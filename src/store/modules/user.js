@@ -58,7 +58,9 @@ const user = {
     // 获取用户信息
     GetInfo({ commit, state }) {
       return new Promise((resolve, reject) => {
+        //resolve({})
         getInfo().then(response => {
+          
           const data = response.data
           data.rolesIdList = data.rolesId.split(',')
           commit('SET_ROLES', data.rolesIdList)

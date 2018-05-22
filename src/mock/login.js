@@ -69,37 +69,7 @@ export default {
     return userMap[username]
   },
   getUserInfo: config => {
-    return {
-      "status": 200,
-      "data": [
-          {
-              "id": 36,
-              "username": "fangjian",
-              "password": null,
-              "orgId": 4,
-              "orgName": "广州白云",
-              "departmentId": 4,
-              "departmentName": null,
-              "position": "5",
-              "mobilephone": "13825160872",
-              "createTime": 1524652461000,
-              "updateTime": 1524652463000,
-              "delFlag": "0",
-              "rolesId": "2",
-              "rolesIdList": [
-                  2
-              ],
-              "rolesName": "财务",
-              "rolesNameList": [
-                  "财务"
-              ],
-              "sexFlag": "0",
-              "loginAccount": "fangj"
-          }
-      ],
-      "text": "success",
-      "errorInfo": null
-  }
+    return {"status":200,"data":{"id":2,"username":"fangjian","password":null,"type":"tms","createTime":1525889025000,"updateTime":1526464928000,"delFlag":"0","userId":2,"orgid":1,"sexFlag":"0","departmentId":21,"name":"方总监","position":"技术经理","mobilephone":"13825160872","orgName":"山东卓鑫","departmentName":"调度部","rolesId":"3","rolesIdList":[3],"rolesName":"调度","rolesNameList":["调度"],"companyName":"山东卓鑫","companyId":1},"text":"请求成功","errorInfo":null}
     const { token } = param2Obj(config.url)
     if (userMap[token]) {
       const user = {

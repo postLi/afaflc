@@ -1,24 +1,90 @@
 .commoncss{
     .el-dialog{
-        margin-top: 10vh !important;
+        margin-top: 30vh !important;
         max-height:80%;
         overflow:auto;
+        border-radius: 10px 10px 0px 0px;
         .el-dialog__header{
             border-bottom:1px solid #ccc;
             text-align:center;
-            background:#ddd;
+            height:40px;
+            padding:10px 0;
+            color:#fff;
             font-weight:bold;
+            background-color: #0b4b7c;
+            .el-dialog__title{
+                height: 13px;
+                font-family: MicrosoftYaHei;
+                font-size: 13px;
+                font-weight: normal;
+                font-stretch: normal;
+                line-height: 20px;
+                letter-spacing: 0px;
+                color: #ffffff;
+            }
+            .el-dialog__headerbtn{
+                top:10px;
+                right:10px;
+            }
         }
         .el-input{
-            width:300px;
+            width:110px;
         }
         .el-dialog__body{
-            padding: 30px 0;
+            padding: 20px 0;
             .el-form{
+                .morewidth{
+                    .el-input{
+                        width:170px;
+                    }
+                }
                 .el-form-item{
                     display:inline-block;
-                    .el-input{
-
+                    border:0 none;
+                    margin-bottom:12px;
+                    .el-form-item__label{
+                        font-size:12px;
+                        padding:1px 5px 0 0;
+                    }
+                    .el-form-item__content{
+                        position: relative;
+                        .el-input{
+                            .el-input__inner{
+                                color:#3e9ff1;
+                                height:26px;
+                                line-height: 26px;
+                                font-size:12px;
+                                padding:0 0 0 5px;
+                            }
+                        }
+                    }
+                    .addItem{
+                        display:inline-block;
+                        height: 26px;
+                        width:26px;
+                        line-height: 26px;
+                        cursor: pointer;
+                        background:url('../../src/assets/icom/23zengjia.png') no-repeat center;
+                        position: absolute;
+                        top:-5px;
+                        left:0;
+                        &:hover{
+                            background:url('../../src/assets/icom/24zengjia-b.png') no-repeat center;
+                        }
+                    }
+                    .reduceItem{
+                        display:inline-block;
+                        height: 26px;
+                        width:26px;
+                        line-height: 26px;
+                        cursor: pointer;
+                        background:url('../../src/assets/icom/21shanchu.png') no-repeat center;
+                        position: absolute;
+                        top:-5px;
+                        left:0;
+                        &:hover{
+                            background:url('../../src/assets/icom/22shanchu-b.png') no-repeat center;
+                        }
                     }
                     
                 }
@@ -26,6 +92,109 @@
         }
         .dialog-footer{
             text-align:center;
+        }
+    }
+}
+
+.cue{
+    .el-dialog{
+        // margin-top: 10vh !important;
+        width:340px;
+        height:105px;
+        background-color: #fffcd8;
+        box-shadow: 0px 0px 15px 0px 
+            rgba(0, 0, 0, 0.32);
+        border-radius: 5px;
+        border: solid 1px #d5ca00;
+        .el-dialog__headerbtn{
+            display: none;
+        }
+        .el-dialog__body{
+            text-align: center;
+            padding-top:5px;
+            span{
+                display: block;
+                font-family: MicrosoftYaHei;
+                font-size: 14px;
+                font-weight: normal;
+                font-stretch: normal;
+                line-height: 33px;
+                letter-spacing: 0px;
+                color: #333333;
+            }
+        }
+    }
+}
+
+.delData{
+    .el-dialog{
+        margin-top:50vh !important;
+        width: 486px;
+	    height: 195px;
+	    background-color: #ffffff;
+	    box-shadow: 0px 0px 15px 0px 
+		rgba(0, 0, 0, 0.32);
+        border-radius: 5px;
+        position: relative;
+        .el-dialog__header{
+            height: 30px;
+            background-color: #e6e6e6;
+            border-radius: 5px 5px 0px 0px;
+            padding:0 0 0 20px;
+            span{
+                width: 28px;
+                height: 14px;
+                font-family: MicrosoftYaHei-Bold;
+                font-size: 14px;
+                font-weight: normal;
+                font-stretch: normal;
+                line-height: 33px;
+                letter-spacing: 0px;
+                color: #333333;
+            }
+            .el-dialog__headerbtn{
+                top:8px;
+                right:11px;
+            }
+        }
+        .el-dialog__body{
+            padding:45px 0 0 84px;
+            .delwarn{
+                display: inline-block;
+                width: 44px;
+	            height: 44px;
+                background:url("../assets/icom/25xinxi.png") no-repeat center;
+                vertical-align: middle;
+                margin-right:21px;
+            }
+            .delinfo{
+                height: 14px;
+                font-family: MicrosoftYaHei;
+                font-size: 14px;
+                font-weight: normal;
+                font-stretch: normal;
+                line-height: 33px;
+                letter-spacing: 0px;
+                color: #333333;
+                vertical-align: middle;
+                
+            }
+        }
+        .el-dialog__footer{
+            position: absolute;
+            left:0;
+            bottom:0;
+            padding:3px 40px 9px ; 
+            width:100%;
+            height: 30px;
+            background-color: #e6e6e6;
+            border-radius: 0px 0px 5px 5px;
+            .el-button{
+                padding:4px 10px ;
+                span{
+                    font-size: 12px;
+                }
+            }
         }
     }
 }

@@ -7,10 +7,12 @@
 
 import fetch from '@/utils/fetch'
 
+const baseurl = "aflccommonservice"
+
 // 获取树节点的数据
 export function data_Trees(page,pagesize,pid) {
   return fetch({
-    url: '/api-common/sysDict/findSysDictByPid',
+    url: '/'+baseurl+'/sysDict/findSysDictByPid',
     method: 'post',
     data: {
         "currentPage": page,
@@ -24,14 +26,14 @@ export function data_Trees(page,pagesize,pid) {
 
 //获取树结构
 export function data_Dic(){
-    return fetch.get('/api-common/sysDict/list') 
+    return fetch.get('/'+baseurl+'/sysDict/list') 
 }
 
 
 //模糊查询
 export function data_Search(page,pagesize,pid,info) {
   return fetch({
-    url: '/api-common/sysDict/findSysDictByPid',
+    url: '/'+baseurl+'/sysDict/findSysDictByPid',
     method: 'post',
     data: {
 
@@ -50,31 +52,40 @@ export function data_Search(page,pagesize,pid,info) {
 //获取code
 export function data_CreatCode(pid) {
   return fetch({
-    url: '/api-common/sysDict/nextCode/'+pid,
+    url: '/'+baseurl+'/sysDict/nextCode/'+pid,
     method: 'get'
   })
 }
 
 // 删除数据
-export function data_Delet(pid) {
+export function data_Delet(delID) {
   return fetch({
-    url: '/api-common/sysDict/deleteSysDict/'+pid,
-    method: 'post'
+    url: '/'+baseurl+'/sysDict/deleteSysDict',
+    method: 'post',
+    data:delID
   })
 }
 
 //添加数据
 export function data_AddForms(infoforms) {
   return fetch({
-    url: '/api-common/sysDict/batchAddSysDict',
+    url: '/'+baseurl+'/sysDict/batchAddSysDict',
     method: 'post',
     data: infoforms
+  })
+}
+
+//生成顶层内容
+export function data_CreatCode_top() {
+  return fetch({
+    url:'/'+baseurl+ '/sysDict/nextCode/top',
+    method: 'get'
   })
 }
 //修改数据
 export function data_ChangeForms(infoforms) {
   return fetch({
-    url: '/api-common/sysDict/updateSysDict',
+    url: '/'+baseurl+'/sysDict/updateSysDict',
     method: 'post',
     data: infoforms
   })

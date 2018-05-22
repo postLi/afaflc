@@ -135,6 +135,8 @@ export default {
             //   this.errInfo = true
             //   this.errInfo = '输入的密码错误'
             // }
+
+
             this.loading = false
             this.$router.push({ path: '/' })
           }).catch(() => {

@@ -46,12 +46,12 @@ service.interceptors.response.use(
     const res = response.data
 
     if (res.status !== 200 && response.config.url.indexOf('/uaa/oauth/token') === -1) {
-      Message({
-        message: res.errorInfo + res.status,
-        type: 'error',
-        duration: 5 * 1000
-      })
-      return Promise.reject('error')
+      // Message({
+      //   message: res.errorInfo + res.status,
+      //   type: 'error',
+      //   duration: 5 * 1000
+      // })
+      return Promise.reject(res)
     } else {
       return response.data
     }
