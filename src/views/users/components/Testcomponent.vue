@@ -1,16 +1,15 @@
 <template>
-    <datagrid></datagrid>    
+    <div>
+        车主nixiangixnagkan
+    </div>
 </template>
 <script type="text/javascript">
-    import TestComponent from "../components/Testcomponent.vue"
+    
     export default {
         data:function(){
             return{
                 
             }
-        },
-        components:{
-            datagrid:TestComponent
         },
         
     }

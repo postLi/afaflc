@@ -430,13 +430,13 @@ import '../../../styles/dialog.scss'
             //获取  服务和车辆 类型列表
             getMoreInformation(){
                 data_CarList().then(res=>{
-                    // console.log(res.data)
+                    console.log(res.data)
                     res.data.map((item)=>{
                         this.optionsCar.push(item);
                     })
                 });
                 data_ServerClassList().then(res=>{
-                    // console.log(res.data)
+                    console.log(res.data)
                      res.data.map((item)=>{
                         this.optionsService.push(item);
                     })

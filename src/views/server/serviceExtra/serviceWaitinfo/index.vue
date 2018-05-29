@@ -90,16 +90,12 @@
                           label="免费时间(分钟)">
                         </el-table-column>
                         <el-table-column
-                          prop="outstripPrice"
+                          prop="intervalTime"
                           label="每间隔时长(分钟)">
                         </el-table-column>
                         <el-table-column
-                          prop="areaPrice"
-                          label="区域起步价">
-                        </el-table-column>
-                        <el-table-column
-                          prop="areaOutstripPrice"
-                          label="区域超里程费">
+                          prop="timeOutstripPrice"
+                          label="超时费用(元)">
                         </el-table-column>
                          <el-table-column
                           prop="usingStatus"
@@ -309,7 +305,7 @@
 
 <script type="text/javascript">
 
-import { data_Area,data_CarList,data_ServerClassList,data_GetCityList,data_GetBeginInfo,data_GetCityInfo } from '../../../../api/server/serverWaitinfo.js'
+import { data_Area,data_CarList,data_ServerClassList,data_GetCityList,data_GetBeginInfo,data_GetCityInfo,data_ChangeStatus } from '../../../../api/server/serverWaitinfo.js'
 import '../../../../styles/dialog.scss'
 
 
@@ -422,11 +418,10 @@ import '../../../../styles/dialog.scss'
             }
         },
         mounted(){
-            //...
+            //...初始化获取数据
             this.firstblood();
-            //..
-
-            // this.getMoreInformation();
+            //..获取诚实 和 服务类型
+            this.getMoreInformation();
         },  
         watch: {
             filterText(val) {
@@ -571,22 +566,17 @@ import '../../../../styles/dialog.scss'
                 }else{
                     console.log(this.checkedinformation)
                     
-                    this.checkedinformation.forEach((item)=>{
-                        if(item.usingStatus === '1'){
-                            console.log('123')
-                            data_Frobidden(item.areaPid).then(res=>{
-                                cosnole.log(res)
-                            })
-                        }
-                        if(item.usingStatus === '0'){
-                            console.log('321')
-                            
-                            data_Open(item.areaPid).then(res=>{
-                                cosnole.log(res)
-                            })
-                        }
+                    let statusID = [];
+                    this.checkedinformation.map((item)=>{
+                        return statusID.push(item.waitPid)
                     })
-                    // this.getCommonFunction();
+
+                    data_ChangeStatus(statusID).then(res=>{
+                        // console.log(res)
+                        // this.firstblood();
+                        this.getCommonFunction();
+
+                    })
                 }
             },
             // 是否删除
@@ -599,7 +589,7 @@ import '../../../../styles/dialog.scss'
                     console.log(this.checkedinformation)
                     let delID = [];
                     this.checkedinformation.map((item)=>{
-                        return delID.push(item.areaPid)
+                        return delID.push(item.waitPid)
                     })
                     this.delID = delID;
                     this.delDialogVisible = true;

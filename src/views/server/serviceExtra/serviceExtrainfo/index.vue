@@ -115,9 +115,9 @@
                                     clearable>
                                 </el-input>
                             </div>
-                            <span  @click="addItem" class="addItem" v-if="idx == 0">
+                            <span  @click="addItem" class="addItem" v-if="keys == 0">
                             </span>
-                            <span  @click="reduceItem(idx)" class="reduceItem" v-else>
+                            <span  @click="reduceItem(keys)" class="reduceItem" v-else>
                             </span>
                         </div>
                       <div slot="footer" class="dialog-footer">
