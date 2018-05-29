@@ -86,16 +86,20 @@
                           label="车辆类型">
                         </el-table-column>
                         <el-table-column
-                          prop="freeTime"
-                          label="免费时间(分钟)">
+                          prop="standardPrice"
+                          label="标准起步价">
                         </el-table-column>
                         <el-table-column
-                          prop="intervalTime"
-                          label="每间隔时长(分钟)">
+                          prop="outstripPrice"
+                          label="标准超里程费   ">
                         </el-table-column>
                         <el-table-column
-                          prop="timeOutstripPrice"
-                          label="超时费用(元)">
+                          prop="areaPrice"
+                          label="区域起步价">
+                        </el-table-column>
+                        <el-table-column
+                          prop="areaOutstripPrice"
+                          label="区域超里程费">
                         </el-table-column>
                          <el-table-column
                           prop="usingStatus"
@@ -305,8 +309,8 @@
 
 <script type="text/javascript">
 
-import { data_Area,data_CarList,data_ServerClassList,data_GetCityList,data_GetBeginInfo,data_GetCityInfo,data_ChangeStatus } from '../../../../api/server/serverWaitinfo.js'
-import '../../../../styles/dialog.scss'
+import { data_Area,data_GetCityList,data_GetCityInfo,data_CarList,data_ServerClassList,data_Frobidden,data_Open,data_Delete } from '../../../api/server/serverArea.js'
+import '../../../styles/dialog.scss'
 
 
     export default{
@@ -343,11 +347,11 @@ import '../../../../styles/dialog.scss'
                     label:'全部'
                     },
                     {
-                    value: '0',
+                    value: '1',
                     label: '启用'
                     },
                     {
-                    value: '1',
+                    value: '0',
                     label: '禁用'
                     }
                 ],
@@ -418,9 +422,10 @@ import '../../../../styles/dialog.scss'
             }
         },
         mounted(){
-            //...初始化获取数据
+            //...
             this.firstblood();
-            //..获取诚实 和 服务类型
+            //..
+
             this.getMoreInformation();
         },  
         watch: {
@@ -453,6 +458,7 @@ import '../../../../styles/dialog.scss'
                     this.getCommonFunction();
                 })
             },
+            
             //模糊查询 分类名称或者code
             getdata_search(event){
                 this.getCommonFunction()
@@ -466,11 +472,11 @@ import '../../../../styles/dialog.scss'
                     serviceCode : this.valueService,
                     usingStatus: this.valueStatus
                 }
-                console.log(data);
+                // console.log(data);
                 data_GetCityInfo(this.page,this.pagesize,data).then(res=>{
-                    console.log(res)
+                    // console.log(res)
                     this.tableDataTree = res.data.list;
-                    this.dataTotal = res.data.totalCount;
+                    this.num = res.data.list.length;
                 })
             },
             //
@@ -566,17 +572,22 @@ import '../../../../styles/dialog.scss'
                 }else{
                     console.log(this.checkedinformation)
                     
-                    let statusID = [];
-                    this.checkedinformation.map((item)=>{
-                        return statusID.push(item.waitPid)
+                    this.checkedinformation.forEach((item)=>{
+                        if(item.usingStatus === '1'){
+                            console.log('123')
+                            data_Frobidden(item.areaPid).then(res=>{
+                                cosnole.log(res)
+                            })
+                        }
+                        if(item.usingStatus === '0'){
+                            console.log('321')
+                            
+                            data_Open(item.areaPid).then(res=>{
+                                cosnole.log(res)
+                            })
+                        }
                     })
-
-                    data_ChangeStatus(statusID).then(res=>{
-                        // console.log(res)
-                        // this.firstblood();
-                        this.getCommonFunction();
-
-                    })
+                    // this.getCommonFunction();
                 }
             },
             // 是否删除
@@ -589,7 +600,7 @@ import '../../../../styles/dialog.scss'
                     console.log(this.checkedinformation)
                     let delID = [];
                     this.checkedinformation.map((item)=>{
-                        return delID.push(item.waitPid)
+                        return delID.push(item.areaPid)
                     })
                     this.delID = delID;
                     this.delDialogVisible = true;
@@ -615,11 +626,82 @@ import '../../../../styles/dialog.scss'
                 console.log(`当前页: ${val}`);
             },
 
+            //进入数据字典页面获取和刷新数据
+            getdata_dic(){
+                data_Dic().then(res =>{ 
+                    if(res.status == 200 && res.data.length !=0){
+                        this.treeData = res.data;
+                        if(res.data[0].pid == null){
+                            this.pid = res.data[0].id;
+                        }else{
+                            this.pid = res.data[0].pid;
+                        }
+                        this.pidname = res.data[0].label;
+                        this.forms[0].pid = this.pid;
+                        let name = this.pidname;
+                        console.log(this.pidname)
+                        data_Trees(this.page,this.pagesize,this.pid).then(res =>{
+                            console.log(res)
+                            if(res.status == 200 && res.data.list){
+                                let num = 0;
+                                res.data.list.forEach(function(item){
+                                    num++;
+                                    if(item.pid == null){
+                                        item.uplabel = '无';
+                                    }else{
+                                        item.uplabel = name;
+                                    }
+                                    if(item.status == true){
+                                        item.status = '启用'
+                                    }
+                                    if(item.status == false){
+                                        item.status = '禁用'
+                                    }
+                                    if(item.isDefault == true){
+                                        item.isDefault = '是'
+                                    }
+                                    if(item.isDefault == false){
+                                        item.isDefault = '否'
+                                    }
+                                })
+                                this.tableDataTree = res.data.list;
+                                this.dataTotal= num;
+                                console.log(this.pidname)
+                            }else{
+                               return
+                            }
+                        })
+                    }else{
+                        console.log('000')
+                    }
+                })
+            },
 
             //新增分类信息获取code值
             addClassfy(){
                 this.dialogFormVisible = true;
 
+            },
+            //添加最高层获取code
+            currentValue(val){
+                console.log(val)
+                if(val == ''){
+                    data_CreatCode_top().then(res => {
+                        console.log(res)
+                        if(res.status == 200){
+                            console.log(res)
+                            this.forms[0].code = res.data;
+                            this.nowcode = res.data;
+                        }   
+                    })
+                }else{
+                    data_CreatCode(this.pid).then(res => {
+                        if(res.status == 200){
+                            this.forms[0].code = res.data;
+                            this.nowcode = res.data;
+                        }
+                    })
+                }
             },
             //保存信息
             newInfoSave(){
@@ -654,6 +736,24 @@ import '../../../../styles/dialog.scss'
                     }
                 })
             },
+            //验证分类名称
+            namerules(event){
+                console.log(event.target.value)
+                if(!event.target.value){
+                    let information = "请输入最少1个字最多20个字分类名称";
+                    this.hint(information);
+                    event.target.focus();
+                }else{
+                    data_Search(this.page,this.pagesize,this.pid,event.target.value).then(res=>{
+                        console.log(res)
+                        if(res.data.length != 0){
+                            let information = "该分类名称已存在，请重新输入";
+                            this.hint(information);
+                            event.target.focus();
+                        }
+                    })
+                }
+            },
             //验证数据值
             valuerules(event){
                 console.log(event.target.value)
@@ -676,7 +776,7 @@ import '../../../../styles/dialog.scss'
 </script>
 
 <style type="text/css" lang="scss">
-       .serviceArea{
+    .serviceArea{
         height:100%;    
         position: relative;
         margin-left:7px;

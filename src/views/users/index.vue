@@ -651,12 +651,6 @@
                   
               </el-tab-pane>
             </el-tabs>
-
-               
-
-
-
-
         </el-dialog>
     </div> 
     <!-- 冻结部分 -->

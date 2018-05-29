@@ -14,7 +14,7 @@ export default {
         // }]
       },
       { path: '/users/carowner', icon: 'information', hidden: false, name: '车主管理', component: _import('users/carowner/index'), meta: { title: '车主管理', noCache: true }},
-      { path: '/users/partner', icon: 'information', hidden: false, name: '合伙人管理', component: _import('users/partner/index'), meta: { title: '合伙人管理', noCache: true }}
+      { path: '/users/partner', icon: 'information', hidden: true, name: '合伙人管理', component: _import('users/partner/index'), meta: { title: '合伙人管理', noCache: true }}
   ]
 }
 

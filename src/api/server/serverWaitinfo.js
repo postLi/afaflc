@@ -64,6 +64,15 @@ export function data_Delete(id) {
 }
 
 
+//删除数据
+export function data_DeletInfo(id) {
+  return fetch({
+  url: '/'+baseurl+'/sm/aflcWaitPrice/v1/delete',
+  method: 'post',
+  data: id
+  })
+}
+
 
 
 

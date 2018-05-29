@@ -1,6 +1,6 @@
 <template>
     <div>
-        车主nixiangixnagkan
+        未认证
     </div>
 </template>
 <script type="text/javascript">

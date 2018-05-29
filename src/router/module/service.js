@@ -7,7 +7,7 @@ export default {
   redirect: '/service/index',
   name: '客服管理',
   icon: 'kehuguanli',
-  hidden: false,
+  hidden: true,
   children: [
     { path: '/service/index', name: '客服反馈', icon: 'zonghe', component: _import('service/index'), meta: { title: '客服反馈', noCache: true },
       children: [{

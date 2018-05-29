@@ -364,11 +364,11 @@ import '../../../styles/dialog.scss'
                     label:'全部'
                     },
                     {
-                    value: '0',
+                    value: '1',
                     label: '启用'
                     },
                     {
-                    value: '1',
+                    value: '0',
                     label: '禁用'
                     }
                 ],
