@@ -36,6 +36,7 @@
                         :data="tableDataTree"
                         stripe
                         border
+                        height="93%"
                         @selection-change = "getinfomation"
                         @row-dblclick="moreinfo"
                         tooltip-effect="dark"
@@ -157,7 +158,7 @@
                       </el-form>
                       <div slot="footer" class="dialog-footer">
                         <el-button type="primary" @click="changeInfoSave">保 存</el-button>
-                        <el-button @click="dialogFormVisible_change = false">取 消</el-button>
+                        <el-button @click="closeChangeInfo">取 消</el-button>
                       </div>
                     </el-dialog>
                 </div>
@@ -230,7 +231,7 @@ import '../../../styles/dialog.scss'
                 information:'你想知道什么',
                 waitchange:{},
                 delID:[],
-                delIDTree:'',
+                delIDTree:null,
                 checkedinformation:[],
                 formLabelWidth: '80px',
                 input_search: null,
@@ -356,6 +357,11 @@ import '../../../styles/dialog.scss'
                     this.changeform.remark = this.checkedinformation[0].remark;
                 }
             },
+            //修改关闭恢复数据
+            closeChangeInfo(){
+                this.dialogFormVisible_change = false;
+                
+            },
             // 禁用/启用
             handleUseStates(){
                 if(this.checkedinformation.length === 0){
@@ -391,17 +397,6 @@ import '../../../styles/dialog.scss'
                         if(item.isDefault == '是'){
                             isOK = false;
                         }
-                        // data_Trees(this.page,this.pagesize,item.id).then(res =>{
-                        //     console.log(res.data)
-                        //     if(res.data.list){
-                        //         console.log('321')
-                        //         isMore = true;
-                        //         console.log(isMore)
-                        //         return isMore
-                        //     }else{
-                        //         console.log('123')
-                        //     }
-                        // })
                         return delID.push(item.id)
                     })
                     console.log(isOK,isMore)
@@ -753,7 +748,7 @@ import '../../../styles/dialog.scss'
                 }
             }
             .info_news{
-                height:100%;
+                height:89%;
                 .el-table{
                     table{
                         width: 100% !important;

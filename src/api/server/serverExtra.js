@@ -1,0 +1,57 @@
+import fetch from '@/utils/fetch'
+
+const baseurl = "aflcsmservice"
+
+//获取额外服务费用列表
+export function data_GetInformation(page,pagesize,keywords) {
+    return fetch({
+      url: '/'+baseurl+'/sm/aflcExtraPrice/v1/getListByKeywords',
+      method: 'post',
+      data:{
+        "currentPage":page ,
+        "pageSize": pagesize,
+        "vo": {
+			  "keywords":keywords
+        }
+      }
+    })
+  }
+
+//获取服务分类子分类
+export function data_ServerClassList(){
+	return fetch.get('/'+baseurl+'/sm/aflcSysDict/v1/getServiceClassList') 
+}
+//新增数据
+export function data_AddForms(infoforms) {
+    return fetch({
+		url: '/'+baseurl+'/sm/aflcExtraPrice/v1/addOrUpdateList',
+		method: 'post',
+		data: infoforms
+    })
+  }
+
+//删除数据
+export function data_DeletInfo(infoforms) {
+    return fetch({
+		url: '/'+baseurl+'/sm/aflcExtraPrice/v1/delete',
+		method: 'post',
+		data: infoforms
+    })
+  }
+
+//更改状态
+export function data_ChangeStatus(id) {
+    return fetch({
+		url: '/'+baseurl+'/sm/aflcExtraPrice/v1/openOrForbidden',
+		method: 'post',
+		data: id
+    })
+  }
+
+
+
+
+  
+
+
+  
