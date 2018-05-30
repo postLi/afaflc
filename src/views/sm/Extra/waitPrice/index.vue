@@ -124,115 +124,85 @@
                 <!-- 新增分类信息 -->
                 <div class="addclassify commoncss">
                     <el-dialog :visible.sync="dialogFormVisible">
-                        <div class="infoinner clearfix">
-                            <div class="slot_info clearfix">
-                                <div class="newarea area_left">
-                                    <span class="slot_head">新增区域定价</span>
-                                    <div class="area_left_server area_server">
-                                        <h4><span>* </span> 选择标准服务类型</h4>
-                                        <div class="eltree_search">
-                                            <label>服务分类&nbsp;
-                                                <el-select v-model="valueService" clearable placeholder="请选择">
-                                                    <el-option
-                                                        v-for="item in optionsService"
-                                                        :key="item.value"
-                                                        :label="item.name"
-                                                        :value="item.code"
-                                                        :disabled="item.disabled">
-                                                    </el-option>
-                                                </el-select>
-                                            </label>
-                                            <label>服务分类&nbsp;
-                                                <el-select v-model="valueService" clearable placeholder="请选择">
-                                                    <el-option
-                                                        v-for="item in optionsService"
-                                                        :key="item.value"
-                                                        :label="item.name"
-                                                        :value="item.code"
-                                                        :disabled="item.disabled">
-                                                    </el-option>
-                                                </el-select>
-                                            </label>
-                                        </div>
-                                        <label>
-                                            <span class="control">标准起步价</span>
-                                            <el-input
-                                                placeholder="请输入内容"
-                                                v-model="input_search"
-                                                clearable>
-                                            </el-input>
-                                            <span>元</span>
-                                            <el-input
-                                                placeholder="请输入内容"
-                                                v-model="input_search"
-                                                clearable>
-                                            </el-input>
-                                            <span>公里</span>
-                                        </label>
-                                        <label>
-                                            <span class="control">超里程费</span>         
-                                            <el-input
-                                                placeholder="请输入内容"
-                                                v-model="input_search"
-                                                clearable>
-                                            </el-input>
-                                            <span>元 / 公里</span>
-                                        </label>       
+                        <div class="newWait">
+                            <div class="clearfix">
+                                <div class="chooseAera chooseCommon fl">
+                                    <h4><span>* </span> 选择省市</h4>
+                                    <div class="eltree_search lesscommon">
+                                        <el-input
+                                        class="el_search"
+                                        placeholder=""
+                                        suffix-icon="el-icon-search"
+                                        v-model="filterText">
+                                        </el-input>
+                                        <el-tree
+                                        :data="newAreaData"
+                                        :props="propsAdd"
+                                        :highlight-current = "true"
+                                        @node-click="handleNodeClick"
+                                        @check-change="handleCheckChange"
+                                        :filter-node-method="filterNode"
+                                        ref="tree2">
+                                        </el-tree>
                                     </div>
-                                    
-                                </div>
-                                <div class="newarea area_right">
-                                    <span class="slot_head">设置区域价</span>
-                                     <div class="area_right_server area_server">
-                                        <h4><span>* </span> 选择省市</h4>
-                                        <div class="eltree_search">
-                                            <el-input
-                                            class="el_search"
-                                            placeholder=""
-                                            suffix-icon="el-icon-search"
-                                            v-model="filterText">
-                                            </el-input>
-                                            <el-tree
-                                            class="filter-tree"
-                                            node-key="id"
-                                            show-checkbox
-                                            :data="data1"
-                                            :props="defaultProps"
-                                            default-expand-all
-                                            :expand-on-click-node = "false"
-                                            @node-click="handleNodeClick"
-                                            :highlight-current = "true"
-                                            :filter-node-method="filterNode"
-                                            ref="tree2">
-                                            </el-tree>
-                                        </div>
-                                        <label>
-                                            <span class="control">区域起步价</span>
-                                            <el-input
-                                                placeholder="请输入内容"
-                                                v-model="input_search"
-                                                clearable>
-                                            </el-input>
-                                            <span>元</span>
-                                            <el-input
-                                                placeholder="请输入内容"
-                                                v-model="input_search"
-                                                clearable>
-                                            </el-input>
-                                            <span>公里</span>
-                                        </label>
-                                        <label>
-                                            <span class="control">区域超里程费</span>         
-                                            <el-input
-                                                placeholder="请输入内容"
-                                                v-model="input_search"
-                                                clearable>
-                                            </el-input>
-                                            <span>元 / 公里</span>
-                                        </label>       
+                                    <div class="infowrite">
+                                        <p><span>* </span>免费</p>
+                                        <el-input
+                                            placeholder="请输入内容"
+                                            v-model="cc"
+                                            clearable>
+                                        </el-input>
+                                        <span>小时</span>
                                     </div>
-                                    
                                 </div>
+                                <div class="chooseServer chooseCommon fl">
+                                    <h4><span>* </span> 选择服务分类</h4>
+                                    <div class="lesscommon">
+                                        <el-checkbox-group v-model="servercheckList">
+                                            <el-checkbox v-for="item in serverbox" :label="item" :key="item">{{item}}</el-checkbox>
+                                        </el-checkbox-group>
+                                    </div>
+                                    <div class="infowrite">
+                                        <p><span>* </span>每间隔</p>
+                                        <el-input
+                                            placeholder="请输入内容"
+                                            v-model="cc"
+                                            clearable>
+                                        </el-input>
+                                        <span>分钟</span>
+                                    </div>
+                                </div>
+                                <div class="chooseCar chooseCommon fr">
+                                    <h4><span>* </span> 选择车辆类型</h4>
+                                    <div class="lesscommon ">
+                                        <el-checkbox-group v-model="carcheckList">
+
+                                            <el-checkbox v-for="item in carbox" :label="item" :key="item">{{item}}</el-checkbox>
+                                            
+                                        </el-checkbox-group>
+                                    </div>
+                                    <div class="infowrite">
+                                        <p><span>* </span>超市费用</p>
+                                        <el-input
+                                            placeholder="请输入内容"
+                                            v-model="cc"
+                                            clearable>
+                                        </el-input>
+                                        <span>元</span>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="additional ">
+                                <p>{{remarkinfo}}</p>
+                                <p>费用说明</p>
+                                <el-input
+                                    placeholder="少于500字符"
+                                    maxlength="500"
+                                    v-model="cc"
+                                    clearable>
+                                </el-input>
+                                <span>元</span>
                             </div>
                         </div>
                         <div slot="footer" class="dialog-footer">
@@ -245,29 +215,7 @@
                 <!-- 修改分类信息 -->
                 <div class="changeclassify commoncss">
                     <el-dialog title='修改分类信息'  :visible.sync="dialogFormVisible_change">
-                      <el-form>
-                        <el-form-item label="上级分类" :label-width="formLabelWidth">
-                         <el-select v-model="changeform.pid" >
-                           <el-option :label="pidname" :value="pid"></el-option>
-                           <el-option label="无" value=null></el-option>
-                         </el-select>
-                       </el-form-item>
-                       <div>
-                            <el-form-item label="编码" :label-width="formLabelWidth">
-                              <el-input v-model="changeform.code" auto-complete="off" :disabled="true"></el-input>
-                            </el-form-item>
-                            <el-form-item label="分类名称" :label-width="formLabelWidth" class="morewidth">
-                              <el-input v-model="changeform.name" auto-complete="off" ></el-input>
-                            </el-form-item>
-                            <el-form-item label="数据值" :label-width="formLabelWidth">
-                              <el-input v-model="changeform.value" auto-complete="off"></el-input>
-                            </el-form-item>
-                            <el-form-item label="描述" :label-width="formLabelWidth" class="morewidth">
-                              <el-input v-model="changeform.remark" auto-complete="off"></el-input>
-                            </el-form-item>
 
-                       </div>
-                      </el-form>
                       <div slot="footer" class="dialog-footer">
                         <el-button type="primary" @click="changeInfoSave">保 存</el-button>
                         <el-button @click="dialogFormVisible_change = false">取 消</el-button>
@@ -299,7 +247,7 @@
                 </div>
             </div>
         </div>
-
+        <!-- <spinner v-show="show"></spinner>  -->
     </div>
 </template>
 
@@ -307,21 +255,34 @@
 
 import { data_Area,data_CarList,data_ServerClassList,data_GetCityList,data_GetBeginInfo,data_GetCityInfo,data_ChangeStatus,data_DeletInfo } from '../../../../api/server/serverWaitinfo.js'
 import '../../../../styles/dialog.scss'
+import spinner from '../../../spinner/spinner'
 
 
     export default{
 
         data(){
             return{
+                cc:null,
+                show:false,
                 areadata:[],
+                newAreaData:[],
+                areadataAdd:[],
                 citylist:[],
                 citywide:null,
                 provinceId:null,
                 cityId:null,
                 props: {
-                label: 'name',
-                children: 'children'
+                    label: 'name',
+                    children: 'children'
                 },
+                propsAdd: {
+                    label: 'name',
+                    children: 'children'
+                },
+                servercheckList:[],
+                serverbox:[],
+                carcheckList:[],
+                carbox:[],
                 valueService:null,
                 optionsService:[
                     {
@@ -353,30 +314,9 @@ import '../../../../styles/dialog.scss'
                 ],
                 value2:'',
                 filterText: '',
-                    data1: [{
-                    label: '一级 1',
-                    children: [{
-                        label: '二级 1-1',
-                        children: [{
-                        label: '三级 1-1-1'
-                        }]
-                    }]
-                    }, {
-                    label: '一级 2',
-                    children: [{
-                        label: '二级 2-1',
-                        children: [{
-                        label: '三级 2-1-1'
-                        }]
-                    }, {
-                        label: '二级 2-2',
-                        children: [{
-                        label: '三级 2-2-1'
-                        }]
-                    }]
-                    }],
                 page:1,
                 pagesize:20,
+                remarkinfo:'例：免费0.25小时，每15分钟加收5元，不足15分钟按15分钟计价',
                 formtitle:'新增分类信息',
                 currentPage4: 100,
                 dialogFormVisible: false,
@@ -417,6 +357,9 @@ import '../../../../styles/dialog.scss'
                 },
             }
         },
+        components:{
+            spinner
+        },
         mounted(){
             //...初始化获取数据
             this.firstblood();
@@ -447,6 +390,7 @@ import '../../../../styles/dialog.scss'
             },
             //刷新页面
             firstblood(){
+                this.show = true;
                 data_Area().then(res=>{
                     this.areadata = res.data.list;
                     this.provinceId = this.areadata[0].code ;
@@ -472,6 +416,7 @@ import '../../../../styles/dialog.scss'
                     console.log(res)
                     this.tableDataTree = res.data.list;
                     this.dataTotal = res.data.totalCount;
+                    this.show = false;
                 })
             },
             //
@@ -620,7 +565,8 @@ import '../../../../styles/dialog.scss'
             //新增分类信息获取code值
             addClassfy(){
                 this.dialogFormVisible = true;
-
+                this.newAreaData = this.areadata;
+                
             },
             //保存信息
             newInfoSave(){
@@ -734,38 +680,54 @@ import '../../../../styles/dialog.scss'
                     z-index: 99;
                 }
             }
-            .infoinner{
-                height:350px;
-                .slot_info{
-                    position:absolute;
-                    top:0;
-                    left:0;
-                    width:100%;
-                    border-bottom: 1px solid #d0d7e5;
-                    .newarea{
-                        float:left;
-                        width:50%;
-                        padding:0 0 0 33px;
-                        .slot_head{
-                            display: inline-block;
-                            text-align: center;
-                            width:100%;
-                            height: 40px;
-                            font-family: MicrosoftYaHei;
-                            font-size: 14px;
-                            font-weight: normal;
-                            font-stretch: normal;
-                            line-height: 40px;
-                            letter-spacing: 0px;
-                            color: #ffffff;
+            .newWait{
+                padding:0 30px;
+                .chooseCommon{
+                    width: 230px;
+                    h4{
+                        span{
+                            color:red;
                         }
-                        .area_server{
-                            padding-top:17px;
-                            padding-bottom: 14px;
-                            h4{
-                                span{
-                                    color:red;
-                                }
+                        font-family: MicrosoftYaHei;
+                        font-size: 12px;
+                        font-weight: normal;
+                        font-stretch: normal;
+                        line-height: 20px;
+                        letter-spacing: 0px;
+                        color: #666;
+                        margin-bottom: 5px;
+                    }
+                    .lesscommon{
+                        width: 230px;
+                        height: 256px;
+                        margin-bottom: 12px;
+                        overflow: auto;
+                        border:1px solid #d2d2d2;
+                        .el-radio-group{
+                            margin-left:34px;
+                            font-size: 12px;
+                            line-height: 20px;
+                            color:#333;
+                            .el-radio{
+                                margin:6px 0 0 0;
+                            }
+                        }
+                        .el_search{
+                            width: 100%;
+                            padding:6px 5px;
+                            .el-input__inner{
+                                height: 26px;
+                                line-height: 26px;
+                            }
+
+                        }
+                        
+                    }
+                    .infowrite{
+                            p{
+                                display: inline-block;
+                                width:60px;
+                                text-align: right;
                                 font-family: MicrosoftYaHei;
                                 font-size: 12px;
                                 font-weight: normal;
@@ -773,91 +735,92 @@ import '../../../../styles/dialog.scss'
                                 line-height: 20px;
                                 letter-spacing: 0px;
                                 color: #666;
-                                margin-bottom: 13px;
+                                span{
+                                    color:red;
+                                }
                             }
-                            .eltree_search{
-                                width: 198px;
-                                height: 256px;
-                                margin-bottom: 12px;
-                                overflow: auto;
-                                p{
-                                    margin:9px 0 0 33px;
+                            span{
+                                font-size:12px;
+                                line-height: 20px;
+                                color:#666;
+                            }
+                            .el-input{
+                                margin:0 5px;
+                                .el-input__inner{
+                                    height: 24px;
+                                    line-height: 24px;
+                                    padding:0 7px;
+                                    font-family: MicrosoftYaHei;
                                     font-size: 12px;
                                     font-weight: normal;
                                     font-stretch: normal;
                                     line-height: 20px;
                                     letter-spacing: 0px;
-                                    color: #333333;
-                                }
-                                .el-radio-group{
-                                    margin-left:34px;
-                                    font-size: 12px;
-                                    line-height: 20px;
-                                    color:#333;
-                                    .el-radio{
-                                        margin:6px 0 0 0;
-                                    }
-                                }
-                                .el_search{
-                                    width: 100%;
-                                    padding:6px 5px;
-                                    .el-input__inner{
-                                        height: 26px;
-                                        line-height: 26px;
-                                    }
-
+                                    color: #3e9ff1;
                                 }
                             }
-                            label{
-                                display: block;
-                                margin-top:12px;
+                        }
+                    label{
+                        display: block;
+                        margin-top:12px;
+                        font-size: 12px;
+                        font-weight: normal;
+                        font-stretch: normal;
+                        line-height: 20px;
+                        letter-spacing: 0px;
+                        color: #666666;
+                        .control{
+                            display: inline-block;
+                            text-align: right;
+                            width: 75px;
+                        }
+                        .el-input{
+                            width: 96px;
+                            height:24px;
+                            margin:0 6px;
+                            .el-input__inner{
+                                display: inline-block;
+                                width: 96px;
+                                height: 24px;
                                 font-size: 12px;
-                                font-weight: normal;
-                                font-stretch: normal;
-                                line-height: 20px;
-                                letter-spacing: 0px;
-                                color: #666666;
-                                .control{
-                                    display: inline-block;
-                                    text-align: right;
-                                    width: 75px;
-                                }
-                                .el-input{
-                                    width: 96px;
-                                    height:24px;
-                                    margin:0 6px;
-                                    .el-input__inner{
-                                        display: inline-block;
-                                        width: 96px;
-                                        height: 24px;
-                                        font-size: 12px;
-                                        background-color: #e6e6e6;
-                                        border-radius: 2px;
-                                        border: solid 1px #d4d4d4;
-                                        padding:8px;
-                                        color: #3e9ff1;
-                                    }
-                                }
+                                background-color: #e6e6e6;
+                                border-radius: 2px;
+                                border: solid 1px #d4d4d4;
+                                padding:8px;
+                                color: #3e9ff1;
                             }
                         }
                     }
-                    .area_left{
-                        .slot_head{
-                            border-right:1px solid #fff;
-                        }
-                        .area_left_server{
-                            border-right:1px solid #d0d7e5;
-                        }
-                    }
+                }
+                .chooseServer{
+                    margin: 0 30px;
+                }
+                .additional{
+                   p:first-child{
+                        padding:10px 0 10px 70px;
+                        font-size: 12px;
+                        line-height: 20px;
+                        letter-spacing: 0px;
+                        color: #999999;
+                   }
+                   p:nth-child(2){
+                       display: inline-block;
+                       width: 60px;
+                       text-align: right;
+                   }
+                   .el-input{
+                       margin: 0 5px;
+                       .el-input__inner{
+                            width: 685px;
+                            height: 24px;
+                            line-height: 24px;
+                            padding: 0 7px;
+                            font-size: 12px;
+                            line-height: 20px;
+                            color: #3e9ff1;
+                       }
+                   }
 
-                    .area_right{
-                        .area_right_server{
-                            .el-tree{
-                                overflow:auto;
-                            }
-                        }
-                    }
-                    
                 }
             }
             .el-dialog__footer{

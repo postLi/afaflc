@@ -45,21 +45,16 @@ export function data_ServerClassList(){
 }
 
 
-//禁用data_Frobidden
-export function data_Frobidden(id) {
+//更改状态
+export function data_ChangeStatus(id) {
   return fetch({
-    url: '/'+baseurl+'/sm/aflcAreaPrice/v1/forbidden/'+id,
-    method: 'post'
+  url: '/'+baseurl+'/sm/aflcAreaPrice/v1/openOrForbidden',
+  method: 'post',
+  data: id
   })
 }
 
-//启用data_Open
-export function data_Open(id) {
-  return fetch({
-    url: '/'+baseurl+'/sm/aflcAreaPrice/v1/open/'+id,
-    method: 'post'
-  })
-}
+
 
 //删除服务区域定价
 export function data_Delete(id) {

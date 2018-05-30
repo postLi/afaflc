@@ -303,20 +303,22 @@
                 </div>
             </div>
         </div>
+        <spinner v-show="show"></spinner> 
 
     </div>
 </template>
 
 <script type="text/javascript">
 
-import { data_Area,data_GetCityList,data_GetCityInfo,data_CarList,data_ServerClassList,data_Frobidden,data_Open,data_Delete } from '../../../api/server/serverArea.js'
+import { data_Area,data_GetCityList,data_GetCityInfo,data_CarList,data_ServerClassList,data_ChangeStatus,data_Delete } from '../../../api/server/serverArea.js'
 import '../../../styles/dialog.scss'
-
+import spinner from '../../spinner/spinner'
 
     export default{
 
         data(){
             return{
+                show:false,
                 areadata:[],
                 citylist:[],
                 citywide:null,
@@ -421,6 +423,9 @@ import '../../../styles/dialog.scss'
                 },
             }
         },
+        components:{
+            spinner
+        },
         mounted(){
             //...
             this.firstblood();
@@ -452,6 +457,7 @@ import '../../../styles/dialog.scss'
             },
             //刷新页面
             firstblood(){
+                this.show = true;
                 data_Area().then(res=>{
                     this.areadata = res.data.list;
                     this.provinceId = this.areadata[0].code ;
@@ -477,6 +483,7 @@ import '../../../styles/dialog.scss'
                     // console.log(res)
                     this.tableDataTree = res.data.list;
                     this.num = res.data.list.length;
+                    this.show = false;
                 })
             },
             //
@@ -571,23 +578,16 @@ import '../../../styles/dialog.scss'
                     this.hint(information);
                 }else{
                     console.log(this.checkedinformation)
-                    
-                    this.checkedinformation.forEach((item)=>{
-                        if(item.usingStatus === '1'){
-                            console.log('123')
-                            data_Frobidden(item.areaPid).then(res=>{
-                                cosnole.log(res)
-                            })
-                        }
-                        if(item.usingStatus === '0'){
-                            console.log('321')
-                            
-                            data_Open(item.areaPid).then(res=>{
-                                cosnole.log(res)
-                            })
-                        }
+                    // this.show = true;   
+                    let statusID = [];
+                    this.checkedinformation.map((item)=>{
+                        return statusID.push(item.areaPid)
                     })
-                    // this.getCommonFunction();
+                    console.log(statusID)
+                    data_ChangeStatus(statusID).then(res=>{
+                        console.log(res)
+                        this.getCommonFunction();
+                    })
                 }
             },
             // 是否删除
@@ -609,6 +609,7 @@ import '../../../styles/dialog.scss'
             },
             //确认删除
             delDataInformation(){
+                this.show = true;
                 this.delDialogVisible = false;
                 data_Delete(this.delID).then(res => {
                     console.log(res)

@@ -84,11 +84,11 @@
                     <el-dialog :title='formtitle'  :visible.sync="dialogFormVisible">
                         <div class="chooseinfo-item">
                             <p><span>* </span>服务一级分类 ：</p>
-                            <el-radio-group v-model="classfyradio" v-for="(obj,keys) in formclassfy">
-                                <el-radio  :label="obj.code" :keys='keys' @change="chooseradio">{{obj.name}}</el-radio>
+                            <el-radio-group v-model="classfyradio" >
+                                <el-radio   v-for="(obj,key) in formclassfy" :label="obj.code" :key='key' @change="chooseradio">{{obj.name}}</el-radio>
                             </el-radio-group>
                         </div>
-                        <div class="extrainfo"  v-for="(form,keys) in forms">
+                        <div class="extrainfo"  v-for="(form,keys) in forms" :key='keys'>
                             <p><span>* </span>额外服务名称</p>
                             <el-input
                                 placeholder="请输入内容"
@@ -111,6 +111,7 @@
                                 <el-input
                                     placeholder="5-300间的字符"
                                     maxlength="200"
+                                    ref="infofocus"
                                     v-model="form.extraDes"
                                     clearable>
                                 </el-input>
@@ -132,8 +133,8 @@
                     <el-dialog title='修改分类信息'  :visible.sync="dialogFormVisible_change">
                         <div class="chooseinfo-item">
                             <p><span>* </span>服务一级分类 ：</p>
-                            <el-radio-group v-model="changeform.serivceCode" v-for="(obj,idx) in formclassfy">
-                                <el-radio  :label="obj.code" :key='idx' @change="chooseradio">{{obj.name}}</el-radio>
+                            <el-radio-group v-model="changeform.serivceCode" >
+                                <el-radio v-for="(obj,idx) in formclassfy" :label="obj.code" :key='idx' @change="chooseradio">{{obj.name}}</el-radio>
                             </el-radio-group>
                         </div>
                         <div class="extrainfo">
@@ -159,6 +160,7 @@
                                 <el-input
                                     placeholder="5-300间的字符"
                                     maxlength="200"
+                                    ref="infofocus"
                                     v-model="changeform.extraDes"
                                     clearable>
                                 </el-input>
@@ -195,7 +197,8 @@
                 </div>
             </div>
         <!-- </div> -->
-
+        <spinner v-show="show"></spinner> 
+        
     </div>
 </template>
 
@@ -203,12 +206,14 @@
 
 import { data_GetInformation,data_ServerClassList,data_AddForms,data_DeletInfo,data_ChangeStatus } from '../../../../api/server/serverExtra.js'
 import '../../../../styles/dialog.scss'
+import spinner from '../../../spinner/spinner'
 
 
     export default{
 
         data(){
             return{
+                show:false,
                 keywords:null,
                 formclassfy:[],
                 classfyradio:null,
@@ -250,6 +255,10 @@ import '../../../../styles/dialog.scss'
                 },
             }
         },
+        components:{
+            spinner
+        },
+        
         mounted(){
             // this.getdata_dic();
             this.firstblood()
@@ -394,18 +403,22 @@ import '../../../../styles/dialog.scss'
             },
             //刷新页面
             firstblood(){
+                this.show = true;
                 data_GetInformation(this.page,this.pagesize,this.keywords).then(res=>{
                     this.dataTotal = res.data.totalCount;
                     this.tableDataTree = res.data.list;
+                    this.show = false;
                     console.log(this.tableDataTree)
                 })
             },
             //模糊查询 分类名称或者code
             getdata_search(event){
                 // console.log(event)
+                this.show = true;
                 data_GetInformation(this.page,this.pagesize,this.input_search).then(res=>{
                     this.tableDataTree = res.data.list;
                     console.log(this.tableDataTree)
+                    this.show = false;
                 })
             },
             //新增分类信息
@@ -428,17 +441,18 @@ import '../../../../styles/dialog.scss'
                             isOK = false;
                             let information = "请填写额外收费价格";
                             this.hint(information);
-                            this.$refs.pricefocus.focus();
+                            this.$refs.pricefocus[0].focus();
                         }
                         if(!item.extraDes){
                             isOK = false;
                             let information = "请填写额外服务描述";
                             this.hint(information);
+                            this.$refs.infofocus[0].focus();
                         }
                             item.serivceCode = this.classfyradio
                     })
                     console.log(this.forms)
-                    cosnole.log(isOK)
+                    console.log(isOK)
                     if(isOK){
                         data_AddForms(this.forms).then(res=>{
                             // console.log(res)
@@ -453,9 +467,6 @@ import '../../../../styles/dialog.scss'
                         })
                     }
                 }
-
-               
-
                 // if(this.forms[0].isFree === '1' && this.forms[0].extraPrice == 0){
                 //         // let information = "请填写额外收费价格";
                 //         // this.hint(information);

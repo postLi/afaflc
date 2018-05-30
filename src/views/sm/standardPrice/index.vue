@@ -135,20 +135,20 @@
                         <div class="chooseinfo">
                             <div class="chooseinfo-item">
                                 <p><span>* </span>选择服务分类 ：</p>
-                                <el-radio-group v-model="radio2" v-for="(obj,key) in formclassfy">
-                                    <el-radio  :label="obj" :key='key'></el-radio>
+                                <el-radio-group v-model="radio2" >
+                                    <el-radio  v-for="(obj,key) in formclassfy" :label="obj" :key='key'></el-radio>
                                 </el-radio-group>
                             </div>
                             <div class="chooseinfo-item">
                                 <p><span>* </span>选择车辆类型 ：</p>
-                                <el-radio-group v-model="radio2" v-for="(obj,key) in formclassfy">
-                                    <el-radio  :label="obj" :key='key'></el-radio>
+                                <el-radio-group v-model="radio2">
+                                    <el-radio   v-for="(obj,key) in formclassfy" :label="obj" :key='key'></el-radio>
                                 </el-radio-group>
                             </div>
                             <div class="chooseinfo-item">
                                 <p>&nbsp;&nbsp;选择车辆规格 ：</p>
-                                <el-radio-group v-model="radio2" v-for="(obj,key) in formclassfy">
-                                    <el-radio  :label="obj" :key='key'></el-radio >
+                                <el-radio-group v-model="radio2" >
+                                    <el-radio  v-for="(obj,key) in formclassfy" :label="obj" :key='key'></el-radio >
                                 </el-radio-group>
                             </div>
                         </div>
@@ -313,6 +313,7 @@
 
 import { data_GetInformation,data_CarList,data_ServerClassList } from '../../../api/server/serverOrder.js'
 import '../../../styles/dialog.scss'
+import spinner from '../../spinner/spinner'
 
 
     export default{
@@ -420,6 +421,9 @@ import '../../../styles/dialog.scss'
                     ]
                 }
             }
+        },
+        components:{
+            spinner
         },
         mounted(){
             // this.getdata_dic();

@@ -8,7 +8,7 @@ import Layout from '../views/layout/Layout'
 
 // ========================引入各个版块类别================
 // 公司
-import Company from './module/company'
+import Common from './module/common'
 // 财务
 import Finance from './module/finance'
 // 客服
@@ -61,7 +61,7 @@ export const asyncRouterMap = [
   Server,
   Finance,
   Report,
-  Company,
+  Common,
   Service,
 /*   {
     path: '/createOrder', hidden: true, icon: 'QQ', name: '创建运单', component: _import('operation/order/createOrder/pop'), meta: { role: ['admin'], title: '创建运单', noCache: true }
