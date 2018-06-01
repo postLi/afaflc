@@ -123,7 +123,7 @@
                 
                 <!-- 新增分类信息 -->
                 <div class="addclassify commoncss">
-                    <el-dialog :visible.sync="dialogFormVisible">
+                    <el-dialog title='新增等待费用'  :visible.sync="dialogFormVisible">
                         <div class="newWait">
                             <div class="clearfix">
                                 <div class="chooseAera chooseCommon fl">
@@ -136,20 +136,24 @@
                                         v-model="filterText">
                                         </el-input>
                                         <el-tree
-                                        :data="newAreaData"
                                         :props="propsAdd"
+                                        show-checkbox
+                                        node-key="code"
+                                        ref = 'trees'
+                                        lazy
+                                        :load="loadNodeMore"
                                         :highlight-current = "true"
-                                        @node-click="handleNodeClick"
-                                        @check-change="handleCheckChange"
-                                        :filter-node-method="filterNode"
-                                        ref="tree2">
+                                        @node-click="handleNodeClickMore"
+                                        @check-change="handleCheckChangeMore"
+                                        :filter-node-method="filterNode">
                                         </el-tree>
                                     </div>
                                     <div class="infowrite">
                                         <p><span>* </span>免费</p>
                                         <el-input
                                             placeholder="请输入内容"
-                                            v-model="cc"
+                                            v-model="freeTime"
+                                            ref="freetime"
                                             clearable>
                                         </el-input>
                                         <span>小时</span>
@@ -158,15 +162,16 @@
                                 <div class="chooseServer chooseCommon fl">
                                     <h4><span>* </span> 选择服务分类</h4>
                                     <div class="lesscommon">
-                                        <el-checkbox-group v-model="servercheckList">
-                                            <el-checkbox v-for="item in serverbox" :label="item" :key="item">{{item}}</el-checkbox>
+                                        <el-checkbox-group v-model="serverCheckList">
+                                            <el-checkbox v-for="item in optionsServiceNew" :label="item.code" :key="item.name" >{{item.name}}</el-checkbox>
                                         </el-checkbox-group>
                                     </div>
                                     <div class="infowrite">
                                         <p><span>* </span>每间隔</p>
                                         <el-input
                                             placeholder="请输入内容"
-                                            v-model="cc"
+                                            v-model="intervalTime"
+                                            ref="intervaltime"
                                             clearable>
                                         </el-input>
                                         <span>分钟</span>
@@ -175,17 +180,18 @@
                                 <div class="chooseCar chooseCommon fr">
                                     <h4><span>* </span> 选择车辆类型</h4>
                                     <div class="lesscommon ">
-                                        <el-checkbox-group v-model="carcheckList">
+                                        <el-checkbox-group v-model="carCheckList">
 
-                                            <el-checkbox v-for="item in carbox" :label="item" :key="item">{{item}}</el-checkbox>
+                                            <el-checkbox v-for="item in optionsCarNew" :label="item.code" :key="item.name">{{item.name}}</el-checkbox>
                                             
                                         </el-checkbox-group>
                                     </div>
                                     <div class="infowrite">
-                                        <p><span>* </span>超市费用</p>
+                                        <p><span>* </span>超时费用</p>
                                         <el-input
                                             placeholder="请输入内容"
-                                            v-model="cc"
+                                            v-model="timeOutstripPrice"
+                                            ref="timeoutstripprice"
                                             clearable>
                                         </el-input>
                                         <span>元</span>
@@ -198,11 +204,12 @@
                                 <p>费用说明</p>
                                 <el-input
                                     placeholder="少于500字符"
+                                    type="textarea"
+                                    :rows="2"
                                     maxlength="500"
-                                    v-model="cc"
-                                    clearable>
+                                    clearable
+                                    v-model="waitPriceDes">
                                 </el-input>
-                                <span>元</span>
                             </div>
                         </div>
                         <div slot="footer" class="dialog-footer">
@@ -215,7 +222,79 @@
                 <!-- 修改分类信息 -->
                 <div class="changeclassify commoncss">
                     <el-dialog title='修改分类信息'  :visible.sync="dialogFormVisible_change">
-
+                        <div class="changeWait">
+                            <div class="changeifno">
+                                <h4><span>* </span>当前城市</h4>
+                                 <el-input
+                                    v-model="changeforms.areaName"
+                                    disabled
+                                    clearable>
+                                </el-input>
+                            </div>
+                            <div class="changeifno">
+                                <h4><span>* </span> 当前服务分类</h4>
+                                <el-select v-model="changeforms.serviceCode" clearable placeholder="请选择">
+                                    <el-option
+                                        v-for="item in optionsService"
+                                        :key="item.value"
+                                        :label="item.name"
+                                        :value="item.code"
+                                        :disabled="item.disabled">
+                                    </el-option>
+                                </el-select>
+                            </div>
+                            <div class="changeifno">
+                                <h4><span>* </span> 当前车辆类型</h4>
+                                <el-select v-model="changeforms.carType" clearable placeholder="请选择">
+                                    <el-option
+                                        v-for="item in optionsCar"
+                                        :key="item.value"
+                                        :label="item.name"
+                                        :value="item.code"
+                                        :disabled="item.disabled">
+                                    </el-option>
+                                </el-select>
+                            </div>
+                            <div class="infowrite">
+                                <p><span>* </span>免费</p>
+                                <el-input
+                                    placeholder="请输入内容"
+                                    v-model="changeforms.freeTime"
+                                    clearable>
+                                </el-input>
+                                <span>小时</span>
+                            </div>
+                            <div class="infowrite">
+                                <p><span>* </span>每间隔</p>
+                                <el-input
+                                    placeholder="请输入内容"
+                                    v-model="changeforms.intervalTime"
+                                    clearable>
+                                </el-input>
+                                <span>分钟</span>
+                            </div>
+                            <div class="infowrite">
+                                <p><span>* </span>超时费用</p>
+                                <el-input
+                                    placeholder="请输入内容"
+                                    v-model="changeforms.timeOutstripPrice"
+                                    clearable>
+                                </el-input>
+                                <span>元</span>
+                            </div>
+                            <div class="additional ">
+                                <p>{{remarkinfo}}</p>
+                                <p>费用说明</p>
+                                 <el-input
+                                    placeholder="少于500字符"
+                                    type="textarea"
+                                    :rows="8"
+                                    maxlength="500"
+                                    clearable
+                                    v-model="changeforms.waitPriceDes">
+                                </el-input>
+                            </div>
+                        </div>
                       <div slot="footer" class="dialog-footer">
                         <el-button type="primary" @click="changeInfoSave">保 存</el-button>
                         <el-button @click="dialogFormVisible_change = false">取 消</el-button>
@@ -253,7 +332,7 @@
 
 <script type="text/javascript">
 
-import { data_Area,data_CarList,data_ServerClassList,data_GetCityList,data_GetBeginInfo,data_GetCityInfo,data_ChangeStatus,data_DeletInfo } from '../../../../api/server/serverWaitinfo.js'
+import { data_Area,data_CarList,data_ServerClassList,data_GetCityList,data_GetBeginInfo,data_GetCityInfo,data_ChangeStatus,data_DeletInfo,data_NewOrChange } from '../../../../api/server/serverWaitinfo.js'
 import '../../../../styles/dialog.scss'
 import spinner from '../../../spinner/spinner'
 
@@ -263,14 +342,21 @@ import spinner from '../../../spinner/spinner'
         data(){
             return{
                 cc:null,
+                ifAll:null,
                 show:false,
                 areadata:[],
                 newAreaData:[],
-                areadataAdd:[],
+                newCityList:[],
                 citylist:[],
                 citywide:null,
                 provinceId:null,
                 cityId:null,
+                chooseAllKeys:[],
+                freeTime:null,
+                intervalTime:null,
+                timeOutstripPrice:null,
+                waitPriceDes:null,
+                newWaitInfo:{},
                 props: {
                     label: 'name',
                     children: 'children'
@@ -279,11 +365,12 @@ import spinner from '../../../spinner/spinner'
                     label: 'name',
                     children: 'children'
                 },
-                servercheckList:[],
-                serverbox:[],
-                carcheckList:[],
-                carbox:[],
+                serverCheckList:[],
+                serverBoxs:[],
+                carCheckList:[],
+                carBoxs:[],
                 valueService:null,
+                optionsServiceNew:null,
                 optionsService:[
                     {
                     code:null,
@@ -291,6 +378,7 @@ import spinner from '../../../spinner/spinner'
                     }
                 ],
                 valueCarlist:null,
+                optionsCarNew:null,
                 optionsCar:[
                     {
                     code:null,
@@ -325,20 +413,14 @@ import spinner from '../../../spinner/spinner'
                 delDialogVisible:false,
                 nowcode:null,
                 dataTotal:0,
-                formlist: [{
-                    code: null,
-                    name: null,
-                    pid: null,
-                    remark: null,
-                    value: null
-                }],
-                changeform:{
-                    id:null,
-                    code: null,
-                    name: null,
-                    pid: null,
-                    remark: null,
-                    value: null
+                changeforms:{
+                    carType:null,
+                    cityId:null,
+                    freeTime:null,
+                    intervalTime:null,
+                    serviceCode:null,
+                    timeOutstripPrice:null,
+                    waitPriceDes:null,
                 },
                 pid:null,
                 pidname:null,
@@ -363,12 +445,10 @@ import spinner from '../../../spinner/spinner'
         mounted(){
             //...初始化获取数据
             this.firstblood();
-            //..获取诚实 和 服务类型
-            this.getMoreInformation();
         },  
         watch: {
             filterText(val) {
-                this.$refs.tree2.filter(val);
+                this.$refs.trees.filter(val);
             }
         },
         methods: {
@@ -376,17 +456,21 @@ import spinner from '../../../spinner/spinner'
             getMoreInformation(){
                 data_CarList().then(res=>{
                     // console.log(res.data)
+
                     res.data.map((item)=>{
                         this.optionsCar.push(item);
                     })
+                    this.optionsCarNew = res.data;
                 });
                 data_ServerClassList().then(res=>{
                     // console.log(res.data)
                      res.data.map((item)=>{
                         this.optionsService.push(item);
                     })
+                    this.optionsServiceNew = res.data;
+                    
                 });
-                console.log(this.optionsService,this.optionsCar)
+                // console.log(this.optionsService,this.optionsCar)
             },
             //刷新页面
             firstblood(){
@@ -399,7 +483,6 @@ import spinner from '../../../spinner/spinner'
             },
             //模糊查询 分类名称或者code
             getdata_search(event){
-                
                 this.getCommonFunction()
             },
             //查询和获取对应区域的数据
@@ -411,13 +494,15 @@ import spinner from '../../../spinner/spinner'
                     serviceCode : this.valueService,
                     usingStatus: this.valueStatus
                 }
-                console.log(data);
+                // console.log(data);
                 data_GetCityInfo(this.page,this.pagesize,data).then(res=>{
-                    console.log(res)
+                    // console.log(res)
                     this.tableDataTree = res.data.list;
                     this.dataTotal = res.data.totalCount;
                     this.show = false;
                 })
+
+                this.getMoreInformation();
             },
             //
             handleCheckChange(data, checked, indeterminate) {
@@ -452,10 +537,41 @@ import spinner from '../../../spinner/spinner'
                     }, 500);
                 }
             },
+            //弹窗Tree节点
+            handleNodeClickMore(data,checked){
+                console.log(data)
+                data_GetCityList(data.code).then(res=>{
+                    this.newCityList = res.data.list;
+                }).catch(res=>{
+                    console.log(res)
+                })
+            },
+            loadNodeMore(node, resolve) {
+                // console.log(node)
+                if (node.level === 0){
+                // 不会触发事件
+                    resolve([{name:'全部'}])
+                }else if(node.level === 1){
+                    setTimeout(() => {
+                    resolve(this.areadata);
+                    }, 500);
+                }else if(node.level >1 ){
+                    setTimeout(() => {
+                    resolve(this.newCityList);
+                    }, 500);
+                }
+                else{
+                   
+                }
+            },
+            handleCheckChangeMore(data, checked, indeterminate) {
+                // console.log(data, checked, indeterminate);
+            },
             //sousuodizhi
             filterNode(value, data){
+                // console.log(value,data)
                 if (!value) return true;
-                return data.label.indexOf(value) !== -1;
+                return data.name.indexOf(value) !== -1;
             },
             //shuangji
             moreinfo(row, event){
@@ -469,14 +585,14 @@ import spinner from '../../../spinner/spinner'
             },
             //新增关闭返回初始内容
             closeAddNewInfo(){
+                this.getCommonFunction();
                 this.dialogFormVisible = false;
-                this.forms = [{
-                    code: null,
-                    name: null,
-                    pid: null,
-                    remark: null,
-                    value: null
-                }]
+                this.serverCheckList = null;
+                this.carCheckList = null;
+                this.waitPriceDes= null;
+                this.freeTime = null ;
+                this.timeOutstripPrice = null;
+                this.intervalTime = null;
             },
             //判断是否选中
             getinfomation(selection){
@@ -495,12 +611,22 @@ import spinner from '../../../spinner/spinner'
                 }else{
                     console.log(this.checkedinformation)
                     this.dialogFormVisible_change = true;
-                    this.changeform.id = this.checkedinformation[0].id;
-                    this.changeform.pid = this.checkedinformation[0].pid;
-                    this.changeform.code = this.checkedinformation[0].code;
-                    this.changeform.name = this.checkedinformation[0].name;
-                    this.changeform.value = this.checkedinformation[0].value;
-                    this.changeform.remark = this.checkedinformation[0].remark;
+                    if(this.checkedinformation[0].cityId){
+                        this.changeforms.cityId = this.checkedinformation[0].cityId;
+                    }else{
+                        this.changeforms.cityId = this.checkedinformation[0].provinceId;
+                    }
+                    this.changeforms.serviceCode = this.checkedinformation[0].serviceCode;
+                    this.changeforms.carType = this.checkedinformation[0].carType;
+                    this.changeforms.freeTime = this.checkedinformation[0].freeTime;
+                    this.changeforms.intervalTime = this.checkedinformation[0].value;
+                    this.changeforms.timeOutstripPrice = this.checkedinformation[0].timeOutstripPrice;
+                    this.changeforms.waitPriceDes = this.checkedinformation[0].waitPriceDes;
+                    this.changeforms.intervalTime = this.checkedinformation[0].intervalTime;
+                    this.changeforms.areaName = this.checkedinformation[0].areaName;
+                    
+                    
+                  
                 }
             },
             // 禁用/启用
@@ -560,54 +686,110 @@ import spinner from '../../../spinner/spinner'
             handleCurrentChange(val) {
                 console.log(`当前页: ${val}`);
             },
-
-
-            //新增分类信息获取code值
+            //新增
             addClassfy(){
                 this.dialogFormVisible = true;
+                this.inited = true
                 this.newAreaData = this.areadata;
-                
             },
             //保存信息
             newInfoSave(){
-                if(this.forms[0].pid){
-                    data_AddForms(this.forms).then(res=>{
-                        if(res.status == 200){
-                            this.dialogFormVisible = false;
-                            this.getdata_dic();
-                        }
-                    })
-                }else{
-                    this.forms.map((item)=>{
-                        item.pid = null;
-                    })
-                    data_AddForms(this.forms).then(res=>{
-                        if(res.status == 200){
-                            this.dialogFormVisible = false;
-                            this.getdata_dic();
-                        }
-                    })
-                    
-                }
+
+                this.NewOrChange()
+                // console.log(this.$refs.trees.getCheckedKeys())
                
+            },
+            //新增和修改Common
+            NewOrChange(){
+                let data = {
+                    waitPriceDes:this.waitPriceDes,
+                    freeTime:this.freeTime,
+                    intervalTime:this.intervalTime,
+                    carType:this.carCheckList.join(','),
+                    serviceCode:this.serverCheckList.join(','),
+                    timeOutstripPrice:this.timeOutstripPrice,
+                    cityId:this.$refs.trees.getCheckedKeys().join(',')
+                };
+                if(!data.cityId){
+                    let information = "请选择省市";
+                    this.hint(information);
+                }
+                else if(!data.serviceCode){
+                    let information = "请选择服务类型";
+                    this.hint(information);
+                }
+                else if(!data.carType){
+                    let information = "请选择车辆类型";
+                    this.hint(information);
+                }
+                else if(!data.freeTime){
+                    let information = "请填写免费时长";
+                    this.hint(information);
+                }
+                else if(!data.intervalTime){
+                    let information = "请填写每间隔分钟数";
+                    this.hint(information);
+                }
+                else if(!data.timeOutstripPrice){
+                    let information = "请填写超时费用";
+                    this.hint(information);
+                }
+                else if(!/^[0-9]+$/.test(data.freeTime)){
+                    let information = "请输入整形数字";
+                    this.hint(information);
+                    this.$refs.freetime.focus();
+                }
+                else if(!/^[0-9]+$/.test(data.intervalTime)){
+                    let information = "请输入整形数字";
+                    this.hint(information);
+                    this.$refs.intervaltime.focus();
+                }
+                else if(!/^[0-9]+$/.test(data.timeOutstripPrice)){
+                    let information = "请输入整形数字";
+                    this.hint(information);
+                    this.$refs.timeoutstripprice.focus();
+                }
+                else(
+                        data_NewOrChange(data).then(res=>{
+                            console.log(res)
+                            if(res.status == 200){
+                                this.getCommonFunction();
+                                this.dialogFormVisible = false;
+                                this.serverCheckList = null;
+                                this.carCheckList = null;
+                                this.waitPriceDes= null;
+                                this.freeTime = null ;
+                                this.timeOutstripPrice = null;
+                                this.intervalTime = null;
+        
+                                console.log(this.serverCheckList,this.carCheckList)
+                            }
+                        })
+                )
+                // this.valuerules(data.freeTime,this.$refs.freetime)
+                // this.valuerules(data.intervalTime,this.$refs.intervaltime)
+                // this.valuerules(data.timeOutstripPrice,this.$refs.timeoutstripPrice)
+
+
             },
             //修改保存
             changeInfoSave(){
-                // console.log(this.changeform)
-                data_ChangeForms(this.changeform).then(res=>{
+                console.log(this.changeforms)
+                data_NewOrChange(this.changeforms).then(res=>{
+                    console.log(res)
                     if(res.status == 200){
+                        this.getCommonFunction();
                         this.dialogFormVisible_change = false;
-                        this.getdata_dic();
+                        
                     }
                 })
             },
             //验证数据值
-            valuerules(event){
-                console.log(event.target.value)
-                if(!/^[0-9]+$/.test(event.target.value)){
-                    let information = "请输入数字类型内容";
+            valuerules(data,event){
+                if(!/^[0-9]+$/.test(data)){
+                    let information = "请输入整形数字";
                     this.hint(information);
-                    event.target.focus()
+                    event.focus();
                 }
             },
             hint(val){
@@ -672,7 +854,7 @@ import spinner from '../../../spinner/spinner'
                padding:8px 20px;
             }
         }
-        .addclassify{
+        .addclassify,.changeclassify{
             .el-dialog{
                 position: relative;
                 width: 820px;
@@ -703,6 +885,7 @@ import spinner from '../../../spinner/spinner'
                         margin-bottom: 12px;
                         overflow: auto;
                         border:1px solid #d2d2d2;
+
                         .el-radio-group{
                             margin-left:34px;
                             font-size: 12px;
@@ -723,6 +906,33 @@ import spinner from '../../../spinner/spinner'
                         }
                         
                     }
+                    .eltree_search{
+                        .checkedAll{
+                            margin-top:5px;
+                            .el-checkbox__input{
+                                margin-left: 24px;
+                                .el-checkbox__inner{
+                                    width:12px;
+                                    height:12px;
+                                }
+                            }
+                            .el-checkbox__label{
+                                padding-left: 8px;
+                            }
+                        }
+                        .el-tree{
+                            .el-tree-node__content{
+                                
+                                .el-checkbox{
+                                    margin-top:0;
+                                    .el-checkbox__inner{
+                                        width: 12px;
+                                        height: 12px;
+                                    }
+                                }
+                            }
+                        }
+                    } 
                     .infowrite{
                             p{
                                 display: inline-block;
@@ -795,6 +1005,15 @@ import spinner from '../../../spinner/spinner'
                 .chooseServer{
                     margin: 0 30px;
                 }
+                .chooseServer,.chooseCar{
+                    .el-checkbox{
+                        margin-left:15px;
+                    }
+                    .el-checkbox__inner{
+                        width:12px;
+                        height: 12px;
+                    }
+                }
                 .additional{
                    p:first-child{
                         padding:10px 0 10px 70px;
@@ -807,20 +1026,107 @@ import spinner from '../../../spinner/spinner'
                        display: inline-block;
                        width: 60px;
                        text-align: right;
+                       margin-right: 5px;
                    }
-                   .el-input{
-                       margin: 0 5px;
-                       .el-input__inner{
-                            width: 685px;
+                   .el-textarea{
+                        vertical-align:middle; 
+                        width: 685px;
+                        font-size: 12px;
+                        line-height: 20px;
+                        .el-textarea__inner{
+                            color: #3e9ff1;
+                        }
+                   }
+
+                }
+            }
+            .changeWait{
+                padding:0 30px;
+                .changeifno{
+                    margin:10px 0;
+                    h4{
+                        display: inline-block;
+                        width: 100px;
+                        text-align: right;
+                        margin-right: 10px;
+                        font-family: MicrosoftYaHei;
+                        font-size: 14px;
+                        font-weight: normal;
+                        font-stretch: normal;
+                        line-height: 20px;
+                        letter-spacing: 0px;
+                        color: #666;
+                        span{
+                            color:red;
+                        }
+
+                    }
+                    .el-input{
+
+                    }
+                    .el-input__inner{
+                        height: 24px;
+                        line-height: 24px;
+                        
+                    }
+                    .el-select{
+                        .el-input{
+                             width: 150px;
+                        }
+                    }
+                }
+                .infowrite{
+                    display: inline-block;
+                    margin-right: 30px; 
+                    p{
+                        display: inline-block;
+                        width:72px;
+                        text-align: right;
+                        font-family: MicrosoftYaHei;
+                        font-size: 14px;
+                        font-weight: normal;
+                        font-stretch: normal;
+                        line-height: 20px;
+                        letter-spacing: 0px;
+                        color: #666;
+                        span{
+                            color:red;
+                        }
+                    }
+
+                    .el-input{
+                        .el-input__inner{
                             height: 24px;
                             line-height: 24px;
                             padding: 0 7px;
                             font-size: 12px;
                             line-height: 20px;
                             color: #3e9ff1;
-                       }
+                        }
+                    }
+                }
+                .additional {
+                    p:first-child{
+                        padding:10px 0 10px 70px;
+                        font-size: 12px;
+                        line-height: 20px;
+                        letter-spacing: 0px;
+                        color: #999999;
                    }
-
+                    p:nth-child(2){
+                       display: inline-block;
+                       width: 60px;
+                       text-align: right;
+                   }
+                    .el-textarea{
+                        vertical-align:middle; 
+                        width: 685px;
+                        font-size: 12px;
+                        line-height: 20px;
+                        .el-textarea__inner{
+                            color: #3e9ff1;
+                        }
+                   }
                 }
             }
             .el-dialog__footer{

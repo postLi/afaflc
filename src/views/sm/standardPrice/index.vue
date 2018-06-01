@@ -87,19 +87,19 @@
                           label="车辆规格">
                         </el-table-column>
                         <el-table-column
-                          prop="carLength"
+                          prop="carTypeClass"
                           label="车长">
                         </el-table-column>
                         <el-table-column
-                          prop="capacityTon"
+                          prop="capacityTonM"
                           label="负载量">
                         </el-table-column>
                         <el-table-column
-                          prop="standardPrice"
+                          prop="standardPriceM"
                           label="标准起步价">
                         </el-table-column>
                         <el-table-column
-                          prop="outstripPrice"
+                          prop="outstripPriceM"
                           label="标准超里程费">
                         </el-table-column>
                         <el-table-column
@@ -136,13 +136,13 @@
                             <div class="chooseinfo-item">
                                 <p><span>* </span>选择服务分类 ：</p>
                                 <el-radio-group v-model="radio2" >
-                                    <el-radio  v-for="(obj,key) in formclassfy" :label="obj" :key='key'></el-radio>
+                                    <el-radio  v-for="(obj,key) in optionsServiceM" :label="obj" :key='key'></el-radio>
                                 </el-radio-group>
                             </div>
                             <div class="chooseinfo-item">
                                 <p><span>* </span>选择车辆类型 ：</p>
                                 <el-radio-group v-model="radio2">
-                                    <el-radio   v-for="(obj,key) in formclassfy" :label="obj" :key='key'></el-radio>
+                                    <el-radio   v-for="(obj,key) in optionsServiceM" :label="obj" :key='key'></el-radio>
                                 </el-radio-group>
                             </div>
                             <div class="chooseinfo-item">
@@ -230,15 +230,7 @@
                         <div class="completeinfo">
                             <div class="detailinfo">
                                 <p><span>* </span>上传服务图片 ：</p>
-                                <el-upload
-                                    class="upload-demo"
-                                    drag
-                                    action="#"
-                                    multiple>
-                                    <i class="el-icon-upload"></i>
-                                    <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
-                                    <!-- <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过500kb</div> -->
-                                </el-upload>
+                                <upload class="licensePicture" tip="（有年检章，jpg/png。小于5M）" v-model="form.licensePicture" />
                             </div>
                         </div>
                       <div slot="footer" class="dialog-footer">
@@ -271,7 +263,6 @@
                             <el-form-item label="描述" :label-width="formLabelWidth" class="morewidth">
                               <el-input v-model="changeform.remark" auto-complete="off"></el-input>
                             </el-form-item>
-
                        </div>
                       </el-form>
                       <div slot="footer" class="dialog-footer">
@@ -305,13 +296,16 @@
                 </div>
             </div>
         <!-- </div> -->
-
+        <!-- loading   -->
+        <!-- <spinner v-show="show"></spinner>  -->
+        
     </div>
 </template>
 
 <script type="text/javascript">
 
-import { data_GetInformation,data_CarList,data_ServerClassList } from '../../../api/server/serverOrder.js'
+import { data_GetInformation,data_CarList,data_ServerClassList,data_ChangeStatus,data_DeletInfo,data_AddForms } from '../../../api/server/standardPrice.js'
+import Upload from '@/components/Upload/singleImage'
 import '../../../styles/dialog.scss'
 import spinner from '../../spinner/spinner'
 
@@ -423,7 +417,9 @@ import spinner from '../../spinner/spinner'
             }
         },
         components:{
-            spinner
+            spinner,
+            Upload,
+
         },
         mounted(){
             // this.getdata_dic();
@@ -506,16 +502,15 @@ import spinner from '../../spinner/spinner'
                     let information = "未选中任何更改状态内容";
                     this.hint(information);
                 }else{
-                    let statusform = {
-                        id:this.checkedinformation.id,
-                        status:this.dataStatus
-                    }
-                    // console.log(statusform)
-                    data_ChangeForms(statusform).then( res=>{
-                        if(res.status == 200){
-                           console.log(res)
-                           this.getdata_dic();
-                        }
+                    let statusID = [];
+                    this.checkedinformation.map((item)=>{
+                        return statusID.push(item.standardPid)
+                    })
+                    data_ChangeStatus(statusID).then(res=>{
+                        console.log(res)
+                        this.firstblood();
+                        // this.getCommonFunction();
+
                     })
                 }
             },
@@ -528,31 +523,18 @@ import spinner from '../../spinner/spinner'
                 }else{
                     console.log(this.checkedinformation)
                     let delID = [];
-                    let isOK = true;
-                    let isMore = false;
-                    this.checkedinformation.map((item)=>{
-                        if(item.isDefault == '是'){
-                            isOK = false;
-                        }
-                        return delID.push(item.id)
-                    })
-                    console.log(isOK,isMore)
-                    if(!isOK){
-                        let information = "存在初始化数据不能删除";
-                        this.hint(information);
-                    }else{
-                        this.delDialogVisible = true;
-                        this.delID = delID;
-                    }
+                   
+                    return delID.push(item.id)
+                    
                     console.log(this.delID)
                 }
             },
             //确认删除
             delDataInformation(){
                 this.delDialogVisible = false;
-                data_Delet(this.delID).then(res => {
+                data_DeletInfo(this.delID).then(res => {
                     if(res.status == 200){
-                      this.getdata_dic();
+                      this.firstblood();
                     }
                 }).catch(res=>{
                     let information = res.text;
@@ -577,6 +559,13 @@ import spinner from '../../spinner/spinner'
                 data_GetInformation(this.page,this.pagesize).then(res=>{
                     this.dataTotal = res.data.totalCount;
                     this.tableDataTree = res.data.list;
+                    this.tableDataTree.map((item)=>{
+                        item.carTypeClass = item.carLength +'*'+item.carWidth+'*'+item.carHeight+'M';
+                        item.capacityTonM = item.capacityTon + '吨,'+' '+item.capacitySquare+'方';
+                        item.standardPriceM = item.standardPrice+'元 '+' '+'('+item.standardKm+'公里)';
+                        item.outstripPriceM = item.outstripPrice + '元/公里';
+                    })
+                    // this.tableDataTree[carTypeClass] = carLength +'*'+carWidth+'*'+carHeight+'M'
                     console.log(this.tableDataTree)
                 })
             },

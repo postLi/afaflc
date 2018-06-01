@@ -74,6 +74,15 @@ export function data_DeletInfo(id) {
 }
 
 
+//新增和修改
+export function data_NewOrChange(data) {
+  return fetch({
+    url: '/'+baseurl+'/sm/aflcWaitPrice/v1/add',
+    method: 'post',
+    data:data
+  })
+}
+
 
 
   

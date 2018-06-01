@@ -62,6 +62,9 @@
                         <el-table-column
                           prop="usingStatus"
                           label="状态">
+                             <template  slot-scope="scope">
+                                {{ scope.row.usingStatus === '1' ? '启用' : '禁用' }}
+                            </template>
                         </el-table-column>
                       </el-table>
                       <!-- 页码 -->
@@ -109,6 +112,8 @@
                             <div class="nomore">
                                 <p>描述</p>
                                 <el-input
+                                    type="textarea"
+                                    :rows="2"
                                     placeholder="5-300间的字符"
                                     maxlength="200"
                                     ref="infofocus"
@@ -158,6 +163,8 @@
                             <div class="nomore">
                                 <p>描述</p>
                                 <el-input
+                                    type="textarea"
+                                    :rows="2"
                                     placeholder="5-300间的字符"
                                     maxlength="200"
                                     ref="infofocus"
@@ -197,7 +204,8 @@
                 </div>
             </div>
         <!-- </div> -->
-        <spinner v-show="show"></spinner> 
+        <!-- loading -->
+        <!-- <spinner v-show="show"></spinner>  -->
         
     </div>
 </template>
@@ -467,15 +475,6 @@ import spinner from '../../../spinner/spinner'
                         })
                     }
                 }
-                // if(this.forms[0].isFree === '1' && this.forms[0].extraPrice == 0){
-                //         // let information = "请填写额外收费价格";
-                //         // this.hint(information);
-                //         this.$refs.pricefocus.focus();
-                //         console.log(this.$refs.pricefocus);
-                //    }
-                
-
-                
             },
             //修改保存
             changeInfoSave(){
@@ -598,7 +597,7 @@ import spinner from '../../../spinner/spinner'
                             }
                         }
                         .ifprice{
-                            width:150px;
+                            width:200px;
                             text-align: left;
                             span{
                                 color:#666;
@@ -613,12 +612,22 @@ import spinner from '../../../spinner/spinner'
                         }
                         .el-input{
                             height:22px;
+                            width: 150px;
                             input{
                                 height:22px;
                                 line-height: 22px;
                                 font-size:12px;
                                 color: #3e9ff1;
                                 padding:0 10px;
+                            }
+                        }
+                        .el-textarea{
+                            width: 560px;   
+                            vertical-align: middle;
+                            .el-textarea__inner{
+                                font-size:12px;
+                                line-height: 20px;
+                                color: #3e9ff1;
                             }
                         }
                         .el-checkbox{

@@ -28,10 +28,10 @@ export function data_ServerClassList(){
 }
 
 
-//新增数据
+//新增数据 和  修改数据
 export function data_AddForms(infoforms) {
     return fetch({
-		url: '/'+baseurl+'/sm/aflcExtraPrice/v1/addOrUpdateList',
+		url: '/'+baseurl+'/sm/aflcStandardPrice/v1/add',
 		method: 'post',
 		data: infoforms
     })
@@ -40,16 +40,17 @@ export function data_AddForms(infoforms) {
 //删除数据
 export function data_DeletInfo(infoforms) {
     return fetch({
-		url: '/'+baseurl+'/sm/aflcExtraPrice/v1/delete',
+		url: '/'+baseurl+'/sm/aflcStandardPrice/v1/delete',
 		method: 'post',
 		data: infoforms
     })
   }
 
+  
 //更改状态
 export function data_ChangeStatus(id) {
     return fetch({
-		url: '/'+baseurl+'/sm/aflcExtraPrice/v1/openOrForbidden',
+		url: '/'+baseurl+'/sm/aflcStandardPrice/v1/openOrForbidden',
 		method: 'post',
 		data: id
     })

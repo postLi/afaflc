@@ -65,6 +65,35 @@ export function data_Delete(id) {
   })
 }
 
+//
+
+export function data_GetCarStyle(servicecode,cartype) {
+  return fetch({
+    url: '/'+baseurl+'/sm/aflcStandardPrice/v1/getPriceByServiceAndCarType/'+servicecode+'/'+cartype,
+    method: 'get'
+  })
+}
+
+//修改
+export function data_NewOrChange(data) {
+  return fetch({
+    url: '/'+baseurl+'/sm/aflcAreaPrice/v1/addList',
+    method: 'post',
+    data:data
+  })
+}
+
+//修改
+export function data_OnlyChange(data) {
+  return fetch({
+    url: '/'+baseurl+'/sm/aflcAreaPrice/v1/update',
+    method: 'post',
+    data:data
+  })
+}
+
+
+
 
 
 
