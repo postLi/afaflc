@@ -1,8 +1,23 @@
 <template>
   <div class="shipper">
     <el-tabs v-model="activeName2" type="card" @tab-click="handleClick">
+      <!-- 全部 -->
+      <el-tab-pane label="全部" name="first">
+				 <ShipperAll></ShipperAll>
+			</el-tab-pane>
+
+      <!-- 未认证 -->
+    <el-tab-pane label="未认证" name="second">
+      <ShipperUnauthorized></ShipperUnauthorized>
+    </el-tab-pane>
+
+    <!-- 待认证 -->
+    <el-tab-pane label="待认证" name="third">
+      <ShipperCertified></ShipperCertified>
+    </el-tab-pane>
+
         <!-- 审核部分 -->
-        <el-tab-pane label="待审核" name="first">
+        <!-- <el-tab-pane label="待审核" name="second">
             <div class="shipper_searchinfo">
                 <label>手机号码：
                     <el-input
@@ -26,16 +41,17 @@
                     </el-input>
                 </label>
                 <label>所在地：
-                    <el-select v-model="formInline.region" placeholder="活动区域">
-                        <el-option label="区域一" value="shanghai"></el-option>
-                        <el-option label="区域二" value="beijing"></el-option>
-                    </el-select>
+                    <el-cascader
+                      :options="options1"
+                      v-model="formInline.selectedOptions1"
+                      @change="handleChange">
+                    </el-cascader>
                 </label>
-                <el-button type="info" plain>查询</el-button>
-                <el-button type="info" plain>清空</el-button>
+                <el-button type="info" plain @click="getdata_search">查询</el-button>
+                <el-button type="info" plain @click="getdata_clear">清空</el-button>
             </div>
             <div class="export">
-                <el-button type="info">导出</el-button>
+                <el-button type="primary" @click="addClassfy">新增</el-button>
             </div>
             <div class="info_news">
                 <el-table
@@ -101,11 +117,11 @@
                        layout="total, sizes, prev, pager, next, jumper"
                        :total="400">
                 </el-pagination>
-            </div>
-        </el-tab-pane>
+            </div> 
+        </el-tab-pane> -->
 
         <!-- 未提交认证部分 -->
-        <el-tab-pane label="未提交认证" name="second">
+        <!-- <el-tab-pane label="未提交认证" name="third">
             <div class="shipper_searchinfo">
                 <label>手机号码：
                     <el-input
@@ -186,124 +202,27 @@
                        :total="400">
                 </el-pagination>
             </div>
-        </el-tab-pane>
+        </el-tab-pane> -->
         
-        <!-- 已认证部分 -->
-        <el-tab-pane label="已认证" name="third">
-            <div class="shipper_searchinfo">
-                <label>手机号码：
-                    <el-input
-                      placeholder="请输入内容"
-                      v-model="formInline.phone"
-                      clearable>
-                    </el-input>
-                </label>
-                <label>公司名称：
-                    <el-input
-                      placeholder="请输入内容"
-                      v-model="formInline.company"
-                      clearable>
-                    </el-input>
-                </label>
-                <label>联系人姓名：
-                    <el-input
-                      placeholder="请输入内容"
-                      v-model="formInline.contacts"
-                      clearable>
-                    </el-input>
-                </label>
-                <label>货主类型：
-                    <el-select v-model="formInline.region" placeholder="活动区域">
-                        <el-option label="区域一" value="shanghai"></el-option>
-                        <el-option label="区域二" value="beijing"></el-option>
-                    </el-select>
-                </label>
-                <el-button type="info" plain>查询</el-button>
-                <el-button type="info" plain>清空</el-button>
-            </div>
-            <div class="export">
-                <el-button type="info">新增</el-button>
-                <el-button type="info">导出</el-button>
-            </div>
-            <div class="info_news">
-                <el-table
-                    ref="multipleTable"
-                    :data="tableData3"
-                    stripe
-                    border
-                    tooltip-effect="dark"
-                    style="width: 100%">
-                    <el-table-column
-                      prop="id"
-                      label="序号">
-                    </el-table-column>
-                    <el-table-column
-                      prop="name"
-                      label="公司名称">
-                    </el-table-column>
-                    <el-table-column
-                      prop="side"
-                      label="联系人">
-                    </el-table-column>
-                    <el-table-column
-                      prop="bumen"
-                      label="手机号"
-                      width="200">
-                    </el-table-column>
-                    <el-table-column
-                      prop="zhiwu"
-                      label="所属组织">
-                    </el-table-column>
-                    <el-table-column
-                      prop="load"
-                      label="常发货物">
-                    </el-table-column>
-                    <el-table-column
-                      prop="quanxian"
-                      label="认证通过时间">
-                    </el-table-column>
-                    <el-table-column
-                      prop="sex"
-                      label="所在地">
-                    </el-table-column>
-                    <el-table-column
-                      prop="phone"
-                      label="货主类型"
-                      >
-                    </el-table-column>
-                    <el-table-column
-                      label="操作"
-                      width="400">
-                      <template slot-scope="scope">
-                            <el-button
-                                @click="dialogFormVisible_prove = true">详情</el-button>
-                            <el-button
-                                @click="dialogFormVisible = true">修改</el-button>
-                            <el-button
-                                @click="dialogFormVisible = true">冻结</el-button>
-                            <el-button
-                                @click="dialogFormVisible = true">移入黑名单</el-button>
-                      </template>
-                    </el-table-column>
-                </el-table>
-                    
-                <el-pagination
-                       @size-change="handleSizeChange"
-                       @current-change="handleCurrentChange"
-                       :current-page="currentPage4"
-                       :page-sizes="[100, 200, 300, 400]"
-                       :page-size="100"
-                       layout="total, sizes, prev, pager, next, jumper"
-                       :total="400">
-                </el-pagination>
-            </div>
-        </el-tab-pane>
+    <!-- 已认证部分 -->
+    <el-tab-pane label="已认证" name="fourth">
+      <ShipperHasCertified></ShipperHasCertified>
+    </el-tab-pane>
 
-        <!-- 冻结部分 -->
-        <el-tab-pane label="冻结中" name="fourth">冻结中</el-tab-pane>
+    <!-- 认证为通过 -->
+    <el-tab-pane label="认证不通过" name="fifth">
+      <ShipperDisqualification></ShipperDisqualification>
+    </el-tab-pane>
 
-        <!-- 黑名单部分 -->
-        <el-tab-pane label="黑名单" name="fifth">黑名单</el-tab-pane>
+    <!-- 冻结部分 -->
+    <el-tab-pane label="冻结中" name="six">
+      <ShipperFreezing></ShipperFreezing>
+    </el-tab-pane>
+
+    <!-- 黑名单部分 -->
+    <el-tab-pane label="黑名单" name="seven">
+      <ShipperBlacklist></ShipperBlacklist>
+    </el-tab-pane>
 
     </el-tabs>
 
@@ -660,14 +579,39 @@
 
 
 <script type="text/javascript">
+    import ShipperAll from './components/ShipperAll.vue'
+    import ShipperUnauthorized from './components/ShipperUnauthorized.vue' 
+    import ShipperCertified from './components/ShipperCertified.vue'
+    import ShipperHasCertified from './components/ShipperHasCertified.vue'
+    import ShipperDisqualification from './components/ShipperDisqualification.vue'
+    import ShipperFreezing from './components/ShipperFreezing.vue'
+    import ShipperBlacklist from './components/ShipperBlacklist.vue'
     
     export default {
+      name:'shipper',
+      components:{
+          ShipperAll,
+          ShipperUnauthorized,
+          ShipperCertified,
+          ShipperHasCertified,
+          ShipperDisqualification,
+          ShipperFreezing,
+          ShipperBlacklist
+        },
         data() {
           return {
+            options2:null,
+            options:[],
             fileList1: [
                 {name: 'food.jpeg', url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'}],
-            radio1:'上传合格',
-            radio2:'3',
+           fileList2: [
+                {name: 'food.jpeg', url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'}],
+           
+           fileList3: [
+                {name: 'food.jpeg', url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'}],radio1:'上传合格',
+            
+            fileList4: [
+                {name: 'food.jpeg', url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'}],radio2:'3',
             radio3:'3',
             currentPage4: 4,
             tableData3:[
@@ -695,10 +639,21 @@
             followform:{
                 textarea:'',
             },
+            
             dialogFormVisible: false,
             dialogFormVisible_uncommitted:false,
             dialogFormVisible_follow:false,
             dialogFormVisible_prove:false,
+            dialogFormVisible_add:false, //待审核-新增
+
+            options:[{
+              value: '选项1',
+              label: '企业货主'
+              },
+              {
+              value: '选项2',
+              label: '普通货主'
+            }],
 
             shengheform: {
                 phone: '',
@@ -736,7 +691,11 @@
             }
           };
         },
+        
         methods: {
+            handleChange(value){
+              console.log(value);
+            },
             handleClick(tab, event) {
                 // console.log(tab, event);
             },
@@ -775,6 +734,25 @@
 </script>
 
 <style type="text/css" lang="scss">
+    .completeinfo{
+      .detailinfo{
+        margin-left: 26px;
+        p{
+            width:160px;
+            height: 40px;
+            line-height: 40px;
+            text-align: left;
+            display: inline-block;
+            vertical-align: top;
+            span{
+                color:red;
+            }
+        }
+        .upload-demo{
+          display: inline-block ;
+        }
+      }
+    }
     .shipper{
         height:100%;
         .shipper_searchinfo{
