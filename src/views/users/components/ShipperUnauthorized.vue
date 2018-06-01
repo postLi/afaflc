@@ -15,8 +15,8 @@
             clearable>
           </el-input>
         </label>
-        <el-button type="primary" plain>查询</el-button>
-        <el-button type="info" plain>清空</el-button>
+        <el-button type="primary" plain @click="getdata_search">查询</el-button>
+        <el-button type="info" plain @click="clearSearch">清空</el-button>
       </div>
       <div class="info_news">
         <el-table
@@ -27,7 +27,7 @@
           tooltip-effect="dark"
           style="width: 100%" >
           <el-table-column
-            prop="index"
+            type="index"
             label="序号">
           </el-table-column>
           <el-table-column
@@ -70,7 +70,7 @@
               @size-change="handleSizeChange"
               @current-change="handleCurrentChange"
               :current-page="page"
-              :page-sizes="[100, 200, 300, 400]"
+              :page-sizes="[20, 50, 200, 400]"
               :page-size="pagesize"
               layout="total, sizes, prev, pager, next, jumper"
               :total="totalCount">
@@ -90,10 +90,7 @@ export default {
           pagesize:20,
           formInline: {
             belongCity:null,
-            mobile:'',
-            company:'',
-            contacts:'',
-            region:''
+            mobile:''
           }
         }
     },
@@ -101,6 +98,22 @@ export default {
      this.firstblood()
     },
     methods:{
+        //点击查询按纽，按条件查询列表
+      getdata_search(event){
+          data_get_shipper_list(this.page,this.pagesize,this.formInline).then(res=>{
+            this.totalCount = res.data.totalCount;
+            this.tableDataAll = res.data.list;
+          })
+      },
+      
+      //清空
+      clearSearch(){
+        this.formInline = {
+          belongCity:'',
+          mobile:''
+  
+        }
+      },
        //刷新页面
       firstblood(){
         data_get_shipper_list(this.page,this.pagesize,this.formInline).then(res=>{

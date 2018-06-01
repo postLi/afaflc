@@ -192,9 +192,7 @@ export default {
           data_get_shipper_create(this.xinzengform).then(res=>{
             console.log(res)
             this.dialogFormVisible_add = !this.dialogFormVisible_add;
-            if(res.data.status== '200'){
-              this.$message.success('保存成功')
-            }
+            this.$emit('getDataList')
           })
         }
       })

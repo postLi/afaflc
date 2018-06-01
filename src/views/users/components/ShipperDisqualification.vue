@@ -12,10 +12,10 @@
               <el-input v-model="formAll.companyName"></el-input>
             </label>
             <label>手机号码：
-             <el-input v-model="formAll.phone"></el-input>
+             <el-input v-model="formAll.mobile"></el-input>
            </label>
-           <el-button type="primary" plain>查询</el-button>
-           <el-button type="info" plain>清空</el-button>
+           <el-button type="primary" plain @click="getdata_search">查询</el-button>
+           <el-button type="info" plain @click="clearSearch">清空</el-button>
         </div>
         <div class="info_news">
             <el-table 
@@ -25,17 +25,17 @@
                 border
                 tooltip-effect="dark"
                 style="width: 100%">
-                <el-table-column prop="id" label="序号">
+                <el-table-column type="index" label="序号">
                 </el-table-column>
-                <el-table-column prop="company" label="公司名称">
+                <el-table-column prop="companyName" label="公司名称">
                 </el-table-column>
-                <el-table-column prop="phone" label="联系人">
+                <el-table-column prop="contacts" label="联系人">
                 </el-table-column>
-                <el-table-column prop="phone" label="手机号">
+                <el-table-column prop="mobile" label="手机号">
                 </el-table-column>
-                <el-table-column prop="phone" label="注册来源">
+                <el-table-column prop="registerOrigin" label="注册来源">
                 </el-table-column>
-                <el-table-column prop="phone" label="所在地">
+                <el-table-column prop="belongCity" label="所在地">
                 </el-table-column>
                 <el-table-column prop="phone" label="提交认证时间">
                 </el-table-column>
@@ -53,31 +53,71 @@
             <el-pagination
                 @size-change="handleSizeChange"
                 @current-change="handleCurrentChange"
-                :current-page="currentPage4"
-                :page-sizes="[100, 200, 300, 400]"
-                :page-size="100"
+                :current-page="page"
+                :page-sizes="[20, 50, 200, 400]"
+                :page-size="pagesize"
                 layout="total, sizes, prev, pager, next, jumper"
-                :total="400">
+                :total="totalCount">
             </el-pagination>
         </div>
     </div>
 </template>
 <script>
+import {data_get_shipper_list} from '../../../api/users/shipper/all_shipper.js'
 export default {
     data(){
         return{
             tableData1:[],
-            total:null,
-            currentPage4:1,
+            totalCount:null,
+            page:1,
+            pagesize:21,
             options:[],
             formAll:{
-              selectedOptions6:null,
+              belongCity:null,
               companyName:'',
-              phone:''
+              mobile:''
             }
         }
     },
+    mounted(){
+        this.firstblood()
+    },
     methods:{
+        //刷新页面
+      firstblood(){
+        data_get_shipper_list(this.page,this.pagesize,this.formAll).then(res=>{
+          console.log(res)
+          this.totalCount = res.data.totalCount;
+          this.tableData1 = res.data.list;
+        })
+      },
+         //点击查询按纽，按条件查询列表
+      getdata_search(event){
+          data_get_shipper_list(this.page,this.pagesize,this.formAll).then(res=>{
+            this.totalCount = res.data.totalCount;
+            this.tableData1= res.data.list;
+          })
+      },
+      
+      //清空
+      clearSearch(){
+        this.formAll = {
+          belongCity:'',
+          attestationStatus:'',
+          mobile:'',
+          companyName:''
+        }
+      },
+      handleSizeChange(val) {
+        console.log(`每页 ${val} 条`);
+        this.pagesize=val
+        this.firstblood()
+      },
+      handleCurrentChange(val) {
+        console.log(`当前页: ${val}`);
+        this.page=val
+        this.firstblood()
+      },
         handleChange(value){
             console.log(value)
         },

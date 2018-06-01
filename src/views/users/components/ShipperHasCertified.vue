@@ -4,14 +4,14 @@
             <label>手机号码：
                 <el-input
                     placeholder="请输入内容"
-                    v-model="formInline.phone"
+                    v-model="formInline.mobile"
                     clearable>
                 </el-input>
             </label>
             <label>公司名称：
                 <el-input
                     placeholder="请输入内容"
-                    v-model="formInline.company"
+                    v-model="formInline.companyName"
                     clearable>
                 </el-input>
             </label>
@@ -23,13 +23,13 @@
                 </el-input>
             </label>
             <label>货主类型：
-                <el-select v-model="formInline.region" placeholder="活动区域">
+                <el-select v-model="formInline.shipperType" placeholder="活动区域">
                     <el-option label="区域一" value="shanghai"></el-option>
                     <el-option label="区域二" value="beijing"></el-option>
                 </el-select>
             </label>
-            <el-button type="info" plain>查询</el-button>
-            <el-button type="info" plain>清空</el-button>
+            <el-button type="primary" plain @click="getdata_search">查询</el-button>
+           <el-button type="info" plain @click="clearSearch">清空</el-button>
         </div>
         <div class="export">
             <el-button type="info">新增</el-button>
@@ -44,19 +44,19 @@
                 tooltip-effect="dark"
                 style="width: 100%">
                 <el-table-column
-                    prop="id"
+                    type="index"
                     label="序号">
                 </el-table-column>
                 <el-table-column
-                    prop="name"
+                    prop="companyName"
                     label="公司名称">
                 </el-table-column>
                 <el-table-column
-                    prop="side"
+                    prop="contants"
                     label="联系人">
                 </el-table-column>
                 <el-table-column
-                    prop="bumen"
+                    prop="mobile"
                     label="手机号"
                     width="200">
                 </el-table-column>
@@ -73,11 +73,11 @@
                     label="认证通过时间">
                 </el-table-column>
                 <el-table-column
-                    prop="sex"
+                    prop="belongCity"
                     label="所在地">
                 </el-table-column>
                 <el-table-column
-                    prop="phone"
+                    prop="shipperType"
                     label="货主类型"
                     >
                 </el-table-column>
@@ -100,39 +100,71 @@
             <el-pagination
                     @size-change="handleSizeChange"
                     @current-change="handleCurrentChange"
-                    :current-page="currentPage4"
-                    :page-sizes="[100, 200, 300, 400]"
-                    :page-size="100"
+                    :current-page="page"
+                    :page-sizes="[20, 50, 200, 400]"
+                    :page-size="pagesize"
                     layout="total, sizes, prev, pager, next, jumper"
-                    :total="400">
+                    :total="totalCount">
             </el-pagination>
         </div>
     </div>
 </template>
 <script>
+import {data_get_shipper_list} from '../../../api/users/shipper/all_shipper.js'
 export default {
     data(){
         return {
             tableData3:[],
-            currentPage4:1,
             total:null,
             page:1,
             pagesize:20,
             formInline:{
-             phone:'',
-             company:'',
+             mobile:'',
+             companyName:'',
              contacts:'',
-             region:''
+             shipperType:''
             }
         }
     },
+    mounted(){
+      this.firstblood()
+    },
     methods:{
+        //刷新页面
+      firstblood(){
+        data_get_shipper_list(this.page,this.pagesize,this.formInline).then(res=>{
+          console.log(res)
+          this.totalCount = res.data.totalCount;
+          this.tableData3 = res.data.list;
+        })
+      },
         handleSizeChange(val) {
         console.log(`每页 ${val} 条`);
-       },
-       handleCurrentChange(val) {
+        this.pagesize=val
+        this.firstblood()
+      },
+      handleCurrentChange(val) {
         console.log(`当前页: ${val}`);
-       },
+        this.page=val
+        this.firstblood()
+      },
+       //点击查询按纽，按条件查询列表
+      getdata_search(event){
+          data_get_shipper_list(this.page,this.pagesize,this.formInline).then(res=>{
+            this.totalCount = res.data.totalCount;
+            this.tableDataAll = res.data.list;
+          })
+      },
+      
+      //清空
+      clearSearch(){
+        this.formInline = {
+          belongCity:'',
+          mobile:'',
+          companyName:'',
+          shipperType:''
+        }
+      },
     }
 }
 </script>

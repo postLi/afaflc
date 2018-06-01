@@ -109,7 +109,7 @@ export default {
     },
     methods:{
       //刷新页面
-      getDataList(){
+      firstblood(){
         data_get_shipper_list(this.page,this.pagesize,this.formAll).then(res=>{
           console.log(res)
           this.totalCount = res.data.totalCount;
@@ -136,7 +136,6 @@ export default {
       clearSearch(){
         this.formAll = {
           belongCity:'',
-          attestationStatus:'',
           mobile:'',
           companyName:''
         }
