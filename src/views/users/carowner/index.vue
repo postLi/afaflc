@@ -8,27 +8,31 @@
 				<Unauthorized></Unauthorized>
 			</el-tab-pane>
 			<el-tab-pane label="待认证">
-
+                <toBeCertified></toBeCertified>
 			</el-tab-pane>
 			<el-tab-pane label="已认证">
-
+                <authenticatedcomponent></authenticatedcomponent>
 			</el-tab-pane>
 			<el-tab-pane label="认证不通过">
-
+                <unPassCertification></unPassCertification>
 			</el-tab-pane>
 			<el-tab-pane label="冻结中">
-
+                <freezing></freezing>
 			</el-tab-pane>
 			<el-tab-pane label="黑名单">
-
+                <blackList></blackList>
 			</el-tab-pane>
 		</el-tabs>
 	</div>
 </template>
 <script type="text/javascript">
-	import TotalComponent from "../components/Totalcomponent.vue"
-    import UnauthorizedComponent from "../components/Unauthorizedcomponent.vue"
-	
+    import totalComponent from "../components/totalComponent.vue"
+    import unauthorizedComponent from "../components/unauthOrizedComponent.vue"
+    import authEnticatedComponent from "../components/authEnticatedComponent.vue"
+    import toBeCertified from "../components/toBeCertified.vue"
+    import unPassCertification from "../components/unPassCertification.vue"
+    import freezing from "../components/freezing.vue"
+    import blackList from "../components/blackList.vue"
     export default {
         data:function(){
             return{
@@ -37,9 +41,13 @@
             }
         },
         components:{
-			Total:TotalComponent,
-            Unauthorized:UnauthorizedComponent
-			
+			Total:totalComponent,
+            Unauthorized:unauthorizedComponent,
+            authenticatedcomponent:authEnticatedComponent,
+            toBeCertified:toBeCertified,
+            unPassCertification:unPassCertification,
+            freezing:freezing,
+            blackList:blackList
         },
         methods:{
 			handleClick(tab, event) {

@@ -8,17 +8,6 @@
                       clearable>
                     </el-input>
                 </label>
-                <label>状态：
-                    <el-select v-model="formInline.driverStatus" placeholder="请选择">
-                        <el-option
-                            v-for="item in optionsService"
-                            :key="item.value"
-                            :label="item.name"
-                            :value="item.code"
-                            :disabled="item.disabled">
-                        </el-option>
-                    </el-select>
-                </label>
                 <label>车牌号：
                     <el-input
                       placeholder="请输入内容"
@@ -51,13 +40,13 @@
                       prop="id"
                       label="序号">
                     </el-table-column>
+                     <el-table-column
+                      prop="carNumber"
+                      label="车牌号">
+                    </el-table-column>
                     <el-table-column
                       prop="driverMobile"
                       label="手机号">
-                    </el-table-column>
-                    <el-table-column
-                      prop="carNumber"
-                      label="车牌号">
                     </el-table-column>
                     <el-table-column
                       prop="driverName"
@@ -65,20 +54,20 @@
                       width="200">
                     </el-table-column>
                     <el-table-column
-                      prop="registerOrigin"
-                      label="注册来源">
-                    </el-table-column>
-                    <el-table-column
                       prop="belongCity"
                       label="所在地">
                     </el-table-column>
                     <el-table-column
-                      prop="driverStatus"
-                      label="状态">
+                      prop="putBlackTime"
+                      label="移入黑名单时间">
                     </el-table-column>
                     <el-table-column
-                      prop="createTime"
-                      label="注册日期">
+                      prop="putBlackCause"
+                      label="冻结原因">
+                    </el-table-column>
+                    <el-table-column
+                      prop=""
+                      label="操作">
                     </el-table-column>
                 </el-table>
                     
@@ -105,7 +94,7 @@
                 formInline: {//查询条件
                     driverMobile:'',
                     belongCity:'',
-                    driverStatus:'',
+                    driverStatus:'AF0010406',
                     carNumber:''
                 },
                 tableDataTree:[],//定义列表记录

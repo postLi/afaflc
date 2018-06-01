@@ -8,17 +8,6 @@
                       clearable>
                     </el-input>
                 </label>
-                <label>状态：
-                    <el-select v-model="formInline.driverStatus" placeholder="请选择">
-                        <el-option
-                            v-for="item in optionsService"
-                            :key="item.value"
-                            :label="item.name"
-                            :value="item.code"
-                            :disabled="item.disabled">
-                        </el-option>
-                    </el-select>
-                </label>
                 <label>车牌号：
                     <el-input
                       placeholder="请输入内容"
@@ -36,9 +25,6 @@
                 <el-button type="primary" plain @click="getdata_search">查询</el-button>
                 <el-button type="info" plain>清空</el-button>
             </div>
-            <div class="export">
-                <el-button type="info">新增</el-button>
-            </div>
             <div class="info_news">
                 <el-table
                     ref="multipleTable"
@@ -52,12 +38,12 @@
                       label="序号">
                     </el-table-column>
                     <el-table-column
-                      prop="driverMobile"
-                      label="手机号">
-                    </el-table-column>
-                    <el-table-column
                       prop="carNumber"
                       label="车牌号">
+                    </el-table-column>
+                    <el-table-column
+                      prop="driverMobile"
+                      label="手机号">
                     </el-table-column>
                     <el-table-column
                       prop="driverName"
@@ -73,12 +59,12 @@
                       label="所在地">
                     </el-table-column>
                     <el-table-column
-                      prop="driverStatus"
-                      label="状态">
+                      prop="authPassTime"
+                      label="认证通过日期">
                     </el-table-column>
-                    <el-table-column
-                      prop="createTime"
-                      label="注册日期">
+                     <el-table-column
+                      prop=""
+                      label="操作">
                     </el-table-column>
                 </el-table>
                     
@@ -105,7 +91,7 @@
                 formInline: {//查询条件
                     driverMobile:'',
                     belongCity:'',
-                    driverStatus:'',
+                    driverStatus:'AF0010403',
                     carNumber:''
                 },
                 tableDataTree:[],//定义列表记录
