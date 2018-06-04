@@ -110,9 +110,9 @@
                 },
                 tableDataTree:[],//定义列表记录
                 optionsService:[//状态
-                     {
-                    code:null,
-                    name:'全部'
+                    {
+                      code:null,
+                      name:'全部'
                     }
                 ],
             }
