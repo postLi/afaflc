@@ -22,7 +22,7 @@
           </el-form-item>
           <el-form-item label="所在地:" :label-width="formLabelWidth" required>
             <el-cascader
-              :options="options2"
+              :options="areadata"
               v-model="xinzengform.belongCity"
               @change="handleChange">
             </el-cascader>
@@ -34,7 +34,7 @@
             <el-input :maxlength="20" v-model="xinzengform.companyname"></el-input>
           </el-form-item>
           <el-form-item label="统一社会信用代码:" :label-width="formLabelWidth" v-show="companyFlag">
-            <el-input :maxlength="20" v-model="xinzengform.creditCOde"></el-input>
+            <el-input :maxlength="20" v-model="xinzengform.creditCode"></el-input>
           </el-form-item>
         </el-form>
 
@@ -85,14 +85,14 @@
             </div>
         </div>
         <div slot="footer" class="dialog-footer">
-          <el-button type="primary" @click="onSubmit">确 定</el-button>
-          <el-button @click="dialogFormVisible_add = false">取 消</el-button>
+          <el-button type="primary" @click="onSubmit" v-show="editType!='view'">确 定</el-button>
+          <el-button @click="dialogFormVisible_add = false" v-show="editType!='view'">取 消</el-button>
         </div>
       </el-dialog>
     </div>
 </template>
 <script>
-import {data_get_shipper_type,data_get_shipper_create} from '../../../api/users/shipper/all_shipper.js'
+import {data_get_shipper_type,data_get_shipper_create,data_Area,data_get_shipper_change,data_get_shipper_view} from '../../../api/users/shipper/all_shipper.js'
 export default {
   props:{
     params:{
@@ -130,7 +130,7 @@ export default {
         title:'',
         text:'',
         options:[],
-        options2:[],  
+        areadata:[],  
         formLabelWidth:'150px',
         companyFlag:false,
         xinzengform:{
@@ -140,7 +140,7 @@ export default {
           contacts:'',
           address:'',
           companyname:'',
-          creditCOde:''
+          creditCode:''
         }  
       }
   },
@@ -169,6 +169,24 @@ export default {
   methods:{
     openDialog(){
       this.dialogFormVisible_add=true
+      if(this.params){
+       var obj = JSON.parse(JSON.stringify(this.params));
+        this.xinzengform.shipperType=obj.shipperType
+        this.xinzengform.belongCity=obj.belongCity
+        this.xinzengform.mobile=obj.mobile
+        this.xinzengform.contacts=obj.contacts
+        this.xinzengform.address=obj.address
+        this.xinzengform.companyname=obj.companyname
+        this.xinzengform.creditCode=obj.creditCode
+      }else{
+        this.xinzengform.shipperType=null
+        this.xinzengform.belongCity=null
+        this.xinzengform.mobile=null
+        this.xinzengform.contacts=null
+        this.xinzengform.address=null
+        this.xinzengform.companyname=null
+        this.xinzengform.creditCode=null
+      }
     },
     change() {
       this.dialogFormVisible_add = !this.dialogFormVisible_add;
@@ -182,6 +200,8 @@ export default {
         })
       })
     },
+    
+    // 保存
     onSubmit(){
       this.$refs['xinzengform'].validate((valid)=>{
         if(valid){
@@ -189,11 +209,29 @@ export default {
             xinzengform: this.xinzengform
           }
           console.log('onSubmit',form)
-          data_get_shipper_create(this.xinzengform).then(res=>{
-            console.log(res)
-            this.dialogFormVisible_add = !this.dialogFormVisible_add;
-            this.$emit('getDataList')
-          })
+          if(this.editType === 'add'){
+            // 新增
+            data_get_shipper_create(this.xinzengform).then(res=>{
+              console.log(res)
+              this.dialogFormVisible_add = !this.dialogFormVisible_add;
+              this.$emit('getDataList')
+            })
+          }else if(this.editType === 'edit'){
+            // 修改
+            data_get_shipper_change(this.xinzengform).then(res=>{
+              console.log(res)
+              this.dialogFormVisible_add = !this.dialogFormVisible_add;
+              this.$emit('getDataList')
+            }) 
+          } else {
+            data_get_shipper_view(this.xinzengform).then(res=>{
+              console.log(res)
+              this.dialogFormVisible_add = !this.dialogFormVisible_add;
+            })
+          }
+          
+
+          
         }
       })
     },
@@ -203,8 +241,15 @@ export default {
     handlePreview(file) {
       console.log(file);
     },
+
+    // 所在地获取
     handleChange(value){
       console.log(value)
+      // data_Area().then(res=>{
+      //   console.log(res)
+      //   this.areadata = res.data.list;
+      //   this.provinceId = this.areadata[0].code ;
+      // })
     }
   }
 }

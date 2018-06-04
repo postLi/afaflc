@@ -57,7 +57,7 @@
           :page-sizes="[20, 50, 200, 400]"
           :page-size="pagesize"
           layout="total, sizes, prev, pager, next, jumper"
-          :total="totalcount">
+          :total="totalCount">
         </el-pagination>
       </div>
     </div>
@@ -69,7 +69,7 @@ export default {
       return{
         options:[],
         tableData:[],
-        total:null,
+        totalCount:null,
         page:1,
         pagesize:20,
         formAll:{

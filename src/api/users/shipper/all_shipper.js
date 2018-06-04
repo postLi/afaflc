@@ -1,0 +1,65 @@
+import fetch from '@/utils/fetch'
+
+const baseurl = 'aflcusercenterservice'
+const baseurl_two = 'aflccommonservice'
+
+// 获取货主列表
+export function data_get_shipper_list(page, pagesize, data) {
+  return fetch({
+    url: '/' + baseurl + '/usercenter/aflcShipper/v1/list',
+    method: 'post',
+    data: {
+      'currentPage': page,
+      'pageSize': pagesize,
+      'vo': data
+    }
+  })
+}
+
+// 获取状态列表
+export function data_get_shipper_status() {
+  return fetch({
+    url: '/' + baseurl_two + '/sysDict/getSysDictByCodeGet/AF00104',
+    method: 'get'
+  })
+}
+
+ // 货主页面 -新增
+export function data_get_shipper_create(data) {
+  return fetch.post('/' + baseurl + '/usercenter/aflcShipper/v1/add', data)
+}
+
+// 货主类型的获取
+export function data_get_shipper_type() {
+  return fetch({
+    url: '/' + baseurl_two + '/sysDict/getSysDictByCodeGet/AF00101',
+    method: 'get'
+  })
+}
+
+// 根据手机号码获取货主
+export function data_get_shipper_view() {
+  return fetch.post('/' + baseurl + '/usercenter/aflcShipper/v1/findByMobile/{mobile}')
+}
+// 获取省市数据
+export function data_Area() {
+  return fetch.get('/' + baseurl + '/sm/aflcDistrict/v1/getProvinceList') 
+}
+
+//  修改货主表
+export function data_get_shipper_change(code) {
+  return fetch.put({
+    url: '/' + baseurl + '/usercenter/aflcShipper/v1/update',
+    'body': code
+  })
+}
+// 获取省级对应的城市列表
+export function data_GetCityList(code) {
+  return fetch({
+    url: '/' + baseurl + '/sm/aflcDistrict/v1/lists',
+    method: 'post',
+    data: {
+      'code': code
+    }
+  })
+}
