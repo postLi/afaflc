@@ -30,7 +30,7 @@
          </div>
          <div class="export">
             <!-- <el-button type="primary" @click="addClassfy">新增</el-button> -->
-            <createdDialog btntext="新增" btnType="primary" editType="add" btntitle="新增" @getData="getDataList"></createdDialog>
+            <createdDialog btntext="新增" btnType="primary" editType="add" btntitle="新增货主" @getData="getDataList"></createdDialog>
          </div>
          <div class="info_news">
            <el-table
@@ -44,7 +44,8 @@
            </el-table-column>  
            <el-table-column label="手机号">
              <template slot-scope="scope">
-                <div @click="handleClick(scope.row)">{{scope.row.mobile}}</div>
+                <!-- <div @click="handleClick(scope.row)">{{scope.row.mobile}}</div> -->
+                <createdDialog :params="scope.row" btntype="text" :btntext="scope.row.mobile" editType="view" btntitle="货主详情" @getData="getDataList"></createdDialog>
               </template>
            </el-table-column>
            <el-table-column prop="companyName" label="公司名称">
@@ -71,6 +72,14 @@
               layout="total, sizes, prev, pager, next, jumper"
               :total="totalCount">
            </el-pagination>
+
+
+           <!-- 修改 -->
+           <!-- <div class="changeclassify commoncss">
+             <el-dialog title="修改" :visible.sync="changeDialogflag">
+
+             </el-dialog>
+           </div> -->
         </div>
     </div>
 </template>
@@ -91,6 +100,7 @@ export default {
               name:'全部'
               }
             ],
+            // changeDialogflag: false, // 修改弹框显示控制
             formAll:{
               belongCity: null,
               attestationStatus:null,
@@ -135,7 +145,7 @@ export default {
       //清空
       clearSearch(){
         this.formAll = {
-          belongCity:'',
+          belongCity:null,
           mobile:'',
           companyName:''
         }

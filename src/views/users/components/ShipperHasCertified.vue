@@ -115,7 +115,7 @@ export default {
     data(){
         return {
             tableData3:[],
-            total:null,
+            totalCount:null,
             page:1,
             pagesize:20,
             formInline:{

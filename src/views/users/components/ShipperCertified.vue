@@ -69,7 +69,7 @@ export default {
         return{
           options:[],
           tableData1:[],
-          total:null,
+          totalCount:null,
           page:1,
           pagesize:20,
           formAll:{
