@@ -36,7 +36,7 @@
                         :data="tableDataTree"
                         stripe
                         border
-                        height="93%"
+                        height="90%"
                         @selection-change = "getinfomation"
                         @row-dblclick="moreinfo"
                         tooltip-effect="dark"
@@ -67,6 +67,9 @@
                         <el-table-column
                           prop="status"
                           label="状态">
+                             <template  slot-scope="scope">
+                                {{ scope.row.status == true ? '启用' : '禁用' }}
+                            </template>
                         </el-table-column>
                         <el-table-column
                           prop="remark"
@@ -75,6 +78,9 @@
                         <el-table-column
                           prop="isDefault"
                           label="是否初始值">
+                             <template  slot-scope="scope">
+                                {{ scope.row.isDefault == true ? '是' : '否' }}
+                            </template>
                         </el-table-column>
                       </el-table>
                       <!-- 页码 -->
@@ -102,7 +108,7 @@
                            <el-option label="无" value=''></el-option>
                          </el-select>
                        </el-form-item>
-                         <div  v-for="(form,idx) in forms"> 
+                         <div  v-for="(form,idx) in forms" :key="idx"> 
                             <el-form-item label="编码" :label-width="formLabelWidth">
                               <el-input v-model="form.code" auto-complete="off" :disabled="true" ></el-input>
                             </el-form-item>
@@ -206,7 +212,7 @@ import '../../../styles/dialog.scss'
                 page:1,
                 pagesize:20,
                 formtitle:'新增分类信息',
-                currentPage4: 100,
+                currentPage4: 1,
                 dialogFormVisible: false,
                 dialogFormVisible_change:false,
                 centerDialogVisible:false,
@@ -229,7 +235,6 @@ import '../../../styles/dialog.scss'
                     value: null
                 },
                 information:'你想知道什么',
-                waitchange:{},
                 delID:[],
                 delIDTree:null,
                 checkedinformation:[],
@@ -259,29 +264,15 @@ import '../../../styles/dialog.scss'
                 data_Trees(this.page,this.pagesize,row.id).then(res =>{
                     console.log(res)
                     if(res.status == 200 && res.data.list){
-                        let num = 0;
                         res.data.list.forEach(function(item){
-                            num++;
                             if(item.pid == null){
                                 item.uplabel = '无';
                             }else{
                                 item.uplabel = name;
                             }
-                            if(item.status == true){
-                                item.status = '启用'
-                            }
-                            if(item.status == false){
-                                item.status = '禁用'
-                            }
-                            if(item.isDefault == true){
-                                item.isDefault = '是'
-                            }
-                            if(item.isDefault == false){
-                                item.isDefault = '否'
-                            }
                         })
                         this.tableDataTree = res.data.list;
-                        this.dataTotal= num;
+                        this.dataTotal= res.data.totalCount;
                         console.log(this.pidname)
                     }else{
                         return
@@ -291,13 +282,6 @@ import '../../../styles/dialog.scss'
             //点击选中当前行
             clickDetails(row, event, column){
                 this.$refs.multipleTable.toggleRowSelection(row);
-                this.waitchange = row;
-                if(row.status == "启用"){
-                    this.dataStatus = false;
-                }
-                if(row.status == "禁用"){
-                    this.dataStatus = true;
-                }
             },
             //添加子节点新增
             addItem(){
@@ -318,7 +302,6 @@ import '../../../styles/dialog.scss'
             },
             //删除子节点新增
             reduceItem(idx){
-                console.log(idx)
                 this.forms.splice(idx,1);
             },
             //新增关闭返回初始内容
@@ -369,15 +352,18 @@ import '../../../styles/dialog.scss'
                     let information = "未选中任何更改状态内容";
                     this.hint(information);
                 }else{
+
+                    // this.checkedinformation.forEach(item=>{
+
+                    // })
                     let statusform = {
-                        id:this.checkedinformation.id,
-                        status:this.dataStatus
+                        id:this.checkedinformation[0].id,
+                        status:this.checkedinformation[0].status
                     }
-                    // console.log(statusform)
+                    console.log(this.checkedinformation)
                     data_ChangeForms(statusform).then( res=>{
                         if(res.status == 200){
-                           console.log(res)
-                           this.getdata_dic();
+                           this.getInformation();
                         }
                     })
                 }
@@ -394,7 +380,7 @@ import '../../../styles/dialog.scss'
                     let isOK = true;
                     let isMore = false;
                     this.checkedinformation.map((item)=>{
-                        if(item.isDefault == '是'){
+                        if(item.isDefault == 1){
                             isOK = false;
                         }
                         return delID.push(item.id)
@@ -415,7 +401,7 @@ import '../../../styles/dialog.scss'
                 this.delDialogVisible = false;
                 data_Delet(this.delID).then(res => {
                     if(res.status == 200){
-                      this.getdata_dic();
+                        this.getInformation();
                     }
                 }).catch(res=>{
                     let information = res.text;
@@ -427,7 +413,8 @@ import '../../../styles/dialog.scss'
                 console.log(index, row);
             },
             handleSizeChange(val) {
-                console.log(`每页 ${val} 条`);
+                this.pagesize = val ;
+                this.firstblood();
             },
             handleCurrentChange(val) {
                 console.log(`当前页: ${val}`);
@@ -439,7 +426,6 @@ import '../../../styles/dialog.scss'
                 this.forms[0].pid = this.pid;
                 this.delIDTree = data.id;
                 data_Trees(this.page,this.pagesize,this.pid).then(res =>{
-                    console.log(res)
                     if( res.data.list){
                         res.data.list.forEach(function(item){
                             if(checked.data.pid){
@@ -447,23 +433,13 @@ import '../../../styles/dialog.scss'
                             }else{
                                 item.uplabel = checked.data.label;
                             }
-                            if(item.status == true){
-                                item.status = '启用'
-                            }
-                            if(item.status == false){
-                                item.status = '禁用'
-                            }
-                            if(item.isDefault == true){
-                                item.isDefault = '是'
-                            }
-                            if(item.isDefault == false){
-                                item.isDefault = '否'
-                            }
                         })
                         this.tableDataTree = res.data.list;
                     }else{
                          this.tableDataTree = [];
                     }
+                    this.dataTotal = res.data.totalCount;
+
                 })
             },
             //刷新页面
@@ -474,90 +450,31 @@ import '../../../styles/dialog.scss'
                         this.treeData = res.data;
                         this.pid = null;
                         this.pidname = '无';
-                        data_Trees(this.page,this.pagesize,this.pid).then(res =>{
-                            console.log(666)
-                            console.log(res)
-                            if(res.status == 200 && res.data.list){
-                                let num = 0;
-                                res.data.list.forEach(function(item){
-                                    num++;
-                                    if(item.pid == null){
-                                        item.uplabel = '无';
-                                    }else{
-                                        item.uplabel = name;
-                                    }
-                                    if(item.status == true){
-                                        item.status = '启用'
-                                    }
-                                    if(item.status == false){
-                                        item.status = '禁用'
-                                    }
-                                    if(item.isDefault == true){
-                                        item.isDefault = '是'
-                                    }
-                                    if(item.isDefault == false){
-                                        item.isDefault = '否'
-                                    }
-                                })
-                                this.tableDataTree = res.data.list;
-                                this.dataTotal= num;
-                                console.log(this.pidname)
-                            }else{
-                               return
-                            }
-                        })
+                        this.getInformation();
                     }else{
                         console.log('000')
                     }
                 })
             },
-            //进入数据字典页面获取和刷新数据
-            getdata_dic(){
-                data_Dic().then(res =>{ 
-                    if(res.status == 200 && res.data.length !=0){
-                        this.treeData = res.data;
-                        if(res.data[0].pid == null){
-                            this.pid = res.data[0].id;
-                        }else{
-                            this.pid = res.data[0].pid;
-                        }
-                        this.pidname = res.data[0].label;
-                        this.forms[0].pid = this.pid;
-                        let name = this.pidname;
-                        console.log(this.pidname)
-                        data_Trees(this.page,this.pagesize,this.pid).then(res =>{
-                            console.log(res)
-                            if(res.status == 200 && res.data.list){
-                                let num = 0;
-                                res.data.list.forEach(function(item){
-                                    num++;
-                                    if(item.pid == null){
-                                        item.uplabel = '无';
-                                    }else{
-                                        item.uplabel = name;
-                                    }
-                                    if(item.status == true){
-                                        item.status = '启用'
-                                    }
-                                    if(item.status == false){
-                                        item.status = '禁用'
-                                    }
-                                    if(item.isDefault == true){
-                                        item.isDefault = '是'
-                                    }
-                                    if(item.isDefault == false){
-                                        item.isDefault = '否'
-                                    }
-                                })
-                                this.tableDataTree = res.data.list;
-                                this.dataTotal= num;
-                                console.log(this.pidname)
+            //刷新数据
+            getInformation(){
+                console.log(this.pid)
+                data_Trees(this.page,this.pagesize,this.pid).then(res =>{
+                    console.log(res)
+                    if(res.status == 200 && res.data.list){
+                        res.data.list.forEach(function(item){
+                           
+                            if(item.pid == null){
+                                item.uplabel = '无';
                             }else{
-                               return
+                                item.uplabel = name;
                             }
                         })
+                        this.tableDataTree = res.data.list;
+                        this.dataTotal= res.data.totalCount;
+                        console.log(this.pidname)
                     }else{
-                        console.log('000')
+                       return
                     }
                 })
             },
@@ -569,20 +486,9 @@ import '../../../styles/dialog.scss'
                         if(item.uplabel == undefined || !item.uplabel){
                             item.uplabel = '无';
                         }
-                        if(item.status == true){
-                            item.status = '启用'
-                        }
-                        if(item.status == false){
-                            item.status = '禁用'
-                        }
-                        if(item.isDefault == true){
-                            item.isDefault = '是'
-                        }
-                        if(item.isDefault == false){
-                            item.isDefault = '否'
-                        }
                     })
                     this.tableDataTree = res.data.list;
+                    this.dataTotal= res.data.totalCount;
                 })
             },
             //新增分类信息获取code值
@@ -618,11 +524,12 @@ import '../../../styles/dialog.scss'
             },
             //保存信息
             newInfoSave(){
+                console.log(this.forms)
                 if(this.forms[0].pid){
                     data_AddForms(this.forms).then(res=>{
                         if(res.status == 200){
                             this.dialogFormVisible = false;
-                            this.getdata_dic();
+                            this.getInformation();
                         }
                     })
                 }else{
@@ -632,7 +539,7 @@ import '../../../styles/dialog.scss'
                     data_AddForms(this.forms).then(res=>{
                         if(res.status == 200){
                             this.dialogFormVisible = false;
-                            this.getdata_dic();
+                            this.getInformation();
                         }
                     })
                     
@@ -645,7 +552,8 @@ import '../../../styles/dialog.scss'
                 data_ChangeForms(this.changeform).then(res=>{
                     if(res.status == 200){
                         this.dialogFormVisible_change = false;
-                        this.getdata_dic();
+                        this.getInformation();
+                       
                     }
                 })
             },
@@ -694,16 +602,17 @@ import '../../../styles/dialog.scss'
         height:100%;
         
         .side_left{
-            width: 10%;
+            width: 13%;
             height:100%;
             float:left;
             padding-top:10px;
             border-right:1px solid #ccc;
             border-top:2px solid #ccc;
+            overflow:auto;
         }
         .side_right{
             height:100%;
-            width:90%;
+            width:87%;
             padding-bottom: 20px;
             float:left;
             position: relative;
@@ -735,6 +644,15 @@ import '../../../styles/dialog.scss'
             }
             .el-button{
                padding:8px 20px;
+            }
+        }
+        .addclassify{
+            .el-form{
+                .el-select{
+                    .el-input{
+                        width: 150px;
+                    }
+                }
             }
         }
         .classify_info{

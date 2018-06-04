@@ -1,18 +1,5 @@
 <template>
     <div class="serviceOrder clearfix">
-        <!-- <div class="side_left"> -->
-            <!-- <el-tree
-              :data="data1"
-              node-key="id"
-              :highlight-current = "true"
-              :expand-on-click-node = "false"
-              @node-click="handleNodeClick"
-              default-expand-all
-              :default-checked-keys="[]"
-              :props="defaultProps">
-            </el-tree> -->
-        <!-- </div> -->
-        <!-- <div class="side_right"> -->
              <div class="classify_searchinfo">
                 <label>服务分类&nbsp;
                     <el-select v-model="valueService" clearable placeholder="请选择">
@@ -105,11 +92,14 @@
                         <el-table-column
                           prop="servicePic"
                           label="服务图片">
+                            <template  slot-scope="scope"> 
+                                <img  :src="scope.row.servicePic" />
+                            </template>
                         </el-table-column>
                         <el-table-column
                           prop="usingStatus"
                           label="状态">
-                          <template  slot-scope="scope">
+                            <template  slot-scope="scope">
                                 {{ scope.row.usingStatus === '1' ? '启用' : '禁用' }}
                             </template>
                         </el-table-column>
@@ -127,6 +117,8 @@
                             </el-pagination>
                         </div>
                     </div>
+                    <!-- <div class="info_tab_footer">共计:{{ dataTotal }} <div class="show_pager"> <Pager :total="dataTotal" @change="handlePageChange" /></div> </div>     -->
+
                 </div>
                 
                 <!-- 新增分类信息 -->
@@ -135,20 +127,20 @@
                         <div class="chooseinfo">
                             <div class="chooseinfo-item">
                                 <p><span>* </span>选择服务分类 ：</p>
-                                <el-radio-group v-model="radio2" >
-                                    <el-radio  v-for="(obj,key) in optionsServiceM" :label="obj" :key='key'></el-radio>
+                                <el-radio-group v-model="forms.serivceCode" >
+                                    <el-radio  v-for="(obj,key) in optionsServiceM" :label="obj.code" :key='key'>{{obj.name}}</el-radio>
                                 </el-radio-group>
                             </div>
                             <div class="chooseinfo-item">
                                 <p><span>* </span>选择车辆类型 ：</p>
-                                <el-radio-group v-model="radio2">
-                                    <el-radio   v-for="(obj,key) in optionsServiceM" :label="obj" :key='key'></el-radio>
+                                <el-radio-group v-model="forms.carType">
+                                    <el-radio   v-for="(obj,key) in optionsCarM" :label="obj.code" :key='key'>{{obj.name}}</el-radio>
                                 </el-radio-group>
                             </div>
                             <div class="chooseinfo-item">
                                 <p>&nbsp;&nbsp;选择车辆规格 ：</p>
-                                <el-radio-group v-model="radio2" >
-                                    <el-radio  v-for="(obj,key) in formclassfy" :label="obj" :key='key'></el-radio >
+                                <el-radio-group v-model="forms.spec" >
+                                    <el-radio  v-for="(obj,key) in optionsCarTypeM" :label="obj.code" :key='key'>{{obj.name}}</el-radio >
                                 </el-radio-group>
                             </div>
                         </div>
@@ -157,17 +149,23 @@
                                 <p><span>* </span>车长 ：</p>
                                 <el-input
                                     placeholder="长"
-                                    v-model="input_search"
+                                    maxlength="5"
+                                    ref="carLength"
+                                    v-model="forms.carLength"
                                     clearable>
                                 </el-input>
                                 <el-input
                                     placeholder="宽"
-                                    v-model="input_search"
+                                    maxlength="5"
+                                    ref="carWidth"
+                                    v-model="forms.carWidth"
                                     clearable>
                                 </el-input>
                                 <el-input
                                     placeholder="高"
-                                    v-model="input_search"
+                                    maxlength="5"
+                                    ref="carHeight"
+                                    v-model="forms.carHeight"
                                     clearable>
                                 </el-input>
                                 <span class="node">米</span>
@@ -180,15 +178,17 @@
                                 <p><span>* </span>负载量 ：</p>
                                 <el-input
                                     class="morewidth"
-                                    placeholder="长"
-                                    v-model="input_search"
+                                    maxlength="5"
+                                    ref="capacityTon"
+                                    v-model="forms.capacityTon"
                                     clearable>
                                 </el-input>
                                 <span class="dotted">吨</span>
                                 <el-input
-                                    class="morewidth"                                    
-                                    placeholder="高"
-                                    v-model="input_search"
+                                    class="morewidth"   
+                                    maxlength="5"
+                                    ref="capacitySquare"
+                                    v-model="forms.capacitySquare"
                                     clearable>
                                 </el-input>
                                 <span>方</span>
@@ -200,15 +200,17 @@
                                 <p><span>* </span>标准起步价 ：</p>
                                 <el-input
                                     class="morewidth"
-                                    placeholder="长"
-                                    v-model="input_search"
+                                    maxlength="5"
+                                    ref="standardPrice"
+                                    v-model="forms.standardPrice"
                                     clearable>
                                 </el-input>
                                 <span class="dotted">元</span>
                                 <el-input
                                     class="morewidth"
-                                    placeholder="宽"
-                                    v-model="input_search"
+                                    maxlength="5"
+                                    ref="standardKm"
+                                    v-model="forms.standardKm"
                                     clearable>
                                 </el-input>
                                 <span class="node">公里</span>
@@ -220,8 +222,9 @@
                                 <p><span>* </span>标准超里程费 ：</p>
                                 <el-input
                                     class="morewidth"
-                                    placeholder="长"
-                                    v-model="input_search"
+                                    maxlength="5"
+                                    ref="outstripPrice"
+                                    v-model="forms.outstripPrice"
                                     clearable>
                                 </el-input>
                                 <span>元/公里</span>
@@ -230,7 +233,7 @@
                         <div class="completeinfo">
                             <div class="detailinfo">
                                 <p><span>* </span>上传服务图片 ：</p>
-                                <upload class="licensePicture" tip="（有年检章，jpg/png。小于5M）" v-model="form.licensePicture" />
+                                <upload class="licensePicture" tip="（必须为jpg/png并且小于1M）" @ifError="hint" v-model="forms.servicePic" />
                             </div>
                         </div>
                       <div slot="footer" class="dialog-footer">
@@ -241,34 +244,114 @@
                 </div>
 
                 <!-- 修改分类信息 -->
-                <div class="changeclassify commoncss">
+                <div class="addclassify commoncss">
                     <el-dialog title='修改分类信息'  :visible.sync="dialogFormVisible_change">
-                      <el-form>
-                        <el-form-item label="上级分类" :label-width="formLabelWidth">
-                         <el-select v-model="changeform.pid" >
-                           <el-option :label="pidname" :value="pid"></el-option>
-                           <el-option label="无" value=null></el-option>
-                         </el-select>
-                       </el-form-item>
-                       <div>
-                            <el-form-item label="编码" :label-width="formLabelWidth">
-                              <el-input v-model="changeform.code" auto-complete="off" :disabled="true"></el-input>
-                            </el-form-item>
-                            <el-form-item label="分类名称" :label-width="formLabelWidth" class="morewidth">
-                              <el-input v-model="changeform.name" auto-complete="off" ></el-input>
-                            </el-form-item>
-                            <el-form-item label="数据值" :label-width="formLabelWidth">
-                              <el-input v-model="changeform.value" auto-complete="off"></el-input>
-                            </el-form-item>
-                            <el-form-item label="描述" :label-width="formLabelWidth" class="morewidth">
-                              <el-input v-model="changeform.remark" auto-complete="off"></el-input>
-                            </el-form-item>
-                       </div>
-                      </el-form>
-                      <div slot="footer" class="dialog-footer">
-                        <el-button type="primary" @click="changeInfoSave">保 存</el-button>
-                        <el-button @click="dialogFormVisible_change = false">取 消</el-button>
-                      </div>
+                        <div class="chooseinfo">
+                            <div class="chooseinfo-item">
+                                <p><span>* </span>选择服务分类 ：</p>
+                                <el-input
+                                    v-model="changeforms.serviceName"
+                                    disabled
+                                    clearable>
+                                </el-input>
+                            </div>
+                            <div class="chooseinfo-item">
+                                <p><span>* </span>选择车辆类型 ：</p>
+                                 <el-input
+                                    v-model="changeforms.carTypeName"
+                                    disabled
+                                    clearable>
+                                </el-input>
+                            </div>
+                            <div class="chooseinfo-item">
+                                <p>&nbsp;&nbsp;选择车辆规格 ：</p>
+                                <el-input
+                                    v-model="changeforms.specName"
+                                    disabled
+                                    clearable>
+                                </el-input>
+                            </div>
+                        </div>
+                        <div class="completeinfo">
+                            <div class="detailinfo">
+                                <p><span>* </span>车长 ：</p>
+                                <el-input
+                                    placeholder="长"
+                                    v-model="changeforms.carLength"
+                                    clearable>
+                                </el-input>
+                                <el-input
+                                    placeholder="宽"
+                                    v-model="changeforms.carWidth"
+                                    clearable>
+                                </el-input>
+                                <el-input
+                                    placeholder="高"
+                                    v-model="changeforms.carHeight"
+                                    clearable>
+                                </el-input>
+                                <span class="node">米</span>
+                                <span class="remarks">(例如：长/宽/高 1.8*1.3*.1.2米)</span>
+                            </div>
+                        </div>
+
+                        <div class="completeinfo">
+                            <div class="detailinfo">
+                                <p><span>* </span>负载量 ：</p>
+                                <el-input
+                                    class="morewidth"
+                                    v-model="changeforms.capacityTon"
+                                    clearable>
+                                </el-input>
+                                <span class="dotted">吨</span>
+                                <el-input
+                                    class="morewidth"                                    
+                                    v-model="changeforms.capacitySquare"
+                                    clearable>
+                                </el-input>
+                                <span>方</span>
+                            </div>
+                        </div>
+
+                        <div class="completeinfo">
+                            <div class="detailinfo">
+                                <p><span>* </span>标准起步价 ：</p>
+                                <el-input
+                                    class="morewidth"
+                                    v-model="changeforms.standardPrice"
+                                    clearable>
+                                </el-input>
+                                <span class="dotted">元</span>
+                                <el-input
+                                    class="morewidth"
+                                    v-model="changeforms.standardKm"
+                                    clearable>
+                                </el-input>
+                                <span class="node">公里</span>
+                                <span class="remarks">(例如：16元/3公里)</span>
+                            </div>
+                        </div>
+                        <div class="completeinfo">
+                            <div class="detailinfo">
+                                <p><span>* </span>标准超里程费 ：</p>
+                                <el-input
+                                    class="morewidth"
+                                    v-model="changeforms.outstripPrice"
+                                    clearable>
+                                </el-input>
+                                <span>元/公里</span>
+                            </div>
+                        </div>
+                        <div class="completeinfo">
+                            <div class="detailinfo">
+                                <p><span>* </span>上传服务图片 ：</p>
+                                <upload class="licensePicture" tip="（必须为jpg/png并且小于5M）" v-model="changeforms.servicePic" />
+                            </div>
+                        </div>
+                        <div slot="footer" class="dialog-footer">
+                            <el-button type="primary" @click="changeInfoSave">保 存</el-button>
+                            <el-button @click="dialogFormVisible_change = false">取 消</el-button>
+                        </div>
                     </el-dialog>
                 </div>
 
@@ -295,7 +378,6 @@
                     </el-dialog>
                 </div>
             </div>
-        <!-- </div> -->
         <!-- loading   -->
         <!-- <spinner v-show="show"></spinner>  -->
         
@@ -304,8 +386,10 @@
 
 <script type="text/javascript">
 
-import { data_GetInformation,data_CarList,data_ServerClassList,data_ChangeStatus,data_DeletInfo,data_AddForms } from '../../../api/server/standardPrice.js'
+import { data_GetInformation,data_CarList,data_ServerClassList,data_ChangeStatus,data_DeletInfo,data_AddForms,data_NewClassfy,data_changeClassfy } from '../../../api/server/standardPrice.js'
+import { data_GetCarType } from '@/api/common.js'
 import Upload from '@/components/Upload/singleImage'
+import Pager from '../../../components/Pagination/index'
 import '../../../styles/dialog.scss'
 import spinner from '../../spinner/spinner'
 
@@ -338,6 +422,34 @@ import spinner from '../../spinner/spinner'
                             }]
                         }]
                         }],
+                forms:{
+                    serivceCode:null,
+                    carType:null,
+                    spec:null,
+                    carLength:null,
+                    carWidth:null,
+                    carHeight:null,
+                    capacityTon:null,
+                    capacitySquare:null,
+                    standardPrice:null,
+                    standardKm:null,
+                    outstripPrice:null,
+                    servicePic:'',
+                },
+                changeforms:{
+                    serivceCode:null,
+                    carType:null,
+                    spec:null,
+                    carLength:null,
+                    carWidth:null,
+                    carHeight:null,
+                    capacityTon:null,
+                    capacitySquare:null,
+                    standardPrice:null,
+                    standardKm:null,
+                    outstripPrice:null,
+                    servicePic:'',
+                },
                 valueService:null,
                 optionsService:[
                     {
@@ -345,6 +457,7 @@ import spinner from '../../spinner/spinner'
                     name:'全部'
                     }
                 ],
+                optionsServiceM:null,
                 valueCarlist:null,
                 optionsCar:[
                     {
@@ -352,6 +465,8 @@ import spinner from '../../spinner/spinner'
                     name:'全部'
                     }
                 ],
+                optionsCarM:null,
+                optionsCarTypeM:null,
                 valueStatus:null,
                 optionsStatus:[
                     {
@@ -381,21 +496,6 @@ import spinner from '../../spinner/spinner'
                 delDialogVisible:false,
                 nowcode:null,
                 dataTotal:null,
-                forms: [{
-                    code: null,
-                    name: null,
-                    pid: null,
-                    remark: null,
-                    value: null
-                }],
-                changeform:{
-                    id:null,
-                    code: null,
-                    name: null,
-                    pid: null,
-                    remark: null,
-                    value: null
-                },
                 information:'你想知道什么',
                 waitchange:{},
                 delID:[],
@@ -419,14 +519,20 @@ import spinner from '../../spinner/spinner'
         components:{
             spinner,
             Upload,
+            Pager,
 
         },
         mounted(){
-            // this.getdata_dic();
             this.firstblood();
             this.getMoreInformation();
         },  
         methods: {
+            // 获取翻页返回的数据
+            handlePageChange (obj) {
+                console.log(obj)
+                // Object.assign(this.searchForm, obj)
+                // this.fetchData()
+            },
             //获取  服务和车辆 类型列表
             getMoreInformation(){
                 data_CarList().then(res=>{
@@ -434,14 +540,21 @@ import spinner from '../../spinner/spinner'
                     res.data.map((item)=>{
                         this.optionsCar.push(item);
                     })
+                    this.optionsCarM = res.data;
                 });
                 data_ServerClassList().then(res=>{
                     console.log(res.data)
                      res.data.map((item)=>{
-                        this.optionsService.push(item);
+                         this.optionsService.push(item);
                     })
+                    this.optionsServiceM = res.data;
+                    
                 });
-                console.log(this.optionsService,this.optionsCar)
+                data_GetCarType().then(res=>{
+                    console.log(res.data)
+                    this.optionsCarTypeM = res.data;
+                })
+                // console.log(this.optionsService,this.optionsCar)
             },
             //shuangji
             moreinfo(row, event){
@@ -462,13 +575,7 @@ import spinner from '../../spinner/spinner'
             //新增关闭返回初始内容
             closeAddNewInfo(){
                 this.dialogFormVisible = false;
-                this.forms = [{
-                    code: null,
-                    name: null,
-                    pid: null,
-                    remark: null,
-                    value: null
-                }]
+                this.clearData();
             },
             //判断是否选中
             getinfomation(selection){
@@ -487,12 +594,26 @@ import spinner from '../../spinner/spinner'
                 }else{
                     console.log(this.checkedinformation)
                     this.dialogFormVisible_change = true;
-                    this.changeform.id = this.checkedinformation[0].id;
-                    this.changeform.pid = this.checkedinformation[0].pid;
-                    this.changeform.code = this.checkedinformation[0].code;
-                    this.changeform.name = this.checkedinformation[0].name;
-                    this.changeform.value = this.checkedinformation[0].value;
-                    this.changeform.remark = this.checkedinformation[0].remark;
+                    this.checkedinformation.map((item)=>{
+                        this.changeforms.serivceCode = item.serivceCode;
+                        this.changeforms.carType = item.carType;
+                        this.changeforms.carTypeName = item.carTypeName;
+                        this.changeforms.specName = item.specName;
+                        this.changeforms.carLength = item.carLength;
+                        this.changeforms.carWidth = item.carWidth;
+                        this.changeforms.carHeight = item.carHeight;
+                        this.changeforms.serviceName = item.serviceName;
+                        this.changeforms.standardKm = item.standardKm;
+                        this.changeforms.standardPrice = item.standardPrice;
+                        this.changeforms.outstripPrice = item.outstripPrice;
+                        this.changeforms.capacityTon = item.capacityTon;
+                        this.changeforms.standardKm = item.standardKm;
+                        this.changeforms.standardPrice = item.standardPrice;
+                        this.changeforms.capacitySquare = item.capacitySquare;
+                        this.changeforms.servicePic = item.servicePic;
+                        this.changeforms.standardPid = item.standardPid;
+                        this.changeforms.spec = item.spec;
+                    })
                 }
             },
             // 禁用/启用
@@ -507,10 +628,8 @@ import spinner from '../../spinner/spinner'
                         return statusID.push(item.standardPid)
                     })
                     data_ChangeStatus(statusID).then(res=>{
-                        console.log(res)
+                        // console.log(res)
                         this.firstblood();
-                        // this.getCommonFunction();
-
                     })
                 }
             },
@@ -523,9 +642,11 @@ import spinner from '../../spinner/spinner'
                 }else{
                     console.log(this.checkedinformation)
                     let delID = [];
-                   
-                    return delID.push(item.id)
-                    
+                    this.checkedinformation.map((item)=>{
+                        return delID.push(item.standardPid)
+                    })
+                    this.delID = delID;
+                    this.delDialogVisible = true;
                     console.log(this.delID)
                 }
             },
@@ -547,16 +668,26 @@ import spinner from '../../spinner/spinner'
             },
             handleSizeChange(val) {
                 console.log(`每页 ${val} 条`);
+                this.pagesize = val ;
+                this.firstblood();
             },
             handleCurrentChange(val) {
                 console.log(`当前页: ${val}`);
+                this.page = val;
+                this.firstblood();
             },
             handleNodeClick(data,checked){  
                 console.log(data)
             },
             //刷新页面  
             firstblood(){
-                data_GetInformation(this.page,this.pagesize).then(res=>{
+                 let data  = {
+                    carType : this.valueCarlist,
+                    serviceCode : this.valueService,
+                    usingStatus: this.valueStatus
+                }
+                console.log(data)
+                data_GetInformation(this.page,this.pagesize,data).then(res=>{
                     this.dataTotal = res.data.totalCount;
                     this.tableDataTree = res.data.list;
                     this.tableDataTree.map((item)=>{
@@ -565,7 +696,6 @@ import spinner from '../../spinner/spinner'
                         item.standardPriceM = item.standardPrice+'元 '+' '+'('+item.standardKm+'公里)';
                         item.outstripPriceM = item.outstripPrice + '元/公里';
                     })
-                    // this.tableDataTree[carTypeClass] = carLength +'*'+carWidth+'*'+carHeight+'M'
                     console.log(this.tableDataTree)
                 })
             },
@@ -573,25 +703,145 @@ import spinner from '../../spinner/spinner'
             //模糊查询 分类名称或者code
             getdata_search(event){
                 console.log(event)
-                
+                this.firstblood();
             },
-            //新增分类信息获取code值
+            //新增分类信息
             addClassfy(){
                 this.dialogFormVisible = true;
-               
+
             },
             //保存信息
             newInfoSave(){
-        
+                console.log(this.forms)
+                if(!this.forms.serivceCode){
+                    let information = "请选择服务类型";
+                    this.hint(information);
+                }
+                else if(!this.forms.carType){
+                    let information = "请选择车辆类型";
+                    this.hint(information);
+                } 
+                else if(!this.forms.spec){
+                    let information = "请选择车辆规格";
+                    this.hint(information);
+                }
+                else if(!this.forms.carLength){
+                    let information = "请填写完整车长信息";
+                    this.hint(information);
+                    this.$refs.carLength.focus();
+                }
+                else if(!this.forms.carWidth){
+                    let information = "请填写完整车长信息";
+                    this.hint(information);
+                    this.$refs.carWidth.focus();
+                }
+                else if(!this.forms.carHeight){
+                    let information = "请填写完整车长信息";
+                    this.hint(information);
+                    this.$refs.carHeight.focus();
+                }
+                else if(!this.forms.capacityTon){
+                    let information = "请填写负载量";
+                    this.hint(information);
+                    this.$refs.capacityTon.focus();
+                }
+                 else if(!this.forms.capacitySquare){
+                    let information = "请填写负载量";
+                    this.hint(information);
+                    this.$refs.capacitySquare.focus();
+                }
+                else if(!this.forms.standardPrice){
+                    let information = "请填写标准起步价";
+                    this.hint(information);
+                    this.$refs.standardPrice.focus();
+                }
+                else if(!this.forms.standardKm){
+                    let information = "请填写标准起步价";
+                    this.hint(information);
+                    this.$refs.standardKm.focus();
+                }
+                else if(!this.forms.outstripPrice){
+                    let information = "请填写标准里程费";
+                    this.hint(information);
+                    this.$refs.outstripPrice.focus();
+                }
+                else if(!this.forms.servicePic){
+                    let information = "请上传服务图片";
+                    this.hint(information);
+                }
+                else if(!/^[0-9]+$/.test(this.forms.carLength)){
+                    let information = "请输入整形数字";
+                    this.hint(information);
+                    this.$refs.carLength.focus();
+                }
+                else if(!/^[0-9]+$/.test(this.forms.carWidth)){
+                    let information = "请输入整形数字";
+                    this.hint(information);
+                    this.$refs.carWidth.focus();
+                }
+                else if(!/^[0-9]+$/.test(this.forms.carHeight)){
+                    let information = "请输入整形数字";
+                    this.hint(information);
+                    this.$refs.carHeight.focus();
+                }
+                else if(!/^[0-9]+$/.test(this.forms.capacityTon)){
+                    let information = "请输入整形数字";
+                    this.hint(information);
+                    this.$refs.capacityTon.focus();
+                }
+                else if(!/^[0-9]+$/.test(this.forms.capacitySquare)){
+                    let information = "请输入整形数字";
+                    this.hint(information);
+                    this.$refs.capacitySquare.focus();
+                }
+                else if(!/^[0-9]+$/.test(this.forms.standardPrice)){
+                    let information = "请输入整形数字";
+                    this.hint(information);
+                    this.$refs.standardPrice.focus();
+                }
+                else if(!/^[0-9]+$/.test(this.forms.standardKm)){
+                    let information = "请输入整形数字";
+                    this.hint(information);
+                    this.$refs.standardKm.focus();
+                }
+                else if(!/^[0-9]+$/.test(this.forms.outstripPrice)){
+                    let information = "请输入整形数字";
+                    this.hint(information);
+                    this.$refs.outstripPrice.focus();
+                }
+                else(
+                    data_NewClassfy(this.forms).then(res=>{
+                        console.log(res)
+                        this.firstblood();
+                        this.dialogFormVisible = false;
+                        this.clearData();
+                    })
+                )
+            },
+
+            //清空数据
+            clearData(){
+                this.forms={
+                            serivceCode:null,
+                            carType:null,
+                            spec:null,
+                            carLength:null,
+                            carWidth:null,
+                            carHeight:null,
+                            capacityTon:null,
+                            capacitySquare:null,
+                            standardPrice:null,
+                            standardKm:null,
+                            outstripPrice:null,
+                            servicePic:'',
+                        };
             },
             //修改保存
             changeInfoSave(){
-                // console.log(this.changeform)
-                data_ChangeForms(this.changeform).then(res=>{
-                    if(res.status == 200){
-                        this.dialogFormVisible_change = false;
-                        this.getdata_dic();
-                    }
+                console.log(this.changeform)
+                data_changeClassfy(this.changeforms).then(res=>{
+                    this.firstblood();
+                    this.dialogFormVisible_change = false;
                 })
             },
             //验证数据值
@@ -620,22 +870,6 @@ import spinner from '../../spinner/spinner'
         height:100%;    
         position: relative;
         margin-left:7px;
-        // .side_left{
-        //     width: 10%;
-        //     height:100%;
-        //     float:left;
-        //     padding-top:10px;
-        //     border-right:1px solid #ccc;
-        //     border-top:2px solid #ccc;
-        // }
-        // .side_right{
-        //     height:100%;
-        //     width:90%;
-        //     padding-bottom: 20px;
-        //     float:left;
-        //     position: relative;
-        //     border-top:2px solid #ccc;
-        // }
         .classify_searchinfo{
             position: absolute;
             left:0;
@@ -670,6 +904,11 @@ import spinner from '../../spinner/spinner'
                 width: 760px;
                 .el-dialog__body{
                         margin:0 40px;
+                        .el-input__inner{
+                            height: 24px;
+                            line-height: 24px;
+                            color: #3e9ff1;
+                        }
                     .chooseinfo{
                         border:1px solid #d2d2d2;
                         margin-bottom: 20px;
@@ -680,6 +919,9 @@ import spinner from '../../spinner/spinner'
                                 span{
                                     color:red;
                                 }
+                            }
+                            .el-input{
+                                width: 150px;
                             }
                             .el-radio-group{
                                 display: inline-block;
@@ -713,7 +955,7 @@ import spinner from '../../spinner/spinner'
                                     font-stretch: normal;
                                     line-height: 20px;
                                     letter-spacing: 0px;
-                                    color: #999999;
+                                    color: #3e9ff1;
                                 }
                             }
                             .dotted{
@@ -738,11 +980,11 @@ import spinner from '../../spinner/spinner'
                                 letter-spacing: 0px;
                                 color: #999999;
                             }
-                            .upload-demo{
-                                    display: inline-block;
-                                    width: 180px;
-                                    height: 116px;
-
+                            .licensePicture{
+                                width: 180px;
+                                height: 116px;
+                                line-height: 1.2;
+                                display: inline-block;
                                 .el-upload-dragger{
                                     width: 180px;
                                     height: 116px;
@@ -753,6 +995,7 @@ import spinner from '../../spinner/spinner'
                                         font-size: 12px;
                                     }
                                 }
+
                             }
                         }
                     }
@@ -777,6 +1020,13 @@ import spinner from '../../spinner/spinner'
                         width: 100% !important;
                         th,td{
                             text-align:center;
+                        }
+                    }
+                    .cell{
+                        img{
+                            display: inline-block;
+                            width: 100px;
+                            height: 50px;
                         }
                     }
                 }

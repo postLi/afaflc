@@ -23,7 +23,6 @@
 <script>
 // 上传接口
 import { getUploadPolicy } from '@/api/common'
-import fetch from '@/utils/fetch'
 
 export default {
   name: 'singleImageUpload',
@@ -110,17 +109,19 @@ export default {
     beforeUpload(file) {
       const _self = this
       const isJPG = /image\/\w+/.test(file.type) && /(jpeg|jpg|png)/i.test(file.type)
-      const isLt5M = file.size / 1024 / 1024 < 5
+      const isLt5M = file.size / 1024 / 1024 < 1
       let type = file.name.match(/([^\.]+)$/)
       type = type ? '.' + type[1] : ''
 
       return new Promise((resolve, reject) => {
         if (!isJPG) {
-            this.$message.error('上传头像图片只能是 JPG/PNG 格式!')
-            reject(false)
+            this.$emit('ifError', '上传图片只能是 JPG/PNG 格式!')
+            // this.$message.error('上传图片只能是 JPG/PNG 格式!')
+            // reject(false)
         }else if (!isLt5M) {
-            this.$message.error('上传头像图片大小不能超过 5MB!')
-            reject(false)
+            this.$emit('ifError', '上传图片大小不能超过 1MB!')
+            // this.$message.error('上传图片大小不能超过 5MB!')
+            // reject(false)
         } else {
             // 设置文件名
             this.upload.key = this.dir + this.random_string() + type

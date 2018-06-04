@@ -138,9 +138,12 @@
                     <el-dialog title='修改分类信息'  :visible.sync="dialogFormVisible_change">
                         <div class="chooseinfo-item">
                             <p><span>* </span>服务一级分类 ：</p>
-                            <el-radio-group v-model="changeform.serivceCode" >
-                                <el-radio v-for="(obj,idx) in formclassfy" :label="obj.code" :key='idx' @change="chooseradio">{{obj.name}}</el-radio>
-                            </el-radio-group>
+                            <el-input
+                                placeholder="请输入内容"
+                                v-model="changeform.serviceName"
+                                disabled
+                                clearable>
+                            </el-input>
                         </div>
                         <div class="extrainfo">
                             <p><span>* </span>额外服务名称</p>
@@ -334,12 +337,12 @@ import spinner from '../../../spinner/spinner'
                 }else if(this.checkedinformation.length >1){
                     let information = "不可修改多个内容";
                     this.hint(information);
-
                 }else{
                     console.log(this.checkedinformation)
                     this.dialogFormVisible_change = true; 
                     this.changeform.extraId = this.checkedinformation[0].extraId;
                     this.changeform.serivceCode = this.checkedinformation[0].serivceCode;
+                    this.changeform.serviceName = this.checkedinformation[0].serviceName;
                     this.changeform.extraDes = this.checkedinformation[0].extraDes;
                     this.changeform.extraName = this.checkedinformation[0].extraName;
                     this.changeform.isFree = this.checkedinformation[0].isFree;
@@ -568,13 +571,10 @@ import spinner from '../../../spinner/spinner'
                                 color:red;
                             }
                         }
-                        .el-radio-group{
-                            display: inline-block;
-                            margin:0 9px;
-                            .el-radio__label{
-                                font-size: 12px;
-                                line-height: 20px;
-                                color:#666;
+                        .el-input{
+                            .el-input__inner{
+                                height: 24px;
+                                line-height:24px;
                             }
                         }
                     }

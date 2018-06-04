@@ -197,7 +197,6 @@
                                         <span>元</span>
                                     </div>
                                 </div>
-
                             </div>
                             <div class="additional ">
                                 <p>{{remarkinfo}}</p>
@@ -231,30 +230,23 @@
                                     clearable>
                                 </el-input>
                             </div>
-                            <div class="changeifno">
+                            <div class="changeifno serverClass">
                                 <h4><span>* </span> 当前服务分类</h4>
-                                <el-select v-model="changeforms.serviceCode" clearable placeholder="请选择">
-                                    <el-option
-                                        v-for="item in optionsService"
-                                        :key="item.value"
-                                        :label="item.name"
-                                        :value="item.code"
-                                        :disabled="item.disabled">
-                                    </el-option>
-                                </el-select>
+                                <el-input
+                                    v-model="changeforms.serviceName"
+                                    disabled
+                                    clearable>
+                                </el-input>
                             </div>
-                            <div class="changeifno">
+                            <div class="changeifno carTypeClass">
                                 <h4><span>* </span> 当前车辆类型</h4>
-                                <el-select v-model="changeforms.carType" clearable placeholder="请选择">
-                                    <el-option
-                                        v-for="item in optionsCar"
-                                        :key="item.value"
-                                        :label="item.name"
-                                        :value="item.code"
-                                        :disabled="item.disabled">
-                                    </el-option>
-                                </el-select>
+                                <el-input
+                                    v-model="changeforms.carTypeName"
+                                    disabled
+                                    clearable>
+                                </el-input>
                             </div>
+                            <br/>
                             <div class="infowrite">
                                 <p><span>* </span>免费</p>
                                 <el-input
@@ -445,6 +437,8 @@ import spinner from '../../../spinner/spinner'
         mounted(){
             //...初始化获取数据
             this.firstblood();
+            this.getMoreInformation();
+            
         },  
         watch: {
             filterText(val) {
@@ -502,7 +496,6 @@ import spinner from '../../../spinner/spinner'
                     this.show = false;
                 })
 
-                this.getMoreInformation();
             },
             //
             handleCheckChange(data, checked, indeterminate) {
@@ -607,7 +600,6 @@ import spinner from '../../../spinner/spinner'
                 }else if(this.checkedinformation.length >1){
                     let information = "不可修改多个内容";
                     this.hint(information);
-
                 }else{
                     console.log(this.checkedinformation)
                     this.dialogFormVisible_change = true;
@@ -617,16 +609,15 @@ import spinner from '../../../spinner/spinner'
                         this.changeforms.cityId = this.checkedinformation[0].provinceId;
                     }
                     this.changeforms.serviceCode = this.checkedinformation[0].serviceCode;
+                    this.changeforms.serviceName = this.checkedinformation[0].serviceName;
                     this.changeforms.carType = this.checkedinformation[0].carType;
+                    this.changeforms.carTypeName = this.checkedinformation[0].carTypeName;
                     this.changeforms.freeTime = this.checkedinformation[0].freeTime;
                     this.changeforms.intervalTime = this.checkedinformation[0].value;
                     this.changeforms.timeOutstripPrice = this.checkedinformation[0].timeOutstripPrice;
                     this.changeforms.waitPriceDes = this.checkedinformation[0].waitPriceDes;
                     this.changeforms.intervalTime = this.checkedinformation[0].intervalTime;
                     this.changeforms.areaName = this.checkedinformation[0].areaName;
-                    
-                    
-                  
                 }
             },
             // 禁用/启用
@@ -682,9 +673,13 @@ import spinner from '../../../spinner/spinner'
             },
             handleSizeChange(val) {
                 console.log(`每页 ${val} 条`);
+                this.pagesize = val ;
+                this.firstblood();
             },
             handleCurrentChange(val) {
                 console.log(`当前页: ${val}`);
+                this.page = val;
+                this.firstblood();
             },
             //新增
             addClassfy(){
@@ -694,10 +689,7 @@ import spinner from '../../../spinner/spinner'
             },
             //保存信息
             newInfoSave(){
-
                 this.NewOrChange()
-                // console.log(this.$refs.trees.getCheckedKeys())
-               
             },
             //新增和修改Common
             NewOrChange(){
@@ -761,8 +753,6 @@ import spinner from '../../../spinner/spinner'
                                 this.freeTime = null ;
                                 this.timeOutstripPrice = null;
                                 this.intervalTime = null;
-        
-                                console.log(this.serverCheckList,this.carCheckList)
                             }
                         })
                 )
@@ -847,8 +837,6 @@ import spinner from '../../../spinner/spinner'
                         line-height: 30px;
                     }
                 }
-
-
             }
             .el-button{
                padding:8px 20px;
@@ -1046,7 +1034,7 @@ import spinner from '../../../spinner/spinner'
                     margin:10px 0;
                     h4{
                         display: inline-block;
-                        width: 100px;
+                        width: 95px;
                         text-align: right;
                         margin-right: 10px;
                         font-family: MicrosoftYaHei;
@@ -1061,9 +1049,6 @@ import spinner from '../../../spinner/spinner'
                         }
 
                     }
-                    .el-input{
-
-                    }
                     .el-input__inner{
                         height: 24px;
                         line-height: 24px;
@@ -1075,12 +1060,18 @@ import spinner from '../../../spinner/spinner'
                         }
                     }
                 }
+                .serverClass,.carTypeClass{
+                    display: inline-block;
+                }
+                .carTypeClass{
+                    margin: 0 0 0 32px;
+                }
                 .infowrite{
                     display: inline-block;
-                    margin-right: 30px; 
                     p{
                         display: inline-block;
-                        width:72px;
+                        width:95px;
+                        margin-right: 10px;
                         text-align: right;
                         font-family: MicrosoftYaHei;
                         font-size: 14px;

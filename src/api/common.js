@@ -1,4 +1,5 @@
 import fetch from '@/utils/fetch'
+const baseurl_two = "aflccommonservice"
 
 /**
  * 获取城市数据
@@ -53,3 +54,12 @@ export function getSelectType(type = '', orgid) {
     return res.data || []
   })
 }
+
+
+//获取状态列表
+export function data_GetCarType() {
+    return fetch({
+      url: '/'+baseurl_two+'/sysDict/getSysDictByCodeGet/AF009',
+      method: 'get'
+    })
+  }

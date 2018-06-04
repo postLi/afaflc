@@ -3,14 +3,14 @@ import fetch from '@/utils/fetch'
 const baseurl = "aflcsmservice"
 
 //获取标准服务费用列表
-export function data_GetInformation(page,pagesize) {
+export function data_GetInformation(page,pagesize,data) {
     return fetch({
       url: '/'+baseurl+'/sm/aflcStandardPrice/v1/list',
       method: 'post',
       data:{
         "currentPage":page ,
         "pageSize": pagesize,
-        "vo": {}
+        "vo": data
       }
     })
   }
@@ -56,7 +56,23 @@ export function data_ChangeStatus(id) {
     })
   }
 
+//xinzneg
+export function data_NewClassfy(data) {
+  return fetch({
+    url: '/'+baseurl+'/sm/aflcStandardPrice/v1/add',
+    method: 'post',
+    data:data
+  })
+}
 
+//修改
+export function data_changeClassfy(data) {
+  return fetch({
+    url: '/'+baseurl+'/sm/aflcStandardPrice/v1/update',
+    method: 'post',
+    data:data
+  })
+}
 
 
   
