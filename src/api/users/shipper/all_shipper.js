@@ -2,6 +2,7 @@ import fetch from '@/utils/fetch'
 
 const baseurl = 'aflcusercenterservice'
 const baseurl_two = 'aflccommonservice'
+const baseurl_three= 'aflcsmservice'
 
 // 获取货主列表
 export function data_get_shipper_list(page, pagesize, data) {
@@ -43,7 +44,7 @@ export function data_get_shipper_view() {
 }
 // 获取省市数据
 export function data_Area() {
-  return fetch.get('/' + baseurl + '/sm/aflcDistrict/v1/getProvinceList') 
+  return fetch.get('/' + baseurl_three + '/sm/aflcDistrict/v1/getProvinceList') 
 }
 
 //  修改货主表
@@ -56,7 +57,7 @@ export function data_get_shipper_change(code) {
 // 获取省级对应的城市列表
 export function data_GetCityList(code) {
   return fetch({
-    url: '/' + baseurl + '/sm/aflcDistrict/v1/lists',
+    url: '/' + baseurl_three + '/sm/aflcDistrict/v1/lists',
     method: 'post',
     data: {
       'code': code

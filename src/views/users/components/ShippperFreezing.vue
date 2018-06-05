@@ -25,7 +25,7 @@
             border
             tooltip-effect="dark"
             style="width: 100%">
-            <el-table-column prop="id" label="序号">
+            <el-table-column prop="id" label="序号" width="80px">
             </el-table-column>
             <el-table-column prop="id" label="公司名称">
             </el-table-column>
