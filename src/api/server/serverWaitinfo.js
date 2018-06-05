@@ -3,8 +3,7 @@ import fetch from '@/utils/fetch'
 const baseurl = "aflcsmservice"
 
 
-// 获取区域树节点的数据
-
+// 获取省级数据
 export function data_Area(){
     return fetch.get('/'+baseurl+'/sm/aflcDistrict/v1/getProvinceList') 
 }

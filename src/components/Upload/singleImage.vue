@@ -1,7 +1,7 @@
 <template>
     <div class="upload-container">
         <el-upload v-if="uploadUrl" class="image-uploader" :data="upload" :before-upload="beforeUpload" drag :multiple="false" :show-file-list="false" :action="uploadUrl"
-            :on-success="handleImageScucess">
+            :on-success="handleImageScucess" :on-error="handleError">
             <slot name="content">
                 <div v-if="title" class="upload__title">{{ title }}</div>
                 <el-button :size="size" type="primary">点击上传</el-button>
@@ -105,6 +105,9 @@ export default {
         }
       this.emitInput(url)
       //this.imageUrl = url
+    },
+    handleError(err){
+        this.$emit('ifError', '上传路径已过期，刷新页面重新获取')
     },
     beforeUpload(file) {
       const _self = this

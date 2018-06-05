@@ -136,7 +136,7 @@
                                         <div class="eltree_search chooseclassfy">
                                             <div class="chose">
                                                 <p><span>* </span>选择服务分类 ：</p>
-                                                <el-select v-model="newValueService" clearable placeholder="请选择">
+                                                <el-select v-model="newValueService" clearable placeholder="请选择" @change="choseStyle">
                                                     <el-option
                                                         v-for="item in optionsService"
                                                         :key="item.value"
@@ -148,7 +148,7 @@
                                             </div>
                                              <div class="chose">
                                                 <p><span>* </span>选择车辆类型 ：</p>
-                                                <el-select v-model="newValueCar" clearable placeholder="请选择" >
+                                                <el-select v-model="newValueCar" clearable placeholder="请选择" @change="choseStyle">
                                                     <el-option
                                                         v-for="item in optionsCar"
                                                         :key="item.value"
@@ -160,7 +160,7 @@
                                             </div>
                                              <div class="chose">
                                                 <p><span>* </span>车长 ：</p>
-                                                <el-select v-model="newValueStyle" clearable placeholder="请选择"  @visible-change="choseStyle" @change="choseVule">
+                                                <el-select v-model="newValueStyle" clearable placeholder="请选择"   @change="choseVule">
                                                     <el-option
                                                         v-for="item in optionsStyle"
                                                         :key="item.value"
@@ -227,6 +227,7 @@
                                         <label>
                                             <span class="control">区域起步价</span>
                                             <el-input
+                                                @blur="valuerules"
                                                 placeholder="请输入内容"
                                                 v-model="newPrice"
                                                 ref="newPrice"
@@ -235,6 +236,7 @@
                                             <span>元</span>
                                             <el-input
                                                 placeholder="请输入内容"
+                                                @blur="valuerules"
                                                 v-model="newInfoKm"
                                                 ref="newInfoKm"
                                                 clearable>
@@ -244,6 +246,7 @@
                                         <label>
                                             <span class="control">区域超里程费</span>         
                                             <el-input
+                                                @blur="valuerules"
                                                 placeholder="请输入内容"
                                                 v-model="newMorePrice"
                                                 ref="newMorePrice"
@@ -252,10 +255,8 @@
                                             <span>元 / 公里</span>
                                         </label>       
                                     </div>
-                                    
                                 </div>
                             </div>
-                            
                         </div>
                         <div slot="footer" class="dialog-footer">
                         <el-button type="primary" @click="newInfoSave">保 存</el-button>
@@ -293,6 +294,7 @@
                             <div class="chose">
                                 <p><span>* </span>车长 ：</p>
                                 <el-input
+                                
                                     v-model="changeforms.carTypeStyle"
                                     :disabled="true">
                                 </el-input>
@@ -326,6 +328,7 @@
                             <div class="nowChange">
                                 <span class="control">区域起步价</span>
                                 <el-input
+                                    @blur="valuerules"
                                     placeholder="请输入内容"
                                     v-model="changeforms.areaPrice"
                                     ref="newPrice"
@@ -333,6 +336,7 @@
                                 </el-input>
                                 <span>元</span>
                                 <el-input
+                                    @blur="valuerules"
                                     placeholder="请输入内容"
                                     v-model="changeforms.areaKm"
                                     ref="newInfoKm"
@@ -340,9 +344,10 @@
                                 </el-input>
                                 <span>公里</span>
                             </div>
-                            <div class="nowChange">
+                            <div class="nowChange nowChangeInfo">
                                 <span class="control">区域超里程费</span>         
                                 <el-input
+                                    @blur="valuerules"
                                     placeholder="请输入内容"
                                     v-model="changeforms.areaOutstripPrice"
                                     ref="newMorePrice"
@@ -393,35 +398,36 @@ import { data_Area,data_GetCityList,data_GetCityInfo,data_CarList,data_ServerCla
 import '../../../styles/dialog.scss'
 import spinner from '../../spinner/spinner'
 
+
     export default{
 
         data(){
             return{
-                show:false,
-                areadata:[],
-                citylist:[],
-                citywide:null,
-                provinceId:null,
-                cityId:null,
+                show:false,//遮罩层
+                areadata:[],//左侧树结构数据
+                citylist:[],//城市列表
+                provinceId:null,//省级列表
+                //左侧树结构tree数据定义
                 props: {
                     label: 'name',
                     children: 'children'
                 },
+                //新增树结构数据定义
                 propsAdd:{
                      label: 'name',
                     children: 'children'
                 },
-                valueService:null,
-                newValueService:null,
-                newValueCar:null,
-                newValueStyle:null,
-                standPrice:null,
-                standKm:null,
-                standMorePrice:null,
-                newPrice:null,
-                newInfoKm:null,
-                newMorePrice:null,
-                optionsStyle:[],
+                valueService:null,//服务分类
+                newValueService:null,//新增服务分类
+                newValueCar:null,//车辆分类
+                newValueStyle:null,//车长
+                standPrice:null,//标准起步价    
+                standKm:null,//标准起步价公里
+                standMorePrice:null,//  标准起步价超里程费
+                newPrice:null,//区域起步价
+                newInfoKm:null,//区域起步价公里
+                newMorePrice:null,//区域超里程费
+                optionsStyle:[],//车长分类
                 optionsService:[
                     {
                     code:null,
@@ -540,23 +546,40 @@ import spinner from '../../spinner/spinner'
         methods: {
             //根据服务分类和车辆类型选择车长
             choseStyle(val){
-                console.log(this.newValueService,this.newValueCar)
-               if(val){
+                console.log(val)
+                // this.newValueStyle = null;
+                if(val){
                     data_GetCarStyle(this.newValueService,this.newValueCar).then(res=>{
                        console.log(res)
-                       this.optionsStyle = res.data;
-                       this.optionsStyle.map((item)=>{
-                            item.carStyle = item.carLength+'*'+item.carWidth+'*'+item.carHeight+'M';
-                       })
+                       if(res.data.length > 0){
+                            this.newValueStyle = null;
+                            this.standPrice = null;
+                            this.standKm = null;
+                            this.standMorePrice = null;
+                            this.optionsStyle = res.data;
+                            this.optionsStyle.map((item)=>{
+                                item.carStyle = item.carLength+'*'+item.carWidth+'*'+item.carHeight+'M';
+                           })
+                       }else{
+                            this.optionsStyle = res.data;
+                            this.newValueStyle = null;
+                            this.standPrice = null;
+                            this.standKm = null;
+                            this.standMorePrice = null;
+                       }
 
-                   })
+                   }).catch(res=>{
+                    console.log(res)
+                    // if(res.status == 40001)
+                    let information = res.text;
+                    this.hint(information);
+                })
                }
             },
             //根据车长显示标准定价
             choseVule(val){
                 this.optionsStyle.map((item)=>{
                     if(item.standardPid == val ){
-
                         this.standPrice = item.standardPrice;
                         this.standKm = item.standardKm;
                         this.standMorePrice = item.outstripPrice;
@@ -577,8 +600,13 @@ import spinner from '../../spinner/spinner'
                      res.data.map((item)=>{
                         this.optionsService.push(item);
                     })
+                }).catch(res=>{
+                    console.log(res)
+                    // if(res.status == 40001)
+                    // let information = res.text;
+                    // this.hint(information);
                 });
-                console.log(this.optionsService,this.optionsCar)
+                // console.log(this.optionsService,this.optionsCar)
             },
             //刷新页面
             firstblood(){
@@ -617,6 +645,11 @@ import spinner from '../../spinner/spinner'
                     })
                     this.show = false;
                     
+                }).catch(res=>{
+                    console.log(res)
+                    // if(res.status == 40001)
+                    let information = res.text;
+                    this.hint(information);
                 })
             },
             //
@@ -627,6 +660,8 @@ import spinner from '../../spinner/spinner'
                 // console.log(data,checked);
                 data_GetCityList(data.code).then(res=>{
                     this.citylist = res.data.list;
+                }).catch(res=>{
+                    console.log("res",res)
                 })
 
                 if(checked.level === 1){
@@ -638,10 +673,7 @@ import spinner from '../../spinner/spinner'
                     this.cityId  = data.code;
                     this.provinceId = null ;
                 }
-                
                 this.getCommonFunction();
-                
-
             },
             loadNode(node, resolve) {
                 if (Node.level === 0) {
@@ -654,11 +686,17 @@ import spinner from '../../spinner/spinner'
             },
              //弹窗Tree节点
             handleNodeClickMore(data,checked){
-                console.log(data)
+                // console.log(data)
                 data_GetCityList(data.code).then(res=>{
-                    this.newCityList = res.data.list;
-                }).catch(res=>{
                     console.log(res)
+                    if(!res.errorInfo){
+                        this.newCityList = res.data.list;
+                    }else{
+                        this.newCityList = [];
+                    }
+                    // console.log(this.newCityList)
+                }).catch(res=>{
+                    // this.newCityList = [];
                 })
             },
             loadNodeMore(node, resolve) {
@@ -865,42 +903,31 @@ import spinner from '../../spinner/spinner'
                     let information = "区域超里程费";
                     this.hint(information);
                 }
-                else if(!/^[0-9]+$/.test(data.areaPrice)){
-                    let information = "请输入整形数字";
-                    this.hint(information);
-                    this.$refs.newPrice.focus();
-                }
-                else if(!/^[0-9]+$/.test(data.areaKm)){
-                    let information = "请输入整形数字";
-                    this.hint(information);
-                    this.$refs.newInfoKm.focus();
-                }
-                else if(!/^[0-9]+$/.test(data.areaOutstripPrice)){
-                    let information = "请输入整形数字";
-                    this.hint(information);
-                    this.$refs.newMorePrice.focus();
-                }
                 else(
                         data_NewOrChange(data).then(res=>{
                             console.log(res)
                             this.getCommonFunction();
                             this.dialogFormVisible = false;
-                            this.standPrice = null;
-                            this.standKm = null;
-                            this.standMorePrice = null;
-                            this.newValueService = null;
-                            this.newValueCar = null;
-                            this.newInfoKm = null;
-                            this.newPrice = null;
-                            this.newValueStyle = null;
-                            this.newMorePrice = null;
-                            // this.$refs.trees.getCheckedKeys() = null;
-            
+                            this.clearData();
+                        }).catch(res=>{
+                            console.log(res)
+                            // if(res.status == 40001)
+                            let information = res.text;
+                            this.hint(information);
                         })
                 )
-                // this.valuerules(data.freeTime,this.$refs.freetime)
-                // this.valuerules(data.intervalTime,this.$refs.intervaltime)
-                // this.valuerules(data.timeOutstripPrice,this.$refs.timeoutstripPrice)
+            },
+            //清空数据
+            clearData(){
+                this.standPrice = null;
+                this.standKm = null;
+                this.standMorePrice = null;
+                this.newValueService = null;
+                this.newValueCar = null;
+                this.newInfoKm = null;
+                this.newPrice = null;
+                this.newValueStyle = null;
+                this.newMorePrice = null;
             },
             //修改保存
             changeInfoSave(){
@@ -910,33 +937,24 @@ import spinner from '../../spinner/spinner'
                     this.dialogFormVisible_change = false;
                     this.getCommonFunction();
                     
-                })
-            },
-            //验证分类名称
-            namerules(event){
-                console.log(event.target.value)
-                if(!event.target.value){
-                    let information = "请输入最少1个字最多20个字分类名称";
+                }).catch(res=>{
+                    console.log(res)
+                    // if(res.status == 40001)
+                    let information = res.text;
                     this.hint(information);
-                    event.target.focus();
-                }else{
-                    data_Search(this.page,this.pagesize,this.pid,event.target.value).then(res=>{
-                        console.log(res)
-                        if(res.data.length != 0){
-                            let information = "该分类名称已存在，请重新输入";
-                            this.hint(information);
-                            event.target.focus();
-                        }
-                    })
-                }
+                })
             },
             //验证数据值
             valuerules(event){
-                console.log(event.target.value)
-                if(!/^[0-9]+$/.test(event.target.value)){
-                    let information = "请输入数字类型内容";
-                    this.hint(information);
-                    event.target.focus()
+                console.log(event)
+                if(!event.target.value){
+                    return 
+                }else{
+                    if(!/^[0-9]+$/.test(event.target.value)){
+                        let information = "请输入数字类型内容";
+                        this.hint(information);
+                        event.target.focus()
+                    }
                 }
             },
             hint(val){
@@ -1181,7 +1199,7 @@ import spinner from '../../spinner/spinner'
                 .changeInforMation{
                     padding: 0 20px;
                     .el-input{
-                        width: 150px;
+                        width: 110px;
                         .el-input__inner{
                             height: 24px;
                             line-height: 24px;
@@ -1191,27 +1209,31 @@ import spinner from '../../spinner/spinner'
                     }
                     .nowCity{
                         h4{
+                            display: inline-block;
+                            width: 111px;
                             span{
                                 color: red;
                             }
                         }
-                        .el-input{
-                            margin-left: 60px;
-                        }
+                        // .el-input__inner{
+                        //     text-align: center;
+                        // }
                     }
                     .chose{
                         display: inline-block;
-                        margin:5px 45px 5px 0; 
+                        margin:10px 30px 10px 0; 
                         p{
+                            display: inline-block;
                             height: 24px;
                             line-height: 24px;
                             span{
                                 color: red;
                             }
                         }
-                        .el-input{
-                            margin-left: 60px;
-                        }
+                        // .el-input{
+                        //     width: 110px;
+                        // }
+                        
                     }
                     .reference{
                         border: 1px dashed #ccc;
@@ -1230,10 +1252,15 @@ import spinner from '../../spinner/spinner'
                     }
                     .nowChange{
                         display: inline-block;
+                        margin-left: 80px;
                         .el-input{
                             width: 90px;
                         }
                     }
+                    .nowChangeInfo{
+                        margin-left: 32px;
+                    }
+                    
                 }
             }
         }

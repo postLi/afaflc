@@ -1,5 +1,6 @@
 import fetch from '@/utils/fetch'
 const baseurl_two = "aflccommonservice"
+const baseurl = "aflcsmservice"
 
 /**
  * 获取城市数据
@@ -63,3 +64,20 @@ export function data_GetCarType() {
       method: 'get'
     })
   }
+
+  // 获取省级数据
+export function data_getProvinceList(){
+  return fetch.get('/'+baseurl+'/sm/aflcDistrict/v1/getProvinceList') 
+}
+
+
+// 获取省级对应的城市列表
+export function data_GetCityList(code) {
+  return fetch({
+    url: '/'+baseurl+'/sm/aflcDistrict/v1/lists',
+    method: 'post',
+    data: {
+      "code": code
+    }
+  })
+}

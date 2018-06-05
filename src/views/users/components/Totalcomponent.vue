@@ -1,7 +1,7 @@
 <template>
     <div>
          <div class="shipper_searchinfo">
-                <label>所在地：
+                <!-- <label>所在地：
                     <el-input
                       placeholder="请输入内容"
                       v-model="formInline.belongCity"
@@ -32,14 +32,17 @@
                       v-model="formInline.driverMobile"
                       clearable>
                     </el-input>
-                </label>
+                </label> -->
                 <el-button type="primary" plain @click="getdata_search">查询</el-button>
                 <el-button type="info" plain>清空</el-button>
+            
+                <getCityList></getCityList>
+
             </div>
             <div class="export">
                 <el-button type="info">新增</el-button>
             </div>
-            <div class="info_news">
+            <!-- <div class="info_news">
                 <el-table
                     ref="multipleTable"
                     :data="tableDataTree"
@@ -91,11 +94,12 @@
                        layout="total, sizes, prev, pager, next, jumper"
                        :total="totalCount">
                 </el-pagination>
-            </div>
+            </div> -->
     </div>
 </template>
 <script type="text/javascript">
     import {data_get_driver_list,data_get_driver_status} from '../../../api/users/carowner/total_carowner.js'
+    import getCityList from '../../../components/GetCityList/index.vue'
     export default {
         data:function(){
             return{
@@ -116,6 +120,9 @@
                     }
                 ],
             }
+        },
+        components:{
+            getCityList
         },
         mounted(){
             this.firstblood()

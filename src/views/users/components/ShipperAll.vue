@@ -85,7 +85,7 @@
 </template>
 
 <script>
-import {data_get_shipper_list,data_get_shipper_status} from '../../../api/users/shipper/all_shipper.js'
+import {data_get_shipper_list,data_get_shipper_status} from '@/api/users/shipper/all_shipper.js'
 import createdDialog from './createdDialog.vue'
 export default {
     components:{

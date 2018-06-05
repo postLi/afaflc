@@ -5,9 +5,9 @@
 				<Total></Total>   
 			</el-tab-pane>
 			<el-tab-pane label="未认证">
-				<Unauthorized></Unauthorized>
+				<!-- <Unauthorized></Unauthorized> -->
 			</el-tab-pane>
-			<el-tab-pane label="待认证">
+			<!-- <el-tab-pane label="待认证">
                 <toBeCertified></toBeCertified>
 			</el-tab-pane>
 			<el-tab-pane label="已认证">
@@ -21,13 +21,13 @@
 			</el-tab-pane>
 			<el-tab-pane label="黑名单">
                 <blackList></blackList>
-			</el-tab-pane>
+			</el-tab-pane> -->
 		</el-tabs>
 	</div>
 </template>
 <script type="text/javascript">
-    import totalComponent from "../components/totalComponent.vue"
-    import unauthorizedComponent from "../components/unauthOrizedComponent.vue"
+    import totalComponent from "../components/Totalcomponent.vue"
+    import unauthorizedComponent from "../components/Unauthorizedcomponent.vue"
     import authEnticatedComponent from "../components/authEnticatedComponent.vue"
     import toBeCertified from "../components/toBeCertified.vue"
     import unPassCertification from "../components/unPassCertification.vue"

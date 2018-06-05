@@ -165,8 +165,16 @@ export default {
     //弹出框标题
     this.title = this.btntitle;
     this.getMoreInformation()
+    // this.test()
   },
   methods:{
+    test(){
+       data_Area().then(res=>{
+        console.log(res)
+        // this.areadata = res.data.list;
+        // this.provinceId = this.areadata[0].code ;
+      })
+    },
     openDialog(){
       this.dialogFormVisible_add=true
       if(this.params){

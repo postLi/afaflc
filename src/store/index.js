@@ -6,6 +6,7 @@ import permission from './modules/permission'
 import getters from './getters'
 import tagsView from './modules/tagsView'
 import errorLog from './modules/errorLog'
+import rules from './modules/rulers'
 
 Vue.use(Vuex)
 
@@ -15,7 +16,8 @@ const store = new Vuex.Store({
     user,
     permission,
     tagsView,
-    errorLog
+    errorLog,
+    rules
   },
   getters
 })

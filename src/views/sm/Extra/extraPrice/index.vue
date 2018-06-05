@@ -101,6 +101,7 @@
                             <el-checkbox v-model="form.isFree" true-label="1" false-label="0" @change="changeformprice">收费</el-checkbox>
                             <p class="ifprice" v-if = "form.isFree === '1'">
                                 <el-input
+                                    @blur="valuerules"
                                     placeholder="请输入价格"
                                     maxlength="4"
                                     v-model="form.extraPrice"
@@ -155,6 +156,7 @@
                             <el-checkbox v-model="changeform.isFree" true-label="1" false-label="0"  >收费</el-checkbox>
                             <p class="ifprice" v-if = "changeform.isFree === '1'">
                                 <el-input
+                                    @blur="valuerules"
                                     placeholder="请输入价格"
                                     maxlength="4"
                                     v-model="changeform.extraPrice"
@@ -493,6 +495,19 @@ import spinner from '../../../spinner/spinner'
                     this.firstblood();
                 })
             },
+             //验证数据值
+            valuerules(event){
+                // console.log(event)
+                if(!event.target.value){
+                    return 
+                }else{
+                    if(!/^[0-9]+$/.test(event.target.value)){
+                        let information = "请输入数字类型内容";
+                        this.hint(information);
+                        event.target.focus()
+                    }
+                }
+            },
             hint(val){
                 this.information = val;
                 this.centerDialogVisible = true;
@@ -510,22 +525,6 @@ import spinner from '../../../spinner/spinner'
         height:100%;    
         position: relative;
         margin-left:7px;
-        // .side_left{
-        //     width: 10%;
-        //     height:100%;
-        //     float:left;
-        //     padding-top:10px;
-        //     border-right:1px solid #ccc;
-        //     border-top:2px solid #ccc;
-        // }
-        // .side_right{
-        //     height:100%;
-        //     width:90%;
-        //     padding-bottom: 20px;
-        //     float:left;
-        //     position: relative;
-        //     border-top:2px solid #ccc;
-        // }
         .classify_searchinfo{
             position: absolute;
             left:0;

@@ -46,7 +46,7 @@ export function data_Area() {
   return fetch.get('/' + baseurl + '/sm/aflcDistrict/v1/getProvinceList') 
 }
 
-//  修改货主表
+//  修改货主表  
 export function data_get_shipper_change(code) {
   return fetch.put({
     url: '/' + baseurl + '/usercenter/aflcShipper/v1/update',
