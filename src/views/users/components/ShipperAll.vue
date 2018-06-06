@@ -116,6 +116,7 @@ export default {
     mounted(){
       this.firstblood()
       this.getMoreInformation()
+      
     },
     methods:{
       //刷新页面

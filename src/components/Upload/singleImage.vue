@@ -63,6 +63,7 @@ export default {
       uploadUrl: '',
       dir: ''
     }
+    
   },
   mounted () {
     this.init()  

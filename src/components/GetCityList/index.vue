@@ -2,16 +2,12 @@
   <div>
         <h1>test</h1>
         <el-cascader
+        v-model="selectedOptions"
         :options="areaData"
         @active-item-change="handleItemMore"
         :props="props">
         </el-cascader>
-
-        <el-cascader
-        :options="options2"
-        @active-item-change="handleItemChange"
-        :props="props1"
-        ></el-cascader>
+        <h1>{{selectedOptions}}</h1>
   </div>
 </template>
 
@@ -20,14 +16,14 @@
     import { data_getProvinceList,data_GetCityList } from '@/api/common.js'
 
 export default {
-
-
     name: 'getCityList',
     props: {
-        
+
     },
     data() {
       return {
+        selectedOptions: [],
+        areaList:null,
         areaData:[],
         props: {
             label: 'name',
@@ -52,15 +48,29 @@ export default {
             console.log(val)
             data_GetCityList(val[0]).then(res=>{
                 console.log(res)
-                this.areaData.forEach(item=>{
-                    if(item.code == val[0]){
-                        item.children = res.data.list;
-                    }
-                })
+                if(res.errorInfo){
+                    this.areaData.forEach(item=>{
+                        if(item.code == val[0]){
+                            item.children = null;
+                        }
+                    })
+                    
+                // }else if(res.data.list.length == 0){
+                //         if(item.code == val[0]){
+                //             item.children = null;
+                //         }
+                }else{
+                    this.areaData.forEach(item=>{
+                        if(item.code == val[0]){
+                            item.children = res.data.list;
+                        }
+                    })
+                }
             }).catch(res=>{
-                console.log(res)
+                // console.log(res)
             })
             console.log(this.area)
+            console.log(this.selectedOptions)
         },
         handleItemChange(val) {
         console.log('active item:', val);

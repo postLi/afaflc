@@ -5,9 +5,9 @@
 				<Total></Total>   
 			</el-tab-pane>
 			<el-tab-pane label="未认证">
-				<!-- <Unauthorized></Unauthorized> -->
+				<Unauthorized></Unauthorized>
 			</el-tab-pane>
-			<!-- <el-tab-pane label="待认证">
+			<el-tab-pane label="待认证">
                 <toBeCertified></toBeCertified>
 			</el-tab-pane>
 			<el-tab-pane label="已认证">
@@ -21,7 +21,7 @@
 			</el-tab-pane>
 			<el-tab-pane label="黑名单">
                 <blackList></blackList>
-			</el-tab-pane> -->
+			</el-tab-pane>
 		</el-tabs>
 	</div>
 </template>

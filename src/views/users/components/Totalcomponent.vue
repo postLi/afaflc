@@ -1,7 +1,7 @@
 <template>
     <div>
          <div class="shipper_searchinfo">
-                <!-- <label>所在地：
+                <label>所在地：
                     <el-input
                       placeholder="请输入内容"
                       v-model="formInline.belongCity"
@@ -32,11 +32,11 @@
                       v-model="formInline.driverMobile"
                       clearable>
                     </el-input>
-                </label> -->
+                </label>
                 <el-button type="primary" plain @click="getdata_search">查询</el-button>
                 <el-button type="info" plain>清空</el-button>
             
-                <getCityList></getCityList>
+                <!-- <getCityList></getCityList> -->
 
             </div>
             <div class="export">

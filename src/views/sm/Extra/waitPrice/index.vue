@@ -342,11 +342,9 @@ import { REGEX }  from '@/utils/validate'
 
         data(){
             return{
-                cc:null,
-                ifAll:null,
-                show:false,
-                areadata:[],
-                newAreaData:[],
+                show:false,//遮罩层
+                areadata:[],//树结构数据
+                newAreaData:[],//新增界面树结构数据
                 newCityList:[],
                 citylist:[],
                 citywide:null,
