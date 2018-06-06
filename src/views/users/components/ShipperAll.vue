@@ -40,7 +40,7 @@
            border
            tooltip-effect="dark"
            style="width: 100%">
-           <el-table-column type='index' label="序号">
+           <el-table-column type='index' label="序号" width="80px">
            </el-table-column>  
            <el-table-column label="手机号">
              <template slot-scope="scope">
@@ -72,14 +72,6 @@
               layout="total, sizes, prev, pager, next, jumper"
               :total="totalCount">
            </el-pagination>
-
-
-           <!-- 修改 -->
-           <!-- <div class="changeclassify commoncss">
-             <el-dialog title="修改" :visible.sync="changeDialogflag">
-
-             </el-dialog>
-           </div> -->
         </div>
     </div>
 </template>
@@ -93,25 +85,24 @@ export default {
     },
     data(){
         return{
-            options:[],
-            optionsStatus:[
-              {
-              code:null,
-              name:'全部'
-              }
-            ],
-            // changeDialogflag: false, // 修改弹框显示控制
-            formAll:{
-              belongCity: null,
-              attestationStatus:null,
-              companyname:'',
-              mobile:''
-            },
-            page:1,
-            pagesize:20,
-            totalCount:null,
-            tableDataAll:[],
-        }
+        options:[],
+        optionsStatus:[
+          {
+          code:null,
+          name:'全部'
+          }
+        ],
+        formAll:{
+          belongCity: null,
+          attestationStatus:null,
+          companyName:'',
+          mobile:''
+        },
+        page:1,
+        pagesize:20,
+        totalCount:null,
+        tableDataAll:[],
+      }
     },
     mounted(){
       this.firstblood()
@@ -130,9 +121,9 @@ export default {
       //获取状态列表
       getMoreInformation(){
           data_get_shipper_status().then(res=>{
-              res.data.map((item)=>{
-                this.optionsStatus.push(item);
-              })
+            res.data.map((item)=>{
+              this.optionsStatus.push(item);
+            })
           })
       },
        //点击查询按纽，按条件查询列表
@@ -148,20 +139,26 @@ export default {
         this.formAll = {
           belongCity:null,
           mobile:'',
+          attestationStatus:'',
           companyName:''
         }
       },
       handleChange(value){
         console.log(value)
       },
+
       handleClick (row) {
         console.log('row:',row)
       },
+
+      // 码数
       handleSizeChange(val) {
         console.log(`每页 ${val} 条`);
         this.pagesize=val
         this.firstblood()
       },
+
+      // 页数
       handleCurrentChange(val) {
         console.log(`当前页: ${val}`);
         this.page=val

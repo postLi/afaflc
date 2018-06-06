@@ -31,10 +31,10 @@
             <el-button type="primary" plain @click="getdata_search">查询</el-button>
            <el-button type="info" plain @click="clearSearch">清空</el-button>
         </div>
-        <div class="export">
+        <!-- <div class="export">
             <el-button type="info">新增</el-button>
             <el-button type="info">导出</el-button>
-        </div>
+        </div> -->
         <div class="info_news">
             <el-table
                 ref="multipleTable"
@@ -45,7 +45,8 @@
                 style="width: 100%">
                 <el-table-column
                     type="index"
-                    label="序号">
+                    label="序号"
+                    width="80px">
                 </el-table-column>
                 <el-table-column
                     prop="companyName"
