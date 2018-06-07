@@ -1,9 +1,10 @@
 import fetch from '@/utils/fetch'
 
-const baseurl = "aflcsmservice"
+const baseurl = "aflcdispatchservice-lyc"
 
 
-// 获取省级数据
+// 获取区域树节点的数据
+
 export function data_Area(){
     return fetch.get('/'+baseurl+'/sm/aflcDistrict/v1/getProvinceList') 
 }
@@ -20,10 +21,10 @@ export function data_GetCityList(code) {
     })
   }
 
-//根据id获取服务区域定价  he  查询功能(初始化)
-export function data_GetCityInfo(page,pagesize,data) {
+//获取公海推单设置列表
+export function data_dispatchList(page,pagesize,data) {
     return fetch({
-      url: '/'+baseurl+'/sm/aflcWaitPrice/v1/list',
+      url: '/'+baseurl+'/dispatch/aflcOpenseaRecommend/v1/list',
       method: 'post',
       data:{
         "currentPage":page ,
@@ -44,43 +45,58 @@ export function data_ServerClassList(){
 }
 
 
-//更改状态
+//启用或禁用公海推单设置
 export function data_ChangeStatus(id) {
   return fetch({
-  url: '/'+baseurl+'/sm/aflcWaitPrice/v1/openOrForbidden',
+  url: '/'+baseurl+'/dispatch/aflcOpenseaRecommend/v1/enableOrDisable/',
   method: 'post',
+  headers: {'Content-Type':'application/json'},
   data: id
   })
 }
 
-//删除服务区域定价
-export function data_Delete(id) {
+
+
+//删除公海推单设置
+export function data_DeletInfo(id) {
   return fetch({
-    url: '/'+baseurl+'/sm/aflcAreaPrice/v1/delete/',
-    method: 'post',
+    url: '/'+baseurl+'/dispatch/aflcOpenseaRecommend/v1/delete',
+    method: 'delete',
     data:id
   })
 }
 
 
-//删除数据
-export function data_DeletInfo(id) {
+//
+
+export function data_GetCarStyle(servicecode,cartype) {
   return fetch({
-  url: '/'+baseurl+'/sm/aflcWaitPrice/v1/delete',
-  method: 'post',
-  data: id
+    url: '/'+baseurl+'/sm/aflcStandardPrice/v1/getPriceByServiceAndCarType/'+servicecode+'/'+cartype,
+    method: 'get'
   })
 }
 
-
-//新增和修改
+//xinzneg
 export function data_NewOrChange(data) {
   return fetch({
-    url: '/'+baseurl+'/sm/aflcWaitPrice/v1/add',
+    url: '/'+baseurl+'/sm/aflcAreaPrice/v1/addList',
     method: 'post',
     data:data
   })
 }
+
+//修改
+export function data_OnlyChange(data) {
+  return fetch({
+    url: '/'+baseurl+'/sm/aflcAreaPrice/v1/update',
+    method: 'post',
+    data:data
+  })
+}
+
+
+
+
 
 
 

@@ -120,7 +120,9 @@
                         </div>
                     </div>
                 </div>
-                
+
+                <span>{{$store.state.count}}</span>
+
                 <!-- 新增分类信息 -->
                 <div class="addclassify commoncss">
                     <el-dialog title='新增等待费用'  :visible.sync="dialogFormVisible">
@@ -151,6 +153,7 @@
                                     <div class="infowrite">
                                         <p><span>* </span>免费</p>
                                         <el-input
+                                            @blur="valuerules"
                                             placeholder="请输入内容"
                                             v-model="freeTime"
                                             ref="freetime"
@@ -169,6 +172,7 @@
                                     <div class="infowrite">
                                         <p><span>* </span>每间隔</p>
                                         <el-input
+                                            @blur="valuerules"
                                             placeholder="请输入内容"
                                             v-model="intervalTime"
                                             ref="intervaltime"
@@ -189,6 +193,7 @@
                                     <div class="infowrite">
                                         <p><span>* </span>超时费用</p>
                                         <el-input
+                                            @blur="valuerules"
                                             placeholder="请输入内容"
                                             v-model="timeOutstripPrice"
                                             ref="timeoutstripprice"
@@ -250,6 +255,7 @@
                             <div class="infowrite">
                                 <p><span>* </span>免费</p>
                                 <el-input
+                                    @blur="valuerules"
                                     placeholder="请输入内容"
                                     v-model="changeforms.freeTime"
                                     clearable>
@@ -259,6 +265,7 @@
                             <div class="infowrite">
                                 <p><span>* </span>每间隔</p>
                                 <el-input
+                                    @blur="valuerules"
                                     placeholder="请输入内容"
                                     v-model="changeforms.intervalTime"
                                     clearable>
@@ -268,6 +275,7 @@
                             <div class="infowrite">
                                 <p><span>* </span>超时费用</p>
                                 <el-input
+                                    @blur="valuerules"
                                     placeholder="请输入内容"
                                     v-model="changeforms.timeOutstripPrice"
                                     clearable>
@@ -293,7 +301,7 @@
                       </div>
                     </el-dialog>
                 </div>
-
+ 
                 <!-- 新增分类提示不可为空 -->
                 <div class="cue">
                     <el-dialog
@@ -327,17 +335,16 @@
 import { data_Area,data_CarList,data_ServerClassList,data_GetCityList,data_GetBeginInfo,data_GetCityInfo,data_ChangeStatus,data_DeletInfo,data_NewOrChange } from '../../../../api/server/serverWaitinfo.js'
 import '../../../../styles/dialog.scss'
 import spinner from '../../../spinner/spinner'
+import { REGEX }  from '@/utils/validate'
 
 
     export default{
 
         data(){
             return{
-                cc:null,
-                ifAll:null,
-                show:false,
-                areadata:[],
-                newAreaData:[],
+                show:false,//遮罩层
+                areadata:[],//树结构数据
+                newAreaData:[],//新增界面树结构数据
                 newCityList:[],
                 citylist:[],
                 citywide:null,
@@ -464,6 +471,8 @@ import spinner from '../../../spinner/spinner'
                     this.optionsServiceNew = res.data;
                     
                 });
+
+                
                 // console.log(this.optionsService,this.optionsCar)
             },
             //刷新页面
@@ -568,7 +577,8 @@ import spinner from '../../../spinner/spinner'
             },
             //shuangji
             moreinfo(row, event){
-                console.log(row, event)
+                // console.log(row, event)
+                 console.log(this.$store)
                 
             },
             //点击选中当前行
@@ -756,11 +766,6 @@ import spinner from '../../../spinner/spinner'
                             }
                         })
                 )
-                // this.valuerules(data.freeTime,this.$refs.freetime)
-                // this.valuerules(data.intervalTime,this.$refs.intervaltime)
-                // this.valuerules(data.timeOutstripPrice,this.$refs.timeoutstripPrice)
-
-
             },
             //修改保存
             changeInfoSave(){
@@ -770,16 +775,19 @@ import spinner from '../../../spinner/spinner'
                     if(res.status == 200){
                         this.getCommonFunction();
                         this.dialogFormVisible_change = false;
-                        
                     }
                 })
             },
             //验证数据值
-            valuerules(data,event){
-                if(!/^[0-9]+$/.test(data)){
-                    let information = "请输入整形数字";
-                    this.hint(information);
-                    event.focus();
+            valuerules(event){
+                 if(!event.target.value){
+                    return 
+                }else{
+                    if(!REGEX.ONLY_NUMBER.test(event.target.value)){
+                        let information = "请输入数字类型内容";
+                        this.hint(information);
+                        event.target.focus()
+                    }
                 }
             },
             hint(val){

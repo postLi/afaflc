@@ -9,7 +9,8 @@
     <div class="main-container">
       <TagsView></TagsView>
       <div class="main-container-wrap">
-          <app-main></app-main>
+          <!-- <app-main></app-main> -->
+          <app-main :key="theRefreshKey"></app-main>
       </div>
     </div>
     <LockScreen></LockScreen>
@@ -29,12 +30,24 @@ export default {
     AppMain,
     TagsView,
     LockScreen
-  },
-  computed: {
-    sidebar() {
-      return this.$store.state.app.sidebar
-    }
+    },
+    data () {
+        return {
+            theRefreshKey: ''
+        }
+    },
+
+    computed: {
+        sidebar() {
+        return this.$store.state.app.sidebar
+        }
+    },
+     methods: {
+      refreshKey(){
+          this.theRefreshKey = Math.random()
+      }
   }
+
 }
 </script>
 

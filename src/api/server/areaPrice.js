@@ -65,7 +65,7 @@ export function data_Delete(id) {
   })
 }
 
-//
+//根据服务分类和车辆类型选择车长
 
 export function data_GetCarStyle(servicecode,cartype) {
   return fetch({
@@ -74,7 +74,7 @@ export function data_GetCarStyle(servicecode,cartype) {
   })
 }
 
-//修改
+//xinzneg
 export function data_NewOrChange(data) {
   return fetch({
     url: '/'+baseurl+'/sm/aflcAreaPrice/v1/addList',

@@ -139,9 +139,9 @@
                             </div>
                             <div class="chooseinfo-item">
                                 <p>&nbsp;&nbsp;选择车辆规格 ：</p>
-                                <el-radio-group v-model="forms.spec" >
-                                    <el-radio  v-for="(obj,key) in optionsCarTypeM" :label="obj.code" :key='key'>{{obj.name}}</el-radio >
-                                </el-radio-group>
+                                <el-checkbox-group v-model="specList">
+                                    <el-checkbox v-for="obj in optionsCarTypeM" :label="obj.code" :key="obj.name" >{{obj.name}}</el-checkbox>
+                                </el-checkbox-group>
                             </div>
                         </div>
                         <div class="completeinfo">
@@ -149,6 +149,7 @@
                                 <p><span>* </span>车长 ：</p>
                                 <el-input
                                     placeholder="长"
+                                    @blur="valuerules"
                                     maxlength="5"
                                     ref="carLength"
                                     v-model="forms.carLength"
@@ -157,12 +158,15 @@
                                 <el-input
                                     placeholder="宽"
                                     maxlength="5"
+                                    @blur="valuerules"
+                                    
                                     ref="carWidth"
                                     v-model="forms.carWidth"
                                     clearable>
                                 </el-input>
                                 <el-input
                                     placeholder="高"
+                                    @blur="valuerules"
                                     maxlength="5"
                                     ref="carHeight"
                                     v-model="forms.carHeight"
@@ -177,6 +181,7 @@
                             <div class="detailinfo">
                                 <p><span>* </span>负载量 ：</p>
                                 <el-input
+                                    @blur="valuerules"
                                     class="morewidth"
                                     maxlength="5"
                                     ref="capacityTon"
@@ -185,6 +190,7 @@
                                 </el-input>
                                 <span class="dotted">吨</span>
                                 <el-input
+                                    @blur="valuerules"
                                     class="morewidth"   
                                     maxlength="5"
                                     ref="capacitySquare"
@@ -199,6 +205,7 @@
                             <div class="detailinfo">
                                 <p><span>* </span>标准起步价 ：</p>
                                 <el-input
+                                    @blur="valuerules"
                                     class="morewidth"
                                     maxlength="5"
                                     ref="standardPrice"
@@ -207,6 +214,7 @@
                                 </el-input>
                                 <span class="dotted">元</span>
                                 <el-input
+                                    @blur="valuerules"
                                     class="morewidth"
                                     maxlength="5"
                                     ref="standardKm"
@@ -221,6 +229,7 @@
                             <div class="detailinfo">
                                 <p><span>* </span>标准超里程费 ：</p>
                                 <el-input
+                                    @blur="valuerules"
                                     class="morewidth"
                                     maxlength="5"
                                     ref="outstripPrice"
@@ -276,16 +285,19 @@
                             <div class="detailinfo">
                                 <p><span>* </span>车长 ：</p>
                                 <el-input
+                                    @blur="valuerules"
                                     placeholder="长"
                                     v-model="changeforms.carLength"
                                     clearable>
                                 </el-input>
                                 <el-input
+                                    @blur="valuerules"
                                     placeholder="宽"
                                     v-model="changeforms.carWidth"
                                     clearable>
                                 </el-input>
                                 <el-input
+                                    @blur="valuerules"
                                     placeholder="高"
                                     v-model="changeforms.carHeight"
                                     clearable>
@@ -299,12 +311,14 @@
                             <div class="detailinfo">
                                 <p><span>* </span>负载量 ：</p>
                                 <el-input
+                                    @blur="valuerules"
                                     class="morewidth"
                                     v-model="changeforms.capacityTon"
                                     clearable>
                                 </el-input>
                                 <span class="dotted">吨</span>
                                 <el-input
+                                    @blur="valuerules"
                                     class="morewidth"                                    
                                     v-model="changeforms.capacitySquare"
                                     clearable>
@@ -317,12 +331,14 @@
                             <div class="detailinfo">
                                 <p><span>* </span>标准起步价 ：</p>
                                 <el-input
+                                    @blur="valuerules"
                                     class="morewidth"
                                     v-model="changeforms.standardPrice"
                                     clearable>
                                 </el-input>
                                 <span class="dotted">元</span>
                                 <el-input
+                                    @blur="valuerules"
                                     class="morewidth"
                                     v-model="changeforms.standardKm"
                                     clearable>
@@ -335,6 +351,7 @@
                             <div class="detailinfo">
                                 <p><span>* </span>标准超里程费 ：</p>
                                 <el-input
+                                    @blur="valuerules"
                                     class="morewidth"
                                     v-model="changeforms.outstripPrice"
                                     clearable>
@@ -436,6 +453,7 @@ import spinner from '../../spinner/spinner'
                     outstripPrice:null,
                     servicePic:'',
                 },
+                specList:[],
                 changeforms:{
                     serivceCode:null,
                     carType:null,
@@ -509,11 +527,7 @@ import spinner from '../../spinner/spinner'
                   children: 'children',
                   label: 'label'
                 },
-                rules: {
-                    dev: [
-                        { required: true, message: '请输入手机号码', trigger: 'change' },
-                    ]
-                }
+                carTypeRules: '请填写完整车长信息',
             }
         },
         components:{
@@ -525,6 +539,7 @@ import spinner from '../../spinner/spinner'
         mounted(){
             this.firstblood();
             this.getMoreInformation();
+            // console.log(this.$store)
         },  
         methods: {
             // 获取翻页返回的数据
@@ -555,10 +570,12 @@ import spinner from '../../spinner/spinner'
                     this.optionsCarTypeM = res.data;
                 })
                 // console.log(this.optionsService,this.optionsCar)
+
+
             },
             //shuangji
             moreinfo(row, event){
-                console.log(row, event)
+                // console.log(row, event)
                
             },
             //点击选中当前行
@@ -683,7 +700,7 @@ import spinner from '../../spinner/spinner'
             firstblood(){
                  let data  = {
                     carType : this.valueCarlist,
-                    serviceCode : this.valueService,
+                    serivceCode : this.valueService,
                     usingStatus: this.valueStatus
                 }
                 console.log(data)
@@ -712,7 +729,7 @@ import spinner from '../../spinner/spinner'
             },
             //保存信息
             newInfoSave(){
-                console.log(this.forms)
+                this.forms.spec = this.specList.join(',');
                 if(!this.forms.serivceCode){
                     let information = "请选择服务类型";
                     this.hint(information);
@@ -721,10 +738,6 @@ import spinner from '../../spinner/spinner'
                     let information = "请选择车辆类型";
                     this.hint(information);
                 } 
-                else if(!this.forms.spec){
-                    let information = "请选择车辆规格";
-                    this.hint(information);
-                }
                 else if(!this.forms.carLength){
                     let information = "请填写完整车长信息";
                     this.hint(information);
@@ -769,49 +782,9 @@ import spinner from '../../spinner/spinner'
                     let information = "请上传服务图片";
                     this.hint(information);
                 }
-                else if(!/^[0-9]+$/.test(this.forms.carLength)){
-                    let information = "请输入整形数字";
-                    this.hint(information);
-                    this.$refs.carLength.focus();
-                }
-                else if(!/^[0-9]+$/.test(this.forms.carWidth)){
-                    let information = "请输入整形数字";
-                    this.hint(information);
-                    this.$refs.carWidth.focus();
-                }
-                else if(!/^[0-9]+$/.test(this.forms.carHeight)){
-                    let information = "请输入整形数字";
-                    this.hint(information);
-                    this.$refs.carHeight.focus();
-                }
-                else if(!/^[0-9]+$/.test(this.forms.capacityTon)){
-                    let information = "请输入整形数字";
-                    this.hint(information);
-                    this.$refs.capacityTon.focus();
-                }
-                else if(!/^[0-9]+$/.test(this.forms.capacitySquare)){
-                    let information = "请输入整形数字";
-                    this.hint(information);
-                    this.$refs.capacitySquare.focus();
-                }
-                else if(!/^[0-9]+$/.test(this.forms.standardPrice)){
-                    let information = "请输入整形数字";
-                    this.hint(information);
-                    this.$refs.standardPrice.focus();
-                }
-                else if(!/^[0-9]+$/.test(this.forms.standardKm)){
-                    let information = "请输入整形数字";
-                    this.hint(information);
-                    this.$refs.standardKm.focus();
-                }
-                else if(!/^[0-9]+$/.test(this.forms.outstripPrice)){
-                    let information = "请输入整形数字";
-                    this.hint(information);
-                    this.$refs.outstripPrice.focus();
-                }
                 else(
                     data_NewClassfy(this.forms).then(res=>{
-                        console.log(res)
+                        // console.log(res)
                         this.firstblood();
                         this.dialogFormVisible = false;
                         this.clearData();
@@ -842,15 +815,19 @@ import spinner from '../../spinner/spinner'
                 data_changeClassfy(this.changeforms).then(res=>{
                     this.firstblood();
                     this.dialogFormVisible_change = false;
-                })
+                })  
             },
             //验证数据值
             valuerules(event){
-                console.log(event.target.value)
-                if(!/^[0-9]+$/.test(event.target.value)){
-                    let information = "请输入数字类型内容";
-                    this.hint(information);
-                    event.target.focus()
+                // console.log(event)
+                if(!event.target.value){
+                    return 
+                }else{
+                    if(!/^[0-9]+$/.test(event.target.value)){
+                        let information = "请输入数字类型内容";
+                        this.hint(information);
+                        event.target.focus()
+                    }
                 }
             },
             hint(val){
@@ -926,6 +903,10 @@ import spinner from '../../spinner/spinner'
                             .el-radio-group{
                                 display: inline-block;
                                 margin:0 9px;
+                            }
+                            .el-checkbox-group{
+                                display: inline-block;
+                                margin-left: 10px;
                             }
                         }
                     }

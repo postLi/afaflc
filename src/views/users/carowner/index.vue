@@ -26,8 +26,8 @@
 	</div>
 </template>
 <script type="text/javascript">
-    import totalComponent from "../components/totalComponent.vue"
-    import unauthorizedComponent from "../components/unauthOrizedComponent.vue"
+    import totalComponent from "../components/Totalcomponent.vue"
+    import unauthorizedComponent from "../components/Unauthorizedcomponent.vue"
     import authEnticatedComponent from "../components/authEnticatedComponent.vue"
     import toBeCertified from "../components/toBeCertified.vue"
     import unPassCertification from "../components/unPassCertification.vue"

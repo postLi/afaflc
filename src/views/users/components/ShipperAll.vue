@@ -77,7 +77,7 @@
 </template>
 
 <script>
-import {data_get_shipper_list,data_get_shipper_status} from '../../../api/users/shipper/all_shipper.js'
+import {data_get_shipper_list,data_get_shipper_status} from '@/api/users/shipper/all_shipper.js'
 import createdDialog from './createdDialog.vue'
 export default {
   components:{
@@ -126,7 +126,7 @@ export default {
         })
     },
       //点击查询按纽，按条件查询列表
-    getdata_search(event){
+    getdata_search(event) {
         data_get_shipper_list(this.page,this.pagesize,this.formAll).then(res=>{
           this.totalCount = res.data.totalCount;
           this.tableDataAll = res.data.list;
