@@ -21,7 +21,8 @@ import Report from './module/report'
 import Marketing from './module/marketing'
 //用户
 import Users from './module/users'
-
+//调度
+import Dispatch from './module/dispatchServer'
 Vue.use(Router)
 
  /**
@@ -61,6 +62,7 @@ export const asyncRouterMap = [
   Server,
   Finance,
   Report,
+  Dispatch,
   Common,
   Service,
 /*   {

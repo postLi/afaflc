@@ -1,6 +1,6 @@
 import fetch from '@/utils/fetch'
 
-const baseurl = "aflcsmservice"
+const baseurl = "aflcdispatchservice-lyc"
 
 
 // 获取区域树节点的数据
@@ -21,10 +21,10 @@ export function data_GetCityList(code) {
     })
   }
 
-//根据id获取服务区域定价  he  查询功能
-export function data_GetCityInfo(page,pagesize,data) {
+//获取公海推单设置列表
+export function data_dispatchList(page,pagesize,data) {
     return fetch({
-      url: '/'+baseurl+'/sm/aflcAreaPrice/v1/list',
+      url: '/'+baseurl+'/dispatch/aflcOpenseaRecommend/v1/list',
       method: 'post',
       data:{
         "currentPage":page ,
@@ -45,27 +45,29 @@ export function data_ServerClassList(){
 }
 
 
-//更改状态
+//启用或禁用公海推单设置
 export function data_ChangeStatus(id) {
   return fetch({
-  url: '/'+baseurl+'/sm/aflcAreaPrice/v1/openOrForbidden',
+  url: '/'+baseurl+'/dispatch/aflcOpenseaRecommend/v1/enableOrDisable/',
   method: 'post',
+  headers: {'Content-Type':'application/json'},
   data: id
   })
 }
 
 
 
-//删除服务区域定价
-export function data_Delete(id) {
+//删除公海推单设置
+export function data_DeletInfo(id) {
   return fetch({
-    url: '/'+baseurl+'/sm/aflcAreaPrice/v1/delete/',
-    method: 'post',
+    url: '/'+baseurl+'/dispatch/aflcOpenseaRecommend/v1/delete',
+    method: 'delete',
     data:id
   })
 }
 
-//根据服务分类和车辆类型选择车长
+
+//
 
 export function data_GetCarStyle(servicecode,cartype) {
   return fetch({
