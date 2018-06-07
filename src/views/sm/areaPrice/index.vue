@@ -403,6 +403,8 @@ import spinner from '../../spinner/spinner'
 
         data(){
             return{
+                cacheData: {},
+                catchData:{},
                 show:false,//遮罩层
                 areadata:[],//左侧树结构数据
                 citylist:[],//城市列表
@@ -660,15 +662,14 @@ import spinner from '../../spinner/spinner'
                 // console.log(data,checked);
                 data_GetCityList(data.code).then(res=>{
                     this.citylist = res.data.list;
+                    this.cacheData[data.code] = res.data.list;
                 }).catch(res=>{
                     console.log("res",res)
                 })
-
                 if(checked.level === 1){
                     this.provinceId  = data.code;
                     this.cityId = null ;
                 }
-                
                 if(checked.level === 2){
                     this.cityId  = data.code;
                     this.provinceId = null ;
@@ -676,13 +677,14 @@ import spinner from '../../spinner/spinner'
                 this.getCommonFunction();
             },
             loadNode(node, resolve) {
-                if (Node.level === 0) {
+                if (node.level === 0) {
                 // 不会触发事件
                 }else{
                     setTimeout(() => {
-                    resolve(this.citylist);
+                    //resolve(this.citylist);
+                    resolve(this.cacheData[node.data.code] || []);
                     }, 500);
-                }
+                } 
             },
              //弹窗Tree节点
             handleNodeClickMore(data,checked){
@@ -691,6 +693,7 @@ import spinner from '../../spinner/spinner'
                     console.log(res)
                     if(!res.errorInfo){
                         this.newCityList = res.data.list;
+                        this.catchData[data.code] = res.data.list;
                     }else{
                         this.newCityList = [];
                     }
@@ -710,7 +713,7 @@ import spinner from '../../spinner/spinner'
                     }, 500);
                 }else if(node.level >1 ){
                     setTimeout(() => {
-                    resolve(this.newCityList);
+                    resolve(this.catchData[node.data.code] || []);
                     }, 500);
                 }
                 else{

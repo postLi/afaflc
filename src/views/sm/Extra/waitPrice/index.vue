@@ -342,6 +342,8 @@ import { REGEX }  from '@/utils/validate'
 
         data(){
             return{
+                cacheData: {},
+                catchData:{},
                 show:false,//遮罩层
                 areadata:[],//树结构数据
                 newAreaData:[],//新增界面树结构数据
@@ -514,6 +516,7 @@ import { REGEX }  from '@/utils/validate'
                 // console.log(data,checked);
                 data_GetCityList(data.code).then(res=>{
                     this.citylist = res.data.list;
+                    this.cacheData[data.code] = res.data.list;
                 })
 
                 if(checked.level === 1){
@@ -531,11 +534,11 @@ import { REGEX }  from '@/utils/validate'
 
             },
             loadNode(node, resolve) {
-                if (Node.level === 0) {
+                if (node.level === 0) {
                 // 不会触发事件
                 }else{
                     setTimeout(() => {
-                    resolve(this.citylist);
+                    resolve(this.cacheData[node.data.code] || []);
                     }, 500);
                 }
             },
@@ -544,6 +547,8 @@ import { REGEX }  from '@/utils/validate'
                 console.log(data)
                 data_GetCityList(data.code).then(res=>{
                     this.newCityList = res.data.list;
+                    this.catchData[data.code] = res.data.list;
+                    
                 }).catch(res=>{
                     console.log(res)
                 })
@@ -559,7 +564,7 @@ import { REGEX }  from '@/utils/validate'
                     }, 500);
                 }else if(node.level >1 ){
                     setTimeout(() => {
-                    resolve(this.newCityList);
+                    resolve(this.catchData[node.data.code] || []);
                     }, 500);
                 }
                 else{
