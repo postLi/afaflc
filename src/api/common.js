@@ -81,3 +81,13 @@ export function data_GetCityList(code) {
     }
   })
 }
+
+//获取车辆类型列表
+export function data_CarList(){
+  return fetch.get('/'+baseurl+'/sm/aflcSysDict/v1/getCarTypeList') 
+}
+
+//获取服务分类子分类
+export function data_ServerClassList(){
+  return fetch.get('/'+baseurl+'/sm/aflcSysDict/v1/getServiceClassList') 
+}

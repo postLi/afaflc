@@ -33,18 +33,7 @@ export function data_dispatchList(page,pagesize,data) {
       }
     })
   }
-
-//获取车辆类型列表
-export function data_CarList(){
-  return fetch.get('/'+baseurl+'/sm/aflcSysDict/v1/getCarTypeList') 
-}
-
-//获取服务分类子分类
-export function data_ServerClassList(){
-  return fetch.get('/'+baseurl+'/sm/aflcSysDict/v1/getServiceClassList') 
-}
-
-
+  
 //启用或禁用公海推单设置
 export function data_ChangeStatus(id) {
   return fetch({
@@ -76,10 +65,10 @@ export function data_GetCarStyle(servicecode,cartype) {
   })
 }
 
-//xinzneg
-export function data_NewOrChange(data) {
+//新增公海推单设置
+export function data_NewData(data) {
   return fetch({
-    url: '/'+baseurl+'/sm/aflcAreaPrice/v1/addList',
+    url: '/'+baseurl+'/dispatch/aflcOpenseaRecommend/v1/add',
     method: 'post',
     data:data
   })

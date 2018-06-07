@@ -71,57 +71,7 @@
                 </div>
                   
                 <addClassfy :dialogFormVisible.sync = "dialogFormVisible" :formtitle = "formtitle" ></addClassfy>
-                <changeclassify :dialogFormVisibleChange.sync = "dialogFormVisibleChange" :formtitle = "formtitle_change"></changeclassify>
-                <!-- 修改分类信息 -->
-                <!-- <div class="changeclassify commoncss">
-                    <el-dialog title='修改分类信息'  :visible.sync="dialogFormVisibleChange">
-                        <div class="chooseinfo-item">
-                            <p><span>* </span>服务一级分类 ：</p>
-                            <el-input
-                                placeholder="请输入内容"
-                                v-model="changeform.serviceName"
-                                disabled
-                                clearable>
-                            </el-input>
-                        </div>
-                        <div class="extrainfo">
-                            <p><span>* </span>额外服务名称</p>
-                            <el-input
-                                placeholder="请输入内容"
-                                v-model="changeform.extraName"
-                                clearable>
-                            </el-input>
-                            <el-checkbox v-model="changeform.isFree" true-label="1" false-label="0"  >收费</el-checkbox>
-                            <p class="ifprice" v-if = "changeform.isFree === '1'">
-                                <el-input
-                                    @blur="valuerules"
-                                    placeholder="请输入价格"
-                                    maxlength="4"
-                                    v-model="changeform.extraPrice"
-                                     ref="pricefocus"
-                                    clearable>
-                                </el-input>
-                                <span> 元</span>
-                            </p>
-                            <div class="nomore">
-                                <p>描述</p>
-                                <el-input
-                                    type="textarea"
-                                    :rows="2"
-                                    placeholder="5-300间的字符"
-                                    maxlength="200"
-                                    ref="infofocus"
-                                    v-model="changeform.extraDes"
-                                    clearable>
-                                </el-input>
-                            </div>
-                        </div>
-                        <div slot="footer" class="dialog-footer">
-                            <el-button type="primary" @click="changeInfoSave">保 存</el-button>
-                            <el-button @click="dialogFormVisibleChange = false">取 消</el-button>
-                        </div>
-                    </el-dialog>
-                </div> -->
+                <changeclassify :dialogFormVisibleChange.sync = "dialogFormVisibleChange" :formtitle = "formtitle_change" @renovate="Onrenovate" :changeforms = 'changeforms'></changeclassify>
 
                 <!-- 新增分类提示不可为空 -->
                 <div class="cue">
@@ -184,14 +134,7 @@ import changeclassify from './changeclassify'
                     "isFree":"0",
                     "extraPrice" :0,
                 }],
-                changeform:{
-                    "extraId":null,
-                    "serivceCode":null,
-                    "extraDes":null,
-                    "extraName":null,
-                    "isFree":"0",
-                    "extraPrice" :0,
-                },
+                changeforms:{},
                 information:'你想知道什么',
                 waitchange:{},
                 delID:[],
@@ -216,6 +159,10 @@ import changeclassify from './changeclassify'
             this.firstblood()
         },  
         methods: {
+            //子组件调用父组件刷新页面
+            Onrenovate(){
+                this.firstblood()
+            },
             //
             changeformprice(val){
                 console.log(val)
@@ -274,13 +221,17 @@ import changeclassify from './changeclassify'
                 // }else{
                     console.log(this.checkedinformation)
                     this.dialogFormVisibleChange = true; 
-                    // this.changeform.extraId = this.checkedinformation[0].extraId;
-                    // this.changeform.serivceCode = this.checkedinformation[0].serivceCode;
-                    // this.changeform.serviceName = this.checkedinformation[0].serviceName;
-                    // this.changeform.extraDes = this.checkedinformation[0].extraDes;
-                    // this.changeform.extraName = this.checkedinformation[0].extraName;
-                    // this.changeform.isFree = this.checkedinformation[0].isFree;
-                    // this.changeform.extraPrice = this.checkedinformation[0].extraPrice;
+                    this.changeforms.areaCode = this.checkedinformation[0].areaCode;
+                    this.changeforms.serivceCode = this.checkedinformation[0].serivceCode;
+                    this.changeforms.firstRecommendKm = this.checkedinformation[0].firstRecommendKm;
+                    this.changeforms.firstRecommendTime = this.checkedinformation[0].firstRecommendTime;
+                    this.changeforms.secondRecommendKm = this.checkedinformation[0].secondRecommendKm;
+                    this.changeforms.secondRecommendTime = this.checkedinformation[0].secondRecommendTime;
+                    this.changeforms.shipperCarType = this.checkedinformation[0].shipperCarType;
+                    this.changeforms.visualCarType = this.checkedinformation[0].visualCarType;
+                    this.changeforms.usingStatus = this.checkedinformation[0].usingStatus;
+                    
+                    
                 // }
             },
             // 禁用/启用
@@ -457,7 +408,6 @@ import changeclassify from './changeclassify'
         .addclassify,.changeclassify{
             .el-dialog{
                 position: relative;
-                width: 760px;
                 .el-dialog__body{
                     margin:0 20px;
                     margin-bottom: 20px;

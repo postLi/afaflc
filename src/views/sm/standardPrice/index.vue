@@ -405,7 +405,7 @@
 
 import { data_GetInformation,data_CarList,data_ServerClassList,data_ChangeStatus,data_DeletInfo,data_AddForms,data_NewClassfy,data_changeClassfy } from '../../../api/server/standardPrice.js'
 import { data_GetCarType } from '@/api/common.js'
-import Upload from '@/components/Upload/singleImage'
+import Upload from '@/components/Upload/singleImage'    
 import Pager from '../../../components/Pagination/index'
 import '../../../styles/dialog.scss'
 import spinner from '../../spinner/spinner'
@@ -823,7 +823,7 @@ import spinner from '../../spinner/spinner'
                 if(!event.target.value){
                     return 
                 }else{
-                    if(!/^[0-9]+$/.test(event.target.value)){
+                    if(!/^[0-9\.]+$/.test(event.target.value)){
                         let information = "请输入数字类型内容";
                         this.hint(information);
                         event.target.focus()

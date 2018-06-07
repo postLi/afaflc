@@ -2,58 +2,55 @@
     <!-- 新增分类信息 -->
         <div class="addclassify commoncss">
             <el-dialog :title='formtitle' :close-on-click-modal="true"  :visible="dialogFormVisibleChange" @close="close">
-                <h1>修改</h1>
-                <!-- <div class="chooseinfo-item"> 
-                    <p><span>* </span>服务一级分类 ：</p>
-                    <el-radio-group v-model="classfyradio" >
-                        <el-radio   v-for="(obj,key) in formclassfy" :label="obj.code" :key='key' @change="chooseradio">{{obj.name}}</el-radio>
-                    </el-radio-group>
+                <div class="chooseArea">
+                    <p><span>* </span>所在地 ：</p>
+                    <el-input v-model="changeforms.areaCode" disabled></el-input>
                 </div>
-                <div class="extrainfo"  v-for="(form,keys) in forms" :key='keys'>
-                    <p><span>* </span>额外服务名称</p>
-                    <el-input
-                        placeholder="请输入内容"
-                        v-model="form.extraName"
-                        clearable>
-                    </el-input>
-                    <el-checkbox v-model="form.isFree" true-label="1" false-label="0" @change="changeformprice">收费</el-checkbox>
-                    <p class="ifprice" v-if = "form.isFree === '1'">
-                        <el-input
-                            @blur="valuerules"
-                            placeholder="请输入价格"
-                            maxlength="4"
-                            v-model="form.extraPrice"
-                            ref="pricefocus"
-                            clearable>
-                        </el-input>
-                        <span> 元</span>
-                    </p>
-                    <div class="nomore">
-                        <p>描述</p>
-                        <el-input
-                            type="textarea"
-                            :rows="2"
-                            placeholder="5-300间的字符"
-                            maxlength="200"
-                            ref="infofocus"
-                            v-model="form.extraDes"
-                            clearable>
-                        </el-input>
-                    </div>
-                    <span  @click="addItem" class="addItem" v-if="keys == 0">
-                    </span>
-                    <span  @click="reduceItem(keys)" class="reduceItem" v-else>
-                    </span>
+                <div class="chooseServer chooseStyle">
+                    <p><span>* </span>服务类型 ：</p>
+                    <el-input v-model="changeforms.serivceCode" disabled></el-input>
                 </div>
+                <div class="chooseCarType chooseStyle">
+                    <p><span>* </span>货主用车类型 ：</p>
+                    <el-input v-model="changeforms.shipperCarType" disabled></el-input>
+                </div>
+                <div class="firstPush choosePush">
+                    <p><span>* </span>第一轮推送 ：</p>
+                    <el-input v-model="changeforms.firstRecommendKm"></el-input>
+                    <span>公里/</span>
+                    <el-input v-model="changeforms.firstRecommendTime"></el-input>
+                    <span>秒</span>                    
+                </div>
+                 <div class="secondPush choosePush">
+                    <p><span>* </span>第二轮及之后推送 ：</p>
+                     <el-input v-model="changeforms.secondRecommendKm"></el-input>
+                    <span>公里/</span>
+                    <el-input v-model="changeforms.secondRecommendTime"></el-input>
+                    <span>秒</span>                    
+                </div>
+                <div class="chooseVisual chooseStyle">
+                    <p><span>* </span>可见车主类型 ：</p>
+                    <el-select v-model="visualCarType" multiple  clearable placeholder="请选择">
+                        <el-option
+                            v-for="item in optionsVisualCarType"
+                            :key="item.code"
+                            :label="item.name"
+                            :value="item.code">
+                        </el-option>
+                    </el-select>
+                </div><br/>
+                
                 <div slot="footer" class="dialog-footer">
-                <el-button type="primary" @click="newInfoSave">保 存</el-button>
-                <el-button @click="closeAddNewInfo">取 消</el-button>
-                </div> -->
+                <el-button type="primary" @click="changeInfoSave">保 存</el-button>
+                <el-button @click="closeChangeInfo">取 消</el-button>
+                </div> 
             </el-dialog>
         </div>
 </template>
 
 <script>
+import { data_CarList } from '@/api/common.js'
+
 export default {
     name: 'getCityList',
     props: {
@@ -64,20 +61,16 @@ export default {
         formtitle:{
             type:String,
             required:true
+        },
+        changeforms:{
+            type:Object,
+            required:true
         }
     },
     data() {
       return {
-          forms:{
-              areaCode:null,//地区code
-              firstRecommendKm:null,//第一次推送公里
-              firstRecommendTime:null,//第一次推送时间
-              secondRecommendKm:null,//第二次
-              secondRecommendTime:null,//第二次
-              serivceCode:null,//服务类型
-              shipperCarType:null,//货主用车类型
-              visualCarType:null,//可见车主类型
-          }
+            optionsVisualCarType:[],
+            visualCarType:[],
       };
     },
     watch:{
@@ -86,10 +79,30 @@ export default {
     methods: {
         close(){
             this.$emit('update:dialogFormVisibleChange',false)
+        },
+        init(){
+            data_CarList().then(res=>{
+                this.optionsVisualCarType =res.data;
+            }).catch(err => {
+                
+            })
+        },
+        //修改保存
+        changeInfoSave(){
+            console.log(this.changeform)
+            data_changeClassfy(this.changeforms).then(res=>{
+                this.firstblood();
+                this.dialogFormVisible_change = false;
+            })  
+        },
+        //修改关闭
+        closeChangeInfo(){
+            this.close();
         }
     },
     mounted(){
-
+        this.init();
+        // console.log(changeforms)
     },
 }
 </script>
