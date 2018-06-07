@@ -30,7 +30,7 @@
                 </div>
                 <div class="chooseVisual chooseStyle">
                     <p><span>* </span>可见车主类型 ：</p>
-                    <el-select v-model="visualCarType" multiple  clearable placeholder="请选择">
+                    <el-select v-model="visualCarTypeM" multiple  clearable placeholder="请选择">
                         <el-option
                             v-for="item in optionsVisualCarType"
                             :key="item.code"
@@ -39,7 +39,12 @@
                         </el-option>
                     </el-select>
                 </div><br/>
-                
+                <div class="chooseCarType chooseStyle">
+                    <p><span>* </span>状态 ：</p>
+                    <el-radio-group v-model="changeforms.usingStatus" >
+                        <el-radio  v-for="(obj,key) in optionsStatus" :label="obj.value" :key='key'>{{obj.name}}</el-radio>
+                    </el-radio-group>
+                </div>
                 <div slot="footer" class="dialog-footer">
                 <el-button type="primary" @click="changeInfoSave">保 存</el-button>
                 <el-button @click="closeChangeInfo">取 消</el-button>
@@ -70,7 +75,17 @@ export default {
     data() {
       return {
             optionsVisualCarType:[],
-            visualCarType:[],
+            visualCarTypeM:[],
+            optionsStatus:[
+            {
+                value:'1',
+                name:"启用"
+            },
+                {
+                value:'0',
+                name:"禁用"
+            }
+        ]
       };
     },
     watch:{
@@ -81,11 +96,19 @@ export default {
             this.$emit('update:dialogFormVisibleChange',false)
         },
         init(){
+            // console.log(this.props.changeforms)
+            
             data_CarList().then(res=>{
                 this.optionsVisualCarType =res.data;
             }).catch(err => {
                 
             })
+            
+            if(Object.keys(this.changeforms).length != 0){
+                this.visualCarTypeM = this.changeforms.visualCarType.split(',')
+            }
+            console.log('13',this.changeforms)
+            console.log(this.visualCarTypeM)
         },
         //修改保存
         changeInfoSave(){
@@ -102,7 +125,6 @@ export default {
     },
     mounted(){
         this.init();
-        // console.log(changeforms)
     },
 }
 </script>

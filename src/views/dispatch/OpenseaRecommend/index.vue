@@ -211,14 +211,14 @@ import changeclassify from './changeclassify'
             },
             //修改
             handleEdit() {
-                // if(Object.keys(this.checkedinformation).length == 0){
-                //     //未选择任何修改内容的提示
-                //     let information = "未选中任何修改内容";
-                //     this.hint(information);
-                // }else if(this.checkedinformation.length >1){
-                //     let information = "不可修改多个内容";
-                //     this.hint(information);
-                // }else{
+                if(Object.keys(this.checkedinformation).length == 0){
+                    //未选择任何修改内容的提示
+                    let information = "未选中任何修改内容";
+                    this.hint(information);
+                }else if(this.checkedinformation.length >1){
+                    let information = "不可修改多个内容";
+                    this.hint(information);
+                }else{
                     console.log(this.checkedinformation)
                     this.dialogFormVisibleChange = true; 
                     this.changeforms.areaCode = this.checkedinformation[0].areaCode;
@@ -232,7 +232,7 @@ import changeclassify from './changeclassify'
                     this.changeforms.usingStatus = this.checkedinformation[0].usingStatus;
                     
                     
-                // }
+                }
             },
             // 禁用/启用
             handleUseStates(){
