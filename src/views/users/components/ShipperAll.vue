@@ -30,7 +30,7 @@
          </div>
          <div class="export">
             <!-- <el-button type="primary" @click="addClassfy">新增</el-button> -->
-            <createdDialog btntext="新增" btnType="primary" editType="add" btntitle="新增货主" @getData="getDataList"></createdDialog>
+            <createdDialog btntext="新增" :plain="true" type="primary" btntype="primary" icon="el-icon-news" editType="add" btntitle="新增货主" @getData="getDataList"></createdDialog>
          </div>
          <div class="info_news">
            <el-table
@@ -58,7 +58,7 @@
            </el-table-column>
            <el-table-column prop="belongCity" label="所在地">
            </el-table-column>
-           <el-table-column prop="shipperType" label="货主类型">
+           <el-table-column prop="shipperTypeName" label="货主类型">
            </el-table-column>
            <el-table-column prop="createTime" label="注册日期">
            </el-table-column>
@@ -80,93 +80,93 @@
 import {data_get_shipper_list,data_get_shipper_status} from '../../../api/users/shipper/all_shipper.js'
 import createdDialog from './createdDialog.vue'
 export default {
-    components:{
-      createdDialog
+  components:{
+    createdDialog
+  },
+  data(){
+      return{
+      options:[],
+      optionsStatus:[
+        {
+        code:null,
+        name:'全部'
+        }
+      ],
+      formAll:{
+        belongCity: null,
+        attestationStatus:null,
+        companyName:'',
+        mobile:''
+      },
+      page:1,
+      pagesize:20,
+      totalCount:null,
+      tableDataAll:[],
+    }
+  },
+  mounted(){
+    this.firstblood()
+    this.getMoreInformation()
+  },
+  methods:{
+    //刷新页面
+    firstblood(){
+      data_get_shipper_list(this.page,this.pagesize,this.formAll).then(res=>{
+        console.log(res)
+        this.totalCount = res.data.totalCount;
+        this.tableDataAll = res.data.list;
+      })
     },
-    data(){
-        return{
-        options:[],
-        optionsStatus:[
-          {
-          code:null,
-          name:'全部'
-          }
-        ],
-        formAll:{
-          belongCity: null,
-          attestationStatus:null,
-          companyName:'',
-          mobile:''
-        },
-        page:1,
-        pagesize:20,
-        totalCount:null,
-        tableDataAll:[],
-      }
+    //获取状态列表
+    getMoreInformation(){
+        data_get_shipper_status().then(res=>{
+          res.data.map((item)=>{
+            this.optionsStatus.push(item);
+          })
+        })
     },
-    mounted(){
-      this.firstblood()
-      this.getMoreInformation()
-    },
-    methods:{
-      //刷新页面
-      firstblood(){
+      //点击查询按纽，按条件查询列表
+    getdata_search(event){
         data_get_shipper_list(this.page,this.pagesize,this.formAll).then(res=>{
-          console.log(res)
           this.totalCount = res.data.totalCount;
           this.tableDataAll = res.data.list;
         })
-      },
-      //获取状态列表
-      getMoreInformation(){
-          data_get_shipper_status().then(res=>{
-            res.data.map((item)=>{
-              this.optionsStatus.push(item);
-            })
-          })
-      },
-       //点击查询按纽，按条件查询列表
-      getdata_search(event){
-          data_get_shipper_list(this.page,this.pagesize,this.formAll).then(res=>{
-            this.totalCount = res.data.totalCount;
-            this.tableDataAll = res.data.list;
-          })
-      },
-      
-      //清空
-      clearSearch(){
-        this.formAll = {
-          belongCity:null,
-          mobile:'',
-          attestationStatus:'',
-          companyName:''
-        }
-      },
-      handleChange(value){
-        console.log(value)
-      },
-
-      handleClick (row) {
-        console.log('row:',row)
-      },
-
-      // 码数
-      handleSizeChange(val) {
-        console.log(`每页 ${val} 条`);
-        this.pagesize=val
-        this.firstblood()
-      },
-
-      // 页数
-      handleCurrentChange(val) {
-        console.log(`当前页: ${val}`);
-        this.page=val
-        this.firstblood()
-      },
-      getDataList(){
-        this.firstblood()
+    },
+    
+    //清空
+    clearSearch(){
+      this.formAll = {
+        belongCity:null,
+        mobile:'',
+        attestationStatus:'',
+        companyName:''
       }
+    },
+    handleChange(value){
+      console.log(value)
+    },
+
+    handleClick (row) {
+      console.log('row:',row)
+    },
+
+    // 码数
+    handleSizeChange(val) {
+      console.log(`每页 ${val} 条`);
+      this.pagesize=val
+      this.firstblood()
+    },
+
+    // 页数
+    handleCurrentChange(val) {
+      console.log(`当前页: ${val}`);
+      this.page=val
+      this.firstblood()
+    },
+    getDataList(){
+      this.firstblood()
     }
+  }
 }
 </script>
 <style>
