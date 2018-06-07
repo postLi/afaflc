@@ -17,15 +17,28 @@
            <el-button type="primary" plain @click="getdata_search">查询</el-button>
            <el-button type="info" plain @click="clearSearch">清空</el-button>
         </div>
+        <div class="export">
+        <!-- <el-button type="primary" @click="addClassfy">新增</el-button> -->
+        <createdDialog btntext="代客认证"
+          :params="selectRowData"
+          :plain="true" type="primary" 
+          btntype="primary" 
+          icon="el-icon-news"
+          editType="edit" 
+          btntitle="代客提交"
+          @getData="getDataList">
+        </createdDialog>
+      </div>
         <div class="info_news">
             <el-table 
                 ref="mutipleTable"
                 :data="tableData1"
                 stripe
                 border
+                @selection-change="handleSelectionChange"
                 tooltip-effect="dark"
                 style="width: 100%">
-                <el-table-column type="index" label="序号" width="80px">
+                <el-table-column type="selection" width="80px">
                 </el-table-column>
                 <el-table-column prop="companyName" label="公司名称">
                 </el-table-column>
@@ -41,14 +54,14 @@
                 </el-table-column>
                 <el-table-column prop="phone" label="审核不通过时间">
                 </el-table-column>
-                <el-table-column
+                <!-- <el-table-column
                     fixed="right"
                     label="操作"
                     width="250">
                     <template slot-scope="scope">
                     <el-button type="text" size="small">代客认证</el-button>
                     </template>
-                </el-table-column>
+                </el-table-column> -->
             </el-table>
             <el-pagination
                 @size-change="handleSizeChange"
@@ -63,8 +76,12 @@
     </div>
 </template>
 <script>
+import createdDialog from './createdDialog.vue'
 import {data_get_shipper_list} from '../../../api/users/shipper/all_shipper.js'
 export default {
+    components:{
+        createdDialog
+    },
     data(){
         return{
             tableData1:[],
@@ -76,13 +93,27 @@ export default {
               belongCity:null,
               companyName:'',
               mobile:''
-            }
+            },
+            selectRowData:{},
+            multipleSelection:[]
         }
     },
     mounted(){
         this.firstblood()
     },
     methods:{
+        getDataList(){
+            this.firstblood()
+        },
+        handleSelectionChange(val){
+        this.multipleSelection = val;
+        if(val[0]){
+            this.selectRowData = val[0]
+        } else {
+            this.selectRowData = {}
+        }
+      
+    },
         //刷新页面
       firstblood(){
         data_get_shipper_list(this.page,this.pagesize,this.formAll).then(res=>{

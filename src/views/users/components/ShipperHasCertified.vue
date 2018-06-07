@@ -31,26 +31,39 @@
             <el-button type="primary" plain @click="getdata_search">查询</el-button>
            <el-button type="info" plain @click="clearSearch">清空</el-button>
         </div>
-        <!-- <div class="export">
-            <el-button type="info">新增</el-button>
-            <el-button type="info">导出</el-button>
-        </div> -->
+        <div class="export">
+            <!-- <el-button type="info">新增</el-button> -->
+            <createdDialog 
+            btntext="修改"
+            :plain="true"
+            type="primary" 
+            btntype="primary"
+            icon="el-icon-news"
+            editType="edit"
+            btntitle="修改"
+            :params="selectRowData"
+            @getData="getDataList"></createdDialog>
+            <!-- <el-button type="info">导出</el-button> -->
+            <el-button type="primary" plain icon="el-icon-edit" @click="handleFroze">冻结</el-button>
+             <el-button type="primary" plain icon="el-icon-edit" @click="handleBlack">移入黑名单</el-button>
+        </div>
         <div class="info_news">
             <el-table
                 ref="multipleTable"
                 :data="tableData3"
                 stripe
                 border
+                @selection-change="handleSelectionChange"
                 tooltip-effect="dark"
                 style="width: 100%">
                 <el-table-column
-                    type="index"
-                    label="序号"
+                    type="selection"
                     width="80px">
                 </el-table-column>
-                <el-table-column
-                    prop="companyName"
-                    label="公司名称">
+                <el-table-column label="公司名称">
+                    <template slot-scope="scope">
+                        <createdDialog :params="scope.row" btntype="text" :btntext="scope.row.companyName" editType="view" btntitle="详情"></createdDialog>
+                    </template>
                 </el-table-column>
                 <el-table-column
                     prop="contants"
@@ -82,7 +95,7 @@
                     label="货主类型"
                     >
                 </el-table-column>
-                <el-table-column
+                <!-- <el-table-column
                     label="操作"
                     width="400">
                     <template slot-scope="scope">
@@ -95,7 +108,7 @@
                         <el-button type="text"
                             @click="dialogFormVisible = true">移入黑名单</el-button>
                     </template>
-                </el-table-column>
+                </el-table-column> -->
             </el-table>
                 
             <el-pagination
@@ -111,8 +124,12 @@
     </div>
 </template>
 <script>
+import createdDialog from './createdDialog.vue'
 import {data_get_shipper_list} from '../../../api/users/shipper/all_shipper.js'
 export default {
+    components:{
+      createdDialog
+    },
     data(){
         return {
             tableData3:[],
@@ -124,13 +141,32 @@ export default {
              companyName:'',
              contacts:'',
              shipperType:''
-            }
+            },
+            multipleSelection:[],
+            selectRowData:{}
         }
     },
     mounted(){
       this.firstblood()
     },
     methods:{
+        // 冻结
+        handleFroze(){
+            console.log(11111)
+        },
+        // 黑名单
+        handleBlack(){
+            console.log(2222)
+        },
+        // 选中值判断
+        handleSelectionChange(val){
+            this.multipleSelection = val;
+            if(val[0]){
+                this.selectRowData = val[0]
+            } else {
+                this.selectRowData = {}
+            }
+        },
         //刷新页面
       firstblood(){
         data_get_shipper_list(this.page,this.pagesize,this.formInline).then(res=>{
@@ -166,6 +202,9 @@ export default {
           shipperType:''
         }
       },
+      getDataList(){
+        this.firstblood()
+      }
     }
 }
 </script>

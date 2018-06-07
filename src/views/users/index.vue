@@ -209,7 +209,7 @@
       <ShipperHasCertified></ShipperHasCertified>
     </el-tab-pane>
 
-    <!-- 认证为通过 -->
+    <!-- 认证不通过 -->
     <el-tab-pane label="认证不通过" name="fifth">
       <ShipperDisqualification></ShipperDisqualification>
     </el-tab-pane>
@@ -579,6 +579,7 @@
 
 
 <script type="text/javascript">
+import '@/styles/dialog.scss'
     import ShipperAll from './components/ShipperAll.vue'
     import ShipperUnauthorized from './components/ShipperUnauthorized.vue' 
     import ShipperCertified from './components/ShipperCertified.vue'
