@@ -74,11 +74,11 @@ export function data_NewData(data) {
   })
 }
 
-//修改
-export function data_OnlyChange(data) {
+//修改公海推单设置
+export function data_ChangeData(data) {
   return fetch({
-    url: '/'+baseurl+'/sm/aflcAreaPrice/v1/update',
-    method: 'post',
+    url: '/'+baseurl+'/dispatch/aflcOpenseaRecommend/v1/update',
+    method: 'put',
     data:data
   })
 }

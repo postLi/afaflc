@@ -741,17 +741,17 @@ import { REGEX }  from '@/utils/validate'
                     let information = "请填写超时费用";
                     this.hint(information);
                 }
-                else if(!/^[0-9]+$/.test(data.freeTime)){
+                else if(!/^[0-9\.]+$/.test(data.freeTime)){
                     let information = "请输入整形数字";
                     this.hint(information);
                     this.$refs.freetime.focus();
                 }
-                else if(!/^[0-9]+$/.test(data.intervalTime)){
+                else if(!/^[0-9\.]+$/.test(data.intervalTime)){
                     let information = "请输入整形数字";
                     this.hint(information);
                     this.$refs.intervaltime.focus();
                 }
-                else if(!/^[0-9]+$/.test(data.timeOutstripPrice)){
+                else if(!/^[0-9\.]+$/.test(data.timeOutstripPrice)){
                     let information = "请输入整形数字";
                     this.hint(information);
                     this.$refs.timeoutstripprice.focus();

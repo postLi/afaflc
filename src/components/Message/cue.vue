@@ -13,15 +13,31 @@
 export default {
     name: 'getCityList',
     props: {
-        config,
-
+        // centerDialogVisible:{
+        //     type:Boolean,
+        //     required:true
+        // },
+        // information:{
+        //     type:String,
+        //     required:true
+        // }
     },
     data() {
       return {
-       
+            information:null,
+            centerDialogVisible:false,
       };
     },
     methods: {
+        hint(val){
+            this.information = val;
+            console.log("val:",val)
+            this.centerDialogVisible = true;
+            let timer = setTimeout(()=>{
+                this.centerDialogVisible = false;
+                clearTimeout(timer)
+            },2000)
+        }
     },
     mounted(){
     },

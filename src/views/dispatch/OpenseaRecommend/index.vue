@@ -24,15 +24,15 @@
                             width="55">
                         </el-table-column>
                         <el-table-column
-                          prop="areaCode"
+                          prop="areaCodeName"
                           label="地区">
                         </el-table-column>
                         <el-table-column
-                          prop="serivceCode"
+                          prop="serivceCodeName"
                           label="服务类型">
                         </el-table-column>
                         <el-table-column
-                          prop="shipperCarType"
+                          prop="shipperCarTypeName"
                           label="货主用车类型">
                         </el-table-column>
                         <el-table-column
@@ -44,7 +44,7 @@
                           label="第二轮及之后推送">
                         </el-table-column>
                         <el-table-column
-                          prop="visualCarType"
+                          prop="visualCarTypeName"
                           label="可见车主类型">
                         </el-table-column>
                         <el-table-column
@@ -69,9 +69,8 @@
                         </div>
                     </div>
                 </div>
-                  
-                <addClassfy :dialogFormVisible.sync = "dialogFormVisible" :formtitle = "formtitle" ></addClassfy>
-                <changeclassify :dialogFormVisibleChange.sync = "dialogFormVisibleChange" :formtitle = "formtitle_change" @renovate="Onrenovate" :changeforms = 'changeforms'></changeclassify>
+                <addClassfy :dialogFormVisible.sync = "dialogFormVisible" :formtitle = "formtitle" @renovate="Onrenovate" @ifError="hint" ></addClassfy>
+                <changeclassify :dialogFormVisibleChange.sync = "dialogFormVisibleChange" :formtitle = "formtitle_change" @ifError="hint" @renovate="Onrenovate" :changeforms = 'changeforms'></changeclassify>
 
                 <!-- 新增分类提示不可为空 -->
                 <div class="cue">
@@ -114,8 +113,6 @@ import changeclassify from './changeclassify'
 
         data(){
             return{
-                AddVisible:null,
-                config:null,
                 show:false,//遮罩层
                 page:1,//页码
                 pagesize:20,//每页显示数量
@@ -128,25 +125,11 @@ import changeclassify from './changeclassify'
                 delDialogVisible:false,//删除提示弹窗
                 dataTotal:null,//当前页面数据总数
                 data:{},//获取页面数据 后端要求传参{}
-                forms: [{
-                    "extraDes":null,
-                    "extraName":null,
-                    "isFree":"0",
-                    "extraPrice" :0,
-                }],
                 changeforms:{},
                 information:'你想知道什么',
-                waitchange:{},
                 delID:[],
-                delIDTree:'',
                 checkedinformation:[],
-                formLabelWidth: '80px',
-                input_search: null,
                 tableDataTree:[],
-                defaultProps: {
-                  children: 'children',
-                  label: 'label'
-                },
             }
         },
         components:{
@@ -159,17 +142,10 @@ import changeclassify from './changeclassify'
             this.firstblood()
         },  
         methods: {
-            //子组件调用父组件刷新页面
+            //子组件调用父组件刷新页面  
             Onrenovate(){
-                this.firstblood()
-            },
-            //
-            changeformprice(val){
-                console.log(val)
-            },
-            //
-            chooseradio(label){
-                console.log(label)
+                this.firstblood();
+                this.dialogFormVisible = false;
             },
             //shuangji
             moreinfo(row, event){
@@ -179,31 +155,6 @@ import changeclassify from './changeclassify'
             //点击选中当前行
             clickDetails(row, event, column){
                 this.$refs.multipleTable.toggleRowSelection(row);
-            },
-            //添加子节点新增
-            addItem(){
-                // 业务逻辑判断
-                this.forms.push({
-                    extraDes:null,
-                    extraName:null,
-                    isFree:null,
-                    serivceCode:null,
-                }); 
-            },
-            //删除子节点新增
-            reduceItem(idx){
-                console.log(idx)
-                this.forms.splice(idx,1);
-            },
-            //新增关闭返回初始内容
-            closeAddNewInfo(){
-                this.dialogFormVisible = false;
-                this.forms = [{
-                    "extraDes":null,
-                    "extraName":null,
-                    "isFree":"0",
-                    "extraPrice" :0,
-                }];
             },
             //判断是否选中
             getinfomation(selection){
@@ -221,17 +172,7 @@ import changeclassify from './changeclassify'
                 }else{
                     console.log(this.checkedinformation)
                     this.dialogFormVisibleChange = true; 
-                    this.changeforms.areaCode = this.checkedinformation[0].areaCode;
-                    this.changeforms.serivceCode = this.checkedinformation[0].serivceCode;
-                    this.changeforms.firstRecommendKm = this.checkedinformation[0].firstRecommendKm;
-                    this.changeforms.firstRecommendTime = this.checkedinformation[0].firstRecommendTime;
-                    this.changeforms.secondRecommendKm = this.checkedinformation[0].secondRecommendKm;
-                    this.changeforms.secondRecommendTime = this.checkedinformation[0].secondRecommendTime;
-                    this.changeforms.shipperCarType = this.checkedinformation[0].shipperCarType;
-                    this.changeforms.visualCarType = this.checkedinformation[0].visualCarType;
-                    this.changeforms.usingStatus = this.checkedinformation[0].usingStatus;
-                    
-                    
+                    this.changeforms = this.checkedinformation[0]
                 }
             },
             // 禁用/启用
@@ -322,72 +263,7 @@ import changeclassify from './changeclassify'
             addClassfy(){
                 this.dialogFormVisible = true;
             },
-            //保存信息
-            newInfoSave(event){
-                if(!this.classfyradio){
-                    let information = "请选择标准服务类型";
-                    this.hint(information);
-                }else{
-                    let isOK = true;
-                    this.forms.map((item)=>{
-                        if(item.isFree === '1' && item.extraPrice == 0){
-                            isOK = false;
-                            let information = "请填写额外收费价格";
-                            this.hint(information);
-                            this.$refs.pricefocus[0].focus();
-                        }
-                        if(!item.extraDes){
-                            isOK = false;
-                            let information = "请填写额外服务描述";
-                            this.hint(information);
-                            this.$refs.infofocus[0].focus();
-                        }
-                            item.serivceCode = this.classfyradio
-                    })
-                    console.log(this.forms)
-                    console.log(isOK)
-                    if(isOK){
-                        data_AddForms(this.forms).then(res=>{
-                            // console.log(res)
-                            this.dialogFormVisible = false;
-                            this.firstblood();
-                            this.forms = [{
-                                "extraDes":null,
-                                "extraName":null,
-                                "isFree":"0",
-                                "extraPrice" :0,
-                            }];
-                        })
-                    }
-                }
-            },
-            //修改保存
-            changeInfoSave(){
-                console.log(this.changeform)
-                if(this.changeform.isFree == "0"){
-                    this.changeform.extraPrice = 0;
-                }
-                let arr = [];
-                arr.push(this.changeform)
-                data_AddForms(arr).then(res=>{
-                    console.log(res)
-                    this.dialogFormVisibleChange = false;   
-                    this.firstblood();
-                })
-            },
-             //验证数据值
-            valuerules(event){
-                // console.log(event)
-                if(!event.target.value){
-                    return 
-                }else{
-                    if(!/^[0-9]+$/.test(event.target.value)){
-                        let information = "请输入数字类型内容";
-                        this.hint(information);
-                        event.target.focus()
-                    }
-                }
-            },
+            
             hint(val){
                 this.information = val;
                 this.centerDialogVisible = true;

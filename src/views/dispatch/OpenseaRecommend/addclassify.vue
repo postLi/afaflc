@@ -1,72 +1,77 @@
 <template>
-    <!-- 新增分类信息 -->
-        <div class="addclassify commoncss">
-            <el-dialog :title='formtitle' :close-on-click-modal="true"  :visible="dialogFormVisible" @close="close">
-                <div class="chooseArea">
-                    <p><span>* </span>所在地 ：</p>
-                    <getCityList class="chooseItem" v-model="forms.areaCode" ref="area"></getCityList>
-                </div>
-                <div class="chooseServer chooseStyle">
-                    <p><span>* </span>服务类型 ：</p>
-                    <el-select v-model="forms.serivceCode" clearable placeholder="请选择">
-                        <el-option
-                            v-for="item in optionsService"
-                            :key="item.value"
-                            :label="item.name"
-                            :value="item.code"
-                            :disabled="item.disabled">
-                        </el-option>
-                    </el-select>
-                </div>
-                <div class="chooseCarType chooseStyle">
-                    <p><span>* </span>货主用车类型 ：</p>
-                    <el-select v-model="forms.shipperCarType" clearable placeholder="请选择">
-                        <el-option
-                            v-for="item in optionsCarType"
-                            :key="item.value"
-                            :label="item.name"
-                            :value="item.code"
-                            :disabled="item.disabled">
-                        </el-option>
-                    </el-select>
-                </div>
-                <div class="firstPush choosePush">
-                    <p><span>* </span>第一轮推送 ：</p>
-                    <el-input v-model="forms.firstRecommendKm"></el-input>
-                    <span>公里/</span>
-                    <el-input v-model="forms.firstRecommendTime"></el-input>
-                    <span>秒</span>                    
-                </div>
-                 <div class="secondPush choosePush">
-                    <p><span>* </span>第二轮及之后推送 ：</p>
-                     <el-input v-model="forms.secondRecommendKm"></el-input>
-                    <span>公里/</span>
-                    <el-input v-model="forms.secondRecommendTime"></el-input>
-                    <span>秒</span>                    
-                </div>
-                <div class="chooseVisual chooseStyle">
-                    <p><span>* </span>可见车主类型 ：</p>
-                    <el-select v-model="visualCarType" multiple  clearable placeholder="请选择">
-                        <el-option
-                            v-for="item in optionsVisualCarType"
-                            :key="item.code"
-                            :label="item.name"
-                            :value="item.code">
-                        </el-option>
-                    </el-select>
-                </div><br/>
-                <div class="chooseCarType chooseStyle">
-                    <p><span>* </span>状态 ：</p>
-                    <el-radio-group v-model="forms.usingStatus" >
-                        <el-radio  v-for="(obj,key) in optionsStatus" :label="obj.value" :key='key'>{{obj.name}}</el-radio>
-                    </el-radio-group>
-                </div>
-                <div slot="footer" class="dialog-footer">
-                <el-button type="primary" @click="newInfoSave">保 存</el-button>
-                <el-button @click="closeAddNewInfo">取 消</el-button>
-                </div> 
-            </el-dialog>
-        </div>
+    <div>
+        <!-- 新增分类信息 -->
+            <div class="addclassify commoncss">
+                <el-dialog :title='formtitle' :close-on-click-modal="true"  :visible="dialogFormVisible" @close="close">
+                    <div class="chooseArea">
+                        <p><span>* </span>所在地 ：</p>
+                        <getCityList class="chooseItem" v-model="forms.areaCode" ref="area"></getCityList>
+                    </div>
+                    <div class="chooseServer chooseStyle">
+                        <p><span>* </span>服务类型 ：</p>
+                        <el-select v-model="forms.serivceCode" clearable placeholder="请选择">
+                            <el-option
+                                v-for="item in optionsService"
+                                :key="item.value"
+                                :label="item.name"
+                                :value="item.code"
+                                :disabled="item.disabled">
+                            </el-option>
+                        </el-select>
+                    </div>
+                    <div class="chooseCarType chooseStyle">
+                        <p><span>* </span>货主用车类型 ：</p>
+                        <el-select v-model="forms.shipperCarType" clearable placeholder="请选择">
+                            <el-option
+                                v-for="item in optionsCarType"
+                                :key="item.value"
+                                :label="item.name"
+                                :value="item.code"
+                                :disabled="item.disabled">
+                            </el-option>
+                        </el-select>
+                    </div>
+                    <div class="firstPush choosePush">
+                        <p><span>* </span>第一轮推送 ：</p>
+                                   
+                        <el-input v-model="forms.firstRecommendKm"  maxlength="4" @blur="valuerules"></el-input>
+                        <span>公里/</span>
+                        <el-input v-model="forms.firstRecommendTime" maxlength="4" @blur="valuerules"></el-input>
+                        <span>秒</span>                    
+                    </div>
+                    <div class="secondPush choosePush">
+                        <p><span>* </span>第二轮及之后推送 ：</p>
+                        <el-input v-model="forms.secondRecommendKm" maxlength="4" @blur="valuerules"></el-input>
+                        <span>公里/</span>
+                        <el-input v-model="forms.secondRecommendTime" maxlength="4" @blur="valuerules"></el-input>
+                        <span>秒</span>                    
+                    </div>
+                    <div class="chooseVisual chooseStyle">
+                        <p><span>* </span>可见车主类型 ：</p>
+                        <el-select v-model="visualCarType" multiple  clearable placeholder="请选择">
+                            <el-option
+                                v-for="item in optionsVisualCarType"
+                                :key="item.code"
+                                :label="item.name"
+                                :value="item.code">
+                            </el-option>
+                        </el-select>
+                    </div><br/>
+                    <div class="chooseCarType chooseStyle">
+                        <p><span>* </span>状态 ：</p>
+                        <el-radio-group v-model="forms.usingStatus" >
+                            <el-radio  v-for="(obj,key) in optionsStatus" :label="obj.value" :key='key'>{{obj.name}}</el-radio>
+                        </el-radio-group>
+                    </div>
+                    <div slot="footer" class="dialog-footer">
+                    <el-button type="primary" @click="newInfoSave">保 存</el-button>
+                    <el-button @click="closeAddNewInfo">取 消</el-button>
+                    </div> 
+                </el-dialog>
+            </div>
+
+            <cue ref="cue"></cue>
+    </div>
 </template>
 
 <script>
@@ -74,6 +79,8 @@
 import getCityList from '@/components/GetCityList/index'
 import { data_CarList,data_ServerClassList } from '@/api/common.js'
 import { data_NewData } from '@/api/dispatch/OpenseaRecommend.js'
+import cue from "../../../components/Message/cue";
+
 
 export default {
     name: 'addClassfy',
@@ -89,6 +96,7 @@ export default {
     },
     components:{
         getCityList,
+        cue
     },
     data() {
       return {
@@ -107,6 +115,7 @@ export default {
         optionsCarType:null,//车辆类型选项
         optionsVisualCarType:[],
         visualCarType:[],
+        information:null,
     //可见车主类型
         optionsStatus:[
             {
@@ -142,19 +151,71 @@ export default {
             })
         },
         newInfoSave(){
-            // console.log(this.$refs.area.selectedOptions)
+            // this.information = '666ca'
+            // this.$refs.cue.hint(this.information)
             this.forms.areaCode = this.$refs.area.selectedOptions.pop();
             this.forms.visualCarType = this.visualCarType.join(',')
-            console.log(this.forms)
-            data_NewData(this.forms).then(res=>{
-                console.log(res)
-
-            })
+            if(!this.forms.areaCode){
+                let information = "请选择地区";
+                this.$refs.cue.hint(information)
+            }
+            else if(!this.forms.serivceCode){
+                let information = "请选择服务类型";
+                this.$refs.cue.hint(information)
+            }
+            else if(!this.forms.shipperCarType){
+                let information = "请选择车辆类型";
+                this.$refs.cue.hint(information)
+            }
+            else if(!this.forms.firstRecommendKm || !this.forms.firstRecommendTime ){
+                let information = "第一轮推送公里数和秒数必填且为数字整数";
+                this.$refs.cue.hint(information) 
+            }
+            else if(!this.forms.secondRecommendKm || !this.forms.secondRecommendTime ){
+                let information = "第二轮及以后推送公里数和秒数必填且为数字整数";
+                this.$refs.cue.hint(information)
+            }
+            else if(!this.forms.visualCarType){
+                let information = "请选择可见车主类型";
+                this.$refs.cue.hint(information)
+            }else{
+                
+                console.log(this.forms)
+    
+                data_NewData(this.forms).then(res=>{
+                    console.log(res)
+                    this.$emit('renovate')
+                })
+            }
         },
         closeAddNewInfo(){
-            this.close();
+            this.close();  
+            this.forms = {
+                areaCode:null,//地区code
+                firstRecommendKm:null,//第一次推送公里
+                firstRecommendTime:null,//第一次推送时间
+                secondRecommendKm:null,//第二次
+                secondRecommendTime:null,//第二次
+                serivceCode:null,//服务类型
+                shipperCarType:null,//货主用车类型
+                visualCarType:null,//可见车主类型
+                usingStatus:'1',//起始状态
+            };        
+            
+            console.log(this.forms)
         },
-
+        //验证数据值
+        valuerules(event){
+            if(!event.target.value){
+                return 
+            }else{
+                if(!/^[0-9]+$/.test(event.target.value)){
+                    let information = "请输入数字类型内容";
+                    this.$refs.cue.hint(information)
+                    event.target.focus()
+                }
+            }
+        },
     },
    
 }

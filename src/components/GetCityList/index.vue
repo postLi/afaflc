@@ -60,7 +60,6 @@ export default {
            data_getProvinceList().then(res=>{
             //    console.log(res)
             if(res.text == '请求成功' && res.data.list.length >0 ){
-                
                 this.areaData = res.data.list.map(el => {
                     el.children = []
                     return el
