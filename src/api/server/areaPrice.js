@@ -63,7 +63,7 @@ export function data_Delete(id) {
     method: 'post',
     data:id
   })
-}
+} 
 
 //根据服务分类和车辆类型选择车长
 

@@ -488,7 +488,7 @@ import spinner from '../../../spinner/spinner'
                 if(!event.target.value){
                     return 
                 }else{
-                    if(!/^[0-9]+$/.test(event.target.value)){
+                    if(!/^[0-9\.]+$/.test(event.target.value)){
                         let information = "请输入数字类型内容";
                         this.hint(information);
                         event.target.focus()

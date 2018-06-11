@@ -318,6 +318,7 @@ import '../../../styles/dialog.scss'
             //判断是否选中
             getinfomation(selection){
                 this.checkedinformation = selection;
+                console.log(this.checkedinformation)
             },
             //修改
             handleEdit() {
@@ -329,6 +330,9 @@ import '../../../styles/dialog.scss'
                     let information = "不可修改多个内容";
                     this.hint(information);
 
+                }else if(this.checkedinformation[0].isDefault){
+                    let information = "初始数据不可修改";
+                    this.hint(information);
                 }else{
                     console.log(this.checkedinformation)
                     this.dialogFormVisible_change = true;
@@ -338,6 +342,7 @@ import '../../../styles/dialog.scss'
                     this.changeform.name = this.checkedinformation[0].name;
                     this.changeform.value = this.checkedinformation[0].value;
                     this.changeform.remark = this.checkedinformation[0].remark;
+                        
                 }
             },
             //修改关闭恢复数据
@@ -553,8 +558,11 @@ import '../../../styles/dialog.scss'
                     if(res.status == 200){
                         this.dialogFormVisible_change = false;
                         this.getInformation();
-                       
                     }
+                }).catch(res => {
+                    let information = res.text;
+                    this.hint(information);
+                    
                 })
             },
             //验证分类名称
