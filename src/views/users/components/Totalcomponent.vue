@@ -42,7 +42,7 @@
             <div class="export">
                 <el-button type="info">新增</el-button>
             </div>
-            <!-- <div class="info_news">
+            <div class="info_news">
                 <el-table
                     ref="multipleTable"
                     :data="tableDataTree"
@@ -94,7 +94,7 @@
                        layout="total, sizes, prev, pager, next, jumper"
                        :total="totalCount">
                 </el-pagination>
-            </div> -->
+            </div>
     </div>
 </template>
 <script type="text/javascript">

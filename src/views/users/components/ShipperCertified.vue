@@ -2,11 +2,12 @@
     <div>
         <div class="shipper_searchinfo">
         <label>所在地：
-          <el-cascader
+          <!-- <el-cascader
             :options="options"
             v-model="formAll.belongCity"
             @change="handleChange">
-          </el-cascader>
+          </el-cascader> -->
+          <GetCityList v-model="formAll.belongCity" ref="area"></GetCityList>
         </label>
          <label>公司名称:
              <el-input v-model="formAll.companyName"></el-input>
@@ -93,10 +94,11 @@
               </el-col>
               <el-col :span="12">
                 <el-form-item label="所在地" :label-width="formLabelWidth" prop="address">
-                  <el-select v-model="shengheform.belongCity" placeholder="请选择活动区域">
+                  <!-- <el-select v-model="shengheform.belongCity" placeholder="请选择活动区域">
                     <el-option label="区域一" value="shanghai"></el-option>
                     <el-option label="区域二" value="beijing"></el-option>
-                  </el-select>
+                  </el-select> -->
+                  
                 </el-form-item>
               </el-col>
             </el-row>
@@ -239,10 +241,12 @@
 </template>
 <script>
 import createdDialog from './createdDialog.vue'
+import GetCityList from '@/components/GetCityList'
 import {data_get_shipper_list} from '../../../api/users/shipper/all_shipper.js'
 export default {
   components:{
-    createdDialog
+    createdDialog,
+    GetCityList
   },
   data(){
     return{
@@ -334,6 +338,7 @@ export default {
     },
     //点击查询按纽，按条件查询列表
     getdata_search(event){
+       this.formAll.belongCity = this.$refs.area.selectedOptions.pop();
         data_get_shipper_list(this.page,this.pagesize,this.formAll).then(res=>{
           this.totalCount = res.data.totalCount;
           this.tableData1 = res.data.list;

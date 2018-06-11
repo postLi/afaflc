@@ -34,12 +34,13 @@
             </el-col>
             <el-col :span="12">
               <el-form-item label="所在地:" :label-width="formLabelWidth" required>
-                <el-cascader
+                <!-- <el-cascader
                   :options="areadata"
                   :props="props"
                   v-model="belongCity"
                   @active-item-change="handleChange">
-                </el-cascader>
+                </el-cascader> -->
+                <GetCityList v-model="xinzengform.belongCity" ref="area"></GetCityList>
               </el-form-item>
             </el-col>
           </el-row>
@@ -153,10 +154,12 @@
 </template>
 <script>
 import Upload from '@/components/Upload/singleImage'
+import GetCityList from '@/components/GetCityList'
 import {data_get_shipper_type,data_get_shipper_create,data_Area,data_get_shipper_change,data_get_shipper_view,data_GetCityList} from '../../../api/users/shipper/all_shipper.js'
 export default {
   components:{
-    Upload
+    Upload,
+    GetCityList
   },
   props:{
     params:{
@@ -236,6 +239,15 @@ export default {
         this.companyFlag= true
       }else{
         this.companyFlag=false
+        this.xinzengform.companyName=null
+        this.xinzengform.creditCode=null
+        this.xinzengform.businessLicenceFile=null
+        this.xinzengform.shipperCardFile=null
+        this.xinzengform.companyFacadeFile=null
+          //  creditCode:null,
+          //  businessLicenceFile:'',
+          //  shipperCardFile:'',
+          //  companyFacadeFile:'',
       }
      },
      deep:true
@@ -252,23 +264,23 @@ export default {
     //弹出框标题
     this.title = this.btntitle;
     this.getMoreInformation()
-    this.getArea()
+    // this.getArea()
   },
   methods:{
     setCurrent(row) {
 			this.$refs.singleTable.setCurrentRow(row);
 		},
     // 获取省份数据
-    getArea(){
-      data_Area().then(res=>{
-        this.areadata = res.data.list.map(el => {
-          el.children = []
-          return el
-        })
-        // console.log(res)
-        this.provinceId = this.areadata[0].code;
-      })
-    },
+    // getArea(){
+    //   data_Area().then(res=>{
+    //     this.areadata = res.data.list.map(el => {
+    //       el.children = []
+    //       return el
+    //     })
+    //     // console.log(res)
+    //     this.provinceId = this.areadata[0].code;
+    //   })
+    // },
 
     openDialog(){
       if(this.editType==='add'||this.editType==='view'){
@@ -335,6 +347,7 @@ export default {
           console.log('onSubmit',form)
           if(this.editType === 'add'){
             // 新增
+            this.xinzengform.belongCity = this.$refs.area.selectedOptions.pop();
             data_get_shipper_create(this.xinzengform).then(res=>{
               // console.log(res)
               this.dialogFormVisible_add = !this.dialogFormVisible_add;
@@ -345,6 +358,7 @@ export default {
             })
           }else if(this.editType === 'edit'){
             // 修改
+            this.xinzengform.belongCity = this.$refs.area.selectedOptions.pop();
             data_get_shipper_change(this.xinzengform).then(res=>{
               // console.log(res)
               this.dialogFormVisible_add = !this.dialogFormVisible_add;
@@ -364,20 +378,20 @@ export default {
     //   console.log(file);
     // },
 
-    // 所在地
-    handleChange(value){
-      console.log(value)
-      data_GetCityList(value[0]).then(res=>{
-        this.areadata = this.areadata.map(el => {
-          if(el.code === value[0]){
-            el.children = res.data.list
-          }
-          return el
-        })
-        this.citylist = res.data.list;
-      })
-      return []
-    }
+    // // 所在地
+    // handleChange(value){
+    //   console.log(value)
+    //   data_GetCityList(value[0]).then(res=>{
+    //     this.areadata = this.areadata.map(el => {
+    //       if(el.code === value[0]){
+    //         el.children = res.data.list
+    //       }
+    //       return el
+    //     })
+    //     this.citylist = res.data.list;
+    //   })
+    //   return []
+    // }
   }
 }
 </script>

@@ -2,11 +2,12 @@
   <div>
       <div class="shipper_searchinfo">
         <label>所在地：
-        <el-cascader
+        <!-- <el-cascader
           :options="options"
           v-model="formAll.selectedOptions6"
           @change="handleChange">
-        </el-cascader>
+        </el-cascader> -->
+          <GetCityList v-model="formAll.belongCity" ref="area"></GetCityList>
         </label>
         <label>公司名称:
           <el-input v-model="formAll.companyName"></el-input>
@@ -19,8 +20,29 @@
       </div>
       <div class="export">
         <el-button type="primary" plain icon="el-icon-edit" @click="handleUnfroze">解冻</el-button>
-        <el-button type="primary" plain icon="el-icon-edit" @click="handleUnfroze">冻结修改</el-button>
-        <el-button type="primary" plain icon="el-icon-edit" @click="handleUnfroze">移入黑名单</el-button>
+        <!-- <el-button type="primary" plain icon="el-icon-edit" @click="handleUnfroze">冻结修改</el-button> -->
+        <FreezeDialog
+          btntext="冻结修改"
+          type="primary" 
+          btntitle="冻结修改"
+          :plain="true"
+          editType='edit'
+          btntype="primary"
+          icon="el-icon-news"
+          :params="selectRowData"
+          >
+        </FreezeDialog>
+        <!-- <el-button type="primary" plain icon="el-icon-edit" @click="handleUnfroze">移入黑名单</el-button> -->
+        <shipperBlackDialog
+          btntext="移入黑名单"
+          type="primary" 
+          btntitle="移入黑名单"
+          :plain="true"
+          editType='edit'
+          btntype="primary"
+          icon="el-icon-news"
+          :params="selectRowData"
+        ></shipperBlackDialog>
       </div>
       <div class="info_news">
            <el-table 
@@ -28,7 +50,7 @@
             :data="tableData"
             stripe
             border
-            @selection-chang="handleSelectionChange"
+            @selection-change="handleSelectionChange"
             tooltip-effect="dark"
             style="width: 100%">
             <el-table-column type="selection" width="80px">
@@ -65,33 +87,39 @@
            </el-table-column> -->
           </el-table>
           <el-pagination
-          @size-change="handleSizeChange"
-          @current-change="handleCurrentChange"
-          :current-page="page"
-          :page-sizes="[20, 50, 200, 400]"
-          :page-size="pagesize"
-          layout="total, sizes, prev, pager, next, jumper"
-          :total="totalCount">
+            @size-change="handleSizeChange"
+            @current-change="handleCurrentChange"
+            :current-page="page"
+            :page-sizes="[20, 50, 200, 400]"
+            :page-size="pagesize"
+            layout="total, sizes, prev, pager, next, jumper"
+            :total="totalCount">
         </el-pagination>
       </div>
 
        <!-- 提示语的弹框 -->
      <div class="cue">
-          <el-dialog
+        <el-dialog
           :visible.sync="centerDialogVisible"
           center>
-          <span>{{information}}</span>
-          </el-dialog>
+        <span>{{information}}</span>
+        </el-dialog>
       </div>
   </div>    
 </template>
 <script>
 
 import {data_get_shipper_list} from '../../../api/users/shipper/all_shipper.js'
-import createdDialog from './createdDialog.vue'
+import createdDialog from './createdDialog'
+import FreezeDialog from './FreezeDialog'
+import shipperBlackDialog from './shipperBlackDialog'
+import GetCityList from '@/components/GetCityList'
 export default {
   components:{
-    createdDialog
+    createdDialog,
+    FreezeDialog,
+    shipperBlackDialog,
+    GetCityList
   },
   data(){
     return{
@@ -108,13 +136,24 @@ export default {
       },
       centerDialogVisible:false,// 提示语的弹窗控制
       information:null, // 弹框显示的信息
-      multipleSelection:[]
+      multipleSelection:[],
+      selectRowData:{}
     }
   },
   mounted(){
     this.firstblood()
   },
   methods:{
+     // 判断选中值
+    handleSelectionChange(val){
+      this.multipleSelection = val;
+      if(val[0]){
+        // 对弹框的赋值处理
+        this.selectRowData=val[0]
+      } else {
+        this.selectRowData = {}
+      }
+    },
     // 解冻
     handleUnfroze(){
         console.log(this.multipleSelection)
@@ -127,17 +166,6 @@ export default {
           this.hint(information);
       } else{
 
-      }
-    },
-
-    // 判断选中值
-    handleSelectionChange(val){
-      this.multipleSelection = val;
-      if(val[0]){
-        // 对解冻弹框的赋值处理
-
-      } else {
-          this.selectRowData = {}
       }
     },
 
@@ -159,6 +187,7 @@ export default {
     },
     //点击查询按纽，按条件查询列表
     getdata_search(event){
+       this.formAll.belongCity = this.$refs.area.selectedOptions.pop();
         data_get_shipper_list(this.page,this.pagesize,this.formAll).then(res=>{
           this.totalCount = res.data.totalCount;
           this.tableData = res.data.list;

@@ -7,6 +7,7 @@
             v-model="formInline.belongCity"
             @change="handleChange">
           </el-cascader> -->
+           <GetCityList v-model="formInline.belongCity" ref="area"></GetCityList>
         </label>
         <label>手机号码：
           <el-input
@@ -117,6 +118,7 @@
                     v-model="forms.belongCity"
                     @change="handleChange">
                   </el-cascader> -->
+                  <GetCityList v-model="forms.belongCity" ref="area"></GetCityList>
                 </el-form-item>
                </el-col>
                <el-col :span="12">
@@ -163,6 +165,7 @@
                     v-model="formFroze.belongCity"
                     @change="handleChange">
                   </el-cascader> -->
+                  <GetCityList v-model="formFroze.belongCity" ref="area"></GetCityList>
                 </el-form-item>
                </el-col>
              </el-row>
@@ -175,11 +178,15 @@
                </el-col>
                <el-col :span="12">
                  <el-form-item label="货主类型" :label-width="formLabelWidth">
-                  <!-- <el-cascader
-                    :options="options"
-                    v-model="formFroze.shipperType"
-                    @change="handleChange">
-                  </el-cascader> -->
+                  <el-select v-model="formFroze.shipperType" placeholder="请选择">
+                  <el-option
+                    v-for="item in options"
+                    :key="item.value"
+                    :label="item.name"
+                    :value="item.code"
+                    :disabled="item.disabled">
+                  </el-option>
+                </el-select>
                 </el-form-item>
                </el-col>
              </el-row>
@@ -227,7 +234,7 @@
               </el-row>
              <el-row>
                <el-col :span="24">
-                  <el-form-item label="解冻原因说明"  :label-width="formLabelWidth" required>
+                  <el-form-item label="冻结原因说明"  :label-width="formLabelWidth" required>
                     <el-input type="textarea" :rows="2" v-model="formFroze.reason"></el-input>
                   </el-form-item>
                </el-col>
@@ -270,6 +277,7 @@
                     v-model="formFroze.belongCity"
                     @change="handleChange">
                   </el-cascader> -->
+                  <GetCityList v-model="formBlack.belongCity" ref="area"></GetCityList>
                 </el-form-item>
                </el-col>
              </el-row>
@@ -282,11 +290,15 @@
                </el-col>
                <el-col :span="12">
                  <el-form-item label="货主类型" :label-width="formLabelWidth">
-                  <!-- <el-cascader
-                    :options="options"
-                    v-model="formFroze.shipperType"
-                    @change="handleChange">
-                  </el-cascader> -->
+                  <el-select v-model="formBlack.shipperType" placeholder="请选择">
+                  <el-option
+                    v-for="item in options"
+                    :key="item.value"
+                    :label="item.name"
+                    :value="item.code"
+                    :disabled="item.disabled">
+                  </el-option>
+                  </el-select>
                 </el-form-item>
                </el-col>
              </el-row>
@@ -342,11 +354,15 @@
     </div>
 </template>
 <script>
+import GetCityList from '@/components/GetCityList'
 import createdDialog from './createdDialog.vue'
+import FreezeDialog from './FreezeDialog.vue'
 import {data_get_shipper_list,data_get_shipper_change} from '../../../api/users/shipper/all_shipper.js'
 export default {
   components:{
-    createdDialog
+    createdDialog,
+    FreezeDialog,
+    GetCityList
   },
   data(){
     return{
@@ -372,13 +388,13 @@ export default {
       forms:{
         mobile:'',
         contacts:'',
-        // belongCity:[],
+        belongCity:null,
         address:''
       },
       formFroze:{
          mobile:'',
         contacts:'',
-        // belongCity:[],
+        belongCity:null,
         shipperType:null,
         companyName:'',
         address:'',
@@ -392,7 +408,7 @@ export default {
         mobile:'',
         contacts:'',
         companyName:'',
-        // belongCity:[],
+        belongCity:null,
         shipperType:null,
         address:'',
         registerOrigin:'',
@@ -422,11 +438,15 @@ export default {
          this.formBlack= val[0]
       } else {
         this.selectRowData = {}
+        this.forms ={}
+        this.formFroze= {}
+        this.formBlack= {}
       }
       
     },
       //点击查询按纽，按条件查询列表
     getdata_search(event){
+      this.formInline.belongCity = this.$refs.area.selectedOptions.pop();
       data_get_shipper_list(this.page,this.pagesize,this.formInline).then(res=>{
         this.totalCount = res.data.totalCount;
         this.tableDataAll = res.data.list;
@@ -442,6 +462,7 @@ export default {
     },
       //刷新页面
     firstblood(){
+      // this.formInline.belongCity = this.$refs.area.selectedOptions.pop();
       data_get_shipper_list(this.page,this.pagesize,this.formInline).then(res=>{
         console.log(res)
         this.totalCount = res.data.totalCount;
@@ -515,6 +536,7 @@ export default {
             belongCity:this.belongCity,
             address: this.address
           }
+          this.forms.belongCity = this.$refs.area.selectedOptions.pop();
           data_get_shipper_change(this.forms).then(res=>{
             // console.log(res)
             this.changeDialogFlag = false;

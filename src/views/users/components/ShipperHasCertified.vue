@@ -23,9 +23,14 @@
                 </el-input>
             </label>
             <label>货主类型：
-                <el-select v-model="formInline.shipperType" placeholder="活动区域">
-                    <el-option label="区域一" value="shanghai"></el-option>
-                    <el-option label="区域二" value="beijing"></el-option>
+                <el-select v-model="formInline.shipperType" placeholder="请选择">
+                  <el-option
+                    v-for="item in options"
+                    :key="item.value"
+                    :label="item.name"
+                    :value="item.code"
+                    :disabled="item.disabled">
+                  </el-option>
                 </el-select>
             </label>
             <el-button type="primary" plain @click="getdata_search">查询</el-button>
@@ -44,8 +49,29 @@
             :params="selectRowData"
             @getData="getDataList"></createdDialog>
             <!-- <el-button type="info">导出</el-button> -->
-            <el-button type="primary" plain icon="el-icon-edit" @click="handleFroze">冻结</el-button>
-             <el-button type="primary" plain icon="el-icon-edit" @click="handleBlack">移入黑名单</el-button>
+            <!-- <el-button type="primary" plain icon="el-icon-edit" @click="handleFroze">冻结</el-button> -->
+            <FreezeDialog
+              btntext="冻结"
+              type="primary" 
+              btntitle="冻结"
+              :plain="true"
+              editType='edit'
+              btntype="primary"
+              icon="el-icon-news"
+              :params="selectRowData"
+            >
+            </FreezeDialog>
+            <shipperBlackDialog
+              btntext="移入黑名单"
+              type="primary" 
+              btntitle="移入黑名单"
+              :plain="true"
+              editType='edit'
+              btntype="primary"
+              icon="el-icon-news"
+              :params="selectRowData"
+            ></shipperBlackDialog>
+             <!-- <el-button type="primary" plain icon="el-icon-edit" @click="handleBlack">移入黑名单</el-button> -->
         </div>
         <div class="info_news">
             <el-table
@@ -112,35 +138,40 @@
             </el-table>
                 
             <el-pagination
-                    @size-change="handleSizeChange"
-                    @current-change="handleCurrentChange"
-                    :current-page="page"
-                    :page-sizes="[20, 50, 200, 400]"
-                    :page-size="pagesize"
-                    layout="total, sizes, prev, pager, next, jumper"
-                    :total="totalCount">
+                @size-change="handleSizeChange"
+                @current-change="handleCurrentChange"
+                :current-page="page"
+                :page-sizes="[20, 50, 200, 400]"
+                :page-size="pagesize"
+                layout="total, sizes, prev, pager, next, jumper"
+                :total="totalCount">
             </el-pagination>
         </div>
     </div>
 </template>
 <script>
 import createdDialog from './createdDialog.vue'
-import {data_get_shipper_list} from '../../../api/users/shipper/all_shipper.js'
+import FreezeDialog from './FreezeDialog.vue'
+import shipperBlackDialog from './shipperBlackDialog'
+import {data_get_shipper_list,data_get_shipper_type} from '../../../api/users/shipper/all_shipper.js'
 export default {
     components:{
-      createdDialog
+      createdDialog,
+      FreezeDialog,
+      shipperBlackDialog
     },
     data(){
         return {
+            options:[],
             tableData3:[],
             totalCount:null,
             page:1,
             pagesize:20,
             formInline:{
-             mobile:'',
-             companyName:'',
-             contacts:'',
-             shipperType:''
+                mobile:'',
+                companyName:'',
+                contacts:'',
+                shipperType:''
             },
             multipleSelection:[],
             selectRowData:{}
@@ -150,14 +181,15 @@ export default {
       this.firstblood()
     },
     methods:{
-        // 冻结
-        handleFroze(){
-            console.log(11111)
-        },
-        // 黑名单
-        handleBlack(){
-            console.log(2222)
-        },
+        // // 冻结
+        // handleFroze(){
+        //     console.log(11111)
+        // },
+        // // 黑名单
+        // handleBlack(){
+        //     console.log(2222)
+        // },
+
         // 选中值判断
         handleSelectionChange(val){
             this.multipleSelection = val;
@@ -166,6 +198,16 @@ export default {
             } else {
                 this.selectRowData = {}
             }
+        },
+
+        //获取货主类型
+        getMoreInformation(){
+            data_get_shipper_type().then(res=>{
+                // console.log(res)
+                res.data.map((item)=>{
+                this.options.push(item)
+                })
+            })
         },
         //刷新页面
       firstblood(){
@@ -208,4 +250,11 @@ export default {
     }
 }
 </script>
+<style>
+.shipper .shipper_searchinfo{
+    padding: 0 0px 10px 20px;
+    margin-right: 30px;
+}
+</style>
+
 
