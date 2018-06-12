@@ -30,6 +30,7 @@
           btntype="primary"
           icon="el-icon-news"
           :params="selectRowData"
+          @getData="getListData"
           >
         </FreezeDialog>
         <!-- <el-button type="primary" plain icon="el-icon-edit" @click="handleUnfroze">移入黑名单</el-button> -->
@@ -42,6 +43,7 @@
           btntype="primary"
           icon="el-icon-news"
           :params="selectRowData"
+          @getData="getListData"
         ></shipperBlackDialog>
       </div>
       <div class="info_news">
@@ -67,7 +69,7 @@
             </el-table-column>
             <el-table-column prop="belongCity" label="所在地">
             </el-table-column>
-            <el-table-column prop="shipperType" label="货主类型">
+            <el-table-column prop="shipperTypeName" label="货主类型">
             </el-table-column>
             <el-table-column prop="freezeTime" label="冻结时间">
             </el-table-column>
@@ -97,6 +99,125 @@
         </el-pagination>
       </div>
 
+
+      <!-- 解冻弹框 -->
+       <div class="addclassify commoncss">
+        <el-dialog title="解冻" :visible.sync="unfrozeDialogFlag">
+          <el-form :model="formUnFroze" ref="formUnFroze">
+            <el-row>
+                <el-col :span="12">
+                  <el-form-item label="手机号码" :label-width="formLabelWidth">
+                    <el-input v-model="formUnFroze.mobile"></el-input>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="12">
+                  <el-form-item label="公司名称" :label-width="formLabelWidth">
+                    <el-input v-model="formUnFroze.companyName"></el-input>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+              
+               <el-row>
+               <el-col :span="12">
+                 <el-form-item label="联系人" :label-width="formLabelWidth">
+                    <el-input v-model="formUnFroze.contacts"></el-input>
+                  </el-form-item>
+               </el-col>
+               <el-col :span="12">
+                 <el-form-item label="所在地" :label-width="formLabelWidth">
+                  <!-- <el-cascader
+                    :options="options"
+                    v-model="formFroze.belongCity"
+                    @change="handleChange">
+                  </el-cascader> -->
+                  <GetCityList v-model="formUnFroze.belongCity" ref="area"></GetCityList>
+                </el-form-item>
+               </el-col>
+             </el-row>
+
+              <el-row>
+               <el-col :span="12">
+                 <el-form-item label="详细地址" :label-width="formLabelWidth">
+                  <el-input v-model="formUnFroze.address" :maxlength="20"></el-input>
+                </el-form-item>
+               </el-col>
+               <el-col :span="12">
+                 <el-form-item label="货主类型" :label-width="formLabelWidth">
+                  <el-select v-model="formUnFroze.shipperType" placeholder="请选择">
+                  <el-option
+                    v-for="item in options"
+                    :key="item.value"
+                    :label="item.name"
+                    :value="item.code"
+                    :disabled="item.disabled">
+                  </el-option>
+                </el-select>
+                </el-form-item>
+               </el-col>
+             </el-row>
+             <el-row>
+               <el-col :span="12">
+                  <el-form-item label="注册来源" :label-width="formLabelWidth">
+                    <el-input v-model="formUnFroze.registerOrigin" :maxlength="20"></el-input>
+                  </el-form-item>
+               </el-col>
+             </el-row>
+             <div class="shipper_information">
+                <h2>冻结原因</h2>
+             </div>
+             <el-row>
+               <el-col :span="24">
+                 <el-form-item label="冻结原因" :label-width="formLabelWidth">
+                  <el-select v-model="formUnFroze.freezeCause" placeholder="请选择">
+                    <el-option
+                      v-for="item in optionsReason"
+                      :key="item.value"
+                      :label="item.name"
+                      :value="item.code">
+                    </el-option>
+                  </el-select>
+                </el-form-item>
+               </el-col>
+             </el-row>
+              <el-row>
+                <el-col :span="24">
+                  <el-form-item label="解冻日期" :label-width="formLabelWidth">
+                    <el-date-picker
+                      v-model="formUnFroze.unfreezeTime"
+                      type="datetime"
+                      placeholder="选择日期"
+                      format="yyyy-MM-dd"
+                      :picker-options="pickerOptions">
+                    </el-date-picker>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+             <el-row>
+               <el-col :span="24">
+                  <el-form-item label="冻结原因说明:"  :label-width="formLabelWidth">
+                    <el-input type="textarea" :rows="2" v-model="formUnFroze.freezeCauseRemark"></el-input>
+                  </el-form-item>
+               </el-col>
+             </el-row>
+             <div class="shipper_information">
+              <h2>解冻</h2>
+             </div>
+             <el-row>
+               <el-col :span="24">
+                 <el-form-item  label="解冻原因说明:" :label-width="formLabelWidth" required>
+                  <el-input type="textarea" :rows="2" v-model="formUnFroze.freezeCauseRemark"  :maxlength="100"></el-input>
+                 </el-form-item>
+               </el-col>
+             </el-row>
+          </el-form>
+          <div slot="footer" class="dialog-footer">
+            <el-button type="primary" @click="onSave">确 定</el-button>
+            <el-button @click="unfrozeDialogFlag = false">取 消</el-button>
+          </div>
+        </el-dialog>
+      </div>
+
+
        <!-- 提示语的弹框 -->
      <div class="cue">
         <el-dialog
@@ -109,7 +230,7 @@
 </template>
 <script>
 
-import {data_get_shipper_list} from '../../../api/users/shipper/all_shipper.js'
+import {data_get_shipper_list,data_get_shipper_freezeType,data_get_shipper_type} from '../../../api/users/shipper/all_shipper.js'
 import createdDialog from './createdDialog'
 import FreezeDialog from './FreezeDialog'
 import shipperBlackDialog from './shipperBlackDialog'
@@ -123,6 +244,8 @@ export default {
   },
   data(){
     return{
+      optionsReason:[],
+      unfrozeDialogFlag:false,
       options:[],
       tableData:[],
       page:1,
@@ -137,11 +260,32 @@ export default {
       centerDialogVisible:false,// 提示语的弹窗控制
       information:null, // 弹框显示的信息
       multipleSelection:[],
-      selectRowData:{}
+      selectRowData:{},
+      formUnFroze: { // 解冻弹框表单
+        mobile: '', // 手机号
+        companyName: '', // 公司名称
+        shipperType:null,
+        address:'', // 详细地址
+        contacts:'', // 联系人
+        belongCity:null, // 所在地
+        registerOrigin:'', // 注册来源
+        creditCode:'', // 统一社会信用代码
+        unfreezeTime:'',
+        attestationStatus:null,
+        freezeCause:'',
+        freezeCauseRemark:''
+      },
+      formLabelWidth:'120px',
+      pickerOptions:{
+        disabledDate(time) {
+          return time.getTime() < Date.now();
+        },
+      }
     }
   },
   mounted(){
     this.firstblood()
+    this.getMoreInformation()
   },
   methods:{
      // 判断选中值
@@ -150,8 +294,10 @@ export default {
       if(val[0]){
         // 对弹框的赋值处理
         this.selectRowData=val[0]
+        this.formUnFroze=val[0]
       } else {
         this.selectRowData = {}
+         this.formUnFroze= {}
       }
     },
     // 解冻
@@ -165,7 +311,7 @@ export default {
           let information = "不可修改多个内容";
           this.hint(information);
       } else{
-
+        this.unfrozeDialogFlag=true
       }
     },
 
@@ -220,6 +366,42 @@ export default {
       this.firstblood()
     },
     getDataList(){
+      this.firstblood()
+    },
+     getMoreInformation(){
+      //获取货主类型
+      data_get_shipper_type().then(res=>{
+        // console.log(res)
+        res.data.map((item)=>{
+        this.options.push(item)
+        })
+      }),
+
+      // 获取冻结原因下拉
+      data_get_shipper_freezeType().then(res=>{
+        // console.log(res)
+        res.data.map((item)=>{
+          this.optionsReason.push(item)
+        })
+      })
+    },
+    onSave(){
+      this.$refs['formUnFroze'].validate((valid)=>{
+        if(valid){
+          this.formUnFroze.belongCity = this.$refs.area.selectedOptions.pop();
+          var forms= Object.assign({}, this.formUnFroze,{attestationStatus:"AF0010403"})
+          data_get_shipper_change(forms).then(res=>{
+            // console.log(res)
+            this.$message.success('解冻成功')
+            this.unfrozeDialogFlag = false;
+            this.firstblood();
+          }).catch(err=>{
+            console.log(err)
+          })
+        }
+      })
+    },
+    getListData(){
       this.firstblood()
     }
   }

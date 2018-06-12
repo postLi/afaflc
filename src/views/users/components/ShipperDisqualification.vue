@@ -41,7 +41,10 @@
                 style="width: 100%">
                 <el-table-column type="selection" width="80px">
                 </el-table-column>
-                <el-table-column prop="companyName" label="公司名称">
+                <el-table-column label="公司名称">
+                    <template slot-scope="scope">
+                        <createdDialog :params="scope.row" btntype="text" :btntext="scope.row.companyName" editType="view" btntitle="详情"></createdDialog>
+                    </template>
                 </el-table-column>
                 <el-table-column prop="contacts" label="联系人">
                 </el-table-column>
@@ -51,9 +54,9 @@
                 </el-table-column>
                 <el-table-column prop="belongCity" label="所在地">
                 </el-table-column>
-                <el-table-column prop="phone" label="提交认证时间">
+                <el-table-column prop="authenticationTime" label="提交认证时期">
                 </el-table-column>
-                <el-table-column prop="phone" label="审核不通过时间">
+                <el-table-column prop="phone" label="审核不通过日期">
                 </el-table-column>
                 <!-- <el-table-column
                     fixed="right"

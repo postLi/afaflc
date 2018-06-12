@@ -51,11 +51,11 @@
           </el-table-column>
           <el-table-column prop="belongCity" label="所在地">
           </el-table-column>
-          <el-table-column prop="shipperType" label="货主类型">
+          <el-table-column prop="shipperTypeName" label="货主类型">
           </el-table-column>
-          <el-table-column prop="shipperType" label="移入黑名单时间">
+          <el-table-column prop="putBlackTime" label="移入黑名单时间">
           </el-table-column>
-          <el-table-column prop="shipperType" label="移入时间">
+          <el-table-column prop="shipperType" label="移入原因">
           </el-table-column>
             <!-- <el-table-column
               fixed="right"
@@ -148,7 +148,7 @@
                 <h2>移入黑名单信息</h2>
                 <el-row>
                   <el-col :span="24">
-                    <el-form-item label="移入原因:" :label-width="formLabelWidth" required>
+                    <el-form-item label="移入原因:" :label-width="formLabelWidth">
                       <el-select v-model="formBlack.reason" placeholder="请选择">
                         <el-option
                           v-for="item in optionsFormBlack"
@@ -163,7 +163,7 @@
                 <el-row>
                   <el-col :span="24">
                     <el-form-item label="移入黑名单原因说明:" :label-width="formLabelWidth">
-                      <el-input v-model="formBlack.reason" :rows="2" placeholder="请输入内容" type="textarea"></el-input>
+                      <el-input v-model="formBlack.reason" :rows="2" :maxlength="100" placeholder="请输入内容" type="textarea"></el-input>
                     </el-form-item>
                   </el-col>
                 </el-row>
@@ -197,7 +197,7 @@
 <script>
 import createdDialog from './createdDialog.vue'
 import GetCityList from '@/components/GetCityList'
-import {data_get_shipper_list,data_get_shipper_type} from '../../../api/users/shipper/all_shipper.js'
+import {data_get_shipper_list,data_get_shipper_type,data_get_shipper_BlackType} from '../../../api/users/shipper/all_shipper.js'
 export default {
   components:{
     createdDialog,
@@ -225,7 +225,7 @@ export default {
         mobile:'',
         contacts:'',
         companyName:'',
-        // belongCity:[],
+        belongCity:null,
         shipperType:null,
         address:'',
         registerOrigin:'',
@@ -264,12 +264,19 @@ export default {
         this.BlackDialogFlag = true
       }
     },
-     //获取货主类型
+     
     getMoreInformation(){
+      //获取货主类型
       data_get_shipper_type().then(res=>{
         // console.log(res)
         res.data.map((item)=>{
           this.options.push(item)
+        })
+      }),
+      // 获取移入黑名单的列表
+      data_get_shipper_BlackType().then(res=>{
+        res.data.map(item=>{
+          this.optionsFormBlack.push(item)
         })
       })
     },
@@ -302,7 +309,7 @@ export default {
     //清空
     clearSearch(){
       this.formAll = {
-        belongCity:'',
+        belongCity:null,
         mobile:'',
         companyName:''
       }
@@ -320,8 +327,23 @@ export default {
       this.page=val
       this.firstblood()
     },
+     
+    // 移出黑名单- 提交
     onSubmit(){
-      console.log(34324324)
+      this.$refs['formBlack'].validate((valid)=>{
+        if(valid){
+          this.formBlack1.belongCity = this.$refs.area.selectedOptions.pop();
+          var forms= object.assign({}, this.formBlack,{attestationStatus:"AF0010403"})
+          data_get_shipper_change(forms).then(res=>{
+            // console.log(res)
+            this.$message.success('移出黑名单成功')
+            this.BlackDialogFlag = false;
+            this.firstblood();
+          }).catch(err=>{
+            console.log(err)
+          })
+        }
+      })
     }
   }
 }

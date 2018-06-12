@@ -67,7 +67,7 @@
           <el-row>
             <el-col :span="24">
               <el-form-item label="冻结原因" :label-width="formLabelWidth" required>
-              <el-select v-model="formFroze.frozeReason" placeholder="请选择">
+              <el-select v-model="formFroze.freezeCause" placeholder="请选择">
                 <el-option
                   v-for="item in optionsReason"
                   :key="item.value"
@@ -82,11 +82,13 @@
             <el-col :span="24">
               <el-form-item label="解冻日期" :label-width="formLabelWidth" required>
                 <el-date-picker
-                  v-model="formFroze.unfrozeTime"
-                  type="date"
-                  placeholder="选择日期">
+                  v-model="formFroze.freezeTime"
+                  type="datetime"
+                  placeholder="选择日期"
+                  format="yyyy-MM-dd"
+                  :picker-options="pickerOptions">
                 </el-date-picker>
-                <el-radio-group v-model="formFroze.radio">
+                <el-radio-group v-model="radio" @change="timeChange">
                   <el-radio :label="1">1天</el-radio>
                   <el-radio :label="3">3天</el-radio>
                   <el-radio :label="7">一周</el-radio>
@@ -99,7 +101,7 @@
           <el-row>
             <el-col :span="24">
               <el-form-item label="冻结原因说明：" :label-width="formLabelWidth">
-                <el-input type="textarea" :rows="2" v-model="formFroze.reason"></el-input>
+                <el-input type="textarea" :rows="2" :maxlength="100" v-model="formFroze.freezeCauseRemark "></el-input>
               </el-form-item>
             </el-col>
           </el-row>
@@ -113,7 +115,8 @@
 </template>
 <script>
 import GetCityList from '@/components/GetCityList'
-import {data_get_shipper_type,data_get_shipper_change} from '../../../api/users/shipper/all_shipper.js'
+import {parseTime} from '@/utils/'
+import {data_get_shipper_type,data_get_shipper_change,data_get_shipper_freezeType} from '../../../api/users/shipper/all_shipper.js'
 export default {
   name:'create-Change-ViewDialog',
   components:{
@@ -161,21 +164,29 @@ export default {
       options:[], 
       formLabelWidth:'120px',
       freezeDialogFlag:false,
-      formFroze: { // 认证审核表单
+      formFroze: { // 冻结弹框表单
         mobile: '', // 手机号
         companyName: '', // 公司名称
         shipperType:null,
         address:'', // 详细地址
         contacts:'', // 联系人
         belongCity:null, // 所在地
-        shehetime:'',
         registerOrigin:'', // 注册来源
         creditCode:'', // 统一社会信用代码
-        radio1:'',
-        radio2:'',
-        radio3:''
+        freezeTime:'',
+        freezeCause:null,
+        freezeCauseRemark :''
+        // radio1:'',
+        // radio2:'',
+        // radio3:''
       },
-      currentRow:null
+      radio: '',
+      currentRow:null,
+      pickerOptions:{
+        disabledDate(time) {
+          return time.getTime() < Date.now();
+        },
+      }
     }
   },
   mounted(){
@@ -188,6 +199,30 @@ export default {
     this.getMoreInformation()
   },
   methods:{
+    timeChange(val){
+      let currentTime = this.formFroze.freezeTime || new Date()
+      let oneDay = 1* 24 * 60 * 60 * 1000
+      let time = +new Date()
+      switch(val){
+        case 1:
+          time += 1 * oneDay
+          break
+        case 3:
+          time += 3 * oneDay
+          break
+        case 7:
+          time += 7 * oneDay
+          break
+        case 9:
+          time += 30 * oneDay
+          break
+        case 10:
+          time += 100000 * oneDay
+          break
+      }
+
+      this.formFroze.freezeTime = time
+    },
     change(){
       this.freezeDialogFlag!=this.freezeDialogFlag
     },
@@ -207,8 +242,6 @@ export default {
       if(this.params){
         var obj = JSON.parse(JSON.stringify(this.params));
         this.formFroze.shipperType=obj.shipperType
-        //this.xinzengform.shipperType= "AF0010202"
-        //this.xinzengform.shipperTypeName=obj.shipperTypeName
         this.formFroze.belongCity=obj.belongCity
         this.formFroze.mobile=obj.mobile
         this.formFroze.contacts=obj.contacts
@@ -234,12 +267,20 @@ export default {
       }
     },
 
-      //获取货主类型
     getMoreInformation(){
+      //获取货主类型
       data_get_shipper_type().then(res=>{
         // console.log(res)
         res.data.map((item)=>{
         this.options.push(item)
+        })
+      }),
+
+      // 获取冻结原因下拉
+      data_get_shipper_freezeType().then(res=>{
+        // console.log(res)
+        res.data.map((item)=>{
+          this.optionsReason.push(item)
         })
       })
     },
@@ -248,7 +289,16 @@ export default {
       this.$refs['formFroze'].validate((valid)=>{
         if(valid){
           this.formFroze.belongCity = this.$refs.area.selectedOptions.pop();
-          console.log(12323)
+          var forms= Object.assign({}, this.formFroze,{attestationStatus:"AF0010405"})
+          forms.freezeTime = parseTime(forms.freezeTime)
+          data_get_shipper_change(forms).then(res=>{
+            // console.log(res)
+            this.$message.success('冻结修改成功')
+            this.freezeDialogFlag = false;
+            this.$emit('getData')
+          }).catch(err=>{
+            console.log(err)
+          })
         }
       })
     }

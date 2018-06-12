@@ -59,6 +59,7 @@
               btntype="primary"
               icon="el-icon-news"
               :params="selectRowData"
+              @getData="getDataList"
             >
             </FreezeDialog>
             <shipperBlackDialog
@@ -70,6 +71,7 @@
               btntype="primary"
               icon="el-icon-news"
               :params="selectRowData"
+              @getData="getDataList"
             ></shipperBlackDialog>
              <!-- <el-button type="primary" plain icon="el-icon-edit" @click="handleBlack">移入黑名单</el-button> -->
         </div>
@@ -101,25 +103,20 @@
                     width="200">
                 </el-table-column>
                 <el-table-column
-                    prop="zhiwu"
-                    label="所属组织">
+                    prop="registerOriginName"
+                    label="注册来源">
                 </el-table-column>
                 <el-table-column
-                    prop="load"
-                    label="常发货物">
-                </el-table-column>
-                <el-table-column
-                    prop="quanxian"
-                    label="认证通过时间">
-                </el-table-column>
-                <el-table-column
-                    prop="belongCity"
+                    prop="belongcity"
                     label="所在地">
                 </el-table-column>
                 <el-table-column
-                    prop="shipperType"
-                    label="货主类型"
-                    >
+                    prop="shipperTypeName"
+                    label="货主类型">
+                </el-table-column>
+                <el-table-column
+                    prop="authPassTime"
+                    label="认证通过日期">
                 </el-table-column>
                 <!-- <el-table-column
                     label="操作"

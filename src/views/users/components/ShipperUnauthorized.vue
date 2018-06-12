@@ -64,7 +64,7 @@
             label="所在地">
           </el-table-column>
           <el-table-column
-            prop="shipperType"
+            prop="shipperTypeName"
             label="货主类型">
           </el-table-column>
           <el-table-column
@@ -203,12 +203,12 @@
              <el-row>
                <el-col :span="24">
                  <el-form-item label="冻结原因" :label-width="formLabelWidth" required>
-                  <el-select v-model="formFroze.frozeReason" placeholder="请选择">
+                  <el-select v-model="formFroze.freezeCause" placeholder="请选择">
                     <el-option
                       v-for="item in optionsReason"
                       :key="item.value"
-                      :label="item.label"
-                      :value="item.value">
+                      :label="item.name"
+                      :value="item.code">
                     </el-option>
                   </el-select>
                 </el-form-item>
@@ -218,11 +218,13 @@
                 <el-col :span="24">
                   <el-form-item label="解冻日期" :label-width="formLabelWidth" required>
                     <el-date-picker
-                      v-model="formFroze.unfrozeTime"
-                      type="date"
-                      placeholder="选择日期">
+                      v-model="formFroze.freezeTime"
+                      type="datetime"
+                      placeholder="选择日期"
+                      format="yyyy-MM-dd"
+                      :picker-options="pickerOptions">
                     </el-date-picker>
-                    <el-radio-group v-model="formFroze.radio">
+                    <el-radio-group v-model="radio" @change="timeChange">
                       <el-radio :label="1">1天</el-radio>
                       <el-radio :label="3">3天</el-radio>
                       <el-radio :label="7">一周</el-radio>
@@ -235,13 +237,13 @@
              <el-row>
                <el-col :span="24">
                   <el-form-item label="冻结原因说明"  :label-width="formLabelWidth" required>
-                    <el-input type="textarea" :rows="2" v-model="formFroze.reason"></el-input>
+                    <el-input type="textarea" :rows="2" v-model="formFroze.freezeCauseRemark "></el-input>
                   </el-form-item>
                </el-col>
              </el-row>
           </el-form>
           <div slot="footer" class="dialog-footer">
-            <el-button type="primary" @click="onSubmit">确 定</el-button>
+            <el-button type="primary" @click="onSave">确 定</el-button>
             <el-button @click="frozeDialogFlag = false">取 消</el-button>
           </div>
         </el-dialog>
@@ -314,7 +316,7 @@
                 <el-row>
                   <el-col :span="24">
                     <el-form-item label="移入原因:" :label-width="formLabelWidth" required>
-                      <el-select v-model="formBlack.reason" placeholder="请选择">
+                      <el-select v-model="formBlack.putBlackCause" placeholder="请选择">
                         <el-option
                           v-for="item in optionsFormBlack"
                           :key="item.value"
@@ -328,7 +330,7 @@
                 <el-row>
                   <el-col :span="24">
                     <el-form-item label="移入黑名单原因说明:" :label-width="formLabelWidth">
-                      <el-input v-model="formBlack.reason" :rows="2" placeholder="请输入内容" type="textarea"></el-input>
+                      <el-input v-model="formBlack.putBlackCauseRemark" :rows="2" :maxlength="100" placeholder="请输入内容" type="textarea"></el-input>
                     </el-form-item>
                   </el-col>
                 </el-row>
@@ -336,7 +338,7 @@
           </el-form>
           
           <div slot="footer" class="dialog-footer">
-            <el-button type="primary" @click="onSubmit">确 定</el-button>
+            <el-button type="primary" @click="handleblackList">确 定</el-button>
             <el-button @click="BlackDialogFlag = false">取 消</el-button>
           </div>
         </el-dialog>
@@ -357,7 +359,8 @@
 import GetCityList from '@/components/GetCityList'
 import createdDialog from './createdDialog.vue'
 import FreezeDialog from './FreezeDialog.vue'
-import {data_get_shipper_list,data_get_shipper_change} from '../../../api/users/shipper/all_shipper.js'
+import {parseTime} from '@/utils/'
+import {data_get_shipper_list,data_get_shipper_change,data_get_shipper_freezeType,data_get_shipper_type} from '../../../api/users/shipper/all_shipper.js'
 export default {
   components:{
     createdDialog,
@@ -389,20 +392,21 @@ export default {
         mobile:'',
         contacts:'',
         belongCity:null,
-        address:''
+        address:'',
+        shipperId:''
       },
       formFroze:{
-         mobile:'',
+        mobile:'',
         contacts:'',
         belongCity:null,
         shipperType:null,
         companyName:'',
         address:'',
         registerOrigin:'',
-        unfrozeTime:'',
-        reason:'',
-        frozeReason:null,
-        radio:''
+        freezeTime:'',
+        freezeCauseRemark :'',
+        freezeCause:null,
+        shipperId:''
       },
       formBlack:{
         mobile:'',
@@ -412,15 +416,48 @@ export default {
         shipperType:null,
         address:'',
         registerOrigin:'',
-        reason:''
+        shipperId:'',
+        putBlackCause:'',
+        putBlackCauseRemark:''
       },
-      selectRowData:{}
+      radio:'',
+      selectRowData:{},
+      pickerOptions:{
+        disabledDate(time) {
+          return time.getTime() < Date.now();
+        },
+      }
     }
   },
   mounted(){
     this.firstblood()
+    this.getMoreInformation()
   },
   methods:{
+    timeChange(val){
+      let currentTime = this.formFroze.freezeTime || new Date()
+      let oneDay = 1* 24 * 60 * 60 * 1000
+      let time = +new Date()
+      switch(val){
+        case 1:
+          time += 1 * oneDay
+          break
+        case 3:
+          time += 3 * oneDay
+          break
+        case 7:
+          time += 7 * oneDay
+          break
+        case 9:
+          time += 30 * oneDay
+          break
+        case 10:
+          time += 100000 * oneDay
+          break
+      }
+
+      this.formFroze.freezeTime = time
+    },
     hint(val){
       this.information = val;
       this.centerDialogVisible = true;
@@ -526,23 +563,90 @@ export default {
     getDataList(){
       this.firstblood()
     },
-    //提交
+    
+    //修改-提交
     onSubmit(){
       this.$refs['forms'].validate((valid)=>{
         if(valid){
-          var forms={
-            mobile:this.mobile,
-            contacts:this.contacts,
-            belongCity:this.belongCity,
-            address: this.address
-          }
+          // var forms={
+          //   mobile:this.mobile,
+          //   contacts:this.contacts,
+          //   belongCity:this.belongCity,
+          //   address: this.address,
+          //   shipperId: this.shipperId
+          // }
           this.forms.belongCity = this.$refs.area.selectedOptions.pop();
-          data_get_shipper_change(this.forms).then(res=>{
+          var forms=Object.assign({},this.forms)
+          data_get_shipper_change(forms).then(res=>{
             // console.log(res)
+            this.$message.success('修改成功')
             this.changeDialogFlag = false;
             this.firstblood();
+          }).catch(err=>{
+            console.log(err)
           })
         }
+      })
+    },
+
+    // 冻结-提交
+    onSave(){
+      this.$refs['formFroze'].validate((valid)=>{
+        if(valid){
+          this.formFroze.belongCity = this.$refs.area.selectedOptions.pop();
+          var forms= Object.assign({}, this.formFroze,{attestationStatus:"AF0010405"})
+          forms.freezeTime = parseTime(forms.freezeTime)
+          data_get_shipper_change(forms).then(res=>{
+            // console.log(res)
+            this.$message.success('冻结修改成功')
+            this.frozeDialogFlag = false;
+            this.firstblood();
+          }).catch(err=>{
+            console.log(err)
+          })
+        }
+      })
+    },
+
+    //移入黑名单-提交
+    handleblackList(){
+      this.$refs['formBlack'].validate((valid)=>{
+        if(valid){
+          this.formBlack.belongCity = this.$refs.area.selectedOptions.pop();
+          var formB= Object.assign({},this.formBlack,{attestationStatus:"AF0010406"})
+          data_get_shipper_change(formB).then(res=>{
+            // console.log(res)
+            this.$message.success('移入黑名单成功')
+            this.BlackDialogFlag = false;
+            this.firstblood();
+          }).catch(err=>{
+            console.log(err)
+          })
+        }
+      })
+    },
+
+    
+    getMoreInformation(){
+      // 货主类型
+      data_get_shipper_type().then(res=>{
+        // console.log(res)
+        res.data.map((item)=>{
+          this.options.push(item)
+        })
+      })
+      // 获取冻结原因字典
+      data_get_shipper_freezeType().then(res=>{
+        // console.log(res)
+        res.data.map((item)=>{
+          this.optionsReason.push(item)
+        })
+      }),
+      // 移入黑名单的原因列表
+      data_get_shipper_freezeType().then(res=>{
+        res.data.map(item=>{
+          this.optionsFormBlack.push(item)
+        })
       })
     }
   }
