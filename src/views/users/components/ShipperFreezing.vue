@@ -205,7 +205,7 @@
              <el-row>
                <el-col :span="24">
                  <el-form-item  label="解冻原因说明:" :label-width="formLabelWidth" required>
-                  <el-input type="textarea" :rows="2" v-model="formUnFroze.freezeCauseRemark"  :maxlength="100"></el-input>
+                  <el-input type="textarea" :rows="2" v-model="formUnFroze.unfreezeRemark"  :maxlength="100"></el-input>
                  </el-form-item>
                </el-col>
              </el-row>
@@ -230,7 +230,7 @@
 </template>
 <script>
 
-import {data_get_shipper_list,data_get_shipper_freezeType,data_get_shipper_type} from '../../../api/users/shipper/all_shipper.js'
+import {data_get_shipper_list,data_get_shipper_freezeType,data_get_shipper_type,data_get_shipper_change } from '../../../api/users/shipper/all_shipper.js'
 import createdDialog from './createdDialog'
 import FreezeDialog from './FreezeDialog'
 import shipperBlackDialog from './shipperBlackDialog'
@@ -273,7 +273,8 @@ export default {
         unfreezeTime:'',
         attestationStatus:null,
         freezeCause:'',
-        freezeCauseRemark:''
+        freezeCauseRemark:'',
+        unfreezeRemark:''
       },
       formLabelWidth:'120px',
       pickerOptions:{

@@ -116,7 +116,7 @@
 <script>
 import GetCityList from '@/components/GetCityList'
 import {parseTime} from '@/utils/'
-import {data_get_shipper_type,data_get_shipper_change,data_get_shipper_freezeType} from '../../../api/users/shipper/all_shipper.js'
+import {data_get_shipper_type,data_get_shipper_change,data_get_shipper_freezeType} from '@/api/users/shipper/all_shipper.js'
 export default {
   name:'create-Change-ViewDialog',
   components:{

@@ -237,7 +237,7 @@
              <el-row>
                <el-col :span="24">
                   <el-form-item label="冻结原因说明"  :label-width="formLabelWidth" required>
-                    <el-input type="textarea" :rows="2" v-model="formFroze.freezeCauseRemark "></el-input>
+                    <el-input type="textarea" :rows="2" :maxlength="100" v-model="formFroze.freezeCauseRemark "></el-input>
                   </el-form-item>
                </el-col>
              </el-row>
@@ -486,7 +486,7 @@ export default {
       this.formInline.belongCity = this.$refs.area.selectedOptions.pop();
       data_get_shipper_list(this.page,this.pagesize,this.formInline).then(res=>{
         this.totalCount = res.data.totalCount;
-        this.tableDataAll = res.data.list;
+        this.tableData4 = res.data.list;
       })
     },
     

@@ -182,7 +182,7 @@
                     <!-- <img src="" alt="" /> -->
                     <upload class="licensePicture" tip="（必须为jpg/png并且小于5M）" v-model="shengheform.businessLicenceFile" />
                     <h2>营业执照</h2>
-                    <el-radio-group v-model="radio1">
+                    <el-radio-group v-model="radio1"  @change="pictureTypeChange">
                         <el-radio label="1">上传合格</el-radio><br />
                         <el-radio label="2">不清晰</el-radio><br />
                         <el-radio label="3">内容不符</el-radio>
@@ -192,7 +192,7 @@
                     <!-- <img src="" alt="" /> -->
                     <upload class="licensePicture" tip="（必须为jpg/png并且小于5M）" v-model="shengheform.companyFacadeFile" />
                     <h2>公司或档口照片</h2>
-                    <el-radio-group v-model="radio2">
+                    <el-radio-group v-model="radio2"  @change="pictureTypeChange">
                         <el-radio :label="1">上传合格</el-radio><br />
                         <el-radio :label="2">不清晰</el-radio><br />
                         <el-radio :label="3">内容不符</el-radio>
@@ -202,7 +202,7 @@
                     <!-- <img src="" alt="" /> -->
                     <upload class="licensePicture" tip="（必须为jpg/png并且小于5M）" v-model="shengheform.shipperCardFile" />
                     <h2>发货人名片</h2>
-                    <el-radio-group v-model="radio3">
+                    <el-radio-group v-model="radio3" @change="pictureTypeChange">
                         <el-radio :label="1">上传合格</el-radio><br />
                         <el-radio :label="2">不清晰</el-radio><br />
                         <el-radio :label="3">内容不符</el-radio>
@@ -354,13 +354,15 @@ export default {
       data_get_shipper_list(this.page,this.pagesize,this.formAll).then(res=>{
         console.log(res)
         this.totalCount = res.data.totalCount;
-        this.tableData1 = res.data.list;
+        //this.tableData1 = res.data.list;
       })
     },
     //点击查询按纽，按条件查询列表
     getdata_search(event){
        this.formAll.belongCity = this.$refs.area.selectedOptions.pop();
+       console.log('this.tableData1:',this.tableData1)
         data_get_shipper_list(this.page,this.pagesize,this.formAll).then(res=>{
+          console.log('this.tableData1:',this.tableData1, res)
           this.totalCount = res.data.totalCount;
           this.tableData1 = res.data.list;
         })
@@ -438,6 +440,18 @@ export default {
           })
         }
       })
+    },
+
+    // 图片质量的选择拼接
+    pictureTypeChange(val){
+      switch(val){
+        case 1:
+        break
+        case 2:
+        break
+        case 3:
+        break
+      }
     }
   }
 }

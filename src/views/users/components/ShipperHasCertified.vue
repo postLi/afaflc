@@ -79,6 +79,7 @@
             <el-table
                 ref="multipleTable"
                 :data="tableData3"
+                :key="thekey"
                 stripe
                 border
                 @selection-change="handleSelectionChange"
@@ -90,11 +91,11 @@
                 </el-table-column>
                 <el-table-column label="公司名称">
                     <template slot-scope="scope">
-                        <createdDialog :params="scope.row" btntype="text" :btntext="scope.row.companyName" editType="view" btntitle="详情"></createdDialog>
+                      <createdDialog :params="scope.row" btntype="text" :btntext="scope.row.companyName" editType="view" btntitle="详情"></createdDialog>
                     </template>
                 </el-table-column>
                 <el-table-column
-                    prop="contants"
+                    prop="contacts"
                     label="联系人">
                 </el-table-column>
                 <el-table-column
@@ -161,6 +162,7 @@ export default {
         return {
             options:[],
             tableData3:[],
+            thekey: '1',
             totalCount:null,
             page:1,
             pagesize:20,
@@ -227,8 +229,11 @@ export default {
        //点击查询按纽，按条件查询列表
       getdata_search(event){
           data_get_shipper_list(this.page,this.pagesize,this.formInline).then(res=>{
+            
             this.totalCount = res.data.totalCount;
-            this.tableDataAll = res.data.list;
+            this.tableData3 = res.data.list;
+            this.thekey = Math.random()
+            console.log(this.tableData3,res)
           })
       },
       

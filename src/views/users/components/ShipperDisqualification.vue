@@ -54,7 +54,7 @@
                 </el-table-column>
                 <el-table-column prop="belongCity" label="所在地">
                 </el-table-column>
-                <el-table-column prop="authenticationTime" label="提交认证时期">
+                <el-table-column prop="authenticationTime" label="提交认证日期">
                 </el-table-column>
                 <el-table-column prop="phone" label="审核不通过日期">
                 </el-table-column>

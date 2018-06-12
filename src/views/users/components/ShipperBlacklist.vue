@@ -149,7 +149,7 @@
                 <el-row>
                   <el-col :span="24">
                     <el-form-item label="移入原因:" :label-width="formLabelWidth">
-                      <el-select v-model="formBlack.reason" placeholder="请选择">
+                      <el-select v-model="formBlack.putBlackCause" placeholder="请选择">
                         <el-option
                           v-for="item in optionsFormBlack"
                           :key="item.value"
@@ -163,7 +163,7 @@
                 <el-row>
                   <el-col :span="24">
                     <el-form-item label="移入黑名单原因说明:" :label-width="formLabelWidth">
-                      <el-input v-model="formBlack.reason" :rows="2" :maxlength="100" placeholder="请输入内容" type="textarea"></el-input>
+                      <el-input v-model="formBlack.putBlackCauseRemark" :rows="2" :maxlength="100" placeholder="请输入内容" type="textarea"></el-input>
                     </el-form-item>
                   </el-col>
                 </el-row>
@@ -171,7 +171,7 @@
              <div class="shipper_information">
                 <h2>移出黑名单信息</h2>
                 <el-form-item label="移出黑名单原因说明" :label-width="formLabelWidth">
-                  <el-input v-model="formBlack.putreason" :rows="2" placeholder="请输入内容" type="textarea"></el-input>
+                  <el-input v-model="formBlack.popBlackRemark" :rows="2" placeholder="请输入内容" type="textarea"></el-input>
                 </el-form-item>
              </div>
           </el-form>
@@ -197,7 +197,7 @@
 <script>
 import createdDialog from './createdDialog.vue'
 import GetCityList from '@/components/GetCityList'
-import {data_get_shipper_list,data_get_shipper_type,data_get_shipper_BlackType} from '../../../api/users/shipper/all_shipper.js'
+import {data_get_shipper_list,data_get_shipper_type,data_get_shipper_BlackType,data_get_shipper_change } from '../../../api/users/shipper/all_shipper.js'
 export default {
   components:{
     createdDialog,
@@ -229,8 +229,9 @@ export default {
         shipperType:null,
         address:'',
         registerOrigin:'',
-        reason:'',
-        putreason:''
+        putBlackCause:'',
+        popBlackRemark:'',
+        putBlackCauseRemark:''
       },
     }
   }, 
@@ -332,8 +333,8 @@ export default {
     onSubmit(){
       this.$refs['formBlack'].validate((valid)=>{
         if(valid){
-          this.formBlack1.belongCity = this.$refs.area.selectedOptions.pop();
-          var forms= object.assign({}, this.formBlack,{attestationStatus:"AF0010403"})
+          this.formBlack.belongCity = this.$refs.area.selectedOptions.pop();
+          var forms= Object.assign({}, this.formBlack,{attestationStatus:"AF0010403"})
           data_get_shipper_change(forms).then(res=>{
             // console.log(res)
             this.$message.success('移出黑名单成功')

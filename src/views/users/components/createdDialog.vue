@@ -252,9 +252,9 @@ export default {
      },
      deep:true
     },
-    belongCity(newVal){
-      this.xinzengform.belongCity = newVal.join(',')
-    }
+    // belongCity(newVal){
+    //   this.xinzengform.belongCity = newVal.join(',')
+    // }
   },
   mounted(){
     //按钮类型text,primary...
@@ -341,14 +341,16 @@ export default {
     onSubmit(){
       this.$refs['xinzengform'].validate((valid)=>{
         if(valid){
-          var form={
-            xinzengform: this.xinzengform
-          }
-          console.log('onSubmit',form)
+          this.xinzengform.belongCity = this.$refs.area.selectedOptions.pop();
+          // var form={
+          //   xinzengform: this.xinzengform
+          // }
+          var forms=Object.assign({},this.xinzengform)
+          // console.log('onSubmit',form)
           if(this.editType === 'add'){
             // 新增
-            this.xinzengform.belongCity = this.$refs.area.selectedOptions.pop();
-            data_get_shipper_create(this.xinzengform).then(res=>{
+            
+            data_get_shipper_create(forms).then(res=>{
               // console.log(res)
               this.dialogFormVisible_add = !this.dialogFormVisible_add;
               this.$message.success('保存成功')
@@ -358,8 +360,7 @@ export default {
             })
           }else if(this.editType === 'edit'){
             // 修改
-            this.xinzengform.belongCity = this.$refs.area.selectedOptions.pop();
-            data_get_shipper_change(this.xinzengform).then(res=>{
+            data_get_shipper_change(forms).then(res=>{
               // console.log(res)
               this.dialogFormVisible_add = !this.dialogFormVisible_add;
               this.$message.success('修改成功')
