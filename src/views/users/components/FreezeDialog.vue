@@ -71,8 +71,8 @@
                 <el-option
                   v-for="item in optionsReason"
                   :key="item.value"
-                  :label="item.label"
-                  :value="item.value">
+                  :label="item.name"
+                  :value="item.code">
                 </el-option>
               </el-select >
             </el-form-item>

@@ -51,6 +51,14 @@
                 <el-input :maxlength="20" v-model="xinzengform.address" auto-complete="off"></el-input>
               </el-form-item>
             </el-col>
+            <el-col :span="12" >
+              <el-form-item label="是否定向:" :label-width="formLabelWidth">
+                <el-radio-group v-model="xinzengform.isDirectional">
+                  <el-radio label="0">否</el-radio>
+                  <el-radio label="1">是</el-radio>
+                </el-radio-group>
+              </el-form-item>
+            </el-col>
             <el-col :span="12">
               <el-form-item label="公司名称:" :label-width="formLabelWidth" v-show="companyFlag">
                 <el-input :maxlength="20" v-model="xinzengform.companyName"></el-input>
@@ -221,7 +229,8 @@ export default {
         businessLicenceFile:'',
         shipperCardFile:'',
         companyFacadeFile:'',
-        shipperId:''
+        shipperId:'',
+        isDirectional: '0'
       },
       currentRow: null,
       props: {

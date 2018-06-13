@@ -10,10 +10,10 @@
           <GetCityList v-model="formAll.belongCity" ref="area"></GetCityList>
         </label>
          <label>公司名称:
-             <el-input v-model="formAll.companyName"></el-input>
+             <el-input v-model.trim="formAll.companyName"></el-input>
            </label>
            <label>手机号码：
-             <el-input v-model="formAll.mobile"></el-input>
+             <el-input v-model.trim="formAll.mobile"></el-input>
            </label>
            <el-button type="primary" plain @click="getdata_search">查询</el-button>
            <el-button type="info" plain @click="clearSearch">清空</el-button>
@@ -47,7 +47,10 @@
            </el-table-column>
            <el-table-column prop="authenticationTime" label="提交认证时间">
            </el-table-column>
-           <el-table-column prop="phone" label="等待时长">
+           <el-table-column prop="" label="等待时长">
+             <template slot-scope="scope">
+               {{ scope.row.authenticationTime ? formatTime((+new Date(scope.row.authenticationTime))) : '' }}
+             </template>
            </el-table-column>
            <!-- <el-table-column
             fixed="right"
@@ -128,7 +131,7 @@
               </el-col>
               <el-col :span="12">
                 <el-form-item label="等待时长" :label-width="formLabelWidth">
-                  <el-input v-model="shengheform.companyname" auto-complete="off"></el-input>
+                  <el-input v-model="shengheform.companyName" auto-complete="off"></el-input>
                 </el-form-item>
               </el-col>
             </el-row>
@@ -140,7 +143,7 @@
                 </el-form-item>
               </el-col>
               <el-col :span="12">
-                <el-form-item label="货主类型" :label-width="formLabelWidth" prop="hzclassify">
+                <el-form-item label="货主类型" :label-width="formLabelWidth">
                   <!-- <el-select v-model="shengheform.shipperType" placeholder="请选择活动区域">
                     <el-option label="区域一" value="shanghai"></el-option>
                     <el-option label="区域二" value="beijing"></el-option>
@@ -182,20 +185,20 @@
                     <!-- <img src="" alt="" /> -->
                     <upload class="licensePicture" tip="（必须为jpg/png并且小于5M）" v-model="shengheform.businessLicenceFile" />
                     <h2>营业执照</h2>
-                    <el-radio-group v-model="radio1"  @change="pictureTypeChange">
-                        <el-radio label="1">上传合格</el-radio><br />
-                        <el-radio label="2">不清晰</el-radio><br />
-                        <el-radio label="3">内容不符</el-radio>
+                    <el-radio-group v-model="radio1" @change="pictureTypeChange">
+                        <el-radio label="上传合格">上传合格</el-radio><br />
+                        <el-radio label="不清晰">不清晰</el-radio><br />
+                        <el-radio label="内容不符">内容不符</el-radio>
                     </el-radio-group>
                 </div>
                 <div class="data_pic_company data_pic_c">
                     <!-- <img src="" alt="" /> -->
                     <upload class="licensePicture" tip="（必须为jpg/png并且小于5M）" v-model="shengheform.companyFacadeFile" />
                     <h2>公司或档口照片</h2>
-                    <el-radio-group v-model="radio2"  @change="pictureTypeChange">
-                        <el-radio :label="1">上传合格</el-radio><br />
-                        <el-radio :label="2">不清晰</el-radio><br />
-                        <el-radio :label="3">内容不符</el-radio>
+                    <el-radio-group v-model="radio2" @change="pictureTypeChange">
+                        <el-radio label="上传合格">上传合格</el-radio><br />
+                        <el-radio label="不清晰">不清晰</el-radio><br />
+                        <el-radio label="内容不符">内容不符</el-radio>
                     </el-radio-group>
                 </div>
                 <div class="data_pic_callingcode data_pic_c">
@@ -203,9 +206,9 @@
                     <upload class="licensePicture" tip="（必须为jpg/png并且小于5M）" v-model="shengheform.shipperCardFile" />
                     <h2>发货人名片</h2>
                     <el-radio-group v-model="radio3" @change="pictureTypeChange">
-                        <el-radio :label="1">上传合格</el-radio><br />
-                        <el-radio :label="2">不清晰</el-radio><br />
-                        <el-radio :label="3">内容不符</el-radio>
+                        <el-radio label="上传合格">上传合格</el-radio><br />
+                        <el-radio label="不清晰">不清晰</el-radio><br />
+                        <el-radio label="内容不符">内容不符</el-radio>
                     </el-radio-group>
                 </div>
             </div>
@@ -264,6 +267,11 @@ export default {
     createdDialog,
     GetCityList,
     Upload
+  },
+  computed: {
+    pictureValue () {
+      return '营业执照:'+ this.radio1 + ',公司或档口照片:'+ this.radio2 + ',发货人名片:'+ this.radio3
+    }
   },
   data(){
     return{
@@ -328,6 +336,10 @@ export default {
     this.getMoreInformation()
   },
   methods:{
+    formatTime(da){
+      let time = (+new Date()) - da
+      return parseInt(time / 1000 / (3600*24))+ '天'+ parseInt(time/1000 /(3600*24*60))+ '时'+parseInt(time/1000/3600/24/60/60)+ '秒'
+    },
     handleEdit(){
       console.log(this.multipleSelection)
       if(this.multipleSelection.length == 0){
@@ -354,15 +366,15 @@ export default {
       data_get_shipper_list(this.page,this.pagesize,this.formAll).then(res=>{
         console.log(res)
         this.totalCount = res.data.totalCount;
-        //this.tableData1 = res.data.list;
+        this.tableData1 = res.data.list;
       })
     },
     //点击查询按纽，按条件查询列表
     getdata_search(event){
        this.formAll.belongCity = this.$refs.area.selectedOptions.pop();
-       console.log('this.tableData1:',this.tableData1)
+      //  console.log('this.tableData1:',this.tableData1)
         data_get_shipper_list(this.page,this.pagesize,this.formAll).then(res=>{
-          console.log('this.tableData1:',this.tableData1, res)
+          // console.log('this.tableData1:',this.tableData1, res)
           this.totalCount = res.data.totalCount;
           this.tableData1 = res.data.list;
         })
@@ -411,7 +423,7 @@ export default {
       this.$refs['shengheform'].validate((valid)=>{
         if(valid){
           this.shengheform.belongCity = this.$refs.area.selectedOptions.pop();
-          var forms=Object.assign({},this.shengheform,{attestationStatus:"AF0010404"})
+          var forms=Object.assign({},this.shengheform,{attestationStatus:"AF0010404"},{authNoPassCause:this.pictureValue})
           data_get_shipper_change(forms).then(res=>{
             // console.log(res)
             this.$message.success('审核不通过 成功')
@@ -428,8 +440,8 @@ export default {
     handlerPass(){
       this.$refs['shengheform'].validate((valid)=>{
         if(valid){
-           this.shengheform.belongCity = this.$refs.area.selectedOptions.pop();
-          var forms=Object.assign({},this.shengheform,{attestationStatus:"AF0010403"})
+          this.shengheform.belongCity = this.$refs.area.selectedOptions.pop();
+          var forms=Object.assign({},this.shengheform,{attestationStatus:"AF0010403"},{authNoPassCause:this.pictureValue})
           data_get_shipper_change(forms).then(res=>{
             // console.log(res)
             this.$message.success('审核通过成功')
@@ -444,12 +456,17 @@ export default {
 
     // 图片质量的选择拼接
     pictureTypeChange(val){
+      console.log('pictureValue:', this.pictureValue)
+      let authNoPassCause
       switch(val){
         case 1:
+
         break
         case 2:
+
         break
         case 3:
+
         break
       }
     }
