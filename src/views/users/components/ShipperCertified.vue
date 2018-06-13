@@ -1,13 +1,28 @@
 <template>
     <div>
         <div class="shipper_searchinfo">
-        <label>所在地：
+          <el-form :inline="true">
+            <el-form-item label="所在地：">
+              <GetCityList v-model="formAll.belongCity" ref="area"></GetCityList>
+            </el-form-item>
+            <el-form-item label="公司名称：">
+              <el-input v-model.trim="formAll.companyName"></el-input>
+            </el-form-item>
+            <el-form-item label="手机号：">
+              <el-input v-model.trim="formAll.mobile"></el-input>
+            </el-form-item>
+            <el-form-item>
+              <el-button type="primary" plain @click="getdata_search">查询</el-button>
+              <el-button type="info" plain @click="clearSearch">清空</el-button>
+            </el-form-item>
+          </el-form>
+        <!-- <label>所在地： -->
           <!-- <el-cascader
             :options="options"
             v-model="formAll.belongCity"
             @change="handleChange">
           </el-cascader> -->
-          <GetCityList v-model="formAll.belongCity" ref="area"></GetCityList>
+          <!-- <GetCityList v-model="formAll.belongCity" ref="area"></GetCityList>
         </label>
          <label>公司名称:
              <el-input v-model.trim="formAll.companyName"></el-input>
@@ -16,7 +31,7 @@
              <el-input v-model.trim="formAll.mobile"></el-input>
            </label>
            <el-button type="primary" plain @click="getdata_search">查询</el-button>
-           <el-button type="info" plain @click="clearSearch">清空</el-button>
+           <el-button type="info" plain @click="clearSearch">清空</el-button> -->
       </div>
       <div class="export">
         <el-button type="primary" plain icon="el-icon-edit" @click="handleEdit">认证审核</el-button>
@@ -261,7 +276,7 @@
 import Upload from '@/components/Upload/singleImage'
 import createdDialog from './createdDialog.vue'
 import GetCityList from '@/components/GetCityList'
-import {data_get_shipper_list,data_get_shipper_type,data_get_shipper_change} from '../../../api/users/shipper/all_shipper.js'
+import {data_get_shipper_list,data_get_shipper_type,data_get_shipper_change} from '@/api/users/shipper/all_shipper.js'
 export default {
   components:{
     createdDialog,
@@ -338,27 +353,28 @@ export default {
   methods:{
     formatTime(da){
       let time = (+new Date()) - da
-      return parseInt(time / 1000 / (3600*24))+ '天'+ parseInt(time/1000 /(3600*24*60))+ '时'+parseInt(time/1000/3600/24/60/60)+ '秒'
+      return parseInt(time / 1000 / (3600*24))+ '天'+ parseInt(time/1000/(3600*24*60))+ '时'
     },
     handleEdit(){
       console.log(this.multipleSelection)
       if(this.multipleSelection.length == 0){
           //未选择任何修改内容的提示
-          let information = "未选中任何修改内容";
-          this.hint(information);
+        let information = "未选中任何修改内容";
+        this.hint(information);
       }else if(this.multipleSelection.length >1){
-          let information = "不可修改多个内容";
-          this.hint(information);
+        let information = "不可修改多个内容";
+        this.hint(information);
       } else{
-        this.dialogFormVisible= true
-      }
+        this.dialogFormVisible = true
+      } 
     },
     handleSelectionChange(val){
       this.multipleSelection = val;
       if(val[0]){
          this.shengheform=val[0]
+         console.log(this.shengheform)
       } else {
-          this.selectRowData = {}
+          this.shengheform = {}
       }
     },
     //刷新页面

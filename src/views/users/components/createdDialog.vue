@@ -59,14 +59,14 @@
                 </el-radio-group>
               </el-form-item>
             </el-col>
+          </el-row>
+
+          <el-row>
             <el-col :span="12">
               <el-form-item label="公司名称:" :label-width="formLabelWidth" v-show="companyFlag">
                 <el-input :maxlength="20" v-model="xinzengform.companyName"></el-input>
               </el-form-item>
             </el-col>
-          </el-row>
-
-          <el-row>
             <el-col :span="12">
             <el-form-item label="统一社会信用代码:" :label-width="formLabelWidth" v-show="companyFlag">
               <el-input :maxlength="20" v-model="xinzengform.creditCode"></el-input>

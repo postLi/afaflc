@@ -1,22 +1,37 @@
 <template>
   <div>
       <div class="shipper_searchinfo">
-        <label>所在地：
+        <el-form inline>
+          <el-form-item label="所在地">
+            <GetCityList v-model="formAll.belongCity" ref="area"></GetCityList>
+          </el-form-item>
+          <el-form-item label="公司名称">
+            <el-input v-model.trim="formAll.companyName"></el-input>
+          </el-form-item>
+          <el-form-item label="手机号：">
+            <el-input v-model.trim="formAll.mobile"></el-input>
+          </el-form-item>
+          <el-form-item label="">
+            <el-button type="primary" plain @click="getdata_search">查询</el-button>
+            <el-button type="info" plain @click="clearSearch">清空</el-button>
+          </el-form-item>
+        </el-form>
+        <!-- <label>所在地： -->
         <!-- <el-cascader
           :options="options"
           v-model="formAll.selectedOptions6"
           @change="handleChange">
         </el-cascader> -->
-          <GetCityList v-model="formAll.belongCity" ref="area"></GetCityList>
+          <!-- <GetCityList v-model="formAll.belongCity" ref="area"></GetCityList>
         </label>
         <label>公司名称:
-          <el-input v-model="formAll.companyName"></el-input>
+          <el-input v-model.trim="formAll.companyName"></el-input>
         </label>
         <label>手机号码：
-          <el-input v-model="formAll.mobile"></el-input>
+          <el-input v-model.trim="formAll.mobile"></el-input>
         </label>
         <el-button type="primary" plain @click="getdata_search">查询</el-button>
-           <el-button type="info" plain @click="clearSearch">清空</el-button>
+           <el-button type="info" plain @click="clearSearch">清空</el-button> -->
       </div>
       <div class="export">
         <el-button type="primary" plain icon="el-icon-edit" @click="handleUnfroze">解冻</el-button>

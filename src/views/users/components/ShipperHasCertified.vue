@@ -1,24 +1,50 @@
 <template>
     <div>
         <div class="shipper_searchinfo">
-            <label>手机号码：
+            <el-form :inline="true">
+                <el-form-item label="手机号：">
+                    <el-input placeholder="请输入内容" v-model.trim="formInline.mobile" clearable></el-input>
+                </el-form-item>
+                <el-form-item label="公司名称：">
+                    <el-input placeholder="请输入内容" v-model.trim="formInline.companyName" clearable></el-input>
+                </el-form-item>
+                <el-form-item label="联系人姓名：">
+                    <el-input placeholder="请输入内容" v-model.trim="formInline.contacts" clearable></el-input>
+                </el-form-item>
+                <el-form-item label="货主类型：">
+                    <el-select v-model="formInline.shipperType" placeholder="请选择">
+                        <el-option
+                            v-for="item in options"
+                            :key="item.value"
+                            :label="item.name"
+                            :value="item.code"
+                            :disabled="item.disabled">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="">
+                    <el-button type="primary" plain @click="getdata_search">查询</el-button>
+                    <el-button type="info" plain @click="clearSearch">清空</el-button>
+                </el-form-item>
+            </el-form>
+            <!-- <label>手机号码：
                 <el-input
                     placeholder="请输入内容"
-                    v-model="formInline.mobile"
+                    v-model.trim="formInline.mobile"
                     clearable>
                 </el-input>
             </label>
             <label>公司名称：
                 <el-input
                     placeholder="请输入内容"
-                    v-model="formInline.companyName"
+                    v-model.trim="formInline.companyName"
                     clearable>
                 </el-input>
             </label>
             <label>联系人姓名：
                 <el-input
                     placeholder="请输入内容"
-                    v-model="formInline.contacts"
+                    v-model.trim="formInline.contacts"
                     clearable>
                 </el-input>
             </label>
@@ -34,7 +60,7 @@
                 </el-select>
             </label>
             <el-button type="primary" plain @click="getdata_search">查询</el-button>
-           <el-button type="info" plain @click="clearSearch">清空</el-button>
+           <el-button type="info" plain @click="clearSearch">清空</el-button> -->
         </div>
         <div class="export">
             <!-- <el-button type="info">新增</el-button> -->

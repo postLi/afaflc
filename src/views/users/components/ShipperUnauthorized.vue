@@ -1,23 +1,39 @@
 <template>
     <div>
         <div class="shipper_searchinfo">
-        <label>所在地：
+          <el-form :inline="true">
+            <el-form-item label="所在地：">
+              <GetCityList v-model="formInline.belongCity" ref="area"></GetCityList>
+            </el-form-item>
+            <el-form-item label="手机号：">
+              <el-input
+                placeholder="请输入内容"
+                v-model.trim="formInline.mobile"
+                clearable>
+              </el-input>
+            </el-form-item>
+            <el-form-item>
+              <el-button type="primary" plain @click="getdata_search">查询</el-button>
+              <el-button type="info" plain @click="clearSearch">清空</el-button>
+            </el-form-item>
+          </el-form>
+        <!-- <label>所在地： -->
           <!-- <el-cascader
             :options="options"
             v-model="formInline.belongCity"
             @change="handleChange">
           </el-cascader> -->
-           <GetCityList v-model="formInline.belongCity" ref="area"></GetCityList>
+           <!-- <GetCityList v-model="formInline.belongCity" ref="area"></GetCityList>
         </label>
         <label>手机号码：
           <el-input
             placeholder="请输入内容"
-            v-model="formInline.mobile"
+            v-model.trim="formInline.mobile"
             clearable>
           </el-input>
         </label>
         <el-button type="primary" plain @click="getdata_search">查询</el-button>
-        <el-button type="info" plain @click="clearSearch">清空</el-button>
+        <el-button type="info" plain @click="clearSearch">清空</el-button> -->
       </div>
       <div class="export">
         <!-- <el-button type="primary" @click="addClassfy">新增</el-button> -->
