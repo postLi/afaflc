@@ -53,7 +53,7 @@
             </el-col>
             <el-col :span="12">
               <el-form-item label="是否定向:" :label-width="formLabelWidth">
-                <el-radio-group v-model="xinzengform.isDirectional"  :disabled="editType=='view'">
+                <el-radio-group v-model="xinzengform.isDirectional"  :disabled="editType!='add'">
                   <el-radio label="0">否</el-radio>
                   <el-radio label="1">是</el-radio>
                 </el-radio-group>

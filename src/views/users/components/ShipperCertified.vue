@@ -354,7 +354,7 @@ export default {
   methods:{
     formatTime(da){
       let time = (+new Date()) - da
-      return parseInt(time / 1000 / (3600*24))+ '天'+ parseInt(time/1000/(3600*24*60))+ '时'
+      return parseInt(time / 1000 / (3600*24))+ '天'+ parseInt(time/1000/(3600*24*60*60)*60*60)+ '小时'
     },
     handleEdit(){
       console.log(this.multipleSelection)

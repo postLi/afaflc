@@ -1,7 +1,22 @@
 <template>
     <div>
          <div class="shipper_searchinfo">
-                <label>所在地：
+              <el-form inline>
+                <el-form-item label="所在地：">
+                     <GetCityList v-model="formInline.belongCity" ref="area"></GetCityList>
+                </el-form-item>
+                <el-form-item label="车牌号：">
+                    <el-input placeholder="请输入内容" v-model.trim="formInline.carNumber" clearable></el-input>
+                </el-form-item>
+                <el-form-item label="手机号：">
+                    <el-input placeholder="请输入内容" v-model.trim="formInline.driverMobile" clearable></el-input>
+                </el-form-item>
+                <el-form-item>
+                    <el-button type="primary" plain @click="getdata_search">查询</el-button>
+                    <el-button type="info" plain>清空</el-button>
+                </el-form-item>
+            </el-form>
+                <!-- <label>所在地：
                     <el-input
                       placeholder="请输入内容"
                       v-model="formInline.belongCity"
@@ -23,10 +38,11 @@
                     </el-input>
                 </label>
                 <el-button type="primary" plain @click="getdata_search">查询</el-button>
-                <el-button type="info" plain>清空</el-button>
+                <el-button type="info" plain>清空</el-button> -->
             </div>
             <div class="export">
-                <el-button type="info">新增</el-button>
+                <!-- <el-button type="info">新增</el-button> -->
+                <el-button type="primary" plain @click="handleEnsure">代客认证</el-button>
             </div>
             <div class="info_news">
                 <el-table
@@ -34,11 +50,12 @@
                     :data="tableDataTree"
                     stripe
                     border
+                    @selcection-change="handleSelectionChange"
                     tooltip-effect="dark"
                     style="width: 100%">
                     <el-table-column
-                      prop="id"
-                      label="序号">
+                      type="selection"
+                      width="80">
                     </el-table-column>
                      <el-table-column
                       prop="carNumber"
@@ -69,10 +86,13 @@
                       prop="authNoPassTime"
                       label="认证不通过时间">
                     </el-table-column>
-                    <el-table-column
+                    <!-- <el-table-column
                       prop="driverStatus"
                       label="操作">
-                    </el-table-column>
+                      <template slot-scope="scope">
+                          <el-button type="text">代客认证</el-button>
+                      </template>
+                    </el-table-column> -->
                 </el-table>
                     
                 <el-pagination
@@ -89,8 +109,12 @@
 </template>
 <script type="text/javascript">
     import {data_get_driver_list,data_get_driver_status} from '../../../api/users/carowner/total_carowner.js'
+    import GetCityList from '@/components/GetCityList'
     export default {
-        data:function(){
+        components:{
+            GetCityList
+        },
+        data(){
             return{
                 page:1,//当前页
                 pagesize:20,//每页显示数
@@ -108,6 +132,7 @@
                     name:'全部'
                     }
                 ],
+                multipleSelection:[],
             }
         },
         mounted(){
@@ -115,12 +140,16 @@
             this.getMoreInformation()
         },  
         methods:{
-            handleSizeChange(val) {
-                console.log(`每页 ${val} 条`);
+            // 判断选中与否
+            handleSelectionChange(val){
+                this.multipleSelection = val;
             },
-            handleCurrentChange(val) {
-                console.log(`当前页: ${val}`);
+
+            // 代客认证功能
+            handleEnsure(){
+                console.log('代客认证功能')
             },
+
             //刷新页面
             firstblood(){
                 data_get_driver_list(this.page,this.pagesize,this.formInline).then(res=>{
@@ -128,6 +157,7 @@
                     this.tableDataTree = res.data.list;
                 })
             },
+
             //点击查询按纽，按条件查询列表
             getdata_search(event){
                 data_get_driver_list(this.page,this.pagesize,this.formInline).then(res=>{
@@ -135,6 +165,7 @@
                     this.tableDataTree = res.data.list;
                 })
             },
+
             //获取车主状态列表
             getMoreInformation(){
                 data_get_driver_status().then(res=>{
@@ -143,6 +174,7 @@
                     })
                 })
             },
+
              //每页显示数据量变更
             handleSizeChange: function(val) {
                 this.pagesize = val;
