@@ -92,19 +92,19 @@
       </el-pagination>
     </div>
 
-    <!-- 移除黑名单 -->
+    <!-- 移出黑名单 -->
     <div class="addclassify commoncss">
         <el-dialog title="移出黑名单" :visible.sync="BlackDialogFlag">
           <el-form :model="formBlack" ref="formBlack">
             <el-row>
                 <el-col :span="12">
                   <el-form-item label="手机号码" :label-width="formLabelWidth">
-                    <el-input v-model="formBlack.mobile"></el-input>
+                    <el-input v-model="formBlack.mobile" disabled></el-input>
                   </el-form-item>
                 </el-col>
                 <el-col :span="12">
                   <el-form-item label="公司名称" :label-width="formLabelWidth">
-                    <el-input v-model="formBlack.companyName"></el-input>
+                    <el-input v-model="formBlack.companyName" disabled></el-input>
                   </el-form-item>
                 </el-col>
               </el-row>
@@ -112,7 +112,7 @@
                <el-row>
                <el-col :span="12">
                  <el-form-item label="联系人" :label-width="formLabelWidth">
-                    <el-input v-model="formBlack.contacts"></el-input>
+                    <el-input v-model="formBlack.contacts" disabled></el-input>
                   </el-form-item>
                </el-col>
                <el-col :span="12">
@@ -122,7 +122,7 @@
                     v-model="formFroze.belongCity"
                     @change="handleChange">
                   </el-cascader> -->
-                  <GetCityList v-model="formBlack.belongCity" ref="area"></GetCityList>
+                  <GetCityList v-model="formBlack.belongCity" disabled ref="area"></GetCityList>
                 </el-form-item>
                </el-col>
              </el-row>
@@ -130,7 +130,7 @@
               <el-row>
                <el-col :span="12">
                  <el-form-item label="详细地址" :label-width="formLabelWidth">
-                  <el-input v-model="formBlack.address" :maxlength="20"></el-input>
+                  <el-input v-model="formBlack.address" disabled :maxlength="20"></el-input>
                 </el-form-item>
                </el-col>
                <el-col :span="12">
@@ -140,7 +140,7 @@
                     v-model="formFroze.shipperType"
                     @change="handleChange">
                   </el-cascader> -->
-                  <el-select v-model="formBlack.shipperType" placeholder="请选择">
+                  <el-select v-model="formBlack.shipperType" disabled placeholder="请选择">
                   <el-option
                     v-for="item in options"
                     :key="item.value"
@@ -155,7 +155,7 @@
              <el-row>
                <el-col :span="12">
                   <el-form-item label="注册来源" :label-width="formLabelWidth">
-                    <el-input v-model="formBlack.registerOrigin" :maxlength="20"></el-input>
+                    <el-input v-model="formBlack.registerOrigin" disabled :maxlength="20"></el-input>
                   </el-form-item>
                </el-col>
              </el-row>
@@ -164,7 +164,7 @@
                 <el-row>
                   <el-col :span="24">
                     <el-form-item label="移入原因:" :label-width="formLabelWidth">
-                      <el-select v-model="formBlack.putBlackCause" placeholder="请选择">
+                      <el-select v-model="formBlack.putBlackCause" disabled placeholder="请选择">
                         <el-option
                           v-for="item in optionsFormBlack"
                           :key="item.value"
@@ -178,7 +178,7 @@
                 <el-row>
                   <el-col :span="24">
                     <el-form-item label="移入黑名单原因说明:" :label-width="formLabelWidth">
-                      <el-input v-model="formBlack.putBlackCauseRemark" :rows="2" :maxlength="100" placeholder="请输入内容" type="textarea"></el-input>
+                      <el-input v-model="formBlack.putBlackCauseRemark" disabled :rows="2" :maxlength="100" placeholder="请输入内容" type="textarea"></el-input>
                     </el-form-item>
                   </el-col>
                 </el-row>
@@ -186,7 +186,7 @@
              <div class="shipper_information">
                 <h2>移出黑名单信息</h2>
                 <el-form-item label="移出黑名单原因说明" :label-width="formLabelWidth">
-                  <el-input v-model="formBlack.popBlackRemark" :rows="2" placeholder="请输入内容" type="textarea"></el-input>
+                  <el-input v-model="formBlack.popBlackRemark" :maxlength="100" :rows="2" placeholder="请输入内容" type="textarea"></el-input>
                 </el-form-item>
              </div>
           </el-form>
@@ -247,7 +247,7 @@ export default {
         putBlackCause:'',
         popBlackRemark:'',
         putBlackCauseRemark:''
-      },
+      }
     }
   }, 
   mounted(){

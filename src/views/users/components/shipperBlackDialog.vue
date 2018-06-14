@@ -4,16 +4,16 @@
       <el-dialog :title="title" :visible.sync="BlackDialogFlag" :before-close="change()" :modal="false">
 
       <!-- <el-dialog title="移入黑名单" :visible.sync="BlackDialogFlag"> -->
-        <el-form :model="formBlack" ref="formBlack">
+        <el-form :model="formBlack" ref="formBlack" :rules="formBlackRules">
             <el-row>
                 <el-col :span="12">
                     <el-form-item label="手机号码" :label-width="formLabelWidth">
-                    <el-input v-model="formBlack.mobile"></el-input>
+                    <el-input v-model="formBlack.mobile" disabled></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col :span="12">
                     <el-form-item label="公司名称" :label-width="formLabelWidth">
-                    <el-input v-model="formBlack.companyName"></el-input>
+                    <el-input v-model="formBlack.companyName" disabled></el-input>
                     </el-form-item>
                 </el-col>
                 </el-row>
@@ -21,7 +21,7 @@
                 <el-row>
                 <el-col :span="12">
                     <el-form-item label="联系人" :label-width="formLabelWidth">
-                    <el-input v-model="formBlack.contacts"></el-input>
+                    <el-input v-model="formBlack.contacts" disabled></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col :span="12">
@@ -31,7 +31,7 @@
                     v-model="formFroze.belongCity"
                     @change="handleChange">
                     </el-cascader> -->
-                        <GetCityList v-model="formBlack.belongCity" ref="area"></GetCityList>
+                        <GetCityList v-model="formBlack.belongCity" disabled ref="area"></GetCityList>
                     </el-form-item>
                 </el-col>
                 </el-row>
@@ -39,12 +39,12 @@
                 <el-row>
                 <el-col :span="12">
                     <el-form-item label="详细地址" :label-width="formLabelWidth">
-                    <el-input v-model="formBlack.address" :maxlength="20"></el-input>
+                    <el-input v-model="formBlack.address" disabled :maxlength="20"></el-input>
                 </el-form-item>
                 </el-col>
                 <el-col :span="12">
                     <el-form-item label="货主类型" :label-width="formLabelWidth">
-                        <el-select v-model="formBlack.shipperType" placeholder="请选择">
+                        <el-select v-model="formBlack.shipperType" placeholder="请选择" disabled>
                             <el-option
                                 v-for="item in options"
                                 :key="item.value"
@@ -59,7 +59,7 @@
                 <el-row>
                 <el-col :span="12">
                     <el-form-item label="注册来源" :label-width="formLabelWidth">
-                    <el-input v-model="formBlack.registerOrigin" :maxlength="20"></el-input>
+                    <el-input v-model="formBlack.registerOrigin" disabled :maxlength="20"></el-input>
                     </el-form-item>
                 </el-col>
                 </el-row>
@@ -67,7 +67,7 @@
                 <h2>移入黑名单信息</h2>
                 <el-row>
                     <el-col :span="24">
-                    <el-form-item label="移入原因:" :label-width="formLabelWidth" required>
+                    <el-form-item label="移入原因:" :label-width="formLabelWidth" prop="putBlackCause">
                         <el-select v-model="formBlack.putBlackCause" placeholder="请选择">
                         <el-option
                             v-for="item in optionsFormBlack"
@@ -158,7 +158,10 @@ export default {
                 putBlackCauseRemark:'',
                 putBlackCause:''
             },
-            currentRow:{}
+            currentRow:{},
+            formBlackRules:{
+                putBlackCause:{required:true,message:'请选择移入原因',trigger:"change"}
+            }
         }
     },
     mounted(){

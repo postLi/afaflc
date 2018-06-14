@@ -217,6 +217,9 @@ export default {
 .shipper .shipper_searchinfo label {
   margin-right: 0px;
 }
+.el-form-item{
+  border: 0;
+}
 </style>
 
 

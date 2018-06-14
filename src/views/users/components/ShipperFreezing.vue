@@ -118,16 +118,16 @@
       <!-- 解冻弹框 -->
        <div class="addclassify commoncss">
         <el-dialog title="解冻" :visible.sync="unfrozeDialogFlag">
-          <el-form :model="formUnFroze" ref="formUnFroze">
+          <el-form :model="formUnFroze" ref="formUnFroze" :rules="rules">
             <el-row>
                 <el-col :span="12">
                   <el-form-item label="手机号码" :label-width="formLabelWidth">
-                    <el-input v-model="formUnFroze.mobile"></el-input>
+                    <el-input v-model="formUnFroze.mobile" disabled></el-input>
                   </el-form-item>
                 </el-col>
                 <el-col :span="12">
                   <el-form-item label="公司名称" :label-width="formLabelWidth">
-                    <el-input v-model="formUnFroze.companyName"></el-input>
+                    <el-input v-model="formUnFroze.companyName" disabled></el-input>
                   </el-form-item>
                 </el-col>
               </el-row>
@@ -135,7 +135,7 @@
                <el-row>
                <el-col :span="12">
                  <el-form-item label="联系人" :label-width="formLabelWidth">
-                    <el-input v-model="formUnFroze.contacts"></el-input>
+                    <el-input v-model="formUnFroze.contacts" disabled></el-input>
                   </el-form-item>
                </el-col>
                <el-col :span="12">
@@ -145,7 +145,7 @@
                     v-model="formFroze.belongCity"
                     @change="handleChange">
                   </el-cascader> -->
-                  <GetCityList v-model="formUnFroze.belongCity" ref="area"></GetCityList>
+                  <GetCityList v-model="formUnFroze.belongCity" disabled ref="area"></GetCityList>
                 </el-form-item>
                </el-col>
              </el-row>
@@ -153,12 +153,12 @@
               <el-row>
                <el-col :span="12">
                  <el-form-item label="详细地址" :label-width="formLabelWidth">
-                  <el-input v-model="formUnFroze.address" :maxlength="20"></el-input>
+                  <el-input v-model="formUnFroze.address" disabled :maxlength="20"></el-input>
                 </el-form-item>
                </el-col>
                <el-col :span="12">
                  <el-form-item label="货主类型" :label-width="formLabelWidth">
-                  <el-select v-model="formUnFroze.shipperType" placeholder="请选择">
+                  <el-select v-model="formUnFroze.shipperType" disabled placeholder="请选择">
                   <el-option
                     v-for="item in options"
                     :key="item.value"
@@ -173,7 +173,7 @@
              <el-row>
                <el-col :span="12">
                   <el-form-item label="注册来源" :label-width="formLabelWidth">
-                    <el-input v-model="formUnFroze.registerOrigin" :maxlength="20"></el-input>
+                    <el-input v-model="formUnFroze.registerOrigin" disabled :maxlength="20"></el-input>
                   </el-form-item>
                </el-col>
              </el-row>
@@ -183,7 +183,7 @@
              <el-row>
                <el-col :span="24">
                  <el-form-item label="冻结原因" :label-width="formLabelWidth">
-                  <el-select v-model="formUnFroze.freezeCause" placeholder="请选择">
+                  <el-select v-model="formUnFroze.freezeCause" disabled placeholder="请选择">
                     <el-option
                       v-for="item in optionsReason"
                       :key="item.value"
@@ -202,7 +202,8 @@
                       type="datetime"
                       placeholder="选择日期"
                       format="yyyy-MM-dd"
-                      :picker-options="pickerOptions">
+                      :picker-options="pickerOptions"
+                      disabled>
                     </el-date-picker>
                   </el-form-item>
                 </el-col>
@@ -210,7 +211,7 @@
              <el-row>
                <el-col :span="24">
                   <el-form-item label="冻结原因说明:"  :label-width="formLabelWidth">
-                    <el-input type="textarea" :rows="2" v-model="formUnFroze.freezeCauseRemark"></el-input>
+                    <el-input type="textarea" :rows="2" disabled v-model="formUnFroze.freezeCauseRemark"></el-input>
                   </el-form-item>
                </el-col>
              </el-row>
@@ -219,8 +220,8 @@
              </div>
              <el-row>
                <el-col :span="24">
-                 <el-form-item  label="解冻原因说明:" :label-width="formLabelWidth" required>
-                  <el-input type="textarea" :rows="2" v-model="formUnFroze.unfreezeRemark"  :maxlength="100"></el-input>
+                 <el-form-item  label="解冻原因说明:" :label-width="formLabelWidth" prop="unfreezeRemark" required>
+                  <el-input type="textarea" :rows="2" v-model="formUnFroze.unfreezeRemark" :maxlength="100"></el-input>
                  </el-form-item>
                </el-col>
              </el-row>
@@ -296,6 +297,9 @@ export default {
         disabledDate(time) {
           return time.getTime() < Date.now();
         },
+      },
+      rules:{
+        unfreezeRemark:{required: true, message:'请输入解冻原因',trigger:'change'}
       }
     }
   },

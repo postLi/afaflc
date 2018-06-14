@@ -113,10 +113,10 @@
       <!-- 修改 -->
        <div class="addclassify commoncss">
           <el-dialog title="修改" :visible.sync="changeDialogFlag">
-            <el-form :model="forms" ref="forms">
+            <el-form :model="forms" ref="forms" :rules="formsRules">
               <el-row>
                 <el-col :span="12">
-                  <el-form-item label="手机号码" :label-width="formLabelWidth" required>
+                  <el-form-item label="手机号码" prop="mobile" :label-width="formLabelWidth" required>
                     <el-input v-model="forms.mobile"></el-input>
                   </el-form-item>
                 </el-col>
@@ -128,7 +128,7 @@
               </el-row>
              <el-row>
                <el-col :span="12">
-                 <el-form-item label="所在地" :label-width="formLabelWidth" required>
+                 <el-form-item label="所在地" prop="belongCity" :label-width="formLabelWidth" required>
                   <!-- <el-cascader
                     :options="options"
                     v-model="forms.belongCity"
@@ -154,16 +154,16 @@
        <!-- 冻结 -->
       <div class="addclassify commoncss">
         <el-dialog title="冻结" :visible.sync="frozeDialogFlag">
-          <el-form :model="formFroze" ref="formFroze">
+          <el-form :model="formFroze" :rules="formFrozeRules" ref="formFroze" >
             <el-row>
                 <el-col :span="12">
                   <el-form-item label="手机号码" :label-width="formLabelWidth">
-                    <el-input v-model="formFroze.mobile"></el-input>
+                    <el-input v-model="formFroze.mobile" disabled></el-input>
                   </el-form-item>
                 </el-col>
                 <el-col :span="12">
                   <el-form-item label="公司名称" :label-width="formLabelWidth">
-                    <el-input v-model="formFroze.companyName"></el-input>
+                    <el-input v-model="formFroze.companyName" disabled></el-input>
                   </el-form-item>
                 </el-col>
               </el-row>
@@ -171,7 +171,7 @@
                <el-row>
                <el-col :span="12">
                  <el-form-item label="联系人" :label-width="formLabelWidth">
-                    <el-input v-model="formFroze.contacts"></el-input>
+                    <el-input v-model="formFroze.contacts" disabled></el-input>
                   </el-form-item>
                </el-col>
                <el-col :span="12">
@@ -189,12 +189,12 @@
               <el-row>
                <el-col :span="12">
                  <el-form-item label="详细地址" :label-width="formLabelWidth">
-                  <el-input v-model="formFroze.address" :maxlength="20"></el-input>
+                  <el-input v-model="formFroze.address" :maxlength="20" disabled></el-input>
                 </el-form-item>
                </el-col>
                <el-col :span="12">
                  <el-form-item label="货主类型" :label-width="formLabelWidth">
-                  <el-select v-model="formFroze.shipperType" placeholder="请选择">
+                  <el-select v-model="formFroze.shipperType" placeholder="请选择" disabled>
                   <el-option
                     v-for="item in options"
                     :key="item.value"
@@ -209,7 +209,7 @@
              <el-row>
                <el-col :span="12">
                   <el-form-item label="注册来源" :label-width="formLabelWidth">
-                    <el-input v-model="formFroze.registerOrigin" :maxlength="20"></el-input>
+                    <el-input v-model="formFroze.registerOrigin" :maxlength="20" disabled></el-input>
                   </el-form-item>
                </el-col>
              </el-row>
@@ -218,8 +218,8 @@
              </div>
              <el-row>
                <el-col :span="24">
-                 <el-form-item label="冻结原因" :label-width="formLabelWidth" required>
-                  <el-select v-model="formFroze.freezeCause" placeholder="请选择">
+                 <el-form-item label="冻结原因" prop="freezeCause" :label-width="formLabelWidth">
+                  <el-select v-model="formFroze.freezeCause" placeholder="请选择" clearable>
                     <el-option
                       v-for="item in optionsReason"
                       :key="item.value"
@@ -232,7 +232,7 @@
              </el-row>
               <el-row>
                 <el-col :span="24">
-                  <el-form-item label="解冻日期" :label-width="formLabelWidth" required>
+                  <el-form-item label="解冻日期" prop="freezeTime" :label-width="formLabelWidth">
                     <el-date-picker
                       v-model="formFroze.freezeTime"
                       type="datetime"
@@ -252,7 +252,7 @@
               </el-row>
              <el-row>
                <el-col :span="24">
-                  <el-form-item label="冻结原因说明"  :label-width="formLabelWidth" required>
+                  <el-form-item label="冻结原因说明"  :label-width="formLabelWidth">
                     <el-input type="textarea" :rows="2" :maxlength="100" v-model="formFroze.freezeCauseRemark "></el-input>
                   </el-form-item>
                </el-col>
@@ -268,16 +268,16 @@
       <!-- 移入黑名单 -->
        <div class="addclassify commoncss">
         <el-dialog title="移入黑名单" :visible.sync="BlackDialogFlag">
-          <el-form :model="formBlack" ref="formBlack">
+          <el-form :model="formBlack" ref="formBlack" :rules="formBlackRules">
             <el-row>
                 <el-col :span="12">
                   <el-form-item label="手机号码" :label-width="formLabelWidth">
-                    <el-input v-model="formBlack.mobile"></el-input>
+                    <el-input v-model="formBlack.mobile" disabled></el-input>
                   </el-form-item>
                 </el-col>
                 <el-col :span="12">
                   <el-form-item label="公司名称" :label-width="formLabelWidth">
-                    <el-input v-model="formBlack.companyName"></el-input>
+                    <el-input v-model="formBlack.companyName" disabled></el-input>
                   </el-form-item>
                 </el-col>
               </el-row>
@@ -285,7 +285,7 @@
                <el-row>
                <el-col :span="12">
                  <el-form-item label="联系人" :label-width="formLabelWidth">
-                    <el-input v-model="formBlack.contacts"></el-input>
+                    <el-input v-model="formBlack.contacts" disabled></el-input>
                   </el-form-item>
                </el-col>
                <el-col :span="12">
@@ -295,7 +295,7 @@
                     v-model="formFroze.belongCity"
                     @change="handleChange">
                   </el-cascader> -->
-                  <GetCityList v-model="formBlack.belongCity" ref="area"></GetCityList>
+                  <GetCityList v-model="formBlack.belongCity" disabled ref="area"></GetCityList>
                 </el-form-item>
                </el-col>
              </el-row>
@@ -303,12 +303,12 @@
               <el-row>
                <el-col :span="12">
                  <el-form-item label="详细地址" :label-width="formLabelWidth">
-                  <el-input v-model="formBlack.address" :maxlength="20"></el-input>
+                  <el-input v-model="formBlack.address" :maxlength="20" disabled></el-input>
                 </el-form-item>
                </el-col>
                <el-col :span="12">
                  <el-form-item label="货主类型" :label-width="formLabelWidth">
-                  <el-select v-model="formBlack.shipperType" placeholder="请选择">
+                  <el-select v-model="formBlack.shipperType" placeholder="请选择" disabled>
                   <el-option
                     v-for="item in options"
                     :key="item.value"
@@ -323,7 +323,7 @@
              <el-row>
                <el-col :span="12">
                   <el-form-item label="注册来源" :label-width="formLabelWidth">
-                    <el-input v-model="formBlack.registerOrigin" :maxlength="20"></el-input>
+                    <el-input v-model="formBlack.registerOrigin" disabled :maxlength="20"></el-input>
                   </el-form-item>
                </el-col>
              </el-row>
@@ -331,8 +331,8 @@
                 <h2>移入黑名单信息</h2>
                 <el-row>
                   <el-col :span="24">
-                    <el-form-item label="移入原因:" :label-width="formLabelWidth" required>
-                      <el-select v-model="formBlack.putBlackCause" placeholder="请选择">
+                    <el-form-item label="移入原因:" prop="putBlackCause" :label-width="formLabelWidth">
+                      <el-select v-model="formBlack.putBlackCause" placeholder="请选择" clearable>
                         <el-option
                           v-for="item in optionsFormBlack"
                           :key="item.value"
@@ -384,6 +384,23 @@ export default {
     GetCityList
   },
   data(){
+    // 手机号校验
+    const mobileValidator=(rule,val,cb)=>{
+      let phoneTest = /(^1[3|4|5|7|8]\d{9}$)|(^09\d{8}$)/
+      !val && cb(new Error('手机号码不能为空'))
+      setTimeout(function () {
+        !(phoneTest.test(val)) ? cb(new Error('请输入正确的手机号码格式')) : cb()
+      }, 0)
+    }
+    //  所在地校验
+    const belongCityValidator =(rule,val,cb)=>{
+      if (!this.forms.belongCity){
+        cb(new Error('请选择所在地'))
+      } else {
+        cb()
+      }
+    }
+  
     return{
       optionsFormBlack:[], // 黑名单的移入原因
       optionsReason:[], // 冻结移入原因的
@@ -441,8 +458,26 @@ export default {
       pickerOptions:{
         disabledDate(time) {
           return time.getTime() < Date.now();
-        },
+        }
+      },
+      //移入黑名单校验
+      formBlackRules:{
+        putBlackCause:{required:true,message:'请选择移入原因',trigger:'blur'}
+      },
+
+      // 修改校验
+      formsRules:{
+        mobile:{validator: mobileValidator, trigger: 'change'},
+        belongCity:{required:true,validator:belongCityValidator,trigger:'change'}
+      },
+
+      //冻结校验
+      formFrozeRules:{
+        freezeCause:{required:true,message:'请选择冻结原因',trigger:'change'},
+        freezeTime:{required:true, message:'请选择解冻日期',trigger:'change'}
       }
+
+
     }
   },
   mounted(){
@@ -582,16 +617,9 @@ export default {
     
     //修改-提交
     onSubmit(){
+      this.forms.belongCity = this.$refs.area.selectedOptions.pop();
       this.$refs['forms'].validate((valid)=>{
         if(valid){
-          // var forms={
-          //   mobile:this.mobile,
-          //   contacts:this.contacts,
-          //   belongCity:this.belongCity,
-          //   address: this.address,
-          //   shipperId: this.shipperId
-          // }
-          this.forms.belongCity = this.$refs.area.selectedOptions.pop();
           var forms=Object.assign({},this.forms)
           data_get_shipper_change(forms).then(res=>{
             // console.log(res)
@@ -653,7 +681,6 @@ export default {
       })
       // 获取冻结原因字典
       data_get_shipper_freezeType().then(res=>{
-        // console.log(res)
         res.data.map((item)=>{
           this.optionsReason.push(item)
         })

@@ -2,16 +2,16 @@
   <div class="addclassify commoncss">
     <el-button :type="type" :value="value" :plain="plain" :icon="icon" @click="openDialog()">{{text}}</el-button>
     <el-dialog :title="title" :visible.sync="freezeDialogFlag" :before-close="change()" :modal="false">
-      <el-form :model="formFroze" ref="formFroze">
+      <el-form :model="formFroze" ref="formFroze" :rules="formFrozeRules">
         <el-row>
             <el-col :span="12">
               <el-form-item label="手机号码" :label-width="formLabelWidth">
-                <el-input v-model="formFroze.mobile"></el-input>
+                <el-input v-model="formFroze.mobile" disabled></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="12">
               <el-form-item label="公司名称" :label-width="formLabelWidth">
-                <el-input v-model="formFroze.companyName"></el-input>
+                <el-input v-model="formFroze.companyName" disabled></el-input>
               </el-form-item>
             </el-col>
           </el-row>
@@ -19,7 +19,7 @@
           <el-row>
             <el-col :span="12">
               <el-form-item label="联系人" :label-width="formLabelWidth">
-                <el-input v-model="formFroze.contacts"></el-input>
+                <el-input v-model="formFroze.contacts" disabled></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="12">
@@ -29,7 +29,7 @@
                 v-model="formFroze.belongCity"
                 @change="handleChange">
               </el-cascader> -->
-              <GetCityList v-model="formFroze.belongCity" ref="area"></GetCityList>
+              <GetCityList v-model="formFroze.belongCity" disabled ref="area"></GetCityList>
             </el-form-item>
             </el-col>
           </el-row>
@@ -37,12 +37,12 @@
           <el-row>
             <el-col :span="12">
               <el-form-item label="详细地址" :label-width="formLabelWidth">
-              <el-input v-model="formFroze.address" :maxlength="20"></el-input>
+              <el-input v-model="formFroze.address" :maxlength="20" disabled></el-input>
             </el-form-item>
             </el-col>
             <el-col :span="12">
               <el-form-item label="货主类型" :label-width="formLabelWidth">
-              <el-select v-model="formFroze.shipperType" placeholder="请选择">
+              <el-select v-model="formFroze.shipperType" placeholder="请选择" disabled>
               <el-option
                 v-for="item in options"
                 :key="item.value"
@@ -57,7 +57,7 @@
           <el-row>
             <el-col :span="12">
               <el-form-item label="注册来源" :label-width="formLabelWidth">
-                <el-input v-model="formFroze.registerOrigin" :maxlength="20"></el-input>
+                <el-input v-model="formFroze.registerOrigin" :maxlength="20" disabled></el-input>
               </el-form-item>
             </el-col>
           </el-row>
@@ -66,8 +66,8 @@
           </div>
           <el-row>
             <el-col :span="24">
-              <el-form-item label="冻结原因" :label-width="formLabelWidth" required>
-              <el-select v-model="formFroze.freezeCause" placeholder="请选择">
+              <el-form-item label="冻结原因" prop="freezeCause" :label-width="formLabelWidth">
+              <el-select v-model="formFroze.freezeCause" placeholder="请选择" clearable>
                 <el-option
                   v-for="item in optionsReason"
                   :key="item.value"
@@ -80,7 +80,7 @@
           </el-row>
           <el-row>
             <el-col :span="24">
-              <el-form-item label="解冻日期" :label-width="formLabelWidth" required>
+              <el-form-item label="解冻日期" :label-width="formLabelWidth" prop="freezeTime">
                 <el-date-picker
                   v-model="formFroze.freezeTime"
                   type="datetime"
@@ -185,7 +185,11 @@ export default {
       pickerOptions:{
         disabledDate(time) {
           return time.getTime() < Date.now();
-        },
+        }
+      },
+      formFrozeRules:{
+        freezeCause:{required: true,message:'请选择冻结原因',trigger:'change'},
+        freezeTime:{required:true,message:'请选择解冻日期',trigger:'change'}
       }
     }
   },
