@@ -1,21 +1,37 @@
 <template>
     <div>
         <div class="shipper_searchinfo">
-            <label>所在地：
-                <el-cascader
+            <el-form inline>
+                <el-form-item label="所在地">
+                    <GetCityList v-model="formAll.belongCity" ref="area"></GetCityList>
+                </el-form-item>
+                <el-form-item label="公司名称">
+                    <el-input v-model.trim="formAll.companyName"></el-input>
+                </el-form-item>
+                <el-form-item label="手机号：">
+                    <el-input v-model.trim="formAll.mobile"></el-input>
+                </el-form-item>
+                <el-form-item label="">
+                    <el-button type="primary" plain @click="getdata_search">查询</el-button>
+                    <el-button type="info" plain @click="clearSearch">清空</el-button>
+                </el-form-item>
+            </el-form>
+            <!-- <label>所在地： -->
+                <!-- <el-cascader
                   :options="options"
                   v-model="formAll.selectedOptions6"
                   @change="handleChange">
-                </el-cascader>
+                </el-cascader> -->
+                <!-- <GetCityList v-model="formAll.belongCity" ref="area"></GetCityList>
             </label>
             <label>公司名称：
-              <el-input v-model="formAll.companyName"></el-input>
+              <el-input v-model.trim="formAll.companyName"></el-input>
             </label>
             <label>手机号码：
-             <el-input v-model="formAll.mobile"></el-input>
+             <el-input v-model.trim="formAll.mobile"></el-input>
            </label>
            <el-button type="primary" plain @click="getdata_search">查询</el-button>
-           <el-button type="info" plain @click="clearSearch">清空</el-button>
+           <el-button type="info" plain @click="clearSearch">清空</el-button> -->
         </div>
         <div class="export">
         <!-- <el-button type="primary" @click="addClassfy">新增</el-button> -->
@@ -40,7 +56,10 @@
                 style="width: 100%">
                 <el-table-column type="selection" width="80px">
                 </el-table-column>
-                <el-table-column prop="companyName" label="公司名称">
+                <el-table-column label="公司名称">
+                    <template slot-scope="scope">
+                        <createdDialog :params="scope.row" btntype="text" :btntext="scope.row.companyName" editType="view" btntitle="详情"></createdDialog>
+                    </template>
                 </el-table-column>
                 <el-table-column prop="contacts" label="联系人">
                 </el-table-column>
@@ -50,9 +69,9 @@
                 </el-table-column>
                 <el-table-column prop="belongCity" label="所在地">
                 </el-table-column>
-                <el-table-column prop="phone" label="提交认证时间">
+                <el-table-column prop="authenticationTime" label="提交认证日期">
                 </el-table-column>
-                <el-table-column prop="phone" label="审核不通过时间">
+                <el-table-column prop="phone" label="审核不通过日期">
                 </el-table-column>
                 <!-- <el-table-column
                     fixed="right"
@@ -77,10 +96,12 @@
 </template>
 <script>
 import createdDialog from './createdDialog.vue'
+import GetCityList from '@/components/GetCityList'
 import {data_get_shipper_list} from '../../../api/users/shipper/all_shipper.js'
 export default {
     components:{
-        createdDialog
+        createdDialog,
+        GetCityList
     },
     data(){
         return{
@@ -124,6 +145,7 @@ export default {
       },
          //点击查询按纽，按条件查询列表
       getdata_search(event){
+          this.formAll.belongCity = this.$refs.area.selectedOptions.pop();
           data_get_shipper_list(this.page,this.pagesize,this.formAll).then(res=>{
             this.totalCount = res.data.totalCount;
             this.tableData1= res.data.list;

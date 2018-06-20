@@ -4,11 +4,11 @@
 
       <el-button :type="type" :value="value" :plain="plain" :icon="icon" @click="openDialog()">{{text}}</el-button>
       <el-dialog :title="title" :visible="dialogFormVisible_add" :before-close="change" :modal=false>
-        <el-form :model="xinzengform" ref="xinzengform">
+        <el-form :model="xinzengform" ref="xinzengform" :rules="rulesForm">
           <el-row>
             <el-col :span="12">
-              <el-form-item label="货主类型:" :label-width="formLabelWidth" required>
-                <el-select v-model="xinzengform.shipperType" placeholder="请选择">
+              <el-form-item label="货主类型:" prop="shipperType" :label-width="formLabelWidth" required>
+                <el-select v-model="xinzengform.shipperType" placeholder="请选择" :disabled="editType=='view'">
                   <el-option
                     v-for="item in options"
                     :key="item.value"
@@ -20,8 +20,8 @@
              </el-form-item>
             </el-col>
             <el-col :span="12">
-              <el-form-item label="手机号码:" :label-width="formLabelWidth" required>
-                <el-input v-model="xinzengform.mobile" auto-complete="off"></el-input>
+              <el-form-item label="手机号码:" prop="mobile" :label-width="formLabelWidth" required>
+                <el-input v-model="xinzengform.mobile" auto-complete="off"  :disabled="editType=='view'"></el-input>
               </el-form-item>
             </el-col>
           </el-row>
@@ -29,17 +29,18 @@
           <el-row>
             <el-col :span="12">
               <el-form-item label="联系人:" :label-width="formLabelWidth">
-                <el-input v-model="xinzengform.contacts" auto-complete="off"></el-input>
+                <el-input v-model="xinzengform.contacts" auto-complete="off"  :disabled="editType=='view'"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="12">
-              <el-form-item label="所在地:" :label-width="formLabelWidth" required>
-                <el-cascader
+              <el-form-item label="所在地:" prop="belongCity" :label-width="formLabelWidth">
+                <!-- <el-cascader
                   :options="areadata"
                   :props="props"
                   v-model="belongCity"
                   @active-item-change="handleChange">
-                </el-cascader>
+                </el-cascader> -->
+                <GetCityList v-model="xinzengform.belongCity"  :disabled="editType=='view'" ref="area"></GetCityList>
               </el-form-item>
             </el-col>
           </el-row>
@@ -47,26 +48,34 @@
           <el-row>
             <el-col :span="12">
               <el-form-item label="详细地址:" :label-width="formLabelWidth">
-                <el-input :maxlength="20" v-model="xinzengform.address" auto-complete="off"></el-input>
+                <el-input :maxlength="20" v-model="xinzengform.address" auto-complete="off"  :disabled="editType=='view'"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="12">
-              <el-form-item label="公司名称:" :label-width="formLabelWidth" v-show="companyFlag">
-                <el-input :maxlength="20" v-model="xinzengform.companyName"></el-input>
+              <el-form-item label="是否定向:" :label-width="formLabelWidth">
+                <el-radio-group v-model="xinzengform.isDirectional"  :disabled="editType!='add'">
+                  <el-radio label="0">否</el-radio>
+                  <el-radio label="1">是</el-radio>
+                </el-radio-group>
               </el-form-item>
             </el-col>
           </el-row>
 
           <el-row>
             <el-col :span="12">
+              <el-form-item label="公司名称:" :label-width="formLabelWidth" v-show="companyFlag">
+                <el-input :maxlength="20" v-model="xinzengform.companyName"  :disabled="editType=='view'"></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="12">
             <el-form-item label="统一社会信用代码:" :label-width="formLabelWidth" v-show="companyFlag">
-              <el-input :maxlength="20" v-model="xinzengform.creditCode"></el-input>
+              <el-input :maxlength="20" v-model="xinzengform.creditCode"  :disabled="editType=='view'"></el-input>
             </el-form-item>
             </el-col>
           </el-row>
           <el-row>
             <el-col :span="9">
-              <el-form-item label="上传营业执照照片:" :label-width="formLabelWidth" v-show="companyFlag">
+              <el-form-item label="上传营业执照照片:" label-width="125px" v-show="companyFlag">
                 <!-- <div class="completeinfo">
                   <div class="detailinfo">
                     <p>上传营业执照照片 ：</p> -->
@@ -79,7 +88,7 @@
           
           <el-row>
             <el-col :span="9">
-              <el-form-item label="上传公司或者档口照片:" :label-width="formLabelWidth" v-show="companyFlag">
+              <el-form-item label="上传公司或者档口照片:" label-width="125px" prop="companyFacadeFile" v-show="companyFlag" :rules="companyFlag === false ? {} : companyFacadeFileRules">
                 <upload class="licensePicture" tip="（必须为jpg/png并且小于5M）" v-model="xinzengform.companyFacadeFile" />
               </el-form-item>
             </el-col>
@@ -87,7 +96,7 @@
           
           <el-row>
             <el-col :span="9">
-              <el-form-item label="上传发货人名片照片:" :label-width="formLabelWidth" v-show="companyFlag">
+              <el-form-item label="上传发货人名片照片:" label-width="125px" prop="shipperCardFile" v-show="companyFlag" :rules="companyFlag === false ? {} : shipperCardFileRules" >
                 <upload class="licensePicture" tip="（必须为jpg/png并且小于5M）" v-model="xinzengform.shipperCardFile" />
               </el-form-item>
             </el-col>
@@ -153,10 +162,12 @@
 </template>
 <script>
 import Upload from '@/components/Upload/singleImage'
+import GetCityList from '@/components/GetCityList'
 import {data_get_shipper_type,data_get_shipper_create,data_Area,data_get_shipper_change,data_get_shipper_view,data_GetCityList} from '../../../api/users/shipper/all_shipper.js'
 export default {
   components:{
-    Upload
+    Upload,
+    GetCityList
   },
   props:{
     params:{
@@ -193,6 +204,36 @@ export default {
     }
   },
   data(){
+    // 手机号校验
+     const mobileValidator = (rule, val, cb) => {
+      let phoneTest = /(^1[3|4|5|7|8]\d{9}$)|(^09\d{8}$)/
+      !val && cb(new Error('手机号码不能为空'))
+      setTimeout(function () {
+        !(phoneTest.test(val)) ? cb(new Error('请输入正确的手机号码格式')) : cb()
+      }, 0)
+    }
+    const companyNameValidator = (rule, val, cb)=>{
+      // console.log(val)
+      if(!this.xinzengform.companyFacadeFile){
+        cb(new Error('请上传公司或者档口照片'))
+      }else{
+        cb()
+      }
+    }
+    const shipperCardFileValidator=(rule,val,cb) => {
+      if(!this.xinzengform.shipperCardFile){
+        cb(new Error('请上传发货人名片照片'))
+      } else {
+        cb()
+      }
+    }
+    const belongCityValidator = (rule, val, cb) => {
+      if(!this.xinzengform.belongCity) {
+        cb(new Error('请选择所在地'))
+      } else {
+        cb()
+      }
+    }
     return{
       // fileList4:[],
       // fileList3:[],
@@ -218,7 +259,8 @@ export default {
         businessLicenceFile:'',
         shipperCardFile:'',
         companyFacadeFile:'',
-        shipperId:''
+        shipperId:'',
+        isDirectional: '0'
       },
       currentRow: null,
       props: {
@@ -226,6 +268,17 @@ export default {
         children: 'children',
         value:'code'
       },
+      rulesForm:{
+        shipperType:{required: true, message:'请选择货主类型', trigger:'change'},
+        mobile:{validator: mobileValidator, trigger:'change'},
+        belongCity:{required:true,validator:belongCityValidator, trigger:'change'}
+      },
+
+      // 上传公司或者档口照片校验
+      companyFacadeFileRules:{required:true,validator: companyNameValidator,trigger:'change'},
+
+      // 上传发货人名片照片
+      shipperCardFileRules:{required:true,validator: shipperCardFileValidator, trigger: 'change'}
     }
   },
   watch:{
@@ -236,13 +289,28 @@ export default {
         this.companyFlag= true
       }else{
         this.companyFlag=false
+        this.xinzengform.companyName=null
+        this.xinzengform.creditCode=null
+        this.xinzengform.businessLicenceFile=null
+        this.xinzengform.shipperCardFile=null
+        this.xinzengform.companyFacadeFile=null
+          //  creditCode:null,
+          //  businessLicenceFile:'',
+          //  shipperCardFile:'',
+          //  companyFacadeFile:'',
       }
      },
      deep:true
     },
-    belongCity(newVal){
-      this.xinzengform.belongCity = newVal.join(',')
+    'xinzengform.mobile':{
+      handler:function(val, oldVal){
+        //用户输入校验合法后发送请求判断是否已注册
+
+      }
     }
+    // belongCity(newVal){
+    //   this.xinzengform.belongCity = newVal.join(',')
+    // }
   },
   mounted(){
     //按钮类型text,primary...
@@ -252,23 +320,23 @@ export default {
     //弹出框标题
     this.title = this.btntitle;
     this.getMoreInformation()
-    this.getArea()
+    // this.getArea()
   },
   methods:{
     setCurrent(row) {
 			this.$refs.singleTable.setCurrentRow(row);
 		},
     // 获取省份数据
-    getArea(){
-      data_Area().then(res=>{
-        this.areadata = res.data.list.map(el => {
-          el.children = []
-          return el
-        })
-        // console.log(res)
-        this.provinceId = this.areadata[0].code;
-      })
-    },
+    // getArea(){
+    //   data_Area().then(res=>{
+    //     this.areadata = res.data.list.map(el => {
+    //       el.children = []
+    //       return el
+    //     })
+    //     // console.log(res)
+    //     this.provinceId = this.areadata[0].code;
+    //   })
+    // },
 
     openDialog(){
       if(this.editType==='add'||this.editType==='view'){
@@ -327,25 +395,30 @@ export default {
     
     // 保存
     onSubmit(){
+      this.xinzengform.belongCity = this.$refs.area.selectedOptions.pop();
+      console.log(this.xinzengform.belongCity)
       this.$refs['xinzengform'].validate((valid)=>{
         if(valid){
-          var form={
-            xinzengform: this.xinzengform
-          }
-          console.log('onSubmit',form)
+          // this.xinzengform.belongCity = this.$refs.area.selectedOptions.pop();
+          // var form={
+          //   xinzengform: this.xinzengform
+          // }
+          var forms=Object.assign({},this.xinzengform)
+          // console.log('onSubmit',form)
           if(this.editType === 'add'){
             // 新增
-            data_get_shipper_create(this.xinzengform).then(res=>{
+            
+            data_get_shipper_create(forms).then(res=>{
               // console.log(res)
               this.dialogFormVisible_add = !this.dialogFormVisible_add;
-              this.$message.success('保存成功')
+              this.$message.success('新增成功')
               this.$emit('getData')
             }).catch(err=>{
               console.log(err)
             })
           }else if(this.editType === 'edit'){
             // 修改
-            data_get_shipper_change(this.xinzengform).then(res=>{
+            data_get_shipper_change(forms).then(res=>{
               // console.log(res)
               this.dialogFormVisible_add = !this.dialogFormVisible_add;
               this.$message.success('修改成功')
@@ -364,20 +437,20 @@ export default {
     //   console.log(file);
     // },
 
-    // 所在地
-    handleChange(value){
-      console.log(value)
-      data_GetCityList(value[0]).then(res=>{
-        this.areadata = this.areadata.map(el => {
-          if(el.code === value[0]){
-            el.children = res.data.list
-          }
-          return el
-        })
-        this.citylist = res.data.list;
-      })
-      return []
-    }
+    // // 所在地
+    // handleChange(value){
+    //   console.log(value)
+    //   data_GetCityList(value[0]).then(res=>{
+    //     this.areadata = this.areadata.map(el => {
+    //       if(el.code === value[0]){
+    //         el.children = res.data.list
+    //       }
+    //       return el
+    //     })
+    //     this.citylist = res.data.list;
+    //   })
+    //   return []
+    // }
   }
 }
 </script>
@@ -406,6 +479,3 @@ export default {
     }
   }
 </style>
-
-
-

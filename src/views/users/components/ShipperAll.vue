@@ -1,15 +1,43 @@
 <template>
     <div>
         <div class="shipper_searchinfo">
-           <label>所在地：
-             <el-cascader
+          <el-form :inline="true">
+            <el-form-item label="所在地：">
+              <GetCityList v-model="formAll.belongCity" ref="area"></GetCityList>
+            </el-form-item>
+            <el-form-item label="状态：">
+              <el-select v-model="formAll.attestationStatus" clearable placeholder="请选择">
+                <el-option
+                  v-for="item in optionsStatus"
+                  :key="item.value"
+                  :label="item.name"
+                  :value="item.code"
+                  :disabled="item.disabled">
+                </el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item label="公司名称:">
+              <el-input v-model.trim="formAll.companyName"></el-input>
+            </el-form-item>
+             <el-form-item label="手机号：">
+             <el-input v-model.trim="formAll.mobile"></el-input>
+          </el-form-item>
+          <el-form-item>
+            <el-button type="primary" plain @click="getdata_search">查询</el-button>
+            <el-button type="info" plain @click="clearSearch">清空</el-button>
+          </el-form-item>
+          </el-form>
+         
+           <!-- <label>所在地： -->
+             <!-- <el-cascader
                 :options="options"
                 v-model="formAll.belongCity"
                 @change="handleChange">
-              </el-cascader>
+              </el-cascader> -->
+              <!-- <GetCityList v-model="formAll.belongCity" ref="area"></GetCityList>
            </label>
            <label>状态：
-             <el-select v-model="formAll.attestationStatus" placeholder="请选择">
+             <el-select v-model="formAll.attestationStatus" clearable placeholder="请选择">
                 <el-option
                   v-for="item in optionsStatus"
                   :key="item.value"
@@ -20,13 +48,13 @@
               </el-select>
            </label>
            <label>公司名称:
-             <el-input v-model="formAll.companyName"></el-input>
+             <el-input v-model.trim="formAll.companyName"></el-input>
            </label>
            <label>手机号码：
-             <el-input v-model="formAll.mobile"></el-input>
+             <el-input v-model.trim="formAll.mobile"></el-input>
            </label>
            <el-button type="primary" plain @click="getdata_search">查询</el-button>
-           <el-button type="info" plain @click="clearSearch">清空</el-button>
+           <el-button type="info" plain @click="clearSearch">清空</el-button> -->
          </div>
          <div class="export">
             <!-- <el-button type="primary" @click="addClassfy">新增</el-button> -->
@@ -79,9 +107,11 @@
 <script>
 import {data_get_shipper_list,data_get_shipper_status} from '@/api/users/shipper/all_shipper.js'
 import createdDialog from './createdDialog.vue'
+import GetCityList from '@/components/GetCityList'
 export default {
   components:{
-    createdDialog
+    createdDialog,
+    GetCityList
   },
   data(){
       return{
@@ -107,6 +137,8 @@ export default {
   mounted(){
     this.firstblood()
     this.getMoreInformation()
+    this.getdata_search()
+    // this.formAll.belongCity = this.$refs.area.selectedOptions.pop();
   },
   methods:{
     //刷新页面
@@ -115,6 +147,8 @@ export default {
         console.log(res)
         this.totalCount = res.data.totalCount;
         this.tableDataAll = res.data.list;
+      }).catch(err=>{
+        console.log(err)
       })
     },
     //获取状态列表
@@ -127,6 +161,7 @@ export default {
     },
       //点击查询按纽，按条件查询列表
     getdata_search(event) {
+        this.formAll.belongCity = this.$refs.area.selectedOptions.pop();
         data_get_shipper_list(this.page,this.pagesize,this.formAll).then(res=>{
           this.totalCount = res.data.totalCount;
           this.tableDataAll = res.data.list;
@@ -169,8 +204,22 @@ export default {
   }
 }
 </script>
-<style>
-
+<style lang="scss">
+.shipper_searchinfo{
+  label{
+    display: inline-block;
+    margin-left: 10px;
+  }
+  .chooseCityList{
+    display: inline-block;
+  }
+}
+.shipper .shipper_searchinfo label {
+  margin-right: 0px;
+}
+.el-form-item{
+  border: 0;
+}
 </style>
 
 

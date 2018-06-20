@@ -1,12 +1,39 @@
 <template>
     <div>
          <div class="shipper_searchinfo">
-                <label>所在地：
-                    <el-input
+            <el-form inline>
+                <el-form-item label="所在地：">
+                     <GetCityList v-model="formInline.belongCity" ref="area"></GetCityList>
+                </el-form-item>
+                <el-form-item label="状态：">
+                    <el-select v-model="formInline.driverStatus" placeholder="请选择">
+                        <el-option
+                            v-for="item in optionsService"
+                            :key="item.value"
+                            :label="item.name"
+                            :value="item.code"
+                            :disabled="item.disabled">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="车牌号：">
+                    <el-input v-model.trim="formInline.carNumber" clearable placeholder="请输入内容"></el-input>
+                </el-form-item>
+                <el-form-item label="手机号：">
+                    <el-input placeholder="请输入内容" v-model.trim="formInline.driverMobile" clearable></el-input>
+                </el-form-item>
+                <el-form-item>
+                    <el-button type="primary" plain @click="getdata_search">查询</el-button>
+                    <el-button type="info" plain>清空</el-button>
+                </el-form-item>
+            </el-form>
+                <!-- <label>所在地： -->
+                    <!-- <el-input
                       placeholder="请输入内容"
                       v-model="formInline.belongCity"
                       clearable>
-                    </el-input>
+                    </el-input> -->
+                    <!-- <GetCityList v-model="formInline.belongCity" ref="area"></GetCityList>
                 </label>
                 <label>状态：
                     <el-select v-model="formInline.driverStatus" placeholder="请选择">
@@ -35,14 +62,19 @@
                 </label>
                 <el-button type="primary" plain @click="getdata_search">查询</el-button>
                 <el-button type="info" plain>清空</el-button>
-            
+             -->
                 <!-- <getCityList></getCityList> -->
 
             </div>
             <div class="export">
-                <el-button type="info">新增</el-button>
+                <el-button type="primary" plain @click="handleCreate">新增</el-button>
+                <!-- <driverNewDialog
+                 showme.sync="driverNewdailogFlag"
+                 :templateItem="templateItem">
+
+                </driverNewDialog> -->
             </div>
-            <!-- <div class="info_news">
+            <div class="info_news">
                 <el-table
                     ref="multipleTable"
                     :data="tableDataTree"
@@ -51,8 +83,9 @@
                     tooltip-effect="dark"
                     style="width: 100%">
                     <el-table-column
-                      prop="id"
-                      label="序号">
+                      type="index"
+                      label="序号"
+                      width="80">
                     </el-table-column>
                     <el-table-column
                       prop="driverMobile"
@@ -94,12 +127,13 @@
                        layout="total, sizes, prev, pager, next, jumper"
                        :total="totalCount">
                 </el-pagination>
-            </div> -->
+            </div>
     </div>
 </template>
 <script type="text/javascript">
     import {data_get_driver_list,data_get_driver_status} from '../../../api/users/carowner/total_carowner.js'
-    import getCityList from '../../../components/GetCityList/index.vue'
+    // import DriverNewDialog from '../carowner/driverNewDialog'
+    import GetCityList from '@/components/GetCityList'
     export default {
         data:function(){
             return{
@@ -108,7 +142,7 @@
                 totalCount:null,//总记录数
                 formInline: {//查询条件
                     driverMobile:'',
-                    belongCity:'',
+                    belongCity:null,
                     driverStatus:'',
                     carNumber:''
                 },
@@ -119,22 +153,25 @@
                       name:'全部'
                     }
                 ],
+                multipleSelection:[],
+               // driverNewdailogFlag: false, // 新增弹框控制
+               // templateItem:{}, //新增数据填充
             }
         },
         components:{
-            getCityList
+            GetCityList
+            // DriverNewDialog
         },
         mounted(){
             this.firstblood()
             this.getMoreInformation()
         },  
         methods:{
-            handleSizeChange(val) {
-                console.log(`每页 ${val} 条`);
+            // 新增功能
+            handleCreate(){
+                console.log('新增功能')
             },
-            handleCurrentChange(val) {
-                console.log(`当前页: ${val}`);
-            },
+
             //刷新页面
             firstblood(){
                 data_get_driver_list(this.page,this.pagesize,this.formInline).then(res=>{
@@ -142,13 +179,16 @@
                     this.tableDataTree = res.data.list;
                 })
             },
+
             //点击查询按纽，按条件查询列表
             getdata_search(event){
+                this.formInline.belongCity = this.$refs.area.selectedOptions.pop();
                 data_get_driver_list(this.page,this.pagesize,this.formInline).then(res=>{
                     this.dataTotal = res.data.totalCount;
                     this.tableDataTree = res.data.list;
                 })
             },
+            
             //获取车主状态列表
             getMoreInformation(){
                 data_get_driver_status().then(res=>{
@@ -172,3 +212,8 @@
         
     }
 </script>
+<style lang="scss">
+.carOwner .shipper_searchinfo label{
+    margin-right: 0;  
+}
+</style>
