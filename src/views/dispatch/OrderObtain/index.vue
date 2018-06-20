@@ -1,12 +1,16 @@
 <template>
     <div class="OpenseaRecommend clearfix">
+            
             <div class="classify_info">
                 <div class="btns_box">
                     <el-button type="primary" plain icon="el-icon-news" @click="addClassfy">新增</el-button>
                     <el-button type="primary" plain icon="el-icon-edit" @click="handleEdit">修改</el-button>
                     <el-button type="primary" plain icon="el-icon-delete" @click="handleDelete">删除</el-button>
-                    <el-button type="primary" plain icon="el-icon-bell" @click="handleUseStates">启用/禁用</el-button>
+                    <!-- <el-button type="primary" plain icon="el-icon-bell" @click="handleUseStates">启用/禁用</el-button> -->
                 </div>
+
+                <!-- <v-region @values="regionChange" class=""></v-region> -->
+
                 <div class="info_news">
                     <el-table
                         ref="multipleTable"
@@ -32,28 +36,24 @@
                           label="服务类型">
                         </el-table-column>
                         <el-table-column
-                          prop="shipperCarTypeName"
-                          label="货主用车类型">
+                          prop="carTypeName"
+                          label="用车类型">
                         </el-table-column>
                         <el-table-column
-                          prop="firstPush"
-                          label="第一轮推送">
+                          prop="obtainTimeM"
+                          label="公布中单时间">
                         </el-table-column>
                         <el-table-column
-                          prop="secondPush"
-                          label="第二轮及之后推送">
+                          prop="obtainKmM"
+                          label="公布中单距离">
                         </el-table-column>
-                        <el-table-column
-                          prop="visualCarTypeName"
-                          label="可见车主类型">
-                        </el-table-column>
-                        <el-table-column
+                        <!-- <el-table-column
                           prop="usingStatus"
                           label="状态">
                              <template  slot-scope="scope">
                                 {{ scope.row.usingStatus === '1' ? '启用' : '禁用' }}
                             </template>
-                        </el-table-column>
+                        </el-table-column> -->
                       </el-table>
                       <!-- 页码 -->
                     <div class="Pagination ">
@@ -70,18 +70,9 @@
                     </div>
                 </div>
                 <!-- 新增数据 -->
-                <addClassfy :dialogFormVisible.sync = "dialogFormVisible" :formtitle = "formtitle" @renovate="Onrenovate" @ifError="hint" ></addClassfy>
+                <addClassfy :dialogFormVisible.sync = "dialogFormVisible" :formtitle = "formtitle" @renovate="Onrenovate" ></addClassfy>
                 <!-- 修改数据 -->
-                <changeclassify :dialogFormVisibleChange.sync = "dialogFormVisibleChange" :formtitle = "formtitle_change" @ifError="hint" @renovate="Onrenovate" :changeforms = 'changeforms'></changeclassify>
-
-                <!-- 新增分类提示不可为空 -->
-                <div class="cue">
-                    <el-dialog
-                    :visible.sync="centerDialogVisible"
-                    center>
-                    <span>{{information}}</span>
-                    </el-dialog>
-                </div>
+                <changeclassify :dialogFormVisibleChange.sync = "dialogFormVisibleChange" :formtitle = "formtitle_change" @renovate="Onrenovate" :changeforms = 'changeforms'></changeclassify>
 
                 <!-- 删除信息提示 -->
                 <div class="delData">
@@ -98,18 +89,19 @@
                 </div>
             </div>
         <!-- loading -->
-        <!-- <spinner v-show="show"></spinner>  -->
+        <!-- <spinner v-show="show"></spinner>  -->\
+        <cue ref="cueInfo"></cue>
     </div>
 </template>
-
 <script type="text/javascript">
 
-import { data_dispatchList,data_ChangeStatus,data_DeletInfo } from '@/api/dispatch/OpenseaRecommend.js'
+import { data_dispatchList,data_DeletInfo } from '@/api/dispatch/OrderObtain.js'
 
 import '@/styles/dialog.scss'
 import spinner from '../../spinner/spinner'
 import addClassfy from './addclassify'
 import changeclassify from './changeclassify'
+import cue from '../../../components/Message/cue'
 
     export default{
 
@@ -137,13 +129,17 @@ import changeclassify from './changeclassify'
         components:{
             spinner,
             addClassfy,
-            changeclassify
+            changeclassify,
+            cue
         },
         
         mounted(){
             this.firstblood()
         },  
         methods: {
+             regionChange(data){
+                console.log(data);
+            },
             //子组件调用父组件刷新页面  
             Onrenovate(){
                 this.firstblood();
@@ -167,10 +163,10 @@ import changeclassify from './changeclassify'
                 if(Object.keys(this.checkedinformation).length == 0){
                     //未选择任何修改内容的提示
                     let information = "未选中任何修改内容";
-                    this.hint(information);
+                    this.$refs.cueInfo.hint(information)
                 }else if(this.checkedinformation.length >1){
                     let information = "不可修改多个内容";
-                    this.hint(information);
+                    this.$refs.cueInfo.hint(information)
                 }else{
                     console.log(this.checkedinformation)
                     this.dialogFormVisibleChange = true; 
@@ -182,7 +178,7 @@ import changeclassify from './changeclassify'
                 if(this.checkedinformation.length === 0){
                     //未选择任何修改内容的提示
                     let information = "未选中任何更改状态内容";
-                    this.hint(information);
+                    this.$refs.cueInfo.hint(information)
                 }else{
                     console.log(this.checkedinformation)
                     let statusID = [];
@@ -201,7 +197,7 @@ import changeclassify from './changeclassify'
                 if(this.checkedinformation.length === 0){
                     //未选择任何修改内容的提示
                     let information = "未选中任何删除内容";
-                    this.hint(information);
+                    this.$refs.cueInfo.hint(information)
                 }else{
                     console.log(this.checkedinformation)
                     let delID = [];
@@ -217,7 +213,8 @@ import changeclassify from './changeclassify'
             delDataInformation(){
                 this.delDialogVisible = false;
                 data_DeletInfo(this.delID).then(res => {
-                    // console.log(res)
+                    console.log(res)
+                    
                     this.firstblood();
                     
                 }).catch(res=>{
@@ -225,9 +222,6 @@ import changeclassify from './changeclassify'
                     this.hint(information);
                 })
                 
-            },
-            handleUse(index, row) {
-                console.log(index, row);
             },
             handleSizeChange(val) {
                 this.pagesize = val ;
@@ -241,35 +235,23 @@ import changeclassify from './changeclassify'
             firstblood(){
                 this.show = true;
                 data_dispatchList(this.page,this.pagesize,this.data).then(res=>{
-                    console.log(res)
+                    console.log('res:',res)
                     this.dataTotal = res.data.totalCount;
                     this.tableDataTree = res.data.list;
-                    this.tableDataTree.map(item=>{
-                        item.firstPush = item.firstRecommendKm +'公里/'+item.firstRecommendTime+'秒';
-                        item.secondPush = item.secondRecommendKm +'公里/'+item.secondRecommendTime+'秒';
+                    this.tableDataTree.forEach(item=>{
+                        item.obtainTimeM = item.obtainTime +'秒';
+                        item.obtainKmM = item.obtainKm +'公里';
                     })
                     this.show = false;
                     // console.log(this.tableDataTree)
                 })
-            },
-            //模糊查询 分类名称或者code
-            getdata_search(event){
-                // console.log(event)
-                this.show = true;
             },
             //新增分类信息
             addClassfy(){
                 this.dialogFormVisible = true;
             },
             
-            hint(val){
-                this.information = val;
-                this.centerDialogVisible = true;
-                let timer = setTimeout(()=>{
-                    this.centerDialogVisible = false;
-                    clearTimeout(timer)
-                },2000)
-            }
+           
         }
     }
 </script>

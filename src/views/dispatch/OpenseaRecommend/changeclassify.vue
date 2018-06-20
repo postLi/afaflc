@@ -108,8 +108,8 @@ export default {
     },
     mounted(){
         this.init();
-        console.log(this.changeforms)
-        console.log("this.visualCarTypeM:",this.visualCarTypeM)
+        // console.log(this.changeforms)
+        // console.log("this.visualCarTypeM:",this.visualCarTypeM)
         
         
     },
@@ -125,28 +125,42 @@ export default {
             }).catch(err => {
                 
             })
-            
-            console.log('13',this.changeforms)
-            console.log(this.visualCarTypeM)
         },
         //修改保存
         changeInfoSave(){
-            this.changeforms.visualCarType = this.visualCarTypeM.join(',') ;
             this.changeforms.usingStatus = this.usingStatus;
+
+            // console.log("this.visualCarTypeM:",this.visualCarTypeM)
+
+            let visualCar = [];
+            this.optionsVisualCarType.forEach(item => {
+                for(var i = 0; i<this.visualCarTypeM.length;i++){
+                    if(item.code == this.visualCarTypeM[i]){
+                        visualCar.push(item.name)
+                    }
+                }
+            })
+            // console.log(visualCar)
+            this.changeforms.visualCarTypeName = visualCar.join(',');
+            this.changeforms.visualCarType = this.visualCarTypeM.join(',') ;
+
            if(!this.changeforms.firstRecommendKm || !this.changeforms.firstRecommendTime ){
                 let information = "第一轮推送公里数和秒数必填且为数字整数";
-                this.$refs.cue.hint(information) 
+                this.$refs.cue.hint(information);
+                return 
             }
             else if(!this.changeforms.secondRecommendKm || !this.changeforms.secondRecommendTime ){
                 let information = "第二轮及以后推送公里数和秒数必填且为数字整数";
                 this.$refs.cue.hint(information)
+                return
             }
             else if(!this.changeforms.visualCarType){
                 let information = "请选择可见车主类型";
                 this.$refs.cue.hint(information)
+                return
             }else{
 
-                console.log(this.changeforms)           
+                // console.log(this.changeforms)           
                 data_ChangeData(this.changeforms).then(res=>{
                     console.log(res)
                     this.$emit('renovate')
@@ -169,6 +183,11 @@ export default {
                 if(!/^[0-9]+$/.test(event.target.value)){
                     let information = "请输入数字类型内容";
                     this.$refs.cue.hint(information)
+                    for(let item in this.changeforms){
+                        if(this.changeforms[item] == event.target.value){
+                            this.changeforms[item] = null;
+                        }
+                    }
                     event.target.focus()
                 }
             }

@@ -1,16 +1,13 @@
 <template>
   <div class="chooseCityList">
-        
         <el-cascader
         v-model="selectedOptions"
         :options="areaData"
         @active-item-change="handleItemMore"
         :props="props">
         </el-cascader>
-
   </div>
 </template>
-
 <script>
 
     import { data_getProvinceList,data_GetCityList } from '@/api/common.js'
@@ -18,7 +15,7 @@
 export default {
     name: 'getCityList',
     props: {
-
+        
     },
     data() {
       return {

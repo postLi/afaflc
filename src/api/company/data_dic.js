@@ -66,6 +66,21 @@ export function data_Delet(delID) {
   })
 }
 
+
+// 更改状态
+export function data_changeStatus(ID) {
+  return fetch({
+    url: '/'+baseurl+'/sysDict/batchForbiddenSysDict',
+    method: 'post',
+    data:ID
+  })
+}
+
+
+
+
+
+
 //添加数据
 export function data_AddForms(infoforms) {
   return fetch({

@@ -123,10 +123,9 @@
                         </div>
                     </div>
                 </div>
-                
                 <!-- 新增分类信息 -->
                 <div class="addclassify commoncss">
-                    <el-dialog :visible.sync="dialogFormVisible">
+                    <el-dialog :visible.sync="dialogFormVisible"  :before-close = "beforClose">
                         <div class="infoinner clearfix">
                             <div class="slot_info clearfix">
                                 <div class="newarea area_left">
@@ -170,7 +169,6 @@
                                                     </el-option>
                                                 </el-select>
                                             </div>
-                                               
                                         </div>
                                         <label>
                                             <span class="control">标准起步价</span>
@@ -260,7 +258,7 @@
                         </div>
                         <div slot="footer" class="dialog-footer">
                         <el-button type="primary" @click="newInfoSave">保 存</el-button>
-                        <el-button @click="closeAddNewInfo">取 消</el-button>
+                        <el-button @mouseover.native="setCanClose" @mouseout.native="canclose=false" @click="closeAddNewInfo">取 消</el-button>
                         </div>
                     </el-dialog>
                 </div>
@@ -348,6 +346,7 @@
                                 <span class="control">区域超里程费</span>         
                                 <el-input
                                     @blur="valuerules"
+                                   
                                     placeholder="请输入内容"
                                     v-model="changeforms.areaOutstripPrice"
                                     ref="newMorePrice"
@@ -358,7 +357,7 @@
                         </div>
                         <div slot="footer" class="dialog-footer">
                             <el-button type="primary" @click="changeInfoSave">保 存</el-button>
-                            <el-button @click="dialogFormVisible_change = false">取 消</el-button>
+                            <el-button  @click="dialogFormVisible_change = false">取 消</el-button>
                         </div>
                     </el-dialog>
                 </div>
@@ -403,6 +402,7 @@ import spinner from '../../spinner/spinner'
 
         data(){
             return{
+                canclose: false,
                 cacheData: {},
                 catchData:{},
                 show:false,//遮罩层
@@ -458,47 +458,16 @@ import spinner from '../../spinner/spinner'
                     label: '禁用'
                     }
                 ],
-                value2:'',
                 filterText: '',
-                    data1: [{
-                    label: '一级 1',
-                    children: [{
-                        label: '二级 1-1',
-                        children: [{
-                        label: '三级 1-1-1'
-                        }]
-                    }]
-                    }, {
-                    label: '一级 2',
-                    children: [{
-                        label: '二级 2-1',
-                        children: [{
-                        label: '三级 2-1-1'
-                        }]
-                    }, {
-                        label: '二级 2-2',
-                        children: [{
-                        label: '三级 2-2-1'
-                        }]
-                    }]
-                    }],
                 page:1,
                 pagesize:20,
                 formtitle:'新增分类信息',
-                currentPage4: 100,
+                currentPage4:1,
                 dialogFormVisible: false,
                 dialogFormVisible_change:false,
                 centerDialogVisible:false,
                 delDialogVisible:false,
-                nowcode:null,
                 dataTotal:0,
-                formlist: [{
-                    code: null,
-                    name: null,
-                    pid: null,
-                    remark: null,
-                    value: null
-                }],
                 changeforms:{
                     areaKm:null,
                     areaName:null,
@@ -513,17 +482,11 @@ import spinner from '../../spinner/spinner'
                     standardPrice:null,
                     standardPriceId:null,
                 },
-                pid:null,
-                pidname:null,
                 information:'你想知道什么',
-                waitchange:{},
                 delID:[],
                 delIDTree:'',
                 checkedinformation:[],
-                formLabelWidth: '80px',
-                input_search: null,
                 tableDataTree:[],
-                treeData:[],
                 defaultProps: {
                   children: 'children',
                   label: 'label'
@@ -543,9 +506,20 @@ import spinner from '../../spinner/spinner'
         watch: {
             filterText(val) {
                 this.$refs.tree2.filter(val);
-            }
+            },
+
         },
         methods: {
+            //关闭前事件
+            beforClose(done){
+                // console.log(done)
+                this.setCanClose();
+                done()
+            },
+            setCanClose(){
+                this.canclose=true
+                console.log(this.canclose)
+            },
             //根据服务分类和车辆类型选择车长
             choseStyle(val){
                 console.log(val)
@@ -729,11 +703,6 @@ import spinner from '../../spinner/spinner'
                 if (!value) return true;
                 return data.name.indexOf(value) !== -1;
             },
-            //sousuodizhi
-            filterNode(value, data){
-                if (!value) return true;
-                return data.label.indexOf(value) !== -1;
-            },
             //shuangji
             moreinfo(row, event){
                 console.log(row, event)
@@ -742,18 +711,13 @@ import spinner from '../../spinner/spinner'
             //点击选中当前行
             clickDetails(row, event, column){
                 this.$refs.multipleTable.toggleRowSelection(row);
-                this.waitchange = row;
             },
             //新增关闭返回初始内容
             closeAddNewInfo(){
                 this.dialogFormVisible = false;
-                this.forms = [{
-                    code: null,
-                    name: null,
-                    pid: null,
-                    remark: null,
-                    value: null
-                }]
+                this.newPrice = null;//区域起步价
+                this.newInfoKm = null;//区域起步价公里
+                this.newMorePrice = null;//区域超里程费
             },
             //判断是否选中
             getinfomation(selection){
@@ -773,26 +737,12 @@ import spinner from '../../spinner/spinner'
                     console.log(this.checkedinformation)
                     this.dialogFormVisible_change = true;
                     this.checkedinformation.map((item)=>{
+                        this.changeforms = item;
                         if(item.cityId){
                             this.changeforms.cityId = item.cityId;
                         }else{
                             this.changeforms.cityId = item.provinceId;
                         }
-                        this.changeforms.areaPid = item.areaPid;
-                        this.changeforms.serivceCode = item.serivceCode;
-                        this.changeforms.carType = item.carType;
-                        this.changeforms.areaKm = item.areaKm;
-                        this.changeforms.carTypeName = item.carTypeName;
-                        this.changeforms.serviceName = item.serviceName;
-                        this.changeforms.standardKm = item.standardKm;
-                        this.changeforms.standardPrice = item.standardPrice;
-                        this.changeforms.outstripPrice = item.outstripPrice;
-                        this.changeforms.areaOutstripPrice = item.areaOutstripPrice;
-                        this.changeforms.areaPrice = item.areaPrice;
-                        this.changeforms.standardKm = item.standardKm;
-                        this.changeforms.standardPrice = item.standardPrice;
-                        this.changeforms.areaName = item.areaName;
-                        this.changeforms.standardPriceId = item.standardPriceId;
                         this.changeforms. carTypeStyle= item.carLength+'*'+item.carWidth+'*'+item.carHeight+'M';
                     })
 
@@ -949,16 +899,19 @@ import spinner from '../../spinner/spinner'
             },
             //验证数据值
             valuerules(event){
-                console.log(event)
-                if(!event.target.value){
+                let _this = this
+                console.log('this.canclose',this.canclose)
+                if(!event.target.value || this.canclose){
                     return 
                 }else{
                     if(!/^[0-9\.]+$/.test(event.target.value)){
                         let information = "请输入数字类型内容";
-                        this.hint(information);
-                        event.target.focus()
+                        _this.hint(information);
+                        // event.target.focus()
                     }
                 }
+                
+            
             },
             hint(val){
                 this.information = val;

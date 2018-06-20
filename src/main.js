@@ -2,6 +2,8 @@ import 'babel-polyfill'
 window.Promise = Promise
 import Vue from 'vue'
 import ElementUI from 'element-ui'
+//地图插件
+import vRegion from 'v-region';
 import 'element-ui/lib/theme-chalk/index.css'
 // import locale from 'element-ui/lib/locale/lang/en'
 import App from './App'
@@ -18,6 +20,8 @@ import './mock/'
 
 // Vue.use(ElementUI, { locale })
 Vue.use(ElementUI)
+//
+Vue.use(vRegion);
 
 Vue.config.productionTip = false
 

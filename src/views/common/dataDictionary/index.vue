@@ -6,8 +6,8 @@
               node-key="id"
               :highlight-current = "true"
               :expand-on-click-node = "false"
+                :default-expanded-keys="[1]"
               @node-click="handleNodeClick"
-              default-expand-all
               :default-checked-keys="[]"
               :props="defaultProps">
             </el-tree>
@@ -198,17 +198,17 @@
 
 <script type="text/javascript">
 
-import { data_Dic,data_Trees,data_Search,data_CreatCode,data_AddForms,data_Delet,data_ChangeForms,data_CreatCode_top } from '../../../api/company/data_dic.js'
+import { data_Dic,data_Trees,data_Search,data_CreatCode,data_AddForms,data_Delet,data_ChangeForms,data_CreatCode_top,data_changeStatus } from '../../../api/company/data_dic.js'
 import '../../../styles/dialog.scss'
-
 
     export default{
 
         data(){
             return{
+                ifclose:false,
                 pid:null,
                 pidname:null,
-                labelName:null,
+                labelName:'无',
                 page:1,
                 pagesize:20,
                 formtitle:'新增分类信息',
@@ -241,7 +241,13 @@ import '../../../styles/dialog.scss'
                 formLabelWidth: '80px',
                 input_search: null,
                 tableDataTree:[],
-                treeData:[],
+                treeData:[
+                    {
+                        label:'全部',
+                        id:1,
+                        children:[],
+                    }
+                ],
                 defaultProps: {
                   children: 'children',
                   label: 'label'
@@ -253,8 +259,17 @@ import '../../../styles/dialog.scss'
                 }
             }
         },
+        watch:{
+            treeData:{
+                handler(newValue, oldValue){
+                    
+                    console.log("newValue, oldValue:",newValue, oldValue)
+                    //  this.firstblood()
+                },
+                deep:true
+            }
+        },
         mounted(){
-            // this.getdata_dic();
             this.firstblood()
         },  
         methods: {
@@ -318,7 +333,6 @@ import '../../../styles/dialog.scss'
             //判断是否选中
             getinfomation(selection){
                 this.checkedinformation = selection;
-                console.log(this.checkedinformation)
             },
             //修改
             handleEdit() {
@@ -336,19 +350,12 @@ import '../../../styles/dialog.scss'
                 }else{
                     console.log(this.checkedinformation)
                     this.dialogFormVisible_change = true;
-                    this.changeform.id = this.checkedinformation[0].id;
-                    this.changeform.pid = this.checkedinformation[0].pid;
-                    this.changeform.code = this.checkedinformation[0].code;
-                    this.changeform.name = this.checkedinformation[0].name;
-                    this.changeform.value = this.checkedinformation[0].value;
-                    this.changeform.remark = this.checkedinformation[0].remark;
-                        
+                    this.changeform = this.checkedinformation[0];
                 }
             },
             //修改关闭恢复数据
             closeChangeInfo(){
                 this.dialogFormVisible_change = false;
-                
             },
             // 禁用/启用
             handleUseStates(){
@@ -358,18 +365,16 @@ import '../../../styles/dialog.scss'
                     this.hint(information);
                 }else{
 
-                    // this.checkedinformation.forEach(item=>{
+                    let statusID = [];
 
-                    // })
-                    let statusform = {
-                        id:this.checkedinformation[0].id,
-                        status:this.checkedinformation[0].status
-                    }
-                    console.log(this.checkedinformation)
-                    data_ChangeForms(statusform).then( res=>{
-                        if(res.status == 200){
-                           this.getInformation();
-                        }
+                    this.checkedinformation.map((item)=>{
+                        return statusID.push(item.id)
+                    })
+        
+                    data_changeStatus(statusID).then( res=>{
+                        console.log(res)
+                        this.getInformation();
+
                     })
                 }
             },
@@ -383,14 +388,12 @@ import '../../../styles/dialog.scss'
                     console.log(this.checkedinformation)
                     let delID = [];
                     let isOK = true;
-                    let isMore = false;
                     this.checkedinformation.map((item)=>{
-                        if(item.isDefault == 1){
+                        if(item.isDefault == true){
                             isOK = false;
                         }
                         return delID.push(item.id)
                     })
-                    console.log(isOK,isMore)
                     if(!isOK){
                         let information = "存在初始化数据不能删除";
                         this.hint(information);
@@ -398,13 +401,13 @@ import '../../../styles/dialog.scss'
                         this.delDialogVisible = true;
                         this.delID = delID;
                     }
-                    console.log(this.delID)
                 }
             },
             //确认删除
             delDataInformation(){
                 this.delDialogVisible = false;
                 data_Delet(this.delID).then(res => {
+                    console.log(res)
                     if(res.status == 200){
                         this.getInformation();
                     }
@@ -414,30 +417,29 @@ import '../../../styles/dialog.scss'
                 })
                 
             },
-            handleUse(index, row) {
-                console.log(index, row);
-            },
             handleSizeChange(val) {
                 this.pagesize = val ;
-                this.firstblood();
+                this.getInformation();
             },
             handleCurrentChange(val) {
                 console.log(`当前页: ${val}`);
+                this.page = val;
+                this.getInformation();
             },
+            //数结构选择  渲染数据
             handleNodeClick(data,checked){  
                 console.log(data)
                 this.pid = data.id;
                 this.pidname = data.label;
                 this.forms[0].pid = this.pid;
-                this.delIDTree = data.id;
                 data_Trees(this.page,this.pagesize,this.pid).then(res =>{
+                    console.log(res)
                     if( res.data.list){
                         res.data.list.forEach(function(item){
-                            if(checked.data.pid){
+                            // if(checked.data.pid){
                                 item.uplabel = checked.data.label;
-                            }else{
-                                item.uplabel = checked.data.label;
-                            }
+                            // }else{
+                            // }
                         })
                         this.tableDataTree = res.data.list;
                     }else{
@@ -447,14 +449,13 @@ import '../../../styles/dialog.scss'
 
                 })
             },
-            //刷新页面
+            //初始化渲染数据
             firstblood(){
                  data_Dic().then(res =>{ 
-                     console.log(res)
-                    if(res.status == 200 && res.data.length !=0){
-                        this.treeData = res.data;
-                        this.pid = null;
-                        this.pidname = '无';
+                    console.log(res)
+                    if(res.data.length !=0){
+                        this.treeData[0].children = res.data;
+                        console.log(this.treeData)
                         this.getInformation();
                     }else{
                         console.log('000')
@@ -463,12 +464,11 @@ import '../../../styles/dialog.scss'
             },
             //刷新数据
             getInformation(){
-                console.log(this.pid)
+                console.log(this.page,this.pagesize,this.pid)
                 data_Trees(this.page,this.pagesize,this.pid).then(res =>{
                     console.log(res)
                     if(res.status == 200 && res.data.list){
                         res.data.list.forEach(function(item){
-                           
                             if(item.pid == null){
                                 item.uplabel = '无';
                             }else{
@@ -477,7 +477,7 @@ import '../../../styles/dialog.scss'
                         })
                         this.tableDataTree = res.data.list;
                         this.dataTotal= res.data.totalCount;
-                        console.log(this.pidname)
+                        // console.log(this.pidname)
                     }else{
                        return
                     }
@@ -499,17 +499,12 @@ import '../../../styles/dialog.scss'
             //新增分类信息获取code值
             addClassfy(){
                 this.dialogFormVisible = true;
-                data_CreatCode(this.pid).then(res => {
-                    if(res.status == 200){
-                        this.forms[0].code = res.data;
-                        this.nowcode = res.data;
-                    }
-                })
+                console.log('this.pid:',this.pid)
+                this.currentValue(this.pid);
             },
             //添加最高层获取code
             currentValue(val){
-                console.log(val)
-                if(val == ''){
+                if(val == '' || val == null){
                     data_CreatCode_top().then(res => {
                         console.log(res)
                         if(res.status == 200){
@@ -520,6 +515,7 @@ import '../../../styles/dialog.scss'
                     })
                 }else{
                     data_CreatCode(this.pid).then(res => {
+                        console.log()
                         if(res.status == 200){
                             this.forms[0].code = res.data;
                             this.nowcode = res.data;
@@ -610,7 +606,7 @@ import '../../../styles/dialog.scss'
         height:100%;
         
         .side_left{
-            width: 13%;
+            width: 15%;
             height:100%;
             float:left;
             padding-top:10px;
@@ -620,7 +616,7 @@ import '../../../styles/dialog.scss'
         }
         .side_right{
             height:100%;
-            width:87%;
+            width:85%;
             padding-bottom: 20px;
             float:left;
             position: relative;

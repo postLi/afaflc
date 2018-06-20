@@ -11,16 +11,9 @@
 
 <script>
 export default {
-    name: 'getCityList',
+    name: 'cue',
     props: {
-        // centerDialogVisible:{
-        //     type:Boolean,
-        //     required:true
-        // },
-        // information:{
-        //     type:String,
-        //     required:true
-        // }
+
     },
     data() {
       return {

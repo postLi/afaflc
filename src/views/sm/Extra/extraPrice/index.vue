@@ -329,13 +329,7 @@ import spinner from '../../../spinner/spinner'
                 }else{
                     console.log(this.checkedinformation)
                     this.dialogFormVisible_change = true; 
-                    this.changeform.extraId = this.checkedinformation[0].extraId;
-                    this.changeform.serivceCode = this.checkedinformation[0].serivceCode;
-                    this.changeform.serviceName = this.checkedinformation[0].serviceName;
-                    this.changeform.extraDes = this.checkedinformation[0].extraDes;
-                    this.changeform.extraName = this.checkedinformation[0].extraName;
-                    this.changeform.isFree = this.checkedinformation[0].isFree;
-                    this.changeform.extraPrice = this.checkedinformation[0].extraPrice;
+                    this.changeform = this.checkedinformation[0];
                 }
             },
             // 禁用/启用
@@ -451,8 +445,8 @@ import spinner from '../../../spinner/spinner'
                         }
                             item.serivceCode = this.classfyradio
                     })
-                    console.log(this.forms)
-                    console.log(isOK)
+                    // console.log(this.forms)
+                    // console.log(isOK)
                     if(isOK){
                         data_AddForms(this.forms).then(res=>{
                             // console.log(res)
@@ -491,6 +485,15 @@ import spinner from '../../../spinner/spinner'
                     if(!/^[0-9\.]+$/.test(event.target.value)){
                         let information = "请输入数字类型内容";
                         this.hint(information);
+                         this.forms.forEach(el => {
+                            for(let item in el){
+                                console.log(item);
+                                if(el[item] == event.target.value){
+                                    el[item] = null;
+                                }
+                            }
+                        })
+                        
                         event.target.focus()
                     }
                 }

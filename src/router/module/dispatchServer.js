@@ -4,27 +4,33 @@ const _import = require('../_import_' + process.env.NODE_ENV)
 export default {
   path: '/dispatch',
   component: Layout,
-  redirect: '/dispatch/OpenseaRecommend',
+  redirect: '/dispatch/DispatchTrack',
   icon: 'chengyunshang',
   name: '调度管理',
   noDropdown: true, 
   children: [
+    {
+      path: '/dispatch/DispatchTrack', icon: 'QQ', name: '调度追踪', component: _import('dispatch/DispatchTrack/index'), meta: { role: ['admin'], title: '调度追踪',stitle: '调度',  noCache: true }
+    },
   {
     path: '/dispatch/OpenseaRecommend', icon: 'QQ', name: '公海推单', component: _import('dispatch/OpenseaRecommend/index'), meta: { role: ['admin'], title: '公海推单',stitle: '公海',  noCache: true }
   },
 //   {
 //     path: '/sm/standardPrice', icon: 'QQ', name: '标准信息及定价', component: _import('sm/standardPrice/index'), meta: { role: ['admin'], title: '标准信息及定价',stitle: '标准',  noCache: true }
 //   },
-//   {          
-//     path: '/sm/Extra', icon: 'QQ', name: '附加费管理',hidden: false, component: _import('sm/index'), meta: { role: ['admin'], title: '附加费管理', stitle:'附加', noCache: true },
-//       children: [{
-//         path: '/sm/Extra/extraPrice', name: '额外服务管理', component: _import('sm/Extra/extraPrice/index'), meta: { role: ['admin'], title: '额外服务管理',stitle: '额外',  noCache: true }
-//       },
-//       {
-//         path: '/sm/Extra/waitPrice', name: '等候费用定价', component: _import('sm/Extra/waitPrice/index'), meta: { role: ['admin'], title: '等候费用定价', stitle: '等候', noCache: true }
-//       }
-//     ]
-//   }, 
+  {          
+    path: '/dispatch/Directional', icon: 'QQ', name: '定向推单设置',hidden: false, component: _import('dispatch/index'), meta: { role: ['admin'], title: '定向推单设置', stitle:'设置', noCache: true },
+      children: [{
+        path: '/dispatch/Directional/DriverShipper', icon: 'QQ',name: '绑定车主', component: _import('dispatch/Directional/DriverShipper/index'), meta: { role: ['admin'], title: '绑定车主',stitle: '车主',  noCache: true }
+      },
+      {
+        path: '/dispatch/Directional/DriverPlatform', icon: 'QQ', name: '平台专属', component: _import('dispatch/Directional/DriverPlatform/index'), meta: { role: ['admin'], title: '平台专属', stitle: '平台', noCache: true }
+      }
+    ]
+  }, 
+  {
+    path: '/dispatch/OrderObtain', icon: 'QQ', name: '中单设置', component: _import('dispatch/OrderObtain/index'), meta: { role: ['admin'], title: '中单设置',stitle: '中单',  noCache: true }
+  },
 
 ]
 }

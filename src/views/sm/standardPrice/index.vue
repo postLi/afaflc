@@ -159,7 +159,6 @@
                                     placeholder="宽"
                                     maxlength="5"
                                     @blur="valuerules"
-                                    
                                     ref="carWidth"
                                     v-model="forms.carWidth"
                                     clearable>
@@ -257,7 +256,7 @@
                     <el-dialog title='修改分类信息'  :visible.sync="dialogFormVisible_change">
                         <div class="chooseinfo">
                             <div class="chooseinfo-item">
-                                <p><span>* </span>选择服务分类 ：</p>
+                                <p><span>* </span>当前服务分类 ：</p>
                                 <el-input
                                     v-model="changeforms.serviceName"
                                     disabled
@@ -265,7 +264,7 @@
                                 </el-input>
                             </div>
                             <div class="chooseinfo-item">
-                                <p><span>* </span>选择车辆类型 ：</p>
+                                <p><span>* </span>当前车辆类型 ：</p>
                                  <el-input
                                     v-model="changeforms.carTypeName"
                                     disabled
@@ -273,7 +272,7 @@
                                 </el-input>
                             </div>
                             <div class="chooseinfo-item">
-                                <p>&nbsp;&nbsp;选择车辆规格 ：</p>
+                                <p>&nbsp;&nbsp;当前车辆规格 ：</p>
                                 <el-input
                                     v-model="changeforms.specName"
                                     disabled
@@ -285,19 +284,19 @@
                             <div class="detailinfo">
                                 <p><span>* </span>车长 ：</p>
                                 <el-input
-                                    @blur="valuerules"
+                                    @blur="valuerules_change"
                                     placeholder="长"
                                     v-model="changeforms.carLength"
                                     clearable>
                                 </el-input>
                                 <el-input
-                                    @blur="valuerules"
+                                    @blur="valuerules_change"
                                     placeholder="宽"
                                     v-model="changeforms.carWidth"
                                     clearable>
                                 </el-input>
                                 <el-input
-                                    @blur="valuerules"
+                                    @blur="valuerules_change"
                                     placeholder="高"
                                     v-model="changeforms.carHeight"
                                     clearable>
@@ -311,14 +310,14 @@
                             <div class="detailinfo">
                                 <p><span>* </span>负载量 ：</p>
                                 <el-input
-                                    @blur="valuerules"
+                                    @blur="valuerules_change"
                                     class="morewidth"
                                     v-model="changeforms.capacityTon"
                                     clearable>
                                 </el-input>
                                 <span class="dotted">吨</span>
                                 <el-input
-                                    @blur="valuerules"
+                                    @blur="valuerules_change"
                                     class="morewidth"                                    
                                     v-model="changeforms.capacitySquare"
                                     clearable>
@@ -331,14 +330,14 @@
                             <div class="detailinfo">
                                 <p><span>* </span>标准起步价 ：</p>
                                 <el-input
-                                    @blur="valuerules"
+                                    @blur="valuerules_change"
                                     class="morewidth"
                                     v-model="changeforms.standardPrice"
                                     clearable>
                                 </el-input>
                                 <span class="dotted">元</span>
                                 <el-input
-                                    @blur="valuerules"
+                                    @blur="valuerules_change"
                                     class="morewidth"
                                     v-model="changeforms.standardKm"
                                     clearable>
@@ -351,7 +350,7 @@
                             <div class="detailinfo">
                                 <p><span>* </span>标准超里程费 ：</p>
                                 <el-input
-                                    @blur="valuerules"
+                                    @blur="valuerules_change"
                                     class="morewidth"
                                     v-model="changeforms.outstripPrice"
                                     clearable>
@@ -415,30 +414,6 @@ import spinner from '../../spinner/spinner'
 
         data(){
             return{
-                    formclassfy:['同城','零担','省级'],
-                    radio2:'',
-                     data1: [{
-                        label: '一级 1',
-                        children: [{
-                            label: '二级 1-1',
-                            children: [{
-                            label: '三级 1-1-1'
-                            }]
-                        }]
-                        }, {
-                        label: '一级 2',
-                        children: [{
-                            label: '二级 2-1',
-                            children: [{
-                            label: '三级 2-1-1'
-                            }]
-                        }, {
-                            label: '二级 2-2',
-                            children: [{
-                            label: '三级 2-2-1'
-                            }]
-                        }]
-                        }],
                 forms:{
                     serivceCode:null,
                     carType:null,
@@ -454,20 +429,7 @@ import spinner from '../../spinner/spinner'
                     servicePic:'',
                 },
                 specList:[],
-                changeforms:{
-                    serivceCode:null,
-                    carType:null,
-                    spec:null,
-                    carLength:null,
-                    carWidth:null,
-                    carHeight:null,
-                    capacityTon:null,
-                    capacitySquare:null,
-                    standardPrice:null,
-                    standardKm:null,
-                    outstripPrice:null,
-                    servicePic:'',
-                },
+                changeforms:{},
                 valueService:null,
                 optionsService:[
                     {
@@ -611,26 +573,7 @@ import spinner from '../../spinner/spinner'
                 }else{
                     console.log(this.checkedinformation)
                     this.dialogFormVisible_change = true;
-                    this.checkedinformation.map((item)=>{
-                        this.changeforms.serivceCode = item.serivceCode;
-                        this.changeforms.carType = item.carType;
-                        this.changeforms.carTypeName = item.carTypeName;
-                        this.changeforms.specName = item.specName;
-                        this.changeforms.carLength = item.carLength;
-                        this.changeforms.carWidth = item.carWidth;
-                        this.changeforms.carHeight = item.carHeight;
-                        this.changeforms.serviceName = item.serviceName;
-                        this.changeforms.standardKm = item.standardKm;
-                        this.changeforms.standardPrice = item.standardPrice;
-                        this.changeforms.outstripPrice = item.outstripPrice;
-                        this.changeforms.capacityTon = item.capacityTon;
-                        this.changeforms.standardKm = item.standardKm;
-                        this.changeforms.standardPrice = item.standardPrice;
-                        this.changeforms.capacitySquare = item.capacitySquare;
-                        this.changeforms.servicePic = item.servicePic;
-                        this.changeforms.standardPid = item.standardPid;
-                        this.changeforms.spec = item.spec;
-                    })
+                    this.changeforms  = this.checkedinformation[0];
                 }
             },
             // 禁用/启用
@@ -819,14 +762,34 @@ import spinner from '../../spinner/spinner'
             },
             //验证数据值
             valuerules(event){
-                // console.log(event)
                 if(!event.target.value){
                     return 
                 }else{
                     if(!/^[0-9\.]+$/.test(event.target.value)){
                         let information = "请输入数字类型内容";
                         this.hint(information);
-                        event.target.focus()
+                        for(let item in this.forms){
+                            if(this.forms[item] == event.target.value){
+                                this.forms[item] = null;
+                            }
+                        }
+                        // event.target.focus()
+                    }
+                }
+            },
+            valuerules_change(event){
+                if(!event.target.value){
+                    return 
+                }else{
+                    if(!/^[0-9\.]+$/.test(event.target.value)){
+                        let information = "请输入数字类型内容";
+                        this.hint(information);
+                        for(let item in this.changeforms){
+                            if(this.changeforms[item] == event.target.value){
+                                this.changeforms[item] = null;
+                            }
+                        }
+                        // event.target.focus()
                     }
                 }
             },

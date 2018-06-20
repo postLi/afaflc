@@ -121,11 +121,11 @@
                     </div>
                 </div>
 
-                <span>{{$store.state.count}}</span>
+                <!-- <span>{{$store.state.count}}</span> -->
 
                 <!-- 新增分类信息 -->
-                <div class="addclassify commoncss">
-                    <el-dialog title='新增等待费用'  :visible.sync="dialogFormVisible">
+                <div class="waitAdd commoncss">
+                    <el-dialog title='新增等待费用'  :visible.sync="dialogFormVisible" :before-close = "beforClose">
                         <div class="newWait">
                             <div class="clearfix">
                                 <div class="chooseAera chooseCommon fl">
@@ -218,13 +218,13 @@
                         </div>
                         <div slot="footer" class="dialog-footer">
                         <el-button type="primary" @click="newInfoSave">保 存</el-button>
-                        <el-button @click="closeAddNewInfo">取 消</el-button>
+                        <el-button @click="closeAddNewInfo"  @mouseover.native="setCanClose" @mouseout.native="canclose=false">取 消</el-button>
                         </div>
                     </el-dialog>
                 </div>
 
                 <!-- 修改分类信息 -->
-                <div class="changeclassify commoncss">
+                <div class="changeclassify commoncss" :before-close = "beforClose">
                     <el-dialog title='修改分类信息'  :visible.sync="dialogFormVisible_change">
                         <div class="changeWait">
                             <div class="changeifno">
@@ -342,6 +342,7 @@ import { REGEX }  from '@/utils/validate'
 
         data(){
             return{
+                canclose: false,
                 cacheData: {},
                 catchData:{},
                 show:false,//遮罩层
@@ -349,7 +350,6 @@ import { REGEX }  from '@/utils/validate'
                 newAreaData:[],//新增界面树结构数据
                 newCityList:[],
                 citylist:[],
-                citywide:null,
                 provinceId:null,
                 cityId:null,
                 chooseAllKeys:[],
@@ -367,7 +367,6 @@ import { REGEX }  from '@/utils/validate'
                     children: 'children'
                 },
                 serverCheckList:[],
-                serverBoxs:[],
                 carCheckList:[],
                 carBoxs:[],
                 valueService:null,
@@ -401,37 +400,21 @@ import { REGEX }  from '@/utils/validate'
                     label: '禁用'
                     }
                 ],
-                value2:'',
                 filterText: '',
                 page:1,
                 pagesize:20,
                 remarkinfo:'例：免费0.25小时，每15分钟加收5元，不足15分钟按15分钟计价',
                 formtitle:'新增分类信息',
-                currentPage4: 100,
+                currentPage4: 1,
                 dialogFormVisible: false,
                 dialogFormVisible_change:false,
                 centerDialogVisible:false,
                 delDialogVisible:false,
-                nowcode:null,
                 dataTotal:0,
-                changeforms:{
-                    carType:null,
-                    cityId:null,
-                    freeTime:null,
-                    intervalTime:null,
-                    serviceCode:null,
-                    timeOutstripPrice:null,
-                    waitPriceDes:null,
-                },
-                pid:null,
-                pidname:null,
+                changeforms:{},
                 information:'你想知道什么',
-                waitchange:{},
                 delID:[],
-                delIDTree:'',
                 checkedinformation:[],
-                formLabelWidth: '80px',
-                input_search: null,
                 tableDataTree:[],
                 treeData:[],
                 defaultProps: {
@@ -455,6 +438,16 @@ import { REGEX }  from '@/utils/validate'
             }
         },
         methods: {
+             //关闭前事件
+            beforClose(done){
+                // console.log(done)
+                this.setCanClose();
+                done()
+            },
+            setCanClose(){
+                this.canclose = true;
+                console.log(this.canclose)
+            },
             //获取  服务和车辆 类型列表
             getMoreInformation(){
                 data_CarList().then(res=>{
@@ -589,7 +582,6 @@ import { REGEX }  from '@/utils/validate'
             //点击选中当前行
             clickDetails(row, event, column){
                 this.$refs.multipleTable.toggleRowSelection(row);
-                this.waitchange = row;
             },
             //新增关闭返回初始内容
             closeAddNewInfo(){
@@ -618,21 +610,12 @@ import { REGEX }  from '@/utils/validate'
                 }else{
                     console.log(this.checkedinformation)
                     this.dialogFormVisible_change = true;
+                    this.changeforms = this.checkedinformation[0];
                     if(this.checkedinformation[0].cityId){
                         this.changeforms.cityId = this.checkedinformation[0].cityId;
                     }else{
                         this.changeforms.cityId = this.checkedinformation[0].provinceId;
                     }
-                    this.changeforms.serviceCode = this.checkedinformation[0].serviceCode;
-                    this.changeforms.serviceName = this.checkedinformation[0].serviceName;
-                    this.changeforms.carType = this.checkedinformation[0].carType;
-                    this.changeforms.carTypeName = this.checkedinformation[0].carTypeName;
-                    this.changeforms.freeTime = this.checkedinformation[0].freeTime;
-                    this.changeforms.intervalTime = this.checkedinformation[0].value;
-                    this.changeforms.timeOutstripPrice = this.checkedinformation[0].timeOutstripPrice;
-                    this.changeforms.waitPriceDes = this.checkedinformation[0].waitPriceDes;
-                    this.changeforms.intervalTime = this.checkedinformation[0].intervalTime;
-                    this.changeforms.areaName = this.checkedinformation[0].areaName;
                 }
             },
             // 禁用/启用
@@ -785,7 +768,8 @@ import { REGEX }  from '@/utils/validate'
             },
             //验证数据值
             valuerules(event){
-                 if(!event.target.value){
+                console.log(this.canclose)
+                if(!event.target.value || this.canclose){
                     return 
                 }else{
                     if(!REGEX.ONLY_NUMBER.test(event.target.value)){
@@ -855,7 +839,7 @@ import { REGEX }  from '@/utils/validate'
                padding:8px 20px;
             }
         }
-        .addclassify,.changeclassify{
+        .waitAdd,.changeclassify{
             .el-dialog{
                 position: relative;
                 width: 820px;

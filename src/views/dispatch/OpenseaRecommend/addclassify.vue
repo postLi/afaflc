@@ -102,13 +102,17 @@ export default {
       return {
         forms:{
             areaCode:null,//地区code
+            areaCodeName:null,
             firstRecommendKm:null,//第一次推送公里
             firstRecommendTime:null,//第一次推送时间
             secondRecommendKm:null,//第二次
             secondRecommendTime:null,//第二次
             serivceCode:null,//服务类型
+            serivceCodeName:null,
             shipperCarType:null,//货主用车类型
+            shipperCarTypeName:null,
             visualCarType:null,//可见车主类型
+            visualCarTypeName:null,
             usingStatus:'1',//起始状态
         },
         optionsService:null,//服务选项
@@ -134,6 +138,8 @@ export default {
     },
     mounted(){
         this.init();
+        console.log("this.$refs.area",this.$refs.area)
+
     },
     methods: {
         close(){
@@ -151,10 +157,49 @@ export default {
             })
         },
         newInfoSave(){
-            // this.information = '666ca'
-            // this.$refs.cue.hint(this.information)
-            this.forms.areaCode = this.$refs.area.selectedOptions.pop();
-            this.forms.visualCarType = this.visualCarType.join(',')
+            if(this.$refs.area.selectedOptions.length > 1){
+                let province;
+                this.$refs.area.areaData.forEach((item) =>{
+                    if(item.code == this.$refs.area.selectedOptions[0]){
+                        province = item
+                    }
+                })
+                province.children.forEach( item => {
+                    if(item.code == this.$refs.area.selectedOptions[1]){
+                        this.forms.areaCode = item.code;
+                        this.forms.areaCodeName = item.name;
+                    }
+                })
+            }else{
+                this.$refs.area.areaData.forEach((item) =>{
+                    if(item.code == this.$refs.area.selectedOptions[0]){
+                        this.forms.areaCode = item.code;
+                        this.forms.areaCodeName = item.name;
+                    }
+                })
+            }
+            let visualCar = [];
+            this.optionsVisualCarType.forEach(item => {
+                for(var i = 0; i<this.visualCarType.length;i++){
+                    if(item.code == this.visualCarType[i]){
+                        visualCar.push(item.name)
+                    }
+                }
+            })
+            console.log(visualCar)
+            this.forms.visualCarTypeName = visualCar.join(',');
+            this.forms.visualCarType = this.visualCarType.join(',');
+
+            if(this.forms.serivceCode){
+                
+                this.forms.serivceCodeName = this.optionsService.find(item => item.code === this.forms.serivceCode)['name'];
+            }
+            if(this.forms.shipperCarType){
+
+                this.forms.shipperCarTypeName = this.optionsCarType.find(item => item.code === this.forms.shipperCarType)['name'];
+            }
+
+
             if(!this.forms.areaCode){
                 let information = "请选择地区";
                 this.$refs.cue.hint(information)
@@ -179,14 +224,12 @@ export default {
                 let information = "请选择可见车主类型";
                 this.$refs.cue.hint(information)
             }else{
-                
-                console.log(this.forms)
-    
                 data_NewData(this.forms).then(res=>{
                     console.log(res)
                     this.$emit('renovate')
                 })
             }
+            console.log(this.forms)
         },
         closeAddNewInfo(){
             this.close();  
@@ -204,18 +247,22 @@ export default {
             
             console.log(this.forms)
         },
-        //验证数据值
-        valuerules(event){
+        valuerules(){
             if(!event.target.value){
                 return 
             }else{
                 if(!/^[0-9]+$/.test(event.target.value)){
                     let information = "请输入数字类型内容";
                     this.$refs.cue.hint(information)
+                    for(let item in this.forms){
+                        if(this.forms[item] == event.target.value){
+                            this.forms[item] = null;
+                        }
+                    }
                     event.target.focus()
                 }
             }
-        },
+        }
     },
    
 }
