@@ -67,12 +67,16 @@
 
             </div>
             <div class="export">
-                <el-button type="primary" plain @click="handleCreate">新增</el-button>
-                <!-- <driverNewDialog
-                 showme.sync="driverNewdailogFlag"
-                 :templateItem="templateItem">
-
-                </driverNewDialog> -->
+                <!-- <el-button type="primary" plain @click="handleCreate">新增</el-button> -->
+                <driver-newTemplate
+                 btntext="新增"
+                 :plain="true"
+                 type="primary" 
+                 btntype="primary"
+                 icon="el-icon-news"
+                 editType="add"
+                 btntitle="新增车主">
+                </driver-newTemplate>
             </div>
             <div class="info_news">
                 <el-table
@@ -132,10 +136,10 @@
 </template>
 <script type="text/javascript">
     import {data_get_driver_list,data_get_driver_status} from '../../../api/users/carowner/total_carowner.js'
-    // import DriverNewDialog from '../carowner/driverNewDialog'
+    import DriverNewTemplate from '../carowner/driver-newTemplate'
     import GetCityList from '@/components/GetCityList'
     export default {
-        data:function(){
+        data(){
             return{
                 page:1,//当前页
                 pagesize:20,//每页显示数
@@ -159,8 +163,8 @@
             }
         },
         components:{
-            GetCityList
-            // DriverNewDialog
+            GetCityList,
+            DriverNewTemplate
         },
         mounted(){
             this.firstblood()

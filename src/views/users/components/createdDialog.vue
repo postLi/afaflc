@@ -40,7 +40,12 @@
                   v-model="belongCity"
                   @active-item-change="handleChange">
                 </el-cascader> -->
-                <GetCityList v-model="xinzengform.belongCity"  :disabled="editType=='view'" ref="area"></GetCityList>
+                <!-- <GetCityList v-model="xinzengform.belongCity"  ref="area"  :disabled="editType=='view'" v-if="selectFlag"></GetCityList> -->
+                <el-input v-model="xinzengform.belongCityName" :disabled="editType=='view'" @focus="changeSelect"  v-if="editType!='add' && !selectFlag"></el-input>
+                <span v-if="selectFlag || editType=='add'">
+                  <GetCityList v-model="xinzengform.belongCity"  ref="area"  :disabled="editType=='view'"></GetCityList>
+                </span>
+                
               </el-form-item>
             </el-col>
           </el-row>
@@ -103,56 +108,6 @@
           </el-row>
           
         </el-form>
-        <!-- <div class="completeinfo" v-show="companyFlag">
-            <div class="detailinfo">
-                <p>上传营业执照照片:</p>
-                <el-upload
-                  class="upload-demo"
-                  action="#"
-                  accept="image/JPG,image/JPEG,image/PNG"
-                  :on-preview="handlePreview"
-                  :on-remove="handleRemove"
-                  :file-list="fileList2"
-                  list-type="picture">
-                  <el-button size="small" type="primary">点击上传</el-button>
-                  <div slot="tip" class="el-upload__tip">只能上传JPG/PNG/JPEGp的一种格式，且不超过5M</div>
-                </el-upload>
-            </div>
-        </div> -->
-        
-
-        <!-- <div class="completeinfo" v-show="companyFlag">
-            <div class="detailinfo">
-                <p><span>* </span>上传公司或者档口照片:</p> -->
-                <!-- <el-upload
-                  class="upload-demo"
-                  action="#"
-                  :on-preview="handlePreview"
-                  :on-remove="handleRemove"
-                  :file-list="fileList3"
-                  list-type="picture">
-                  <el-button size="small" type="primary">点击上传</el-button>
-                  <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
-                </el-upload> -->
-                 <!-- <upload class="licensePicture" tip="（必须为jpg/png并且小于1M）" v-model="xinzengform.servicePic1" /> -->
-            <!-- </div>
-        </div>
-          <div class="completeinfo" v-show="companyFlag">
-            <div class="detailinfo">
-                <p><span>* </span>上传发货人名片照片:</p> -->
-                <!-- <el-upload
-                  class="upload-demo"
-                  action="#"
-                  :on-preview="handlePreview"
-                  :on-remove="handleRemove"
-                  :file-list="fileList4"
-                  list-type="picture">
-                  <el-button size="small" type="primary">点击上传</el-button>
-                  <div slot="tip" class="el-upload__tip">只能上传JPG/PNG/JPEGp的一种格式，且不超过5M</div>
-                </el-upload> -->
-                 <!-- <upload class="licensePicture" tip="（必须为jpg/png并且小于1M）" v-model="xinzengform.servicePic2"> -->
-            <!-- </div>
-        </div> -->
         <div slot="footer" class="dialog-footer">
           <el-button type="primary" @click="onSubmit" v-show="editType!='view'">确 定</el-button>
           <el-button @click="dialogFormVisible_add = false" v-show="editType!='view'">取 消</el-button>
@@ -208,9 +163,22 @@ export default {
      const mobileValidator = (rule, val, cb) => {
       let phoneTest = /(^1[3|4|5|7|8]\d{9}$)|(^09\d{8}$)/
       !val && cb(new Error('手机号码不能为空'))
+      if(!(phoneTest.test(val))){
+        cb(new Error('请输入正确的手机号码格式'))
+      } else {
+        data_get_shipper_view(val).then(res=>{
+          console.log(res)
+          if(res.data){
+            cb(new Error('该手机号已经被注册~'))
+          } else {
+           cb()
+          }
+        })
+      }
       setTimeout(function () {
         !(phoneTest.test(val)) ? cb(new Error('请输入正确的手机号码格式')) : cb()
       }, 0)
+      
     }
     const companyNameValidator = (rule, val, cb)=>{
       // console.log(val)
@@ -235,9 +203,7 @@ export default {
       }
     }
     return{
-      // fileList4:[],
-      // fileList3:[],
-      // fileList2:[],
+      selectFlag:false,
       dialogFormVisible_add: false,
       type:'primary',
       title:'',
@@ -260,7 +226,8 @@ export default {
         shipperCardFile:'',
         companyFacadeFile:'',
         shipperId:'',
-        isDirectional: '0'
+        isDirectional: '0',
+        belongCityName:null,
       },
       currentRow: null,
       props: {
@@ -294,6 +261,8 @@ export default {
         this.xinzengform.businessLicenceFile=null
         this.xinzengform.shipperCardFile=null
         this.xinzengform.companyFacadeFile=null
+        this.xinzengform.belongCity=null
+        // this.xinzengform.belongCityName=null
           //  creditCode:null,
           //  businessLicenceFile:'',
           //  shipperCardFile:'',
@@ -306,6 +275,11 @@ export default {
       handler:function(val, oldVal){
         //用户输入校验合法后发送请求判断是否已注册
 
+        // data_get_shipper_view().then(res=>{
+        //   if(){
+
+        //   }
+        // })
       }
     }
     // belongCity(newVal){
@@ -326,17 +300,6 @@ export default {
     setCurrent(row) {
 			this.$refs.singleTable.setCurrentRow(row);
 		},
-    // 获取省份数据
-    // getArea(){
-    //   data_Area().then(res=>{
-    //     this.areadata = res.data.list.map(el => {
-    //       el.children = []
-    //       return el
-    //     })
-    //     // console.log(res)
-    //     this.provinceId = this.areadata[0].code;
-    //   })
-    // },
 
     openDialog(){
       if(this.editType==='add'||this.editType==='view'){
@@ -366,6 +329,7 @@ export default {
         this.xinzengform.companyFacadeFile=obj.companyFacadeFile
         this.xinzengform.shipperCardFile=obj.shipperCardFile
         this.xinzengform.shipperId=obj.shipperId
+        this.xinzengform.belongCityName=obj.belongCityName
       }else{
         this.xinzengform.shipperType=null
         this.xinzengform.belongCity=null
@@ -377,11 +341,20 @@ export default {
         this.xinzengform.businessLicenceFile=null
         this.xinzengform.companyFacadeFile=null
         this.xinzengform.shipperCardFile=null
-        this.xinzengform.shipperId=null     
+        this.xinzengform.shipperId=null
+        // this.xinzengform.areaCode=null
+        this.xinzengform.belongCityName=null
       }
     },
     change() {
       this.dialogFormVisible_add = !this.dialogFormVisible_add;
+    },
+    changeSelect(){
+      if(this.editType==='add'){
+        this.selectFlag=false
+      } else{
+        this.selectFlag=true
+      }
     },
     //获取货主类型
     getMoreInformation(){
@@ -393,16 +366,41 @@ export default {
       })
     },
     
+     //完善数据
+    completeData(){
+      //获取城市name
+      if(this.$refs.area.selectedOptions.length > 1){
+        let province;
+        this.$refs.area.areaData.forEach((item) =>{
+          if(item.code == this.$refs.area.selectedOptions[0]){
+            province = item
+          }
+        })
+        province.children.forEach( item => {
+          if(item.code == this.$refs.area.selectedOptions[1]){
+            this.xinzengform.belongCity = item.code;
+            this.xinzengform.belongCityName = item.name;
+          }
+        })
+       }else{
+        this.$refs.area.areaData.forEach((item) =>{
+          if(item.code == this.$refs.area.selectedOptions[0]){
+            this.xinzengform.belongCity = item.code;
+            this.xinzengform.belongCityName = item.name;
+          }
+        })
+      }
+    },
+
+
     // 保存
     onSubmit(){
-      this.xinzengform.belongCity = this.$refs.area.selectedOptions.pop();
-      console.log(this.xinzengform.belongCity)
+      // this.xinzengform.belongCity = this.$refs.area.selectedOptions.pop();
+      this.completeData();
+      // console.log(this.xinzengform.belongCity)
       this.$refs['xinzengform'].validate((valid)=>{
         if(valid){
-          // this.xinzengform.belongCity = this.$refs.area.selectedOptions.pop();
-          // var form={
-          //   xinzengform: this.xinzengform
-          // }
+
           var forms=Object.assign({},this.xinzengform)
           // console.log('onSubmit',form)
           if(this.editType === 'add'){
@@ -430,27 +428,6 @@ export default {
         }
       })
     },
-    // handleRemove(file, fileList) {
-    //   console.log(file, fileList);
-    // },
-    // handlePreview(file) {
-    //   console.log(file);
-    // },
-
-    // // 所在地
-    // handleChange(value){
-    //   console.log(value)
-    //   data_GetCityList(value[0]).then(res=>{
-    //     this.areadata = this.areadata.map(el => {
-    //       if(el.code === value[0]){
-    //         el.children = res.data.list
-    //       }
-    //       return el
-    //     })
-    //     this.citylist = res.data.list;
-    //   })
-    //   return []
-    // }
   }
 }
 </script>

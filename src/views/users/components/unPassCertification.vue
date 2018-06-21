@@ -42,7 +42,16 @@
             </div>
             <div class="export">
                 <!-- <el-button type="info">新增</el-button> -->
-                <el-button type="primary" plain @click="handleEnsure">代客认证</el-button>
+                <!-- <el-button type="primary" plain @click="handleEnsure">代客认证</el-button> -->
+                <driver-newTemplate
+                 btntext="代客认证"
+                 :plain="true"
+                 type="primary" 
+                 btntype="primary"
+                 icon="el-icon-news"
+                 editType="edit"
+                 btntitle="车主管理">
+                </driver-newTemplate>
             </div>
             <div class="info_news">
                 <el-table
@@ -110,9 +119,11 @@
 <script type="text/javascript">
     import {data_get_driver_list,data_get_driver_status} from '../../../api/users/carowner/total_carowner.js'
     import GetCityList from '@/components/GetCityList'
+    import DriverNewTemplate from '../carowner/driver-newTemplate'
     export default {
         components:{
-            GetCityList
+            GetCityList,
+            DriverNewTemplate
         },
         data(){
             return{

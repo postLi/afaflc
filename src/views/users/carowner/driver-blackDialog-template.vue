@@ -7,44 +7,38 @@
         <el-form :model="formBlack" ref="formBlack" :rules="formBlackRules">
             <el-row>
                 <el-col :span="12">
-                    <el-form-item label="手机号码" :label-width="formLabelWidth">
+                    <el-form-item label="手机号码：" :label-width="formLabelWidth">
                     <el-input v-model="formBlack.mobile" disabled></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col :span="12">
-                    <el-form-item label="公司名称" :label-width="formLabelWidth">
-                    <el-input v-model="formBlack.companyName" disabled></el-input>
+                    <el-form-item label="车主：" :label-width="formLabelWidth">
+                    <el-input v-model="formBlack.driverName" disabled></el-input>
                     </el-form-item>
                 </el-col>
                 </el-row>
                 
                 <el-row>
                 <el-col :span="12">
-                    <el-form-item label="联系人" :label-width="formLabelWidth">
+                    <el-form-item label="身份证号码：" :label-width="formLabelWidth">
                     <el-input v-model="formBlack.contacts" disabled></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col :span="12">
-                    <el-form-item label="所在地" :label-width="formLabelWidth">
-                    <!-- <el-cascader
-                    :options="options"
-                    v-model="formFroze.belongCity"
-                    @change="handleChange">
-                    </el-cascader> -->
-                        <!-- <GetCityList v-model="formBlack.belongCity" disabled ref="area"></GetCityList> -->
-                        <el-input v-model="formBlack.belongCityName" disabled></el-input>
+                    <el-form-item label="所在地：" :label-width="formLabelWidth">
+                       <GetCityList v-model="formBlack.belongCity" disabled ref="area"></GetCityList>
                     </el-form-item>
                 </el-col>
                 </el-row>
 
                 <el-row>
                 <el-col :span="12">
-                    <el-form-item label="详细地址" :label-width="formLabelWidth">
+                    <el-form-item label="车牌号：" :label-width="formLabelWidth">
                     <el-input v-model="formBlack.address" disabled :maxlength="20"></el-input>
                 </el-form-item>
                 </el-col>
                 <el-col :span="12">
-                    <el-form-item label="货主类型" :label-width="formLabelWidth">
+                    <el-form-item label="车型" :label-width="formLabelWidth">
                         <el-select v-model="formBlack.shipperType" placeholder="请选择" disabled>
                             <el-option
                                 v-for="item in options"
@@ -58,11 +52,16 @@
                 </el-col>
                 </el-row>
                 <el-row>
-                <el-col :span="12">
-                    <el-form-item label="注册来源" :label-width="formLabelWidth">
-                    <el-input v-model="formBlack.registerOrigin" disabled :maxlength="20"></el-input>
-                    </el-form-item>
-                </el-col>
+                    <el-col :span="12">
+                        <el-form-item label="车型" :label-width="formLabelWidth">
+                            <el-input v-model="formBlack.shipperType"></el-input>
+                        </el-form-item>
+                    </el-col>
+                   <el-col :span="12">
+                        <el-form-item label="注册来源" :label-width="formLabelWidth">
+                            <el-input v-model="formBlack.registerOrigin" disabled :maxlength="20"></el-input>
+                        </el-form-item>
+                   </el-col>
                 </el-row>
                 <div class="shipper_information">
                 <h2>移入黑名单信息</h2>
@@ -98,45 +97,48 @@
     </div>
 </template>
 <script>
-// import GetCityList from '@/components/GetCityList'
+import GetCityList from '@/components/GetCityList'
 import {data_get_shipper_type,data_get_shipper_change,data_get_shipper_BlackType} from '@/api/users/shipper/all_shipper.js'
 
 export default {
     name:'shipper_blackList-diaolog',
     components:{
-        // GetCityList
+        GetCityList
     },
     props:{
         params:{
-        type:Object
+            type:Object
         },
         icon:{
-        type: String,
-        default: ''
+            type: String,
+            default: ''
         },
         btntype: {
-        type: String,
-        default: ''
+            type: String,
+            default: ''
         },
         btntitle: {
-        type: String,
-        default: ''
+            type: String,
+            default: ''
         },
         plain:{
-        type: Boolean,
-        default: false
+            type: Boolean,
+             default: false
         },
         btntext: {
-        type: String,
-        default: ''
+            type: String,
+            default: ''
         },
         value:{
-        type: String,
-        default:''
+            type: String,
+            default:''
         },
         editType: {
-        type: String,
-        default: 'edit'
+            type: String,
+            default: 'edit'
+        },
+        count:{
+            type: Number
         }
     },
     data(){
@@ -149,12 +151,11 @@ export default {
             BlackDialogFlag: false, // 弹框控制
             formLabelWidth:'120px',
             formBlack:{
-                mobile:'',
+                driverMobile:'',
                 contacts:'',
-                companyName:'',
+                driverName:'',
                 belongCity:null,
                 shipperType:null,
-                belongCityName:'',
                 address:'',
                 registerOrigin:'',
                 putBlackCauseRemark:'',
@@ -184,25 +185,24 @@ export default {
           this.$refs.singleTable.setCurrentRow(row);
         },
         openDialog(){
-            if(this.editType ==="edit"){
-                if(this.params.companyName ||this.params.contacts){
-                this.BlackDialogFlag=true 
-                } else{
-                this.$message.error('选中一个才可以操作')
-                }
-            }
-            
+            // if(this.editType ==="edit"){
+            //     if(this.params.companyName ||this.params.contacts){
+            //     this.BlackDialogFlag=true 
+            //     } else{
+            //     this.$message.error('选中一个才可以操作')
+            //     }
+            // }
+            this.BlackDialogFlag=true
             if(this.params){
                 var obj = JSON.parse(JSON.stringify(this.params));
                 this.formBlack.shipperType=obj.shipperType
                 //this.xinzengform.shipperType= "AF0010202"
                 //this.xinzengform.shipperTypeName=obj.shipperTypeName
                 this.formBlack.belongCity=obj.belongCity
-                 this.formBlack.belongCityName=obj.belongCityName
                 this.formBlack.mobile=obj.mobile
                 this.formBlack.contacts=obj.contacts
                 this.formBlack.address=obj.address
-                this.formBlack.companyName=obj.companyName
+                this.formBlack.driverName=obj.driverName
                 this.formBlack.creditCode=obj.creditCode
                 this.formBlack.businessLicenceFile=obj.businessLicenceFile
                 this.formBlack.companyFacadeFile=obj.companyFacadeFile
@@ -214,7 +214,7 @@ export default {
                 this.formBlack.mobile=null
                 this.formBlack.contacts=null
                 this.formBlack.address=null
-                this.formBlack.companyName=null
+                this.formBlack.driverName=null
                 this.formBlack.creditCode=null
                 this.formBlack.businessLicenceFile=null
                 this.formBlack.companyFacadeFile=null
@@ -243,15 +243,15 @@ export default {
         this.$refs['formBlack'].validate((valid)=>{
             if(valid){
                 this.formBlack.belongCity = this.$refs.area.selectedOptions.pop();
-                var forms= Object.assign({}, this.formBlack,{attestationStatus:"AF0010406"})
-                data_get_shipper_change(forms).then(res=>{
-                    // console.log(res)
-                    this.$message.success('冻结修改成功')
-                    this.BlackDialogFlag = false;
-                    this.$emit('getData')
-                }).catch(err=>{
-                    console.log(err)
-                })
+                var forms= Object.assign({}, this.formBlack)
+                // data_get_shipper_change(forms).then(res=>{
+                //     // console.log(res)
+                //     this.$message.success('冻结修改成功')
+                //     this.BlackDialogFlag = false;
+                //     this.$emit('getData')
+                // }).catch(err=>{
+                //     console.log(err)
+                // })
             }
         })
     }

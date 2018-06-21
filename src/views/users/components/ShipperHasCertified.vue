@@ -76,7 +76,7 @@
             @getData="getDataList"></createdDialog>
             <!-- <el-button type="info">导出</el-button> -->
             <!-- <el-button type="primary" plain icon="el-icon-edit" @click="handleFroze">冻结</el-button> -->
-            <FreezeDialog
+            <!-- <FreezeDialog
               btntext="冻结"
               type="primary" 
               btntitle="冻结"
@@ -98,7 +98,7 @@
               icon="el-icon-news"
               :params="selectRowData"
               @getData="getDataList"
-            ></shipperBlackDialog>
+            ></shipperBlackDialog> -->
              <!-- <el-button type="primary" plain icon="el-icon-edit" @click="handleBlack">移入黑名单</el-button> -->
         </div>
         <div class="info_news">
@@ -134,12 +134,15 @@
                     label="注册来源">
                 </el-table-column>
                 <el-table-column
-                    prop="belongcity"
+                    prop="belongCityName"
                     label="所在地">
                 </el-table-column>
                 <el-table-column
                     prop="shipperTypeName"
                     label="货主类型">
+                    <template slot-scope="scope">
+                        {{scope.row.shipperType==='AF0010202'? '企业货主':'普通货主'}}
+                    </template>
                 </el-table-column>
                 <el-table-column
                     prop="authPassTime"
@@ -175,14 +178,14 @@
 </template>
 <script>
 import createdDialog from './createdDialog.vue'
-import FreezeDialog from './FreezeDialog.vue'
-import shipperBlackDialog from './shipperBlackDialog'
+// import FreezeDialog from './FreezeDialog.vue'
+// import shipperBlackDialog from './shipperBlackDialog'
 import {data_get_shipper_list,data_get_shipper_type} from '../../../api/users/shipper/all_shipper.js'
 export default {
     components:{
-      createdDialog,
-      FreezeDialog,
-      shipperBlackDialog
+      createdDialog
+    //   FreezeDialog,
+    //   shipperBlackDialog
     },
     data(){
         return {

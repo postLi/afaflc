@@ -39,8 +39,8 @@ export function data_get_shipper_type() {
 }
 
 // 根据手机号码获取货主
-export function data_get_shipper_view() {
-  return fetch.post('/' + baseurl + '/usercenter/aflcShipper/v1/findByMobile/{mobile}')
+export function data_get_shipper_view(mobile) {
+  return fetch.post('/' + baseurl + '/usercenter/aflcShipper/v1/findByMobile/' + mobile)
 }
 // 获取省市数据
 export function data_Area() {
@@ -67,6 +67,11 @@ export function data_get_shipper_freezeType() {
   return fetch.get('/' + baseurl_two + '/sysDict/getSysDictByCodeGet/AF02003')
 }
 //  获取移入黑名单原因列表
-export function data_get_shipper_BlackType(){
+export function data_get_shipper_BlackType() {
   return fetch.get('/' + baseurl_two + '/sysDict/getSysDictByCodeGet/AF02004')
+}
+
+// 获取账户状态列表
+export function data_get_shipper_auid() {
+  return fetch.get('/' + baseurl_two + '/sysDict/findAflcCommonSysDictBycode/AF00105' )
 }

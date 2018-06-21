@@ -31,7 +31,16 @@
                 <el-button type="info" plain>清空</el-button> -->
             </div>
             <div class="export">
-                <el-button type="primary" plain @click="handleCertification">代客认证</el-button>
+                <!-- <el-button type="primary" plain @click="handleCertification">代客认证</el-button> -->
+                <driver-newTemplate
+                 btntext="代客认证"
+                 :plain="true"
+                 type="primary" 
+                 btntype="primary"
+                 icon="el-icon-news"
+                 editType="add"
+                 btntitle="车主管理">
+                </driver-newTemplate>
             </div>
             <div class="info_news">
                 <el-table
@@ -87,9 +96,11 @@
 <script type="text/javascript">
     import {data_get_driver_list,data_get_driver_status} from '@/api/users/carowner/total_carowner.js'
     import GetCityList from '@/components/GetCityList'
+    import DriverNewTemplate from '../carowner/driver-newTemplate.vue'
     export default {
         components:{
-            GetCityList
+            GetCityList,
+            DriverNewTemplate
         },
         data(){
             return{
@@ -120,6 +131,7 @@
             // 判断选中值
             handleSelectionChange(val){
                 this.multipleSelection=val
+                console.log(this.multipleSelection.length)
             },
 
             //代客认证功能
