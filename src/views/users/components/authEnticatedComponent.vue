@@ -41,9 +41,38 @@
                 <el-button type="info" plain>清空</el-button> -->
             </div>
             <div class="export">
-                <el-button type="primary" plain @click="handleEdit">修改</el-button>
-                <el-button type="primary" plain @click="handleFreezeEdit">冻结修改</el-button>
-                <el-button type="primary" plain @click="handleBlick">移入黑名单</el-button>
+                <!-- <el-button type="primary" plain @click="handleEdit">修改</el-button> -->
+                <driver-newTemplate
+                 btntext="修改"
+                 :plain="true"
+                 type="primary" 
+                 btntype="primary"
+                 icon="el-icon-news"
+                 editType="edit"
+                 btntitle="修改">
+                </driver-newTemplate>
+                <!-- <el-button type="primary" plain @click="handleFreezeEdit">冻结修改</el-button> -->
+                <freeze-change-template
+                 btntext="冻结"
+                 :plain="true"
+                 type="primary" 
+                 btntype="primary"
+                 icon="el-icon-news"
+                 editType="edit"
+                 btntitle="冻结">
+
+                </freeze-change-template>
+
+                <!-- <el-button type="primary" plain @click="handleBlick">移入黑名单</el-button> -->
+                <driver-blackDialog-template
+                 btntext="移入黑名单"
+                 :plain="true"
+                 type="primary" 
+                 btntype="primary"
+                 icon="el-icon-news"
+                 editType="edit"
+                 btntitle="移入黑名单">
+                </driver-blackDialog-template>
             </div>
             <div class="info_news">
                 <el-table
@@ -109,9 +138,15 @@
 <script type="text/javascript">
     import {data_get_driver_list,data_get_driver_status} from '../../../api/users/carowner/total_carowner.js'
     import GetCityList from '@/components/GetCityList'
+    import DriverNewTemplate from '../carowner/driver-newTemplate'
+    import FreezeChangeTemplate from '../carowner/freeze-change-template'
+    import DriverBlackDialogTemplate from '../carowner/driver-blackDialog-template'
     export default {
         components:{
-            GetCityList
+            GetCityList,
+            DriverNewTemplate,
+            FreezeChangeTemplate,
+            DriverBlackDialogTemplate
         },
         data(){
             return{
@@ -197,3 +232,6 @@
         
     }
 </script>
+<style lang="scss">
+
+</style>

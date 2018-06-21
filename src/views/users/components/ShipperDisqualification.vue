@@ -51,6 +51,7 @@
                 :data="tableData1"
                 stripe
                 border
+                :key="theKey4"
                 @selection-change="handleSelectionChange"
                 tooltip-effect="dark"
                 style="width: 100%">
@@ -67,7 +68,7 @@
                 </el-table-column>
                 <el-table-column prop="registerOrigin" label="注册来源">
                 </el-table-column>
-                <el-table-column prop="belongCity" label="所在地">
+                <el-table-column prop="belongCityName" label="所在地">
                 </el-table-column>
                 <el-table-column prop="authenticationTime" label="提交认证日期">
                 </el-table-column>
@@ -105,10 +106,11 @@ export default {
     },
     data(){
         return{
+            theKey4:'1',
             tableData1:[],
             totalCount:null,
             page:1,
-            pagesize:21,
+            pagesize:20,
             options:[],
             formAll:{
               belongCity:null,
@@ -148,6 +150,7 @@ export default {
           this.formAll.belongCity = this.$refs.area.selectedOptions.pop();
           data_get_shipper_list(this.page,this.pagesize,this.formAll).then(res=>{
             this.totalCount = res.data.totalCount;
+            this.theKey4=Math.random()
             this.tableData1= res.data.list;
           })
       },
@@ -173,13 +176,7 @@ export default {
       },
         handleChange(value){
             console.log(value)
-        },
-        handleSizeChange(val) {
-          console.log(`每页 ${val} 条`);
-        },
-        handleCurrentChange(val) {
-          console.log(`当前页: ${val}`);
-        },
+        }
     }
 }
 </script>

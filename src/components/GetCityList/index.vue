@@ -4,6 +4,7 @@
         v-model="selectedOptions"
         :options="areaData"
         @active-item-change="handleItemMore"
+        :disabled="disabled"
         :props="props">
         </el-cascader>
   </div>
@@ -15,7 +16,9 @@
 export default {
     name: 'getCityList',
     props: {
-        
+        disabled:{
+          type: Boolean
+        }
     },
     data() {
       return {
