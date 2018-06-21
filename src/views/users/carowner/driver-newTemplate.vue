@@ -48,7 +48,7 @@
                   </el-col>
                   <el-col :span="12">
                     <el-form-item label="车长(米)：" :label-width="formLabelWidth">
-                      <!-- <el-input
+                      <el-input
                             placeholder="长"
                             v-model="templateModel.carLength"
                             clearable>
@@ -63,7 +63,7 @@
                             v-model="templateModel.carHeight"
                             clearable>
                         </el-input>
-                        <span class="node">米</span> -->
+                        <span class="node">米</span>
                     </el-form-item>
                   </el-col>
               </el-row>
@@ -216,6 +216,7 @@ export default {
             type:'primary',
             title:'',
             text:'',
+            optionsLevel:[],
             options:[], // 车型列表
             optionsType:[], // 车辆规列表
             templateModel:{

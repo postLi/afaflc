@@ -337,7 +337,8 @@ export default {
         creditCode:'', // 统一社会信用代码
         businessLicenceFile:'',
         companyFacadeFile:'',
-        shipperCardFile:''
+        shipperCardFile:'',
+        belongCityName:''
       },
       radio1:'',
       radio2:'',
@@ -445,8 +446,33 @@ export default {
       },2000)
     },
     
+     completeData(){
+      //获取城市name
+      if(this.$refs.area.selectedOptions.length > 1){
+        let province;
+        this.$refs.area.areaData.forEach((item) =>{
+          if(item.code == this.$refs.area.selectedOptions[0]){
+            province = item
+          }
+        })
+        province.children.forEach( item => {
+          if(item.code == this.$refs.area.selectedOptions[1]){
+            this.shengheform.belongCity = item.code;
+            this.shengheform.belongCityName = item.name;
+          }
+        })
+       }else{
+        this.$refs.area.areaData.forEach((item) =>{
+          if(item.code == this.$refs.area.selectedOptions[0]){
+            this.shengheform.belongCity = item.code;
+            this.shengheform.belongCityName = item.name;
+          }
+        })
+      }
+    },
     // 审核不通过
     handlerOut(){
+      this.completeData()
       this.$refs['shengheform'].validate((valid)=>{
         if(valid){
           this.shengheform.belongCity = this.$refs.area.selectedOptions.pop();
@@ -466,6 +492,7 @@ export default {
 
     // 审核通过
     handlerPass(){
+      this.completeData()
       this.$refs['shengheform'].validate((valid)=>{
         if(valid){
           this.shengheform.belongCity = this.$refs.area.selectedOptions.pop();
