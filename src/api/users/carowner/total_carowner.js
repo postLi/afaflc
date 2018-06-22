@@ -34,7 +34,7 @@ export function data_post_createDriver(data) {
 
 // 认证审核
 export function data_post_audit(data) {
-  return fetch.post('/' + baseurl + '/usercenter/aflcDriver/v1/authAflcDriver', data)
+  return fetch.post('/' + baseurl + '//usercenter/aflcDriver/v1/authAflcDriver', data)
 }
 
 // 根据手机号码获取车主
@@ -59,7 +59,7 @@ export function data_put_changeDriver(data) {
 
 // 代客认证
 export function data_post_driverAudit(data) {
-  return fetch.put('/' + baseurl + '/usercenter/aflcDriver/v1/valetAuthAflcDriver', data)
+  return fetch.post('/' + baseurl + '/usercenter/aflcDriver/v1/valetAuthAflcDriver', data)
 }
 
 // 获取车辆类型列表
@@ -70,4 +70,14 @@ export function data_CarList() {
 //  获取车型列表
 export function data_Get_carType() {
   return fetch.get('/' + baseurl_three + '/sm/aflcSysDict/v1/getCarSpecList')
+}
+
+// 获取中单等级列表
+export function data_get_driver_obStatus() {
+  return fetch.get('/' + baseurl_two + '/sysDict/getSysDictByCodeGet/AF00503')
+}
+
+// 获取账户状态列表
+export function data_get_shipper_auid() {
+  return fetch.get('/' + baseurl_two + '/sysDict/getSysDictByCodeGet/AF00105')
 }

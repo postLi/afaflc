@@ -73,10 +73,10 @@
             label="注册来源">
           </el-table-column>
           <el-table-column
-            prop="attestationStatus"
+            prop="shipperStatus"
             label="状态">
             <template slot-scope="scope">
-               {{getAttestationStatus(scope.row.attestationStatus)}}
+               {{getAttestationStatus(scope.row.shipperStatus)}}
              </template>
           </el-table-column>
           <el-table-column

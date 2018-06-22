@@ -13,32 +13,9 @@
                 </el-form-item>
                 <el-form-item>
                     <el-button type="primary" plain @click="getdata_search">查询</el-button>
-                    <el-button type="info" plain>清空</el-button>
+                    <el-button type="info" plain   @click="clearSearch">清空</el-button>
                 </el-form-item>
             </el-form>
-                <!-- <label>所在地：
-                    <el-input
-                      placeholder="请输入内容"
-                      v-model="formInline.belongCity"
-                      clearable>
-                    </el-input>
-                </label>
-                <label>车牌号：
-                    <el-input
-                      placeholder="请输入内容"
-                      v-model="formInline.carNumber"
-                      clearable>
-                    </el-input>
-                </label>
-                <label>手机号：
-                    <el-input
-                      placeholder="请输入内容"
-                      v-model="formInline.driverMobile"
-                      clearable>
-                    </el-input>
-                </label>
-                <el-button type="primary" plain @click="getdata_search">查询</el-button>
-                <el-button type="info" plain>清空</el-button> -->
             </div>
             <div class="export">
                 <!-- <el-button type="primary" plain @click="handleEdit">修改</el-button> -->
@@ -49,10 +26,11 @@
                  btntype="primary"
                  icon="el-icon-news"
                  editType="edit"
+                 :templateItem="selectionData1"
                  btntitle="修改">
                 </driver-newTemplate>
-                <!-- <el-button type="primary" plain @click="handleFreezeEdit">冻结修改</el-button> -->
-                <freeze-change-template
+
+                <!-- <freeze-change-template
                  btntext="冻结"
                  :plain="true"
                  type="primary" 
@@ -61,10 +39,9 @@
                  editType="edit"
                  btntitle="冻结">
 
-                </freeze-change-template>
+                </freeze-change-template> -->
 
-                <!-- <el-button type="primary" plain @click="handleBlick">移入黑名单</el-button> -->
-                <driver-blackDialog-template
+                <!-- <driver-blackDialog-template
                  btntext="移入黑名单"
                  :plain="true"
                  type="primary" 
@@ -72,7 +49,7 @@
                  icon="el-icon-news"
                  editType="edit"
                  btntitle="移入黑名单">
-                </driver-blackDialog-template>
+                </driver-blackDialog-template> -->
             </div>
             <div class="info_news">
                 <el-table
@@ -80,7 +57,7 @@
                     :data="tableDataTree"
                     stripe
                     border
-                    @selcection-change="handleSelectionChange"
+                    @selection-change="handleSelectionChange"
                     tooltip-effect="dark"
                     style="width: 100%">
                     <el-table-column
@@ -105,7 +82,7 @@
                       label="注册来源">
                     </el-table-column>
                     <el-table-column
-                      prop="belongCity"
+                      prop="belongCityName"
                       label="所在地">
                     </el-table-column>
                     <el-table-column
@@ -137,16 +114,17 @@
 </template>
 <script type="text/javascript">
     import {data_get_driver_list,data_get_driver_status} from '../../../api/users/carowner/total_carowner.js'
+    import { parseTime,formatTime } from '@/utils/index.js'
     import GetCityList from '@/components/GetCityList'
     import DriverNewTemplate from '../carowner/driver-newTemplate'
-    import FreezeChangeTemplate from '../carowner/freeze-change-template'
-    import DriverBlackDialogTemplate from '../carowner/driver-blackDialog-template'
+    // import FreezeChangeTemplate from '../carowner/freeze-change-template'
+    // import DriverBlackDialogTemplate from '../carowner/driver-blackDialog-template'
     export default {
         components:{
             GetCityList,
             DriverNewTemplate,
-            FreezeChangeTemplate,
-            DriverBlackDialogTemplate
+            // FreezeChangeTemplate,
+            // DriverBlackDialogTemplate
         },
         data(){
             return{
@@ -166,6 +144,7 @@
                     name:'全部'
                     }
                 ],
+                selectionData1:{},
                 multipleSelection:[],
             }
         },
@@ -174,31 +153,47 @@
             this.getMoreInformation()
         },  
         methods:{
+            clearSearch(){
+                this.formInline={//查询条件
+                    driverMobile:'',
+                    belongCity:'',
+                    driverStatus:'',
+                    carNumber:''
+                }
+            },
             // 判断选中与否
             handleSelectionChange(val){
                 this.multipleSelection = val;
+                if(val[0]){
+                    this.selectionData1=val[0]
+                } else{
+                    this.selectionData1={}
+                }
             },
 
             // 修改功能
-            handleEdit(){
-                console.log('修改功能')
-            },
+            // handleEdit(){
+            //     console.log('修改功能')
+            // },
 
             // 修改冻结功能
-            handleFreezeEdit(){
-                console.log('修改冻结功能') 
-            },
+            // handleFreezeEdit(){
+            //     console.log('修改冻结功能') 
+            // },
 
             // 移入黑名单功能
-            handleBlick(){
-                console.log('移入黑名单功能')
-            },
+            // handleBlick(){
+            //     console.log('移入黑名单功能')
+            // },
 
             //刷新页面
             firstblood(){
                 data_get_driver_list(this.page,this.pagesize,this.formInline).then(res=>{
                     this.totalCount = res.data.totalCount;
                     this.tableDataTree = res.data.list;
+                    this.tableDataTree.forEach(item => {
+                        item.authPassTime = parseTime(item.authPassTime,"{y}-{m}-{d}");
+                    })
                 })
             },
             //点击查询按纽，按条件查询列表

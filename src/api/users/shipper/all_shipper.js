@@ -73,5 +73,5 @@ export function data_get_shipper_BlackType() {
 
 // 获取账户状态列表
 export function data_get_shipper_auid() {
-  return fetch.get('/' + baseurl_two + '/sysDict/findAflcCommonSysDictBycode/AF00105' )
+  return fetch.get('/' + baseurl_two + '/sysDict/findAflcCommonSysDictBycode/AF00105')
 }

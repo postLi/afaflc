@@ -83,7 +83,11 @@
                   </el-col>
                   <el-col :span="12">
                     <el-form-item label="所在地：" :label-width="formLabelWidth">
-                        <GetCityList v-model="templateModel.belongCity" ref="area"></GetCityList>
+                        <!-- <GetCityList v-model="templateModel.belongCity" ref="area"></GetCityList> -->
+                        <el-input v-model="templateModel.belongCityName" :disabled="editType=='view'" @focus="changeSelect"  v-if="editType!='add' && !selectFlag"></el-input>
+                        <span v-if="selectFlag || editType=='add'">
+                        <GetCityList v-model="templateModel.belongCity" ref="area" :disabled="editType=='view'"></GetCityList>
+                        </span>
                     </el-form-item>
                   </el-col>
               </el-row>
@@ -91,7 +95,7 @@
               <el-row>
                   <el-col :span="12">
                       <el-form-item label="中单等级" :label-width="formLabelWidth">
-                            <el-select v-model="templateModel.carType" placeholder="请选择">
+                            <el-select v-model="templateModel.obtainGrade" placeholder="请选择">
                                 <el-option
                                     v-for="item in optionsLevel"
                                     :key="item.value"
@@ -104,8 +108,9 @@
                   <el-col :span="12">
                     <el-form-item label="中单等级有效期至"  :label-width="formLabelWidth">
                         <el-date-picker
-                            v-model="templateModel.carType"
+                            v-model="templateModel.obtainGradeTime"
                             type="date"
+                            format="yyyy-MM-dd"
                             placeholder="选择日期">
                         </el-date-picker>
                     </el-form-item>
@@ -115,7 +120,7 @@
               <el-row  :gutter="20">
                   <el-col :span="12">
                     <el-form-item :label-width="formLabelWidth">
-                        <el-checkbox v-model="templateModel.carType">是特权车</el-checkbox>
+                        <el-checkbox v-model="templateModel.isVipCar">是特权车</el-checkbox>
                     </el-form-item>
                   </el-col>
               </el-row>
@@ -165,7 +170,7 @@
     </div>
 </template>
 <script>
-import  {data_post_createDriver,data_put_changeDriver,data_CarList,data_Get_carType} from '@/api/users/carowner/total_carowner.js'
+import  { data_post_createDriver,data_put_changeDriver,data_CarList,data_Get_carType,data_get_driver_obStatus,data_post_driverAudit} from '@/api/users/carowner/total_carowner.js'
 import Upload from '@/components/Upload/singleImage'
 import GetCityList from '@/components/GetCityList'
 export default {
@@ -213,6 +218,7 @@ export default {
     },
     data() {
         return{
+            selectFlag: false,
             type:'primary',
             title:'',
             text:'',
@@ -230,11 +236,16 @@ export default {
                 carWidth:'',
                 carHeight:'',
                 belongCity:null,
+                obtainGrade:'',
+                belongCityName:'',
+                obtainGradeTime:null, //中单等级有效时间
+                isVipCar:'', //特权车
                 carFile:'',
                 drivingLicenceFile:'',
                 drivingPermitFile:'',
                 idCardFile:'',
-                takeIdCardFile:''
+                takeIdCardFile:'',
+                driverId:''
             },
             formLabelWidth:'130px',
             driverTemplateDialogFlag: false,// 弹框控制的控制
@@ -253,6 +264,13 @@ export default {
         this.getMoreInformation()
     },
     methods:{
+        changeSelect(){
+            if(this.editType==='add'){
+                this.selectFlag=false
+            } else{
+                this.selectFlag=true
+            }
+        },
         // 获取对应的字典列表
         getMoreInformation(){
             // console.log('等数据来')
@@ -274,6 +292,15 @@ export default {
             }).catch(err =>{
                 console.log(err)
             })
+            // 中单等级的获取
+            data_get_driver_obStatus().then(res =>{
+                res.data.map(item=>{
+                    this.optionsLevel.push(item)
+                })
+            }).catch(err =>{
+                console.log(err)
+            })
+
         },
 
         openDialog(){
@@ -290,11 +317,16 @@ export default {
                 this.templateModel.carHeight=obj.carHeight
                 this.templateModel.carSpec=obj.carSpec
                 this.templateModel.belongCity=obj.belongCity
+                this.templateModel.belongCityName=obj.belongCityName
                 this.templateModel.carFile=obj.carFile
                 this.templateModel.drivingPermitFile=obj.drivingPermitFile
                 this.templateModel.drivingLicenceFile=obj.drivingLicenceFile
                 this.templateModel.idCardFile=obj.idCardFile
-                this.templateModel.takeIdCardFile=obj.takeIdCardFile
+                this.templateModel.takeIdCardFile=obj.takeIdCardFile    
+                this.templateModel.obtainGrade=obj.obtainGrade
+                this.templateModel.obtainGradeTime=obj.obtainGradeTime    
+                this.templateModel.isVipCar=obj.isVipCar
+                this.templateModel.driverId=obj.driverId
             } else {
                  this.templateModel.driverMobile=null
                 this.templateModel.driverName=null
@@ -311,6 +343,35 @@ export default {
                 this.templateModel.drivingLicenceFile=null
                 this.templateModel.idCardFile=null
                 this.templateModel.takeIdCardFile=null
+                this.templateModel.obtainGrade=null
+                this.templateModel.obtainGradeTime=null
+                this.templateModel.isVipCar=null
+                this.templateModel.driverId=null
+            }
+        },
+         completeData(){
+             console.log("--------------------------"+this.$refs.area)
+            //获取城市name
+            if(this.$refs.area.selectedOptions.length > 1){
+                let province;
+                this.$refs.area.areaData.forEach((item) =>{
+                if(item.code == this.$refs.area.selectedOptions[0]){
+                    province = item
+                }
+                })
+                province.children.forEach( item => {
+                if(item.code == this.$refs.area.selectedOptions[1]){
+                    this.templateModel.belongCity = item.code;
+                    this.templateModel.belongCityName = item.name;
+                }
+                })
+            }else{
+                this.$refs.area.areaData.forEach((item) =>{
+                if(item.code == this.$refs.area.selectedOptions[0]){
+                    this.templateModel.belongCity = item.code;
+                    this.templateModel.belongCityName = item.name;
+                }
+                })
             }
         },
         
@@ -320,7 +381,8 @@ export default {
         },
          // 提交数据
         onSubmit(){
-            this.$refs.templateForm.validate(valid=>{
+            this.completeData();
+            this.$refs['templateForm'].validate(valid=>{
                 if(valid){
                     // console.log('等联调')
                     var forms= Object.assign({}, this.templateModel)
@@ -332,7 +394,13 @@ export default {
                             this.$message.success('新增成功')
                             this.$emit('getData')
                         })
-                    } else { // 修改数据提交
+                    } else if(this.editType=== 'valetAuth') { 
+                        data_post_driverAudit(forms).then(res=>{
+                            this.driverTemplateDialogFlag = !this.driverTemplateDialogFlag;
+                            this.$message.success('代客认证成功')
+                            this.$emit('getData')
+                        })
+                    } else if(this.editType==='edit'){
                         data_put_changeDriver(forms).then(res=>{
                             this.driverTemplateDialogFlag = !this.driverTemplateDialogFlag;
                             this.$message.success('修改成功')

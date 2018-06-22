@@ -13,7 +13,7 @@
             </el-form-item>
             <el-form-item>
                 <el-button type="primary" plain @click="getdata_search">查询</el-button>
-                <el-button type="info" plain>清空</el-button>
+                <el-button type="info" plain @click="clearSearch">清空</el-button>
             </el-form-item>
         </el-form>
             <!-- <label>所在地：
@@ -50,6 +50,7 @@
                 :data="tableDataTree"
                 stripe
                 border
+                :key="theKey"
                 @selection-change="handleSelectionChange"
                 tooltip-effect="dark"
                 style="width: 100%">
@@ -57,10 +58,10 @@
                 <el-table-column prop="carNumber" label="车牌号"></el-table-column>
                 <el-table-column prop="driverMobile" label="手机号"></el-table-column>
                 <el-table-column  prop="driverName" label="车主" width="200"></el-table-column>
-                <el-table-column prop="belongCity" label="所在地"></el-table-column>
+                <el-table-column prop="belongCityName" label="所在地"></el-table-column>
                 <el-table-column  prop="authenticationTime" label="提交认证时间"></el-table-column>
                 <el-table-column  prop="waitTime"  label="等待时长"></el-table-column>
-                <el-table-column  prop="driverStatus" label="操作"></el-table-column>
+                <!-- <el-table-column  prop="driverStatus" label="操作"></el-table-column> -->
             </el-table>
                 
             <el-pagination
@@ -174,7 +175,7 @@
             <div class="data_pic">
                 <div class="data_pic_yyzz data_pic_c">
                     <el-form-item>
-                    <upload class="licensePicture" tip="（必须为jpg/png并且小于5M）" v-model="templateModel.businessLicenceFile" />
+                    <upload class="licensePicture" tip="（必须为jpg/png并且小于5M）" v-model="templateModel.carFile" />
                     </el-form-item>
                     <h2>车辆45°</h2>
                     <el-form-item prop="radio1">
@@ -186,7 +187,7 @@
                     </el-form-item> 
                 </div>
                 <div class="data_pic_company data_pic_c">
-                    <upload class="licensePicture" tip="（必须为jpg/png并且小于5M）" v-model="templateModel.businessLicenceFile" />
+                    <upload class="licensePicture" tip="（必须为jpg/png并且小于5M）" v-model="templateModel.drivingPermitFile" />
                     <h2>行驾证</h2>
                     <el-form-item prop="radio2">
                       <el-radio-group v-model="radio2" @change="pictureTypeChange">
@@ -197,7 +198,7 @@
                     </el-form-item>
                 </div>
                 <div class="data_pic_callingcode data_pic_c">
-                    <upload class="licensePicture" tip="（必须为jpg/png并且小于5M）" v-model="templateModel.businessLicenceFile" />
+                    <upload class="licensePicture" tip="（必须为jpg/png并且小于5M）" v-model="templateModel.drivingLicenceFile" />
                     <h2>驾驶证</h2>
                     <el-form-item prop="radio3">
                       <el-radio-group v-model="radio3" @change="pictureTypeChange">
@@ -208,7 +209,8 @@
                     </el-form-item>
                 </div>
                 <div class="data_pic_callingcode data_pic_c">
-                    <upload class="licensePicture" tip="（必须为jpg/png并且小于5M）" v-model="templateModel.businessLicenceFile" />
+                    <upload class="licensePicture" tip="（必须为jpg/png并且小于5M）" v-model="templateModel.idcardFile" />
+
                     <h2>身份证</h2>
                     <el-form-item prop="radio3">
                       <el-radio-group v-model="radio4" @change="pictureTypeChange">
@@ -219,7 +221,7 @@
                     </el-form-item>
                 </div>
                 <div class="data_pic_callingcode data_pic_c">
-                    <upload class="licensePicture" tip="（必须为jpg/png并且小于5M）" v-model="templateModel.businessLicenceFile" />
+                    <upload class="licensePicture" tip="（必须为jpg/png并且小于5M）" v-model="templateModel.takeIdCardFile" />
                     <h2>手持身份证</h2>
                     <el-form-item prop="radio3">
                       <el-radio-group v-model="radio5" @change="pictureTypeChange">
@@ -242,8 +244,9 @@
     </div>
 </template>
 <script type="text/javascript">
-    import {data_get_driver_list,data_get_driver_status} from '../../../api/users/carowner/total_carowner.js'
+    import {data_get_driver_list,data_get_driver_status,data_post_audit} from '../../../api/users/carowner/total_carowner.js'
     import Upload from '@/components/Upload/singleImage'
+    import { parseTime } from '@/utils/index.js'
     import GetCityList from '@/components/GetCityList'
     export default {
         components:{
@@ -252,6 +255,7 @@
         },
         data(){
             return{
+                theKey:'12',
                 options:[], //车辆规格下拉列表
                 page:1,//当前页
                 pagesize:20,//每页显示数
@@ -278,13 +282,23 @@
                     belongCity:'',
                     authenticationTime:'',
                     registerOrigin:'',
-                    businessLicenceFile:''
+                    takeIdCardFile:'',
+                    idcardFile:'',
+                    drivingLicenceFile:'',
+                    drivingPermitFile:'',
+                    carFile:''
                 },
                 radio1:'',
                 radio2:'',
                 radio3:'',
                 radio4:'',
                 radio5:'',
+                multipleSelection:[]
+            }
+        },
+        computed: {
+            pictureValue () {
+            return '车辆45°:'+ this.radio1 + ',行驾证:'+ this.radio2 + ',驾驶证:'+ this.radio3 + ',身份证'+ this.radio4 + ',手持身份证'+ this.radio5
             }
         },
         mounted(){
@@ -292,22 +306,55 @@
             this.getMoreInformation()
         },  
         methods:{
+            formatTime(da){
+                let time = (+new Date()) - da
+                return parseInt(time / 1000 / (3600*24))+ '天'+ parseInt(time/1000/(3600*24*60*60)*60*60)+ '小时'
+            },
+
+            clearSearch(){
+                this.formInline={//查询条件
+                    driverMobile:'',
+                    belongCity:'',
+                    driverStatus:'',
+                    carNumber:''
+                }
+            },
             // 判断选中值
             handleSelectionChange(val){
                 this.multipleSelection=val
+                if(val[0]){
+                    this.templateModel=val[0]
+                } else{
+                    this.templateModel={}
+                }
             },
 
             // 认证审核功能
             handleAudit(){
-                console.log('认证审核功能')
-                this.formAuidDialogFlag=true
+                // console.log('认证审核功能')
+                if(this.multipleSelection.length == 0){
+                    //未选择任何修改内容的提示
+                    // let information = "未选中任何修改内容";
+                    // this.hint(information);
+                    this.$message.error('未选中任何修改内容')
+                }else if(this.multipleSelection.length >1){
+                    // let information = "不可修改多个内容";
+                    // this.hint(information);
+                    this.$message.error('不可修改多个内容')
+                } else{
+                    this.formAuidDialogFlag=true
+                }
             },
 
             //刷新页面
             firstblood(){
                 data_get_driver_list(this.page,this.pagesize,this.formInline).then(res=>{
                     this.totalCount = res.data.totalCount;
+                    this.theKey=Math.random()
                     this.tableDataTree = res.data.list;
+                    this.tableDataTree.forEach(item => {
+                        item.authenticationTime = parseTime(item.authenticationTime,"{y}-{m}-{d}");
+                    })
                 })
             },
             //点击查询按纽，按条件查询列表
@@ -341,14 +388,67 @@
             pictureTypeChange(){
 
             },
+            completeData(){
+                //获取城市name
+                if(this.$refs.area.selectedOptions.length > 1){
+                    let province;
+                    this.$refs.area.areaData.forEach((item) =>{
+                    if(item.code == this.$refs.area.selectedOptions[0]){
+                        province = item
+                    }
+                    })
+                    province.children.forEach( item => {
+                    if(item.code == this.$refs.area.selectedOptions[1]){
+                        this.templateModel.belongCity = item.code;
+                        this.templateModel.belongCityName = item.name;
+                    }
+                    })
+                }else{
+                    this.$refs.area.areaData.forEach((item) =>{
+                    if(item.code == this.$refs.area.selectedOptions[0]){
+                        this.templateModel.belongCity = item.code;
+                        this.templateModel.belongCityName = item.name;
+                    }
+                    })
+                }
+                },
+            // 审核不通过
+            handlerOut(){
+            this.completeData()
+            this.$refs['shengheform'].validate((valid)=>{
+                if(valid){
+                // this.templateModel.belongCity = this.$refs.area.selectedOptions.pop();
+                var forms=Object.assign({},this.templateModel,{driverStatus:"AF0010404"},{authNoPassCause:this.pictureValue})
+                this.$confirm()
+                data_post_audit(forms).then(res=>{
+                    // console.log(res)
+                    this.$message.success('审核不通过 提交')
+                    this.formAuidDialogFlag = false;
+                    this.firstblood()
+                }).catch(err=>{
+                    console.log(err)
+                })
+                }
+            })
+            },
 
             // 审核通过
             handlerPass(){
-
-            },
-            // 审核不通过
-            handlerOut(){
-
+            this.completeData()
+            this.$refs['shengheform'].validate((valid)=>{
+                if(valid){
+                // this.templateModel.belongCity = this.$refs.area.selectedOptions.pop();
+                var forms=Object.assign({},this.templateModel,{driverStatus:"AF0010403",authNoPassCause:""})
+                data_post_audit(forms).then(res=>{
+                    // console.log(res)
+                    this.$message.success('审核通过成功')
+                    this.formAuidDialogFlag = false;
+                    this.firstblood()
+                }).catch(err=>{
+                    console.log(err)
+                })
+                }
+            })
             }
         }
         

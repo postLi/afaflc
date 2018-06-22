@@ -6,7 +6,7 @@
               <GetCityList v-model="formAll.belongCity" ref="area"></GetCityList>
             </el-form-item>
             <el-form-item label="状态：">
-              <el-select v-model="formAll.attestationStatus" clearable placeholder="请选择">
+              <el-select v-model="formAll.shipperStatus" clearable placeholder="请选择">
                 <el-option
                   v-for="item in optionsStatus"
                   :key="item.value"
@@ -93,9 +93,9 @@
            </el-table-column>
            <el-table-column prop="registerOrigin" label="注册来源">
            </el-table-column>
-           <el-table-column prop="attestationStatus" label="认证状态">
+           <el-table-column prop="shipperStatus" label="认证状态">
              <template slot-scope="scope">
-               {{getAttestationStatus(scope.row.attestationStatus)}}
+               {{getAttestationStatus(scope.row.shipperStatus)}}
              </template>
            </el-table-column>
            <el-table-column prop="accountStatus" label="账户状态">
@@ -403,7 +403,7 @@ export default {
         registerOrigin:'', // 注册来源
         creditCode:'', // 统一社会信用代码
         unfreezeTime:'',
-        attestationStatus:null,
+        shipperStatus:null,
         freezeCause:'',
         freezeCauseRemark:'',
         unfreezeRemark:'',
@@ -428,7 +428,7 @@ export default {
       },
       formAll:{
         belongCity: null,
-        attestationStatus:null,
+        shipperStatus:null,
         companyName:'',
         mobile:''
       },
@@ -573,7 +573,7 @@ export default {
       this.formAll = {
         belongCity:null,
         mobile:'',
-        attestationStatus:'',
+        shipperStatus:'',
         companyName:''
       }
     },
@@ -590,7 +590,7 @@ export default {
       this.$refs['formBlack'].validate((valid)=>{
         if(valid){
           this.formBlack.belongCity = this.$refs.area.selectedOptions.pop();
-          var forms= Object.assign({}, this.formBlack,{attestationStatus:"AF0010403"})
+          var forms= Object.assign({}, this.formBlack,{shipperStatus:"AF0010403"})
           data_get_shipper_change(forms).then(res=>{
             // console.log(res)
             this.$message.success('移出黑名单成功')
@@ -608,7 +608,7 @@ export default {
       this.$refs['formUnFroze'].validate((valid)=>{
         if(valid){
           this.formUnFroze.belongCity = this.$refs.area.selectedOptions.pop();
-          var forms= Object.assign({}, this.formUnFroze,{attestationStatus:"AF0010403"})
+          var forms= Object.assign({}, this.formUnFroze,{shipperStatus:"AF0010403"})
           data_get_shipper_change(forms).then(res=>{
             // console.log(res)
             this.$message.success('解冻成功')
