@@ -4,8 +4,8 @@ const baseurl = "aflcorderservice"
 
 
 
-//获取货主平台绑定列表
-export function data_dispatchList(page,pagesize,data) {
+//获取订单列表
+export function data_getList(page,pagesize,data) {
     return fetch({
       url: '/'+baseurl+'/order/aflcOrder/v1/orderList',
       method: 'post',
@@ -16,6 +16,18 @@ export function data_dispatchList(page,pagesize,data) {
       }
     })
   }
+
+
+//根据订单号查询订单基本信息，运费信息，抢单记录
+export function data_getOrderDetail(id) {
+  return fetch({
+    url: '/'+baseurl+'/order/aflcOrder/v1/getOrderDetail',
+    method: 'post',
+    data:{
+      id:id
+    }
+  })
+}
   
 //启用或禁用
 export function data_ChangeStatus(id) {

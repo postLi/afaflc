@@ -23,7 +23,7 @@
             </div>
             <div class="classify_info">
                 <div class="btns_box">
-                    <el-button type="primary" plain icon="el-icon-success" @click="addClassfy">指派司机</el-button>
+                    <el-button type="primary" plain icon="el-icon-success" @click="appoint">指派司机</el-button>
                     <el-button type="primary" plain icon="el-icon-error" @click="cancellOrder">取消订单</el-button>
                 </div>
                 <div class="info_news">
@@ -56,7 +56,7 @@
                         align = "center"
                           prop="orderTypeName"
                           label="订单分类"
-                          width="80">
+                          width="110">
                         </el-table-column>
                         <el-table-column
                         align = "center"
@@ -71,40 +71,39 @@
                         align = "center"
                           prop="shipperMobile"
                           label="货主账号"
-                          width="120">
+                          width="180">
                         </el-table-column>
                         <el-table-column
                         align = "center"
                           prop="shipperName"
                           label="货主姓名"
-                          width="110">
+                          width="150">
                         </el-table-column>
-                         <el-table-column
+                        <el-table-column
                         align = "center"
-                          prop="shipperAddress"
-                          label="发货地址">
-                        </el-table-column>
-                         <el-table-column
-                        align = "center"
-                          prop="endTime"
-                          label="途径地">
-                        </el-table-column>
-                         <el-table-column
-                        align = "center"
-                          prop="endTime"
-                          label="收货地址">
+                          prop="aflcOrderAddresses"
+                          label="配送路径">
+                            <template  slot-scope="scope">
+                                <p class="aflcOrderAddresses" v-for="(obj,idx) in scope.row.aflcOrderAddresses" :key="obj.id">
+                                    <span v-if="idx == 0">发货地：</span>
+                                    <span v-else-if="idx == scope.row.aflcOrderAddresses.length-1">收货地：</span>
+                                    <span v-else>途径地{{ scope.row.aflcOrderAddresses.length >3 ? idx : ''}}：</span>
+                                    <!-- <span v-if="idx != 0 && idx != scope.row.aflcOrderAddresses.length-1 && scope.row.aflcOrderAddresses.length > 2 && scope.row.aflcOrderAddresses.length >= 3">途径地：</span> -->
+                                    {{obj.viaAddress}}
+                                </p>
+                            </template>
                         </el-table-column>
                         <el-table-column
                         align = "center"
                           prop="carTypeName"
                           label="所需车型"
-                          width="110">
+                          width="150">
                         </el-table-column>
                         <el-table-column
                         align = "center"
                           prop="totalAmount"
                           label="运费总额"
-                          width="80">
+                          width="120">
                         </el-table-column>
                     </el-table>
                     
@@ -126,67 +125,70 @@
                 </div>
                 
                 <!-- 新增数据 -->
-                <appointDriver :dialogFormVisible.sync = "dialogFormVisible" :formtitle = "formtitle" @renovate="Onrenovate" @ifError="hint" ></appointDriver>
+                <appointDriver :dialogFormVisible.sync = "dialogFormVisible" :formtitle = "formtitle" :listInformation="listInformation" @renovate="Onrenovate" ></appointDriver>
                 <!-- 修改数据 -->
-                <changeclassify :dialogFormVisibleChange.sync = "dialogFormVisibleChange" :formtitle = "formtitle_change" @ifError="hint" @renovate="Onrenovate" :changeforms = 'changeforms'></changeclassify>
+                <detailsInformations :dialogFormVisibleDetails.sync = "dialogFormVisibleDetails" :listInformationMore= "listInformation" :record="record" :formtitle = "formtitle_change" @renovate="Onrenovate"></detailsInformations>
             </div>
         <!-- loading   -->
         <!-- <spinner v-show="show"></spinner>  -->
-        
+        <cue ref="cue"></cue>
     </div>
 </template>
 
 <script type="text/javascript">
 
-import { data_dispatchList,data_ChangeStatus } from '../../../api/dispatch/OrderServer.js'
+import { data_CarList } from '@/api/common.js'
+import { data_getList,data_getOrderDetail } from '../../../api/dispatch/OrderServer.js'
 import '@/styles/dialog.scss'
 import spinner from '../../spinner/spinner'
 // import { parseTime,formatTime } from '../../../../utils/index.js'
 import appointDriver from './appointDriver'
-import changeclassify from './changeclassify'
-import { data_CarList } from '@/api/common.js'
+import detailsInformations from './detailsInformations'
+import cue from '../../../components/Message/cue'
 
     export default{
         data(){
             return{
                 value6:null,
+                record:false,
+                listInformation:{},//列表详细内容
                 carNumber:null,//车主账号
                 shipperNumber:null,//货主账号
                 data:{
                 },//获取页面数据 后端要求传参{}
-                changeforms:{},
                 page:1,//页码
                 pagesize:20,//页码数量
                 formtitle:'指派司机',//弹窗标题
-                formtitle_change:'修改绑定车主',
+                formtitle_change:'订单详情',
                 currentPage4:1,//默认显示第一页
                 dialogFormVisible: false,//新增弹窗
-                dialogFormVisibleChange:false,//修改弹窗
-                dialogFormVisible_change:false,
-                centerDialogVisible:false,
-                delDialogVisible:false,
+                dialogFormVisibleDetails:false,//详情弹窗
                 dataTotal:null,//总数
                 information:'你想知道什么',
-                delIDTree:'',
                 checkedinformation:[],//选中的内容
                 tableDataTree:[],//table数据表
                 carTypeList:null,//车辆类型
+                noOrderInformation:'未选中指派订单',//未选中订单提示
+                ifOrderInformation:'不可同时指派多个订单',//不可同时指派多个订单
             }
         },
         components:{
             spinner,
             appointDriver,
-            changeclassify
-
+            detailsInformations,
+            cue
         },
         mounted(){
-            this.firstblood();
-            data_CarList().then(res => {
-                // console.log(res)
-                this.carTypeList = res.data;
-            })
+            this.init();
         },  
         methods: {
+            init(){
+                data_CarList().then(res => {
+                    console.log('carTypeList:',res.data)
+                    this.carTypeList = res.data;
+                    this.firstblood();
+                })
+            },
             //子组件调用父组件刷新页面  
             Onrenovate(){
                 this.firstblood();
@@ -198,10 +200,14 @@ import { data_CarList } from '@/api/common.js'
                 // Object.assign(this.searchForm, obj)
                 // this.fetchData()
             },
-            //shuangji
+            //双击打开详情页面
             moreinfo(row, event){
-                // console.log(row, event)
-               
+                // console.log(row)
+                if(row){
+                    this.getOrderDetails(row.id);
+                    this.record = true;
+                    this.dialogFormVisibleDetails = true;
+                }
             },
             //点击选中当前行
             clickDetails(row, event, column){
@@ -223,12 +229,11 @@ import { data_CarList } from '@/api/common.js'
             },
             //刷新页面  
             firstblood(){
-                data_dispatchList(this.page,this.pagesize,this.data).then(res=>{
-                    console.log('res:',res)
+                data_getList(this.page,this.pagesize,this.data).then(res=>{
+                    console.log('res:',res.data.list)
                     this.tableDataTree = res.data.list;
                     
                     this.dataTotal = res.data.totalCount;
-
 
                     this.tableDataTree.forEach(item => {
                         switch(item.orderType){
@@ -242,16 +247,28 @@ import { data_CarList } from '@/api/common.js'
                                 item.orderTypeName = "省际";
                                 break;
                         }
+
+                        if(this.carTypeList){
+                            item.carTypeName = this.carTypeList.find(el => el.code === item.usedCarType)['name'];
+                        }else{
+
+                        }
                         
-                        item.carTypeName = this.carTypeList.find(el => el.code === item.usedCarType)['name'];
+                        item.receiverPhone  = item.aflcOrderAddresses[item.aflcOrderAddresses.length-1].contactsPhone;
+                        item.receiverAddress = item.aflcOrderAddresses[item.aflcOrderAddresses.length-1].viaAddress;
+
+                        // console.log('item.aflcOrderAddresses:',item.aflcOrderAddresses,item.receiverAddress)
+                        // console.log('listInformation.aflcOrderAddresses.slice(1,-1):',item.aflcOrderAddresses.slice(1,-1))   
+                        item.aflcOrderAddresses.sort(function(a,b){  
+                            return a.viaOrder - b.viaOrder;  
+                        })  
+                        // console.log('item.aflcOrderAddresses:',item.aflcOrderAddresses)
                         // item.startTime = parseTime(item.bindingStartDate,"{y}-{m}-{d}");
                         // item.endTime = parseTime(item.bindingEndDate,"{y}-{m}-{d}");
                     })
-                    // console.log(parseTime("1528710180","{y}-{m}-{d}"))
-                    // console.log(formatTime("1528710180"))
+
                 })
             },
-           
             //模糊查询 分类名称或者code
             getdata_search(){
                 this.firstblood();
@@ -264,9 +281,51 @@ import { data_CarList } from '@/api/common.js'
                 };
                 this.firstblood();
             },
-            //新增分类信息
-            addClassfy(){
-                this.dialogFormVisible = true;
+            //指派司机
+            appoint(){
+                if(Object.keys(this.checkedinformation).length == 0){
+                    //未选择任何修改内容的提示
+                    this.$refs.cue.hint(this.noOrderInformation)
+                }else if(this.checkedinformation.length >1){
+                    this.$refs.cue.hint(this.ifOrderInformation)
+                }else{
+                    console.log(this.checkedinformation)
+                    let detailID = this.checkedinformation[0].id;
+                    this.getOrderDetails(detailID);
+                    this.dialogFormVisible = true;
+                }
+            },
+            //
+            getOrderDetails(id){
+                data_getOrderDetail(id).then(res => {
+                    this.listInformation
+                    let  details = res.data;
+                    switch(details.orderBaseInfo.orderType){
+                        case "AF01701":
+                            details.orderBaseInfo.orderTypeName = "同城";
+                            break;
+                        case "AF01702":
+                            details.orderBaseInfo.orderTypeName = "零担";
+                            break;
+                        case "AF01703":
+                            details.orderBaseInfo.orderTypeName = "省际";
+                            break;
+                    }
+                    if(this.carTypeList){
+                        details.orderBaseInfo.carTypeName = this.carTypeList.find(el => el.code === details.orderBaseInfo.usedCarType)['name'];
+                    }else{
+                        
+                    }
+                    details.orderBaseInfo.receiverPhone  = details.orderBaseInfo.aflcOrderAddresses[details.orderBaseInfo.aflcOrderAddresses.length-1].contactsPhone;
+                    details.orderBaseInfo.receiverAddress = details.orderBaseInfo.aflcOrderAddresses[details.orderBaseInfo.aflcOrderAddresses.length-1].viaAddress;
+
+                    details.orderBaseInfo.aflcOrderAddresses.sort(function(a,b){  
+                        return a.viaOrder - b.viaOrder;  
+                    })  
+
+                    this.listInformation = details;
+                    console.log('listInformation:',this.listInformation)
+                })
             },
             //取消订单
             cancellOrder(){
@@ -320,6 +379,18 @@ import { data_CarList } from '@/api/common.js'
             }
             .el-button{
                padding:8px 20px;
+            }
+        }
+        .aflcOrderAddresses{
+            text-align: left;
+            text-indent: 0px;
+            span{
+                display: inline-block;
+                width: 80px;
+                text-indent: 0;
+                white-space: nowrap;
+                text-align: right;
+                color: #888;
             }
         }
         .classify_info{

@@ -15,6 +15,8 @@ import '@/permission' // permission
 
 import * as filters from './filters'
 
+import './directive'
+
 // mock
 import './mock/'
 

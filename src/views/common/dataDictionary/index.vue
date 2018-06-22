@@ -2,14 +2,14 @@
     <div class="DIC clearfix">
         <div class="side_left">
             <el-tree
-              :data="treeData"
-              node-key="id"
-              :highlight-current = "true"
-              :expand-on-click-node = "false"
+                :data="treeData"
+                node-key="key"
+                :highlight-current = "true"
+                :expand-on-click-node = "false"
                 :default-expanded-keys="[1]"
-              @node-click="handleNodeClick"
-              :default-checked-keys="[]"
-              :props="defaultProps">
+                @node-click="handleNodeClick"
+                :default-checked-keys="[]"
+                :props="defaultProps">
             </el-tree>
         </div>
         <div class="side_right">
@@ -104,7 +104,7 @@
                       <el-form :rules="rules">
                         <el-form-item label="上级分类" :label-width="formLabelWidth">
                          <el-select v-model="forms[0].pid"  @change="currentValue">
-                           <el-option :label="pidname" :value="pid" v-if="pidname != null && pidname!= undefined && pidname !='无'"></el-option>
+                           <el-option :label="pidname" :value="pid" v-if="pidname != null && pidname!= undefined && pidname !='无' && pidname !='全部'"></el-option>
                            <el-option label="无" value=''></el-option>
                          </el-select>
                        </el-form-item>
@@ -244,7 +244,8 @@ import '../../../styles/dialog.scss'
                 treeData:[
                     {
                         label:'全部',
-                        id:1,
+                        id:null,
+                        key:1,
                         children:[],
                     }
                 ],
@@ -260,14 +261,13 @@ import '../../../styles/dialog.scss'
             }
         },
         watch:{
-            treeData:{
-                handler(newValue, oldValue){
-                    
-                    console.log("newValue, oldValue:",newValue, oldValue)
-                    //  this.firstblood()
-                },
-                deep:true
-            }
+            // treeData:{
+            //     handler(newValue, oldValue){
+            //         console.log("newValue, oldValue:",newValue, oldValue)
+            //         //  this.firstblood()
+            //     },
+            //     deep:true
+            // }
         },
         mounted(){
             this.firstblood()
@@ -290,6 +290,7 @@ import '../../../styles/dialog.scss'
                         this.dataTotal= res.data.totalCount;
                         console.log(this.pidname)
                     }else{
+                        this.tableDataTree =[];
                         return
                     }
                 })
@@ -374,7 +375,6 @@ import '../../../styles/dialog.scss'
                     data_changeStatus(statusID).then( res=>{
                         console.log(res)
                         this.getInformation();
-
                     })
                 }
             },
@@ -432,14 +432,16 @@ import '../../../styles/dialog.scss'
                 this.pid = data.id;
                 this.pidname = data.label;
                 this.forms[0].pid = this.pid;
+                console.log(this.pid)
                 data_Trees(this.page,this.pagesize,this.pid).then(res =>{
                     console.log(res)
-                    if( res.data.list){
+                    if(res.data.list){
                         res.data.list.forEach(function(item){
-                            // if(checked.data.pid){
-                                item.uplabel = checked.data.label;
-                            // }else{
-                            // }
+                            if(checked.data.label == "全部"){
+                                item.uplabel = "无"
+                            }else{
+                            item.uplabel = checked.data.label;
+                            }
                         })
                         this.tableDataTree = res.data.list;
                     }else{
@@ -479,6 +481,7 @@ import '../../../styles/dialog.scss'
                         this.dataTotal= res.data.totalCount;
                         // console.log(this.pidname)
                     }else{
+                        this.tableDataTree = [];
                        return
                     }
                 })

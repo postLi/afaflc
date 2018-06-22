@@ -76,7 +76,7 @@
                             </el-table>
                         </div>
                     </div>
-                    <detailsComponent></detailsComponent>
+                    <detailsComponent v-if="Object.keys(listInformation).length != 0" :listInformation = "listInformation"></detailsComponent>
                 </el-dialog>
             </div>
 
@@ -99,6 +99,10 @@ export default {
         },
         formtitle:{
             type:String,
+            required:true
+        },
+        listInformation:{
+            type:Object,
             required:true
         }
     },

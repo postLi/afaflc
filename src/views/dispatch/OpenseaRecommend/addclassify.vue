@@ -2,7 +2,7 @@
     <div>
         <!-- 新增分类信息 -->
             <div class="addclassify commoncss">
-                <el-dialog :title='formtitle' :close-on-click-modal="true"  :visible="dialogFormVisible" @close="close">
+                <el-dialog :title='formtitle' :close-on-click-modal="true" v-el-drag-dialog :visible="dialogFormVisible" @close="close">
                     <div class="chooseArea">
                         <p><span>* </span>所在地 ：</p>
                         <getCityList class="chooseItem" v-model="forms.areaCode" ref="area"></getCityList>
@@ -33,17 +33,16 @@
                     </div>
                     <div class="firstPush choosePush">
                         <p><span>* </span>第一轮推送 ：</p>
-                                   
-                        <el-input v-model="forms.firstRecommendKm"  maxlength="4" @blur="valuerules"></el-input>
+                        <el-input v-model="forms.firstRecommendKm"  maxlength="4" v-number-only:point></el-input>
                         <span>公里/</span>
-                        <el-input v-model="forms.firstRecommendTime" maxlength="4" @blur="valuerules"></el-input>
+                        <el-input v-model="forms.firstRecommendTime" maxlength="4" v-numberOnly></el-input>
                         <span>秒</span>                    
                     </div>
                     <div class="secondPush choosePush">
                         <p><span>* </span>第二轮及之后推送 ：</p>
-                        <el-input v-model="forms.secondRecommendKm" maxlength="4" @blur="valuerules"></el-input>
+                        <el-input v-model="forms.secondRecommendKm" maxlength="4" v-number-only:point></el-input>
                         <span>公里/</span>
-                        <el-input v-model="forms.secondRecommendTime" maxlength="4" @blur="valuerules"></el-input>
+                        <el-input v-model="forms.secondRecommendTime" maxlength="4" v-numberOnly></el-input>
                         <span>秒</span>                    
                     </div>
                     <div class="chooseVisual chooseStyle">

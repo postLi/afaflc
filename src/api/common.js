@@ -57,7 +57,7 @@ export function getSelectType(type = '', orgid) {
 }
 
 
-//获取状态列表
+//获取车辆规格 加宽  加长等
 export function data_GetCarType() {
     return fetch({
       url: '/'+baseurl_two+'/sysDict/getSysDictByCodeGet/AF009',

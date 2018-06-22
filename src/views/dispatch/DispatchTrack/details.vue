@@ -3,122 +3,128 @@
     <el-collapse v-model="activeNames" @change="handleChange">
         <el-collapse-item title="订单基本信息" name="1">
             <div class="essentialInformation">
-                <p>
-                <span>订单号：</span>
-                <span></span>
-                </p>
-                <p>
-                <span>货主账号：</span>
-
-                </p>
-                <p>
-                <span>货主姓名：</span>
-
-                </p>
-                <p>
-                <span>订单分布区域：</span>
-
-                </p>
-                <p>
-                <span>订单分类：</span>
-
-                </p>
+                <h6>
+                    <span>订单号：</span>
+                    <span>{{listInformation.orderBaseInfo.orderSerial}}</span>
+                </h6>
+                <h6>
+                    <span>货主账号：</span>
+                    <span>{{listInformation.orderBaseInfo.shipperMobile}}</span>
+                </h6>
+                <h6>
+                    <span>货主姓名：</span>
+                    <span>{{listInformation.orderBaseInfo.shipperName}}</span>
+                </h6>
+                <h6>
+                    <span>订单分布区域：</span>
+                    <span>{{listInformation.orderBaseInfo.belongCity}}</span>
+                </h6>
+                <h6 class="minwidth">
+                    <span>订单分类：</span>
+                    <span>{{listInformation.orderBaseInfo.orderTypeName}}</span>
+                </h6>
             </div>
             <div class="essentialInformation">
-                <p>
-                <span>订单类型：</span>
-
-                </p>
-                <p>
-                <span>用车时间：</span>
-
-                </p>
-                <p>
-                <span>货主用车类型：</span>
-
-                </p>
-                <p>
-                <span>发货地址：</span>
-
-                </p>
+                <h6>
+                    <span>订单类型：</span>
+                    <span>{{listInformation.orderBaseInfo.orderClass === '1' ? '实时用车' : '预约用车'}}</span>
+                </h6>
+                <h6>
+                    <span>用车时间：</span>
+                     <span>{{listInformation.orderBaseInfo.useCarTime}}</span>
+                </h6>
+                <h6>
+                    <span>货主用车类型：</span>
+                    <span>{{listInformation.orderBaseInfo.carTypeName}} - {{listInformation.orderBaseInfo.spec}}</span>
+                </h6>
+                <h6>
+                    <span>发货地址：</span>
+                    <span>{{listInformation.orderBaseInfo.aflcOrderAddresses[0].viaAddress}}</span>
+                </h6>
             </div>
             <div class="essentialInformation">
-                <p>
-                <span>货物名称：</span>
-
-                </p>
-                <p>
-                <span>额外服务：</span>
-
-                </p>
-                <p>
-                <span>收货联系人：</span>
-
-                </p>
-                <p>
-                <span>收货人电话：</span>
-
-                </p>
-                <p>
-                <span>我的司机 优选接单：</span>
-
-                </p>
+                <h6>
+                    <span>货物名称：</span>
+                    <span>{{listInformation.orderBaseInfo.goodsName}}  {{listInformation.orderBaseInfo.goodsWeight}}吨  {{listInformation.orderBaseInfo.goodsVolume}}方</span>
+                </h6>
+                <h6>
+                    <span>额外服务：</span>
+                    <span>{{listInformation.orderBaseInfo.extraName}}</span>
+                </h6>
+                <h6>
+                    <span>收货联系人：</span>
+                    <span>{{listInformation.orderBaseInfo.receiverPhone}}</span>
+                </h6>
+                <h6>
+                    <span>收货人电话：</span>
+                    <span>{{listInformation.orderBaseInfo.receiverPhone}}</span>
+                </h6>
+                <h6 class="minwidth">
+                    <span>我的司机 优选接单：</span>
+                    <span>{{listInformation.orderBaseInfo.isFirst == 1 ? '已选':'未选'}}</span>
+                </h6>
             </div>
             <div class="essentialInformation">
-                <p>
-                <span>发货地址：</span>
-
-                </p>
-                <p>
-                <span>收货地址：</span>
-
-                </p>
-                <p>
-                <span>给司机捎句话：</span>
-
-                </p>
+                <h6 v-if="listInformation.orderBaseInfo.aflcOrderAddresses.length > 2" class="morewidth">
+                    <span>途径地址：</span>
+                        <p >
+                            <span class="spanDiv" v-for="(obj,idx) in listInformation.orderBaseInfo.aflcOrderAddresses.slice(1,-1)" :key="obj.id">途径地{{idx+1}}：{{obj.viaAddress}}</span>
+                        </p>
+                </h6>
+                <h6 v-else class="morewidth">
+                    <span>途径地址：</span>
+                    <span>暂无途径地点</span>
+                </h6>
+                <h6 class="lesswidth">
+                    <span>收货地址：</span>
+                    <span>{{listInformation.orderBaseInfo.receiverAddress}}</span>
+                </h6>
+                <h6>
+                    <span>给司机捎句话：</span>
+                    <span>{{listInformation.orderBaseInfo.remark}}</span>
+                </h6>
             </div>
         </el-collapse-item>
         <el-collapse-item title="运费信息" name="2">
             <div class="">
-                <p>
+                <h6>
                     <span>运费总额：</span>
-                    <span></span>
-                </p>
-                <p>
+                    <span>￥{{listInformation.expenses.orderPrice.toFixed(2)}}</span>
+                </h6>
+                <h6>
                     <span>已优惠：</span>
                     <span></span>
-                </p>
-                <p>
+                </h6>
+                <h6>
                     <span>起步价：</span>
-                    <span></span>
-                </p>
-                <p>
+                    <span>￥{{listInformation.expenses.startPrice.toFixed(2)}}</span>
+                </h6>
+                <h6>
                     <span>里程数：</span>
                     <span></span>
-                </p>
-                <p>
+                </h6>
+                <h6>
                     <span>超里程价：</span>
                     <span></span>
-                </p>
+                </h6>
             </div>
             <div class="">
-                <p>
+                <h6>
                     <span>超里程数：</span>
                     <span></span>
-                </p>
-                <p>
+                </h6>
+                <h6>
                     <span>给司机小费：</span>
                     <span></span>
-                </p>
-                <p>
+                </h6>
+                <h6>
                     <span>支付方式：</span>
                     <span></span>
-                </p>
-                <p>
+                </h6>
+                <h6>
                     <span>付款状态：</span>
                     <span></span>
-                </p>
+                </h6>
             </div>
         </el-collapse-item>
         <el-collapse-item title="抢单记录" name="3" v-if="record == true">
@@ -167,12 +173,15 @@
 export default {
     name: 'detailsComponent',
     props: {
+        listInformation:{
+            type:Object,
+            required:true
+        },
         record:{
             type:Boolean,
             
         }
     },
-   
     components:{
     },
     data() {
@@ -208,6 +217,8 @@ export default {
     },
     mounted(){
         // this.init();
+
+        console.log('this.listInformation:',this.listInformation)
     },
     methods: {
         handleChange(val) {
@@ -251,15 +262,46 @@ export default {
                 line-height: 20px;
                 letter-spacing: 0px;
                 color: #666666;
-                p{
+                h6{
                     display: inline-block;
                     color:#333333;
+                    vertical-align: top;
+                    p{
+                        display: inline-block;
+                        vertical-align: top;
+                        span{
+                            color: #333;
+                        }
+                    }
                     span{
-                        color:#666666;
+                        color:#666;
+                    }
+                    span:nth-child(2){
+                        color: #333;
                     }
                 }
                 .el-collapse-item__content{
                     padding-bottom:0;
+                    &>div{
+                        margin-top: 5px;
+                    }
+                    .essentialInformation{
+                        h6{
+                            width: 259px;
+                            .spanDiv{
+                                display: block;
+                            }
+                        }
+                        .minwidth{
+                            width: 200px;
+                        }
+                        .morewidth{
+                            width: 522px;
+                        }
+                        .lesswidth{
+                            width: 521px;
+                        }
+                    }
                 }
             }
             .el-table{

@@ -291,7 +291,6 @@ import changeclassify from './changeclassify'
                     this.tableDataTree.forEach(item => {
                         item.platInfo = item.orgPhone +'/'+item.orgName;
                         item.shipperInfo = item.shipperPhone+ '/' +item.shipperName;
-                        
                         item.interceptStartTime = parseTime(item.bindingStartDate,"{y}-{m}-{d}");
                         item.interceptEndTime = parseTime(item.bindingEndDate,"{y}-{m}-{d}");
                     })
