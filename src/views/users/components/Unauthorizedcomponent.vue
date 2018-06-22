@@ -10,7 +10,7 @@
                 </el-form-item>
                 <el-form-item>
                     <el-button type="primary" plain @click="getdata_search">查询</el-button>
-                    <el-button type="info" plain>清空</el-button>
+                    <el-button type="info" plain @click="clearSearch">清空</el-button>
                 </el-form-item>
             </el-form>
                 <!-- <label>所在地：
@@ -31,13 +31,25 @@
                 <el-button type="info" plain>清空</el-button> -->
             </div>
             <div class="export">
-                <el-button type="primary" plain @click="handleCertification">代客认证</el-button>
+                <!-- <el-button type="primary" plain @click="handleCertification">代客认证</el-button> -->
+                <driver-newTemplate
+                 btntext="代客认证"
+                 :plain="true"
+                 type="primary" 
+                 btntype="primary"
+                 icon="el-icon-news"
+                 editType="valetAuth"
+                 :templateItem="selectionData"
+                 btntitle="车主管理"
+                 @getData="getDataList">
+                </driver-newTemplate>
             </div>
             <div class="info_news">
                 <el-table
                     ref="multipleTable"
                     :data="tableDataTree"
                     stripe
+                    :key="theKeys"
                     border
                     @selection-change="handleSelectionChange"
                     tooltip-effect="dark"
@@ -55,21 +67,21 @@
                       label="注册来源">
                     </el-table-column>
                      <el-table-column
-                      prop="belongCity"
+                      prop="belongCityName"
                       label="所在地">
                     </el-table-column>
                     <el-table-column
-                      prop="driverStatus"
+                      prop="driverStatusName"
                       label="状态">
                     </el-table-column>
                     <el-table-column
-                      prop="registerDate"
+                      prop="registerTime"
                       label="注册日期">
                     </el-table-column>
-                     <el-table-column
+                     <!-- <el-table-column
                       prop=""
                       label="操作">
-                    </el-table-column>
+                    </el-table-column> -->
                 </el-table>
                     
                 <el-pagination
@@ -87,12 +99,16 @@
 <script type="text/javascript">
     import {data_get_driver_list,data_get_driver_status} from '@/api/users/carowner/total_carowner.js'
     import GetCityList from '@/components/GetCityList'
+    import { parseTime,formatTime } from '@/utils/index.js'
+    import DriverNewTemplate from '../carowner/driver-newTemplate.vue'
     export default {
         components:{
-            GetCityList
+            GetCityList,
+            DriverNewTemplate
         },
         data(){
             return{
+                theKeys:'11',
                 page:1,//当前页
                 pagesize:20,//每页显示数
                 totalCount:null,//总记录数
@@ -109,6 +125,7 @@
                     name:'全部'
                     }
                 ],
+                selectionData:{},
                 multipleSelection:[],
             }
         },
@@ -117,9 +134,23 @@
             this.getMoreInformation()
         },  
         methods:{
+            clearSearch(){
+                this.formInline={//查询条件
+                    driverMobile:'',
+                    belongCity:'',
+                    driverStatus:'',
+                    carNumber:''
+                }
+            },
             // 判断选中值
             handleSelectionChange(val){
                 this.multipleSelection=val
+                // console.log(this.multipleSelection.length)
+                if(val[0]){
+                    this.selectionData=val[0]
+                } else{
+                   this.selectionData={}
+                }
             },
 
             //代客认证功能
@@ -131,7 +162,11 @@
             firstblood(){
                 data_get_driver_list(this.page,this.pagesize,this.formInline).then(res=>{
                     this.totalCount = res.data.totalCount;
+                    this.theKeys=Math.random()
                     this.tableDataTree = res.data.list;
+                     this.tableDataTree.forEach(item => {
+                        item.registerTime = parseTime(item.registerTime,"{y}-{m}-{d}");
+                    })
                 })
             },
             //点击查询按纽，按条件查询列表
@@ -160,7 +195,10 @@
             handleCurrentChange: function(val) {
                 this.page = val;
                 this.firstblood()
-            },  
+            }, 
+            getDataList(){
+                 this.firstblood()
+            } 
         } 
     }
 </script>

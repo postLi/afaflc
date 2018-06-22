@@ -42,6 +42,7 @@
            :data="tableData1"
            stripe
            border
+           :key="theKey3"
            @selection-change="handleSelectionChange"
            tooltip-effect="dark"
            style="width: 100%">
@@ -58,7 +59,7 @@
            </el-table-column>
            <el-table-column prop="registerOrigin" label="注册来源">
            </el-table-column>
-           <el-table-column prop="belongCity" label="所在地">
+           <el-table-column prop="belongCityName" label="所在地">
            </el-table-column>
            <el-table-column prop="authenticationTime" label="提交认证时间">
            </el-table-column>
@@ -116,7 +117,10 @@
                     <el-option label="区域一" value="shanghai"></el-option>
                     <el-option label="区域二" value="beijing"></el-option>
                   </el-select> -->
-                  <GetCityList v-model="shengheform.belongCity" ref="area"></GetCityList>
+                 <el-input v-model="shengheform.belongCityName" @focus="changeCity" v-if="selectDiaologFlag" ></el-input>
+                 <span v-else>
+                   <GetCityList v-model="shengheform.belongCity" ref="area"></GetCityList>
+                 </span>
                 </el-form-item>
               </el-col>
             </el-row>
@@ -129,7 +133,7 @@
               </el-col>
               <el-col :span="12">
                 <el-form-item label="统一社会信用代码" :label-width="formLabelWidth">
-                  <el-input v-model="shengheform.creditCode"></el-input>
+                  <el-input v-model="shengheform.creditCode" :maxlength="20"></el-input>
                 </el-form-item>
               </el-col>
             </el-row>
@@ -308,6 +312,8 @@ export default {
       }
     }
     return{
+      theKey3:'1',
+      selectDiaologFlag:true,
       options:[], // 货主类型列表
       tableData1:[], // 列表数据
       totalCount:null, // 总数
@@ -331,7 +337,8 @@ export default {
         creditCode:'', // 统一社会信用代码
         businessLicenceFile:'',
         companyFacadeFile:'',
-        shipperCardFile:''
+        shipperCardFile:'',
+        belongCityName:''
       },
       radio1:'',
       radio2:'',
@@ -352,6 +359,9 @@ export default {
     this.getMoreInformation()
   },
   methods:{
+    changeCity(){
+      this.selectDiaologFlag=false
+    },
     formatTime(da){
       let time = (+new Date()) - da
       return parseInt(time / 1000 / (3600*24))+ '天'+ parseInt(time/1000/(3600*24*60*60)*60*60)+ '小时'
@@ -393,6 +403,7 @@ export default {
         data_get_shipper_list(this.page,this.pagesize,this.formAll).then(res=>{
           // console.log('this.tableData1:',this.tableData1, res)
           this.totalCount = res.data.totalCount;
+          this.theKey3=Math.random()
           this.tableData1 = res.data.list;
         })
     },
@@ -435,8 +446,33 @@ export default {
       },2000)
     },
     
+     completeData(){
+      //获取城市name
+      if(this.$refs.area.selectedOptions.length > 1){
+        let province;
+        this.$refs.area.areaData.forEach((item) =>{
+          if(item.code == this.$refs.area.selectedOptions[0]){
+            province = item
+          }
+        })
+        province.children.forEach( item => {
+          if(item.code == this.$refs.area.selectedOptions[1]){
+            this.shengheform.belongCity = item.code;
+            this.shengheform.belongCityName = item.name;
+          }
+        })
+       }else{
+        this.$refs.area.areaData.forEach((item) =>{
+          if(item.code == this.$refs.area.selectedOptions[0]){
+            this.shengheform.belongCity = item.code;
+            this.shengheform.belongCityName = item.name;
+          }
+        })
+      }
+    },
     // 审核不通过
     handlerOut(){
+      this.completeData()
       this.$refs['shengheform'].validate((valid)=>{
         if(valid){
           this.shengheform.belongCity = this.$refs.area.selectedOptions.pop();
@@ -456,6 +492,7 @@ export default {
 
     // 审核通过
     handlerPass(){
+      this.completeData()
       this.$refs['shengheform'].validate((valid)=>{
         if(valid){
           this.shengheform.belongCity = this.$refs.area.selectedOptions.pop();

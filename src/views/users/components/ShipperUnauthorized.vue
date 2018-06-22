@@ -47,14 +47,15 @@
           @getData="getDataList">
         </createdDialog>
         <el-button type="primary" plain icon="el-icon-edit" @click="handleEdit">修改</el-button>
-        <el-button type="primary" plain icon="el-icon-edit" @click="handleFroze">冻结</el-button>
-        <el-button type="primary" plain icon="el-icon-edit" @click="handleBlack">移入黑名单</el-button>
+        <!-- <el-button type="primary" plain icon="el-icon-edit" @click="handleFroze">冻结</el-button>
+        <el-button type="primary" plain icon="el-icon-edit" @click="handleBlack">移入黑名单</el-button> -->
       </div>
       <div class="info_news">
         <el-table
           ref="multipleTable"
           :data="tableData4"
           stripe
+          :key="theKey1"
           border
           @selection-change="handleSelectionChange"
           tooltip-effect="dark"
@@ -72,16 +73,22 @@
             label="注册来源">
           </el-table-column>
           <el-table-column
-            prop="attestationStatus"
+            prop="shipperStatus"
             label="状态">
+            <template slot-scope="scope">
+               {{getAttestationStatus(scope.row.shipperStatus)}}
+             </template>
           </el-table-column>
           <el-table-column
-            prop="belongCity"
+            prop="belongCityName"
             label="所在地">
           </el-table-column>
           <el-table-column
             prop="shipperTypeName"
             label="货主类型">
+            <template slot-scope="scope">
+              {{scope.row.shipperType==='AF0010202'? '企业货主':'普通货主'}}
+             </template>
           </el-table-column>
           <el-table-column
             prop="createTime"
@@ -152,7 +159,7 @@
        </div>
 
        <!-- 冻结 -->
-      <div class="addclassify commoncss">
+      <!-- <div class="addclassify commoncss">
         <el-dialog title="冻结" :visible.sync="frozeDialogFlag">
           <el-form :model="formFroze" :rules="formFrozeRules" ref="formFroze" >
             <el-row>
@@ -176,11 +183,6 @@
                </el-col>
                <el-col :span="12">
                  <el-form-item label="所在地" :label-width="formLabelWidth">
-                  <!-- <el-cascader
-                    :options="options"
-                    v-model="formFroze.belongCity"
-                    @change="handleChange">
-                  </el-cascader> -->
                   <GetCityList v-model="formFroze.belongCity" ref="area"></GetCityList>
                 </el-form-item>
                </el-col>
@@ -263,10 +265,10 @@
             <el-button @click="frozeDialogFlag = false">取 消</el-button>
           </div>
         </el-dialog>
-      </div>
+      </div> -->
 
       <!-- 移入黑名单 -->
-       <div class="addclassify commoncss">
+       <!-- <div class="addclassify commoncss">
         <el-dialog title="移入黑名单" :visible.sync="BlackDialogFlag">
           <el-form :model="formBlack" ref="formBlack" :rules="formBlackRules">
             <el-row>
@@ -290,11 +292,6 @@
                </el-col>
                <el-col :span="12">
                  <el-form-item label="所在地" :label-width="formLabelWidth">
-                  <!-- <el-cascader
-                    :options="options"
-                    v-model="formFroze.belongCity"
-                    @change="handleChange">
-                  </el-cascader> -->
                   <GetCityList v-model="formBlack.belongCity" disabled ref="area"></GetCityList>
                 </el-form-item>
                </el-col>
@@ -358,7 +355,7 @@
             <el-button @click="BlackDialogFlag = false">取 消</el-button>
           </div>
         </el-dialog>
-      </div>
+      </div> -->
 
       </div>
         <!-- 新增分类提示不可为空 -->
@@ -376,7 +373,7 @@ import GetCityList from '@/components/GetCityList'
 import createdDialog from './createdDialog.vue'
 import FreezeDialog from './FreezeDialog.vue'
 import {parseTime} from '@/utils/'
-import {data_get_shipper_list,data_get_shipper_change,data_get_shipper_freezeType,data_get_shipper_type} from '../../../api/users/shipper/all_shipper.js'
+import {data_get_shipper_list,data_get_shipper_change,data_get_shipper_freezeType,data_get_shipper_type,data_get_shipper_status} from '../../../api/users/shipper/all_shipper.js'
 export default {
   components:{
     createdDialog,
@@ -402,9 +399,11 @@ export default {
     }
   
     return{
+      theKey1:'1',
+      optionsStatus:[], // 状态列表
       optionsFormBlack:[], // 黑名单的移入原因
-      optionsReason:[], // 冻结移入原因的
-      options:[],
+      // optionsReason:[], // 冻结移入原因的
+      // options:[],// 货主类型
       tableData4:[],
       totalCount:null,
       page:1,
@@ -417,8 +416,8 @@ export default {
       multipleSelection:[],
       information:null,
       formLabelWidth:'120px',
-      BlackDialogFlag: false, //  移入黑名单弹框控制
-      frozeDialogFlag: false, // 冻结弹框控制
+      // BlackDialogFlag: false, //  移入黑名单弹框控制
+      // frozeDialogFlag: false, // 冻结弹框控制
       changeDialogFlag: false, // 修改弹窗控制
       centerDialogVisible:false, // 提示语弹窗控制
       forms:{
@@ -428,19 +427,19 @@ export default {
         address:'',
         shipperId:''
       },
-      formFroze:{
-        mobile:'',
-        contacts:'',
-        belongCity:null,
-        shipperType:null,
-        companyName:'',
-        address:'',
-        registerOrigin:'',
-        freezeTime:'',
-        freezeCauseRemark :'',
-        freezeCause:null,
-        shipperId:''
-      },
+      // formFroze:{ // 冻结
+      //   mobile:'',
+      //   contacts:'',
+      //   belongCity:null,
+      //   shipperType:null,
+      //   companyName:'',
+      //   address:'',
+      //   registerOrigin:'',
+      //   freezeTime:'',
+      //   freezeCauseRemark :'',
+      //   freezeCause:null,
+      //   shipperId:''
+      // },
       formBlack:{
         mobile:'',
         contacts:'',
@@ -532,11 +531,26 @@ export default {
       }
       
     },
+    getMoreInformation(){
+     var optionsStatus=[]
+      data_get_shipper_status().then(res=>{
+        res.data.map((item)=>{
+          this.optionsStatus.push(item);
+        })
+      })
+    },
+    getAttestationStatus(code){
+      let find = this.optionsStatus.filter(el => {
+        return el.code === code
+      })[0]
+      return find ? find.name : '未知：'+code
+    },
       //点击查询按纽，按条件查询列表
     getdata_search(event){
       this.formInline.belongCity = this.$refs.area.selectedOptions.pop();
       data_get_shipper_list(this.page,this.pagesize,this.formInline).then(res=>{
         this.totalCount = res.data.totalCount;
+        this.theKey1=Math.random()
         this.tableData4 = res.data.list;
       })
     },
@@ -575,32 +589,32 @@ export default {
       }
     },
     // 冻结
-    handleFroze(){
-      if(this.multipleSelection.length == 0){
-        //未选择任何修改内容的提示
-        let information = "未选中任何修改内容";
-        this.hint(information);
-      }else if(this.multipleSelection.length >1){
-        let information = "不可修改多个内容";
-        this.hint(information);
-      } else{
-        this.frozeDialogFlag= true
-      }
-    },
+    // handleFroze(){
+    //   if(this.multipleSelection.length == 0){
+    //     //未选择任何修改内容的提示
+    //     let information = "未选中任何修改内容";
+    //     this.hint(information);
+    //   }else if(this.multipleSelection.length >1){
+    //     let information = "不可修改多个内容";
+    //     this.hint(information);
+    //   } else{
+    //     this.frozeDialogFlag= true
+    //   }
+    // },
 
     // 黑名单
-    handleBlack(){
-      if(this.multipleSelection.length == 0){
-        //未选择任何修改内容的提示
-        let information = "未选中任何修改内容";
-        this.hint(information);
-      }else if(this.multipleSelection.length >1){
-        let information = "不可修改多个内容";
-        this.hint(information);
-      } else{
-        this.BlackDialogFlag= true
-      }
-    },
+    // handleBlack(){
+    //   if(this.multipleSelection.length == 0){
+    //     //未选择任何修改内容的提示
+    //     let information = "未选中任何修改内容";
+    //     this.hint(information);
+    //   }else if(this.multipleSelection.length >1){
+    //     let information = "不可修改多个内容";
+    //     this.hint(information);
+    //   } else{
+    //     this.BlackDialogFlag= true
+    //   }
+    // },
     handleSizeChange(val) {
       console.log(`每页 ${val} 条`);
       this.pagesize=val
@@ -634,64 +648,64 @@ export default {
     },
 
     // 冻结-提交
-    onSave(){
-      this.$refs['formFroze'].validate((valid)=>{
-        if(valid){
-          this.formFroze.belongCity = this.$refs.area.selectedOptions.pop();
-          var forms= Object.assign({}, this.formFroze,{attestationStatus:"AF0010405"})
-          forms.freezeTime = parseTime(forms.freezeTime)
-          data_get_shipper_change(forms).then(res=>{
-            // console.log(res)
-            this.$message.success('冻结修改成功')
-            this.frozeDialogFlag = false;
-            this.firstblood();
-          }).catch(err=>{
-            console.log(err)
-          })
-        }
-      })
-    },
+    // onSave(){
+    //   this.$refs['formFroze'].validate((valid)=>{
+    //     if(valid){
+    //       this.formFroze.belongCity = this.$refs.area.selectedOptions.pop();
+    //       var forms= Object.assign({}, this.formFroze,{attestationStatus:"AF0010405"})
+    //       forms.freezeTime = parseTime(forms.freezeTime)
+    //       data_get_shipper_change(forms).then(res=>{
+    //         // console.log(res)
+    //         this.$message.success('冻结修改成功')
+    //         this.frozeDialogFlag = false;
+    //         this.firstblood();
+    //       }).catch(err=>{
+    //         console.log(err)
+    //       })
+    //     }
+    //   })
+    // },
 
     //移入黑名单-提交
-    handleblackList(){
-      this.$refs['formBlack'].validate((valid)=>{
-        if(valid){
-          this.formBlack.belongCity = this.$refs.area.selectedOptions.pop();
-          var formB= Object.assign({},this.formBlack,{attestationStatus:"AF0010406"})
-          data_get_shipper_change(formB).then(res=>{
-            // console.log(res)
-            this.$message.success('移入黑名单成功')
-            this.BlackDialogFlag = false;
-            this.firstblood();
-          }).catch(err=>{
-            console.log(err)
-          })
-        }
-      })
-    },
+    // handleblackList(){
+    //   this.$refs['formBlack'].validate((valid)=>{
+    //     if(valid){
+    //       this.formBlack.belongCity = this.$refs.area.selectedOptions.pop();
+    //       var formB= Object.assign({},this.formBlack,{attestationStatus:"AF0010406"})
+    //       data_get_shipper_change(formB).then(res=>{
+    //         // console.log(res)
+    //         this.$message.success('移入黑名单成功')
+    //         this.BlackDialogFlag = false;
+    //         this.firstblood();
+    //       }).catch(err=>{
+    //         console.log(err)
+    //       })
+    //     }
+    //   })
+    // },
 
     
-    getMoreInformation(){
+    // getMoreInformation(){
       // 货主类型
-      data_get_shipper_type().then(res=>{
-        // console.log(res)
-        res.data.map((item)=>{
-          this.options.push(item)
-        })
-      })
+      // data_get_shipper_type().then(res=>{
+      //   // console.log(res)
+      //   res.data.map((item)=>{
+      //     this.options.push(item)
+      //   })
+      // })
       // 获取冻结原因字典
-      data_get_shipper_freezeType().then(res=>{
-        res.data.map((item)=>{
-          this.optionsReason.push(item)
-        })
-      }),
+      // data_get_shipper_freezeType().then(res=>{
+      //   res.data.map((item)=>{
+      //     this.optionsReason.push(item)
+      //   })
+      // }),
       // 移入黑名单的原因列表
-      data_get_shipper_freezeType().then(res=>{
-        res.data.map(item=>{
-          this.optionsFormBlack.push(item)
-        })
-      })
-    }
+      // data_get_shipper_freezeType().then(res=>{
+      //   res.data.map(item=>{
+      //     this.optionsFormBlack.push(item)
+      //   })
+      // })
+    // }
   }
 }
 </script>

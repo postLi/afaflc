@@ -215,14 +215,14 @@
     </el-tab-pane>
 
     <!-- 冻结部分 -->
-    <el-tab-pane label="冻结中" name="six">
+    <!-- <el-tab-pane label="冻结中" name="six">
       <ShipperFreezing></ShipperFreezing>
-    </el-tab-pane>
+    </el-tab-pane> -->
 
     <!-- 黑名单部分 -->
-    <el-tab-pane label="黑名单" name="seven">
+    <!-- <el-tab-pane label="黑名单" name="seven">
       <ShipperBlacklist></ShipperBlacklist>
-    </el-tab-pane>
+    </el-tab-pane> -->
 
     </el-tabs>
 

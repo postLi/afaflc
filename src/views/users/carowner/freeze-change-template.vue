@@ -5,44 +5,38 @@
       <el-form :model="formFroze" ref="formFroze" :rules="formFrozeRules">
         <el-row>
             <el-col :span="12">
-              <el-form-item label="手机号码" :label-width="formLabelWidth">
-                <el-input v-model="formFroze.mobile" disabled></el-input>
+              <el-form-item label="手机号码：" :label-width="formLabelWidth">
+                <el-input v-model="formFroze.driverMobile" disabled></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="12">
-              <el-form-item label="公司名称" :label-width="formLabelWidth">
-                <el-input v-model="formFroze.companyName" disabled></el-input>
+              <el-form-item label="车主：" :label-width="formLabelWidth">
+                <el-input v-model="formFroze.driverName" disabled></el-input>
               </el-form-item>
             </el-col>
           </el-row>
           
           <el-row>
             <el-col :span="12">
-              <el-form-item label="联系人" :label-width="formLabelWidth">
+              <el-form-item label="身份证号码：" :label-width="formLabelWidth">
                 <el-input v-model="formFroze.contacts" disabled></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="12">
               <el-form-item label="所在地" :label-width="formLabelWidth">
-              <!-- <el-cascader
-                :options="options"
-                v-model="formFroze.belongCity"
-                @change="handleChange">
-              </el-cascader> -->
-              <!-- <GetCityList v-model="formFroze.belongCity" disabled ref="area"></GetCityList> -->
-              <el-input v-model="formFroze.belongCityName" disabled></el-input>
+              <GetCityList v-model="formFroze.belongCity" disabled ref="area"></GetCityList>
             </el-form-item>
             </el-col>
           </el-row>
 
           <el-row>
             <el-col :span="12">
-              <el-form-item label="详细地址" :label-width="formLabelWidth">
+              <el-form-item label="车牌号：" :label-width="formLabelWidth">
               <el-input v-model="formFroze.address" :maxlength="20" disabled></el-input>
             </el-form-item>
             </el-col>
             <el-col :span="12">
-              <el-form-item label="货主类型" :label-width="formLabelWidth">
+              <el-form-item label="车型" :label-width="formLabelWidth">
               <el-select v-model="formFroze.shipperType" placeholder="请选择" disabled>
               <el-option
                 v-for="item in options"
@@ -56,6 +50,11 @@
             </el-col>
           </el-row>
           <el-row>
+              <el-col :span="12">
+                  <el-form-item label="车型" :label-width="formLabelWidth">
+                      <el-input v-model="formFroze.shipperType"></el-input>
+                  </el-form-item>
+              </el-col>
             <el-col :span="12">
               <el-form-item label="注册来源" :label-width="formLabelWidth">
                 <el-input v-model="formFroze.registerOrigin" :maxlength="20" disabled></el-input>
@@ -115,13 +114,13 @@
   </div>
 </template>
 <script>
-// import GetCityList from '@/components/GetCityList'
+import GetCityList from '@/components/GetCityList'
 import {parseTime} from '@/utils/'
 import {data_get_shipper_type,data_get_shipper_change,data_get_shipper_freezeType} from '@/api/users/shipper/all_shipper.js'
 export default {
   name:'create-Change-ViewDialog',
   components:{
-    // GetCityList
+    GetCityList
   },
   props:{
     params:{
@@ -154,6 +153,9 @@ export default {
      editType: {
       type: String,
       default: 'edit'
+    },
+    count:{
+        type:Number
     }
   },
   data(){
@@ -166,13 +168,12 @@ export default {
       formLabelWidth:'120px',
       freezeDialogFlag:false,
       formFroze: { // 冻结弹框表单
-        mobile: '', // 手机号
-        companyName: '', // 公司名称
+        driverMobile: '', // 手机号
+        driverName: '', // 公司名称
         shipperType:null,
         address:'', // 详细地址
         contacts:'', // 联系人
         belongCity:null, // 所在地
-        belongCityName:'',
         registerOrigin:'', // 注册来源
         creditCode:'', // 统一社会信用代码
         freezeTime:'',
@@ -237,23 +238,22 @@ export default {
       this.$refs.singleTable.setCurrentRow(row);
     },
     openDialog(){
-      if(this.editType ==="edit"){
-        if(this.params.companyName || this.params.contacts){
-          this.freezeDialogFlag=true 
-        }else{
-          this.$message.error('选中一个才可以操作')
-        }
-      }
-      
+    //   if(this.editType ==="edit"){
+    //     if(this.params.companyName || this.params.contacts){
+    //       this.freezeDialogFlag=true 
+    //     }else{
+    //       this.$message.error('选中一个才可以操作')
+    //     }
+    //   }
+      this.freezeDialogFlag=true
       if(this.params){
         var obj = JSON.parse(JSON.stringify(this.params));
         this.formFroze.shipperType=obj.shipperType
         this.formFroze.belongCity=obj.belongCity
-        this.formFroze.belongCityName=obj.belongCityName
-        this.formFroze.mobile=obj.mobile
+        this.formFroze.driverMobile=obj.mobile
         this.formFroze.contacts=obj.contacts
         this.formFroze.address=obj.address
-        this.formFroze.companyName=obj.companyName
+        this.formFroze.driverName=obj.driverName
         this.formFroze.creditCode=obj.creditCode
         this.formFroze.businessLicenceFile=obj.businessLicenceFile
         this.formFroze.companyFacadeFile=obj.companyFacadeFile
@@ -262,10 +262,10 @@ export default {
       }else{
         this.formFroze.shipperType=null
         this.formFroze.belongCity=null
-        this.formFroze.mobile=null
+        this.formFroze.driverMobile=null
         this.formFroze.contacts=null
         this.formFroze.address=null
-        this.formFroze.companyName=null
+        this.formFroze.driverName=null
         this.formFroze.creditCode=null
         this.formFroze.businessLicenceFile=null
         this.formFroze.companyFacadeFile=null
@@ -317,5 +317,7 @@ export default {
   display: inline-block;
 }
 </style>
+
+
 
 

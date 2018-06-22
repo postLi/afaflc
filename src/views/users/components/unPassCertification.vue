@@ -42,7 +42,18 @@
             </div>
             <div class="export">
                 <!-- <el-button type="info">新增</el-button> -->
-                <el-button type="primary" plain @click="handleEnsure">代客认证</el-button>
+                <!-- <el-button type="primary" plain @click="handleEnsure">代客认证</el-button> -->
+                <driver-newTemplate
+                 btntext="代客认证"
+                 :plain="true"
+                 type="primary" 
+                 btntype="primary"
+                 icon="el-icon-news"
+                 editType="valetAuth"
+                 :templateItem="selectionData"
+                 btntitle="车主管理"
+                 @getData="getDataList">
+                </driver-newTemplate>
             </div>
             <div class="info_news">
                 <el-table
@@ -50,7 +61,7 @@
                     :data="tableDataTree"
                     stripe
                     border
-                    @selcection-change="handleSelectionChange"
+                    @selection-change="handleSelectionChange"
                     tooltip-effect="dark"
                     style="width: 100%">
                     <el-table-column
@@ -75,7 +86,7 @@
                       label="注册来源">
                     </el-table-column>
                     <el-table-column
-                      prop="belongCity"
+                      prop="belongCityName"
                       label="所在地">
                     </el-table-column>
                     <el-table-column
@@ -110,9 +121,12 @@
 <script type="text/javascript">
     import {data_get_driver_list,data_get_driver_status} from '../../../api/users/carowner/total_carowner.js'
     import GetCityList from '@/components/GetCityList'
+    import { parseTime,formatTime } from '@/utils/index.js'
+    import DriverNewTemplate from '../carowner/driver-newTemplate'
     export default {
         components:{
-            GetCityList
+            GetCityList,
+            DriverNewTemplate
         },
         data(){
             return{
@@ -132,6 +146,7 @@
                     name:'全部'
                     }
                 ],
+                selectionData:{},
                 multipleSelection:[],
             }
         },
@@ -143,18 +158,28 @@
             // 判断选中与否
             handleSelectionChange(val){
                 this.multipleSelection = val;
+                console.log(val)
+                if(val[0]){
+                    this.selectionData=val[0]
+                } else{
+                    this.selectionData={}
+                }
             },
 
             // 代客认证功能
-            handleEnsure(){
-                console.log('代客认证功能')
-            },
+            // handleEnsure(){
+            //     console.log('代客认证功能')
+            // },
 
             //刷新页面
             firstblood(){
                 data_get_driver_list(this.page,this.pagesize,this.formInline).then(res=>{
                     this.totalCount = res.data.totalCount;
                     this.tableDataTree = res.data.list;
+                    this.tableDataTree.forEach(item => {
+                        item.authenticationTime = parseTime(item.authenticationTime,"{y}-{m}-{d}");
+                        item.authNoPassTime = parseTime(item.authNoPassTime,"{y}-{m}-{d}");
+                    })
                 })
             },
 
@@ -185,7 +210,10 @@
             handleCurrentChange: function(val) {
                 this.page = val;
                 this.firstblood()
-            },  
+            }, 
+            getDataList(){
+                this.firstblood()
+            } 
         }
         
     }
