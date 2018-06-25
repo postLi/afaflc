@@ -236,12 +236,16 @@ import cue from '../../../components/Message/cue'
                     this.dataTotal = res.data.totalCount;
 
                     this.tableDataTree.forEach(item => {
-                        switch(item.payStatus){
-                            
+                        switch(item.orderType){
+                            case "AF01701":
+                                item.orderTypeName = "同城";
+                                break;
                             case "AF01702":
                                 item.orderTypeName = "零担";
                                 break;
-                            
+                            case "AF01703":
+                                item.orderTypeName = "省际";
+                                break;
                         }
 
                         if(this.carTypeList){

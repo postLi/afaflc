@@ -15,7 +15,13 @@
                 </label>
                 <label><span>账号类型&nbsp;</span>
                    <el-select v-model="data.accountType" clearable placeholder="请选择">
-                      
+                       <el-option
+                          v-for="item in optionsAccountType"
+                          :key="item.value"
+                          :label="item.label"
+                          :value="item.code"
+                          >
+                        </el-option>
                     </el-select>
                 </label> 
                 <label><span>交易方式&nbsp;</span>
@@ -30,13 +36,7 @@
                 </label> 
                 <label><span>服务分类&nbsp;</span>
                    <el-select v-model="data.orderType" clearable placeholder="请选择">
-                        <el-option
-                          v-for="item in optionsAccountType"
-                          :key="item.name"
-                          :label="item.name"
-                          :value="item.code"
-                          >
-                        </el-option>
+                            
                     </el-select>
                 </label>
                 <label><span>收支类型&nbsp;</span>
@@ -56,8 +56,8 @@
                 </label>    
                 <!-- {{value6}}  -->
                 <label>
-                  <el-button type="primary"  plain @click="getdata_search">查询</el-button>
-                  <el-button type="primary"  plain @click="reset">重置</el-button>
+                  <el-button type="primary"  plain >查询</el-button>
+                  <el-button type="primary"  plain>重置</el-button>
                 </label>
                 
             </div>
@@ -154,7 +154,7 @@
                         </el-table-column>
                          <el-table-column
                         align = "center"
-                          prop="payStatus"
+                          prop="tradeStatus"
                           label="交易状态">
                         </el-table-column>
                          <el-table-column
@@ -199,17 +199,14 @@
 </template>
 
 <script type="text/javascript">
-import {data_financeList,data_GetServerType} from '../../../api/finance/financeServer.js'
-import {data_GetCarStyle} from '../../../api/server/areaPrice.js'
+import {data_financeList} from '../../../api/finance/financeServer.js'
 import '@/styles/dialog.scss'
-import { parseTime,formatTime } from '@/utils/index.js'
+
 
     export default{
         data(){
             return{
                 data:{
-                  orderSerial:'',
-                  tradeSerial:'',
 
                 },
                 currentPage4:1,
@@ -217,7 +214,7 @@ import { parseTime,formatTime } from '@/utils/index.js'
                 pagesize:20,
                 dataTotal:null,
                 tableDataTree:[],
-                optionsAccountType: [],
+                optionsAccountType: null,
             }
         },
         components:{
@@ -226,32 +223,20 @@ import { parseTime,formatTime } from '@/utils/index.js'
         },
         mounted(){
             this.load();
-            this.getMoreInformation();
         },  
         methods: {
-          //翻页
-           handleSizeChange(val){
-
+           handleSizeChange(obj){
                 this.pagesize = val ;
                 this.load();
            },
-           //跳转当前页
-           handleCurrentChange(val){
-
+           handleCurrentChange(obj){
                 this.page = val;
                 this.load();
            },
-            //点击查询
-            getdata_search(event){
-               this.load()
-            },
-            
            //重置
             reset(){
                 this.data = {
-                    orderSerial:null,
-                    tradeSerial:null,
-                    accountName:null,
+                    
                 };
                 this.load();
             },
@@ -261,23 +246,8 @@ import { parseTime,formatTime } from '@/utils/index.js'
            },
            //双击
             moreinfo(row, event){
-              
+                // console.log(row, event)
                
-            },
-            //获取信息列表
-            getMoreInformation(){
-                data_GetServerType().then(res=>{
-                    res.data.map((item)=>{
-                        this.optionsAccountType.push(item);
-                    })
-                })
-               
-               
-            },
-            //相关信息
-            handleClick(row){
-                this.load();
-                this.data.orderSerial = row.orderSerial;
             },
             //判断是否选中
             getinfomation(selection){
@@ -286,25 +256,15 @@ import { parseTime,formatTime } from '@/utils/index.js'
             //刷新页面  
             load(){
                 data_financeList(this.page,this.pagesize,this.data).then(res=>{
-                   
-                    this.tableDataTree = res.data.list;
-                    this.dataTotal = res.data.totalCount;
-                    this.tableDataTree.forEach(item => {
-                        item.createTime = parseTime(item.createTime,"{y}-{m}-{d}");
-                    })
-                     this.tableDataTree.forEach(item => {
-                        switch(item.payStatus){
-                            case "AF00801":
-                                item.payStatus = "待付款";
-                                break;
-                            
-                    }
-                   }) 
-                 
+                    console.log('res:',res)
+                   // item.startTime = parseTime(item.bindingStartDate,"{y}-{m}-{d}");
+                        // item.endTime = parseTime(item.bindingEndDate,"{y}-{m}-{d}");
 
                 })
             },
-            
+            handleClick(row){
+
+            }
         }
     }
 </script>
@@ -386,7 +346,6 @@ import { parseTime,formatTime } from '@/utils/index.js'
         .classify_info{
             
             padding:170px 13px 18px;
-            height:100%;
             .btns_box{
                 margin-bottom:10px;
                 .el-button{
