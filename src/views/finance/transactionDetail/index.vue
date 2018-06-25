@@ -15,7 +15,13 @@
                 </label>
                 <label><span>账号类型&nbsp;</span>
                    <el-select v-model="data.accountType" clearable placeholder="请选择">
-                            
+                       <el-option
+                          v-for="item in optionsAccountType"
+                          :key="item.value"
+                          :label="item.label"
+                          :value="item.code"
+                          >
+                        </el-option>
                     </el-select>
                 </label> 
                 <label><span>交易方式&nbsp;</span>
@@ -162,6 +168,10 @@
                           prop="totalAmount"
                           label="操作"
                           width="80">
+                          <template slot-scope="scope">
+                              <el-button @click="handleClick(scope.row)" type="text" size="small">相关信息</el-button>
+                              
+                            </template>
                         </el-table-column>
                     </el-table>
                     
@@ -204,6 +214,7 @@ import '@/styles/dialog.scss'
                 pagesize:20,
                 dataTotal:null,
                 tableDataTree:[],
+                optionsAccountType: null,
             }
         },
         components:{
@@ -246,10 +257,14 @@ import '@/styles/dialog.scss'
             load(){
                 data_financeList(this.page,this.pagesize,this.data).then(res=>{
                     console.log('res:',res)
-                   
+                   // item.startTime = parseTime(item.bindingStartDate,"{y}-{m}-{d}");
+                        // item.endTime = parseTime(item.bindingEndDate,"{y}-{m}-{d}");
 
                 })
             },
+            handleClick(row){
+
+            }
         }
     }
 </script>
