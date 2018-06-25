@@ -34,13 +34,6 @@
             </el-col>
             <el-col :span="12">
               <el-form-item label="所在地:" prop="belongCity" :label-width="formLabelWidth">
-                <!-- <el-cascader
-                  :options="areadata"
-                  :props="props"
-                  v-model="belongCity"
-                  @active-item-change="handleChange">
-                </el-cascader> -->
-                <!-- <GetCityList v-model="xinzengform.belongCity"  ref="area"  :disabled="editType=='view'" v-if="selectFlag"></GetCityList> -->
                 <el-input v-model="xinzengform.belongCityName" :disabled="editType=='view'" @focus="changeSelect"  v-if="editType!='add' && !selectFlag"></el-input>
                 <span v-if="selectFlag || editType=='add'">
                   <GetCityList v-model="xinzengform.belongCity"  ref="area"  :disabled="editType=='view'"></GetCityList>

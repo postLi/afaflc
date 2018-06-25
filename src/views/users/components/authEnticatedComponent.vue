@@ -17,99 +17,81 @@
                 </el-form-item>
             </el-form>
             </div>
-            <div class="export">
-                <!-- <el-button type="primary" plain @click="handleEdit">修改</el-button> -->
-                <driver-newTemplate
-                 btntext="修改"
-                 :plain="true"
-                 type="primary" 
-                 btntype="primary"
-                 icon="el-icon-news"
-                 editType="edit"
-                 :templateItem="selectionData1"
-                 btntitle="修改">
-                </driver-newTemplate>
-
-                <!-- <freeze-change-template
-                 btntext="冻结"
-                 :plain="true"
-                 type="primary" 
-                 btntype="primary"
-                 icon="el-icon-news"
-                 editType="edit"
-                 btntitle="冻结">
-
-                </freeze-change-template> -->
-
-                <!-- <driver-blackDialog-template
-                 btntext="移入黑名单"
-                 :plain="true"
-                 type="primary" 
-                 btntype="primary"
-                 icon="el-icon-news"
-                 editType="edit"
-                 btntitle="移入黑名单">
-                </driver-blackDialog-template> -->
+                
+            <div class="classify_info">
+                <div class="btns_box">
+                    <driver-newTemplate
+                    btntext="修改"
+                    :plain="true"
+                    type="primary" 
+                    btntype="primary"
+                    icon="el-icon-news"
+                    editType="edit"
+                    :templateItem="selectionData1"
+                    btntitle="修改">
+                    </driver-newTemplate>
+                </div>
+                <div class="info_news">
+                    <el-table
+                        ref="multipleTable"
+                        :data="tableDataTree"
+                        stripe
+                        border
+                        @selection-change="handleSelectionChange"
+                        tooltip-effect="dark"
+                        style="width: 100%">
+                        <el-table-column
+                        type="selection"
+                        width="80">
+                        </el-table-column>
+                        <el-table-column
+                        prop="carNumber"
+                        label="车牌号">
+                        </el-table-column>
+                        <el-table-column
+                        prop="driverMobile"
+                        label="手机号">
+                        </el-table-column>
+                        <el-table-column
+                        prop="driverName"
+                        label="车主"
+                        width="200">
+                        </el-table-column>
+                        <el-table-column
+                        prop="registerOrigin"
+                        label="注册来源">
+                        </el-table-column>
+                        <el-table-column
+                        prop="belongCityName"
+                        label="所在地">
+                        </el-table-column>
+                        <el-table-column
+                        prop="authPassTime"
+                        label="认证通过日期">
+                        </el-table-column>
+                        <!-- <el-table-column
+                        prop=""
+                        label="操作">
+                        <template slot-scope="scope">
+                            <el-button type="text">修改</el-button>
+                            <el-button type="text">冻结修改</el-button>
+                            <el-button type="text">移入黑名单</el-button>
+                        </template>
+                        </el-table-column> -->
+                    </el-table>
+                        
+                    <el-pagination
+                        @size-change="handleSizeChange"
+                        @current-change="handleCurrentChange"
+                        :current-page="page"
+                        :page-sizes="[20, 50, 200, 400]"
+                        :page-size="pagesize"
+                        layout="total, sizes, prev, pager, next, jumper"
+                        :total="totalCount">
+                    </el-pagination>
+                </div>
             </div>
-            <div class="info_news">
-                <el-table
-                    ref="multipleTable"
-                    :data="tableDataTree"
-                    stripe
-                    border
-                    @selection-change="handleSelectionChange"
-                    tooltip-effect="dark"
-                    style="width: 100%">
-                    <el-table-column
-                      type="selection"
-                      width="80">
-                    </el-table-column>
-                    <el-table-column
-                      prop="carNumber"
-                      label="车牌号">
-                    </el-table-column>
-                    <el-table-column
-                      prop="driverMobile"
-                      label="手机号">
-                    </el-table-column>
-                    <el-table-column
-                      prop="driverName"
-                      label="车主"
-                      width="200">
-                    </el-table-column>
-                    <el-table-column
-                      prop="registerOrigin"
-                      label="注册来源">
-                    </el-table-column>
-                    <el-table-column
-                      prop="belongCityName"
-                      label="所在地">
-                    </el-table-column>
-                    <el-table-column
-                      prop="authPassTime"
-                      label="认证通过日期">
-                    </el-table-column>
-                    <!-- <el-table-column
-                      prop=""
-                      label="操作">
-                      <template slot-scope="scope">
-                          <el-button type="text">修改</el-button>
-                          <el-button type="text">冻结修改</el-button>
-                          <el-button type="text">移入黑名单</el-button>
-                      </template>
-                    </el-table-column> -->
-                </el-table>
-                    
-                <el-pagination
-                       @size-change="handleSizeChange"
-                       @current-change="handleCurrentChange"
-                       :current-page="page"
-                       :page-sizes="[20, 50, 200, 400]"
-                       :page-size="pagesize"
-                       layout="total, sizes, prev, pager, next, jumper"
-                       :total="totalCount">
-                </el-pagination>
-            </div>
+        
     </div>
 </template>
 <script type="text/javascript">

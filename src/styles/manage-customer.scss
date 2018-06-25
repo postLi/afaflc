@@ -106,3 +106,43 @@
 }
 
 
+//search
+.classify_searchinfo{
+  position: absolute;
+  left:0;
+  top:0;
+  padding:15px 16px;
+  border-bottom:2px dashed #ccc;
+  height:70px;
+  width:100%;
+  line-height: 35px;
+  label{
+      margin-right:50px;
+      color: #666;
+      font-size:14px; 
+      .el-input{
+          width:300px;
+          .el-input__inner{
+              color:#3e9ff1;
+              height:30px;
+              line-height: 30px;
+          }
+      }
+      .el-date-editor{
+          height: 30px;
+          line-height: 30px;
+          vertical-align: middle;
+          .el-range-separator{
+              width: 10%;
+              margin-top:-10px; 
+          }
+          .el-input__icon{
+              margin-top:-10px; 
+          }
+      }
+  }
+  .el-button{
+     padding:8px 20px;
+  }
+}
+

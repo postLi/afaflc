@@ -13,87 +13,73 @@
                     <el-button type="info" plain @click="clearSearch">清空</el-button>
                 </el-form-item>
             </el-form>
-                <!-- <label>所在地：
-                    <el-input
-                      placeholder="请输入内容"
-                      v-model="formInline.belongCity"
-                      clearable>
-                    </el-input>
-                </label>
-                <label>手机号：
-                    <el-input
-                      placeholder="请输入内容"
-                      v-model="formInline.driverMobile"
-                      clearable>
-                    </el-input>
-                </label>
-                <el-button type="primary" plain @click="getdata_search">查询</el-button>
-                <el-button type="info" plain>清空</el-button> -->
             </div>
-            <div class="export">
-                <!-- <el-button type="primary" plain @click="handleCertification">代客认证</el-button> -->
-                <driver-newTemplate
-                 btntext="代客认证"
-                 :plain="true"
-                 type="primary" 
-                 btntype="primary"
-                 icon="el-icon-news"
-                 editType="valetAuth"
-                 :templateItem="selectionData"
-                 btntitle="车主管理"
-                 @getData="getDataList">
-                </driver-newTemplate>
+            <div class="classify_info">
+                <div class="btns_box">
+                    <driver-newTemplate
+                    btntext="代客认证"
+                    :plain="true"
+                    type="primary" 
+                    btntype="primary"
+                    icon="el-icon-news"
+                    editType="valetAuth"
+                    :templateItem="selectionData"
+                    btntitle="车主管理"
+                    @getData="getDataList">
+                    </driver-newTemplate>
+                </div>
+                <div class="info_news">
+                    <el-table
+                        ref="multipleTable"
+                        :data="tableDataTree"
+                        stripe
+                        :key="theKeys"
+                        border
+                        @selection-change="handleSelectionChange"
+                        tooltip-effect="dark"
+                        style="width: 100%">
+                        <el-table-column
+                        type="selection"
+                        width="80">
+                        </el-table-column>
+                        <el-table-column
+                        prop="driverMobile"
+                        label="手机号">
+                        </el-table-column>
+                        <el-table-column
+                        prop="registerOrigin"
+                        label="注册来源">
+                        </el-table-column>
+                        <el-table-column
+                        prop="belongCityName"
+                        label="所在地">
+                        </el-table-column>
+                        <el-table-column
+                        prop="driverStatusName"
+                        label="状态">
+                        </el-table-column>
+                        <el-table-column
+                        prop="registerTime"
+                        label="注册日期">
+                        </el-table-column>
+                        <!-- <el-table-column
+                        prop=""
+                        label="操作">
+                        </el-table-column> -->
+                    </el-table>
+                        
+                    <el-pagination
+                        @size-change="handleSizeChange"
+                        @current-change="handleCurrentChange"
+                        :current-page="page"
+                        :page-sizes="[20, 50, 200, 400]"
+                        :page-size="pagesize"
+                        layout="total, sizes, prev, pager, next, jumper"
+                        :total="totalCount">
+                    </el-pagination>
+                </div>
             </div>
-            <div class="info_news">
-                <el-table
-                    ref="multipleTable"
-                    :data="tableDataTree"
-                    stripe
-                    :key="theKeys"
-                    border
-                    @selection-change="handleSelectionChange"
-                    tooltip-effect="dark"
-                    style="width: 100%">
-                    <el-table-column
-                      type="selection"
-                      width="80">
-                    </el-table-column>
-                    <el-table-column
-                      prop="driverMobile"
-                      label="手机号">
-                    </el-table-column>
-                      <el-table-column
-                      prop="registerOrigin"
-                      label="注册来源">
-                    </el-table-column>
-                     <el-table-column
-                      prop="belongCityName"
-                      label="所在地">
-                    </el-table-column>
-                    <el-table-column
-                      prop="driverStatusName"
-                      label="状态">
-                    </el-table-column>
-                    <el-table-column
-                      prop="registerTime"
-                      label="注册日期">
-                    </el-table-column>
-                     <!-- <el-table-column
-                      prop=""
-                      label="操作">
-                    </el-table-column> -->
-                </el-table>
-                    
-                <el-pagination
-                       @size-change="handleSizeChange"
-                       @current-change="handleCurrentChange"
-                       :current-page="page"
-                       :page-sizes="[20, 50, 200, 400]"
-                       :page-size="pagesize"
-                       layout="total, sizes, prev, pager, next, jumper"
-                       :total="totalCount">
-                </el-pagination>
-            </div>
+            
     </div>
 </template>
 <script type="text/javascript">

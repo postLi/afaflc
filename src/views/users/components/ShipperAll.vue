@@ -157,12 +157,6 @@
                </el-col>
                <el-col :span="12">
                  <el-form-item label="所在地" :label-width="formLabelWidth">
-                  <!-- <el-cascader
-                    :options="options"
-                    v-model="formFroze.belongCity"
-                    @change="handleChange">
-                  </el-cascader> -->
-                  <!-- <GetCityList v-model="formBlack.belongCity" disabled ref="area"></GetCityList> -->
                   <el-input v-model="formBlack.belongCityName" disabled></el-input>
                 </el-form-item>
                </el-col>
@@ -529,34 +523,30 @@ export default {
       var optionsAuidSataus=[]
       data_get_shipper_status().then(res=>{
         res.data.map((item)=>{
+			// console.log('item:',item)
           this.optionsStatus.push(item);
         })
       })
       // 获取移入黑名单的列表
       data_get_shipper_BlackType().then(res=>{
-        res.data.map(item=>{
-          this.optionsFormBlack.push(item)
-        })
+          this.optionsFormBlack = res.data;
       })
       // 获取冻结原因下拉
       data_get_shipper_freezeType().then(res=>{
-        // console.log(res)
-        res.data.map((item)=>{
-          this.optionsReason.push(item)
-        })
+          this.optionsReason = res.data;
       })
       data_get_shipper_auid().then(res=>{
-        console.log(res)
-        res.data.map(item=>{
-          this.optionsAuidSataus.push(item)
-        })
+		  console.log('车主状态：',res)
+          this.optionsAuidSataus = res.data;
       })
-    },
+	},
+	//
     getAccountStatus(code){
-      let findAuid=this.optionsAuidSataus.filter(el => {
-        return el.code === code
-      })[0]
-      return findAuid ? findAuid.name : '正常'
+		console.log('this.optionsAuidSataus:',this.optionsAuidSataus)
+    //   let findAuid=this.optionsAuidSataus.filter(el => {
+    //     return el.code === code
+    //   })[0]
+    //   return findAuid ? findAuid.name : '正常'
     },
       //点击查询按纽，按条件查询列表
     getdata_search(event) {
@@ -567,7 +557,6 @@ export default {
           this.tableDataAll = res.data.list;
         })
     },
-    
     //清空
     clearSearch(){
       this.formAll = {

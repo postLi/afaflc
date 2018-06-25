@@ -1,6 +1,6 @@
 <template>
     <div class="DispatchTrack clearfix">
-             <div class="classify_searchinfo">
+            <div class="classify_searchinfo">
                 <label>订单号&nbsp;
                    <el-input v-model="data.shipperName" placeholder="请输入内容" clearable></el-input>
                 </label>
