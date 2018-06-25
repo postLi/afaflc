@@ -415,7 +415,17 @@ export default {
 </script>
 <style  lang="scss">
 .addclassify{
-    display: inline-block;
+    .el-dialog__wrapper{
+        .el-dialog{
+            width: 980px;
+            .el-dialog__body{
+                border-bottom:1px solid #ccc;   
+                margin-bottom: 0; 
+                margin: 0 10px;
+            }
+        }
+    }
+    
 }
 </style>
 

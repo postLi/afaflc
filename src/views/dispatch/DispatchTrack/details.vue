@@ -105,7 +105,7 @@
                 </h6>
                 <h6>
                     <span>超里程价：</span>
-                    <span></span>
+                    <span>￥{{listInformation.expenses.outMileagePrice.toFixed(2)}}</span>
                 </h6>
             </div>
             <div class="">

@@ -16,29 +16,6 @@
                 <el-button type="info" plain>清空</el-button>
             </el-form-item>
         </el-form>
-            <!-- <label>所在地：
-                <el-input
-                    placeholder="请输入内容"
-                    v-model="formInline.belongCity"
-                    clearable>
-                </el-input>
-            </label>
-            <label>车牌号：
-                <el-input
-                    placeholder="请输入内容"
-                    v-model="formInline.carNumber"
-                    clearable>
-                </el-input>
-            </label>
-            <label>手机号：
-                <el-input
-                    placeholder="请输入内容"
-                    v-model="formInline.driverMobile"
-                    clearable>
-                </el-input>
-            </label>
-            <el-button type="primary" plain @click="getdata_search">查询</el-button>
-            <el-button type="info" plain>清空</el-button> -->
         </div>
         <div class="export">
             <!-- <el-button type="info">新增</el-button> -->

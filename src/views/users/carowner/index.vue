@@ -37,7 +37,6 @@
         data:function(){
             return{
             	activeName2: 'first',
-                
             }
         },
         components:{
@@ -60,120 +59,50 @@
 
 <style type="text/css" lang="scss">
     .carOwner{
-        height:100%;
+        height:100%;    
+        position: relative;
+        margin-left:7px;
         .shipper_searchinfo{
-            padding:0 30px 15px 30px;
-            border-bottom:1px solid #ccc;
-            label{
-                margin-right:50px;
-                .el-input{
-                    width:230px;
-                }
-            }
-        }
-        .export{
-            padding:10px 30px;
-            .el-button{
-
-            }
-        }
-        .info_news{
-            padding:10px 30px;
-            .el-table{
-                table{
-                    width: 100% !important;
-                    th,td{
-                        text-align:center;
-                    }
-                }
-            }
-        }
-        .el-pagination{
-            margin-top:20px;
-            text-align:right;
-        }
-        .commoncss{
-            .el-dialog{
-                margin-top: 10vh !important;
-                max-height:80%;
-                overflow:auto;
-                .el-dialog__header{
-                    border-bottom:1px solid #ccc;
-                    text-align:center;
-                    background:#ddd;
-                    font-weight:bold;
-                }
-                .el-input{
-                    width:300px;
-                }
-                .el-dialog__body{
-                    padding: 30px 0;
-                    .el-form{
-                        .el-form-item{
-                            display:inline-block;
-                            .el-input{
-
-                            }
-                            
-                        }
-                    }
-                }
-                .dialog-footer{
-                    text-align:center;
-                }
-            }
-            .data_pic{
-                padding-left:20px;
-                text-align:center;
-                .data_pic_c{
-                    display:inline-block;
-                    width:300px;
-                    .el-radio-group{
-                        text-align:left;
-                        .el-radio{
-                            margin:10px 0;
-                        }
-                    }
-                }
-            }
-            .shipper_information{
-                h2{
-                    margin:20px 50px;
-                    padding:10px 0; 
-                    border-bottom:1px solid #ccc;
-                }
-            }
-        }
-        .uncommitted{
-            .data_pic{
-                .el-form-item{
-                    display:block !important;
-                }
-                .el-form-item__label{
-                    float:left;
-                }
+            position: absolute;
+            left:0;
+            top:0;
+            padding:15px 16px;
+            border-bottom:2px dashed #ccc;
+            height:70px;
+            width:100%;
+            line-height: 35px;
+            .el-form-item{
                 .el-form-item__content{
-                    float:left;
-                    margin-left: 0 !important;
-                    .upload-demo{
-                        overflow:hidden;
-                        .el-upload{
-                            float:right;
-                            margin:0 20px;
+                    .el-input{
+                        .el-input__inner{
+                            color:#3e9ff1;
+                            height:30px;
+                            line-height: 30px;
                         }
-                        .el-upload-list {
-                            float:right;
-                        }
+                    }
+                    .el-button{
+                        padding:8px 20px;
                     }
                 }
             }
         }
-        .follow{
-            .textarea_info{
-                display:block !important;
-                margin-right:55px;
+        .classify_info{
+            height:100%;
+            padding:90px 13px 18px;
+            .btns_box{
+                margin-bottom:10px;
+                .el-button{
+                    margin-right:20px;
+                    padding:10px 20px;
+                }
             }
-            
+            .info_news{
+                height:90%;
+            }
+            .el-pagination{
+                margin-top:13px;
+                text-align:right;
+            }
         }
     }
 

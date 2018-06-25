@@ -1,7 +1,7 @@
 <template>
     <div>
          <div class="shipper_searchinfo">
-            <el-form inline>
+            <el-form inline >
                 <el-form-item label="所在地：">
                      <GetCityList v-model="formInline.belongCity" ref="area"></GetCityList>
                 </el-form-item>
@@ -21,7 +21,7 @@
                     <el-select v-model="formInline.accountStatus" placeholder="请选择" clearable>
                         <el-option
                             v-for="item in optionsAuidSataus"
-                            :key="item.value"
+                            :key="item.id"
                             :label="item.name"
                             :value="item.code"
                             :disabled="item.disabled"
@@ -42,84 +42,87 @@
             </el-form>
 
             </div>
-            <div class="export">
-                <!-- <el-button type="primary" plain @click="handleCreate">新增</el-button> -->
-                <driver-newTemplate
-                 btntext="新增"
-                 :plain="true"
-                 type="primary" 
-                 btntype="primary"
-                 icon="el-icon-news"
-                 editType="add"
-                 btntitle="新增车主"
-                 @getData="getDataList">
-                </driver-newTemplate>
+            <div class="classify_info">
+                <div class="btns_box">
+                    <driver-newTemplate
+                    btntext="新增"
+                    :plain="true"
+                    type="primary" 
+                    btntype="primary"
+                    icon="el-icon-news"
+                    editType="add"
+                    btntitle="新增车主"
+                    @getData="getDataList">
+                    </driver-newTemplate>
+
+                </div>
+                <div class="info_news">
+                    <el-table
+                        ref="multipleTable"
+                        :data="tableDataTree"
+                        stripe
+                        border
+                        tooltip-effect="dark"
+                        style="width: 100%">
+                        <el-table-column
+                        type="index"
+                        label="序号"
+                        width="80">
+                        </el-table-column>
+                        <el-table-column
+                        prop="driverMobile"
+                        label="手机号">
+                        <template slot-scope="scoped">
+                            <driver-newTemplate
+                            :templateItem="scoped.row"
+                                :btntext="scoped.row.driverMobile"
+                                type="primary" 
+                                btntype="text"
+                                editType="view"
+                                btntitle="新增车主">
+                                </driver-newTemplate>
+                        </template>
+                        </el-table-column>
+                        <el-table-column
+                        prop="carNumber"
+                        label="车牌号">
+                        </el-table-column>
+                        <el-table-column
+                        prop="driverName"
+                        label="车主"
+                        width="200">
+                        </el-table-column>
+                        <el-table-column
+                        prop="registerOrigin"
+                        label="注册来源">
+                        </el-table-column>
+                        <el-table-column prop="accountStatusName" label="账户状态"></el-table-column>
+                        <el-table-column
+                        prop="belongCityName"
+                        label="所在地">
+                        </el-table-column>
+                        <el-table-column
+                        prop="driverStatusName"
+                        label="状态">
+                        </el-table-column>
+                        <el-table-column
+                        prop="createTime"
+                        label="注册日期">
+                        </el-table-column>
+                    </el-table>
+                        
+                    <el-pagination
+                        @size-change="handleSizeChange"
+                        @current-change="handleCurrentChange"
+                        :current-page="page"
+                        :page-sizes="[20, 50, 200, 400]"
+                        :page-size="pagesize"
+                        layout="total, sizes, prev, pager, next, jumper"
+                        :total="totalCount">
+                    </el-pagination>
+                </div>
             </div>
-            <div class="info_news">
-                <el-table
-                    ref="multipleTable"
-                    :data="tableDataTree"
-                    stripe
-                    border
-                    tooltip-effect="dark"
-                    style="width: 100%">
-                    <el-table-column
-                      type="index"
-                      label="序号"
-                      width="80">
-                    </el-table-column>
-                    <el-table-column
-                      prop="driverMobile"
-                      label="手机号">
-                      <template slot-scope="scoped">
-                          <driver-newTemplate
-                           :templateItem="scoped.row"
-                            :btntext="scoped.row.driverMobile"
-                            type="primary" 
-                            btntype="text"
-                            editType="view"
-                            btntitle="新增车主">
-                            </driver-newTemplate>
-                      </template>
-                    </el-table-column>
-                    <el-table-column
-                      prop="carNumber"
-                      label="车牌号">
-                    </el-table-column>
-                    <el-table-column
-                      prop="driverName"
-                      label="车主"
-                      width="200">
-                    </el-table-column>
-                    <el-table-column
-                      prop="registerOrigin"
-                      label="注册来源">
-                    </el-table-column>
-                    <el-table-column prop="accountStatusName" label="账户状态"></el-table-column>
-                    <el-table-column
-                      prop="belongCityName"
-                      label="所在地">
-                    </el-table-column>
-                    <el-table-column
-                      prop="driverStatusName"
-                      label="状态">
-                    </el-table-column>
-                    <el-table-column
-                      prop="createTime"
-                      label="注册日期">
-                    </el-table-column>
-                </el-table>
-                    
-                <el-pagination
-                       @size-change="handleSizeChange"
-                       @current-change="handleCurrentChange"
-                       :current-page="page"
-                       :page-sizes="[20, 50, 200, 400]"
-                       :page-size="pagesize"
-                       layout="total, sizes, prev, pager, next, jumper"
-                       :total="totalCount">
-                </el-pagination>
-            </div>
+            
     </div>
 </template>
 <script type="text/javascript">
@@ -206,9 +209,7 @@
                 // 账户状态获取
                 data_get_shipper_auid().then(res=>{
                     console.log(res)
-                    res.data.map(item=>{
-                    this.optionsAuidSataus.push(item)
-                    })
+                    this.optionsAuidSataus = res.data;
                 })
             },
              //每页显示数据量变更
