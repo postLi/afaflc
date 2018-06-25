@@ -17,106 +17,76 @@
               <el-button type="info" plain @click="clearSearch">清空</el-button>
             </el-form-item>
           </el-form>
-        <!-- <label>所在地： -->
-          <!-- <el-cascader
-            :options="options"
-            v-model="formInline.belongCity"
-            @change="handleChange">
-          </el-cascader> -->
-           <!-- <GetCityList v-model="formInline.belongCity" ref="area"></GetCityList>
-        </label>
-        <label>手机号码：
-          <el-input
-            placeholder="请输入内容"
-            v-model.trim="formInline.mobile"
-            clearable>
-          </el-input>
-        </label>
-        <el-button type="primary" plain @click="getdata_search">查询</el-button>
-        <el-button type="info" plain @click="clearSearch">清空</el-button> -->
       </div>
-      <div class="export">
-        <!-- <el-button type="primary" @click="addClassfy">新增</el-button> -->
-        <createdDialog btntext="代客认证"
-          :params="selectRowData"
-          :plain="true" type="primary" 
-          btntype="primary" 
-          icon="el-icon-news"
-          editType="edit" 
-          btntitle="代客提交"
-          @getData="getDataList">
-        </createdDialog>
-        <el-button type="primary" plain icon="el-icon-edit" @click="handleEdit">修改</el-button>
-        <!-- <el-button type="primary" plain icon="el-icon-edit" @click="handleFroze">冻结</el-button>
-        <el-button type="primary" plain icon="el-icon-edit" @click="handleBlack">移入黑名单</el-button> -->
-      </div>
-      <div class="info_news">
-        <el-table
-          ref="multipleTable"
-          :data="tableData4"
-          stripe
-          :key="theKey1"
-          border
-          @selection-change="handleSelectionChange"
-          tooltip-effect="dark"
-          style="width: 100%">
-          <el-table-column
-            type="selection"
-            width="80px">
-          </el-table-column>
-          <el-table-column
-            prop="mobile"
-            label="手机号">
-          </el-table-column>
-          <el-table-column
-            prop="registerOrigin"
-            label="注册来源">
-          </el-table-column>
-          <el-table-column
-            prop="shipperStatus"
-            label="状态">
-            <template slot-scope="scope">
-               {{getAttestationStatus(scope.row.shipperStatus)}}
-             </template>
-          </el-table-column>
-          <el-table-column
-            prop="belongCityName"
-            label="所在地">
-          </el-table-column>
-          <el-table-column
-            prop="shipperTypeName"
-            label="货主类型">
-            <template slot-scope="scope">
-              {{scope.row.shipperType==='AF0010202'? '企业货主':'普通货主'}}
-             </template>
-          </el-table-column>
-          <el-table-column
-            prop="createTime"
-            label="注册日期">
-          </el-table-column>
-          <!-- <el-table-column
-            fixed="right"
-            label="操作"
-            width="300">
-            <template slot-scope="scope"> -->
-              <!-- <el-button @click="handleClick(scope.row)" type="text" size="small">代客认证</el-button> -->
-               <!-- <createdDialog :params="scope.row" btntype="text" btntext="代客认证" editType="edit" btntitle="代客提交" @getData="getDataList"></createdDialog> -->
-              <!-- <el-button @click="handleEdit(scope.row)" type="text">修改</el-button> -->
-              <!-- <el-button  type="text">冻结</el-button> -->
-              <!-- <el-button type="text" size="small">移入黑名单</el-button> -->
-            <!-- </template>
-          </el-table-column> -->
-        </el-table>
-        <el-pagination
-          @size-change="handleSizeChange"
-          @current-change="handleCurrentChange"
-          :current-page="page"
-          :page-sizes="[20, 50, 200, 400]"
-          :page-size="pagesize"
-          layout="total, sizes, prev, pager, next, jumper"
-          :total="totalCount">
-        </el-pagination>
-
+	  	<div class="classify_info">
+		  	<div class="btns_box">
+				<createdDialog btntext="代客认证"
+				:params="selectRowData"
+				:plain="true" type="primary" 
+				btntype="primary" 
+				icon="el-icon-news"
+				editType="edit" 
+				btntitle="代客提交"
+				@getData="getDataList">
+				</createdDialog>
+				<el-button type="primary" plain icon="el-icon-edit" @click="handleEdit">修改</el-button>
+			</div>
+			<div class="info_news">
+				<el-table
+				ref="multipleTable"
+				:data="tableData4"
+				stripe
+				:key="theKey1"
+				border
+				@selection-change="handleSelectionChange"
+				tooltip-effect="dark"
+				style="width: 100%">
+				<el-table-column
+					type="selection"
+					width="80px">
+				</el-table-column>
+				<el-table-column
+					prop="mobile"
+					label="手机号">
+				</el-table-column>
+				<el-table-column
+					prop="registerOrigin"
+					label="注册来源">
+				</el-table-column>
+				<el-table-column
+					prop="shipperStatus"
+					label="状态">
+					<template slot-scope="scope">
+					{{getAttestationStatus(scope.row.shipperStatus)}}
+					</template>
+				</el-table-column>
+				<el-table-column
+					prop="belongCityName"
+					label="所在地">
+				</el-table-column>
+				<el-table-column
+					prop="shipperTypeName"
+					label="货主类型">
+					<template slot-scope="scope">
+					{{scope.row.shipperType==='AF0010202'? '企业货主':'普通货主'}}
+					</template>
+				</el-table-column>
+				<el-table-column
+					prop="createTime"
+					label="注册日期">
+				</el-table-column>
+				</el-table>
+				<el-pagination
+				@size-change="handleSizeChange"
+				@current-change="handleCurrentChange"
+				:current-page="page"
+				:page-sizes="[20, 50, 200, 400]"
+				:page-size="pagesize"
+				layout="total, sizes, prev, pager, next, jumper"
+				:total="totalCount">
+				</el-pagination>
+			</div>	
+		</div>
       <!-- 修改 -->
        <div class="addclassify commoncss">
           <el-dialog title="修改" :visible.sync="changeDialogFlag">
@@ -158,206 +128,7 @@
           </el-dialog>
        </div>
 
-       <!-- 冻结 -->
-      <!-- <div class="addclassify commoncss">
-        <el-dialog title="冻结" :visible.sync="frozeDialogFlag">
-          <el-form :model="formFroze" :rules="formFrozeRules" ref="formFroze" >
-            <el-row>
-                <el-col :span="12">
-                  <el-form-item label="手机号码" :label-width="formLabelWidth">
-                    <el-input v-model="formFroze.mobile" disabled></el-input>
-                  </el-form-item>
-                </el-col>
-                <el-col :span="12">
-                  <el-form-item label="公司名称" :label-width="formLabelWidth">
-                    <el-input v-model="formFroze.companyName" disabled></el-input>
-                  </el-form-item>
-                </el-col>
-              </el-row>
-              
-               <el-row>
-               <el-col :span="12">
-                 <el-form-item label="联系人" :label-width="formLabelWidth">
-                    <el-input v-model="formFroze.contacts" disabled></el-input>
-                  </el-form-item>
-               </el-col>
-               <el-col :span="12">
-                 <el-form-item label="所在地" :label-width="formLabelWidth">
-                  <GetCityList v-model="formFroze.belongCity" ref="area"></GetCityList>
-                </el-form-item>
-               </el-col>
-             </el-row>
 
-              <el-row>
-               <el-col :span="12">
-                 <el-form-item label="详细地址" :label-width="formLabelWidth">
-                  <el-input v-model="formFroze.address" :maxlength="20" disabled></el-input>
-                </el-form-item>
-               </el-col>
-               <el-col :span="12">
-                 <el-form-item label="货主类型" :label-width="formLabelWidth">
-                  <el-select v-model="formFroze.shipperType" placeholder="请选择" disabled>
-                  <el-option
-                    v-for="item in options"
-                    :key="item.value"
-                    :label="item.name"
-                    :value="item.code"
-                    :disabled="item.disabled">
-                  </el-option>
-                </el-select>
-                </el-form-item>
-               </el-col>
-             </el-row>
-             <el-row>
-               <el-col :span="12">
-                  <el-form-item label="注册来源" :label-width="formLabelWidth">
-                    <el-input v-model="formFroze.registerOrigin" :maxlength="20" disabled></el-input>
-                  </el-form-item>
-               </el-col>
-             </el-row>
-             <div class="shipper_information">
-                <h2>冻结原因</h2>
-             </div>
-             <el-row>
-               <el-col :span="24">
-                 <el-form-item label="冻结原因" prop="freezeCause" :label-width="formLabelWidth">
-                  <el-select v-model="formFroze.freezeCause" placeholder="请选择" clearable>
-                    <el-option
-                      v-for="item in optionsReason"
-                      :key="item.value"
-                      :label="item.name"
-                      :value="item.code">
-                    </el-option>
-                  </el-select>
-                </el-form-item>
-               </el-col>
-             </el-row>
-              <el-row>
-                <el-col :span="24">
-                  <el-form-item label="解冻日期" prop="freezeTime" :label-width="formLabelWidth">
-                    <el-date-picker
-                      v-model="formFroze.freezeTime"
-                      type="datetime"
-                      placeholder="选择日期"
-                      format="yyyy-MM-dd"
-                      :picker-options="pickerOptions">
-                    </el-date-picker>
-                    <el-radio-group v-model="radio" @change="timeChange">
-                      <el-radio :label="1">1天</el-radio>
-                      <el-radio :label="3">3天</el-radio>
-                      <el-radio :label="7">一周</el-radio>
-                      <el-radio :label="9">一个月</el-radio>
-                      <el-radio :label="10">永久</el-radio>
-                    </el-radio-group>
-                  </el-form-item>
-                </el-col>
-              </el-row>
-             <el-row>
-               <el-col :span="24">
-                  <el-form-item label="冻结原因说明"  :label-width="formLabelWidth">
-                    <el-input type="textarea" :rows="2" :maxlength="100" v-model="formFroze.freezeCauseRemark "></el-input>
-                  </el-form-item>
-               </el-col>
-             </el-row>
-          </el-form>
-          <div slot="footer" class="dialog-footer">
-            <el-button type="primary" @click="onSave">确 定</el-button>
-            <el-button @click="frozeDialogFlag = false">取 消</el-button>
-          </div>
-        </el-dialog>
-      </div> -->
-
-      <!-- 移入黑名单 -->
-       <!-- <div class="addclassify commoncss">
-        <el-dialog title="移入黑名单" :visible.sync="BlackDialogFlag">
-          <el-form :model="formBlack" ref="formBlack" :rules="formBlackRules">
-            <el-row>
-                <el-col :span="12">
-                  <el-form-item label="手机号码" :label-width="formLabelWidth">
-                    <el-input v-model="formBlack.mobile" disabled></el-input>
-                  </el-form-item>
-                </el-col>
-                <el-col :span="12">
-                  <el-form-item label="公司名称" :label-width="formLabelWidth">
-                    <el-input v-model="formBlack.companyName" disabled></el-input>
-                  </el-form-item>
-                </el-col>
-              </el-row>
-              
-               <el-row>
-               <el-col :span="12">
-                 <el-form-item label="联系人" :label-width="formLabelWidth">
-                    <el-input v-model="formBlack.contacts" disabled></el-input>
-                  </el-form-item>
-               </el-col>
-               <el-col :span="12">
-                 <el-form-item label="所在地" :label-width="formLabelWidth">
-                  <GetCityList v-model="formBlack.belongCity" disabled ref="area"></GetCityList>
-                </el-form-item>
-               </el-col>
-             </el-row>
-
-              <el-row>
-               <el-col :span="12">
-                 <el-form-item label="详细地址" :label-width="formLabelWidth">
-                  <el-input v-model="formBlack.address" :maxlength="20" disabled></el-input>
-                </el-form-item>
-               </el-col>
-               <el-col :span="12">
-                 <el-form-item label="货主类型" :label-width="formLabelWidth">
-                  <el-select v-model="formBlack.shipperType" placeholder="请选择" disabled>
-                  <el-option
-                    v-for="item in options"
-                    :key="item.value"
-                    :label="item.name"
-                    :value="item.code"
-                    :disabled="item.disabled">
-                  </el-option>
-                  </el-select>
-                </el-form-item>
-               </el-col>
-             </el-row>
-             <el-row>
-               <el-col :span="12">
-                  <el-form-item label="注册来源" :label-width="formLabelWidth">
-                    <el-input v-model="formBlack.registerOrigin" disabled :maxlength="20"></el-input>
-                  </el-form-item>
-               </el-col>
-             </el-row>
-             <div class="shipper_information">
-                <h2>移入黑名单信息</h2>
-                <el-row>
-                  <el-col :span="24">
-                    <el-form-item label="移入原因:" prop="putBlackCause" :label-width="formLabelWidth">
-                      <el-select v-model="formBlack.putBlackCause" placeholder="请选择" clearable>
-                        <el-option
-                          v-for="item in optionsFormBlack"
-                          :key="item.value"
-                          :label="item.name"
-                          :value="item.code">
-                        </el-option>
-                      </el-select>
-                    </el-form-item>
-                  </el-col>
-                </el-row>
-                <el-row>
-                  <el-col :span="24">
-                    <el-form-item label="移入黑名单原因说明:" :label-width="formLabelWidth">
-                      <el-input v-model="formBlack.putBlackCauseRemark" :rows="2" :maxlength="100" placeholder="请输入内容" type="textarea"></el-input>
-                    </el-form-item>
-                  </el-col>
-                </el-row>
-             </div>
-          </el-form>
-          
-          <div slot="footer" class="dialog-footer">
-            <el-button type="primary" @click="handleblackList">确 定</el-button>
-            <el-button @click="BlackDialogFlag = false">取 消</el-button>
-          </div>
-        </el-dialog>
-      </div> -->
-
-      </div>
         <!-- 新增分类提示不可为空 -->
       <div class="cue">
           <el-dialog
@@ -427,19 +198,6 @@ export default {
         address:'',
         shipperId:''
       },
-      // formFroze:{ // 冻结
-      //   mobile:'',
-      //   contacts:'',
-      //   belongCity:null,
-      //   shipperType:null,
-      //   companyName:'',
-      //   address:'',
-      //   registerOrigin:'',
-      //   freezeTime:'',
-      //   freezeCauseRemark :'',
-      //   freezeCause:null,
-      //   shipperId:''
-      // },
       formBlack:{
         mobile:'',
         contacts:'',

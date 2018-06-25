@@ -1,6 +1,6 @@
 <template>
 	<div class="carOwner">
-		<el-tabs v-model="activeName2" type="card" @tab-click="handleClick">
+		<el-tabs v-model="activeName2" type="border-card" @tab-click="handleClick">
 			<el-tab-pane label="全部" name="first">
 				<Total></Total>   
 			</el-tab-pane>
@@ -61,7 +61,6 @@
     .carOwner{
         height:100%;    
         position: relative;
-        margin-left:7px;
         .shipper_searchinfo{
             position: absolute;
             left:0;
@@ -88,7 +87,7 @@
         }
         .classify_info{
             height:100%;
-            padding:90px 13px 18px;
+            padding:90px 13px 0 0;
             .btns_box{
                 margin-bottom:10px;
                 .el-button{
@@ -105,6 +104,4 @@
             }
         }
     }
-
-
 </style>

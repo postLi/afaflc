@@ -1,7 +1,7 @@
 <template>
     <div>
          <div class="shipper_searchinfo">
-             <el-form inline>
+            <el-form inline>
                 <el-form-item label="所在地：">
                      <GetCityList v-model="formInline.belongCity" ref="area"></GetCityList>
                 </el-form-item>

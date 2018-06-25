@@ -16,61 +16,55 @@
               <el-button type="info" plain @click="clearSearch">清空</el-button>
             </el-form-item>
           </el-form>
-      </div>
-      <div class="export">
-        <el-button type="primary" plain icon="el-icon-edit" @click="handleEdit">认证审核</el-button>
-      </div>
-      <div class="info_news">
-        <el-table 
-           ref="mutipleTable"
-           :data="tableData1"
-           stripe
-           border
-           :key="theKey3"
-           @selection-change="handleSelectionChange"
-           tooltip-effect="dark"
-           style="width: 100%">
-          <el-table-column type="selection" width="80px">
-          </el-table-column>
-           <el-table-column label="公司名称">
-             <template slot-scope="scope">
-                <createdDialog :params="scope.row" btntype="text" :btntext="scope.row.companyName" editType="view" btntitle="详情"></createdDialog>
-             </template>
-           </el-table-column>
-            <el-table-column prop="contacts" label="联系人">
-           </el-table-column>
-           <el-table-column prop="mobile" label="手机号">
-           </el-table-column>
-           <el-table-column prop="registerOrigin" label="注册来源">
-           </el-table-column>
-           <el-table-column prop="belongCityName" label="所在地">
-           </el-table-column>
-           <el-table-column prop="authenticationTime" label="提交认证时间">
-           </el-table-column>
-           <el-table-column prop="" label="等待时长">
-             <template slot-scope="scope">
-               {{ scope.row.authenticationTime ? formatTime((+new Date(scope.row.authenticationTime))) : '' }}
-             </template>
-           </el-table-column>
-           <!-- <el-table-column
-            fixed="right"
-            label="操作"
-            width="250">
-            <template slot-scope="scope">
-              <el-button type="text" size="small">认证审核</el-button>
-            </template>
-          </el-table-column> -->
-        </el-table>
-        <el-pagination
-          @size-change="handleSizeChange"
-          @current-change="handleCurrentChange"
-          :current-page="page"
-          :page-sizes="[20, 50, 200, 400]"
-          :page-size="pagesize"
-          layout="total, sizes, prev, pager, next, jumper"
-          :total="totalCount">
-        </el-pagination>
-      </div>
+      	</div>
+      	<div class="classify_info">
+		  <div class="btns_box">
+        	<el-button type="primary" plain icon="el-icon-edit" @click="handleEdit">认证审核</el-button>
+		</div>
+		<div class="info_news">
+			<el-table 
+			ref="mutipleTable"
+			:data="tableData1"
+			stripe
+			border
+			:key="theKey3"
+			@selection-change="handleSelectionChange"
+			tooltip-effect="dark"
+			style="width: 100%">
+			<el-table-column type="selection" width="80px">
+			</el-table-column>
+			<el-table-column label="公司名称">
+				<template slot-scope="scope">
+					<createdDialog :params="scope.row" btntype="text" :btntext="scope.row.companyName" editType="view" btntitle="详情"></createdDialog>
+				</template>
+			</el-table-column>
+				<el-table-column prop="contacts" label="联系人">
+			</el-table-column>
+			<el-table-column prop="mobile" label="手机号">
+			</el-table-column>
+			<el-table-column prop="registerOrigin" label="注册来源">
+			</el-table-column>
+			<el-table-column prop="belongCityName" label="所在地">
+			</el-table-column>
+			<el-table-column prop="authenticationTime" label="提交认证时间">
+			</el-table-column>
+			<el-table-column prop="" label="等待时长">
+				<template slot-scope="scope">
+				{{ scope.row.authenticationTime ? formatTime((+new Date(scope.row.authenticationTime))) : '' }}
+				</template>
+			</el-table-column>
+			</el-table>
+			<el-pagination
+			@size-change="handleSizeChange"
+			@current-change="handleCurrentChange"
+			:current-page="page"
+			:page-sizes="[20, 50, 200, 400]"
+			:page-size="pagesize"
+			layout="total, sizes, prev, pager, next, jumper"
+			:total="totalCount">
+			</el-pagination>
+		</div>
+	  </div>
 
        <!--认证审核部分 -->
     <div class="shenghe commoncss">
@@ -97,10 +91,6 @@
               </el-col>
               <el-col :span="12">
                 <el-form-item label="所在地" :label-width="formLabelWidth" prop="address">
-                  <!-- <el-select v-model="shengheform.belongCity" placeholder="请选择活动区域">
-                    <el-option label="区域一" value="shanghai"></el-option>
-                    <el-option label="区域二" value="beijing"></el-option>
-                  </el-select> -->
                  <el-input v-model="shengheform.belongCityName" @focus="changeCity" v-if="selectDiaologFlag" ></el-input>
                  <span v-else>
                    <GetCityList v-model="shengheform.belongCity" ref="area"></GetCityList>
@@ -135,12 +125,10 @@
               </el-col>
               <el-col :span="12">
                 <el-form-item label="等待时长:" :label-width="formLabelWidth">
-                  <!-- <el-input auto-complete="off"></el-input> -->
                   {{shengheform.authenticationTime? formatTime((+new Date(shengheform.authenticationTime))) : '' }}
                 </el-form-item>
               </el-col>
             </el-row>
-
             <el-row>
               <el-col :span="12">
                 <el-form-item label="注册来源" :label-width="formLabelWidth">
@@ -149,10 +137,6 @@
               </el-col>
               <el-col :span="12">
                 <el-form-item label="货主类型" :label-width="formLabelWidth" prop="shipperType">
-                  <!-- <el-select v-model="shengheform.shipperType" placeholder="请选择活动区域">
-                    <el-option label="区域一" value="shanghai"></el-option>
-                    <el-option label="区域二" value="beijing"></el-option>
-                  </el-select> -->
                   <el-select v-model="shengheform.shipperType" placeholder="请选择">
                   <el-option
                     v-for="item in options"
@@ -166,28 +150,8 @@
               </el-col>
             </el-row>
  
-            <!-- <el-form-item label="长发货物" :label-width="formLabelWidth">
-              <el-input v-model="shengheform.companyname" auto-complete="off"></el-input>
-            </el-form-item>
-            <el-form-item label="提交认证时间" :label-width="formLabelWidth">
-              <el-input v-model="shengheform.companyname" auto-complete="off"></el-input>
-            </el-form-item> -->
-            <!-- <el-form-item label="是否二次提交申请" :label-width="formLabelWidth">
-              <el-input v-model="shengheform.companyname" auto-complete="off"></el-input>
-            </el-form-item> -->
-            <!-- <el-form-item label="注册时经纬度" :label-width="formLabelWidth">
-              <el-input v-model="shengheform.companyname" auto-complete="off"></el-input>
-            </el-form-item>
-            <el-form-item label="首次提交认证时间" :label-width="formLabelWidth">
-              <el-input v-model="shengheform.companyname" auto-complete="off"></el-input>
-            </el-form-item> --> 
             <div class="data_pic">
-                <!-- <img src="" alt="" /><br /> -->
-                <!-- <div class="liceseBigPicture">
-                  <upload class="licensePicture" tip="（必须为jpg/png并且小于5M）" v-model="shengheform.businessLicenceFile" />
-                </div> -->
                 <div class="data_pic_yyzz data_pic_c">
-                    <!-- <img src="" alt="" /> -->
                     <el-form-item>
                     <upload class="licensePicture" tip="（必须为jpg/png并且小于5M）" v-model="shengheform.businessLicenceFile" />
                     </el-form-item>
@@ -201,7 +165,6 @@
                     </el-form-item> 
                 </div>
                 <div class="data_pic_company data_pic_c">
-                    <!-- <img src="" alt="" /> -->
                     <upload class="licensePicture" tip="（必须为jpg/png并且小于5M）" v-model="shengheform.companyFacadeFile" />
                     <h2>公司或档口照片</h2>
                     <el-form-item prop="radio2">
@@ -213,7 +176,6 @@
                     </el-form-item>
                 </div>
                 <div class="data_pic_callingcode data_pic_c">
-                    <!-- <img src="" alt="" /> -->
                     <upload class="licensePicture" tip="（必须为jpg/png并且小于5M）" v-model="shengheform.shipperCardFile" />
                     <h2>发货人名片</h2>
                     <el-form-item prop="radio3">
@@ -225,30 +187,6 @@
                     </el-form-item>
                 </div>
             </div>
-            <!-- <div class="shipper_information">
-                <h2>货主归属信息</h2>
-                <el-form-item label="所属组织" :label-width="formLabelWidth">
-                  <el-input v-model="shengheform.companyname" auto-complete="off"></el-input>
-                </el-form-item>
-                <el-form-item label="归属片区" :label-width="formLabelWidth" prop="hzclassify">
-                  <el-select v-model="shengheform.region" placeholder="请选择">
-                    <el-option label="区域一" value="shanghai"></el-option>
-                    <el-option label="区域二" value="beijing"></el-option>
-                  </el-select>
-                </el-form-item>
-                <el-form-item label="绑定合伙人" :label-width="formLabelWidth" prop="hzclassify">
-                  <el-select v-model="shengheform.region" placeholder="请选择">
-                    <el-option label="区域一" value="shanghai"></el-option>
-                    <el-option label="区域二" value="beijing"></el-option>
-                  </el-select>
-                </el-form-item>
-                <el-form-item label="业务员" :label-width="formLabelWidth" prop="hzclassify">
-                  <el-select v-model="shengheform.region" placeholder="请选择">
-                    <el-option label="区域一" value="shanghai"></el-option>
-                    <el-option label="区域二" value="beijing"></el-option>
-                  </el-select>
-                </el-form-item>
-            </div> -->
           </el-form>
           <div slot="footer" class="dialog-footer">
             <el-button type="primary" plain @click="handlerPass">确认审核通过</el-button>
@@ -257,17 +195,6 @@
           </div>
         </el-dialog>
      </div> 
-     
-      <!-- 提示语的弹框 -->
-     <div class="cue">
-          <el-dialog
-          :visible.sync="centerDialogVisible"
-          center>
-          <span>{{information}}</span>
-          </el-dialog>
-      </div>
-
-
     </div>
 </template>
 <script>
@@ -514,14 +441,6 @@ export default {
 </script>
 <style lang="scss">
 
-// .data_pic{
-//   .liceseBigPicture{
-//     display: block;
-//     width:200px;
-//     height: 200px;
-//     margin: 0 auto;
-//   }
-// }
 </style>
 
 

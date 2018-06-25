@@ -54,7 +54,6 @@
                     btntitle="新增车主"
                     @getData="getDataList">
                     </driver-newTemplate>
-
                 </div>
                 <div class="info_news">
                     <el-table
