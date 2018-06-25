@@ -1,8 +1,8 @@
 import fetch from '@/utils/fetch'
 
-const baseurl = 'aflcusercenterservice'
-const baseurl_two = 'aflccommonservice'
-const baseurl_three= 'aflcsmservice'
+const baseurl = 'aflcusercenterservice-xmy'
+const baseurl_two = 'aflccommonservice-xmy'
+const baseurl_three= 'aflcsmservice-xmy'
 
 // 获取货主列表
 export function data_get_shipper_list(page, pagesize, data) {

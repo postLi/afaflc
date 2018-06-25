@@ -27,111 +27,104 @@
             <el-button type="info" plain @click="clearSearch">清空</el-button>
           </el-form-item>
           </el-form>
-         </div>
-         <div class="export">
-            <!-- <el-button type="primary" @click="addClassfy">新增</el-button> -->
-            <createdDialog btntext="新增" :plain="true" type="primary" btntype="primary" icon="el-icon-news" editType="add" btntitle="新增货主" @getData="getDataList"></createdDialog>
-            <FreezeDialog
-              btntext="冻结"
-              type="primary" 
-              btntitle="冻结"
-              :plain="true"
-              editType='edit'
-              btntype="primary"
-              icon="el-icon-news"
-              :params="selectRowData"
-              @getData="getDataList"
-              >
-            </FreezeDialog>
-            <FreezeDialog
-              btntext="冻结修改"
-              type="primary" 
-              btntitle="冻结修改"
-              :plain="true"
-              editType='edit'
-              btntype="primary"
-              icon="el-icon-news"
-              :params="selectRowData"
-              @getData="getDataList"
-              >
-            </FreezeDialog>
-            <shipperBlackDialog
-              btntext="移入黑名单"
-              type="primary" 
-              btntitle="移入黑名单"
-              :plain="true"
-              editType='edit'
-              btntype="primary"
-              icon="el-icon-news"
-              :params="selectRowData"
-              @getData="getDataList"
-            ></shipperBlackDialog>
-            <el-button type="primary" plain icon="el-icon-edit" @click="handleBlackout">移出黑名单</el-button>
-            <el-button type="primary" plain icon="el-icon-edit" @click="handleUnfroze">解冻</el-button>
-         </div>
-         <div class="info_news">
-           <el-table
-           ref="mutipleTable"
-           :data="tableDataAll"
-           stripe
-           border
-           :key="thekey2"
-           @selection-change="handleSelectionChange"
-           tooltip-effect="dark"
-           style="width: 100%">
-           <el-table-column type='selection' width="80px">
-           </el-table-column>  
-           <el-table-column label="手机号">
-             <template slot-scope="scoped">
-                <!-- <div @click="handleClick(scope.row)">{{scope.row.mobile}}</div> -->
-                <createdDialog :params="scoped.row" btntype="text" :btntext="scoped.row.mobile" editType="view" btntitle="货主详情" @getData="getDataList"></createdDialog>
-              </template>
-           </el-table-column>
-           <el-table-column prop="companyName" label="公司名称">
-           </el-table-column>
-           <el-table-column prop="contacts" label="联系人">
-           </el-table-column>
-           <el-table-column prop="registerOrigin" label="注册来源">
-           </el-table-column>
-           <el-table-column prop="shipperStatus" label="认证状态">
-             <template slot-scope="scope">
-               {{getAttestationStatus(scope.row.shipperStatus)}}
-             </template>
-           </el-table-column>
-           <el-table-column prop="accountStatus" label="账户状态">
-             <template slot-scope="scope">
-               {{getAccountStatus(scope.row.accountStatus)}}
-             </template>
-           </el-table-column>
-           <el-table-column prop="belongCityName" label="所在地">
-           </el-table-column>
-           <el-table-column prop="shipperTypeName" label="货主类型">
-             <template slot-scope="scope">
-              {{scope.row.shipperType==='AF0010202'? '企业货主':'普通货主'}}
-             </template>
-           </el-table-column>
-           <el-table-column prop="createTime" label="注册日期">
-           </el-table-column>
-           </el-table>
-           <el-pagination
-              @size-change="handleSizeChange"
-              @current-change="handleCurrentChange"
-              :current-page="page"
-              :page-sizes="[20, 50, 200, 400]"
-              :page-size="pagesize"
-              layout="total, sizes, prev, pager, next, jumper"
-              :total="totalCount">
-           </el-pagination>
         </div>
-
-        <!-- 提示语的弹框 -->
-      <!-- <div class="cue">
-        <el-dialog
-        :visible.sync="centerDialogVisible"
-        center>
-        <span>{{information}}</span>
-        </el-dialog>
-      </div> -->
+		<div class="classify_info">
+			<div class="btns_box">
+				<createdDialog btntext="新增" :plain="true" type="primary" btntype="primary" icon="el-icon-news" editType="add" btntitle="新增货主" @getData="getDataList"></createdDialog>
+				<FreezeDialog
+				btntext="冻结"
+				type="primary" 
+				btntitle="冻结"
+				:plain="true"
+				editType='edit'
+				btntype="primary"
+				icon="el-icon-news"
+				:params="selectRowData"
+				@getData="getDataList"
+				>
+				</FreezeDialog>
+				<FreezeDialog
+				btntext="冻结修改"
+				type="primary" 
+				btntitle="冻结修改"
+				:plain="true"
+				editType='edit'
+				btntype="primary"
+				icon="el-icon-news"
+				:params="selectRowData"
+				@getData="getDataList"
+				>
+				</FreezeDialog>
+				<shipperBlackDialog
+				btntext="移入黑名单"
+				type="primary" 
+				btntitle="移入黑名单"
+				:plain="true"
+				editType='edit'
+				btntype="primary"
+				icon="el-icon-news"
+				:params="selectRowData"
+				@getData="getDataList"
+				></shipperBlackDialog>
+				<el-button type="primary" plain icon="el-icon-edit" @click="handleBlackout">移出黑名单</el-button>
+				<el-button type="primary" plain icon="el-icon-edit" @click="handleUnfroze">解冻</el-button>
+			</div>
+			<div class="info_news">
+			<el-table
+			ref="mutipleTable"
+			:data="tableDataAll"
+			stripe
+			border
+			:key="thekey2"
+			@selection-change="handleSelectionChange"
+			tooltip-effect="dark"
+			style="width: 100%">
+			<el-table-column type='selection' width="80px">
+			</el-table-column>  
+			<el-table-column label="手机号">
+				<template slot-scope="scoped">
+					<!-- <div @click="handleClick(scope.row)">{{scope.row.mobile}}</div> -->
+					<createdDialog :params="scoped.row" btntype="text" :btntext="scoped.row.mobile" editType="view" btntitle="货主详情" @getData="getDataList"></createdDialog>
+				</template>
+			</el-table-column>
+			<el-table-column prop="companyName" label="公司名称">
+			</el-table-column>
+			<el-table-column prop="contacts" label="联系人">
+			</el-table-column>
+			<el-table-column prop="registerOrigin" label="注册来源">
+			</el-table-column>
+			<el-table-column prop="shipperStatus" label="认证状态">
+				<template slot-scope="scope">
+				{{getAttestationStatus(scope.row.shipperStatus)}}
+				</template>
+			</el-table-column>
+			<el-table-column prop="accountStatus" label="账户状态">
+				<template slot-scope="scope">
+				{{getAccountStatus(scope.row.accountStatus)}}
+				</template>
+			</el-table-column>
+			<el-table-column prop="belongCityName" label="所在地">
+			</el-table-column>
+			<el-table-column prop="shipperTypeName" label="货主类型">
+				<template slot-scope="scope">
+				{{scope.row.shipperType==='AF0010202'? '企业货主':'普通货主'}}
+				</template>
+			</el-table-column>
+			<el-table-column prop="createTime" label="注册日期">
+			</el-table-column>
+			</el-table>
+			<el-pagination
+				@size-change="handleSizeChange"
+				@current-change="handleCurrentChange"
+				:current-page="page"
+				:page-sizes="[20, 50, 200, 400]"
+				:page-size="pagesize"
+				layout="total, sizes, prev, pager, next, jumper"
+				:total="totalCount">
+			</el-pagination>
+			</div>
+		</div>
+         
       <!-- 移出黑名单 -->
     <div class="addclassify commoncss">
         <el-dialog title="移出黑名单" :visible.sync="BlackDialogFlag">
@@ -500,14 +493,6 @@ export default {
         this.unfrozeDialogFlag=true
       }
     },
-    // hint(val){
-    //   this.information = val;
-    //   this.centerDialogVisible = true;
-    //   let timer = setTimeout(()=>{
-    //       this.centerDialogVisible = false;
-    //       clearTimeout(timer)
-    //   },2000)
-    // },
     //刷新页面
     firstblood(){
       data_get_shipper_list(this.page,this.pagesize,this.formAll).then(res=>{
@@ -542,11 +527,11 @@ export default {
 	},
 	//
     getAccountStatus(code){
-		console.log('this.optionsAuidSataus:',this.optionsAuidSataus)
-    //   let findAuid=this.optionsAuidSataus.filter(el => {
-    //     return el.code === code
-    //   })[0]
-    //   return findAuid ? findAuid.name : '正常'
+		// console.log('this.optionsAuidSataus:',this.optionsAuidSataus)
+		let findAuid=this.optionsAuidSataus.filter(el => {
+			return el.code === code
+		})[0]
+		return findAuid ? findAuid.name : '正常'
     },
       //点击查询按纽，按条件查询列表
     getdata_search(event) {
@@ -630,19 +615,5 @@ export default {
 }
 </script>
 <style lang="scss">
-.shipper_searchinfo{
-  label{
-    display: inline-block;
-    margin-left: 10px;
-  }
-  .chooseCityList{
-    display: inline-block;
-  }
-}
-.shipper .shipper_searchinfo label {
-  margin-right: 0px;
-}
-.el-form-item{
-  border: 0;
-}
+
 </style>

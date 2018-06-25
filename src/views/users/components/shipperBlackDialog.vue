@@ -259,9 +259,7 @@ export default {
 }
 </script>
 <style lang="scss">
-.addclassify{
-  display: inline-block;
-}
+
 </style>
 
 
