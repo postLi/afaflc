@@ -52,8 +52,61 @@
                     icon="el-icon-news"
                     editType="add"
                     btntitle="新增车主"
+                    v-on:click.native="addClick"
                     @getData="getDataList">
                     </driver-newTemplate>
+                    <freeze-change-template
+                    btntext="冻结"
+                    type="primary" 
+                    btntitle="冻结"
+                    :plain="true"
+                    editType='edit'
+                    btntype="primary"
+                    icon="el-icon-news"
+                     v-on:click.native="freezeClick"
+                    :params="selectRowData"
+                    @getData="getDataList"
+                    >
+                    </freeze-change-template>
+                    <freeze-change-template
+                    btntext="冻结修改"
+                    type="primary" 
+                    btntitle="冻结修改"
+                    :plain="true"
+                    editType='edit-two'
+                    btntype="primary"
+                    icon="el-icon-news"
+                     v-on:click.native="freezeClick"
+                    :params="selectRowData"
+                    @getData="getDataList"
+                    >
+                    </freeze-change-template>
+                    <unbind-freeze
+                    btntext="解冻"
+                    type="primary" 
+                    btntitle="解冻"
+                    :plain="true"
+                    editType='edit-three'
+                    btntype="primary"
+                    icon="el-icon-news"
+                     v-on:click.native="freezeClick"
+                    :params="selectRowData"
+                    @getData="getDataList"
+                    >
+                    </unbind-freeze>
+                    <blacklist
+                    btntext="移入黑名单"
+                    type="primary" 
+                    btntitle="移入黑名单"
+                    :plain="true"
+                    editType='edit-four'
+                    btntype="primary"
+                    icon="el-icon-news"
+                     v-on:click.native="freezeClick"
+                    :params="selectRowData"
+                    @getData="getDataList"
+                    >
+                    </blacklist>
                 </div>
                 <div class="info_news">
                     <el-table
@@ -61,8 +114,13 @@
                         :data="tableDataTree"
                         stripe
                         border
+                        highlight-current-row
+                        current-row-key
                         tooltip-effect="dark"
+                        @row-click="clickDetails"
+                        @current-change= "handleSelectionChange"
                         style="width: 100%">
+                    
                         <el-table-column
                         type="index"
                         label="序号"
@@ -70,7 +128,8 @@
                         </el-table-column>
                         <el-table-column
                         prop="driverMobile"
-                        label="手机号">
+                        label="手机号"
+                        >
                         <template slot-scope="scoped">
                             <driver-newTemplate
                             :templateItem="scoped.row"
@@ -78,6 +137,7 @@
                                 type="primary" 
                                 btntype="text"
                                 editType="view"
+
                                 btntitle="新增车主">
                                 </driver-newTemplate>
                         </template>
@@ -121,7 +181,7 @@
                     </el-pagination>
                 </div>
             </div>
-            
+             <cue ref="cue"></cue>
     </div>
 </template>
 <script type="text/javascript">
@@ -129,6 +189,11 @@
     import DriverNewTemplate from '../carowner/driver-newTemplate'
     import { parseTime,formatTime } from '@/utils/index.js'
     import GetCityList from '@/components/GetCityList'
+    import cue from '../../../components/Message/cue'
+    import FreezeChangeTemplate from '../carowner/freeze-change-template'
+    import UnbindFreeze from '../carowner/unbind-freeze'
+    import blacklist from '../carowner/blacklist'
+
     export default {
         data(){
             return{
@@ -151,13 +216,20 @@
                     }
                 ],
                 multipleSelection:[],
+                selectRowData:{},
+                
+                 ifInformation:'选中一个才可以操作'
                // driverNewdailogFlag: false, // 新增弹框控制
                // templateItem:{}, //新增数据填充
             }
         },
         components:{
             GetCityList,
-            DriverNewTemplate
+            DriverNewTemplate,
+            cue,
+            FreezeChangeTemplate,
+            UnbindFreeze,
+            blacklist
         },
         mounted(){
             this.firstblood()
@@ -177,7 +249,48 @@
             handleCreate(){
                 console.log('新增功能')
             },
+            //点击选中当前行
+            clickDetails(row, event, column){
+                
+                /*this.$refs.multipleTable.toggleRowSelection(row);
 
+                if(row) {
+               
+                    this.selectRowData=row
+                    
+                  } else {
+                   
+                    this.selectRowData={}
+                   
+                  }*/
+            },
+
+            // 判断选中与否
+            handleSelectionChange(val){
+              this.multipleSelection = val;
+             
+              if(val!= "") {
+               
+                this.selectRowData=val
+                
+              } else{
+               
+                this.selectRowData={}
+                
+               
+              }
+            },
+            freezeClick(val){
+                console.log(this.multipleSelection)
+              if(this.multipleSelection == '') {           
+                this.selectRowData={}
+                 this.$refs.cue.hint(this.ifInformation)
+               
+              } 
+            },
+            addClick(val){
+                this.$refs.multipleTable.setCurrentRow();
+            },
             //刷新页面
             firstblood(){
                 data_get_driver_list(this.page,this.pagesize,this.formInline).then(res=>{
@@ -192,10 +305,7 @@
             //点击查询按纽，按条件查询列表
             getdata_search(event){
                 this.formInline.belongCity = this.$refs.area.selectedOptions.pop();
-                data_get_driver_list(this.page,this.pagesize,this.formInline).then(res=>{
-                    this.dataTotal = res.data.totalCount;
-                    this.tableDataTree = res.data.list;
-                })
+               this.firstblood()
             },
             
             //获取车主状态列表
@@ -230,8 +340,14 @@
     }
 </script>
 <style lang="scss">
+.el-form-item{
+    border:none;
+}
 .carOwner .shipper_searchinfo label{
     margin-right: 0;  
+}
+.el-table--enable-row-hover .el-table__body tr:hover>td {
+    background-color: #bcd6f5;
 }
 .el-form--inline .el-form-item {
     margin-right: 0px;

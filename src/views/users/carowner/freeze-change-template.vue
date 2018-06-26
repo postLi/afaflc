@@ -19,12 +19,13 @@
           <el-row>
             <el-col :span="12">
               <el-form-item label="身份证号码：" :label-width="formLabelWidth">
-                <el-input v-model="formFroze.contacts" disabled></el-input>
+                <el-input v-model="formFroze.driverCardid" disabled></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="12">
               <el-form-item label="所在地" :label-width="formLabelWidth">
-              <GetCityList v-model="formFroze.belongCity" disabled ref="area"></GetCityList>
+              <el-input type="text" v-model="formFroze.belongCityName" disabled ></el-input>
+          
             </el-form-item>
             </el-col>
           </el-row>
@@ -32,12 +33,12 @@
           <el-row>
             <el-col :span="12">
               <el-form-item label="车牌号：" :label-width="formLabelWidth">
-              <el-input v-model="formFroze.address" :maxlength="20" disabled></el-input>
+              <el-input v-model="formFroze.carNumber" :maxlength="20" disabled></el-input>
             </el-form-item>
             </el-col>
             <el-col :span="12">
               <el-form-item label="车型" :label-width="formLabelWidth">
-              <el-select v-model="formFroze.shipperType" placeholder="请选择" disabled>
+              <el-select v-model="formFroze.carTypeName" placeholder="请选择" disabled>
               <el-option
                 v-for="item in options"
                 :key="item.value"
@@ -49,11 +50,48 @@
             </el-form-item>
             </el-col>
           </el-row>
+             <el-row>
+            <el-col :span="12">
+              <el-form-item label="中单等级" :label-width="formLabelWidth">
+              <el-select v-model="formFroze.obtainGradeName" placeholder="请选择"  disabled>
+                <el-option
+                  v-for="item in midoptions"
+                  :key="item.value"
+                  :label="item.name"
+                  :value="item.code"
+                  :disabled="item.disabled">
+                </el-option>
+              </el-select >
+             
+            </el-form-item>
+            </el-col>
+            <el-col :span="12">
+              <el-form-item label="中单等级有效期至" :label-width="formLabelWidth">
+               <el-input v-model="formFroze.obtainGradeTime" :maxlength="20" disabled></el-input>
+              
+            </el-form-item>
+            </el-col>
+          </el-row>
           <el-row>
               <el-col :span="12">
-                  <el-form-item label="车型" :label-width="formLabelWidth">
-                      <el-input v-model="formFroze.shipperType"></el-input>
-                  </el-form-item>
+                  <el-form-item label="车长(米)：" :label-width="formLabelWidth">
+                      <el-input
+                            placeholder="长"
+                            v-model="formFroze.carLength" disabled
+                            clearable>
+                        </el-input>
+                        <el-input
+                            placeholder="宽"
+                            v-model="formFroze.carWidth" disabled
+                            clearable>
+                        </el-input>
+                        <el-input
+                            placeholder="高"
+                            v-model="formFroze.carHeight" disabled
+                            clearable>
+                        </el-input>
+                        <span class="node">米</span>
+                    </el-form-item>
               </el-col>
             <el-col :span="12">
               <el-form-item label="注册来源" :label-width="formLabelWidth">
@@ -105,9 +143,21 @@
               </el-form-item>
             </el-col>
           </el-row>
+          <div class="shipper_information" v-if=" editType == 'edit-three'">
+            <h2>解冻</h2>
+          </div>
+          <el-row v-if=" editType == 'edit-three'"> 
+            <el-col :span="24">
+              <el-form-item label="解冻原因说明：" :label-width="formLabelWidth">
+                <el-input type="textarea" :rows="2" :maxlength="100"  v-model="formFroze.unfreezeCauseRemark "></el-input>
+              </el-form-item>
+            </el-col>
+          </el-row>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="onSubmit">确 定</el-button>
+        <el-button type="primary" @click="onSubmit" v-if=" editType == 'edit'">确 定</el-button>
+        <el-button type="primary" @click="onSubmit2" v-else-if=" editType == 'edit-two'">确定2</el-button>
+        <el-button type="primary" @click="onSubmit3" v-else-if=" editType == 'edit-three'">确定3</el-button>
         <el-button @click="freezeDialogFlag = false">取 消</el-button>
       </div>
     </el-dialog>
@@ -116,7 +166,7 @@
 <script>
 import GetCityList from '@/components/GetCityList'
 import {parseTime} from '@/utils/'
-import {data_get_shipper_type,data_get_shipper_change,data_get_shipper_freezeType} from '@/api/users/shipper/all_shipper.js'
+import {data_get_shipper_type,data_get_shipper_change,data_get_shipper_freezeType,data_get_freeze_change,data_get_freeze} from '@/api/users/shipper/all_shipper.js'
 export default {
   name:'create-Change-ViewDialog',
   components:{
@@ -164,21 +214,27 @@ export default {
       title:'',
       text:'',
       optionsReason:[],
+      midoptions:[],
       options:[], 
       formLabelWidth:'120px',
       freezeDialogFlag:false,
       formFroze: { // 冻结弹框表单
         driverMobile: '', // 手机号
         driverName: '', // 公司名称
-        shipperType:null,
-        address:'', // 详细地址
-        contacts:'', // 联系人
+        carTypeName:null,
+        carNumber:'', // 详细地址
+        driverCardid:'', // 身份证号码
         belongCity:null, // 所在地
         registerOrigin:'', // 注册来源
         creditCode:'', // 统一社会信用代码
         freezeTime:'',
         freezeCause:null,
-        freezeCauseRemark :''
+        freezeCauseRemark :'',
+        belongCityName:'',
+        obtainGrade:'',
+        obtainGradeName:'',
+        obtainGradeTime:'',
+        unfreezeCauseRemark:''
         // radio1:'',
         // radio2:'',
         // radio3:''
@@ -238,71 +294,121 @@ export default {
       this.$refs.singleTable.setCurrentRow(row);
     },
     openDialog(){
-    //   if(this.editType ==="edit"){
-    //     if(this.params.companyName || this.params.contacts){
-    //       this.freezeDialogFlag=true 
-    //     }else{
-    //       this.$message.error('选中一个才可以操作')
-    //     }
-    //   }
-      this.freezeDialogFlag=true
+      //冻结
+      if(this.editType ==="edit" ){
+        console.log(this.params)
+          console.log(this.params.driverMobile)
+        if(this.params.driverMobile!= undefined){
+         
+          this.freezeDialogFlag=true 
+        }else{
+         
+          this.freezeDialogFlag=false
+         
+          
+        }
+      }
+      //冻结修改
+      if(this.editType ==="edit-two" ){
+
+        if(this.params.driverMobile!= undefined){
+          this.freezeDialogFlag=true 
+        }else{
+         
+          this.freezeDialogFlag=false
+         
+          
+        }
+      }
+      if(this.editType ==="edit-three" ){
+
+        if(this.params.driverMobile!= undefined){
+          this.freezeDialogFlag=true 
+        }else{
+         
+          this.freezeDialogFlag=false
+         
+          
+        }
+      }
       if(this.params){
+
+     
         var obj = JSON.parse(JSON.stringify(this.params));
-        this.formFroze.shipperType=obj.shipperType
-        this.formFroze.belongCity=obj.belongCity
-        this.formFroze.driverMobile=obj.mobile
-        this.formFroze.contacts=obj.contacts
-        this.formFroze.address=obj.address
-        this.formFroze.driverName=obj.driverName
-        this.formFroze.creditCode=obj.creditCode
-        this.formFroze.businessLicenceFile=obj.businessLicenceFile
-        this.formFroze.companyFacadeFile=obj.companyFacadeFile
-        this.formFroze.shipperCardFile=obj.shipperCardFile
-        this.formFroze.shipperId=obj.shipperId
+       
+        this.formFroze=obj;
+        this.formFroze.obtainGradeTime = parseTime(this.formFroze.obtainGradeTime,"{y}-{m}-{d}");
+       /* this.formFroze.forEach(item => {
+            item.obtainGradeTime = parseTime(item.obtainGradeTime,"{y}-{m}-{d}");
+        })*/
+       
       }else{
-        this.formFroze.shipperType=null
-        this.formFroze.belongCity=null
-        this.formFroze.driverMobile=null
-        this.formFroze.contacts=null
-        this.formFroze.address=null
-        this.formFroze.driverName=null
-        this.formFroze.creditCode=null
-        this.formFroze.businessLicenceFile=null
-        this.formFroze.companyFacadeFile=null
-        this.formFroze.shipperCardFile=null
-        this.formFroze.shipperId=null     
+        this.formFroze=null
+       
       }
     },
 
     getMoreInformation(){
       //获取货主类型
       data_get_shipper_type().then(res=>{
-        // console.log(res)
         res.data.map((item)=>{
         this.options.push(item)
         })
       }),
-
       // 获取冻结原因下拉
       data_get_shipper_freezeType().then(res=>{
-        // console.log(res)
+       
         res.data.map((item)=>{
           this.optionsReason.push(item)
         })
       })
+      
     },
-    // 提交数据
+    // 冻结提交数据
     onSubmit(){
       this.$refs['formFroze'].validate((valid)=>{
         if(valid){
-          this.formFroze.belongCity = this.$refs.area.selectedOptions.pop();
-          var forms= Object.assign({}, this.formFroze,{attestationStatus:"AF0010405"})
-          forms.freezeTime = parseTime(forms.freezeTime)
-          data_get_shipper_change(forms).then(res=>{
-            // console.log(res)
+          var forms= Object.assign({}, this.formFroze)
+          
+          data_get_freeze(forms).then(res=>{
+         
             this.$message.success('冻结修改成功')
             this.freezeDialogFlag = false;
-            this.$emit('getData')
+            this.$emit('getData') 
+          }).catch(err=>{
+            console.log(err)
+          })
+        }
+      })
+    },
+    //冻结修改
+    onSubmit2(){
+        this.$refs['formFroze'].validate((valid)=>{
+        if(valid){
+          var forms= Object.assign({}, this.formFroze)
+          
+          data_get_freeze_change(forms).then(res=>{
+          
+            this.$message.success('冻结修改成功')
+            this.freezeDialogFlag = false;
+            this.$emit('getData') 
+          }).catch(err=>{
+            console.log(err)
+          })
+        }
+      })
+    },
+    //解冻
+    onSubmit3(){
+        this.$refs['formFroze'].validate((valid)=>{
+        if(valid){
+          var forms= Object.assign({}, this.formFroze)
+          
+          data_get_freeze_change(forms).then(res=>{
+         
+            this.$message.success('解冻修改成功')
+            this.freezeDialogFlag = false;
+            this.$emit('getData') 
           }).catch(err=>{
             console.log(err)
           })

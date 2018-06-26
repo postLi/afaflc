@@ -3,7 +3,7 @@ import fetch from '@/utils/fetch'
 const baseurl = 'aflcusercenterservice-xmy'
 const baseurl_two = 'aflccommonservice-xmy'
 const baseurl_three= 'aflcsmservice-xmy'
-
+const baseurl_four = 'aflcusercenterservice-lyc'
 // 获取货主列表
 export function data_get_shipper_list(page, pagesize, data) {
   return fetch({
@@ -75,4 +75,21 @@ export function data_get_shipper_BlackType() {
 // 获取账户状态列表
 export function data_get_shipper_auid() {
   return fetch.get('/' + baseurl_two + '/sysDict/getSysDictByCodeGet/AF00105')
+}
+
+//车主冻结
+export function data_get_freeze(data) {
+  return fetch.put('/' + baseurl_four + '/usercenter/aflcDriver/v1/freezeAflcDriver', data)
+}
+//车主冻结修改
+export function data_get_freeze_change(data) {
+  return fetch.put('/' + baseurl_four + '/usercenter/aflcDriver/v1/freezeUpdateAflcDriver', data)
+}
+//车主解冻
+export function data_unbind_freeze_change(data) {
+  return fetch.put('/' + baseurl_four + '/usercenter/aflcDriver/v1/unfreezeAflcDriver', data)
+}
+//车主移入解冻
+export function data_blacklist(data) {
+  return fetch.put('/' + baseurl_four + '/usercenter/aflcDriver/v1/putBlackAflcDriver', data)
 }
