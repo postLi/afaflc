@@ -32,19 +32,19 @@
                         </el-select>
                     </div>
                     <div class="firstPush choosePush">
-                        <p><span>* </span>第一轮推送 ：</p>
+                        <p><span>* </span>推送距离/时间 ：</p>
                         <el-input v-model="forms.firstRecommendKm"  maxlength="4" v-number-only:point></el-input>
                         <span>公里/</span>
                         <el-input v-model="forms.firstRecommendTime" maxlength="4" v-numberOnly></el-input>
                         <span>秒</span>                    
                     </div>
-                    <div class="secondPush choosePush">
+                    <!-- <div class="secondPush choosePush">
                         <p><span>* </span>第二轮及之后推送 ：</p>
                         <el-input v-model="forms.secondRecommendKm" maxlength="4" v-number-only:point></el-input>
                         <span>公里/</span>
                         <el-input v-model="forms.secondRecommendTime" maxlength="4" v-numberOnly></el-input>
                         <span>秒</span>                    
-                    </div>
+                    </div> -->
                     <div class="chooseVisual chooseStyle">
                         <p><span>* </span>可见车主类型 ：</p>
                         <el-select v-model="visualCarType" multiple  clearable placeholder="请选择">

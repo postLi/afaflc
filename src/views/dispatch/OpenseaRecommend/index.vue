@@ -37,12 +37,12 @@
                         </el-table-column>
                         <el-table-column
                           prop="firstPush"
-                          label="第一轮推送">
+                          label="推送距离/推送时间">
                         </el-table-column>
-                        <el-table-column
+                        <!-- <el-table-column
                           prop="secondPush"
                           label="第二轮及之后推送">
-                        </el-table-column>
+                        </el-table-column> -->
                         <el-table-column
                           prop="visualCarTypeName"
                           label="可见车主类型">
@@ -241,12 +241,12 @@ import changeclassify from './changeclassify'
             firstblood(){
                 this.show = true;
                 data_dispatchList(this.page,this.pagesize,this.data).then(res=>{
-                    console.log(res)
+                    // console.log(res)
                     this.dataTotal = res.data.totalCount;
                     this.tableDataTree = res.data.list;
                     this.tableDataTree.map(item=>{
                         item.firstPush = item.firstRecommendKm +'公里/'+item.firstRecommendTime+'秒';
-                        item.secondPush = item.secondRecommendKm +'公里/'+item.secondRecommendTime+'秒';
+                        // item.secondPush = item.secondRecommendKm +'公里/'+item.secondRecommendTime+'秒';
                     })
                     this.show = false;
                     // console.log(this.tableDataTree)

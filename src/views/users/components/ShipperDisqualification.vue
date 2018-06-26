@@ -46,11 +46,21 @@
                             <createdDialog :params="scope.row" btntype="text" :btntext="scope.row.companyName" editType="view" btntitle="详情"></createdDialog>
                         </template>
                     </el-table-column>
-                    <el-table-column prop="contacts" label="联系人">
-                    </el-table-column>
                     <el-table-column prop="mobile" label="手机号">
                     </el-table-column>
+                    <el-table-column prop="contacts" label="联系人">
+                    </el-table-column>
                     <el-table-column prop="registerOrigin" label="注册来源">
+                    </el-table-column>
+                    <el-table-column prop="shipperStatusName" label="认证状态">
+                        <!-- <template slot-scope="scope">
+                        {{getAttestationStatus(scope.row.shipperStatus)}}
+                        </template> -->
+                    </el-table-column>
+                    <el-table-column prop="accountStatusName" label="账户状态">
+                        <!-- <template slot-scope="scope">
+                        {{getAccountStatus(scope.row.accountStatus)}}
+                        </template> -->
                     </el-table-column>
                     <el-table-column prop="belongCityName" label="所在地">
                     </el-table-column>
@@ -98,9 +108,10 @@ export default {
             pagesize:20,
             options:[],
             formAll:{
-              belongCity:null,
-              companyName:'',
-              mobile:''
+                companyName:'',
+                belongCity:'',
+                mobile:'',
+                shipperStatus:"AF0010404",//未认证的状态码
             },
             selectRowData:{},
             multipleSelection:[]

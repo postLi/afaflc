@@ -47,10 +47,12 @@ export function data_Area() {
   return fetch.get('/' + baseurl_three + '/sm/aflcDistrict/v1/getProvinceList')
 }
 
+
 //  修改货主表
 export function data_get_shipper_change(data) {
   return fetch.put('/' + baseurl + '/usercenter/aflcShipper/v1/update', data)
 }
+
 // 获取省级对应的城市列表
 export function data_GetCityList(code) {
   return fetch({
