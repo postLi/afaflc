@@ -15,7 +15,7 @@
                 </label>
                 <label><span>账号类型&nbsp;</span>
                    <el-select v-model="data.accountType" clearable placeholder="请选择">
-                            
+                      
                     </el-select>
                 </label> 
                 <label><span>交易方式&nbsp;</span>
@@ -30,7 +30,13 @@
                 </label> 
                 <label><span>服务分类&nbsp;</span>
                    <el-select v-model="data.orderType" clearable placeholder="请选择">
-                            
+                        <el-option
+                          v-for="item in optionsAccountType"
+                          :key="item.name"
+                          :label="item.name"
+                          :value="item.code"
+                          >
+                        </el-option>
                     </el-select>
                 </label>
                 <label><span>收支类型&nbsp;</span>
@@ -50,8 +56,8 @@
                 </label>    
                 <!-- {{value6}}  -->
                 <label>
-                  <el-button type="primary"  plain >查询</el-button>
-                  <el-button type="primary"  plain>重置</el-button>
+                  <el-button type="primary"  plain @click="getdata_search">查询</el-button>
+                  <el-button type="primary"  plain @click="reset">重置</el-button>
                 </label>
                 
             </div>
@@ -148,7 +154,7 @@
                         </el-table-column>
                          <el-table-column
                         align = "center"
-                          prop="tradeStatus"
+                          prop="payStatus"
                           label="交易状态">
                         </el-table-column>
                          <el-table-column
@@ -162,6 +168,10 @@
                           prop="totalAmount"
                           label="操作"
                           width="80">
+                          <template slot-scope="scope">
+                              <el-button @click="handleClick(scope.row)" type="text" size="small">相关信息</el-button>
+                              
+                            </template>
                         </el-table-column>
                     </el-table>
                     
@@ -189,14 +199,17 @@
 </template>
 
 <script type="text/javascript">
-import {data_financeList} from '../../../api/finance/financeServer.js'
+import {data_financeList,data_GetServerType} from '../../../api/finance/financeServer.js'
+import {data_GetCarStyle} from '../../../api/server/areaPrice.js'
 import '@/styles/dialog.scss'
-
+import { parseTime,formatTime } from '@/utils/index.js'
 
     export default{
         data(){
             return{
                 data:{
+                  orderSerial:'',
+                  tradeSerial:'',
 
                 },
                 currentPage4:1,
@@ -204,6 +217,7 @@ import '@/styles/dialog.scss'
                 pagesize:20,
                 dataTotal:null,
                 tableDataTree:[],
+                optionsAccountType: [],
             }
         },
         components:{
@@ -212,20 +226,33 @@ import '@/styles/dialog.scss'
         },
         mounted(){
             this.load();
+            this.getMoreInformation();
         },  
         methods: {
-           handleSizeChange(obj){
+          //翻页
+           handleSizeChange(val){
+
                 this.pagesize = val ;
                 this.load();
            },
-           handleCurrentChange(obj){
+           //跳转当前页
+           handleCurrentChange(val){
+
                 this.page = val;
                 this.load();
            },
+            //点击查询
+            getdata_search(event){
+               this.load()
+            },
+            
            //重置
             reset(){
                 this.data = {
-                    
+                    orderSerial:null,
+                    tradeSerial:null,
+                    accountName:null,
+                    optionsAccountType:[],
                 };
                 this.load();
             },
@@ -235,8 +262,23 @@ import '@/styles/dialog.scss'
            },
            //双击
             moreinfo(row, event){
-                // console.log(row, event)
+              
                
+            },
+            //获取信息列表
+            getMoreInformation(){
+                data_GetServerType().then(res=>{
+                    res.data.map((item)=>{
+                        this.optionsAccountType.push(item);
+                    })
+                })
+               
+               
+            },
+            //相关信息
+            handleClick(row){
+                this.load();
+                this.data.orderSerial = row.orderSerial;
             },
             //判断是否选中
             getinfomation(selection){
@@ -245,11 +287,25 @@ import '@/styles/dialog.scss'
             //刷新页面  
             load(){
                 data_financeList(this.page,this.pagesize,this.data).then(res=>{
-                    console.log('res:',res)
                    
+                    this.tableDataTree = res.data.list;
+                    this.dataTotal = res.data.totalCount;
+                    this.tableDataTree.forEach(item => {
+                        item.createTime = parseTime(item.createTime,"{y}-{m}-{d}");
+                    })
+                     this.tableDataTree.forEach(item => {
+                        switch(item.payStatus){
+                            case "AF00801":
+                                item.payStatus = "待付款";
+                                break;
+                            
+                    }
+                   }) 
+                 
 
                 })
             },
+            
         }
     }
 </script>
@@ -331,6 +387,7 @@ import '@/styles/dialog.scss'
         .classify_info{
             
             padding:170px 13px 18px;
+            height:100%;
             .btns_box{
                 margin-bottom:10px;
                 .el-button{
