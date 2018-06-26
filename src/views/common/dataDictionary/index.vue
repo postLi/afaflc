@@ -198,7 +198,7 @@
 
 <script type="text/javascript">
 
-import { data_Dic,data_Trees,data_Search,data_CreatCode,data_AddForms,data_Delet,data_ChangeForms,data_CreatCode_top,data_changeStatus } from '../../../api/company/data_dic.js'
+import { data_Dic,data_Trees,data_Search,data_CreatCode,data_AddForms,data_Delet,data_ChangeForms,data_CreatCode_top,data_changeStatus } from '@/api/company/data_dic.js'
 import '../../../styles/dialog.scss'
 
     export default{
@@ -251,7 +251,7 @@ import '../../../styles/dialog.scss'
                 ],
                 defaultProps: {
                   children: 'children',
-                  label: 'label'
+                  label: 'name'
                 },
                 rules: {
                     dev: [
@@ -529,25 +529,25 @@ import '../../../styles/dialog.scss'
             //保存信息
             newInfoSave(){
                 console.log(this.forms)
-                if(this.forms[0].pid){
-                    data_AddForms(this.forms).then(res=>{
-                        if(res.status == 200){
-                            this.dialogFormVisible = false;
-                            this.getInformation();
-                        }
-                    })
-                }else{
-                    this.forms.map((item)=>{
-                        item.pid = null;
-                    })
-                    data_AddForms(this.forms).then(res=>{
-                        if(res.status == 200){
-                            this.dialogFormVisible = false;
-                            this.getInformation();
-                        }
-                    })
+                // if(this.forms[0].pid){
+                //     data_AddForms(this.forms).then(res=>{
+                //         if(res.status == 200){
+                //             this.dialogFormVisible = false;
+                //             this.getInformation();
+                //         }
+                //     })
+                // }else{
+                //     this.forms.map((item)=>{
+                //         item.pid = null;
+                //     })
+                //     data_AddForms(this.forms).then(res=>{
+                //         if(res.status == 200){
+                //             this.dialogFormVisible = false;
+                //             this.getInformation();
+                //         }
+                //     })
                     
-                }
+                // }
                
             },
             //修改保存
@@ -570,7 +570,7 @@ import '../../../styles/dialog.scss'
                 if(!event.target.value){
                     let information = "请输入最少1个字最多20个字分类名称";
                     this.hint(information);
-                    event.target.focus();
+                    // event.target.focus();
                 }else{
                     data_Search(this.page,this.pagesize,this.pid,event.target.value).then(res=>{
                         console.log(res)

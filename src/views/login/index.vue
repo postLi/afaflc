@@ -169,5 +169,11 @@ export default {
   @import "../../styles/mixin.scss";
   @import "../../styles/login-index.css";
 
+  .container-right{
+    .el-input{
+      border: 1px solid #333;
+    }
+  }
+
 
 </style>

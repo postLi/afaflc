@@ -1,7 +1,5 @@
 <template>
      <div class="addclassify commoncss">
-      <!-- <el-button :type="type"  @click="openDialog()" :value="value">{{text}}</el-button>    -->
-
       <el-button :type="type" :value="value" :plain="plain" :icon="icon" @click="openDialog()">{{text}}</el-button>
       <el-dialog :title="title" :visible="dialogFormVisible_add" :before-close="change" :modal=false>
         <el-form :model="xinzengform" ref="xinzengform" :rules="rulesForm">
@@ -49,14 +47,14 @@
                 <el-input :maxlength="20" v-model="xinzengform.address" auto-complete="off"  :disabled="editType=='view'"></el-input>
               </el-form-item>
             </el-col>
-            <el-col :span="12">
+            <!-- <el-col :span="12">
               <el-form-item label="是否定向:" :label-width="formLabelWidth">
                 <el-radio-group v-model="xinzengform.isDirectional"  :disabled="editType!='add'">
                   <el-radio label="0">否</el-radio>
                   <el-radio label="1">是</el-radio>
                 </el-radio-group>
               </el-form-item>
-            </el-col>
+            </el-col> -->
           </el-row>
 
           <el-row>
@@ -74,12 +72,7 @@
           <el-row>
             <el-col :span="9">
               <el-form-item label="上传营业执照照片:" label-width="125px" v-show="companyFlag">
-                <!-- <div class="completeinfo">
-                  <div class="detailinfo">
-                    <p>上传营业执照照片 ：</p> -->
                     <upload class="licensePicture" tip="（必须为jpg/png并且小于5M）" v-model="xinzengform.businessLicenceFile" />
-                  <!-- </div>
-                </div> -->
               </el-form-item>
             </el-col>
           </el-row>
@@ -102,7 +95,7 @@
           
         </el-form>
         <div slot="footer" class="dialog-footer">
-          <el-button type="primary" @click="onSubmit" v-show="editType!='view'">确 定</el-button>
+          <el-button type="primary" @click="onSubmit" v-show="editType!='view'" >确 定</el-button>
           <el-button @click="dialogFormVisible_add = false" v-show="editType!='view'">取 消</el-button>
         </div>
       </el-dialog>
@@ -111,6 +104,7 @@
 <script>
 import Upload from '@/components/Upload/singleImage'
 import GetCityList from '@/components/GetCityList'
+import { eventBus } from '@/eventBus'
 import {data_get_shipper_type,data_get_shipper_create,data_Area,data_get_shipper_change,data_get_shipper_view,data_GetCityList} from '../../../api/users/shipper/all_shipper.js'
 export default {
   components:{
@@ -214,7 +208,8 @@ export default {
         contacts:null,
         address:null,
         companyName:null,
-        creditCode:null,
+		creditCode:null,
+		registerOrigin:'WEB',
         businessLicenceFile:'',
         shipperCardFile:'',
         companyFacadeFile:'',
@@ -255,11 +250,6 @@ export default {
         this.xinzengform.shipperCardFile=null
         this.xinzengform.companyFacadeFile=null
         this.xinzengform.belongCity=null
-        // this.xinzengform.belongCityName=null
-          //  creditCode:null,
-          //  businessLicenceFile:'',
-          //  shipperCardFile:'',
-          //  companyFacadeFile:'',
       }
      },
      deep:true
@@ -290,39 +280,24 @@ export default {
     // this.getArea()
   },
   methods:{
-    setCurrent(row) {
-			this.$refs.singleTable.setCurrentRow(row);
-		},
+    // setCurrent(row) {
+	// 		this.$refs.singleTable.setCurrentRow(row);
+	// 	},
 
     openDialog(){
       if(this.editType==='add'||this.editType==='view'){
         this.dialogFormVisible_add=true
       } else if(this.editType==="edit"){
-          // console.log(this.params)
           if(this.params.address){
             this.dialogFormVisible_add=true
           } else{
             this.$message.error('必须选中一个才可操作')
           }
-        // this.dialogFormVisible_add=true 
       }
       
       if(this.params){
        var obj = JSON.parse(JSON.stringify(this.params));
-        this.xinzengform.shipperType=obj.shipperType
-        //this.xinzengform.shipperType= "AF0010202"
-        //this.xinzengform.shipperTypeName=obj.shipperTypeName
-        this.xinzengform.belongCity=obj.belongCity
-        this.xinzengform.mobile=obj.mobile
-        this.xinzengform.contacts=obj.contacts
-        this.xinzengform.address=obj.address
-        this.xinzengform.companyName=obj.companyName
-        this.xinzengform.creditCode=obj.creditCode
-        this.xinzengform.businessLicenceFile=obj.businessLicenceFile
-        this.xinzengform.companyFacadeFile=obj.companyFacadeFile
-        this.xinzengform.shipperCardFile=obj.shipperCardFile
-        this.xinzengform.shipperId=obj.shipperId
-        this.xinzengform.belongCityName=obj.belongCityName
+        this.xinzengform = obj ;
       }else{
         this.xinzengform.shipperType=null
         this.xinzengform.belongCity=null
@@ -384,21 +359,21 @@ export default {
         })
       }
     },
-
-
     // 保存
     onSubmit(){
       // this.xinzengform.belongCity = this.$refs.area.selectedOptions.pop();
       this.completeData();
       // console.log(this.xinzengform.belongCity)
       this.$refs['xinzengform'].validate((valid)=>{
+		eventBus.$emit('changeList')
         if(valid){
-
           var forms=Object.assign({},this.xinzengform)
           // console.log('onSubmit',form)
           if(this.editType === 'add'){
             // 新增
-            
+            if(!forms.companyName){
+				forms.companyName = '个人业务' ;
+			}
             data_get_shipper_create(forms).then(res=>{
               // console.log(res)
               this.dialogFormVisible_add = !this.dialogFormVisible_add;
@@ -408,15 +383,17 @@ export default {
               console.log(err)
             })
           }else if(this.editType === 'edit'){
-            // 修改
-            data_get_shipper_change(forms).then(res=>{
-              // console.log(res)
-              this.dialogFormVisible_add = !this.dialogFormVisible_add;
-              this.$message.success('修改成功')
-              this.$emit('getData')
-            }).catch((err)=>{
-              console.log(err)
-           })
+			// 修改
+			
+			 console.log('onSubmit',form)
+        //     data_get_shipper_change(forms).then(res=>{
+        //       // console.log(res)
+        //       this.dialogFormVisible_add = !this.dialogFormVisible_add;
+        //       this.$message.success('修改成功')
+        //       this.$emit('getData')
+        //     }).catch((err)=>{
+        //       console.log(err)
+        //    })
           } 
         }
       })
@@ -425,27 +402,5 @@ export default {
 }
 </script>
 <style lang="scss">
-.addclassify{
-  display: inline-block;
-}
-  .el-dialog{
-    .el-dialog__body{
-      .licensePicture{
-        width: 180px;
-        height: 116px;
-        line-height: 1.2;
-        display: inline-block;
-        .el-upload-dragger{
-          width: 180px;
-          height: 116px;
-          .el-icon-upload{
-            margin: 15px 0 16px;
-          }
-          .el-upload__text{
-            font-size: 12px;
-          }
-        }
-      }
-    }
-  }
+
 </style>

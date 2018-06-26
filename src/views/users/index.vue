@@ -1,14 +1,16 @@
 <template>
   <div class="shipper">
-    <el-tabs v-model="activeName2" type="border-card" @tab-click="handleClick">
+    <el-tabs v-model="activeName2" type="border-card" @tab-click="handleClick" >
         <!-- 全部 -->
-        <el-tab-pane label="全部" name="first">
-            <ShipperAll></ShipperAll>
-        </el-tab-pane>
+        <!-- <el-badge :value="12" class="item"> -->
+            <el-tab-pane label="全部" name="first">
+                <ShipperAll></ShipperAll>
+            </el-tab-pane>
+        <!-- </el-badge> -->
 
         <!-- 未认证 -->
         <el-tab-pane label="未认证" name="second">
-            <ShipperUnauthorized></ShipperUnauthorized>
+            <ShipperUnauthorized :isvisible="activeName2 === 'second'"></ShipperUnauthorized>
         </el-tab-pane>
 
         <!-- 待认证 -->
@@ -18,7 +20,7 @@
             
         <!-- 已认证部分 -->
         <el-tab-pane label="已认证" name="fourth">
-            <ShipperHasCertified></ShipperHasCertified>
+            <ShipperHasCertified :isvisible="activeName2 === 'fourth'"></ShipperHasCertified>
         </el-tab-pane>
 
         <!-- 认证不通过 -->
@@ -49,7 +51,7 @@
     import ShipperDisqualification from './components/ShipperDisqualification.vue'
     import ShipperFreezing from './components/ShipperFreezing.vue'
     import ShipperBlacklist from './components/ShipperBlacklist.vue'
-    
+     
     export default {
       name:'shipper',
       components:{
@@ -63,102 +65,13 @@
         },
         data() {
           return {
-            options2:null,
-            activeName2: 'first',
-            formInline: {
-                phone:'',
-                company:'',
-                contacts:'',
-                region:''
-            },
-            followform:{
-                textarea:'',
-            },
-            
-            dialogFormVisible: false,
-            dialogFormVisible_uncommitted:false,
-            dialogFormVisible_follow:false,
-            dialogFormVisible_prove:false,
-            dialogFormVisible_add:false, //待审核-新增
-            options:[{
-              value: '选项1',
-              label: '企业货主'
-              },
-              {
-              value: '选项2',
-              label: '普通货主'
-            }],
-            shengheform: {
-                phone: '',
-                companyname: '',
-                date1: '',
-                date2: '',
-                delivery: false,
-                type: [],
-                resource: '',
-                desc: ''
-            },
-            shengherules: {
-              phone: [
-                { required: true, message: '请输入手机号码', trigger: 'blur' },
-              ],
-              linkman: [
-                { required: true, message: '联系人不可为空', trigger: 'change' }
-              ],
-              address: [
-                { required: true, message: '地址不可为空', trigger: 'change' }
-              ],
-              xsaddress: [
-                {  required: true, message: '请选择时间', trigger: 'change' }
-              ],
-              hzclassify: [
-                {  required: true, message: '请至少选择一个活动性质', trigger: 'change' }
-              ],
-              resource: [
-                { required: true, message: '请选择活动资源', trigger: 'change' }
-              ],
-              desc: [
-                { required: true, message: '请填写活动形式', trigger: 'blur' }
-              ]
-            }
+            activeName2:'first',
           };
         },
         methods: {
-            handleChange(value){
-              console.log(value);
-            },
+           
             handleClick(tab, event) {
                 // console.log(tab, event);
-            },
-            handleCheck(index, row) {
-                console.log(index, row);
-            },
-            handleRZ(index, row) {
-                console.log(index, row);
-            },
-            handleGJRZ(index, row) {
-                console.log(index, row);
-            },
-            handleSizeChange(val) {
-                console.log(`每页 ${val} 条`);
-            },
-            handleCurrentChange(val) {
-                console.log(`当前页: ${val}`);
-            },
-            change(){
-                console.log(this.radio1)
-            },
-            handleRemove(file, fileList) {
-                console.log(file, fileList);
-            },
-            handlePreview(file) {
-                console.log(file);
-            },
-            handleExceed(files, fileList) {
-                this.$message.warning(`当前限制选择 1个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`);
-            },
-            beforeRemove(file, fileList) {
-                return this.$confirm(`确定移除 ${ file.name }？`);
             }
         }
     }
@@ -237,5 +150,9 @@
         }
     }
 
+    .item {
+        margin-top: 10px;
+        margin-right: 40px;
+    }
 
 </style>

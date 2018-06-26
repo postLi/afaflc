@@ -18,10 +18,7 @@
         </el-form>
         </div>
         <div class="export">
-            <!-- <el-button type="info">新增</el-button> -->
             <el-button type="primary" plain @click="handleUnfreeze">解冻</el-button>
-            <!-- <el-button type="primary" plain @click="handlefreezeEdit">冻结修改</el-button>
-            <el-button type="primary" plain @click="handlePutBlack">移入黑名单</el-button> -->
             <freeze-change-template
                  btntext="冻结修改"
                  :plain="true"
@@ -33,7 +30,6 @@
 
                 </freeze-change-template>
 
-                <!-- <el-button type="primary" plain @click="handleBlick">移入黑名单</el-button> -->
                 <driver-blackDialog-template
                  btntext="移入黑名单"
                  :plain="true"
@@ -62,15 +58,6 @@
                 <el-table-column  prop="freezeTime" label="冻结时间"></el-table-column>
                 <el-table-column prop="freezeCause" label="冻结原因"></el-table-column>
                 <el-table-column prop="unfreezeTime" label="解冻日期"></el-table-column>
-                <!-- <el-table-column
-                    prop=""
-                    label="操作">
-                    <template slot-scope="scope">
-                        <el-button type="primary" plain>解冻</el-button>
-                        <el-button type="primary" plain>冻结修改</el-button>
-                        <el-button type="primary" plain>移入黑名单</el-button>
-                    </template>
-                </el-table-column> -->
             </el-table>
                 
             <el-pagination
@@ -109,11 +96,7 @@
                     </el-col>
                     <el-col :span="12">
                         <el-form-item label="所在地" :label-width="formLabelWidth">
-                        <!-- <el-cascader
-                            :options="options"
-                            v-model="formFroze.belongCity"
-                            @change="handleChange">
-                        </el-cascader> -->
+                        
                         <GetCityList v-model="formUnFroze.belongCity" disabled ref="area"></GetCityList>
                         </el-form-item>
                     </el-col>
@@ -207,14 +190,6 @@
             </el-dialog>
         </div>
 
-         <!-- 提示语的弹框 -->
-     <div class="cue">
-        <el-dialog
-          :visible.sync="centerDialogVisible"
-          center>
-        <span>{{information}}</span>
-        </el-dialog>
-      </div>
 
     </div>
 </template>

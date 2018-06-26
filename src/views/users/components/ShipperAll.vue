@@ -1,15 +1,26 @@
 <template>
     <div>
-        <div class="shipper_searchinfo">
+        <div class="shipper_searchinfo" @click="changeList()">
           <el-form :inline="true">
             <el-form-item label="所在地：">
               <GetCityList v-model="formAll.belongCity" ref="area"></GetCityList>
             </el-form-item>
-            <el-form-item label="状态：">
+            <el-form-item label="认证状态：">
               <el-select v-model="formAll.shipperStatus" clearable placeholder="请选择">
                 <el-option
                   v-for="item in optionsStatus"
                   :key="item.value"
+                  :label="item.name"
+                  :value="item.code"
+                  :disabled="item.disabled">
+                </el-option>
+              </el-select>
+            </el-form-item>
+			<el-form-item label="账户状态：">
+              <el-select v-model="formAll.accountStatus" clearable placeholder="请选择">
+                <el-option
+                  v-for="item in optionsAuidSataus"
+                  :key="item.code"
                   :label="item.name"
                   :value="item.code"
                   :disabled="item.disabled">
@@ -37,6 +48,7 @@
 				btntitle="冻结"
 				:plain="true"
 				editType='edit'
+				freeze = 'freeze'
 				btntype="primary"
 				icon="el-icon-news"
 				:params="selectRowData"
@@ -47,6 +59,7 @@
 				btntext="冻结修改"
 				type="primary" 
 				btntitle="冻结修改"
+				freeze = 'freeze'
 				:plain="true"
 				editType='edit'
 				btntype="primary"
@@ -55,7 +68,7 @@
 				@getData="getDataList"
 				>
 				</FreezeDialog>
-				<shipperBlackDialog
+				<!-- <shipperBlackDialog
 				btntext="移入黑名单"
 				type="primary" 
 				btntitle="移入黑名单"
@@ -67,163 +80,161 @@
 				@getData="getDataList"
 				></shipperBlackDialog>
 				<el-button type="primary" plain icon="el-icon-edit" @click="handleBlackout">移出黑名单</el-button>
-				<el-button type="primary" plain icon="el-icon-edit" @click="handleUnfroze">解冻</el-button>
+				<el-button type="primary" plain icon="el-icon-edit" @click="handleUnfroze">解冻</el-button> -->
 			</div>
 			<div class="info_news">
-			<el-table
-			ref="mutipleTable"
-			:data="tableDataAll"
-			stripe
-			border
-			:key="thekey2"
-			@selection-change="handleSelectionChange"
-			tooltip-effect="dark"
-			style="width: 100%">
-			<el-table-column type='selection' width="80px">
-			</el-table-column>  
-			<el-table-column label="手机号">
-				<template slot-scope="scoped">
-					<!-- <div @click="handleClick(scope.row)">{{scope.row.mobile}}</div> -->
-					<createdDialog :params="scoped.row" btntype="text" :btntext="scoped.row.mobile" editType="view" btntitle="货主详情" @getData="getDataList"></createdDialog>
-				</template>
-			</el-table-column>
-			<el-table-column prop="companyName" label="公司名称">
-			</el-table-column>
-			<el-table-column prop="contacts" label="联系人">
-			</el-table-column>
-			<el-table-column prop="registerOrigin" label="注册来源">
-			</el-table-column>
-			<el-table-column prop="shipperStatus" label="认证状态">
-				<template slot-scope="scope">
-				{{getAttestationStatus(scope.row.shipperStatus)}}
-				</template>
-			</el-table-column>
-			<el-table-column prop="accountStatus" label="账户状态">
-				<template slot-scope="scope">
-				{{getAccountStatus(scope.row.accountStatus)}}
-				</template>
-			</el-table-column>
-			<el-table-column prop="belongCityName" label="所在地">
-			</el-table-column>
-			<el-table-column prop="shipperTypeName" label="货主类型">
-				<template slot-scope="scope">
-				{{scope.row.shipperType==='AF0010202'? '企业货主':'普通货主'}}
-				</template>
-			</el-table-column>
-			<el-table-column prop="createTime" label="注册日期">
-			</el-table-column>
-			</el-table>
-			<el-pagination
-				@size-change="handleSizeChange"
-				@current-change="handleCurrentChange"
-				:current-page="page"
-				:page-sizes="[20, 50, 200, 400]"
-				:page-size="pagesize"
-				layout="total, sizes, prev, pager, next, jumper"
-				:total="totalCount">
-			</el-pagination>
+				<el-table
+				ref="multipleTable"
+				:data="tableDataAll"
+				stripe
+				border
+				:key="thekey2"
+				@row-click="clickDetails"
+				@selection-change="handleSelectionChange"
+				tooltip-effect="dark"
+				style="width: 100%">
+				<el-table-column type='selection' width="80px">
+				</el-table-column>  
+				<el-table-column label="手机号">
+					<template slot-scope="scoped">
+						<createdDialog :params="scoped.row" btntype="text" :btntext="scoped.row.mobile" editType="view" btntitle="货主详情" @getData="getDataList"></createdDialog>
+					</template>
+				</el-table-column>
+				<el-table-column prop="companyName" label="公司名称">
+					<!-- <template slot-scope="scope">
+					{{scope.row.companyName ?  scope.row.companyName : '个人业务'}}
+					</template> -->
+				</el-table-column>
+				<el-table-column prop="contacts" label="联系人">
+				</el-table-column>
+				<el-table-column prop="registerOrigin" label="注册来源">
+				</el-table-column>
+				<el-table-column prop="shipperStatusName" label="认证状态">
+					<!-- <template slot-scope="scope">
+					{{getAttestationStatus(scope.row.shipperStatus)}}
+					</template> -->
+				</el-table-column>
+				<el-table-column prop="accountStatusName" label="账户状态">
+					<!-- <template slot-scope="scope">
+					{{getAccountStatus(scope.row.accountStatus)}}
+					</template> -->
+				</el-table-column>
+				<el-table-column prop="belongCityName" label="所在地">
+				</el-table-column>
+				<el-table-column prop="shipperTypeName" label="货主类型">
+					<!-- <template slot-scope="scope">
+					{{scope.row.shipperType==='AF0010202'? '企业货主':'普通货主'}}
+					</template> -->
+				</el-table-column>
+				<el-table-column prop="createTime" label="注册日期">
+				</el-table-column>
+				</el-table>
+				<el-pagination
+					@size-change="handleSizeChange"
+					@current-change="handleCurrentChange"
+					:current-page="page"
+					:page-sizes="[20, 50, 200, 400]"
+					:page-size="pagesize"
+					layout="total, sizes, prev, pager, next, jumper"
+					:total="totalCount">
+				</el-pagination>
 			</div>
 		</div>
          
       <!-- 移出黑名单 -->
-    <div class="addclassify commoncss">
-        <el-dialog title="移出黑名单" :visible.sync="BlackDialogFlag">
-          <el-form :model="formBlack" ref="formBlack">
-            <el-row>
-                <el-col :span="12">
-                  <el-form-item label="手机号码" :label-width="formLabelWidth">
-                    <el-input v-model="formBlack.mobile" disabled></el-input>
-                  </el-form-item>
-                </el-col>
-                <el-col :span="12">
-                  <el-form-item label="公司名称" :label-width="formLabelWidth">
-                    <el-input v-model="formBlack.companyName" disabled></el-input>
-                  </el-form-item>
-                </el-col>
-              </el-row>
-              
-               <el-row>
-               <el-col :span="12">
-                 <el-form-item label="联系人" :label-width="formLabelWidth">
-                    <el-input v-model="formBlack.contacts" disabled></el-input>
-                  </el-form-item>
-               </el-col>
-               <el-col :span="12">
-                 <el-form-item label="所在地" :label-width="formLabelWidth">
-                  <el-input v-model="formBlack.belongCityName" disabled></el-input>
-                </el-form-item>
-               </el-col>
-             </el-row>
+    	<div class="addclassify commoncss">
+			<el-dialog title="移出黑名单" :visible.sync="BlackDialogFlag">
+			<el-form :model="formBlack" ref="formBlack">
+				<el-row>
+					<el-col :span="12">
+					<el-form-item label="手机号码" :label-width="formLabelWidth">
+						<el-input v-model="formBlack.mobile" disabled></el-input>
+					</el-form-item>
+					</el-col>
+					<el-col :span="12">
+					<el-form-item label="公司名称" :label-width="formLabelWidth">
+						<el-input v-model="formBlack.companyName" disabled></el-input>
+					</el-form-item>
+					</el-col>
+				</el-row>
+				
+				<el-row>
+				<el-col :span="12">
+					<el-form-item label="联系人" :label-width="formLabelWidth">
+						<el-input v-model="formBlack.contacts" disabled></el-input>
+					</el-form-item>
+				</el-col>
+				<el-col :span="12">
+					<el-form-item label="所在地" :label-width="formLabelWidth">
+					<el-input v-model="formBlack.belongCityName" disabled></el-input>
+					</el-form-item>
+				</el-col>
+				</el-row>
 
-              <el-row>
-               <el-col :span="12">
-                 <el-form-item label="详细地址" :label-width="formLabelWidth">
-                  <el-input v-model="formBlack.address" disabled :maxlength="20"></el-input>
-                </el-form-item>
-               </el-col>
-               <el-col :span="12">
-                 <el-form-item label="货主类型" :label-width="formLabelWidth">
-                  <!-- <el-cascader
-                    :options="options"
-                    v-model="formFroze.shipperType"
-                    @change="handleChange">
-                  </el-cascader> -->
-                  <el-select v-model="formBlack.shipperType" disabled placeholder="请选择">
-                  <el-option
-                    v-for="item in options"
-                    :key="item.value"
-                    :label="item.name"
-                    :value="item.code"
-                    :disabled="item.disabled">
-                  </el-option>
-                </el-select>
-                </el-form-item>
-               </el-col>
-             </el-row>
-             <el-row>
-               <el-col :span="12">
-                  <el-form-item label="注册来源" :label-width="formLabelWidth">
-                    <el-input v-model="formBlack.registerOrigin" disabled :maxlength="20"></el-input>
-                  </el-form-item>
-               </el-col>
-             </el-row>
-             <div class="shipper_information">
-                <h2>移入黑名单信息</h2>
-                <el-row>
-                  <el-col :span="24">
-                    <el-form-item label="移入原因:" :label-width="formLabelWidth">
-                      <el-select v-model="formBlack.putBlackCause" disabled placeholder="请选择">
-                        <el-option
-                          v-for="item in optionsFormBlack"
-                          :key="item.value"
-                          :label="item.label"
-                          :value="item.value">
-                        </el-option>
-                      </el-select>
-                    </el-form-item>
-                  </el-col>
-                </el-row>
-                <el-row>
-                  <el-col :span="24">
-                    <el-form-item label="移入黑名单原因说明:" :label-width="formLabelWidth">
-                      <el-input v-model="formBlack.putBlackCauseRemark" disabled :rows="2" :maxlength="100" placeholder="请输入内容" type="textarea"></el-input>
-                    </el-form-item>
-                  </el-col>
-                </el-row>
-             </div>
-             <div class="shipper_information">
-                <h2>移出黑名单信息</h2>
-                <el-form-item label="移出黑名单原因说明" :label-width="formLabelWidth">
-                  <el-input v-model="formBlack.popBlackRemark" :maxlength="100" :rows="2" placeholder="请输入内容" type="textarea"></el-input>
-                </el-form-item>
-             </div>
-          </el-form>
-          
-          <div slot="footer" class="dialog-footer">
-            <el-button type="primary" @click="onSubmitBlack">确 定</el-button>
-            <el-button @click="BlackDialogFlag = false">取 消</el-button>
-          </div>
-        </el-dialog>
+				<el-row>
+				<el-col :span="12">
+					<el-form-item label="详细地址" :label-width="formLabelWidth">
+					<el-input v-model="formBlack.address" disabled :maxlength="20"></el-input>
+					</el-form-item>
+				</el-col>
+				<el-col :span="12">
+					<el-form-item label="货主类型" :label-width="formLabelWidth">
+					<el-select v-model="formBlack.shipperType" disabled placeholder="请选择">
+					<el-option
+						v-for="item in options"
+						:key="item.value"
+						:label="item.name"
+						:value="item.code"
+						:disabled="item.disabled">
+					</el-option>
+					</el-select>
+					</el-form-item>
+				</el-col>
+				</el-row>
+				<el-row>
+				<el-col :span="12">
+					<el-form-item label="注册来源" :label-width="formLabelWidth">
+						<el-input v-model="formBlack.registerOrigin" disabled :maxlength="20"></el-input>
+					</el-form-item>
+				</el-col>
+				</el-row>
+				<div class="shipper_information">
+					<h2>移入黑名单信息</h2>
+					<el-row>
+					<el-col :span="24">
+						<el-form-item label="移入原因:" :label-width="formLabelWidth">
+						<el-select v-model="formBlack.putBlackCause" disabled placeholder="请选择">
+							<el-option
+							v-for="item in optionsFormBlack"
+							:key="item.value"
+							:label="item.label"
+							:value="item.value">
+							</el-option>
+						</el-select>
+						</el-form-item>
+					</el-col>
+					</el-row>
+					<el-row>
+					<el-col :span="24">
+						<el-form-item label="移入黑名单原因说明:" :label-width="formLabelWidth">
+						<el-input v-model="formBlack.putBlackCauseRemark" disabled :rows="2" :maxlength="100" placeholder="请输入内容" type="textarea"></el-input>
+						</el-form-item>
+					</el-col>
+					</el-row>
+				</div>
+				<div class="shipper_information">
+					<h2>移出黑名单信息</h2>
+					<el-form-item label="移出黑名单原因说明" :label-width="formLabelWidth">
+					<el-input v-model="formBlack.popBlackRemark" :maxlength="100" :rows="2" placeholder="请输入内容" type="textarea"></el-input>
+					</el-form-item>
+				</div>
+			</el-form>
+			
+			<div slot="footer" class="dialog-footer">
+				<el-button type="primary" @click="onSubmitBlack">确 定</el-button>
+				<el-button @click="BlackDialogFlag = false">取 消</el-button>
+			</div>
+			</el-dialog>
       </div>
 
     <!-- 解冻弹框 -->
@@ -251,12 +262,6 @@
                </el-col>
                <el-col :span="12">
                  <el-form-item label="所在地" :label-width="formLabelWidth">
-                  <!-- <el-cascader
-                    :options="options"
-                    v-model="formFroze.belongCity"
-                    @change="handleChange">
-                  </el-cascader> -->
-                  <!-- <GetCityList v-model="formUnFroze.belongCity" disabled ref="area"></GetCityList> -->
                   <el-input v-model="formUnFroze.belongCityName" disabled></el-input>
                 </el-form-item>
                </el-col>
@@ -355,6 +360,8 @@ import createdDialog from './createdDialog.vue'
 import GetCityList from '@/components/GetCityList'
 import FreezeDialog from './FreezeDialog'
 import shipperBlackDialog from './shipperBlackDialog'
+import { eventBus } from '@/eventBus'
+
 export default {
   components:{
     createdDialog,
@@ -364,92 +371,103 @@ export default {
   },
   data(){
       return{
-      thekey2:'1',
-      options:[],
-      optionsAuidSataus: [],
-      optionsStatus:[
-        {
-        code:null,
-        name:'全部'
-        }
-      ],
-      pickerOptions:{
-        disabledDate(time) {
-          return time.getTime() < Date.now();
-        },
-      },
-      optionsReason:[],
-      optionsFormBlack:[],
-      formUnFroze: { // 解冻弹框表单
-        mobile: '', // 手机号
-        companyName: '', // 公司名称
-        shipperType:null,
-        address:'', // 详细地址
-        contacts:'', // 联系人
-        belongCity:null, // 所在地
-        registerOrigin:'', // 注册来源
-        creditCode:'', // 统一社会信用代码
-        unfreezeTime:'',
-        shipperStatus:null,
-        freezeCause:'',
-        freezeCauseRemark:'',
-        unfreezeRemark:'',
-        belongCityName:''
-      },
-      // information:null,
-      // centerDialogVisible: false,
-      formLabelWidth:'120px',
-      BlackDialogFlag: false, // 移出黑名单的弹框控制
-      formBlack:{ // 移除黑名单的表单
-        mobile:'',
-        contacts:'',
-        companyName:'',
-        belongCity:null,
-        shipperType:null,
-        address:'',
-        registerOrigin:'',
-        putBlackCause:'',
-        popBlackRemark:'',
-        putBlackCauseRemark:'',
-        belongCityName:''
-      },
-      formAll:{
-        belongCity: null,
-        shipperStatus:null,
-        companyName:'',
-        mobile:''
-      },
-      selectRowData:{},
-      page:1,
-      pagesize:20,
-      totalCount:null,
-      tableDataAll:[],
-      unfrozeDialogFlag: false,
-      rules:{
-        unfreezeRemark:{required: true, message:'请输入解冻原因',trigger:'change'}
-      },
-      multipleSelection:[]
-    }
+		freeze:true,//是否冻结
+		thekey2:'1',
+		options:[],
+		optionsStatus:[
+			{
+			code:null,
+			name:'全部'
+			}
+		],
+		optionsAuidSataus:[
+			{
+			code:null,
+			name:'全部'
+			}
+		],//账户状态
+		pickerOptions:{
+			disabledDate(time) {
+			return time.getTime() < Date.now();
+			},
+		},
+		optionsReason:[],
+		optionsFormBlack:[],
+		formUnFroze: { // 解冻弹框表单
+			mobile: '', // 手机号
+			companyName: '', // 公司名称
+			shipperType:null,
+			address:'', // 详细地址
+			contacts:'', // 联系人
+			belongCity:null, // 所在地
+			registerOrigin:'', // 注册来源
+			creditCode:'', // 统一社会信用代码
+			unfreezeTime:'',
+			shipperStatus:null,
+			freezeCause:'',
+			freezeCauseRemark:'',
+			unfreezeRemark:'',
+			belongCityName:''
+		},
+		// information:null,
+		// centerDialogVisible: false,
+		formLabelWidth:'120px',
+		BlackDialogFlag: false, // 移出黑名单的弹框控制
+		formBlack:{ // 移除黑名单的表单
+			mobile:'',
+			contacts:'',
+			companyName:'',
+			belongCity:null,
+			shipperType:null,
+			address:'',
+			registerOrigin:'',
+			putBlackCause:'',
+			popBlackRemark:'',
+			putBlackCauseRemark:'',
+			belongCityName:''
+		},
+		formAll:{
+			belongCity: null,
+			shipperStatus:null,
+			accountStatus:null,
+			companyName:'',
+			mobile:''
+		},
+		selectRowData:{},
+		page:1,
+		pagesize:20,
+		totalCount:null,
+		tableDataAll:[],
+		unfrozeDialogFlag: false,
+		rules:{
+			unfreezeRemark:{required: true, message:'请输入解冻原因',trigger:'change'}
+		},
+		multipleSelection:[]
+		}
   },
   created(){
 
   },
   mounted(){
     this.firstblood()
-    this.getMoreInformation()
-    this.getdata_search()
+	this.getMoreInformation()
+	
+    // this.getdata_search()
     // this.formAll.belongCity = this.$refs.area.selectedOptions.pop();
   },
   methods:{
-    getAttestationStatus(code){
-      let find = this.optionsStatus.filter(el => {
-        return el.code === code
-      })[0]
-      return find ? find.name : '未知：'+code
-    },
+	changeList(){
+		eventBus.$emit('changeList')
+	},
+	//点击选中当前行
+	clickDetails(row, event, column){
+		this.$refs.multipleTable.toggleRowSelection(row);
+	},
+   
 
     // 判断选中与否
     handleSelectionChange(val){
+      console.log(val)
       this.multipleSelection = val;
       if(val[0]) {
         this.formUnFroze=val[0]
@@ -505,40 +523,51 @@ export default {
     },
     //获取状态列表
     getMoreInformation(){
-      var optionsAuidSataus=[]
-      data_get_shipper_status().then(res=>{
-        res.data.map((item)=>{
-			// console.log('item:',item)
-          this.optionsStatus.push(item);
-        })
-      })
-      // 获取移入黑名单的列表
-      data_get_shipper_BlackType().then(res=>{
-          this.optionsFormBlack = res.data;
-      })
-      // 获取冻结原因下拉
-      data_get_shipper_freezeType().then(res=>{
-          this.optionsReason = res.data;
-      })
-      data_get_shipper_auid().then(res=>{
+		// 获取移入黑名单的列表
+		data_get_shipper_BlackType().then(res=>{
+			this.optionsFormBlack = res.data;
+		})
+		// 获取冻结原因下拉
+		data_get_shipper_freezeType().then(res=>{
+			this.optionsReason = res.data;
+		})
+		//获取状态列表
+		data_get_shipper_status().then(res=>{
+			// console.log('optionsStatus',res)
+			res.data.map((item)=>{
+				this.optionsStatus.push(item);
+			})
+		})
+		//获取账户状态列表
+     	data_get_shipper_auid().then(res=>{
 		  console.log('车主状态：',res)
-          this.optionsAuidSataus = res.data;
-      })
+			res.data.map((item)=>{
+				this.optionsAuidSataus.push(item);
+			})
+      	})
 	},
-	//
-    getAccountStatus(code){
-		// console.log('this.optionsAuidSataus:',this.optionsAuidSataus)
-		let findAuid=this.optionsAuidSataus.filter(el => {
-			return el.code === code
-		})[0]
-		return findAuid ? findAuid.name : '正常'
-    },
-      //点击查询按纽，按条件查询列表
+	// //账户状态
+    // getAccountStatus(code){
+	// 	// console.log('this.optionsAuidSataus:',this.optionsAuidSataus)
+	// 	let findAuid=this.optionsAuidSataus.filter(el => {
+	// 		return el.code === code
+	// 	})[0]
+	// 	return findAuid ? findAuid.name : '正常'
+	// },
+	// //获取认证状态
+	// getAttestationStatus(code){
+    //   let find = this.optionsStatus.filter(el => {
+    //     return el.code === code
+    //   })[0]
+    //   return find ? find.name : '未知：'+code
+	// },
+	
+    //点击查询按纽，按条件查询列表
     getdata_search(event) {
         this.formAll.belongCity = this.$refs.area.selectedOptions.pop();
+        console.log(this.formAll)
         data_get_shipper_list(this.page,this.pagesize,this.formAll).then(res=>{
           this.totalCount = res.data.totalCount;
-          this.thekey2 = Math.random()
           this.tableDataAll = res.data.list;
         })
     },

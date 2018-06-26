@@ -36,16 +36,22 @@
             </el-form-item>
             </el-col>
             <el-col :span="12">
-              <el-form-item label="货主类型" :label-width="formLabelWidth">
-              <el-select v-model="formFroze.shipperType" placeholder="请选择" disabled>
-              <el-option
-                v-for="item in options"
-                :key="item.value"
-                :label="item.name"
-                :value="item.code"
-                :disabled="item.disabled">
-              </el-option>
-              </el-select>
+              	<el-form-item label="货主类型" :label-width="formLabelWidth">
+				<el-input
+				v-if="freeze == true"
+				placeholder="请输入内容"
+				v-model="formFroze.shipperType"
+				:disabled="true">
+				</el-input>
+              	<el-select v-model="formFroze.shipperType" placeholder="请选择" v-else>
+					<el-option
+						v-for="item in options"
+						:key="item.value"
+						:label="item.name"
+						:value="item.code"
+						:disabled="item.disabled">
+					</el-option>
+              	</el-select>
             </el-form-item>
             </el-col>
           </el-row>
@@ -78,9 +84,9 @@
               <el-form-item label="解冻日期" :label-width="formLabelWidth" prop="freezeTime">
                 <el-date-picker
                   v-model="formFroze.freezeTime"
-                  type="datetime"
                   placeholder="选择日期"
-                  format="yyyy-MM-dd"
+                  type="date"
+                  format="yyyy-MM-dd" 
                   :picker-options="pickerOptions">
                 </el-date-picker>
                 <el-radio-group v-model="radio" @change="timeChange">
@@ -148,7 +154,10 @@ export default {
      editType: {
       type: String,
       default: 'edit'
-    }
+	},
+	freeze:{
+		type:Boolean
+	}
   },
   data(){
     return{
@@ -160,21 +169,18 @@ export default {
       formLabelWidth:'120px',
       freezeDialogFlag:false,
       formFroze: { // 冻结弹框表单
-        mobile: '', // 手机号
-        companyName: '', // 公司名称
-        shipperType:null,
-        address:'', // 详细地址
-        contacts:'', // 联系人
-        belongCity:null, // 所在地
-        belongCityName:'',
-        registerOrigin:'', // 注册来源
-        creditCode:'', // 统一社会信用代码
-        freezeTime:'',
-        freezeCause:null,
-        freezeCauseRemark :''
-        // radio1:'',
-        // radio2:'',
-        // radio3:''
+        // mobile: '', // 手机号
+        // companyName: '', // 公司名称
+        // shipperType:null,
+        // address:'', // 详细地址
+        // contacts:'', // 联系人
+        // belongCity:null, // 所在地
+        // belongCityName:'',
+        // registerOrigin:'', // 注册来源
+        // creditCode:'', // 统一社会信用代码
+        // freezeTime:'',
+        // freezeCause:null,
+        // freezeCauseRemark :''
       },
       radio: '',
       currentRow:null,
@@ -184,8 +190,8 @@ export default {
         }
       },
       formFrozeRules:{
-        freezeCause:{required: true,message:'请选择冻结原因',trigger:'change'},
-        freezeTime:{required:true,message:'请选择解冻日期',trigger:'change'}
+        freezeCause:{required: true,message:'请选择冻结原因',trigger:['blur', 'change']},
+        freezeTime:{required:true,message:'请选择解冻日期',trigger:['blur', 'change']}
       }
     }
   },
@@ -200,6 +206,7 @@ export default {
   },
   methods:{
     timeChange(val){
+      console.log(val)
       let currentTime = this.formFroze.freezeTime || new Date()
       let oneDay = 1* 24 * 60 * 60 * 1000
       let time = +new Date()
@@ -222,6 +229,7 @@ export default {
       }
 
       this.formFroze.freezeTime = time
+      console.log(time)
     },
     change(){
       this.freezeDialogFlag!=this.freezeDialogFlag
@@ -233,7 +241,7 @@ export default {
     openDialog(){
       if(this.editType ==="edit"){
         if(this.params.companyName || this.params.contacts){
-          this.freezeDialogFlag=true 
+          this.freezeDialogFlag = true ;
         }else{
           this.$message.error('选中一个才可以操作')
         }
@@ -241,30 +249,9 @@ export default {
       
       if(this.params){
         var obj = JSON.parse(JSON.stringify(this.params));
-        this.formFroze.shipperType=obj.shipperType
-        this.formFroze.belongCity=obj.belongCity
-        this.formFroze.belongCityName=obj.belongCityName
-        this.formFroze.mobile=obj.mobile
-        this.formFroze.contacts=obj.contacts
-        this.formFroze.address=obj.address
-        this.formFroze.companyName=obj.companyName
-        this.formFroze.creditCode=obj.creditCode
-        this.formFroze.businessLicenceFile=obj.businessLicenceFile
-        this.formFroze.companyFacadeFile=obj.companyFacadeFile
-        this.formFroze.shipperCardFile=obj.shipperCardFile
-        this.formFroze.shipperId=obj.shipperId
+        this.formFroze = obj ;
       }else{
-        this.formFroze.shipperType=null
-        this.formFroze.belongCity=null
-        this.formFroze.mobile=null
-        this.formFroze.contacts=null
-        this.formFroze.address=null
-        this.formFroze.companyName=null
-        this.formFroze.creditCode=null
-        this.formFroze.businessLicenceFile=null
-        this.formFroze.companyFacadeFile=null
-        this.formFroze.shipperCardFile=null
-        this.formFroze.shipperId=null     
+        this.formFroze = {};
       }
     },
 
@@ -289,11 +276,15 @@ export default {
     onSubmit(){
       this.$refs['formFroze'].validate((valid)=>{
         if(valid){
-          this.formFroze.belongCity = this.$refs.area.selectedOptions.pop();
+          // this.formFroze.belongCity = this.$refs.area.selectedOptions.pop();
           var forms= Object.assign({}, this.formFroze,{attestationStatus:"AF0010405"})
-          forms.freezeTime = parseTime(forms.freezeTime)
+		  forms.freezeTime = parseTime(forms.freezeTime);
+		  //冻结写死冻结code（根据后端要求）
+		  forms.accountStatus = 'AF0010502';
+          console.log('forms.freezeTime:',forms.freezeTime)
           data_get_shipper_change(forms).then(res=>{
-            // console.log(res)
+            console.log(res)
+            console.log('test')
             this.$message.success('冻结修改成功')
             this.freezeDialogFlag = false;
             this.$emit('getData')

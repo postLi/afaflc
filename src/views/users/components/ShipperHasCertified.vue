@@ -11,7 +11,7 @@
                 <el-form-item label="联系人姓名：">
                     <el-input placeholder="请输入内容" v-model.trim="formInline.contacts" clearable></el-input>
                 </el-form-item>
-                <el-form-item label="货主类型：">
+                <!-- <el-form-item label="货主类型：">
                     <el-select v-model="formInline.shipperType" placeholder="请选择">
                         <el-option
                             v-for="item in options"
@@ -21,7 +21,7 @@
                             :disabled="item.disabled">
                         </el-option>
                     </el-select>
-                </el-form-item>
+                </el-form-item> -->
                 <el-form-item label="">
                     <el-button type="primary" plain @click="getdata_search">查询</el-button>
                     <el-button type="info" plain @click="clearSearch">清空</el-button>
@@ -61,17 +61,27 @@
                         </template>
                     </el-table-column>
                     <el-table-column
-                        prop="contacts"
-                        label="联系人">
-                    </el-table-column>
-                    <el-table-column
                         prop="mobile"
                         label="手机号"
                         width="200">
                     </el-table-column>
                     <el-table-column
+                        prop="contacts"
+                        label="联系人">
+                    </el-table-column>
+                    <el-table-column
                         prop="registerOriginName"
                         label="注册来源">
+                    </el-table-column>
+                    <el-table-column prop="shipperStatusName" label="认证状态">
+                        <!-- <template slot-scope="scope">
+                        {{getAttestationStatus(scope.row.shipperStatus)}}
+                        </template> -->
+                    </el-table-column>
+                    <el-table-column prop="accountStatusName" label="账户状态">
+                        <!-- <template slot-scope="scope">
+                        {{getAccountStatus(scope.row.accountStatus)}}
+                        </template> -->
                     </el-table-column>
                     <el-table-column
                         prop="belongCityName"
@@ -88,20 +98,6 @@
                         prop="authPassTime"
                         label="认证通过日期">
                     </el-table-column>
-                    <!-- <el-table-column
-                        label="操作"
-                        width="400">
-                        <template slot-scope="scope">
-                            <el-button type="text"
-                                @click="dialogFormVisible_prove = true">详情</el-button>
-                            <el-button type="text"
-                                @click="dialogFormVisible = true">修改</el-button>
-                            <el-button type="text"
-                                @click="dialogFormVisible = true">冻结</el-button>
-                            <el-button type="text"
-                                @click="dialogFormVisible = true">移入黑名单</el-button>
-                        </template>
-                    </el-table-column> -->
                 </el-table>
                     
                 <el-pagination
@@ -120,10 +116,17 @@
 </template>
 <script>
 import createdDialog from './createdDialog.vue'
+import { eventBus } from '@/eventBus'
 // import FreezeDialog from './FreezeDialog.vue'
 // import shipperBlackDialog from './shipperBlackDialog'
 import {data_get_shipper_list,data_get_shipper_type} from '../../../api/users/shipper/all_shipper.js'
 export default {
+    props: {
+        isvisible: {
+            type: Boolean,
+            default: false
+        }
+    },
     components:{
       createdDialog
     //   FreezeDialog,
@@ -137,29 +140,33 @@ export default {
             totalCount:null,
             page:1,
             pagesize:20,
-            formInline:{
-                mobile:'',
+            inited:false,
+            formInline: {
                 companyName:'',
-                contacts:'',
-                shipperType:''
+                belongCity:'',
+                mobile:'',
+                shipperStatus:"AF0010403",//未认证的状态码
             },
             multipleSelection:[],
             selectRowData:{}
         }
     },
+    watch: {
+        isvisible(newVal){
+            if(newVal && !this.inited){
+                this.inited = true
+                this.firstblood()
+            }
+        }
+    },
     mounted(){
-      this.firstblood()
+      eventBus.$on('changeList', function(){
+          if(this.inited){
+              this.firstblood()
+          }
+      })
     },
     methods:{
-        // // 冻结
-        // handleFroze(){
-        //     console.log(11111)
-        // },
-        // // 黑名单
-        // handleBlack(){
-        //     console.log(2222)
-        // },
-
         // 选中值判断
         handleSelectionChange(val){
             this.multipleSelection = val;
@@ -175,14 +182,15 @@ export default {
             data_get_shipper_type().then(res=>{
                 // console.log(res)
                 res.data.map((item)=>{
-                this.options.push(item)
+                    this.options.push(item)
                 })
             })
         },
         //刷新页面
       firstblood(){
+          console.log('1111111111')
         data_get_shipper_list(this.page,this.pagesize,this.formInline).then(res=>{
-          console.log(res)
+          console.log("已认证",res)
           this.totalCount = res.data.totalCount;
           this.tableData3 = res.data.list;
         })
