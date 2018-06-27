@@ -156,7 +156,7 @@
       </el-form>
       <div slot="footer" class="dialog-footer">
 
-        <el-button type="primary" @click="onSubmit3" >确定3</el-button>
+        <el-button type="primary" @click="onSubmit3" >确定</el-button>
         <el-button @click="freezeDialogFlag = false">取 消</el-button>
       </div>
     </el-dialog>
@@ -172,9 +172,7 @@ export default {
     GetCityList
   },
   props:{
-    params:{
-      type:Object
-    },
+    params:null,
     icon:{
       type: String,
       default: ''
@@ -296,7 +294,7 @@ export default {
  
       if(this.editType ==="edit-three" ){
 
-        if(this.params.driverMobile!= undefined){
+        if(this.params!= null){
           this.freezeDialogFlag=true 
         }else{
          

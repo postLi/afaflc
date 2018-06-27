@@ -81,7 +81,7 @@
                     @getData="getDataList"
                     >
                     </freeze-change-template>
-                    <unbind-freeze
+                    <freeze-change-template
                     btntext="解冻"
                     type="primary" 
                     btntitle="解冻"
@@ -93,13 +93,26 @@
                     :params="selectRowData"
                     @getData="getDataList"
                     >
-                    </unbind-freeze>
+                    </freeze-change-template>
                     <blacklist
                     btntext="移入黑名单"
                     type="primary" 
                     btntitle="移入黑名单"
                     :plain="true"
                     editType='edit-four'
+                    btntype="primary"
+                    icon="el-icon-news"
+                     v-on:click.native="freezeClick"
+                    :params="selectRowData"
+                    @getData="getDataList"
+                    >
+                    </blacklist>
+                     <blacklist
+                    btntext="移出黑名单"
+                    type="primary" 
+                    btntitle="移出黑名单"
+                    :plain="true"
+                    editType='edit-five'
                     btntype="primary"
                     icon="el-icon-news"
                      v-on:click.native="freezeClick"
@@ -216,7 +229,7 @@
                     }
                 ],
                 multipleSelection:[],
-                selectRowData:{},
+                selectRowData:null,
                 
                  ifInformation:'选中一个才可以操作'
                // driverNewdailogFlag: false, // 新增弹框控制
@@ -275,15 +288,15 @@
                 
               } else{
                
-                this.selectRowData={}
+                this.selectRowData=null
                 
                
               }
             },
             freezeClick(val){
-                console.log(this.multipleSelection)
-              if(this.multipleSelection == '') {           
-                this.selectRowData={}
+             
+              if(this.selectRowData == null) {           
+                this.selectRowData=null
                  this.$refs.cue.hint(this.ifInformation)
                
               } 
@@ -305,7 +318,7 @@
             //点击查询按纽，按条件查询列表
             getdata_search(event){
                 this.formInline.belongCity = this.$refs.area.selectedOptions.pop();
-               this.firstblood()
+                this.firstblood()
             },
             
             //获取车主状态列表

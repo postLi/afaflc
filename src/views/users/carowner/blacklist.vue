@@ -100,12 +100,20 @@
             </el-col>
           </el-row>
           <div class="shipper_information">
-            <h2>{{text}}信息</h2>
+            <h2>移入黑名单信息</h2>
           </div>
           <el-row>
             <el-col :span="24">
               <el-form-item label="移入原因：" prop="freezeCause" :label-width="formLabelWidth">
-              <el-select v-model="formFroze.putBlackCause" placeholder="请选择" clearable>
+              <el-select v-model="formFroze.putBlackCause" placeholder="请选择" clearable  v-if = "editType == 'edit-four'">
+                <el-option
+                  v-for="item in putBlackCauseoptions"
+                  :key="item.value"
+                  :label="item.name"
+                  :value="item.code">
+                </el-option>
+              </el-select >
+              <el-select v-model="formFroze.putBlackCause" placeholder="请选择" disabled v-else-if="editType == 'edit-five'">
                 <el-option
                   v-for="item in putBlackCauseoptions"
                   :key="item.value"
@@ -120,15 +128,27 @@
           <el-row>
             <el-col :span="24">
               <el-form-item label="移入黑名单原因说明：" :label-width="formLabelWidth">
-                <el-input type="textarea" :rows="2" :maxlength="100" v-model="formFroze.putBlackCauseRemark "></el-input>
+                <el-input type="textarea" :rows="2" :maxlength="100" v-model="formFroze.putBlackCauseRemark " v-if = "editType == 'edit-four'"></el-input>
+                 <el-input type="textarea" :rows="2" :maxlength="100" v-model="formFroze.putBlackCauseRemark " v-else-if="editType == 'edit-five'" disabled></el-input>
               </el-form-item>
             </el-col>
           </el-row>
-        
+          <div class="shipper_information" v-if = "editType == 'edit-five'">
+            <h2>移出黑名单信息</h2>
+          </div>
+          <el-row v-if = "editType == 'edit-five'">
+            <el-col :span="24">
+              <el-form-item label="移出黑名单原因说明：" :label-width="formLabelWidth">
+              
+                 <el-input type="textarea" :rows="2" :maxlength="100" v-model="formFroze.outPutBlackCauseRemark " ></el-input>
+              </el-form-item>
+            </el-col>
+          </el-row>
       </el-form>
       <div slot="footer" class="dialog-footer">
 
-        <el-button type="primary" @click="onSubmit3" >确定3</el-button>
+        <el-button type="primary" @click="onSubmit1" v-if = "editType == 'edit-four'">确定</el-button>
+        <el-button type="primary" @click="onSubmit2"  v-else-if="editType == 'edit-five'">确定</el-button>
         <el-button @click="freezeDialogFlag = false">取 消</el-button>
       </div>
     </el-dialog>
@@ -137,16 +157,14 @@
 <script>
 import GetCityList from '@/components/GetCityList'
 import {parseTime} from '@/utils/'
-import {data_get_shipper_type,data_get_shipper_change,data_get_shipper_freezeType,data_get_freeze_change,data_get_freeze, data_get_shipper_BlackType,data_unbind_freeze_change,data_blacklist} from '@/api/users/shipper/all_shipper.js'
+import {data_get_shipper_type,data_get_shipper_change,data_get_shipper_freezeType,data_get_freeze_change,data_get_freeze, data_get_shipper_BlackType,data_unbind_freeze_change,data_blacklist,data_remove_blacklist} from '@/api/users/shipper/all_shipper.js'
 export default {
   name:'create-Change-ViewDialog',
   components:{
     GetCityList
   },
   props:{
-    params:{
-      type:Object
-    },
+    params:null,
     icon:{
       type: String,
       default: ''
@@ -207,7 +225,7 @@ export default {
         obtainGradeName:'',
         obtainGradeTime:'',
         unfreezeCauseRemark:'',
-        
+        outPutBlackCauseRemark:'',
         putBlackCause:'',
         putBlackCauseRemark:''
         // radio1:'',
@@ -270,24 +288,22 @@ export default {
     },
     openDialog(){
  
-      if(this.editType ==="edit-four" ){
-
-        if(this.params.driverMobile!= undefined){
+      if(this.editType ==="edit-four" || this.editType ==="edit-five" ){
+        console.log(this.params)
+        if(this.params!= null){
           this.freezeDialogFlag=true 
-        }else{
-         
-          this.freezeDialogFlag=false
-         
-          
+        }else{         
+          this.freezeDialogFlag=false        
         }
       }
+
       if(this.params){
 
      
         var obj = JSON.parse(JSON.stringify(this.params));
        
         this.formFroze=obj;
-        console.log(this.formFroze)
+       
         this.formFroze.obtainGradeTime = parseTime(this.formFroze.obtainGradeTime,"{y}-{m}-{d}");
        /* this.formFroze.forEach(item => {
             item.obtainGradeTime = parseTime(item.obtainGradeTime,"{y}-{m}-{d}");
@@ -322,13 +338,30 @@ export default {
       })
     },
 
-    //解冻
-    onSubmit3(){
+    //移入黑名单
+    onSubmit1(){
         this.$refs['formFroze'].validate((valid)=>{
         if(valid){
           var forms= Object.assign({}, this.formFroze)
           
           data_blacklist(forms).then(res=>{
+         
+            this.$message.success('解冻修改成功')
+            this.freezeDialogFlag = false;
+            this.$emit('getData') 
+          }).catch(err=>{
+            console.log(err)
+          })
+        }
+      })
+    },
+    //移出黑名单
+    onSubmit2(){
+        this.$refs['formFroze'].validate((valid)=>{
+        if(valid){
+          var forms= Object.assign({}, this.formFroze)
+          
+          data_remove_blacklist(forms).then(res=>{
          
             this.$message.success('解冻修改成功')
             this.freezeDialogFlag = false;

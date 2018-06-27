@@ -4,7 +4,7 @@ const baseurl = "aflcorderservice"
 const baseurl_two ='aflccommonservice'
 
 
-//获取货主平台绑定列表
+//获取交易明细列表
 export function data_financeList(page,pagesize,data) {
     return fetch({
       url: '/'+baseurl+'/order/aflcOrderPayment/v1/list',

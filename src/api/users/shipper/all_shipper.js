@@ -95,3 +95,6 @@ export function data_unbind_freeze_change(data) {
 export function data_blacklist(data) {
   return fetch.put('/' + baseurl_four + '/usercenter/aflcDriver/v1/putBlackAflcDriver', data)
 }
+export function data_remove_blacklist(data){
+  return fetch.put('/' + baseurl_four + '/usercenter/aflcDriver/v1/outPutBlackAflcDriver', data)
+}
