@@ -53,9 +53,24 @@
                 </el-row>
                 <el-row>
                     <el-col :span="12">
-                        <el-form-item label="车型" :label-width="formLabelWidth">
-                            <el-input v-model="formBlack.shipperType"></el-input>
-                        </el-form-item>
+                        <el-form-item label="车长(米)：" :label-width="formLabelWidth">
+                      <el-input
+                            placeholder="长"
+                            v-model="templateModel.carLength"
+                            clearable>
+                        </el-input>
+                        <el-input
+                            placeholder="宽"
+                            v-model="templateModel.carWidth"
+                            clearable>
+                        </el-input>
+                        <el-input
+                            placeholder="高"
+                            v-model="templateModel.carHeight"
+                            clearable>
+                        </el-input>
+                        <span class="node">米</span>
+                    </el-form-item>
                     </el-col>
                    <el-col :span="12">
                         <el-form-item label="注册来源" :label-width="formLabelWidth">

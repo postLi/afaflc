@@ -78,3 +78,23 @@ export function data_get_shipper_BlackType() {
 export function data_get_shipper_auid() {
   return fetch.get('/' + baseurl_two + '/sysDict/getSysDictByCodeGet/AF00105')
 }
+
+//车主冻结
+export function data_get_freeze(data) {
+  return fetch.put('/' + baseurl_four + '/usercenter/aflcDriver/v1/freezeAflcDriver', data)
+}
+//车主冻结修改
+export function data_get_freeze_change(data) {
+  return fetch.put('/' + baseurl_four + '/usercenter/aflcDriver/v1/freezeUpdateAflcDriver', data)
+}
+//车主解冻
+export function data_unbind_freeze_change(data) {
+  return fetch.put('/' + baseurl_four + '/usercenter/aflcDriver/v1/unfreezeAflcDriver', data)
+}
+//车主移入解冻
+export function data_blacklist(data) {
+  return fetch.put('/' + baseurl_four + '/usercenter/aflcDriver/v1/putBlackAflcDriver', data)
+}
+export function data_remove_blacklist(data){
+  return fetch.put('/' + baseurl_four + '/usercenter/aflcDriver/v1/outPutBlackAflcDriver', data)
+}
