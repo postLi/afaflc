@@ -23,7 +23,7 @@
     "node-sass": "^4.9.0",
     "normalize.css": "8.0.0",
     "nprogress": "0.2.0",
-    "v-region": "^1.5.0",
+    "v-region": "^1.7.1",
     "vue": "2.5.16",
     "vue-router": "3.0.1",
     "vuedraggable": "2.16.0",

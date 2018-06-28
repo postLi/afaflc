@@ -1,6 +1,6 @@
 import fetch from '@/utils/fetch'
 
-const baseurl = "aflcorderservice"
+const baseurl = "aflcorderservice-lyc"
 
 
 

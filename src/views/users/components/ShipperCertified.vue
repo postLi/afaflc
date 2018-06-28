@@ -23,11 +23,11 @@
 		</div>
 		<div class="info_news">
 			<el-table 
-			ref="mutipleTable"
+			ref="multipleTable"
 			:data="tableData1"
+            @row-click="clickDetails"
 			stripe
 			border
-			:key="theKey3"
 			@selection-change="handleSelectionChange"
 			tooltip-effect="dark"
 			style="width: 100%">
@@ -209,78 +209,107 @@
 </template>
 <script>
 import Upload from '@/components/Upload/singleImage'
+import { eventBus } from '@/eventBus'
 import createdDialog from './createdDialog.vue'
 import GetCityList from '@/components/GetCityList'
 import {data_get_shipper_list,data_get_shipper_type,data_get_shipper_change} from '@/api/users/shipper/all_shipper.js'
 export default {
-  components:{
-    createdDialog,
-    GetCityList,
-    Upload
-  },
-  computed: {
-    pictureValue () {
-      return '营业执照:'+ this.radio1 + ',公司或档口照片:'+ this.radio2 + ',发货人名片:'+ this.radio3
-    }
-  },
-  data(){
-    const radioValidator = (rule,val,cb)=>{
-      console.log(val)
-      if(!this.radio1){
-        cb(new Error('请选择图片质量'))
-      }else{
-       cb()
-      }
-    }
-    return{
-      theKey3:'1',
-      selectDiaologFlag:true,
-      options:[], // 货主类型列表
-      tableData1:[], // 列表数据
-      totalCount:null, // 总数
-      page:1,
-      pagesize:20,
-      formAll:{
-        belongCity:null,
-        companyName:'',
-        mobile:'',
-        shipperStatus:"AF0010402",//待认证的状态码
-      },
-      formLabelWidth: '120px',
-      dialogFormVisible:false, //认证审核弹框控制
-      shengheform: { // 认证审核表单
-        mobile: '', // 手机号
-        companyName: '', // 公司名称
-        address:'', // 详细地址
-        contacts:'', // 联系人
-        belongCity:null, // 所在地
-        authenticationTime:'',
-        registerOrigin:'', // 注册来源
-        creditCode:'', // 统一社会信用代码
-        businessLicenceFile:'',
-        companyFacadeFile:'',
-        shipperCardFile:'',
-        belongCityName:''
-      },
-      radio1:'',
-      radio2:'',
-      radio3:'',
-      centerDialogVisible:false,// 提示语的弹窗控制
-      information:null, // 弹框显示的信息
-      multipleSelection:[],
-      shengheformRules:{
-       shipperType:{required: true, message:'请选择货主类型',trigger:'change'},
-       radio1:{validator: radioValidator,trigger:'change'},
-       radio2:{validator: radioValidator,trigger:'change'},
-       radio3:{validator: radioValidator,trigger:'change'}
-      }
-    }
-  },
-  mounted(){
-    this.firstblood()
-    this.getMoreInformation()
-  },
+	props: {
+        isvisible: {
+            type: Boolean,
+            default: false
+        }
+    },
+	components:{
+		createdDialog,
+		GetCityList,
+		Upload
+	},
+	computed: {
+		pictureValue () {
+		    return [{name:'营业执照',result: this.radio1},{name:'公司或档口照片',result: this.radio2},{name:'发货人名片',result: this.radio3}]
+		}
+	},
+	data(){
+		const radioValidator = (rule,val,cb)=>{
+            // console.log(val)
+            if(!this.radio1){
+                cb(new Error('请选择图片质量'))
+            }else{
+                cb()
+            }
+		}
+		return{
+        selectDiaologFlag:true,
+		options:[], // 货主类型列表
+		tableData1:[], // 列表数据
+		totalCount:null, // 总数
+		page:1,
+		pagesize:20,
+		formAll:{
+			belongCity:null,
+			companyName:'',
+			mobile:'',
+			shipperStatus:"AF0010402",//待认证的状态码
+		},
+		formLabelWidth: '120px',
+		dialogFormVisible:false, //认证审核弹框控制
+		shengheform: { // 认证审核表单
+			mobile: '', // 手机号
+			companyName: '', // 公司名称
+			address:'', // 详细地址
+			contacts:'', // 联系人
+			belongCity:null, // 所在地
+			authenticationTime:'',
+			registerOrigin:'', // 注册来源
+			creditCode:'', // 统一社会信用代码
+			businessLicenceFile:'',
+			companyFacadeFile:'',
+			shipperCardFile:'',
+			belongCityName:''
+		},
+		radio1:'',
+		radio2:'',
+		radio3:'',
+		centerDialogVisible:false,// 提示语的弹窗控制
+		information:null, // 弹框显示的信息
+		multipleSelection:[],
+		shengheformRules:{
+		shipperType:{required: true, message:'请选择货主类型',trigger:'change'},
+		radio1:{validator: radioValidator,trigger:'change'},
+		radio2:{validator: radioValidator,trigger:'change'},
+		radio3:{validator: radioValidator,trigger:'change'}
+		}
+		}
+	},
+	watch: {
+		isvisible: {
+            handler(newVal, oldVal) {
+                console.log('testnewVal:',newVal)
+                if(newVal && !this.inited){
+                    this.inited = true
+                    this.firstblood();
+                    this.getMoreInformation();
+                }
+            },
+            // 代表在wacth里声明了firstName这个方法之后立即先去执行handler方法
+            immediate: true
+        }
+	},
+	mounted(){
+		eventBus.$on('changeList', function(){
+			if(this.inited){
+				this.firstblood();
+				this.getMoreInformation()
+			}
+		})
+	},
   methods:{
+      //点击选中当前行
+    clickDetails(row, event, column){
+      this.$refs.multipleTable.toggleRowSelection(row);
+    },
+
     changeCity(){
       this.selectDiaologFlag=false
     },
@@ -325,7 +354,6 @@ export default {
         data_get_shipper_list(this.page,this.pagesize,this.formAll).then(res=>{
           // console.log('this.tableData1:',this.tableData1, res)
           this.totalCount = res.data.totalCount;
-          this.theKey3=Math.random()
           this.tableData1 = res.data.list;
         })
     },
@@ -394,45 +422,72 @@ export default {
     },
     // 审核不通过
     handlerOut(){
-      this.completeData()
-      this.$refs['shengheform'].validate((valid)=>{
-        if(valid){
-          this.shengheform.belongCity = this.$refs.area.selectedOptions.pop();
-          var forms=Object.assign({},this.shengheform,{attestationStatus:"AF0010404"},{authNoPassCause:this.pictureValue})
-          this.$confirm()
-          data_get_shipper_change(forms).then(res=>{
-            // console.log(res)
-            this.$message.success('审核不通过 成功')
-            this.dialogFormVisible = false;
-            this.firstblood()
-          }).catch(err=>{
-            console.log(err)
-          })
-        }
-      })
+        this.completeData();
+        this.pictureValue.forEach((el,idx) => {
+            if(el.result == '上传合格'){
+                this.pictureValue.splice(idx,1)
+            }
+        })
+
+        console.log('this.pictureValue',this.pictureValue)
+        this.$refs['shengheform'].validate((valid)=>{
+            if(valid){
+            this.shengheform.belongCity = this.$refs.area.selectedOptions.pop();
+            var forms=Object.assign({},this.shengheform,{shipperStatus:"AF0010404"},{authNoPassCause:JSON.stringify(this.pictureValue)});
+            console.log(forms)
+            this.$confirm()
+            data_get_shipper_change(forms).then(res=>{
+                // console.log(res)
+                this.$message.success('审核不通过 成功')
+                this.dialogFormVisible = false;
+                this.firstblood();
+                eventBus.$emit('changeList')
+            }).catch(err=>{
+                console.log(err)
+            })
+            }
+        })
     },
 
     // 审核通过
     handlerPass(){
-      this.completeData()
-      this.$refs['shengheform'].validate((valid)=>{
-        if(valid){
-          this.shengheform.belongCity = this.$refs.area.selectedOptions.pop();
-          var forms=Object.assign({},this.shengheform,{attestationStatus:"AF0010403"},{authNoPassCause:this.pictureValue})
-          data_get_shipper_change(forms).then(res=>{
-            // console.log(res)
-            this.$message.success('审核通过成功')
-            this.dialogFormVisible = false;
-            this.firstblood()
-          }).catch(err=>{
-            console.log(err)
-          })
-        }
-      })
+        this.completeData();
+        let ifQualified = true ;
+        this.pictureValue.forEach((el,idx) => {
+            console.log(el.result)
+            if(el.result != "上传合格"){
+                console.log(ifQualified)
+                this.pictureValue.splice(idx,1)
+                ifQualified = false;
+            }
+            console.log(ifQualified)
+
+        })
+        console.log(ifQualified)
+        this.$refs['shengheform'].validate((valid)=>{
+            if(valid && ifQualified){
+                this.shengheform.belongCity = this.$refs.area.selectedOptions.pop();
+                var forms=Object.assign({},this.shengheform,{shipperStatus:"AF0010403"},{authNoPassCause:JSON.stringify(this.pictureValue)});
+                console.log(forms)
+
+                data_get_shipper_change(forms).then(res=>{
+                  // console.log(res)
+                    this.$message.success('审核通过成功')
+                    this.dialogFormVisible = false;
+                    this.firstblood()
+                    eventBus.$emit('changeList')
+                }).catch(err=>{
+                    console.log(err)
+                })
+            }else{
+                this.$message.success('审核未满足通过要求')
+            }
+        })
     },
 
     // 图片质量的选择拼接
     pictureTypeChange(val){
+        console.log(val)
       console.log('pictureValue:', this.pictureValue)
       let authNoPassCause
       switch(val){

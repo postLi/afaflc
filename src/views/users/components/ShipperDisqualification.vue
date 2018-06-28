@@ -93,8 +93,16 @@
 <script>
 import createdDialog from './createdDialog.vue'
 import GetCityList from '@/components/GetCityList'
+import { eventBus } from '@/eventBus'
+
 import {data_get_shipper_list} from '../../../api/users/shipper/all_shipper.js'
 export default {
+    props: {
+        isvisible: {
+            type: Boolean,
+            default: false
+        }
+    },
     components:{
         createdDialog,
         GetCityList
@@ -117,9 +125,24 @@ export default {
             multipleSelection:[]
         }
     },
-    mounted(){
-        this.firstblood()
+    watch: {
+        isvisible(newVal){
+            if(newVal && !this.inited){
+                this.inited = true
+                this.firstblood()
+            }
+        }
     },
+	mounted(){
+		eventBus.$on('changeList', function(){
+            if(this.inited){
+                this.firstblood();
+            }
+		})
+	},
+    // mounted(){
+    //     this.firstblood()
+    // },
     methods:{
         getDataList(){
             this.firstblood()

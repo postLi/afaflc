@@ -1,32 +1,32 @@
 <template>
   <div class="shipper">
-    <el-tabs v-model="activeName2" type="border-card" @tab-click="handleClick" >
+    <el-tabs v-model="activeName" type="border-card" @tab-click="handleClick" >
         <!-- 全部 -->
         <!-- <el-badge :value="12" class="item"> -->
             <el-tab-pane label="全部" name="first">
-                <ShipperAll></ShipperAll>
+                <ShipperAll :isvisible="activeName === 'first'"></ShipperAll>
             </el-tab-pane>
         <!-- </el-badge> -->
 
         <!-- 未认证 -->
-        <el-tab-pane label="未认证" name="second">
-            <ShipperUnauthorized :isvisible="activeName2 === 'second'"></ShipperUnauthorized>
-        </el-tab-pane>
+            <el-tab-pane label="未认证" name="second">
+                <ShipperUnauthorized :isvisible="activeName === 'second'"></ShipperUnauthorized>
+            </el-tab-pane>
 
         <!-- 待认证 -->
-        <el-tab-pane label="待认证" name="third">
-            <ShipperCertified></ShipperCertified>
-        </el-tab-pane>
+            <el-tab-pane label="待认证" name="third">
+                <ShipperCertified :isvisible="activeName === 'third'"></ShipperCertified>
+            </el-tab-pane>
             
         <!-- 已认证部分 -->
-        <el-tab-pane label="已认证" name="fourth">
-            <ShipperHasCertified :isvisible="activeName2 === 'fourth'"></ShipperHasCertified>
-        </el-tab-pane>
+            <el-tab-pane label="已认证" name="fourth">
+                <ShipperHasCertified :isvisible="activeName === 'fourth'"></ShipperHasCertified>
+            </el-tab-pane>
 
         <!-- 认证不通过 -->
-        <el-tab-pane label="认证不通过" name="fifth">
-            <ShipperDisqualification></ShipperDisqualification>
-        </el-tab-pane>
+            <el-tab-pane label="认证不通过" name="fifth">
+                <ShipperDisqualification :isvisible="activeName === 'fifth'"></ShipperDisqualification>
+            </el-tab-pane>
 
         <!-- 冻结部分 -->
         <!-- <el-tab-pane label="冻结中" name="six">
@@ -65,13 +65,35 @@
         },
         data() {
           return {
-            activeName2:'first',
+            activeName:null,
           };
         },
+        watch:{
+            activeName(newVal,oldVal){
+                // console.log('newVal,oldVal',newVal,oldVal)
+                if(newVal){
+                    this.activeName = newVal;
+                }else{
+                    this.activeName = oldVal;
+                }
+            }
+        },
+        created() {
+            this.activeName = localStorage.getItem('activeName') || 'first';
+        },
+
+        beforeUpdate () {
+            localStorage.setItem('activeName', this.activeName);
+        },
+
+        beforeDestroy () {
+            localStorage.setItem('activeName', 'first');
+        },
         methods: {
-           
+
             handleClick(tab, event) {
                 // console.log(tab, event);
+                this.activeName = tab.name;
             }
         }
     }

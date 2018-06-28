@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="shipper_searchinfo" @click="changeList()">
+        <div class="shipper_searchinfo">
           <el-form :inline="true">
             <el-form-item label="所在地：">
               <GetCityList v-model="formAll.belongCity" ref="area"></GetCityList>
@@ -40,6 +40,7 @@
           </el-form>
         </div>
 		<div class="classify_info">
+            <!-- <v-region  class="form-control" :text = false  :ui = false  ></v-region> -->
 			<div class="btns_box">
 				<createdDialog btntext="新增" :plain="true" type="primary" btntype="primary" icon="el-icon-news" editType="add" btntitle="新增货主" @getData="getDataList"></createdDialog>
 				<FreezeDialog
@@ -126,7 +127,7 @@
 					{{scope.row.shipperType==='AF0010202'? '企业货主':'普通货主'}}
 					</template> -->
 				</el-table-column>
-				<el-table-column prop="createTime" label="注册日期">
+				<el-table-column prop="registerTime" label="注册日期">
 				</el-table-column>
 				</el-table>
 				<el-pagination
@@ -371,6 +372,7 @@ export default {
   },
   data(){
       return{
+          ul:true,
 		freeze:true,//是否冻结
 		thekey2:'1',
 		options:[],
@@ -514,7 +516,7 @@ export default {
     //刷新页面
     firstblood(){
       data_get_shipper_list(this.page,this.pagesize,this.formAll).then(res=>{
-        console.log(res)
+        console.log('shipperAll',res)
         this.totalCount = res.data.totalCount;
         this.tableDataAll = res.data.list;
       }).catch(err=>{
@@ -578,7 +580,8 @@ export default {
         mobile:'',
         shipperStatus:'',
         companyName:''
-      }
+      },
+	  this.firstblood();
     },
     handleChange(value){
       console.log(value)
