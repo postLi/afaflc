@@ -369,7 +369,7 @@ export default {
     },
     // 修改
     handleEdit(){
-      console.log(this.multipleSelection)
+    
       if(this.multipleSelection.length == 0){
           //未选择任何修改内容的提示
           let information = "未选中任何修改内容";

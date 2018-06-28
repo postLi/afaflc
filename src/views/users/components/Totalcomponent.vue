@@ -63,7 +63,7 @@
                     editType='edit'
                     btntype="primary"
                     icon="el-icon-news"
-                     v-on:click.native="freezeClick"
+                    v-on:click.native="freezeClick"
                     :params="selectRowData"
                     @getData="getDataList"
                     >
@@ -102,7 +102,7 @@
                     editType='edit-four'
                     btntype="primary"
                     icon="el-icon-news"
-                     v-on:click.native="freezeClick"
+                    v-on:click.native="freezeClick"
                     :params="selectRowData"
                     @getData="getDataList"
                     >
@@ -231,7 +231,7 @@
                 multipleSelection:[],
                 selectRowData:null,
                 
-                 ifInformation:'选中一个才可以操作'
+                ifInformation:'选中一个才可以操作'
                // driverNewdailogFlag: false, // 新增弹框控制
                // templateItem:{}, //新增数据填充
             }
@@ -264,25 +264,14 @@
             },
             //点击选中当前行
             clickDetails(row, event, column){
-                
-                /*this.$refs.multipleTable.toggleRowSelection(row);
-
-                if(row) {
-               
-                    this.selectRowData=row
-                    
-                  } else {
-                   
-                    this.selectRowData={}
-                   
-                  }*/
+            
             },
 
             // 判断选中与否
             handleSelectionChange(val){
               this.multipleSelection = val;
              
-              if(val!= "") {
+              if(val) {
                
                 this.selectRowData=val
                 
@@ -294,12 +283,11 @@
               }
             },
             freezeClick(val){
-             
-              if(this.selectRowData == null) {           
-                this.selectRowData=null
-                 this.$refs.cue.hint(this.ifInformation)
+                if(this.selectRowData == null) {           
+                    this.selectRowData=null
+                    this.$refs.cue.hint(this.ifInformation)
                
-              } 
+                } 
             },
             addClick(val){
                 this.$refs.multipleTable.setCurrentRow();
@@ -364,5 +352,8 @@
 }
 .el-form--inline .el-form-item {
     margin-right: 0px;
+}
+.addclassify.commoncss{
+    display:inline-block;
 }
 </style>

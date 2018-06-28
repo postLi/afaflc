@@ -27,6 +27,7 @@
                     btntype="primary"
                     icon="el-icon-news"
                     editType="valetAuth"
+                    v-on:click.native="freezeClick"
                     :templateItem="selectionData"
                     btntitle="车主管理"
                     @getData="getDataList">
@@ -38,13 +39,15 @@
                         :data="tableDataTree"
                         stripe
                         border
-                        @selection-change="handleSelectionChange"
+                        highlight-current-row
+                        current-row-key
+                        @current-change="handleSelectionChange"
                         tooltip-effect="dark"
                         style="width: 100%">
-                        <el-table-column
-                        type="selection"
-                        width="80">
-                        </el-table-column>
+                      <!--   <el-table-column
+                      type="selection"
+                      width="80">
+                      </el-table-column> -->
                         <el-table-column
                         prop="carNumber"
                         label="车牌号">
@@ -94,18 +97,20 @@
                     </el-pagination>
                 </div>
             </div>
-            
+             <cue ref="cue"></cue>
     </div>
 </template>
 <script type="text/javascript">
     import {data_get_driver_list,data_get_driver_status} from '../../../api/users/carowner/total_carowner.js'
     import GetCityList from '@/components/GetCityList'
+    import cue from '../../../components/Message/cue'
     import { parseTime,formatTime } from '@/utils/index.js'
     import DriverNewTemplate from '../carowner/driver-newTemplate'
     export default {
         components:{
             GetCityList,
-            DriverNewTemplate
+            DriverNewTemplate,
+            cue
         },
         data(){
             return{
@@ -125,8 +130,10 @@
                     name:'全部'
                     }
                 ],
-                selectionData:{},
+                selectionData:null,
                 multipleSelection:[],
+                ifInformation:'选中一个才可以操作',
+                ifInformation2:'不可修改多个内容'
             }
         },
         mounted(){
@@ -137,14 +144,22 @@
             // 判断选中与否
             handleSelectionChange(val){
                 this.multipleSelection = val;
-                console.log(val)
-                if(val[0]){
-                    this.selectionData=val[0]
+                if(val){
+                    this.selectionData=val
                 } else{
-                    this.selectionData={}
+                    this.selectionData=null
                 }
             },
-
+            //判断选中是否弹窗
+             freezeClick(){
+                console.log(this.multipleSelection.length)
+                  if(this.multipleSelection.length == 0){                      
+                     this.selectionData=null
+                     this.$refs.cue.hint(this.ifInformation)
+                  } else{
+                       this.selectionData=this.multipleSelection
+                  }
+            },
             // 代客认证功能
             // handleEnsure(){
             //     console.log('代客认证功能')

@@ -209,7 +209,7 @@ export default {
       formLabelWidth:'120px',
       freezeDialogFlag:false,
       formFroze: { // 冻结弹框表单
-        driverMobile: '', // 手机号
+        driverMobile: null, // 手机号
         driverName: '', // 公司名称
         carTypeName:null,
         carNumber:'', // 详细地址
@@ -303,14 +303,14 @@ export default {
         var obj = JSON.parse(JSON.stringify(this.params));
        
         this.formFroze=obj;
-       
+    
         this.formFroze.obtainGradeTime = parseTime(this.formFroze.obtainGradeTime,"{y}-{m}-{d}");
        /* this.formFroze.forEach(item => {
             item.obtainGradeTime = parseTime(item.obtainGradeTime,"{y}-{m}-{d}");
         })*/
        
       }else{
-        this.formFroze=null
+        this.formFroze=null;
        
       }
     },

@@ -23,6 +23,8 @@
                     btntype="primary"
                     icon="el-icon-news"
                     editType="valetAuth"
+                   
+                    v-on:click.native="freezeClick"
                     :templateItem="selectionData"
                     btntitle="车主管理"
                     @getData="getDataList">
@@ -128,6 +130,7 @@
                     carNumber:''
                 }
             },
+           
             // 判断选中值
             handleSelectionChange(val){
                 this.multipleSelection=val
@@ -143,7 +146,9 @@
             handleCertification(){
                 console.log('代客认证功能')
             },
-
+            freezeClick(){
+                
+            },
             //刷新页面
             firstblood(){
                 data_get_driver_list(this.page,this.pagesize,this.formInline).then(res=>{

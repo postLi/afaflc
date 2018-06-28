@@ -1,6 +1,6 @@
 import fetch from '@/utils/fetch'
 
-const baseurl = "aflcorderservice"
+const baseurl = "aflcorderservice-lyc"
 const baseurl_two ='aflccommonservice'
 
 
@@ -17,7 +17,7 @@ export function data_financeList(page,pagesize,data) {
     })
   }
 
-//获取货主平台绑定列表
+//获取服务分类列表
 export function data_GetServerType() {
     return fetch({
       url: '/'+baseurl_two+'/sysDict/getSysDictByCodeGet/AF017',
@@ -26,6 +26,22 @@ export function data_GetServerType() {
     })
   }
 
+//交易类型的AF014子集
+export function data_GetServerType2() {
+    return fetch({
+      url: '/'+baseurl_two+'/sysDict/getSysDictByCodeGet/AF014',
+      method: 'get',
+     
+    })
+  }
+//交易类型的AF015子集
+export function data_GetServerType3() {
+    return fetch({
+      url: '/'+baseurl_two+'/sysDict/getSysDictByCodeGet/AF015',
+      method: 'get',
+     
+    })
+  }
 
 
 
