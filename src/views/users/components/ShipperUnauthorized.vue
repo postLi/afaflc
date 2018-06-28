@@ -5,6 +5,17 @@
             <el-form-item label="所在地：">
               <GetCityList v-model="formInline.belongCity" ref="area"></GetCityList>
             </el-form-item>
+            <el-form-item label="账户状态：">
+              <el-select v-model="formInline.accountStatus" clearable placeholder="请选择">
+                <el-option
+                  v-for="item in optionsAuidSataus"
+                  :key="item.code"
+                  :label="item.name"
+                  :value="item.code"
+                  :disabled="item.disabled">
+                </el-option>
+              </el-select>
+            </el-form-item>
             <el-form-item label="手机号：">
               <el-input
                 placeholder="请输入内容"
@@ -19,17 +30,34 @@
           </el-form>
       </div>
 	  	<div class="classify_info">
+              
+            <!-- <v-region :town="true" :ui="true" @values="regionChange" class="form-control">
+                <button type="button" class="btn btn-default">
+                    ｛｛btnText｝｝ <i class="fa fa-fw fa-caret-down"></i>
+                </button>
+            </v-region> -->
 		  	<div class="btns_box">
-				<createdDialog btntext="代客认证"
+				<createdDialog 
+				btntext="代客认证"
+				:params="selectRowData"
+				:plain="true" type="primary" 
+				btntype="primary" 
+				icon="el-icon-news"
+				editType="identification" 
+				btntitle="代客提交"
+				@getData="getDataList">
+				</createdDialog>
+                <createdDialog 
+				btntext="修改"
 				:params="selectRowData"
 				:plain="true" type="primary" 
 				btntype="primary" 
 				icon="el-icon-news"
 				editType="edit" 
-				btntitle="代客提交"
+				btntitle="修改"
 				@getData="getDataList">
 				</createdDialog>
-				<el-button type="primary" plain icon="el-icon-edit" @click="handleEdit">修改</el-button>
+				<!-- <el-button type="primary" plain icon="el-icon-edit" @click="handleEdit">修改</el-button> -->
 			</div>
 			<div class="info_news">
 				<el-table
@@ -37,7 +65,6 @@
 				@row-click="clickDetails"
 				:data="tableData4"
 				stripe
-				:key="theKey1"
 				border
 				@selection-change="handleSelectionChange"
 				tooltip-effect="dark"
@@ -93,66 +120,15 @@
 				</el-pagination>
 			</div>	
 		</div>
-      <!-- 修改 -->
-       <div class="addclassify commoncss">
-          <el-dialog title="修改" :visible.sync="changeDialogFlag">
-            <el-form :model="forms" ref="forms" :rules="formsRules">
-              <el-row>
-                <el-col :span="12">
-                  <el-form-item label="手机号码" prop="mobile" :label-width="formLabelWidth" required>
-                    <el-input v-model="forms.mobile"></el-input>
-                  </el-form-item>
-                </el-col>
-                <el-col :span="12">
-                  <el-form-item label="联系人" :label-width="formLabelWidth">
-                    <el-input v-model="forms.contacts"></el-input>
-                  </el-form-item>
-                </el-col>
-              </el-row>
-             <el-row>
-               <el-col :span="12">
-                 <el-form-item label="所在地" prop="belongCity" :label-width="formLabelWidth" required>
-                  <!-- <el-cascader
-                    :options="options"
-                    v-model="forms.belongCity"
-                    @change="handleChange">
-                  </el-cascader> -->
-                  <GetCityList v-model="forms.belongCity" ref="area"></GetCityList>
-                </el-form-item>
-               </el-col>
-               <el-col :span="12">
-                 <el-form-item label="详细地址" :label-width="formLabelWidth">
-                  <el-input v-model="forms.address" :maxlength="20"></el-input>
-                </el-form-item>
-               </el-col>
-             </el-row>
-            </el-form>
-            <div slot="footer" class="dialog-footer">
-              <el-button type="primary" @click="onSubmit">确 定</el-button>
-              <el-button @click="changeDialogFlag = false">取 消</el-button>
-            </div>
-          </el-dialog>
-       </div>
-
-
-        <!-- 新增分类提示不可为空 -->
-		<div class="cue">
-			<el-dialog
-			:visible.sync="centerDialogVisible"
-			center>
-			<span>{{information}}</span>
-			</el-dialog>
-		</div>
     </div>
 </template>
 <script>
 import GetCityList from '@/components/GetCityList'
 import createdDialog from './createdDialog.vue'
 import { eventBus } from '@/eventBus'
-
 import FreezeDialog from './FreezeDialog.vue'
 import {parseTime} from '@/utils/'
-import {data_get_shipper_list,data_get_shipper_change,data_get_shipper_freezeType,data_get_shipper_type,data_get_shipper_status} from '../../../api/users/shipper/all_shipper.js'
+import {data_get_shipper_list,data_get_shipper_change,data_get_shipper_auid,} from '../../../api/users/shipper/all_shipper.js'
 export default {
 	props: {
 		isvisible: {
@@ -184,167 +160,109 @@ export default {
     }
   
     return{
-      theKey1:'1',
-      optionsStatus:[], // 状态列表
-      optionsFormBlack:[], // 黑名单的移入原因
-      // optionsReason:[], // 冻结移入原因的
-      // options:[],// 货主类型
-      tableData4:[],
-      totalCount:null,
-      page:1,
-      pagesize:20,
-      formInline: {
-        belongCity:'',
-		mobile:'',
-		shipperStatus:"AF0010401",//未认证的状态码
-      },
-      formLabelWidth:'120px',
-      multipleSelection:[],
-      information:null,
-      formLabelWidth:'120px',
-      // BlackDialogFlag: false, //  移入黑名单弹框控制
-      // frozeDialogFlag: false, // 冻结弹框控制
-      changeDialogFlag: false, // 修改弹窗控制
-      centerDialogVisible:false, // 提示语弹窗控制
-      forms:{
-        mobile:'',
-        contacts:'',
-        belongCity:null,
-        address:'',
-        shipperId:''
-      },
-      formBlack:{
-        mobile:'',
-        contacts:'',
-        companyName:'',
-        belongCity:null,
-        shipperType:null,
-        address:'',
-        registerOrigin:'',
-        shipperId:'',
-        putBlackCause:'',
-        putBlackCauseRemark:''
-      },
-	  radio:'',
-	  
+        optionsStatus:[], // 状态列表
+        tableData4:[],
+        totalCount:null,
+        page:1,
+        pagesize:20,
+        formInline: {
+            accountStatus:null,
+            belongCity:'',
+            mobile:'',
+            shipperStatus:"AF0010401",//未认证的状态码
+        },
+        formLabelWidth:'120px',
+        multipleSelection:[],
+        information:null,
+        formLabelWidth:'120px',
+        changeDialogFlag: false, // 修改弹窗控制
+        forms:{
+            mobile:'',
+            contacts:'',
+            belongCity:null,
+            address:'',
+            shipperId:''
+        },
+        optionsAuidSataus:[
+			{
+			code:null,
+			name:'全部'
+			}
+        ],//账户状态
       selectRowData:{},
       pickerOptions:{
         disabledDate(time) {
           return time.getTime() < Date.now();
         }
       },
-      //移入黑名单校验
-      formBlackRules:{
-        putBlackCause:{required:true,message:'请选择移入原因',trigger:'blur'}
-      },
-
       // 修改校验
       formsRules:{
         mobile:{validator: mobileValidator, trigger: 'change'},
         belongCity:{required:true,validator:belongCityValidator,trigger:'change'}
       },
-
-      //冻结校验
-      formFrozeRules:{
-        freezeCause:{required:true,message:'请选择冻结原因',trigger:'change'},
-        freezeTime:{required:true, message:'请选择解冻日期',trigger:'change'}
-      }
-
-
     }
   },
-     watch: {
-        isvisible(newVal){
-            if(newVal && !this.inited){
-                this.inited = true
-                this.firstblood()
-            }
+    watch: {
+        isvisible: {
+            handler(newVal, oldVal) {
+                console.log('testnewVal:',newVal)
+                if(newVal && !this.inited){
+                    this.inited = true
+                    this.firstblood();
+                    this.getMoreInformation()
+                }
+            },
+            // 代表在wacth里声明了firstName这个方法之后立即先去执行handler方法
+            immediate: true
         }
     },
-    mounted(){
-      eventBus.$on('changeList', function(){
-          if(this.inited){
-			  alert("jkfd")
-			this.firstblood()
-    		this.getMoreInformation()
-          }
-      })
+    created() {
+        console.log('created:',this.isvisible)
     },
-//   mounted(){
-//     this.firstblood()
-//     this.getMoreInformation()
-//   },
+    mounted(){
+      	eventBus.$on('changeList', function(){
+            if(this.inited || this.isvisible){
+                this.firstblood()
+                this.getMoreInformation()
+            }
+        })
+
+    },
   methods:{
+      regionChange(data){
+            console.log(data);
+        },
     //点击选中当前行
     clickDetails(row, event, column){
       this.$refs.multipleTable.toggleRowSelection(row);
     },
-    timeChange(val){
-      let currentTime = this.formFroze.freezeTime || new Date()
-      let oneDay = 1* 24 * 60 * 60 * 1000
-      let time = +new Date()
-      switch(val){
-        case 1:
-          time += 1 * oneDay
-          break
-        case 3:
-          time += 3 * oneDay
-          break
-        case 7:
-          time += 7 * oneDay
-          break
-        case 9:
-          time += 30 * oneDay
-          break
-        case 10:
-          time += 100000 * oneDay
-          break
-      }
-      this.formFroze.freezeTime = time
-    },
-    hint(val){
-      this.information = val;
-      this.centerDialogVisible = true;
-      let timer = setTimeout(()=>{
-          this.centerDialogVisible = false;
-          clearTimeout(timer)
-      },2000)
-    },
+
     handleSelectionChange(val){
-      this.multipleSelection = val;
-      if(val[0]){
-         this.selectRowData = val[0]
-         this.forms = val[0]
-         this.formFroze= val[0]
-         this.formBlack= val[0]
-      } else {
-        this.selectRowData = {}
-        this.forms ={}
-        this.formFroze= {}
-        this.formBlack= {}
-      }
+		console.log(val)
+		this.multipleSelection = val;
+		if(val[0]){
+			this.selectRowData = val[0]
+			this.forms = val[0]
+		} else {
+			this.selectRowData = {}
+			this.forms ={}
+		}
       
     },
     getMoreInformation(){
-     var optionsStatus=[]
-      data_get_shipper_status().then(res=>{
-        res.data.map((item)=>{
-          this.optionsStatus.push(item);
-        })
-      })
-    },
-    getAttestationStatus(code){
-      let find = this.optionsStatus.filter(el => {
-        return el.code === code
-      })[0]
-      return find ? find.name : '未知：'+code
+        //获取账户状态列表
+     	data_get_shipper_auid().then(res=>{
+		  console.log('车主状态：',res)
+			res.data.map((item)=>{
+				this.optionsAuidSataus.push(item);
+			})
+      	})
     },
       //点击查询按纽，按条件查询列表
     getdata_search(event){
       this.formInline.belongCity = this.$refs.area.selectedOptions.pop();
       data_get_shipper_list(this.page,this.pagesize,this.formInline).then(res=>{
         this.totalCount = res.data.totalCount;
-        this.theKey1=Math.random()
         this.tableData4 = res.data.list;
       })
     },
@@ -354,7 +272,9 @@ export default {
       this.formInline = {
         belongCity:null,
         mobile:''
-      }
+      },
+	  this.firstblood();
+
     },
       //刷新页面
     firstblood(){

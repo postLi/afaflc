@@ -278,9 +278,9 @@ export default {
         if(valid){
           // this.formFroze.belongCity = this.$refs.area.selectedOptions.pop();
           var forms= Object.assign({}, this.formFroze,{attestationStatus:"AF0010405"})
-		  forms.freezeTime = parseTime(forms.freezeTime);
-		  //冻结写死冻结code（根据后端要求）
-		  forms.accountStatus = 'AF0010502';
+          forms.freezeTime = parseTime(forms.freezeTime);
+          //冻结写死冻结code（根据后端要求）
+          forms.accountStatus = 'AF0010502';
           console.log('forms.freezeTime:',forms.freezeTime)
           data_get_shipper_change(forms).then(res=>{
             console.log(res)

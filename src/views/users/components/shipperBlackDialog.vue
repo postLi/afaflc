@@ -26,12 +26,6 @@
                 </el-col>
                 <el-col :span="12">
                     <el-form-item label="所在地" :label-width="formLabelWidth">
-                    <!-- <el-cascader
-                    :options="options"
-                    v-model="formFroze.belongCity"
-                    @change="handleChange">
-                    </el-cascader> -->
-                        <!-- <GetCityList v-model="formBlack.belongCity" disabled ref="area"></GetCityList> -->
                         <el-input v-model="formBlack.belongCityName" disabled></el-input>
                     </el-form-item>
                 </el-col>
