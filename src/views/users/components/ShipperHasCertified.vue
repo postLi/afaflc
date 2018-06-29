@@ -148,9 +148,9 @@ export default {
     watch: {
         isvisible: {
             handler(newVal, oldVal) {
-                // console.log('已认证:',newVal)
-                // console.log('!this.inited',!this.inited)
+            
                 if(newVal && !this.inited){
+
                     this.inited = true
                     this.firstblood()
                 }
@@ -160,9 +160,11 @@ export default {
         }
     },
     mounted(){
-        eventBus.$on('changeList', params => {
-            this.firstblood();
-            // console.log('1111111111111111111111')
+        eventBus.$on('changeListtwo', () => {
+            if(this.inited || this.isvisible){
+                
+            this.firstblood()
+            }
         })
     },
     methods:{

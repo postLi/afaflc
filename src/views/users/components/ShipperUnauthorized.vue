@@ -195,10 +195,11 @@ export default {
     watch: {
         isvisible: {
             handler(newVal, oldVal) {
-                // console.log('testnewVal:',newVal, this.inited)
+            
                 if(newVal && !this.inited){
+
                     this.inited = true
-                    this.firstblood();
+                    this.firstblood()
                     this.getMoreInformation()
                 }
             },
@@ -206,20 +207,13 @@ export default {
             immediate: true
         }
     },
-    created() {
-        console.log('created:',this.isvisible)
-    },
     mounted(){
-      	// eventBus.$on('changeList', () =>{
-        //       debugger
-        //     if(this.inited || this.isvisible){
-        //         this.firstblood()
-        //         this.getMoreInformation()
-        //     }
-        // })
-        eventBus.$on('changeList', () => {
-            this.firstblood();
-            this.getMoreInformation();
+        eventBus.$on('changeListtwo', () => {
+            if(this.inited || this.isvisible){
+                
+            this.firstblood()
+            this.getMoreInformation()
+            }
         })
     },
   methods:{

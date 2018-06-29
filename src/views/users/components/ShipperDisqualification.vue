@@ -110,13 +110,14 @@ export default {
             multipleSelection:[]
         }
     },
-    watch: {
+     watch: {
         isvisible: {
             handler(newVal, oldVal) {
-                console.log('testnewVal:',newVal)
+            
                 if(newVal && !this.inited){
+
                     this.inited = true
-                    this.firstblood();
+                    this.firstblood()
                 }
             },
             // 代表在wacth里声明了firstName这个方法之后立即先去执行handler方法
@@ -124,8 +125,11 @@ export default {
         }
     },
     mounted(){
-        eventBus.$on('changeList', params => {
-            this.firstblood();
+        eventBus.$on('changeListtwo', () => {
+            if(this.inited || this.isvisible){
+                
+            this.firstblood()
+            }
         })
     },
     methods:{

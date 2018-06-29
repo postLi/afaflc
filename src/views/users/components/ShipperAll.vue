@@ -417,7 +417,9 @@ export default {
     watch: {
         isvisible: {
             handler(newVal, oldVal) {
-                if(newVal ){
+            
+                if(newVal && !this.inited){
+
                     this.inited = true
                     this.firstblood()
                     this.getMoreInformation()
@@ -428,10 +430,12 @@ export default {
         }
     },
     mounted(){
-        eventBus.$on('changeList', params => {
-            this.firstblood();
+        eventBus.$on('changeListtwo', () => {
+            if(this.inited || this.isvisible){
+                
+            this.firstblood()
             this.getMoreInformation()
-
+            }
         })
     },
     methods:{

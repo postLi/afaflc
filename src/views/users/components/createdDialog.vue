@@ -291,8 +291,8 @@ export default {
   },
   methods:{
     changeList(){
-		eventBus.$emit('changeList')
-	},
+        eventBus.$emit('changeListtwo')
+    },
     openDialog(){
 		// console.log('parmas:',this.params)
 		if(this.editType==='add'||this.editType==='view' || this.editType==='identification'){
