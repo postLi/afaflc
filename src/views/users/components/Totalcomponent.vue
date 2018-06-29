@@ -63,7 +63,7 @@
                     editType='edit'
                     btntype="primary"
                     icon="el-icon-news"
-                     v-on:click.native="freezeClick"
+                    v-on:click.native="freezeClick"
                     :params="selectRowData"
                     @getData="getDataList"
                     >
@@ -102,7 +102,7 @@
                     editType='edit-four'
                     btntype="primary"
                     icon="el-icon-news"
-                     v-on:click.native="freezeClick"
+                    v-on:click.native="freezeClick"
                     :params="selectRowData"
                     @getData="getDataList"
                     >
@@ -203,8 +203,9 @@
     import { parseTime,formatTime } from '@/utils/index.js'
     import GetCityList from '@/components/GetCityList'
     import cue from '../../../components/Message/cue'
+    import { eventBus } from '@/eventBus'
     import FreezeChangeTemplate from '../carowner/freeze-change-template'
-    import UnbindFreeze from '../carowner/unbind-freeze'
+ 
     import blacklist from '../carowner/blacklist'
 
     export default {
@@ -231,9 +232,15 @@
                 multipleSelection:[],
                 selectRowData:null,
                 
-                 ifInformation:'选中一个才可以操作'
+                ifInformation:'选中一个才可以操作'
                // driverNewdailogFlag: false, // 新增弹框控制
                // templateItem:{}, //新增数据填充
+            }
+        },
+        props: {
+            isvisible: {
+                type: Boolean,
+                default: false
             }
         },
         components:{
@@ -241,13 +248,37 @@
             DriverNewTemplate,
             cue,
             FreezeChangeTemplate,
-            UnbindFreeze,
+           
             blacklist
         },
+        created() {
+           
+        },
+        watch: {
+            isvisible: {
+                handler(newVal, oldVal) {
+                
+                    if(newVal && !this.inited){
+
+                        this.inited = true
+                        this.firstblood()
+                        this.getMoreInformation()
+                    }
+                },
+                // 代表在wacth里声明了firstName这个方法之后立即先去执行handler方法
+                immediate: true
+            }
+        },
         mounted(){
-            this.firstblood()
-            this.getMoreInformation()
-        },  
+          eventBus.$on('changeListtwo', () => {
+              if(this.inited || this.isvisible){
+                 
+                this.firstblood()
+                this.getMoreInformation()
+              }
+          })
+        },
+ 
         methods:{
             clearSearch(){
                 this.formInline={
@@ -258,31 +289,21 @@
                     accountStatus:''
                 }
             },
+
             // 新增功能
             handleCreate(){
                 console.log('新增功能')
             },
             //点击选中当前行
             clickDetails(row, event, column){
-                
-                /*this.$refs.multipleTable.toggleRowSelection(row);
-
-                if(row) {
-               
-                    this.selectRowData=row
-                    
-                  } else {
-                   
-                    this.selectRowData={}
-                   
-                  }*/
+            
             },
 
             // 判断选中与否
             handleSelectionChange(val){
               this.multipleSelection = val;
              
-              if(val!= "") {
+              if(val) {
                
                 this.selectRowData=val
                 
@@ -294,18 +315,20 @@
               }
             },
             freezeClick(val){
-             
-              if(this.selectRowData == null) {           
-                this.selectRowData=null
-                 this.$refs.cue.hint(this.ifInformation)
+                if(this.selectRowData == null) {           
+                    this.selectRowData=null
+                    this.$refs.cue.hint(this.ifInformation)
                
-              } 
+                }else{
+                    this.selectionData=this.multipleSelection
+                  } 
             },
             addClick(val){
                 this.$refs.multipleTable.setCurrentRow();
             },
             //刷新页面
             firstblood(){
+              
                 data_get_driver_list(this.page,this.pagesize,this.formInline).then(res=>{
                     this.totalCount = res.data.totalCount;
                     this.tableDataTree = res.data.list;
@@ -364,5 +387,8 @@
 }
 .el-form--inline .el-form-item {
     margin-right: 0px;
+}
+.addclassify.commoncss{
+    display:inline-block;
 }
 </style>

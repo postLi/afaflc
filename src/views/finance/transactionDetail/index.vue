@@ -7,25 +7,34 @@
                 <label><span>交易流水号&nbsp;</span>                   
                   <el-input v-model="data.tradeSerial" placeholder="请输入内容" clearable></el-input>
                 </label>
-                <label><span>用户姓名&nbsp;</span>
+                <label><span>用户姓名/账号&nbsp;</span>
                    <el-input v-model="data.accountName" placeholder="请输入内容" clearable></el-input>
                 </label> 
-                <label><span>用户账号&nbsp;</span>
-                   <el-input v-model="data.accountName" placeholder="请输入内容" clearable></el-input>
-                </label>
+                
                 <label><span>账号类型&nbsp;</span>
                    <el-select v-model="data.accountType" clearable placeholder="请选择">
-                      
+                        <el-option label="货主" value="0"></el-option>
+                       <el-option label="车主" value="1"></el-option>
+                       <el-option label="平台" value="2"></el-option>
                     </el-select>
                 </label> 
                 <label><span>交易方式&nbsp;</span>
                    <el-select v-model="data.payWay" clearable placeholder="请选择">
-                            
+                      
+                       <el-option label="支付宝" value="0"></el-option>
+                       <el-option label="微信" value="1"></el-option>
+                       <el-option label="余额支付" value="2"></el-option>
                     </el-select>
                 </label>
                 <label><span>交易类型&nbsp;</span>
                    <el-select v-model="data.tradeType" clearable placeholder="请选择">
-                            
+                        <el-option
+                          v-for="item in optionsAccountType2"
+                          :key="item.name"
+                          :label="item.name"
+                          :value="item.code"
+                          >
+                        </el-option>
                     </el-select>
                 </label> 
                 <label><span>服务分类&nbsp;</span>
@@ -40,13 +49,14 @@
                     </el-select>
                 </label>
                 <label><span>收支类型&nbsp;</span>
-                   <el-select v-model="data.serivceCode6" clearable placeholder="请选择">
-                            
+                   <el-select v-model="data.incomeExpendType" clearable placeholder="请选择">
+                          <el-option label="入账" value="AF014"></el-option>
+                          <el-option label="出帐" value="AF015"></el-option>
                     </el-select>
                 </label>         
-                <label ><span>交易时间&nbsp;</span>
+                <label ><span>付款时间&nbsp;</span>
                     <el-date-picker
-                    v-model="data.value6"
+                    v-model="payTime"
                     value-format="timestamp"
                     type="daterange"
                     range-separator="至"
@@ -121,7 +131,7 @@
                         </el-table-column>
                          <el-table-column
                         align = "center"
-                          prop="endTime"
+                          prop="incomeExpendType"
                           label="收支类型">
                         </el-table-column>
                          <el-table-column
@@ -135,18 +145,8 @@
                           label="交易类型"
                           width="110">
                         </el-table-column>
-                        <el-table-column
-                        align = "center"
-                          prop="totalAmount"
-                          label="资金来源"
-                          width="80">
-                        </el-table-column>
-                        <el-table-column
-                        align = "center"
-                          prop="shipperName"
-                          label="交易类型"
-                          width="110">
-                        </el-table-column>
+                      
+                       
                          <el-table-column
                         align = "center"
                           prop="orderType"
@@ -154,13 +154,13 @@
                         </el-table-column>
                          <el-table-column
                         align = "center"
-                          prop="payStatus"
+                          prop="tradeStatus"
                           label="交易状态">
                         </el-table-column>
                          <el-table-column
                         align = "center"
-                          prop="endTime"
-                          label="交易时间">
+                          prop="payTime"
+                          label="付款时间">
                         </el-table-column>
                         
                         <el-table-column
@@ -199,7 +199,7 @@
 </template>
 
 <script type="text/javascript">
-import {data_financeList,data_GetServerType} from '../../../api/finance/financeServer.js'
+import {data_financeList,data_GetServerType,data_GetServerType2,data_GetServerType3} from '../../../api/finance/financeServer.js'
 import {data_GetCarStyle} from '../../../api/server/areaPrice.js'
 import '@/styles/dialog.scss'
 import { parseTime,formatTime } from '@/utils/index.js'
@@ -210,14 +210,26 @@ import { parseTime,formatTime } from '@/utils/index.js'
                 data:{
                   orderSerial:'',
                   tradeSerial:'',
-
+                  tradeStatus:'',
+                  accountName:'',
+                  accountType:'',                 
+                  payWay:'',
+                  tradeType:'',
+                  orderType:'',
+                  tradeStartTime:'',
+                  tradeEndTime:'',
+                  incomeExpendType:'',
                 },
+                payTime:'',
                 currentPage4:1,
                 page:1,
                 pagesize:20,
                 dataTotal:null,
                 tableDataTree:[],
                 optionsAccountType: [],
+                optionsAccountType2: [],
+                alloption1:{},
+                alloption2:{},
             }
         },
         components:{
@@ -252,7 +264,13 @@ import { parseTime,formatTime } from '@/utils/index.js'
                     orderSerial:null,
                     tradeSerial:null,
                     accountName:null,
+                    accountType:null,
+                    payWay:null,
+                    tradeType:null,
+                    payTime:null,
+                    incomeExpendType:null,
                     optionsAccountType:[],
+                    optionsAccountType2: [],
                 };
                 this.load();
             },
@@ -271,32 +289,65 @@ import { parseTime,formatTime } from '@/utils/index.js'
                     res.data.map((item)=>{
                         this.optionsAccountType.push(item);
                     })
+                })              
+                data_GetServerType2().then(res=>{                 
+                    this.alloption1 = res.data;                 
                 })
-               
-               
+                data_GetServerType3().then(res=>{                 
+                  this.alloption2 = res.data;
+                  for(var i in this.alloption2){
+                    this.alloption1.push(this.alloption2[i])
+                  }
+                  this.alloption1.map((item)=>{                     
+                      this.optionsAccountType2.push(item);
+                  })
+                })
             },
             //相关信息
             handleClick(row){
-                this.load();
+                
                 this.data.orderSerial = row.orderSerial;
+                this.load();
             },
             //判断是否选中
             getinfomation(selection){
                
             },
             //刷新页面  
-            load(){
-                data_financeList(this.page,this.pagesize,this.data).then(res=>{
-                   
+            load(){                   
+                var payend = this.payTime[1]+24*60*60*1000
+                this.data.tradeStartTime = parseTime(this.payTime[0],"{y}-{m}-{d}");
+                this.data.tradeEndTime = parseTime(payend,"{y}-{m}-{d}");
+                data_financeList(this.page,this.pagesize,this.data).then(res=>{                   
                     this.tableDataTree = res.data.list;
                     this.dataTotal = res.data.totalCount;
                     this.tableDataTree.forEach(item => {
                         item.createTime = parseTime(item.createTime,"{y}-{m}-{d}");
                     })
+                    this.tableDataTree.forEach(item => {
+                        switch(item.accountType){
+                            case "0":
+                                item.accountType = "货主";
+                                break;
+                            case "1":
+                                item.accountType = "车主";
+                                break;
+                            case "2":
+                                item.accountType = "平台";
+                                break;
+
+                    }
+                    })
                      this.tableDataTree.forEach(item => {
-                        switch(item.payStatus){
-                            case "AF00801":
-                                item.payStatus = "待付款";
+                        switch(item.payWay){
+                            case "0":
+                                item.payWay = "支付宝";
+                                break;
+                            case "1":
+                                item.payWay = "微信";
+                                break;
+                            case "2":
+                                item.payWay = "余额支付";
                                 break;
                             
                     }

@@ -1,7 +1,7 @@
 <template>
     <div class="addclassify commoncss">
         <el-button :type="type" :value="value" :plain="plain" :icon="icon" @click="openDialog()">{{text}}</el-button>
-        <el-dialog :title="title" :visible="driverTemplateDialogFlag" :before-close="change" :modal=false size="">
+        <el-dialog :title="title" :visible="driverTemplateDialogFlag" :before-close="change" size="" >
              <el-form
               ref="templateForm"
               :model="templateModel"
@@ -173,12 +173,11 @@
 import  { data_post_createDriver,data_put_changeDriver,data_CarList,data_Get_carType,data_get_driver_obStatus,data_post_driverAudit} from '@/api/users/carowner/total_carowner.js'
 import Upload from '@/components/Upload/singleImage'
 import GetCityList from '@/components/GetCityList'
+import { eventBus } from '@/eventBus'
 export default {
     name:'template-create-view-change',
     props:{
-        templateItem: {
-            type: Object
-        },
+        templateItem: null,
         value:{
             type: String,
             default:''
@@ -252,7 +251,7 @@ export default {
         }
     },
     watch:{
-
+        
     },
     mounted(){
         //按钮类型text,primary...
@@ -270,6 +269,9 @@ export default {
             } else{
                 this.selectFlag=true
             }
+        },
+        changeList(){
+            eventBus.$emit('changeListtwo')
         },
         // 获取对应的字典列表
         getMoreInformation(){
@@ -304,31 +306,18 @@ export default {
         },
 
         openDialog(){
-            this.driverTemplateDialogFlag=true
+            console.log(this.templateItem)
+            if(this.templateItem!= null){
+                this.driverTemplateDialogFlag=true 
+            }else{         
+                this.driverTemplateDialogFlag=false        
+            }
+           /* this.driverTemplateDialogFlag=true*/
             if(this.templateItem){
                 var obj = JSON.parse(JSON.stringify(this.templateItem));
-                this.templateModel.driverMobile=obj.driverMobile
-                this.templateModel.driverName=obj.driverName
-                this.templateModel.driverCardid=obj.driverCardid
-                this.templateModel.carNumber=obj.carNumber
-                this.templateModel.carType=obj.carType
-                this.templateModel.carLength=obj.carLength
-                this.templateModel.carWidth=obj.carWidth
-                this.templateModel.carHeight=obj.carHeight
-                this.templateModel.carSpec=obj.carSpec
-                this.templateModel.belongCity=obj.belongCity
-                this.templateModel.belongCityName=obj.belongCityName
-                this.templateModel.carFile=obj.carFile
-                this.templateModel.drivingPermitFile=obj.drivingPermitFile
-                this.templateModel.drivingLicenceFile=obj.drivingLicenceFile
-                this.templateModel.idCardFile=obj.idCardFile
-                this.templateModel.takeIdCardFile=obj.takeIdCardFile    
-                this.templateModel.obtainGrade=obj.obtainGrade
-                this.templateModel.obtainGradeTime=obj.obtainGradeTime    
-                this.templateModel.isVipCar=obj.isVipCar
-                this.templateModel.driverId=obj.driverId
+                this.templateModel=obj
             } else {
-                 this.templateModel.driverMobile=null
+                this.templateModel.driverMobile=null
                 this.templateModel.driverName=null
                 this.templateModel.driverCardid=null
                 this.templateModel.carNumber=null
@@ -352,7 +341,10 @@ export default {
          completeData(){
              console.log("--------------------------"+this.$refs.area)
             //获取城市name
-            if(this.$refs.area.selectedOptions.length > 1){
+            if(!this.$refs.area){
+                return
+            }  
+            else if(this.$refs.area.selectedOptions.length > 1){
                 let province;
                 this.$refs.area.areaData.forEach((item) =>{
                 if(item.code == this.$refs.area.selectedOptions[0]){
@@ -381,6 +373,7 @@ export default {
         },
          // 提交数据
         onSubmit(){
+
             this.completeData();
             this.$refs['templateForm'].validate(valid=>{
                 if(valid){
@@ -390,20 +383,24 @@ export default {
                     // 新增数据提交
                     if(this.editType === 'add'){
                         data_post_createDriver(forms).then(res=>{
+
                             this.driverTemplateDialogFlag = !this.driverTemplateDialogFlag;
                             this.$message.success('新增成功')
+                             this.changeList();
                             this.$emit('getData')
                         })
                     } else if(this.editType=== 'valetAuth') { 
                         data_post_driverAudit(forms).then(res=>{
                             this.driverTemplateDialogFlag = !this.driverTemplateDialogFlag;
                             this.$message.success('代客认证成功')
+                             this.changeList();
                             this.$emit('getData')
                         })
                     } else if(this.editType==='edit'){
                         data_put_changeDriver(forms).then(res=>{
                             this.driverTemplateDialogFlag = !this.driverTemplateDialogFlag;
                             this.$message.success('修改成功')
+                             this.changeList();
                             this.$emit('getData')
                         })
                     }
