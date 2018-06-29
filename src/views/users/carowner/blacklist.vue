@@ -157,6 +157,7 @@
 <script>
 import GetCityList from '@/components/GetCityList'
 import {parseTime} from '@/utils/'
+import { eventBus } from '@/eventBus'
 import {data_get_shipper_type,data_get_shipper_change,data_get_shipper_freezeType,data_get_freeze_change,data_get_freeze, data_get_shipper_BlackType,data_unbind_freeze_change,data_blacklist,data_remove_blacklist} from '@/api/users/shipper/all_shipper.js'
 export default {
   name:'create-Change-ViewDialog',
@@ -282,7 +283,9 @@ export default {
     change(){
       this.freezeDialogFlag!=this.freezeDialogFlag
     },
-
+    changeList(){
+      eventBus.$emit('changeListtwo')
+    },
     setCurrent(row) {
       this.$refs.singleTable.setCurrentRow(row);
     },
@@ -340,6 +343,7 @@ export default {
 
     //移入黑名单
     onSubmit1(){
+      this.changeList()
         this.$refs['formFroze'].validate((valid)=>{
         if(valid){
           var forms= Object.assign({}, this.formFroze)
@@ -357,6 +361,7 @@ export default {
     },
     //移出黑名单
     onSubmit2(){
+        this.changeList()
         this.$refs['formFroze'].validate((valid)=>{
         if(valid){
           var forms= Object.assign({}, this.formFroze)

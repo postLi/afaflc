@@ -48,6 +48,11 @@
                       type="selection"
                       width="80">
                       </el-table-column> -->
+                      <el-table-column
+                        type="index"
+                        label="序号"
+                        width="80">
+                        </el-table-column>
                         <el-table-column
                         prop="carNumber"
                         label="车牌号">
@@ -104,9 +109,16 @@
     import {data_get_driver_list,data_get_driver_status} from '../../../api/users/carowner/total_carowner.js'
     import GetCityList from '@/components/GetCityList'
     import cue from '../../../components/Message/cue'
+    import { eventBus } from '@/eventBus'
     import { parseTime,formatTime } from '@/utils/index.js'
     import DriverNewTemplate from '../carowner/driver-newTemplate'
     export default {
+        props: {
+            isvisible: {
+                type: Boolean,
+                default: false
+            }
+        },
         components:{
             GetCityList,
             DriverNewTemplate,
@@ -133,13 +145,36 @@
                 selectionData:null,
                 multipleSelection:[],
                 ifInformation:'选中一个才可以操作',
-                ifInformation2:'不可修改多个内容'
+                
             }
         },
+        watch: {
+            isvisible: {
+                handler(newVal, oldVal) {
+                    
+                    if(newVal && !this.inited){
+                        this.inited = true
+                        this.firstblood()
+                        this.getMoreInformation()
+                    }
+                },
+                // 代表在wacth里声明了firstName这个方法之后立即先去执行handler方法
+                immediate: true
+            }
+        },
+        created() {
+            
+        },
         mounted(){
-            this.firstblood()
-            this.getMoreInformation()
-        },  
+            eventBus.$on('changeListtwo', ()=>{
+                if(this.inited || this.isvisible){
+                    this.firstblood()
+                    this.getMoreInformation()
+                }
+            })
+
+        },
+  
         methods:{
             // 判断选中与否
             handleSelectionChange(val){
@@ -152,8 +187,8 @@
             },
             //判断选中是否弹窗
              freezeClick(){
-                console.log(this.multipleSelection.length)
-                  if(this.multipleSelection.length == 0){                      
+                
+                  if(this.selectionData == null){                      
                      this.selectionData=null
                      this.$refs.cue.hint(this.ifInformation)
                   } else{

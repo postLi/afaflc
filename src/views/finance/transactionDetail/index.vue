@@ -305,17 +305,19 @@ import { parseTime,formatTime } from '@/utils/index.js'
             },
             //相关信息
             handleClick(row){
-                this.load();
+                
                 this.data.orderSerial = row.orderSerial;
+                this.load();
             },
             //判断是否选中
             getinfomation(selection){
                
             },
             //刷新页面  
-            load(){              
-                this.data.tradeStartTime = this.payTime[0]
-                this.data.tradeEndTime = this.payTime[1]
+            load(){                   
+                var payend = this.payTime[1]+24*60*60*1000
+                this.data.tradeStartTime = parseTime(this.payTime[0],"{y}-{m}-{d}");
+                this.data.tradeEndTime = parseTime(payend,"{y}-{m}-{d}");
                 data_financeList(this.page,this.pagesize,this.data).then(res=>{                   
                     this.tableDataTree = res.data.list;
                     this.dataTotal = res.data.totalCount;

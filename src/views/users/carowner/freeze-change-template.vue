@@ -190,6 +190,7 @@
 <script>
 import GetCityList from '@/components/GetCityList'
 import {parseTime} from '@/utils/'
+import { eventBus } from '@/eventBus'
 import {data_get_shipper_type,data_get_shipper_change,data_get_shipper_freezeType,data_get_freeze_change,data_get_freeze,data_unbind_freeze_change} from '@/api/users/shipper/all_shipper.js'
 export default {
   name:'create-Change-ViewDialog',
@@ -315,6 +316,9 @@ export default {
     setCurrent(row) {
       this.$refs.singleTable.setCurrentRow(row);
     },
+    changeList(){
+      eventBus.$emit('changeListtwo')
+    },
     openDialog(){
       //冻结
       if(this.editType ==="edit" ||this.editType ==="edit-two" ||this.editType ==="edit-three"){
@@ -366,6 +370,7 @@ export default {
     },
     // 冻结提交数据
     onSubmit(){
+      this.changeList();
       this.$refs['formFroze'].validate((valid)=>{
         if(valid){
           var forms= Object.assign({}, this.formFroze)
@@ -383,6 +388,7 @@ export default {
     },
     //冻结修改
     onSubmit2(){
+       this.changeList();
         this.$refs['formFroze'].validate((valid)=>{
         if(valid){
           var forms= Object.assign({}, this.formFroze)
@@ -400,6 +406,7 @@ export default {
     },
     //解冻
     onSubmit3(){
+       this.changeList();
         this.$refs['formFroze'].validate((valid)=>{
         if(valid){
           var forms= Object.assign({}, this.formFroze)

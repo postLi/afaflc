@@ -51,11 +51,17 @@
                         :data="tableDataTree"
                         stripe
                         border
+                          highlight-current-row
+                        current-row-key
                         :key="theKey"
-                        @selection-change="handleSelectionChange"
+                        @current-change="handleSelectionChange"
                         tooltip-effect="dark"
                         style="width: 100%">
-                        <el-table-column type="selection"  width="80"> </el-table-column>
+                        <el-table-column
+                        type="index"
+                        label="序号"
+                        width="80">
+                        </el-table-column>
                         <el-table-column prop="carNumber" label="车牌号"></el-table-column>
                         <el-table-column prop="driverMobile" label="手机号"></el-table-column>
                         <el-table-column  prop="driverName" label="车主" width="200"></el-table-column>
@@ -241,19 +247,29 @@
             <el-button @click="formAuidDialogFlag = false">取 消</el-button>
           </div>
         </el-dialog>
+        
      </div> 
-     
+     <cue ref="cue"></cue>
     </div>
 </template>
 <script type="text/javascript">
     import {data_get_driver_list,data_get_driver_status,data_post_audit} from '../../../api/users/carowner/total_carowner.js'
     import Upload from '@/components/Upload/singleImage'
+    import cue from '../../../components/Message/cue'
+    import { eventBus } from '@/eventBus'
     import { parseTime } from '@/utils/index.js'
     import GetCityList from '@/components/GetCityList'
     export default {
+        props: {
+            isvisible: {
+                type: Boolean,
+                default: false
+            }
+        },
         components:{
             Upload,
-            GetCityList
+            GetCityList,
+            cue
         },
         data(){
             return{
@@ -295,7 +311,9 @@
                 radio3:'',
                 radio4:'',
                 radio5:'',
-                multipleSelection:[]
+                multipleSelection:[],
+                ifInformation:'未选中任何修改内容',
+                ifInformation2:'不可修改多个内容',
             }
         },
         computed: {
@@ -303,10 +321,28 @@
             return '车辆45°:'+ this.radio1 + ',行驾证:'+ this.radio2 + ',驾驶证:'+ this.radio3 + ',身份证'+ this.radio4 + ',手持身份证'+ this.radio5
             }
         },
+        watch: {
+            isvisible: {
+                handler(newVal, oldVal) {
+                
+                    if(newVal && !this.inited){
+                        this.inited = true
+                       this.firstblood()
+                        this.getMoreInformation()
+                    }
+                },
+                // 代表在wacth里声明了firstName这个方法之后立即先去执行handler方法
+                immediate: true
+            }
+        },
         mounted(){
-            this.firstblood()
-            this.getMoreInformation()
-        },  
+          eventBus.$on('changeListtwo', ()=>{
+              if(this.inited || this.isvisible){
+                 this.firstblood()
+                this.getMoreInformation()
+              }
+          })
+        }, 
         methods:{
             formatTime(da){
                 let time = (+new Date()) - da
@@ -324,8 +360,8 @@
             // 判断选中值
             handleSelectionChange(val){
                 this.multipleSelection=val
-                if(val[0]){
-                    this.templateModel=val[0]
+                if(val){
+                    this.templateModel=val
                 } else{
                     this.templateModel={}
                 }
@@ -338,11 +374,11 @@
                     //未选择任何修改内容的提示
                     // let information = "未选中任何修改内容";
                     // this.hint(information);
-                    this.$message.error('未选中任何修改内容')
+                    this.$refs.cue.hint(this.ifInformation)
                 }else if(this.multipleSelection.length >1){
                     // let information = "不可修改多个内容";
                     // this.hint(information);
-                    this.$message.error('不可修改多个内容')
+                    this.$refs.cue.hint(this.ifInformation2)
                 } else{
                     this.formAuidDialogFlag=true
                 }
@@ -350,6 +386,7 @@
 
             //刷新页面
             firstblood(){
+                this.changeList()
                 data_get_driver_list(this.page,this.pagesize,this.formInline).then(res=>{
                     this.totalCount = res.data.totalCount;
                     this.theKey=Math.random()
@@ -386,13 +423,19 @@
                 this.page = val;
                 this.firstblood()
             },  
+            changeList(){
+                eventBus.$emit('changeListtwo')
+            },
             // 图片质量拼接传给后台
             pictureTypeChange(){
 
             },
             completeData(){
                 //获取城市name
-                if(this.$refs.area.selectedOptions.length > 1){
+                if(!this.$refs.area){
+                    return
+                }  
+                else if(this.$refs.area.selectedOptions.length > 1){
                     let province;
                     this.$refs.area.areaData.forEach((item) =>{
                     if(item.code == this.$refs.area.selectedOptions[0]){
@@ -416,7 +459,7 @@
                 },
             // 审核不通过
             handlerOut(){
-            this.completeData()
+                this.completeData()
             this.$refs['shengheform'].validate((valid)=>{
                 if(valid){
                 // this.templateModel.belongCity = this.$refs.area.selectedOptions.pop();
@@ -427,6 +470,7 @@
                     this.$message.success('审核不通过 提交')
                     this.formAuidDialogFlag = false;
                     this.firstblood()
+                    this.changeList()
                 }).catch(err=>{
                     console.log(err)
                 })
@@ -436,7 +480,7 @@
 
             // 审核通过
             handlerPass(){
-            this.completeData()
+                this.completeData()
             this.$refs['shengheform'].validate((valid)=>{
                 if(valid){
                 // this.templateModel.belongCity = this.$refs.area.selectedOptions.pop();
@@ -446,6 +490,7 @@
                     this.$message.success('审核通过成功')
                     this.formAuidDialogFlag = false;
                     this.firstblood()
+                    this.changeList()
                 }).catch(err=>{
                     console.log(err)
                 })

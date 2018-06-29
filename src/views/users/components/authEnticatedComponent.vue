@@ -27,7 +27,8 @@
                     btntype="primary"
                     icon="el-icon-news"
                     editType="edit"
-                    :templateItem="selectionData1"
+                    v-on:click.native="freezeClick"
+                    :templateItem="selectionData"
                     btntitle="修改">
                     </driver-newTemplate>
                 </div>
@@ -37,11 +38,14 @@
                         :data="tableDataTree"
                         stripe
                         border
-                        @selection-change="handleSelectionChange"
+                         highlight-current-row
+                        current-row-key
+                        @current-change="handleSelectionChange"
                         tooltip-effect="dark"
                         style="width: 100%">
                         <el-table-column
-                        type="selection"
+                        type="index"
+                        label="序号"
                         width="80">
                         </el-table-column>
                         <el-table-column
@@ -91,20 +95,29 @@
                     </el-pagination>
                 </div>
             </div>
-        
+         <cue ref="cue"></cue>
     </div>
 </template>
 <script type="text/javascript">
     import {data_get_driver_list,data_get_driver_status} from '../../../api/users/carowner/total_carowner.js'
+    import cue from '../../../components/Message/cue'
+    import { eventBus } from '@/eventBus'
     import { parseTime,formatTime } from '@/utils/index.js'
     import GetCityList from '@/components/GetCityList'
     import DriverNewTemplate from '../carowner/driver-newTemplate'
     // import FreezeChangeTemplate from '../carowner/freeze-change-template'
     // import DriverBlackDialogTemplate from '../carowner/driver-blackDialog-template'
     export default {
+        props: {
+            isvisible: {
+                type: Boolean,
+                default: false
+            }
+        },
         components:{
             GetCityList,
             DriverNewTemplate,
+            cue
             // FreezeChangeTemplate,
             // DriverBlackDialogTemplate
         },
@@ -126,14 +139,37 @@
                     name:'全部'
                     }
                 ],
-                selectionData1:{},
+                selectionData:null,
                 multipleSelection:[],
+                 ifInformation:'选中一个才可以操作',
+            }
+        },
+        created() {
+          
+        },
+        watch: {
+            isvisible: {
+                handler(newVal, oldVal) {
+                
+                    if(newVal && !this.inited){
+                        this.inited = true
+                        this.firstblood()
+                        this.getMoreInformation()
+                    }
+                },
+                // 代表在wacth里声明了firstName这个方法之后立即先去执行handler方法
+                immediate: true
             }
         },
         mounted(){
-            this.firstblood()
-            this.getMoreInformation()
-        },  
+          eventBus.$on('changeListtwo', ()=>{
+              if(this.inited || this.isvisible){
+                this.firstblood()
+                this.getMoreInformation()
+              }
+          })
+        },
+ 
         methods:{
             clearSearch(){
                 this.formInline={//查询条件
@@ -145,14 +181,24 @@
             },
             // 判断选中与否
             handleSelectionChange(val){
+
                 this.multipleSelection = val;
-                if(val[0]){
-                    this.selectionData1=val[0]
+                if(val){
+                    this.selectionData=val
+                     
                 } else{
-                    this.selectionData1={}
+                    this.selectionData1=null
                 }
             },
-
+            freezeClick(){
+             
+                if(this.selectionData == null){                      
+                     this.selectionData=null
+                     this.$refs.cue.hint(this.ifInformation)
+                  } else{
+                       this.selectionData=this.multipleSelection
+                  }
+            },
             // 修改功能
             // handleEdit(){
             //     console.log('修改功能')

@@ -1,20 +1,20 @@
 <template>
 	<div class="carOwner">
-		<el-tabs v-model="activeName2" type="border-card" @tab-click="handleClick">
+		<el-tabs v-model="CarActiveName" type="border-card" @tab-click="handleClick">
 			<el-tab-pane label="全部" name="first">
-				<Total></Total>   
+				<Total :isvisible="CarActiveName === 'first'"></Total>   
 			</el-tab-pane>
-			<el-tab-pane label="未认证">
-				<Unauthorized></Unauthorized>
+			<el-tab-pane label="未认证"  name="second">
+				<Unauthorized :isvisible="CarActiveName === 'second'"></Unauthorized>
 			</el-tab-pane>
-			<el-tab-pane label="待认证">
-                <toBeCertified></toBeCertified>
+			<el-tab-pane label="待认证" name="third">
+                <toBeCertified :isvisible="CarActiveName === 'third'"></toBeCertified>
 			</el-tab-pane>
-			<el-tab-pane label="已认证">
-                <authenticatedcomponent></authenticatedcomponent>
+			<el-tab-pane label="已认证" name="fourth">
+                <authenticatedcomponent  :isvisible="CarActiveName === 'fourth'"></authenticatedcomponent>
 			</el-tab-pane>
-			<el-tab-pane label="认证不通过">
-                <unPassCertification></unPassCertification>
+			<el-tab-pane label="认证不通过" name="fifth">
+                <unPassCertification :isvisible="CarActiveName === 'fifth'"></unPassCertification>
 			</el-tab-pane>
 			<!-- <el-tab-pane label="冻结中">
                 <freezing></freezing>
@@ -34,9 +34,9 @@
     // import freezing from "../components/freezing.vue"
     // import blackList from "../components/blackList.vue"
     export default {
-        data:function(){
+        data(){
             return{
-            	activeName2: 'first',
+            	CarActiveName: null,
             }
         },
         components:{
@@ -48,9 +48,30 @@
             // freezing:freezing,
             // blackList:blackList
         },
+        watch:{
+            CarActiveName(newVal,oldVal){
+                // console.log('newVal,oldVal',newVal,oldVal)
+                if(newVal){
+                    this.CarActiveName = newVal;
+                }else{
+                    this.CarActiveName = oldVal;
+                }
+            }
+        },
+        created() {
+            this.CarActiveName = localStorage.getItem('CarActiveName') || 'first';
+        },
+
+        beforeUpdate () {
+            localStorage.setItem('CarActiveName', this.CarActiveName);
+        },
+
+        beforeDestroy () {
+            localStorage.setItem('CarActiveName', 'first');
+        },
         methods:{
 			handleClick(tab, event) {
-                // console.log(tab, event);
+                 this.CarActiveName = tab.name;
             },
 		}
     }

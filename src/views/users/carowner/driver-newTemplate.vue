@@ -173,6 +173,7 @@
 import  { data_post_createDriver,data_put_changeDriver,data_CarList,data_Get_carType,data_get_driver_obStatus,data_post_driverAudit} from '@/api/users/carowner/total_carowner.js'
 import Upload from '@/components/Upload/singleImage'
 import GetCityList from '@/components/GetCityList'
+import { eventBus } from '@/eventBus'
 export default {
     name:'template-create-view-change',
     props:{
@@ -269,6 +270,9 @@ export default {
                 this.selectFlag=true
             }
         },
+        changeList(){
+            eventBus.$emit('changeListtwo')
+        },
         // 获取对应的字典列表
         getMoreInformation(){
             // console.log('等数据来')
@@ -337,7 +341,10 @@ export default {
          completeData(){
              console.log("--------------------------"+this.$refs.area)
             //获取城市name
-            if(this.$refs.area.selectedOptions.length > 1){
+            if(!this.$refs.area){
+                return
+            }  
+            else if(this.$refs.area.selectedOptions.length > 1){
                 let province;
                 this.$refs.area.areaData.forEach((item) =>{
                 if(item.code == this.$refs.area.selectedOptions[0]){
@@ -366,6 +373,7 @@ export default {
         },
          // 提交数据
         onSubmit(){
+
             this.completeData();
             this.$refs['templateForm'].validate(valid=>{
                 if(valid){
@@ -375,20 +383,24 @@ export default {
                     // 新增数据提交
                     if(this.editType === 'add'){
                         data_post_createDriver(forms).then(res=>{
+
                             this.driverTemplateDialogFlag = !this.driverTemplateDialogFlag;
                             this.$message.success('新增成功')
+                             this.changeList();
                             this.$emit('getData')
                         })
                     } else if(this.editType=== 'valetAuth') { 
                         data_post_driverAudit(forms).then(res=>{
                             this.driverTemplateDialogFlag = !this.driverTemplateDialogFlag;
                             this.$message.success('代客认证成功')
+                             this.changeList();
                             this.$emit('getData')
                         })
                     } else if(this.editType==='edit'){
                         data_put_changeDriver(forms).then(res=>{
                             this.driverTemplateDialogFlag = !this.driverTemplateDialogFlag;
                             this.$message.success('修改成功')
+                             this.changeList();
                             this.$emit('getData')
                         })
                     }

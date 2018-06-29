@@ -23,7 +23,6 @@
                     btntype="primary"
                     icon="el-icon-news"
                     editType="valetAuth"
-                   
                     v-on:click.native="freezeClick"
                     :templateItem="selectionData"
                     btntitle="车主管理"
@@ -37,11 +36,14 @@
                         stripe
                         :key="theKeys"
                         border
-                        @selection-change="handleSelectionChange"
+                         highlight-current-row
+                        current-row-key
+                        @current-change="handleSelectionChange"
                         tooltip-effect="dark"
                         style="width: 100%">
-                        <el-table-column
-                        type="selection"
+                       <el-table-column
+                        type="index"
+                        label="序号"
                         width="80">
                         </el-table-column>
                         <el-table-column
@@ -81,18 +83,27 @@
                     </el-pagination>
                 </div>
             </div>
-            
+            <cue ref="cue"></cue>
     </div>
 </template>
 <script type="text/javascript">
     import {data_get_driver_list,data_get_driver_status} from '@/api/users/carowner/total_carowner.js'
     import GetCityList from '@/components/GetCityList'
+    import cue from '../../../components/Message/cue'
+    import { eventBus } from '@/eventBus'
     import { parseTime,formatTime } from '@/utils/index.js'
     import DriverNewTemplate from '../carowner/driver-newTemplate.vue'
     export default {
+        props: {
+            isvisible: {
+                type: Boolean,
+                default: false
+            }
+        },
         components:{
             GetCityList,
-            DriverNewTemplate
+            DriverNewTemplate,
+            cue
         },
         data(){
             return{
@@ -113,14 +124,37 @@
                     name:'全部'
                     }
                 ],
-                selectionData:{},
+                selectionData:null,
                 multipleSelection:[],
+                ifInformation:'选中一个才可以操作',
+            }
+        },
+        created() {
+          
+        },
+        watch: {
+            isvisible: {
+                handler(newVal, oldVal) {
+                
+                    if(newVal && !this.inited){
+                        this.inited = true
+                        this.firstblood();
+                        this.getMoreInformation()
+                    }
+                },
+                // 代表在wacth里声明了firstName这个方法之后立即先去执行handler方法
+                immediate: true
             }
         },
         mounted(){
-            this.firstblood()
-            this.getMoreInformation()
-        },  
+          eventBus.$on('changeListtwo', ()=>{
+              if(this.inited || this.isvisible){
+                this.firstblood()
+                this.getMoreInformation()
+              }
+          })
+        },
+         
         methods:{
             clearSearch(){
                 this.formInline={//查询条件
@@ -133,12 +167,11 @@
            
             // 判断选中值
             handleSelectionChange(val){
-                this.multipleSelection=val
-                // console.log(this.multipleSelection.length)
-                if(val[0]){
-                    this.selectionData=val[0]
+                this.multipleSelection = val;
+                if(val){
+                    this.selectionData=val
                 } else{
-                   this.selectionData={}
+                    this.selectionData=null
                 }
             },
 
@@ -147,7 +180,12 @@
                 console.log('代客认证功能')
             },
             freezeClick(){
-                
+                if(this.selectionData == null){                      
+                     this.selectionData=null
+                     this.$refs.cue.hint(this.ifInformation)
+                  } else{
+                       this.selectionData=this.multipleSelection
+                  }
             },
             //刷新页面
             firstblood(){

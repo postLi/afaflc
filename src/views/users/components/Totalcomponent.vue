@@ -203,8 +203,9 @@
     import { parseTime,formatTime } from '@/utils/index.js'
     import GetCityList from '@/components/GetCityList'
     import cue from '../../../components/Message/cue'
+    import { eventBus } from '@/eventBus'
     import FreezeChangeTemplate from '../carowner/freeze-change-template'
-    import UnbindFreeze from '../carowner/unbind-freeze'
+ 
     import blacklist from '../carowner/blacklist'
 
     export default {
@@ -236,18 +237,48 @@
                // templateItem:{}, //新增数据填充
             }
         },
+        props: {
+            isvisible: {
+                type: Boolean,
+                default: false
+            }
+        },
         components:{
             GetCityList,
             DriverNewTemplate,
             cue,
             FreezeChangeTemplate,
-            UnbindFreeze,
+           
             blacklist
         },
+        created() {
+            console.log('created:',this.isvisible)
+        },
+        watch: {
+            isvisible: {
+                handler(newVal, oldVal) {
+                
+                    if(newVal && !this.inited){
+
+                        this.inited = true
+                        this.firstblood()
+                        this.getMoreInformation()
+                    }
+                },
+                // 代表在wacth里声明了firstName这个方法之后立即先去执行handler方法
+                immediate: true
+            }
+        },
         mounted(){
-            this.firstblood()
-            this.getMoreInformation()
-        },  
+          eventBus.$on('changeListtwo', () => {
+              if(this.inited || this.isvisible){
+                 console.log("changeListtwo:", this.isvisible)
+                this.firstblood()
+                this.getMoreInformation()
+              }
+          })
+        },
+ 
         methods:{
             clearSearch(){
                 this.formInline={
@@ -258,6 +289,7 @@
                     accountStatus:''
                 }
             },
+
             // 新增功能
             handleCreate(){
                 console.log('新增功能')
@@ -287,13 +319,16 @@
                     this.selectRowData=null
                     this.$refs.cue.hint(this.ifInformation)
                
-                } 
+                }else{
+                    this.selectionData=this.multipleSelection
+                  } 
             },
             addClick(val){
                 this.$refs.multipleTable.setCurrentRow();
             },
             //刷新页面
             firstblood(){
+              
                 data_get_driver_list(this.page,this.pagesize,this.formInline).then(res=>{
                     this.totalCount = res.data.totalCount;
                     this.tableDataTree = res.data.list;
