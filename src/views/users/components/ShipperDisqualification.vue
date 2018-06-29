@@ -31,11 +31,11 @@
 		    </div>
             <div class="info_news">
                 <el-table 
-                    ref="mutipleTable"
+                    ref="multipleTable"
                     :data="tableData1"
+                    @row-click="clickDetails"
                     stripe
                     border
-                    :key="theKey4"
                     @selection-change="handleSelectionChange"
                     tooltip-effect="dark"
                     style="width: 100%">
@@ -53,14 +53,8 @@
                     <el-table-column prop="registerOrigin" label="注册来源">
                     </el-table-column>
                     <el-table-column prop="shipperStatusName" label="认证状态">
-                        <!-- <template slot-scope="scope">
-                        {{getAttestationStatus(scope.row.shipperStatus)}}
-                        </template> -->
                     </el-table-column>
                     <el-table-column prop="accountStatusName" label="账户状态">
-                        <!-- <template slot-scope="scope">
-                        {{getAccountStatus(scope.row.accountStatus)}}
-                        </template> -->
                     </el-table-column>
                     <el-table-column prop="belongCityName" label="所在地">
                     </el-table-column>
@@ -68,14 +62,6 @@
                     </el-table-column>
                     <el-table-column prop="phone" label="审核不通过日期">
                     </el-table-column>
-                    <!-- <el-table-column
-                        fixed="right"
-                        label="操作"
-                        width="250">
-                        <template slot-scope="scope">
-                        <el-button type="text" size="small">代客认证</el-button>
-                        </template>
-                    </el-table-column> -->
                 </el-table>
                 <el-pagination
                     @size-change="handleSizeChange"
@@ -109,7 +95,6 @@ export default {
     },
     data(){
         return{
-            theKey4:'1',
             tableData1:[],
             totalCount:null,
             page:1,
@@ -126,24 +111,28 @@ export default {
         }
     },
     watch: {
-        isvisible(newVal){
-            if(newVal && !this.inited){
-                this.inited = true
-                this.firstblood()
-            }
+        isvisible: {
+            handler(newVal, oldVal) {
+                console.log('testnewVal:',newVal)
+                if(newVal && !this.inited){
+                    this.inited = true
+                    this.firstblood();
+                }
+            },
+            // 代表在wacth里声明了firstName这个方法之后立即先去执行handler方法
+            immediate: true
         }
     },
-	mounted(){
-		eventBus.$on('changeList', function(){
-            if(this.inited){
-                this.firstblood();
-            }
-		})
-	},
-    // mounted(){
-    //     this.firstblood()
-    // },
+    mounted(){
+        eventBus.$on('changeList', params => {
+            this.firstblood();
+        })
+    },
     methods:{
+        //点击选中当前行
+        clickDetails(row, event, column){
+        this.$refs.multipleTable.toggleRowSelection(row);
+        },
         getDataList(){
             this.firstblood()
         },
@@ -169,7 +158,6 @@ export default {
           this.formAll.belongCity = this.$refs.area.selectedOptions.pop();
           data_get_shipper_list(this.page,this.pagesize,this.formAll).then(res=>{
             this.totalCount = res.data.totalCount;
-            this.theKey4=Math.random()
             this.tableData1= res.data.list;
           })
       },
@@ -177,11 +165,12 @@ export default {
       //清空
       clearSearch(){
         this.formAll = {
-          belongCity:'',
-          attestationStatus:'',
-          mobile:'',
-          companyName:''
-        }
+            companyName:'',
+            belongCity:'',
+            mobile:'',
+            shipperStatus:"AF0010404",//未认证的状态码
+        },
+        this.firstblood()
       },
       handleSizeChange(val) {
         console.log(`每页 ${val} 条`);

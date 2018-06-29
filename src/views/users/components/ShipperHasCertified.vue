@@ -45,7 +45,7 @@
                 <el-table
                     ref="multipleTable"
                     :data="tableData3"
-                    :key="thekey"
+				    @row-click="clickDetails"
                     stripe
                     border
                     @selection-change="handleSelectionChange"
@@ -90,9 +90,6 @@
                     <el-table-column
                         prop="shipperTypeName"
                         label="货主类型">
-                        <template slot-scope="scope">
-                            {{scope.row.shipperType==='AF0010202'? '企业货主':'普通货主'}}
-                        </template>
                     </el-table-column>
                     <el-table-column
                         prop="authPassTime"
@@ -111,7 +108,6 @@
                 </el-pagination>
             </div>
 	    </div>
-       
     </div>
 </template>
 <script>
@@ -136,37 +132,44 @@ export default {
         return {
             options:[],
             tableData3:[],
-            thekey: '1',
             totalCount:null,
             page:1,
             pagesize:20,
-            inited:false,
             formInline: {
                 companyName:'',
                 belongCity:'',
                 mobile:'',
-                shipperStatus:"AF0010403",//未认证的状态码
+                shipperStatus:"AF0010403",//已认证的状态码
             },
             multipleSelection:[],
             selectRowData:{}
         }
     },
     watch: {
-        isvisible(newVal){
-            if(newVal && !this.inited){
-                this.inited = true
-                this.firstblood()
-            }
+        isvisible: {
+            handler(newVal, oldVal) {
+                // console.log('已认证:',newVal)
+                // console.log('!this.inited',!this.inited)
+                if(newVal && !this.inited){
+                    this.inited = true
+                    this.firstblood()
+                }
+            },
+            // 代表在wacth里声明了firstName这个方法之后立即先去执行handler方法
+            immediate: true
         }
     },
     mounted(){
-      eventBus.$on('changeList', function(){
-          if(this.inited){
-              this.firstblood()
-          }
-      })
+        eventBus.$on('changeList', params => {
+            this.firstblood();
+            // console.log('1111111111111111111111')
+        })
     },
     methods:{
+         //点击选中当前行
+        clickDetails(row, event, column){
+        this.$refs.multipleTable.toggleRowSelection(row);
+        },
         // 选中值判断
         handleSelectionChange(val){
             this.multipleSelection = val;
@@ -176,19 +179,9 @@ export default {
                 this.selectRowData = {}
             }
         },
-
-        //获取货主类型
-        getMoreInformation(){
-            data_get_shipper_type().then(res=>{
-                // console.log(res)
-                res.data.map((item)=>{
-                    this.options.push(item)
-                })
-            })
-        },
         //刷新页面
       firstblood(){
-          console.log('1111111111')
+        console.log('是否进去已认证页面')
         data_get_shipper_list(this.page,this.pagesize,this.formInline).then(res=>{
           console.log("已认证",res)
           this.totalCount = res.data.totalCount;
@@ -211,20 +204,20 @@ export default {
             
             this.totalCount = res.data.totalCount;
             this.tableData3 = res.data.list;
-            this.thekey = Math.random()
             console.log(this.tableData3,res)
           })
       },
       
-      //清空
-      clearSearch(){
-        this.formInline = {
-          belongCity:'',
-          mobile:'',
-          companyName:'',
-          shipperType:''
-        }
-      },
+        //清空
+        clearSearch(){
+            this.formInline = {
+                companyName:'',
+                belongCity:'',
+                mobile:'',
+                shipperStatus:"AF0010403",//已认证的状态码
+            }
+            this.firstblood()
+        },
       getDataList(){
         this.firstblood()
       }

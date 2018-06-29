@@ -34,7 +34,6 @@
                         ref="multipleTable"
                         :data="tableDataTree"
                         stripe
-                        :key="theKeys"
                         border
                          highlight-current-row
                         current-row-key
@@ -66,12 +65,7 @@
                         prop="registerTime"
                         label="注册日期">
                         </el-table-column>
-                        <!-- <el-table-column
-                        prop=""
-                        label="操作">
-                        </el-table-column> -->
                     </el-table>
-                        
                     <el-pagination
                         @size-change="handleSizeChange"
                         @current-change="handleCurrentChange"
@@ -107,7 +101,6 @@
         },
         data(){
             return{
-                theKeys:'11',
                 page:1,//当前页
                 pagesize:20,//每页显示数
                 totalCount:null,//总记录数
@@ -191,7 +184,6 @@
             firstblood(){
                 data_get_driver_list(this.page,this.pagesize,this.formInline).then(res=>{
                     this.totalCount = res.data.totalCount;
-                    this.theKeys=Math.random()
                     this.tableDataTree = res.data.list;
                      this.tableDataTree.forEach(item => {
                         item.registerTime = parseTime(item.registerTime,"{y}-{m}-{d}");

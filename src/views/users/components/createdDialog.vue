@@ -65,19 +65,19 @@
 
           <el-row>
             <el-col :span="12">
-              <el-form-item label="公司名称 ：" :label-width="formLabelWidth" v-show="companyFlag">
+              <el-form-item label="公司名称 ：" :label-width="formLabelWidth" v-show="companyFlag || editType=='identification'">
                 <el-input :maxlength="20" v-model="xinzengform.companyName"  :disabled="editType=='view'"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="12">
-            <el-form-item label="统一社会信用代码 ：" :label-width="formLabelWidth" v-show="companyFlag">
+            <el-form-item label="统一社会信用代码 ：" :label-width="formLabelWidth" v-show="companyFlag || editType=='identification'">
               <el-input :maxlength="20" v-model="xinzengform.creditCode"  :disabled="editType=='view'"></el-input>
             </el-form-item>
             </el-col>
           </el-row>
           <el-row>
             <el-col :span="9">
-              <el-form-item label="上传营业执照照片 ：" label-width="125px" v-show="companyFlag">
+              <el-form-item label="上传营业执照照片 ：" label-width="125px" v-show="companyFlag || editType=='identification'">
                     <upload class="licensePicture" tip="（必须为jpg/png并且小于5M）"  v-model="xinzengform.businessLicenceFile" :showFileList = "editType == 'view' ? true : false"/>
               </el-form-item>
             </el-col>
@@ -85,7 +85,7 @@
           
           <el-row>
             <el-col :span="9">
-              <el-form-item label="上传公司或者档口照片 ：" label-width="125px" prop="companyFacadeFile" v-show="companyFlag" :rules="companyFlag === false ? {} : companyFacadeFileRules">
+              <el-form-item label="上传公司或者档口照片 ：" label-width="125px" prop="companyFacadeFile" v-show="companyFlag || editType=='identification'" :rules="companyFlag === false ? {} : companyFacadeFileRules">
                 <upload class="licensePicture" tip="（必须为jpg/png并且小于5M）" v-model="xinzengform.companyFacadeFile" />
               </el-form-item>
             </el-col>
@@ -93,7 +93,7 @@
           
           <el-row>
             <el-col :span="9">
-              <el-form-item label="上传发货人名片照片 ：" label-width="125px" prop="shipperCardFile" v-show="companyFlag" :rules="companyFlag === false ? {} : shipperCardFileRules" >
+              <el-form-item label="上传发货人名片照片 ：" label-width="125px" prop="shipperCardFile" v-show="companyFlag || editType=='identification'" :rules="companyFlag === false ? {} : shipperCardFileRules" >
                 <upload class="licensePicture" tip="（必须为jpg/png并且小于5M）" v-model="xinzengform.shipperCardFile" />
               </el-form-item>
             </el-col>
@@ -160,12 +160,12 @@ export default {
             cb(new Error('请输入正确的手机号码格式'))
         } else {
             data_get_shipper_view(val).then(res=>{
-            console.log(res)
-            if(res.data){
-                cb(new Error('该手机号已经被注册~'))
-            } else {
-            cb()
-            }
+                console.log(res)
+                if(res.data){
+                    cb(new Error('该手机号已经被注册~'))
+                } else {
+                    cb()
+                }
             })
         }
         setTimeout(function () {
@@ -174,26 +174,26 @@ export default {
         
         }
         const companyNameValidator = (rule, val, cb)=>{
-        // console.log(val)
-        if(!this.xinzengform.companyFacadeFile){
-            cb(new Error('请上传公司或者档口照片'))
-        }else{
-            cb()
-        }
-        }
-        const shipperCardFileValidator=(rule,val,cb) => {
-        if(!this.xinzengform.shipperCardFile){
-            cb(new Error('请上传发货人名片照片'))
-        } else {
-            cb()
-        }
-        }
-        const belongCityValidator = (rule, val, cb) => {
-        if(!this.xinzengform.belongCity) {
-            cb(new Error('请选择所在地'))
-        } else {
-            cb()
-        }
+            // console.log(val)
+            if(!this.xinzengform.companyFacadeFile){
+                cb(new Error('请上传公司或者档口照片'))
+            }else{
+                cb()
+            }
+            }
+            const shipperCardFileValidator=(rule,val,cb) => {
+            if(!this.xinzengform.shipperCardFile){
+                cb(new Error('请上传发货人名片照片'))
+            } else {
+                cb()
+            }
+            }
+            const belongCityValidator = (rule, val, cb) => {
+            if(!this.xinzengform.belongCity) {
+                cb(new Error('请选择所在地'))
+            } else {
+                cb()
+            }
         }
         return{
         cc:'企业货主',
@@ -246,17 +246,16 @@ export default {
   },
   watch:{
     'xinzengform.shipperType': {
-     handler: function(val, oldVal) {
-        // console.log(val)
-        if(val === 'AF0010202'){
-            this.companyFlag= true
-        }else{
-            this.companyFlag= false
-        }
-     },
-     deep:true
+        handler: function(val, oldVal) {
+            // console.log(val)
+            if(val === 'AF0010202'){
+                this.companyFlag= true
+            }else{
+                this.companyFlag= false
+            }
+        },
+        deep:true
     },
-
     'xinzengform.mobile':{
       handler:function(val, oldVal){
         //用户输入校验合法后发送请求判断是否已注册
@@ -272,7 +271,9 @@ export default {
         handler(newVal,oldVal){
             if(newVal == 'identification'){
                 this.getMoreInformation();
+                this.companyFlag =  true
             }
+            console.log(this.companyFlag)
         },
         immediate: true
     }
@@ -289,6 +290,9 @@ export default {
     // this.getArea()
   },
   methods:{
+    changeList(){
+		eventBus.$emit('changeList')
+	},
     openDialog(){
 		// console.log('parmas:',this.params)
 		if(this.editType==='add'||this.editType==='view' || this.editType==='identification'){
@@ -339,20 +343,16 @@ export default {
     //获取货主类型
     getMoreInformation(){
       data_get_shipper_type().then(res=>{
-        console.log('货主类型',res)
-        
+        // console.log('货主类型',res)
         this.options = res.data
-        
-        if(this.editType==='identification'){
-            this.options.filter( el => {
-                if(el.name == "企业货主" ){
-                    this.xinzengform.shipperTypeName = el.name;
-                    this.xinzengform.shipperType = el.code;
-                }
-            })
-        }
-        console.log(this.options)
-        console.log(this.xinzengform.shipperTypeName,this.xinzengform.shipperType)
+        // if(this.editType==='identification'){
+        //     this.options.filter( el => {
+        //         if(el.name == "企业货主" ){
+        //             this.xinzengform.shipperTypeName = el.name;
+        //             this.xinzengform.shipperType = el.code;
+        //         }
+        //     })
+        // }
       })
     },
     //完善数据
@@ -387,39 +387,29 @@ export default {
     },
     // 保存
     onSubmit(){
-      // this.xinzengform.belongCity = this.$refs.area.selectedOptions.pop();
 	  this.completeData();
-    //   console.log(this.xinzengform.belongCity)
-    //   if(this.editType === 'identification'){
-    //       console.log('789789')
-    //   }else{
-    //       conosle.log('987987')
-    //   }
+        this.changeList();
       this.$refs['xinzengform'].validate((valid)=>{
-        eventBus.$emit('changeList')
-        console.log('resVAILD',valid)
         if(valid){
-            console.log(this.xinzengform)
 			var forms=Object.assign({},this.xinzengform)
 			if(this.editType === 'add'){
                 // 新增
                 console.log('xinzeng')
 				if(!forms.companyName){
-					forms.companyName = '个人业务' ;
+                    forms.companyName = '个人业务' ;
 				}
-				console.log('onSubmit',forms)	
-
+				// console.log('onSubmit',forms)	
 				data_get_shipper_create(forms).then(res=>{
 				// console.log(res)
-				this.dialogFormVisible_add = !this.dialogFormVisible_add;
-				this.$message.success('新增成功')
-				this.$emit('getData')
+                    this.dialogFormVisible_add = !this.dialogFormVisible_add;
+                    this.$message.success('新增成功')
+                    this.$emit('getData')
 				}).catch(err=>{
-				console.log(err)
+				    console.log(err)
             	})
           	}else if(this.editType === 'edit'){
 				// 修改 
-				console.log('onSubmit','xiugai')
+				// console.log('onSubmit','xiugai')
 				data_get_shipper_change(forms).then(res=>{
 				// console.log(res)
 					this.dialogFormVisible_add = !this.dialogFormVisible_add;
@@ -429,19 +419,21 @@ export default {
 					console.log(err)
 				})
           	}else if(this.editType === 'identification'){
-                console.log('identification:' ,forms)
+                // console.log('identification:' ,forms)
                 forms.currentShipperStatus = forms.shipperStatus;
                 forms.shipperStatus =  "AF0010403";
-
                 this.options.filter( el => {
                     if(el.name == "企业货主" ){
                         forms.shipperTypeName = el.name;
                         forms.shipperType = el.code;
                     }
                 })
-                console.log('identificationChange:' ,forms)
+                // console.log('identificationChange:' ,forms)
                 data_get_shipper_change(forms).then(res => {
                     console.log(res)
+				    this.dialogFormVisible_add = !this.dialogFormVisible_add;
+                    this.$message.success('认证成功')
+					this.$emit('getData')
                 })
 
 		  	} 
