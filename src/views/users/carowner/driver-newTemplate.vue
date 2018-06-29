@@ -307,7 +307,7 @@ export default {
 
         openDialog(){
             console.log(this.templateItem)
-            if(this.templateItem!= null){
+            if(this.templateItem!= null|| this.templateItem == undefined){
                 this.driverTemplateDialogFlag=true 
             }else{         
                 this.driverTemplateDialogFlag=false        
