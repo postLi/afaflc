@@ -45,23 +45,14 @@
 			<el-table-column prop="registerOrigin" label="注册来源">
 			</el-table-column>
 			<el-table-column prop="shipperStatusName" label="认证状态">
-					<!-- <template slot-scope="scope">
-					{{getAttestationStatus(scope.row.shipperStatus)}}
-					</template> -->
 			</el-table-column>
 			<el-table-column prop="accountStatusName" label="账户状态">
-				<!-- <template slot-scope="scope">
-				{{getAccountStatus(scope.row.accountStatus)}}
-				</template> -->
 			</el-table-column>
 			<el-table-column prop="belongCityName" label="所在地">
 			</el-table-column>
 			<el-table-column prop="authenticationTime" label="提交认证时间">
 			</el-table-column>
-			<el-table-column prop="" label="等待时长">
-				<template slot-scope="scope">
-				{{ scope.row.authenticationTime ? formatTime((+new Date(scope.row.authenticationTime))) : '' }}
-				</template>
+			<el-table-column prop="waitTime" label="等待时长">
 			</el-table-column>
 			</el-table>
 			<el-pagination
@@ -135,7 +126,8 @@
               </el-col>
               <el-col :span="12">
                 <el-form-item label="等待时长:" :label-width="formLabelWidth">
-                  {{shengheform.authenticationTime? formatTime((+new Date(shengheform.authenticationTime))) : '' }}
+                  <el-input v-model="shengheform.authenticationTime" disabled></el-input>
+                  <!-- {{shengheform.authenticationTime? formatTime((+new Date(shengheform.authenticationTime))) : '' }} -->
                 </el-form-item>
               </el-col>
             </el-row>
@@ -147,15 +139,7 @@
               </el-col>
               <el-col :span="12">
                 <el-form-item label="货主类型" :label-width="formLabelWidth" prop="shipperType">
-                  <el-select v-model="shengheform.shipperType" placeholder="请选择">
-                  <el-option
-                    v-for="item in options"
-                    :key="item.value"
-                    :label="item.name"
-                    :value="item.code"
-                    :disabled="item.disabled">
-                  </el-option>
-                </el-select>
+                  <el-input v-model="demoData" disabled></el-input>
                 </el-form-item>
               </el-col>
             </el-row>
@@ -240,267 +224,253 @@ export default {
             }
 		}
 		return{
-        selectDiaologFlag:true,
-		options:[], // 货主类型列表
-		tableData1:[], // 列表数据
-		totalCount:null, // 总数
-		page:1,
-		pagesize:20,
-		formAll:{
-			belongCity:null,
-			companyName:'',
-			mobile:'',
-			shipperStatus:"AF0010402",//待认证的状态码
-		},
-		formLabelWidth: '120px',
-		dialogFormVisible:false, //认证审核弹框控制
-		shengheform: { // 认证审核表单
-			mobile: '', // 手机号
-			companyName: '', // 公司名称
-			address:'', // 详细地址
-			contacts:'', // 联系人
-			belongCity:null, // 所在地
-			authenticationTime:'',
-			registerOrigin:'', // 注册来源
-			creditCode:'', // 统一社会信用代码
-			businessLicenceFile:'',
-			companyFacadeFile:'',
-			shipperCardFile:'',
-			belongCityName:''
-		},
-		radio1:'',
-		radio2:'',
-		radio3:'',
-		centerDialogVisible:false,// 提示语的弹窗控制
-		information:null, // 弹框显示的信息
-		multipleSelection:[],
-		shengheformRules:{
-		shipperType:{required: true, message:'请选择货主类型',trigger:'change'},
-		radio1:{validator: radioValidator,trigger:'change'},
-		radio2:{validator: radioValidator,trigger:'change'},
-		radio3:{validator: radioValidator,trigger:'change'}
-		}
-		}
+            demoData:"企业货主",//根据项目要求写死
+            selectDiaologFlag:true,
+            options:[], // 货主类型列表
+            tableData1:[], // 列表数据
+            totalCount:null, // 总数
+            page:1,
+            pagesize:20,
+            formAll:{
+                belongCity:null,
+                companyName:'',
+                mobile:'',
+                shipperStatus:"AF0010402",//待认证的状态码
+            },
+            formLabelWidth: '120px',
+            dialogFormVisible:false, //认证审核弹框控制
+            shengheform: { // 认证审核表单
+                mobile: '', // 手机号
+                companyName: '', // 公司名称
+                address:'', // 详细地址
+                contacts:'', // 联系人
+                belongCity:null, // 所在地
+                authenticationTime:'',
+                registerOrigin:'', // 注册来源
+                creditCode:'', // 统一社会信用代码
+                businessLicenceFile:'',
+                companyFacadeFile:'',
+                shipperCardFile:'',
+                belongCityName:''
+            },
+            radio1:'',
+            radio2:'',
+            radio3:'',
+            centerDialogVisible:false,// 提示语的弹窗控制
+            information:null, // 弹框显示的信息
+            multipleSelection:[],
+            shengheformRules:{
+                shipperType:{required: true, message:'请选择货主类型',trigger:'change'},
+                radio1:{validator: radioValidator,trigger:'change'},
+                radio2:{validator: radioValidator,trigger:'change'},
+                radio3:{validator: radioValidator,trigger:'change'}
+            }
+        }
 	},
-	watch: {
-		isvisible: {
+    watch: {
+        isvisible: {
             handler(newVal, oldVal) {
                 console.log('testnewVal:',newVal)
                 if(newVal && !this.inited){
                     this.inited = true
                     this.firstblood();
-                    this.getMoreInformation();
                 }
             },
             // 代表在wacth里声明了firstName这个方法之后立即先去执行handler方法
             immediate: true
         }
-	},
-	mounted(){
-		eventBus.$on('changeList', function(){
-			if(this.inited){
-				this.firstblood();
-				this.getMoreInformation()
-			}
-		})
-	},
-  methods:{
-      //点击选中当前行
-    clickDetails(row, event, column){
-      this.$refs.multipleTable.toggleRowSelection(row);
     },
-
-    changeCity(){
-      this.selectDiaologFlag=false
-    },
-    formatTime(da){
-      let time = (+new Date()) - da
-      return parseInt(time / 1000 / (3600*24))+ '天'+ parseInt(time/1000/(3600*24*60*60)*60*60)+ '小时'
-    },
-    handleEdit(){
-      console.log(this.multipleSelection)
-      if(this.multipleSelection.length == 0){
-          //未选择任何修改内容的提示
-        let information = "未选中任何修改内容";
-        this.hint(information);
-      }else if(this.multipleSelection.length >1){
-        let information = "不可修改多个内容";
-        this.hint(information);
-      } else{
-        this.dialogFormVisible = true
-      } 
-    },
-    handleSelectionChange(val){
-      this.multipleSelection = val;
-      if(val[0]){
-         this.shengheform=val[0]
-         console.log(this.shengheform)
-      } else {
-          this.shengheform = {}
-      }
-    },
-    //刷新页面
-    firstblood(){
-      data_get_shipper_list(this.page,this.pagesize,this.formAll).then(res=>{
-        console.log(res)
-        this.totalCount = res.data.totalCount;
-        this.tableData1 = res.data.list;
-      })
-    },
-    //点击查询按纽，按条件查询列表
-    getdata_search(event){
-       this.formAll.belongCity = this.$refs.area.selectedOptions.pop();
-      //  console.log('this.tableData1:',this.tableData1)
-        data_get_shipper_list(this.page,this.pagesize,this.formAll).then(res=>{
-          // console.log('this.tableData1:',this.tableData1, res)
-          this.totalCount = res.data.totalCount;
-          this.tableData1 = res.data.list;
-        })
-    },
-    //清空
-    clearSearch(){
-      this.formAll = {
-        belongCity:'',
-        mobile:'',
-        companyName:''
-      }
-    },
-      handleChange(value){
-        console.log(value);
-      },
-      handleSizeChange(val) {
-      console.log(`每页 ${val} 条`);
-      this.pagesize=val
-      this.firstblood()
-    },
-    handleCurrentChange(val) {
-      console.log(`当前页: ${val}`);
-      this.page=val
-      this.firstblood()
-    },
-    //获取货主类型
-    getMoreInformation(){
-      data_get_shipper_type().then(res=>{
-        // console.log(res)
-        res.data.map((item)=>{
-          this.options.push(item)
-        })
-      })
-    },
-    hint(val){
-      this.information = val;
-      this.centerDialogVisible = true;
-      let timer = setTimeout(()=>{
-          this.centerDialogVisible = false;
-          clearTimeout(timer)
-      },2000)
-    },
-    
-     completeData(){
-      //获取城市name
-      if(this.$refs.area.selectedOptions.length > 1){
-        let province;
-        this.$refs.area.areaData.forEach((item) =>{
-          if(item.code == this.$refs.area.selectedOptions[0]){
-            province = item
-          }
-        })
-        province.children.forEach( item => {
-          if(item.code == this.$refs.area.selectedOptions[1]){
-            this.shengheform.belongCity = item.code;
-            this.shengheform.belongCityName = item.name;
-          }
-        })
-       }else{
-        this.$refs.area.areaData.forEach((item) =>{
-          if(item.code == this.$refs.area.selectedOptions[0]){
-            this.shengheform.belongCity = item.code;
-            this.shengheform.belongCityName = item.name;
-          }
-        })
-      }
-    },
-    // 审核不通过
-    handlerOut(){
-        this.completeData();
-        this.pictureValue.forEach((el,idx) => {
-            if(el.result == '上传合格'){
-                this.pictureValue.splice(idx,1)
-            }
-        })
-
-        console.log('this.pictureValue',this.pictureValue)
-        this.$refs['shengheform'].validate((valid)=>{
-            if(valid){
-            this.shengheform.belongCity = this.$refs.area.selectedOptions.pop();
-            var forms=Object.assign({},this.shengheform,{shipperStatus:"AF0010404"},{authNoPassCause:JSON.stringify(this.pictureValue)});
-            console.log(forms)
-            this.$confirm()
-            data_get_shipper_change(forms).then(res=>{
-                // console.log(res)
-                this.$message.success('审核不通过 成功')
-                this.dialogFormVisible = false;
+    mounted(){
+        eventBus.$on('changeList', (params) => {
                 this.firstblood();
-                eventBus.$emit('changeList')
-            }).catch(err=>{
-                console.log(err)
-            })
-            }
         })
     },
+    methods:{
+        changeList(){
+            eventBus.$emit('changeList')
+        },
+        //点击选中当前行
+        clickDetails(row, event, column){
+        this.$refs.multipleTable.toggleRowSelection(row);
+        },
 
-    // 审核通过
-    handlerPass(){
-        this.completeData();
-        let ifQualified = true ;
-        this.pictureValue.forEach((el,idx) => {
-            console.log(el.result)
-            if(el.result != "上传合格"){
-                console.log(ifQualified)
-                this.pictureValue.splice(idx,1)
-                ifQualified = false;
+        changeCity(){
+        this.selectDiaologFlag=false
+        },
+        formatTime(da){
+        let time = (+new Date()) - da
+        return parseInt(time / 1000 / (3600*24))+ '天'+ parseInt(time/1000/(3600*24*60*60)*60*60)+ '小时'
+        },
+        handleEdit(){
+        console.log(this.multipleSelection)
+        if(this.multipleSelection.length == 0){
+            //未选择任何修改内容的提示
+            let information = "未选中任何修改内容";
+            this.hint(information);
+        }else if(this.multipleSelection.length >1){
+            let information = "不可修改多个内容";
+            this.hint(information);
+        } else{
+            this.dialogFormVisible = true
+        } 
+        },
+        handleSelectionChange(val){
+        this.multipleSelection = val;
+        if(val[0]){
+            this.shengheform=val[0]
+            console.log(this.shengheform)
+        } else {
+            this.shengheform = {}
+        }
+        },
+        //刷新页面
+        firstblood(){
+            data_get_shipper_list(this.page,this.pagesize,this.formAll).then(res=>{
+                console.log('是否进去页面？？？')
+                this.totalCount = res.data.totalCount;
+                this.tableData1 = res.data.list;
+            })
+        },
+        //点击查询按纽，按条件查询列表
+        getdata_search(event){
+                this.formAll.belongCity = this.$refs.area.selectedOptions.pop();
+                //  console.log('this.tableData1:',this.tableData1)
+                data_get_shipper_list(this.page,this.pagesize,this.formAll).then(res=>{
+                // console.log('this.tableData1:',this.tableData1, res)
+                this.totalCount = res.data.totalCount;
+                this.tableData1 = res.data.list;
+                })
+        },
+        //清空
+        clearSearch(){
+            this.formAll = {
+                belongCity:null,
+                companyName:'',
+                mobile:'',
+                shipperStatus:"AF0010402",//待认证的状态码
             }
-            console.log(ifQualified)
+            this.firstblood()
+        },
+        handleChange(value){
+            console.log(value);
+        },
+        handleSizeChange(val) {
+        console.log(`每页 ${val} 条`);
+        this.pagesize=val
+        this.firstblood()
+        },
+        handleCurrentChange(val) {
+        console.log(`当前页: ${val}`);
+        this.page=val
+        this.firstblood()
+        },
+        hint(val){
+        this.information = val;
+        this.centerDialogVisible = true;
+        let timer = setTimeout(()=>{
+            this.centerDialogVisible = false;
+            clearTimeout(timer)
+        },2000)
+        },
 
-        })
-        console.log(ifQualified)
-        this.$refs['shengheform'].validate((valid)=>{
-            if(valid && ifQualified){
+        completeData(){
+        //获取城市name
+        if(this.$refs.area.selectedOptions.length > 1){
+            let province;
+            this.$refs.area.areaData.forEach((item) =>{
+            if(item.code == this.$refs.area.selectedOptions[0]){
+                province = item
+            }
+            })
+            province.children.forEach( item => {
+            if(item.code == this.$refs.area.selectedOptions[1]){
+                this.shengheform.belongCity = item.code;
+                this.shengheform.belongCityName = item.name;
+            }
+            })
+        }else{
+            this.$refs.area.areaData.forEach((item) =>{
+            if(item.code == this.$refs.area.selectedOptions[0]){
+                this.shengheform.belongCity = item.code;
+                this.shengheform.belongCityName = item.name;
+            }
+            })
+        }
+        },
+        // 审核不通过
+        handlerOut(){
+            this.completeData();
+            this.pictureValue.forEach((el,idx) => {
+                if(el.result == '上传合格'){
+                    this.pictureValue.splice(idx,1)
+                }
+            })
+            // console.log('this.pictureValue',this.pictureValue)
+            this.$refs['shengheform'].validate((valid)=>{
+                if(valid){
                 this.shengheform.belongCity = this.$refs.area.selectedOptions.pop();
-                var forms=Object.assign({},this.shengheform,{shipperStatus:"AF0010403"},{authNoPassCause:JSON.stringify(this.pictureValue)});
-                console.log(forms)
-
+                var forms=Object.assign({},this.shengheform,{shipperType:"AF0010202"},{currentShipperStatus:"AF0010402"},{shipperStatus:"AF0010404"},{authNoPassCause:JSON.stringify(this.pictureValue)});
+                // console.log(forms)
                 data_get_shipper_change(forms).then(res=>{
-                  // console.log(res)
-                    this.$message.success('审核通过成功')
+                    // console.log(res)
+                    this.$message.success('审核不通过 成功')
                     this.dialogFormVisible = false;
-                    this.firstblood()
-                    eventBus.$emit('changeList')
+                    this.changeList();
+                    this.firstblood();
                 }).catch(err=>{
                     console.log(err)
                 })
-            }else{
-                this.$message.success('审核未满足通过要求')
-            }
-        })
-    },
+                }
+            })
+        },
 
-    // 图片质量的选择拼接
-    pictureTypeChange(val){
-        console.log(val)
-      console.log('pictureValue:', this.pictureValue)
-      let authNoPassCause
-      switch(val){
-        case 1:
+        // 审核通过
+        handlerPass(){
+            this.completeData();
+            let ifQualified = true ;
+            this.pictureValue.forEach((el,idx) => {
+                if(el.result != "上传合格"){
+                    console.log(ifQualified)
+                    ifQualified = false;
+                }
+            })
+            // console.log('this.pictureValue',this.pictureValue)
+            this.$refs['shengheform'].validate((valid)=>{
+                if(valid && ifQualified){
+                    this.shengheform.belongCity = this.$refs.area.selectedOptions.pop();
+                    var forms=Object.assign({},this.shengheform,{shipperType:"AF0010202"},{currentShipperStatus:"AF0010402"},{shipperStatus:"AF0010403"},{authNoPassCause:JSON.stringify(this.pictureValue)});
+                    // console.log(forms)
+                    data_get_shipper_change(forms).then(res=>{
+                    // console.log(res)
+                        this.$message.success('审核通过成功')
+                        this.dialogFormVisible = false;
+                        this.changeList();
+                        this.firstblood()
+                    }).catch(err=>{
+                        console.log(err)
+                    })
+                }else{
+                    this.$message.success('审核未满足通过要求')
+                }
+            })
+        },
 
-        break
-        case 2:
+        // 图片质量的选择拼接
+        pictureTypeChange(val){
+            console.log(val)
+        console.log('pictureValue:', this.pictureValue)
+        let authNoPassCause
+        switch(val){
+            case 1:
 
-        break
-        case 3:
+            break
+            case 2:
 
-        break
-      }
+            break
+            case 3:
+
+            break
+        }
     }
   }
 }

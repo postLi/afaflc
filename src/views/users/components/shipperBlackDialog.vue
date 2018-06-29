@@ -39,15 +39,7 @@
                 </el-col>
                 <el-col :span="12">
                     <el-form-item label="货主类型" :label-width="formLabelWidth">
-                        <el-select v-model="formBlack.shipperType" placeholder="请选择" disabled>
-                            <el-option
-                                v-for="item in options"
-                                :key="item.value"
-                                :label="item.name"
-                                :value="item.code"
-                                :disabled="item.disabled">
-                            </el-option>
-                        </el-select>
+                        <el-input v-model="formBlack.shipperTypeName" disabled :maxlength="20"></el-input>
                     </el-form-item>
                 </el-col>
                 </el-row>
@@ -142,18 +134,7 @@ export default {
             text:'',
             BlackDialogFlag: false, // 弹框控制
             formLabelWidth:'120px',
-            formBlack:{
-                mobile:'',
-                contacts:'',
-                companyName:'',
-                belongCity:null,
-                shipperType:null,
-                belongCityName:'',
-                address:'',
-                registerOrigin:'',
-                putBlackCauseRemark:'',
-                putBlackCause:''
-            },
+            formBlack:{},
             currentRow:{},
             formBlackRules:{
                 putBlackCause:{required:true,message:'请选择移入原因',trigger:"change"}
@@ -188,32 +169,9 @@ export default {
             
             if(this.params){
                 var obj = JSON.parse(JSON.stringify(this.params));
-                this.formBlack.shipperType=obj.shipperType
-                //this.xinzengform.shipperType= "AF0010202"
-                //this.xinzengform.shipperTypeName=obj.shipperTypeName
-                this.formBlack.belongCity=obj.belongCity
-                 this.formBlack.belongCityName=obj.belongCityName
-                this.formBlack.mobile=obj.mobile
-                this.formBlack.contacts=obj.contacts
-                this.formBlack.address=obj.address
-                this.formBlack.companyName=obj.companyName
-                this.formBlack.creditCode=obj.creditCode
-                this.formBlack.businessLicenceFile=obj.businessLicenceFile
-                this.formBlack.companyFacadeFile=obj.companyFacadeFile
-                this.formBlack.shipperCardFile=obj.shipperCardFile
-                this.formBlack.shipperId=obj.shipperId
+                this.formBlack = obj ;
             }else{
-                this.formBlack.shipperType=null
-                this.formBlack.belongCity=null
-                this.formBlack.mobile=null
-                this.formBlack.contacts=null
-                this.formBlack.address=null
-                this.formBlack.companyName=null
-                this.formBlack.creditCode=null
-                this.formBlack.businessLicenceFile=null
-                this.formBlack.companyFacadeFile=null
-                this.formBlack.shipperCardFile=null
-                this.formBlack.shipperId=null     
+                this.formBlack = {};
             }
         },
 
@@ -236,8 +194,10 @@ export default {
         onSubmit(){
         this.$refs['formBlack'].validate((valid)=>{
             if(valid){
-                this.formBlack.belongCity = this.$refs.area.selectedOptions.pop();
-                var forms= Object.assign({}, this.formBlack,{attestationStatus:"AF0010406"})
+                // this.formBlack.belongCity = this.$refs.area.selectedOptions.pop();
+                var forms= Object.assign({}, this.formBlack,{accountStatus:"AF0010503"})
+
+                console.log(forms)
                 data_get_shipper_change(forms).then(res=>{
                     // console.log(res)
                     this.$message.success('冻结修改成功')

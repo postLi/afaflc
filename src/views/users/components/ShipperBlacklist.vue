@@ -270,6 +270,7 @@ export default {
         res.data.map(item=>{
           this.optionsFormBlack.push(item)
         })
+        console.log('heimingdan',res.data)
       })
     },
 

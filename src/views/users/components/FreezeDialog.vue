@@ -40,7 +40,7 @@
 				<el-input
 				v-if="freeze == true"
 				placeholder="请输入内容"
-				v-model="formFroze.shipperType"
+				v-model="formFroze.shipperTypeName"
 				:disabled="true">
 				</el-input>
               	<el-select v-model="formFroze.shipperType" placeholder="请选择" v-else>
@@ -191,9 +191,12 @@ export default {
       },
       formFrozeRules:{
         freezeCause:{required: true,message:'请选择冻结原因',trigger:['blur', 'change']},
-        freezeTime:{required:true,message:'请选择解冻日期',trigger:['blur', 'change']}
+        freezeTime:{required:true,message:'请选择解冻日期',trigger:['change']}
       }
     }
+  },
+  watch:{
+    
   },
   mounted(){
     //按钮类型text,primary...
@@ -206,35 +209,30 @@ export default {
   },
   methods:{
     timeChange(val){
-      console.log(val)
-      let currentTime = this.formFroze.freezeTime || new Date()
-      let oneDay = 1* 24 * 60 * 60 * 1000
-      let time = +new Date()
-      switch(val){
+        let oneDay = 1* 24 * 60 * 60 * 1000
+        let time = +new Date()
+        switch(val){
         case 1:
-          time += 1 * oneDay
-          break
+            time += 1 * oneDay
+            break
         case 3:
-          time += 3 * oneDay
-          break
+            time += 3 * oneDay
+            break
         case 7:
-          time += 7 * oneDay
-          break
+            time += 7 * oneDay
+            break
         case 9:
-          time += 30 * oneDay
-          break
+            time += 30 * oneDay
+            break
         case 10:
-          time += 100000 * oneDay
-          break
-      }
-
-      this.formFroze.freezeTime = time
-      console.log(time)
+            time += 100000 * oneDay
+            break
+        }
+        this.formFroze.freezeTime = time
     },
     change(){
       this.freezeDialogFlag!=this.freezeDialogFlag
     },
-
     setCurrent(row) {
       this.$refs.singleTable.setCurrentRow(row);
     },
@@ -250,6 +248,8 @@ export default {
       if(this.params){
         var obj = JSON.parse(JSON.stringify(this.params));
         this.formFroze = obj ;
+        this.formFroze.freezeTime = new Date()
+        console.log('this.formFroze.freezeTime',this.formFroze.freezeTime)
       }else{
         this.formFroze = {};
       }
@@ -271,20 +271,20 @@ export default {
           this.optionsReason.push(item)
         })
       })
-    },
+    }, 
     // 提交数据
     onSubmit(){
       this.$refs['formFroze'].validate((valid)=>{
         if(valid){
-          // this.formFroze.belongCity = this.$refs.area.selectedOptions.pop();
-          var forms= Object.assign({}, this.formFroze,{attestationStatus:"AF0010405"})
+          var forms= Object.assign({}, this.formFroze)
           forms.freezeTime = parseTime(forms.freezeTime);
+          forms.currentAccountStatus = forms.accountStatus;
+          
           //冻结写死冻结code（根据后端要求）
           forms.accountStatus = 'AF0010502';
           console.log('forms.freezeTime:',forms.freezeTime)
           data_get_shipper_change(forms).then(res=>{
-            console.log(res)
-            console.log('test')
+            // console.log(res)
             this.$message.success('冻结修改成功')
             this.freezeDialogFlag = false;
             this.$emit('getData')

@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="shipper_searchinfo">
+        <div class="shipper_searchinfo" >
           <el-form :inline="true">
             <el-form-item label="所在地：">
               <GetCityList v-model="formAll.belongCity" ref="area"></GetCityList>
@@ -69,7 +69,7 @@
 				@getData="getDataList"
 				>
 				</FreezeDialog>
-				<!-- <shipperBlackDialog
+				<shipperBlackDialog
 				btntext="移入黑名单"
 				type="primary" 
 				btntitle="移入黑名单"
@@ -81,7 +81,7 @@
 				@getData="getDataList"
 				></shipperBlackDialog>
 				<el-button type="primary" plain icon="el-icon-edit" @click="handleBlackout">移出黑名单</el-button>
-				<el-button type="primary" plain icon="el-icon-edit" @click="handleUnfroze">解冻</el-button> -->
+				<el-button type="primary" plain icon="el-icon-edit" @click="handleUnfroze">解冻</el-button>
 			</div>
 			<div class="info_news">
 				<el-table
@@ -89,17 +89,13 @@
 				:data="tableDataAll"
 				stripe
 				border
-				:key="thekey2"
 				@row-click="clickDetails"
 				@selection-change="handleSelectionChange"
 				tooltip-effect="dark"
 				style="width: 100%">
 				<el-table-column type='selection' width="80px">
 				</el-table-column>  
-				<el-table-column label="手机号">
-					<template slot-scope="scoped">
-						<createdDialog :params="scoped.row" btntype="text" :btntext="scoped.row.mobile" editType="view" btntitle="货主详情" @getData="getDataList"></createdDialog>
-					</template>
+				<el-table-column label="手机号" prop="mobile">
 				</el-table-column>
 				<el-table-column prop="companyName" label="公司名称">
 					<!-- <template slot-scope="scope">
@@ -180,15 +176,7 @@
 				</el-col>
 				<el-col :span="12">
 					<el-form-item label="货主类型" :label-width="formLabelWidth">
-					<el-select v-model="formBlack.shipperType" disabled placeholder="请选择">
-					<el-option
-						v-for="item in options"
-						:key="item.value"
-						:label="item.name"
-						:value="item.code"
-						:disabled="item.disabled">
-					</el-option>
-					</el-select>
+                        <el-input v-model="formUnFroze.shipperTypeName" disabled :maxlength="20"></el-input>
 					</el-form-item>
 				</el-col>
 				</el-row>
@@ -204,21 +192,14 @@
 					<el-row>
 					<el-col :span="24">
 						<el-form-item label="移入原因:" :label-width="formLabelWidth">
-						<el-select v-model="formBlack.putBlackCause" disabled placeholder="请选择">
-							<el-option
-							v-for="item in optionsFormBlack"
-							:key="item.value"
-							:label="item.label"
-							:value="item.value">
-							</el-option>
-						</el-select>
+						    <el-input v-model="formBlack.putBlackCauseName" disabled :maxlength="20"></el-input>
 						</el-form-item>
 					</el-col>
 					</el-row>
 					<el-row>
 					<el-col :span="24">
 						<el-form-item label="移入黑名单原因说明:" :label-width="formLabelWidth">
-						<el-input v-model="formBlack.putBlackCauseRemark" disabled :rows="2" :maxlength="100" placeholder="请输入内容" type="textarea"></el-input>
+						    <el-input v-model="formBlack.popBlackRemark" disabled :maxlength="20"></el-input>
 						</el-form-item>
 					</el-col>
 					</el-row>
@@ -226,7 +207,7 @@
 				<div class="shipper_information">
 					<h2>移出黑名单信息</h2>
 					<el-form-item label="移出黑名单原因说明" :label-width="formLabelWidth">
-					<el-input v-model="formBlack.popBlackRemark" :maxlength="100" :rows="2" placeholder="请输入内容" type="textarea"></el-input>
+					    <el-input v-model="formBlack.popBlackRemark" :maxlength="100" :rows="2" placeholder="请输入内容" type="textarea"></el-input>
 					</el-form-item>
 				</div>
 			</el-form>
@@ -276,15 +257,7 @@
                </el-col>
                <el-col :span="12">
                  <el-form-item label="货主类型" :label-width="formLabelWidth">
-                  <el-select v-model="formUnFroze.shipperType" disabled placeholder="请选择">
-                  <el-option
-                    v-for="item in options"
-                    :key="item.value"
-                    :label="item.name"
-                    :value="item.code"
-                    :disabled="item.disabled">
-                  </el-option>
-                </el-select>
+                    <el-input v-model="formUnFroze.shipperTypeName" disabled :maxlength="20"></el-input>
                 </el-form-item>
                </el-col>
              </el-row>
@@ -301,28 +274,14 @@
              <el-row>
                <el-col :span="24">
                  <el-form-item label="冻结原因" :label-width="formLabelWidth">
-                  <el-select v-model="formUnFroze.freezeCause" disabled placeholder="请选择">
-                    <el-option
-                      v-for="item in optionsReason"
-                      :key="item.value"
-                      :label="item.name"
-                      :value="item.code">
-                    </el-option>
-                  </el-select>
+                    <el-input v-model="formUnFroze.freezeCauseName" disabled :maxlength="20"></el-input>                     
                 </el-form-item>
                </el-col>
              </el-row>
               <el-row>
                 <el-col :span="24">
                   <el-form-item label="解冻日期" :label-width="formLabelWidth">
-                    <el-date-picker
-                      v-model="formUnFroze.unfreezeTime"
-                      type="datetime"
-                      placeholder="选择日期"
-                      format="yyyy-MM-dd"
-                      :picker-options="pickerOptions"
-                      disabled>
-                    </el-date-picker>
+                    <el-input v-model="formUnFroze.freezeTime" disabled :maxlength="20"></el-input>
                   </el-form-item>
                 </el-col>
               </el-row>
@@ -370,11 +329,16 @@ export default {
     FreezeDialog,
     shipperBlackDialog,
   },
+    props: {
+		isvisible: {
+			type: Boolean,
+			default: false
+		}
+	},
   data(){
       return{
-          ul:true,
+        ul:true,
 		freeze:true,//是否冻结
-		thekey2:'1',
 		options:[],
 		optionsStatus:[
 			{
@@ -446,18 +410,31 @@ export default {
 		},
 		multipleSelection:[]
 		}
-  },
-  created(){
+    },
+    created(){
 
-  },
-  mounted(){
-    this.firstblood()
-	this.getMoreInformation()
-	
-    // this.getdata_search()
-    // this.formAll.belongCity = this.$refs.area.selectedOptions.pop();
-  },
-  methods:{
+    },
+    watch: {
+        isvisible: {
+            handler(newVal, oldVal) {
+                if(newVal ){
+                    this.inited = true
+                    this.firstblood()
+                    this.getMoreInformation()
+                }
+            },
+            // 代表在wacth里声明了firstName这个方法之后立即先去执行handler方法
+            immediate: true
+        }
+    },
+    mounted(){
+        eventBus.$on('changeList', params => {
+            this.firstblood();
+            this.getMoreInformation()
+
+        })
+    },
+    methods:{
 	changeList(){
 		eventBus.$emit('changeList')
 	},
@@ -465,8 +442,6 @@ export default {
 	clickDetails(row, event, column){
 		this.$refs.multipleTable.toggleRowSelection(row);
 	},
-   
-
     // 判断选中与否
     handleSelectionChange(val){
       console.log(val)
@@ -535,7 +510,7 @@ export default {
 		})
 		//获取状态列表
 		data_get_shipper_status().then(res=>{
-			// console.log('optionsStatus',res)
+			console.log('optionsStatus',res)
 			res.data.map((item)=>{
 				this.optionsStatus.push(item);
 			})
@@ -596,7 +571,7 @@ export default {
       this.$refs['formBlack'].validate((valid)=>{
         if(valid){
           this.formBlack.belongCity = this.$refs.area.selectedOptions.pop();
-          var forms= Object.assign({}, this.formBlack,{shipperStatus:"AF0010403"})
+          var forms= Object.assign({}, this.formBlack,{accountStatus:"AF0010501"})
           data_get_shipper_change(forms).then(res=>{
             // console.log(res)
             this.$message.success('移出黑名单成功')
@@ -614,7 +589,7 @@ export default {
       this.$refs['formUnFroze'].validate((valid)=>{
         if(valid){
           this.formUnFroze.belongCity = this.$refs.area.selectedOptions.pop();
-          var forms= Object.assign({}, this.formUnFroze,{shipperStatus:"AF0010403"})
+          var forms= Object.assign({}, this.formUnFroze,{accountStatus:"AF0010501"})
           data_get_shipper_change(forms).then(res=>{
             // console.log(res)
             this.$message.success('解冻成功')

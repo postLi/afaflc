@@ -57,7 +57,6 @@
 				btntitle="修改"
 				@getData="getDataList">
 				</createdDialog>
-				<!-- <el-button type="primary" plain icon="el-icon-edit" @click="handleEdit">修改</el-button> -->
 			</div>
 			<div class="info_news">
 				<el-table
@@ -84,14 +83,8 @@
 					label="注册来源">
 				</el-table-column>
 				<el-table-column prop="shipperStatusName" label="认证状态">
-					<!-- <template slot-scope="scope">
-					{{getAttestationStatus(scope.row.shipperStatus)}}
-					</template> -->
 				</el-table-column>
 				<el-table-column prop="accountStatusName" label="账户状态">
-					<!-- <template slot-scope="scope">
-					{{getAccountStatus(scope.row.accountStatus)}}
-					</template> -->
 				</el-table-column>
 				<el-table-column
 					prop="belongCityName"
@@ -100,12 +93,9 @@
 				<el-table-column
 					prop="shipperTypeName"
 					label="货主类型">
-					<!-- <template slot-scope="scope">
-					{{scope.row.shipperType==='AF0010202'? '企业货主':'普通货主'}}
-					</template> -->
 				</el-table-column>
 				<el-table-column
-					prop="createTime"
+					prop="registerTime"
 					label="注册日期">
 				</el-table-column>
 				</el-table>
@@ -136,11 +126,11 @@ export default {
 			default: false
 		}
 	},
-  components:{
-    createdDialog,
-    FreezeDialog,
-    GetCityList
-  },
+    components:{
+        createdDialog,
+        FreezeDialog,
+        GetCityList
+    },
   data(){
     // 手机号校验
     const mobileValidator=(rule,val,cb)=>{
@@ -205,7 +195,7 @@ export default {
     watch: {
         isvisible: {
             handler(newVal, oldVal) {
-                console.log('testnewVal:',newVal)
+                // console.log('testnewVal:',newVal, this.inited)
                 if(newVal && !this.inited){
                     this.inited = true
                     this.firstblood();
@@ -220,18 +210,22 @@ export default {
         console.log('created:',this.isvisible)
     },
     mounted(){
-      	eventBus.$on('changeList', function(){
-            if(this.inited || this.isvisible){
-                this.firstblood()
-                this.getMoreInformation()
-            }
+      	// eventBus.$on('changeList', () =>{
+        //       debugger
+        //     if(this.inited || this.isvisible){
+        //         this.firstblood()
+        //         this.getMoreInformation()
+        //     }
+        // })
+        eventBus.$on('changeList', () => {
+            this.firstblood();
+            this.getMoreInformation();
         })
-
     },
   methods:{
-      regionChange(data){
-            console.log(data);
-        },
+    regionChange(data){
+        console.log(data);
+    },
     //点击选中当前行
     clickDetails(row, event, column){
       this.$refs.multipleTable.toggleRowSelection(row);
@@ -247,7 +241,6 @@ export default {
 			this.selectRowData = {}
 			this.forms ={}
 		}
-      
     },
     getMoreInformation(){
         //获取账户状态列表
@@ -269,11 +262,14 @@ export default {
     
     //清空
     clearSearch(){
-      this.formInline = {
-        belongCity:null,
-        mobile:''
-      },
-	  this.firstblood();
+        this.formInline = {
+            accountStatus:null,
+            belongCity:'',
+            mobile:'',
+            shipperStatus:"AF0010401",//未认证的状态码
+
+        },
+	    this.firstblood();
 
     },
       //刷新页面
@@ -313,24 +309,6 @@ export default {
     },
     getDataList(){
       this.firstblood()
-    },
-    
-    //修改-提交
-    onSubmit(){
-      this.forms.belongCity = this.$refs.area.selectedOptions.pop();
-      this.$refs['forms'].validate((valid)=>{
-        if(valid){
-          var forms=Object.assign({},this.forms)
-          data_get_shipper_change(forms).then(res=>{
-            // console.log(res)
-            this.$message.success('修改成功')
-            this.changeDialogFlag = false;
-            this.firstblood();
-          }).catch(err=>{
-            console.log(err)
-          })
-        }
-      })
     },
   }
 }
