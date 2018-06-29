@@ -252,7 +252,7 @@
             blacklist
         },
         created() {
-            console.log('created:',this.isvisible)
+           
         },
         watch: {
             isvisible: {
@@ -272,7 +272,7 @@
         mounted(){
           eventBus.$on('changeListtwo', () => {
               if(this.inited || this.isvisible){
-                 console.log("changeListtwo:", this.isvisible)
+                 
                 this.firstblood()
                 this.getMoreInformation()
               }
