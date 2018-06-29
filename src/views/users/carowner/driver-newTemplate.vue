@@ -316,12 +316,6 @@ export default {
                 }
             }
 
-/*            if(this.templateItem!= null){
-                this.driverTemplateDialogFlag=true 
-            }else{         
-                this.driverTemplateDialogFlag=false        
-            }*/
-           /* this.driverTemplateDialogFlag=true*/
             if(this.templateItem){
                 var obj = JSON.parse(JSON.stringify(this.templateItem));
                 this.templateModel=obj
