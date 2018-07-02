@@ -296,17 +296,17 @@ export default {
         //点击选中当前行
         clickDetails(row, event, column){
         this.$refs.multipleTable.toggleRowSelection(row);
+            console.log(row)
         },
 
         changeCity(){
-        this.selectDiaologFlag=false
+            this.selectDiaologFlag=false
         },
         formatTime(da){
         let time = (+new Date()) - da
         return parseInt(time / 1000 / (3600*24))+ '天'+ parseInt(time/1000/(3600*24*60*60)*60*60)+ '小时'
         },
         handleEdit(){
-        console.log(this.multipleSelection)
         if(this.multipleSelection.length == 0){
             //未选择任何修改内容的提示
             let information = "未选中任何修改内容";
@@ -319,18 +319,16 @@ export default {
         } 
         },
         handleSelectionChange(val){
-        this.multipleSelection = val;
-        if(val[0]){
-            this.shengheform=val[0]
-            console.log(this.shengheform)
-        } else {
-            this.shengheform = {}
-        }
+            this.multipleSelection = val;
+            if(val[0]){
+                this.shengheform=val[0]
+            } else {
+                this.shengheform = {}
+            }
         },
         //刷新页面
         firstblood(){
             data_get_shipper_list(this.page,this.pagesize,this.formAll).then(res=>{
-                console.log('是否进去页面？？？')
                 this.totalCount = res.data.totalCount;
                 this.tableData1 = res.data.list;
             })
@@ -338,11 +336,9 @@ export default {
         //点击查询按纽，按条件查询列表
         getdata_search(event){
                 this.formAll.belongCity = this.$refs.area.selectedOptions.pop();
-                //  console.log('this.tableData1:',this.tableData1)
                 data_get_shipper_list(this.page,this.pagesize,this.formAll).then(res=>{
-                // console.log('this.tableData1:',this.tableData1, res)
-                this.totalCount = res.data.totalCount;
-                this.tableData1 = res.data.list;
+                    this.totalCount = res.data.totalCount;
+                    this.tableData1 = res.data.list;
                 })
         },
         //清空
@@ -359,22 +355,22 @@ export default {
             console.log(value);
         },
         handleSizeChange(val) {
-        console.log(`每页 ${val} 条`);
-        this.pagesize=val
-        this.firstblood()
+            console.log(`每页 ${val} 条`);
+            this.pagesize=val
+            this.firstblood()
         },
         handleCurrentChange(val) {
-        console.log(`当前页: ${val}`);
-        this.page=val
-        this.firstblood()
+            console.log(`当前页: ${val}`);
+            this.page=val
+            this.firstblood()
         },
         hint(val){
-        this.information = val;
-        this.centerDialogVisible = true;
-        let timer = setTimeout(()=>{
-            this.centerDialogVisible = false;
-            clearTimeout(timer)
-        },2000)
+            this.information = val;
+            this.centerDialogVisible = true;
+            let timer = setTimeout(()=>{
+                this.centerDialogVisible = false;
+                clearTimeout(timer)
+            },2000)
         },
 
         completeData(){
@@ -434,7 +430,6 @@ export default {
             let ifQualified = true ;
             this.pictureValue.forEach((el,idx) => {
                 if(el.result != "上传合格"){
-                    console.log(ifQualified)
                     ifQualified = false;
                 }
             })

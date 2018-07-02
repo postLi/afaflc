@@ -27,13 +27,14 @@ export function getCityInfo(params) {
  */
 let UPLOADPOLICYDATA // 用来缓存上传policy
 export function getUploadPolicy() {
+
   // 后期可添加是否过期的验证
   if (UPLOADPOLICYDATA) {
     return new Promise((resolve) => {
       resolve(UPLOADPOLICYDATA)
     })
   } else {
-    return fetch.get('/anfacommonservice/common/oss/v1/policy').then(res => {
+    return fetch.get('/api-common/common/oss/v1/policy').then(res => {
       UPLOADPOLICYDATA = res.data || ''
       return res.data || {}
     })

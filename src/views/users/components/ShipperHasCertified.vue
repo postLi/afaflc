@@ -183,9 +183,7 @@ export default {
         },
         //刷新页面
       firstblood(){
-        console.log('是否进去已认证页面')
         data_get_shipper_list(this.page,this.pagesize,this.formInline).then(res=>{
-          console.log("已认证",res)
           this.totalCount = res.data.totalCount;
           this.tableData3 = res.data.list;
         })

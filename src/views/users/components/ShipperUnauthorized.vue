@@ -30,7 +30,6 @@
           </el-form>
       </div>
 	  	<div class="classify_info">
-              
             <!-- <v-region :town="true" :ui="true" @values="regionChange" class="form-control">
                 <button type="button" class="btn btn-default">
                     ｛｛btnText｝｝ <i class="fa fa-fw fa-caret-down"></i>
@@ -212,7 +211,6 @@ export default {
             if(this.inited || this.isvisible){
                 
             this.firstblood()
-            this.getMoreInformation()
             }
         })
     },

@@ -20,7 +20,7 @@
               <el-select v-model="formAll.accountStatus" clearable placeholder="请选择">
                 <el-option
                   v-for="item in optionsAuidSataus"
-                  :key="item.code"
+                  :key="item.code + 'shipperAll' "
                   :label="item.name"
                   :value="item.code"
                   :disabled="item.disabled">
@@ -315,7 +315,7 @@
 </template>
 
 <script>
-import {data_get_shipper_freezeType,data_get_shipper_BlackType,data_get_shipper_list,data_get_shipper_status,data_get_shipper_auid} from '@/api/users/shipper/all_shipper.js'
+import {data_get_shipper_freezeType,data_get_shipper_BlackType,data_get_shipper_change,data_get_shipper_list,data_get_shipper_status,data_get_shipper_auid} from '@/api/users/shipper/all_shipper.js'
 import createdDialog from './createdDialog.vue'
 import GetCityList from '@/components/GetCityList'
 import FreezeDialog from './FreezeDialog'
@@ -396,8 +396,8 @@ export default {
 			belongCity: null,
 			shipperStatus:null,
 			accountStatus:null,
-			companyName:'',
-			mobile:''
+			companyName:null,
+			mobile:null
 		},
 		selectRowData:{},
 		page:1,
@@ -432,9 +432,7 @@ export default {
     mounted(){
         eventBus.$on('changeListtwo', () => {
             if(this.inited || this.isvisible){
-                
-            this.firstblood()
-            this.getMoreInformation()
+                this.firstblood()
             }
         })
     },
@@ -478,7 +476,7 @@ export default {
     },
     // 解冻
     handleUnfroze(){
-        console.log(this.multipleSelection)
+        // console.log(this.multipleSelection)
       if(this.multipleSelection.length == 0){
           //未选择任何修改内容的提示
           // let information = "未选中任何修改内容";
@@ -495,7 +493,7 @@ export default {
     //刷新页面
     firstblood(){
       data_get_shipper_list(this.page,this.pagesize,this.formAll).then(res=>{
-        console.log('shipperAll',res)
+        // console.log('shipperAll',res)
         this.totalCount = res.data.totalCount;
         this.tableDataAll = res.data.list;
       }).catch(err=>{
@@ -521,7 +519,7 @@ export default {
 		})
 		//获取账户状态列表
      	data_get_shipper_auid().then(res=>{
-		  console.log('车主状态：',res)
+		//   console.log('车主状态：',res)
 			res.data.map((item)=>{
 				this.optionsAuidSataus.push(item);
 			})
@@ -574,7 +572,7 @@ export default {
     onSubmitBlack(){
       this.$refs['formBlack'].validate((valid)=>{
         if(valid){
-          this.formBlack.belongCity = this.$refs.area.selectedOptions.pop();
+        //   this.formBlack.belongCity = this.$refs.area.selectedOptions.pop();
           var forms= Object.assign({}, this.formBlack,{accountStatus:"AF0010501"})
           data_get_shipper_change(forms).then(res=>{
             // console.log(res)
@@ -592,7 +590,7 @@ export default {
     onSave(){
       this.$refs['formUnFroze'].validate((valid)=>{
         if(valid){
-          this.formUnFroze.belongCity = this.$refs.area.selectedOptions.pop();
+        //   this.formUnFroze.belongCity = this.$refs.area.selectedOptions.pop();
           var forms= Object.assign({}, this.formUnFroze,{accountStatus:"AF0010501"})
           data_get_shipper_change(forms).then(res=>{
             // console.log(res)

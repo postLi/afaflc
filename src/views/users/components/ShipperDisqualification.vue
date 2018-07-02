@@ -60,7 +60,7 @@
                     </el-table-column>
                     <el-table-column prop="authenticationTime" label="提交认证日期">
                     </el-table-column>
-                    <el-table-column prop="phone" label="审核不通过日期">
+                    <el-table-column prop="authNoPassTime" label="审核不通过日期">
                     </el-table-column>
                 </el-table>
                 <el-pagination
@@ -135,13 +135,14 @@ export default {
     methods:{
         //点击选中当前行
         clickDetails(row, event, column){
-        this.$refs.multipleTable.toggleRowSelection(row);
+            this.$refs.multipleTable.toggleRowSelection(row);
+            console.log(row)
         },
         getDataList(){
             this.firstblood()
         },
         handleSelectionChange(val){
-        this.multipleSelection = val;
+            this.multipleSelection = val;
         if(val[0]){
             this.selectRowData = val[0]
         } else {
@@ -152,7 +153,6 @@ export default {
         //刷新页面
       firstblood(){
         data_get_shipper_list(this.page,this.pagesize,this.formAll).then(res=>{
-          console.log(res)
           this.totalCount = res.data.totalCount;
           this.tableData1 = res.data.list;
         })

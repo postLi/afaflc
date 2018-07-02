@@ -101,7 +101,7 @@
           
         </el-form>
         <div slot="footer" class="dialog-footer">
-          <el-button type="primary" @click="onSubmit" v-show="editType!='view'" >确 定</el-button>
+          <el-button type="primary" @click.stop="onSubmit" v-show="editType!='view'" >确 定</el-button>
           <el-button @click="dialogFormVisible_add = false" v-show="editType!='view'">取 消</el-button>
         </div>
       </el-dialog>
@@ -273,7 +273,6 @@ export default {
                 this.getMoreInformation();
                 this.companyFlag =  true
             }
-            console.log(this.companyFlag)
         },
         immediate: true
     }
@@ -327,8 +326,6 @@ export default {
 				belongCityName:null,
 			}
         }
-        
-        console.log('this.xinzengform',this.xinzengform)
     },
     change() {
       	this.dialogFormVisible_add = !this.dialogFormVisible_add;
@@ -358,7 +355,6 @@ export default {
     //完善数据
     completeData(){
 	  //获取城市name
-		console.log(this.$refs.area)
 		if(!this.$refs.area){
 			return
 		}  
@@ -394,7 +390,6 @@ export default {
 			var forms=Object.assign({},this.xinzengform)
 			if(this.editType === 'add'){
                 // 新增
-                console.log('xinzeng')
 				if(!forms.companyName){
                     forms.companyName = '个人业务' ;
 				}
@@ -428,9 +423,7 @@ export default {
                         forms.shipperType = el.code;
                     }
                 })
-                // console.log('identificationChange:' ,forms)
                 data_get_shipper_change(forms).then(res => {
-                    console.log(res)
 				    this.dialogFormVisible_add = !this.dialogFormVisible_add;
                     this.$message.success('认证成功')
 					this.$emit('getData')
