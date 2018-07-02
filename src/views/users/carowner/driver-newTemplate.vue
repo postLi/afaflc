@@ -306,13 +306,16 @@ export default {
         },
 
         openDialog(){
-            console.log(this.templateItem)
-            if(this.templateItem!= null|| this.templateItem == undefined){
+            if (this.editType === 'add') {
                 this.driverTemplateDialogFlag=true 
-            }else{         
-                this.driverTemplateDialogFlag=false        
+            }else if(this.editType=== 'valetAuth'||this.editType==='edit'){
+                if(this.templateItem!= null){
+                    this.driverTemplateDialogFlag=true 
+                }else{         
+                    this.driverTemplateDialogFlag=false        
+                }
             }
-           /* this.driverTemplateDialogFlag=true*/
+
             if(this.templateItem){
                 var obj = JSON.parse(JSON.stringify(this.templateItem));
                 this.templateModel=obj

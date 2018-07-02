@@ -272,6 +272,7 @@ import { parseTime,formatTime } from '@/utils/index.js'
                     optionsAccountType:[],
                     optionsAccountType2: [],
                 };
+                 this.payTime=null
                 this.load();
             },
              //点击选中当前行
@@ -315,9 +316,9 @@ import { parseTime,formatTime } from '@/utils/index.js'
             },
             //刷新页面  
             load(){                   
-                var payend = this.payTime[1]+24*60*60*1000
+             
                 this.data.tradeStartTime = parseTime(this.payTime[0],"{y}-{m}-{d}");
-                this.data.tradeEndTime = parseTime(payend,"{y}-{m}-{d}");
+                this.data.tradeEndTime = parseTime(this.payTime[1]+24*60*60*1000,"{y}-{m}-{d}");
                 data_financeList(this.page,this.pagesize,this.data).then(res=>{                   
                     this.tableDataTree = res.data.list;
                     this.dataTotal = res.data.totalCount;
