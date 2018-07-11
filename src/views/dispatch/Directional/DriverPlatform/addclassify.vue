@@ -209,11 +209,6 @@ export default {
             this.forms.orgName =  name.join(',');
             this.forms.orgPhone =  mobilephone.join(',');
             
-
-            // console.log(this.forms)
-            // console.log(this.checkListShpper)
-            // console.log(this.checkListSystemUsers)
-            
             if(!this.forms.bindingStartDate){
                 let information = "请填写拦截开始时间";
                 this.$refs.cue.hint(information)
@@ -239,15 +234,28 @@ export default {
             else{
                 data_NewData(this.forms).then(res=>{
                     console.log(res)
-                    this.$emit('renovate')
-                }).catch(err => {
-                    console.log(err)
+                    this.$alert('操作成功', '提示', {
+                        confirmButtonText: '确定',
+                        callback: action => {
+                            this.$emit('renovate');
+                            this.clearForms();
+                        }
+                    });
+                }).catch( err => {
+                    this.$message({
+                        type: 'info',
+                        message: '操作失败，原因：' + err.text ? err.text : err
+                    })
                 })
             }
             console.log(this.forms)
         },
         closeAddNewInfo(){
             this.close();  
+            this.clearForms()
+        },
+
+        clearForms(){
             this.forms = {
                 bindingStartDate:null,//拦截开始时间
                 bindingEndDate:null,//拦截结束时间
@@ -257,8 +265,9 @@ export default {
                 shipperId:null,//货主
                 shipperName:null,//
                 shipperPhone:null,//
-            };        
-        },
+            };
+
+        }
     },
    
 }
@@ -333,7 +342,6 @@ export default {
                             .el-checkbox__label{
                                 font-size: 12px;
                                 color: #666;
-
                             }
                         }
                     }

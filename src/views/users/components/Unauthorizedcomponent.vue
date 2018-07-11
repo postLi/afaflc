@@ -35,7 +35,7 @@
                         :data="tableDataTree"
                         stripe
                         border
-                         highlight-current-row
+                        highlight-current-row
                         current-row-key
                         @current-change="handleSelectionChange"
                         tooltip-effect="dark"
@@ -143,7 +143,6 @@
           eventBus.$on('changeListtwo', ()=>{
               if(this.inited || this.isvisible){
                 this.firstblood()
-                this.getMoreInformation()
               }
           })
         },

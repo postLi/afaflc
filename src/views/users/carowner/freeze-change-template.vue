@@ -1,5 +1,5 @@
 <template>
-  <div class="addclassify commoncss">
+  <div class="freezeInfo commoncss">
     <el-button :type="type" :value="value" :plain="plain" :icon="icon" @click="openDialog()">{{text}}</el-button>
     <el-dialog :title="title" :visible.sync="freezeDialogFlag" :before-close="change()" :modal="false">
       <el-form :model="formFroze" ref="formFroze" :rules="formFrozeRules">
@@ -38,31 +38,14 @@
             </el-col>
             <el-col :span="12">
               <el-form-item label="车型" :label-width="formLabelWidth">
-              <el-select v-model="formFroze.carTypeName" placeholder="请选择" disabled>
-              <el-option
-                v-for="item in options"
-                :key="item.value"
-                :label="item.name"
-                :value="item.code"
-                :disabled="item.disabled">
-              </el-option>
-              </el-select>
+                <el-input v-model="formFroze.carTypeName" disabled></el-input>
             </el-form-item>
             </el-col>
           </el-row>
              <el-row>
             <el-col :span="12">
               <el-form-item label="中单等级" :label-width="formLabelWidth">
-              <el-select v-model="formFroze.obtainGradeName" placeholder="请选择"  disabled>
-                <el-option
-                  v-for="item in midoptions"
-                  :key="item.value"
-                  :label="item.name"
-                  :value="item.code"
-                  :disabled="item.disabled">
-                </el-option>
-              </el-select >
-             
+                <el-input v-model="formFroze.obtainGradeName" disabled></el-input>
             </el-form-item>
             </el-col>
             <el-col :span="12">
@@ -76,21 +59,23 @@
               <el-col :span="12">
                   <el-form-item label="车长(米)：" :label-width="formLabelWidth">
                       <el-input
+                            class="lessWidth"
                             placeholder="长"
                             v-model="formFroze.carLength" disabled
                             clearable>
                         </el-input>
                         <el-input
+                            class="lessWidth"
                             placeholder="宽"
                             v-model="formFroze.carWidth" disabled
                             clearable>
                         </el-input>
                         <el-input
+                            class="lessWidth"
                             placeholder="高"
                             v-model="formFroze.carHeight" disabled
                             clearable>
                         </el-input>
-                        <span class="node">米</span>
                     </el-form-item>
               </el-col>
             <el-col :span="12">
@@ -161,8 +146,8 @@
           <el-row>
             <el-col :span="24">
               <el-form-item label="冻结原因说明：" :label-width="formLabelWidth">
-                <el-input type="textarea" :rows="2" :maxlength="100" v-model="formFroze.freezeCauseRemark "  v-if=" editType == 'edit'|| editType == 'edit-two'" ></el-input>
-                <el-input type="textarea" :rows="2" :maxlength="100" v-model="formFroze.freezeCauseRemark " v-else-if=" editType == 'edit-three'" disabled></el-input>
+                <el-input type="textarea" class="textArea" :rows="2" :maxlength="100" v-model="formFroze.freezeCauseRemark "  v-if=" editType == 'edit'|| editType == 'edit-two'" ></el-input>
+                <el-input type="textarea" class="textArea" :rows="2" :maxlength="100" v-model="formFroze.freezeCauseRemark " v-else-if=" editType == 'edit-three'" disabled></el-input>
               </el-form-item>
             </el-col>
           </el-row>
@@ -172,8 +157,7 @@
           <el-row v-if=" editType == 'edit-three'"> 
             <el-col :span="24">
               <el-form-item label="解冻原因说明：" :label-width="formLabelWidth">
-              
-                 <el-input type="textarea" :rows="2" :maxlength="100"  v-model="formFroze.unfreezeCauseRemark "  ></el-input>
+                    <el-input type="textarea" class="textArea" :rows="2" :maxlength="100"  v-model="formFroze.unfreezeCauseRemark "></el-input>
               </el-form-item>
             </el-col>
           </el-row>

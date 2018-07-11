@@ -72,7 +72,6 @@
                 
             </div>
             <div class="classify_info">
-            
                 <div class="info_news">
                     <el-table
                         ref="multipleTable"
@@ -120,7 +119,7 @@
                         </el-table-column>
                         <el-table-column
                         align = "center"
-                          prop="accountType"
+                          prop="accountTypeName"
                           label="账号类型"
                           width="110">
                         </el-table-column>
@@ -131,30 +130,28 @@
                         </el-table-column>
                          <el-table-column
                         align = "center"
-                          prop="incomeExpendType"
+                          prop="incomeExpendTypeName"
                           label="收支类型">
                         </el-table-column>
                          <el-table-column
                         align = "center"
-                          prop="payWay"
+                          prop="payWayName"
                           label="交易方式">
                         </el-table-column>
                         <el-table-column
                         align = "center"
-                          prop="tradeType"
+                          prop="tradeTypeName"
                           label="交易类型"
                           width="110">
                         </el-table-column>
-                      
-                       
                          <el-table-column
                         align = "center"
-                          prop="orderType"
+                          prop="orderTypeName"
                           label="服务分类">
                         </el-table-column>
                          <el-table-column
                         align = "center"
-                          prop="tradeStatus"
+                          prop="tradeStatusName"
                           label="交易状态">
                         </el-table-column>
                          <el-table-column

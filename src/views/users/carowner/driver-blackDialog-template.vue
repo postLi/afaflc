@@ -1,5 +1,5 @@
 <template>
-    <div class="addclassify commoncss">
+    <div class="blackInfo commoncss">
       <el-button :type="type" :value="value" :plain="plain" :icon="icon" @click="openDialog()">{{text}}</el-button>
       <el-dialog :title="title" :visible.sync="BlackDialogFlag" :before-close="change()" :modal="false">
 

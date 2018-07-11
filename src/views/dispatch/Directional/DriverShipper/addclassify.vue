@@ -1,7 +1,7 @@
 <template>
     <div>
         <!-- 新增分类信息 -->
-            <div class="addclassify commoncss">
+            <div class="shipperOfdispatch commoncss">
                 <el-dialog :title='formtitle' :close-on-click-modal="true"  :visible="dialogFormVisible" @close="close">
                     
                     <div class="bindLeft fl bind">
@@ -237,7 +237,6 @@ export default {
                 let information = "请填写绑定结束时间";
                 this.$refs.cue.hint(information)
                 return
-
             }
             else if(this.checkListShpper.length == 0){
                 let information = "请选择至少一个货主账号";
@@ -251,14 +250,26 @@ export default {
             }
             else{
                 data_NewData(this.forms).then(res=>{
-                    this.$emit('renovate')
-                }).catch(err => {
-                    console.log(err)
+                     this.$alert('操作成功', '提示', {
+                        confirmButtonText: '确定',
+                        callback: action => {
+                            this.$emit('renovate');
+                            this.clearForms();
+                        }
+                    });
+                }).catch( err => {
+                    this.$message({
+                        type: 'info',
+                        message: '操作失败，原因：' + err.text ? err.text : err
+                    })
                 })
             }
         },
         closeAddNewInfo(){
             this.close();  
+            this.clearForms();
+        },
+        clearForms(){
             this.forms = {
                 bindingStartDate:null,//绑定开始时间
                 bindingEndDate:null,//绑定结束时间
@@ -290,7 +301,7 @@ export default {
 </script>
 
 <style rel="stylesheet/scss" lang="scss" >
-    .addclassify{
+    .shipperOfdispatch{
         .el-dialog{
             width: 780px;
         }

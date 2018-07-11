@@ -1,6 +1,8 @@
 // @import "~element-ui/packages/theme-chalk/src/index";
 @import './element-ui.scss';
 @import './mixin.scss';
+@import './commonstyle.scss';
+
 body {
   -moz-osx-font-smoothing: grayscale;
   -webkit-font-smoothing: antialiased;

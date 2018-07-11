@@ -7,6 +7,7 @@ export default {
   redirect: '/report/index',
   icon: 'baobiao',
   name: '报表管理',
+  hidden: true,
   noDropdown: false,
   children: [{
     path: '/report/index', icon: 'baobiao', name: '报表管理', component: _import('report/index'), meta: { role: ['admin'], title: '报表管理', noCache: true }

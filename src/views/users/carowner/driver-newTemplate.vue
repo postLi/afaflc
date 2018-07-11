@@ -1,7 +1,7 @@
 <template>
-    <div class="addclassify commoncss">
+    <div class="carNewinfo commoncss">
         <el-button :type="type" :value="value" :plain="plain" :icon="icon" @click="openDialog()">{{text}}</el-button>
-        <el-dialog :title="title" :visible="driverTemplateDialogFlag" :before-close="change" size="" >
+        <el-dialog :title="title" :visible="driverTemplateDialogFlag" :before-close="change">
              <el-form
               ref="templateForm"
               :model="templateModel"
@@ -49,21 +49,23 @@
                   <el-col :span="12">
                     <el-form-item label="车长(米)：" :label-width="formLabelWidth">
                       <el-input
+                            class="lessWidth"
                             placeholder="长"
                             v-model="templateModel.carLength"
                             clearable>
                         </el-input>
                         <el-input
+                            class="lessWidth"
                             placeholder="宽"
                             v-model="templateModel.carWidth"
                             clearable>
                         </el-input>
                         <el-input
+                            class="lessWidth"
                             placeholder="高"
                             v-model="templateModel.carHeight"
                             clearable>
                         </el-input>
-                        <span class="node">米</span>
                     </el-form-item>
                   </el-col>
               </el-row>
@@ -83,7 +85,6 @@
                   </el-col>
                   <el-col :span="12">
                     <el-form-item label="所在地：" :label-width="formLabelWidth">
-                        <!-- <GetCityList v-model="templateModel.belongCity" ref="area"></GetCityList> -->
                         <el-input v-model="templateModel.belongCityName" :disabled="editType=='view'" @focus="changeSelect"  v-if="editType!='add' && !selectFlag"></el-input>
                         <span v-if="selectFlag || editType=='add'">
                         <GetCityList v-model="templateModel.belongCity" ref="area" :disabled="editType=='view'"></GetCityList>
@@ -117,7 +118,7 @@
                   </el-col>
               </el-row>
 
-              <el-row  :gutter="20">
+              <el-row>
                   <el-col :span="12">
                     <el-form-item :label-width="formLabelWidth">
                         <el-checkbox v-model="templateModel.isVipCar">是特权车</el-checkbox>
@@ -126,35 +127,35 @@
               </el-row>
             
               <el-row>
-                  <el-col :span="9">
+                  <el-col :span="24">
                     <el-form-item label="上传车辆45°照片：" :label-width="formLabelWidth">
                       <upload class="licensePicture" tip="（必须为jpg/png并且小于5M）" v-model="templateModel.carFile" />
                     </el-form-item>
                   </el-col>
               </el-row>
               <el-row>
-                  <el-col :span="9">
+                  <el-col :span="24">
                     <el-form-item label="上传车辆行驶证片：" :label-width="formLabelWidth">
                         <upload class="licensePicture" tip="（必须为jpg/png并且小于5M）" v-model="templateModel.drivingPermitFile" />
                     </el-form-item>
                   </el-col>
               </el-row>
               <el-row>
-                  <el-col :span="9">
+                  <el-col :span="24">
                     <el-form-item label="上传驾驶证照片：" :label-width="formLabelWidth">
                        <upload class="licensePicture" tip="（必须为jpg/png并且小于5M）" v-model="templateModel.drivingLicenceFile" />
                     </el-form-item>
                   </el-col>
               </el-row>
               <el-row>
-                  <el-col :span="9">
+                  <el-col :span="24">
                     <el-form-item label="上传车主身份证照片：" :label-width="formLabelWidth">
                         <upload class="licensePicture" tip="（必须为jpg/png并且小于5M）" v-model="templateModel.idCardFile" />
                     </el-form-item>
                   </el-col>
               </el-row>
               <el-row>
-                  <el-col :span="9">
+                  <el-col :span="24">
                     <el-form-item label="上传车主个人形象照：" :label-width="formLabelWidth">
                        <upload class="licensePicture" tip="（必须为jpg/png并且小于5M）" v-model="templateModel.takeIdCardFile" />
                     </el-form-item>
@@ -264,7 +265,7 @@ export default {
     },
     methods:{
         changeSelect(){
-            if(this.editType==='add'){
+            if(this.editType === 'add'){
                 this.selectFlag=false
             } else{
                 this.selectFlag=true
@@ -372,11 +373,11 @@ export default {
         
         //弹框控制
         change() {
-         this.driverTemplateDialogFlag = !this.driverTemplateDialogFlag;
+         this.driverTemplateDialogFlag = false;
         },
          // 提交数据
         onSubmit(){
-
+            console.log(this.templateModel)
             this.completeData();
             this.$refs['templateForm'].validate(valid=>{
                 if(valid){
@@ -387,21 +388,21 @@ export default {
                     if(this.editType === 'add'){
                         data_post_createDriver(forms).then(res=>{
 
-                            this.driverTemplateDialogFlag = !this.driverTemplateDialogFlag;
+                            this.driverTemplateDialogFlag = false;
                             this.$message.success('新增成功')
-                             this.changeList();
+                            this.changeList();
                             this.$emit('getData')
                         })
                     } else if(this.editType=== 'valetAuth') { 
                         data_post_driverAudit(forms).then(res=>{
-                            this.driverTemplateDialogFlag = !this.driverTemplateDialogFlag;
+                            this.driverTemplateDialogFlag = false;
                             this.$message.success('代客认证成功')
                              this.changeList();
                             this.$emit('getData')
                         })
                     } else if(this.editType==='edit'){
                         data_put_changeDriver(forms).then(res=>{
-                            this.driverTemplateDialogFlag = !this.driverTemplateDialogFlag;
+                            this.driverTemplateDialogFlag = false;
                             this.$message.success('修改成功')
                              this.changeList();
                             this.$emit('getData')

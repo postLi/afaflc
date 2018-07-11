@@ -1,5 +1,5 @@
 <template>
-    <div class="platShipper clearfix">
+    <div class="identicalStyle clearfix">
              <div class="classify_searchinfo">
                 <label>货主账号&nbsp;
                    <el-input v-model="data.shipperName" placeholder="请输入内容"></el-input>
@@ -24,7 +24,7 @@
                         stripe
                         border
                         align = "center"
-                        height="93%"
+                        height="100%"
                         @selection-change = "getinfomation"
                         @row-dblclick="moreinfo"
                         tooltip-effect="dark"
@@ -326,178 +326,114 @@ import changeclassify from './changeclassify'
 </script>
 
 <style type="text/css" lang="scss" scoped>
-    .platShipper{
-        height:100%;    
-        position: relative;
-        margin-left:7px;
-        .classify_info{
-            height:100%;
-            padding:90px 13px 18px;
-            .btns_box{
-                margin-bottom:10px;
-                .el-button{
-                    margin-right:20px;
-                    padding:10px 20px;
-                }
-            }
-            .info_news{
-                height:89%;
-                .el-table{
-                    table{
-                        width: 100% !important;
-                        th,td{
-                            text-align:center !important;
-                        }
-                    }
-                    .cell{
-                        img{
-                            display: inline-block;
-                            width: 100px;
-                            height: 50px;
-                        }
-                    }
-                }
-            }
-            .Pagination{
-                margin-top:13px;
-                text-align:right;
-            }
-        }
-        .classify_searchinfo{
-            position: absolute;
-            left:0;
-            top:0;
-            padding:15px 16px;
-            border-bottom:2px dashed #ccc;
-            height:70px;
-            width:100%;
-            line-height: 35px;
-            label{
-                margin-right:50px;
-                color: #666;
-                font-size:14px;
-                .el-input{
-                    width:300px;
+    .addclassify{
+        .el-dialog{
+            position: relative;
+            width: 760px;
+            .el-dialog__body{
+                    margin:0 40px;
                     .el-input__inner{
-                        color:#3e9ff1;
-                        height:30px;
-                        line-height: 30px;
+                        height: 24px;
+                        line-height: 24px;
+                        color: #3e9ff1;
+                    }
+                .chooseinfo{
+                    border:1px solid #d2d2d2;
+                    margin-bottom: 20px;
+                    .chooseinfo-item{
+                        padding: 20px 10px;
+                        p{
+                            display: inline-block;
+                            span{
+                                color:red;
+                            }
+                        }
+                        .el-input{
+                            width: 150px;
+                        }
+                        .el-radio-group{
+                            display: inline-block;
+                            margin:0 9px;
+                        }
+                        .el-checkbox-group{
+                            display: inline-block;
+                            margin-left: 10px;
+                        }
                     }
                 }
-            }
-            .el-button{
-               padding:8px 20px;
-            }
-        }
-        .addclassify{
-            .el-dialog{
-                position: relative;
-                width: 760px;
-                .el-dialog__body{
-                        margin:0 40px;
-                        .el-input__inner{
+                .completeinfo{
+                    .detailinfo{
+                        margin-bottom: 12px;
+                        p{
+                            width:120px;
+                            text-align: right;
+                            display: inline-block;
+                            vertical-align: top;
+                            span{
+                                color:red;
+                            }
+                        }
+                        
+                        .el-input{
+                            width: 70px;
                             height: 24px;
-                            line-height: 24px;
-                            color: #3e9ff1;
-                        }
-                    .chooseinfo{
-                        border:1px solid #d2d2d2;
-                        margin-bottom: 20px;
-                        .chooseinfo-item{
-                            padding: 20px 10px;
-                            p{
-                                display: inline-block;
-                                span{
-                                    color:red;
-                                }
-                            }
-                            .el-input{
-                                width: 150px;
-                            }
-                            .el-radio-group{
-                                display: inline-block;
-                                margin:0 9px;
-                            }
-                            .el-checkbox-group{
-                                display: inline-block;
-                                margin-left: 10px;
-                            }
-                        }
-                    }
-                    .completeinfo{
-                        .detailinfo{
-                            margin-bottom: 12px;
-                            p{
-                                width:120px;
-                                text-align: right;
-                                display: inline-block;
-                                vertical-align: top;
-                                span{
-                                    color:red;
-                                }
-                            }
-                            
-                            .el-input{
-                                width: 70px;
-	                            height: 24px;
-                                margin-right:6px;
-                                .el-input__inner{
-                                    height:24px;
-                                    line-height: 24px;
-                                    padding:5px;
-                                    font-size: 12px;
-                                    font-weight: normal;
-                                    font-stretch: normal;
-                                    line-height: 20px;
-                                    letter-spacing: 0px;
-                                    color: #3e9ff1;
-                                }
-                            }
-                            .dotted{
-                                margin-right:9px;
-                            }
-                            .node{
-                                display: inline-block;
-                                width:28px;
-                                text-align: left;
-                                margin-right: 12px;
-                            }
-                            .morewidth{
-                                width: 96px;
-                            }
-                            .remarks{
-                                height: 14px;
-                                font-family: MicrosoftYaHei;
+                            margin-right:6px;
+                            .el-input__inner{
+                                height:24px;
+                                line-height: 24px;
+                                padding:5px;
                                 font-size: 12px;
                                 font-weight: normal;
                                 font-stretch: normal;
                                 line-height: 20px;
                                 letter-spacing: 0px;
-                                color: #999999;
+                                color: #3e9ff1;
                             }
-                            .licensePicture{
+                        }
+                        .dotted{
+                            margin-right:9px;
+                        }
+                        .node{
+                            display: inline-block;
+                            width:28px;
+                            text-align: left;
+                            margin-right: 12px;
+                        }
+                        .morewidth{
+                            width: 96px;
+                        }
+                        .remarks{
+                            height: 14px;
+                            font-family: MicrosoftYaHei;
+                            font-size: 12px;
+                            font-weight: normal;
+                            font-stretch: normal;
+                            line-height: 20px;
+                            letter-spacing: 0px;
+                            color: #999999;
+                        }
+                        .licensePicture{
+                            width: 180px;
+                            height: 116px;
+                            line-height: 1.2;
+                            display: inline-block;
+                            .el-upload-dragger{
                                 width: 180px;
                                 height: 116px;
-                                line-height: 1.2;
-                                display: inline-block;
-                                .el-upload-dragger{
-                                    width: 180px;
-                                    height: 116px;
-                                    .el-icon-upload{
-                                        margin: 15px 0 16px;
-                                    }
-                                    .el-upload__text{
-                                        font-size: 12px;
-                                    }
+                                .el-icon-upload{
+                                    margin: 15px 0 16px;
                                 }
-
+                                .el-upload__text{
+                                    font-size: 12px;
+                                }
                             }
+
                         }
                     }
                 }
             }
-            
         }
         
     }
+    
 </style>

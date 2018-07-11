@@ -11,17 +11,6 @@
                 <el-form-item label="联系人姓名：">
                     <el-input placeholder="请输入内容" v-model.trim="formInline.contacts" clearable></el-input>
                 </el-form-item>
-                <!-- <el-form-item label="货主类型：">
-                    <el-select v-model="formInline.shipperType" placeholder="请选择">
-                        <el-option
-                            v-for="item in options"
-                            :key="item.value"
-                            :label="item.name"
-                            :value="item.code"
-                            :disabled="item.disabled">
-                        </el-option>
-                    </el-select>
-                </el-form-item> -->
                 <el-form-item label="">
                     <el-button type="primary" plain @click="getdata_search">查询</el-button>
                     <el-button type="info" plain @click="clearSearch">清空</el-button>
@@ -45,19 +34,19 @@
                 <el-table
                     ref="multipleTable"
                     :data="tableData3"
-				    @row-click="clickDetails"
                     stripe
                     border
-                    @selection-change="handleSelectionChange"
+                    highlight-current-row
+                    @current-change="handleCurrentChangeRow"
                     tooltip-effect="dark"
                     style="width: 100%">
                     <el-table-column
                         type="selection"
                         width="80px">
                     </el-table-column>
-                    <el-table-column label="公司名称">
+                    <el-table-column  label="公司名称">
                         <template slot-scope="scope">
-                        <createdDialog :params="scope.row" btntype="text" :btntext="scope.row.companyName" editType="view" btntitle="详情"></createdDialog>
+                            <createdDialog :paramsView="scope.row" btntype="text" :btntext="scope.row.companyName" editType="view" btntitle="详情"></createdDialog>
                         </template>
                     </el-table-column>
                     <el-table-column
@@ -70,18 +59,12 @@
                         label="联系人">
                     </el-table-column>
                     <el-table-column
-                        prop="registerOriginName"
+                        prop="registerOrigin"
                         label="注册来源">
                     </el-table-column>
                     <el-table-column prop="shipperStatusName" label="认证状态">
-                        <!-- <template slot-scope="scope">
-                        {{getAttestationStatus(scope.row.shipperStatus)}}
-                        </template> -->
                     </el-table-column>
                     <el-table-column prop="accountStatusName" label="账户状态">
-                        <!-- <template slot-scope="scope">
-                        {{getAccountStatus(scope.row.accountStatus)}}
-                        </template> -->
                     </el-table-column>
                     <el-table-column
                         prop="belongCityName"
@@ -96,7 +79,6 @@
                         label="认证通过日期">
                     </el-table-column>
                 </el-table>
-                    
                 <el-pagination
                     @size-change="handleSizeChange"
                     @current-change="handleCurrentChange"
@@ -141,16 +123,13 @@ export default {
                 mobile:'',
                 shipperStatus:"AF0010403",//已认证的状态码
             },
-            multipleSelection:[],
             selectRowData:{}
         }
     },
     watch: {
         isvisible: {
             handler(newVal, oldVal) {
-            
                 if(newVal && !this.inited){
-
                     this.inited = true
                     this.firstblood()
                 }
@@ -160,32 +139,24 @@ export default {
         }
     },
     mounted(){
-        eventBus.$on('changeListtwo', () => {
-            if(this.inited || this.isvisible){
-                
-            this.firstblood()
-            }
+        eventBus.$on('changeList', () => {
+            // console.log('55555555555555')
+                this.firstblood()
         })
     },
     methods:{
-         //点击选中当前行
-        clickDetails(row, event, column){
-        this.$refs.multipleTable.toggleRowSelection(row);
-        },
         // 选中值判断
-        handleSelectionChange(val){
-            this.multipleSelection = val;
-            if(val[0]){
-                this.selectRowData = val[0]
-            } else {
-                this.selectRowData = {}
-            }
+        handleCurrentChangeRow(val){
+            console.log(val)
+            this.selectRowData = val
         },
         //刷新页面
       firstblood(){
         data_get_shipper_list(this.page,this.pagesize,this.formInline).then(res=>{
-          this.totalCount = res.data.totalCount;
-          this.tableData3 = res.data.list;
+            this.totalCount = res.data.totalCount;
+            this.tableData3 = res.data.list;
+            // this.inited = false;
+
         })
       },
         handleSizeChange(val) {

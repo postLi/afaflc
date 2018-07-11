@@ -21,10 +21,10 @@ export default {
   {          
     path: '/dispatch/Directional', icon: 'QQ', name: '定向推单设置',hidden: false, component: _import('dispatch/index'), meta: { role: ['admin'], title: '定向推单设置', stitle:'设置', noCache: true },
       children: [{
-        path: '/dispatch/Directional/DriverShipper', icon: 'QQ',name: '绑定车主', component: _import('dispatch/Directional/DriverShipper/index'), meta: { role: ['admin'], title: '绑定车主',stitle: '车主',  noCache: true }
+        path: '/dispatch/Directional/DriverShipper',name: '绑定车主', component: _import('dispatch/Directional/DriverShipper/index'), meta: { role: ['admin'], title: '绑定车主',stitle: '车主',  noCache: true }
       },
       {
-        path: '/dispatch/Directional/DriverPlatform', icon: 'QQ', name: '平台专属', component: _import('dispatch/Directional/DriverPlatform/index'), meta: { role: ['admin'], title: '平台专属', stitle: '平台', noCache: true }
+        path: '/dispatch/Directional/DriverPlatform', name: '平台专属', component: _import('dispatch/Directional/DriverPlatform/index'), meta: { role: ['admin'], title: '平台专属', stitle: '平台', noCache: true }
       }
     ]
   }, 

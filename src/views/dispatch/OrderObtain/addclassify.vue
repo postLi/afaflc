@@ -176,7 +176,19 @@ export default {
     
                 data_NewData(this.forms).then(res=>{
                     console.log(res)
-                    this.$emit('renovate')
+                    this.$alert('操作成功', '提示', {
+                        confirmButtonText: '确定',
+                        callback: action => {
+                            this.$emit('renovate');
+                            this.clearForms();
+                        }
+                    });
+                    
+                }).catch( err => {
+                    this.$message({
+                        type: 'info',
+                        message: '操作失败，原因：' + err.text ? err.text : err
+                    })
                 })
             }
             console.log(this.forms)
@@ -184,6 +196,9 @@ export default {
         //关闭清空
         closeAddNewInfo(){
             this.close();  
+            this.clearForms();
+        },
+        clearForms(){
             this.forms = {
                 areaCode:null,//地区code
                 areaCodeName:null,
@@ -193,9 +208,11 @@ export default {
                 carTypeName:null,
                 obtainKmList:null,//中单时间
                 obtainTimeList:null,//中单距离
-            };        
+            };
             
-            console.log(this.forms)
+            if(this.$refs.area.selectedOptions){
+                this.$refs.area.selectedOptions = [];
+            }
         },
          //添加子节点新增
         addItem(){
@@ -326,6 +343,7 @@ export default {
                         .needMoreWidth{
                             display: block;
                             width: 150px;
+                            margin: 10px 0;
                         }
                         .publishSet{
                             border: 1px solid #ccc;

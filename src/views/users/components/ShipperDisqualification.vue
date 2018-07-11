@@ -24,7 +24,7 @@
                 :plain="true" type="primary" 
                 btntype="primary" 
                 icon="el-icon-news"
-                editType="edit" 
+                editType="identification" 
                 btntitle="代客提交"
                 @getData="getDataList">
                 </createdDialog>
@@ -33,17 +33,17 @@
                 <el-table 
                     ref="multipleTable"
                     :data="tableData1"
-                    @row-click="clickDetails"
                     stripe
                     border
-                    @selection-change="handleSelectionChange"
+                    highlight-current-row
+                    @current-change="handleCurrentChangeRow"
                     tooltip-effect="dark"
                     style="width: 100%">
                     <el-table-column type="selection" width="80px">
                     </el-table-column>
-                    <el-table-column label="公司名称">
+                    <el-table-column label="公司名称" >
                         <template slot-scope="scope">
-                            <createdDialog :params="scope.row" btntype="text" :btntext="scope.row.companyName" editType="view" btntitle="详情"></createdDialog>
+                            <createdDialog :paramsView="scope.row" btntype="text" :btntext="scope.row.companyName" editType="view" btntitle="详情"></createdDialog>
                         </template>
                     </el-table-column>
                     <el-table-column prop="mobile" label="手机号">
@@ -110,12 +110,10 @@ export default {
             multipleSelection:[]
         }
     },
-     watch: {
+    watch: {
         isvisible: {
             handler(newVal, oldVal) {
-            
                 if(newVal && !this.inited){
-
                     this.inited = true
                     this.firstblood()
                 }
@@ -125,36 +123,25 @@ export default {
         }
     },
     mounted(){
-        eventBus.$on('changeListtwo', () => {
-            if(this.inited || this.isvisible){
-                
+        eventBus.$on('changeList', () => {
+            // console.log('6666666666666666')
             this.firstblood()
-            }
         })
     },
     methods:{
-        //点击选中当前行
-        clickDetails(row, event, column){
-            this.$refs.multipleTable.toggleRowSelection(row);
-            console.log(row)
-        },
         getDataList(){
             this.firstblood()
         },
-        handleSelectionChange(val){
-            this.multipleSelection = val;
-        if(val[0]){
-            this.selectRowData = val[0]
-        } else {
-            this.selectRowData = {}
-        }
-      
+        handleCurrentChangeRow(val){
+            console.log(val)
+            this.selectRowData = val
     },
         //刷新页面
       firstblood(){
         data_get_shipper_list(this.page,this.pagesize,this.formAll).then(res=>{
-          this.totalCount = res.data.totalCount;
-          this.tableData1 = res.data.list;
+            this.totalCount = res.data.totalCount;
+            this.tableData1 = res.data.list;
+            // this.inited = true
         })
       },
          //点击查询按纽，按条件查询列表

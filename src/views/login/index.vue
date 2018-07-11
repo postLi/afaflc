@@ -1,5 +1,6 @@
 <template>
   <div class="login-container">
+    <div class="login-wrapper clearfix">
     <div class="container-left">
       <img src="../../assets/login_images/left.png" alt="">
     </div>
@@ -23,19 +24,25 @@
           <!--<icon-svg icon-class="yonghuming" />-->
           <!--</span>-->
 
-         <el-input name="accNum" type="text" v-model="loginForm.accNum" autoComplete="on" :placeholder="holder.accNum" @focus='accNum()'   clearable />
+         <el-input name="accNum" type="text" v-model="loginForm.accNum" autoComplete="off" :placeholder="holder.accNum" @focus='accNum()'   clearable >
+          <template slot="prepend">公司ID</template>
+         </el-input>
         </el-form-item>
 
         <el-form-item prop="username">
-          <el-input name="username" type="text" @keyup.enter.native="handleLogin" v-model="loginForm.username" autoComplete="on"
-                    :placeholder="holder.username" @focus='username()' clearable></el-input>
+          <el-input name="username" type="text" @keyup.enter.native="handleLogin" v-model="loginForm.username" autoComplete="off"
+                    :placeholder="holder.username" @focus='username()' clearable>
+                    <template slot="prepend">用户名</template>
+         </el-input>
 
 
         </el-form-item>
 
         <el-form-item prop="password">
-          <el-input name="password" type="password" @keyup.enter.native="handleLogin" v-model="loginForm.password" autoComplete="on"
-                    :placeholder="holder.password" @focus='password()' clearable></el-input>
+          <el-input name="password" type="password" @keyup.enter.native="handleLogin" v-model="loginForm.password" autoComplete="off"
+                    :placeholder="holder.password" @focus='password()' clearable>
+            <template slot="prepend">密　码</template>
+          </el-input>
         </el-form-item>
 
         <el-form-item class="login">
@@ -49,6 +56,7 @@
           <p class="rember-tit" @click="forgetPsw">忘记密码</p>
         </div>
       </el-form>
+    </div>
     </div>
     <div class="button-cont">
       <ul>
@@ -135,10 +143,11 @@ export default {
             //   this.errInfo = true
             //   this.errInfo = '输入的密码错误'
             // }
-
-
             this.loading = false
-            this.$router.push({ path: '/' })
+            // 获取登录前的页面地址
+            // 有可能会出现前一个页面是现在登录账号没有权限访问的？
+            const nexturl = this.$route.query.tourl
+            this.$router.push({ path: nexturl && nexturl.indexOf('/login') === -1 ? nexturl : '/' })
           }).catch(() => {
             this.loading = false
           })
@@ -150,7 +159,7 @@ export default {
     },
     forgetPsw() {
       // this.$router.push({ path: '/' })
-      console.log(5555)
+      // console.log(5555)
     },
     accNum() {
       this.holder = ''
@@ -168,12 +177,6 @@ export default {
 <style rel="stylesheet/scss" lang="scss">
   @import "../../styles/mixin.scss";
   @import "../../styles/login-index.css";
-
-  .container-right{
-    .el-input{
-      border: 1px solid #333;
-    }
-  }
 
 
 </style>

@@ -16,6 +16,7 @@
                         ref="multipleTable"
                         :data="tableDataTree"
                         stripe
+                        height="100%"
                         border
                         @selection-change = "getinfomation"
                         @row-dblclick="moreinfo"
@@ -213,15 +214,11 @@ import cue from '../../../components/Message/cue'
             delDataInformation(){
                 this.delDialogVisible = false;
                 data_DeletInfo(this.delID).then(res => {
-                    console.log(res)
-                    
                     this.firstblood();
-                    
                 }).catch(res=>{
                     let information = res.text;
                     this.hint(information);
                 })
-                
             },
             handleSizeChange(val) {
                 this.pagesize = val ;
@@ -371,7 +368,7 @@ import cue from '../../../components/Message/cue'
                 }
             }
             .info_news{
-                height:89%;
+                height:91%;
                 .el-table{
                     table{
                         width: 100% !important;

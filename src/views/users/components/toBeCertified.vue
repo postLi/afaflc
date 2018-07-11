@@ -16,44 +16,19 @@
                 <el-button type="info" plain @click="clearSearch">清空</el-button>
             </el-form-item>
         </el-form>
-            <!-- <label>所在地：
-                <el-input
-                    placeholder="请输入内容"
-                    v-model="formInline.belongCity"
-                    clearable>
-                </el-input>
-            </label>
-            <label>车牌号：
-                <el-input
-                    placeholder="请输入内容"
-                    v-model="formInline.carNumber"
-                    clearable>
-                </el-input>
-            </label>
-            <label>手机号：
-                <el-input
-                    placeholder="请输入内容"
-                    v-model="formInline.driverMobile"
-                    clearable>
-                </el-input>
-            </label>
-            <el-button type="primary" plain @click="getdata_search">查询</el-button>
-            <el-button type="info" plain>清空</el-button> -->
         </div>
         <div class="classify_info">
                 <div class="btns_box">
                         <el-button type="primary" plain @click="handleAudit">认证审核</el-button>
                 </div>
-                
                 <div class="info_news">
                     <el-table
                         ref="multipleTable"
                         :data="tableDataTree"
                         stripe
                         border
-                          highlight-current-row
+                        highlight-current-row
                         current-row-key
-                        :key="theKey"
                         @current-change="handleSelectionChange"
                         tooltip-effect="dark"
                         style="width: 100%">
@@ -273,7 +248,6 @@
         },
         data(){
             return{
-                theKey:'12',
                 options:[], //车辆规格下拉列表
                 page:1,//当前页
                 pagesize:20,//每页显示数
@@ -294,17 +268,6 @@
                 formLabelWidth:'130px',
                 formAuidDialogFlag:false, // 认证审核弹框控制
                 templateModel:{ // 认证审核表单
-                    driverMobile:'',
-                    driverName:'',
-                    carType:'',
-                    belongCity:'',
-                    authenticationTime:'',
-                    registerOrigin:'',
-                    takeIdCardFile:'',
-                    idcardFile:'',
-                    drivingLicenceFile:'',
-                    drivingPermitFile:'',
-                    carFile:''
                 },
                 radio1:'',
                 radio2:'',
@@ -336,12 +299,11 @@
             }
         },
         mounted(){
-          eventBus.$on('changeListtwo', ()=>{
-              if(this.inited || this.isvisible){
-                 this.firstblood()
-                this.getMoreInformation()
-              }
-          })
+            eventBus.$on('changeListtwo', ()=>{
+                if(this.inited || this.isvisible){
+                    this.firstblood()
+                }
+            })
         }, 
         methods:{
             formatTime(da){
@@ -359,6 +321,7 @@
             },
             // 判断选中值
             handleSelectionChange(val){
+                console.log(val)
                 this.multipleSelection=val
                 if(val){
                     this.templateModel=val
@@ -386,10 +349,8 @@
 
             //刷新页面
             firstblood(){
-                this.changeList()
                 data_get_driver_list(this.page,this.pagesize,this.formInline).then(res=>{
                     this.totalCount = res.data.totalCount;
-                    this.theKey=Math.random()
                     this.tableDataTree = res.data.list;
                     this.tableDataTree.forEach(item => {
                         item.authenticationTime = parseTime(item.authenticationTime,"{y}-{m}-{d}");
@@ -460,42 +421,40 @@
             // 审核不通过
             handlerOut(){
                 this.completeData()
-            this.$refs['shengheform'].validate((valid)=>{
+                this.$refs['shengheform'].validate((valid)=>{
                 if(valid){
-                // this.templateModel.belongCity = this.$refs.area.selectedOptions.pop();
-                var forms=Object.assign({},this.templateModel,{driverStatus:"AF0010404"},{authNoPassCause:this.pictureValue})
-                this.$confirm()
-                data_post_audit(forms).then(res=>{
-                    // console.log(res)
-                    this.$message.success('审核不通过 提交')
-                    this.formAuidDialogFlag = false;
-                    this.firstblood()
-                    this.changeList()
-                }).catch(err=>{
-                    console.log(err)
+                    var forms=Object.assign({},this.templateModel,{driverStatus:"AF0010404"},{authNoPassCause:this.pictureValue})
+                    this.$confirm()
+                    data_post_audit(forms).then(res=>{
+                        // console.log(res)
+                        this.$message.success('审核不通过 提交')
+                        this.formAuidDialogFlag = false;
+                        this.firstblood()
+                        this.changeList()
+                    }).catch(err=>{
+                        console.log(err)
+                    })
+                    }
                 })
-                }
-            })
             },
 
             // 审核通过
             handlerPass(){
                 this.completeData()
-            this.$refs['shengheform'].validate((valid)=>{
-                if(valid){
-                // this.templateModel.belongCity = this.$refs.area.selectedOptions.pop();
-                var forms=Object.assign({},this.templateModel,{driverStatus:"AF0010403",authNoPassCause:""})
-                data_post_audit(forms).then(res=>{
-                    // console.log(res)
-                    this.$message.success('审核通过成功')
-                    this.formAuidDialogFlag = false;
-                    this.firstblood()
-                    this.changeList()
-                }).catch(err=>{
-                    console.log(err)
+                this.$refs['shengheform'].validate((valid)=>{
+                    if(valid){
+                        var forms=Object.assign({},this.templateModel,{driverStatus:"AF0010403",authNoPassCause:""})
+                        data_post_audit(forms).then(res=>{
+                            // console.log(res)
+                            this.$message.success('审核通过成功')
+                            this.formAuidDialogFlag = false;
+                            this.firstblood()
+                            this.changeList()
+                        }).catch(err=>{
+                            console.log(err)
+                        })
+                    }
                 })
-                }
-            })
             }
         }
         

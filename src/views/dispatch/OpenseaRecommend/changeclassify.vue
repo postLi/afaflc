@@ -2,7 +2,7 @@
     <div>
         
     <!-- 新增分类信息 -->
-        <div class="addclassify commoncss">
+        <div class="dispatchPush commoncss">
             <el-dialog :title='formtitle' :close-on-click-modal="true"  :visible="dialogFormVisibleChange" @close="close">
                 <div class="chooseArea">
                     <p><span>* </span>所在地 ：</p>
@@ -198,7 +198,7 @@ export default {
 </script>
 
 <style rel="stylesheet/scss" lang="scss" >
-    .addclassify{
+    .dispatchPush{
         
         .chooseCarTypeList{
             margin-left: 37px;

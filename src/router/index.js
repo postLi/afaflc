@@ -13,16 +13,21 @@ import Common from './module/common'
 import Finance from './module/finance'
 // 客服
 import Service from './module/service'
-// 客服
+// 服务
 import Server from './module/server'
 // 报表
 import Report from './module/report'
 // 营销
 import Marketing from './module/marketing'
-//用户
+// 用户
 import Users from './module/users'
-//调度
+// 调度
 import Dispatch from './module/dispatchServer'
+// 订单
+import Order from './module/orderManage'
+// 任务
+import Task from './module/taskControl'
+
 Vue.use(Router)
 
  /**
@@ -63,6 +68,8 @@ export const asyncRouterMap = [
   Finance,
   Report,
   Dispatch,
+  Order,
+  Task,
   Common,
   Service,
 /*   {

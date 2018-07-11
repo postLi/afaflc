@@ -1,31 +1,31 @@
 <template>
   <div class="shipper">
-    <el-tabs v-model="activeName" type="border-card" @tab-click="handleClick" >
+    <el-tabs v-model="shipperName" type="border-card" @tab-click="handleClick" >
         <!-- 全部 -->
         <!-- <el-badge :value="12" class="item"> -->
             <el-tab-pane label="全部" name="first">
-                <ShipperAll :isvisible="activeName === 'first'"></ShipperAll>
+                <ShipperAll :isvisible="shipperName === 'first'"></ShipperAll>
             </el-tab-pane>
         <!-- </el-badge> -->
 
         <!-- 未认证 -->
             <el-tab-pane label="未认证" name="second">
-                <ShipperUnauthorized :isvisible="activeName === 'second'"></ShipperUnauthorized>
+                <ShipperUnauthorized :isvisible="shipperName === 'second'"></ShipperUnauthorized>
             </el-tab-pane>
 
         <!-- 待认证 -->
             <el-tab-pane label="待认证" name="third">
-                <ShipperCertified :isvisible="activeName === 'third'"></ShipperCertified>
+                <ShipperCertified :isvisible="shipperName === 'third'"></ShipperCertified>
             </el-tab-pane>
             
         <!-- 已认证部分 -->
             <el-tab-pane label="已认证" name="fourth">
-                <ShipperHasCertified :isvisible="activeName === 'fourth'"></ShipperHasCertified>
+                <ShipperHasCertified :isvisible="shipperName === 'fourth'"></ShipperHasCertified>
             </el-tab-pane>
 
         <!-- 认证不通过 -->
             <el-tab-pane label="认证不通过" name="fifth">
-                <ShipperDisqualification :isvisible="activeName === 'fifth'"></ShipperDisqualification>
+                <ShipperDisqualification :isvisible="shipperName === 'fifth'"></ShipperDisqualification>
             </el-tab-pane>
 
         <!-- 冻结部分 -->
@@ -65,41 +65,42 @@
         },
         data() {
           return {
-            activeName:null,
+            shipperName:'first',
           };
         },
         watch:{
-            activeName(newVal,oldVal){
+            shipperName(newVal,oldVal){
                 // console.log('newVal,oldVal',newVal,oldVal)
                 if(newVal){
-                    this.activeName = newVal;
+                    this.shipperName = newVal;
                 }else{
-                    this.activeName = oldVal;
+                    this.shipperName = oldVal;
                 }
             }
         },
         created() {
-            this.activeName = localStorage.getItem('activeName') || 'first';
+            this.shipperName = localStorage.getItem('shipperName') || 'first';
         },
 
         beforeUpdate () {
-            localStorage.setItem('activeName', this.activeName);
+            localStorage.setItem('shipperName', this.shipperName);
         },
 
         beforeDestroy () {
-            localStorage.setItem('activeName', 'first');
+            localStorage.setItem('shipperName', 'first');
         },
         methods: {
 
             handleClick(tab, event) {
                 // console.log(tab, event);
-                this.activeName = tab.name;
+                this.shipperName = tab.name;
             }
         }
     }
 </script>
 
 <style type="text/css" lang="scss">
+    @import "../../styles/tab.scss";
     .completeinfo{
       .detailinfo{
         margin-left: 26px;
@@ -132,6 +133,7 @@
             width:100%;
             line-height: 35px;
             .el-form-item{
+                margin-right: 18px;
                 .el-form-item__content{
                     .el-input{
                         .el-input__inner{
@@ -149,7 +151,7 @@
         .classify_info{
             height:100%;
             padding:90px 13px 0 0;
-            .btns_box{
+            &>.btns_box{
                 margin-bottom:10px;
                 .el-button{
                     margin-right:20px;
@@ -177,4 +179,45 @@
         margin-right: 40px;
     }
 
+
+    .creatDialog,.freezeDialog,.shipperBlackDialog,.shenghe{
+        display: inline-block;
+        .el-dialog{
+            width: 780px;
+            .el-dialog__body{
+                .el-form{
+                    .shipper_information{
+                        h2{ 
+                            margin:10px 20px;
+                            padding-bottom: 10px;
+                            border-bottom: 2px solid #ccc;
+                        }
+                    }
+                    .el-form-item{
+                        .el-form-item__content{
+                            .el-input{
+                                width: 250px;
+                            }
+                        }
+                    }
+                    .moreLength{
+                        .el-form-item__content{
+                            .el-input{
+                                width: 637px;
+                            }
+                        }
+                    }
+                    .el-textarea{
+                        width: 637px;
+                        vertical-align: top;
+                        font-size: 12px;
+                        padding-top: 5px;
+                    }
+                    .textArea{
+                        
+                    }
+                }
+            }
+        }
+    }
 </style>

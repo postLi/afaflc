@@ -36,7 +36,7 @@
     export default {
         data(){
             return{
-            	CarActiveName: null,
+            	CarActiveName: 'first',
             }
         },
         components:{
@@ -82,6 +82,15 @@
     .carOwner{
         height:100%;    
         position: relative;
+        .el-tabs{
+            height: 100%;
+            .el-tabs__content{
+                height: 93%;
+                .el-tab-pane{
+                    height: 100%;
+                }
+            }
+        }
         .shipper_searchinfo{
             position: absolute;
             left:0;
@@ -122,6 +131,51 @@
             .el-pagination{
                 margin-top:13px;
                 text-align:right;
+            }
+        }
+        .carNewinfo,.freezeInfo,.blackInfo{
+            display: inline-block;
+            .el-dialog{
+                width: 780px;
+                .el-dialog__body{
+                    .el-form{
+                        .shipper_information{
+                            h2{ 
+                                margin:10px 20px;
+                                padding-bottom: 10px;
+                                border-bottom: 2px solid #ccc;
+                            }
+                        }
+                        .el-form-item{
+                            .el-form-item__content{
+                                .el-input{
+                                    width: 250px;
+                                }
+                                .lessWidth{
+                                    width: 80px;
+                                }
+                            }
+                        }    
+                        .licensePicture{
+                            width: 300px;
+                            line-height: 20px;
+                        }
+                        .moreLength{
+                            .el-form-item__content{
+                                .el-input{
+                                    width: 637px;
+                                }
+                            }
+                        }
+                        .el-textarea{
+                            width: 637px;
+                            vertical-align: top;
+                            font-size: 12px;
+                            padding-top: 5px;
+                        }
+                      
+                    }
+                }
             }
         }
     }

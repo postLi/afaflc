@@ -5,6 +5,12 @@
             <el-form-item label="所在地：">
               <GetCityList v-model="formAll.belongCity" ref="area"></GetCityList>
             </el-form-item>
+            
+<v-region :town="true" :ui="true" @values="regionChange" class="form-control">
+    <p>
+        {{btnText}} <i class="fa fa-fw fa-caret-down"></i>
+    </p>
+</v-region>
             <el-form-item label="公司名称：">
               <el-input v-model.trim="formAll.companyName"></el-input>
             </el-form-item>
@@ -25,18 +31,18 @@
 			<el-table 
 			ref="multipleTable"
 			:data="tableData1"
-            @row-click="clickDetails"
 			stripe
 			border
-			@selection-change="handleSelectionChange"
+            highlight-current-row
+            @current-change="handleCurrentChangeRow"
 			tooltip-effect="dark"
 			style="width: 100%">
 			<el-table-column type="selection" width="80px">
 			</el-table-column>
 			<el-table-column label="公司名称">
-				<template slot-scope="scope">
-					<createdDialog :params="scope.row" btntype="text" :btntext="scope.row.companyName" editType="view" btntitle="详情"></createdDialog>
-				</template>
+                <template slot-scope="scope">
+                    <createdDialog :paramsView="scope.row" btntype="text" :btntext="scope.row.companyName" editType="view" btntitle="详情"></createdDialog>
+                </template>
 			</el-table-column>
 			<el-table-column prop="mobile" label="手机号">
 			</el-table-column>
@@ -99,7 +105,6 @@
                 </el-form-item>
               </el-col>
             </el-row>
-
             <el-row>
               <el-col :span="12">
                 <el-form-item label="详细地址" :label-width="formLabelWidth" prop="xsaddress">
@@ -112,27 +117,21 @@
                 </el-form-item>
               </el-col>
             </el-row>
-
             <el-row>
               <el-col :span="12">
                 <el-form-item label="提交认证时间" :label-width="formLabelWidth">
-                  <el-date-picker
-                    v-model="shengheform.authenticationTime"
-                    type="datetime"
-                    placeholder="选择日期"
-                    disabled>
-                  </el-date-picker>
+                    <el-input v-model="shengheform.authenticationTime" disabled></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="12">
                 <el-form-item label="等待时长:" :label-width="formLabelWidth">
-                  <el-input v-model="shengheform.authenticationTime" disabled></el-input>
-                  <!-- {{shengheform.authenticationTime? formatTime((+new Date(shengheform.authenticationTime))) : '' }} -->
+                  <el-input v-model="shengheform.waitTime" disabled></el-input>
                 </el-form-item>
               </el-col>
             </el-row>
             <el-row>
               <el-col :span="12">
+                  <!-- <img src="../../../assets/404_images/404.png" alt=""> -->
                 <el-form-item label="注册来源" :label-width="formLabelWidth">
                   <el-input v-model="shengheform.registerOrigin" disabled></el-input>
                 </el-form-item>
@@ -144,41 +143,43 @@
               </el-col>
             </el-row>
  
-            <div class="data_pic">
-                <div class="data_pic_yyzz data_pic_c">
-                    <el-form-item>
-                    <upload class="licensePicture" tip="（必须为jpg/png并且小于5M）" v-model="shengheform.businessLicenceFile" />
-                    </el-form-item>
-                    <h2>营业执照</h2>
-                    <el-form-item prop="radio1">
-                      <el-radio-group v-model="radio1" @change="pictureTypeChange">
-                        <el-radio label="上传合格">上传合格</el-radio><br />
-                        <el-radio label="不清晰">不清晰</el-radio><br />
-                        <el-radio label="内容不符">内容不符</el-radio>
-                      </el-radio-group>
-                    </el-form-item> 
+            <div class="data_pic clearfix">  
+                <div class="data_pic_default">
+                    <img  :src= 'defaultImg'/>
                 </div>
-                <div class="data_pic_company data_pic_c">
-                    <upload class="licensePicture" tip="（必须为jpg/png并且小于5M）" v-model="shengheform.companyFacadeFile" />
-                    <h2>公司或档口照片</h2>
-                    <el-form-item prop="radio2">
-                      <el-radio-group v-model="radio2" @change="pictureTypeChange">
+                <div class="data_pic_yyzz data_pic_c">  
+                    <img  class="picURL" :src="shengheform.businessLicenceFile ? shengheform.businessLicenceFile : defaultImg" @click="changeIMG"/>
+                    <h2>营业执照</h2>
+                    <!-- <el-form-item prop="radio1"> -->
+                      <el-radio-group v-model="shengheform.businessLicenceFileNoPass" @change="pictureTypeChange">
                         <el-radio label="上传合格">上传合格</el-radio><br />
                         <el-radio label="不清晰">不清晰</el-radio><br />
                         <el-radio label="内容不符">内容不符</el-radio>
                       </el-radio-group>
-                    </el-form-item>
+                    <!-- </el-form-item>  -->
+                </div>
+                <div class="data_pic_company data_pic_c">   
+                    <img  class="picURL" :src="shengheform.companyFacadeFile ? shengheform.companyFacadeFile : defaultImg" @click="changeIMG"/>
+                    <h2>公司或档口照片</h2>
+                    <!-- <el-form-item prop="radio2"> -->
+                      <el-radio-group v-model="shengheform.companyFacadeFileNoPass" @change="pictureTypeChange">
+                        <el-radio label="上传合格">上传合格</el-radio><br />
+                        <el-radio label="不清晰">不清晰</el-radio><br />
+                        <el-radio label="内容不符">内容不符</el-radio>
+                      </el-radio-group>
+                    <!-- </el-form-item> -->
                 </div>
                 <div class="data_pic_callingcode data_pic_c">
-                    <upload class="licensePicture" tip="（必须为jpg/png并且小于5M）" v-model="shengheform.shipperCardFile" />
+                    <!-- <upload class="licensePicture" tip="（必须为jpg/png并且小于5M）" v-model="shengheform.shipperCardFile" /> -->
+                    <img  class="picURL" :src="shengheform.shipperCardFile ? shengheform.shipperCardFile : defaultImg" @click="changeIMG"/>
                     <h2>发货人名片</h2>
-                    <el-form-item prop="radio3">
-                      <el-radio-group v-model="radio3" @change="pictureTypeChange">
+                    <!-- <el-form-item prop="radio3"> -->
+                      <el-radio-group v-model="shengheform.shipperCardFileNoPass" @change="pictureTypeChange">
                         <el-radio label="上传合格">上传合格</el-radio><br />
                         <el-radio label="不清晰">不清晰</el-radio><br />
                         <el-radio label="内容不符">内容不符</el-radio>
                       </el-radio-group>
-                    </el-form-item>
+                    <!-- </el-form-item> -->
                 </div>
             </div>
           </el-form>
@@ -197,6 +198,7 @@ import { eventBus } from '@/eventBus'
 import createdDialog from './createdDialog.vue'
 import GetCityList from '@/components/GetCityList'
 import {data_get_shipper_list,data_get_shipper_type,data_get_shipper_change} from '@/api/users/shipper/all_shipper.js'
+import defaultURL  from '@/assets/404_images/404.png'
 export default {
 	props: {
         isvisible: {
@@ -210,9 +212,9 @@ export default {
 		Upload
 	},
 	computed: {
-		pictureValue () {
-		    return [{name:'营业执照',result: this.radio1},{name:'公司或档口照片',result: this.radio2},{name:'发货人名片',result: this.radio3}]
-		}
+		// pictureValue () {
+		//     return [{name:'营业执照',result: this.radio1},{name:'公司或档口照片',result: this.radio2},{name:'发货人名片',result: this.radio3}]
+		// }
 	},
 	data(){
 		const radioValidator = (rule,val,cb)=>{
@@ -224,6 +226,8 @@ export default {
             }
 		}
 		return{
+            btnText: 'please select',
+            defaultImg:'/static/test.jpg',//默认第一张图片的url
             demoData:"企业货主",//根据项目要求写死
             selectDiaologFlag:true,
             options:[], // 货主类型列表
@@ -239,26 +243,10 @@ export default {
             },
             formLabelWidth: '120px',
             dialogFormVisible:false, //认证审核弹框控制
-            shengheform: { // 认证审核表单
-                mobile: '', // 手机号
-                companyName: '', // 公司名称
-                address:'', // 详细地址
-                contacts:'', // 联系人
-                belongCity:null, // 所在地
-                authenticationTime:'',
-                registerOrigin:'', // 注册来源
-                creditCode:'', // 统一社会信用代码
-                businessLicenceFile:'',
-                companyFacadeFile:'',
-                shipperCardFile:'',
-                belongCityName:''
-            },
-            radio1:'',
-            radio2:'',
-            radio3:'',
+            shengheform:{},
             centerDialogVisible:false,// 提示语的弹窗控制
             information:null, // 弹框显示的信息
-            multipleSelection:[],
+            multipleSelection:{},
             shengheformRules:{
                 shipperType:{required: true, message:'请选择货主类型',trigger:'change'},
                 radio1:{validator: radioValidator,trigger:'change'},
@@ -270,9 +258,7 @@ export default {
     watch: {
         isvisible: {
             handler(newVal, oldVal) {
-            
                 if(newVal && !this.inited){
-
                     this.inited = true
                     this.firstblood()
                 }
@@ -282,60 +268,59 @@ export default {
         }
     },
     mounted(){
-        eventBus.$on('changeListtwo', () => {
-            if(this.inited || this.isvisible){
-                
-            this.firstblood()
-            }
+        eventBus.$on('changeList', () => {
+            // console.log('44444444444444444')
+                this.firstblood()
         })
     },
     methods:{
+
+        regionChange(d) {
+            this.btnText = (!d.province&&!d.city&&!d.area&&!d.town)?'please select': `${this.getValue(d.province)}${'/'+this.getValue(d.city)}${this.getValue(d.area)}${this.getValue(d.town)}`.trim();
+        },
+        getValue(obj){
+            return obj?obj.value:'';
+        },
+        // //receive selected region data
+        // regionChange(data){
+        //     console.log(data);
+        // },
+        changeIMG(event){
+            // console.log(event)
+            this.defaultImg = event.target.src;
+        },
         changeList(){
             eventBus.$emit('changeList')
-        },
-        //点击选中当前行
-        clickDetails(row, event, column){
-        this.$refs.multipleTable.toggleRowSelection(row);
-            console.log(row)
         },
 
         changeCity(){
             this.selectDiaologFlag=false
         },
         formatTime(da){
-        let time = (+new Date()) - da
-        return parseInt(time / 1000 / (3600*24))+ '天'+ parseInt(time/1000/(3600*24*60*60)*60*60)+ '小时'
+            let time = (+new Date()) - da
+            return parseInt(time / 1000 / (3600*24))+ '天'+ parseInt(time/1000/(3600*24*60*60)*60*60)+ '小时'
         },
         handleEdit(){
-        if(this.multipleSelection.length == 0){
-            //未选择任何修改内容的提示
-            let information = "未选中任何修改内容";
-            this.hint(information);
-        }else if(this.multipleSelection.length >1){
-            let information = "不可修改多个内容";
-            this.hint(information);
-        } else{
-            this.dialogFormVisible = true
-        } 
+            
+            this.dialogFormVisible = true;
+            this.shengheform = this.multipleSelection[0];
+            // this.defaultImg =  this.shengheform.businessLicenceFile ?  this.shengheform.businessLicenceFile : defaultImg;
+            
         },
-        handleSelectionChange(val){
+        handleCurrentChangeRow(val){
             this.multipleSelection = val;
-            if(val[0]){
-                this.shengheform=val[0]
-            } else {
-                this.shengheform = {}
-            }
         },
         //刷新页面
         firstblood(){
             data_get_shipper_list(this.page,this.pagesize,this.formAll).then(res=>{
                 this.totalCount = res.data.totalCount;
                 this.tableData1 = res.data.list;
+                // this.inited = true
             })
         },
         //点击查询按纽，按条件查询列表
         getdata_search(event){
-                this.formAll.belongCity = this.$refs.area.selectedOptions.pop();
+                this.formAll.belongCity = this.$refs.area.selectedOptions[1];
                 data_get_shipper_list(this.page,this.pagesize,this.formAll).then(res=>{
                     this.totalCount = res.data.totalCount;
                     this.tableData1 = res.data.list;
@@ -343,6 +328,7 @@ export default {
         },
         //清空
         clearSearch(){
+            this.$refs.area.selectedOptions = [];
             this.formAll = {
                 belongCity:null,
                 companyName:'',
@@ -363,14 +349,6 @@ export default {
             console.log(`当前页: ${val}`);
             this.page=val
             this.firstblood()
-        },
-        hint(val){
-            this.information = val;
-            this.centerDialogVisible = true;
-            let timer = setTimeout(()=>{
-                this.centerDialogVisible = false;
-                clearTimeout(timer)
-            },2000)
         },
 
         completeData(){
@@ -399,57 +377,88 @@ export default {
         },
         // 审核不通过
         handlerOut(){
-            this.completeData();
-            this.pictureValue.forEach((el,idx) => {
-                if(el.result == '上传合格'){
-                    this.pictureValue.splice(idx,1)
-                }
-            })
-            // console.log('this.pictureValue',this.pictureValue)
+            
+            // this.pictureValue.forEach((el,idx) => {
+                //     if(el.result == '上传合格'){
+                    //         this.pictureValue.splice(idx,1)
             this.$refs['shengheform'].validate((valid)=>{
                 if(valid){
-                this.shengheform.belongCity = this.$refs.area.selectedOptions.pop();
-                var forms=Object.assign({},this.shengheform,{shipperType:"AF0010202"},{currentShipperStatus:"AF0010402"},{shipperStatus:"AF0010404"},{authNoPassCause:JSON.stringify(this.pictureValue)});
-                // console.log(forms)
-                data_get_shipper_change(forms).then(res=>{
-                    // console.log(res)
-                    this.$message.success('审核不通过 成功')
-                    this.dialogFormVisible = false;
-                    this.changeList();
-                    this.firstblood();
-                }).catch(err=>{
-                    console.log(err)
-                })
+                    this.completeData();
+                    let item =  this.shengheform.contacts;
+                    this.$confirm('确定要不通过'+ item +' 货主吗？', '提示', {
+                        confirmButtonText: '确定',
+                        cancelButtonText: '取消',
+                        type: 'warning'
+                    }).then(() => {
+                        var forms=Object.assign({},this.shengheform,{shipperType:"AF0010202"},{currentShipperStatus:"AF0010402"},{shipperStatus:"AF0010404"});
+                        data_get_shipper_change(forms).then(res=>{
+                            // console.log(res)
+                            this.$message({
+                                type: 'success',
+                                message: '该货主未通过审核',
+                                duration:2000
+                            })
+                            this.dialogFormVisible = false;
+                            this.changeList();
+                            this.firstblood();
+                        }).catch(err=>{
+                            this.$message({
+                                type: 'info',
+                                message: '操作失败，原因：' + err.text ? err.text : err
+                            })
+                        })
+                    }).catch(() => {
+                        this.$message({
+                            type: 'info',
+                            message: '已取消'
+                        })
+                    })
+                
+                } else {
+                    // console.log('error submit!!');
+                    return false;
                 }
             })
         },
 
         // 审核通过
         handlerPass(){
-            this.completeData();
-            let ifQualified = true ;
-            this.pictureValue.forEach((el,idx) => {
-                if(el.result != "上传合格"){
-                    ifQualified = false;
-                }
-            })
-            // console.log('this.pictureValue',this.pictureValue)
+            let ifQualified;
+            // this.pictureValue.forEach((el,idx) => {
+                //     if(el.result != "上传合格"){
+                    //         ifQualified = false;
+            //     }
+            // })
+
+            if(this.shengheform.shipperCardFileNoPass = this.shengheform.businessLicenceFileNoPass = this.shengheform.companyFacadeFileNoPass == "上传合格" ){
+                ifQualified = true ;
+            }else{
+                ifQualified = false ;
+            }
             this.$refs['shengheform'].validate((valid)=>{
                 if(valid && ifQualified){
-                    this.shengheform.belongCity = this.$refs.area.selectedOptions.pop();
-                    var forms=Object.assign({},this.shengheform,{shipperType:"AF0010202"},{currentShipperStatus:"AF0010402"},{shipperStatus:"AF0010403"},{authNoPassCause:JSON.stringify(this.pictureValue)});
-                    // console.log(forms)
+                    this.completeData();
+                    var forms=Object.assign({},this.shengheform,{shipperType:"AF0010202"},{currentShipperStatus:"AF0010402"},{shipperStatus:"AF0010403"});
                     data_get_shipper_change(forms).then(res=>{
                     // console.log(res)
-                        this.$message.success('审核通过成功')
                         this.dialogFormVisible = false;
-                        this.changeList();
-                        this.firstblood()
+                        this.$alert('操作成功', '提示', {
+                            confirmButtonText: '确定',
+                            callback: action => {
+                                this.changeList();
+                                this.firstblood()
+                            }
+                        });
                     }).catch(err=>{
-                        console.log(err)
+                        this.dialogFormVisible = true;
+                        this.$message({
+                            type: 'info',
+                            message: '删除失败，原因：' + err.text ? err.text : err
+                        })
                     })
                 }else{
-                    this.$message.success('审核未满足通过要求')
+                    this.$message.error('审核未满足通过要求')
+                    return false
                 }
             })
         },
@@ -475,7 +484,46 @@ export default {
 }
 </script>
 <style lang="scss">
-
+    .shenghe{
+        width: 100%;
+        .data_pic{
+            margin: 0 15px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #ccc;
+            .data_pic_default{
+                width: 100%;
+                height: 600px;
+                margin-bottom: 15px;
+                img{
+                    width: 100%;
+                    height: 100%;
+                }
+            }
+            .data_pic_c{
+                float: left;
+                width: 32%;
+                h2{
+                    text-align: center;
+                }
+                .el-radio-group{
+                    margin-left:78px;
+                    margin-top: 10px;
+                    .el-radio{
+                        margin: 2px 0;
+                    }
+                }
+                .picURL{
+                    display: block;
+                    width: 100%;
+                    height: 160px;
+                    margin-bottom: 10px;
+                }
+            }
+            .data_pic_yyzz,.data_pic_company{
+                margin-right: 2%;
+            }
+        }
+    }
 </style>
 
 

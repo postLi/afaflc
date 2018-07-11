@@ -12,6 +12,7 @@
                         ref="multipleTable"
                         :data="tableDataTree"
                         stripe
+                        height="100%"
                         border
                         @selection-change = "getinfomation"
                         @row-dblclick="moreinfo"
@@ -389,7 +390,7 @@ import changeclassify from './changeclassify'
                 }
             }
             .info_news{
-                height:89%;
+                height:91%;
                 .el-table{
                     table{
                         width: 100% !important;

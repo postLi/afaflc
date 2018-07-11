@@ -60,11 +60,11 @@
 			<div class="info_news">
 				<el-table
 				ref="multipleTable"
-				@row-click="clickDetails"
 				:data="tableData4"
 				stripe
 				border
-				@selection-change="handleSelectionChange"
+				highlight-current-row
+                @current-change="handleCurrentChangeRow"
 				tooltip-effect="dark"
 				style="width: 100%">
 				<el-table-column
@@ -131,23 +131,6 @@ export default {
         GetCityList
     },
   data(){
-    // 手机号校验
-    const mobileValidator=(rule,val,cb)=>{
-      let phoneTest = /(^1[3|4|5|7|8]\d{9}$)|(^09\d{8}$)/
-      !val && cb(new Error('手机号码不能为空'))
-      setTimeout(function () {
-        !(phoneTest.test(val)) ? cb(new Error('请输入正确的手机号码格式')) : cb()
-      }, 0)
-    }
-    //  所在地校验
-    const belongCityValidator =(rule,val,cb)=>{
-      if (!this.forms.belongCity){
-        cb(new Error('请选择所在地'))
-      } else {
-        cb()
-      }
-    }
-  
     return{
         optionsStatus:[], // 状态列表
         tableData4:[],
@@ -161,17 +144,9 @@ export default {
             shipperStatus:"AF0010401",//未认证的状态码
         },
         formLabelWidth:'120px',
-        multipleSelection:[],
         information:null,
         formLabelWidth:'120px',
         changeDialogFlag: false, // 修改弹窗控制
-        forms:{
-            mobile:'',
-            contacts:'',
-            belongCity:null,
-            address:'',
-            shipperId:''
-        },
         optionsAuidSataus:[
 			{
 			code:null,
@@ -184,19 +159,12 @@ export default {
           return time.getTime() < Date.now();
         }
       },
-      // 修改校验
-      formsRules:{
-        mobile:{validator: mobileValidator, trigger: 'change'},
-        belongCity:{required:true,validator:belongCityValidator,trigger:'change'}
-      },
     }
   },
     watch: {
         isvisible: {
             handler(newVal, oldVal) {
-            
                 if(newVal && !this.inited){
-
                     this.inited = true
                     this.firstblood()
                     this.getMoreInformation()
@@ -205,47 +173,39 @@ export default {
             // 代表在wacth里声明了firstName这个方法之后立即先去执行handler方法
             immediate: true
         }
+        
     },
     mounted(){
-        eventBus.$on('changeListtwo', () => {
-            if(this.inited || this.isvisible){
-                
-            this.firstblood()
-            }
+        eventBus.$on('changeList', () => {
+            // console.log('111111111111111111')
+                this.firstblood()
         })
     },
   methods:{
     regionChange(data){
         console.log(data);
     },
-    //点击选中当前行
-    clickDetails(row, event, column){
-      this.$refs.multipleTable.toggleRowSelection(row);
-    },
-
-    handleSelectionChange(val){
-		console.log(val)
-		this.multipleSelection = val;
-		if(val[0]){
-			this.selectRowData = val[0]
-			this.forms = val[0]
-		} else {
-			this.selectRowData = {}
-			this.forms ={}
-		}
+    handleCurrentChangeRow(val){
+        console.log(val)
+        this.selectRowData = val;
     },
     getMoreInformation(){
         //获取账户状态列表
-     	data_get_shipper_auid().then(res=>{
-		  console.log('车主状态：',res)
-			res.data.map((item)=>{
-				this.optionsAuidSataus.push(item);
-			})
-      	})
+        if(this.optionsAuidSataus.length > 1){
+            return
+        }else{
+            
+            data_get_shipper_auid().then(res=>{
+             console.log('车主状态：',res)
+               res.data.map((item)=>{
+                   this.optionsAuidSataus.push(item);
+               })
+             })
+        }
     },
       //点击查询按纽，按条件查询列表
     getdata_search(event){
-      this.formInline.belongCity = this.$refs.area.selectedOptions.pop();
+      this.formInline.belongCity = this.$refs.area.selectedOptions[1];
       data_get_shipper_list(this.page,this.pagesize,this.formInline).then(res=>{
         this.totalCount = res.data.totalCount;
         this.tableData4 = res.data.list;
@@ -254,40 +214,23 @@ export default {
     
     //清空
     clearSearch(){
+        this.$refs.area.selectedOptions = [];
         this.formInline = {
             accountStatus:null,
             belongCity:'',
             mobile:'',
             shipperStatus:"AF0010401",//未认证的状态码
-
         },
 	    this.firstblood();
-
     },
       //刷新页面
     firstblood(){
       data_get_shipper_list(this.page,this.pagesize,this.formInline).then(res=>{
-        console.log('未认证',res)
+        // console.log('未认证',res)
         this.totalCount = res.data.totalCount;
         this.tableData4 = res.data.list;
+        // this.inited = false;
       })
-    },
-    handleChange(value){
-      console.log(value)
-    },
-    // 修改
-    handleEdit(){
-    
-      if(this.multipleSelection.length == 0){
-          //未选择任何修改内容的提示
-          let information = "未选中任何修改内容";
-          this.hint(information);
-      }else if(this.multipleSelection.length >1){
-          let information = "不可修改多个内容";
-          this.hint(information);
-      } else{
-        this.changeDialogFlag= true
-      }
     },
     handleSizeChange(val) {
       console.log(`每页 ${val} 条`);

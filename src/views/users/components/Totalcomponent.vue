@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div style="height:100%;">
          <div class="shipper_searchinfo">
             <el-form inline >
                 <el-form-item label="所在地：">
@@ -127,13 +127,13 @@
                         :data="tableDataTree"
                         stripe
                         border
+                        height="100%"
                         highlight-current-row
                         current-row-key
                         tooltip-effect="dark"
                         @row-click="clickDetails"
                         @current-change= "handleSelectionChange"
                         style="width: 100%">
-                    
                         <el-table-column
                         type="index"
                         label="序号"
@@ -271,10 +271,8 @@
         },
         mounted(){
           eventBus.$on('changeListtwo', () => {
-              if(this.inited || this.isvisible){
-                 
+              if(this.inited){
                 this.firstblood()
-                this.getMoreInformation()
               }
           })
         },
@@ -301,6 +299,7 @@
 
             // 判断选中与否
             handleSelectionChange(val){
+                console.log(val)
               this.multipleSelection = val;
              
               if(val) {
@@ -353,7 +352,7 @@
                 })
                 // 账户状态获取
                 data_get_shipper_auid().then(res=>{
-                    console.log(res)
+                    // console.log(res)
                     this.optionsAuidSataus = res.data;
                 })
             },

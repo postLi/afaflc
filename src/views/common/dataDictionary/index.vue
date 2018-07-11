@@ -53,8 +53,11 @@
                           label="分类名称">
                         </el-table-column>
                         <el-table-column
-                          prop="uplabel"
+                          prop="pidName"
                           label="上级分类">
+                           <template  slot-scope="scope">
+                                {{ scope.row.pidName ? scope.row.pidName: '无'   }}
+                            </template>
                         </el-table-column>
                         <el-table-column
                           prop="code"
@@ -243,7 +246,7 @@ import '../../../styles/dialog.scss'
                 tableDataTree:[],
                 treeData:[
                     {
-                        label:'全部',
+                        name:'全部',
                         id:null,
                         key:1,
                         children:[],
@@ -430,19 +433,12 @@ import '../../../styles/dialog.scss'
             handleNodeClick(data,checked){  
                 console.log(data)
                 this.pid = data.id;
-                this.pidname = data.label;
+                this.pidname = data.name;
                 this.forms[0].pid = this.pid;
                 console.log(this.pid)
                 data_Trees(this.page,this.pagesize,this.pid).then(res =>{
                     console.log(res)
                     if(res.data.list){
-                        res.data.list.forEach(function(item){
-                            if(checked.data.label == "全部"){
-                                item.uplabel = "无"
-                            }else{
-                            item.uplabel = checked.data.label;
-                            }
-                        })
                         this.tableDataTree = res.data.list;
                     }else{
                          this.tableDataTree = [];
@@ -463,20 +459,13 @@ import '../../../styles/dialog.scss'
                         console.log('000')
                     }
                 })
-            },
+            },  
             //刷新数据
             getInformation(){
                 console.log(this.page,this.pagesize,this.pid)
                 data_Trees(this.page,this.pagesize,this.pid).then(res =>{
                     console.log(res)
                     if(res.status == 200 && res.data.list){
-                        res.data.list.forEach(function(item){
-                            if(item.pid == null){
-                                item.uplabel = '无';
-                            }else{
-                                item.uplabel = name;
-                            }
-                        })
                         this.tableDataTree = res.data.list;
                         this.dataTotal= res.data.totalCount;
                         // console.log(this.pidname)
@@ -529,25 +518,25 @@ import '../../../styles/dialog.scss'
             //保存信息
             newInfoSave(){
                 console.log(this.forms)
-                // if(this.forms[0].pid){
-                //     data_AddForms(this.forms).then(res=>{
-                //         if(res.status == 200){
-                //             this.dialogFormVisible = false;
-                //             this.getInformation();
-                //         }
-                //     })
-                // }else{
-                //     this.forms.map((item)=>{
-                //         item.pid = null;
-                //     })
-                //     data_AddForms(this.forms).then(res=>{
-                //         if(res.status == 200){
-                //             this.dialogFormVisible = false;
-                //             this.getInformation();
-                //         }
-                //     })
+                if(this.forms[0].pid){
+                    data_AddForms(this.forms).then(res=>{
+                        if(res.status == 200){
+                            this.dialogFormVisible = false;
+                            this.getInformation();
+                        }
+                    })
+                }else{
+                    this.forms.map((item)=>{
+                        item.pid = null;
+                    })
+                    data_AddForms(this.forms).then(res=>{
+                        if(res.status == 200){
+                            this.dialogFormVisible = false;
+                            this.getInformation();
+                        }
+                    })
                     
-                // }
+                }
                
             },
             //修改保存

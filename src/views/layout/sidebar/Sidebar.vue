@@ -6,7 +6,8 @@
       </div> -->
       <SidebarMenuSearch :searchItem="sidebarRouters" />
       <hamburger class="hamburger-container" :toggleClick="toggleSideBar" :isActive="sidebar.opened"></hamburger>
-      <sidebar-item :routes='sidebarRouters'></sidebar-item>
+      <sidebar-item ref="sidebaritem" :routes='sidebarRouters'></sidebar-item>
+      <div @mouseover="showSubnav" @mouseout="hideSubnav" class="subNavWrapper"></div>
   </div>
   
 </template>
@@ -29,14 +30,23 @@ export default {
   methods: {
     toggleSideBar() {
       this.$store.dispatch('ToggleSideBar')
+    },
+    showSubnav () {
+      this.$refs.sidebaritem.clearTimer()
+    },
+    hideSubnav () {
+      this.$refs.sidebaritem.hideSubNav()
     }
   }
 }
 </script>
 
+
 <style rel="stylesheet/scss" lang="scss">
 @import "src/styles/variate.scss";
+@import "src/styles/mixin.scss";
 #app .sidebar-menu{
+    padding-top: 10px;
   min-height: 100%;
   .router-link-exact-active{
     .el-menu-item{
@@ -84,6 +94,16 @@ export default {
     top: 40px;
     right: 10px;
   }
+
+   .subNavWrapper{
+    display: none;
+    position: absolute;
+    left: 100%;
+    max-height: 100%;
+    overflow: auto;
+
+  }
+
 }
 
 </style>

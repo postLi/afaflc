@@ -1,7 +1,7 @@
 <template>
     <div>
         <!-- 新增分类信息 -->
-            <div class="addclassify commoncss">
+            <div class="dispatchPush commoncss">
                 <el-dialog :title='formtitle' :close-on-click-modal="true" v-el-drag-dialog :visible="dialogFormVisible" @close="close">
                     <div class="chooseArea">
                         <p><span>* </span>所在地 ：</p>
@@ -104,8 +104,8 @@ export default {
             areaCodeName:null,
             firstRecommendKm:null,//第一次推送公里
             firstRecommendTime:null,//第一次推送时间
-            secondRecommendKm:null,//第二次
-            secondRecommendTime:null,//第二次
+            // secondRecommendKm:null,//第二次
+            // secondRecommendTime:null,//第二次
             serivceCode:null,//服务类型
             serivceCodeName:null,
             shipperCarType:null,//货主用车类型
@@ -212,39 +212,55 @@ export default {
                 this.$refs.cue.hint(information)
             }
             else if(!this.forms.firstRecommendKm || !this.forms.firstRecommendTime ){
-                let information = "第一轮推送公里数和秒数必填且为数字整数";
+                let information = "推送公里数和秒数必填且为数字整数";
                 this.$refs.cue.hint(information) 
             }
-            else if(!this.forms.secondRecommendKm || !this.forms.secondRecommendTime ){
-                let information = "第二轮及以后推送公里数和秒数必填且为数字整数";
-                this.$refs.cue.hint(information)
-            }
+            // else if(!this.forms.secondRecommendKm || !this.forms.secondRecommendTime ){
+            //     let information = "第二轮及以后推送公里数和秒数必填且为数字整数";
+            //     this.$refs.cue.hint(information)
+            // }
             else if(!this.forms.visualCarType){
                 let information = "请选择可见车主类型";
                 this.$refs.cue.hint(information)
             }else{
                 data_NewData(this.forms).then(res=>{
                     console.log(res)
-                    this.$emit('renovate')
+                    this.$alert('操作成功', '提示', {
+                        confirmButtonText: '确定',
+                        callback: action => {
+                            this.$emit('renovate');
+                            this.clearForms();
+                        }
+                    });
+                }).catch( err => {
+                    this.$message({
+                        type: 'info',
+                        message: '操作失败，原因：' + err.text ? err.text : err
+                    })
                 })
             }
             console.log(this.forms)
         },
         closeAddNewInfo(){
             this.close();  
-            this.forms = {
+            this.clearForms();
+            
+            console.log(this.forms)
+        },
+        clearForms(){
+             this.forms = {
                 areaCode:null,//地区code
                 firstRecommendKm:null,//第一次推送公里
                 firstRecommendTime:null,//第一次推送时间
-                secondRecommendKm:null,//第二次
-                secondRecommendTime:null,//第二次
                 serivceCode:null,//服务类型
                 shipperCarType:null,//货主用车类型
                 visualCarType:null,//可见车主类型
                 usingStatus:'1',//起始状态
-            };        
-            
-            console.log(this.forms)
+            };       
+            if(this.$refs.area.selectedOptions){
+                this.$refs.area.selectedOptions = [];
+            }
+            this.visualCarType = [];
         },
         valuerules(){
             if(!event.target.value){
@@ -263,18 +279,18 @@ export default {
             }
         }
     },
-   
 }
 </script>
 
 <style rel="stylesheet/scss" lang="scss" >
-    .addclassify{
+    .dispatchPush{
         .el-dialog{
-            width: 700px;
+            width: 720px;
         }
         .el-dialog__body{
             border-bottom:1px solid #ccc;   
             margin-bottom: 0; 
+            margin: 0 10px;
         }
         p{
             display: inline-block;
