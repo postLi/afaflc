@@ -3,23 +3,23 @@
         <!-- 新增分类信息 -->
             <div class="creatTaskExecute commoncss">
                 <el-dialog v-el-drag-dialog :title='formtitle' :close-on-click-modal="false"  :visible="dialogFormVisible" @close="close">
-                    <el-form :model="taskForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
+                    <el-form :model="form" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
                         <el-form-item label="AppName" prop="appName">
-                            <el-input v-model="taskForm.appName" placeholder="请输入“AppName”" auto-complete="off" clearable></el-input>
+                            <el-input v-model="form.appName" placeholder="请输入“AppName”" auto-complete="off" clearable></el-input>
                         </el-form-item>
                         <el-form-item label="名称" prop="title">
-                            <el-input v-model="taskForm.title" placeholder="请输入“名称”" auto-complete="on" clearable></el-input>
+                            <el-input v-model="form.title" placeholder="请输入“名称”" auto-complete="on" clearable></el-input>
                         </el-form-item>
                         <el-form-item label="排序" prop="order">
-                            <el-input v-model="taskForm.order" placeholder="请输入“排序”" auto-complete="off" clearable></el-input>
+                            <el-input v-model="form.order" placeholder="请输入“排序”" auto-complete="off" clearable></el-input>
                         </el-form-item>
                         <el-form-item label="注册方式">
-                            <el-radio-group v-model="taskForm.addressType">
+                            <el-radio-group v-model="form.addressType">
                                 <el-radio v-for="item in radioFrom"  :label="item.value" :key="item.value">{{item.label}}</el-radio>
                             </el-radio-group>
                         </el-form-item>
                          <el-form-item label="机器地址">
-                            <el-input v-model="taskForm.addressList" placeholder="请输入执行器地址列表，多地址逗号分隔" auto-complete="off" :disabled="taskForm.addressType == '0'" clearable></el-input>
+                            <el-input v-model="form.addressList" placeholder="请输入执行器地址列表，多地址逗号分隔" auto-complete="off" :disabled="form.addressType == '0'" clearable></el-input>
                         </el-form-item>
                     </el-form>
                     <div slot="footer" class="dialog-footer">
@@ -33,11 +33,11 @@
 
 <script>
 
-import { data_newTaskExecute } from '@/api/task/taskExecute.js'
+import { data_newTaskExecute,data_changeTaskExecute } from '@/api/task/taskExecute.js'
 import { REGEX } from '@/utils/validate.js'
 
 export default {
-    name: 'addClassfy',
+    name: 'taskComponent',
     props: {
         dialogFormVisible:{
             type:Boolean,
@@ -50,6 +50,9 @@ export default {
         taskForm:{
             type:Object,
             required:true
+        },
+        editType:{
+            type:String,
         }
     },
     components:{
@@ -59,10 +62,12 @@ export default {
      
     },
     watch:{
-        dialogFormVisible:{
+        editType:{
             handler(newVal, oldVal) {
-                if(newVal){
-
+                if(newVal == 'edit'){
+                    this.form = Object.assign({},this.taskForm)
+                }else{
+                    this.form = Object.assign({},this.taskForm)
                 }
             },
         },
@@ -93,6 +98,13 @@ export default {
             }
         };
         return {
+            form:{
+                addressType:0,
+                order:null,
+                title:null,
+                appName:null,
+                addressList:null,
+            },
             radioFrom:[
                 {value:0,label:'自动注册'},
                 {value:1,label:'手动录入'},
@@ -116,9 +128,8 @@ export default {
         this.init();
     },
     methods: {
-       
         close(){
-            this.$emit('update:dialogFormVisible',false)
+            this.$emit('update:dialogFormVisible',false);
         },
         getTaskChoose(){
             let params = 1 ;
@@ -133,11 +144,10 @@ export default {
              
         },
         newInfoSave(formName){
-
-            console.log(this.taskForm)
+            console.log(this.form)
             this.$refs[formName].validate((valid) => {
                 if (valid) {
-                    if(this.taskForm.addressType != 0  && !this.taskForm.addressList){
+                    if(this.form.addressType != 0  && !this.form.addressList){
                         this.$alert('手动录入注册方式，机器地址不可为空', '系统提示', {
                             confirmButtonText: '确定',
                             callback: action => {
@@ -146,7 +156,13 @@ export default {
                         });
                         return false
                     }
-                    data_newTaskExecute(this.taskForm).then(res => {
+                    let exeuteFuntion;
+                    if(this.editType == 'add'){
+                        exeuteFuntion = data_newTaskExecute(this.form)
+                    }else{
+                        exeuteFuntion = data_changeTaskExecute(this.form)
+                    }
+                    exeuteFuntion.then(res => {
                         console.log(res)
                     }).catch( err => {
                         console.log('err',err)
@@ -168,8 +184,12 @@ export default {
                 }
             });
         },
-        closeAddNewInfo(){
+        closeAddNewInfo(done){
             this.close();
+            this.$refs['ruleForm'].resetFields()
+            if(typeof done === 'function'){
+                done()
+            }
         }
     }
 }

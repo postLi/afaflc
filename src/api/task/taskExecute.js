@@ -20,12 +20,20 @@ export function data_newTaskExecute(data) {
 }
 
 //删除执行器
-
 export function data_removeTaskExecute(id) {
     return fetch({
         url: '/'+baseurl+'/jobgroup/remove',
         method: 'post',
         id: id
+    })
+}
+
+//修改执行器
+export function data_changeTaskExecute(data) {
+    return fetch({
+        url: '/'+baseurl+'/jobgroup/update',
+        method: 'post',
+        data: data
     })
 }
 

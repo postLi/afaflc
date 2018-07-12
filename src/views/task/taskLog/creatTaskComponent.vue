@@ -5,7 +5,7 @@
                 <el-dialog :title='formtitle' :close-on-click-modal="false"  :visible="dialogFormVisible" @close="close">
                     <el-form :model="taskForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
                         <el-form-item label="执行器" prop="name">
-                            <el-select v-model="taskForm.jobGroup" clearable placeholder="请选择">
+                            <el-select v-model="taskForm.name" clearable placeholder="请选择">
                                 <el-option
                                     v-for="item in newTaskOptions"
                                     :key="item.id"
@@ -15,10 +15,10 @@
                             </el-select>
                         </el-form-item>
                         <el-form-item label="任务描述" prop="name">
-                            <el-input v-model="taskForm.jobDesc"></el-input>
+                            <el-input v-model="taskForm.name"></el-input>
                         </el-form-item>
                         <el-form-item label="路由策略" prop="name">
-                            <el-select v-model="taskForm.executorRouteStrategy" placeholder="请选择">
+                            <el-select v-model="taskForm.name" placeholder="请选择">
                                 <el-option value="FIRST" >第一个</el-option>
                                 <el-option value="LAST" >最后一个</el-option>
                                 <el-option value="ROUND" >轮询</el-option>
@@ -32,10 +32,10 @@
                             </el-select>
                         </el-form-item>
                         <el-form-item label="Cron" prop="name">
-                            <el-input v-model="taskForm.jobCron"></el-input>
+                            <el-input v-model="taskForm.name"></el-input>
                         </el-form-item>
                         <el-form-item label="运行模式" prop="name">
-                            <el-select v-model="taskForm.glueType" placeholder="请选择">
+                            <el-select v-model="taskForm.name" placeholder="请选择">
                                 <el-option value="BEAN" >BEAN模式</el-option>
                                 <el-option value="GLUE_GROOVY" >GLUE模式(Java)</el-option>
                                 <el-option value="GLUE_SHELL" >GLUE模式(Shell)</el-option>
@@ -43,32 +43,32 @@
                             </el-select>
                         </el-form-item>
                         <el-form-item label="JobHandler" prop="name">
-                            <el-input v-model="taskForm.executorHandler"></el-input>
+                            <el-input v-model="taskForm.name"></el-input>
                         </el-form-item>
                         <el-form-item label="执行参数" prop="name">
-                            <el-input v-model="taskForm.executorParam"></el-input>
+                            <el-input v-model="taskForm.name"></el-input>
                         </el-form-item>
                         <el-form-item label="子任务Key" prop="name">
-                            <el-input v-model="taskForm.childJobKey"></el-input>
+                            <el-input v-model="taskForm.name"></el-input>
                         </el-form-item>
                         <el-form-item label="阻塞处理策略" prop="name">
-                            <el-select v-model="taskForm.executorBlockStrategy" placeholder="请选择">
+                            <el-select v-model="taskForm.name" placeholder="请选择">
                                 <el-option value="SERIAL_EXECUTION" >单机串行</el-option>
                                 <el-option value="DISCARD_LATER" >丢弃后续调度</el-option>
                                 <el-option value="COVER_EARLY" >覆盖之前调度</el-option>
                             </el-select>
                         </el-form-item>
                         <el-form-item label="失败处理策略" prop="name">
-                            <el-select v-model="taskForm.executorFailStrategy" placeholder="请选择">
+                            <el-select v-model="taskForm.name" placeholder="请选择">
                                 <el-option value="FAIL_ALARM" >失败告警</el-option>
 								<el-option value="FAIL_RETRY" >失败重试</el-option>
                             </el-select>
                         </el-form-item>
                         <el-form-item label="负责人" prop="name">
-                            <el-input v-model="taskForm.author"></el-input>
+                            <el-input v-model="taskForm.name"></el-input>
                         </el-form-item>
                         <el-form-item label="报警邮件" prop="name">
-                            <el-input v-model="taskForm.alarmEmail"></el-input>
+                            <el-input v-model="taskForm.name"></el-input>
                         </el-form-item>
                     </el-form>
                     <div slot="footer" class="dialog-footer">
@@ -117,18 +117,7 @@ export default {
     data() {
       return {
             taskForm:{
-                jobGroup:null,
-                jobDesc:null,
-                executorRouteStrategy:null,
-                jobCron:null,
-                glueType:null,
-                executorHandler:null,
-                executorParam:null,
-                childJobKey:null,
-                executorBlockStrategy:null,
-                executorFailStrategy:null,
-                author:null,
-                alarmEmail:null,
+                name:null,
             },
             ExecutorRouteStrategyEnum:[],
             newTaskOptions:[],//执行器下拉列表

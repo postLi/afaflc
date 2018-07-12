@@ -214,6 +214,7 @@ import changeclassify from './changeclassify'
                     console.log('开始：',this.changeforms.bindingStartDate,this.changeforms.bindingEndDate)
                     
                 }
+                this.$refs.multipleTable.clearSelection()
             },
             // 禁用/启用
             handleUseStates(){
@@ -237,6 +238,7 @@ import changeclassify from './changeclassify'
                         console.log(err)
                     })
                 }
+                this.$refs.multipleTable.clearSelection()
             },
             // 是否删除
             handleDelete() {
@@ -312,6 +314,7 @@ import changeclassify from './changeclassify'
             //新增分类信息
             addClassfy(){
                 this.dialogFormVisible = true;
+                this.$refs.multipleTable.clearSelection();
             },
             hint(val){
                 this.information = val;

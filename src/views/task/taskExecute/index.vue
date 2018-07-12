@@ -72,7 +72,7 @@
 
                 </div>
                 
-                <creatTaskExecuteComponent :dialogFormVisible.sync = "dialogFormVisible" @renovate="Onrenovate" :taskForm = "taskForms" :formtitle = "formtitle"></creatTaskExecuteComponent>
+                <creatTaskExecuteComponent :dialogFormVisible.sync = "dialogFormVisible"  :editType = "editType" @renovate="Onrenovate" :taskForm = "taskForms" :formtitle = "formtitle"></creatTaskExecuteComponent>
             </div>
         <!-- loading   -->
         <!-- <spinner v-show="show"></spinner>  -->
@@ -90,20 +90,16 @@ import { data_taskExecuteList,data_removeTaskExecute } from '@/api/task/taskExec
     export default{
         data(){
             return{
-                formtitle:'新增任务',//新增任务
+                formtitle:'新增执行器',//新增任务
                 dialogFormVisible:false,
                 test:null,
                 tableExecute:[],
                 currentPage4:1,
                 pagesize:1,
                 dataTotal:null,
-                taskForms:{
-                    addressType:0,
-                    order:null,
-                    title:null,
-                    appName:null,
-                    addressList:null,
-                },
+                taskForms:{},
+                tasktest:{},
+                editType:null,//按钮类型
             }
         },
         components:{
@@ -126,7 +122,7 @@ import { data_taskExecuteList,data_removeTaskExecute } from '@/api/task/taskExec
             //单选中当前数据
             handleCurrentTask(val){
                 console.log(val)
-                this.taskForms = val;
+                this.tasktest = val;
             },
             
             handleSizeChange(val) {
@@ -171,9 +167,13 @@ import { data_taskExecuteList,data_removeTaskExecute } from '@/api/task/taskExec
                 switch (type){
                     case 'add':
                         this.dialogFormVisible = true ;
+                        this.editType = 'add';
+                        this.taskForms = {};
                         break;
                     case 'edit':
                         this.dialogFormVisible = true ;
+                        this.editType = 'edit';
+                        this.taskForms = this.tasktest;
                 }
             },
             //移除执行器
@@ -188,13 +188,6 @@ import { data_taskExecuteList,data_removeTaskExecute } from '@/api/task/taskExec
             //
             Onrenovate(){
                 this.firstblood();
-                this.taskForms = {
-                    addressType:0,
-                    order:null,
-                    title:null,
-                    appName:null,
-                    addressList:null
-                }
             },
 
         }
