@@ -272,6 +272,10 @@ export default {
                 }
             }
         },
+    },
+    btntext(newVal,oldVal){
+        // console.log(newVal,oldVal)
+        this.text = newVal;
     }
   },
   mounted(){
@@ -300,14 +304,15 @@ export default {
             this.dialogFormVisible_add = true;
             return
         }else if(this.editType == 'edit'){
-                this.xinzengform = this.params;
+                this.xinzengform =JSON.parse(JSON.stringify(this.params))
                 this.dialogFormVisible_add = true;
         }else if(this.editType == 'identification'){
-                this.xinzengform = this.params;
+                this.xinzengform =JSON.parse(JSON.stringify(this.params))
                 this.dialogFormVisible_add = true;
         }else if(this.editType == 'view'){
                 this.dialogFormVisible_add = true;
-                this.xinzengform  = this.paramsView;
+                this.xinzengform =JSON.parse(JSON.stringify(this.paramsView))
+
         }
 
     },

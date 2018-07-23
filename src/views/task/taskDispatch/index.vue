@@ -7,7 +7,7 @@
                             v-for="item in taskOptions"
                             :key="item.id"
                             :label="item.title"
-                            :value="item.title">
+                            :value="item.id">
                         </el-option>
                     </el-select>
                 </label>

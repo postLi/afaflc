@@ -154,6 +154,9 @@
                                 .lessWidth{
                                     width: 80px;
                                 }
+                                &>.el-checkbox{
+                                    margin-left: 130px;
+                                }
                             }
                         }    
                         .licensePicture{

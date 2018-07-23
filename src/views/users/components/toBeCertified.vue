@@ -78,7 +78,7 @@
             <el-row>
                 <el-col :span="12">
                     <el-form-item label="身份证号码：" :label-width="formLabelWidth">
-                        <el-input v-model="templateModel.driverMobile"></el-input>
+                        <el-input v-model="templateModel.driverCardid"></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col :span="12">
@@ -91,7 +91,7 @@
             <el-row>
                 <el-col :span="12">
                     <el-form-item label="车牌号：" :label-width="formLabelWidth">
-                        <el-input v-model="templateModel.driverMobile"></el-input>
+                        <el-input v-model="templateModel.carNumber"></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col :span="12">
@@ -150,7 +150,7 @@
             <el-row>
               <el-col :span="12">
                 <el-form-item label="注册来源" :label-width="formLabelWidth">
-                  <el-input v-model="templateModel.registerOrigin" disabled></el-input>
+                  <el-input v-model="templateModel.registerOriginName" disabled></el-input>
                 </el-form-item>
               </el-col>
             </el-row>

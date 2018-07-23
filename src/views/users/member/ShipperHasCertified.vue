@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div style="height:100%;">
         <div class="shipper_searchinfo">
             <el-form :inline="true">
                 <el-form-item label="手机号：">
@@ -41,41 +41,32 @@
                     tooltip-effect="dark"
                     style="width: 100%">
                     <el-table-column type='index' label="序号" width="80px">
-				    </el-table-column>  
-                    <el-table-column  label="公司名称">
-                        <template slot-scope="scope">
-                            <createdDialog :paramsView="scope.row" btntype="text" :btntext="scope.row.companyName" editType="view" btntitle="详情"></createdDialog>
-                        </template>
-                    </el-table-column>
-                    <el-table-column
-                        prop="mobile"
-                        label="手机号"
-                        width="200">
-                    </el-table-column>
-                    <el-table-column
-                        prop="contacts"
-                        label="联系人">
-                    </el-table-column>
-                    <el-table-column
-                        prop="registerOrigin"
-                        label="注册来源">
-                    </el-table-column>
-                    <el-table-column prop="shipperStatusName" label="认证状态">
-                    </el-table-column>
-                    <el-table-column prop="accountStatusName" label="账户状态">
-                    </el-table-column>
-                    <el-table-column
-                        prop="belongCityName"
-                        label="所在地">
-                    </el-table-column>
-                    <el-table-column
-                        prop="shipperTypeName"
-                        label="货主类型">
-                    </el-table-column>
-                    <el-table-column
-                        prop="authPassTime"
-                        label="认证通过日期">
-                    </el-table-column>
+				</el-table-column>  
+				<el-table-column label="手机号(会员账号)">
+                    <template slot-scope="scope">
+                        <createdDialog :paramsView="scope.row" btntype="text" :btntext="scope.row.mobile" editType="view" btntitle="详情"></createdDialog>
+                    </template>
+				</el-table-column>
+				<el-table-column prop="contactsName" label="注册人姓名">
+				</el-table-column>
+				<el-table-column prop="companyName" label="公司名称">
+				</el-table-column>
+				<el-table-column prop="belongCityName" label="所在地">
+				</el-table-column>
+				<el-table-column prop="registerOriginName" label="注册来源">
+				</el-table-column>
+				<el-table-column prop="registerTime" label="注册日期" width="200">
+				</el-table-column>
+				<el-table-column prop="accountStatusName" label="账户状态">
+				</el-table-column>
+				<el-table-column prop="authStatusName" label="认证状态">
+				</el-table-column>
+                <el-table-column prop="qq" label="QQ号码">
+				</el-table-column>
+				<el-table-column prop="serviceCommitment" label="会员服务承诺">
+				</el-table-column>
+                <el-table-column prop="isOpenTms" label="是否开通TMS">
+				</el-table-column>
                 </el-table>
                 <el-pagination
                     @size-change="handleSizeChange"
@@ -95,7 +86,9 @@ import createdDialog from './createdDialog.vue'
 import { eventBus } from '@/eventBus'
 // import FreezeDialog from './FreezeDialog.vue'
 // import shipperBlackDialog from './shipperBlackDialog'
-import {data_get_shipper_list,data_get_shipper_type} from '../../../api/users/shipper/all_shipper.js'
+import {data_get_shipper_type} from '../../../api/users/shipper/all_shipper.js'
+import { data_LogisticsCompanyList } from '../../../api/users/logistics/LogisticsCompany.js'
+
 export default {
     props: {
         isvisible: {
@@ -119,7 +112,7 @@ export default {
                 companyName:'',
                 belongCity:'',
                 mobile:'',
-                shipperStatus:"AF0010403",//已认证的状态码
+                authStatus:"AF0010403",//已认证的状态码
             },
             selectRowData:{}
         }
@@ -150,7 +143,7 @@ export default {
         },
         //刷新页面
       firstblood(){
-        data_get_shipper_list(this.page,this.pagesize,this.formInline).then(res=>{
+        data_LogisticsCompanyList(this.page,this.pagesize,this.formInline).then(res=>{
             this.totalCount = res.data.totalCount;
             this.tableData3 = res.data.list;
             // this.inited = false;
@@ -168,14 +161,9 @@ export default {
         this.firstblood()
       },
        //点击查询按纽，按条件查询列表
-      getdata_search(event){
-          data_get_shipper_list(this.page,this.pagesize,this.formInline).then(res=>{
-            
-            this.totalCount = res.data.totalCount;
-            this.tableData3 = res.data.list;
-            console.log(this.tableData3,res)
-          })
-      },
+        getdata_search(event){
+            this.firstblood()
+        },
       
         //清空
         clearSearch(){
@@ -183,7 +171,7 @@ export default {
                 companyName:'',
                 belongCity:'',
                 mobile:'',
-                shipperStatus:"AF0010403",//已认证的状态码
+                authStatus:"AF0010403",//已认证的状态码
             }
             this.firstblood()
         },

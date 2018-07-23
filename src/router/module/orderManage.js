@@ -4,14 +4,17 @@ const _import = require('../_import_' + process.env.NODE_ENV)
 export default {
   path: '/order',
   component: Layout,
-  redirect: '/order/OrderTrack',
+  redirect: '/order/tongcheng',
   icon: 'chengyunshang',
   name: '订单管理',
   noDropdown: true, 
   children: [
     {
-      path: '/order/OrderTrack', icon: 'QQ', name: '订单管理', component: _import('order/OrderTrack/index'), meta: { role: ['admin'], title: '订单管理',stitle: '订单',  noCache: true }
+      path: '/order/tongcheng', icon: 'QQ', name: '同城订单', component: _import('order/tongcheng/index'), meta: { role: ['admin'], title: '同城订单',stitle: '同城',  noCache: true }
     },
+    {
+        path: '/order/lingdan', icon: 'QQ', name: '零担订单', component: _import('order/lingdan/index'), meta: { role: ['admin'], title: '零担订单',stitle: '零担',  noCache: true }
+      },
 //   {
 //     path: '/dispatch/OpenseaRecommend', icon: 'QQ', name: '公海推单', component: _import('dispatch/OpenseaRecommend/index'), meta: { role: ['admin'], title: '公海推单',stitle: '公海',  noCache: true }
 //   },

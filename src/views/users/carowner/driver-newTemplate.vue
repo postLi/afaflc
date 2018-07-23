@@ -121,7 +121,7 @@
               <el-row>
                   <el-col :span="12">
                     <el-form-item :label-width="formLabelWidth">
-                        <el-checkbox v-model="templateModel.isVipCar">是特权车</el-checkbox>
+                        <el-checkbox v-model="templateModel.isVipCar" @change='aa' label="1">是特权车</el-checkbox>
                     </el-form-item>
                   </el-col>
               </el-row>
@@ -274,6 +274,11 @@ export default {
         changeList(){
             eventBus.$emit('changeListtwo')
         },
+        aa(val){
+            console.log(val)
+            console.log(this.templateModel.isVipCar)
+            
+        },
         // 获取对应的字典列表
         getMoreInformation(){
             // console.log('等数据来')
@@ -308,39 +313,19 @@ export default {
 
         openDialog(){
             if (this.editType === 'add') {
-                this.driverTemplateDialogFlag=true 
+                this.driverTemplateDialogFlag = true ;
             }else if(this.editType=== 'valetAuth'||this.editType==='edit'){
                 if(this.templateItem!= null){
-                    this.driverTemplateDialogFlag=true 
+                    this.driverTemplateDialogFlag = true ;
                 }else{         
-                    this.driverTemplateDialogFlag=false        
+                    this.driverTemplateDialogFlag = false ;    
                 }
             }
 
             if(this.templateItem){
                 var obj = JSON.parse(JSON.stringify(this.templateItem));
-                this.templateModel=obj
-            } else {
-                this.templateModel.driverMobile=null
-                this.templateModel.driverName=null
-                this.templateModel.driverCardid=null
-                this.templateModel.carNumber=null
-                this.templateModel.carType=null
-                this.templateModel.carLength=null
-                this.templateModel.carWidth=null
-                this.templateModel.carHeight=null
-                this.templateModel.carSpec=null
-                this.templateModel.belongCity=null
-                this.templateModel.carFile=null
-                this.templateModel.drivingPermitFile=null
-                this.templateModel.drivingLicenceFile=null
-                this.templateModel.idCardFile=null
-                this.templateModel.takeIdCardFile=null
-                this.templateModel.obtainGrade=null
-                this.templateModel.obtainGradeTime=null
-                this.templateModel.isVipCar=null
-                this.templateModel.driverId=null
-            }
+                this.templateModel = obj ;
+            } 
         },
          completeData(){
              console.log("--------------------------"+this.$refs.area)

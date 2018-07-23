@@ -496,6 +496,7 @@ import spinner from '../../spinner/spinner'
         components:{
             spinner
         },
+        
         mounted(){
             //...
             this.firstblood();
@@ -543,14 +544,13 @@ import spinner from '../../spinner/spinner'
                             this.standKm = null;
                             this.standMorePrice = null;
                        }
-
                    }).catch(res=>{
-                    console.log(res)
-                    // if(res.status == 40001)
-                    let information = res.text;
-                    this.hint(information);
-                })
-               }
+                        console.log(res)
+                        // if(res.status == 40001)
+                        let information = res.text;
+                        this.hint(information);
+                    })
+                }
             },
             //根据车长显示标准定价
             choseVule(val){
@@ -796,9 +796,13 @@ import spinner from '../../spinner/spinner'
             },
             handleSizeChange(val) {
                 console.log(`每页 ${val} 条`);
+                this.pagesize = val;
+                this.getCommonFunction();
             },
             handleCurrentChange(val) {
                 console.log(`当前页: ${val}`);
+                this.page = val;
+                this.getCommonFunction();
             },
 
 
