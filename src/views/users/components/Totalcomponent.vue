@@ -150,8 +150,7 @@
                                 type="primary" 
                                 btntype="text"
                                 editType="view"
-
-                                btntitle="新增车主">
+                                btntitle="车主详情">
                                 </driver-newTemplate>
                         </template>
                         </el-table-column>
@@ -257,7 +256,7 @@
         watch: {
             isvisible: {
                 handler(newVal, oldVal) {
-                
+                 
                     if(newVal && !this.inited){
 
                         this.inited = true
@@ -294,26 +293,23 @@
             },
             //点击选中当前行
             clickDetails(row, event, column){
-            
             },
 
             // 判断选中与否
             handleSelectionChange(val){
-                console.log(val)
-              this.multipleSelection = val;
+              console.log('log1',val)
+              
              
               if(val) {
-               
+               this.multipleSelection = val;
                 this.selectRowData=val
-                
               } else{
-               
-                this.selectRowData=null
-                
-               
+                this.selectRowData= this.multipleSelection
+    
               }
             },
             freezeClick(val){
+             console.log('log2',this.selectRowData)
                 if(this.selectRowData == null) {           
                     this.selectRowData=null
                     this.$refs.cue.hint(this.ifInformation)

@@ -242,7 +242,6 @@ export default {
       this.$refs.singleTable.setCurrentRow(row);
     },
     openDialog(){
-      
         this.formFroze = this.params;
 
         if(this.formFroze.accountStatusName == '冻结中' && this.editType == 'add'){

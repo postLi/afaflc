@@ -29,7 +29,9 @@
                     editType="edit"
                     v-on:click.native="freezeClick"
                     :templateItem="selectionData"
-                    btntitle="修改">
+                    btntitle="修改"
+                    :updataflag="true"
+                    >
                     </driver-newTemplate>
                 </div>
                 <div class="info_news">
@@ -51,6 +53,15 @@
                         <el-table-column
                         prop="carNumber"
                         label="车牌号">
+                    <template slot-scope="scope">
+                    <driver-newTemplate         
+                    btntype="text"           
+                    :btntext="scope.row.carNumber"
+                    editType="view"
+                    :templateItem="scope.row"
+                    btntitle="详情">
+                    </driver-newTemplate>
+                              </template>
                         </el-table-column>
                         <el-table-column
                         prop="driverMobile"
@@ -106,7 +117,8 @@
         components:{
             GetCityList,
             DriverNewTemplate,
-            cue
+            cue,
+            DriverNewTemplate
         },
         data(){
             return{

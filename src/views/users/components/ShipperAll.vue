@@ -268,7 +268,7 @@ export default {
 		eventBus.$emit('changeList')
 	},
     // 判断选中与否
-    handleCurrentChangeRow(val){
+    handleCurrentChangeRow(val){ 
         console.log('选中内容',val)
         this.selectRowData = val;
     },

@@ -37,8 +37,22 @@
                         label="序号"
                         width="80">
                         </el-table-column>
-                        <el-table-column prop="carNumber" label="车牌号"></el-table-column>
-                        <el-table-column prop="driverMobile" label="手机号"></el-table-column>
+                        <el-table-column prop="carNumber" label="车牌号">
+                        <template slot-scope="scope">
+                        <driver-newTemplate         
+                          btntype="text"           
+                         :btntext="scope.row.carNumber"
+                          editType="view"
+                         :templateItem="scope.row"
+                         btntitle="详情"
+                         :updataflag="true"
+                         >
+                        </driver-newTemplate>
+                              </template>
+
+                        </el-table-column>
+                        <el-table-column prop="driverMobile" label="手机号" >
+                        </el-table-column>
                         <el-table-column  prop="driverName" label="车主" width="200"></el-table-column>
                         <el-table-column prop="belongCityName" label="所在地"></el-table-column>
                         <el-table-column  prop="authenticationTime" label="提交认证时间"></el-table-column>
@@ -154,12 +168,14 @@
                 </el-form-item>
               </el-col>
             </el-row>
- 
+                 <div class="data_pic_default">
+                    <img  :src= 'defaultImg1'/>
+                </div>
             <div class="data_pic">
-                <div class="data_pic_yyzz data_pic_c">
-                    <el-form-item>
-                    <upload class="licensePicture" tip="（必须为jpg/png并且小于5M）" v-model="templateModel.carFile" />
-                    </el-form-item>
+                <div class="data_pic_callingcode data_pic_c">
+                <img  class="picURL" :src="templateModel.carFile ? templateModel.carFile : defaultImg" @click="changeIMG"/>
+                    <!-- <upload class="licensePicture" tip="（必须为jpg/png并且小于5M）" v-model="templateModel.carFile" /> -->
+              
                     <h2>车辆45°</h2>
                     <el-form-item prop="radio1">
                       <el-radio-group v-model="radio1" @change="pictureTypeChange">
@@ -169,8 +185,9 @@
                       </el-radio-group>
                     </el-form-item> 
                 </div>
-                <div class="data_pic_company data_pic_c">
-                    <upload class="licensePicture" tip="（必须为jpg/png并且小于5M）" v-model="templateModel.drivingPermitFile" />
+                <div class="data_pic_callingcode data_pic_c">
+              <img  class="picURL" :src="templateModel.drivingPermitFile ? templateModel.drivingPermitFile : defaultImg" @click="changeIMG"/>
+                    <!-- <upload class="licensePicture" tip="（必须为jpg/png并且小于5M）" v-model="templateModel.drivingPermitFile" /> -->
                     <h2>行驾证</h2>
                     <el-form-item prop="radio2">
                       <el-radio-group v-model="radio2" @change="pictureTypeChange">
@@ -181,7 +198,8 @@
                     </el-form-item>
                 </div>
                 <div class="data_pic_callingcode data_pic_c">
-                    <upload class="licensePicture" tip="（必须为jpg/png并且小于5M）" v-model="templateModel.drivingLicenceFile" />
+                 <img  class="picURL" :src="templateModel.drivingLicenceFile ? templateModel.drivingLicenceFile : defaultImg" @click="changeIMG"/>
+                    <!-- <upload class="licensePicture" tip="（必须为jpg/png并且小于5M）" v-model="templateModel.drivingLicenceFile" /> -->
                     <h2>驾驶证</h2>
                     <el-form-item prop="radio3">
                       <el-radio-group v-model="radio3" @change="pictureTypeChange">
@@ -192,7 +210,8 @@
                     </el-form-item>
                 </div>
                 <div class="data_pic_callingcode data_pic_c">
-                    <upload class="licensePicture" tip="（必须为jpg/png并且小于5M）" v-model="templateModel.idcardFile" />
+               <img  class="picURL" :src="templateModel.idcardFile ? templateModel.idcardFile : defaultImg" @click="changeIMG"/>
+                    <!-- <upload class="licensePicture" tip="（必须为jpg/png并且小于5M）" v-model="templateModel.idcardFile" /> -->
 
                     <h2>身份证</h2>
                     <el-form-item prop="radio3">
@@ -204,7 +223,8 @@
                     </el-form-item>
                 </div>
                 <div class="data_pic_callingcode data_pic_c">
-                    <upload class="licensePicture" tip="（必须为jpg/png并且小于5M）" v-model="templateModel.takeIdCardFile" />
+                 <img  class="picURL" :src="templateModel.takeIdCardFile ? templateModel.takeIdCardFile : defaultImg" @click="changeIMG"/>
+                    <!-- <upload class="licensePicture" tip="（必须为jpg/png并且小于5M）" v-model="templateModel.takeIdCardFile" /> -->
                     <h2>手持身份证</h2>
                     <el-form-item prop="radio3">
                       <el-radio-group v-model="radio5" @change="pictureTypeChange">
@@ -229,6 +249,7 @@
 </template>
 <script type="text/javascript">
     import {data_get_driver_list,data_get_driver_status,data_post_audit} from '../../../api/users/carowner/total_carowner.js'
+    import DriverNewTemplate from '../carowner/driver-newTemplate'
     import Upload from '@/components/Upload/singleImage'
     import cue from '../../../components/Message/cue'
     import { eventBus } from '@/eventBus'
@@ -244,10 +265,13 @@
         components:{
             Upload,
             GetCityList,
-            cue
+            cue,
+            DriverNewTemplate
         },
         data(){
             return{
+                defaultImg:'/static/test.jpg',//默认第一张图片的url
+                defaultImg1:'',//默认第一张图片的url
                 options:[], //车辆规格下拉列表
                 page:1,//当前页
                 pagesize:20,//每页显示数
@@ -265,7 +289,7 @@
                     name:'全部'
                     }
                 ],
-                formLabelWidth:'130px',
+                formLabelWidth:'110px',
                 formAuidDialogFlag:false, // 认证审核弹框控制
                 templateModel:{ // 认证审核表单
                 },
@@ -391,6 +415,10 @@
             pictureTypeChange(){
 
             },
+             changeIMG(event){
+            // console.log(event)
+            this.defaultImg1 = event.target.src;
+            },
             completeData(){
                 //获取城市name
                 if(!this.$refs.area){
@@ -461,9 +489,41 @@
     }
 </script>
 <style lang="scss">
-.carOwner .commoncss .data_pic .data_pic_c{
-        display: inline-block;
-    width:150px;
+.shenghe .data_pic{
+   width: 100%;
+   margin:0px auto;
+   display: flex;
+   justify-content: space-around;
 }
+.data_pic_c{
+    flex-basis: 130px;
+    margin:0px 5px;
+}
+.shenghe .data_pic .data_pic_c h2
+{
+    line-height: 40px;
+    text-align: center;
+}
+.shenghe .data_pic .data_pic_c .el-radio-group{
+margin:0px auto;
+}
+.commoncss .el-dialog{
+    width: 750px;
+}
+.commoncss .el-dialog .el-input{
+    width: 250px;
+}
+.picURL{
+    width: 100%;
+}
+.data_pic_default
+{
+   margin:20px 0px;
 
+img{
+    width: 500px;
+    margin: 0px auto;
+    display: block
+}
+} 
 </style>
