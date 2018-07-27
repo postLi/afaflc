@@ -200,7 +200,7 @@
     
             </el-form>
             <div slot="footer" class="dialog-footer">
-                <el-button type="primary" @click="onSubmit(templateModel)">确 定</el-button>
+                <el-button type="primary" @click="onSubmit(templateModel)" v-show="editType!='view'">确 定</el-button>
                 <el-button @click="driverTemplateDialogFlag=false" v-show="editType!='view'">取 消</el-button>
             </div>
         </el-dialog>

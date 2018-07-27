@@ -377,6 +377,7 @@ export default {
        this.changeList();
         this.$refs['formFroze'].validate((valid)=>{
         if(valid){
+          console.log('this.formFroze',this.formFroze)
           var forms= Object.assign({}, this.formFroze)
           
           data_get_freezeDriverchange(forms).then(res=>{
