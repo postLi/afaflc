@@ -51,7 +51,8 @@
             </el-col>
             <el-col :span="12">
             <el-form-item label="片区名称：" :label-width="formLabelWidth" prop="districtName">
-            <el-input v-model="vestAll.districtName"></el-input>
+            <el-input @focus="()=>{showMap('endAddress')}" v-model="vestAll.districtName"></el-input>
+
            </el-form-item>
             </el-col>
               </el-row>
@@ -286,6 +287,7 @@
    <div>
 
    </div>
+       <tmsmap @success="getInfo" pos="" name="" :popVisible.sync="popVisible" />
   </div>
 
 </template>
@@ -296,6 +298,7 @@ import  { data_get_onesource_list,data_add_onesource_list,data_Del_onesource,dat
 import { parseTime,formatTime } from '@/utils/index.js'
 import GetCityList from '@/components/GetCityList'
 import vestdetail from './vestdetail'
+import tmsmap from '@/components/map/index'
 export default {
     data(){
         //    选择省市校验
@@ -339,6 +342,7 @@ export default {
             }
 
         return{
+        popVisible:false,
         serviceCardList:[],
         viewStatus:'add',
         selectRowData:{},
@@ -388,7 +392,8 @@ export default {
     },
     components:{
         GetCityList,
-        vestdetail
+        vestdetail,
+        tmsmap
     },
     computed:{
      totalAeraData(){
@@ -446,7 +451,22 @@ export default {
                     console.log(res)
                 });
             },
-
+        showMap(name) {
+            this.popVisible = true ;
+            this.current = name;
+        },
+                getInfo(pos, name, info) {
+            // info.name  info.pos
+            console.log(pos, name, info)
+            switch (this.current) {
+                case 'strartAddress':
+                this.ruleForm.startLocation = info.addressComponent.province+info.addressComponent.cit+info.addressComponent.district;
+                break;
+                case 'endAddress':
+                this.ruleForm.endLocation = info.addressComponent.province+info.addressComponent.cit+info.addressComponent.district;
+                break;
+            }
+        },
         openDialog(){
          this.driverTemplateDialogFlag=true;
          this.driverTemplateDialogFlag2 = false;
