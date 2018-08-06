@@ -1,5 +1,5 @@
 <template>
     <div>
-        代付款
+        全部
     </div>
 </template>
