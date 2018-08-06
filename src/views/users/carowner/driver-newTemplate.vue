@@ -141,13 +141,8 @@
 
               <el-row>
                   <el-col :span="12">
-<<<<<<< HEAD
-                    <el-form-item :label-width="formLabelWidth">
-                        <el-checkbox v-model="isVipCar" @change='aa'>是特权车</el-checkbox>
-=======
                     <el-form-item :label-width="formLabelWidth" label="特权车：">
                         <el-checkbox v-model="templateModel.isVipCar" @change='aa' label="是" border size="medium" :disabled="editType=='view'" :checked='templateModel.isVipCar!==""'></el-checkbox>
->>>>>>> 1af9a953fc7675581b2e9c50bd56b07b67e2c82d
                     </el-form-item>
                   </el-col>
               </el-row>
@@ -423,15 +418,8 @@ export default {
                 cb()
             }
         }   
-
-        
-   
         return{
-<<<<<<< HEAD
-            isVipCar:'',
-=======
             defaultImg:'/static/test.jpg',//默认第一张图片的url
->>>>>>> 1af9a953fc7675581b2e9c50bd56b07b67e2c82d
             selectFlag: false,
             type:'primary',
             title:'',
