@@ -89,7 +89,7 @@
           </div>
           <el-row>
             <el-col :span="24">
-              <el-form-item label="移入原因：" prop="freezeCause" :label-width="formLabelWidth">
+              <el-form-item label="移入原因：" prop="putBlackCause" :label-width="formLabelWidth">
               <el-select v-model="formFroze.putBlackCause" placeholder="请选择" clearable  v-if = "editType == 'edit-four'">
                 <el-option
                   v-for="item in putBlackCauseoptions"
@@ -143,6 +143,7 @@
 import GetCityList from '@/components/GetCityList'
 import {parseTime} from '@/utils/'
 import { eventBus } from '@/eventBus'
+import  {data_put_PutBlack,data_put_OutBlack} from '@/api/users/carowner/total_carowner.js'
 import {data_get_shipper_type,data_get_shipper_change,data_get_shipper_freezeType,data_get_freeze_change,data_get_freeze, data_get_shipper_BlackType,data_unbind_freeze_change,data_blacklist,data_remove_blacklist} from '@/api/users/shipper/all_shipper.js'
 export default {
   name:'create-Change-ViewDialog',
@@ -227,7 +228,8 @@ export default {
       },
       formFrozeRules:{
         freezeCause:{required: true,message:'请选择冻结原因',trigger:'change'},
-        freezeTime:{required:true,message:'请选择解冻日期',trigger:'change'}
+        freezeTime:{required:true,message:'请选择解冻日期',trigger:'change'},
+        putBlackCause:{required:true,message:'请选择移入黑名单原因',trigger:'change'}
       }
     }
   },
@@ -275,19 +277,18 @@ export default {
       this.$refs.singleTable.setCurrentRow(row);
     },
     openDialog(){
- 
-      if(this.editType ==="edit-four" || this.editType ==="edit-five" ){
-        console.log(this.params)
-        if(this.params!= null){
-          this.freezeDialogFlag=true 
-        }else{         
-          this.freezeDialogFlag=false        
-        }
-      }
 
+      this.formBlack = this.params;
+
+      if(this.formBlack.accountStatusName == '黑名单' && this.editType == 'edit-four'){
+                    this.$message.info('您选中的货主已被移入黑名单，不需多次拉黑！');
+                    return
+                }
+       else if(this.formBlack.accountStatusName != '黑名单' && this.editType == 'edit-five'){
+                    this.$message.info('您选中的货主未被移入黑名单，不可做此操作！');
+                    return
+       }
       if(this.params){
-
-     
         var obj = JSON.parse(JSON.stringify(this.params));
        
         this.formFroze=obj;
@@ -296,7 +297,8 @@ export default {
        /* this.formFroze.forEach(item => {
             item.obtainGradeTime = parseTime(item.obtainGradeTime,"{y}-{m}-{d}");
         })*/
-       
+        this.freezeDialogFlag=true 
+
       }else{
         this.formFroze=null;
        
@@ -333,14 +335,14 @@ export default {
         if(valid){
           var forms= Object.assign({}, this.formFroze)
           
-          data_blacklist(forms).then(res=>{
+          data_put_PutBlack(forms).then(res=>{
          
-            this.$message.success('解冻修改成功')
+            this.$message.success('移入黑名单成功')
             this.freezeDialogFlag = false;
             this.$emit('getData') 
           }).catch(err=>{
             console.log(err)
-          })
+          })  
         }
       })
     },
@@ -351,9 +353,8 @@ export default {
         if(valid){
           var forms= Object.assign({}, this.formFroze)
           
-          data_remove_blacklist(forms).then(res=>{
-         
-            this.$message.success('解冻修改成功')
+          data_put_OutBlack(forms).then(res=>{
+            this.$message.success('移出黑名单成功')
             this.freezeDialogFlag = false;
             this.$emit('getData') 
           }).catch(err=>{

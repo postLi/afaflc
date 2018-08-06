@@ -26,7 +26,9 @@
                     v-on:click.native="freezeClick"
                     :templateItem="selectionData"
                     btntitle="车主管理"
-                    @getData="getDataList">
+                    @getData="getDataList"
+                    :updataflag="true"
+                    >
                     </driver-newTemplate>
                 </div>
                 <div class="info_news">

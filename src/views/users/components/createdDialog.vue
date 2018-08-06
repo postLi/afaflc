@@ -258,6 +258,7 @@ export default {
     
     dialogFormVisible_add:{
         handler: function(val, oldVal) {
+            console.log('fdffrrrr',this.$refs.area)
             if(!val){
                 this.selectFlag=false;
                 this.$refs.xinzengform.resetFields();

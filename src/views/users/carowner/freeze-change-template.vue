@@ -176,6 +176,8 @@ import GetCityList from '@/components/GetCityList'
 import {parseTime} from '@/utils/'
 import { eventBus } from '@/eventBus'
 import {data_get_shipper_type,data_get_shipper_change,data_get_shipper_freezeType,data_get_freeze_change,data_get_freeze,data_unbind_freeze_change} from '@/api/users/shipper/all_shipper.js'
+
+import  {data_put_freezeDriver,data_get_freezeDriverchange,data_unbind_freezeDriverchange} from '@/api/users/carowner/total_carowner.js'
 export default {
   name:'create-Change-ViewDialog',
   components:{
@@ -305,21 +307,22 @@ export default {
     },
     openDialog(){
       //冻结
-      if(this.editType ==="edit" ||this.editType ==="edit-two" ||this.editType ==="edit-three"){
-      
-        if(this.params!= null){
-         
-          this.freezeDialogFlag=true 
-        }else{
-         
-          this.freezeDialogFlag=false
-         
-          
+
+            this.formFroze = this.params;
+
+        if(this.formFroze.accountStatusName == '冻结中' && this.editType == 'edit'){
+            this.$message.info('您选中的货主已被冻结，不需多次冻结！');
+            return
         }
-      }
-    
-    
-      if(this.params){
+        else if(this.formFroze.accountStatusName != '冻结中' && this.editType == 'edit-two'){
+            this.$message.info('您选中的货主未被冻结，不可做此操作！');
+            return
+        }
+        else if(this.formFroze.accountStatusName != '冻结中' && this.editType == 'edit-three'){
+            this.$message.info('您选中的货主未被冻结，无需移除！');
+            return
+        }
+        else if(this.params){
 
      
         var obj = JSON.parse(JSON.stringify(this.params));
@@ -329,10 +332,10 @@ export default {
        /* this.formFroze.forEach(item => {
             item.obtainGradeTime = parseTime(item.obtainGradeTime,"{y}-{m}-{d}");
         })*/
-       
-      }else{
-        this.formFroze=null
-       
+       this.freezeDialogFlag=true
+      }
+      else{
+         this.freezeDialogFlag=true
       }
     },
 
@@ -355,12 +358,11 @@ export default {
     // 冻结提交数据
     onSubmit(){
       this.changeList();
+
       this.$refs['formFroze'].validate((valid)=>{
         if(valid){
           var forms= Object.assign({}, this.formFroze)
-          
-          data_get_freeze(forms).then(res=>{
-         
+          data_put_freezeDriver(forms).then(res=>{
             this.$message.success('冻结修改成功')
             this.freezeDialogFlag = false;
             this.$emit('getData') 
@@ -375,9 +377,10 @@ export default {
        this.changeList();
         this.$refs['formFroze'].validate((valid)=>{
         if(valid){
+          console.log('this.formFroze',this.formFroze)
           var forms= Object.assign({}, this.formFroze)
           
-          data_get_freeze_change(forms).then(res=>{
+          data_get_freezeDriverchange(forms).then(res=>{
           
             this.$message.success('冻结修改成功')
             this.freezeDialogFlag = false;
@@ -395,8 +398,7 @@ export default {
         if(valid){
           var forms= Object.assign({}, this.formFroze)
           
-         data_unbind_freeze_change(forms).then(res=>{
-         
+         data_unbind_freezeDriverchange(forms).then(res=>{
             this.$message.success('解冻修改成功')
             this.freezeDialogFlag = false;
             this.$emit('getData') 
