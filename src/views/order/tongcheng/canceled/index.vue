@@ -1,5 +1,5 @@
 <template>
     <div>
-        代付款
+        已取消
     </div>
 </template>

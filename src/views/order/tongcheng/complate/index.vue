@@ -1,5 +1,5 @@
 <template>
     <div>
-        代付款
+        已完成
     </div>
 </template>
