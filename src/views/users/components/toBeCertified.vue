@@ -305,7 +305,7 @@
         },
         computed: {
             pictureValue () {
-            return '车辆45°:'+ this.radio1 + ',行驾证:'+ this.radio2 + ',驾驶证:'+ this.radio3 + ',身份证'+ this.radio4 + ',手持身份证'+ this.radio5
+            return {'车辆45°':this.radio1 ,'行驾证': this.radio2,'驾驶证':this.radio3 , '身份证':this.radio4 ,'手持身份证':this.radio5}
             }
         },
         watch: {
@@ -451,7 +451,7 @@
                 this.completeData()
                 this.$refs['shengheform'].validate((valid)=>{
                 if(valid){
-                    var forms=Object.assign({},this.templateModel,{driverStatus:"AF0010404"},{authNoPassCause:this.pictureValue})
+                    var forms=Object.assign({},this.templateModel,{driverStatus:"AF0010404"},{authNoPassCause:JSON.stringify(this.pictureValue)})
                     this.$confirm()
                     data_post_audit(forms).then(res=>{
                         // console.log(res)
@@ -471,7 +471,7 @@
                 this.completeData()
                 this.$refs['shengheform'].validate((valid)=>{
                     if(valid){
-                        var forms=Object.assign({},this.templateModel,{driverStatus:"AF0010403",authNoPassCause:""})
+                        var forms=Object.assign({},this.templateModel,{driverStatus:"AF0010403",authNoPassCause:JSON.stringify(this.pictureValue)})
                         data_post_audit(forms).then(res=>{
                             // console.log(res)
                             this.$message.success('审核通过成功')

@@ -418,9 +418,6 @@ export default {
                 cb()
             }
         }   
-
-        
-   
         return{
             defaultImg:'/static/test.jpg',//默认第一张图片的url
             selectFlag: false,
@@ -517,9 +514,13 @@ export default {
             eventBus.$emit('changeListtwo')
         },
         aa(val){
-            console.log(val)
+            if(val ){
+                this.templateModel.isVipCar = '1'
+            }
+            else{
+                this.templateModel.isVipCar = '0'
+            }   
             console.log(this.templateModel.isVipCar)
-            
         },
         // 获取对应的字典列表
         getMoreInformation(){

@@ -9,7 +9,7 @@
               <el-select v-model="formAll.shipperStatus" clearable placeholder="请选择">
                 <el-option
                   v-for="item in optionsStatus"
-                  :key="item.value"
+                  :key="item.id"
                   :label="item.name"
                   :value="item.code"
                   :disabled="item.disabled">
@@ -20,7 +20,7 @@
               <el-select v-model="formAll.accountStatus" clearable placeholder="请选择">
                 <el-option
                   v-for="item in optionsAuidSataus"
-                  :key="item.code + 'shipperAll' "
+                  :key="item.id"
                   :label="item.name"
                   :value="item.code"
                   :disabled="item.disabled">
@@ -33,7 +33,7 @@
              <el-form-item label="手机号：">
              <el-input v-model.trim="formAll.mobile"></el-input>
           </el-form-item>
-          <el-form-item>
+          <el-form-item class="fr">
             <el-button type="primary" plain @click="getdata_search">查询</el-button>
             <el-button type="info" plain @click="clearSearch">清空</el-button>
           </el-form-item>
@@ -116,6 +116,13 @@
                 @current-change="handleCurrentChangeRow"
 				tooltip-effect="dark"
 				style="width: 100%">
+                <el-table-column label="" width="65">
+                     <template slot-scope="scope">
+                <!-- class="textRadio" -->
+                <el-radio @change.native="getCurrentRow(scope.$index)" :label="scope.$index" v-model="radio" class="textRadio">&nbsp;</el-radio>
+
+              </template>
+                </el-table-column>
 				<el-table-column type='index' label="序号" width="80px">
 				</el-table-column>  
 				<el-table-column label="手机号">
@@ -189,6 +196,8 @@ export default {
 	},
   data(){
       return{
+           radio: 1,
+          templateRadio:'',
         ul:true,
 		freeze:true,//是否冻结
 		options:[],
@@ -264,6 +273,10 @@ export default {
         })
     },
     methods:{
+        getTemplateRow(index,row){       
+            console.log('this.templateRadio',this.templateRadio)                          //获取选中数据
+    this.templateSelection = row;
+},
 	changeList(){
 		eventBus.$emit('changeList')
 	},

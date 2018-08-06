@@ -49,8 +49,8 @@
     import ShipperCertified from './components/ShipperCertified.vue'
     import ShipperHasCertified from './components/ShipperHasCertified.vue'
     import ShipperDisqualification from './components/ShipperDisqualification.vue'
-    import ShipperFreezing from './components/ShipperFreezing.vue'
-    import ShipperBlacklist from './components/ShipperBlacklist.vue'
+    // import ShipperFreezing from './components/ShipperFreezing.vue'
+    // import ShipperBlacklist from './components/ShipperBlacklist.vue'
      
     export default {
       name:'shipper',
@@ -60,8 +60,8 @@
           ShipperCertified,
           ShipperHasCertified,
           ShipperDisqualification,
-          ShipperFreezing,
-          ShipperBlacklist
+        //   ShipperFreezing,
+        //   ShipperBlacklist
         },
         data() {
           return {
@@ -133,7 +133,7 @@
             width:100%;
             line-height: 35px;
             .el-form-item{
-                margin-right: 18px;
+                margin-right: 15px;
                 .el-form-item__content{
                     .el-input{
                         .el-input__inner{
