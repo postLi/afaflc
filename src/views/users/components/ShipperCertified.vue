@@ -274,7 +274,6 @@ export default {
         })
     },
     methods:{
-
         regionChange(d) {
             this.btnText = (!d.province&&!d.city&&!d.area&&!d.town)?'please select': `${this.getValue(d.province)}${'/'+this.getValue(d.city)}${this.getValue(d.area)}${this.getValue(d.town)}`.trim();
         },
@@ -286,7 +285,6 @@ export default {
         //     console.log(data);
         // },
         changeIMG(event){
-            // console.log(event)
             this.defaultImg = event.target.src;
         },
         changeList(){
@@ -304,7 +302,7 @@ export default {
 
             this.dialogFormVisible = true;
             this.shengheform = this.multipleSelection;
-            // this.defaultImg =  this.shengheform.businessLicenceFile ?  this.shengheform.businessLicenceFile : defaultImg;
+            this.defaultImg =  this.shengheform.businessLicenceFile ?  this.shengheform.businessLicenceFile : defaultImg;
             
         },
         handleCurrentChangeRow(val){

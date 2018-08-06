@@ -121,7 +121,7 @@
               <el-row>
                   <el-col :span="12">
                     <el-form-item :label-width="formLabelWidth">
-                        <el-checkbox v-model="templateModel.isVipCar" @change='aa' label="1">是特权车</el-checkbox>
+                        <el-checkbox v-model="isVipCar" @change='aa'>是特权车</el-checkbox>
                     </el-form-item>
                   </el-col>
               </el-row>
@@ -218,6 +218,7 @@ export default {
     },
     data() {
         return{
+            isVipCar:'',
             selectFlag: false,
             type:'primary',
             title:'',
@@ -275,9 +276,13 @@ export default {
             eventBus.$emit('changeListtwo')
         },
         aa(val){
-            console.log(val)
+            if(val ){
+                this.templateModel.isVipCar = '1'
+            }
+            else{
+                this.templateModel.isVipCar = '0'
+            }   
             console.log(this.templateModel.isVipCar)
-            
         },
         // 获取对应的字典列表
         getMoreInformation(){

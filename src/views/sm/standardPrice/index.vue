@@ -5,7 +5,7 @@
                     <el-select v-model="valueService" clearable placeholder="请选择">
                         <el-option
                             v-for="item in optionsService"
-                            :key="item.value"
+                            :key="item.id"
                             :label="item.name"
                             :value="item.code"
                             :disabled="item.disabled">
@@ -16,7 +16,7 @@
                     <el-select v-model="valueCarlist" clearable placeholder="请选择">
                         <el-option
                         v-for="item in optionsCar"
-                        :key="item.value"
+                        :key="item.id"
                         :label="item.name"
                         :value="item.code"
                         :disabled="item.disabled">
@@ -27,7 +27,7 @@
                     <el-select v-model="valueStatus" clearable placeholder="请选择">
                         <el-option
                         v-for="item in optionsStatus"
-                        :key="item.value"
+                        :key="item.id"
                         :label="item.label"
                         :value="item.value"
                         :disabled="item.disabled">
