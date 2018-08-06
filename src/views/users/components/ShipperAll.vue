@@ -353,7 +353,7 @@ export default {
   }
 }
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
     .removeFreeze,.removeBlcak{
         .shipper_information{
             h2{ 

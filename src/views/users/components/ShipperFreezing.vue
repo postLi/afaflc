@@ -337,6 +337,7 @@ export default {
     },
     //点击查询按纽，按条件查询列表
     getdata_search(event){
+
        this.formAll.belongCity = this.$refs.area.selectedOptions.pop();
         data_get_shipper_list(this.page,this.pagesize,this.formAll).then(res=>{
           this.totalCount = res.data.totalCount;

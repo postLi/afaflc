@@ -27,6 +27,8 @@ import Dispatch from './module/dispatchServer'
 import Order from './module/orderManage'
 // 任务
 import Task from './module/taskControl'
+// 马甲
+import vest from './module/vest'
 
 Vue.use(Router)
 
@@ -72,6 +74,7 @@ export const asyncRouterMap = [
   Task,
   Common,
   Service,
+  vest,
 /*   {
     path: '/createOrder', hidden: true, icon: 'QQ', name: '创建运单', component: _import('operation/order/createOrder/pop'), meta: { role: ['admin'], title: '创建运单', noCache: true }
   }, */

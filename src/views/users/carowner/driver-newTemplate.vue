@@ -481,7 +481,6 @@ export default {
         driverTemplateDialogFlag:{
         handler: function(val, oldVal) {
             if(!val){
-                            console.log('fdffrrrr',this.$refs.area)
                 this.selectFlag=false;
                 this.$refs.templateModel.resetFields();
                 if(this.editType == 'add'){
