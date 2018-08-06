@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div style="height:100%;">
         <div class="shipper_searchinfo">
           <el-form :inline="true">
             <el-form-item label="所在地：">
@@ -36,7 +36,7 @@
                 </button>
             </v-region> -->
 		  	<div class="btns_box">
-				<createdDialog 
+				<!-- <createdDialog 
 				btntext="代客认证"
 				:params="selectRowData"
 				:plain="true" type="primary" 
@@ -55,7 +55,7 @@
 				editType="edit" 
 				btntitle="修改"
 				@getData="getDataList">
-				</createdDialog>
+				</createdDialog> -->
 			</div>
 			<div class="info_news">
 				<el-table
@@ -63,37 +63,37 @@
 				:data="tableData4"
 				stripe
 				border
+                height="100%"
 				highlight-current-row
                 @current-change="handleCurrentChangeRow"
 				tooltip-effect="dark"
 				style="width: 100%">
 				<el-table-column type='index' label="序号" width="80px">
 				</el-table-column>  
-				<el-table-column
-					prop="mobile"
-					label="手机号">
+				<el-table-column label="手机号(会员账号)">
+                    <template slot-scope="scope">
+                        <createdDialog :paramsView="scope.row" btntype="text" :btntext="scope.row.mobile" editType="view" btntitle="详情"></createdDialog>
+                    </template>
 				</el-table-column>
-				<el-table-column prop="contacts" label="联系人">
+				<el-table-column prop="contactsName" label="注册人姓名">
 				</el-table-column>
-				<el-table-column
-					prop="registerOrigin"
-					label="注册来源">
+				<el-table-column prop="companyName" label="公司名称">
 				</el-table-column>
-				<el-table-column prop="shipperStatusName" label="认证状态">
+				<el-table-column prop="belongCityName" label="所在地">
+				</el-table-column>
+				<el-table-column prop="registerOriginName" label="注册来源">
+				</el-table-column>
+				<el-table-column prop="registerTime" label="注册日期">
 				</el-table-column>
 				<el-table-column prop="accountStatusName" label="账户状态">
 				</el-table-column>
-				<el-table-column
-					prop="belongCityName"
-					label="所在地">
+				<el-table-column prop="authStatusName" label="认证状态">
 				</el-table-column>
-				<el-table-column
-					prop="shipperTypeName"
-					label="货主类型">
+                <el-table-column prop="qq" label="QQ号码">
 				</el-table-column>
-				<el-table-column
-					prop="registerTime"
-					label="注册日期">
+				<el-table-column prop="serviceCommitment" label="会员服务承诺">
+				</el-table-column>
+                <el-table-column prop="isOpenTms" label="是否开通TMS">
 				</el-table-column>
 				</el-table>
 				<el-pagination
@@ -116,6 +116,8 @@ import { eventBus } from '@/eventBus'
 import FreezeDialog from './FreezeDialog.vue'
 import {parseTime} from '@/utils/'
 import {data_get_shipper_list,data_get_shipper_change,data_get_shipper_auid,} from '../../../api/users/shipper/all_shipper.js'
+import { data_LogisticsCompanyList } from '../../../api/users/logistics/LogisticsCompany.js'
+
 export default {
 	props: {
 		isvisible: {
@@ -139,7 +141,7 @@ export default {
             accountStatus:null,
             belongCity:'',
             mobile:'',
-            shipperStatus:"AF0010401",//未认证的状态码
+            authStatus:"AF0010401",//未认证的状态码
         },
         formLabelWidth:'120px',
         information:null,
@@ -203,11 +205,8 @@ export default {
     },
       //点击查询按纽，按条件查询列表
     getdata_search(event){
-      this.formInline.belongCity = this.$refs.area.selectedOptions.pop();
-      data_get_shipper_list(this.page,this.pagesize,this.formInline).then(res=>{
-        this.totalCount = res.data.totalCount;
-        this.tableData4 = res.data.list;
-      })
+        this.formInline.belongCity = this.$refs.area.selectedOptions.pop();
+        this.firstblood();
     },
     
     //清空
@@ -217,13 +216,13 @@ export default {
             accountStatus:null,
             belongCity:'',
             mobile:'',
-            shipperStatus:"AF0010401",//未认证的状态码
+            authStatus:"AF0010401",//未认证的状态码
         },
 	    this.firstblood();
     },
       //刷新页面
     firstblood(){
-      data_get_shipper_list(this.page,this.pagesize,this.formInline).then(res=>{
+      data_LogisticsCompanyList(this.page,this.pagesize,this.formInline).then(res=>{
         // console.log('未认证',res)
         this.totalCount = res.data.totalCount;
         this.tableData4 = res.data.list;

@@ -22,9 +22,8 @@ export function data_newTaskExecute(data) {
 //删除执行器
 export function data_removeTaskExecute(id) {
     return fetch({
-        url: '/'+baseurl+'/jobgroup/remove',
+        url: '/'+baseurl+'/jobgroup/remove'+id,
         method: 'post',
-        id: id
     })
 }
 

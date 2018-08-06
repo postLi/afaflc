@@ -6,10 +6,10 @@
               <GetCityList v-model="formAll.belongCity" ref="area"></GetCityList>
             </el-form-item>
             <el-form-item label="认证状态：">
-              <el-select v-model="formAll.shipperStatus" clearable placeholder="请选择">
+              <el-select v-model="formAll.authStatus" clearable placeholder="请选择">
                 <el-option
                   v-for="item in optionsStatus"
-                  :key="item.id"
+                  :key="item.value"
                   :label="item.name"
                   :value="item.code"
                   :disabled="item.disabled">
@@ -20,29 +20,25 @@
               <el-select v-model="formAll.accountStatus" clearable placeholder="请选择">
                 <el-option
                   v-for="item in optionsAuidSataus"
-                  :key="item.id"
+                  :key="item.code + 'shipperAll' "
                   :label="item.name"
                   :value="item.code"
                   :disabled="item.disabled">
                 </el-option>
               </el-select>
             </el-form-item>
-            <el-form-item label="公司名称:">
-              <el-input v-model.trim="formAll.companyName"></el-input>
+            <el-form-item label="手机号：">
+                <el-input v-model.trim="formAll.mobile"></el-input>
             </el-form-item>
-             <el-form-item label="手机号：">
-             <el-input v-model.trim="formAll.mobile"></el-input>
-          </el-form-item>
-          <el-form-item class="fr">
-            <el-button type="primary" plain @click="getdata_search">查询</el-button>
-            <el-button type="info" plain @click="clearSearch">清空</el-button>
-          </el-form-item>
+            <el-form-item>
+                <el-button type="primary" plain @click="getdata_search">查询</el-button>
+                <el-button type="info" plain @click="clearSearch">清空</el-button>
+            </el-form-item>
           </el-form>
         </div>
 		<div class="classify_info">
             <!-- <v-region  class="form-control" :text = false  :ui = false  ></v-region> -->
 			<div class="btns_box">
-				<createdDialog btntext="新增" :plain="true" type="primary" btntype="primary" icon="el-icon-news" editType="add" btntitle="新增货主" @getData="getDataList"></createdDialog>
 				<FreezeDialog
 				btntext="冻结"
 				type="primary" 
@@ -116,45 +112,35 @@
                 @current-change="handleCurrentChangeRow"
 				tooltip-effect="dark"
 				style="width: 100%">
-                <el-table-column label="" width="65">
-                    <template scope="scope">
-                        <el-radio :label="scope.row.id" v-model="templateRadio" @change.native="getTemplateRow(scope.$index,scope.row)">&nbsp</el-radio>
-                    </template>
-                </el-table-column>
 				<el-table-column type='index' label="序号" width="80px">
 				</el-table-column>  
-				<el-table-column label="手机号">
+				<el-table-column label="手机号(会员账号)" width="250">
                     <template slot-scope="scope">
                         <createdDialog :paramsView="scope.row" btntype="text" :btntext="scope.row.mobile" editType="view" btntitle="详情"></createdDialog>
                     </template>
 				</el-table-column>
+				<el-table-column prop="contactsName" label="注册人姓名">
+				</el-table-column>
 				<el-table-column prop="companyName" label="公司名称">
-					<!-- <template slot-scope="scope">
-					{{scope.row.companyName ?  scope.row.companyName : '个人业务'}}
-					</template> -->
-				</el-table-column>
-				<el-table-column prop="contacts" label="联系人">
-				</el-table-column>
-				<el-table-column prop="registerOrigin" label="注册来源">
-				</el-table-column>
-				<el-table-column prop="shipperStatusName" label="认证状态">
-					<!-- <template slot-scope="scope">
-					{{getAttestationStatus(scope.row.shipperStatus)}}
-					</template> -->
-				</el-table-column>
-				<el-table-column prop="accountStatusName" label="账户状态">
-					<!-- <template slot-scope="scope">
-					{{getAccountStatus(scope.row.accountStatus)}}
-					</template> -->
 				</el-table-column>
 				<el-table-column prop="belongCityName" label="所在地">
 				</el-table-column>
-				<el-table-column prop="shipperTypeName" label="货主类型">
-					<!-- <template slot-scope="scope">
-					{{scope.row.shipperType==='AF0010202'? '企业货主':'普通货主'}}
-					</template> -->
+				<el-table-column prop="registerOriginName" label="注册来源" width="100">
 				</el-table-column>
-				<el-table-column prop="registerTime" label="注册日期">
+				<el-table-column prop="registerTime" label="注册日期" width="200">
+				</el-table-column>
+				<el-table-column prop="accountStatusName" label="账户状态">
+				</el-table-column>
+				<el-table-column prop="authStatusName" label="认证状态">
+				</el-table-column>
+                <el-table-column prop="qq" label="QQ号码">
+				</el-table-column>
+				<el-table-column prop="serviceCommitment" label="会员服务承诺">
+				</el-table-column>
+                <el-table-column prop="isOpenTms" label="是否开通TMS">
+                    <template slot-scope="scope">
+                        {{scope.row.isOpenTms == 1 ? '是' : '否'}}
+                    </template>
 				</el-table-column>
 				</el-table>
 				<el-pagination
@@ -172,7 +158,8 @@
 </template>
 
 <script>
-import {data_get_shipper_freezeType,data_get_shipper_BlackType,data_get_shipper_change,data_get_shipper_list,data_get_shipper_status,data_get_shipper_auid} from '@/api/users/shipper/all_shipper.js'
+import {data_get_shipper_freezeType,data_get_shipper_BlackType,data_get_shipper_change,data_get_shipper_status,data_get_shipper_auid} from '@/api/users/shipper/all_shipper.js'
+import { data_LogisticsCompanyList } from '../../../api/users/logistics/LogisticsCompany.js'
 import createdDialog from './createdDialog.vue'
 import GetCityList from '@/components/GetCityList'
 import FreezeDialog from './FreezeDialog'
@@ -194,7 +181,6 @@ export default {
 	},
   data(){
       return{
-          templateRadio:'',
         ul:true,
 		freeze:true,//是否冻结
 		options:[],
@@ -209,34 +195,12 @@ export default {
 			code:null,
 			name:'全部'
 			}
-		],//账户状态
-		pickerOptions:{
-			disabledDate(time) {
-			return time.getTime() < Date.now();
-			},
-		},
-		optionsReason:[],
-		optionsFormBlack:[],
-		// information:null,
-		// centerDialogVisible: false,
-		formBlack:{ // 移除黑名单的表单
-			mobile:'',
-			contacts:'',
-			companyName:'',
-			belongCity:null,
-			shipperType:null,
-			address:'',
-			registerOrigin:'',
-			putBlackCause:'',
-			popBlackRemark:'',
-			putBlackCauseRemark:'',
-			belongCityName:''
-		},
+		],
 		formAll:{
 			belongCity: null,
-			shipperStatus:null,
+			authStatus:null,
 			accountStatus:null,
-			companyName:null,
+			accountName:null,
 			mobile:null
 		},
 		selectRowData:{},
@@ -270,39 +234,27 @@ export default {
         })
     },
     methods:{
-        getTemplateRow(index,row){                                 //获取选中数据
-    this.templateSelection = row;
-},
 	changeList(){
 		eventBus.$emit('changeList')
 	},
     // 判断选中与否
-    handleCurrentChangeRow(val){ 
+    handleCurrentChangeRow(val){
         console.log('选中内容',val)
         this.selectRowData = val;
     },
     
     //刷新页面
     firstblood(){
-      data_get_shipper_list(this.page,this.pagesize,this.formAll).then(res=>{
-        // console.log('shipperAll',res)
-        this.totalCount = res.data.totalCount;
-        this.tableDataAll = res.data.list;
-        // this.inited = false;
-      }).catch(err=>{
-        console.log(err)
-      })
+        data_LogisticsCompanyList(this.page,this.pagesize,this.formAll).then(res=>{
+            console.log('shipperAll',res)
+            this.totalCount = res.data.totalCount;
+            this.tableDataAll = res.data.list;
+        }).catch(err=>{
+            console.log(err)
+        })
     },
     //获取状态列表
     getMoreInformation(){
-		// 获取移入黑名单的列表
-		data_get_shipper_BlackType().then(res=>{
-			this.optionsFormBlack = res.data;
-		})
-		// 获取冻结原因下拉
-		data_get_shipper_freezeType().then(res=>{
-			this.optionsReason = res.data;
-		})
 		//获取状态列表
 		data_get_shipper_status().then(res=>{
 			console.log('optionsStatus',res)
@@ -320,18 +272,20 @@ export default {
 	},
     //点击查询按纽，按条件查询列表
     getdata_search(event) {
-        // this.formAll.belongCity = this.$refs.area.selectedOptions[1];
         this.formAll.belongCity = this.$refs.area.selectedOptions.pop();
+
+        console.log(this.formAll)
         this.firstblood();
     },
     //清空
     clearSearch(){
         this.$refs.area.selectedOptions = [];
         this.formAll = {
-            belongCity:null,
-            mobile:'',
-            shipperStatus:'',
-            companyName:''
+            belongCity: null,
+			authStatus:null,
+			accountStatus:null,
+			accountName:null,
+			mobile:null
         },
         this.firstblood();
     },
@@ -369,8 +323,6 @@ export default {
                 margin:10px 0 10px 20px;
             }
         }
-        
-
         .el-textarea{
             width: 637px;
         }

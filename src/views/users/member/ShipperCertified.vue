@@ -1,16 +1,10 @@
 <template>
-    <div>
+    <div style="height:100%;">
         <div class="shipper_searchinfo">
           <el-form :inline="true">
             <el-form-item label="所在地：">
               <GetCityList v-model="formAll.belongCity" ref="area"></GetCityList>
             </el-form-item>
-            
-<!-- <v-region :town="true" :ui="true" @values="regionChange" class="form-control">
-    <p>
-        {{btnText}} <i class="fa fa-fw fa-caret-down"></i>
-    </p>
-</v-region> -->
             <el-form-item label="公司名称：">
               <el-input v-model.trim="formAll.companyName"></el-input>
             </el-form-item>
@@ -33,33 +27,38 @@
 			:data="tableData1"
 			stripe
 			border
+            height="100%"
             highlight-current-row
             @current-change="handleCurrentChangeRow"
 			tooltip-effect="dark"
 			style="width: 100%">
 			<el-table-column type='index' label="序号" width="80px">
-			</el-table-column>  
-			<el-table-column label="公司名称">
-                <template slot-scope="scope">
-                    <createdDialog :paramsView="scope.row" btntype="text" :btntext="scope.row.companyName" editType="view" btntitle="详情"></createdDialog>
-                </template>
-			</el-table-column>
-			<el-table-column prop="mobile" label="手机号">
-			</el-table-column>
-			<el-table-column prop="contacts" label="联系人">
-			</el-table-column>
-			<el-table-column prop="registerOrigin" label="注册来源">
-			</el-table-column>
-			<el-table-column prop="shipperStatusName" label="认证状态">
-			</el-table-column>
-			<el-table-column prop="accountStatusName" label="账户状态">
-			</el-table-column>
-			<el-table-column prop="belongCityName" label="所在地">
-			</el-table-column>
-			<el-table-column prop="authenticationTime" label="提交认证时间">
-			</el-table-column>
-			<el-table-column prop="waitTime" label="等待时长">
-			</el-table-column>
+				</el-table-column>  
+				<el-table-column label="手机号(会员账号)">
+                    <template slot-scope="scope">
+                        <createdDialog :paramsView="scope.row" btntype="text" :btntext="scope.row.mobile" editType="view" btntitle="详情"></createdDialog>
+                    </template>
+				</el-table-column>
+				<el-table-column prop="contactsName" label="注册人姓名">
+				</el-table-column>
+				<el-table-column prop="companyName" label="公司名称">
+				</el-table-column>
+				<el-table-column prop="belongCityName" label="所在地">
+				</el-table-column>
+				<el-table-column prop="registerOriginName" label="注册来源">
+				</el-table-column>
+				<el-table-column prop="registerTime" label="注册日期" width="200">
+				</el-table-column>
+				<el-table-column prop="accountStatusName" label="账户状态">
+				</el-table-column>
+				<el-table-column prop="authStatusName" label="认证状态">
+				</el-table-column>
+                <el-table-column prop="qq" label="QQ号码">
+				</el-table-column>
+				<el-table-column prop="serviceCommitment" label="会员服务承诺">
+				</el-table-column>
+                <el-table-column prop="isOpenTms" label="是否开通TMS">
+				</el-table-column>
 			</el-table>
 			<el-pagination
 			@size-change="handleSizeChange"
@@ -79,70 +78,85 @@
           <el-form :model="shengheform" ref="shengheform" :rules="shengheformRules">
             <el-row>
               <el-col :span="12">
-                <el-form-item label="手机号码" :label-width="formLabelWidth" >
-                  <el-input v-model="shengheform.mobile" disabled auto-complete="off"></el-input>
+                <el-form-item label="会员账号" :label-width="formLabelWidth" >
+                  <el-input v-model="shengheform.account" disabled auto-complete="off"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="12">
-                <el-form-item label="公司名称" :label-width="formLabelWidth">
-                  <el-input v-model="shengheform.companyName" auto-complete="off"></el-input>
+                <el-form-item label="会员手机号码" :label-width="formLabelWidth">
+                  <el-input v-model="shengheform.mobile" auto-complete="off"></el-input>
                 </el-form-item>
               </el-col>
             </el-row>
 
             <el-row>
               <el-col :span="12">
-                <el-form-item label="联系人" :label-width="formLabelWidth" prop="linkman">
-                  <el-input v-model="shengheform.contacts" auto-complete="off"></el-input>
+                <el-form-item label="注册人姓名" :label-width="formLabelWidth" prop="linkman">
+                  <el-input v-model="shengheform.contactsName" auto-complete="off" disabled></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="12">
-                <el-form-item label="所在地" :label-width="formLabelWidth" prop="address">
-                 <el-input v-model="shengheform.belongCityName" @focus="changeCity" v-if="selectDiaologFlag" ></el-input>
-                 <span v-else>
-                   <GetCityList v-model="shengheform.belongCity" ref="area"></GetCityList>
-                 </span>
+                <el-form-item label="经营年限" :label-width="formLabelWidth">
+                  <el-input v-model="shengheform.businessLife" :maxlength="20"></el-input>
                 </el-form-item>
               </el-col>
             </el-row>
             <el-row>
               <el-col :span="12">
-                <el-form-item label="详细地址" :label-width="formLabelWidth" prop="xsaddress">
-                  <el-input v-model="shengheform.address" auto-complete="off"></el-input>
+                <el-form-item label="公司名称" :label-width="formLabelWidth" prop="xsaddress">
+                  <el-input v-model="shengheform.companyName" auto-complete="off" disabled></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="12">
-                <el-form-item label="统一社会信用代码" :label-width="formLabelWidth">
-                  <el-input v-model="shengheform.creditCode" :maxlength="20"></el-input>
-                </el-form-item>
-              </el-col>
-            </el-row>
-            <el-row>
-              <el-col :span="12">
-                <el-form-item label="提交认证时间" :label-width="formLabelWidth">
-                    <el-input v-model="shengheform.authenticationTime" disabled></el-input>
-                </el-form-item>
-              </el-col>
-              <el-col :span="12">
-                <el-form-item label="等待时长:" :label-width="formLabelWidth">
-                  <el-input v-model="shengheform.waitTime" disabled></el-input>
+                  <el-form-item label="所在地" :label-width="formLabelWidth" prop="address">
+                    <el-input v-model="shengheform.belongCityName"  disabled></el-input>
+                    <!-- <span v-else> -->
+                    <!-- <GetCityList v-model="shengheform.belongCity" ref="area"></GetCityList> @focus="changeCity" v-if="selectDiaologFlag"-->
+                    <!-- </span> -->
                 </el-form-item>
               </el-col>
             </el-row>
             <el-row>
               <el-col :span="12">
-                  <!-- <img src="../../../assets/404_images/404.png" alt=""> -->
                 <el-form-item label="注册来源" :label-width="formLabelWidth">
-                  <el-input v-model="shengheform.registerOrigin" disabled></el-input>
+                    <el-input v-model="shengheform.registerOriginName" disabled></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="12">
-                <el-form-item label="货主类型" :label-width="formLabelWidth" prop="shipperType">
-                  <el-input v-model="demoData" disabled></el-input>
+                <el-form-item label="注册日期:" :label-width="formLabelWidth">
+                  <el-input v-model="shengheform.registerTime" disabled></el-input>
                 </el-form-item>
               </el-col>
             </el-row>
- 
+            <el-row>
+              <el-col :span="12">
+                <el-form-item label="账户状态" :label-width="formLabelWidth">
+                  <el-input v-model="shengheform.accountStatusName" disabled></el-input>
+                </el-form-item>
+              </el-col>
+              <el-col :span="12">
+                <el-form-item label="认证状态" :label-width="formLabelWidth">
+                  <el-input v-model="shengheform.authStatusName" disabled></el-input>
+                </el-form-item>
+              </el-col>
+            </el-row>
+             <el-row>    
+                <el-col :span="24" class="moreLength">
+                    <el-form-item label="会员服务承诺 ：" :label-width="formLabelWidth" >
+                        <!-- <el-input :maxlength="20" v-model="xinzengform.companyName"  v-if="editType=='view'" disabled></el-input> -->
+                        <el-checkbox-group v-model="otherServiceCode" >
+                            <el-checkbox v-for="obj in optionsLogisticsCompany" :label="obj.code" :key="obj.id" >{{obj.name}}</el-checkbox>
+                        </el-checkbox-group>
+                    </el-form-item>
+                </el-col>
+            </el-row>
+            <el-row>
+                <el-col :span="24" class="moreLength">
+                    <el-form-item label="是否开通TMS ：" :label-width="formLabelWidth" >
+                        <el-input v-model="shengheform.isOpenTms" disabled></el-input>
+                    </el-form-item>
+                </el-col>
+            </el-row>
             <div class="data_pic clearfix">  
                 <div class="data_pic_default">
                     <img  :src= 'defaultImg'/>
@@ -151,7 +165,7 @@
                     <img  class="picURL" :src="shengheform.businessLicenceFile ? shengheform.businessLicenceFile : defaultImg" @click="changeIMG"/>
                     <h2>营业执照</h2>
                     <!-- <el-form-item prop="radio1"> -->
-                      <el-radio-group v-model="shengheform.businessLicenceFileNoPass" @change="pictureTypeChange">
+                      <el-radio-group v-model="radio1" @change="pictureTypeChange">
                         <el-radio label="上传合格">上传合格</el-radio><br />
                         <el-radio label="不清晰">不清晰</el-radio><br />
                         <el-radio label="内容不符">内容不符</el-radio>
@@ -162,7 +176,7 @@
                     <img  class="picURL" :src="shengheform.companyFacadeFile ? shengheform.companyFacadeFile : defaultImg" @click="changeIMG"/>
                     <h2>公司或档口照片</h2>
                     <!-- <el-form-item prop="radio2"> -->
-                      <el-radio-group v-model="shengheform.companyFacadeFileNoPass" @change="pictureTypeChange">
+                      <el-radio-group v-model="radio2" @change="pictureTypeChange">
                         <el-radio label="上传合格">上传合格</el-radio><br />
                         <el-radio label="不清晰">不清晰</el-radio><br />
                         <el-radio label="内容不符">内容不符</el-radio>
@@ -171,10 +185,10 @@
                 </div>
                 <div class="data_pic_callingcode data_pic_c">
                     <!-- <upload class="licensePicture" tip="（必须为jpg/png并且小于5M）" v-model="shengheform.shipperCardFile" /> -->
-                    <img  class="picURL" :src="shengheform.shipperCardFile ? shengheform.shipperCardFile : defaultImg" @click="changeIMG"/>
-                    <h2>发货人名片</h2>
+                    <img  class="picURL" :src="shengheform.takeIdCardFile ? shengheform.takeIdCardFile : defaultImg" @click="changeIMG"/>
+                    <h2>手持身份证</h2>
                     <!-- <el-form-item prop="radio3"> -->
-                      <el-radio-group v-model="shengheform.shipperCardFileNoPass" @change="pictureTypeChange">
+                      <el-radio-group v-model="radio3" @change="pictureTypeChange">
                         <el-radio label="上传合格">上传合格</el-radio><br />
                         <el-radio label="不清晰">不清晰</el-radio><br />
                         <el-radio label="内容不符">内容不符</el-radio>
@@ -197,7 +211,9 @@ import Upload from '@/components/Upload/singleImage'
 import { eventBus } from '@/eventBus'
 import createdDialog from './createdDialog.vue'
 import GetCityList from '@/components/GetCityList'
-import {data_get_shipper_list,data_get_shipper_type,data_get_shipper_change} from '@/api/users/shipper/all_shipper.js'
+import { data_LogisticsCompanyList,data_ChangeLogisticsCompany } from '../../../api/users/logistics/LogisticsCompany.js'
+import { data_LogisticsCompany } from '@/api/common.js'
+
 import defaultURL  from '@/assets/404_images/404.png'
 export default {
 	props: {
@@ -212,9 +228,9 @@ export default {
 		Upload
 	},
 	computed: {
-		// pictureValue () {
-		//     return [{name:'营业执照',result: this.radio1},{name:'公司或档口照片',result: this.radio2},{name:'发货人名片',result: this.radio3}]
-		// }
+		pictureValue () {
+		    return [{name:'营业执照',result: this.radio1},{name:'公司或档口照片',result: this.radio2},{name:'手持身份证',result: this.radio3}]
+		}
 	},
 	data(){
 		const radioValidator = (rule,val,cb)=>{
@@ -233,17 +249,21 @@ export default {
             options:[], // 货主类型列表
             tableData1:[], // 列表数据
             totalCount:null, // 总数
+            optionsLogisticsCompany:[],//会员服务承诺
+            otherServiceCode:[],//选择增值服务
             page:1,
             pagesize:20,
             formAll:{
                 belongCity:null,
                 companyName:'',
                 mobile:'',
-                shipperStatus:"AF0010402",//待认证的状态码
+                authStatus:"AF0010402",//待认证的状态码
             },
             formLabelWidth: '120px',
             dialogFormVisible:false, //认证审核弹框控制
-            shengheform:{},
+            shengheform:{
+
+            },
             centerDialogVisible:false,// 提示语的弹窗控制
             information:null, // 弹框显示的信息
             multipleSelection:{},
@@ -252,7 +272,10 @@ export default {
                 radio1:{validator: radioValidator,trigger:'change'},
                 radio2:{validator: radioValidator,trigger:'change'},
                 radio3:{validator: radioValidator,trigger:'change'}
-            }
+            },
+            radio1:null,
+            radio2:null,
+            radio3:null
         }
 	},
     watch: {
@@ -260,20 +283,42 @@ export default {
             handler(newVal, oldVal) {
                 if(newVal && !this.inited){
                     this.inited = true
-                    this.firstblood()
+                    this.firstblood();
+                    this.getMoreInformation();
                 }
             },
             // 代表在wacth里声明了firstName这个方法之后立即先去执行handler方法
             immediate: true
+        },
+        otherServiceCode:{
+            handler(newVal,oldVal){
+                if(newVal){
+                    this.shengheform.otherServiceCode = newVal.join(',');
+                    // console.log(this.shengheform.otherServiceCode)
+                    let otherService = [];
+                    this.optionsLogisticsCompany.find((item)=>{
+                        this.otherServiceCode.forEach(el => {
+                            if(item.code == el ){
+                                otherService.push(item.name)    
+                            }
+                        })
+                    })
+
+                    this.shengheform.otherService = otherService.join(',');
+                    // console.log(otherService)
+                    // console.log(this.shengheform.otherServiceCode,this.shengheform.otherService)
+                }
+            }
         }
     },
     mounted(){
         eventBus.$on('changeList', () => {
             // console.log('44444444444444444')
-                this.firstblood()
+                this.firstblood();
         })
     },
     methods:{
+
         regionChange(d) {
             this.btnText = (!d.province&&!d.city&&!d.area&&!d.town)?'please select': `${this.getValue(d.province)}${'/'+this.getValue(d.city)}${this.getValue(d.area)}${this.getValue(d.town)}`.trim();
         },
@@ -285,6 +330,7 @@ export default {
         //     console.log(data);
         // },
         changeIMG(event){
+            // console.log(event)
             this.defaultImg = event.target.src;
         },
         changeList(){
@@ -299,18 +345,24 @@ export default {
             return parseInt(time / 1000 / (3600*24))+ '天'+ parseInt(time/1000/(3600*24*60*60)*60*60)+ '小时'
         },
         handleEdit(){
-
-            this.dialogFormVisible = true;
-            this.shengheform = this.multipleSelection;
-            this.defaultImg =  this.shengheform.businessLicenceFile ?  this.shengheform.businessLicenceFile : defaultImg;
-            
+            if(!this.shengheform.mobile){
+                this.$message.info('至少选择一条数据！');
+            }else{
+                this.dialogFormVisible = true;
+            }
+            // this.defaultImg =  this.shengheform.businessLicenceFile ?  this.shengheform.businessLicenceFile : defaultImg;
         },
         handleCurrentChangeRow(val){
-            this.multipleSelection = val;
+            console.log(val)
+            if(val){
+                this.shengheform = val;
+            }
         },
         //刷新页面
         firstblood(){
-            data_get_shipper_list(this.page,this.pagesize,this.formAll).then(res=>{
+            data_LogisticsCompanyList(this.page,this.pagesize,this.formAll).then(res=>{
+            console.log(res)
+
                 this.totalCount = res.data.totalCount;
                 this.tableData1 = res.data.list;
                 // this.inited = true
@@ -318,11 +370,15 @@ export default {
         },
         //点击查询按纽，按条件查询列表
         getdata_search(event){
-                this.formAll.belongCity = this.$refs.area.selectedOptions[1];
-                data_get_shipper_list(this.page,this.pagesize,this.formAll).then(res=>{
-                    this.totalCount = res.data.totalCount;
-                    this.tableData1 = res.data.list;
-                })
+                this.formAll.belongCity = this.$refs.area.selectedOptions.pop();
+                this.firstblood();
+        },
+         //获取增值服务
+        getMoreInformation(){
+            data_LogisticsCompany().then(res=>{
+                this.optionsLogisticsCompany = res.data;
+                // console.log('this.options',this.optionsLogisticsCompany)
+            })
         },
         //清空
         clearSearch(){
@@ -331,7 +387,7 @@ export default {
                 belongCity:null,
                 companyName:'',
                 mobile:'',
-                shipperStatus:"AF0010402",//待认证的状态码
+                authStatus:"AF0010402",//待认证的状态码
             }
             this.firstblood()
         },
@@ -354,22 +410,22 @@ export default {
         if(this.$refs.area.selectedOptions.length > 1){
             let province;
             this.$refs.area.areaData.forEach((item) =>{
-            if(item.code == this.$refs.area.selectedOptions[0]){
-                province = item
-            }
+                if(item.code == this.$refs.area.selectedOptions[0]){
+                    province = item
+                }
             })
             province.children.forEach( item => {
-            if(item.code == this.$refs.area.selectedOptions[1]){
-                this.shengheform.belongCity = item.code;
-                this.shengheform.belongCityName = item.name;
-            }
+                if(item.code == this.$refs.area.selectedOptions[1]){
+                    this.shengheform.belongCity = item.code;
+                    this.shengheform.belongCityName = item.name;
+                }
             })
         }else{
             this.$refs.area.areaData.forEach((item) =>{
-            if(item.code == this.$refs.area.selectedOptions[0]){
-                this.shengheform.belongCity = item.code;
-                this.shengheform.belongCityName = item.name;
-            }
+                if(item.code == this.$refs.area.selectedOptions[0]){
+                    this.shengheform.belongCity = item.code;
+                    this.shengheform.belongCityName = item.name;
+                }
             })
         }
         },
@@ -388,8 +444,8 @@ export default {
                         cancelButtonText: '取消',
                         type: 'warning'
                     }).then(() => {
-                        var forms=Object.assign({},this.shengheform,{shipperType:"AF0010202"},{currentShipperStatus:"AF0010402"},{shipperStatus:"AF0010404"});
-                        data_get_shipper_change(forms).then(res=>{
+                        var forms=Object.assign({},this.shengheform,{authStatus:"AF0010404",authStatusName:'认证不通过'},{authNoPassCause:JSON.stringify(this.pictureValue)});
+                        data_ChangeLogisticsCompany(forms).then(res=>{
                             // console.log(res)
                             this.$message({
                                 type: 'success',
@@ -421,23 +477,17 @@ export default {
 
         // 审核通过
         handlerPass(){
-            let ifQualified;
-            // this.pictureValue.forEach((el,idx) => {
-                //     if(el.result != "上传合格"){
-                    //         ifQualified = false;
-            //     }
-            // })
-
-            if(this.shengheform.shipperCardFileNoPass = this.shengheform.businessLicenceFileNoPass = this.shengheform.companyFacadeFileNoPass == "上传合格" ){
-                ifQualified = true ;
-            }else{
-                ifQualified = false ;
-            }
+            let ifQualified = true;
+            this.pictureValue.forEach((el,idx) => {
+                if(el.result != "上传合格"){
+                    ifQualified = false;
+                }
+            })
             this.$refs['shengheform'].validate((valid)=>{
                 if(valid && ifQualified){
                     this.completeData();
-                    var forms=Object.assign({},this.shengheform,{shipperType:"AF0010202"},{currentShipperStatus:"AF0010402"},{shipperStatus:"AF0010403"});
-                    data_get_shipper_change(forms).then(res=>{
+                    var forms=Object.assign({},this.shengheform,{authStatus:"AF0010403",authStatusName:'已认证'},{authNoPassCause:JSON.stringify(this.pictureValue)});
+                    data_ChangeLogisticsCompany(forms).then(res=>{
                     // console.log(res)
                         this.dialogFormVisible = false;
                         this.$alert('操作成功', '提示', {
@@ -485,7 +535,7 @@ export default {
     .shenghe{
         width: 100%;
         .data_pic{
-            margin: 0 15px;
+            margin: 0 20px;
             padding-bottom: 20px;
             border-bottom: 1px solid #ccc;
             .data_pic_default{

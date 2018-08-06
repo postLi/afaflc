@@ -1,5 +1,5 @@
 <template>
-  <div class="shipper">
+  <div class="member">
     <el-tabs v-model="shipperName" type="border-card" @tab-click="handleClick" >
         <!-- 全部 -->
         <!-- <el-badge :value="12" class="item"> -->
@@ -27,16 +27,6 @@
             <el-tab-pane label="认证不通过" name="fifth">
                 <ShipperDisqualification :isvisible="shipperName === 'fifth'"></ShipperDisqualification>
             </el-tab-pane>
-
-        <!-- 冻结部分 -->
-        <!-- <el-tab-pane label="冻结中" name="six">
-        <ShipperFreezing></ShipperFreezing>
-        </el-tab-pane> -->
-
-        <!-- 黑名单部分 -->
-        <!-- <el-tab-pane label="黑名单" name="seven">
-        <ShipperBlacklist></ShipperBlacklist>
-        </el-tab-pane> -->
     </el-tabs>
   </div>
 </template>
@@ -44,13 +34,12 @@
 
 <script type="text/javascript">
     import '@/styles/dialog.scss'
-    import ShipperAll from './components/ShipperAll.vue'
-    import ShipperUnauthorized from './components/ShipperUnauthorized.vue' 
-    import ShipperCertified from './components/ShipperCertified.vue'
-    import ShipperHasCertified from './components/ShipperHasCertified.vue'
-    import ShipperDisqualification from './components/ShipperDisqualification.vue'
-    // import ShipperFreezing from './components/ShipperFreezing.vue'
-    // import ShipperBlacklist from './components/ShipperBlacklist.vue'
+    import ShipperAll from './ShipperAll.vue'
+    import ShipperUnauthorized from './ShipperUnauthorized.vue' 
+    import ShipperCertified from './ShipperCertified.vue'
+    import ShipperHasCertified from './ShipperHasCertified.vue'
+    import ShipperDisqualification from './ShipperDisqualification.vue'
+
      
     export default {
       name:'shipper',
@@ -60,8 +49,6 @@
           ShipperCertified,
           ShipperHasCertified,
           ShipperDisqualification,
-        //   ShipperFreezing,
-        //   ShipperBlacklist
         },
         data() {
           return {
@@ -100,7 +87,7 @@
 </script>
 
 <style type="text/css" lang="scss">
-    @import "../../styles/tab.scss";
+    @import "../../../styles/tab.scss";
     .completeinfo{
       .detailinfo{
         margin-left: 26px;
@@ -120,7 +107,7 @@
         }
       }
     }
-    .shipper{
+    .member{
         height:100%;    
         position: relative;
         .shipper_searchinfo{
@@ -133,7 +120,7 @@
             width:100%;
             line-height: 35px;
             .el-form-item{
-                margin-right: 15px;
+                margin-right: 30px;
                 .el-form-item__content{
                     .el-input{
                         .el-input__inner{
@@ -150,7 +137,7 @@
         }
         .classify_info{
             height:100%;
-            padding:90px 13px 0 0;
+            padding:90px 0 0 0;
             &>.btns_box{
                 margin-bottom:10px;
                 .el-button{
@@ -183,7 +170,7 @@
     .creatDialog,.freezeDialog,.shipperBlackDialog,.shenghe{
         display: inline-block;
         .el-dialog{
-            width: 780px;
+            width: 810px;
             .el-dialog__body{
                 .el-form{
                     .shipper_information{
@@ -194,6 +181,8 @@
                         }
                     }
                     .el-form-item{
+                        margin-left: 10px;
+                        margin-right: 10px;
                         .el-form-item__content{
                             .el-input{
                                 width: 250px;
@@ -201,14 +190,18 @@
                         }
                     }
                     .moreLength{
+                        text-align: left;
                         .el-form-item__content{
                             .el-input{
-                                width: 637px;
+                                width: 650px;
+                            }
+                            .el-radio-group{
+                                margin-left: 0;
                             }
                         }
                     }
                     .el-textarea{
-                        width: 637px;
+                        width: 650px;
                         vertical-align: top;
                         font-size: 12px;
                         padding-top: 5px;

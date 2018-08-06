@@ -29,7 +29,9 @@
                     editType="edit"
                     v-on:click.native="freezeClick"
                     :templateItem="selectionData"
-                    btntitle="修改">
+                    btntitle="修改"
+                    :updataflag="true"
+                    >
                     </driver-newTemplate>
                 </div>
                 <div class="info_news">
@@ -51,6 +53,15 @@
                         <el-table-column
                         prop="carNumber"
                         label="车牌号">
+                    <template slot-scope="scope">
+                    <driver-newTemplate         
+                    btntype="text"           
+                    :btntext="scope.row.carNumber"
+                    editType="view"
+                    :templateItem="scope.row"
+                    btntitle="详情">
+                    </driver-newTemplate>
+                              </template>
                         </el-table-column>
                         <el-table-column
                         prop="driverMobile"
@@ -73,15 +84,6 @@
                         prop="authPassTime"
                         label="认证通过日期">
                         </el-table-column>
-                        <!-- <el-table-column
-                        prop=""
-                        label="操作">
-                        <template slot-scope="scope">
-                            <el-button type="text">修改</el-button>
-                            <el-button type="text">冻结修改</el-button>
-                            <el-button type="text">移入黑名单</el-button>
-                        </template>
-                        </el-table-column> -->
                     </el-table>
                         
                     <el-pagination
@@ -105,8 +107,6 @@
     import { parseTime,formatTime } from '@/utils/index.js'
     import GetCityList from '@/components/GetCityList'
     import DriverNewTemplate from '../carowner/driver-newTemplate'
-    // import FreezeChangeTemplate from '../carowner/freeze-change-template'
-    // import DriverBlackDialogTemplate from '../carowner/driver-blackDialog-template'
     export default {
         props: {
             isvisible: {
@@ -117,9 +117,8 @@
         components:{
             GetCityList,
             DriverNewTemplate,
-            cue
-            // FreezeChangeTemplate,
-            // DriverBlackDialogTemplate
+            cue,
+            DriverNewTemplate
         },
         data(){
             return{
@@ -163,10 +162,9 @@
         },
         mounted(){
           eventBus.$on('changeListtwo', ()=>{
-              if(this.inited || this.isvisible){
-                this.firstblood()
-                this.getMoreInformation()
-              }
+                if(this.inited || this.isvisible){
+                    this.firstblood()
+                }
           })
         },
  
@@ -187,7 +185,7 @@
                     this.selectionData=val
                      
                 } else{
-                    this.selectionData1=null
+                    this.selectionData1 = null
                 }
             },
             freezeClick(){

@@ -30,7 +30,9 @@
                     v-on:click.native="freezeClick"
                     :templateItem="selectionData"
                     btntitle="车主管理"
-                    @getData="getDataList">
+                    @getData="getDataList"
+                    :updataflag="true"
+                    >
                     </driver-newTemplate>
                 </div>
                 <div class="info_news">
@@ -56,6 +58,16 @@
                         <el-table-column
                         prop="carNumber"
                         label="车牌号">
+                     <template slot-scope="scope">
+                    <driver-newTemplate         
+                    btntype="text"           
+                    :btntext="scope.row.carNumber"
+                    editType="view"
+                    :templateItem="scope.row"
+                    btntitle="详情"
+                    >
+                    </driver-newTemplate>
+                              </template>
                         </el-table-column>
                         <el-table-column
                         prop="driverMobile"

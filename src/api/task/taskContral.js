@@ -11,7 +11,23 @@ export function data_taskList(params){
     })
 }
 
+// 新增任务
+export function data_newTaskList(data) {
+    return fetch({
+      url: '/'+baseurl+'/jobinfo/add',
+      method: 'post',
+      data:data
+    })
+  }
 
+
+//
+
+// export function data_taskList(params){
+//     return fetch.get('/'+baseurl+'/jobinfo/pageList?'+'jobGroup='+params).then(res => {
+//         return res.data || {} 
+//     })
+// }
 
 
 // 获取省级对应的城市列表

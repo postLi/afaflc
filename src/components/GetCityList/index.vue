@@ -11,7 +11,7 @@
 </template>
 <script>
 
-    import { data_getProvinceList,data_GetCityList } from '@/api/common.js'
+import { data_getProvinceList,data_GetCityList } from '@/api/common.js'
 
 export default {
     name: 'getCityList',
@@ -53,9 +53,6 @@ export default {
             }).catch(res=>{
             })
         },
-        // handleItemChange(val) {
-        // console.log('active item:', val);
-        // },
         getMoreInformation(){
            data_getProvinceList().then(res=>{
             //    console.log(res)
@@ -84,10 +81,10 @@ export default {
                 width: 100%;
             }
             .el-cascader__label{
-                top: 10px;
-                height: 24px;
-                line-height: 24px;
-                font-size: 12px;
+                top: 5px;
+                height: 30px;
+                line-height: 30px;
+                font-size: 14px;
                 color: #3e9ff1;
                 padding: 0 25px 0 6px;
                 span{

@@ -10,7 +10,7 @@
                                     v-for="item in newTaskOptions"
                                     :key="item.id"
                                     :label="item.title"
-                                    :value="item.title">
+                                    :value="item.id">
                                 </el-option>
                             </el-select>
                         </el-form-item>
@@ -84,7 +84,7 @@
 <script>
 
 
-import { data_taskList } from '@/api/task/taskContral.js'
+import { data_taskList,data_newTaskList } from '@/api/task/taskContral.js'
 
 
 export default {
@@ -166,7 +166,12 @@ export default {
              
         },
         newInfoSave(){
+            console.log(this.taskForm)
+            data_newTaskList(this.taskForm).then( res => {
 
+            }).catch( err => {
+                console.log('err',err)
+            })
         },
         closeAddNewInfo(){
             this.close();

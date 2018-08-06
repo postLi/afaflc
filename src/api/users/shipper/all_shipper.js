@@ -2,8 +2,8 @@ import fetch from '@/utils/fetch'
 
 const baseurl = 'aflcusercenterservice'
 const baseurl_two = 'aflccommonservice'
-const baseurl_three= 'aflcsmservice'
-// const baseurl_four = 'aflcusercenterservice-lyc'
+const baseurl_three = 'aflcsmservice'
+const baseurl_four = 'aflcusercenterservice-lyc'
 // 获取货主列表
 export function data_get_shipper_list(page, pagesize, data) {
   return fetch({
