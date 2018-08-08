@@ -373,8 +373,6 @@ export default {
                 margin:10px 0 10px 20px;
             }
         }
-        
-
         .el-textarea{
             width: 637px;
         }
