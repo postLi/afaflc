@@ -7,9 +7,19 @@
             <el-form :inline="true" :model="vestList" ref="vestList" :rules="rulesForm">
              <el-row>
             <el-col :span="12">
-            <el-form-item label="省市：" :label-width="formLabelWidth" prop="areaCode"> 
-               <GetCityList ref="area" v-model="vestList.areaCode"></GetCityList>
+
+
+            <el-form-item label="省市：" :label-width="formLabelWidth" prop="areaCode" > 
+                <el-input v-model="vestList.areaName"  @focus="changeSelect" v-if="editType !=='add' && !selectFlag"></el-input>
+                 <span v-else-if="editType=='add'">
+                <GetCityList ref="area" v-model="vestList.areaCode"  @focus="changeSelect"></GetCityList>
+                 </span>
+                 <span v-else>
+                <GetCityList ref="area" v-model="vestList.areaCode"  @focus="changeSelect" v-if="editType !=='add' && selectFlag"></GetCityList>
+                 </span>
             </el-form-item>
+
+
             </el-col>
             <el-col :span="12">
             <el-form-item label="服务类型：" :label-width="formLabelWidth" prop="serivceCode"> 
@@ -38,17 +48,31 @@
             
             <div class="table_box" v-for="(form,keys) in vestList.setting" :key='keys'>
            <el-form>
-            <el-row> 
+            <el-row>
             <el-col :span="18">
             <el-form-item label="推送时段：" :label-width="formLabelWidth"> 
-                    <el-date-picker
+                    <el-time-picker
+                        is-range
+                        v-model="vestList.setting[keys].createTime"
+                        range-separator="至"
+                        start-placeholder="开始时间"
+                        end-placeholder="结束时间"
+                        placeholder="选择时间范围"
+                        value-format="timestamp"
+                        >
+                    </el-time-picker>
+
+
+                    <!-- <el-date-picker
                     v-model="vestList.setting[keys].createTime"
                     value-format="timestamp"
                     type="daterange"
                     range-separator="至"
                     start-placeholder="开始日期"
-                    end-placeholder="结束日期">
-                    </el-date-picker>
+                    end-placeholder="结束日期"
+                    :default-time="['00:00:00', '23:59:59']"
+                    >
+                    </el-date-picker> -->
             </el-form-item>
             </el-col>
             <el-col :span="6">
@@ -76,85 +100,88 @@
             <tr>
              <th  rowspan="2">小面包</th>
              <td class="Online">在线</td>
-             <td ><el-input  v-model="vestList.setting[keys].sett.AF01801.zero.AF0010401" class="Pushinput" type="number"></el-input> </td>
-             <td ><el-input  v-model="vestList.setting[keys].sett.AF01801.zero.AF0010402" class="Pushinput" type="number"></el-input> </td>
-             <td ><el-input  v-model="vestList.setting[keys].sett.AF01801.zero.AF0010403" class="Pushinput" type="number"></el-input> </td>
-             <td ><el-input  v-model="vestList.setting[keys].sett.AF01801.zero.AF0010404" class="Pushinput" type="number"></el-input> </td>
-             <td ><el-input  v-model="vestList.setting[keys].sett.AF01801.zero.AF0010405" class="Pushinput" type="number"></el-input> </td>
-             <td ><el-input  v-model="vestList.setting[keys].sett.AF01801.zero.AF0010406" class="Pushinput" type="number"></el-input> </td>                                                                       
+             <td ><el-input  v-model="vestList.setting[keys].sett.AF01801.one.AF0010401" class="Pushinput" type="number"  min="0" max='5'></el-input> </td>
+             <td ><el-input  v-model="vestList.setting[keys].sett.AF01801.one.AF0020405" class="Pushinput" type="number"  min="0" max='5'></el-input> </td>
+             <td ><el-input  v-model="vestList.setting[keys].sett.AF01801.one.AF0020404" class="Pushinput" type="number"  min="0" max='5'></el-input> </td>
+             <td ><el-input  v-model="vestList.setting[keys].sett.AF01801.one.AF0020403" class="Pushinput" type="number"  min="0" max='5'></el-input> </td>
+             <td ><el-input  v-model="vestList.setting[keys].sett.AF01801.one.AF0020402" class="Pushinput" type="number"  min="0" max='5'></el-input> </td>
+             <td ><el-input  v-model="vestList.setting[keys].sett.AF01801.one.AF0020401" class="Pushinput" type="number"  min="0" max='5'></el-input> </td>                                                                     
             </tr>
              <tr>
              <td class="Offline">离线</td>
-             <td ><el-input  v-model="vestList.setting[keys].sett.AF01801.one.AF0010401" class="Pushinput" type="number"></el-input> </td>
-             <td ><el-input  v-model="vestList.setting[keys].sett.AF01801.one.AF0010402" class="Pushinput" type="number"></el-input> </td>
-             <td ><el-input  v-model="vestList.setting[keys].sett.AF01801.one.AF0010403" class="Pushinput" type="number"></el-input> </td>
-             <td ><el-input  v-model="vestList.setting[keys].sett.AF01801.one.AF0010404" class="Pushinput" type="number"></el-input> </td>
-             <td ><el-input  v-model="vestList.setting[keys].sett.AF01801.one.AF0010405" class="Pushinput" type="number"></el-input> </td>
-             <td ><el-input  v-model="vestList.setting[keys].sett.AF01801.one.AF0010406" class="Pushinput" type="number"></el-input> </td>             
+             <td ><el-input  v-model="vestList.setting[keys].sett.AF01801.zero.AF0010401" class="Pushinput" type="number"  min="0" max='5'></el-input> </td>
+             <td ><el-input  v-model="vestList.setting[keys].sett.AF01801.zero.AF0020405" class="Pushinput" type="number"  min="0" max='5'></el-input> </td>
+             <td ><el-input  v-model="vestList.setting[keys].sett.AF01801.zero.AF0020404" class="Pushinput" type="number"  min="0" max='5'></el-input> </td>
+             <td ><el-input  v-model="vestList.setting[keys].sett.AF01801.zero.AF0020403" class="Pushinput" type="number"  min="0" max='5'></el-input> </td>
+             <td ><el-input  v-model="vestList.setting[keys].sett.AF01801.zero.AF0020402" class="Pushinput" type="number"  min="0" max='5'></el-input> </td>
+             <td ><el-input  v-model="vestList.setting[keys].sett.AF01801.zero.AF0020401" class="Pushinput" type="number"  min="0" max='5'></el-input> </td>               
             </tr>
              <tr>
              <th  rowspan="2">金杯</th>
              <td class="Online">在线</td>
-             <td ><el-input  v-model="vestList.setting[keys].sett.AF01802.zero.AF0010401" class="Pushinput" type="number"></el-input> </td>
-             <td ><el-input  v-model="vestList.setting[keys].sett.AF01802.zero.AF0010402" class="Pushinput" type="number"></el-input> </td>
-             <td ><el-input  v-model="vestList.setting[keys].sett.AF01802.zero.AF0010403" class="Pushinput" type="number"></el-input> </td>
-             <td ><el-input  v-model="vestList.setting[keys].sett.AF01802.zero.AF0010404" class="Pushinput" type="number"></el-input> </td>
-             <td ><el-input  v-model="vestList.setting[keys].sett.AF01802.zero.AF0010405" class="Pushinput" type="number"></el-input> </td>
-             <td ><el-input  v-model="vestList.setting[keys].sett.AF01802.zero.AF0010406" class="Pushinput" type="number"></el-input> </td>             
+             <td ><el-input  v-model="vestList.setting[keys].sett.AF01802.one.AF0010401" class="Pushinput" type="number"  min="0" max='5'></el-input> </td>
+             <td ><el-input  v-model="vestList.setting[keys].sett.AF01802.one.AF0020405" class="Pushinput" type="number"  min="0" max='5'></el-input> </td>
+             <td ><el-input  v-model="vestList.setting[keys].sett.AF01802.one.AF0020404" class="Pushinput" type="number"  min="0" max='5'></el-input> </td>
+             <td ><el-input  v-model="vestList.setting[keys].sett.AF01802.one.AF0020403" class="Pushinput" type="number"  min="0" max='5'></el-input> </td>
+             <td ><el-input  v-model="vestList.setting[keys].sett.AF01802.one.AF0020402" class="Pushinput" type="number"  min="0" max='5'></el-input> </td>
+             <td ><el-input  v-model="vestList.setting[keys].sett.AF01802.one.AF0020401" class="Pushinput" type="number"  min="0" max='5'></el-input> </td>             
             </tr>
              <tr>
              <td class="Offline">离线</td>
-             <td ><el-input  v-model="vestList.setting[keys].sett.AF01802.one.AF0010401" class="Pushinput" type="number"></el-input> </td>
-             <td ><el-input  v-model="vestList.setting[keys].sett.AF01802.one.AF0010402" class="Pushinput" type="number"></el-input> </td>
-             <td ><el-input  v-model="vestList.setting[keys].sett.AF01802.one.AF0010403" class="Pushinput" type="number"></el-input> </td>
-             <td ><el-input  v-model="vestList.setting[keys].sett.AF01802.one.AF0010404" class="Pushinput" type="number"></el-input> </td>
-             <td ><el-input  v-model="vestList.setting[keys].sett.AF01802.one.AF0010405" class="Pushinput" type="number"></el-input> </td>
-             <td ><el-input  v-model="vestList.setting[keys].sett.AF01802.one.AF0010406" class="Pushinput" type="number"></el-input> </td>             
+             <td ><el-input  v-model="vestList.setting[keys].sett.AF01802.zero.AF0010401" class="Pushinput" type="number"  min="0" max='5'></el-input> </td>
+             <td ><el-input  v-model="vestList.setting[keys].sett.AF01802.zero.AF0020405" class="Pushinput" type="number"  min="0" max='5'></el-input> </td>
+             <td ><el-input  v-model="vestList.setting[keys].sett.AF01802.zero.AF0020404" class="Pushinput" type="number"  min="0" max='5'></el-input> </td>
+             <td ><el-input  v-model="vestList.setting[keys].sett.AF01802.zero.AF0020403" class="Pushinput" type="number"  min="0" max='5'></el-input> </td>
+             <td ><el-input  v-model="vestList.setting[keys].sett.AF01802.zero.AF0020402" class="Pushinput" type="number"  min="0" max='5'></el-input> </td>
+             <td ><el-input  v-model="vestList.setting[keys].sett.AF01802.zero.AF0020401" class="Pushinput" type="number"  min="0" max='5'></el-input> </td>            
             </tr>
              <tr>
              <th  rowspan="2">小货车</th>
-             <td class="Online">在线</td>
-             <td ><el-input  v-model="vestList.setting[keys].sett.AF01803.zero.AF0010401" class="Pushinput" type="number"></el-input> </td>
-             <td ><el-input  v-model="vestList.setting[keys].sett.AF01803.zero.AF0010402" class="Pushinput" type="number"></el-input> </td>
-             <td ><el-input  v-model="vestList.setting[keys].sett.AF01803.zero.AF0010403" class="Pushinput" type="number"></el-input> </td>
-             <td ><el-input  v-model="vestList.setting[keys].sett.AF01803.zero.AF0010404" class="Pushinput" type="number"></el-input> </td>
-             <td ><el-input  v-model="vestList.setting[keys].sett.AF01803.zero.AF0010405" class="Pushinput" type="number"></el-input> </td>
-             <td ><el-input  v-model="vestList.setting[keys].sett.AF01803.zero.AF0010406" class="Pushinput" type="number"></el-input> </td>                     
+             <td class="Online">在线</td>     
+             <td ><el-input  v-model="vestList.setting[keys].sett.AF01803.one.AF0010401" class="Pushinput" type="number"  min="0" max='5'></el-input> </td>
+             <td ><el-input  v-model="vestList.setting[keys].sett.AF01803.one.AF0020405" class="Pushinput" type="number"  min="0" max='5'></el-input> </td>
+             <td ><el-input  v-model="vestList.setting[keys].sett.AF01803.one.AF0020404" class="Pushinput" type="number"  min="0" max='5'></el-input> </td>
+             <td ><el-input  v-model="vestList.setting[keys].sett.AF01803.one.AF0020403" class="Pushinput" type="number"  min="0" max='5'></el-input> </td>
+             <td ><el-input  v-model="vestList.setting[keys].sett.AF01803.one.AF0020402" class="Pushinput" type="number"  min="0" max='5'></el-input> </td>
+             <td ><el-input  v-model="vestList.setting[keys].sett.AF01803.one.AF0020401" class="Pushinput" type="number"  min="0" max='5'></el-input> </td>                  
             </tr>
              <tr>
              <td class="Offline">离线</td>
-             <td ><el-input  v-model="vestList.setting[keys].sett.AF01803.one.AF0010401" class="Pushinput" type="number"></el-input> </td>
-             <td ><el-input  v-model="vestList.setting[keys].sett.AF01803.one.AF0010402" class="Pushinput" type="number"></el-input> </td>
-             <td ><el-input  v-model="vestList.setting[keys].sett.AF01803.one.AF0010403" class="Pushinput" type="number"></el-input> </td>
-             <td ><el-input  v-model="vestList.setting[keys].sett.AF01803.one.AF0010404" class="Pushinput" type="number"></el-input> </td>
-             <td ><el-input  v-model="vestList.setting[keys].sett.AF01803.one.AF0010405" class="Pushinput" type="number"></el-input> </td>
-             <td ><el-input  v-model="vestList.setting[keys].sett.AF01803.one.AF0010406" class="Pushinput" type="number"></el-input> </td>           
+             <td ><el-input  v-model="vestList.setting[keys].sett.AF01803.zero.AF0010401" class="Pushinput" type="number"  min="0" max='5'></el-input> </td>
+             <td ><el-input  v-model="vestList.setting[keys].sett.AF01803.zero.AF0020405" class="Pushinput" type="number"  min="0" max='5'></el-input> </td>
+             <td ><el-input  v-model="vestList.setting[keys].sett.AF01803.zero.AF0020404" class="Pushinput" type="number"  min="0" max='5'></el-input> </td>
+             <td ><el-input  v-model="vestList.setting[keys].sett.AF01803.zero.AF0020403" class="Pushinput" type="number"  min="0" max='5'></el-input> </td>
+             <td ><el-input  v-model="vestList.setting[keys].sett.AF01803.zero.AF0020402" class="Pushinput" type="number"  min="0" max='5'></el-input> </td>
+             <td ><el-input  v-model="vestList.setting[keys].sett.AF01803.zero.AF0020401" class="Pushinput" type="number"  min="0" max='5'></el-input> </td>   
             </tr>
             <tr>
              <th  rowspan="2">大货车</th>
-             <td class="Online">在线</td>
-             <td ><el-input  v-model="vestList.setting[keys].sett.AF01804.zero.AF0010401" class="Pushinput" type="number"></el-input> </td>
-             <td ><el-input  v-model="vestList.setting[keys].sett.AF01804.zero.AF0010402" class="Pushinput" type="number"></el-input> </td>
-             <td ><el-input  v-model="vestList.setting[keys].sett.AF01804.zero.AF0010403" class="Pushinput" type="number"></el-input> </td>
-             <td ><el-input  v-model="vestList.setting[keys].sett.AF01804.zero.AF0010404" class="Pushinput" type="number"></el-input> </td>
-             <td ><el-input  v-model="vestList.setting[keys].sett.AF01804.zero.AF0010405" class="Pushinput" type="number"></el-input> </td>
-             <td ><el-input  v-model="vestList.setting[keys].sett.AF01804.zero.AF0010406" class="Pushinput" type="number"></el-input> </td>                    
+             <td class="Online">在线</td>        
+             <td ><el-input  v-model="vestList.setting[keys].sett.AF01804.one.AF0010401" class="Pushinput" type="number" min="0" max='5'></el-input> </td>
+             <td ><el-input  v-model="vestList.setting[keys].sett.AF01804.one.AF0020405" class="Pushinput" type="number" min="0" max='5'></el-input> </td>
+             <td ><el-input  v-model="vestList.setting[keys].sett.AF01804.one.AF0020404" class="Pushinput" type="number" min="0" max='5'></el-input> </td>
+             <td ><el-input  v-model="vestList.setting[keys].sett.AF01804.one.AF0020403" class="Pushinput" type="number" min="0" max='5'></el-input> </td>
+             <td ><el-input  v-model="vestList.setting[keys].sett.AF01804.one.AF0020402" class="Pushinput" type="number" min="0" max='5'></el-input> </td>
+             <td ><el-input  v-model="vestList.setting[keys].sett.AF01804.one.AF0020401" class="Pushinput" type="number" min="0" max='5'></el-input> </td>              
             </tr>
              <tr>
              <td class="Offline">离线</td>
-             <td ><el-input  v-model="vestList.setting[keys].sett.AF01804.one.AF0010401" class="Pushinput" type="number"></el-input> </td>
-             <td ><el-input  v-model="vestList.setting[keys].sett.AF01804.one.AF0010402" class="Pushinput" type="number"></el-input> </td>
-             <td ><el-input  v-model="vestList.setting[keys].sett.AF01804.one.AF0010403" class="Pushinput" type="number"></el-input> </td>
-             <td ><el-input  v-model="vestList.setting[keys].sett.AF01804.one.AF0010404" class="Pushinput" type="number"></el-input> </td>
-             <td ><el-input  v-model="vestList.setting[keys].sett.AF01804.one.AF0010405" class="Pushinput" type="number"></el-input> </td>
-             <td ><el-input  v-model="vestList.setting[keys].sett.AF01804.one.AF0010406" class="Pushinput" type="number"></el-input> </td>         
+             <td ><el-input  v-model="vestList.setting[keys].sett.AF01804.zero.AF0010401" class="Pushinput" type="number" min="0" max='5'></el-input> </td>
+             <td ><el-input  v-model="vestList.setting[keys].sett.AF01804.zero.AF0020405" class="Pushinput" type="number" min="0" max='5'></el-input> </td>
+             <td ><el-input  v-model="vestList.setting[keys].sett.AF01804.zero.AF0020404" class="Pushinput" type="number" min="0" max='5'></el-input> </td>
+             <td ><el-input  v-model="vestList.setting[keys].sett.AF01804.zero.AF0020403" class="Pushinput" type="number" min="0" max='5'></el-input> </td>
+             <td ><el-input  v-model="vestList.setting[keys].sett.AF01804.zero.AF0020402" class="Pushinput" type="number" min="0" max='5'></el-input> </td>
+             <td ><el-input  v-model="vestList.setting[keys].sett.AF01804.zero.AF0020401" class="Pushinput" type="number" min="0" max='5'></el-input> </td>   
+
+    
             </tr>
             </tbody>    
             </table>
              
             </div>    
                     <div slot="footer" class="dialog-footer">
-                        <el-button type="primary" @click="changeInfoSave">保 存</el-button>
+                        <el-button type="primary" @click="changeInfoSave" v-if="editType=='add'">保 存</el-button>
+                        <el-button type="primary" @click="updateInfoSave" v-else>保 存1</el-button>
                         <el-button @click="close()">取 消</el-button>
                     </div> 
             </el-dialog>
@@ -163,7 +190,7 @@
 </template>
 <script>
 import { data_ServerClassList} from '../../../api/server/areaPrice.js'
-import  { data_Add_pushsheet} from '@/api/vest/pushsheet/pushsheetList.js'
+import  { data_Add_pushsheet,data_dpdata_pushsheet} from '@/api/vest/pushsheet/pushsheetList.js'
 import Upload from '@/components/Upload/singleImage'
 import GetCityList from '@/components/GetCityList'
 import { eventBus } from '@/eventBus'
@@ -171,12 +198,23 @@ export default {
 data(){
     //    选择省市校验
         const belongCityNameValidator = (rule, val, cb) => {
+            if(this.editType=='add'){
              if(!this.$refs.area.selectedOptions[0]) {
                     cb(new Error('请选择所在地'))
                 }
              else{
                 cb()
-            }                
+            }   
+            }
+            else{
+                if(!this.vestList.areaCode) {
+                    cb(new Error('请选择所在地'))
+                }
+             else{
+                cb()
+            } 
+            }
+             
         }
 
     //    选择服务类型校验
@@ -203,7 +241,16 @@ data(){
             }
         }
 
+        // const TimeCodeValidator = (rule, val, cb) => {
+        //      if(val==null){
+        //     cb(new Error('推送不能为空'))
+        //     }
+        //     else{
+        //         cb()
+        //     }   
+        // }
     return{
+            selectFlag:false,
             driverTemplateDialogFlag: false,// 弹框控制的控制
             title:'',
             text:'',
@@ -222,73 +269,73 @@ data(){
                   AF01801:{
                       zero:{
                         AF0010401: null,
+                        AF0020401: null,                        
                         AF0020402: null,
                         AF0020403: null,
                         AF0020404: null,
                         AF0020405: null,
-                        AF0020406: null,
                       },
                       one:{
                         AF0010401: null,
+                        AF0020401: null,                        
                         AF0020402: null,
                         AF0020403: null,
                         AF0020404: null,
                         AF0020405: null,
-                        AF0020406: null,
                       },
                   },
                   AF01802:{
                       zero:{
                         AF0010401: null,
+                        AF0020401: null,                        
                         AF0020402: null,
                         AF0020403: null,
                         AF0020404: null,
                         AF0020405: null,
-                        AF0020406: null,
                       },
                       one:{
                         AF0010401: null,
+                        AF0020401: null,                        
                         AF0020402: null,
                         AF0020403: null,
                         AF0020404: null,
                         AF0020405: null,
-                        AF0020406: null,
                       },
                   },
                   AF01803:{
                       zero:{
                         AF0010401: null,
+                        AF0020401: null,                        
                         AF0020402: null,
                         AF0020403: null,
                         AF0020404: null,
                         AF0020405: null,
-                        AF0020406: null,
                       },
                      one:{
                         AF0010401: null,
+                        AF0020401: null,                        
                         AF0020402: null,
                         AF0020403: null,
                         AF0020404: null,
                         AF0020405: null,
-                        AF0020406: null,
                       },
                   },
                   AF01804:{
                      zero:{
                         AF0010401: null,
+                        AF0020401: null,                        
                         AF0020402: null,
                         AF0020403: null,
                         AF0020404: null,
                         AF0020405: null,
-                        AF0020406: null,
                       },
                       one:{
                         AF0010401: null,
+                        AF0020401: null,                        
                         AF0020402: null,
                         AF0020403: null,
                         AF0020404: null,
                         AF0020405: null,
-                        AF0020406: null,
                       },
                   },
                 }
@@ -308,73 +355,73 @@ data(){
                   AF01801:{
                       zero:{
                         AF0010401: null,
+                        AF0020401: null,                        
                         AF0020402: null,
                         AF0020403: null,
                         AF0020404: null,
                         AF0020405: null,
-                        AF0020406: null,
                       },
                       one:{
                         AF0010401: null,
+                        AF0020401: null,                        
                         AF0020402: null,
                         AF0020403: null,
                         AF0020404: null,
                         AF0020405: null,
-                        AF0020406: null,
                       },
                   },
                   AF01802:{
                       zero:{
                         AF0010401: null,
+                        AF0020401: null,                        
                         AF0020402: null,
                         AF0020403: null,
                         AF0020404: null,
                         AF0020405: null,
-                        AF0020406: null,
                       },
                       one:{
                         AF0010401: null,
+                        AF0020401: null,                        
                         AF0020402: null,
                         AF0020403: null,
                         AF0020404: null,
                         AF0020405: null,
-                        AF0020406: null,
                       },
                   },
                   AF01803:{
                       zero:{
                         AF0010401: null,
+                        AF0020401: null,                        
                         AF0020402: null,
                         AF0020403: null,
                         AF0020404: null,
                         AF0020405: null,
-                        AF0020406: null,
                       },
                      one:{
                         AF0010401: null,
+                        AF0020401: null,                        
                         AF0020402: null,
                         AF0020403: null,
                         AF0020404: null,
                         AF0020405: null,
-                        AF0020406: null,
                       },
                   },
                   AF01804:{
                      zero:{
                         AF0010401: null,
+                        AF0020401: null,                        
                         AF0020402: null,
                         AF0020403: null,
                         AF0020404: null,
                         AF0020405: null,
-                        AF0020406: null,
                       },
                       one:{
                         AF0010401: null,
+                        AF0020401: null,                        
                         AF0020402: null,
                         AF0020403: null,
                         AF0020404: null,
                         AF0020405: null,
-                        AF0020406: null,
                       },
                   },
                 }
@@ -395,73 +442,73 @@ data(){
                   AF01801:{
                       zero:{
                         AF0010401: null,
+                        AF0020401: null,                        
                         AF0020402: null,
                         AF0020403: null,
                         AF0020404: null,
                         AF0020405: null,
-                        AF0020406: null,
                       },
                       one:{
                         AF0010401: null,
+                        AF0020401: null,                        
                         AF0020402: null,
                         AF0020403: null,
                         AF0020404: null,
                         AF0020405: null,
-                        AF0020406: null,
                       },
                   },
                   AF01802:{
                       zero:{
                         AF0010401: null,
+                        AF0020401: null,                        
                         AF0020402: null,
                         AF0020403: null,
                         AF0020404: null,
                         AF0020405: null,
-                        AF0020406: null,
                       },
                       one:{
                         AF0010401: null,
+                        AF0020401: null,                        
                         AF0020402: null,
                         AF0020403: null,
                         AF0020404: null,
                         AF0020405: null,
-                        AF0020406: null,
                       },
                   },
                   AF01803:{
                       zero:{
                         AF0010401: null,
+                        AF0020401: null,                        
                         AF0020402: null,
                         AF0020403: null,
                         AF0020404: null,
                         AF0020405: null,
-                        AF0020406: null,
                       },
                      one:{
                         AF0010401: null,
+                        AF0020401: null,                        
                         AF0020402: null,
                         AF0020403: null,
                         AF0020404: null,
                         AF0020405: null,
-                        AF0020406: null,
                       },
                   },
                   AF01804:{
                      zero:{
                         AF0010401: null,
+                        AF0020401: null,                        
                         AF0020402: null,
                         AF0020403: null,
                         AF0020404: null,
                         AF0020405: null,
-                        AF0020406: null,
                       },
                       one:{
                         AF0010401: null,
+                        AF0020401: null,                        
                         AF0020402: null,
                         AF0020403: null,
                         AF0020404: null,
                         AF0020405: null,
-                        AF0020406: null,
                       },
                   },
                 }
@@ -471,7 +518,8 @@ data(){
             rulesForm:{
             areaCode:{trigger:'change',required:true,validator: belongCityNameValidator},
             serivceCode:{trigger:'change',required:true,validator:serivceCodeValidator},
-            price:{trigger:'change',required:true,validator:priceValidator}
+            price:{trigger:'change',required:true,validator:priceValidator},
+            createTime:[{value: '',trigger:'change',}],
             },
             
     }
@@ -502,18 +550,26 @@ props:{
             default: false
         },
         params:{
-            type:[Object,String],
+            type:[Object,String,Array],
             default: ''
          },
         editType: {
             type: String,
-            default: 'edit'
+            default: 'add'
          },
 },
 components:{
     GetCityList
 },
 methods:{
+        // 省市状态表
+            changeSelect(){
+            if(this.editType==='add'){
+                this.selectFlag=false
+            } else{
+                this.selectFlag=true
+            }
+            },
         openDialog(){
              console.log('this.params',this.params)
             if(this.params==null)
@@ -526,15 +582,13 @@ methods:{
             this.driverTemplateDialogFlag=true;
             }
             if(!this.params.id&&this.editType == 'edit'){
-            this.$message.info('请选择您要冻结的用户');
+            this.$message.info('请选择您要修改的内容');
             return
             }
             if(this.editType == 'edit'){
-            this.driverTemplateDialogFlag=true; 
             this.vestList = this.params;
-            // if(this.vestList.setting==null){
-            //   this.vestList.setting.push(this.constVestList); 
-            // }
+            this.driverTemplateDialogFlag=true; 
+                        
             }
             }
         },
@@ -545,16 +599,18 @@ methods:{
         change() {
          this.driverTemplateDialogFlag = false;
          this.vestList=this.CvestList;
+         this.selectFlag=false;
         },
         //添加子节点新增
         addItem(){
          // 业务逻辑判断
-                this.vestList.setting.push(this.constVestList); 
+        this.vestList.setting.push(this.constVestList); 
                 console.log(this.vestList.setting)
+                        this.$forceUpdate()
             },
         reduceItem(i){
-            console.log(i)
             this.vestList.setting.splice(i,1);
+                        this.$forceUpdate()
         },    
         // 类型列表
         getMoreInformation(){
@@ -571,31 +627,37 @@ methods:{
         close(formName){
             this.driverTemplateDialogFlag = false;
             this.vestList=this.CvestList;
+            this.selectFlag=false;
         },
+    
+        
+
             //完善数据
             completeData(){
-                if(this.$refs.priceStart.value&&this.$refs.priceEnd.value){
-                this.vestList.priceEnd= this.$refs.priceStart.value.substr(0,this.$refs.priceStart.value.indexOf(".")+3)
-                this.vestList.priceStart=this.$refs.priceEnd.value.substr(0,this.$refs.priceEnd.value.indexOf(".")+3)
-                }
+                // if(this.$refs.priceStart.value&&this.$refs.priceEnd.value){
+                // this.vestList.priceEnd= this.$refs.priceStart.value.substr(0,this.$refs.priceStart.value.indexOf(".")+3)
+                // this.vestList.priceStart=this.$refs.priceEnd.value.substr(0,this.$refs.priceEnd.value.indexOf(".")+3)
+                // }
+
                 for(var i=0;i<this.vestList.setting.length;i++){
                     if(this.vestList.setting[i].createTime==null){
-                this.vestList.setting[i].startTime = null;
-                this.vestList.setting[i].endTime = null;
+                   this.$message.warning('推送时间段必须都填写');
+                   this.vestList.setting[i].startTime = null;
+                   this.vestList.setting[i].endTime = null;
+                  return false
                     }
                     else{
                 this.vestList.setting[i].startTime = this.vestList.setting[i].createTime[0];
                 this.vestList.setting[i].endTime = this.vestList.setting[i].createTime[1];
                     }
 
-                        
                 }
-                
 
             //获取城市name
                 if(!this.$refs.area){
                     return
                 }  
+                
                 else if(this.$refs.area.selectedOptions.length > 1){
                     let province;
                     this.$refs.area.areaData.forEach((item) =>{
@@ -621,33 +683,74 @@ methods:{
                 }
             },
 
-        // 保存
+        // 新增保存
         changeInfoSave(){
-          this.completeData();
+            this.completeData();
+            if(this.completeData()==false)
+            {
+               return
+            }
+            else{
             this.$refs['vestList'].validate(valid=>{
             var forms= Object.assign({}, this.vestList)
-            console.log('dddd',forms)
-                if(valid){
-                    forms.setting = JSON.stringify(forms.setting)
-                    console.log('dddd',forms)
+            if(valid){
+            console.log(valid)
+            var forms= Object.assign({}, this.vestList)
+            forms.setting = JSON.stringify(forms.setting)
+            console.log('forms',forms)
                   data_Add_pushsheet(forms).then(res=>{
                 console.log('res',res);
-                 this.driverTemplateDialogFlag=false;
+                this.driverTemplateDialogFlag=false;
+                this.selectFlag=false;
+                for(var i=0;i<this.vestList.setting.length;i++){
+                   this.vestList.setting[i].createTime=null
+                   this.vestList.setting[i].startTime = null;
+                   this.vestList.setting[i].endTime = null;
+                }
+                        this.vestList.priceEnd=null,
+                        this.vestList.priceStart=null,
                 this.changeList();
                 }).catch(res=>{
                     console.log(res)
                 });
-                         this.vestList=this.cvestList;
-                         this.driverTemplateDialogFlag=true;
+                    this.$refs['vestList'].resetFields();
                 }
                 })
-
+            }
+        },
+        // 修改 保存
+        updateInfoSave(){
+        this.completeData();
+            this.$refs['vestList'].validate(valid=>{
+            var forms= Object.assign({}, this.vestList)
+            if(valid){
+            console.log(valid)
+            var forms= Object.assign({}, this.vestList)
+            forms.setting = JSON.stringify(forms.setting)
+                data_dpdata_pushsheet(forms).then(res=>{
+                console.log('res',res);
+                this.driverTemplateDialogFlag=false;
+                this.selectFlag=false;
+                this.changeList();
+                }).catch(res=>{
+                    console.log(res)
+                });
+                    this.$refs['vestList'].resetFields();
+                }
+                })
         }
 },
 watch:{
-
+driverTemplateDialogFlag:{
+            handler: function(val, oldVal) {
+                if(this.$refs.area){
+          this.$refs.area.selectedOptions = [];
+}
+}
+}
 },
 mounted(){
+    console.log('selectRowData',this.params)
 this.getMoreInformation();
 }
 }
@@ -721,6 +824,7 @@ this.getMoreInformation();
         .el-date-editor .el-range__icon {
         line-height: 24px!important;
     }
+
 </style>
 
 <style  lang="scss">
@@ -759,6 +863,10 @@ this.getMoreInformation();
     height:35px;
     border:none
 }
+    .el-date-editor .el-range__close-icon
+    {
+        line-height: 24px!important;
+    }
 }
 
 

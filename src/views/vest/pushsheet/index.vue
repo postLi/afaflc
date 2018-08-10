@@ -27,7 +27,7 @@
    <div class="btns_box">
     <newpushsheet  btntext="新增" :plain="true" type="primary" btntype="primary" icon="el-icon-news" editType="add" btntitle="新增货主"></newpushsheet>
     <el-button type="primary" plain icon="el-icon-bell" @click="handleUseStates">启用/禁用</el-button>
-    <newpushsheet  btntext="修改" :plain="true" type="primary" btntype="primary" icon="el-icon-edit" editType="edit" btntitle="修改" :params="selectRowData" ></newpushsheet>
+    <uppushsheet  btntext="修改" :plain="true" type="primary" btntype="primary" icon="el-icon-edit" editType="edit" :params="selectRowData" ></uppushsheet>
     <el-button type="primary" plain icon="el-icon-delete" @click="handleDelete">删除</el-button>
    </div>
     <el-table style="width: 100%" stripe border :data="tableDataTree" height="87%" @row-click="clickDetails" highlight-current-row>
@@ -82,10 +82,11 @@
 
 <script>
 import { data_ServerClassList} from '../../../api/server/areaPrice.js'
-import  { data_get_pushsheet_list,data_Del_pushsheet,data_UseStates_pushsheet} from '@/api/vest/pushsheet/pushsheetList.js'
+import  { data_get_pushsheet_list,data_Del_pushsheet,data_UseStates_pushsheet,data_get_pushsheet_Id} from '@/api/vest/pushsheet/pushsheetList.js'
 import { parseTime,formatTime } from '@/utils/index.js'
 import GetCityList from '@/components/GetCityList'
 import newpushsheet from './newpushsheet'
+import uppushsheet from './newpushsheet'
 import { eventBus } from '@/eventBus'
 export default {
     data(){
@@ -110,11 +111,92 @@ export default {
         ],
         serviceValue:null,
         formAllId:'',
+        setting:{
+                createTime:null,
+                startTime:null,
+                endTime:null,
+        sett:{
+                  AF01801:{
+                      zero:{
+                        AF0010401: null,
+                        AF0020401: null,                        
+                        AF0020402: null,
+                        AF0020403: null,
+                        AF0020404: null,
+                        AF0020405: null,
+                      },
+                      one:{
+                        AF0010401: null,
+                        AF0020401: null,                        
+                        AF0020402: null,
+                        AF0020403: null,
+                        AF0020404: null,
+                        AF0020405: null,
+                      },
+                  },
+                  AF01802:{
+                      zero:{
+                        AF0010401: null,
+                        AF0020401: null,                        
+                        AF0020402: null,
+                        AF0020403: null,
+                        AF0020404: null,
+                        AF0020405: null,
+                      },
+                      one:{
+                        AF0010401: null,
+                        AF0020401: null,                        
+                        AF0020402: null,
+                        AF0020403: null,
+                        AF0020404: null,
+                        AF0020405: null,
+                      },
+                  },
+                  AF01803:{
+                      zero:{
+                        AF0010401: null,
+                        AF0020401: null,                        
+                        AF0020402: null,
+                        AF0020403: null,
+                        AF0020404: null,
+                        AF0020405: null,
+                      },
+                     one:{
+                        AF0010401: null,
+                        AF0020401: null,                        
+                        AF0020402: null,
+                        AF0020403: null,
+                        AF0020404: null,
+                        AF0020405: null,
+                      },
+                  },
+                  AF01804:{
+                     zero:{
+                        AF0010401: null,
+                        AF0020401: null,                        
+                        AF0020402: null,
+                        AF0020403: null,
+                        AF0020404: null,
+                        AF0020405: null,
+                      },
+                      one:{
+                        AF0010401: null,
+                        AF0020401: null,                        
+                        AF0020402: null,
+                        AF0020403: null,
+                        AF0020404: null,
+                        AF0020405: null,
+                      },
+                  },
+                 }
+            }
+                
         }
     },
     components:{
         GetCityList,
-        newpushsheet
+        newpushsheet,
+        uppushsheet
     },
     mounted(){
         eventBus.$on('pushListtwo', () => {
@@ -136,8 +218,30 @@ export default {
                 })
             },
              clickDetails(i){
-                 this.selectRowData = i;
-                 console.log(i)
+                 let z=0;
+                data_get_pushsheet_Id(i.id).then(res=>{
+                        this.selectRowData=res.data.push;
+                        this.selectRowData2=res.data.settings;
+                        let sy=[]
+                        for(var i = 0;i<res.data.settings.length;i++){
+                            sy.push(this.setting)
+                        }
+                        this.selectRowData2.map((subList,index) => {
+                            subList.map(item => {
+                            sy[index].startTime= item.pushStartTime;
+                            sy[index].endTime= item.pushEndTime;
+                            sy[index].createTime= [item.pushStartTime,item.pushEndTime];  
+                                var carType = item.carType;                                
+                                var isLine = item.isLine;
+                                var liveness = item.liveness;
+                                var sett = sy[index].sett;
+                                // this.sett[carType][isLine][liveness] = item.orderNum
+                               sett[carType][isLine][liveness] = item.orderNum
+                        })
+                        })
+                        this.selectRowData.setting = sy;
+                        })
+                        
              },
         
             //  删除行
@@ -189,8 +293,7 @@ export default {
                      else{
                          this.$message.success('已启用');
                      }
-                        this.firstblood();       
-                        this.selectRowData='';   
+                        this.firstblood();        
                     })
                 }
             },
