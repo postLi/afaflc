@@ -116,13 +116,11 @@
                 @current-change="handleCurrentChangeRow"
 				tooltip-effect="dark"
 				style="width: 100%">
-                <el-table-column label="" width="65">
+                <!-- <el-table-column label="" width="65">
                      <template slot-scope="scope">
-                <!-- class="textRadio" -->
-                <el-radio @change.native="getCurrentRow(scope.$index)" :label="scope.$index" v-model="radio" class="textRadio">&nbsp;</el-radio>
-
-              </template>
-                </el-table-column>
+                        <el-radio class="textRadio" @change.native="getCurrentRow(scope.$index)" :label="scope.$index" v-model="radio" class="textRadio">&nbsp;</el-radio>
+                    </template>
+                </el-table-column> -->
 				<el-table-column type='index' label="序号" width="80px">
 				</el-table-column>  
 				<el-table-column label="手机号">

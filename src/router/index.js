@@ -45,7 +45,7 @@ export const constantRouterMap = [
   {
     path: '/',
     component: Layout,
-    redirect: '/dashboard',
+    redirect: '/users/index',
     noDropdown: true,
     icon: 'shouye',
     name: '首页',

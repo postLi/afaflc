@@ -15,20 +15,20 @@
 <script>
 // 简单管理一个自增长的zIndex
 function getPopZindex() {
-  if(!window.tmsPopZindex){
-    window.tmsPopZindex = 33
+  if (!window.tmsPopZindex) {
+    window.tmsPopZindex = 1000
   } else {
     window.tmsPopZindex += 1
-    return window.tmsPopZindex
   }
+  return window.tmsPopZindex
 }
 export default {
   props: {
     width: {
       type: String,
-      default: "400"
+      default: '400'
     },
-    title:{
+    title: {
       type: String,
       default: '标题'
     },
@@ -37,13 +37,13 @@ export default {
       default: false
     }
   },
-  data () {
+  data() {
     return {
       zIndex: getPopZindex()
     }
   },
   methods: {
-    close () {
+    close() {
       this.$emit('close')
     }
   }

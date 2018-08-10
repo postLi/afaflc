@@ -64,12 +64,12 @@
                             label="订单号"
                             width="250">
                                 <template  slot-scope="scope">
-                                        <h4 class="needMoreInfo" @click="clickDetails(scope.row)">{{ scope.row.orderSerial}}</h4>
+                                        <h4 class="needMoreInfo" @click="pushOrderSerial(scope.row)">{{ scope.row.orderSerial}}</h4>
                                 </template>
                         </el-table-column>
                         <el-table-column
                             prop="orderType"
-                            label="订单分类"
+                            label="服务分类"
                             width="110">
                         </el-table-column>
                         <el-table-column
@@ -167,6 +167,7 @@ import Details from '../components/detailsInformations'
         },
         data(){
             return{
+                timeOut:null,
                 loading: true,//加载
                 sizes:[20,50,100],
                 pagesize:20,//初始化加载数量
@@ -190,11 +191,17 @@ import Details from '../components/detailsInformations'
                 DetailsOrderSerial:'',
             }
         },
+        created(){
+
+        },
         mounted(){
             this.firstblood();
-            
+            // this.timeOut = setInterval(this.firstblood,2000)
             // console.log(this.$store)
         },  
+        beforeDestroy(){
+            clearInterval(this.timeOut);
+        },
         methods: {
             handlePageChange(obj) {
                 this.page = obj.pageNum
@@ -254,8 +261,8 @@ import Details from '../components/detailsInformations'
                 this.$refs.multipleTable.toggleRowSelection(row);
             },
             //详情弹窗
-            clickDetails(item){
-                console.log(item)
+            pushOrderSerial(item){
+                // console.log(item)
                 this.dialogFormVisible_details = true;
                 this.DetailsOrderSerial = item.orderSerial;
             }

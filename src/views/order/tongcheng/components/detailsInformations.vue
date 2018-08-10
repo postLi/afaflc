@@ -3,8 +3,7 @@
     <!-- 详情弹窗 -->
         <div class="details commoncss">
             <el-dialog :title='formtitle' :close-on-click-modal="true"  :visible="dialogFormVisible_details" @close="close">
-                <detailsComponent  :listOrderSerial = "orderSerial" :record = "record"></detailsComponent>
-                <!-- v-if="Object.keys(details).length != 0" -->
+                <detailsComponent  v-if="orderSerial != ''" :listOrderSerial = "orderSerial" :record = "record"></detailsComponent>
             </el-dialog>
         </div>
     </div>
@@ -59,7 +58,7 @@ export default {
     .details{
         .el-dialog__wrapper{
             .el-dialog{
-                width: 70%;
+                width: 75%;
             }
         }
     }

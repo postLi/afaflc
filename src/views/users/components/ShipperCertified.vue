@@ -5,12 +5,6 @@
             <el-form-item label="所在地：">
               <GetCityList v-model="formAll.belongCity" ref="area"></GetCityList>
             </el-form-item>
-            
-<!-- <v-region :town="true" :ui="true" @values="regionChange" class="form-control">
-    <p>
-        {{btnText}} <i class="fa fa-fw fa-caret-down"></i>
-    </p>
-</v-region> -->
             <el-form-item label="公司名称：">
               <el-input v-model.trim="formAll.companyName"></el-input>
             </el-form-item>
@@ -403,7 +397,7 @@ export default {
                         }).catch(err=>{
                             this.$message({
                                 type: 'info',
-                                message: '操作失败，原因：' + err.text ? err.text : err
+                                message: '操作失败，原因：' + err.errorInfo ? err.errorInfo : err.text
                             })
                         })
                     }).catch(() => {
@@ -429,7 +423,7 @@ export default {
             //     }
             // })
 
-            if(this.shengheform.shipperCardFileNoPass = this.shengheform.businessLicenceFileNoPass = this.shengheform.companyFacadeFileNoPass == "上传合格" ){
+            if(this.shengheform.shipperCardFileNoPass = this.shengheform.companyFacadeFileNoPass == "上传合格" ){
                 ifQualified = true ;
             }else{
                 ifQualified = false ;
@@ -452,7 +446,7 @@ export default {
                         this.dialogFormVisible = true;
                         this.$message({
                             type: 'info',
-                            message: '删除失败，原因：' + err.text ? err.text : err
+                            message: '删除失败，原因：' + err.errorInfo ? err.errorInfo : err.text
                         })
                     })
                 }else{

@@ -4,20 +4,17 @@ const _import = require('../_import_' + process.env.NODE_ENV)
 export default {
   path: '/dispatch',
   component: Layout,
-  redirect: '/dispatch/DispatchTrack',
+  redirect: '/dispatch/OpenseaRecommend',
   icon: 'chengyunshang',
   name: '调度管理',
   noDropdown: true, 
   children: [
-    {
-      path: '/dispatch/DispatchTrack', icon: 'QQ', name: '调度追踪', component: _import('dispatch/DispatchTrack/index'), meta: { role: ['admin'], title: '调度追踪',stitle: '调度',  noCache: true }
-    },
+    // {
+    //   path: '/dispatch/DispatchTrack', icon: 'QQ', hidden:true,name: '调度追踪', component: _import('dispatch/DispatchTrack/index'), meta: { role: ['admin'], title: '调度追踪',stitle: '调度',  noCache: true }
+    // },
   {
     path: '/dispatch/OpenseaRecommend', icon: 'QQ', name: '公海推单', component: _import('dispatch/OpenseaRecommend/index'), meta: { role: ['admin'], title: '公海推单',stitle: '公海',  noCache: true }
   },
-//   {
-//     path: '/sm/standardPrice', icon: 'QQ', name: '标准信息及定价', component: _import('sm/standardPrice/index'), meta: { role: ['admin'], title: '标准信息及定价',stitle: '标准',  noCache: true }
-//   },
   {          
     path: '/dispatch/Directional', icon: 'QQ', name: '定向推单设置',hidden: false, component: _import('dispatch/index'), meta: { role: ['admin'], title: '定向推单设置', stitle:'设置', noCache: true },
       children: [{

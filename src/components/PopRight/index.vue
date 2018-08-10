@@ -4,7 +4,7 @@
       <slot name="title">{{title}}</slot>
       <i class="el-icon-close" @click="close" title="关闭"></i>
     </div>
-    <div class="popRight-content">
+    <div class="popRight-content arteryDelivery_lrl">
       <slot name="content">内容</slot>
     </div>
     <div class="popRight-footer">
@@ -15,22 +15,20 @@
 <script>
 // 简单管理一个自增长的zIndex
 function getPopZindex() {
-  if(!window.tmsPopZindex){
-    window.tmsPopZindex = 33
+  if (!window.tmsPopZindex) {
+    window.tmsPopZindex = 1000
   } else {
     window.tmsPopZindex += 1
-    return window.tmsPopZindex
   }
+  return window.tmsPopZindex
 }
-
-
 export default {
   props: {
     width: {
       type: String,
-      default: "546"
+      default: '546'
     },
-    title:{
+    title: {
       type: String,
       default: '标题'
     },
@@ -39,13 +37,13 @@ export default {
       default: false
     }
   },
-  data () {
+  data() {
     return {
-      zIndex: getPopZindex()  
+      zIndex: getPopZindex()
     }
   },
   methods: {
-    close () {
+    close() {
       this.$emit('close')
     }
   }
@@ -65,12 +63,12 @@ export default {
   padding-bottom: 76px;
   background: #fff;
   border-radius: 6px 0px 0px 6px;
-  box-shadow: -2px 0px 8px 0px 
+  box-shadow: -2px 0px 8px 0px
     rgba(169, 169, 169, 0.78);
-  
+
   transition: transform 0.6s ease;
   transform: translate(100%,0);
-  
+
 }
 .showPopRight{
   transform: translate(0, 0);

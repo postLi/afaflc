@@ -23,7 +23,7 @@
 
               <el-row>
                   <el-col :span="12">
-                    <el-form-item label="身份证号码：" prop="driverCardid"  :label-width="formLabelWidth" >
+                    <el-form-item label="身份证号码："  :label-width="formLabelWidth" >
                         <el-input v-model.trim="templateModel.driverCardid" :disabled="editType=='view'"></el-input>
                     </el-form-item>
                   </el-col>
