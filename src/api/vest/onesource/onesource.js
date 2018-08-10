@@ -7,7 +7,7 @@ const baseurl_one= "aflcsmservice_1"
 //获取马甲推单列表
 export function data_get_onesource_list(page,pagesize,data) {
     return fetch({
-      url: '/'+baseurl+'/sm/aflcVestUnisource/v1/list',
+      url: '/'+baseurl_one+'/sm/aflcVestUnisource/v1/list',
       method: 'post',
       data:{
         "currentPage": page,
@@ -19,14 +19,14 @@ export function data_get_onesource_list(page,pagesize,data) {
 
 //增加马甲推单
 export function data_add_onesource_list(data) {
-  return fetch.post('/' + baseurl + '/sm/aflcVestUnisource/v1/add', data)
+  return fetch.post('/' + baseurl_one + '/sm/aflcVestUnisource/v1/add', data)
 }
   
 
   //删除马甲推单
   export function data_Del_onesource(id) {
     return fetch({
-      url: '/'+baseurl+'/sm/aflcVestUnisource/v1/delete/'+id,
+      url: '/'+baseurl_one+'/sm/aflcVestUnisource/v1/delete/'+id,
       method: 'delete',
     })
   }
@@ -39,3 +39,52 @@ export function data_add_onesource_list(data) {
         data:ids
       })
     }
+
+
+
+
+  //删除马甲单源地址推单
+  export function data_Del_onesourceAddress(id) {
+    return fetch({
+      url: '/'+baseurl_one+'/sm/aflcVestUnisourceAddress/v1/delete/'+id,
+      method: 'delete',
+    })
+  }
+
+    //获取马甲单源地址
+export function data_get_onesourceAddress_list(page,pagesize,data) {
+  return fetch({
+    url: '/'+baseurl_one+'/sm/aflcVestUnisourceAddress/v1/list',
+    method: 'post',
+    data:{
+      "currentPage": page,
+      "pageSize": pagesize,
+      "vo": data
+    }
+  })
+}
+
+
+//id获取马甲单源表
+       export function data_get_onesource_Id(id) {
+        return fetch.get('/' + baseurl_one+'/sm/aflcVestUnisource/v1/getVestUnisourceAddresslist?'+'id=' + id)
+
+      }
+
+//  修改马甲单源表
+export function data_get_onesource_update(data) {
+  return fetch.put('/' + baseurl_one + '/sm/aflcVestUnisource/v1/update', data)
+}      
+
+
+// export function data_get_onesource_Distance(data1,data2)
+// {
+//   return fetch({
+//     url: '/'+baseurl_one+'aflcsmservice_1/sm/aflcVestUnisource/v1/getVestUnisourceAddressDistance',
+//     method: 'post',
+//     data:{
+//       "endAddressCoordinate": data2,
+//       "startAddressCoordinate": data1,
+//     }
+//   })
+// }
