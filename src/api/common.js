@@ -13,6 +13,19 @@ export function getCityInfo(params) {
   })
 }
 
+// 通过数据字典查询
+/**
+ * @export
+ * @param {*} code 数据字典code值
+ * @returns
+ */
+export function getDictionary(code) {
+    return fetch({
+      url: '/' + baseUrl + '/sysDict/getSysDictByCodeGet/' + code,
+      method: 'get'
+    })
+  }
+
 /**
  * 获取图片上传的policy
  * callback

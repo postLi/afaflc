@@ -1,41 +1,69 @@
 <template>
-    <div>
-         <el-table
+    <div class="robbingList clearfix">
+        <el-table
             :data="tableData"
+            border
             style="width: 100%">
             <el-table-column
                 prop="date"
-                label="客服"
-                width="200"
+                label="时间"
+                width="150"
                 >
             </el-table-column>
             <el-table-column
                 prop="name"
-                label="备注时间"
+                label="操作事项"
                 width="300"
                 >
             </el-table-column>
             <el-table-column
                 prop="address"
-                label="备注内容">
+                label="定位">
             </el-table-column>
-            </el-table>
+            <el-table-column
+                prop="address"
+                label="备注">
+            </el-table-column>
+            <el-table-column
+                prop="address"
+                label="实际行驶时间">
+            </el-table-column>
+             <el-table-column
+                prop="address"
+                label="与装卸点距离"
+                width="150">
+            </el-table-column>
+        </el-table>
+        <div class="info_tab_footer">共计:{{ totalCount }} <div class="show_pager"> <Pager :total="totalCount" @change="handlePageChange" :sizes="sizes"/></div> </div>    
     </div>
 </template>
 
 <script>
 
+import Pager from '@/components/Pagination/index'
 
 export default {
     name: 'robbingList',
     components:{
+        Pager,
     },
     props: {
-       
+       isvisible: {
+            type: Boolean,
+            default: false
+        },
+        robbingData:{
+            type: Array,
+            required:true,
+        }
     },
     data() {
         return {
-             tableData: [{
+            totalCount:0,
+            page:1,
+            pagesize:20,
+            sizes:[20,30,50],
+            tableData: [{
                 date: '2016-05-02',
                 name: '王小虎',
                 address: '上海市普陀区金沙江路 1518 弄'
@@ -59,15 +87,30 @@ export default {
     },
     mounted(){
         // this.init();
+        console.log('this.robbingData',this.robbingData)
     },
     methods: {
-      
+        init(){
+            this.totalCount = this.robbingData.length;
+            let pageStart =  (this.page - 1) * this.pagesize;
+            let pageEnd = this.page * this.pagesize;
+            this.tableData = this.robbingData.slice(pageStart,pageEnd)
+        },
+        handlePageChange(obj) {
+            this.page = obj.pageNum;
+            this.pagesize = obj.pageSize;
+            this.init();
+        },
     },
    
 }
 </script>
 
-<style rel="stylesheet/scss" lang="scss">
-  
+<style rel="stylesheet/scss" lang="scss" scoped>
+    .ordertrack{
+        position: relative;
+       
+
+    }
     
 </style>
