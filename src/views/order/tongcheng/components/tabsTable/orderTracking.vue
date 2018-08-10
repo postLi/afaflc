@@ -87,14 +87,19 @@ export default {
     },
     mounted(){
         // this.init();
+        console.log('this.tableDataArr',this.tableDataArr)
     },
     methods: {
         init(){
-            
+            this.totalCount = this.tableDataArr.length;
+            let pageStart =  (this.page - 1) * this.pagesize;
+            let pageEnd = this.page * this.pagesize;
+            this.tableData = this.tableDataArr.slice(pageStart,pageEnd)
         },
         handlePageChange(obj) {
-            // this.page = obj.pageNum;
-            // this.pagesize = obj.pageSize;
+            this.page = obj.pageNum;
+            this.pagesize = obj.pageSize;
+            this.init();
         },
     },
    
@@ -103,13 +108,6 @@ export default {
 
 <style rel="stylesheet/scss" lang="scss" scoped>
     .ordertrack{
-        position: relative;
-        .el-table{
-            margin-bottom: 5px;
-        }
-        .info_tab_footer{
-            position: relative;
-        }
 
     }
     

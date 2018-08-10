@@ -421,6 +421,20 @@ export default {
                     height:0px;
                     width:0px;
                 }
+                .el-table--border::after, .el-table--group::after {
+                    top: 0;
+                    right: 0;
+                    height: 0;
+                    width: 0;
+                    /* width: 1px; */
+                    /* height: 100%; */
+                }
+            }
+            .el-table{
+                margin-bottom: 5px;
+            }
+            .info_tab_footer{
+                position: relative;
             }
         }
     }
