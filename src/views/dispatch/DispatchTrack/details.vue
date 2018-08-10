@@ -283,9 +283,13 @@ export default {
                 .el-collapse-item__content{
                     padding-bottom:0;
                     &>div{
-                        margin-top: 5px;
+                        margin-top: 3px;
+                    }
+                    & div:nth-child(2n-1){
+                        background: #f8f0e5;
                     }
                     .essentialInformation{
+                        line-height: 30px;
                         h6{
                             width: 259px;
                             .spanDiv{

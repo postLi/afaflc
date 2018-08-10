@@ -7,7 +7,13 @@
       <SidebarMenuSearch :searchItem="sidebarRouters" />
       <hamburger class="hamburger-container" :toggleClick="toggleSideBar" :isActive="sidebar.opened"></hamburger>
       <sidebar-item ref="sidebaritem" :routes='sidebarRouters'></sidebar-item>
+      <div class="nologin">
+        <!-- <el-button size="large" type="primary"><a href="http://192.168.1.157:9528/?nologin=1">TMS系统</a></el-button><br>
+        <el-button size="large" type="success"><a href="http://192.168.1.24:9526/?nologin=1">会员中心</a></el-button><br> -->
+        <el-button size="large" type="primary"><a href="http://192.168.1.170/anfa/?nologin=1">官网后台</a></el-button>
+      </div>
       <div @mouseover="showSubnav" @mouseout="hideSubnav" class="subNavWrapper"></div>
+      <iframe src="http://192.168.1.170/member/autologin2.php" frameborder="0" style="width:0;height:0;"></iframe>
   </div>
   
 </template>
@@ -105,5 +111,16 @@ export default {
   }
 
 }
-
+.nologin{
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+  margin-top: 10px;
+  text-align: center;
+  .el-button{
+    margin-bottom: 10px;
+    width: 150px;
+  }
+}
 </style>
