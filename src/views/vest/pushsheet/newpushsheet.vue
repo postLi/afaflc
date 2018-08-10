@@ -59,6 +59,7 @@
                         end-placeholder="结束时间"
                         placeholder="选择时间范围"
                         value-format="timestamp"
+                        @change='cTime'
                         >
                     </el-time-picker>
 
@@ -604,14 +605,96 @@ methods:{
         //添加子节点新增
         addItem(){
          // 业务逻辑判断
-        this.vestList.setting.push(this.constVestList); 
+        this.vestList.setting.push({
+                createTime:null,
+                startTime:null,
+                endTime:null,
+                sett:{
+                  AF01801:{
+                      zero:{
+                        AF0010401: null,
+                        AF0020401: null,                        
+                        AF0020402: null,
+                        AF0020403: null,
+                        AF0020404: null,
+                        AF0020405: null,
+                      },
+                      one:{
+                        AF0010401: null,
+                        AF0020401: null,                        
+                        AF0020402: null,
+                        AF0020403: null,
+                        AF0020404: null,
+                        AF0020405: null,
+                      },
+                  },
+                  AF01802:{
+                      zero:{
+                        AF0010401: null,
+                        AF0020401: null,                        
+                        AF0020402: null,
+                        AF0020403: null,
+                        AF0020404: null,
+                        AF0020405: null,
+                      },
+                      one:{
+                        AF0010401: null,
+                        AF0020401: null,                        
+                        AF0020402: null,
+                        AF0020403: null,
+                        AF0020404: null,
+                        AF0020405: null,
+                      },
+                  },
+                  AF01803:{
+                      zero:{
+                        AF0010401: null,
+                        AF0020401: null,                        
+                        AF0020402: null,
+                        AF0020403: null,
+                        AF0020404: null,
+                        AF0020405: null,
+                      },
+                     one:{
+                        AF0010401: null,
+                        AF0020401: null,                        
+                        AF0020402: null,
+                        AF0020403: null,
+                        AF0020404: null,
+                        AF0020405: null,
+                      },
+                  },
+                  AF01804:{
+                     zero:{
+                        AF0010401: null,
+                        AF0020401: null,                        
+                        AF0020402: null,
+                        AF0020403: null,
+                        AF0020404: null,
+                        AF0020405: null,
+                      },
+                      one:{
+                        AF0010401: null,
+                        AF0020401: null,                        
+                        AF0020402: null,
+                        AF0020403: null,
+                        AF0020404: null,
+                        AF0020405: null,
+                      },
+                  },
+                }
+                });
+                  
                 console.log(this.vestList.setting)
                         this.$forceUpdate()
             },
         reduceItem(i){
-            this.vestList.setting.splice(i,1);
+                this.vestList.setting.splice(i,1);
                         this.$forceUpdate()
-        },    
+        },
+        cTime(){
+             this.$forceUpdate()
+        },
         // 类型列表
         getMoreInformation(){
                
@@ -634,11 +717,11 @@ methods:{
 
             //完善数据
             completeData(){
+                
                 // if(this.$refs.priceStart.value&&this.$refs.priceEnd.value){
                 // this.vestList.priceEnd= this.$refs.priceStart.value.substr(0,this.$refs.priceStart.value.indexOf(".")+3)
                 // this.vestList.priceStart=this.$refs.priceEnd.value.substr(0,this.$refs.priceEnd.value.indexOf(".")+3)
                 // }
-
                 for(var i=0;i<this.vestList.setting.length;i++){
                     if(this.vestList.setting[i].createTime==null){
                    this.$message.warning('推送时间段必须都填写');
@@ -744,7 +827,7 @@ watch:{
 driverTemplateDialogFlag:{
             handler: function(val, oldVal) {
                 if(this.$refs.area){
-          this.$refs.area.selectedOptions = [];
+               this.$refs.area.selectedOptions = [];
 }
 }
 }

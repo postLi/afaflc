@@ -74,7 +74,6 @@
                <div class="vestAera">
                    <h4>提货地</h4>
                    <div class="el_vestsearch">
-                       <!-- <el-button type="primary" class="vest_rbut">批量添加</el-button> -->
                        <div class="vest_section"  v-for="(form,keys) in pickAera" :key='keys'>
                          <div class="vest_tree" v-if="keys == 0" >
                              <el-input @focus="()=>{showMap('pickaddAera')}" v-model="pickaddAera"></el-input>
@@ -91,7 +90,7 @@
                <div class="vestAera">
                    <h4>目的地</h4>
                    <div class="el_vestsearch">
-                       <!-- <el-button type="primary" class="vest_rbut">批量添加</el-button> -->
+
                        <div class="vest_section"  v-for="(form,keys) in destinationAera" :key='keys'>
                          <div class="vest_tree" v-if="keys == 0" >
                              <el-input @focus="()=>{showMap('destinationaddAera')}" v-model="destinationaddAera"></el-input>
@@ -108,7 +107,6 @@
                <div class="vestAera">
                    <h4>马甲单源预览</h4>
                    <div class="el_vestsearch">
-                       <!-- <el-button type="primary" class="vest_rbut">批量添加</el-button> -->
                        <div class="vest_section" v-for="(value,keys) in totalAeraData" :key='keys'>
                          <div class="vest_tree">
                              <span class="vest_tree_span">{{value.endAddress}}-{{value.startAddress}}</span>
@@ -446,31 +444,21 @@ export default {
         }
         return AeraData
      },
-    //  startAddressList(){
-    //         let startList=[]
-    //         for(var i = 1; i<this.pickAera.length;i++){
-    //               startList.push(
-                      
-    //                       this.pickAera[i].startAddressCoordinate
-                      
-    //               )
+    },
+    watch:{
+        driverTemplateDialogFlag:{
+             handler: function(val, oldVal){
+             this.$refs.vestAll.resetFields();
+             this.destinationaddAera='';
+             this.pickaddAera='';
+             this.pickAera=[{}];
+             this.destinationAera=[{}];
+                 if(this.$refs.area1){
+                    this.$refs.area1.selectedOptions = [];
+                }
+             }
 
-            
-    //     }
-    //     return startList
-    //  },
-    // endAddressList(){
-    //         let endListS=[]
-    //         for(var j = 1;j<this.destinationAera.length;j++)
-    //         {
-    //               endListS.push(
-                      
-    //                       this.destinationAera[j].endAddressCoordinate
-                      
-    //               )
-    //           }
-    //          return endListS
-    //  }
+        }
     },
     methods:{
                 // 省市状态表
@@ -864,6 +852,7 @@ export default {
                 data_add_onesource_list(forms).then(res=>{
                 console.log('res',res);
                  this.driverTemplateDialogFlag=false;
+
                 this.firstblood()
                 }).catch(res=>{
                     console.log(res)

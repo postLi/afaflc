@@ -94,7 +94,6 @@ export function data_ServerClassList(){
 }
 
 //获取会员服务承诺
-
 export function data_LogisticsCompany() {
     return fetch({
       url: '/'+baseurl_two+'/sysDict/getSysDictByCodeGet/AF025',

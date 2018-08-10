@@ -31,10 +31,30 @@
              <th width="100">至少抽佣金额</th>        
             </tr>
              <tr>
-             <td><el-input></el-input></td>
-             <td><el-input></el-input></td>
-             <td><el-input></el-input></td>
-             <td><el-input></el-input></td>
+             <td><GetCityList  ref="area"></GetCityList></td>
+             <td> 
+                 <el-select v-model="MaidLevelValueCar" clearable placeholder="请选择" >
+                          <el-option
+                             v-for="item in MaidLevel"
+                              :key="item.code"
+                             :label="item.name"
+                              :value="item.code"
+                               :disabled="item.disabled">
+                         </el-option>
+                 </el-select>
+            </td>
+             <td>
+                  <el-select v-model="newValueCar" clearable placeholder="请选择" >
+                          <el-option
+                             v-for="item in optionsCar"
+                              :key="item.code"
+                             :label="item.name"
+                              :value="item.code"
+                               :disabled="item.disabled">
+                         </el-option>
+                 </el-select>  
+             </td>
+             <td><el-input min="0" maxlength="5" v-model.number="age"></el-input></td>
              <td><el-input></el-input></td>
              <td><el-input></el-input></td>
              <td><el-input></el-input></td>
@@ -55,6 +75,7 @@
     </div>
 </template>
 <script>
+import { data_Commission ,data_CarList,data_MaidLevel} from '../../../api/server/areaPrice.js'
 import Upload from '@/components/Upload/singleImage'
 import GetCityList from '@/components/GetCityList'
 import { eventBus } from '@/eventBus'
@@ -104,6 +125,11 @@ export default {
         return{
         dialogFormVisible_add: false,
         switchTab:0,
+        newValueCar:'',
+        MaidLevelValueCar:'',
+        optionsCar:[{ code:null,name:'全部'}],
+        MaidLevel:[{ code:null,name:'全部'}],
+        age:null
         }
   },
   watch:{
@@ -138,6 +164,9 @@ export default {
         },
     },
   },
+  components:{
+        GetCityList,
+  },
   mounted(){
     //按钮类型text,primary...
     this.type = this.btntype;
@@ -145,6 +174,7 @@ export default {
     this.text = this.btntext;
     //弹出框标题
     this.title = this.btntitle;
+    this.getMoreInformation();
   },
   methods:{
    openDialog:function(){
@@ -155,7 +185,26 @@ export default {
    },
    close:function(){
       this.dialogFormVisible_add = false;
-       }
+       },
+            //获取  服务和车辆 类型列表
+    getMoreInformation(){
+                data_CarList().then(res=>{
+                    // console.log(res.data)
+                    res.data.map((item)=>{
+                        this.optionsCar.push(item);
+                    })
+                    })
+                data_MaidLevel().then(res=>{
+                      res.data.map((item)=>{
+                        this.MaidLevel.push(item);
+                    })
+                
+                      
+                }).catch(res=>{
+                    console.log(res)
+                });    
+                
+          }       
   }
 }
 </script>
@@ -203,7 +252,7 @@ export default {
 <style lang="scss" >
     .newMarketingCity{
         .el-dialog{
-            width: 955px;
+            width: 955px!important;
         }
         .swith{
             margin:0px 10px 10px 10px;

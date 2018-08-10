@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class='carOwner_shipper'>
         <div class="shipper_searchinfo">
           <el-form :inline="true">
             <el-form-item label="所属区域：">
@@ -176,6 +176,30 @@ export default {
       margin: 10px  0 10px 50px;
     }
   }
+}
+.carOwner_shipper{
+    height: 100%;
+    position: relative;
+    .el-tabs__content{
+            padding: 15px
+    }
+    .shipper_searchinfo{
+     position: absolute;
+    left: 0;
+    top: 0;
+    padding: 15px 16px;
+    border-bottom: 2px dashed #ccc;
+    height: 70px;
+    width: 100%;
+    line-height: 35px;
+   }
+   .classify_info{
+    height: 100%;
+    padding: 90px 13px 0 0;
+   }
+    .creatDialog {
+        display: inline-block;
+    }
 }
 </style>
 
