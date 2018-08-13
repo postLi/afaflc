@@ -1,12 +1,12 @@
 <template>
-    <div>
-        <div class="shipper_searchinfo">
+    <div class="clearfix" style="height:100%">
+        <div class="shipper_city ">
           <el-form :inline="true">
             <el-form-item label="所属区域：">
-              <GetCityList  ref="area"></GetCityList>
+              <Region  ref="area" v-model="formAllData.areaCode2"></Region>
             </el-form-item>
             <el-form-item label="车主抽佣等级：">
-                 <el-select v-model="MaidLevelValueCar" clearable placeholder="请选择" >
+                 <el-select v-model="formAllData.commissionGrade" clearable placeholder="请选择" >
                           <el-option
                              v-for="item in MaidLevel"
                               :key="item.code"
@@ -17,7 +17,7 @@
                  </el-select>
             </el-form-item>
             <el-form-item label="车辆类型：">
-                 <el-select v-model="newValueCar" clearable placeholder="请选择" >
+                 <el-select v-model="formAllData.carType" clearable placeholder="请选择" >
                           <el-option
                              v-for="item in optionsCar"
                               :key="item.code"
@@ -28,12 +28,12 @@
                  </el-select>
             </el-form-item>          
             <el-form-item>       
-          <el-button type="primary"  plain >查询</el-button> 
+          <el-button type="primary"  plain @click="getData_query">查询</el-button> 
           </el-form-item>              
           
           </el-form>
          </div>
-          	<div class="classify_info">
+          	<div class="classify_cityinfo">
             		<div class="btns_box">
                    <newCity
                     btntext="新增"
@@ -53,59 +53,63 @@
                     icon="el-icon-news"
                     editType="edit"
                     btntitle="修改"
+                    :params="selectRowData"
                    >
                     </newCity>
-                <el-button  type="primary" value="value" plain icon="el-icon-bell" >启用/禁用</el-button>
-                <el-button  type="primary" value="value" plain icon="el-icon-news" >停用</el-button>
-                <el-button type="primary" plain icon="el-icon-delete">删除</el-button>
+                <el-button  type="primary" value="value" plain icon="el-icon-bell" @click="handleUseStates">启用/停用</el-button>
+                <el-button type="primary" plain icon="el-icon-delete" @click="delete_data">删除</el-button>
             		</div>
-                 <el-table style="width: 100%" stripe border height="87%" >
-               <el-table-column label="" width="65">
-                     <template slot-scope="scope">
-                <el-radio >&nbsp;</el-radio>
 
-              </template>
-                </el-table-column>
+            <div class="info_city">    
+               <el-table style="width: 100%" stripe border height="100%" @row-click="clickDetails" highlight-current-row :data="tableDataAll"  >
             <el-table-column  label="序号" width="80px" type="index">
             </el-table-column>
-            <el-table-column  label="省市" >
-                
+            <el-table-column  label="省市" prop="areaCode2">
             </el-table-column>
-
-            <el-table-column  label="服务类型" >
-                
+            <el-table-column  label="车辆类型" prop="carType">
             </el-table-column>
-            <el-table-column  label="价格上浮(倍)">
+            <el-table-column  label="车主抽佣等级" prop="commissionGrade">
             </el-table-column>
-            <el-table-column  label="状态" >
+            <el-table-column  label="开始抽佣单数" prop="startNum">
             </el-table-column>
-            <el-table-column  label="操作人"  >
-                
-            </el-table-column>   
-            <el-table-column  label="操作时间">
-                
-            </el-table-column>               
+            <el-table-column  label="结束抽佣单数" prop="endNum">
+            </el-table-column>       
+            <el-table-column  label="每单抽佣（%）" prop="commissionPer">
+            </el-table-column>                                                       
+            <el-table-column  label="最低抽佣(元)" prop="commissionLowest">
+            </el-table-column>
+            <el-table-column  label="启用状态" >
+            <template  slot-scope="scope">
+              {{ scope.row.usingStatus == 0 ? '启用' : '禁用' }}
+            </template>
+            </el-table-column>          
             </el-table> 
                 <!-- 页码 -->
-              <div class="Pagination ">
-                    <div class="block">
-                    <el-pagination >
-                    </el-pagination>
-                    </div>
-              </div>
-      		</div>
+       <div class="info1_tab_footer">共计:{{ dataTotal }} <div class="show_pager"> <Pager :total="dataTotal" @change="handlePageChange"  :sizes="sizes"/></div> </div>  
+        	</div> 
+          </div>
       </div>
 </template>
 <script>
 import { data_Commission ,data_CarList,data_MaidLevel} from '../../../../api/server/areaPrice.js'
+import { data_get_Marketingsame_list,data_Del_Marketingsame,data_Able_Marketingsame } from '../../../../api/marketing/carmarkting/carmarkting.js'
 import GetCityList from '@/components/GetCityList'
 import Region from '@/components/vregion/Region.vue' 
 import newCity from '../../components/newCity.vue'
 import { eventBus } from '@/eventBus'
+import Pager from '@/components/Pagination/index'
 import {parseTime} from '@/utils/'
 export default {
   data(){
     return{
+      selectRowData:{},
+      sizes:[20,50,100],
+      information:'操作不正确',
+      pagesize:20,//每页显示数
+      page:1,//当前页
+      totalCount:null,
+      dataTotal:null,
+      tableDataAll:[],
       radio: 1,
        optionsCar:[
        {
@@ -113,20 +117,24 @@ export default {
           name:'全部'
       }
       ],
-      newValueCar:'',
-      MaidLevelValueCar:'',
       MaidLevel:[
       {    
           code:null,
           name:'全部'
         }
       ],
+		formAllData:{
+            areaCode2: null,
+            carType:null,
+            commissionGrade:null,
+            },
     }
   },
     components:{
         GetCityList,
         newCity,
-        Region
+        Region,
+        Pager
     },
     methods:{
             //获取  服务和车辆 类型列表
@@ -147,14 +155,94 @@ export default {
                     console.log(res)
                 });    
                 
-          }
+          },
+          // 列表刷新页面  
+            firstblood(){
+                data_get_Marketingsame_list(this.page,this.pagesize,this.formAllData).then(res => {
+                  console.log(res)
+                    this.dataTotal = res.data.totalCount
+                    this.tableDataAll = res.data.list;
+                })
+            },
+         //  查询
+         getData_query(){
+          this.firstblood();
+          },
+         // 选择行
+         clickDetails(i){
+           this.selectRowData = i
+           console.log('selectRowData',this.selectRowData)
+         },
+        //每页显示数据量变更
+            handlePageChange(obj) {
+                this.page = obj.pageNum
+                this.pagesize = obj.pageSize
+        },
+        // 选择删除
+        delete_data(){
+              if(!this.selectRowData.id){
+                this.$message.info('未选中任何删除内容');
+                }else{
+                this.delDataInformation()
+            }
+        },
+       //确认删除
+            delDataInformation(){         
+                   this.$confirm('确定要删除吗？', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(()=>{
+                    data_Del_Marketingsame(this.selectRowData.id).then(res=>{
+                        this.$message.success('删除成功');
+                        this.firstblood();       
+                        this.selectRowData=''; 
+                    }).catch(err => {
+                      console.log('rr',res)
+                        this.$message({
+                            type: 'info',
+                            message: '操作失败，原因：' + err.text ? err.text : err
+                        })
+                    })
+                }).catch(() => {
+                    this.$message({
+                        type: 'info',
+                        message: '已取消'
+                    })
+                })   
+            },
+      // 启用禁用
+        handleUseStates(){
+                if(!this.selectRowData.id){
+                    //未选择任何修改内容的提示
+                        this.$message.info('未选中内容');
+                        return
+                }else{
+                 data_Able_Marketingsame(this.selectRowData.id).then(res=>{
+                     if(this.selectRowData.usingStatus==0)
+                     {
+                         this.$message.warning('已禁用');
+                     }
+                     else{
+                         this.$message.success('已启用');
+                     }
+                        this.firstblood();        
+                    })
+                }
+        }
    },
+
+   
   mounted(){
+     eventBus.$on('pushListtwo', () => {
+       this.firstblood()
+        })
     this.getMoreInformation();
+    this.firstblood();
     },
 }
 </script>
-<style lang="scss"  scoped>
+<style lang="scss" >
 .export{
   .el-button{
     margin-right:20px;
@@ -176,6 +264,57 @@ export default {
       margin: 10px  0 10px 50px;
     }
   }
+} 
+.shipper_city{
+    position: absolute;
+    left: 0;
+    top: 0;
+    padding: 15px 16px;
+    border-bottom: 2px dashed #ccc;
+    height: 70px;
+    width: 100%;
+    line-height: 35px;
+    .el-input__inner{
+      height: 30px;
+      line-height: 30px;
+    }
+}
+.classify_cityinfo{
+    height: 100%;
+    padding: 90px 15px 0 15px;
+    .commoncss{
+      display: inline-block!important;
+    }
+    .btns_box{
+    margin-bottom: 10px;
+    }
+    .info_city{
+      height:100%
+    }
+    .el-button{
+      margin-right: 20px;
+      height: 40px;
+    }
+}
+.info1_tab_footer{
+    padding-left: 20px;
+    background: #eee;
+    height: 40px;
+    line-height: 40px;
+    box-shadow: 0 -2px 2px rgba(0, 0, 0, 0.1);
+    z-index: 10;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    .show_pager{float: right}
+    .page-select{top:5px;
+    .el-input__inner{
+      height: 30px;
+      line-height: 30px; 
+    }
+    }
+    
 }
 </style>
 

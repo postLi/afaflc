@@ -1,7 +1,7 @@
 <template>
     <div class='carOwner_shipper'>
         <div class="shipper_searchinfo">
-          <el-form :inline="true">
+          <el-form :inline="true" >
             <el-form-item label="所属区域：">
               <GetCityList  ref="area"></GetCityList>
             </el-form-item>
