@@ -142,7 +142,7 @@
               <el-row>
                   <el-col :span="12">
                     <el-form-item :label-width="formLabelWidth" label="特权车：">
-                        <el-checkbox v-model="templateModel.isVipCar" @change='aa' label="是" border size="medium" :disabled="editType=='view'" :checked='templateModel.isVipCar!==""'></el-checkbox>
+                        <el-checkbox v-model="templateModel.isVipCar" @change='isVip' label="是" border size="medium" :disabled="editType=='view'" :checked='templateModel.isVipCar!==""'></el-checkbox>
                     </el-form-item>
                   </el-col>
               </el-row>
@@ -513,7 +513,7 @@ export default {
         changeList(){
             eventBus.$emit('changeListtwo')
         },
-        aa(val){
+        isVip(val){
             if(val ){
                 this.templateModel.isVipCar = '1'
             }

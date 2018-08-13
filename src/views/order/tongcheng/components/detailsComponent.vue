@@ -196,6 +196,7 @@
          <el-collapse-item title="客服备注" name="6">
             <el-table
             :data="tableData"
+            border
             style="width: 100%">
             <el-table-column
                 prop="date"
@@ -224,20 +225,22 @@
 
             <!-- 抢单记录 -->
                 <el-tab-pane label="抢单记录" name="robbingList">
-                    <robbingList :isvisible="tabName === 'robbingList'"></robbingList>
+                    <robbingList :isvisible="tabName === 'robbingList'" :robbingData = "listInformation.aflcOrderGrabs"></robbingList>
                 </el-tab-pane>
 
             <!-- 推单记录 -->
                 <el-tab-pane label="推单记录" name="pushOrderList">
+                    <pushList :isvisible="tabName === 'pushOrderList'" :pushOrderData = "listInformation.aflcOrderPushes"></pushList>
                 </el-tab-pane>
                 
             <!-- 行驶轨迹 -->
                 <el-tab-pane label="行驶轨迹" name="driveTrail">
+                    <driverTrail :isvisible="tabName === 'driveTrail'" :driverTrailData = "listInformation.aflcOrderCarTrails"></driverTrail>
                 </el-tab-pane>
 
             <!-- 回单回款评价 -->
                 <el-tab-pane label="回单回款评价" name="rate">
-
+                    <rate :isvisible="tabName === 'rate'" :rateData = "listInformation.aflcOrderEvaluations"></rate>
                 </el-tab-pane>
             </el-tabs>
         </el-collapse-item>
@@ -250,12 +253,18 @@ import { orderDetailsList } from '@/api/order/ordermange'
 import { parseTime } from '@/utils/index.js'
 import orderTracking from './tabsTable/orderTracking'
 import robbingList from './tabsTable/robbingList'
+import pushList from './tabsTable/pushOrderList'
+import driverTrail from './tabsTable/driveTrail'
+import rate from './tabsTable/rateComponent'
 
 export default {
     name: 'detailsComponent',
     components:{
         orderTracking,
         robbingList,
+        pushList,
+        driverTrail,
+        rate
     },
     props: {
         listOrderSerial:{
@@ -290,7 +299,7 @@ export default {
                 name: '王小虎',
                 address: '上海市普陀区金沙江路 1516 弄'
             }],
-            tableDataArray:[],
+            // tableDataArray:[],
         };
     },
     computed: {
@@ -325,7 +334,7 @@ export default {
                     return a.viaOrder - b.viaOrder;  
                 })
                 this.loading = false;
-                this.tableDataArray = this.listInformation.aflcOrderFollowingFiles;
+                // this.tableDataArray = this.listInformation.aflcOrderFollowingFiles;
             })
             console.log()
         },
@@ -428,6 +437,10 @@ export default {
                     width: 0;
                     /* width: 1px; */
                     /* height: 100%; */
+                }
+                .cell {
+                    white-space: initial;
+                    overflow: hidden;
                 }
             }
             .el-table{

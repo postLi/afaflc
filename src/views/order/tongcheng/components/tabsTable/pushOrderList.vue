@@ -1,5 +1,5 @@
 <template>
-    <div class="robbingList clearfix">
+    <div class="pushorder clearfix">
         <el-table
             :data="tableData"
             border
@@ -10,7 +10,7 @@
                 width="80"
                 >
             </el-table-column>
-            <el-table-column
+             <el-table-column
                 prop="date"
                 label="时间"
                 width="200"
@@ -36,65 +36,38 @@
                 </template>
             </el-table-column>
             <el-table-column
+                prop="driverDistance"
+                label="距离提货地(KM)">
+            </el-table-column>
+            <el-table-column
+                prop="driverAddress"
+                label="当前地址"
+                width="300">
+            </el-table-column>
+             <el-table-column
                 prop="address"
-                label="用户中单等级">
+                label="用户认证状态"
+                width="150">
             </el-table-column>
             <el-table-column
                 prop="address"
-                label="是否货主收藏司机">
+                label="用户账户状态"
+                width="150">
             </el-table-column>
-             <el-table-column
+            <el-table-column
+                prop="address"
+                label="车主当前有进行中即时订单"
+                width="150">
+            </el-table-column>
+            <el-table-column
+                prop="address"
+                label="车主当前有进行中预约订单"
+                width="150">
+            </el-table-column>
+            <el-table-column
                 prop="address"
                 label="是否特权车"
-                width="150">
-                <template slot-scope="scope">
-                    {{scope.row.isVipCar == '1' ? '是' : '否'}}
-                </template>
-            </el-table-column>
-             <el-table-column
-                prop="address"
-                label="抢入速度"
-                width="150">
-            </el-table-column>
-             <el-table-column
-                prop="driverDistance"
-                label="距离提货地(KM)"
                 width="100">
-            </el-table-column>
-            <el-table-column
-                prop="address"
-                label="本日与该货主交易次数"
-                width="150">
-            </el-table-column>
-             <el-table-column
-                prop="address"
-                label="本月与该货主交易次数"
-                width="150">
-            </el-table-column>
-             <el-table-column
-                prop="address"
-                label="本日累计交易次数"
-                width="150">
-            </el-table-column>
-             <el-table-column
-                prop="address"
-                label="本月累计交易次数"
-                width="150">
-            </el-table-column>
-             <el-table-column
-                prop="chooseScore"
-                label="中单加权分"
-                width="150">
-            </el-table-column>
-             <el-table-column
-                prop="address"
-                label="理论中单"
-                width="150">
-            </el-table-column>
-             <el-table-column
-                prop="address"
-                label="实际中单"
-                width="150">
             </el-table-column>
         </el-table>
         <div class="info_tab_footer">共计:{{ totalCount }} <div class="show_pager"> <Pager :total="totalCount" @change="handlePageChange" :sizes="sizes"/></div> </div>    
@@ -106,9 +79,8 @@
 import Pager from '@/components/Pagination/index'
 import { parseTime } from '@/utils/index.js'
 
-
 export default {
-    name: 'robbingList',
+    name: 'pushOrderList',
     components:{
         Pager,
     },
@@ -117,7 +89,7 @@ export default {
             type: Boolean,
             default: false
         },
-        robbingData:{
+        pushOrderData:{
             type: Array,
             required:true,
         }
@@ -130,6 +102,7 @@ export default {
             sizes:[20,30,50],
             tableData: null,
             parseTimeFunction:null,//时间转换
+
         };
     },
     watch:{
@@ -137,16 +110,15 @@ export default {
     },
     mounted(){
         this.init();
-        console.log('this.robbingData',this.robbingData)
+        console.log('this.pushOrderData',this.pushOrderData)
     },
     methods: {
         init(){
             this.parseTimeFunction = parseTime;
-            this.totalCount = this.robbingData.length;
+            this.totalCount = this.pushOrderData.length;
             let pageStart =  (this.page - 1) * this.pagesize;
             let pageEnd = this.page * this.pagesize;
-            this.tableData = this.robbingData.slice(pageStart,pageEnd);
-            console.log(this.tableData)
+            this.tableData = this.pushOrderData.slice(pageStart,pageEnd)
         },
         handlePageChange(obj) {
             this.page = obj.pageNum;
@@ -159,9 +131,7 @@ export default {
 </script>
 
 <style rel="stylesheet/scss" lang="scss" scoped>
-    .ordertrack{
-        position: relative;
-       
+    .pushorder{
 
     }
     
