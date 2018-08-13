@@ -222,26 +222,120 @@ export default {
                 data_get_pushsheet_Id(i.id).then(res=>{
                         this.selectRowData=res.data.push;
                         this.selectRowData2=res.data.settings;
+                        console.log('res.data.settings',res.data)
                         let sy=[]
                         for(var i = 0;i<res.data.settings.length;i++){
-                            sy.push(this.setting)
+                            sy.push({
+                createTime:null,
+                startTime:null,
+                endTime:null,
+        sett:{
+                  AF01801:{
+                      zero:{
+                        AF0010401: null,
+                        AF0020401: null,                        
+                        AF0020402: null,
+                        AF0020403: null,
+                        AF0020404: null,
+                        AF0020405: null,
+                      },
+                      one:{
+                        AF0010401: null,
+                        AF0020401: null,                        
+                        AF0020402: null,
+                        AF0020403: null,
+                        AF0020404: null,
+                        AF0020405: null,
+                      },
+                  },
+                  AF01802:{
+                      zero:{
+                        AF0010401: null,
+                        AF0020401: null,                        
+                        AF0020402: null,
+                        AF0020403: null,
+                        AF0020404: null,
+                        AF0020405: null,
+                      },
+                      one:{
+                        AF0010401: null,
+                        AF0020401: null,                        
+                        AF0020402: null,
+                        AF0020403: null,
+                        AF0020404: null,
+                        AF0020405: null,
+                      },
+                  },
+                  AF01803:{
+                      zero:{
+                        AF0010401: null,
+                        AF0020401: null,                        
+                        AF0020402: null,
+                        AF0020403: null,
+                        AF0020404: null,
+                        AF0020405: null,
+                      },
+                     one:{
+                        AF0010401: null,
+                        AF0020401: null,                        
+                        AF0020402: null,
+                        AF0020403: null,
+                        AF0020404: null,
+                        AF0020405: null,
+                      },
+                  },
+                  AF01804:{
+                     zero:{
+                        AF0010401: null,
+                        AF0020401: null,                        
+                        AF0020402: null,
+                        AF0020403: null,
+                        AF0020404: null,
+                        AF0020405: null,
+                      },
+                      one:{
+                        AF0010401: null,
+                        AF0020401: null,                        
+                        AF0020402: null,
+                        AF0020403: null,
+                        AF0020404: null,
+                        AF0020405: null,
+                      },
+                  },
+                 }
+            })
                         }
+                        console.log('sy',sy)
                         this.selectRowData2.map((subList,index) => {
-                            subList.map(item => {
-                            sy[index].startTime= item.pushStartTime;
-                            sy[index].endTime= item.pushEndTime;
-                            sy[index].createTime= [item.pushStartTime,item.pushEndTime];  
-                                var carType = item.carType;                                
-                                var isLine = item.isLine;
-                                var liveness = item.liveness;
-                                var sett = sy[index].sett;
-                                // this.sett[carType][isLine][liveness] = item.orderNum
-                               sett[carType][isLine][liveness] = item.orderNum
-                        })
+                            sy[index].startTime= subList[index].pushStartTime;
+                            sy[index].endTime= subList[index].pushEndTime;
+                            sy[index].createTime= [subList[index].pushStartTime,subList[index].pushEndTime]; 
+                            let sett = sy[index].sett;
+                                subList.map(item => {
+                             
+                                    var carType = item.carType;                                
+                                    var isLine = item.isLine;
+                                    var liveness = item.liveness;
+                                    
+                                    // this.sett[carType][isLine][liveness] = item.orderNum
+                                    sett[carType][isLine][liveness] = item.orderNum
+                                    // sy[index].sett[carType][isLine][liveness] = item.orderNum
+
+                                })
+                                sy[index].sett = sett
+                                console.log('startTime',index,sy[index].startTime)
+                                console.log('endTime',index,sy[index].endTime)
+                                 console.log('createTime',index,sy[index].createTime)
+
+                        
+                        
                         })
                         this.selectRowData.setting = sy;
-                        })
+                        console.log('fdfd',sy)
                         
+                        console.log('this.selectRowData',this.selectRowData)
+                        })
+                       
              },
         
             //  删除行
