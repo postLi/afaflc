@@ -5,14 +5,14 @@ const baseurl = "aflcsmservice"
 /**
  * 获取城市数据
  */
-export function getCityInfo(params) {
-  return fetch.get('/getcity', {
-    params
-  }).then(res => {
-    return res.data || []
-  })
-}
-
+export function getCityInfo(code) {
+    code = code || ''
+    return fetch.get('/aflccommonservice/common/aflcCommonPCA/v1/findAflcCommonPCAByCode?code=' + code).then(res => {
+      res.code = code
+      return res
+    })
+  }
+  
 // 通过数据字典查询
 /**
  * @export

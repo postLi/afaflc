@@ -9,7 +9,7 @@
               <el-select v-model="formAll.authStatus" clearable placeholder="请选择">
                 <el-option
                   v-for="item in optionsStatus"
-                  :key="item.value"
+                  :key="item.id"
                   :label="item.name"
                   :value="item.code"
                   :disabled="item.disabled">
@@ -20,7 +20,7 @@
               <el-select v-model="formAll.accountStatus" clearable placeholder="请选择">
                 <el-option
                   v-for="item in optionsAuidSataus"
-                  :key="item.code + 'shipperAll' "
+                  :key="item.id + 'shipperAll' "
                   :label="item.name"
                   :value="item.code"
                   :disabled="item.disabled">
