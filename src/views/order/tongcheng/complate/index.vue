@@ -1,0 +1,274 @@
+<template>
+    <div class="identicalStyle clearfix waitpayment" v-loading="loading">
+              <el-form :model="searchInfo" ref="ruleForm" class="demo-ruleForm classify_searchinfo">
+                    <el-form-item label="区域" prop="pointName">
+                        <el-input v-model="searchInfo.name" clearable>
+                        </el-input>
+                    </el-form-item>
+                    <el-form-item label="订单号" prop="orderSerial">
+                        <el-input v-model="searchInfo.orderSerial" clearable>
+                        </el-input>
+                    </el-form-item>
+                    <el-form-item label="货主" maxlength="18"  prop="shipperName">
+                        <el-input v-model="searchInfo.shipperName" clearable placeholder="账户/姓名">
+                        </el-input>
+                    </el-form-item>
+                    <el-form-item label="下单时间" prop="mobile">
+                        <el-date-picker
+                            v-model="chooseTime"
+                            type="datetimerange"
+                            :picker-options="pickerOptions2"
+                            range-separator="至"
+                            start-placeholder="开始日期"
+                            end-placeholder="结束日期"
+                            align="right"
+                            :default-time="['00:00:00', '23:59:59']"
+                            value-format="timestamp">
+                        </el-date-picker>
+                    </el-form-item>
+                    <el-form-item class="btnChoose fr"  style="margin-left:0;">
+                        <el-button type="primary" @click="handleSearch('search')">搜索</el-button>
+                        <el-button type="primary" @click="handleSearch('clear')">清空</el-button>
+                    </el-form-item>
+              </el-form>
+            <div class="classify_info">
+                <div class="btns_box">
+                    <el-button type="primary" @click="handleSearch('search')" size="mini">导出Exce</el-button>
+                </div>
+                <div class="info_news" style="height:85%;">
+                    <el-table
+                        ref="multipleTable"
+                        :data="tableData"
+                        stripe
+                        border
+                        align = "center"
+                        height="100%"
+                        @selection-change = "getinfomation"
+                        tooltip-effect="dark"
+                        @row-click="clickDetails"
+                        style="width: 100%"> 
+                        <el-table-column
+                            fixed
+                            type="selection"
+                            width="55">
+                        </el-table-column>
+                         <el-table-column
+                            fixed
+                            label="序号"
+                            type="index"
+                            width="55">
+                        </el-table-column>
+                        <el-table-column
+                            fixed
+                            prop="orderSerial"
+                            label="订单号"
+                            width="250">
+                                <template  slot-scope="scope">
+                                        <h4 class="needMoreInfo" @click="clickDetails(scope.row)">{{ scope.row.orderSerial}}</h4>
+                                </template>
+                        </el-table-column>
+                        <el-table-column
+                            prop="orderType"
+                            label="订单分类"
+                            width="110">
+                        </el-table-column>
+                        <el-table-column
+                            prop="belongCity"
+                            label="区域"
+                            width="180">
+                        </el-table-column>
+                        <el-table-column
+                            label="货主"
+                            width="150">
+                                <template  slot-scope="scope">
+                                    {{scope.row.shipperMobile}} - {{scope.row.shipperName}}
+                                </template>
+                        </el-table-column>
+                        <el-table-column
+                            label="车主"
+                            width="150">
+                                <template  slot-scope="scope">
+                                    {{scope.row.aflcDriverStatus.driverMobile}} - {{scope.row.aflcDriverStatus.driverName}} - {{scope.row.aflcDriverStatus.carNumber}}
+                                </template>
+                        </el-table-column>
+                        <el-table-column
+                            prop="usedCarType"
+                            label="所需车型"
+                            width="150">
+                        </el-table-column>
+                         <el-table-column
+                            prop="totalAmount"
+                            label="运费总额（元）"
+                            width="150">
+                        </el-table-column> 
+                        <el-table-column
+                            prop="useCarTime"
+                            label="用车时间"
+                            width="250">
+                                <template  slot-scope="scope">
+                                    <span class="timeChoose">
+                                        {{ parseTimeFunction(scope.row.useCarTime)}}    
+                                    </span>
+                                </template>
+                        </el-table-column>
+                         <el-table-column
+                            label="订单类型"
+                            width="120">
+                                <template  slot-scope="scope">
+                                    {{ scope.row.orderClass == '1' ? '即时订单' : '预约订单' }}
+                                </template>
+                        </el-table-column>
+                        <el-table-column
+                            label="付款状态"
+                            width="150">
+                                <template  slot-scope="scope">
+                                    {{ scope.row.payStatus == 'AF00801' ? '待付款' : '已付款' }}
+                                </template>
+                        </el-table-column>
+                        <el-table-column
+                            prop="aflcOrderAddresses"
+                            label="配送路径"
+                            width="500">
+                            <template  slot-scope="scope">
+                                <p class="aflcOrderAddresses" v-for="(obj,idx) in scope.row.aflcOrderAddresses" :key="obj.id">
+                                    <span v-if="idx == 0">发货地：</span>
+                                    <span v-else-if="idx == scope.row.aflcOrderAddresses.length-1">收货地：</span>
+                                    <span v-else>途径地{{ scope.row.aflcOrderAddresses.length >3 ? idx : ''}}：</span>
+                                    {{obj.viaAddress}}
+                                </p>
+                            </template>
+                        </el-table-column>
+                        <el-table-column
+                            label="下单时间"
+                            width="250">
+                            <template  slot-scope="scope">
+                                {{ parseTimeFunction(scope.row.useTime)}}
+                            </template>
+                        </el-table-column>
+                    </el-table>
+                      <!-- 页码 -->
+                    <div class="info_tab_footer">共计:{{ dataTotal }} <div class="show_pager"> <Pager :total="dataTotal" @change="handlePageChange"  :sizes="sizes"/></div> </div>    
+                </div>
+            </div>
+
+            <Details :dialogFormVisible_details.sync = "dialogFormVisible_details" :details="DetailsInformation" ></Details>
+    </div>
+</template>
+
+<script type="text/javascript">
+
+import '@/styles/dialog.scss'
+import { orderStatusList } from '@/api/order/ordermange'
+import { parseTime,pickerOptions2 } from '@/utils/index.js'
+import Pager from '@/components/Pagination/index'
+import Details from '../components/detailsInformations'
+
+
+    export default{
+        components:{
+            Pager,
+            Details
+        },
+        data(){
+            return{
+                loading: true,//加载
+                sizes:[20,50,100],
+                pagesize:20,//初始化加载数量
+                page:1,//初始化页码
+                dataTotal:0,
+                searchInfo:{
+                    belongCity:'',//区域
+                    shipperName:'',//货主
+                    startOrderDate:'',//下单起始时间
+                    endOrderDate:'',//下单结束时间
+                    orderSerial:'',//订单号
+                    parentOrderStatus:'AF00807',//订单状态
+                },
+                pickerOptions2:{
+                    shortcuts:pickerOptions2
+                },
+                chooseTime:'',
+                tableData:[],
+                parseTimeFunction:null,
+                dialogFormVisible_details:false,//详情弹窗
+                DetailsInformation:{},
+            }
+        },
+        mounted(){
+            this.firstblood();
+            
+            // console.log(this.$store)
+        },  
+        methods: {
+            handlePageChange(obj) {
+                this.page = obj.pageNum
+                this.pagesize = obj.pageSize
+            },
+            //单选中当前数据
+            handleCurrentTask(val){
+                // console.log(val)
+                this.tasktest = val;
+            },
+            //刷新页面  
+            firstblood(){
+                orderStatusList(this.page,this.pagesize,this.searchInfo).then(res => {
+                    console.log(res)
+                    this.tableData = res.data.list;
+                    this.dataTotal = res.data.totalCount;
+
+                    this.tableData.forEach(item => {
+                        item.aflcOrderAddresses.sort(function(a,b){  
+                            return a.viaOrder - b.viaOrder;  
+                        })  
+                    })
+                })
+
+                this.loading = false;
+                this.parseTimeFunction = parseTime;
+            },
+           
+            //模糊查询 分类名称或者code
+            handleSearch(type){
+                // console.log(this.chooseTime)
+                switch(type){
+                    case 'search':
+                        if(this.chooseTime){
+                            this.searchInfo.startOrderDate = this.chooseTime[0];
+                            this.searchInfo.endOrderDate = this.chooseTime[1];
+                        }
+                        break;
+                    case 'clear':
+                        this.searchInfo = {
+                            belongCity:'',//区域
+                            shipperName:'',//货主
+                            startOrderDate:'',//下单起始时间
+                            endOrderDate:'',//下单结束时间
+                            orderSerial:'',//订单号
+                            parentOrderStatus:'AF00807',//订单状态
+                        }
+                }
+                this.firstblood();
+            },
+             //判断是否选中
+            getinfomation(selection){
+                this.checkedinformation = selection;
+            },
+             //点击选中当前行
+            clickDetails(row, event, column){
+                this.$refs.multipleTable.toggleRowSelection(row);
+            },
+            //详情弹窗
+            clickDetails(item){
+                console.log(item)
+                this.dialogFormVisible_details = true;
+                this.DetailsInformation = item ;
+            }
+        }
+    }
+</script>
+
+<style type="text/css" lang="scss" scoped>
+    .waitpayment{
+       
+    }
+</style>

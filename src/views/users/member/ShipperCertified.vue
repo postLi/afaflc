@@ -57,7 +57,10 @@
 				</el-table-column>
 				<el-table-column prop="serviceCommitment" label="会员服务承诺">
 				</el-table-column>
-                <el-table-column prop="isOpenTms" label="是否开通TMS">
+                <el-table-column  label="是否开通TMS">
+                    <template slot-scope="scope">
+                        {{scope.row.isOpenTms  ==  1 ? '是' : '否'}}
+                    </template>
 				</el-table-column>
 			</el-table>
 			<el-pagination
@@ -153,7 +156,9 @@
             <el-row>
                 <el-col :span="24" class="moreLength">
                     <el-form-item label="是否开通TMS ：" :label-width="formLabelWidth" >
-                        <el-input v-model="shengheform.isOpenTms" disabled></el-input>
+                        <el-radio-group v-model="shengheform.isOpenTms" >
+                            <el-radio  v-for="(obj,key) in optionsStatus" :label="obj.value" :key='key'>{{obj.name}}</el-radio>
+                        </el-radio-group>
                     </el-form-item>
                 </el-col>
             </el-row>
@@ -275,7 +280,17 @@ export default {
             },
             radio1:null,
             radio2:null,
-            radio3:null
+            radio3:null,
+            optionsStatus:[
+                {
+                    value:'1',
+                    name:"是"
+                },
+                    {
+                    value:'0',
+                    name:"否"
+                }
+            ],
         }
 	},
     watch: {
@@ -325,10 +340,6 @@ export default {
         getValue(obj){
             return obj?obj.value:'';
         },
-        // //receive selected region data
-        // regionChange(data){
-        //     console.log(data);
-        // },
         changeIMG(event){
             // console.log(event)
             this.defaultImg = event.target.src;
@@ -350,19 +361,19 @@ export default {
             }else{
                 this.dialogFormVisible = true;
             }
-            // this.defaultImg =  this.shengheform.businessLicenceFile ?  this.shengheform.businessLicenceFile : defaultImg;
+            this.defaultImg =  this.shengheform.businessLicenceFile ?  this.shengheform.businessLicenceFile : this.defaultImg;
         },
         handleCurrentChangeRow(val){
             console.log(val)
             if(val){
                 this.shengheform = val;
+                this.shengheform.isOpenTms = '0';
             }
         },
         //刷新页面
         firstblood(){
             data_LogisticsCompanyList(this.page,this.pagesize,this.formAll).then(res=>{
             console.log(res)
-
                 this.totalCount = res.data.totalCount;
                 this.tableData1 = res.data.list;
                 // this.inited = true

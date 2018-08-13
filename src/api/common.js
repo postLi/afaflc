@@ -5,13 +5,26 @@ const baseurl = "aflcsmservice"
 /**
  * 获取城市数据
  */
-export function getCityInfo(params) {
-  return fetch.get('/getcity', {
-    params
-  }).then(res => {
-    return res.data || []
-  })
-}
+export function getCityInfo(code) {
+    code = code || ''
+    return fetch.get('/aflccommonservice/common/aflcCommonPCA/v1/findAflcCommonPCAByCode?code=' + code).then(res => {
+      res.code = code
+      return res
+    })
+  }
+  
+// 通过数据字典查询
+/**
+ * @export
+ * @param {*} code 数据字典code值
+ * @returns
+ */
+export function getDictionary(code) {
+    return fetch({
+      url: '/' + baseUrl + '/sysDict/getSysDictByCodeGet/' + code,
+      method: 'get'
+    })
+  }
 
 /**
  * 获取图片上传的policy
@@ -94,7 +107,6 @@ export function data_ServerClassList(){
 }
 
 //获取会员服务承诺
-
 export function data_LogisticsCompany() {
     return fetch({
       url: '/'+baseurl_two+'/sysDict/getSysDictByCodeGet/AF025',

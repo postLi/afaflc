@@ -1,7 +1,9 @@
 import fetch from '@/utils/fetch'
 
 const baseurl = "aflcsmservice"
+const baseurl_one = "aflcsmservice_1"
 
+const baseurl_two = "aflccommonservice"
 
 // 获取区域树节点的数据
 
@@ -92,6 +94,26 @@ export function data_OnlyChange(data) {
   })
 }
 
+//车主抽佣
+export function data_Commission() {
+  return fetch({
+    url: '/'+baseurl+'/sm/aflcDriverCommission/v1/list',
+    method: 'post',
+    data:{
+      "currentPage": 1 ,
+      "pageSize": 10,
+      "vo": null
+    },
+  })
+}
+
+//获取车主抽佣等级
+export function data_MaidLevel() {
+  return fetch({
+    url: '/'+baseurl_two+'/sysDict/getSysDictByCodeGet/AF00206',
+    method: 'get'
+  })
+}
 
 
 

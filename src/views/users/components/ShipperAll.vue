@@ -116,11 +116,11 @@
                 @current-change="handleCurrentChangeRow"
 				tooltip-effect="dark"
 				style="width: 100%">
-                <el-table-column label="" width="65">
-                    <template scope="scope">
-                        <el-radio :label="scope.row.id" v-model="templateRadio" @change.native="getTemplateRow(scope.$index,scope.row)">&nbsp</el-radio>
+                <!-- <el-table-column label="" width="65">
+                     <template slot-scope="scope">
+                        <el-radio class="textRadio" @change.native="getCurrentRow(scope.$index)" :label="scope.$index" v-model="radio" class="textRadio">&nbsp;</el-radio>
                     </template>
-                </el-table-column>
+                </el-table-column> -->
 				<el-table-column type='index' label="序号" width="80px">
 				</el-table-column>  
 				<el-table-column label="手机号">
@@ -194,6 +194,7 @@ export default {
 	},
   data(){
       return{
+           radio: 1,
           templateRadio:'',
         ul:true,
 		freeze:true,//是否冻结
@@ -270,7 +271,8 @@ export default {
         })
     },
     methods:{
-        getTemplateRow(index,row){                                 //获取选中数据
+        getTemplateRow(index,row){       
+            console.log('this.templateRadio',this.templateRadio)                          //获取选中数据
     this.templateSelection = row;
 },
 	changeList(){
@@ -362,15 +364,13 @@ export default {
   }
 }
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
     .removeFreeze,.removeBlcak{
         .shipper_information{
             h2{ 
                 margin:10px 0 10px 20px;
             }
         }
-        
-
         .el-textarea{
             width: 637px;
         }

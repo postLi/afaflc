@@ -23,7 +23,7 @@
 
               <el-row>
                   <el-col :span="12">
-                    <el-form-item label="身份证号码：" prop="driverCardid"  :label-width="formLabelWidth" >
+                    <el-form-item label="身份证号码："  :label-width="formLabelWidth" >
                         <el-input v-model.trim="templateModel.driverCardid" :disabled="editType=='view'"></el-input>
                     </el-form-item>
                   </el-col>
@@ -141,13 +141,8 @@
 
               <el-row>
                   <el-col :span="12">
-<<<<<<< HEAD
-                    <el-form-item :label-width="formLabelWidth">
-                        <el-checkbox v-model="isVipCar" @change='aa'>是特权车</el-checkbox>
-=======
                     <el-form-item :label-width="formLabelWidth" label="特权车：">
-                        <el-checkbox v-model="templateModel.isVipCar" @change='aa' label="是" border size="medium" :disabled="editType=='view'" :checked='templateModel.isVipCar!==""'></el-checkbox>
->>>>>>> 1af9a953fc7675581b2e9c50bd56b07b67e2c82d
+                        <el-checkbox v-model="templateModel.isVipCar" @change='isVip' label="是" border size="medium" :disabled="editType=='view'" :checked='templateModel.isVipCar!==""'></el-checkbox>
                     </el-form-item>
                   </el-col>
               </el-row>
@@ -423,15 +418,8 @@ export default {
                 cb()
             }
         }   
-
-        
-   
         return{
-<<<<<<< HEAD
-            isVipCar:'',
-=======
             defaultImg:'/static/test.jpg',//默认第一张图片的url
->>>>>>> 1af9a953fc7675581b2e9c50bd56b07b67e2c82d
             selectFlag: false,
             type:'primary',
             title:'',
@@ -490,7 +478,6 @@ export default {
         driverTemplateDialogFlag:{
         handler: function(val, oldVal) {
             if(!val){
-                            console.log('fdffrrrr',this.$refs.area)
                 this.selectFlag=false;
                 this.$refs.templateModel.resetFields();
                 if(this.editType == 'add'){
@@ -526,7 +513,7 @@ export default {
         changeList(){
             eventBus.$emit('changeListtwo')
         },
-        aa(val){
+        isVip(val){
             if(val ){
                 this.templateModel.isVipCar = '1'
             }
