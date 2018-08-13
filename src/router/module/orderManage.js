@@ -4,19 +4,25 @@ const _import = require('../_import_' + process.env.NODE_ENV)
 export default {
   path: '/order',
   component: Layout,
-  redirect: '/order/tongcheng',
+  redirect: '/order/tongcheng/waitpayment',
   icon: 'chengyunshang',
   name: '订单管理',
   noDropdown: true, 
   children: [
     {
-        path: '/order/tongcheng', icon: 'QQ', name: '同城订单', component: _import('order/index'), meta: { role: ['admin'], title: '同城订单',stitle: '同城',  noCache: true },
+        path: '/order/tongcheng', icon: 'QQ', name: '同城订单',component: _import('order/index'), meta: { role: ['admin'], title: '同城订单',stitle: '同城',  noCache: true },
         children: [
+            {
+                path: '/order/tongcheng/waitPointing', icon: 'QQ',name: '待指派', component: _import('order/tongcheng/waitPointing/index'), meta: { role: ['admin'], title: '待指派',stitle: '待指派',  noCache: true }
+            },
             {
                 path: '/order/tongcheng/waitpayment', icon: 'QQ',name: '待付款', component: _import('order/tongcheng/waitpayment/index'), meta: { role: ['admin'], title: '待付款',stitle: '待付款',  noCache: true }
             },
             {
                 path: '/order/tongcheng/toDispatch', icon: 'QQ', name: '派单中', component: _import('order/tongcheng/toDispatch/index'), meta: { role: ['admin'], title: '派单中', stitle: '派单中', noCache: true }
+            },
+            {
+                path: '/order/tongcheng/implementing', icon: 'QQ', name: '进行中', component: _import('order/tongcheng/implementing/index'), meta: { role: ['admin'], title: '进行中', stitle: '进行中', noCache: true }
             },
             {
                 path: '/order/tongcheng/complate', icon: 'QQ', name: '已完成', component: _import('order/tongcheng/complate/index'), meta: { role: ['admin'], title: '已完成', stitle: '已完成', noCache: true }

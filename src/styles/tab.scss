@@ -45,8 +45,6 @@
     }
   }
   
-
-
 .el-tabs{
     height: 100%;
     .el-tabs__content{
@@ -54,5 +52,9 @@
         .el-tab-pane{
             height: 100%;
         }
+    }
+    .el-tabs__header {
+        margin: 0;
+        /* margin: 0 0 15px; */
     }
 }

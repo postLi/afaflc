@@ -36,14 +36,6 @@
                     </el-form-item>
                 </el-col>
             </el-row>
-
-          <!-- <el-row>
-            <el-col :span="24" class="moreLength">
-              <el-form-item label="详细地址 ：" :label-width="formLabelWidth" >
-                <el-input :maxlength="20" v-model="xinzengform.address" auto-complete="off"  :disabled="editType=='view'"></el-input>
-              </el-form-item>
-            </el-col>
-          </el-row> -->
             <el-row>
                 <el-col :span="12">
                     <el-form-item label="公司名称 ：" :label-width="formLabelWidth">
