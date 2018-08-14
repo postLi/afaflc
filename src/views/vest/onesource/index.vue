@@ -398,6 +398,8 @@ export default {
             areaCode:null,
             startAddressCoordinate:null,
             endAddressCoordinate:null,
+            longitude:null,
+            latitude:null,
             flcVestUnisourceAddressaList:[
             ]
             },
@@ -491,18 +493,17 @@ export default {
             this.current = name;
         },
             getInfo(pos, name, info) {
-            // info.name  info.pos
-            console.log('pos',pos)
-            console.log('name',name)
-            let tude= pos.split(",");
-            let latitude=tude[0]
-            let longitude=tude[1]
             switch (this.current) {
                 case 'districtName':
                 this.vestAll.districtName = info.formattedAddress;
                 break;
                 case 'districtAddress':
                 this.vestAll.districtAddress = info.formattedAddress;
+                let tude= pos.split(",");
+                let longitude=tude[0]
+                let latitude=tude[1]
+                this.vestAll.longitude = longitude;
+                this.vestAll.latitude = latitude;
                 break;
                 case 'vestdistrictName':
                 this.formAll.districtName = info.formattedAddress;
@@ -513,7 +514,7 @@ export default {
                 break;
                 case 'destinationaddAera':
                 this.destinationaddAera = info.formattedAddress;
-                 this.endAddressCoordinate = pos;
+                this.endAddressCoordinate = pos;
                 break;
                 case 'areaCode2':
                 this.formAll2.startAddress = info.formattedAddress;
@@ -544,8 +545,8 @@ export default {
             districtName:null,
             districtAddress:null,
             areaCode:null,
-            latitude:'',
-            longitude:'',
+            latitude:null,
+            longitude:null,
             flcVestUnisourceAddressaList:[
             ]
             }
@@ -809,8 +810,9 @@ export default {
                         return
                 }else{
                     this.selectId.push(this.selectRowData.id)
-                    console.log(this.selectId)
+                    
                  data_UseStates_onesource(this.selectId).then(res=>{
+                     console.log('dsds',this.selectId)
                      this.selectId.splice(0,1);
                      if(this.selectRowData.usingStatus==0)
                      {
@@ -881,8 +883,8 @@ export default {
             districtName:null,
             districtAddress:null,
             areaCode:null,
-            latitude:'',
-            longitude:'',
+            latitude:null,
+            longitude:null,
             flcVestUnisourceAddressaList:[
             ]
             }

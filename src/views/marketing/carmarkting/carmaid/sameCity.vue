@@ -3,7 +3,9 @@
         <div class="shipper_city ">
           <el-form :inline="true">
             <el-form-item label="所属区域：">
-              <Region  ref="area" v-model="formAllData.areaCode2"></Region>
+             <vregion :ui="true" @values="regionChange" class="form-control">
+                <el-input v-model="formAllData.areaCode2" placeholder="请选择出发地"></el-input>
+            </vregion>
             </el-form-item>
             <el-form-item label="车主抽佣等级：">
                  <el-select v-model="formAllData.commissionGrade" clearable placeholder="请选择" >
@@ -64,7 +66,7 @@
                <el-table style="width: 100%" stripe border height="100%" @row-click="clickDetails" highlight-current-row :data="tableDataAll"  >
             <el-table-column  label="序号" width="80px" type="index">
             </el-table-column>
-            <el-table-column  label="省市" prop="areaCode2">
+            <el-table-column  label="所属区域" prop="areaCode2">
             </el-table-column>
             <el-table-column  label="车辆类型" prop="carType">
             </el-table-column>
@@ -80,7 +82,7 @@
             </el-table-column>
             <el-table-column  label="启用状态" >
             <template  slot-scope="scope">
-              {{ scope.row.usingStatus == 0 ? '启用' : '禁用' }}
+              {{ scope.row.usingStatus == 0 ? '启用' : '停用' }}
             </template>
             </el-table-column>          
             </el-table> 
@@ -93,8 +95,7 @@
 <script>
 import { data_Commission ,data_CarList,data_MaidLevel} from '../../../../api/server/areaPrice.js'
 import { data_get_Marketingsame_list,data_Del_Marketingsame,data_Able_Marketingsame } from '../../../../api/marketing/carmarkting/carmarkting.js'
-import GetCityList from '@/components/GetCityList'
-import Region from '@/components/vregion/Region.vue' 
+import vregion from '@/components/vregion/Region'
 import newCity from '../../components/newCity.vue'
 import { eventBus } from '@/eventBus'
 import Pager from '@/components/Pagination/index'
@@ -103,6 +104,7 @@ export default {
   data(){
     return{
       selectRowData:{},
+      selectId:[],
       sizes:[20,50,100],
       information:'操作不正确',
       pagesize:20,//每页显示数
@@ -131,12 +133,18 @@ export default {
     }
   },
     components:{
-        GetCityList,
         newCity,
-        Region,
+        vregion,
         Pager
     },
     methods:{
+            regionChange(d) {
+                console.log('data:',d)
+                this.formAllData.areaCode2 = (!d.province&&!d.city&&!d.area&&!d.town) ? '': `${this.getValue(d.province)}${this.getValue(d.city)}${this.getValue(d.area)}${this.getValue(d.town)}`.trim();
+            },
+             getValue(obj){
+                return obj ? obj.value:'';
+            },
             //获取  服务和车辆 类型列表
             getMoreInformation(){
                 data_CarList().then(res=>{
@@ -218,7 +226,10 @@ export default {
                         this.$message.info('未选中内容');
                         return
                 }else{
-                 data_Able_Marketingsame(this.selectRowData.id).then(res=>{
+                    this.selectId.push(this.selectRowData.id)
+                    
+                  data_Able_Marketingsame(this.selectId).then(res=>{
+                     this.selectId.splice(0,1);
                      if(this.selectRowData.usingStatus==0)
                      {
                          this.$message.warning('已禁用');
@@ -226,7 +237,8 @@ export default {
                      else{
                          this.$message.success('已启用');
                      }
-                        this.firstblood();        
+                        this.firstblood();       
+                        this.selectRowData='';         
                     })
                 }
         }
@@ -278,6 +290,13 @@ export default {
       height: 30px;
       line-height: 30px;
     }
+    .v-dropdown-container{
+        top:35px!important;
+        left:0px!important;
+    }
+    .el-button{
+      padding: 8px 20px!important;
+    }
 }
 .classify_cityinfo{
     height: 100%;
@@ -293,7 +312,7 @@ export default {
     }
     .el-button{
       margin-right: 20px;
-      height: 40px;
+      padding: 8px 20px!important;
     }
 }
 .info1_tab_footer{

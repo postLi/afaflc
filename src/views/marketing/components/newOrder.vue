@@ -1,7 +1,7 @@
 <template>
      <div class="creatcity commoncss">
       <el-button :type="btntype" :value="value" :plain="plain" :icon="icon" @click="openDialog()">{{btntext}}</el-button>
-      <div class="newMarketingCity">
+      <div class="newMarketingOrder">
       <el-dialog  :visible="dialogFormVisible_add" :before-close="change">
         <el-form :model="formAll" ref="formAll" :rules="rulesForm">
           <el-row v-if="editType=='edit'">
@@ -23,17 +23,20 @@
           </el-row>
           <el-row>
             <el-col :span="24">
-            <div class="table_box">
              <table class="ht_table">
             <tbody>
              <tr>
              <th width="150">所属区域</th>
              <th width="100">车辆类型</th>
-             <th width="150">车主抽佣等级</th>                            
-             <th width="100">开始抽佣单数</th>
-             <th width="100">开始抽佣单数</th>
-             <th width="100">每单抽佣（%）</th>
-             <th width="100">至少抽佣金额</th>        
+             <th width="100">车主抽佣等级</th>                            
+             <th width="70">1单/ 天</th>
+             <th width="70">2单/ 天</th>
+             <th width="70">3单/ 天</th>  
+             <th width="70">4单/ 天</th>
+             <th width="70">5单/ 天</th>
+             <th width="70">6单/ 天</th>
+             <th width="70">7单/ 天</th>
+             <th width="70">8单/ 天</th>
             </tr>
              <tr>
              <td>
@@ -70,29 +73,48 @@
                  </el-form-item>
              </td>
              <td>
-                 <el-form-item  prop="startNum"> 
-                 <el-input min="0" maxlength="4"  v-model="formAll.startNum"></el-input>
+                 <el-form-item  prop="reward1"> 
+                 <el-input min="0" maxlength="3"  v-model="formAll.reward1"></el-input>
                  </el-form-item>
              </td>
              <td>
-                 <el-form-item  prop="endNum"> 
-                 <el-input v-model="formAll.endNum" maxlength="4"></el-input>
+                 <el-form-item  prop="reward2"> 
+                 <el-input v-model="formAll.reward2" maxlength="3"></el-input>
                  </el-form-item>
                  </td>
              <td>
-                 <el-form-item  prop="commissionPer"> 
-                 <el-input v-model="formAll.commissionPer" maxlength="4"></el-input>
+                 <el-form-item  prop="reward3"> 
+                 <el-input v-model="formAll.reward3" maxlength="3"></el-input>
                  </el-form-item>
                  </td>
              <td>
-                 <el-form-item  prop="commissionLowest"> 
-                 <el-input v-model="formAll.commissionLowest" maxlength="4"></el-input>
+                 <el-form-item  prop="reward4"> 
+                 <el-input v-model="formAll.reward4" maxlength="3"></el-input>
                  </el-form-item>
                  </td>
+             <td>
+                 <el-form-item  prop="reward5"> 
+                 <el-input v-model="formAll.reward5" maxlength="3"></el-input>
+                 </el-form-item>
+                 </td>
+             <td>
+                 <el-form-item  prop="reward6"> 
+                 <el-input v-model="formAll.reward6" maxlength="3"></el-input>
+                 </el-form-item>
+                 </td>
+             <td>
+                 <el-form-item  prop="reward7"> 
+                 <el-input v-model="formAll.reward7" maxlength="3"></el-input>
+                 </el-form-item>
+                 </td>
+             <td>
+                 <el-form-item  prop="reward8"> 
+                 <el-input v-model="formAll.reward8" maxlength="3"></el-input>
+                 </el-form-item>
+                 </td> 
             </tr>
             </tbody>
              </table>
-             </div>
             </el-col>
           </el-row>
 
@@ -108,8 +130,8 @@
     </div>
 </template>
 <script>
-import { data_Commission,data_CarList,data_MaidLevel} from '../../../api/server/areaPrice.js'
-import { data_get_Marketingsame_create,data_get_Marketingsame_update } from '../../../api/marketing/carmarkting/carmarkting.js'
+import { data_Commission ,data_CarList,data_MaidLevel} from '../../../api/server/areaPrice.js'
+import { data_get_orderFromsame_create,data_get_orderFromsame_update} from '../../../api/marketing/carmarkting/orderFrom.js'
 import Upload from '@/components/Upload/singleImage'
 import vregion from '@/components/vregion/Region'
 import { eventBus } from '@/eventBus'
@@ -187,7 +209,7 @@ export default {
         }
 
     //    开始抽佣单数校验
-        const startNumValidator = (rule, val, cb) => {
+        const rewardValidator = (rule, val, cb) => {
             var reg= /[^\d.]/g
             if(!val){
             cb(new Error('开始抽佣不能为空'))
@@ -199,49 +221,7 @@ export default {
                 cb()
             }        
         }     
-        
-    //    结束抽佣单数校验
-        const endNumValidator = (rule, val, cb) => {
-            var reg= /[^\d.]/g
-             if(!val){
-            cb(new Error(' 结束抽佣不能为空'))
-            }
-             else if(reg.test(val)){
-            cb(new Error('请输入正整数'))
-            }
-            else{
-                cb()
-            }        
-        }         
-
-    //    每单抽佣比例校验
-        const commissionPerValidator = (rule, val, cb) => {
-            var reg= /[^\d.]/g
-            if(!val){
-            cb(new Error('每单抽佣比例不能为空'))
-            }
-            else if(reg.test(val)){
-            cb(new Error('请输入正整数'))
-            }
-            else{
-                cb()
-            }        
-        }        
-
-
-    //    至少抽佣金额校验
-        const commissionLowestValidator = (rule, val, cb) => {
-            var reg= /[^\d.]/g
-            if(!val){
-            cb(new Error(' 至少抽佣金额不能为空'))
-            }
-            else if(reg.test(val)){
-            cb(new Error('请输入正整数'))
-            }
-            else{
-                cb()
-            }        
-        }
+    
 
         return{
         dialogFormVisible_add: false,
@@ -252,20 +232,27 @@ export default {
             areaCode2: null,
             carType:null,
             commissionGrade:null,
-            startNum:null,
-            endNum:null,
-            commissionPer:null,
-            commissionLowest:null,
-            usingStatus:null,
+            reward1:null,
+            reward2:null,
+            reward3:null,
+            reward4:null,
+            reward5:null,
+            reward6:null,
+            reward7:null,
+            reward8:null,
             },
             rulesForm:{
             areaCode2:{trigger:'change',required:true,validator: belongCityNameValidator},
             carType:{trigger:'change',required:true,validator:carTypeValidator},
             commissionGrade:{trigger:'change',required:true,validator:commissionGradeValidator},
-            startNum:{trigger:'change',required:true,validator:startNumValidator},
-            endNum:{trigger:'change',required:true,validator:endNumValidator},
-            commissionPer:{trigger:'change',required:true,validator:commissionPerValidator},
-            commissionLowest:{trigger:'change',required:true,validator:commissionLowestValidator},                                    
+            reward1:{trigger:'change',required:true,validator:rewardValidator}, 
+            reward2:{trigger:'change',required:true,validator:rewardValidator},
+            reward3:{trigger:'change',required:true,validator:rewardValidator},
+            reward4:{trigger:'change',required:true,validator:rewardValidator},
+            reward5:{trigger:'change',required:true,validator:rewardValidator},   
+            reward6:{trigger:'change',required:true,validator:rewardValidator}, 
+            reward7:{trigger:'change',required:true,validator:rewardValidator}, 
+            reward8:{trigger:'change',required:true,validator:rewardValidator},                                    
             },
         }
   },
@@ -344,7 +331,7 @@ export default {
        this.$refs['formAll'].validate(valid=>{
         var forms= Object.assign({}, this.formAll);
         if(valid){
-        data_get_Marketingsame_create(forms).then(res=>{
+        data_get_orderFromsame_create(forms).then(res=>{
             console.log('res',res);
             this.dialogFormVisible_add = false;
             this.changeList();
@@ -357,7 +344,7 @@ export default {
             commissionPer:null,
             commissionLowest:null,
             }
-            this.$refs['vestList'].resetFields();
+            this.$refs['formAll'].resetFields();
         }).catch(res=>{
             console.log(res)
        });
@@ -370,10 +357,11 @@ export default {
        this.$refs['formAll'].validate(valid=>{
         var forms= Object.assign({}, this.formAll);
         if(valid){
-        data_get_Marketingsame_update(forms).then(res=>{
+        data_get_orderFromsame_update(forms).then(res=>{
             console.log('res',res);
             this.dialogFormVisible_add = false;
             this.changeList();
+            this.$refs['formAll'].resetFields();
         }).catch(res=>{
             console.log(res)
             this.$message.error('车辆类型车主抽佣等级已存在');
@@ -404,41 +392,9 @@ export default {
                 height: 100%;
             }
         }
-        
     }
-
-</style>
-
-<style lang="scss" >
-    .newMarketingCity{
-        .el-dialog{
-            width: 955px!important;
-        }
-        .swith{
-            margin:0px 0px 10px 10px;
-            .el-switch{
-                display: inline-block!important;
-            }
-        }
-        .v-dropdown-container{
-          top: 41px!important;
-          left: 0px!important;
-        }
-        .el-dialog__footer{
-            padding: 20px 20px 20px;
-        }
-       .el-dialog{
-           overflow: unset;
-       }
-    }
-    .creatcity{
-        .el-input__inner{
-            line-height: 40px!important; 
-            height: 40px !important; 
-        }
-    .table_box{
     .ht_table{
-        width: 934px!important;
+        width: 980px;
         margin:0px 10px;
         color: #333;
         border-left:1px solid #d0d7e5;
@@ -465,6 +421,34 @@ export default {
             }
         }
         }
+</style>
+
+<style lang="scss" >
+    .newMarketingOrder{
+        .el-dialog{
+            width: 1000px!important;
+        }
+        .swith{
+            margin:0px 0px 10px 10px;
+            .el-switch{
+                display: inline-block!important;
+            }
+        }
+        .v-dropdown-container{
+          top: 41px!important;
+          left: 0px!important;
+        }
+        .el-dialog__footer{
+            padding: 20px 20px 20px;
+        }
+       .el-dialog{
+           overflow: unset;
+       }
+    }
+    .creatcity{
+        .el-input__inner{
+            line-height: 40px !important; 
+            height: 40px !important; 
         }
     }
 </style>

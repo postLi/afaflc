@@ -1,17 +1,16 @@
 <template>
-  <div class="same_shipper clearfix">
     <div class="clearfix" style="height:100%">
-        <div class="shipper_Owner ">
+        <div class="shipper_city ">
           <el-form :inline="true">
             <el-form-item label="所属区域：">
              <vregion :ui="true" @values="regionChange" class="form-control">
                 <el-input v-model="formAllData.areaCode2" placeholder="请选择出发地"></el-input>
             </vregion>
             </el-form-item>
-            <el-form-item label="服务类型：">
-                 <el-select v-model="formAllData.serivceCode" clearable placeholder="请选择" >
+            <el-form-item label="车主抽佣等级：">
+                 <el-select v-model="formAllData.commissionGrade" clearable placeholder="请选择" >
                           <el-option
-                             v-for="item in serviceCardList"
+                             v-for="item in MaidLevel"
                               :key="item.code"
                              :label="item.name"
                               :value="item.code"
@@ -66,33 +65,43 @@
             </el-table-column>
             <el-table-column  label="所属区域" prop="areaCode2" show-overflow-tooltip>
             </el-table-column>
-            <el-table-column  label="奖励额度限制" prop="carType">
+            <el-table-column  label="车辆类型" prop="carType">
             </el-table-column>
-            <el-table-column  label="服务分类" prop="commissionGrade">
+            <el-table-column  label="车主抽佣等级" prop="commissionGrade">
             </el-table-column>
-            <el-table-column  label="车辆类型" prop="commissionGrade">
-            </el-table-column>                          
+             <el-table-column label="完成订单数">
+            <el-table-column  label="1单/ 天" prop="reward1">
+            </el-table-column>
+            <el-table-column  label="2单/ 天" prop="reward2">
+            </el-table-column>
+            <el-table-column  label="3单/ 天" prop="reward3">
+            </el-table-column>
+            <el-table-column  label="4单/ 天" prop="reward4">
+            </el-table-column>
+            <el-table-column  label="5单/ 天" prop="reward5">
+            </el-table-column>
+            <el-table-column  label="6单/ 天" prop="reward6">
+            </el-table-column>
+            <el-table-column  label="7单/ 天" prop="reward7">
+            </el-table-column>  
+            <el-table-column  label="8单/ 天" prop="reward8">
+            </el-table-column>
+            </el-table-column>          
             <el-table-column  label="启用状态" >
             <template  slot-scope="scope">
               {{ scope.row.usingStatus == 0 ? '启用' : '禁用' }}
             </template>
-            </el-table-column>         
-            <el-table-column  label="创建时间" prop="commissionGrade">
-            </el-table-column>
-            <el-table-column  label="创建人" prop="commissionGrade">
-            </el-table-column>                               
+            </el-table-column>          
             </el-table> 
                 <!-- 页码 -->
        <div class="info1_tab_footer">共计:{{ dataTotal }} <div class="show_pager"> <Pager :total="dataTotal" @change="handlePageChange"  :sizes="sizes"/></div> </div>  
         	</div> 
           </div>
       </div>
-  </div>
 </template>
 <script>
-import { data_Commission ,data_CarList,data_MaidLevel,data_ServerClassList} from '../../../../api/server/areaPrice.js'
+import { data_Commission ,data_CarList,data_MaidLevel} from '../../../../api/server/areaPrice.js'
 import { data_get_orderFromsame_list,data_Del_orderFromsame,data_Able_orderFromsame,} from '../../../../api/marketing/carmarkting/orderFrom.js'
-import { data_get_ownerFromsame_list} from '../../../../api/marketing/carmarkting/carOwner.js'
 import vregion from '@/components/vregion/Region'
 import newOrder from '../../components/newOrder.vue'
 import { eventBus } from '@/eventBus'
@@ -117,7 +126,7 @@ export default {
           name:'全部'
       }
       ],
-      serviceCardList:[
+      MaidLevel:[
       {    
           code:null,
           name:'全部'
@@ -154,22 +163,18 @@ export default {
                 data_MaidLevel().then(res=>{
                       res.data.map((item)=>{
                         this.MaidLevel.push(item);
-                    })     
+                    })
+                
+                      
                 }).catch(res=>{
                     console.log(res)
                 });    
-                data_ServerClassList().then(res=>{
-                      res.data.map((item)=>{
-                       this.serviceCardList.push(item);
-                    })     
-                }).catch(res=>{
-                    console.log(res)
-                });                    
+                
           },
           // 列表刷新页面  
             firstblood(){
-                data_get_ownerFromsame_list(this.page,this.pagesize,this.formAllData).then(res => {
-                  console.log('res',res)
+                data_get_orderFromsame_list(this.page,this.pagesize,this.formAllData).then(res => {
+                  console.log(res)
                     this.dataTotal = res.data.totalCount
                     this.tableDataAll = res.data.list;
                 })
@@ -279,10 +284,7 @@ export default {
     }
   }
 } 
-.same_shipper{
-        height:100%;    
-        position: relative;
-.shipper_Owner{
+.shipper_city{
     position: absolute;
     left: 0;
     top: 0;
@@ -339,7 +341,6 @@ export default {
       line-height: 30px; 
     }
     }
-}
 }
 </style>
 

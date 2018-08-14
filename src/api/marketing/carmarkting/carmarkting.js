@@ -7,7 +7,7 @@ const baseurl_one= "aflcsmservice_1"
 //获取同城列表
 export function data_get_Marketingsame_list(page,pagesize,data) {
     return fetch({
-      url: '/'+baseurl_one+'/sm/aflcDriverCommission/v1/list',
+      url: '/'+baseurl+'/sm/aflcDriverCommission/v1/list',
       method: 'post',
       data:{
         "currentPage": page,
@@ -39,13 +39,16 @@ export function data_get_Marketingsame_create(data) {
     })
   }
     //启用禁用同城列表
-    export function data_Able_Marketingsame(id) {
+    export function data_Able_Marketingsame(ids) {
     
         return fetch({
           url: '/'+baseurl+'/sm/aflcDriverCommission/v1/enableOrDisable',
           method: 'post',
-          data:{
-            ids:id
-          },
+          data:ids
         })
       }
+
+      //  修改同城列表
+export function data_get_Marketingsame_update(data) {
+  return fetch.put('/' + baseurl + '/sm/aflcDriverCommission/v1/update', data)
+}      
