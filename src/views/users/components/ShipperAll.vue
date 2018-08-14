@@ -121,7 +121,10 @@
                         <el-radio class="textRadio" @change.native="getCurrentRow(scope.$index)" :label="scope.$index" v-model="radio" class="textRadio">&nbsp;</el-radio>
                     </template>
                 </el-table-column> -->
-				<el-table-column type='index' label="序号" width="80px">
+				<el-table-column label="序号" width="80px">
+                    <template slot-scope="scope">
+                        {{ (page - 1)*pagesize + scope.$index + 1 }}
+                    </template>
 				</el-table-column>  
 				<el-table-column label="手机号">
                     <template slot-scope="scope">

@@ -1,10 +1,10 @@
 <template>
     <div class="identicalStyle clearfix plantOrigin" v-loading="loading">
-            <searchInfo></searchInfo>
+            <searchInfo @change="getSearchParam"></searchInfo>
             <div class="classify_info">
                 <div class="btns_box">
-                    <el-button type="primary" @click="handleSearch('search')" size="mini">取消订单</el-button>
-                    <el-button type="primary" @click="handleSearch('search')" size="mini">导出Exce</el-button>
+                    <el-button type="primary" @click="handleSearch('cancel')" size="mini">取消订单</el-button>
+                    <el-button type="primary" @click="handleSearch('export')" size="mini">导出Exce</el-button>
                 </div>
                 <div class="info_news" style="height:85%;">
                     <el-table
@@ -23,12 +23,11 @@
                             type="selection"
                             width="55">
                         </el-table-column>
-                         <el-table-column
-                            fixed
-                            label="序号"
-                            type="index"
-                            width="55">
-                        </el-table-column>
+                         <el-table-column label="序号" width="80px">
+                            <template slot-scope="scope">
+                                {{ (page - 1)*pagesize + scope.$index + 1 }}
+                            </template>
+                        </el-table-column>  
                         <el-table-column
                             fixed
                             prop="orderSerial"
@@ -119,6 +118,7 @@
             <div class="info_tab_footer">共计:{{ dataTotal }} <div class="show_pager"> <Pager :total="dataTotal" @change="handlePageChange"  :sizes="sizes"/></div> </div>    
 
             <Details :dialogFormVisible_details.sync = "dialogFormVisible_details" :orderSerial="DetailsOrderSerial" ></Details>
+            <cancelCompnent :dialogVisible.sync="dialogVisible"/>
     </div>
 </template>
 
@@ -129,6 +129,7 @@ import { parseTime } from '@/utils/index.js'
 import Pager from '@/components/Pagination/index'
 import Details from '../components/detailsInformations'
 import searchInfo from './components/searchInfo'
+import cancelCompnent from './components/cancel'
 
     export default{
         props: {
@@ -144,7 +145,8 @@ import searchInfo from './components/searchInfo'
         components:{
             Pager,
             Details,
-            searchInfo
+            searchInfo,
+            cancelCompnent,
         },
         data(){
             return{
@@ -160,12 +162,13 @@ import searchInfo from './components/searchInfo'
                     startOrderDate:'',//下单起始时间
                     endOrderDate:'',//下单结束时间
                     orderSerial:'',//订单号
-                    parentOrderStatus:'',//订单状态
+                    orderStatus:'',//订单状态
                 },
                 tableData:[],
                 parseTimeFunction:null,
                 dialogFormVisible_details:false,//详情弹窗
                 DetailsOrderSerial:'',
+                dialogVisible:false,//取消订单弹框
             }
         },
         watch:{
@@ -196,7 +199,7 @@ import searchInfo from './components/searchInfo'
             },
             //刷新页面  
             firstblood(){
-                this.searchInfo.parentOrderStatus = this.status;
+                this.searchInfo.orderStatus = this.status;
                 orderStatusList(this.page,this.pagesize,this.searchInfo).then(res => {
                     console.log(res)
                     this.tableData = res.data.list;
@@ -211,26 +214,15 @@ import searchInfo from './components/searchInfo'
                 this.loading = false;
                 this.parseTimeFunction = parseTime;
             },
-           
             //模糊查询 分类名称或者code
             handleSearch(type){
                 // console.log(this.chooseTime)
                 switch(type){
-                    case 'search':
-                        if(this.chooseTime){
-                            this.searchInfo.startOrderDate = this.chooseTime[0];
-                            this.searchInfo.endOrderDate = this.chooseTime[1];
-                        }
+                    case 'cancel':
+                        this.dialogVisible = true;
                         break;
-                    case 'clear':
-                        this.searchInfo = {
-                            belongCity:'',//区域
-                            shipperName:'',//货主
-                            startOrderDate:'',//下单起始时间
-                            endOrderDate:'',//下单结束时间
-                            orderSerial:'',//订单号
-                            parentOrderStatus:'AF00801',//订单状态待支付
-                        }
+                    case 'export':
+                        
                 }
                 this.firstblood();
             },
@@ -247,7 +239,12 @@ import searchInfo from './components/searchInfo'
                 // console.log(item)
                 this.dialogFormVisible_details = true;
                 this.DetailsOrderSerial = item.orderSerial;
-            }
+            },
+            getSearchParam(obj) {
+                console.log(obj)
+                this.searchInfo = Object.assign(this.searchInfo, obj)
+                this.loading = false
+            },
         }
     }
 </script>

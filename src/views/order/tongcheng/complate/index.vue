@@ -2,8 +2,9 @@
     <div class="identicalStyle clearfix waitpayment" v-loading="loading">
               <el-form :model="searchInfo" ref="ruleForm" class="demo-ruleForm classify_searchinfo">
                     <el-form-item label="区域" prop="pointName">
-                        <el-input v-model="searchInfo.name" clearable>
-                        </el-input>
+                        <vregion :ui="true" @values="regionChange" class="form-control">
+                            <el-input v-model="searchInfo.belongCityName" placeholder="请选择出发地" clearable></el-input>
+                        </vregion>
                     </el-form-item>
                     <el-form-item label="订单号" prop="orderSerial">
                         <el-input v-model="searchInfo.orderSerial" clearable>
@@ -13,12 +14,16 @@
                         <el-input v-model="searchInfo.shipperName" clearable placeholder="账户/姓名">
                         </el-input>
                     </el-form-item>
+                    <el-form-item label="车主" maxlength="18"  prop="shipperName">
+                        <el-input v-model="searchInfo.driverName" clearable placeholder="账户/姓名/车牌号">
+                        </el-input>
+                    </el-form-item>
                     <el-form-item label="下单时间" prop="mobile">
                         <el-date-picker
                             v-model="chooseTime"
-                            type="datetimerange"
+                            type="daterange"
                             :picker-options="pickerOptions2"
-                            range-separator="至"
+                            range-separator="-"
                             start-placeholder="开始日期"
                             end-placeholder="结束日期"
                             align="right"
@@ -35,7 +40,7 @@
                 <div class="btns_box">
                     <el-button type="primary" @click="handleSearch('search')" size="mini">导出Exce</el-button>
                 </div>
-                <div class="info_news" style="height:85%;">
+                <div class="info_news" style="height:87%;">
                     <el-table
                         ref="multipleTable"
                         :data="tableData"
@@ -52,24 +57,23 @@
                             type="selection"
                             width="55">
                         </el-table-column>
-                         <el-table-column
-                            fixed
-                            label="序号"
-                            type="index"
-                            width="55">
-                        </el-table-column>
+                        <el-table-column label="序号" width="80px">
+                            <template slot-scope="scope">
+                                {{ (page - 1)*pagesize + scope.$index + 1 }}
+                            </template>
+                        </el-table-column>  
                         <el-table-column
                             fixed
                             prop="orderSerial"
                             label="订单号"
                             width="250">
                                 <template  slot-scope="scope">
-                                        <h4 class="needMoreInfo" @click="clickDetails(scope.row)">{{ scope.row.orderSerial}}</h4>
+                                        <h4 class="needMoreInfo" @click="pushOrderSerial(scope.row)">{{ scope.row.orderSerial}}</h4>
                                 </template>
                         </el-table-column>
                         <el-table-column
                             prop="orderType"
-                            label="订单分类"
+                            label="服务分类"
                             width="110">
                         </el-table-column>
                         <el-table-column
@@ -79,17 +83,17 @@
                         </el-table-column>
                         <el-table-column
                             label="货主"
-                            width="150">
-                                <template  slot-scope="scope">
-                                    {{scope.row.shipperMobile}} - {{scope.row.shipperName}}
-                                </template>
+                            width="250">
+                            <template slot-scope="scope">
+                                <p>{{scope.row.shipperMobile}}<span v-if="scope.row.shipperName">-</span>{{scope.row.shipperName}}</p>    
+                            </template>
                         </el-table-column>
                         <el-table-column
                             label="车主"
-                            width="150">
-                                <template  slot-scope="scope">
-                                    {{scope.row.aflcDriverStatus.driverMobile}} - {{scope.row.aflcDriverStatus.driverName}} - {{scope.row.aflcDriverStatus.carNumber}}
-                                </template>
+                            width="300">
+                            <template slot-scope="scope">
+                                <p>{{scope.row.aflcDriverStatus.driverMobile}}<span v-if="scope.row.aflcDriverStatus.driverName">-</span>{{scope.row.aflcDriverStatus.driverName}}<span v-if="scope.row.aflcDriverStatus.carNumber">-</span>{{scope.row.aflcDriverStatus.carNumber}}</p>    
+                            </template>
                         </el-table-column>
                         <el-table-column
                             prop="usedCarType"
@@ -151,7 +155,7 @@
                 </div>
             </div>
 
-            <Details :dialogFormVisible_details.sync = "dialogFormVisible_details" :details="DetailsInformation" ></Details>
+            <Details :dialogFormVisible_details.sync = "dialogFormVisible_details" :orderSerial="DetailsOrderSerial" ></Details>
     </div>
 </template>
 
@@ -162,15 +166,18 @@ import { orderStatusList } from '@/api/order/ordermange'
 import { parseTime,pickerOptions2 } from '@/utils/index.js'
 import Pager from '@/components/Pagination/index'
 import Details from '../components/detailsInformations'
+import vregion from '@/components/vregion/Region'
 
 
     export default{
         components:{
             Pager,
-            Details
+            Details,
+            vregion
         },
         data(){
             return{
+                timeOut:null,
                 loading: true,//加载
                 sizes:[20,50,100],
                 pagesize:20,//初始化加载数量
@@ -178,11 +185,13 @@ import Details from '../components/detailsInformations'
                 dataTotal:0,
                 searchInfo:{
                     belongCity:'',//区域
+                    belongCityName:'',//区域
                     shipperName:'',//货主
                     startOrderDate:'',//下单起始时间
                     endOrderDate:'',//下单结束时间
                     orderSerial:'',//订单号
                     parentOrderStatus:'AF00807',//订单状态
+                    driverName:''
                 },
                 pickerOptions2:{
                     shortcuts:pickerOptions2
@@ -191,15 +200,33 @@ import Details from '../components/detailsInformations'
                 tableData:[],
                 parseTimeFunction:null,
                 dialogFormVisible_details:false,//详情弹窗
-                DetailsInformation:{},
+                DetailsOrderSerial:'',
             }
+        },
+        created(){
+
         },
         mounted(){
             this.firstblood();
-            
+            // this.timeOut = setInterval(this.firstblood,2000)
             // console.log(this.$store)
         },  
+        beforeDestroy(){
+            clearInterval(this.timeOut);
+        },
         methods: {
+            regionChange(d) {
+                console.log('data:',d)
+                this.searchInfo.belongCityName = (!d.province&&!d.city&&!d.area&&!d.town) ? '': `${this.getValue(d.province)}${this.getValue(d.city)}${this.getValue(d.area)}${this.getValue(d.town)}`.trim();
+                if(d.city){
+                    this.searchInfo.belongCity = d.city.code;
+                }else{
+                    this.searchInfo.belongCity = d.province.code;
+                }
+            },
+             getValue(obj){
+                return obj ? obj.value:'';
+            },
             handlePageChange(obj) {
                 this.page = obj.pageNum
                 this.pagesize = obj.pageSize
@@ -244,8 +271,9 @@ import Details from '../components/detailsInformations'
                             startOrderDate:'',//下单起始时间
                             endOrderDate:'',//下单结束时间
                             orderSerial:'',//订单号
-                            parentOrderStatus:'AF00807',//订单状态
-                        }
+                            parentOrderStatus:'AF00807',//订单状态待支付
+                        };
+                        this.chooseTime = [];
                 }
                 this.firstblood();
             },
@@ -258,10 +286,10 @@ import Details from '../components/detailsInformations'
                 this.$refs.multipleTable.toggleRowSelection(row);
             },
             //详情弹窗
-            clickDetails(item){
-                console.log(item)
+            pushOrderSerial(item){
+                // console.log(item)
                 this.dialogFormVisible_details = true;
-                this.DetailsInformation = item ;
+                this.DetailsOrderSerial = item.orderSerial;
             }
         }
     }

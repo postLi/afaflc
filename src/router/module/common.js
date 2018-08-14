@@ -45,5 +45,24 @@ export default {
       component: _import('common/trunkManage/index'),
       meta: { title: '片区管理', stitle: '片区', noCache: true }
     },
+    {
+        path: '/common/task',
+        icon: 'QQ',
+        hidden: false,
+        name: '任务调度',
+        component: _import('common/index'),
+        meta: { title: '任务调度', stitle: '任务', noCache: true },
+        children:[
+            {
+                path: '/common/task/taskDispatch', icon: 'QQ', name: '任务管理', component: _import('common/task/taskDispatch/index'), meta: { role: ['admin'], title: '任务管理',stitle: '任务',  noCache: true }
+              },
+              {
+                  path: '/common/task/taskLog', icon: 'QQ', name: '调度日志', component: _import('common/task/taskLog/index'), meta: { role: ['admin'], title: '调度日志',stitle: '日志',  noCache: true }
+              },
+              {
+                  path: '/common/task/taskExecute', icon: 'QQ', name: '执行器管理', component: _import('common/task/taskExecute/index'), meta: { role: ['admin'], title: '执行器管理',stitle: '执行器',  noCache: true }
+              },
+        ]
+    }
   ]
 }

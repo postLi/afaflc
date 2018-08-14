@@ -1,5 +1,5 @@
 <template>
-  <div>
-    报表管理
+  <div style="height:100%;">
+    <router-view></router-view>
   </div>
 </template>

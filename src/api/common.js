@@ -21,7 +21,7 @@ export function getCityInfo(code) {
  */
 export function getDictionary(code) {
     return fetch({
-      url: '/' + baseUrl + '/sysDict/getSysDictByCodeGet/' + code,
+      url: '/' + baseurl_two + '/sysDict/getSysDictByCodeGet/' + code,
       method: 'get'
     })
   }

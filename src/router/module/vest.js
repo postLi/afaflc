@@ -7,6 +7,7 @@ export default{
     redirect: '/vest/pushsheet',
     name: '马甲货源',
     icon: 'zujian',
+    hidden:true,
     children: [
         { path: '/vest/pushsheet', icon: 'QQ', hidden: false, name: '推送设置', component: _import('vest/pushsheet/index'), meta: { title: '推送设置', stitle: '推送',noCache: true },
         },

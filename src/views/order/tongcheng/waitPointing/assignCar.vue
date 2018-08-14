@@ -5,7 +5,7 @@
                 <div class="btns_box">
                     <el-button type="primary" @click="handleSearch('search')" size="mini">导出Exce</el-button>
                 </div>
-                <div class="info_news" style="height:85%;">
+                <div class="info_news" style="height:87%;">
                     <el-table
                         ref="multipleTable"
                         :data="tableData"
@@ -22,12 +22,11 @@
                             type="selection"
                             width="55">
                         </el-table-column>
-                         <el-table-column
-                            fixed
-                            label="序号"
-                            type="index"
-                            width="55">
-                        </el-table-column>
+                        <el-table-column label="序号" width="80px">
+                            <template slot-scope="scope">
+                                {{ (page - 1)*pagesize + scope.$index + 1 }}
+                            </template>
+                        </el-table-column>  
                         <el-table-column
                             fixed
                             prop="orderSerial"

@@ -22,13 +22,9 @@ import Marketing from './module/marketing'
 // 用户
 import Users from './module/users'
 // 调度
-import Dispatch from './module/dispatchServer'
+// import Dispatch from './module/dispatchServer'
 // 订单
 import Order from './module/orderManage'
-// 任务
-import Task from './module/taskControl'
-// 马甲
-import vest from './module/vest'
 
 Vue.use(Router)
 
@@ -65,16 +61,14 @@ export default new Router({
 
 export const asyncRouterMap = [
   Users,
-  Marketing,
-  Server,
-  Finance,
-  Report,
-  Dispatch,
   Order,
-  Task,
-  Common,
+  Server,
+  Marketing,
   Service,
-  vest,
+  Finance,
+//   Report,
+//   Dispatch,
+  Common,
 /*   {
     path: '/createOrder', hidden: true, icon: 'QQ', name: '创建运单', component: _import('operation/order/createOrder/pop'), meta: { role: ['admin'], title: '创建运单', noCache: true }
   }, */

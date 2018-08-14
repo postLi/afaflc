@@ -9,7 +9,7 @@
                     <el-button type="primary" @click="handleSearch('search')" size="mini">新增订单</el-button>
                     <el-button type="primary" @click="handleSearch('search')" size="mini">导出Exce</el-button>
                 </div>
-                <div class="info_news" style="height:88%;">
+                <div class="info_news" style="height:87%;">
                     <el-table
                         ref="multipleTable"
                         :data="tableData"
@@ -26,12 +26,11 @@
                             type="selection"
                             width="55">
                         </el-table-column>
-                         <el-table-column
-                            fixed
-                            label="序号"
-                            type="index"
-                            width="55">
-                        </el-table-column>
+                        <el-table-column label="序号" width="80px">
+                            <template slot-scope="scope">
+                                {{ (page - 1)*pagesize + scope.$index + 1 }}
+                            </template>
+                        </el-table-column>  
                         <el-table-column
                             fixed
                             prop="orderSerial"
@@ -248,7 +247,7 @@ import searchInfo from './components/searchInfo'
                 this.dialogFormVisible_details = true;
                 this.DetailsOrderSerial = item.orderSerial;
             },
-             getSearchParam(obj) {
+            getSearchParam(obj) {
                 console.log(obj)
                 this.searchInfo = Object.assign(this.searchInfo, obj)
                 this.loading = false
