@@ -57,7 +57,7 @@
                             type="selection"
                             width="55">
                         </el-table-column>
-                        <el-table-column label="序号" width="80px">
+                        <el-table-column label="序号" fixed width="80">
                             <template slot-scope="scope">
                                 {{ (page - 1)*pagesize + scope.$index + 1 }}
                             </template>
@@ -150,9 +150,9 @@
                             </template>
                         </el-table-column>
                     </el-table>
-                      <!-- 页码 -->
-                    <div class="info_tab_footer">共计:{{ dataTotal }} <div class="show_pager"> <Pager :total="dataTotal" @change="handlePageChange"  :sizes="sizes"/></div> </div>    
                 </div>
+                <!-- 页码 -->
+                <div class="info_tab_footer">共计:{{ dataTotal }} <div class="show_pager"> <Pager :total="dataTotal" @change="handlePageChange"  :sizes="sizes"/></div> </div>    
             </div>
 
             <Details :dialogFormVisible_details.sync = "dialogFormVisible_details" :orderSerial="DetailsOrderSerial" ></Details>

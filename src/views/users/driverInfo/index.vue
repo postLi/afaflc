@@ -21,37 +21,33 @@
                         border
                         highlight-current-row
                         @current-change="handleCurrentTask"
-                        align = "center"
                         height="100%"
                         tooltip-effect="dark"
                         style="width: 100%"> 
                         <el-table-column
-                            align = "center"
                             fixed
                             label="排序"
-                            prop="order"
                             width="55">
+                            <template  slot-scope="scope">
+                                 {{ (page - 1)*pagesize + scope.$index + 1 }}
+                            </template>
                            </el-table-column>
                         <el-table-column
-                        align = "center"
-                            prop="startLocation"
-                          label="标题">
-                        </el-table-column>
-                             <!-- <template  slot-scope="scope">
+                            width="400"
+                            label="标题">
+                            <template  slot-scope="scope">
                                 <p>{{ scope.row.startLocation}} -> {{scope.row.endLocation}}</p>
-                            </template> -->
+                            </template>
+                        </el-table-column>
                         <el-table-column
-                        align = "center"
                           prop="createTime"
                           label="发布时间">
                         </el-table-column>
                         <el-table-column
-                        align = "center"
-                          prop="logisticsCompanyName"
+                          prop="publishName"
                           label="发布者">
                         </el-table-column>
                         <el-table-column
-                        align = "center"
                           prop="browseNumber"
                           label="浏览量">
                         </el-table-column>
@@ -64,22 +60,8 @@
                         </template>
                         </el-table-column>
                       </el-table>
-                      <!-- 页码 -->
-                    <div class="Pagination ">
-                        <div class="block">
-                            <el-pagination
-                            @size-change="handleSizeChange"
-                            @current-change="handleCurrentChange"
-                            :current-page="currentPage4"
-                            :page-size="pagesize"
-                            layout="total, sizes, prev, pager, next, jumper"
-                            :total="dataTotal">
-                            </el-pagination>
-                        </div>
-                    </div>
-                    <!-- <div class="info_tab_footer">共计:{{ dataTotal }} <div class="show_pager"> <Pager :total="dataTotal" @change="handlePageChange" /></div> </div>     -->
-
                 </div>
+                    <!-- <div class="info_tab_footer">共计:{{ dataTotal }} <div class="show_pager"> <Pager :total="dataTotal" @change="handlePageChange" /></div> </div>     -->
                 
             </div>
         <!-- loading   -->
@@ -101,7 +83,8 @@ import { data_TransportRangeList } from '../../../api/users/logistics/TransportR
                 dialogFormVisible:false,
                 tableExecute:[],
                 currentPage4:1,
-                pagesize:1,
+                pagesize:20,
+                page:1,
                 dataTotal:null,
                 searchInfo:{
                     title:null,
@@ -132,24 +115,11 @@ import { data_TransportRangeList } from '../../../api/users/logistics/TransportR
                 console.log(val)
                 this.tasktest = val;
             },
-            
-            handleSizeChange(val) {
-                console.log(`每页 ${val} 条`);
-                this.pagesize = val ;
-                this.firstblood();
-            },
-            handleCurrentChange(val) {
-                console.log(`当前页: ${val}`);
-                this.page = val;
-                this.firstblood();
-            },
-          
             //刷新页面  
             firstblood(){
                 data_TransportRangeList(this.page,this.pagesize,this.searchInfo).then(res => {
                     console.log(res)
                     this.tableExecute = res.data.list;
-                    this.dataTotal = res.data.totalCount;
                 })
             },
            

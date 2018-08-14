@@ -22,7 +22,7 @@
                             type="selection"
                             width="55">
                         </el-table-column>
-                        <el-table-column label="序号" width="80px">
+                        <el-table-column label="序号" fixed width="80">
                             <template slot-scope="scope">
                                 {{ (page - 1)*pagesize + scope.$index + 1 }}
                             </template>
