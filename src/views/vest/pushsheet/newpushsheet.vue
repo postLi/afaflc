@@ -38,8 +38,8 @@
             <el-row>
             <el-col :span="24">
             <el-form-item label="价格上浮（倍）：" :label-width="formLabelWidth" prop="price"> 
-             <el-input auto-complete="off" class="price_one" v-model="vestList.priceStart" ref="priceStart"></el-input>至
-             <el-input auto-complete="off" class="price_two" v-model="vestList.priceEnd" ref="priceEnd"></el-input>
+             <el-input auto-complete="off" class="price_one" v-model="vestList.priceStart" ref="priceStart" ></el-input>至
+             <el-input auto-complete="off" class="price_two" v-model="vestList.priceEnd" ref="priceEnd" ></el-input>
             </el-form-item>
             </el-col>
             </el-row>
@@ -230,7 +230,7 @@ data(){
 
     //    选择价格上浮校验
         const priceValidator = (rule, val, cb) => {
-            let reg= /^[0-9]+([.]{1}[0-9]+){0,1}$/
+            let reg= /^[1-9]+\d*(\.\d{0,2})?$|^0?\.\d{0,2}$/
             let priceStart = this.$refs.priceStart.value;
             let priceEnd =  this.$refs.priceEnd.value;
             if(!reg.test(priceStart)||!reg.test(priceEnd)){

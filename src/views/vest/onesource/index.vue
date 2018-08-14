@@ -292,20 +292,7 @@
 
   </el-table> 
            <!-- 页码 -->
-         <div class="Pagination ">
-           <div class="block">
-            <el-pagination
-           @size-change='handleSizeChange'
-           @current-change="handleCurrentChange"
-           :current-page="page"
-           :page-sizes="[20, 50, 200, 400]"
-           :page-size="pagesize"
-           layout="total, sizes, prev, pager, next, jumper"
-           :total="dataTotal"
-            >
-             </el-pagination>
-          </div>
-         </div>
+ <div class="info1_tab_footer">共计:{{ dataTotal }} <div class="show_pager"> <Pager :total="dataTotal" @change="handlePageChange"  :sizes="sizes"/></div> </div> 
    </div>
    <div>
 
@@ -319,6 +306,7 @@
 import { data_ServerClassList} from '../../../api/server/areaPrice.js'
 import  { data_get_onesource_list,data_add_onesource_list,data_Del_onesource,data_UseStates_onesource,data_get_onesourceAddress_list,data_Del_onesourceAddress,data_get_onesource_Id,data_get_onesource_update} from '@/api/vest/onesource/onesource.js'
 import { parseTime,formatTime } from '@/utils/index.js'
+import Pager from '@/components/Pagination/index'
 import GetCityList from '@/components/GetCityList'
 import vestdetail from './vestdetail'
 import tmsmap from '@/components/map/index'
@@ -376,6 +364,7 @@ export default {
         driverTemplateDialogFlag:false,
         driverTemplateDialogFlag2: false,
         formLabelWidth:'120px',
+        sizes:[20,50,100],
         pagesize:20,//大表每页显示数
         page:1,//大表当前页
         dataTotal:null,//大表总记录数
@@ -409,6 +398,8 @@ export default {
             areaCode:null,
             startAddressCoordinate:null,
             endAddressCoordinate:null,
+            longitude:null,
+            latitude:null,
             flcVestUnisourceAddressaList:[
             ]
             },
@@ -423,7 +414,8 @@ export default {
     components:{
         GetCityList,
         vestdetail,
-        tmsmap
+        tmsmap,
+        Pager
     },
     computed:{
      totalAeraData(){
@@ -501,18 +493,17 @@ export default {
             this.current = name;
         },
             getInfo(pos, name, info) {
-            // info.name  info.pos
-            console.log('pos',pos)
-            console.log('name',name)
-            let tude= pos.split(",");
-            let latitude=tude[0]
-            let longitude=tude[1]
             switch (this.current) {
                 case 'districtName':
                 this.vestAll.districtName = info.formattedAddress;
                 break;
                 case 'districtAddress':
                 this.vestAll.districtAddress = info.formattedAddress;
+                let tude= pos.split(",");
+                let longitude=tude[0]
+                let latitude=tude[1]
+                this.vestAll.longitude = longitude;
+                this.vestAll.latitude = latitude;
                 break;
                 case 'vestdistrictName':
                 this.formAll.districtName = info.formattedAddress;
@@ -523,7 +514,7 @@ export default {
                 break;
                 case 'destinationaddAera':
                 this.destinationaddAera = info.formattedAddress;
-                 this.endAddressCoordinate = pos;
+                this.endAddressCoordinate = pos;
                 break;
                 case 'areaCode2':
                 this.formAll2.startAddress = info.formattedAddress;
@@ -554,8 +545,8 @@ export default {
             districtName:null,
             districtAddress:null,
             areaCode:null,
-            latitude:'',
-            longitude:'',
+            latitude:null,
+            longitude:null,
             flcVestUnisourceAddressaList:[
             ]
             }
@@ -819,8 +810,9 @@ export default {
                         return
                 }else{
                     this.selectId.push(this.selectRowData.id)
-                    console.log(this.selectId)
+                    
                  data_UseStates_onesource(this.selectId).then(res=>{
+                     console.log('dsds',this.selectId)
                      this.selectId.splice(0,1);
                      if(this.selectRowData.usingStatus==0)
                      {
@@ -879,7 +871,10 @@ export default {
           console.log(res)
         });
         },
-
+            handlePageChange(obj) {
+                this.page = obj.pageNum
+                this.pagesize = obj.pageSize
+            },
         // 关闭小表窗
         close1(){
         this.driverTemplateDialogFlag=false;
@@ -888,8 +883,8 @@ export default {
             districtName:null,
             districtAddress:null,
             areaCode:null,
-            latitude:'',
-            longitude:'',
+            latitude:null,
+            longitude:null,
             flcVestUnisourceAddressaList:[
             ]
             }
@@ -1216,6 +1211,21 @@ export default {
            .el-pagination__jump .el-input{
                 width: 50px!important;
             }
+}
+.info1_tab_footer{
+    padding-left: 20px;
+    background: #eee;
+    height: 40px;
+    line-height: 40px;
+    box-shadow: 0 -2px 2px rgba(0, 0, 0, 0.1);
+    position: relative;
+    z-index: 10;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    .show_pager{float: right}
+    .page-select{top:5px}
 }
 </style>
 <style  lang="scss" scoped>

@@ -2,7 +2,7 @@ import fetch from '@/utils/fetch'
 
 // const baseurl_two = "aflcsmservice"
 const baseurl = "aflcsmservice"
-const baseurl_one= "aflcsmservice_1"
+const baseurl_one= "aflcsmservice"
 
 //获取马甲推单列表
 export function data_get_onesource_list(page,pagesize,data) {

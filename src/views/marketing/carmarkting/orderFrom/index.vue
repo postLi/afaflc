@@ -3,17 +3,17 @@
     <el-tabs v-model="shipperName" type="border-card"  >
         <!-- 同城 -->
             <el-tab-pane label="同城" name="first">
-                <SameCity ></SameCity>
+                <SameOrder></SameOrder>
             </el-tab-pane>
 
         <!-- 城际 -->
             <el-tab-pane label="城际" name="second">
-                <InterCity ></InterCity>
+                <InterOrder ></InterOrder>
             </el-tab-pane>
 
         <!-- 零担 -->
             <el-tab-pane label="零担" name="third">
-                <IoadCity ></IoadCity>
+                <IoadOrder ></IoadOrder>
             </el-tab-pane>
     </el-tabs>
   </div>
@@ -21,9 +21,9 @@
 
 
 <script>
-import SameCity from './sameCity.vue'
-import InterCity from './interCity.vue'
-import IoadCity from './loadCity.vue'
+import SameOrder from './sameOrder.vue'
+import InterOrder from './interOrder.vue'
+import IoadOrder from './loadOrder.vue'
 export default {
     data(){
         return{
@@ -31,9 +31,9 @@ export default {
         }
     },
     components:{    
-            SameCity,
-            InterCity,
-            IoadCity
+            SameOrder,
+            InterOrder,
+            IoadOrder
     },
     watch:{
      shipperName(newVal,oldVal){

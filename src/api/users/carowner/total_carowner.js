@@ -40,7 +40,7 @@ export function data_post_audit(data) {
 
 // 根据手机号码获取车主
 export function data_post_mobileGetDriver(data) {
-  return fetch.get('/' + baseurl_four + '/usercenter/aflcDriver/v1/checkDriverMobile/' + data, data)
+  return fetch.get('/' + baseurl + '/usercenter/aflcDriver/v1/checkDriverMobile/' + data, data)
 }
 
 // 冻结车主
@@ -97,5 +97,5 @@ export function data_get_shipper_auid() {
 
 // 根据身份证获取车主
 export function data_post_checkDriverCardid(data) {
-  return fetch.get('/' + baseurl_four + '/usercenter/aflcDriver/v1/checkDriverCardid/' + data, data)
+  return fetch.get('/' + baseurl + '/usercenter/aflcDriver/v1/checkDriverCardid/' + data, data)
 }

@@ -164,6 +164,7 @@
           eventBus.$on('changeListtwo', ()=>{
                 if(this.inited || this.isvisible){
                     this.firstblood()
+                    this.selectionData = null
                 }
           })
         },

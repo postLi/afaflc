@@ -27,7 +27,7 @@
    <div class="btns_box">
     <newpushsheet  btntext="新增" :plain="true" type="primary" btntype="primary" icon="el-icon-news" editType="add" btntitle="新增货主"></newpushsheet>
     <el-button type="primary" plain icon="el-icon-bell" @click="handleUseStates">启用/禁用</el-button>
-    <uppushsheet  btntext="修改" :plain="true" type="primary" btntype="primary" icon="el-icon-edit" editType="edit" :params="selectRowData" ></uppushsheet>
+    <newpushsheet  btntext="修改" :plain="true" type="primary" btntype="primary" icon="el-icon-edit" editType="edit" :params="selectRowData" ></newpushsheet>
     <el-button type="primary" plain icon="el-icon-delete" @click="handleDelete">删除</el-button>
    </div>
     <el-table style="width: 100%" stripe border :data="tableDataTree" height="87%" @row-click="clickDetails" highlight-current-row>
@@ -52,27 +52,13 @@
          </template>
    </el-table-column>
    <el-table-column  label="操作人"  prop="creater">
-       
    </el-table-column>   
    <el-table-column  label="操作时间" prop="updateTime">
        
    </el-table-column>               
   </el-table> 
       <!-- 页码 -->
-     <div class="Pagination ">
-          <div class="block">
-           <el-pagination 
-           @size-change='handleSizeChange'
-           @current-change="handleCurrentChange"
-           :current-page="page"
-           :page-sizes="[20, 50, 200, 400]"
-           :page-size="pagesize"
-           layout="total, sizes, prev, pager, next, jumper"
-           :total="dataTotal"
-           >
-           </el-pagination>
-          </div>
-     </div>
+  <div class="info1_tab_footer">共计:{{ dataTotal }} <div class="show_pager"> <Pager :total="dataTotal" @change="handlePageChange"  :sizes="sizes"/></div> </div> 
    </div>
    <div>
    </div>
@@ -83,17 +69,20 @@
 <script>
 import { data_ServerClassList} from '../../../api/server/areaPrice.js'
 import  { data_get_pushsheet_list,data_Del_pushsheet,data_UseStates_pushsheet,data_get_pushsheet_Id} from '@/api/vest/pushsheet/pushsheetList.js'
+import Pager from '@/components/Pagination/index'
 import { parseTime,formatTime } from '@/utils/index.js'
 import GetCityList from '@/components/GetCityList'
 import newpushsheet from './newpushsheet'
-import uppushsheet from './newpushsheet'
 import { eventBus } from '@/eventBus'
 export default {
     data(){
+
+        
         return{
         delDialogVisible:false,          //删除控制弹框
         centerDialogVisible:false,
         selectRowData:{},
+        sizes:[20,50,100],
         information:'操作不正确',
         pagesize:20,//每页显示数
         page:1,//当前页
@@ -196,7 +185,7 @@ export default {
     components:{
         GetCityList,
         newpushsheet,
-        uppushsheet
+        Pager
     },
     mounted(){
         eventBus.$on('pushListtwo', () => {
@@ -305,7 +294,6 @@ export default {
                  }
             })
                         }
-                        console.log('sy',sy)
                         this.selectRowData2.map((subList,index) => {
                             sy[index].startTime= subList[index].pushStartTime;
                             sy[index].endTime= subList[index].pushEndTime;
@@ -331,7 +319,6 @@ export default {
                         
                         })
                         this.selectRowData.setting = sy;
-                        console.log('fdfd',sy)
                         
                         console.log('this.selectRowData',this.selectRowData)
                         })
@@ -418,9 +405,9 @@ export default {
             },
 
             //每页显示数据量变更
-            handleSizeChange: function(val) {
-                this.pagesize = val;
-                this.firstblood()
+            handlePageChange(obj) {
+                this.page = obj.pageNum
+                this.pagesize = obj.pageSize
             },
 
             //页码变更
@@ -541,5 +528,22 @@ export default {
     }
    .el-table thead {
     color: #333;
+}
+
+
+.info1_tab_footer{
+    padding-left: 20px;
+    background: #eee;
+    height: 40px;
+    line-height: 40px;
+    box-shadow: 0 -2px 2px rgba(0, 0, 0, 0.1);
+    position: relative;
+    z-index: 10;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    .show_pager{float: right}
+    .page-select{top:5px}
 }
 </style>

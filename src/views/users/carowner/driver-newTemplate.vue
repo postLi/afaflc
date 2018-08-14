@@ -1,6 +1,6 @@
 <template> 
     <div class="carNewinfo commoncss">
-        <el-button :type="type" :value="value" :plain="plain" :icon="icon" @click="openDialog()">{{text}}</el-button>
+        <el-button :type="type" :value="value" :plain="plain" :icon="icon" @click="openDialog()">{{btntext}}</el-button>
         <el-dialog :title="title" :visible="driverTemplateDialogFlag" :before-close="change">
              <el-form
               ref="templateModel"
@@ -23,7 +23,7 @@
 
               <el-row>
                   <el-col :span="12">
-                    <el-form-item label="身份证号码："  :label-width="formLabelWidth" >
+                    <el-form-item label="身份证号码："  :label-width="formLabelWidth" prop="driverCardid">
                         <el-input v-model.trim="templateModel.driverCardid" :disabled="editType=='view'"></el-input>
                     </el-form-item>
                   </el-col>
@@ -265,7 +265,7 @@ export default {
             if(!(phoneTest.test(val))){
                 cb(new Error('请输入正确的手机号码格式'))
             } 
-            else if(this.undpeflag){
+            else if(this.updataflag){
                 cb()
             }
             else {
@@ -296,7 +296,7 @@ export default {
             if(!(IdTest.test(val))){
                 cb(new Error('请输入正确的身份证'))
             }
-            else if(this.undpeflag){
+            else if(this.updataflag){
                 cb()
             }
             else {
