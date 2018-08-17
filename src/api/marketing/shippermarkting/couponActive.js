@@ -13,6 +13,7 @@ export function data_get_couponActive_list(page,pagesize,data) {
         "currentPage": page,
         "pageSize": pagesize,
         "vo": data
+        
       }
     })
   } 
