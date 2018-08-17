@@ -196,8 +196,8 @@
 </template>
 
 <script type="text/javascript">
-import {data_financeList,data_GetServerType,data_GetServerType2,data_GetServerType3} from '../../../api/finance/financeServer.js'
-import {data_GetCarStyle} from '../../../api/server/areaPrice.js'
+import {data_financeList,data_GetServerType,data_GetServerType2,data_GetServerType3} from '@/api/finance/financeServer.js'
+import {data_GetCarStyle} from '@/api/server/areaPrice.js'
 import '@/styles/dialog.scss'
 import { parseTime,formatTime } from '@/utils/index.js'
 

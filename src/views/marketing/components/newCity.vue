@@ -108,12 +108,12 @@
     </div>
 </template>
 <script>
-import { data_Commission,data_CarList,data_MaidLevel} from '../../../api/server/areaPrice.js'
-import { data_get_Marketingsame_create,data_get_Marketingsame_update } from '../../../api/marketing/carmarkting/carmarkting.js'
+import { data_Commission,data_CarList,data_MaidLevel} from '@/api/server/areaPrice.js'
+import { data_get_Marketingsame_create,data_get_Marketingsame_update } from '@/api/marketing/carmarkting/carmarkting.js'
 import Upload from '@/components/Upload/singleImage'
 import vregion from '@/components/vregion/Region'
 import { eventBus } from '@/eventBus'
-import {data_get_shipper_type,data_get_shipper_create,data_get_shipper_change,data_get_shipper_view} from '../../../api/users/shipper/all_shipper.js'
+import {data_get_shipper_type,data_get_shipper_create,data_get_shipper_change,data_get_shipper_view} from '@/api/users/shipper/all_shipper.js'
 export default {
   components:{
     Upload,

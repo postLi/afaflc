@@ -90,9 +90,9 @@
   </div>
 </template>
 <script>
-import { data_Commission ,data_CarList,data_MaidLevel,data_ServerClassList} from '../../../../api/server/areaPrice.js'
-import { data_get_orderFromsame_list,data_Del_orderFromsame,data_Able_orderFromsame,} from '../../../../api/marketing/carmarkting/orderFrom.js'
-import { data_get_ownerFromsame_list} from '../../../../api/marketing/carmarkting/carOwner.js'
+import { data_Commission ,data_CarList,data_MaidLevel,data_ServerClassList} from '@/api/server/areaPrice.js'
+import { data_get_orderFromsame_list,data_Del_orderFromsame,data_Able_orderFromsame,} from '@/api/marketing/carmarkting/orderFrom.js'
+import { data_get_ownerFromsame_list} from '@/api/marketing/carmarkting/carOwner.js'
 import vregion from '@/components/vregion/Region'
 import newOrder from '../../components/newOrder.vue'
 import { eventBus } from '@/eventBus'

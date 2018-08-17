@@ -15,14 +15,14 @@ import Finance from './module/finance'
 import Service from './module/service'
 // 服务
 import Server from './module/server'
+// 服务
+import Dispatch from './module/dispatch'
 // 报表
-import Report from './module/report'
+// import Report from './module/report'
 // 营销
 import Marketing from './module/marketing'
 // 用户
 import Users from './module/users'
-// 调度
-// import Dispatch from './module/dispatchServer'
 // 订单
 import Order from './module/orderManage'
 
@@ -61,11 +61,12 @@ export default new Router({
 
 export const asyncRouterMap = [
   Users,
-  Order,
   Server,
+  Dispatch,
+  Order,
+  Finance,
   Marketing,
   Service,
-  Finance,
 //   Report,
 //   Dispatch,
   Common,

@@ -93,8 +93,8 @@
       </div>
 </template>
 <script>
-import { data_Commission ,data_CarList,data_MaidLevel} from '../../../../api/server/areaPrice.js'
-import { data_get_Marketingsame_list,data_Del_Marketingsame,data_Able_Marketingsame } from '../../../../api/marketing/carmarkting/carmarkting.js'
+import { data_Commission ,data_CarList,data_MaidLevel} from '@/api/server/areaPrice.js'
+import { data_get_Marketingsame_list,data_Del_Marketingsame,data_Able_Marketingsame } from '@/api/marketing/carmarkting/carmarkting.js'
 import vregion from '@/components/vregion/Region'
 import newCity from '../../components/newCity.vue'
 import { eventBus } from '@/eventBus'

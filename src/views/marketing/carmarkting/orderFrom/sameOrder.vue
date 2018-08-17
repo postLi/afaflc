@@ -100,8 +100,8 @@
       </div>
 </template>
 <script>
-import { data_Commission ,data_CarList,data_MaidLevel} from '../../../../api/server/areaPrice.js'
-import { data_get_orderFromsame_list,data_Del_orderFromsame,data_Able_orderFromsame,} from '../../../../api/marketing/carmarkting/orderFrom.js'
+import { data_Commission ,data_CarList,data_MaidLevel} from '@/api/server/areaPrice.js'
+import { data_get_orderFromsame_list,data_Del_orderFromsame,data_Able_orderFromsame,} from '@/api/marketing/carmarkting/orderFrom.js'
 import vregion from '@/components/vregion/Region'
 import newOrder from '../../components/newOrder.vue'
 import { eventBus } from '@/eventBus'
