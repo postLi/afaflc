@@ -407,6 +407,7 @@ export default {
             height: 34px;
         }
         th{
+            text-align:center;
             background: #EAF0FF;
             border-top:1px solid #d0d7e5;
             border-right:1px solid #d0d7e5;

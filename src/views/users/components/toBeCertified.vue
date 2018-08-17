@@ -173,7 +173,7 @@
                 </div>
             <div class="data_pic">
                 <div class="data_pic_callingcode data_pic_c">
-                <img  class="picURL" :src="templateModel.carFile ? templateModel.carFile : defaultImg" @click="changeIMG"/>
+                <div class="uploadImgBox"><img  class="picURL" :src="templateModel.carFile ? templateModel.carFile : defaultImg" @click="changeIMG"/></div>
                     <!-- <upload class="licensePicture" tip="（必须为jpg/png并且小于5M）" v-model="templateModel.carFile" /> -->
               
                     <h2>车辆45°</h2>
@@ -186,7 +186,7 @@
                     </el-form-item> 
                 </div>
                 <div class="data_pic_callingcode data_pic_c">
-              <img  class="picURL" :src="templateModel.drivingPermitFile ? templateModel.drivingPermitFile : defaultImg" @click="changeIMG"/>
+              <div class="uploadImgBox"><img  class="picURL" :src="templateModel.drivingPermitFile ? templateModel.drivingPermitFile : defaultImg" @click="changeIMG"/></div>
                     <!-- <upload class="licensePicture" tip="（必须为jpg/png并且小于5M）" v-model="templateModel.drivingPermitFile" /> -->
                     <h2>行驾证</h2>
                     <el-form-item prop="radio2">
@@ -198,7 +198,7 @@
                     </el-form-item>
                 </div>
                 <div class="data_pic_callingcode data_pic_c">
-                 <img  class="picURL" :src="templateModel.drivingLicenceFile ? templateModel.drivingLicenceFile : defaultImg" @click="changeIMG"/>
+                 <div class="uploadImgBox"><img  class="picURL" :src="templateModel.drivingLicenceFile ? templateModel.drivingLicenceFile : defaultImg" @click="changeIMG"/></div>
                     <!-- <upload class="licensePicture" tip="（必须为jpg/png并且小于5M）" v-model="templateModel.drivingLicenceFile" /> -->
                     <h2>驾驶证</h2>
                     <el-form-item prop="radio3">
@@ -210,7 +210,7 @@
                     </el-form-item>
                 </div>
                 <div class="data_pic_callingcode data_pic_c">
-               <img  class="picURL" :src="templateModel.idcardFile ? templateModel.idcardFile : defaultImg" @click="changeIMG"/>
+                  <div class="uploadImgBox"><img  class="picURL" :src="templateModel.idcardFile ? templateModel.idcardFile : defaultImg" @click="changeIMG"/></div>
                     <!-- <upload class="licensePicture" tip="（必须为jpg/png并且小于5M）" v-model="templateModel.idcardFile" /> -->
 
                     <h2>身份证</h2>
@@ -223,7 +223,7 @@
                     </el-form-item>
                 </div>
                 <div class="data_pic_callingcode data_pic_c">
-                 <img  class="picURL" :src="templateModel.takeIdCardFile ? templateModel.takeIdCardFile : defaultImg" @click="changeIMG"/>
+                  <div class="uploadImgBox"> <img  class="picURL" :src="templateModel.takeIdCardFile ? templateModel.takeIdCardFile : defaultImg" @click="changeIMG"/></div>
                     <!-- <upload class="licensePicture" tip="（必须为jpg/png并且小于5M）" v-model="templateModel.takeIdCardFile" /> -->
                     <h2>手持身份证</h2>
                     <el-form-item prop="radio3">
@@ -452,7 +452,6 @@
                 this.$refs['shengheform'].validate((valid)=>{
                 if(valid){
                     var forms=Object.assign({},this.templateModel,{driverStatus:"AF0010404"},{authNoPassCause:JSON.stringify(this.pictureValue)})
-                    this.$confirm()
                     data_post_audit(forms).then(res=>{
                         // console.log(res)
                         this.$message.success('审核不通过 提交')
@@ -515,6 +514,7 @@ margin:0px auto;
 }
 .picURL{
     width: 100%;
+    height: 100%;
 }
 .data_pic_default
 {
@@ -524,6 +524,11 @@ img{
     width: 500px;
     margin: 0px auto;
     display: block
+}
+.uploadImgBox{
+    width: 130px;
+    height: 130px;
+
 }
 } 
 </style>

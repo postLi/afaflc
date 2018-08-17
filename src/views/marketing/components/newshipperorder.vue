@@ -155,7 +155,7 @@
 </template>
 <script>
 import { data_Commission ,data_CarList,data_MaidLevel,data_ServerClassList} from '@/api/server/areaPrice.js'
-import { data_get_ownerFromsame_create} from '@/api/marketing/carmarkting/carOwner.js'
+import { data_get_shipperOwnerFrom_create} from '@/api/marketing/shippermarkting/shipperOwner.js'
 import Upload from '@/components/Upload/singleImage'
 import vregion from '@/components/vregion/Region'
 import { eventBus } from '@/eventBus'
@@ -234,9 +234,13 @@ export default {
 
     //    区域奖励上限校验
         const rewardMaxValidator = (rule, val, cb) => {
+            var reg= /[^\d.]/g
             if(!val){
             cb(new Error('区域奖励上限不能为空'))
             }
+            else if(reg.test(val)){
+            cb(new Error('请输入正整数'))
+            }            
             else{
                 cb()
             }        
@@ -440,7 +444,7 @@ export default {
         },  
     // 同城新增    
    add_data(){
-       this.FormData = {aflcDriverOrderamountDetailList:[
+       this.FormData = {aflcShipperPreferentialtDetailList:[
            {startPrice:this.formAll.reward1,endPrice:this.formAll.reward2,rewardGrade:'未分类',reward:this.formAll.data1,orderNum:this.formAll.maxnum1},
            {startPrice:this.formAll.reward3,endPrice:this.formAll.reward4,rewardGrade:'未分类',reward:this.formAll.data2,orderNum:this.formAll.maxnum1},
            {startPrice:this.formAll.reward5,endPrice:this.formAll.reward6,rewardGrade:'未分类',reward:this.formAll.data3,orderNum:this.formAll.maxnum1},
@@ -494,7 +498,7 @@ export default {
        console.log('forms',forms)
        this.$refs['formAll'].validate(valid=>{
         if(valid){
-        data_get_ownerFromsame_create(forms).then(res=>{
+        data_get_shipperOwnerFrom_create(forms).then(res=>{
             console.log('res',res);
             this.$refs['formAll'].resetFields();
             this.dialogFormVisible_add = false;
@@ -573,6 +577,7 @@ export default {
             height: 34px;
         }
         th{
+            text-align:center;
             background: #EAF0FF;
             border-top:1px solid #d0d7e5;
             border-right:1px solid #d0d7e5;

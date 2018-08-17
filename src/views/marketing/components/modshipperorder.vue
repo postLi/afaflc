@@ -146,7 +146,7 @@
 </template>
 <script>
 import { data_Commission ,data_CarList,data_MaidLevel,data_ServerClassList} from '@/api/server/areaPrice.js'
-import { data_get_ownerFromsame_list,data_Del_ownerFromsame,data_Able_ownerFromsame,data_get_ownerFromsame_Id} from '@/api/marketing/carmarkting/carOwner.js'
+import { data_get_shipperOwnerFrom1_Id,data_get_shipperOwnerFrom_update,data_get_shipperOwnerFrom2_Id} from '@/api/marketing/shippermarkting/shipperOwner.js'
 import Upload from '@/components/Upload/singleImage'
 import vregion from '@/components/vregion/Region'
 import { eventBus } from '@/eventBus'
@@ -225,9 +225,13 @@ export default {
 
     //    区域奖励上限校验
         const rewardMaxValidator = (rule, val, cb) => {
+            var reg= /[^\d.]/g
             if(!val){
             cb(new Error('区域奖励上限不能为空'))
             }
+            else if(reg.test(val)){
+            cb(new Error('请输入正整数'))
+            }            
             else{
                 cb()
             }        
@@ -290,6 +294,7 @@ export default {
             rewardMax:null,
             carType:null,
             serivceCode:null,
+            usingStatus:null,
             reward1:null,reward2:null,reward3:null,reward4:null,reward5:null,reward6:null,reward7:null,reward8:null, reward9:null,reward10:null,reward11:null,reward12:null,reward13:null,reward14:null,reward15:null,reward16:null,
             maxnum1:null,maxnum2:null,maxnum3:null,maxnum4:null,maxnum5:null,maxnum6:null,
             data1:null,data2:null,data3:null,data4:null,data5:null,data6:null,data7:null,data8:null,data9:null,data10:null,data11:null,data12:null,data13:null,data14:null,data15:null,data16:null,data17:null,data18:null,data19:null,data20:null,
@@ -354,6 +359,7 @@ export default {
   watch:{
    dialogFormVisible_add:{
         handler: function(val, oldVal) {
+            this.$forceUpdate()
         },
     },
   },
@@ -378,22 +384,24 @@ export default {
                 return obj ? obj.value:'';
             },
    openDialog:function(){
-       if(this.editType=='edit'){
            if(!this.params.id){
                
             this.$message.info('未选中需要修改内容');
            }
            else{
+            this.update1();
+            this.$forceUpdate()
             this.dialogFormVisible_add = true;
-            this.formAll = this.params
-           data_get_ownerFromsame_Id(this.params.id).then(res=>{
-               console.log('res',res)
+            data_get_shipperOwnerFrom1_Id(this.params.id).then(res=>{
+            console.log('res',res)
+            this.formAll.areaCode2=res.data.areaCode2
+            this.formAll.rewardMax=res.data.rewardMax
+            this.formAll.carType=res.data.carType
+            this.formAll.serivceCode=res.data.serivceCode
+            this.formAll.usingStatus=res.data.usingStatus
            })
+
            }
-       }
-       else{
-        this.dialogFormVisible_add = true;
-       }
    },
    change:function(){
       this.dialogFormVisible_add = false;
@@ -425,76 +433,106 @@ export default {
                 });         
                 
           }, 
+          update1:function(){
+              data_get_shipperOwnerFrom2_Id(this.params.id).then(res=>{
+            this.formAll.reward1 = res.data[0].startPrice;this.formAll.reward2 = res.data[0].endPrice;
+            this.formAll.reward3 = res.data[1].startPrice;this.formAll.reward4 = res.data[1].endPrice;
+            this.formAll.reward5 = res.data[2].startPrice;this.formAll.reward6 = res.data[2].endPrice;
+            this.formAll.reward7 = res.data[3].startPrice;this.formAll.reward8 = res.data[3].endPrice;
+            this.formAll.reward9 = res.data[4].startPrice;this.formAll.reward10 = res.data[4].endPrice;
+            this.formAll.reward11 = res.data[5].startPrice;this.formAll.reward12 = res.data[5].endPrice;
+            this.formAll.reward13 = res.data[6].startPrice;this.formAll.reward14 = res.data[6].endPrice;
+            this.formAll.reward15 = res.data[7].startPrice;this.formAll.reward16 = res.data[7].endPrice;
+            this.formAll.maxnum1 = res.data[0].orderNum;this.formAll.maxnum2 = res.data[8].orderNum;
+            this.formAll.maxnum3 = res.data[16].orderNum;this.formAll.maxnum4 = res.data[24].orderNum;
+            this.formAll.maxnum5 = res.data[32].orderNum;this.formAll.maxnum6 = res.data[40].orderNum;
+            this.formAll.data1 = res.data[0].reward;this.formAll.data2 = res.data[1].reward;this.formAll.data3 = res.data[2].reward;this.formAll.data4 = res.data[3].reward;
+            this.formAll.data5 = res.data[4].reward;this.formAll.data6 = res.data[5].reward;this.formAll.data7 = res.data[6].reward;this.formAll.data8 = res.data[7].reward;
+            this.formAll.data9 = res.data[8].reward;this.formAll.data10 = res.data[9].reward;this.formAll.data11 = res.data[10].reward;this.formAll.data12 = res.data[11].reward;
+            this.formAll.data13 = res.data[12].reward;this.formAll.data14 = res.data[13].reward;this.formAll.data15 = res.data[14].reward;this.formAll.data16 = res.data[15].reward;
+            this.formAll.data17 = res.data[16].reward;this.formAll.data18 = res.data[17].reward;this.formAll.data19 = res.data[18].reward;this.formAll.data20 = res.data[19].reward;
+            this.formAll.data21 = res.data[20].reward;this.formAll.data22 = res.data[21].reward;this.formAll.data23 = res.data[22].reward;this.formAll.data24 = res.data[23].reward;
+            this.formAll.data25 = res.data[24].reward;this.formAll.data26 = res.data[25].reward;this.formAll.data27 = res.data[26].reward;this.formAll.data28 = res.data[27].reward;
+            this.formAll.data29 = res.data[28].reward;this.formAll.data30 = res.data[29].reward;this.formAll.data31 = res.data[30].reward;this.formAll.data32 = res.data[31].reward;
+            this.formAll.data33 = res.data[32].reward;this.formAll.data34 = res.data[33].reward;this.formAll.data35 = res.data[34].reward;this.formAll.data36 = res.data[35].reward;
+            this.formAll.data37 = res.data[36].reward;this.formAll.data38 = res.data[37].reward;this.formAll.data39 = res.data[38].reward;this.formAll.data40 = res.data[39].reward;
+            this.formAll.data41 = res.data[40].reward;this.formAll.data42 = res.data[41].reward;this.formAll.data43 = res.data[42].reward;this.formAll.data44 = res.data[43].reward;
+            this.formAll.data45 = res.data[44].reward;this.formAll.data46 = res.data[45].reward;this.formAll.data47 = res.data[46].reward;this.formAll.data48 = res.data[47].reward;
+            this.formAll.id1 = res.data[0].id;this.formAll.id2 = res.data[1].id;this.formAll.id3 = res.data[2].id;this.formAll.id4 = res.data[3].id;
+            this.formAll.id5 = res.data[4].id;this.formAll.id6 = res.data[5].id;this.formAll.id7 = res.data[6].id;this.formAll.id8 = res.data[7].id;
+            this.formAll.id9 = res.data[8].id;this.formAll.id10 = res.data[9].id;this.formAll.id11 = res.data[10].id;this.formAll.id12 = res.data[11].id;
+            this.formAll.id13 = res.data[12].id;this.formAll.id14 = res.data[13].id;this.formAll.id15 = res.data[14].id;this.formAll.id16 = res.data[15].id;
+            this.formAll.id17 = res.data[16].id;this.formAll.id18 = res.data[17].id;this.formAll.id19 = res.data[18].id;this.formAll.id20 = res.data[19].id;
+            this.formAll.id21 = res.data[20].id;this.formAll.id22 = res.data[21].id;this.formAll.id23 = res.data[22].id;this.formAll.id24 = res.data[23].id;
+            this.formAll.id25 = res.data[24].id;this.formAll.id26 = res.data[25].id;this.formAll.id27 = res.data[26].id;this.formAll.id28 = res.data[27].id;
+            this.formAll.id29 = res.data[28].id;this.formAll.id30 = res.data[29].id;this.formAll.id31 = res.data[30].id;this.formAll.id32 = res.data[31].id;
+            this.formAll.id33 = res.data[32].id;this.formAll.id34 = res.data[33].id;this.formAll.id35 = res.data[34].id;this.formAll.id36 = res.data[35].id;
+            this.formAll.id37 = res.data[36].id;this.formAll.id38 = res.data[37].id;this.formAll.id39 = res.data[38].id;this.formAll.id40 = res.data[39].id;
+            this.formAll.id41 = res.data[40].id;this.formAll.id42 = res.data[41].id;this.formAll.id43 = res.data[42].id;this.formAll.id44 = res.data[43].id;
+            this.formAll.id45 = res.data[44].id;this.formAll.id46 = res.data[45].id;this.formAll.id47 = res.data[46].id;this.formAll.id48 = res.data[47].id;
+                      
+           })
+         },
+
     changeList(){
             eventBus.$emit('pushListtwo')
         },   
-    // 同城新增    
-   add_data(){
-       this.FormData = {aflcDriverOrderamountDetailList:[
-           {startPrice:this.formAll.reward1,endPrice:this.formAll.reward2,rewardGrade:'未分类',reward:this.formAll.data1,orderNum:this.formAll.maxnum1},
-           {startPrice:this.formAll.reward3,endPrice:this.formAll.reward4,rewardGrade:'未分类',reward:this.formAll.data2,},
-           {startPrice:this.formAll.reward5,endPrice:this.formAll.reward6,rewardGrade:'未分类',reward:this.formAll.data3,},
-           {startPrice:this.formAll.reward7,endPrice:this.formAll.reward8,rewardGrade:'未分类',reward:this.formAll.data4,},
-           {startPrice:this.formAll.reward9,endPrice:this.formAll.reward10,rewardGrade:'未分类',reward:this.formAll.data5,},
-           {startPrice:this.formAll.reward11,endPrice:this.formAll.reward12,rewardGrade:'未分类',reward:this.formAll.data6,},
-           {startPrice:this.formAll.reward13,endPrice:this.formAll.reward14,rewardGrade:'未分类',reward:this.formAll.data7,},
-           {startPrice:this.formAll.reward15,endPrice:this.formAll.reward16,rewardGrade:'未分类',reward:this.formAll.data8,},
-                      {startPrice:this.formAll.reward1,endPrice:this.formAll.reward2,rewardGrade:'普通',reward:this.formAll.data9,orderNum:this.formAll.maxnum2},
-           {startPrice:this.formAll.reward3,endPrice:this.formAll.reward4,rewardGrade:'普通',reward:this.formAll.data10,},
-           {startPrice:this.formAll.reward5,endPrice:this.formAll.reward6,rewardGrade:'普通',reward:this.formAll.data11,},
-           {startPrice:this.formAll.reward7,endPrice:this.formAll.reward8,rewardGrade:'普通',reward:this.formAll.data12,},
-           {startPrice:this.formAll.reward9,endPrice:this.formAll.reward10,rewardGrade:'普通',reward:this.formAll.data13,},
-           {startPrice:this.formAll.reward11,endPrice:this.formAll.reward12,rewardGrade:'普通',reward:this.formAll.data14,},
-           {startPrice:this.formAll.reward13,endPrice:this.formAll.reward14,rewardGrade:'普通',reward:this.formAll.data15,},
-           {startPrice:this.formAll.reward15,endPrice:this.formAll.reward16,rewardGrade:'普通',reward:this.formAll.data16,},
-                      {startPrice:this.formAll.reward1,endPrice:this.formAll.reward2,rewardGrade:'银牌',reward:this.formAll.data17,orderNum:this.formAll.maxnum3},
-           {startPrice:this.formAll.reward3,endPrice:this.formAll.reward4,rewardGrade:'银牌',reward:this.formAll.data18,},
-           {startPrice:this.formAll.reward5,endPrice:this.formAll.reward6,rewardGrade:'银牌',reward:this.formAll.data19,},
-           {startPrice:this.formAll.reward7,endPrice:this.formAll.reward8,rewardGrade:'银牌',reward:this.formAll.data20,},
-           {startPrice:this.formAll.reward9,endPrice:this.formAll.reward10,rewardGrade:'银牌',reward:this.formAll.data21,},
-           {startPrice:this.formAll.reward11,endPrice:this.formAll.reward12,rewardGrade:'银牌',reward:this.formAll.data22,},
-           {startPrice:this.formAll.reward13,endPrice:this.formAll.reward14,rewardGrade:'银牌',reward:this.formAll.data23,},
-           {startPrice:this.formAll.reward15,endPrice:this.formAll.reward16,rewardGrade:'银牌',reward:this.formAll.data24,},
-                      {startPrice:this.formAll.reward1,endPrice:this.formAll.reward2,rewardGrade:'金牌',reward:this.formAll.data25,orderNum:this.formAll.maxnum4},
-           {startPrice:this.formAll.reward3,endPrice:this.formAll.reward4,rewardGrade:'金牌',reward:this.formAll.data26,},
-           {startPrice:this.formAll.reward5,endPrice:this.formAll.reward6,rewardGrade:'金牌',reward:this.formAll.data27,},
-           {startPrice:this.formAll.reward7,endPrice:this.formAll.reward8,rewardGrade:'金牌',reward:this.formAll.data28,},
-           {startPrice:this.formAll.reward9,endPrice:this.formAll.reward10,rewardGrade:'金牌',reward:this.formAll.data29,},
-           {startPrice:this.formAll.reward11,endPrice:this.formAll.reward12,rewardGrade:'金牌',reward:this.formAll.data30,},
-           {startPrice:this.formAll.reward13,endPrice:this.formAll.reward14,rewardGrade:'金牌',reward:this.formAll.data31,},
-           {startPrice:this.formAll.reward15,endPrice:this.formAll.reward16,rewardGrade:'金牌',reward:this.formAll.data32,},
-                      {startPrice:this.formAll.reward1,endPrice:this.formAll.reward2,rewardGrade:'钻石',reward:this.formAll.data33,orderNum:this.formAll.maxnum5},
-           {startPrice:this.formAll.reward3,endPrice:this.formAll.reward4,rewardGrade:'钻石',reward:this.formAll.data34,},
-           {startPrice:this.formAll.reward5,endPrice:this.formAll.reward6,rewardGrade:'钻石',reward:this.formAll.data35,},
-           {startPrice:this.formAll.reward7,endPrice:this.formAll.reward8,rewardGrade:'钻石',reward:this.formAll.data36,},
-           {startPrice:this.formAll.reward9,endPrice:this.formAll.reward10,rewardGrade:'钻石',reward:this.formAll.data37,},
-           {startPrice:this.formAll.reward11,endPrice:this.formAll.reward12,rewardGrade:'钻石',reward:this.formAll.data38,},
-           {startPrice:this.formAll.reward13,endPrice:this.formAll.reward14,rewardGrade:'钻石',reward:this.formAll.data39,},
-           {startPrice:this.formAll.reward15,endPrice:this.formAll.reward16,rewardGrade:'钻石',reward:this.formAll.data40,},
-                      {startPrice:this.formAll.reward1,endPrice:this.formAll.reward2,rewardGrade:'皇冠',reward:this.formAll.data41,orderNum:this.formAll.maxnum6},
-           {startPrice:this.formAll.reward3,endPrice:this.formAll.reward4,rewardGrade:'皇冠',reward:this.formAll.data42,},
-           {startPrice:this.formAll.reward5,endPrice:this.formAll.reward6,rewardGrade:'皇冠',reward:this.formAll.data43,},
-           {startPrice:this.formAll.reward7,endPrice:this.formAll.reward8,rewardGrade:'皇冠',reward:this.formAll.data44,},
-           {startPrice:this.formAll.reward9,endPrice:this.formAll.reward10,rewardGrade:'皇冠',reward:this.formAll.data45,},
-           {startPrice:this.formAll.reward11,endPrice:this.formAll.reward12,rewardGrade:'皇冠',reward:this.formAll.data46,},
-           {startPrice:this.formAll.reward13,endPrice:this.formAll.reward14,rewardGrade:'皇冠',reward:this.formAll.data47,},
-           {startPrice:this.formAll.reward15,endPrice:this.formAll.reward16,rewardGrade:'皇冠',reward:this.formAll.data48,},           
-           ]}
-       var forms= Object.assign({}, this.FormData,{areaCode2:this.formAll.areaCode2},{rewardMax:this.formAll.rewardMax},{carType:this.formAll.carType},{serivceCode:this.formAll.serivceCode});
-       console.log('forms',forms)
-       this.$refs['formAll'].validate(valid=>{
-        if(valid){
-       }
-       }
-       )
-   },
-//    同城修改
+//    修改
    updata_data(){
+        this.FormData = {aflcShipperPreferentialtDetailList:[
+           {startPrice:this.formAll.reward1,endPrice:this.formAll.reward2,rewardGrade:'未分类',reward:this.formAll.data1,orderNum:this.formAll.maxnum1,id:this.formAll.id1},
+           {startPrice:this.formAll.reward3,endPrice:this.formAll.reward4,rewardGrade:'未分类',reward:this.formAll.data2,orderNum:this.formAll.maxnum1,id:this.formAll.id2},
+           {startPrice:this.formAll.reward5,endPrice:this.formAll.reward6,rewardGrade:'未分类',reward:this.formAll.data3,orderNum:this.formAll.maxnum1,id:this.formAll.id3},
+           {startPrice:this.formAll.reward7,endPrice:this.formAll.reward8,rewardGrade:'未分类',reward:this.formAll.data4,orderNum:this.formAll.maxnum1,id:this.formAll.id4},
+           {startPrice:this.formAll.reward9,endPrice:this.formAll.reward10,rewardGrade:'未分类',reward:this.formAll.data5,orderNum:this.formAll.maxnum1,id:this.formAll.id5},
+           {startPrice:this.formAll.reward11,endPrice:this.formAll.reward12,rewardGrade:'未分类',reward:this.formAll.data6,orderNum:this.formAll.maxnum1,id:this.formAll.id6},
+           {startPrice:this.formAll.reward13,endPrice:this.formAll.reward14,rewardGrade:'未分类',reward:this.formAll.data7,orderNum:this.formAll.maxnum1,id:this.formAll.id7},
+           {startPrice:this.formAll.reward15,endPrice:this.formAll.reward16,rewardGrade:'未分类',reward:this.formAll.data8,orderNum:this.formAll.maxnum1,id:this.formAll.id8},
+                      {startPrice:this.formAll.reward1,endPrice:this.formAll.reward2,rewardGrade:'普通',reward:this.formAll.data9,orderNum:this.formAll.maxnum2,id:this.formAll.id9},
+           {startPrice:this.formAll.reward3,endPrice:this.formAll.reward4,rewardGrade:'普通',reward:this.formAll.data10,orderNum:this.formAll.maxnum2,id:this.formAll.id10},
+           {startPrice:this.formAll.reward5,endPrice:this.formAll.reward6,rewardGrade:'普通',reward:this.formAll.data11,orderNum:this.formAll.maxnum2,id:this.formAll.id11},
+           {startPrice:this.formAll.reward7,endPrice:this.formAll.reward8,rewardGrade:'普通',reward:this.formAll.data12,orderNum:this.formAll.maxnum2,id:this.formAll.id12},
+           {startPrice:this.formAll.reward9,endPrice:this.formAll.reward10,rewardGrade:'普通',reward:this.formAll.data13,orderNum:this.formAll.maxnum2,id:this.formAll.id13},
+           {startPrice:this.formAll.reward11,endPrice:this.formAll.reward12,rewardGrade:'普通',reward:this.formAll.data14,orderNum:this.formAll.maxnum2,id:this.formAll.id14},
+           {startPrice:this.formAll.reward13,endPrice:this.formAll.reward14,rewardGrade:'普通',reward:this.formAll.data15,orderNum:this.formAll.maxnum2,id:this.formAll.id15},
+           {startPrice:this.formAll.reward15,endPrice:this.formAll.reward16,rewardGrade:'普通',reward:this.formAll.data16,orderNum:this.formAll.maxnum2,id:this.formAll.id16},
+                      {startPrice:this.formAll.reward1,endPrice:this.formAll.reward2,rewardGrade:'银牌',reward:this.formAll.data17,orderNum:this.formAll.maxnum3,id:this.formAll.id17},
+           {startPrice:this.formAll.reward3,endPrice:this.formAll.reward4,rewardGrade:'银牌',reward:this.formAll.data18,orderNum:this.formAll.maxnum3,id:this.formAll.id18},
+           {startPrice:this.formAll.reward5,endPrice:this.formAll.reward6,rewardGrade:'银牌',reward:this.formAll.data19,orderNum:this.formAll.maxnum3,id:this.formAll.id19},
+           {startPrice:this.formAll.reward7,endPrice:this.formAll.reward8,rewardGrade:'银牌',reward:this.formAll.data20,orderNum:this.formAll.maxnum3,id:this.formAll.id20},
+           {startPrice:this.formAll.reward9,endPrice:this.formAll.reward10,rewardGrade:'银牌',reward:this.formAll.data21,orderNum:this.formAll.maxnum3,id:this.formAll.id21},
+           {startPrice:this.formAll.reward11,endPrice:this.formAll.reward12,rewardGrade:'银牌',reward:this.formAll.data22,orderNum:this.formAll.maxnum3,id:this.formAll.id22},
+           {startPrice:this.formAll.reward13,endPrice:this.formAll.reward14,rewardGrade:'银牌',reward:this.formAll.data23,orderNum:this.formAll.maxnum3,id:this.formAll.id23},
+           {startPrice:this.formAll.reward15,endPrice:this.formAll.reward16,rewardGrade:'银牌',reward:this.formAll.data24,orderNum:this.formAll.maxnum3,id:this.formAll.id24},
+                      {startPrice:this.formAll.reward1,endPrice:this.formAll.reward2,rewardGrade:'金牌',reward:this.formAll.data25,orderNum:this.formAll.maxnum4,id:this.formAll.id25},
+           {startPrice:this.formAll.reward3,endPrice:this.formAll.reward4,rewardGrade:'金牌',reward:this.formAll.data26,orderNum:this.formAll.maxnum4,id:this.formAll.id26},
+           {startPrice:this.formAll.reward5,endPrice:this.formAll.reward6,rewardGrade:'金牌',reward:this.formAll.data27,orderNum:this.formAll.maxnum4,id:this.formAll.id27},
+           {startPrice:this.formAll.reward7,endPrice:this.formAll.reward8,rewardGrade:'金牌',reward:this.formAll.data28,orderNum:this.formAll.maxnum4,id:this.formAll.id28},
+           {startPrice:this.formAll.reward9,endPrice:this.formAll.reward10,rewardGrade:'金牌',reward:this.formAll.data29,orderNum:this.formAll.maxnum4,id:this.formAll.id29},
+           {startPrice:this.formAll.reward11,endPrice:this.formAll.reward12,rewardGrade:'金牌',reward:this.formAll.data30,orderNum:this.formAll.maxnum4,id:this.formAll.id30},
+           {startPrice:this.formAll.reward13,endPrice:this.formAll.reward14,rewardGrade:'金牌',reward:this.formAll.data31,orderNum:this.formAll.maxnum4,id:this.formAll.id31},
+           {startPrice:this.formAll.reward15,endPrice:this.formAll.reward16,rewardGrade:'金牌',reward:this.formAll.data32,orderNum:this.formAll.maxnum4,id:this.formAll.id32},
+                      {startPrice:this.formAll.reward1,endPrice:this.formAll.reward2,rewardGrade:'钻石',reward:this.formAll.data33,orderNum:this.formAll.maxnum5,id:this.formAll.id33},
+           {startPrice:this.formAll.reward3,endPrice:this.formAll.reward4,rewardGrade:'钻石',reward:this.formAll.data34,orderNum:this.formAll.maxnum5,id:this.formAll.id34},
+           {startPrice:this.formAll.reward5,endPrice:this.formAll.reward6,rewardGrade:'钻石',reward:this.formAll.data35,orderNum:this.formAll.maxnum5,id:this.formAll.id35},
+           {startPrice:this.formAll.reward7,endPrice:this.formAll.reward8,rewardGrade:'钻石',reward:this.formAll.data36,orderNum:this.formAll.maxnum5,id:this.formAll.id36},
+           {startPrice:this.formAll.reward9,endPrice:this.formAll.reward10,rewardGrade:'钻石',reward:this.formAll.data37,orderNum:this.formAll.maxnum5,id:this.formAll.id37},
+           {startPrice:this.formAll.reward11,endPrice:this.formAll.reward12,rewardGrade:'钻石',reward:this.formAll.data38,orderNum:this.formAll.maxnum5,id:this.formAll.id38},
+           {startPrice:this.formAll.reward13,endPrice:this.formAll.reward14,rewardGrade:'钻石',reward:this.formAll.data39,orderNum:this.formAll.maxnum5,id:this.formAll.id39},
+           {startPrice:this.formAll.reward15,endPrice:this.formAll.reward16,rewardGrade:'钻石',reward:this.formAll.data40,orderNum:this.formAll.maxnum5,id:this.formAll.id40},
+                      {startPrice:this.formAll.reward1,endPrice:this.formAll.reward2,rewardGrade:'皇冠',reward:this.formAll.data41,orderNum:this.formAll.maxnum6,id:this.formAll.id41},
+           {startPrice:this.formAll.reward3,endPrice:this.formAll.reward4,rewardGrade:'皇冠',reward:this.formAll.data42,orderNum:this.formAll.maxnum6,id:this.formAll.id42},
+           {startPrice:this.formAll.reward5,endPrice:this.formAll.reward6,rewardGrade:'皇冠',reward:this.formAll.data43,orderNum:this.formAll.maxnum6,id:this.formAll.id43},
+           {startPrice:this.formAll.reward7,endPrice:this.formAll.reward8,rewardGrade:'皇冠',reward:this.formAll.data44,orderNum:this.formAll.maxnum6,id:this.formAll.id44},
+           {startPrice:this.formAll.reward9,endPrice:this.formAll.reward10,rewardGrade:'皇冠',reward:this.formAll.data45,orderNum:this.formAll.maxnum6,id:this.formAll.id45},
+           {startPrice:this.formAll.reward11,endPrice:this.formAll.reward12,rewardGrade:'皇冠',reward:this.formAll.data46,orderNum:this.formAll.maxnum6,id:this.formAll.id46},
+           {startPrice:this.formAll.reward13,endPrice:this.formAll.reward14,rewardGrade:'皇冠',reward:this.formAll.data47,orderNum:this.formAll.maxnum6,id:this.formAll.id47},
+           {startPrice:this.formAll.reward15,endPrice:this.formAll.reward16,rewardGrade:'皇冠',reward:this.formAll.data48,orderNum:this.formAll.maxnum6,id:this.formAll.id48},           
+           ]}
+       var forms= Object.assign({}, this.FormData,{areaCode2:this.formAll.areaCode2},{rewardMax:this.formAll.rewardMax},{carType:this.formAll.carType},{serivceCode:this.formAll.serivceCode},{id:this.params.id},{usingStatus:this.formAll.usingStatus});
        this.$refs['formAll'].validate(valid=>{
-        var forms= Object.assign({}, this.formAll);
         if(valid){
-        data_get_orderFromsame_update(forms).then(res=>{
-            console.log('res',res);
+        data_get_shipperOwnerFrom_update(forms).then(res=>{
             this.dialogFormVisible_add = false;
             this.changeList();
             this.$refs['formAll'].resetFields();
@@ -562,6 +600,7 @@ export default {
             height: 34px;
         }
         th{
+            text-align:center;
             background: #EAF0FF;
             border-top:1px solid #d0d7e5;
             border-right:1px solid #d0d7e5;

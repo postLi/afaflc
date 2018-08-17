@@ -101,7 +101,7 @@
               <el-select v-model="formFroze.freezeCause" placeholder="请选择" v-else-if=" editType == 'edit-three'" disabled>
                 <el-option
                   v-for="item in optionsReason"
-                  :key="item.value"
+                  :key="item.code"
                   :label="item.name"
                   :value="item.code" >
                 </el-option>

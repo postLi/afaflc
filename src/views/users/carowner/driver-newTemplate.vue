@@ -10,9 +10,16 @@
              >
               <el-row>
                   <el-col :span="12">
+                      <span v-if="this.btntext=='代客认证'">
+                    <el-form-item label="手机号：" :label-width="formLabelWidth" >
+                       <el-input v-model.trim="templateModel.driverMobile" auto-complete="off" disabled></el-input>
+                    </el-form-item>
+                    </span>
+                    <span v-else>
                     <el-form-item label="手机号：" prop="driverMobile" :label-width="formLabelWidth" >
                        <el-input v-model.trim="templateModel.driverMobile" auto-complete="off" :disabled="editType=='view'"></el-input>
                     </el-form-item>
+                    </span>
                   </el-col>
                   <el-col :span="12">
                     <el-form-item label="车主：" prop="driverName" :label-width="formLabelWidth" >
@@ -40,7 +47,7 @@
                         <el-select v-model="templateModel.carType" placeholder="请选择" :disabled="editType=='view'">
                             <el-option
                                 v-for="item in options"
-                                :key="item.value"
+                                :key="item.code"
                                 :label="item.name"
                                 :value="item.code">
                             </el-option>
@@ -89,7 +96,7 @@
                         <el-select v-model="templateModel.carSpec" placeholder="请选择" :disabled="editType=='view'">
                             <el-option
                                 v-for="item in optionsType"
-                                :key="item.value"
+                                :key="item.code"
                                 :label="item.name"
                                 :value="item.code">
                             </el-option>
@@ -117,7 +124,7 @@
                             <el-select v-model="templateModel.obtainGrade" placeholder="请选择" :disabled="editType=='view'">
                                 <el-option
                                     v-for="item in optionsLevel"
-                                    :key="item.value"
+                                    :key="item.code"
                                     :label="item.name"
                                     :value="item.code">
                                 </el-option>
@@ -142,7 +149,7 @@
               <el-row>
                   <el-col :span="12">
                     <el-form-item :label-width="formLabelWidth" label="特权车：">
-                        <el-checkbox v-model="templateModel.isVipCar" @change='isVip' label="是" border size="medium" :disabled="editType=='view'" :checked='templateModel.isVipCar!==""'></el-checkbox>
+                        <el-checkbox v-model="templateModel.isVipCar" true-label="1" false-label='0' @change='isVip' label="是" border size="medium" :disabled="editType=='view'" ></el-checkbox>
                     </el-form-item>
                   </el-col>
               </el-row>
@@ -441,7 +448,7 @@ export default {
                 obtainGrade:'',
                 belongCityName:'',
                 obtainGradeTime:null, //中单等级有效时间
-                isVipCar:'', //特权车
+                isVipCar:null, //特权车
                 carFile:'',
                 drivingLicenceFile:'',
                 drivingPermitFile:'',
@@ -514,13 +521,15 @@ export default {
             eventBus.$emit('changeListtwo')
         },
         isVip(val){
-            if(val ){
+            if(this.templateModel.isVipCar == '1'){
+
                 this.templateModel.isVipCar = '1'
+                                            console.log(this.templateModel.isVipCar)
             }
             else{
                 this.templateModel.isVipCar = '0'
+                            console.log(this.templateModel.isVipCar)
             }   
-            console.log(this.templateModel.isVipCar)
         },
         // 获取对应的字典列表
         getMoreInformation(){
@@ -568,6 +577,7 @@ export default {
             }
             if(this.templateItem){
                 var obj = JSON.parse(JSON.stringify(this.templateItem));
+                console.log('dds',this.templateItem)
                 this.templateModel = obj ;
             } 
             if(this.editType == 'view'){

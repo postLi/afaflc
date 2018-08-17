@@ -9,7 +9,7 @@
                     <el-select v-model="formInline.driverStatus" placeholder="请选择" clearable>
                         <el-option
                             v-for="item in optionsService"
-                            :key="item.value"
+                            :key="item.code"
                             :label="item.name"
                             :value="item.code"
                             :disabled="item.disabled"

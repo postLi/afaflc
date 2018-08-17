@@ -289,7 +289,6 @@ export default {
     left: 0;
     top: 0;
     padding: 15px 16px;
-    border-bottom: 2px dashed #ccc;
     height: 70px;
     width: 100%;
     line-height: 35px;
@@ -307,7 +306,7 @@ export default {
 }
 .classify_cityinfo{
     height: 100%;
-    padding: 90px 15px 0 15px;
+    padding: 70px 0 0 0;
     .commoncss{
       display: inline-block!important;
     }
