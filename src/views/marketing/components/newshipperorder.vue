@@ -51,7 +51,7 @@
              <table class="ht_table">
             <tbody>
              <tr>
-             <th width="100"  rowspan="2">车主奖励等级</th>
+             <th width="100"  rowspan="2">货主奖励等级</th>
              <th colspan="8">订单金额范围</th> 
              <th width="80"   rowspan="2">一天限量</th>
             </tr>

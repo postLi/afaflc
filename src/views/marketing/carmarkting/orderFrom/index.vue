@@ -19,7 +19,6 @@
   </div>
 </template>
 
-
 <script>
 import SameOrder from './sameOrder.vue'
 import InterOrder from './interOrder.vue'
