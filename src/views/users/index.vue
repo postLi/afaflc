@@ -128,7 +128,6 @@
             left:0;
             top:0;
             padding:15px 16px;
-            border-bottom:2px dashed #ccc;
             height:70px;
             width:100%;
             line-height: 35px;
@@ -138,8 +137,7 @@
                     .el-input{
                         .el-input__inner{
                             color:#3e9ff1;
-                            height:30px;
-                            line-height: 30px;
+                        
                         }
                     }
                     .el-button{
@@ -150,7 +148,7 @@
         }
         .classify_info{
             height:100%;
-            padding:90px 13px 0 0;
+            padding:70px 13px 0 0;
             &>.btns_box{
                 margin-bottom:10px;
                 .el-button{

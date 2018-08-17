@@ -50,6 +50,12 @@
     overflow: hidden;
     text-overflow: ellipsis;
   }
+
+    .el-table th>.cell {
+        min-height: 45px;
+        line-height: 45px;
+
+    }
   
   //element ui upload
   .upload-container {

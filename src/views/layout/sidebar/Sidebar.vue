@@ -5,8 +5,37 @@
         <span>{{ name }}</span><br><span>{{ company }}</span>
       </div> -->
       <SidebarMenuSearch :searchItem="sidebarRouters" />
+      <el-menu
+        class="sidebar-menu" 
+        :default-active="$route.path"
+        router
+        unique-opened
+        text-color="#fff">
+        <template v-if="!item.hidden" v-for="(item,index) in sidebarRouters">
+          <el-menu-item :key="index" v-if="!item.children" :index="item.path">
+            <icon-svg v-if='item.icon' :icon-class="item.icon" /> 
+            <span slot="title">{{!sidebar.opened ? item.meta.stitle :item.meta.title}}</span>
+          </el-menu-item>
+          <el-submenu v-else :key="index" :index="item.path">
+            <template slot="title">
+              <icon-svg v-if='item.icon' :icon-class="item.icon" /> 
+              <span>{{!sidebar.opened ? item.meta.stitle :item.meta.title}}</span>
+            </template>
+            <template v-if="!item2.hidden" v-for="(item2,index2) in item.children">
+              <el-menu-item :key="index2" v-if="!item2.children" :index="item2.path">
+                <icon-svg v-if='item2.icon' :icon-class="item2.icon" /> 
+                <span slot="title">{{!sidebar.opened ? item2.meta.stitle :item2.meta.title}}</span>
+              </el-menu-item>
+              <el-submenu v-else :key="index2" :index="item2.path">
+                <template slot="title">{{!sidebar.opened ? item2.meta.stitle :item2.meta.title}}</template>
+                <el-menu-item v-if="!item3.hidden" v-for="(item3,index3) in item2.children" :key="index3" :index="item3.path"><span slot="title">{{item3.meta.title}}</span></el-menu-item>
+              </el-submenu>
+            </template>
+          </el-submenu>
+        </template>
+      </el-menu>
       <hamburger class="hamburger-container" :toggleClick="toggleSideBar" :isActive="sidebar.opened"></hamburger>
-      <sidebar-item ref="sidebaritem" :routes='sidebarRouters'></sidebar-item>
+      <!-- <sidebar-item ref="sidebaritem" :routes='sidebarRouters'></sidebar-item> -->
       <div class="nologin">
         <!-- <el-button size="large" type="primary"><a href="http://192.168.1.157:9528/?nologin=1">TMS系统</a></el-button><br>
         <el-button size="large" type="success"><a href="http://192.168.1.24:9526/?nologin=1">会员中心</a></el-button><br> -->
@@ -23,6 +52,7 @@ import { mapGetters } from 'vuex'
 import SidebarItem from './SidebarItem'
 import SidebarMenuSearch from './SidebarMenuSearch'
 import Hamburger from '@/components/Hamburger'
+import './memu.scss'
 
 export default {
   components: { SidebarItem, Hamburger, SidebarMenuSearch },
@@ -123,4 +153,6 @@ export default {
     width: 150px;
   }
 }
+
+
 </style>

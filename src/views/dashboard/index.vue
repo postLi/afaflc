@@ -2,13 +2,16 @@
     <div class="dashboard-container">
         <!-- <div class='dashboard-text'>用户名:{{name}}</div>
         <div class='dashboard-text'>权限组:<span v-for='role in roles' :key='role'>{{role}}</span></div> -->
-        <div class="list-tab-title clearfix">
-            <span :class="{'active': component === item.name}" @click="component = item.name" v-for="(item,index) in tabs" :key="index">{{item.title}}</span>
+        <!-- <div class="lsit-tab">
+            <div class="list-tab-title clearfix">
+                <h4>数据总览</h4>
+                <span :class="{'active': component === item.name}" @click="component = item.name" v-for="(item,index) in tabs" :key="index">{{item.title}}</span>
             </div>
             <div class="list-tab-content">
-            <keep-alive>
-                <component :key="component" :listtype="component"  v-bind:is="component"></component>
-            </keep-alive>
+                <keep-alive>
+                    <component :key="component" :listtype="component"  v-bind:is="component"></component>
+                </keep-alive>
+            </div>
         </div>
         <div class="dashboard-content clearfix">
             <div class="echartsLine fl">
@@ -17,8 +20,8 @@
             <div class="echartsPie fl">
 
             </div>
-        </div>
-
+        </div> -->
+        <zanshi></zanshi>
     </div>
 </template>
 
@@ -27,14 +30,15 @@ import { mapGetters } from 'vuex'
 import now from './compnents/data'
 import jinqi from './compnents/data'
 import echartsLine from './compnents/echarts'
+import zanshi from './compnents/zanshi'
 
 export default {
     name: 'dashboard',
     components: {
-        echartsLine,
-        now,
-        jinqi,
-    
+        // echartsLine,
+        // now,
+        // jinqi,
+        zanshi
     },
     computed: {
         ...mapGetters([
@@ -66,11 +70,17 @@ export default {
 <style rel="stylesheet/scss" lang="scss" scoped>
 .dashboard {
   &-container {
-    margin: 30px;
+    // padding: 24px 20px;
+    background: #f2f2f2;
   }
   &-text {
     font-size: 30px;
     line-height: 46px;
   }
 }
+    .lsit-tab{
+        .list-tab-title{
+            background: #fff;
+        }
+    }
 </style>

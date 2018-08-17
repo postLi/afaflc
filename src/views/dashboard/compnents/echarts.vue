@@ -112,10 +112,10 @@
                                 title : {
                                     line : '动态类型切换-折线图',
                                     bar : '动态类型切换-柱形图',
-                                    stack : '动态类型切换-堆积',
-                                    tiled : '动态类型切换-平铺'
+                                    // stack : '动态类型切换-堆积',
+                                    // tiled : '动态类型切换-平铺'stack', 'tiled''
                                 },
-                                type : ['line', 'bar', 'stack', 'tiled']
+                                type : ['line', 'bar', ]
                             },
                             restore : {
                                 show : true,
@@ -123,7 +123,7 @@
                                 color : 'black'
                             },
                             saveAsImage : {
-                                show : false,
+                                show : true,
                                 title : '保存为图片',
                                 type : 'jpeg',
                                 lang : ['点击本地保存'] 
