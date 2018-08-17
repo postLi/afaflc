@@ -302,7 +302,6 @@ export default {
         left:0px!important;
     }
     .el-button{
-      margin-right: 20px;
       padding: 8px 20px!important;
     }
 }

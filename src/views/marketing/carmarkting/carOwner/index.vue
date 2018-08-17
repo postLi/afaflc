@@ -11,10 +11,10 @@
             <el-form-item label="服务类型：">
                  <el-select v-model="formAllData.serivceCode" clearable placeholder="请选择" >
                           <el-option
-                             v-for="item in serviceCardList"
-                              :key="item.code"
-                             :label="item.name"
-                              :value="item.code"
+                              v-for="item in serviceCardList"
+                               :key="item.code"
+                               :label="item.name"
+                               :value="item.code"
                                :disabled="item.disabled">
                          </el-option>
                  </el-select>
@@ -37,7 +37,7 @@
          </div>
           	<div class="classify_cityinfo">
             	<div class="btns_box">
-                   <newOrder
+                   <newOwner
                     btntext="新增"
                     :plain="true"
                     type="primary" 
@@ -45,8 +45,8 @@
                     icon="el-icon-news"
                     editType="add"
                     btntitle="创建">
-                    </newOrder>
-                   <newOrder
+                    </newOwner>
+                   <modOwner
                     btntext="修改"
                     :plain="true"
                     type="primary" 
@@ -55,7 +55,7 @@
                     editType="edit"
                     btntitle="修改"
                     :params="selectRowData">
-                    </newOrder>
+                    </modOwner>
                 <el-button  type="primary" value="value" plain icon="el-icon-bell" @click="handleUseStates">启用/停用</el-button>
                 <el-button type="primary" plain icon="el-icon-delete" @click="delete_data">删除</el-button>
             	</div>
@@ -66,20 +66,20 @@
             </el-table-column>
             <el-table-column  label="所属区域" prop="areaCode2" show-overflow-tooltip>
             </el-table-column>
-            <el-table-column  label="奖励额度限制" prop="carType">
+            <el-table-column  label="奖励额度限制" prop="rewardMax">
             </el-table-column>
-            <el-table-column  label="服务分类" prop="commissionGrade">
+            <el-table-column  label="服务分类" prop="serivceCode">
             </el-table-column>
-            <el-table-column  label="车辆类型" prop="commissionGrade">
+            <el-table-column  label="车辆类型" prop="carType">
             </el-table-column>                          
             <el-table-column  label="启用状态" >
             <template  slot-scope="scope">
               {{ scope.row.usingStatus == 0 ? '启用' : '禁用' }}
             </template>
             </el-table-column>         
-            <el-table-column  label="创建时间" prop="commissionGrade">
+            <el-table-column  label="创建时间" prop="createTime">
             </el-table-column>
-            <el-table-column  label="创建人" prop="commissionGrade">
+            <el-table-column  label="创建人" prop="creater">
             </el-table-column>                               
             </el-table> 
                 <!-- 页码 -->
@@ -94,7 +94,8 @@ import { data_Commission ,data_CarList,data_MaidLevel,data_ServerClassList} from
 import { data_get_orderFromsame_list,data_Del_orderFromsame,data_Able_orderFromsame,} from '@/api/marketing/carmarkting/orderFrom.js'
 import { data_get_ownerFromsame_list} from '@/api/marketing/carmarkting/carOwner.js'
 import vregion from '@/components/vregion/Region'
-import newOrder from '../../components/newOrder.vue'
+import newOwner from '../../components/newOwner.vue'
+import modOwner from '../../components/modOwner.vue'
 import { eventBus } from '@/eventBus'
 import Pager from '@/components/Pagination/index'
 import {parseTime} from '@/utils/'
@@ -126,14 +127,16 @@ export default {
 		formAllData:{
             areaCode2: null,
             carType:null,
+            serivceCode:null,
             commissionGrade:null,
-            },
+         },
     }
   },
     components:{
-        newOrder,
+        newOwner,
         vregion,
-        Pager
+        Pager,
+        modOwner
     },
     methods:{
             regionChange(d) {
@@ -203,7 +206,7 @@ export default {
                     cancelButtonText: '取消',
                     type: 'warning'
                 }).then(()=>{
-                    data_Del_orderFromsame(this.selectRowData.id).then(res=>{
+                    data_Del_ownerFromsame(this.selectRowData.id).then(res=>{
                         this.$message.success('删除成功');
                         this.firstblood();       
                         this.selectRowData=''; 
@@ -230,7 +233,7 @@ export default {
                 }else{
                     this.selectId.push(this.selectRowData.id)
                     
-                  data_Able_orderFromsame(this.selectId).then(res=>{
+                  data_Able_ownerFromsame(this.selectId).then(res=>{
                      this.selectId.splice(0,1);
                      if(this.selectRowData.usingStatus==0)
                      {

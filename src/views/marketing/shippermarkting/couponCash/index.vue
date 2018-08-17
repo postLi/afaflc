@@ -1,5 +1,3 @@
 <template>
-    <div>
-        优惠金
-    </div>
+    <div>优惠金</div>
 </template>

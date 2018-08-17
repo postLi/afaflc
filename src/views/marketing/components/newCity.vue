@@ -47,7 +47,7 @@
                  <el-form-item  prop="carType"> 
                  <el-select  v-model="formAll.carType" clearable placeholder="请选择" >
                           <el-option
-                             v-for="item in MaidLevel"
+                             v-for="item in optionsCar"
                               :key="item.code"
                              :label="item.name"
                               :value="item.code"
@@ -60,7 +60,7 @@
                  <el-form-item  prop="commissionGrade"> 
                   <el-select v-model="formAll.commissionGrade" clearable placeholder="请选择" >
                           <el-option
-                             v-for="item in optionsCar"
+                             v-for="item in MaidLevel"
                               :key="item.code"
                              :label="item.name"
                               :value="item.code"
@@ -109,11 +109,11 @@
 </template>
 <script>
 import { data_Commission,data_CarList,data_MaidLevel} from '@/api/server/areaPrice.js'
-import { data_get_Marketingsame_create,data_get_Marketingsame_update } from '@/api/marketing/carmarkting/carmarkting.js'
+import { data_get_Marketingsame_create,data_get_Marketingsame_update,data_get_Marketingsame_Id} from '@/api/marketing/carmarkting/carmarkting.js'
 import Upload from '@/components/Upload/singleImage'
 import vregion from '@/components/vregion/Region'
 import { eventBus } from '@/eventBus'
-import {data_get_shipper_type,data_get_shipper_create,data_get_shipper_change,data_get_shipper_view} from '@/api/users/shipper/all_shipper.js'
+import {data_get_shipper_type,data_get_shipper_create,data_get_shipper_change,data_get_shipper_view,} from '@/api/users/shipper/all_shipper.js'
 export default {
   components:{
     Upload,
@@ -303,7 +303,12 @@ export default {
            }
            else{
             this.dialogFormVisible_add = true;
-            this.formAll = this.params
+            console.log('id',this.params.id)
+            data_get_Marketingsame_Id(this.params.id).then(res=>{
+                                this.formAll = res.data
+                    })
+
+
            }
 
        }
@@ -374,6 +379,7 @@ export default {
             console.log('res',res);
             this.dialogFormVisible_add = false;
             this.changeList();
+            this.$refs['formAll'].resetFields();
         }).catch(res=>{
             console.log(res)
             this.$message.error('车辆类型车主抽佣等级已存在');

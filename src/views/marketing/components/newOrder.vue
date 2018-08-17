@@ -1,5 +1,5 @@
 <template>
-     <div class="creatcity commoncss">
+     <div class="ordercreatcity commoncss">
       <el-button :type="btntype" :value="value" :plain="plain" :icon="icon" @click="openDialog()">{{btntext}}</el-button>
       <div class="newMarketingOrder">
       <el-dialog  :visible="dialogFormVisible_add" :before-close="change">
@@ -27,7 +27,7 @@
             <tbody>
              <tr>
              <th width="150">所属区域</th>
-             <th width="100">车辆类型</th>
+             <th width="100">车辆类型</th>   
              <th width="100">车主抽佣等级</th>                            
              <th width="70">1单/ 天</th>
              <th width="70">2单/ 天</th>
@@ -50,7 +50,7 @@
                  <el-form-item  prop="carType"> 
                  <el-select  v-model="formAll.carType" clearable placeholder="请选择" >
                           <el-option
-                             v-for="item in MaidLevel"
+                             v-for="item in optionsCar"
                               :key="item.code"
                              :label="item.name"
                               :value="item.code"
@@ -63,7 +63,7 @@
                  <el-form-item  prop="commissionGrade"> 
                   <el-select v-model="formAll.commissionGrade" clearable placeholder="请选择" >
                           <el-option
-                             v-for="item in optionsCar"
+                             v-for="item in MaidLevel"
                               :key="item.code"
                              :label="item.name"
                               :value="item.code"
@@ -131,7 +131,7 @@
 </template>
 <script>
 import { data_Commission ,data_CarList,data_MaidLevel} from '@/api/server/areaPrice.js'
-import { data_get_orderFromsame_create,data_get_orderFromsame_update} from '@/api/marketing/carmarkting/orderFrom.js'
+import { data_get_orderFromsame_create,data_get_orderFromsame_update,data_get_orderFromsame_Id} from '@/api/marketing/carmarkting/orderFrom.js'
 import Upload from '@/components/Upload/singleImage'
 import vregion from '@/components/vregion/Region'
 import { eventBus } from '@/eventBus'
@@ -290,7 +290,9 @@ export default {
            }
            else{
             this.dialogFormVisible_add = true;
-            this.formAll = this.params
+           data_get_orderFromsame_Id(this.params.id).then(res=>{
+                this.formAll = res.data
+           })
            }
 
        }
@@ -344,7 +346,7 @@ export default {
             commissionPer:null,
             commissionLowest:null,
             }
-            this.$refs['formAll'].resetFields();
+           this.$refs['formAll'].resetFields();
         }).catch(res=>{
             console.log(res)
        });
@@ -364,7 +366,7 @@ export default {
             this.$refs['formAll'].resetFields();
         }).catch(res=>{
             console.log(res)
-            this.$message.error('车辆类型车主抽佣等级已存在');
+            this.$message.error('车主达量等级已存在');
        });
        }
        }
@@ -374,7 +376,7 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-    .creatcity{
+    .ordercreatcity{
         .el-button {
                 margin-right: 20px;
                 padding: 10px 20px;
@@ -445,7 +447,7 @@ export default {
            overflow: unset;
        }
     }
-    .creatcity{
+    .ordercreatcity{
         .el-input__inner{
             line-height: 40px !important; 
             height: 40px !important; 
