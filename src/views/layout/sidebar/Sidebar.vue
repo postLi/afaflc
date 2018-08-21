@@ -16,7 +16,7 @@
             <icon-svg v-if='item.icon' :icon-class="item.icon" /> 
             <span class="sidebar-nav-title" slot="title">{{!sidebar.opened ? item.meta.stitle :item.meta.title}}</span>
           </el-menu-item>
-          <el-submenu v-else :key="index" :index="item.path" @mouseover="showSubNav" @mouseout="hideSubNav">
+          <el-submenu v-else :key="index" :index="item.path">
             <template slot="title" >
               <icon-svg v-if='item.icon' :icon-class="item.icon" /> 
               <span class="sidebar-nav-title">{{!sidebar.opened ? item.meta.stitle :item.meta.title}}</span>
@@ -188,14 +188,30 @@ export default {
 }
 .nologin{
     position: absolute;
+    width: 100%;
+    // height: 150px;
+    background: rgb(0,32,57);
     left: 0;
     bottom: 0;
-    width: 100%;
-  margin-top: 10px;
-  text-align: center;
+    margin-top: 10px;
+    text-align: center;
   .el-button{
-    margin-bottom: 10px;
-    width: 150px;
+    width: 100%;
+    height: 50px;
+    background-color: rgb(0,32,56);
+    border: 4px solid #000;
+    border-top-color: rgb(5,55,93);
+    border-right-color: rgb(5,55,93);
+    border-left-color: rgb(5,21,39);
+    border-bottom-color: rgb(5,21,39);
+    opacity: 0.65;
+    border-radius: 0;
+    font-size: 16px;
+    color: rgba(255,255,255,.65);
+
+    &:hover{
+      opacity: 1;
+    }
   }
 }
 

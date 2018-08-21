@@ -10,7 +10,7 @@ export default {
   noDropdown: true, 
   children: [
     {
-        path: '/order/tongcheng', icon: 'QQ', name: '同城订单',component: _import('order/index'), meta: { role: ['admin'], title: '同城订单',stitle: '同城',  noCache: true },
+        path: '/order/tongcheng', icon: 'tcdd', name: '同城订单',component: _import('order/index'), meta: { role: ['admin'], title: '同城订单',stitle: '同城',  noCache: true },
         children: [
             {
                 path: '/order/tongcheng/waitPointing', icon: 'QQ',name: '待指派', component: _import('order/tongcheng/waitPointing/index'), meta: { role: ['admin'], title: '待指派',stitle: '待指派',  noCache: true }
@@ -36,17 +36,16 @@ export default {
         ]
     },
     {
-        path: '/order/lingdan', icon: 'QQ', name: '零担订单', component: _import('order/lingdan/index'), meta: { role: ['admin'], title: '零担订单',stitle: '零担',  noCache: true }
+        path: '/order/lingdan', icon: 'lddd', name: '零担订单', component: _import('order/lingdan/index'), meta: { role: ['admin'], title: '零担订单',stitle: '零担',  noCache: true }
       },
-      {
-        path: '/order/dahuoche', icon: 'QQ', name: '大货车', component: _import('order/dahuoche/index'), meta: { role: ['admin'], title: '大货车',stitle: '货车',  noCache: true }
-      },
-       {
-        path: '/order/xuqiuku', icon: 'QQ', name: '需求库', component: _import('order/xuqiuku/index'), meta: { role: ['admin'], title: '需求库',stitle: '需求库',  noCache: true },
+    {
+        path: '/order/dahuoche', icon: 'dhc', name: '大货车', component: _import('order/dahuoche/index'), meta: { role: ['admin'], title: '大货车',stitle: '货车',  noCache: true }
+    },
+    {
+        path: '/order/xuqiuku', icon: 'xqk', name: '需求库', component: _import('order/xuqiuku/index'), meta: { role: ['admin'], title: '需求库',stitle: '需求库',  noCache: true },
         children:[
             { 
                 path: '/order/xuqiuku/carInfo', 
-                icon: 'QQ', 
                 hidden: false, 
                 name: '车源信息', 
                 component: _import('order/xuqiuku/carInfo/index'), 
@@ -55,14 +54,16 @@ export default {
 
             { 
                 path: '/order/xuqiuku/driverInfo', 
-                icon: 'QQ',
                 hidden: false,
                 name: '货源信息', 
                 component: _import('order/xuqiuku/driverInfo/index'), 
                 meta: { title: '货源信息',stitle: '货源',  noCache: true 
             }},
         ]
-      },
+    },
+    {
+        path: '/order/xiangqing', icon: 'QQ', name: '订单详情', component: _import('order/xiangqing/index'), meta: { role: ['admin'], title: '订单详情',stitle: '详情',  noCache: true }
+    },
 
 ]
 }

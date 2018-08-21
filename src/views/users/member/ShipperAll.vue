@@ -109,12 +109,19 @@
 				border
                 height="100%"
                 highlight-current-row
-                @current-change="handleCurrentChangeRow"
 				tooltip-effect="dark"
 				style="width: 100%">
-				<el-table-column type='index' label="序号" width="80px">
-				</el-table-column>  
-				<el-table-column label="手机号(会员账号)" width="250">
+				<el-table-column label="" width="65" fixed>
+                    <template slot-scope="scope">
+                        <el-radio class="textRadio" @change.native="getCurrentRow(scope.$index,scope.row)" :label="scope.$index" v-model="templateRadio">&nbsp;</el-radio>
+                    </template>
+                </el-table-column>
+                <el-table-column label="序号" width="80px" fixed>
+                    <template slot-scope="scope">
+                        {{ (page - 1)*pagesize + scope.$index + 1 }}
+                    </template>
+                </el-table-column>  
+				<el-table-column label="手机号(会员账号)" width="250" fixed>
                     <template slot-scope="scope">
                         <createdDialog :paramsView="scope.row" btntype="text" :btntext="scope.row.mobile" editType="view" btntitle="详情"></createdDialog>
                     </template>
@@ -123,7 +130,7 @@
 				</el-table-column>
 				<el-table-column prop="companyName" label="公司名称">
 				</el-table-column>
-				<el-table-column prop="belongCityName" label="所在地">
+				<el-table-column prop="belongCityName" label="所在地" width="250">
 				</el-table-column>
 				<el-table-column prop="registerOriginName" label="注册来源" width="100">
 				</el-table-column>
@@ -135,7 +142,12 @@
 				</el-table-column>
                 <el-table-column prop="qq" label="QQ号码">
 				</el-table-column>
-				<el-table-column prop="serviceCommitment" label="会员服务承诺">
+				<el-table-column prop="otherService" label="会员服务承诺">
+                    <!-- <template slot-scope="scope">
+                        <p v-for="">
+
+                        </p>
+                    </template> -->
 				</el-table-column>
                 <el-table-column prop="isOpenTms" label="是否开通TMS">
                     <template slot-scope="scope">
@@ -159,7 +171,7 @@
 
 <script>
 import {data_get_shipper_freezeType,data_get_shipper_BlackType,data_get_shipper_change,data_get_shipper_status,data_get_shipper_auid} from '@/api/users/shipper/all_shipper.js'
-import { data_LogisticsCompanyList } from '../../../api/users/logistics/LogisticsCompany.js'
+import { data_LogisticsCompanyList } from '@/api/users/logistics/LogisticsCompany.js'
 import createdDialog from './createdDialog.vue'
 import GetCityList from '@/components/GetCityList'
 import FreezeDialog from './FreezeDialog'
@@ -181,6 +193,7 @@ export default {
 	},
   data(){
       return{
+        templateRadio:'',
         ul:true,
 		freeze:true,//是否冻结
 		options:[],
@@ -234,6 +247,11 @@ export default {
         })
     },
     methods:{
+        getCurrentRow(index,row){       
+            this.selectRowData = row;
+            this.templateRadio = index;
+            console.log('选中内容',row)
+        },
 	changeList(){
 		eventBus.$emit('changeList')
 	},

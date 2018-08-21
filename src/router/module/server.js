@@ -10,18 +10,17 @@ export default {
   noDropdown: true,
   children: [
     {
-        path: '/sm/xiaohuoche', icon: 'ID', name: '小货车', component: _import('sm/xiaohuoche/index'), meta: { role: ['admin'], title: '小货车',stitle: '小货车',  noCache: true },
+        path: '/sm/xiaohuoche', icon: 'xiaohuoche', name: '小货车', component: _import('sm/xiaohuoche/index'), meta: { role: ['admin'], title: '小货车',stitle: '小货车',  noCache: true },
         children:[
             {
                 path: '/sm/xiaohuoche/areaPrice', 
-                icon: 'QQ',
                 name: '区域定价', 
                 component: _import('sm/xiaohuoche/areaPrice/index'), 
                 meta: { role: ['admin'], title: '区域定价',stitle: '区域',  noCache: true }
             },
             {
-                path: '/sm/xiaohuoche/standardPrice', 
-                icon: 'QQ', name: '标准信息及定价', 
+                path: '/sm/xiaohuoche/standardPrice',  
+                name: '标准信息及定价', 
                 component: _import('sm/xiaohuoche/standardPrice/index'), 
                 meta: { role: ['admin'], title: '标准信息及定价',stitle: '标准',  noCache: true }
             },
@@ -40,7 +39,7 @@ export default {
         ]
       },
       {
-        path: '/sm/lingdan', icon: 'QQ', name: '零担', component: _import('sm/lingdan/index'), meta: { role: ['admin'], title: '零担',stitle: '零担',  noCache: true },
+        path: '/sm/lingdan', icon: 'lingdan', name: '零担', component: _import('sm/lingdan/index'), meta: { role: ['admin'], title: '零担',stitle: '零担',  noCache: true },
         children:[
             { path: '/sm/lingdan/transportRange', 
             icon: 'QQ', 
@@ -51,7 +50,7 @@ export default {
         ]
       },
       {
-        path: '/sm/dahuoche', icon: 'QQ', name: '大货车', component: _import('sm/dahuoche/index'), meta: { role: ['admin'], title: '大货车',stitle: '大货车',  noCache: true },
+        path: '/sm/dahuoche', icon: 'dahuoche', name: '大货车', component: _import('sm/dahuoche/index'), meta: { role: ['admin'], title: '大货车',stitle: '大货车',  noCache: true },
         children:[
           
         ]

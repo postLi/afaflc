@@ -37,11 +37,18 @@
                     stripe
                     border
                     highlight-current-row
-                    @current-change="handleCurrentChangeRow"
                     tooltip-effect="dark"
                     style="width: 100%">
-                    <el-table-column type='index' label="序号" width="80px">
-				    </el-table-column>  
+                    <el-table-column label="" width="65">
+                        <template slot-scope="scope">
+                            <el-radio class="textRadio" @change.native="getCurrentRow(scope.$index,scope.row)" :label="scope.$index" v-model="templateRadio">&nbsp;</el-radio>
+                        </template>
+                    </el-table-column>
+                    <el-table-column label="序号" width="80px">
+                        <template slot-scope="scope">
+                            {{ (page - 1)*pagesize + scope.$index + 1 }}
+                        </template>
+                    </el-table-column>  
                     <el-table-column  label="公司名称">
                         <template slot-scope="scope">
                             <createdDialog :paramsView="scope.row" btntype="text" :btntext="scope.row.companyName" editType="view" btntitle="详情"></createdDialog>
@@ -110,6 +117,7 @@ export default {
     },
     data(){
         return {
+            templateRadio:'',
             options:[],
             tableData3:[],
             totalCount:null,
@@ -143,6 +151,11 @@ export default {
         })
     },
     methods:{
+        getCurrentRow(index,row){       
+            this.selectRowData = row;
+            this.templateRadio = index;
+            console.log('选中内容',row)
+        },
         // 选中值判断
         handleCurrentChangeRow(val){
             console.log(val)

@@ -268,7 +268,7 @@ import vregion from '@/components/vregion/Region'
                 }
                 this.firstblood();
             },
-             //判断是否选中
+                 //判断是否选中
             getinfomation(selection){
                 this.checkedinformation = selection;
             },
@@ -279,8 +279,9 @@ import vregion from '@/components/vregion/Region'
             //详情弹窗
             pushOrderSerial(item){
                 // console.log(item)
-                this.dialogFormVisible_details = true;
-                this.DetailsOrderSerial = item.orderSerial;
+                // this.dialogFormVisible_details = true;
+                // this.DetailsOrderSerial = item.orderSerial;
+                this.$router.push({name: '订单详情',query:{ orderSerial:item.orderSerial }});
             }
         }
     }

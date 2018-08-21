@@ -27,16 +27,6 @@
             <el-tab-pane label="认证不通过" name="fifth">
                 <ShipperDisqualification :isvisible="shipperName === 'fifth'"></ShipperDisqualification>
             </el-tab-pane>
-
-        <!-- 冻结部分 -->
-        <!-- <el-tab-pane label="冻结中" name="six">
-        <ShipperFreezing></ShipperFreezing>
-        </el-tab-pane> -->
-
-        <!-- 黑名单部分 -->
-        <!-- <el-tab-pane label="黑名单" name="seven">
-        <ShipperBlacklist></ShipperBlacklist>
-        </el-tab-pane> -->
     </el-tabs>
   </div>
 </template>
@@ -169,6 +159,9 @@
         .el-table{
             th,td{
                 text-align: center;
+            }
+            .el-radio__input{
+                margin-left: 10px;
             }
         }
     }

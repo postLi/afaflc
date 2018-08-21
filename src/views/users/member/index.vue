@@ -158,6 +158,9 @@
             th,td{
                 text-align: center;
             }
+            .el-radio__input{
+                margin-left: 10px;
+            }
         }
     }
 

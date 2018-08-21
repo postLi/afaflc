@@ -9,6 +9,8 @@
                     </el-input>
                 </label>      
                 <el-button type="primary"  plain @click="getdata_search">查询</el-button>
+                <el-button type="info" plain >清空</el-button>
+
             </div>
             <div class="classify_info">
                 <div class="btns_box">

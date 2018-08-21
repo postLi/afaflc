@@ -9,7 +9,7 @@
                     <el-select v-model="xinzengform.shipperType" placeholder="请选择" v-if="editType=='add'" >
                         <el-option
                         v-for="item in options"
-                        :key="item.value"
+                        :key="item.id"
                         :label="item.name"
                         :value="item.code"
                         :disabled="item.disabled">
