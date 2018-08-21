@@ -1,5 +1,5 @@
 <template>
-    <div class="clearfix" style="height:100%">
+    <div class=" identicalStyle clearfix" style="height:100%">
         <div class="shipper_city ">
           <el-form :inline="true">
             <el-form-item label="所属区域：">
@@ -63,7 +63,7 @@
             		</div>
 
             <div class="info_city">    
-               <el-table style="width: 100%" stripe border height="100%" @row-click="clickDetails" highlight-current-row :data="tableDataAll"  >
+               <el-table style="width: 100%" stripe border height="100%" @row-click="clickDetails" highlight-current-row :data="tableDataAll"  tooltip-effect="dark">
             <el-table-column  label="序号" width="80px" type="index">
             </el-table-column>
             <el-table-column  label="所属区域" prop="areaCode2">
@@ -86,9 +86,9 @@
             </template>
             </el-table-column>          
             </el-table> 
-                <!-- 页码 -->
-       <div class="info1_tab_footer">共计:{{ dataTotal }} <div class="show_pager"> <Pager :total="dataTotal" @change="handlePageChange"  :sizes="sizes"/></div> </div>  
         	</div> 
+                            <!-- 页码 -->
+         <div class="info_tab_footer">共计:{{ dataTotal }} <div class="show_pager"> <Pager :total="dataTotal" @change="handlePageChange"  :sizes="sizes"/></div> </div> 
           </div>
       </div>
 </template>
@@ -105,12 +105,12 @@ export default {
     return{
       selectRowData:{},
       selectId:[],
-      sizes:[20,50,100],
+      sizes:[30,50,100],
       information:'操作不正确',
-      pagesize:20,//每页显示数
-      page:1,//当前页
+      pagesize:30,//初始化加载数量
+      page:1,//初始化页码
       totalCount:null,
-      dataTotal:null,
+      dataTotal:0,
       tableDataAll:[],
       radio: 1,
        optionsCar:[
@@ -185,6 +185,7 @@ export default {
             handlePageChange(obj) {
                 this.page = obj.pageNum
                 this.pagesize = obj.pageSize
+                this.firstblood();
         },
         // 选择删除
         delete_data(){
@@ -299,7 +300,7 @@ export default {
 }
 .classify_cityinfo{
     height: 100%;
-    padding: 70px 0 0 0;
+    padding: 70px 15px 0 15px;
     .commoncss{
       display: inline-block!important;
     }
@@ -307,32 +308,12 @@ export default {
     margin-bottom: 10px;
     }
     .info_city{
-      height:100%
+      height:88%
     }
     .el-button{
       margin-right: 20px;
       padding: 8px 20px!important;
     }
-}
-.info1_tab_footer{
-    padding-left: 20px;
-    background: #eee;
-    height: 40px;
-    line-height: 40px;
-    box-shadow: 0 -2px 2px rgba(0, 0, 0, 0.1);
-    z-index: 10;
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    .show_pager{float: right}
-    .page-select{top:5px;
-    .el-input__inner{
-      height: 30px;
-      line-height: 30px; 
-    }
-    }
-    
 }
 </style>
 

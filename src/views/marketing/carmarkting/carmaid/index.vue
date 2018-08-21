@@ -76,7 +76,9 @@ export default {
     .same_shipper{
         height:100%;    
         position: relative;
-       
+         .el-tabs__content{
+           padding:0px 0px;
+       }     
         
     }
 </style>

@@ -28,7 +28,6 @@
                          </el-option>
                  </el-select>
             </el-form-item>  
-            <br>
             <el-form-item label="所属区域：">
              <vregion :ui="true" @values="regionChange" class="form-control">
                 <el-input v-model="formAllData.areaCode" placeholder="请选择出发地"></el-input>
@@ -44,6 +43,7 @@
                         end-placeholder="结束时间"
                         placeholder="选择时间范围"
                         value-format="timestamp"
+                        :default-time="['00:00:00', '23:59:59']"
                         @change='cTime'
                         >
                     </el-date-picker>
@@ -65,11 +65,26 @@
                     btntitle="创建"
                    >
               </newautocoupon>
-                <el-button  type="primary" value="value" plain icon="el-icon-bell" >启用/停用</el-button>
-                <el-button type="primary" plain icon="el-icon-delete" >删除</el-button>
+              <modautocoupon
+                    btntext="修改"
+                    :plain="true"
+                    type="primary" 
+                    btntype="primary"
+                    icon="el-icon-news"
+                    editType="add"
+                    btntitle="修改"
+                    :params = 'selectRowData'
+                    >
+              </modautocoupon>
+                <el-button  type="primary" value="value" plain icon="el-icon-bell" @click="handleUseStates">启用/停用</el-button>
+                <el-button type="primary" plain icon="el-icon-delete" @click="delete_data">删除</el-button>
+                <span  v-if="types=='two'">
+                <el-button  type="primary" value="value" plain icon="el-icon-bell">发放</el-button>
+                <el-button type="primary" plain icon="el-icon-delete">生成</el-button>
+                </span>
             	</div>
             <div class="info_city">    
-            <el-table style="width: 100%" stripe border height="100%"   :data="tableDataAll">
+            <el-table style="width: 100%" stripe border height="100%"   :data="tableDataAll"  @row-click="clickDetails" highlight-current-row>
             <el-table-column  label="序号" width="80px" type="index">
             </el-table-column>
             <el-table-column  label="创建" prop="createTime">
@@ -77,6 +92,16 @@
             <el-table-column  label="活动类型" prop="activityType">
             </el-table-column>
             <el-table-column  label="活动名称" prop="activityName">
+                <template slot-scope="scope">
+                    <automationcheck
+                          btntype="text"           
+                         :btntext="scope.row.activityName"
+                          editType="view"
+                         :templateItem="scope.row"
+                         btntitle="详情"
+                         :updataflag="true"
+                    ></automationcheck>
+                </template>
             </el-table-column>
             <el-table-column  label="所属区域" prop="areaCode">
             </el-table-column>
@@ -103,20 +128,30 @@
 </template>
 
 <script>
-import {data_get_couponActive_list} from '@/api/marketing/shippermarkting/couponActive.js'
+import {data_get_couponActive_list,data_Del_couponActive,data_Able_couponActive} from '@/api/marketing/shippermarkting/couponActive.js'
 import vregion from '@/components/vregion/Region'
 import { eventBus } from '@/eventBus'
 import Pager from '@/components/Pagination/index'
 import {parseTime} from '@/utils/'
 import newautocoupon from './newautocoupon'
+import automationcheck from './automationcheck'
+import modautocoupon from './modautocoupon'
 export default {
+    props:{
+      types:{
+        type:[Object,String],
+        default:''
+      }
+    },
     data(){
         return{
+            selectRowData:[],
+            selectId:[],
             createTime:null,
             tableDataAll:[],
             dataTotal:null,
             sizes:[30,50,100],
-            pagesize:20,//每页显示数
+            pagesize:30,//每页显示数
             page:1,//当前页
             formAllData:{
             activityName:null,
@@ -141,7 +176,9 @@ export default {
     components:{
         vregion,
         Pager,
-        newautocoupon
+        newautocoupon,
+        automationcheck,
+        modautocoupon
     },
     methods:{
              // 列表刷新页面  
@@ -172,8 +209,72 @@ export default {
          getData_query(){
           this.firstblood();
           },
+
+        // 选择行
+         clickDetails(i){
+           this.selectRowData = i
+         },
+       // 选择删除
+        delete_data(){
+              if(!this.selectRowData.id){
+                this.$message.info('未选中任何删除内容');
+                }else{
+                this.delDataInformation()
+            }
+        },
+       //确认删除
+            delDataInformation(){         
+                   this.$confirm('确定要删除吗？', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(()=>{
+                    data_Del_couponActive(this.selectRowData.id).then(res=>{
+                        this.$message.success('删除成功');
+                        this.firstblood();       
+                        this.selectRowData=''; 
+                    }).catch(err => {
+                      console.log('rr',res)
+                        this.$message({
+                            type: 'info',
+                            message: '操作失败，原因：' + err.text ? err.text : err
+                        })
+                    })
+                }).catch(() => {
+                    this.$message({
+                        type: 'info',
+                        message: '已取消'
+                    })
+                })   
+            },
+        // 启用禁用
+        handleUseStates(){
+                if(!this.selectRowData.id){
+                    //未选择任何修改内容的提示
+                        this.$message.info('未选中内容');
+                        return
+                }else{
+                    this.selectId.push(this.selectRowData.id)
+                    
+                  data_Able_couponActive(this.selectId).then(res=>{
+                     this.selectId.splice(0,1);
+                     if(this.selectRowData.usingStatus==0)
+                     {
+                         this.$message.warning('已禁用');
+                     }
+                     else{
+                         this.$message.success('已启用');
+                     }
+                        this.firstblood();       
+                        this.selectRowData='';         
+                    })
+                }
+        }
     },
      mounted(){
+         eventBus.$on('changeListtwo', () => {
+                this.firstblood()
+          })
          this.firstblood();
      },
 }
@@ -187,7 +288,7 @@ export default {
     left: 0;
     top: 0;
     padding: 15px 16px;
-    height: 140px;
+    height: 70px;
     width: 100%;
     line-height: 35px;
     .el-input__inner{
@@ -215,11 +316,15 @@ export default {
          .el-range__close-icon{
              line-height: 24px;
          }
+         width: 280px;
+    }
+    .el-form-item{
+        margin-bottom:0px;
     }
 }
 .classify_couponinfo{
     height: 100%;
-    padding: 140px 15px 0 15px;
+    padding: 70px 15px 0 15px;
     .commoncss{
       display: inline-block!important;
     }
@@ -227,7 +332,7 @@ export default {
     margin-bottom: 10px;
     }
     .info_city{
-      height:100%
+      height:88%
     }
     .el-button{
       margin-right: 20px;

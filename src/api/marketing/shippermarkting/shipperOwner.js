@@ -21,7 +21,7 @@ export function data_get_shipperOwnerFrom_list(page,pagesize,data) {
 export function data_get_shipperOwnerFrom_create(data) {
     return fetch.post('/' + baseurl + '/sm/aflcShipperPreferential/v1/add', data)
   }
-    
+  
 //删除货主奖励列表
 export function data_Del_shipperOwnerFrom(id) {
     
@@ -58,7 +58,7 @@ export function data_get_shipperOwnerFrom_update(data) {
  //reward_id获取货主所有订单金额奖励明细
  export function data_get_shipperOwnerFrom2_Id(id) {
   return fetch({
-    url: '/'+baseurl+'/sm/aflcShipperPreferential/v1/%7Breward_id%7D?reward_id=' + id,
+    url: '/'+baseurl+'/sm/aflcShipperPreferential/v1/{reward_id}?reward_id=' + id,
     method: 'get',
   })
 }

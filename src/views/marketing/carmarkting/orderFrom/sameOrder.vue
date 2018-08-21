@@ -192,6 +192,7 @@ export default {
             handlePageChange(obj) {
                 this.page = obj.pageNum
                 this.pagesize = obj.pageSize
+                this.firstblood();
         },
         // 选择删除
         delete_data(){
@@ -306,7 +307,7 @@ export default {
 }
 .classify_cityinfo{
     height: 100%;
-    padding: 70px 0 0 0;
+    padding: 70px 15px 0 15px;
     .commoncss{
       display: inline-block!important;
     }

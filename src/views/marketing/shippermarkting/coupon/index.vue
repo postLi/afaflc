@@ -5,12 +5,12 @@
 
         <!-- 自动化 -->
             <el-tab-pane label="自动化设置" name="first">
-                <automation ></automation>
+                <automation types='one'></automation>
             </el-tab-pane>
 
         <!-- 手动化 -->
             <el-tab-pane label="手动化设置"  name="second">
-                <handmation ></handmation>
+                <automation types='two'></automation>
             </el-tab-pane>            
     </el-tabs>
   </div>
@@ -40,7 +40,6 @@ export default {
         }
         },
      methods: {
-
      handleClick(tab, event) {
       this.shipperName = tab.name;
        }
