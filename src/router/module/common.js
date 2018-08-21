@@ -63,6 +63,14 @@ export default {
                   path: '/common/task/taskExecute', icon: 'QQ', name: '执行器管理', component: _import('common/task/taskExecute/index'), meta: { role: ['admin'], title: '执行器管理',stitle: '执行器',  noCache: true }
               },
         ]
-    }
+    },
+    {
+        path: '/common/announcement',
+        icon: 'cheliangguanli',
+        hidden: false,
+        name: '发布公告',
+        component: _import('common/announcement/index'),
+        meta: { title: '发布公告', stitle: '公告', noCache: true }
+      },
   ]
 }

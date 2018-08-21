@@ -1,12 +1,12 @@
 <template>
     <div class="implement">
-        <el-tabs v-model="orderName" type="card" @tab-click="handleClick" >
+        <el-tabs v-model="orderTabName" type="card" @tab-click="handleClick" >
             <el-tab-pane  
             v-for="item in visibleTabs"
             :key="item.name"
             :label="item.label"
             :name="item.name">
-                <implementComponent :isvisible="orderName === item.name" :status = "item.type"></implementComponent>
+                <implementComponent :isvisible="orderTabName === item.name" :status = "item.type"></implementComponent>
             </el-tab-pane>
         </el-tabs>
     </div>
@@ -23,7 +23,7 @@
         },
         data() {
           return {
-            orderName:'tihuo',
+            orderTabName:'tihuo',
             visibleTabs:[
                 {label:"待提货",name:"tihuo",type:'AF0080601PT'},
                 {label:"待到车",name:"daoche",type:'AF0080602PT'},
@@ -36,31 +36,31 @@
           };
         },
         watch:{
-            orderName(newVal,oldVal){
-                // console.log('newVal,oldVal',newVal,oldVal)
+            orderTabName(newVal,oldVal){
+                console.log('newVal,oldVal',newVal,oldVal)
                 if(newVal){
-                    this.orderName = newVal;
+                    this.orderTabName = newVal;
                 }else{
-                    this.orderName = oldVal;
+                    this.orderTabName = oldVal;
                 }
             }
         },
         created() {
-            this.orderName = localStorage.getItem('orderName') || 'tihuo';
+            this.orderTabName = localStorage.getItem('orderTabName') || 'tihuo';
         },
 
         beforeUpdate () {
-            localStorage.setItem('orderName', this.orderName);
+            localStorage.setItem('orderTabName', this.orderTabName);
         },
 
         beforeDestroy () {
-            localStorage.setItem('orderName', 'tihuo');
+            localStorage.setItem('orderTabName', 'tihuo');
         },
         methods: {
 
             handleClick(tab, event) {
                 // console.log(tab, event);
-                this.orderName = tab.name;
+                this.orderTabName = tab.name;
             }
         }
     }

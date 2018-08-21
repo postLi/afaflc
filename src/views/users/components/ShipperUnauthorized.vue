@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="identicalStyle">
         <div class="shipper_searchinfo">
           <el-form :inline="true">
             <el-form-item label="所在地：">
@@ -9,7 +9,7 @@
               <el-select v-model="formInline.accountStatus" clearable placeholder="请选择">
                 <el-option
                   v-for="item in optionsAuidSataus"
-                  :key="item.code"
+                  :key="item.id"
                   :label="item.name"
                   :value="item.code"
                   :disabled="item.disabled">
@@ -30,11 +30,6 @@
           </el-form>
       </div>
 	  	<div class="classify_info">
-            <!-- <v-region :town="true" :ui="true" @values="regionChange" class="form-control">
-                <button type="button" class="btn btn-default">
-                    ｛｛btnText｝｝ <i class="fa fa-fw fa-caret-down"></i>
-                </button>
-            </v-region> -->
 		  	<div class="btns_box">
 				<createdDialog 
 				btntext="代客认证"
@@ -64,10 +59,17 @@
 				stripe
 				border
 				highlight-current-row
-                @current-change="handleCurrentChangeRow"
 				tooltip-effect="dark"
 				style="width: 100%">
-				<el-table-column type='index' label="序号" width="80px">
+                <el-table-column label="" width="65">
+                     <template slot-scope="scope">
+                        <el-radio class="textRadio" @change.native="getCurrentRow(scope.$index,scope.row)" :label="scope.$index" v-model="templateRadio">&nbsp;</el-radio>
+                    </template>
+                </el-table-column>
+				<el-table-column label="序号" width="80px">
+                    <template slot-scope="scope">
+                        {{ (page - 1)*pagesize + scope.$index + 1 }}
+                    </template>
 				</el-table-column>  
 				<el-table-column
 					prop="mobile"
@@ -130,6 +132,7 @@ export default {
     },
   data(){
     return{
+        templateRadio:'',
         optionsStatus:[], // 状态列表
         tableData4:[],
         totalCount:null,
@@ -151,8 +154,8 @@ export default {
 			name:'全部'
 			}
         ],//账户状态
-      selectRowData:{},
-      pickerOptions:{
+        selectRowData:{},
+        pickerOptions:{
         disabledDate(time) {
           return time.getTime() < Date.now();
         }
@@ -180,8 +183,10 @@ export default {
         })
     },
   methods:{
-    regionChange(data){
-        console.log(data);
+    getCurrentRow(index,row){       
+        this.selectRowData = row;
+        this.templateRadio = index;
+        console.log('选中内容',row)
     },
     handleCurrentChangeRow(val){
         console.log(val)

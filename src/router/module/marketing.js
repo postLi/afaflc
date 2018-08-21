@@ -11,7 +11,7 @@ export default {
   noDropdown: false,
   children: [
   {          
-        path: '/marketing/carmarkting', icon: 'QQ', name: '车主营销管理', component: _import('marketing/carmarkting/index'), meta: { role: ['admin'], title: '车主营销管理', stitle:'车主', noCache: true },
+        path: '/marketing/carmarkting', icon: 'czyx', name: '车主营销管理', component: _import('marketing/carmarkting/index'), meta: { role: ['admin'], title: '车主营销管理', stitle:'车主', noCache: true },
         children: [
             {path: '/marketing/carmarkting/carmaid', name: '抽佣管理', component: _import('marketing/carmarkting/carmaid/index'), meta: { role: ['admin'], title: '抽佣管理',stitle: '抽佣',  noCache: true }},
             {path: '/marketing/carmarkting/carOwner', name: '车主奖励', component: _import('marketing/carmarkting/carOwner/index'), meta: { role: ['admin'], title: '车主奖励',stitle: '奖励',  noCache: true }},
@@ -20,7 +20,7 @@ export default {
         
     } ,
     {
-        path: '/marketing/shippermarkting', icon: 'QQ', name: '货主营销管理', component: _import('marketing/shippermarkting/index'), meta: { role: ['admin'], title: '货主营销管理', stitle:'货主', noCache: true },
+        path: '/marketing/shippermarkting', icon: 'hzyx', name: '货主营销管理', component: _import('marketing/shippermarkting/index'), meta: { role: ['admin'], title: '货主营销管理', stitle:'货主', noCache: true },
         children:[
             { 
                 path: '/marketing/shippermarkting/coupon', 
@@ -42,7 +42,7 @@ export default {
 
     },
     {          
-        path: '/marketing/xiaohuocheMJ', icon: 'QQ', name: '小货车马甲单',hidden: false, component: _import('marketing/xiaohuocheMJ/index'), meta: { role: ['admin'], title: '小货车马甲单', stitle:'小货车', noCache: true },
+        path: '/marketing/xiaohuocheMJ', icon: 'xhcmjd', name: '小货车马甲单',hidden: false, component: _import('marketing/xiaohuocheMJ/index'), meta: { role: ['admin'], title: '小货车马甲单', stitle:'小货车', noCache: true },
         children:[
             { 
                 path: '/marketing/xiaohuocheMJ/pushsheet', 
@@ -63,7 +63,7 @@ export default {
         ]
       }, 
       {          
-        path: '/marketing/lingdanMJ', icon: 'QQ', name: '零担马甲单',hidden: false, component: _import('marketing/lingdanMJ/index'), meta: { role: ['admin'], title: '零担马甲单', stitle:'零担', noCache: true },
+        path: '/marketing/lingdanMJ', icon: 'ldmjd', name: '零担马甲单',hidden: false, component: _import('marketing/lingdanMJ/index'), meta: { role: ['admin'], title: '零担马甲单', stitle:'零担', noCache: true },
         children:[
            
         ]

@@ -167,7 +167,7 @@
             <div class="essentialInformation">
                 <h6>
                     <span>车主账号：</span>
-                    <span>{{listInformation.aflcDriverStatus.driverMobile}}</span>
+                    <span>{{listInformation.aflcDriverStatus.driverMobile || '暂无信息'}}</span>
                  </h6>
                 <h6>
                     <span>车主姓名：</span>

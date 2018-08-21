@@ -1,6 +1,6 @@
 <template>
   <div class="shipper">
-    <el-tabs v-model="shipperName" type="border-card" @tab-click="handleClick" >
+    <el-tabs v-model="shipperName" type="card" @tab-click="handleClick" >
         <!-- 全部 -->
         <!-- <el-badge :value="12" class="item"> -->
             <el-tab-pane label="全部" name="first">
@@ -27,16 +27,6 @@
             <el-tab-pane label="认证不通过" name="fifth">
                 <ShipperDisqualification :isvisible="shipperName === 'fifth'"></ShipperDisqualification>
             </el-tab-pane>
-
-        <!-- 冻结部分 -->
-        <!-- <el-tab-pane label="冻结中" name="six">
-        <ShipperFreezing></ShipperFreezing>
-        </el-tab-pane> -->
-
-        <!-- 黑名单部分 -->
-        <!-- <el-tab-pane label="黑名单" name="seven">
-        <ShipperBlacklist></ShipperBlacklist>
-        </el-tab-pane> -->
     </el-tabs>
   </div>
 </template>
@@ -137,7 +127,8 @@
                     .el-input{
                         .el-input__inner{
                             color:#3e9ff1;
-                        
+                            height:30px;
+                            line-height: 30px;
                         }
                     }
                     .el-button{
@@ -169,6 +160,9 @@
             th,td{
                 text-align: center;
             }
+            .el-radio__input{
+                margin-left: 10px;
+            }
         }
     }
 
@@ -192,6 +186,7 @@
                         }
                     }
                     .el-form-item{
+                        margin-bottom: 0px; 
                         .el-form-item__content{
                             .el-input{
                                 width: 250px;

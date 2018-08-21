@@ -28,13 +28,13 @@
                         </el-date-picker>
                     </el-form-item>
                     <el-form-item class="btnChoose fr"  style="margin-left:0;">
-                        <el-button type="primary" @click="handleSearch('search')">搜索</el-button>
-                        <el-button type="primary" @click="handleSearch('clear')">清空</el-button>
+                        <el-button type="primary" plain @click="handleSearch('search')">搜索</el-button>
+                        <el-button type="info" plain @click="handleSearch('clear')">清空</el-button>
                     </el-form-item>
               </el-form>
             <div class="classify_info">
                 <div class="btns_box">
-                    <el-button type="primary" @click="handleSearch('search')" size="mini">导出Exce</el-button>
+                    <el-button type="primary" plain @click="handleSearch('search')" size="mini">导出Exce</el-button>
                 </div>
                 <div class="info_news" style="height:87%;">
                     <el-table
@@ -268,7 +268,7 @@ import vregion from '@/components/vregion/Region'
                 }
                 this.firstblood();
             },
-             //判断是否选中
+                 //判断是否选中
             getinfomation(selection){
                 this.checkedinformation = selection;
             },
@@ -279,8 +279,9 @@ import vregion from '@/components/vregion/Region'
             //详情弹窗
             pushOrderSerial(item){
                 // console.log(item)
-                this.dialogFormVisible_details = true;
-                this.DetailsOrderSerial = item.orderSerial;
+                // this.dialogFormVisible_details = true;
+                // this.DetailsOrderSerial = item.orderSerial;
+                this.$router.push({name: '订单详情',query:{ orderSerial:item.orderSerial }});
             }
         }
     }

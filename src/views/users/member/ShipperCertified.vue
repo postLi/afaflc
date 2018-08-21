@@ -1,5 +1,5 @@
 <template>
-    <div style="height:100%;">
+    <div style="height:100%;"  class="identicalStyle">
         <div class="shipper_searchinfo">
           <el-form :inline="true">
             <el-form-item label="所在地：">

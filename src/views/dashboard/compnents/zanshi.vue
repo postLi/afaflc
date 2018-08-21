@@ -402,7 +402,7 @@ export default {
                 data: ['订单数', '订单金额'],
                 orient: 'horizontal', // 'vertical'
                 x: 'right', // 'center' | 'left' | {number},
-                y: 'top', // 'center' | 'bottom' | {number}
+                y: '-5px', // 'center' | 'bottom' | {number}
                 backgroundColor: '#fff',
                 padding: 5,    // [5, 10, 15, 20]
                 itemGap: 5,

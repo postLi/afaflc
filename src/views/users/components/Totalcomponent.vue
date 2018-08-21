@@ -1,5 +1,5 @@
 <template>
-    <div style="height:100%;">
+    <div style="height:100%;" class="identicalStyle">
          <div class="shipper_searchinfo">
             <el-form inline >
                 <el-form-item label="所在地：">
@@ -9,7 +9,11 @@
                     <el-select v-model="formInline.driverStatus" placeholder="请选择" clearable>
                         <el-option
                             v-for="item in optionsService"
+<<<<<<< HEAD
+                            :key="item.id"
+=======
                             :key="item.code"
+>>>>>>> d1a420f50f7312bc84b0b09c556e462c5ee4f12c
                             :label="item.name"
                             :value="item.code"
                             :disabled="item.disabled"

@@ -47,13 +47,14 @@
                     </el-select>
                 </label>        
                 <el-button type="primary"  plain @click="getdata_search">查询</el-button>
+                <el-button type="info" plain >清空</el-button>
             </div>
             <div class="classify_info">
                 <div class="btns_box">
                     <el-button type="primary" plain icon="el-icon-news" @click="addClassfy">新增</el-button>
                     <el-button type="primary" plain icon="el-icon-edit" @click="handleEdit">修改</el-button>
                     <el-button type="primary" plain icon="el-icon-delete" @click="handleDelete">删除</el-button>
-                    <el-button type="primary" plain icon="el-icon-edit" @click="handleUseStates">启用/禁用</el-button>
+                    <el-button type="primary" plain icon="el-icon-bell" @click="handleUseStates">启用/禁用</el-button>
                 </div>
                 <div class="info_news">
                     <el-table
@@ -952,8 +953,8 @@ import '@/styles/dialog.scss'
             left:0;
             top:0;
             padding:15px 16px;
-            border-bottom:2px dashed #ccc;
-            height:70px;
+            // border-bottom:2px dashed #ccc;
+            // height:70px;
             width:100%;
             line-height: 35px;
             label{
@@ -1222,7 +1223,7 @@ import '@/styles/dialog.scss'
         }
         .classify_info{
             height:100%;
-            padding:90px 13px 18px;
+            padding:70px 13px 18px;
             .btns_box{
                 margin-bottom:10px;
                 .el-button{

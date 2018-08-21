@@ -1,5 +1,5 @@
 <template>
-    <div style="height:100%;">
+    <div style="height:100%;" class="identicalStyle">
         <div class="shipper_searchinfo" >
           <el-form :inline="true">
             <el-form-item label="所在地：">
@@ -50,7 +50,7 @@
 				:plain="true"
 				editType='add'
 				freeze = 'freeze'
-				btntype="primary"
+				btntype="warning"
 				icon="el-icon-news"
 				:params="selectRowData"
 				@getData="getDataList"
@@ -63,8 +63,8 @@
 				freeze = 'freeze'
 				:plain="true"
 				editType='edit'
-				btntype="primary"
-				icon="el-icon-news"
+				btntype="warning"
+				icon="el-icon-edit"
 				:params="selectRowData"
 				@getData="getDataList"
 				>
@@ -75,7 +75,7 @@
 				btntitle="移入黑名单"
 				:plain="true"
 				editType='add'
-				btntype="primary"
+				btntype="info"
 				icon="el-icon-news"
 				:params="selectRowData"
 				@getData="getDataList"
@@ -86,7 +86,7 @@
 				btntitle="移出黑名单"
 				:plain="true"
 				editType='edit'
-				btntype="primary"
+				btntype="info"
 				icon="el-icon-news"
 				:params="selectRowData"
 				@getData="getDataList"
@@ -98,8 +98,8 @@
 				freeze = 'freeze'
 				:plain="true"
 				editType='remove'
-				btntype="primary"
-				icon="el-icon-news"
+				btntype="success"
+				icon="el-icon-success"
 				:params="selectRowData"
 				@getData="getDataList"
 				>
@@ -116,11 +116,11 @@
                 @current-change="handleCurrentChangeRow"
 				tooltip-effect="dark"
 				style="width: 100%">
-                <!-- <el-table-column label="" width="65">
+                <el-table-column label="" width="65">
                      <template slot-scope="scope">
-                        <el-radio class="textRadio" @change.native="getCurrentRow(scope.$index)" :label="scope.$index" v-model="radio" class="textRadio">&nbsp;</el-radio>
+                        <el-radio class="textRadio" @change.native="getCurrentRow(scope.$index,scope.row)" :label="scope.$index" v-model="templateRadio">&nbsp;</el-radio>
                     </template>
-                </el-table-column> -->
+                </el-table-column>
 				<el-table-column label="序号" width="80px">
                     <template slot-scope="scope">
                         {{ (page - 1)*pagesize + scope.$index + 1 }}
@@ -132,30 +132,20 @@
                     </template>
 				</el-table-column>
 				<el-table-column prop="companyName" label="公司名称">
-					<!-- <template slot-scope="scope">
-					{{scope.row.companyName ?  scope.row.companyName : '个人业务'}}
-					</template> -->
+					
 				</el-table-column>
 				<el-table-column prop="contacts" label="联系人">
 				</el-table-column>
 				<el-table-column prop="registerOrigin" label="注册来源">
 				</el-table-column>
 				<el-table-column prop="shipperStatusName" label="认证状态">
-					<!-- <template slot-scope="scope">
-					{{getAttestationStatus(scope.row.shipperStatus)}}
-					</template> -->
+					
 				</el-table-column>
 				<el-table-column prop="accountStatusName" label="账户状态">
-					<!-- <template slot-scope="scope">
-					{{getAccountStatus(scope.row.accountStatus)}}
-					</template> -->
 				</el-table-column>
 				<el-table-column prop="belongCityName" label="所在地">
 				</el-table-column>
 				<el-table-column prop="shipperTypeName" label="货主类型">
-					<!-- <template slot-scope="scope">
-					{{scope.row.shipperType==='AF0010202'? '企业货主':'普通货主'}}
-					</template> -->
 				</el-table-column>
 				<el-table-column prop="registerTime" label="注册日期">
 				</el-table-column>
@@ -197,8 +187,7 @@ export default {
 	},
   data(){
       return{
-           radio: 1,
-          templateRadio:'',
+        templateRadio:'',
         ul:true,
 		freeze:true,//是否冻结
 		options:[],
@@ -274,18 +263,19 @@ export default {
         })
     },
     methods:{
-        getTemplateRow(index,row){       
-            console.log('this.templateRadio',this.templateRadio)                          //获取选中数据
-    this.templateSelection = row;
-},
-	changeList(){
-		eventBus.$emit('changeList')
-	},
-    // 判断选中与否
-    handleCurrentChangeRow(val){ 
-        console.log('选中内容',val)
-        this.selectRowData = val;
-    },
+        getCurrentRow(index,row){       
+            this.selectRowData = row;
+            this.templateRadio = index;
+            console.log('选中内容',row)
+        },
+        changeList(){
+            eventBus.$emit('changeList')
+        },
+        // 判断选中与否
+        handleCurrentChangeRow(val){ 
+            // console.log('选中内容',val)
+            this.selectRowData = val;
+        },
     
     //刷新页面
     firstblood(){

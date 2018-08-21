@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="identicalStyle">
         <div class="shipper_searchinfo">
           <el-form :inline="true">
             <el-form-item label="所在地：">
@@ -28,10 +28,17 @@
 			stripe
 			border
             highlight-current-row
-            @current-change="handleCurrentChangeRow"
 			tooltip-effect="dark"
 			style="width: 100%">
-			<el-table-column type='index' label="序号" width="80px">
+			<el-table-column label="" width="65">
+                <template slot-scope="scope">
+                    <el-radio class="textRadio" @change.native="getCurrentRow(scope.$index,scope.row)" :label="scope.$index" v-model="templateRadio">&nbsp;</el-radio>
+                </template>
+            </el-table-column>
+			<el-table-column label="序号" width="80px">
+                <template slot-scope="scope">
+                    {{ (page - 1)*pagesize + scope.$index + 1 }}
+                </template>
 			</el-table-column>  
 			<el-table-column label="公司名称">
                 <template slot-scope="scope">
@@ -212,7 +219,7 @@ export default {
             }
 		}
 		return{
-            btnText: 'please select',
+            templateRadio:'',
             defaultImage:'',
             defaultImg:'/static/test.jpg',//默认第一张图片的url
             demoData:"企业货主",//根据项目要求写死
@@ -260,8 +267,10 @@ export default {
         })
     },
     methods:{
-        regionChange(d) {
-            this.btnText = (!d.province&&!d.city&&!d.area&&!d.town)?'please select': `${this.getValue(d.province)}${'/'+this.getValue(d.city)}${this.getValue(d.area)}${this.getValue(d.town)}`.trim();
+        getCurrentRow(index,row){       
+            this.selectRowData = row;
+            this.templateRadio = index;
+            console.log('选中内容',row)
         },
         getValue(obj){
             return obj?obj.value:'';

@@ -8,11 +8,11 @@ export default {
   name: '财务管理',
   icon: 'caiwu',
   children: [
-        { path: '/finance/transactionRecharge', icon: 'caiwu', hidden: false, name: '充值明细', component: _import('finance/transactionRecharge/index'), meta: { title: '充值明细', noCache: true }},
-        { path: '/finance/transactionDetail', icon: 'caiwu', hidden: false, name: '交易明细', component: _import('finance/transactionDetail/index'), meta: { title: '交易明细', noCache: true }},
+        { path: '/finance/transactionRecharge', icon: 'czmx', hidden: false, name: '充值明细', component: _import('finance/transactionRecharge/index'), meta: { title: '充值明细', noCache: true }},
+        { path: '/finance/transactionDetail', icon: 'jymx', hidden: false, name: '交易明细', component: _import('finance/transactionDetail/index'), meta: { title: '交易明细', noCache: true }},
         { 
             path: '/finance/transactionCash', 
-            icon: 'caiwu', 
+            icon: 'txgl', 
             hidden: false, 
             name: '提现管理', 
             component: _import('finance/transactionCash/index'), 
