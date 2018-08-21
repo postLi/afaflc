@@ -91,8 +91,7 @@
 </template>
 <script>
 import { data_Commission ,data_CarList,data_MaidLevel,data_ServerClassList} from '@/api/server/areaPrice.js'
-import { data_get_orderFromsame_list,data_Del_orderFromsame,data_Able_orderFromsame,} from '@/api/marketing/carmarkting/orderFrom.js'
-import { data_get_ownerFromsame_list} from '@/api/marketing/carmarkting/carOwner.js'
+import { data_get_ownerFromsame_list,data_get_ownerFromsame2_Id,data_Able_ownerFromsame,data_Del_ownerFromsame} from '@/api/marketing/carmarkting/carOwner.js'
 import vregion from '@/components/vregion/Region'
 import newOwner from '../../components/newOwner.vue'
 import modOwner from '../../components/modOwner.vue'
@@ -183,7 +182,8 @@ export default {
           },
          // 选择行
          clickDetails(i){
-           this.selectRowData = i
+           this.selectRowData = i;
+
            console.log('selectRowData',this.selectRowData)
          },
         //每页显示数据量变更
@@ -232,7 +232,7 @@ export default {
                         return
                 }else{
                     this.selectId.push(this.selectRowData.id)
-                    
+                    console.log('fdf',this.selectRowData.id);
                   data_Able_ownerFromsame(this.selectId).then(res=>{
                      this.selectId.splice(0,1);
                      if(this.selectRowData.usingStatus==0)
@@ -290,7 +290,6 @@ export default {
     left: 0;
     top: 0;
     padding: 15px 16px;
-    border-bottom: 2px dashed #ccc;
     height: 70px;
     width: 100%;
     line-height: 35px;
@@ -309,7 +308,7 @@ export default {
 }
 .classify_cityinfo{
     height: 100%;
-    padding: 90px 15px 0 15px;
+    padding: 70px 15px 0 15px;
     .commoncss{
       display: inline-block!important;
     }

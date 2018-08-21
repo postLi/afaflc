@@ -234,9 +234,13 @@ export default {
 
     //    区域奖励上限校验
         const rewardMaxValidator = (rule, val, cb) => {
+            var reg= /[^\d.]/g
             if(!val){
             cb(new Error('区域奖励上限不能为空'))
             }
+            else if(reg.test(val)){
+            cb(new Error('请输入正整数'))
+            }            
             else{
                 cb()
             }        
@@ -573,6 +577,7 @@ export default {
             height: 34px;
         }
         th{
+            text-align:center;
             background: #EAF0FF;
             border-top:1px solid #d0d7e5;
             border-right:1px solid #d0d7e5;

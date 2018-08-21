@@ -456,6 +456,7 @@ export default {
         }
         th{
             background: #EAF0FF;
+            text-align:center;
             border-top:1px solid #d0d7e5;
             border-right:1px solid #d0d7e5;
         }

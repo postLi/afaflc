@@ -77,14 +77,7 @@ export function data_get_onesource_update(data) {
 }      
 
 
-// export function data_get_onesource_Distance(data1,data2)
-// {
-//   return fetch({
-//     url: '/'+baseurl_one+'aflcsmservice_1/sm/aflcVestUnisource/v1/getVestUnisourceAddressDistance',
-//     method: 'post',
-//     data:{
-//       "endAddressCoordinate": data2,
-//       "startAddressCoordinate": data1,
-//     }
-//   })
-// }
+//  新增马甲单源地址表
+export function data_get_onesource_addDetailAddress(data) {
+  return fetch.post('/' + baseurl_one + '/sm/aflcVestUnisource/v1/addDetailAddress', data)
+}      
