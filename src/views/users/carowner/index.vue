@@ -1,6 +1,6 @@
 <template>
 	<div class="carOwner">
-		<el-tabs v-model="CarActiveName" type="border-card" @tab-click="handleClick">
+		<el-tabs v-model="CarActiveName" type="card" @tab-click="handleClick">
 			<el-tab-pane label="全部" name="first">
 				<Total :isvisible="CarActiveName === 'first'"></Total>   
 			</el-tab-pane>
@@ -96,7 +96,7 @@
             left:0;
             top:0;
             padding:15px 16px;
-            border-bottom:2px dashed #ccc;
+            // border-bottom:2px dashed #ccc;
             height:70px;
             width:100%;
             line-height: 35px;
@@ -117,7 +117,7 @@
         }
         .classify_info{
             height:100%;
-            padding:90px 13px 0 0;
+            padding:70px 13px 0 0;
             .btns_box{
                 margin-bottom:10px;
                 .el-button{

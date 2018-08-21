@@ -812,8 +812,8 @@ import '@/styles/dialog.scss'
             left:0;
             top:0;
             padding:15px 16px;
-            border-bottom:2px dashed #ccc;
-            height:70px;
+            // border-bottom:2px dashed #ccc;
+            // height:70px;
             width:100%;
             line-height: 35px;
             label{
@@ -946,7 +946,7 @@ import '@/styles/dialog.scss'
         }
         .classify_info{
             height:100%;
-            padding:90px 13px 18px;
+            padding:70px 13px 18px;
             .btns_box{
                 margin-bottom:10px;
                 .el-button{

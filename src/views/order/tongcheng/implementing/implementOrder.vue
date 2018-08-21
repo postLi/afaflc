@@ -3,8 +3,8 @@
             <searchInfo @change="getSearchParam"></searchInfo>
             <div class="classify_info">
                 <div class="btns_box">
-                    <el-button type="primary" @click="handleSearch('cancel')" size="mini">取消订单</el-button>
-                    <el-button type="primary" @click="handleSearch('export')" size="mini">导出Exce</el-button>
+                    <el-button type="primary" plain @click="handleSearch('cancel')" size="mini">取消订单</el-button>
+                    <el-button type="primary" plain @click="handleSearch('export')" size="mini">导出Exce</el-button>
                 </div>
                 <div class="info_news" style="height:85%;">
                     <el-table

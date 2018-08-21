@@ -10,7 +10,7 @@ export default {
   noDropdown: true,
   children: [
     {
-        path: '/sm/xiaohuoche', icon: 'QQ', name: '小货车', component: _import('sm/xiaohuoche/index'), meta: { role: ['admin'], title: '小货车',stitle: '小货车',  noCache: true },
+        path: '/sm/xiaohuoche', icon: 'ID', name: '小货车', component: _import('sm/xiaohuoche/index'), meta: { role: ['admin'], title: '小货车',stitle: '小货车',  noCache: true },
         children:[
             {
                 path: '/sm/xiaohuoche/areaPrice', 

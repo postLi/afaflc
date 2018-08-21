@@ -1,5 +1,5 @@
 <template>
-    <div style="height:100%;">
+    <div style="height:100%;" class="identicalStyle">
         <div class="shipper_searchinfo" >
           <el-form :inline="true">
             <el-form-item label="所在地：">
@@ -50,7 +50,7 @@
 				:plain="true"
 				editType='add'
 				freeze = 'freeze'
-				btntype="primary"
+				btntype="warning"
 				icon="el-icon-news"
 				:params="selectRowData"
 				@getData="getDataList"
@@ -63,8 +63,8 @@
 				freeze = 'freeze'
 				:plain="true"
 				editType='edit'
-				btntype="primary"
-				icon="el-icon-news"
+				btntype="warning"
+				icon="el-icon-edit"
 				:params="selectRowData"
 				@getData="getDataList"
 				>
@@ -75,7 +75,7 @@
 				btntitle="移入黑名单"
 				:plain="true"
 				editType='add'
-				btntype="primary"
+				btntype="info"
 				icon="el-icon-news"
 				:params="selectRowData"
 				@getData="getDataList"
@@ -86,7 +86,7 @@
 				btntitle="移出黑名单"
 				:plain="true"
 				editType='edit'
-				btntype="primary"
+				btntype="info"
 				icon="el-icon-news"
 				:params="selectRowData"
 				@getData="getDataList"
@@ -98,8 +98,8 @@
 				freeze = 'freeze'
 				:plain="true"
 				editType='remove'
-				btntype="primary"
-				icon="el-icon-news"
+				btntype="success"
+				icon="el-icon-success"
 				:params="selectRowData"
 				@getData="getDataList"
 				>

@@ -91,8 +91,10 @@ export default {
       return true
     },
     toggle (event) {
-      const el = closest(event.target, 'li')
-      el.classList.toggle('isOpen')
+      const el = closest(event.target, 'li');
+      el.classList.toggle('isOpen');
+    //   el.siblings('li').classList.removeCLass('isOpen');
+      console.log(event)
     },
     setSubNav(type, event){
       let parentEle = document.querySelector('.sidebar-menu')

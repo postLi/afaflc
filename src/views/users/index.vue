@@ -1,6 +1,6 @@
 <template>
   <div class="shipper">
-    <el-tabs v-model="shipperName" type="border-card" @tab-click="handleClick" >
+    <el-tabs v-model="shipperName" type="card" @tab-click="handleClick" >
         <!-- 全部 -->
         <!-- <el-badge :value="12" class="item"> -->
             <el-tab-pane label="全部" name="first">
@@ -137,7 +137,8 @@
                     .el-input{
                         .el-input__inner{
                             color:#3e9ff1;
-                        
+                            height:30px;
+                            line-height: 30px;
                         }
                     }
                     .el-button{
@@ -192,6 +193,7 @@
                         }
                     }
                     .el-form-item{
+                        margin-bottom: 0px; 
                         .el-form-item__content{
                             .el-input{
                                 width: 250px;
