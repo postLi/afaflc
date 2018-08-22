@@ -134,7 +134,6 @@
                                 placeholder="选择日期">
                                 </el-date-picker>
                      </span>
-
                                 </div>
              <div class="ht_table_td table_th11">
                          <el-select v-model="formAllData.aflcCouponList[keys].serivceCode" clearable placeholder="请选择" >
@@ -164,15 +163,15 @@
             </vregion>
               </div>
              <div class="ht_table_td table_th14">
-                 <el-select v-model="formAllData.aflcCouponList[keys].ifvouchersuperposition" clearable placeholder="请选择" >
-                          <el-option
-                             v-for="item in vouchersuperposition"
-                              :key="item.code"
-                             :label="item.name"
-                             :value="item.code"
-                             :disabled="item.disabled">
+                     <el-select v-model="formAllData.aflcCouponList[keys].ifvouchersuperposition" clearable placeholder="请选择" >
+                         <el-option
+                              v-for="item in vouchersuperposition"
+                               :key="item.code"
+                               :label="item.name"
+                               :value="item.code"
+                               :disabled="item.disabled">
                          </el-option>
-                 </el-select>
+                     </el-select>
              </div>               
             </div>
             </div>
@@ -191,7 +190,7 @@
 </template>
 <script>
 import { data_Commission ,data_CarList,data_MaidLevel,data_ServerClassList} from '@/api/server/areaPrice.js'
-import {data_get_couponActive_list,data_get_couponActive_create,data_couponActive,data_couponActiveTime,data_get_couponActive_Id,data_get_couponActive2_Id,data_get_couponActive_update} from '@/api/marketing/shippermarkting/couponActive.js'
+import {data_get_couponActive_list,data_get_couponActive_create,data_couponActive,data_couponActiveTime,data_get_couponActive_Id,data_get_couponActive2_Id,data_get_couponActive_update,data_get_aflcCoupon_add} from '@/api/marketing/shippermarkting/couponActive.js'
 import Upload from '@/components/Upload/singleImage'
 import vregion from '@/components/vregion/Region'
 import { eventBus } from '@/eventBus'
@@ -296,7 +295,7 @@ export default {
           name:'全部'
         }
         ],
-        serviceCardList:[
+         serviceCardList:[
         {    
           code:null,
           name:'全部'
@@ -304,11 +303,11 @@ export default {
         ],
         vouchersuperposition:[
         {    
-          code:0,
+          code:'0',
           name:'不能'
         },
         {
-          code:1,
+          code:'1',
           name:'能'
         }
         ],
@@ -398,7 +397,7 @@ export default {
                 })
           },
     changeInput:function(i){
-       this.inputKey = i;
+          this.inputKey = i;
     },
     openDialog:function(){
         if(!this.params.id){
@@ -407,9 +406,11 @@ export default {
         }
         else{
       data_get_couponActive_Id(this.params.id).then((res)=>{
+          
           let now1 = new Date(res.data.startTime);
           let now2 = new Date(res.data.endTime);
           let Ctime = [];
+          this.formAllData.id = this.params.id
           this.formAllData.activityName= res.data.activityName
           this.formAllData.activityDes= res.data.activityDes
           this.formAllData.areaCode= res.data.areaCode
@@ -418,7 +419,12 @@ export default {
           this.formAllData.createTime = Ctime
       })
       data_get_couponActive2_Id(this.params.id).then((res)=>{
+          console.log('fddddddd',res )
           this.formAllData.aflcCouponList = res.data
+          for(var i= 0;i<this.formAllData.aflcCouponList.length;i++){
+              this.formAllData.aflcCouponList[i].startTime  = new Date(this.formAllData.aflcCouponList[i].startTime).getTime()
+              this.formAllData.aflcCouponList[i].endTime  = new Date(this.formAllData.aflcCouponList[i].endTime).getTime()
+          }
       })
       this.dialogFormVisible_add = true;
         }
@@ -499,7 +505,6 @@ export default {
                      this.$message.warning('满减条件/最高抵扣仅能输入正整数');
                      return false
                     }
-                   
                  }
                  
     },
@@ -536,8 +541,6 @@ export default {
               }
          })
         }
-            
-
      }       
   },
   mounted(){

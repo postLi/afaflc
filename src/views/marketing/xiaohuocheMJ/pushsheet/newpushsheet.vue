@@ -59,6 +59,7 @@
                         end-placeholder="结束时间"
                         placeholder="选择时间范围"
                         value-format="timestamp"
+                        :default-time="['00:00:00', '23:59:59']"
                         @change='cTime'
                         >
                     </el-time-picker>

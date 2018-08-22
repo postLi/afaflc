@@ -43,6 +43,13 @@ export function data_Able_couponActive(ids) {
        }    
 
 
+//自动化化配置
+export function data_automationActive() {
+  return fetch({
+    url: '/'+baseurl_two+'/sysDict/getSysDictByCodeGet/AF0461',
+    method: 'get'
+  })
+}
 
 //获取优惠券类型
 export function data_couponActive() {
@@ -60,10 +67,20 @@ export function data_couponActiveTime() {
   })
 }
 
+//获取卷码状态类型
+export function data_couponStatus() {
+  return fetch({
+    url: '/'+baseurl_two+'/sysDict/getSysDictByCodeGet/AF0464',
+    method: 'get'
+  })
+}
+
+
+
  //activity_id获取优惠卷活动列表
  export function data_get_couponActive2_Id(activity_id) {
   return fetch({
-    url: '/'+baseurl_one+'/usercenter/aflcCoupon/v1/query/' + activity_id,
+    url: '/'+baseurl+'/usercenter/aflcCoupon/v1/query/' + activity_id,
     method: 'get',
   })
 }
@@ -92,5 +109,56 @@ export function data_get_aflcCouponUse_list(page,pagesize,data) {
 
 //  修改优惠卷领用明细列表
 export function data_get_couponActive_update(data) {
-  return fetch.put('/' + baseurl + '/usercenter/aflcCoupon/v1/update', data)
+  return fetch.put('/' + baseurl + '/usercenter/aflcCouponActivity/v1/update', data)
 }      
+
+//  新增优惠卷
+export function data_get_aflcCoupon_add(data) {
+  return fetch({
+    url: '/'+baseurl+'/usercenter/aflcCoupon/v1/add',
+    method: 'post',
+    data:{
+      "activityId": data
+    }
+  })
+}      
+
+//  删除优惠卷
+export function data_get_aflcCoupon_delete(id) {
+    
+  return fetch({
+        url: '/'+baseurl+'/usercenter/aflcCoupon/v1/delete/'+id,
+        method: 'delete',
+      })
+    }
+
+    
+//获取优惠卷列表
+export function data_get_aflcCoupon_list(page,pagesize,data) {
+  return fetch({
+    url: '/'+baseurl+'/usercenter/aflcCoupon/v1/list',
+    method: 'post',
+    data:{
+      "currentPage": page,
+      "pageSize": pagesize,
+      "vo": data
+    }
+  })
+}
+
+
+// 生成优惠卷
+ export function data_get_produceCoupon(activity_id,num) {
+  return fetch({
+    url: '/'+baseurl+'/usercenter/aflcCouponUse/v1/produceCoupon/?id=' + activity_id+'&num='+num,
+    method: 'get',
+  })
+}
+
+// 发放优惠卷
+export function data_get_grantCoupon(activity_id,mobile) {
+  return fetch({
+    url: '/'+baseurl+'/usercenter/aflcCouponUse/v1/grantCoupon/?id=' + activity_id+'&mobile='+mobile,
+    method: 'get',
+  })
+}

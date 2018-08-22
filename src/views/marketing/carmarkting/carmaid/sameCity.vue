@@ -63,7 +63,7 @@
             		</div>
 
             <div class="info_city">    
-               <el-table style="width: 100%" stripe border height="100%" @row-click="clickDetails" highlight-current-row :data="tableDataAll"  tooltip-effect="dark">
+            <el-table style="width: 100%" stripe border height="100%" @row-click="clickDetails" highlight-current-row :data="tableDataAll"  tooltip-effect="dark">
             <el-table-column  label="序号" width="80px" type="index">
             </el-table-column>
             <el-table-column  label="所属区域" prop="areaCode2">
@@ -87,7 +87,7 @@
             </el-table-column>          
             </el-table> 
         	</div> 
-                            <!-- 页码 -->
+         <!-- 页码 -->
          <div class="info_tab_footer">共计:{{ dataTotal }} <div class="show_pager"> <Pager :total="dataTotal" @change="handlePageChange"  :sizes="sizes"/></div> </div> 
           </div>
       </div>

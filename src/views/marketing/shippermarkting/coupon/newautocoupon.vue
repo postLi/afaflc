@@ -4,7 +4,7 @@
       <div class="newcoupon1">
       <el-dialog  :visible="dialogFormVisible_add" :before-close="change" :title="btntitle">
         <el-form :model="formAllData" ref="formAllData" :rules="rulesForm">
-          <el-row >
+          <el-row v-if="editType=='one'">
             <el-col>
                <el-form-item  label="触发条件：" :label-width="formLabelWidth" prop="activityType"> 
                     <el-radio-group v-model="formAllData.activityType" size="small">
@@ -232,7 +232,7 @@ export default {
       type: Boolean,
       default: false
     },
-    /*add新增，edit编辑，view查看*/
+    /*one自动，two手动*/
     editType: {
       type: String,
     }
@@ -401,6 +401,7 @@ export default {
        this.inputKey = i;
     },
     openDialog:function(){
+        console.log('types',this.editType)
         this.dialogFormVisible_add = true;
    },
     change:function(){
@@ -490,7 +491,10 @@ export default {
             else{
             this.$refs['formAllData'].validate(valid=>{
               if(valid){
-              delete this.formAllData["createTime"];  
+              delete this.formAllData["createTime"];
+              if(this.editType=='two'){
+                  this.formAllData.activityType = 'AF046101';
+              } 
               data_get_couponActive_create(this.formAllData).then((res)=>{
               this.dialogFormVisible_add = false;
               this.$refs['formAllData'].resetFields();
@@ -614,15 +618,15 @@ export default {
         // .table_th13{width: 68px}
         // .table_th14{width: 124px}
         .table_th1{width: 5%;}
-        .table_th2{width: 6%;}
+        .table_th2{width: 10%;}
         .table_th3{width: 6%;}
-        .table_th4{width: 5%;}
+        .table_th4{width: 6%;}
         .table_th5{width: 10%;}
         .table_th6{width: 4%;}
         .table_th7{width: 6%;}
         .table_th8{width: 6%;}
-        .table_th9{width: 7%;}
-        .table_th10{width: 7%;}
+        .table_th9{width: 11%;}
+        .table_th10{width: 11%;}
         .table_th11{width: 7%;}
         .table_th12{width: 7%;}
         .table_th13{width: 9%}

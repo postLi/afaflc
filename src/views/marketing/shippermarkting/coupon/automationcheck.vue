@@ -8,12 +8,12 @@
             <el-tab-pane label="活动配置" name="first">
                 <div class="automationcheckTab">
         <el-form :model="formAllData" ref="formAllData">
-          <el-row >
-            <el-col>
+          <el-row v-if="editType=='one'">
+            <el-col >
                <el-form-item  label="触发条件：" :label-width="formLabelWidth"> 
                     <el-radio-group v-model="formAllData.activityType" size="small" disabled>
-                       <el-radio label="新用户注册" border>新用户注册</el-radio>
-                       <el-radio label="认证通过" border>认证通过</el-radio>
+                       <el-radio label="AF046102" border>新用户注册</el-radio>
+                       <el-radio label="AF046103" border>认证通过</el-radio>
                     </el-radio-group>
                </el-form-item>  
             </el-col>
@@ -91,27 +91,86 @@
              <div class="ht_table_td1"></div>
              <div class="ht_table_td table_th1"><el-input v-model="formAllData.aflcCouponList[keys].couponNum" disabled></el-input></div>
              <div class="ht_table_td table_th2"><el-input v-model="formAllData.aflcCouponList[keys].couponName" disabled></el-input></div> 
-             <div class="ht_table_td table_th3"><el-input v-model="formAllData.aflcCouponList[keys].couponType" disabled></el-input></div>
+             <div class="ht_table_td table_th3">
+                     <el-select v-model="formAllData.aflcCouponList[keys].couponType" clearable placeholder="" disabled>
+                         <el-option
+                              v-for="item in couponList"
+                               :key="item.code"
+                               :label="item.name"
+                               :value="item.code"
+                               :disabled="item.disabled">
+                         </el-option>
+                     </el-select>
+             </div>
              <div class="ht_table_td table_th4"><el-input v-model="formAllData.aflcCouponList[keys].remissionDiscount" disabled></el-input></div> 
              <div class="ht_table_td table_th5"><el-input v-model.number="formAllData.aflcCouponList[keys].conditionDeduction" disabled></el-input></div>
              <div class="ht_table_td table_th8"><el-input placeholder="在线支付" disabled></el-input></div>
-             <div class="ht_table_td table_th7"><el-input v-model="formAllData.aflcCouponList[keys].timeType" disabled></el-input></div>     
+             <div class="ht_table_td table_th7">
+                      <el-select v-model="formAllData.aflcCouponList[keys].timeType" clearable placeholder="请选择" @change='TimeType(keys)' disabled>
+                         <el-option
+                              v-for="item in couponTimeList"
+                               :key="item.code"
+                               :label="item.name"
+                               :value="item.code"
+                               :disabled="item.disabled">
+                         </el-option>
+                     </el-select>
+                 </div>     
              <div class="ht_table_td table_th9">
-               <el-input v-model="formAllData.aflcCouponList[keys].startTime" disabled></el-input>
-                                 </div> 
+                 <span v-if="formAllData.aflcCouponList[keys].timeType =='AF046301'">/</span>
+                     <span v-else>
+                         <el-date-picker v-model="formAllData.aflcCouponList[keys].startTime"
+                                type="date"
+                                value-format="timestamp"
+                                placeholder=""
+                                disabled
+                                >
+                         </el-date-picker>
+                     </span>
+                   </div> 
              <div class="ht_table_td table_th10">
-               <el-input v-model="formAllData.aflcCouponList[keys].endTime" disabled></el-input>
+                     <span v-if="formAllData.aflcCouponList[keys].timeType =='AF046301'">
+                         <el-input v-model="formAllData.aflcCouponList[keys].overTime" placeholder="过期天数" max="3" disabled></el-input>
+                     </span>
+                     <span v-else>
+                               <el-date-picker
+                                v-model="formAllData.aflcCouponList[keys].endTime"
+                                type="date"
+                                value-format="timestamp"
+                                placeholder=""
+                                disabled
+                                >
+                                </el-date-picker>
+                     </span>
                                 </div>
              <div class="ht_table_td table_th11">
-               <el-input v-model="formAllData.aflcCouponList[keys].serivceCode" disabled></el-input>
+            <el-select v-model="formAllData.aflcCouponList[keys].serivceCode" clearable placeholder=""disabled >
+                          <el-option
+                              v-for="item in serviceCardList"
+                               :key="item.code"
+                               :label="item.name"
+                               :value="item.code"
+                               :disabled="item.disabled">
+                         </el-option>
+                 </el-select>
             </div>
              <div class="ht_table_td table_th12">
-               <el-input v-model="formAllData.aflcCouponList[keys].carType" disabled></el-input>
+                <el-select v-model="formAllData.aflcCouponList[keys].carType" clearable placeholder="" disabled>
+                          <el-option
+                             v-for="item in optionsCar"
+                              :key="item.code"
+                             :label="item.name"
+                             :value="item.code"
+                             :disabled="item.disabled">
+                         </el-option>
+                 </el-select>
                  </div>  
              <div class="ht_table_td table_th13">
-                <el-input v-model="formAllData.aflcCouponList[keys].areaCode" placeholder="请选择出发地" disabled></el-input>
+                <el-input v-model="formAllData.aflcCouponList[keys].areaCode" placeholder="" disabled></el-input>
               </div>
-             <div class="ht_table_td table_th14"><el-input v-model="formAllData.aflcCouponList[keys].ifvouchersuperposition" disabled></el-input></div>                     
+             <div class="ht_table_td table_th14">
+                  <el-input v-model="formAllData.aflcCouponList[keys].ifvouchersuperposition" placeholder="" disabled></el-input>
+                 </div>                     
             </div>
             </div>
 
@@ -134,13 +193,14 @@
                <el-form-item  label="手机号码：" :label-width="formLabelWidth">
                    <el-input v-model="searchData.mobile"></el-input>
                </el-form-item>
-                 <el-form-item label="活动时效："  :label-width="formLabelWidth">
+                 <el-form-item label="派发时间："  :label-width="formLabelWidth">
                     <el-date-picker
                         is-range
                         type="date"
                         v-model="searchData.grantTime"
                         placeholder="派发时间"
-                        value-format="timestamp"
+                        format="yyyy-MM-dd"
+                        value-format="yyyy-MM-dd HH:mm:ss"
                         >
                     </el-date-picker>
                   </el-form-item> 
@@ -148,13 +208,13 @@
                    <el-input v-model="searchData.couponStatus"></el-input>
                </el-form-item>  
           <el-form-item>       
-          <el-button type="primary"  plain >查询</el-button> 
+          <el-button type="primary"  plain   @click="getData_query">查询</el-button> 
           </el-form-item> 
                 </el-form>  
             </el-col>
             </el-row>
             <div class="tableDataAllBox">
-            <el-table style="width: 100%" stripe border height="80%"  :data="tableDataAll">
+            <el-table style="width: 100%"  border height="80%"  :data="tableDataAll">
             <el-table-column  label="序号" width="80px" type="index">
             </el-table-column>
             <el-table-column  label="优惠券名称" prop="couponName">
@@ -188,7 +248,7 @@
 </template>
 <script>
 import { data_Commission ,data_CarList,data_MaidLevel,data_ServerClassList} from '@/api/server/areaPrice.js'
-import {data_get_couponActive2_Id,data_get_couponActive_Id,data_get_aflcCouponUse_list} from '@/api/marketing/shippermarkting/couponActive.js'
+import {data_get_couponActive2_Id,data_get_couponActive_Id,data_get_aflcCouponUse_list,data_couponStatus,data_couponActive,data_couponActiveTime} from '@/api/marketing/shippermarkting/couponActive.js'
 import Upload from '@/components/Upload/singleImage'
 import vregion from '@/components/vregion/Region'
 import { eventBus } from '@/eventBus'
@@ -229,7 +289,7 @@ export default {
       type: Boolean,
       default: false
     },
-    /*add新增，edit编辑，view查看*/
+    /*one自动，two手动*/
     editType: {
       type: String,
     }
@@ -277,6 +337,18 @@ export default {
           name:'全部'
         }
         ],
+        vouchersuperposition:[
+        {    
+          code:0,
+          name:'不能'
+        },
+        {
+          code:1,
+          name:'能'
+        }
+        ],
+        couponList:[],
+        couponTimeList:[],   
         dialogFormVisible_add:false,
         formLabelWidth:'120px',
         formLabelWidth2:'80px',
@@ -322,6 +394,10 @@ export default {
                 this.formAllData.startTime = i[0]
                 this.formAllData.endTime = i[1]
       },  
+    getData_query(){
+        this.firstblood();
+    },    
+    
    openDialog(){
        this.dialogFormVisible_add = true;
       data_get_couponActive_Id(this.templateItem.id).then((res)=>{
@@ -336,7 +412,17 @@ export default {
           this.createTime = Ctime
       })
       data_get_couponActive2_Id(this.templateItem.id).then((res)=>{
-          this.formAllData.aflcCouponList = res.data
+              this.formAllData.aflcCouponList = res.data
+        for(var i= 0;i<this.formAllData.aflcCouponList.length;i++){
+              this.formAllData.aflcCouponList[i].startTime  = new Date(this.formAllData.aflcCouponList[i].startTime).getTime()
+              this.formAllData.aflcCouponList[i].endTime  = new Date(this.formAllData.aflcCouponList[i].endTime).getTime()
+              if(this.formAllData.aflcCouponList[i].ifvouchersuperposition=='0'){
+                  this.formAllData.aflcCouponList[i].ifvouchersuperposition='不能'
+              }
+              else{
+                   this.formAllData.aflcCouponList[i].ifvouchersuperposition='能'
+              }
+          }
       })
      this.firstblood();
    },
@@ -358,12 +444,49 @@ export default {
                 this.page = obj.pageNum
                 this.pagesize = obj.pageSize
                 this.firstblood();
-        },            
-            },     
-     mounted(){
-                eventBus.$on('changeDia', () => {
-                this.dialogFormVisible_add = false;
-            })
+        },          
+    // 卷码状态    
+    getMoreInformation(){
+                data_CarList().then(res=>{
+                    // console.log(res.data)
+                    res.data.map((item)=>{
+                        this.optionsCar.push(item);
+                    })
+                    })
+                data_MaidLevel().then(res=>{
+                      res.data.map((item)=>{
+                        this.MaidLevel.push(item);
+                    })
+                }).catch(res=>{
+                    console.log(res)
+                });    
+                data_ServerClassList().then(res=>{
+                      res.data.map((item)=>{
+                       this.serviceCardList.push(item);
+                    })     
+                }).catch(res=>{
+                    console.log(res)
+                });            
+                data_couponActive().then((res)=>{
+                     res.data.map((item)=>{
+                       this.couponList.push(item);
+                    })   
+                })
+                 data_couponActiveTime().then((res)=>{
+                     res.data.map((item)=>{
+                       this.couponTimeList.push(item);
+                    })   
+                })        
+                data_couponStatus().then(res=>{
+                // console.log('卷码状态',res)
+                })
+    },   
+   },     
+   mounted(){
+    this.getMoreInformation();
+    eventBus.$on('changeDia', () => {
+    this.dialogFormVisible_add = false;
+    })
     }
     }
 </script>
@@ -478,15 +601,15 @@ export default {
             border-bottom:1px solid #d0d7e5;
         }
         .table_th1{width: 5%;}
-        .table_th2{width: 6%;}
+        .table_th2{width: 10%;}
         .table_th3{width: 6%;}
-        .table_th4{width: 5%;}
+        .table_th4{width: 6%;}
         .table_th5{width: 10%;}
         .table_th6{width: 4%;}
         .table_th7{width: 6%;}
         .table_th8{width: 6%;}
-        .table_th9{width: 7%;}
-        .table_th10{width: 7%;}
+        .table_th9{width: 11%;}
+        .table_th10{width: 11%;}
         .table_th11{width: 7%;}
         .table_th12{width: 7%;}
         .table_th13{width: 9%}
@@ -546,12 +669,20 @@ export default {
         .dialog-footer{
             padding:10px;
         }
+        .el-input__inner{
+            height: 30px!important;
+        }
 }
         .automationcheckTabTwo{
          padding-top: 20px;
          .tableDataAllBox{
              padding-bottom: 50px;
              height: 88%
+         }
+         .el-input__prefix{
+             .el-input__icon{
+                 display: none;
+             }
          }
          .info_tab_footer{
             padding-left: 20px;

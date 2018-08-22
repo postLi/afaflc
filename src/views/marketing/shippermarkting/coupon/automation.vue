@@ -61,8 +61,8 @@
                     type="primary" 
                     btntype="primary"
                     icon="el-icon-news"
-                    editType="add"
                     btntitle="创建"
+                    :editType="types"
                    >
               </newautocoupon>
               <modautocoupon
@@ -71,16 +71,36 @@
                     type="primary" 
                     btntype="primary"
                     icon="el-icon-news"
-                    editType="add"
                     btntitle="修改"
+                    :editType="types"
                     :params = 'selectRowData'
                     >
               </modautocoupon>
-                <el-button  type="primary" value="value" plain icon="el-icon-bell" @click="handleUseStates">启用/停用</el-button>
+                <el-button  type="primary" value="value" plain icon="el-icon-bell" @click="handleUseStates"  v-if="types=='one'">启用/停用</el-button>
                 <el-button type="primary" plain icon="el-icon-delete" @click="delete_data">删除</el-button>
                 <span  v-if="types=='two'">
-                <el-button  type="primary" value="value" plain icon="el-icon-bell">发放</el-button>
-                <el-button type="primary" plain icon="el-icon-delete">生成</el-button>
+              <couponGive
+                    btntext="发放"
+                    :plain="true"
+                    type="primary" 
+                    btntype="primary"
+                    icon="el-icon-news"
+                    editType="Give"
+                    btntitle="优惠卷发放"
+                    :params = 'selectRowData'
+                    >
+              </couponGive>
+             <couponGive
+                    btntext="生成"
+                    :plain="true"
+                    type="primary" 
+                    btntype="primary"
+                    icon="el-icon-news"
+                    editType="Build"
+                    btntitle="优惠卷生成"
+                    :params = 'selectRowData'
+                    >
+              </couponGive>
                 </span>
             	</div>
             <div class="info_city">    
@@ -96,7 +116,7 @@
                     <automationcheck
                           btntype="text"           
                          :btntext="scope.row.activityName"
-                          editType="view"
+                         :editType="types"
                          :templateItem="scope.row"
                          btntitle="详情"
                          :updataflag="true"
@@ -128,7 +148,7 @@
 </template>
 
 <script>
-import {data_get_couponActive_list,data_Del_couponActive,data_Able_couponActive} from '@/api/marketing/shippermarkting/couponActive.js'
+import {data_get_couponActive_list,data_Del_couponActive,data_Able_couponActive,data_automationActive} from '@/api/marketing/shippermarkting/couponActive.js'
 import vregion from '@/components/vregion/Region'
 import { eventBus } from '@/eventBus'
 import Pager from '@/components/Pagination/index'
@@ -136,6 +156,7 @@ import {parseTime} from '@/utils/'
 import newautocoupon from './newautocoupon'
 import automationcheck from './automationcheck'
 import modautocoupon from './modautocoupon'
+import couponGive from './couponGive'
 export default {
     props:{
       types:{
@@ -163,13 +184,11 @@ export default {
          },
           activeList:[
            { code:null,name:'全部'},
-           { code:'新用户注册',name:'新用户注册'},
-           { code:'认证通过',name:'认证通过'},
           ],
           activeStatus:[
            { code:null,name:'不限'},
-           { code:'启用',name:'启用'},
-           { code:'禁用',name:'禁用'},
+           { code:'0',name:'启用'},
+           { code:'1',name:'禁用'},
           ],
         }
     },
@@ -178,7 +197,8 @@ export default {
         Pager,
         newautocoupon,
         automationcheck,
-        modautocoupon
+        modautocoupon,
+        couponGive
     },
     methods:{
              // 列表刷新页面  
@@ -269,9 +289,17 @@ export default {
                         this.selectRowData='';         
                     })
                 }
+        },
+        getMoreInformation(){
+            data_automationActive().then(res=>{
+                   res.data.map((item)=>{
+                        this.activeList.push(item);
+                    })    
+            })
         }
     },
      mounted(){
+         this.getMoreInformation();
          eventBus.$on('changeListtwo', () => {
                 this.firstblood()
           })

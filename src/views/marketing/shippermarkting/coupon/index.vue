@@ -18,7 +18,6 @@
 
 
 <script>
-import handmation from './handmation.vue'
 import automation from './automation.vue'
 export default {
     data(){
@@ -27,7 +26,6 @@ export default {
         }
     },
     components:{    
-            handmation,
             automation,
     },
     watch:{

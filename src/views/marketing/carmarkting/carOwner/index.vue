@@ -171,10 +171,8 @@ export default {
           // 列表刷新页面  
             firstblood(){
                 data_get_ownerFromsame_list(this.page,this.pagesize,this.formAllData).then(res => {
-
                     this.dataTotal = res.data.totalCount
                     this.tableDataAll = res.data.list;
-                    this.firstblood();
                 })
             },
          //  查询
@@ -191,6 +189,7 @@ export default {
             handlePageChange(obj) {
                 this.page = obj.pageNum
                 this.pagesize = obj.pageSize
+                this.firstblood();
         },
         // 选择删除
         delete_data(){
