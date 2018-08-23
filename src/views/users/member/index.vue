@@ -121,6 +121,7 @@
             line-height: 35px;
             .el-form-item{
                 margin-right: 30px;
+                margin-bottom: 0px;
                 .el-form-item__content{
                     .el-input{
                         .el-input__inner{
@@ -146,7 +147,7 @@
                 }
             }
             .info_news{
-                height:90%;
+                height:88%;
             }
             .el-pagination{
                 margin-top:13px;
@@ -161,6 +162,30 @@
             .el-radio__input{
                 margin-left: 10px;
             }
+            td .cell {
+                white-space: initial;
+                overflow: hidden;
+            }
+
+            .freezeName{
+                color: #e6a23c;
+                font-weight: bold;
+                font-size: 16px;
+            }
+
+            .blackName{
+                color: red;
+                font-weight: bold;
+                font-size: 16px;
+
+            }
+
+            .normalName{
+                color: #67c23a;
+                font-weight: bold;
+                font-size: 16px;
+
+            }
         }
     }
 
@@ -168,8 +193,6 @@
         margin-top: 10px;
         margin-right: 40px;
     }
-
-
     .creatDialog,.freezeDialog,.shipperBlackDialog,.shenghe{
         display: inline-block;
         .el-dialog{

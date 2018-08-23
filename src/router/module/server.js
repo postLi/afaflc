@@ -42,7 +42,6 @@ export default {
         path: '/sm/lingdan', icon: 'lingdan', name: '零担', component: _import('sm/lingdan/index'), meta: { role: ['admin'], title: '零担',stitle: '零担',  noCache: true },
         children:[
             { path: '/sm/lingdan/transportRange', 
-            icon: 'QQ', 
             hidden: false, 
             name: '物流专线', 
             component: _import('sm/lingdan/transportRange/index'), 

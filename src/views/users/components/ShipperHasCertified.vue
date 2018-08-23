@@ -24,7 +24,7 @@
                 :plain="true"
                 type="primary" 
                 btntype="primary"
-                icon="el-icon-news"
+                icon="el-icon-edit"
                 editType="edit"
                 btntitle="修改"
                 :params="selectRowData"
@@ -80,8 +80,10 @@
                         label="货主类型">
                     </el-table-column>
                     <el-table-column
-                        prop="authPassTime"
                         label="认证通过日期">
+                        <template  slot-scope="scope">
+                            <span v-if="scope.row.authPassTime">{{ scope.row.authPassTime | parseTime}}</span>
+                        </template>
                     </el-table-column>
                 </el-table>
                 <el-pagination
@@ -100,8 +102,8 @@
 <script>
 import createdDialog from './createdDialog.vue'
 import { eventBus } from '@/eventBus'
-// import FreezeDialog from './FreezeDialog.vue'
-// import shipperBlackDialog from './shipperBlackDialog'
+import { parseTime } from '@/utils/index.js'
+
 import {data_get_shipper_list,data_get_shipper_type} from '../../../api/users/shipper/all_shipper.js'
 export default {
     props: {
@@ -152,7 +154,7 @@ export default {
     },
     methods:{
         getCurrentRow(index,row){       
-            this.selectRowData = row;
+            this.selectRowData = Object.assign({},row);
             this.templateRadio = index;
             console.log('选中内容',row)
         },

@@ -239,11 +239,21 @@ $borderWidth: 6px;
   
 </style>
 <style lang="scss">
-.tms-pagination__sizes .el-input .el-input__inner:hover {
-    border-color: #409EFF;
-}
-.tms-pagenation .el-select .el-input{
-  width: 70px;
-  margin: 0 5px;
-}
+    .tms-pagination__sizes .el-input .el-input__inner:hover {
+        border-color: #409EFF;
+    }
+    .tms-pagenation .el-select .el-input{
+    width: 70px;
+    margin: 0 5px;
+
+    }
+
+    .page-jumper{
+        &>.el-pagination__editor{
+            .el-input__inner{
+                padding:0;
+                text-align:center;
+            }
+        }
+    }
 </style>

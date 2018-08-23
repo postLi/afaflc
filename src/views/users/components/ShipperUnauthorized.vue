@@ -46,7 +46,7 @@
 				:params="selectRowData"
 				:plain="true" type="primary" 
 				btntype="primary" 
-				icon="el-icon-news"
+				icon="el-icon-edit"
 				editType="edit" 
 				btntitle="修改"
 				@getData="getDataList">
@@ -94,8 +94,10 @@
 					label="货主类型">
 				</el-table-column>
 				<el-table-column
-					prop="registerTime"
 					label="注册日期">
+                    <template  slot-scope="scope">
+                        <span v-if="scope.row.registerTime">{{ scope.row.registerTime | parseTime}}</span>
+                    </template>
 				</el-table-column>
 				</el-table>
 				<el-pagination
@@ -116,7 +118,8 @@ import GetCityList from '@/components/GetCityList'
 import createdDialog from './createdDialog.vue'
 import { eventBus } from '@/eventBus'
 import FreezeDialog from './FreezeDialog.vue'
-import {parseTime} from '@/utils/'
+import { parseTime } from '@/utils/index.js'
+
 import {data_get_shipper_list,data_get_shipper_change,data_get_shipper_auid,} from '../../../api/users/shipper/all_shipper.js'
 export default {
 	props: {
@@ -184,7 +187,7 @@ export default {
     },
   methods:{
     getCurrentRow(index,row){       
-        this.selectRowData = row;
+        this.selectRowData = Object.assign({},row);
         this.templateRadio = index;
         console.log('选中内容',row)
     },
@@ -232,7 +235,6 @@ export default {
         // console.log('未认证',res)
         this.totalCount = res.data.totalCount;
         this.tableData4 = res.data.list;
-        // this.inited = false;
       })
     },
     handleSizeChange(val) {

@@ -36,10 +36,12 @@
                     stripe
                     border
                     highlight-current-row
-                    @current-change="handleCurrentChangeRow"
                     tooltip-effect="dark"
                     style="width: 100%">
-                    <el-table-column type="selection" width="80px">
+                    <el-table-column label="" width="65">
+                        <template slot-scope="scope">
+                            <el-radio class="textRadio" @change.native="getCurrentRow(scope.$index,scope.row)" :label="scope.$index" v-model="templateRadio">&nbsp;</el-radio>
+                        </template>
                     </el-table-column>
                     <el-table-column label="公司名称" >
                         <template slot-scope="scope">
@@ -59,8 +61,14 @@
                     <el-table-column prop="belongCityName" label="所在地">
                     </el-table-column>
                     <el-table-column prop="authenticationTime" label="提交认证日期">
+                        <template  slot-scope="scope">
+                            <span v-if="scope.row.authenticationTime">{{ scope.row.authenticationTime | parseTime}}</span>
+                        </template>
                     </el-table-column>
                     <el-table-column prop="authNoPassTime" label="审核不通过日期">
+                        <template  slot-scope="scope">
+                            <span v-if="scope.row.authNoPassTime">{{ scope.row.authNoPassTime | parseTime}}</span>
+                        </template>
                     </el-table-column>
                 </el-table>
                 <el-pagination
@@ -80,8 +88,9 @@
 import createdDialog from './createdDialog.vue'
 import GetCityList from '@/components/GetCityList'
 import { eventBus } from '@/eventBus'
+import { parseTime } from '@/utils/index.js'
 
-import {data_get_shipper_list} from '../../../api/users/shipper/all_shipper.js'
+import {data_get_shipper_list} from '@/api/users/shipper/all_shipper.js'
 export default {
     props: {
         isvisible: {
@@ -95,6 +104,7 @@ export default {
     },
     data(){
         return{
+            templateRadio:'',
             tableData1:[],
             totalCount:null,
             page:1,
@@ -129,54 +139,59 @@ export default {
         })
     },
     methods:{
+        getCurrentRow(index,row){       
+            this.selectRowData = Object.assign({},row);
+            this.templateRadio = index;
+            console.log('选中内容',row)
+        },
         getDataList(){
-            this.firstblood()
+            this.firstblood();
         },
         handleCurrentChangeRow(val){
             console.log(val)
             this.selectRowData = val
-    },
-        //刷新页面
-      firstblood(){
-        data_get_shipper_list(this.page,this.pagesize,this.formAll).then(res=>{
-            this.totalCount = res.data.totalCount;
-            this.tableData1 = res.data.list;
-            // this.inited = true
-        })
-      },
-         //点击查询按纽，按条件查询列表
-      getdata_search(event){
-          this.formAll.belongCity = this.$refs.area.selectedOptions.pop();
-          data_get_shipper_list(this.page,this.pagesize,this.formAll).then(res=>{
-            this.totalCount = res.data.totalCount;
-            this.tableData1= res.data.list;
-          })
-      },
-      
-      //清空
-      clearSearch(){
-        this.formAll = {
-            companyName:'',
-            belongCity:'',
-            mobile:'',
-            shipperStatus:"AF0010404",//未认证的状态码
         },
-        this.firstblood()
-      },
-      handleSizeChange(val) {
-        console.log(`每页 ${val} 条`);
-        this.pagesize=val
-        this.firstblood()
-      },
-      handleCurrentChange(val) {
-        console.log(`当前页: ${val}`);
-        this.page=val
-        this.firstblood()
-      },
-        handleChange(value){
-            console.log(value)
+        //刷新页面
+        firstblood(){
+            data_get_shipper_list(this.page,this.pagesize,this.formAll).then(res=>{
+                this.totalCount = res.data.totalCount;
+                this.tableData1 = res.data.list;
+                // this.inited = true
+            })
+        },
+         //点击查询按纽，按条件查询列表
+        getdata_search(event){
+            this.formAll.belongCity = this.$refs.area.selectedOptions.pop();
+            data_get_shipper_list(this.page,this.pagesize,this.formAll).then(res=>{
+                this.totalCount = res.data.totalCount;
+                this.tableData1= res.data.list;
+            })
+        },
+        
+      //清空
+        clearSearch(){
+            this.formAll = {
+                companyName:'',
+                belongCity:'',
+                mobile:'',
+                shipperStatus:"AF0010404",//未认证的状态码
+            },
+            this.firstblood()
+        },
+        handleSizeChange(val) {
+            console.log(`每页 ${val} 条`);
+            this.pagesize=val
+            this.firstblood()
+        },
+        handleCurrentChange(val) {
+            console.log(`当前页: ${val}`);
+            this.page=val
+            this.firstblood()
+        },
+            handleChange(value){
+                console.log(value)
+            }
         }
-    }
 }
 </script>
 

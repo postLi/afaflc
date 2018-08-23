@@ -64,7 +64,7 @@
                     <el-select v-model="formFroze.freezeCause" v-else placeholder="请选择" clearable>
                         <el-option
                         v-for="item in optionsReason"
-                        :key="item.value"
+                        :key="item.id"
                         :label="item.name"
                         :value="item.code">
                         </el-option>
@@ -247,29 +247,29 @@ export default {
       this.$refs.singleTable.setCurrentRow(row);
     },
     openDialog(){
-        console.log(this.params)
-        if(!this.params.accountStatusName){
-            this.$message.info('请选择您要冻结的用户');
-            return
+        console.log('this.params',this.params)
+        if(Object.keys(this.params).length == 0){
+            return this.$message.info('请选择您要冻结的用户');
+            
         }
         else if(this.params.accountStatusName == '冻结中' && this.editType == 'add'){
-            this.$message.info('您选中的货主已被冻结，不需多次冻结！');
-            return
+            return this.$message.info('您选中的货主已被冻结，不需多次冻结！');
+            
         }
         else if(this.params.accountStatusName != '冻结中' && this.editType == 'edit'){
-            this.$message.info('您选中的货主未被冻结，不可做此操作！');
-            return
+            return this.$message.info('您选中的货主未被冻结，不可做此操作！');
+            
         }
         else if(this.params.accountStatusName != '冻结中' && this.editType == 'remove'){
-            this.$message.info('您选中的货主未被冻结，无需移除！');
-            return
+            return this.$message.info('您选中的货主未被冻结，无需移除！');
+
         }
         else{
             if(this.editType == 'add'){
                 this.freezeDialogFlag = true ;
                 this.formFroze.unfreezeTime = this.formFroze.unfreezeTime ? this.formFroze.unfreezeTime : new Date();
                 this.formFroze.id = this.params.id;
-                this.formFroze.moblie = this.params.moblie;
+                this.formFroze.mobile = this.params.mobile;
 
             }else{
                 this.formFroze = Object.assign({},this.params) ;
@@ -277,6 +277,8 @@ export default {
                 this.formFroze.unfreezeTime = this.formFroze.unfreezeTime ? this.formFroze.unfreezeTime : new Date();
             }
         }
+
+        console.log(this.params.mobile)
     },
     close(){
         this.freezeDialogFlag = false;
@@ -302,10 +304,11 @@ export default {
                 if(valid){
                     switch (this.editType){
                         case 'add' :
+                            console.log(this.formFroze)
                             var forms= Object.assign({}, this.formFroze,{accountStatus:"AF0010502",accountStatusName:'冻结中'})
                             forms.freezeCauseName = this.optionsReason.find(item => item.code === forms.freezeCause)['name'];
 
-                            let item =  forms.moblie;
+                            let item =  forms.mobile;
                             console.log(forms)  
                             this.$confirm('确定要将手机号码为'+ item +'用户冻结吗？', '提示', {
                                 confirmButtonText: '确定',

@@ -24,7 +24,7 @@
                 :plain="true"
                 type="primary" 
                 btntype="primary"
-                icon="el-icon-news"
+                icon="el-icon-edit"
                 editType="edit"
                 btntitle="修改"
                 :params="selectRowData"
@@ -36,36 +36,50 @@
                     :data="tableData3"
                     stripe
                     border
+                    height="100%"
                     highlight-current-row
-                    @current-change="handleCurrentChangeRow"
                     tooltip-effect="dark"
                     style="width: 100%">
-                    <el-table-column type='index' label="序号" width="80px">
-				</el-table-column>  
-				<el-table-column label="手机号(会员账号)">
+                <el-table-column label="" width="65" fixed>
+                    <template slot-scope="scope">
+                        <el-radio class="textRadio" @change.native="getCurrentRow(scope.$index,scope.row)" :label="scope.$index" v-model="templateRadio">&nbsp;</el-radio>
+                    </template>
+                </el-table-column>
+               <el-table-column label="序号" width="80px" fixed>
+                    <template slot-scope="scope">
+                        {{ (page - 1)*pagesize + scope.$index + 1 }}
+                    </template>
+                </el-table-column>   
+				<el-table-column label="手机号(会员账号)" width="150" fixed>
                     <template slot-scope="scope">
                         <createdDialog :paramsView="scope.row" btntype="text" :btntext="scope.row.mobile" editType="view" btntitle="详情"></createdDialog>
                     </template>
 				</el-table-column>
-				<el-table-column prop="contactsName" label="注册人姓名">
+				<el-table-column prop="contactsName" label="注册人姓名" width="150">
 				</el-table-column>
-				<el-table-column prop="companyName" label="公司名称">
+				<el-table-column prop="companyName" label="公司名称"  width="300">
 				</el-table-column>
-				<el-table-column prop="belongCityName" label="所在地">
+				<el-table-column prop="belongCityName" label="所在地"  width="250">
 				</el-table-column>
-				<el-table-column prop="registerOriginName" label="注册来源">
+				<el-table-column prop="registerOriginName" label="注册来源"  width="120">
 				</el-table-column>
 				<el-table-column prop="registerTime" label="注册日期" width="200">
 				</el-table-column>
-				<el-table-column prop="accountStatusName" label="账户状态">
+				<el-table-column prop="accountStatusName" label="账户状态" width="120">
+                     <template slot-scope="scope">
+                        <span :class="{freezeName: scope.row.accountStatusName == '冻结中' ,blackName: scope.row.accountStatusName == '黑名单',normalName :scope.row.accountStatusName == '正常'}">{{scope.row.accountStatusName}}</span>
+                    </template>
 				</el-table-column>
-				<el-table-column prop="authStatusName" label="认证状态">
+				<el-table-column prop="authStatusName" label="认证状态" width="120">
 				</el-table-column>
-                <el-table-column prop="qq" label="QQ号码">
+                <el-table-column prop="qq" label="QQ号码" width="150">
 				</el-table-column>
-				<el-table-column prop="serviceCommitment" label="会员服务承诺">
+				<el-table-column prop="serviceCommitment" label="会员服务承诺" width="200">
 				</el-table-column>
-                <el-table-column prop="isOpenTms" label="是否开通TMS">
+                <el-table-column prop="isOpenTms" label="是否开通TMS" width="120">
+                     <template slot-scope="scope">
+                        {{scope.row.isOpenTms  ==  1 ? '是' : '否'}}
+                    </template>
 				</el-table-column>
                 </el-table>
                 <el-pagination
@@ -78,16 +92,17 @@
                     :total="totalCount">
                 </el-pagination>
             </div>
+            <div class="info_tab_footer">共计:{{ totalCount }} <div class="show_pager"> <Pager :total="totalCount" @change="handlePageChange" /></div> </div>    
+
 	    </div>
     </div>
 </template>
 <script>
 import createdDialog from './createdDialog.vue'
 import { eventBus } from '@/eventBus'
-// import FreezeDialog from './FreezeDialog.vue'
-// import shipperBlackDialog from './shipperBlackDialog'
 import {data_get_shipper_type} from '../../../api/users/shipper/all_shipper.js'
 import { data_LogisticsCompanyList } from '../../../api/users/logistics/LogisticsCompany.js'
+import Pager from '@/components/Pagination/index'
 
 export default {
     props: {
@@ -97,12 +112,12 @@ export default {
         }
     },
     components:{
-      createdDialog
-    //   FreezeDialog,
-    //   shipperBlackDialog
+        createdDialog,
+        Pager
     },
     data(){
         return {
+            templateRadio:'',
             options:[],
             tableData3:[],
             totalCount:null,
@@ -136,6 +151,17 @@ export default {
         })
     },
     methods:{
+        
+        handlePageChange(obj) {
+            this.page = obj.pageNum
+            this.pagesize = obj.pageSize
+            this.firstblood()
+        },
+         getCurrentRow(index,row){       
+            this.selectRowData = Object.assign({},row);
+            this.templateRadio = index;
+            console.log('选中内容',row)
+        },
         // 选中值判断
         handleCurrentChangeRow(val){
             console.log(val)

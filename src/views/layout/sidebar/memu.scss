@@ -10,6 +10,11 @@ $sidebarBackgroundColor: #002039;
         background: $sidebarBackgroundColor;
         border-left: 4px solid #002039;
     }
+
+    .el-submenu__icon-arrow{
+        top: 55%;
+        right: 14px;
+    }
     &>.menu-item>a{
         padding-left: 24px;
     }
@@ -33,14 +38,14 @@ $sidebarBackgroundColor: #002039;
         position: relative;
         transition: height .4s ease;
     }
-        .is-opened{
-            height: auto;
-            background: #002039;
-            .el-menu {
-                border-right: 0;
-                background: $backgroundColor;
-            }
+    .is-opened{
+        height: auto;
+        background: #002039;
+        .el-menu {
+            border-right: 0;
+            background: $backgroundColor;
         }
+    }
 
     .sidebar-nav-title{
         display: inline-block;
@@ -52,13 +57,9 @@ $sidebarBackgroundColor: #002039;
         font-size: $sidebarFontSize - 2px;
     }
 
-    .is-active{
+    .is-active,.el-menu-item .is-active{
         background: $hoverBackgroundColor;
         border-left-color: #104193;
-
-        .is-active{
-            border: none;
-        }
 
         // &>.el-menu{
         //     background: $hoverBackgroundColor;

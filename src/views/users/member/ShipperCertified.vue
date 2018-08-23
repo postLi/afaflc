@@ -19,7 +19,7 @@
       	</div>
       	<div class="classify_info">
 		  <div class="btns_box">
-        	<el-button type="primary" plain icon="el-icon-edit" @click="handleEdit">认证审核</el-button>
+        	<el-button type="primary" plain icon="el-icon-check" @click="handleEdit">认证审核</el-button>
 		</div>
 		<div class="info_news">
 			<el-table 
@@ -29,35 +29,45 @@
 			border
             height="100%"
             highlight-current-row
-            @current-change="handleCurrentChangeRow"
 			tooltip-effect="dark"
 			style="width: 100%">
-			<el-table-column type='index' label="序号" width="80px">
-				</el-table-column>  
-				<el-table-column label="手机号(会员账号)">
+            <el-table-column label="" width="65" fixed>
+                <template slot-scope="scope">
+                    <el-radio class="textRadio" @change.native="getCurrentRow(scope.$index,scope.row)" :label="scope.$index" v-model="templateRadio">&nbsp;</el-radio>
+                </template>
+            </el-table-column>
+			<el-table-column label="序号" width="80px" fixed>
+                <template slot-scope="scope">
+                    {{ (page - 1)*pagesize + scope.$index + 1 }}
+                </template>
+            </el-table-column>  
+				<el-table-column label="手机号(会员账号)" width="150" fixed>
                     <template slot-scope="scope">
                         <createdDialog :paramsView="scope.row" btntype="text" :btntext="scope.row.mobile" editType="view" btntitle="详情"></createdDialog>
                     </template>
 				</el-table-column>
-				<el-table-column prop="contactsName" label="注册人姓名">
+				<el-table-column prop="contactsName" label="注册人姓名" width="150">
 				</el-table-column>
-				<el-table-column prop="companyName" label="公司名称">
+				<el-table-column prop="companyName" label="公司名称" width="300">
 				</el-table-column>
-				<el-table-column prop="belongCityName" label="所在地">
+				<el-table-column prop="belongCityName" label="所在地" width="250">
 				</el-table-column>
-				<el-table-column prop="registerOriginName" label="注册来源">
+				<el-table-column prop="registerOriginName" label="注册来源" width="120">
 				</el-table-column>
 				<el-table-column prop="registerTime" label="注册日期" width="200">
 				</el-table-column>
-				<el-table-column prop="accountStatusName" label="账户状态">
+				<el-table-column prop="accountStatusName" label="账户状态" width="120">
+                     <template slot-scope="scope">
+                        <span :class="{freezeName: scope.row.accountStatusName == '冻结中' ,blackName: scope.row.accountStatusName == '黑名单',normalName :scope.row.accountStatusName == '正常'}">{{scope.row.accountStatusName}}</span>
+                    </template>
 				</el-table-column>
-				<el-table-column prop="authStatusName" label="认证状态">
+				<el-table-column prop="authStatusName" label="认证状态" width="120">
 				</el-table-column>
-                <el-table-column prop="qq" label="QQ号码">
+                <el-table-column prop="qq" label="QQ号码" width="150">
 				</el-table-column>
-				<el-table-column prop="serviceCommitment" label="会员服务承诺">
+				<el-table-column prop="serviceCommitment" label="会员服务承诺" width="200">
 				</el-table-column>
-                <el-table-column  label="是否开通TMS">
+                <el-table-column  label="是否开通TMS" width="120">
                     <template slot-scope="scope">
                         {{scope.row.isOpenTms  ==  1 ? '是' : '否'}}
                     </template>
@@ -73,6 +83,8 @@
 			:total="totalCount">
 			</el-pagination>
 		</div>
+        <div class="info_tab_footer">共计:{{ totalCount }} <div class="show_pager"> <Pager :total="totalCount" @change="handlePageChange" /></div> </div>    
+
 	  </div>
 
        <!--认证审核部分 -->
@@ -218,6 +230,7 @@ import createdDialog from './createdDialog.vue'
 import GetCityList from '@/components/GetCityList'
 import { data_LogisticsCompanyList,data_ChangeLogisticsCompany } from '../../../api/users/logistics/LogisticsCompany.js'
 import { data_LogisticsCompany } from '@/api/common.js'
+import Pager from '@/components/Pagination/index'
 
 import defaultURL  from '@/assets/404_images/404.png'
 export default {
@@ -230,7 +243,8 @@ export default {
 	components:{
 		createdDialog,
 		GetCityList,
-		Upload
+        Upload,
+        Pager
 	},
 	computed: {
 		pictureValue () {
@@ -247,7 +261,7 @@ export default {
             }
 		}
 		return{
-            btnText: 'please select',
+            templateRadio:'',
             defaultImg:'/static/test.jpg',//默认第一张图片的url
             demoData:"企业货主",//根据项目要求写死
             selectDiaologFlag:true,
@@ -333,9 +347,16 @@ export default {
         })
     },
     methods:{
-
-        regionChange(d) {
-            this.btnText = (!d.province&&!d.city&&!d.area&&!d.town)?'please select': `${this.getValue(d.province)}${'/'+this.getValue(d.city)}${this.getValue(d.area)}${this.getValue(d.town)}`.trim();
+        getCurrentRow(index,row){       
+            this.shengheform = Object.assign({},row);
+            this.shengheform.isOpenTms = '0';
+            this.templateRadio = index;
+            console.log('选中内容',row)
+        },
+        handlePageChange(obj) {
+            this.page = obj.pageNum
+            this.pagesize = obj.pageSize
+            this.firstblood()
         },
         getValue(obj){
             return obj?obj.value:'';
@@ -367,7 +388,6 @@ export default {
             console.log(val)
             if(val){
                 this.shengheform = val;
-                this.shengheform.isOpenTms = '0';
             }
         },
         //刷新页面

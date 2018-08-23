@@ -20,7 +20,6 @@ export default {
             children:[
                 { 
                     path: '/finance/transactionCash/cashSet', 
-                    icon: 'QQ', 
                     hidden: false, 
                     name: '提现配置', 
                     component: _import('finance/transactionCash/cashSet/index'), 
@@ -28,7 +27,6 @@ export default {
                 },
                 { 
                     path: '/finance/transactionCash/cashAuditing', 
-                    icon: 'QQ', 
                     hidden: false, 
                     name: '提现审核', 
                     component: _import('finance/transactionCash/cashAuditing/index'), 

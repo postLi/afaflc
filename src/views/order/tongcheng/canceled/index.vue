@@ -90,7 +90,7 @@
                             width="150">
                                 <template  slot-scope="scope">
                                     <span class="timeChoose">
-                                        {{ parseTimeFunction(scope.row.useCarTime)}}    
+                                        {{ scope.row.useCarTime | parseTime}}    
                                     </span>
                                 </template>
                         </el-table-column>
@@ -120,7 +120,7 @@
                             width="250">
                                 <template  slot-scope="scope">
                                     <span class="timeChoose">
-                                        {{ parseTimeFunction(scope.row.useCarTime)}}    
+                                        {{ scope.row.useCarTime | parseTime}}    
                                     </span>
                                 </template>
                         </el-table-column>
@@ -155,7 +155,7 @@
                             label="下单时间"
                             width="250">
                             <template  slot-scope="scope">
-                                {{ parseTimeFunction(scope.row.useTime)}}
+                                {{ scope.row.useTime | parseTime}}
                             </template>
                         </el-table-column>
                     </el-table>

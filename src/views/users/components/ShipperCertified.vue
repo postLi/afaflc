@@ -19,7 +19,7 @@
       	</div>
       	<div class="classify_info">
 		  <div class="btns_box">
-        	<el-button type="primary" plain icon="el-icon-edit" @click="handleEdit">认证审核</el-button>
+        	<el-button type="primary" plain icon="el-icon-check" @click="handleEdit">认证审核</el-button>
 		</div>
 		<div class="info_news">
 			<el-table 
@@ -76,7 +76,7 @@
 
        <!--认证审核部分 -->
     <div class="certifed commoncss">
-        <el-dialog title="认证审核" :visible.sync="dialogFormVisible" v-if="Object.keys(shengheform).length != 0">
+        <el-dialog title="认证审核" :visible.sync="RZdialogFormVisible" v-if="Object.keys(shengheform).length != 0">
           <el-form :model="shengheform" ref="shengheform" :rules="shengheformRules">
             <el-row>
               <el-col :span="12">
@@ -179,7 +179,7 @@
           <div slot="footer" class="dialog-footer">
             <el-button type="primary" plain @click="handlerPass">确认审核通过</el-button>
             <el-button @click="handlerOut">审核不通过</el-button>
-            <el-button @click="dialogFormVisible = false">取 消</el-button>
+            <el-button @click="RZdialogFormVisible = false">取 消</el-button>
           </div>
         </el-dialog>
      </div> 
@@ -236,10 +236,9 @@ export default {
                 shipperStatus:"AF0010402",//待认证的状态码
             },
             formLabelWidth: '120px',
-            dialogFormVisible:false, //认证审核弹框控制
+            RZdialogFormVisible:false, //认证审核弹框控制
+            selectRowData:{},
             shengheform:{},
-            centerDialogVisible:false,// 提示语的弹窗控制
-            information:null, // 弹框显示的信息
             multipleSelection:{},
             shengheformRules:{
                 shipperType:{required: true, message:'请选择货主类型',trigger:'change'},
@@ -268,7 +267,9 @@ export default {
     },
     methods:{
         getCurrentRow(index,row){       
-            this.selectRowData = row;
+
+            this.selectRowData = Object.assign({},row);
+
             this.templateRadio = index;
             console.log('选中内容',row)
         },
@@ -290,14 +291,19 @@ export default {
         },
         //认证审核
         handleEdit(){
-            this.dialogFormVisible = true;
-            this.shengheform = Object.assign({},this.multipleSelection) ;
-            this.defaultImage =  this.shengheform.businessLicenceFile ?  this.shengheform.businessLicenceFile : this.defaultImg;
+            
+            if(Object.keys(this.selectRowData).length == 0){
+                return this.$message({
+                    type: 'info',
+                    message: '请选择需认证的货主信息' 
+                })
+            }else{
+                this.RZdialogFormVisible = true;
+                this.shengheform = Object.assign({},this.selectRowData) ;
+                this.defaultImage =  this.shengheform.businessLicenceFile ?  this.shengheform.businessLicenceFile : this.defaultImg;
+            }
             console.log('`````````````')
-            console.log('this.defaultImage',this.defaultImage)
-        },
-        handleCurrentChangeRow(val){
-            this.multipleSelection = val;
+            console.log(' this.RZdialogFormVisible', this.RZdialogFormVisible)
         },
         //刷新页面
         firstblood(){
@@ -384,7 +390,7 @@ export default {
                                 message: '该货主未通过审核',
                                 duration:2000
                             })
-                            this.dialogFormVisible = false;
+                            this.RZdialogFormVisible = false;
                             this.changeList();
                             this.firstblood();
                         }).catch(err=>{
@@ -426,7 +432,7 @@ export default {
                     var forms=Object.assign({},this.shengheform,{shipperType:"AF0010202"},{currentShipperStatus:"AF0010402"},{shipperStatus:"AF0010403"});
                     data_get_shipper_change(forms).then(res=>{
                     // console.log(res)
-                        this.dialogFormVisible = false;
+                        this.RZdialogFormVisible = false;
                         this.$alert('操作成功', '提示', {
                             confirmButtonText: '确定',
                             callback: action => {
@@ -435,7 +441,7 @@ export default {
                             }
                         });
                     }).catch(err=>{
-                        this.dialogFormVisible = true;
+                        this.RZdialogFormVisible = true;
                         this.$message({
                             type: 'info',
                             message: '删除失败，原因：' + err.errorInfo ? err.errorInfo : err.text

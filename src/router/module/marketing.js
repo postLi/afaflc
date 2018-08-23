@@ -24,7 +24,6 @@ export default {
         children:[
             { 
                 path: '/marketing/shippermarkting/coupon', 
-                icon: 'QQ', 
                 hidden: false, 
                 name: '优惠券', 
                 component: _import('marketing/shippermarkting/coupon/index'), 
@@ -32,7 +31,6 @@ export default {
             },
             { 
                 path: '/marketing/shippermarkting/couponCash', 
-                icon: 'QQ', 
                 hidden: false, 
                 name: '优惠金', 
                 component: _import('marketing/shippermarkting/couponCash/index'), 
@@ -42,11 +40,10 @@ export default {
 
     },
     {          
-        path: '/marketing/xiaohuocheMJ', icon: 'xhcmjd', name: '小货车马甲单',hidden: false, component: _import('marketing/xiaohuocheMJ/index'), meta: { role: ['admin'], title: '小货车马甲单', stitle:'小货车', noCache: true },
+        path: '/marketing/xiaohuocheMJ', icon: 'xiaohuochemj', name: '小货车马甲单',hidden: false, component: _import('marketing/xiaohuocheMJ/index'), meta: { role: ['admin'], title: '小货车马甲单', stitle:'小货车', noCache: true },
         children:[
             { 
                 path: '/marketing/xiaohuocheMJ/pushsheet', 
-                icon: 'QQ', 
                 hidden: false, 
                 name: '推送设置', 
                 component: _import('marketing/xiaohuocheMJ/pushsheet/index'), 
@@ -54,7 +51,6 @@ export default {
             },
             { 
                 path: '/marketing/xiaohuocheMJ/onesource', 
-                icon: 'QQ', 
                 hidden: false, name: 
                 '单源配置', 
                 component: _import('marketing/xiaohuocheMJ/onesource/index'), 
@@ -63,7 +59,7 @@ export default {
         ]
       }, 
       {          
-        path: '/marketing/lingdanMJ', icon: 'ldmjd', name: '零担马甲单',hidden: false, component: _import('marketing/lingdanMJ/index'), meta: { role: ['admin'], title: '零担马甲单', stitle:'零担', noCache: true },
+        path: '/marketing/lingdanMJ', icon: 'lingdanmj', name: '零担马甲单',hidden: false, component: _import('marketing/lingdanMJ/index'), meta: { role: ['admin'], title: '零担马甲单', stitle:'零担', noCache: true },
         children:[
            
         ]

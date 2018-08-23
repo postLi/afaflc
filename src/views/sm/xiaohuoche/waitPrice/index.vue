@@ -52,7 +52,7 @@
             </div>
             <div class="classify_info">
                 <div class="btns_box">
-                    <el-button type="primary" plain icon="el-icon-news" @click="addClassfy">新增</el-button>
+                    <el-button type="primary" plain icon="el-icon-circle-plus" @click="addClassfy">新增</el-button>
                     <el-button type="primary" plain icon="el-icon-edit" @click="handleEdit">修改</el-button>
                     <el-button type="primary" plain icon="el-icon-delete" @click="handleDelete">删除</el-button>
                     <el-button type="primary" plain icon="el-icon-bell" @click="handleUseStates">启用/禁用</el-button>

@@ -42,7 +42,7 @@
 		<div class="classify_info">
             <!-- <v-region  class="form-control" :text = false  :ui = false  ></v-region> -->
 			<div class="btns_box">
-				<createdDialog btntext="新增" :plain="true" type="primary" btntype="primary" icon="el-icon-news" editType="add" btntitle="新增货主" @getData="getDataList"></createdDialog>
+				<createdDialog btntext="新增" :plain="true" type="primary" btntype="primary" icon="el-icon-circle-plus" editType="add" btntitle="新增货主" @getData="getDataList"></createdDialog>
 				<FreezeDialog
 				btntext="冻结"
 				type="primary" 
@@ -51,7 +51,7 @@
 				editType='add'
 				freeze = 'freeze'
 				btntype="warning"
-				icon="el-icon-news"
+				icon="el-icon-info"
 				:params="selectRowData"
 				@getData="getDataList"
 				>
@@ -76,7 +76,7 @@
 				:plain="true"
 				editType='add'
 				btntype="info"
-				icon="el-icon-news"
+				icon="el-icon-warning"
 				:params="selectRowData"
 				@getData="getDataList"
 				></shipperBlackDialog>
@@ -87,7 +87,7 @@
 				:plain="true"
 				editType='edit'
 				btntype="info"
-				icon="el-icon-news"
+				icon="el-icon-success"
 				:params="selectRowData"
 				@getData="getDataList"
 				></shipperBlackDialog>
@@ -139,15 +139,17 @@
 				<el-table-column prop="registerOrigin" label="注册来源">
 				</el-table-column>
 				<el-table-column prop="shipperStatusName" label="认证状态">
-					
 				</el-table-column>
 				<el-table-column prop="accountStatusName" label="账户状态">
 				</el-table-column>
 				<el-table-column prop="belongCityName" label="所在地">
-				</el-table-column>
+				</el-table-column>  
 				<el-table-column prop="shipperTypeName" label="货主类型">
 				</el-table-column>
-				<el-table-column prop="registerTime" label="注册日期">
+				<el-table-column  label="注册日期">
+                    <template  slot-scope="scope">
+                       <span v-if="scope.row.registerTime">{{ scope.row.registerTime | parseTime}}</span>
+                    </template>
 				</el-table-column>
 				</el-table>
 				<el-pagination
@@ -171,6 +173,9 @@ import GetCityList from '@/components/GetCityList'
 import FreezeDialog from './FreezeDialog'
 import shipperBlackDialog from './shipperBlackDialog'
 import { eventBus } from '@/eventBus'
+import { parseTime } from '@/utils/index.js'
+
+
 
 export default {
   components:{
@@ -264,7 +269,9 @@ export default {
     },
     methods:{
         getCurrentRow(index,row){       
-            this.selectRowData = row;
+
+            this.selectRowData = Object.assign({},row);
+
             this.templateRadio = index;
             console.log('选中内容',row)
         },

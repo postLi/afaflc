@@ -123,6 +123,7 @@
             line-height: 35px;
             .el-form-item{
                 margin-right: 15px;
+                margin-bottom: 0px;
                 .el-form-item__content{
                     .el-input{
                         .el-input__inner{

@@ -37,65 +37,64 @@
           </el-form>
         </div>
 		<div class="classify_info">
-            <!-- <v-region  class="form-control" :text = false  :ui = false  ></v-region> -->
 			<div class="btns_box">
 				<FreezeDialog
 				btntext="冻结"
-				type="primary" 
+				type="warning" 
 				btntitle="冻结"
 				:plain="true"
 				editType='add'
 				freeze = 'freeze'
-				btntype="primary"
-				icon="el-icon-news"
+				btntype="warning"
+				icon="el-icon-info"
 				:params="selectRowData"
 				@getData="getDataList"
 				>
 				</FreezeDialog>
 				<FreezeDialog
 				btntext="冻结修改"
-				type="primary" 
+				type="warning" 
 				btntitle="冻结修改"
 				freeze = 'freeze'
 				:plain="true"
 				editType='edit'
-				btntype="primary"
-				icon="el-icon-news"
+				btntype="warning"
+				icon="el-icon-edit"
 				:params="selectRowData"
 				@getData="getDataList"
 				>
 				</FreezeDialog>
 				<shipperBlackDialog
 				btntext="移入黑名单"
-				type="primary" 
+				type="info" 
 				btntitle="移入黑名单"
 				:plain="true"
 				editType='add'
-				btntype="primary"
-				icon="el-icon-news"
+				btntype="info"
+				icon="el-icon-warning"
 				:params="selectRowData"
 				@getData="getDataList"
 				></shipperBlackDialog>
                 <shipperBlackDialog
 				btntext="移出黑名单"
-				type="primary" 
+				type="info" 
 				btntitle="移出黑名单"
 				:plain="true"
 				editType='edit'
-				btntype="primary"
-				icon="el-icon-news"
+				btntype="info"
+				icon="el-icon-success"
 				:params="selectRowData"
 				@getData="getDataList"
 				></shipperBlackDialog>
 				<FreezeDialog
 				btntext="解冻"
-				type="primary" 
+				type="success" 
 				btntitle="解冻"
 				freeze = 'freeze'
 				:plain="true"
 				editType='remove'
-				btntype="primary"
-				icon="el-icon-news"
+				btntype="success"
+				icon="el-icon-success"
 				:params="selectRowData"
 				@getData="getDataList"
 				>
@@ -121,51 +120,48 @@
                         {{ (page - 1)*pagesize + scope.$index + 1 }}
                     </template>
                 </el-table-column>  
-				<el-table-column label="手机号(会员账号)" width="250" fixed>
+				<el-table-column label="手机号(会员账号)" width="150" fixed>
                     <template slot-scope="scope">
                         <createdDialog :paramsView="scope.row" btntype="text" :btntext="scope.row.mobile" editType="view" btntitle="详情"></createdDialog>
                     </template>
 				</el-table-column>
-				<el-table-column prop="contactsName" label="注册人姓名">
+				<el-table-column prop="contactsName" label="注册人姓名" width="150">
 				</el-table-column>
-				<el-table-column prop="companyName" label="公司名称">
+				<el-table-column prop="companyName" label="公司名称" width="300">
 				</el-table-column>
 				<el-table-column prop="belongCityName" label="所在地" width="250">
 				</el-table-column>
-				<el-table-column prop="registerOriginName" label="注册来源" width="100">
+				<el-table-column prop="registerOriginName" label="注册来源" width="120">
 				</el-table-column>
 				<el-table-column prop="registerTime" label="注册日期" width="200">
 				</el-table-column>
-				<el-table-column prop="accountStatusName" label="账户状态">
+				<el-table-column prop="accountStatusName" label="账户状态" width="120">
+                    <template slot-scope="scope">
+                        <span :class="{freezeName: scope.row.accountStatusName == '冻结中' ,blackName: scope.row.accountStatusName == '黑名单',normalName :scope.row.accountStatusName == '正常'}">{{scope.row.accountStatusName}}</span>
+                    </template>
 				</el-table-column>
-				<el-table-column prop="authStatusName" label="认证状态">
+				<el-table-column prop="authStatusName" label="认证状态" width="120">
 				</el-table-column>
-                <el-table-column prop="qq" label="QQ号码">
+                <el-table-column prop="qq" label="QQ号码" width="150">
 				</el-table-column>
-				<el-table-column prop="otherService" label="会员服务承诺">
-                    <!-- <template slot-scope="scope">
-                        <p v-for="">
-
-                        </p>
-                    </template> -->
+				<el-table-column prop="otherService" label="会员服务承诺" width="200"  align="left">
+                    <template slot-scope="scope" >
+                        <div class="otherServiceTD">
+                            <span class="otherService" v-for="(item,key) in JSON.parse(scope.row.otherService) " :key="key">
+                                {{item}}
+                            </span>
+                        </div>
+                    </template>
 				</el-table-column>
-                <el-table-column prop="isOpenTms" label="是否开通TMS">
+                <el-table-column prop="isOpenTms" label="是否开通TMS" width="120">
                     <template slot-scope="scope">
                         {{scope.row.isOpenTms == 1 ? '是' : '否'}}
                     </template>
 				</el-table-column>
 				</el-table>
-				<el-pagination
-					@size-change="handleSizeChange"
-					@current-change="handleCurrentChange"
-					:current-page="page"
-					:page-sizes="[20, 50, 200, 400]"
-					:page-size="pagesize"
-					layout="total, sizes, prev, pager, next, jumper"
-					:total="totalCount">
-				</el-pagination>
 			</div>
 		</div>
+        <div class="info_tab_footer">共计:{{ totalCount }} <div class="show_pager"> <Pager :total="totalCount" @change="handlePageChange" /></div> </div>    
     </div>
 </template>
 
@@ -177,6 +173,7 @@ import GetCityList from '@/components/GetCityList'
 import FreezeDialog from './FreezeDialog'
 import shipperBlackDialog from './shipperBlackDialog'
 import { eventBus } from '@/eventBus'
+import Pager from '@/components/Pagination/index'
 
 export default {
   components:{
@@ -184,6 +181,7 @@ export default {
     GetCityList,
     FreezeDialog,
     shipperBlackDialog,
+    Pager,
   },
     props: {
 		isvisible: {
@@ -242,96 +240,86 @@ export default {
     },
     mounted(){
         eventBus.$on('changeList', () => {
-            console.log('22222222222222222222')
-                this.firstblood()
+                console.log('22222222222222222222')
+            this.firstblood()
         })
     },
     methods:{
         getCurrentRow(index,row){       
-            this.selectRowData = row;
+            this.selectRowData = Object.assign({},row);
             this.templateRadio = index;
             console.log('选中内容',row)
         },
-	changeList(){
-		eventBus.$emit('changeList')
-	},
-    // 判断选中与否
-    handleCurrentChangeRow(val){
-        console.log('选中内容',val)
-        this.selectRowData = val;
-    },
-    
-    //刷新页面
-    firstblood(){
-        data_LogisticsCompanyList(this.page,this.pagesize,this.formAll).then(res=>{
-            console.log('shipperAll',res)
-            this.totalCount = res.data.totalCount;
-            this.tableDataAll = res.data.list;
-        }).catch(err=>{
-            console.log(err)
-        })
-    },
-    //获取状态列表
-    getMoreInformation(){
-		//获取状态列表
-		data_get_shipper_status().then(res=>{
-			console.log('optionsStatus',res)
-			res.data.map((item)=>{
-				this.optionsStatus.push(item);
-			})
-		})
-		//获取账户状态列表
-     	data_get_shipper_auid().then(res=>{
-		//   console.log('车主状态：',res)
-			res.data.map((item)=>{
-				this.optionsAuidSataus.push(item);
-			})
-      	})
-	},
-    //点击查询按纽，按条件查询列表
-    getdata_search(event) {
-        this.formAll.belongCity = this.$refs.area.selectedOptions.pop();
-
-        console.log(this.formAll)
-        this.firstblood();
-    },
-    //清空
-    clearSearch(){
-        this.$refs.area.selectedOptions = [];
-        this.formAll = {
-            belongCity: null,
-			authStatus:null,
-			accountStatus:null,
-			accountName:null,
-			mobile:null
+        changeList(){
+            eventBus.$emit('changeList')
         },
-        this.firstblood();
-    },
-    handleChange(value){
-      console.log(value)
-    },
+        // 判断选中与否
+        handleCurrentChangeRow(val){
+            console.log('选中内容',val)
+            this.selectRowData = val;
+        },
+    
+        //刷新页面
+        firstblood(){
+            data_LogisticsCompanyList(this.page,this.pagesize,this.formAll).then(res=>{
+                console.log('shipperAll',res)
+                this.totalCount = res.data.totalCount;
+                this.tableDataAll = res.data.list;
+                this.tableDataAll.forEach(el => {
+                    el.otherServiceName = JSON.parse(el.otherService)
+                })
 
-    handleClick (row) {
-      console.log('row:',row)
-    },
+                console.log('Name',this.tableDataAll)
+            }).catch(err=>{
+                console.log(err)
+            })
+        },
+        //获取状态列表
+        getMoreInformation(){
+            //获取状态列表
+            data_get_shipper_status().then(res=>{
+                console.log('optionsStatus',res)
+                res.data.map((item)=>{
+                    this.optionsStatus.push(item);
+                })
+            })
+            //获取账户状态列表
+            data_get_shipper_auid().then(res=>{
+            //   console.log('车主状态：',res)
+                res.data.map((item)=>{
+                    this.optionsAuidSataus.push(item);
+                })
+            })
+        },
+        //点击查询按纽，按条件查询列表
+        getdata_search(event) {
+            this.formAll.belongCity = this.$refs.area.selectedOptions.pop();
 
-    // 码数
-    handleSizeChange(val) {
-      console.log(`每页 ${val} 条`);
-      this.pagesize=val
-      this.firstblood()
-    },
-
-    // 页数
-    handleCurrentChange(val) {
-      console.log(`当前页: ${val}`);
-      this.page=val
-      this.firstblood()
-    },
-    getDataList(){
-      this.firstblood()
+            console.log(this.formAll)
+            this.firstblood();
+        },
+        //清空
+        clearSearch(){
+            this.$refs.area.selectedOptions = [];
+            this.formAll = {
+                belongCity: null,
+                authStatus:null,
+                accountStatus:null,
+                accountName:null,
+                mobile:null
+            },
+            this.firstblood();
+        },
+    
+        handlePageChange(obj) {
+            this.page = obj.pageNum
+            this.pagesize = obj.pageSize
+            this.firstblood()
+        },
+        getDataList(){
+            this.firstblood()
+        }
     }
-  }
 }
 </script>
 <style lang="scss">
@@ -344,5 +332,18 @@ export default {
         .el-textarea{
             width: 637px;
         }
+    }
+
+    .otherServiceTD{
+        text-align: left;
+    }
+    .otherService{
+        text-align: left;
+        display: inline-block;
+        margin: 0 10px 10px 0 ;
+        border-radius:20% / 50%;
+        padding: 5px 10px;
+        background: #ef6c00;
+        color: #fff;
     }
 </style>

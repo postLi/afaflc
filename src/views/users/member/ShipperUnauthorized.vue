@@ -30,12 +30,7 @@
           </el-form>
       </div>
 	  	<div class="classify_info">
-            <!-- <v-region :town="true" :ui="true" @values="regionChange" class="form-control">
-                <button type="button" class="btn btn-default">
-                    ｛｛btnText｝｝ <i class="fa fa-fw fa-caret-down"></i>
-                </button>
-            </v-region> -->
-		  	<div class="btns_box">
+		  	<!-- <div class="btns_box"> -->
 				<!-- <createdDialog 
 				btntext="代客认证"
 				:params="selectRowData"
@@ -56,8 +51,8 @@
 				btntitle="修改"
 				@getData="getDataList">
 				</createdDialog> -->
-			</div>
-			<div class="info_news">
+			<!-- </div> -->
+			<div class="info_news" style="height:93.9%">
 				<el-table
 				ref="multipleTable"
 				:data="tableData4"
@@ -65,48 +60,51 @@
 				border
                 height="100%"
 				highlight-current-row
-                @current-change="handleCurrentChangeRow"
 				tooltip-effect="dark"
 				style="width: 100%">
-				<el-table-column type='index' label="序号" width="80px">
-				</el-table-column>  
-				<el-table-column label="手机号(会员账号)">
+                <el-table-column label="" width="65" fixed>
+                    <template slot-scope="scope">
+                        <el-radio class="textRadio" @change.native="getCurrentRow(scope.$index,scope.row)" :label="scope.$index" v-model="templateRadio">&nbsp;</el-radio>
+                    </template>
+                </el-table-column>
+				<el-table-column label="序号" width="80px" fixed>
+                    <template slot-scope="scope">
+                        {{ (page - 1)*pagesize + scope.$index + 1 }}
+                    </template>
+                </el-table-column>  
+				<el-table-column label="手机号(会员账号)" fixed width="150">
                     <template slot-scope="scope">
                         <createdDialog :paramsView="scope.row" btntype="text" :btntext="scope.row.mobile" editType="view" btntitle="详情"></createdDialog>
                     </template>
 				</el-table-column>
-				<el-table-column prop="contactsName" label="注册人姓名">
+				<el-table-column prop="contactsName" label="注册人姓名" width="150">
 				</el-table-column>
-				<el-table-column prop="companyName" label="公司名称">
+				<el-table-column prop="companyName" label="公司名称" width="300">
 				</el-table-column>
-				<el-table-column prop="belongCityName" label="所在地">
+				<el-table-column prop="belongCityName" label="所在地" width="250">
 				</el-table-column>
-				<el-table-column prop="registerOriginName" label="注册来源">
+				<el-table-column prop="registerOriginName" label="注册来源" width="120">
 				</el-table-column>
-				<el-table-column prop="registerTime" label="注册日期">
+				<el-table-column prop="registerTime" label="注册日期" width="200">
 				</el-table-column>
-				<el-table-column prop="accountStatusName" label="账户状态">
+				<el-table-column prop="accountStatusName" label="账户状态" width="120">
+                    <template slot-scope="scope">
+                        <span :class="{freezeName: scope.row.accountStatusName == '冻结中' ,blackName: scope.row.accountStatusName == '黑名单',normalName :scope.row.accountStatusName == '正常'}">{{scope.row.accountStatusName}}</span>
+                    </template>
 				</el-table-column>
-				<el-table-column prop="authStatusName" label="认证状态">
+				<el-table-column prop="authStatusName" label="认证状态" width="120">
 				</el-table-column>
-                <el-table-column prop="qq" label="QQ号码">
+                <el-table-column prop="qq" label="QQ号码" width="150">
 				</el-table-column>
-				<el-table-column prop="serviceCommitment" label="会员服务承诺">
+				<el-table-column prop="serviceCommitment" label="会员服务承诺" width="200">
 				</el-table-column>
-                <el-table-column prop="isOpenTms" label="是否开通TMS">
+                <el-table-column prop="isOpenTms" label="是否开通TMS" width="120">
 				</el-table-column>
 				</el-table>
-				<el-pagination
-				@size-change="handleSizeChange"
-				@current-change="handleCurrentChange"
-				:current-page="page"
-				:page-sizes="[20, 50, 200, 400]"
-				:page-size="pagesize"
-				layout="total, sizes, prev, pager, next, jumper"
-				:total="totalCount">
-				</el-pagination>
 			</div>	
 		</div>
+        <div class="info_tab_footer">共计:{{ totalCount }} <div class="show_pager"> <Pager :total="totalCount" @change="handlePageChange" /></div> </div>    
+
     </div>
 </template>
 <script>
@@ -114,9 +112,9 @@ import GetCityList from '@/components/GetCityList'
 import createdDialog from './createdDialog.vue'
 import { eventBus } from '@/eventBus'
 import FreezeDialog from './FreezeDialog.vue'
-import {parseTime} from '@/utils/'
-import {data_get_shipper_list,data_get_shipper_change,data_get_shipper_auid,} from '../../../api/users/shipper/all_shipper.js'
-import { data_LogisticsCompanyList } from '../../../api/users/logistics/LogisticsCompany.js'
+import {data_get_shipper_list,data_get_shipper_change,data_get_shipper_auid,} from '@/api/users/shipper/all_shipper.js'
+import { data_LogisticsCompanyList } from '@/api/users/logistics/LogisticsCompany.js'
+import Pager from '@/components/Pagination/index'
 
 export default {
 	props: {
@@ -128,10 +126,12 @@ export default {
     components:{
         createdDialog,
         FreezeDialog,
-        GetCityList
+        GetCityList,
+        Pager
     },
   data(){
     return{
+        templateRadio:'',
         optionsStatus:[], // 状态列表
         tableData4:[],
         totalCount:null,
@@ -153,10 +153,10 @@ export default {
 			name:'全部'
 			}
         ],//账户状态
-      selectRowData:{},
-      pickerOptions:{
-        disabledDate(time) {
-          return time.getTime() < Date.now();
+        selectRowData:{},
+        pickerOptions:{
+            disabledDate(time) {
+            return time.getTime() < Date.now();
         }
       },
     }
@@ -181,68 +181,67 @@ export default {
                 this.firstblood()
         })
     },
-  methods:{
-    regionChange(data){
-        console.log(data);
-    },
-    handleCurrentChangeRow(val){
-        console.log(val)
-        this.selectRowData = val;
-    },
-    getMoreInformation(){
-        //获取账户状态列表
-        if(this.optionsAuidSataus.length > 1){
-            return
-        }else{
-            
-            data_get_shipper_auid().then(res=>{
-             console.log('车主状态：',res)
-               res.data.map((item)=>{
-                   this.optionsAuidSataus.push(item);
-               })
-             })
-        }
-    },
-      //点击查询按纽，按条件查询列表
-    getdata_search(event){
-        this.formInline.belongCity = this.$refs.area.selectedOptions.pop();
-        this.firstblood();
-    },
-    
-    //清空
-    clearSearch(){
-        this.$refs.area.selectedOptions = [];
-        this.formInline = {
-            accountStatus:null,
-            belongCity:'',
-            mobile:'',
-            authStatus:"AF0010401",//未认证的状态码
+    methods:{
+        getCurrentRow(index,row){       
+            this.selectRowData = Object.assign({},row);
+            this.templateRadio = index;
+            console.log('选中内容',row)
         },
-	    this.firstblood();
-    },
-      //刷新页面
-    firstblood(){
-      data_LogisticsCompanyList(this.page,this.pagesize,this.formInline).then(res=>{
-        // console.log('未认证',res)
-        this.totalCount = res.data.totalCount;
-        this.tableData4 = res.data.list;
-        // this.inited = false;
-      })
-    },
-    handleSizeChange(val) {
-      console.log(`每页 ${val} 条`);
-      this.pagesize=val
-      this.firstblood()
-    },
-    handleCurrentChange(val) {
-      console.log(`当前页: ${val}`);
-      this.page=val
-      this.firstblood()
-    },
-    getDataList(){
-      this.firstblood()
-    },
-  }
+        handlePageChange(obj) {
+            this.page = obj.pageNum
+            this.pagesize = obj.pageSize
+            this.firstblood()
+        },
+   
+        handleCurrentChangeRow(val){
+            console.log(val)
+            this.selectRowData = val;
+        },
+        getMoreInformation(){
+            //获取账户状态列表
+            if(this.optionsAuidSataus.length > 1){
+                return
+            }else{
+                
+                data_get_shipper_auid().then(res=>{
+                console.log('车主状态：',res)
+                res.data.map((item)=>{
+                    this.optionsAuidSataus.push(item);
+                })
+                })
+            }
+        },
+        //点击查询按纽，按条件查询列表
+        getdata_search(event){
+            this.formInline.belongCity = this.$refs.area.selectedOptions.pop();
+            this.firstblood();
+        },
+        
+        //清空
+        clearSearch(){
+            this.$refs.area.selectedOptions = [];
+            this.formInline = {
+                accountStatus:null,
+                belongCity:'',
+                mobile:'',
+                authStatus:"AF0010401",//未认证的状态码
+            },
+            this.firstblood();
+        },
+        //刷新页面
+        firstblood(){
+            data_LogisticsCompanyList(this.page,this.pagesize,this.formInline).then(res=>{
+                // console.log('未认证',res)
+                this.totalCount = res.data.totalCount;
+                this.tableData4 = res.data.list;
+                // this.inited = false;
+            })
+        },
+       
+        getDataList(){
+            this.firstblood()
+        },
+    }
 }
 </script>
 <style lang="scss">

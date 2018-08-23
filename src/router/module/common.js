@@ -23,7 +23,7 @@ export default {
     },
     {
       path: '/common/dataDictionary',
-      icon: 'kehuguanli',
+      icon: 'sjzd',
       hidden: false,
       name: '数据字典',
       component: _import('common/dataDictionary/index'),
@@ -47,7 +47,7 @@ export default {
     },
     {
         path: '/common/task',
-        icon: 'QQ',
+        icon: 'rwdd',
         hidden: false,
         name: '任务调度',
         component: _import('common/index'),

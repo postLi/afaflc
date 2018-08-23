@@ -9,7 +9,7 @@
                         <el-select v-model="xinzengform.account" placeholder="请选择" v-if="editType=='add'" >
                             <el-option
                                 v-for="item in options"
-                                :key="item.value"
+                                :key="item.id"
                                 :label="item.name"
                                 :value="item.code"
                                 :disabled="item.disabled">
@@ -84,7 +84,9 @@
                     <el-form-item label="会员服务承诺 ：" :label-width="formLabelWidth">
                         <el-input :maxlength="20" v-model="xinzengform.otherService"  v-if="editType=='view'" disabled></el-input>
                         <el-checkbox-group v-model="otherServiceCode" v-else>
-                            <el-checkbox v-for="obj in optionsLogisticsCompany" :label="obj.code" :key="obj.id" >{{obj.name}}</el-checkbox>
+                            <span>
+                                <el-checkbox v-for="obj in optionsLogisticsCompany" :label="obj.code" :key="obj.id" >{{obj.name}}</el-checkbox>
+                            </span>
                         </el-checkbox-group>
                     </el-form-item>
                 </el-col>
@@ -523,6 +525,17 @@ export default {
                 display: block;
                 width: 100%;
                 height: 100%;
+            }
+        }
+
+        .moreLength{
+            .el-checkbox-group{
+                span:nth-child(2n){
+                    margin-right: 20px;
+                }
+                .el-checkbox{
+                    margin-left: 0;
+                }
             }
         }
     }
