@@ -171,7 +171,6 @@ export default {
           // 列表刷新页面  
             firstblood(){
                 data_get_ownerFromsame_list(this.page,this.pagesize,this.formAllData).then(res => {
-                  console.log('res',res)
                     this.dataTotal = res.data.totalCount
                     this.tableDataAll = res.data.list;
                 })
@@ -190,6 +189,7 @@ export default {
             handlePageChange(obj) {
                 this.page = obj.pageNum
                 this.pagesize = obj.pageSize
+                this.firstblood();
         },
         // 选择删除
         delete_data(){
@@ -316,7 +316,7 @@ export default {
     margin-bottom: 10px;
     }
     .info_city{
-      height:100%
+      height:88%
     }
     .el-button{
       margin-right: 20px;

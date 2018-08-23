@@ -4,7 +4,7 @@
       <div class="newcoupon1">
       <el-dialog  :visible="dialogFormVisible_add" :before-close="change" :title="btntitle">
         <el-form :model="formAllData" ref="formAllData" :rules="rulesForm">
-          <el-row v-if="editType=='one'">
+          <el-row >
             <el-col>
                <el-form-item  label="触发条件：" :label-width="formLabelWidth" prop="activityType"> 
                     <el-radio-group v-model="formAllData.activityType" size="small">
@@ -134,7 +134,6 @@
                                 placeholder="选择日期">
                                 </el-date-picker>
                      </span>
-
                                 </div>
              <div class="ht_table_td table_th11">
                          <el-select v-model="formAllData.aflcCouponList[keys].serivceCode" clearable placeholder="请选择" >
@@ -164,15 +163,15 @@
             </vregion>
               </div>
              <div class="ht_table_td table_th14">
-                 <el-select v-model="formAllData.aflcCouponList[keys].ifvouchersuperposition" clearable placeholder="请选择" >
-                          <el-option
-                             v-for="item in vouchersuperposition"
-                              :key="item.code"
-                             :label="item.name"
-                             :value="item.code"
-                             :disabled="item.disabled">
+                     <el-select v-model="formAllData.aflcCouponList[keys].ifvouchersuperposition" clearable placeholder="请选择" >
+                         <el-option
+                              v-for="item in vouchersuperposition"
+                               :key="item.code"
+                               :label="item.name"
+                               :value="item.code"
+                               :disabled="item.disabled">
                          </el-option>
-                 </el-select>
+                     </el-select>
              </div>               
             </div>
             </div>
@@ -191,7 +190,7 @@
 </template>
 <script>
 import { data_Commission ,data_CarList,data_MaidLevel,data_ServerClassList} from '@/api/server/areaPrice.js'
-import {data_get_couponActive_list,data_get_couponActive_create,data_couponActive,data_couponActiveTime} from '@/api/marketing/shippermarkting/couponActive.js'
+import {data_get_couponActive_list,data_get_couponActive_create,data_couponActive,data_couponActiveTime,data_get_couponActive_Id,data_get_couponActive2_Id,data_get_couponActive_update,data_get_aflcCoupon_add} from '@/api/marketing/shippermarkting/couponActive.js'
 import Upload from '@/components/Upload/singleImage'
 import vregion from '@/components/vregion/Region'
 import { eventBus } from '@/eventBus'
@@ -206,7 +205,7 @@ export default {
       type:Object,
     },
     params:{
-      type:[Object,String],
+      type:[Object,String,Array],
     },
     value:{
       type: String,
@@ -232,7 +231,7 @@ export default {
       type: Boolean,
       default: false
     },
-    /*one自动，two手动*/
+    /*add新增，edit编辑，view查看*/
     editType: {
       type: String,
     }
@@ -296,7 +295,7 @@ export default {
           name:'全部'
         }
         ],
-        serviceCardList:[
+         serviceCardList:[
         {    
           code:null,
           name:'全部'
@@ -304,11 +303,11 @@ export default {
         ],
         vouchersuperposition:[
         {    
-          code:0,
+          code:'0',
           name:'不能'
         },
         {
-          code:1,
+          code:'1',
           name:'能'
         }
         ],
@@ -398,11 +397,40 @@ export default {
                 })
           },
     changeInput:function(i){
-       this.inputKey = i;
+          this.inputKey = i;
     },
     openDialog:function(){
-        console.log('types',this.editType)
-        this.dialogFormVisible_add = true;
+        if(!this.params.id){
+               
+            this.$message.info('未选中需要修改内容');
+        }
+        else{
+      data_get_couponActive_Id(this.params.id).then((res)=>{
+          
+          let now1 = new Date(res.data.startTime);
+          let now2 = new Date(res.data.endTime);
+          let Ctime = [];
+          this.formAllData.id = this.params.id
+          this.formAllData.activityName= res.data.activityName
+          this.formAllData.activityDes= res.data.activityDes
+          this.formAllData.areaCode= res.data.areaCode
+          this.formAllData.activityType= res.data.activityType
+          Ctime.push(now1.getTime(),now2.getTime())
+          this.formAllData.createTime = Ctime
+      })
+      data_get_couponActive2_Id(this.params.id).then((res)=>{
+          console.log('fddddddd',res )
+          this.formAllData.aflcCouponList = res.data
+          for(var i= 0;i<this.formAllData.aflcCouponList.length;i++){
+              this.formAllData.aflcCouponList[i].startTime  = new Date(this.formAllData.aflcCouponList[i].startTime).getTime()
+              this.formAllData.aflcCouponList[i].endTime  = new Date(this.formAllData.aflcCouponList[i].endTime).getTime()
+          }
+      })
+      this.dialogFormVisible_add = true;
+        }
+  
+
+
    },
     change:function(){
       this.dialogFormVisible_add = false;
@@ -477,7 +505,6 @@ export default {
                      this.$message.warning('满减条件/最高抵扣仅能输入正整数');
                      return false
                     }
-                   
                  }
                  
     },
@@ -491,11 +518,8 @@ export default {
             else{
             this.$refs['formAllData'].validate(valid=>{
               if(valid){
-              delete this.formAllData["createTime"];
-              if(this.editType=='two'){
-                  this.formAllData.activityType = 'AF046101';
-              } 
-              data_get_couponActive_create(this.formAllData).then((res)=>{
+              delete this.formAllData["createTime"];  
+              data_get_couponActive_update(this.formAllData).then((res)=>{
               this.dialogFormVisible_add = false;
               this.$refs['formAllData'].resetFields();
               this.formAllData.aflcCouponList=[{
@@ -517,8 +541,6 @@ export default {
               }
          })
         }
-            
-
      }       
   },
   mounted(){
@@ -528,161 +550,4 @@ export default {
 
 </script>
 <style lang="scss">
-.newcouponBox{
-    .el-dialog{
-        width: 80%;
-        overflow:unset;
-    }
-    .el-row{
-        padding-bottom: 10px;
-    }
-    .v-dropdown-container{
-        top:35px!important;
-        left:0px!important;
-    }
-    .el-radio.is-bordered{
-        height: 30px;
-        padding: 7px 20px 0 10px;
-    }
-     .textareaBox {
-        width: 990px;
-    }
-    .el-input__inner{
-        line-height: 30px;
-        height: 30px;
-    }
-    .el-range__icon{
-      line-height: 24px;
-    }
-    .el-date-editor .el-range-separator{
-        line-height: 24px;
-        width: 7%
-    }
-    .couponcost{
-        margin-left:50px;
-    }
-    .el-radio-group{
-            margin-left:0px;
-        }    
-    .table_box{
-    .ht_table{
-        width: 95!important;
-        margin:0px 10px;
-        color: #333;
-        .ht_table_tr{
-            width: 100%;
-            overflow: hidden;
-            line-height: 32px;
-                        display: flex;
-        }
-         .ht_table_tr1{
-            width: 100%;
-            line-height: 31px;
-            height: 32px;
-            display: flex;
-        }
-        .ht_table_th1{
-
-            padding: 5px 5px;
-            width: 35px;
-            height: 45px;
-            line-height: 45px;
-            position: relative;
-             .addItem{
-                 top:10px;
-                 left:0px;
-             }
-        }
-        .ht_table_th{
-            padding: 5px 5px;
-            display: inline-block;
-            background: #EAF0FF;
-            text-align: center;
-            border-top:1px solid #d0d7e5;
-            border-left:1px solid #d0d7e5;
-            border-right:1px solid #d0d7e5;
-            border-bottom:1px solid #d0d7e5;
-        }
-        // .table_th1{width: 68px;}
-        // .table_th2{width: 82px;}
-        // .table_th3{width: 82px;}
-        // .table_th4{width: 72px;}
-        // .table_th5{width: 128px;}
-        // .table_th6{width: 68px;}
-        // .table_th7{width: 68px;}
-        // .table_th8{width: 68px;}
-        // .table_th9{width: 90px;text-align: center;}
-        // .table_th10{width: 90px;text-align: center;}
-        // .table_th11{width: 96px;}
-        // .table_th12{width: 96px;}
-        // .table_th13{width: 68px}
-        // .table_th14{width: 124px}
-        .table_th1{width: 5%;}
-        .table_th2{width: 10%;}
-        .table_th3{width: 6%;}
-        .table_th4{width: 6%;}
-        .table_th5{width: 10%;}
-        .table_th6{width: 4%;}
-        .table_th7{width: 6%;}
-        .table_th8{width: 6%;}
-        .table_th9{width: 11%;}
-        .table_th10{width: 11%;}
-        .table_th11{width: 7%;}
-        .table_th12{width: 7%;}
-        .table_th13{width: 9%}
-        .table_th14{width: 11%}
-        .ht_table_td1{
-            float: left;
-            padding: 5px 5px;
-            width: 35px;
-            height: 45px;
-            line-height: 45px;
-            position: relative;
-             .reduceItem{
-                 top:3px;
-                 left:0px;
-             }
-        }
-        .ht_table_td{
-            float: left;
-            text-align: center;
-            display: inline-block;
-            border-left:1px solid #d0d7e5;
-            border-bottom:1px solid #d0d7e5;
-            border-right:1px solid #d0d7e5;
-            position: relative;
-            text-align: center;
-                        height: 32px;
-            .reduceItem{
-                 top:5px;
-                 left:25px;  
-             }
-            .el-form-item{
-            margin-bottom: 0px!important;
-            }
-            .el-input{
-                width:100%;
-            }
-        }
-        .el-input__icon{
-            display:none;
-        }
-        .htable_div{
-            display: block
-        }
-        .el-form-item{
-            width: 100%;
-            padding-top:10px;
-            padding-bottom: 10px!important;
-        }
-        .el-input{
-                 width: 98%!important;
-                 .el-input__inner{
-                  padding: 0px 5px!important;
-                 }
-                
-             } 
-        }
-        }
-}
 </style>

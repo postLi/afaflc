@@ -190,6 +190,7 @@ export default {
             handlePageChange(obj) {
                 this.page = obj.pageNum
                 this.pagesize = obj.pageSize
+                this.firstblood();
         },
         // 选择删除
         delete_data(){
@@ -316,7 +317,7 @@ export default {
     margin-bottom: 10px;
     }
     .info_city{
-      height:100%
+      height:89%
     }
     .el-button{
       margin-right: 20px;

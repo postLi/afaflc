@@ -56,88 +56,88 @@
              <th width="80"   rowspan="2">一天限量</th>
             </tr>
             <tr>
-              <td><el-form-item prop="reward1" size = '50'><el-input class="Order_input" v-model="formAll.reward1" ref='reward1'></el-input></el-form-item>-<el-form-item prop="reward2"><el-input class="Order_input" v-model="formAll.reward2" ref='reward2'></el-input></el-form-item></td> 
-              <td><el-form-item prop="reward3"><el-input class="Order_input" v-model="formAll.reward3" ref='reward3'></el-input></el-form-item>-<el-form-item prop="reward4"><el-input class="Order_input" v-model="formAll.reward4" ref='reward4'></el-input></el-form-item></td> 
-              <td><el-form-item prop="reward5"><el-input class="Order_input" v-model="formAll.reward5" ref='reward5'></el-input></el-form-item>-<el-form-item prop="reward6"><el-input class="Order_input" v-model="formAll.reward6" ref='reward6'></el-input></el-form-item></td> 
-              <td><el-form-item prop="reward7"><el-input class="Order_input" v-model="formAll.reward7" ref='reward7'></el-input></el-form-item>-<el-form-item prop="reward8"><el-input class="Order_input" v-model="formAll.reward8" ref='reward8'></el-input></el-form-item></td> 
-              <td><el-form-item prop="reward9"><el-input class="Order_input" v-model="formAll.reward9" ref='reward9'></el-input></el-form-item>-<el-form-item prop="reward10"><el-input class="Order_input" v-model="formAll.reward10" ref='reward10'></el-input></el-form-item></td> 
-              <td><el-form-item prop="reward11"><el-input class="Order_input" v-model="formAll.reward11" ref='reward11'></el-input></el-form-item>-<el-form-item prop="reward12"><el-input class="Order_input" v-model="formAll.reward12" ref='reward12'></el-input></el-form-item></td> 
-              <td><el-form-item prop="reward13"><el-input class="Order_input" v-model="formAll.reward13" ref='reward13'></el-input></el-form-item>-<el-form-item prop="reward14"><el-input class="Order_input" v-model="formAll.reward14" ref='reward14'></el-input></el-form-item></td> 
-              <td><el-form-item prop="reward15"><el-input class="Order_input" v-model="formAll.reward15" ref='reward15'></el-input></el-form-item>-<el-form-item prop="reward16"><el-input class="Order_input" v-model="formAll.reward16" ref='reward16'></el-input></el-form-item></td> 
+              <td><el-form-item prop="reward1" size = '50'><el-input class="Order_input" v-model="formAll.reward1" ref='reward1' maxlength='5'></el-input></el-form-item>-<el-form-item prop="reward2"><el-input class="Order_input" v-model="formAll.reward2" ref='reward2'  maxlength='5'></el-input></el-form-item></td> 
+              <td><el-form-item prop="reward3"><el-input class="Order_input" v-model="formAll.reward3" ref='reward3' maxlength='5'></el-input></el-form-item>-<el-form-item prop="reward4"><el-input class="Order_input" v-model="formAll.reward4" ref='reward4'  maxlength='5'></el-input></el-form-item></td> 
+              <td><el-form-item prop="reward5"><el-input class="Order_input" v-model="formAll.reward5" ref='reward5' maxlength='5'></el-input></el-form-item>-<el-form-item prop="reward6"><el-input class="Order_input" v-model="formAll.reward6" ref='reward6'  maxlength='5'></el-input></el-form-item></td> 
+              <td><el-form-item prop="reward7"><el-input class="Order_input" v-model="formAll.reward7" ref='reward7' maxlength='5'></el-input></el-form-item>-<el-form-item prop="reward8"><el-input class="Order_input" v-model="formAll.reward8" ref='reward8'  maxlength='5'></el-input></el-form-item></td> 
+              <td><el-form-item prop="reward9"><el-input class="Order_input" v-model="formAll.reward9" ref='reward9' maxlength='5'></el-input></el-form-item>-<el-form-item prop="reward10"><el-input class="Order_input" v-model="formAll.reward10" ref='reward10'  maxlength='5'></el-input></el-form-item></td> 
+              <td><el-form-item prop="reward11"><el-input class="Order_input" v-model="formAll.reward11" ref='reward11' maxlength='5'></el-input></el-form-item>-<el-form-item prop="reward12"><el-input class="Order_input" v-model="formAll.reward12" ref='reward12'  maxlength='5'></el-input></el-form-item></td> 
+              <td><el-form-item prop="reward13"><el-input class="Order_input" v-model="formAll.reward13" ref='reward13' maxlength='5'></el-input></el-form-item>-<el-form-item prop="reward14"><el-input class="Order_input" v-model="formAll.reward14" ref='reward14'  maxlength='5'></el-input></el-form-item></td> 
+              <td><el-form-item prop="reward15"><el-input class="Order_input" v-model="formAll.reward15" ref='reward15' maxlength='5'></el-input></el-form-item>-<el-form-item prop="reward16"><el-input class="Order_input" v-model="formAll.reward16" ref='reward16'  maxlength='5'></el-input></el-form-item></td> 
                  
             </tr>
             <tr>
               <td>未分类</td>
-              <td><el-form-item prop="data1" size = '50'><el-input v-model="formAll.data1"></el-input></el-form-item></td>
-              <td><el-form-item prop="data2" size = '50'><el-input v-model="formAll.data2"></el-input></el-form-item></td> 
-              <td><el-form-item prop="data3" size = '50'><el-input v-model="formAll.data3"></el-input></el-form-item></td> 
-              <td><el-form-item prop="data4" size = '50'><el-input v-model="formAll.data4"></el-input></el-form-item></td> 
-              <td><el-form-item prop="data5" size = '50'><el-input v-model="formAll.data5"></el-input></el-form-item></td> 
-              <td><el-form-item prop="data6" size = '50'><el-input v-model="formAll.data6"></el-input></el-form-item></td> 
-              <td><el-form-item prop="data7" size = '50'><el-input v-model="formAll.data7"></el-input></el-form-item></td> 
-              <td><el-form-item prop="data8" size = '50'><el-input v-model="formAll.data8"></el-input></el-form-item></td> 
-              <td><el-form-item prop="maxnum1" size = '50'><el-input v-model="formAll.maxnum1"></el-input></el-form-item></td>   
+              <td><el-form-item prop="data1" size = '50'><el-input v-model="formAll.data1" maxlength='3'></el-input></el-form-item></td>
+              <td><el-form-item prop="data2" size = '50'><el-input v-model="formAll.data2" maxlength='3'></el-input></el-form-item></td> 
+              <td><el-form-item prop="data3" size = '50'><el-input v-model="formAll.data3" maxlength='3'></el-input></el-form-item></td> 
+              <td><el-form-item prop="data4" size = '50'><el-input v-model="formAll.data4" maxlength='3'></el-input></el-form-item></td> 
+              <td><el-form-item prop="data5" size = '50'><el-input v-model="formAll.data5" maxlength='3'></el-input></el-form-item></td> 
+              <td><el-form-item prop="data6" size = '50'><el-input v-model="formAll.data6" maxlength='3'></el-input></el-form-item></td> 
+              <td><el-form-item prop="data7" size = '50'><el-input v-model="formAll.data7" maxlength='3'></el-input></el-form-item></td> 
+              <td><el-form-item prop="data8" size = '50'><el-input v-model="formAll.data8" maxlength='3'></el-input></el-form-item></td> 
+              <td><el-form-item prop="maxnum1" size = '50'><el-input v-model="formAll.maxnum1" maxlength='5'></el-input></el-form-item></td>   
             </tr>
              <tr>
               <td>普通</td>
-              <td><el-form-item prop="data9" size = '50'><el-input v-model="formAll.data9"></el-input></el-form-item></td>
-              <td><el-form-item prop="data10" size = '50'><el-input v-model="formAll.data10"></el-input></el-form-item></td>
-              <td><el-form-item prop="data11" size = '50'><el-input v-model="formAll.data11"></el-input></el-form-item></td> 
-              <td><el-form-item prop="data12" size = '50'><el-input v-model="formAll.data12"></el-input></el-form-item></td> 
-              <td><el-form-item prop="data13" size = '50'><el-input v-model="formAll.data13"></el-input></el-form-item></td> 
-              <td><el-form-item prop="data14" size = '50'><el-input v-model="formAll.data14"></el-input></el-form-item></td> 
-              <td><el-form-item prop="data15" size = '50'><el-input v-model="formAll.data15"></el-input></el-form-item></td> 
-              <td><el-form-item prop="data16" size = '50'><el-input v-model="formAll.data16"></el-input></el-form-item></td> 
-              <td><el-form-item prop="maxnum2" size = '50'><el-input v-model="formAll.maxnum2"></el-input></el-form-item></td> 
+              <td><el-form-item prop="data9" size = '50'><el-input v-model="formAll.data9" maxlength='3'></el-input></el-form-item></td>
+              <td><el-form-item prop="data10" size = '50'><el-input v-model="formAll.data10" maxlength='3'></el-input></el-form-item></td>
+              <td><el-form-item prop="data11" size = '50'><el-input v-model="formAll.data11" maxlength='3'></el-input></el-form-item></td> 
+              <td><el-form-item prop="data12" size = '50'><el-input v-model="formAll.data12" maxlength='3'></el-input></el-form-item></td> 
+              <td><el-form-item prop="data13" size = '50'><el-input v-model="formAll.data13" maxlength='3'></el-input></el-form-item></td> 
+              <td><el-form-item prop="data14" size = '50'><el-input v-model="formAll.data14" maxlength='3'></el-input></el-form-item></td> 
+              <td><el-form-item prop="data15" size = '50'><el-input v-model="formAll.data15" maxlength='3'></el-input></el-form-item></td> 
+              <td><el-form-item prop="data16" size = '50'><el-input v-model="formAll.data16" maxlength='3'></el-input></el-form-item></td> 
+              <td><el-form-item prop="maxnum2" size = '50'><el-input v-model="formAll.maxnum2" maxlength='5'></el-input></el-form-item></td> 
 
             </tr>
             <tr>
               <td>银牌</td>
-              <td><el-form-item prop="data17" size = '50'><el-input v-model="formAll.data17"></el-input></el-form-item></td>
-              <td><el-form-item prop="data18" size = '50'><el-input v-model="formAll.data18"></el-input></el-form-item></td>   
-              <td><el-form-item prop="data19" size = '50'><el-input v-model="formAll.data19"></el-input></el-form-item></td>
-              <td><el-form-item prop="data20" size = '50'><el-input v-model="formAll.data20"></el-input></el-form-item></td> 
-              <td><el-form-item prop="data21" size = '50'><el-input v-model="formAll.data21"></el-input></el-form-item></td> 
-              <td><el-form-item prop="data22" size = '50'><el-input v-model="formAll.data22"></el-input></el-form-item></td> 
-              <td><el-form-item prop="data23" size = '50'><el-input v-model="formAll.data23"></el-input></el-form-item></td> 
-              <td><el-form-item prop="data24" size = '50'><el-input v-model="formAll.data24"></el-input></el-form-item></td> 
-              <td><el-form-item prop="maxnum3" size = '50'><el-input v-model="formAll.maxnum3"></el-input></el-form-item></td>  
+              <td><el-form-item prop="data17" size = '50'><el-input v-model="formAll.data17" maxlength='3'></el-input></el-form-item></td>
+              <td><el-form-item prop="data18" size = '50'><el-input v-model="formAll.data18" maxlength='3'></el-input></el-form-item></td>   
+              <td><el-form-item prop="data19" size = '50'><el-input v-model="formAll.data19" maxlength='3'></el-input></el-form-item></td>
+              <td><el-form-item prop="data20" size = '50'><el-input v-model="formAll.data20" maxlength='3'></el-input></el-form-item></td> 
+              <td><el-form-item prop="data21" size = '50'><el-input v-model="formAll.data21" maxlength='3'></el-input></el-form-item></td> 
+              <td><el-form-item prop="data22" size = '50'><el-input v-model="formAll.data22" maxlength='3'></el-input></el-form-item></td> 
+              <td><el-form-item prop="data23" size = '50'><el-input v-model="formAll.data23" maxlength='3'></el-input></el-form-item></td> 
+              <td><el-form-item prop="data24" size = '50'><el-input v-model="formAll.data24" maxlength='3'></el-input></el-form-item></td> 
+              <td><el-form-item prop="maxnum3" size = '50'><el-input v-model="formAll.maxnum3" maxlength='5'></el-input></el-form-item></td>  
             </tr>
              <tr>
               <td>金牌</td>
-              <td><el-form-item prop="data25" size = '50'><el-input v-model="formAll.data25"></el-input></el-form-item></td> 
-              <td><el-form-item prop="data26" size = '50'><el-input v-model="formAll.data26"></el-input></el-form-item></td> 
-              <td><el-form-item prop="data27" size = '50'><el-input v-model="formAll.data27"></el-input></el-form-item></td>                
-              <td><el-form-item prop="data28" size = '50'><el-input v-model="formAll.data28"></el-input></el-form-item></td>
-              <td><el-form-item prop="data29" size = '50'><el-input v-model="formAll.data29"></el-input></el-form-item></td> 
-              <td><el-form-item prop="data30" size = '50'><el-input v-model="formAll.data30"></el-input></el-form-item></td> 
-              <td><el-form-item prop="data31" size = '50'><el-input v-model="formAll.data31"></el-input></el-form-item></td> 
-              <td><el-form-item prop="data32" size = '50'><el-input v-model="formAll.data32"></el-input></el-form-item></td> 
-              <td><el-form-item prop="maxnum4" size = '50'><el-input v-model="formAll.maxnum4"></el-input></el-form-item></td>   
+              <td><el-form-item prop="data25" size = '50'><el-input v-model="formAll.data25" maxlength='3'></el-input></el-form-item></td> 
+              <td><el-form-item prop="data26" size = '50'><el-input v-model="formAll.data26" maxlength='3'></el-input></el-form-item></td> 
+              <td><el-form-item prop="data27" size = '50'><el-input v-model="formAll.data27" maxlength='3'></el-input></el-form-item></td>                
+              <td><el-form-item prop="data28" size = '50'><el-input v-model="formAll.data28" maxlength='3'></el-input></el-form-item></td>
+              <td><el-form-item prop="data29" size = '50'><el-input v-model="formAll.data29" maxlength='3'></el-input></el-form-item></td> 
+              <td><el-form-item prop="data30" size = '50'><el-input v-model="formAll.data30" maxlength='3'></el-input></el-form-item></td> 
+              <td><el-form-item prop="data31" size = '50'><el-input v-model="formAll.data31" maxlength='3'></el-input></el-form-item></td> 
+              <td><el-form-item prop="data32" size = '50'><el-input v-model="formAll.data32" maxlength='3'></el-input></el-form-item></td> 
+              <td><el-form-item prop="maxnum4" size = '50'><el-input v-model="formAll.maxnum4" maxlength='5'></el-input></el-form-item></td>   
             </tr>
             <tr>
               <td>钻石</td>
-              <td><el-form-item prop="data33" size = '50'><el-input v-model="formAll.data33"></el-input></el-form-item></td> 
-              <td><el-form-item prop="data34" size = '50'><el-input v-model="formAll.data34"></el-input></el-form-item></td> 
-              <td><el-form-item prop="data35" size = '50'><el-input v-model="formAll.data35"></el-input></el-form-item></td> 
-              <td><el-form-item prop="data36" size = '50'><el-input v-model="formAll.data36"></el-input></el-form-item></td>
-              <td><el-form-item prop="data37" size = '50'><el-input v-model="formAll.data37"></el-input></el-form-item></td>
-              <td><el-form-item prop="data38" size = '50'><el-input v-model="formAll.data38"></el-input></el-form-item></td> 
-              <td><el-form-item prop="data39" size = '50'><el-input v-model="formAll.data39"></el-input></el-form-item></td> 
-              <td><el-form-item prop="data40" size = '50'><el-input v-model="formAll.data40"></el-input></el-form-item></td> 
-              <td><el-form-item prop="maxnum5" size = '50'><el-input v-model="formAll.maxnum5"></el-input></el-form-item></td>  
+              <td><el-form-item prop="data33" size = '50'><el-input v-model="formAll.data33" maxlength='3'></el-input></el-form-item></td> 
+              <td><el-form-item prop="data34" size = '50'><el-input v-model="formAll.data34" maxlength='3'></el-input></el-form-item></td> 
+              <td><el-form-item prop="data35" size = '50'><el-input v-model="formAll.data35" maxlength='3'></el-input></el-form-item></td> 
+              <td><el-form-item prop="data36" size = '50'><el-input v-model="formAll.data36" maxlength='3'></el-input></el-form-item></td>
+              <td><el-form-item prop="data37" size = '50'><el-input v-model="formAll.data37" maxlength='3'></el-input></el-form-item></td>
+              <td><el-form-item prop="data38" size = '50'><el-input v-model="formAll.data38" maxlength='3'></el-input></el-form-item></td> 
+              <td><el-form-item prop="data39" size = '50'><el-input v-model="formAll.data39" maxlength='3'></el-input></el-form-item></td> 
+              <td><el-form-item prop="data40" size = '50'><el-input v-model="formAll.data40" maxlength='3'></el-input></el-form-item></td> 
+              <td><el-form-item prop="maxnum5" size = '50'><el-input v-model="formAll.maxnum5" maxlength='5'></el-input></el-form-item></td>  
             </tr>
              <tr>
               <td>皇冠</td>
-              <td><el-form-item prop="data41" size = '50'><el-input v-model="formAll.data41"></el-input></el-form-item></td> 
-              <td><el-form-item prop="data42" size = '50'><el-input v-model="formAll.data42"></el-input></el-form-item></td> 
-              <td><el-form-item prop="data43" size = '50'><el-input v-model="formAll.data43"></el-input></el-form-item></td>
-              <td><el-form-item prop="data44" size = '50'><el-input v-model="formAll.data44"></el-input></el-form-item></td>  
-              <td><el-form-item prop="data45" size = '50'><el-input v-model="formAll.data45"></el-input></el-form-item></td>   
-              <td><el-form-item prop="data46" size = '50'><el-input v-model="formAll.data46"></el-input></el-form-item></td> 
-              <td><el-form-item prop="data47" size = '50'><el-input v-model="formAll.data47"></el-input></el-form-item></td> 
-              <td><el-form-item prop="data48" size = '50'><el-input v-model="formAll.data48"></el-input></el-form-item></td> 
-              <td><el-form-item prop="maxnum6" size = '50'><el-input v-model="formAll.maxnum6"></el-input></el-form-item></td>   
+              <td><el-form-item prop="data41" size = '50'><el-input v-model="formAll.data41" maxlength='3'></el-input></el-form-item></td> 
+              <td><el-form-item prop="data42" size = '50'><el-input v-model="formAll.data42" maxlength='3'></el-input></el-form-item></td> 
+              <td><el-form-item prop="data43" size = '50'><el-input v-model="formAll.data43" maxlength='3'></el-input></el-form-item></td>
+              <td><el-form-item prop="data44" size = '50'><el-input v-model="formAll.data44" maxlength='3'></el-input></el-form-item></td>  
+              <td><el-form-item prop="data45" size = '50'><el-input v-model="formAll.data45" maxlength='3'></el-input></el-form-item></td>   
+              <td><el-form-item prop="data46" size = '50'><el-input v-model="formAll.data46" maxlength='3'></el-input></el-form-item></td> 
+              <td><el-form-item prop="data47" size = '50'><el-input v-model="formAll.data47" maxlength='3'></el-input></el-form-item></td> 
+              <td><el-form-item prop="data48" size = '50'><el-input v-model="formAll.data48" maxlength='3'></el-input></el-form-item></td> 
+              <td><el-form-item prop="maxnum6" size = '50'><el-input v-model="formAll.maxnum6" maxlength='5'></el-input></el-form-item></td>   
             </tr>                        
             </tbody>
              </table>

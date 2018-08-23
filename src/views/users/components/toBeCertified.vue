@@ -79,12 +79,12 @@
              <el-row>
                 <el-col :span="12">
                     <el-form-item label="手机号：" :label-width="formLabelWidth">
-                        <el-input v-model="templateModel.driverMobile"></el-input>
+                        <el-input v-model="templateModel.driverMobile" disabled></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col :span="12">
                     <el-form-item label="车主：" :label-width="formLabelWidth">
-                        <el-input v-model="templateModel.driverName"></el-input>
+                        <el-input v-model="templateModel.driverName" ></el-input>
                     </el-form-item>
                 </el-col>
             </el-row>
@@ -112,8 +112,8 @@
                     <el-form-item label="车型：" :label-width="formLabelWidth">
                         <el-select v-model="templateModel.carType" placeholder="请选择">
                             <el-option
-                                v-for="item in options"
-                                :key="item.value"
+                                v-for="item in optionscarType"
+                                :key="item.code"
                                 :label="item.name"
                                 :value="item.code">
                             </el-option>
@@ -124,16 +124,45 @@
 
             <el-row>
                 <el-col :span="12">
-                    <el-form-item label="车长(米)：" :label-width="formLabelWidth">
-                      <el-input></el-input>
+                    <el-form-item label="车长(米)：" :label-width="formLabelWidth"  >
+                      <el-input
+                            class="lessWidth"
+                            placeholder="长"
+                            v-model="templateModel.carLength"
+                            clearable
+                            ref="lengths"
+                            :maxlength="30"
+                            :disabled="editType=='view'"
+                            >
+                        </el-input>
+                        <el-input
+                            class="lessWidth"
+                            placeholder="宽"
+                            v-model="templateModel.carWidth"
+                            clearable
+                            ref="widths"
+                            :maxlength="30"
+                            :disabled="editType=='view'"
+                            >
+                        </el-input>
+                        <el-input
+                            class="lessWidth"
+                            placeholder="高"
+                            v-model="templateModel.carHeight"
+                            clearable
+                            ref="heights"
+                            :maxlength="30"
+                            :disabled="editType=='view'"
+                            >
+                        </el-input>
                     </el-form-item>
                 </el-col>
                 <el-col :span="12">
                     <el-form-item label="车辆规格："  :label-width="formLabelWidth">
-                        <el-select v-model="templateModel.carType" placeholder="请选择">
+                        <el-select v-model="templateModel.carSpec" placeholder="请选择">
                             <el-option
-                                v-for="item in options"
-                                :key="item.value"
+                                v-for="item in optionscarSpec"
+                                :key="item.code"
                                 :label="item.name"
                                 :value="item.code">
                             </el-option>
@@ -141,6 +170,40 @@
                     </el-form-item>
                   </el-col>
             </el-row>
+              <el-row>
+                  <el-col :span="12">
+                      <el-form-item label="中单等级：" :label-width="formLabelWidth">
+                            <el-select v-model="templateModel.obtainGrade" placeholder="请选择" >
+                                <el-option
+                                    v-for="item in optionsLevel"
+                                    :key="item.code"
+                                    :label="item.name"
+                                    :value="item.code">
+                                </el-option>
+                            </el-select>
+                        </el-form-item>
+                  </el-col>
+                  <el-col :span="12">
+                    <el-form-item label="中单等级有效期至：" :label-width="formLabelWidth" >
+                        <el-date-picker
+                            v-model="templateModel.obtainGradeTime"
+                            type="date"
+                            format="yyyy-MM-dd"
+                            placeholder="选择日期"
+                            :picker-options="pickerOptions"
+                            >
+                        </el-date-picker>
+                    </el-form-item>
+                  </el-col>
+              </el-row>
+
+              <el-row>
+                  <el-col :span="12">
+                    <el-form-item :label-width="formLabelWidth" label="特权车：">
+                        <el-checkbox v-model="templateModel.isVipCar" true-label="1" false-label='0' @change='isVip' label="是" border size="medium" ></el-checkbox>
+                    </el-form-item>
+                  </el-col>
+              </el-row>
 
             <el-row>
               <el-col :span="12">
@@ -164,7 +227,7 @@
             <el-row>
               <el-col :span="12">
                 <el-form-item label="注册来源" :label-width="formLabelWidth">
-                  <el-input v-model="templateModel.registerOriginName" disabled></el-input>
+                  <el-input v-model="templateModel.registerOrigin" disabled></el-input>
                 </el-form-item>
               </el-col>
             </el-row>
@@ -210,7 +273,7 @@
                     </el-form-item>
                 </div>
                 <div class="data_pic_callingcode data_pic_c">
-                  <div class="uploadImgBox"><img  class="picURL" :src="templateModel.idcardFile ? templateModel.idcardFile : defaultImg" @click="changeIMG"/></div>
+                  <div class="uploadImgBox"><img  class="picURL" :src="templateModel.idCardFile ? templateModel.idCardFile : defaultImg" @click="changeIMG"/></div>
                     <!-- <upload class="licensePicture" tip="（必须为jpg/png并且小于5M）" v-model="templateModel.idcardFile" /> -->
 
                     <h2>身份证</h2>
@@ -248,7 +311,7 @@
     </div>
 </template>
 <script type="text/javascript">
-    import {data_get_driver_list,data_get_driver_status,data_post_audit} from '../../../api/users/carowner/total_carowner.js'
+    import {data_get_driver_list,data_get_driver_status,data_post_audit,data_Get_carType,data_CarList,data_get_driver_obStatus} from '../../../api/users/carowner/total_carowner.js'
     import DriverNewTemplate from '../carowner/driver-newTemplate'
     import Upload from '@/components/Upload/singleImage'
     import cue from '../../../components/Message/cue'
@@ -270,6 +333,11 @@
         },
         data(){
             return{
+                pickerOptions:{
+                disabledDate(time) {
+                return time.getTime() < Date.now();
+                }
+                },
                 defaultImg:'/static/test.jpg',//默认第一张图片的url
                 defaultImg1:'',//默认第一张图片的url
                 options:[], //车辆规格下拉列表
@@ -289,7 +357,25 @@
                     name:'全部'
                     }
                 ],
-                formLabelWidth:'110px',
+                optionscarType:[
+                    {
+                    code:null,
+                    name:'全部'
+                    }
+                ],
+                optionscarSpec:[
+                    {
+                    code:null,
+                    name:'全部'
+                    }
+                ],
+                optionsLevel:[
+                     {
+                    code:null,
+                    name:'全部'
+                    }  
+                ],
+                formLabelWidth:'120px',
                 formAuidDialogFlag:false, // 认证审核弹框控制
                 templateModel:{ // 认证审核表单
                 },
@@ -396,6 +482,26 @@
                         this.optionsService.push(item);
                     })
                 })
+
+                data_CarList().then(res=>{
+                    res.data.map((item)=>{
+                        this.optionscarType.push(item);
+                    })
+                })
+
+                data_Get_carType().then(res=>{
+                    res.data.map((item)=>{
+                        this.optionscarSpec.push(item);
+                    })
+                })
+           // 中单等级的获取
+            data_get_driver_obStatus().then(res =>{
+                res.data.map(item=>{
+                    this.optionsLevel.push(item)
+                })
+            }).catch(err =>{
+                console.log(err)
+            })
             },
              //每页显示数据量变更
             handleSizeChange: function(val) {
@@ -446,6 +552,17 @@
                     })
                 }
                 },
+        isVip(val){
+            if(this.templateModel.isVipCar == '1'){
+
+                this.templateModel.isVipCar = '1'
+                                            console.log(this.templateModel.isVipCar)
+            }
+            else{
+                this.templateModel.isVipCar = '0'
+                            console.log(this.templateModel.isVipCar)
+            }   
+        },    
             // 审核不通过
             handlerOut(){
                 this.completeData()
