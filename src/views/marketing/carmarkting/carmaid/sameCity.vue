@@ -32,7 +32,6 @@
             <el-form-item>       
           <el-button type="primary"  plain @click="getData_query">查询</el-button> 
           </el-form-item>              
-          
           </el-form>
          </div>
           	<div class="classify_cityinfo">
@@ -88,7 +87,7 @@
             </el-table> 
         	</div> 
          <!-- 页码 -->
-         <div class="info_tab_footer">共计:{{ dataTotal }} <div class="show_pager"> <Pager :total="dataTotal" @change="handlePageChange"  :sizes="sizes"/></div> </div> 
+         <div class="info1_tab_footer">共计:{{ dataTotal }} <div class="show_pager"> <Pager :total="dataTotal" @change="handlePageChange"  :sizes="sizes"/></div> </div> 
           </div>
       </div>
 </template>
@@ -255,7 +254,7 @@ export default {
     },
 }
 </script>
-<style lang="scss" >
+<style lang="scss">
 .export{
   .el-button{
     margin-right:20px;

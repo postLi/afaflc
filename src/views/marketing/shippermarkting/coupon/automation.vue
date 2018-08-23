@@ -118,8 +118,13 @@
                          :btntext="scope.row.activityName"
                          :editType="types"
                          :templateItem="scope.row"
-                         btntitle="详情"
+                          btntitle="详情"
                          :updataflag="true"
+                         :optionsCarList='optionsCarList'
+                         :MaidLevelList="MaidLevelList"
+                         :serviceCardList="serviceCardList"
+                         :couponLists="couponLists"
+                         :couponTimeLists="couponTimeLists"
                     ></automationcheck>
                 </template>
             </el-table-column>
@@ -148,7 +153,8 @@
 </template>
 
 <script>
-import {data_get_couponActive_list,data_Del_couponActive,data_Able_couponActive,data_automationActive} from '@/api/marketing/shippermarkting/couponActive.js'
+import {data_CarList,data_MaidLevel,data_ServerClassList} from '@/api/server/areaPrice.js'
+import {data_get_couponActive_list,data_Del_couponActive,data_Able_couponActive,data_automationActive,data_couponActive,data_couponActiveTime,data_couponStatus} from '@/api/marketing/shippermarkting/couponActive.js'
 import vregion from '@/components/vregion/Region'
 import { eventBus } from '@/eventBus'
 import Pager from '@/components/Pagination/index'
@@ -190,6 +196,26 @@ export default {
            { code:'0',name:'启用'},
            { code:'1',name:'禁用'},
           ],
+        optionsCarList:[
+        {
+          code:null,
+          name:'全部'
+        }
+         ],
+        MaidLevelList:[
+        {    
+          code:null,
+          name:'全部'
+        }
+        ],
+         serviceCardList:[
+        {    
+          code:null,
+          name:'全部'
+        }
+        ],
+        couponLists:[],
+        couponTimeLists:[],          
         }
     },
     components:{
@@ -222,8 +248,15 @@ export default {
                 this.pagesize = obj.pageSize
         },
             cTime(i){
+                console.log('fdfd');
+                if(i!==null){
                 this.formAllData.startTime = i[0]
                 this.formAllData.endTime = i[1]
+                }
+                else{
+                this.formAllData.startTime = null
+                this.formAllData.endTime = null
+                }
             },
          //  查询
          getData_query(){
@@ -295,10 +328,49 @@ export default {
                    res.data.map((item)=>{
                         this.activeList.push(item);
                     })    
-            })
+                })
+                data_CarList().then(res=>{
+                    // console.log(res.data)
+                    res.data.map((item)=>{
+                        this.optionsCarList.push(item);
+                    })
+                    })
+                data_MaidLevel().then(res=>{
+                      res.data.map((item)=>{
+                        this.MaidLevelList.push(item);
+                    })
+                }).catch(res=>{
+                    console.log(res)
+                });    
+                data_ServerClassList().then(res=>{
+                      res.data.map((item)=>{
+                       this.serviceCardList.push(item);
+                    })     
+                }).catch(res=>{
+                    console.log(res)
+                });
+                data_couponActive().then((res)=>{
+                     res.data.map((item)=>{
+                       this.couponLists.push(item);
+                    })   
+                })
+                 data_couponActiveTime().then((res)=>{
+                     res.data.map((item)=>{
+                       this.couponTimeLists.push(item);
+                    })   
+                })        
+                data_couponStatus().then(res=>{
+                console.log('卷码状态',res)
+                })            
         }
     },
      mounted(){
+           if(this.types=='two'){
+                 this.formAllData.usingStatus = "0";
+           }
+           else{
+               this.formAllData.usingStatus = null;
+           }
          this.getMoreInformation();
          eventBus.$on('changeListtwo', () => {
                 this.firstblood()

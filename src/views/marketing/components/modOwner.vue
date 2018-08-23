@@ -18,8 +18,28 @@
             <tr>
              <td><el-input v-model="formAll.areaCode2" disabled></el-input></td>
              <td><el-input v-model="formAll.rewardMax" placeholder="请选择"></el-input></td>   
-             <td><el-input v-model="formAll.serivceCode"  disabled></el-input></td>
-             <td><el-input v-model="formAll.carType"  disabled></el-input></td>
+             <td>
+                 <el-select v-model="formAll.serivceCode" clearable placeholder="请选择" disabled>
+                          <el-option
+                             v-for="item in serviceCardList"
+                              :key="item.code"
+                             :label="item.name"
+                              :value="item.code"
+                               :disabled="item.disabled">
+                         </el-option>
+                 </el-select>
+            </td>
+             <td>
+                 <el-select v-model="formAll.carType" clearable placeholder="请选择" disabled>
+                          <el-option
+                             v-for="item in optionsCar"
+                               :key="item.code"
+                               :label="item.name"
+                               :value="item.code"
+                               :disabled="item.disabled">
+                         </el-option>
+                 </el-select>
+             </td>
              <td> 
             <el-switch
             style="display: block"
@@ -393,7 +413,6 @@ export default {
             this.$forceUpdate()
             this.dialogFormVisible_add = true;
             data_get_ownerFromsame1_Id(this.params.id).then(res=>{
-            console.log('res',res)
             this.formAll.areaCode2=res.data.areaCode2
             this.formAll.rewardMax=res.data.rewardMax
             this.formAll.carType=res.data.carType
@@ -434,7 +453,9 @@ export default {
                 
           }, 
           update1:function(){
+               console.log('fdfwqwqwd')
               data_get_ownerFromsame2_Id(this.params.id).then(res=>{
+                  console.log('fdfd',res)
             this.formAll.reward1 = res.data[0].startPrice;this.formAll.reward2 = res.data[0].endPrice;
             this.formAll.reward3 = res.data[1].startPrice;this.formAll.reward4 = res.data[1].endPrice;
             this.formAll.reward5 = res.data[2].startPrice;this.formAll.reward6 = res.data[2].endPrice;

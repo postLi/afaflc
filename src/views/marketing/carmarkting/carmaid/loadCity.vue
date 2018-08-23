@@ -1,11 +1,7 @@
 <template>
     <div>
         <div class="shipper_searchinfo">
-          <el-form :inline="true">
-            <el-form-item label="所在地3：">
-              <GetCityList  ref="area"></GetCityList>
-            </el-form-item>
-          </el-form>
+              零担
       </div>
     </div>
 </template>

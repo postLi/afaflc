@@ -192,7 +192,7 @@
 </template>
 <script>
 import { data_ServerClassList} from '@/api/server/areaPrice.js'
-import  { data_Add_pushsheet,data_dpdata_pushsheet} from '@/api/vest/pushsheet/pushsheetList.js'
+import  { data_Add_pushsheet,data_dpdata_pushsheet,data_get_pushsheet_Id} from '@/api/vest/pushsheet/pushsheetList.js'
 import Upload from '@/components/Upload/singleImage'
 import GetCityList from '@/components/GetCityList'
 import { eventBus } from '@/eventBus'
@@ -242,15 +242,6 @@ data(){
               
             }
         }
-
-        // const TimeCodeValidator = (rule, val, cb) => {
-        //      if(val==null){
-        //     cb(new Error('推送不能为空'))
-        //     }
-        //     else{
-        //         cb()
-        //     }   
-        // }
     return{
             selectFlag:false,
             driverTemplateDialogFlag: false,// 弹框控制的控制
@@ -262,87 +253,6 @@ data(){
             createTime:'',
             serviceCardList:[],
             serviceValue:null,
-            // 保存数据
-            constVestList:{
-                createTime:null,
-                startTime:null,
-                endTime:null,
-                sett:{
-                  AF01801:{
-                      zero:{
-                        AF0010401: null,
-                        AF0020401: null,                        
-                        AF0020402: null,
-                        AF0020403: null,
-                        AF0020404: null,
-                        AF0020405: null,
-                      },
-                      one:{
-                        AF0010401: null,
-                        AF0020401: null,                        
-                        AF0020402: null,
-                        AF0020403: null,
-                        AF0020404: null,
-                        AF0020405: null,
-                      },
-                  },
-                  AF01802:{
-                      zero:{
-                        AF0010401: null,
-                        AF0020401: null,                        
-                        AF0020402: null,
-                        AF0020403: null,
-                        AF0020404: null,
-                        AF0020405: null,
-                      },
-                      one:{
-                        AF0010401: null,
-                        AF0020401: null,                        
-                        AF0020402: null,
-                        AF0020403: null,
-                        AF0020404: null,
-                        AF0020405: null,
-                      },
-                  },
-                  AF01803:{
-                      zero:{
-                        AF0010401: null,
-                        AF0020401: null,                        
-                        AF0020402: null,
-                        AF0020403: null,
-                        AF0020404: null,
-                        AF0020405: null,
-                      },
-                     one:{
-                        AF0010401: null,
-                        AF0020401: null,                        
-                        AF0020402: null,
-                        AF0020403: null,
-                        AF0020404: null,
-                        AF0020405: null,
-                      },
-                  },
-                  AF01804:{
-                     zero:{
-                        AF0010401: null,
-                        AF0020401: null,                        
-                        AF0020402: null,
-                        AF0020403: null,
-                        AF0020404: null,
-                        AF0020405: null,
-                      },
-                      one:{
-                        AF0010401: null,
-                        AF0020401: null,                        
-                        AF0020402: null,
-                        AF0020403: null,
-                        AF0020404: null,
-                        AF0020405: null,
-                      },
-                  },
-                }
-                },
-
     	 	vestList:{
             serivceCode: null,
             areaCode:null,
@@ -573,7 +483,6 @@ methods:{
             }
             },
         openDialog(){
-             console.log('this.params',this.params)
             if(this.params==null)
             {
             this.driverTemplateDialogFlag=true;
@@ -588,9 +497,109 @@ methods:{
             return
             }
             if(this.editType == 'edit'){
-            this.vestList = this.params;
-            this.driverTemplateDialogFlag=true; 
-                        
+                data_get_pushsheet_Id(this.params.id).then(res=>{
+                        let selectRowData = res.data.push;
+                        let setting =res.data.settings
+                        console.log('res.data.push',setting)
+                        let sy=[]
+                        for(var i = 0;i<setting.length;i++){
+                            sy.push( {
+                                 createTime:null,
+                                 startTime:null,
+                                 endTime:null,
+                               sett:{
+                            AF01801:{
+                                zero:{
+                                    AF0010401: null,
+                                    AF0020401: null,                        
+                                    AF0020402: null,
+                                    AF0020403: null,
+                                    AF0020404: null,
+                                    AF0020405: null,
+                                },
+                                one:{
+                                    AF0010401: null,
+                                    AF0020401: null,                        
+                                    AF0020402: null,
+                                    AF0020403: null,
+                                    AF0020404: null,
+                                    AF0020405: null,
+                                },
+                            },
+                            AF01802:{
+                                zero:{
+                                    AF0010401: null,
+                                    AF0020401: null,                        
+                                    AF0020402: null,
+                                    AF0020403: null,
+                                    AF0020404: null,
+                                    AF0020405: null,
+                                },
+                                one:{
+                                    AF0010401: null,
+                                    AF0020401: null,                        
+                                    AF0020402: null,
+                                    AF0020403: null,
+                                    AF0020404: null,
+                                    AF0020405: null,
+                                },
+                            },
+                            AF01803:{
+                                zero:{
+                                    AF0010401: null,
+                                    AF0020401: null,                        
+                                    AF0020402: null,
+                                    AF0020403: null,
+                                    AF0020404: null,
+                                    AF0020405: null,
+                                },
+                                one:{
+                                    AF0010401: null,
+                                    AF0020401: null,                        
+                                    AF0020402: null,
+                                    AF0020403: null,
+                                    AF0020404: null,
+                                    AF0020405: null,
+                                },
+                            },
+                            AF01804:{
+                                zero:{
+                                    AF0010401: null,
+                                    AF0020401: null,                        
+                                    AF0020402: null,
+                                    AF0020403: null,
+                                    AF0020404: null,
+                                    AF0020405: null,
+                                },
+                                one:{
+                                    AF0010401: null,
+                                    AF0020401: null,                        
+                                    AF0020402: null,
+                                    AF0020403: null,
+                                    AF0020404: null,
+                                    AF0020405: null,
+                                },
+                            },
+                            }
+                            })}
+                        setting.map((subList,index) => {
+                            sy[index].startTime= subList[index].pushStartTime;
+                            sy[index].endTime= subList[index].pushEndTime;
+                            sy[index].createTime= [subList[index].pushStartTime,subList[index].pushEndTime]; 
+                            let sett = sy[index].sett;
+                                subList.map(item => {
+                                    var carType = item.carType;                                
+                                    var isLine = item.isLine;
+                                    var liveness = item.liveness;
+                                    sett[carType][isLine][liveness] = item.orderNum
+                                })
+                                sy[index].sett = sett
+                        })
+                        selectRowData.setting = sy;
+                        this.vestList = selectRowData;
+                        })
+
+            this.driverTemplateDialogFlag=true;
             }
             }
         },
@@ -607,86 +616,84 @@ methods:{
         addItem(){
          // 业务逻辑判断
         this.vestList.setting.push({
-                createTime:null,
-                startTime:null,
-                endTime:null,
-                sett:{
-                  AF01801:{
-                      zero:{
-                        AF0010401: null,
-                        AF0020401: null,                        
-                        AF0020402: null,
-                        AF0020403: null,
-                        AF0020404: null,
-                        AF0020405: null,
-                      },
-                      one:{
-                        AF0010401: null,
-                        AF0020401: null,                        
-                        AF0020402: null,
-                        AF0020403: null,
-                        AF0020404: null,
-                        AF0020405: null,
-                      },
-                  },
-                  AF01802:{
-                      zero:{
-                        AF0010401: null,
-                        AF0020401: null,                        
-                        AF0020402: null,
-                        AF0020403: null,
-                        AF0020404: null,
-                        AF0020405: null,
-                      },
-                      one:{
-                        AF0010401: null,
-                        AF0020401: null,                        
-                        AF0020402: null,
-                        AF0020403: null,
-                        AF0020404: null,
-                        AF0020405: null,
-                      },
-                  },
-                  AF01803:{
-                      zero:{
-                        AF0010401: null,
-                        AF0020401: null,                        
-                        AF0020402: null,
-                        AF0020403: null,
-                        AF0020404: null,
-                        AF0020405: null,
-                      },
-                     one:{
-                        AF0010401: null,
-                        AF0020401: null,                        
-                        AF0020402: null,
-                        AF0020403: null,
-                        AF0020404: null,
-                        AF0020405: null,
-                      },
-                  },
-                  AF01804:{
-                     zero:{
-                        AF0010401: null,
-                        AF0020401: null,                        
-                        AF0020402: null,
-                        AF0020403: null,
-                        AF0020404: null,
-                        AF0020405: null,
-                      },
-                      one:{
-                        AF0010401: null,
-                        AF0020401: null,                        
-                        AF0020402: null,
-                        AF0020403: null,
-                        AF0020404: null,
-                        AF0020405: null,
-                      },
-                  },
-                }
-                });
-                  
-                console.log(this.vestList.setting)
+                                 createTime:null,
+                                 startTime:null,
+                                 endTime:null,
+                               sett:{
+                            AF01801:{
+                                zero:{
+                                    AF0010401: null,
+                                    AF0020401: null,                        
+                                    AF0020402: null,
+                                    AF0020403: null,
+                                    AF0020404: null,
+                                    AF0020405: null,
+                                },
+                                one:{
+                                    AF0010401: null,
+                                    AF0020401: null,                        
+                                    AF0020402: null,
+                                    AF0020403: null,
+                                    AF0020404: null,
+                                    AF0020405: null,
+                                },
+                            },
+                            AF01802:{
+                                zero:{
+                                    AF0010401: null,
+                                    AF0020401: null,                        
+                                    AF0020402: null,
+                                    AF0020403: null,
+                                    AF0020404: null,
+                                    AF0020405: null,
+                                },
+                                one:{
+                                    AF0010401: null,
+                                    AF0020401: null,                        
+                                    AF0020402: null,
+                                    AF0020403: null,
+                                    AF0020404: null,
+                                    AF0020405: null,
+                                },
+                            },
+                            AF01803:{
+                                zero:{
+                                    AF0010401: null,
+                                    AF0020401: null,                        
+                                    AF0020402: null,
+                                    AF0020403: null,
+                                    AF0020404: null,
+                                    AF0020405: null,
+                                },
+                                one:{
+                                    AF0010401: null,
+                                    AF0020401: null,                        
+                                    AF0020402: null,
+                                    AF0020403: null,
+                                    AF0020404: null,
+                                    AF0020405: null,
+                                },
+                            },
+                            AF01804:{
+                                zero:{
+                                    AF0010401: null,
+                                    AF0020401: null,                        
+                                    AF0020402: null,
+                                    AF0020403: null,
+                                    AF0020404: null,
+                                    AF0020405: null,
+                                },
+                                one:{
+                                    AF0010401: null,
+                                    AF0020401: null,                        
+                                    AF0020402: null,
+                                    AF0020403: null,
+                                    AF0020404: null,
+                                    AF0020405: null,
+                                },
+                            },
+                            }
+                            });
                         this.$forceUpdate()
             },
         reduceItem(i){

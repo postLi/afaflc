@@ -671,7 +671,7 @@ export default {
 }
 .el-col-24{
     text-align: left;
-} 
+}
 .upload{
             width: 300px;
             line-height: 20px;

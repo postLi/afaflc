@@ -17,7 +17,7 @@
             </el-form-item>
         </el-form>
         </div>
-        <div class="classify_info">
+        <div class="classify_info identicalStyle">
                 <div class="btns_box">
                         <el-button type="primary" plain @click="handleAudit">认证审核</el-button>
                 </div>
@@ -49,7 +49,6 @@
                          >
                         </driver-newTemplate>
                               </template>
-
                         </el-table-column>
                         <el-table-column prop="driverMobile" label="手机号" >
                         </el-table-column>
@@ -75,7 +74,7 @@
         <!-- 认证审核 -->
         <div class="shenghe commoncss">
         <el-dialog title="认证审核" :visible.sync="formAuidDialogFlag">
-          <el-form :model="templateModel" ref="shengheform">
+          <el-form :model="templateModel" ref="shengheform" :rules="rulesForm">
              <el-row>
                 <el-col :span="12">
                     <el-form-item label="手机号：" :label-width="formLabelWidth">
@@ -96,7 +95,7 @@
                     </el-form-item>
                 </el-col>
                 <el-col :span="12">
-                    <el-form-item label="所在地：" :label-width="formLabelWidth">
+                    <el-form-item label="所在区域：" :label-width="formLabelWidth">
                         <GetCityList v-model="templateModel.belongCity" ref="area"></GetCityList>
                     </el-form-item>
                 </el-col>
@@ -132,7 +131,6 @@
                             clearable
                             ref="lengths"
                             :maxlength="30"
-                            :disabled="editType=='view'"
                             >
                         </el-input>
                         <el-input
@@ -142,7 +140,6 @@
                             clearable
                             ref="widths"
                             :maxlength="30"
-                            :disabled="editType=='view'"
                             >
                         </el-input>
                         <el-input
@@ -152,7 +149,6 @@
                             clearable
                             ref="heights"
                             :maxlength="30"
-                            :disabled="editType=='view'"
                             >
                         </el-input>
                     </el-form-item>
@@ -172,7 +168,7 @@
             </el-row>
               <el-row>
                   <el-col :span="12">
-                      <el-form-item label="中单等级：" :label-width="formLabelWidth">
+                      <el-form-item label="中单等级：" :label-width="formLabelWidth" prop="obtainGrade">
                             <el-select v-model="templateModel.obtainGrade" placeholder="请选择" >
                                 <el-option
                                     v-for="item in optionsLevel"
@@ -184,7 +180,7 @@
                         </el-form-item>
                   </el-col>
                   <el-col :span="12">
-                    <el-form-item label="中单等级有效期至：" :label-width="formLabelWidth" >
+                    <el-form-item label="中单等级有效期至：" :label-width="formLabelWidth" prop="obtainGradeTime">
                         <el-date-picker
                             v-model="templateModel.obtainGradeTime"
                             type="date"
@@ -332,6 +328,25 @@
             DriverNewTemplate
         },
         data(){
+      // 上传中单等级校验 
+        const obtainGradeValidator = (rule,val,cb)=>{
+            if(!val){
+            cb(new Error('请填写中单等级'))
+            }
+            else{
+                cb()
+            }
+        }   
+
+      // 中单等级有效期校验 
+        const obtainGradeTimeValidator = (rule,val,cb)=>{
+            if(!val){
+            cb(new Error('请填写中单等级有效期'))
+            }
+            else{
+                cb()
+            }
+        }   
             return{
                 pickerOptions:{
                 disabledDate(time) {
@@ -375,7 +390,7 @@
                     name:'全部'
                     }  
                 ],
-                formLabelWidth:'120px',
+                formLabelWidth:'125px',
                 formAuidDialogFlag:false, // 认证审核弹框控制
                 templateModel:{ // 认证审核表单
                 },
@@ -387,6 +402,10 @@
                 multipleSelection:[],
                 ifInformation:'未选中任何修改内容',
                 ifInformation2:'不可修改多个内容',
+                rulesForm:{
+                obtainGrade:{validator:obtainGradeValidator, trigger:'change',required:true,},
+                obtainGradeTime:{validator: obtainGradeTimeValidator, trigger:'change',required:true,},
+                },
             }
         },
         computed: {
@@ -526,6 +545,26 @@
             this.defaultImg1 = event.target.src;
             },
             completeData(){
+                  if(this.radio5==''){
+                      this.$message.info('请勾选手持身份证照片审核结果');
+                      return false
+                  }    
+                  if(this.radio4==''){
+                      this.$message.info('请勾选身份证照片审核结果');
+                      return false
+                  }                 
+                  if(this.radio3==''){
+                      this.$message.info('请勾选驾驶证照片审核结果');
+                      return false
+                  }
+                  if(this.radio2==''){
+                      this.$message.info('请勾选行驶证照片审核结果');
+                      return false
+                  }
+                  if(this.radio1==''){
+                      this.$message.info('请勾选车辆45°照片审核结果');
+                      return false
+                  }
                 //获取城市name
                 if(!this.$refs.area){
                     return
@@ -556,19 +595,24 @@
             if(this.templateModel.isVipCar == '1'){
 
                 this.templateModel.isVipCar = '1'
-                                            console.log(this.templateModel.isVipCar)
+                 console.log(this.templateModel.isVipCar)
             }
             else{
                 this.templateModel.isVipCar = '0'
-                            console.log(this.templateModel.isVipCar)
+                 console.log(this.templateModel.isVipCar)
             }   
         },    
             // 审核不通过
             handlerOut(){
                 this.completeData()
+                var forms=Object.assign({},this.templateModel,{driverStatus:"AF0010404"},{authNoPassCause:JSON.stringify(this.pictureValue)})
+                    if(this.completeData()==false)
+                    {
+                    return
+                    }
+                    else{
                 this.$refs['shengheform'].validate((valid)=>{
                 if(valid){
-                    var forms=Object.assign({},this.templateModel,{driverStatus:"AF0010404"},{authNoPassCause:JSON.stringify(this.pictureValue)})
                     data_post_audit(forms).then(res=>{
                         // console.log(res)
                         this.$message.success('审核不通过 提交')
@@ -580,11 +624,18 @@
                     })
                     }
                 })
+                }
             },
 
             // 审核通过
             handlerPass(){
                 this.completeData()
+                var forms=Object.assign({},this.templateModel,{driverStatus:"AF0010404"},{authNoPassCause:JSON.stringify(this.pictureValue)})
+                    if(this.completeData()==false)
+                    {
+                    return
+                    }
+                    else{
                 this.$refs['shengheform'].validate((valid)=>{
                     if(valid){
                         var forms=Object.assign({},this.templateModel,{driverStatus:"AF0010403",authNoPassCause:JSON.stringify(this.pictureValue)})
@@ -599,6 +650,7 @@
                         })
                     }
                 })
+                }                
             }
         }
         
@@ -642,10 +694,12 @@ img{
     margin: 0px auto;
     display: block
 }
+} 
 .uploadImgBox{
     width: 130px;
     height: 130px;
-
 }
-} 
+.lessWidth{
+    width: 80px!important
+}
 </style>

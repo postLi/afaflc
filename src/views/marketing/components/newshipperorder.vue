@@ -437,7 +437,6 @@ export default {
                 }).catch(res=>{
                     console.log(res)
                 });         
-                
           }, 
     changeList(){
             eventBus.$emit('pushListtwo')
