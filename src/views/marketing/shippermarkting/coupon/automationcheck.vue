@@ -144,7 +144,7 @@
                      </span>
                                 </div>
              <div class="ht_table_td table_th11">
-            <el-select v-model="formAllData.aflcCouponList[keys].serivceCode" clearable placeholder=""disabled >
+            <el-select v-model="formAllData.aflcCouponList[keys].serivceCode" clearable placeholder="" disabled>
                           <el-option
                               v-for="item in serviceCardList"
                                :key="item.code"
@@ -194,15 +194,18 @@
                    <el-input v-model="searchData.mobile"></el-input>
                </el-form-item>
                  <el-form-item label="派发时间："  :label-width="formLabelWidth">
-                    <el-date-picker
-                        is-range
-                        type="date"
-                        v-model="searchData.grantTime"
-                        placeholder="派发时间"
-                        format="yyyy-MM-dd"
+                        <el-date-picker
+                        v-model="grantTimeAll"
+                        type="daterange"
+                        range-separator="至"
+                        start-placeholder="开始日期"
+                        end-placeholder="结束日期"
+                        :default-time="['00:00:00', '23:59:59']"
                         value-format="yyyy-MM-dd HH:mm:ss"
+                        @change='cTime2'                        
                         >
-                    </el-date-picker>
+                        </el-date-picker>
+            
                   </el-form-item> 
                     <el-form-item  label="卷码状态：" :label-width="formLabelWidth">
                    <el-input v-model="searchData.couponStatus"></el-input>
@@ -292,7 +295,22 @@ export default {
     /*one自动，two手动*/
     editType: {
       type: String,
-    }
+    },
+    optionsCarList:{
+    type: Array,
+    },
+    MaidLevelList:{
+    type: Array,
+    },
+    serviceCardList:{
+    type: Array,
+    },
+    couponLists:{
+    type: Array, 
+    },
+    couponTimeLists:{
+    type: Array, 
+    }            
   },
   components:{
       GetCityList,
@@ -318,26 +336,11 @@ export default {
         autocheck:'first',
         dialogFormVisible_add:false,
          createTime:[],
-        inputKey:null,
-        optionsCar:[
-        {
-          code:null,
-          name:'全部'
-        }
-         ],
-        MaidLevel:[
-        {    
-          code:null,
-          name:'全部'
-        }
-        ],
-         serviceCardList:[
-        {    
-          code:null,
-          name:'全部'
-        }
-        ],
-        vouchersuperposition:[
+        inputKey:null,   
+        dialogFormVisible_add:false,
+        formLabelWidth:'120px',
+        formLabelWidth2:'80px',
+        vouchersuperpositionList:[
         {    
           code:0,
           name:'不能'
@@ -346,12 +349,12 @@ export default {
           code:1,
           name:'能'
         }
-        ],
+        ],        
+        optionsCar:[],
+        MaidLevel:[],
+        serviceCard:[],
         couponList:[],
-        couponTimeList:[],   
-        dialogFormVisible_add:false,
-        formLabelWidth:'120px',
-        formLabelWidth2:'80px',
+        couponTimeList:[],
         formAllData:{
             activityDes:null,
             activityName:null,
@@ -376,9 +379,11 @@ export default {
            ifvouchersuperposition:null,
         }]
         },
+       grantTimeAll:null,
        searchData:{
         mobile:'',
         grantTime:null,
+        endTime:null,
         couponStatus:'',
        },
     }
@@ -391,9 +396,25 @@ export default {
     eventBus.$emit('changeDia')
    },
     cTime(i){
-                this.formAllData.startTime = i[0]
-                this.formAllData.endTime = i[1]
+        if(i!==null){
+        this.formAllData.startTime = i[0]
+        this.formAllData.endTime = i[1]
+        }
+        else{
+        this.formAllData.startTime = null
+        this.formAllData.endTime = null
+        }        
       },  
+    cTime2(i){
+        if(i!==null){
+        this.searchData.grantTime = i[0]
+        this.searchData.endTime = i[1]
+        }
+        else{
+        this.searchData.grantTime = null
+        this.searchData.endTime = null
+        }        
+    },
     getData_query(){
         this.firstblood();
     },    
@@ -447,39 +468,11 @@ export default {
         },          
     // 卷码状态    
     getMoreInformation(){
-                data_CarList().then(res=>{
-                    // console.log(res.data)
-                    res.data.map((item)=>{
-                        this.optionsCar.push(item);
-                    })
-                    })
-                data_MaidLevel().then(res=>{
-                      res.data.map((item)=>{
-                        this.MaidLevel.push(item);
-                    })
-                }).catch(res=>{
-                    console.log(res)
-                });    
-                data_ServerClassList().then(res=>{
-                      res.data.map((item)=>{
-                       this.serviceCardList.push(item);
-                    })     
-                }).catch(res=>{
-                    console.log(res)
-                });            
-                data_couponActive().then((res)=>{
-                     res.data.map((item)=>{
-                       this.couponList.push(item);
-                    })   
-                })
-                 data_couponActiveTime().then((res)=>{
-                     res.data.map((item)=>{
-                       this.couponTimeList.push(item);
-                    })   
-                })        
-                data_couponStatus().then(res=>{
-                // console.log('卷码状态',res)
-                })
+                         this.optionsCar=this.optionsCarList
+                         this.MaidLevel=this.MaidLevelList
+                         this.serviceCard=this.serviceCardList
+                         this.couponList=this.couponLists
+                         this.couponTimeList=this.couponTimeLists
     },   
    },     
    mounted(){
@@ -678,11 +671,6 @@ export default {
          .tableDataAllBox{
              padding-bottom: 50px;
              height: 88%
-         }
-         .el-input__prefix{
-             .el-input__icon{
-                 display: none;
-             }
          }
          .info_tab_footer{
             padding-left: 20px;

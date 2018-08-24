@@ -58,7 +58,7 @@ export function data_get_ownerFromsame_update(data) {
  //reward_id获取所有订单金额奖励明细
  export function data_get_ownerFromsame2_Id(id) {
   return fetch({
-    url: '/'+baseurl+'/sm/aflcDriverOrderamountReward/v1/%7Breward_id%7D?reward_id=' + id,
+    url: '/'+baseurl+'/sm/aflcDriverOrderamountReward/v1/{reward_id}?reward_id=' + id,
     method: 'get',
   })
 }

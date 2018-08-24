@@ -187,15 +187,19 @@
             </el-col>
              <el-col :span="12">
 
-            <el-form-item label="省市：" :label-width="formLabelWidth" prop="areaCode">
+            
                  <span v-if="openFlag==0">
+                      <el-form-item label="省市：" :label-width="formLabelWidth">
                 <el-input v-model="selectRowData.areaName" disabled></el-input>
+                      </el-form-item>
                  </span>
                  <span v-else>
+                    <el-form-item label="省市：" :label-width="formLabelWidth" prop="areaCode">
                  <el-input v-model="selectRowData.areaName"  @focus="changeSelect" v-if="openFlag !==0 && !selectFlag"></el-input>
                 <GetCityList ref="area2" v-model="selectRowData.areaCode"  @focus="changeSelect" v-else></GetCityList>
+                    </el-form-item>
                  </span>
-            </el-form-item>
+
 
 
 

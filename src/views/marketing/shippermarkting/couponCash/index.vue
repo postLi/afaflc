@@ -171,7 +171,6 @@ export default {
           // 列表刷新页面  
             firstblood(){
                 data_get_shipperOwnerFrom_list(this.page,this.pagesize,this.formAllData).then(res => {
-                  console.log('res',res)
                     this.dataTotal = res.data.totalCount
                     this.tableDataAll = res.data.list;
                 })

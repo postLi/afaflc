@@ -64,14 +64,15 @@
                 <div class="couponGive_piece">
                  <h3 class="couponGive_piece_H3">请上传模板批量发放</h3>
                  <p class="couponGive_piece_P">格式：txt文档，一行一个手机号</p>
-                 <!-- <el-upload
+                 <el-upload
                     class="upload-demo"
                     drag
                     multiple>
                     <i class="el-icon-upload"></i>
                     <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
-                    <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过500kb</div>
-                    </el-upload> -->
+                    <div class="el-upload__tip" slot="tip">只能上传txt文件，且不超过500kb</div>
+                    </el-upload>
+                    <el-button type="primary" @click="grantCoupon">确认发放</el-button>
                 </div>
             </el-tab-pane>            
           </el-tabs>
@@ -188,8 +189,7 @@ export default {
                 }).catch(res=>{
                     console.log(res)
                 });    
-                
-          }, 
+          },
        changeList(){
             eventBus.$emit('pushListtwo')
         },   
@@ -213,7 +213,7 @@ export default {
         //   data_get_produceCoupon(this.params.id,this.mobile).then(res=>{
         //       console.log('fdfdf',res);
         //  })   
-       }
+       },
   }
 }
 </script>

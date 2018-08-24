@@ -17,7 +17,7 @@
                     </el-select>
                  </el-form-item>
         <el-form-item>       
-         <el-button type="primary"  plain @click="getdata_search()">查询</el-button> 
+         <el-button type="primary"  plain @click="getdata_search()">查询</el-button>
          <el-button type="primary"  plain  @click="clearSearch">清空</el-button>
          </el-form-item>
            </el-form> 
@@ -115,82 +115,8 @@ export default {
                 createTime:null,
                 startTime:null,
                 endTime:null,
-        sett:{
-                  AF01801:{
-                      zero:{
-                        AF0010401: null,
-                        AF0020401: null,                        
-                        AF0020402: null,
-                        AF0020403: null,
-                        AF0020404: null,
-                        AF0020405: null,
-                      },
-                      one:{
-                        AF0010401: null,
-                        AF0020401: null,                        
-                        AF0020402: null,
-                        AF0020403: null,
-                        AF0020404: null,
-                        AF0020405: null,
-                      },
-                  },
-                  AF01802:{
-                      zero:{
-                        AF0010401: null,
-                        AF0020401: null,                        
-                        AF0020402: null,
-                        AF0020403: null,
-                        AF0020404: null,
-                        AF0020405: null,
-                      },
-                      one:{
-                        AF0010401: null,
-                        AF0020401: null,                        
-                        AF0020402: null,
-                        AF0020403: null,
-                        AF0020404: null,
-                        AF0020405: null,
-                      },
-                  },
-                  AF01803:{
-                      zero:{
-                        AF0010401: null,
-                        AF0020401: null,                        
-                        AF0020402: null,
-                        AF0020403: null,
-                        AF0020404: null,
-                        AF0020405: null,
-                      },
-                     one:{
-                        AF0010401: null,
-                        AF0020401: null,                        
-                        AF0020402: null,
-                        AF0020403: null,
-                        AF0020404: null,
-                        AF0020405: null,
-                      },
-                  },
-                  AF01804:{
-                     zero:{
-                        AF0010401: null,
-                        AF0020401: null,                        
-                        AF0020402: null,
-                        AF0020403: null,
-                        AF0020404: null,
-                        AF0020405: null,
-                      },
-                      one:{
-                        AF0010401: null,
-                        AF0020401: null,                        
-                        AF0020402: null,
-                        AF0020403: null,
-                        AF0020404: null,
-                        AF0020405: null,
-                      },
-                  },
-                 }
-            }
-                
+        sett:{}
+            }    
         }
     },
     components:{
@@ -217,127 +143,11 @@ export default {
                     })
                 })
             },
+            // 选择行
              clickDetails(i){
                  let z=0;
-                data_get_pushsheet_Id(i.id).then(res=>{
-                        this.selectRowData=res.data.push;
-                        this.selectRowData2=res.data.settings;
-                        console.log('res.data.settings',res.data)
-                        let sy=[]
-                        for(var i = 0;i<res.data.settings.length;i++){
-                            sy.push({
-                createTime:null,
-                startTime:null,
-                endTime:null,
-        sett:{
-                  AF01801:{
-                      zero:{
-                        AF0010401: null,
-                        AF0020401: null,                        
-                        AF0020402: null,
-                        AF0020403: null,
-                        AF0020404: null,
-                        AF0020405: null,
-                      },
-                      one:{
-                        AF0010401: null,
-                        AF0020401: null,                        
-                        AF0020402: null,
-                        AF0020403: null,
-                        AF0020404: null,
-                        AF0020405: null,
-                      },
-                  },
-                  AF01802:{
-                      zero:{
-                        AF0010401: null,
-                        AF0020401: null,                        
-                        AF0020402: null,
-                        AF0020403: null,
-                        AF0020404: null,
-                        AF0020405: null,
-                      },
-                      one:{
-                        AF0010401: null,
-                        AF0020401: null,                        
-                        AF0020402: null,
-                        AF0020403: null,
-                        AF0020404: null,
-                        AF0020405: null,
-                      },
-                  },
-                  AF01803:{
-                      zero:{
-                        AF0010401: null,
-                        AF0020401: null,                        
-                        AF0020402: null,
-                        AF0020403: null,
-                        AF0020404: null,
-                        AF0020405: null,
-                      },
-                     one:{
-                        AF0010401: null,
-                        AF0020401: null,                        
-                        AF0020402: null,
-                        AF0020403: null,
-                        AF0020404: null,
-                        AF0020405: null,
-                      },
-                  },
-                  AF01804:{
-                     zero:{
-                        AF0010401: null,
-                        AF0020401: null,                        
-                        AF0020402: null,
-                        AF0020403: null,
-                        AF0020404: null,
-                        AF0020405: null,
-                      },
-                      one:{
-                        AF0010401: null,
-                        AF0020401: null,                        
-                        AF0020402: null,
-                        AF0020403: null,
-                        AF0020404: null,
-                        AF0020405: null,
-                      },
-                  },
-                 }
-            })
-                        }
-                        console.log('sy',sy)
-                        this.selectRowData2.map((subList,index) => {
-                            sy[index].startTime= subList[index].pushStartTime;
-                            sy[index].endTime= subList[index].pushEndTime;
-                            sy[index].createTime= [subList[index].pushStartTime,subList[index].pushEndTime]; 
-                            let sett = sy[index].sett;
-                                subList.map(item => {
-                             
-                                    var carType = item.carType;                                
-                                    var isLine = item.isLine;
-                                    var liveness = item.liveness;
-                                    
-                                    // this.sett[carType][isLine][liveness] = item.orderNum
-                                    sett[carType][isLine][liveness] = item.orderNum
-                                    // sy[index].sett[carType][isLine][liveness] = item.orderNum
-
-                                })
-                                sy[index].sett = sett
-                                console.log('startTime',index,sy[index].startTime)
-                                console.log('endTime',index,sy[index].endTime)
-                                 console.log('createTime',index,sy[index].createTime)
-
-                        
-                        
-                        })
-                        this.selectRowData.setting = sy;
-                        console.log('fdfd',sy)
-                        
-                        console.log('this.selectRowData',this.selectRowData)
-                        })
-                       
+                 this.selectRowData = i;
              },
-        
             //  删除行
             handleDelete(){
              if(!this.selectRowData.id){
@@ -387,7 +197,8 @@ export default {
                      else{
                          this.$message.success('已启用');
                      }
-                        this.firstblood();        
+                        this.firstblood();       
+                        this.selectRowData='';    
                     })
                 }
             },
