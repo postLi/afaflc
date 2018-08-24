@@ -177,14 +177,38 @@
                 color: red;
                 font-weight: bold;
                 font-size: 16px;
-
             }
 
             .normalName{
-                color: #67c23a;
+                color: #8bc34a;
                 font-weight: bold;
                 font-size: 16px;
+            }
 
+            .otherServiceTD{
+                text-align: left;
+                padding-left: 10px;
+            }
+            .otherService{
+                text-align: left;
+                display: inline-block;
+                margin: 0 10px 10px 0 ;
+                border-radius:20% / 50%;
+                padding: 5px 10px;
+                background: #ef6c00;
+                color: #fff;
+            }
+
+            .isTMS{
+                color: #8bc34a;
+                font-size: 16px;
+                font-weight: bold;
+            }
+
+            .noTMS{
+                color: red;
+                font-size: 16px;
+                font-weight: bold;
             }
         }
     }

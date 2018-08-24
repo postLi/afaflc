@@ -1,7 +1,7 @@
 <template>
      <div class="creatDialog commoncss">
-      <el-button :type="type" :value="value" :plain="plain" :icon="icon" @click="openDialog()">{{text}}</el-button>
-      <el-dialog :title="title" :visible="dialogFormVisible_add" :before-close="change" :close-on-click-modal="false" >
+      <el-button :type="type" :value="value" :plain="plain" :icon="icon" @click="openDialog">{{text}}</el-button>
+      <el-dialog :title="title" :visible.sync="dialogFormVisible_add" :before-close="change" :close-on-click-modal="false" >
         <el-form :model="xinzengform" ref="xinzengform" :rules="rulesForm">
             <el-row>
                 <el-col :span="12">
@@ -82,7 +82,13 @@
             <el-row>        
                 <el-col :span="24" class="moreLength">
                     <el-form-item label="会员服务承诺 ：" :label-width="formLabelWidth">
-                        <el-input :maxlength="20" v-model="xinzengform.otherService"  v-if="editType=='view'" disabled></el-input>
+                        <p v-if="editType == 'view'">
+                            <!-- <p v-if="xinzengform.otherService"></p>
+                            <span v-for="(item,key) in xinzengform.otherService" :key="key">
+                                {{item}}
+                            </span> -->
+
+                        </p>
                         <el-checkbox-group v-model="otherServiceCode" v-else>
                             <span>
                                 <el-checkbox v-for="obj in optionsLogisticsCompany" :label="obj.code" :key="obj.id" >{{obj.name}}</el-checkbox>
@@ -144,8 +150,8 @@
 import Upload from '@/components/Upload/singleImage'
 import GetCityList from '@/components/GetCityList'
 import { eventBus } from '@/eventBus'
-import {data_get_shipper_type} from '../../../api/users/shipper/all_shipper.js'
-import {data_ChangeLogisticsCompany} from '../../../api/users/logistics/LogisticsCompany.js'
+import {data_get_shipper_type} from '@/api/users/shipper/all_shipper.js'
+import {data_ChangeLogisticsCompany} from '@/api/users/logistics/LogisticsCompany.js'
 
 import { data_LogisticsCompany } from '@/api/common.js'
 export default {
@@ -190,25 +196,6 @@ export default {
     }
   },
   data(){
-    // 手机号校验
-        // const mobileValidator = (rule, val, cb) => {
-        //     let phoneTest = /(^1[3|4|5|7|8]\d{9}$)|(^09\d{8}$)/
-        //     !val && cb(new Error('手机号码不能为空'))
-        //     if(!(phoneTest.test(val))){
-        //         cb(new Error('请输入正确的手机号码格式'))
-        //     } else {
-                
-        //     (val).then(res=>{
-        //             console.log(res)
-        //             if(res.data){
-        //                 cb(new Error('该手机号已经被注册~'))
-        //             } else {
-        //                 cb()
-        //             }
-        //         })
-        //     }
-        
-        // }
         const companyNameValidator = (rule, val, cb)=>{
             // console.log(val)
             if(!this.xinzengform.companyFacadeFile){
@@ -345,21 +332,34 @@ export default {
         openDialog(){
             // console.log('parmas:',this.params)
             console.log(this.editType)
+                    this.dialogFormVisible_add = true;
 
-            if(this.editType  == 'add'){
-                this.dialogFormVisible_add = true;
-                return
-            }else if(this.editType == 'edit'){
-                    this.xinzengform =JSON.parse(JSON.stringify(this.params))
-                    this.dialogFormVisible_add = true;
-                    this.otherServiceCode = this.xinzengform.otherServiceCode.split(',');
 
-            }else if(this.editType == 'identification'){
-                    this.xinzengform =JSON.parse(JSON.stringify(this.params))
+            // if(this.editType  == 'add'){
+            //     this.dialogFormVisible_add = true;
+            //     return
+            // }else 
+            
+            if(this.editType == 'edit'){
+                    this.xinzengform = JSON.parse(JSON.stringify(this.params))
                     this.dialogFormVisible_add = true;
-            }else if(this.editType == 'view'){
+                    if(this.xinzengform.otherServiceCode != ''){
+                        this.otherServiceCode = JSON.parse(this.xinzengform.otherServiceCode) 
+                    }
+
+                    this.xinzengform.isOpenTms = this.xinzengform.isOpenTms == 1 ? '1' : '0'
+            }
+            // else if(this.editType == 'identification'){
+            //         this.xinzengform =JSON.parse(JSON.stringify(this.params))
+            //         this.dialogFormVisible_add = true;
+            // }
+            
+            else if(this.editType == 'view'){
                     this.dialogFormVisible_add = true;
-                    this.xinzengform  = this.paramsView;
+                    this.xinzengform  = Object.assign({},this.paramsView) ;
+                    if(this.xinzengform.otherService != ''){
+                        this.otherService = JSON.parse(this.xinzengform.otherService) 
+                    }
                     this.xinzengform.isOpenTmsName = this.xinzengform.isOpenTms == 1 ? '是' : '否';
                     console.log(this.xinzengform)
 

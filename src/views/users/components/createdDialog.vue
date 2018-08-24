@@ -303,24 +303,25 @@ export default {
 
             if(this.editType  == 'add'){
                 return this.dialogFormVisible_add = true;
-            }else {
+
+            }else if(this.editType == 'view'){
+                this.dialogFormVisible_add = true;
+
+                console.log(this.paramsView)
+                this.xinzengform = JSON.parse(JSON.stringify(this.paramsView))
+
+                console.log('123',this.xinzengform)
+            }
+            else {
                 if(Object.keys(this.params).length == 0){
                     return this.$message({
                         type: 'info',
                         message: '请选择货主信息' 
                     })
                 }else{
-                    if(this.editType == 'edit'){
-                            this.xinzengform =JSON.parse(JSON.stringify(this.params))
-                            this.dialogFormVisible_add = true;
-                    }else if(this.editType == 'identification'){
-                            this.xinzengform =JSON.parse(JSON.stringify(this.params))
-                            this.dialogFormVisible_add = true;
-                    }else if(this.editType == 'view'){
-                            this.dialogFormVisible_add = true;
-                            this.xinzengform =JSON.parse(JSON.stringify(this.paramsView))
-            
-                    }
+                    this.xinzengform =JSON.parse(JSON.stringify(this.params))
+                    this.dialogFormVisible_add = true;
+                   
                 }
             }
 
