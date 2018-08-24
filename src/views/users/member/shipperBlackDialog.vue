@@ -57,7 +57,7 @@
                         <el-select v-model="formBlack.putBlackCause" placeholder="请选择" v-else>
                             <el-option
                                 v-for="item in optionsFormBlack"
-                                :key="item.value"
+                                :key="item.id"
                                 :label="item.name"
                                 :value="item.code">
                             </el-option>

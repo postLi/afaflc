@@ -40,12 +40,12 @@
                     highlight-current-row
                     tooltip-effect="dark"
                     style="width: 100%">
-                <el-table-column label="" width="65" fixed>
+                <el-table-column label="" width="60" fixed>
                     <template slot-scope="scope">
                         <el-radio class="textRadio" @change.native="getCurrentRow(scope.$index,scope.row)" :label="scope.$index" v-model="templateRadio">&nbsp;</el-radio>
                     </template>
                 </el-table-column>
-               <el-table-column label="序号" width="80px" fixed>
+               <el-table-column label="序号" width="50" fixed>
                     <template slot-scope="scope">
                         {{ (page - 1)*pagesize + scope.$index + 1 }}
                     </template>
@@ -74,23 +74,22 @@
 				</el-table-column>
                 <el-table-column prop="qq" label="QQ号码" width="150">
 				</el-table-column>
-				<el-table-column prop="serviceCommitment" label="会员服务承诺" width="200">
-				</el-table-column>
-                <el-table-column prop="isOpenTms" label="是否开通TMS" width="120">
-                     <template slot-scope="scope">
-                        {{scope.row.isOpenTms  ==  1 ? '是' : '否'}}
+                <el-table-column prop="otherService" label="会员服务承诺" width="200"  align="left">
+                    <template slot-scope="scope" >
+                        <div class="otherServiceTD">
+                            <span class="otherService" v-for="(item,key) in JSON.parse(scope.row.otherService) " :key="key">
+                                {{item}}
+                            </span>
+                        </div>
                     </template>
 				</el-table-column>
+                <el-table-column prop="isOpenTms" label="是否开通TMS" width="120">
+                    <template slot-scope="scope">
+                        <span :class="scope.row.isOpenTms == 1 ? 'isTMS' : 'noTMS'"> {{scope.row.isOpenTms == 1 ? '是' : '否'}}</span>
+                    </template>
+				</el-table-column>
+
                 </el-table>
-                <el-pagination
-                    @size-change="handleSizeChange"
-                    @current-change="handleCurrentChange"
-                    :current-page="page"
-                    :page-sizes="[20, 50, 200, 400]"
-                    :page-size="pagesize"
-                    layout="total, sizes, prev, pager, next, jumper"
-                    :total="totalCount">
-                </el-pagination>
             </div>
             <div class="info_tab_footer">共计:{{ totalCount }} <div class="show_pager"> <Pager :total="totalCount" @change="handlePageChange" /></div> </div>    
 
@@ -100,8 +99,8 @@
 <script>
 import createdDialog from './createdDialog.vue'
 import { eventBus } from '@/eventBus'
-import {data_get_shipper_type} from '../../../api/users/shipper/all_shipper.js'
-import { data_LogisticsCompanyList } from '../../../api/users/logistics/LogisticsCompany.js'
+import {data_get_shipper_type} from '@/api/users/shipper/all_shipper.js'
+import { data_LogisticsCompanyList } from '@/api/users/logistics/LogisticsCompany.js'
 import Pager from '@/components/Pagination/index'
 
 export default {

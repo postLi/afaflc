@@ -110,17 +110,17 @@
                 highlight-current-row
 				tooltip-effect="dark"
 				style="width: 100%">
-				<el-table-column label="" width="65" fixed>
+				<el-table-column label="" width="60" fixed>
                     <template slot-scope="scope">
                         <el-radio class="textRadio" @change.native="getCurrentRow(scope.$index,scope.row)" :label="scope.$index" v-model="templateRadio">&nbsp;</el-radio>
                     </template>
                 </el-table-column>
-                <el-table-column label="序号" width="80px" fixed>
+                <el-table-column label="序号" width="50" fixed>
                     <template slot-scope="scope">
                         {{ (page - 1)*pagesize + scope.$index + 1 }}
                     </template>
                 </el-table-column>  
-				<el-table-column label="手机号(会员账号)" width="150" fixed>
+				<el-table-column label="手机号(会员账号)" width="150">
                     <template slot-scope="scope">
                         <createdDialog :paramsView="scope.row" btntype="text" :btntext="scope.row.mobile" editType="view" btntitle="详情"></createdDialog>
                     </template>
@@ -145,17 +145,17 @@
                 <el-table-column prop="qq" label="QQ号码" width="150">
 				</el-table-column>
 				<el-table-column prop="otherService" label="会员服务承诺" width="200"  align="left">
-                    <template slot-scope="scope" >
+                    <!-- <template slot-scope="scope" >
                         <div class="otherServiceTD">
                             <span class="otherService" v-for="(item,key) in JSON.parse(scope.row.otherService) " :key="key">
                                 {{item}}
                             </span>
                         </div>
-                    </template>
+                    </template> -->
 				</el-table-column>
                 <el-table-column prop="isOpenTms" label="是否开通TMS" width="120">
                     <template slot-scope="scope">
-                        {{scope.row.isOpenTms == 1 ? '是' : '否'}}
+                        <span :class="scope.row.isOpenTms == 1 ? 'isTMS' : 'noTMS'"> {{scope.row.isOpenTms == 1 ? '是' : '否'}}</span>
                     </template>
 				</el-table-column>
 				</el-table>
@@ -334,16 +334,5 @@ export default {
         }
     }
 
-    .otherServiceTD{
-        text-align: left;
-    }
-    .otherService{
-        text-align: left;
-        display: inline-block;
-        margin: 0 10px 10px 0 ;
-        border-radius:20% / 50%;
-        padding: 5px 10px;
-        background: #ef6c00;
-        color: #fff;
-    }
+    
 </style>

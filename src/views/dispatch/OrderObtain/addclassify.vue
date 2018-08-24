@@ -12,7 +12,7 @@
                         <el-select v-model="forms.serivceCode" clearable placeholder="请选择">
                             <el-option
                                 v-for="item in optionsService"
-                                :key="item.value"
+                                :key="item.id"
                                 :label="item.name"
                                 :value="item.code"
                                 :disabled="item.disabled">
@@ -24,7 +24,7 @@
                         <el-select v-model="forms.carType" clearable placeholder="请选择">
                             <el-option
                                 v-for="item in optionsCarType"
-                                :key="item.value"
+                                :key="item.id"
                                 :label="item.name"
                                 :value="item.code"
                                 :disabled="item.disabled">
@@ -37,12 +37,12 @@
                             <div class="chooseTime publishStyle">
                                 <span>公布中单时间 ：</span>
                                 <el-input v-model="form.time" placeholder="请输入内容" maxlength="4" clearable ref="times" @blur="valuerules"></el-input>
-                                <span>/秒</span>
-                            </div>.
+                                <span> / 秒</span>
+                            </div>
                             <div class="chooseKM publishStyle">
                                 <span>公布中单距离 ：</span>
                                 <el-input v-model="form.km" placeholder="请输入内容" maxlength="4" clearable></el-input>
-                                <span>/公里</span>
+                                <span> / 公里</span>
                             </div>
                         </div>
                         <span  @click="addItem" class="addItem" v-if="keys == 0">
@@ -351,6 +351,14 @@ export default {
                             padding: 10px;
                             .publishStyle{
                                 display: inline-block;
+                                width: 45%;
+                                .el-input{
+                                    width: 38%;
+                                    .el-input__inner{
+                                        height: 30px;
+                                        line-height: 30px;
+                                    }
+                                }
                                 span{
                                     font-size: 12px;
                                     line-height: 20px;
@@ -359,7 +367,7 @@ export default {
                                 }
                             }
                             .chooseTime{
-                                padding:0 0 0 55px; 
+                                margin-left: 30px; 
                             }
                         }
                         .addItem,.reduceItem{
