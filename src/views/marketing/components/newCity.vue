@@ -49,7 +49,7 @@
                           <el-option
                              v-for="item in optionsCar"
                               :key="item.code"
-                             :label="item.name"
+                              :label="item.name"
                               :value="item.code"
                                :disabled="item.disabled">
                          </el-option>
@@ -246,8 +246,8 @@ export default {
         return{
         dialogFormVisible_add: false,
         MaidLevelValueCar:'',
-        optionsCar:[{ code:null,name:'全部'}],
-        MaidLevel:[{ code:null,name:'全部'}],
+        optionsCar:[],
+        MaidLevel:[],
         formAll:{
             areaCode2: null,
             carType:null,

@@ -112,23 +112,13 @@ export default {
       dataTotal:0,
       tableDataAll:[],
       radio: 1,
-       optionsCar:[
-       {
-          code:null,
-          name:'全部'
-      }
-      ],
-      MaidLevel:[
-      {    
-          code:null,
-          name:'全部'
-        }
-      ],
+      optionsCar:[],
+      MaidLevel:[],
 		formAllData:{
             areaCode2: null,
             carType:null,
             commissionGrade:null,
-            },
+     },
     }
   },
     components:{
@@ -139,7 +129,30 @@ export default {
     methods:{
             regionChange(d) {
                 console.log('data:',d)
-                this.formAllData.areaCode2 = (!d.province&&!d.city&&!d.area&&!d.town) ? '': `${this.getValue(d.province)}${this.getValue(d.city)}${this.getValue(d.area)}${this.getValue(d.town)}`.trim();
+
+                this.formAllData.areaCode = d.province.code;
+                this.formAllData.province = d.province.name;
+                this.formAllData.city = null;
+                this.formAllData.area = null;
+                if(d.city)
+                {
+                this.formAllData.areaCode = d.city.code;
+                this.formAllData.province = d.province.name;
+                this.formAllData.city = d.city.name;
+                this.formAllData.area = null;
+                }    
+                if(d.area)
+                {
+                this.formAllData.areaCode = d.area.code;
+                this.formAllData.province = d.province.name;
+                this.formAllData.city = d.city.name;
+                this.formAllData.area = d.area.name;
+                }     
+                console.log('1',this.formAllData.areaCode);       
+                console.log('2',this.formAllData.province);   
+                console.log('3',this.formAllData.city);   
+                console.log('4',this.formAllData.area);  
+                // this.formAllData.areaCode2 = (!d.province&&!d.city&&!d.area&&!d.town) ? '': `${this.getValue(d.province)}${this.getValue(d.city)}${this.getValue(d.area)}${this.getValue(d.town)}`.trim();
             },
              getValue(obj){
                 return obj ? obj.value:'';
@@ -156,8 +169,6 @@ export default {
                       res.data.map((item)=>{
                         this.MaidLevel.push(item);
                     })
-                
-                      
                 }).catch(res=>{
                     console.log(res)
                 });    
