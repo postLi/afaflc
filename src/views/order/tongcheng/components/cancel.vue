@@ -17,8 +17,8 @@
                 <span class="delinfo">是否确认取消订单 ?</span>
             </p>
             <el-form :model="form" :rules="rules" ref="ruleForm" :label-width="formLabelWidth" label-position="right" size="mini">
-                <el-form-item label="取消原因：" prop="cancel">
-                    <el-select v-model="form.cancel" placeholder="请选择">
+                <el-form-item label="取消原因：" prop="cancelCode">
+                    <el-select v-model="form.cancelCode" placeholder="请选择">
                         <el-option
                         v-for="item in optionsCancel"
                         :key="item.id"
@@ -28,8 +28,8 @@
                     </el-select>
                 </el-form-item>
 
-                <el-form-item label="备注：" prop="evaluationDes">
-                    <el-input :autosize="{ minRows: 3, maxRows: 10}" type="textarea" :maxlength="400" v-model="form.evaluationDes"></el-input>
+                <el-form-item label="备注：" prop="cancelRemark">
+                    <el-input :autosize="{ minRows: 3, maxRows: 10}" type="textarea" :maxlength="400" v-model="form.cancelRemark"></el-input>
                 <!-- <div class="last-input-num">还可输入<span>{{ 400 - form.evaluationDes.length}}</span>字</div> -->
                 </el-form-item>
             </el-form>
@@ -43,7 +43,7 @@
 
 <script type="text/javascript">
 import { getDictionary } from '@/api/common.js'
-
+import { cancelOrder } from '@/api/order/ordermange.js'
     export default{
         components:{
 
@@ -52,11 +52,15 @@ import { getDictionary } from '@/api/common.js'
             dialogVisible:{
                 type:Boolean,
                 default:false
+            },
+            orderSerial:{
+                type:String,
+                required:true
             }
         },
         watch:{
             dialogVisible(newVal,oldVal){
-                console.log('newVal',newVal)
+                // console.log('newVal',newVal)
                 if(newVal){
                     this.init();
                 }
@@ -64,31 +68,33 @@ import { getDictionary } from '@/api/common.js'
         },
         data(){
             return{
-                cancelReason:'AF00512',
+                cancelReason:'AF00512',//取消原因
                 formLabelWidth:'25%',
                 loading:true,
-                cancelForm:{
-
-                },
                 form:{
-                    evaluationDes:'',
-                    cancel:'',
+                    cancelRemark:'',//取消说明
+                    cancelCode:'',//取消原因code
+                    cancelCause:'',//取消原因
+                    cancelType:'AF0051302',
+                    orderSerial:'',//订单流水号
                 },
                 optionsCancel:[],
                 rules:{
-                    name: [
-                        { required: true, message: '请输入活动名称', trigger: 'blur' },
-                        { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }
+                    cancel: [
+                        { required: true, message: '请选择取消原因', trigger: 'blur' },
                     ],
+                    cancelRemark:[
+                        {}
+                    ]
                 },
             }
         },
         methods: {
             init(){
                 getDictionary(this.cancelReason).then(res => {
-                    console.log('cancel',res)
+                    // console.log('cancel',res)
                     this.optionsCancel = res.data;
-                    this.form.cancel = res.data[0].code;
+                    this.form.cancelCode = res.data[0].code;
                     this.loading = false;
                 })
             },
@@ -98,7 +104,26 @@ import { getDictionary } from '@/api/common.js'
                         this.close();
                         break;
                     case 'sure':
-                        this.close();
+                        this.form.cancelCause = this.optionsCancel.find(item => item.code == this.form.cancelCode)['name'];
+                        
+                        let cancelForm = Object.assign({},this.form,{orderSerial:this.orderSerial})
+
+                        // console.log(cancelForm)
+                        // this.close();
+                        cancelOrder(cancelForm).then(res => {
+                            console.log('是否取消成功',res)
+                            this.$alert('操作成功', '提示', {
+                                confirmButtonText: '确定',
+                                callback: action => {
+                                    this.close();
+                                }
+                            });
+                        }).catch(err => {
+                            this.$message({
+                                type: 'info',
+                                message: '操作失败，原因：' + err.text ? err.text : err.errorInfo
+                            })
+                        })
                         break;
                 }
             },

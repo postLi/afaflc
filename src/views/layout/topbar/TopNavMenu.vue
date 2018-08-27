@@ -1,18 +1,18 @@
 <template>
-  <div class="page-top-nav">
-    <el-menu 
-      mode="horizontal" 
-      :default-active="current"
-      :router="true">
-      <el-menu-item key="/dashboard" index="/dashboard">
-        <icon-svg icon-class="shouye" /> 首页
-      </el-menu-item>
-      <template v-for="(menu, index) in permission_routers">
-         <el-menu-item :key="index" :index="menu.path" v-if="!menu.hidden">
-          <icon-svg v-if="menu.icon" :icon-class="menu.icon" /> {{menu.name}}
+    <div class="page-top-nav">
+        <el-menu 
+        mode="horizontal" 
+        :default-active="current"
+        :router="true">
+        <el-menu-item key="/dashboard" index="/dashboard">
+            <icon-svg icon-class="shouye" /> 首页
         </el-menu-item>
-      </template>
-      </el-menu>
+        <template v-for="(menu, index) in permission_routers">
+            <el-menu-item :key="index" :index="menu.path" v-if="!menu.hidden">
+                <icon-svg v-if="menu.icon" :icon-class="menu.icon" /> {{menu.name}}
+            </el-menu-item>
+        </template>
+        </el-menu>
     </div>
 </template>
 

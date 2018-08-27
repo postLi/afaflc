@@ -193,6 +193,9 @@ import vregion from '@/components/vregion/Region'
                 DetailsOrderSerial:'',
             }
         },
+        watch:{
+
+        },
         created(){
 
         },

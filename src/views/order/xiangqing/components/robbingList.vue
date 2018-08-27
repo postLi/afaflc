@@ -146,7 +146,7 @@ export default {
         init(){
             orderDetailsList(this.$route.query.orderSerial).then(res => {
                 console.log('details',res)
-                this.tableData = res.data.aflcOrderEvaluations;
+                this.tableData = res.data.aflcOrderGrabs;
                 this.loading = false;
             })
             // this.totalCount = this.robbingData.length;

@@ -1,49 +1,73 @@
 <template>
     <div class="rate clearfix" v-loading = "loading">
-        <h2>照片信息</h2>
-        <div class="essentialInformation">
-            <h6>
-                <span>车主账号：</span>
-            </h6>
-            <h6>
-                <span>车主姓名：</span>
-            </h6>
-            <h6>
-                <span>车牌号：</span>
-            </h6>
-            <h6>
-                <span>车型：</span>
-            </h6>
+        <div class="ratePicture collapseInfo">
+            <h2>照片信息</h2>   
+            <div class="essentialInformation">
+                <p>
+                    <span>装货照片：</span>
+                    <img src="../../../../../static/test.jpg" v-showPicture imgurl="../../../../../static/test.jpg" alt="">
+                </p>
+                <p>
+                    <span>回单照片：</span>
+                    <img src="../../../../../static/test.jpg" v-showPicture imgurl="../../../../../static/test.jpg" alt="">
+                    <img src="../../../../../static/test.jpg" v-showPicture imgurl="../../../../../static/test.jpg" alt="">
+                    <img src="../../../../../static/test.jpg" v-showPicture imgurl="../../../../../static/test.jpg" alt="">
+                    <img src="../../../../../static/test.jpg" v-showPicture imgurl="../../../../../static/test.jpg" alt="">
+                </p>
+            </div>
         </div>
-        <h2>照片信息</h2>
-        <div class="essentialInformation">
-            <h6>
-                <span>车主账号：</span>
-            </h6>
-            <h6>
-                <span>车主姓名：</span>
-            </h6>
-            <h6>
-                <span>车牌号：</span>
-            </h6>
-            <h6>
-                <span>车型：</span>
-            </h6>
+        <div class="rateInfo collapseInfo">
+            <h2>评价信息</h2>   
+            <div class="essentialInformation">
+                <p>
+                    <span>货主评价车主：</span>
+                </p>
+                <p>
+                    <span>评价内容：</span>
+                </p>
+                <p>
+                    <span>评价标签：</span>
+                </p>
+            </div>
+             <div class="essentialInformation">
+                <p>
+                    <span>车主评价货主：</span>
+                </p>
+                <p>
+                    <span>评价内容：</span>
+                </p>
+                <p>
+                    <span>评价标签：</span>
+                </p>
+            </div>
         </div>
-        <h2>照片信息</h2>
-        <div class="essentialInformation">
-            <h6>
-                <span>车主账号：</span>
-            </h6>
-            <h6>
-                <span>车主姓名：</span>
-            </h6>
-            <h6>
-                <span>车牌号：</span>
-            </h6>
-            <h6>
-                <span>车型：</span>
-            </h6>
+        <div class="rateHuidan collapseInfo">
+            <h2>回单信息</h2>   
+            <div class="essentialInformation">
+                <p>
+                    <span>车主回单时间：</span>
+                </p>
+                <p>
+                    <span>快递公司：</span>
+                </p>
+                 <p>
+                    <span>快递单号：</span>
+                </p> 
+                <p>
+                    <span>货主收到回单时间：</span>
+                </p>
+            </div>
+        </div>
+        <div class="rateHuikuan collapseInfo">
+            <h2>汇款信息信息</h2>   
+            <div class="essentialInformation">
+                <p>
+                    <span>车主回款时间：</span>
+                </p>
+                <p>
+                    <span>货主收到回款时间：</span>
+                </p>
+            </div>
         </div>
     </div>
 </template>
@@ -84,19 +108,32 @@ export default {
         init(){
             orderDetailsList(this.$route.query.orderSerial).then(res => {
                 console.log('details',res)
-                this.tableData = res.data.aflcOrderGrabs;
+                this.tableData = res.data.aflcOrderEvaluations;
                 this.loading = false;
             })
         },
-      
     },
-   
 }
 </script>
 
 <style rel="stylesheet/scss" lang="scss" scoped>
     .rate{
-
+        .ratePicture{
+            .essentialInformation{
+                img{
+                    vertical-align: top;
+                    display: inline-block;
+                    width: 208px;
+                    height: 118px;
+                    margin-top: 10px;
+                    // margin-right: 10px;
+                }
+                
+                p:nth-child(2){
+                    width: 70%;
+                }
+            }
+        }
     }
     
 </style>

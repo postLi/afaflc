@@ -118,7 +118,7 @@
             <div class="info_tab_footer">共计:{{ dataTotal }} <div class="show_pager"> <Pager :total="dataTotal" @change="handlePageChange"  :sizes="sizes"/></div> </div>    
 
             <Details :dialogFormVisible_details.sync = "dialogFormVisible_details" :orderSerial="DetailsOrderSerial" ></Details>
-            <cancelCompnent :dialogVisible.sync="dialogVisible"/>
+            <cancelCompnent :dialogVisible.sync="dialogVisible" :orderSerial = "currentOrderSerial"   @close = "shuaxin"/>
     </div>
 </template>
 
@@ -129,7 +129,7 @@ import { parseTime } from '@/utils/index.js'
 import Pager from '@/components/Pagination/index'
 import Details from '../components/detailsInformations'
 import searchInfo from './components/searchInfo'
-import cancelCompnent from './components/cancel'
+import cancelCompnent from '../components/cancel'
 
     export default{
         props: {
@@ -150,6 +150,7 @@ import cancelCompnent from './components/cancel'
         },
         data(){
             return{
+                currentOrderSerial:'',//当前选择的流水号
                 timeOut:null,
                 loading: false,//加载
                 sizes:[20,50,100],
@@ -163,12 +164,15 @@ import cancelCompnent from './components/cancel'
                     endOrderDate:'',//下单结束时间
                     orderSerial:'',//订单号
                     orderStatus:'',//订单状态
+                    parentOrderStatus:'AF00806PT',//订单状态
+                    
                 },
                 tableData:[],
                 parseTimeFunction:null,
                 dialogFormVisible_details:false,//详情弹窗
                 DetailsOrderSerial:'',
                 dialogVisible:false,//取消订单弹框
+                checkedinformation:[],//选中数据
             }
         },
         watch:{
@@ -201,7 +205,7 @@ import cancelCompnent from './components/cancel'
             firstblood(){
                 this.searchInfo.orderStatus = this.status;
                 orderStatusList(this.page,this.pagesize,this.searchInfo).then(res => {
-                    console.log(res)
+                    console.log('是否刷新',res.data)
                     this.tableData = res.data.list;
                     this.dataTotal = res.data.totalCount;
                     this.tableData.forEach(item => {
@@ -219,15 +223,29 @@ import cancelCompnent from './components/cancel'
                 // console.log(this.chooseTime)
                 switch(type){
                     case 'cancel':
-                        this.dialogVisible = true;
+                        console.log(this.checkedinformation.length)
+                        if(this.checkedinformation.length == 0){
+                            return this.$message({
+                                type: 'info',
+                                message: '请选择一个订单' 
+                            })
+                        } else if(this.checkedinformation.length > 1){
+                            return this.$message({
+                                type: 'info',
+                                message: '只能选择一个订单' 
+                            })
+                        }else{
+                            this.currentOrderSerial = this.checkedinformation[0].orderSerial;
+                            this.dialogVisible = true;
+                        }
                         break;
                     case 'export':
                         
                 }
-                this.firstblood();
             },
              //判断是否选中
             getinfomation(selection){
+                console.log('当前选中',selection)
                 this.checkedinformation = selection;
             },
              //点击选中当前行
@@ -245,6 +263,9 @@ import cancelCompnent from './components/cancel'
                 this.searchInfo = Object.assign(this.searchInfo, obj)
                 this.loading = false
             },
+            shuaxin(){
+                this.firstblood();
+            }
         }
     }
 </script>

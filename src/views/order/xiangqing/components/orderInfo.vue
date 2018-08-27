@@ -121,7 +121,7 @@
                 </p>
                 <p> 
                     <span>车主收入：</span>
-                    <span class="fontRed">￥{{listInformation.orderType}}</span>
+                    <span class="fontRed">￥{{listInformation.driverIncome}}</span>
                 </p>
                 <p>
                     <span>付款状态：</span>
@@ -197,7 +197,7 @@
             <div class="essentialInformation">
                 <p>
                     <span>中单等级：</span>
-                    <span>{{listInformation.orderClass === '1' ? '实时订单' : '预约订单'}}</span>
+                    <!-- <span>{{listInformation.orderClass === '1' ? '实时订单' : '预约订单'}}</span> -->
                 </p>
                 <p>
                     <span>派单方式：</span>
@@ -249,23 +249,6 @@ export default {
         return {
             listInformation:[],
             loading:true,
-            tableData: [{
-                date: '2016-05-02',
-                name: '王小虎',
-                address: '上海市普陀区金沙江路 1518 弄'
-            }, {
-                date: '2016-05-04',
-                name: '王小虎',
-                address: '上海市普陀区金沙江路 1517 弄'
-            }, {
-                date: '2016-05-01',
-                name: '王小虎',
-                address: '上海市普陀区金沙江路 1519 弄'
-            }, {
-                date: '2016-05-03', 
-                name: '王小虎',
-                address: '上海市普陀区金沙江路 1516 弄'
-            }],
         };
     },
     watch:{
@@ -277,14 +260,19 @@ export default {
             },
             // 代表在wacth里声明了firstName这个方法之后立即先去执行handler方法
             immediate: true
+        },
+        $route(to,from){
+            console.log('to.path',to.path);
         }
+        
     },
     mounted(){
+        // console.log(this.$route)
     },
     methods: {
         init(){
-            console.log('orderInfo')
-            orderDetailsList(this.$route.query.orderSerial).then(res => {
+            let orderSerial = this.$route.query.orderSerial;
+            orderDetailsList(orderSerial).then(res => {
                 console.log('details',res)
                 this.listInformation = res.data;
                 this.listInformation.aflcOrderAddresses.sort(function(a,b){  
@@ -300,61 +288,6 @@ export default {
 
 <style rel="stylesheet/scss" lang="scss" scoped>
     .TCorderInfo{
-        .collapseInfo{
-            border: 1px solid #e2e2e2;
-            background: #ffffff;
-            color: #333;
-            padding: 0 24px;
-            padding-bottom: 10px;
-            margin-bottom: 12px;
-            h2{
-                font-size: 16px;
-                line-height: 20px;
-                padding: 19px 0 10px 0;
-                border-bottom: 1px solid #e2e2e2; 
-            }
-            .essentialInformation{
-                font-size: 14px;
-                margin: 5px;
-                p{
-                    display: inline-block;
-                    color:#333333;
-                    line-height: 30px;
-                    vertical-align: top;
-                    width: 24%;
-                    font-size: 14px;
-                    .spanDiv{
-                        display: block;
-                    }
-                    span{
-                        color:#333;
-                        display: inline-block;
-                    }
-                    span:first-child{
-                        text-align: center;
-                    }
-                    span:nth-child(2){
-                        // color: #333;
-                        font-weight: bold;
-                    }
-                    .fontRed{
-                        color: red;
-                    }
-                }
-                .minwidth{
-                    width: 200px;
-                }
-                .morewidth{
-                    width: 48.4%;
-                }
-                .lesswidth{
-                    width: 521px;
-                }
-
-                .markInfo{
-                    width: 50%;
-                }
-            }
-        }
+       
     }
 </style>
