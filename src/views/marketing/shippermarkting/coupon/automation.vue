@@ -125,6 +125,7 @@
                          :serviceCardList="serviceCardList"
                          :couponLists="couponLists"
                          :couponTimeLists="couponTimeLists"
+                         :couponStatusLists="couponStatusList"
                     ></automationcheck>
                 </template>
             </el-table-column>
@@ -140,7 +141,7 @@
             </el-table-column>            
             <el-table-column  label="启用状态" >
             <template  slot-scope="scope">
-              {{ scope.row.usingStatus == 0 ? '启用' : '停用' }}
+              {{ scope.row.usingStatus == 1 ? '启用' : '停用' }}
             </template>
             </el-table-column>          
             </el-table> 
@@ -198,7 +199,8 @@ export default {
         MaidLevelList:[],
         serviceCardList:[],
         couponLists:[],
-        couponTimeLists:[],          
+        couponTimeLists:[],
+        couponStatusList:[],    
         }
     },
     components:{
@@ -342,7 +344,9 @@ export default {
                     })   
                 })        
                 data_couponStatus().then(res=>{
-                console.log('卷码状态',res)
+                res.data.map((item)=>{
+                       this.couponStatusList.push(item);
+                    })   
                 })            
         }
     },

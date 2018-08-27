@@ -73,7 +73,7 @@
 </template>
 <script>
 import { data_Commission ,data_CarList,data_MaidLevel,data_ServerClassList} from '@/api/server/areaPrice.js'
-import { data_get_couponActive2_Id,data_get_produceCoupon,data_get_BatchDistribution} from '@/api/marketing/shippermarkting/couponActive.js'
+import { data_get_couponActive2_Id,data_get_produceCoupon,data_get_BatchDistribution,data_get_grantCoupon} from '@/api/marketing/shippermarkting/couponActive.js'
 import Upload from '@/components/Upload/singleImage'
 import vregion from '@/components/vregion/Region'
 import { eventBus } from '@/eventBus'
@@ -190,7 +190,7 @@ export default {
                this.$message.warning('生成张数输入框仅能输入正整数');
            }
            else{
-         data_get_produceCoupon(this.params.id,this.num).then(res=>{
+         data_get_grantCoupon(this.params.id,this.num).then(res=>{
              this.$message.success('生成成功');
              this.dialogFormVisible_add = false;
          })
@@ -226,9 +226,11 @@ export default {
            console.log('mo',this.mobile)
            let mobile_Araay = this.mobile.split('\n')
            console.log('mobile_Araay',mobile_Araay);
-        //   data_get_produceCoupon(this.params.id,this.mobile).then(res=>{
-        //       console.log('data',res);
-        //  })   
+          
+        //    console.log('fdf',typeof(mobile_Araay));
+          data_get_grantCoupon(this.params.id,mobile_Araay).then(res=>{
+              console.log('data',res);
+         })   
        },
 
   }

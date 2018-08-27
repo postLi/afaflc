@@ -4,7 +4,7 @@
           <el-form :inline="true">
             <el-form-item label="所属区域：">
              <vregion :ui="true" @values="regionChange" class="form-control">
-                <el-input v-model="formAllData.areaCode2" placeholder="请选择出发地"></el-input>
+                <el-input v-model="formAllData.areaCode" placeholder="请选择出发地"></el-input>
             </vregion>
             </el-form-item>
             <el-form-item label="车主抽佣等级：">
@@ -63,7 +63,7 @@
                <el-table style="width: 100%" stripe border height="100%" @row-click="clickDetails" highlight-current-row :data="tableDataAll"  >
             <el-table-column  label="序号" width="80px" type="index">
             </el-table-column>
-            <el-table-column  label="所属区域" prop="areaCode2" show-overflow-tooltip>
+            <el-table-column  label="所属区域" prop="areaCode" show-overflow-tooltip>
             </el-table-column>
             <el-table-column  label="车辆类型" prop="carType">
             </el-table-column>
@@ -89,7 +89,7 @@
             </el-table-column>          
             <el-table-column  label="启用状态" >
             <template  slot-scope="scope">
-              {{ scope.row.usingStatus == 0 ? '启用' : '禁用' }}
+              {{ scope.row.usingStatus == 1 ? '启用' : '禁用' }}
             </template>
             </el-table-column>          
             </el-table> 
@@ -133,7 +133,7 @@ export default {
         }
       ],
 		formAllData:{
-            areaCode2: null,
+            areaCode: null,
             carType:null,
             commissionGrade:null,
             },
@@ -147,7 +147,7 @@ export default {
     methods:{
             regionChange(d) {
                 console.log('data:',d)
-                this.formAllData.areaCode2 = (!d.province&&!d.city&&!d.area&&!d.town) ? '': `${this.getValue(d.province)}${this.getValue(d.city)}${this.getValue(d.area)}${this.getValue(d.town)}`.trim();
+                this.formAllData.areaCode = (!d.province&&!d.city&&!d.area&&!d.town) ? '': `${this.getValue(d.province)}${this.getValue(d.city)}${this.getValue(d.area)}${this.getValue(d.town)}`.trim();
             },
              getValue(obj){
                 return obj ? obj.value:'';
