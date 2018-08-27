@@ -14,7 +14,7 @@
                 </el-col>
                 <el-col :span="12">
                 <el-form-item label="区域奖励额度上限：" :label-width="formLabelWidth" prop="rewardMax">
-                        <el-input v-model="formAll.rewardMax" placeholder="请选择" maxlength='7'></el-input>
+                        <el-input v-model="formAll.rewardMax" placeholder="请选择区域奖励额度上限" maxlength='7'></el-input>
                 </el-form-item>
                 </el-col>
             </el-row>
@@ -56,7 +56,7 @@
              <th width="80"   rowspan="2">一天限量</th>
             </tr>
             <tr>
-              <td><el-form-item prop="reward1" size = '50'><el-input class="Order_input" v-model="formAll.reward1" ref='reward1' maxlength='5'></el-input></el-form-item>-<el-form-item prop="reward2"><el-input class="Order_input" v-model="formAll.reward2" ref='reward2'  maxlength='5'></el-input></el-form-item></td> 
+              <td><el-form-item prop="reward1"><el-input class="Order_input" v-model="formAll.reward1" ref='reward1' maxlength='5'></el-input></el-form-item>-<el-form-item prop="reward2"><el-input class="Order_input" v-model="formAll.reward2" ref='reward2'  maxlength='5'></el-input></el-form-item></td> 
               <td><el-form-item prop="reward3"><el-input class="Order_input" v-model="formAll.reward3" ref='reward3' maxlength='5'></el-input></el-form-item>-<el-form-item prop="reward4"><el-input class="Order_input" v-model="formAll.reward4" ref='reward4'  maxlength='5'></el-input></el-form-item></td> 
               <td><el-form-item prop="reward5"><el-input class="Order_input" v-model="formAll.reward5" ref='reward5' maxlength='5'></el-input></el-form-item>-<el-form-item prop="reward6"><el-input class="Order_input" v-model="formAll.reward6" ref='reward6'  maxlength='5'></el-input></el-form-item></td> 
               <td><el-form-item prop="reward7"><el-input class="Order_input" v-model="formAll.reward7" ref='reward7' maxlength='5'></el-input></el-form-item>-<el-form-item prop="reward8"><el-input class="Order_input" v-model="formAll.reward8" ref='reward8'  maxlength='5'></el-input></el-form-item></td> 
@@ -64,7 +64,6 @@
               <td><el-form-item prop="reward11"><el-input class="Order_input" v-model="formAll.reward11" ref='reward11' maxlength='5'></el-input></el-form-item>-<el-form-item prop="reward12"><el-input class="Order_input" v-model="formAll.reward12" ref='reward12'  maxlength='5'></el-input></el-form-item></td> 
               <td><el-form-item prop="reward13"><el-input class="Order_input" v-model="formAll.reward13" ref='reward13' maxlength='5'></el-input></el-form-item>-<el-form-item prop="reward14"><el-input class="Order_input" v-model="formAll.reward14" ref='reward14'  maxlength='5'></el-input></el-form-item></td> 
               <td><el-form-item prop="reward15"><el-input class="Order_input" v-model="formAll.reward15" ref='reward15' maxlength='5'></el-input></el-form-item>-<el-form-item prop="reward16"><el-input class="Order_input" v-model="formAll.reward16" ref='reward16'  maxlength='5'></el-input></el-form-item></td> 
-                 
             </tr>
             <tr>
               <td>未分类</td>
@@ -295,8 +294,8 @@ export default {
         formLabelWidth:'130px',
         dialogFormVisible_add: false,
         MaidLevelValueCar:'',
-        optionsCar:[{ code:null,name:'全部'}],
-        serviceCardList:[{ code:null,name:'全部'}],
+        optionsCar:[],
+        serviceCardList:[],
         FormData:null,
         formAll:{
             areaCode2: null,

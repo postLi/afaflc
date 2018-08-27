@@ -42,7 +42,7 @@
                         start-placeholder="开始时间"
                         end-placeholder="结束时间"
                         placeholder="选择时间范围"
-                        value-format="timestamp"
+                        value-format="yyyy-MM-dd HH:mm:ss"
                         :default-time="['00:00:00', '23:59:59']"
                         @change='cTime'
                         >
@@ -188,32 +188,15 @@ export default {
             startTime:null,
             endTime:null,
          },
-          activeList:[
-           { code:null,name:'全部'},
-          ],
+          activeList:[],
           activeStatus:[
            { code:null,name:'不限'},
            { code:'0',name:'启用'},
-           { code:'1',name:'禁用'},
+           { code:'1',name:'停用'},
           ],
-        optionsCarList:[
-        {
-          code:null,
-          name:'全部'
-        }
-         ],
-        MaidLevelList:[
-        {    
-          code:null,
-          name:'全部'
-        }
-        ],
-         serviceCardList:[
-        {    
-          code:null,
-          name:'全部'
-        }
-        ],
+        optionsCarList:[],
+        MaidLevelList:[],
+        serviceCardList:[],
         couponLists:[],
         couponTimeLists:[],          
         }
@@ -248,7 +231,6 @@ export default {
                 this.pagesize = obj.pageSize
         },
             cTime(i){
-                console.log('fdfd');
                 if(i!==null){
                 this.formAllData.startTime = i[0]
                 this.formAllData.endTime = i[1]

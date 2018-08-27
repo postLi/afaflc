@@ -295,8 +295,8 @@ export default {
         formLabelWidth:'130px',
         dialogFormVisible_add: false,
         MaidLevelValueCar:'',
-        optionsCar:[{ code:null,name:'全部'}],
-        serviceCardList:[{ code:null,name:'全部'}],
+        optionsCar:[],
+        serviceCardList:[],
         FormData:null,
         formAll:{
             areaCode2: null,

@@ -283,24 +283,9 @@ export default {
         }        
     return{
         inputKey:null,
-        optionsCar:[
-        {
-          code:null,
-          name:'全部'
-        }
-         ],
-        MaidLevel:[
-        {    
-          code:null,
-          name:'全部'
-        }
-        ],
-         serviceCardList:[
-        {    
-          code:null,
-          name:'全部'
-        }
-        ],
+        optionsCar:[],
+        MaidLevel:[],
+        serviceCardList:[],
         vouchersuperposition:[
         {    
           code:'0',

@@ -1,7 +1,7 @@
 import fetch from '@/utils/fetch'
 
 // const baseurl_two = "aflcsmservice"
-const baseurl = "aflcsmservice"
+const baseurl = "aflcsmservice_1"
 const baseurl_one= "aflcsmservice"
 const baseurl_two = "aflccommonservice"
 
@@ -160,5 +160,14 @@ export function data_get_grantCoupon(activity_id,mobile) {
   return fetch({
     url: '/'+baseurl+'/usercenter/aflcCouponUse/v1/grantCoupon/?id=' + activity_id+'&mobile='+mobile,
     method: 'get',
+  })
+}
+
+// txt文件上传
+export function data_get_BatchDistribution(id,multipartFile) {
+  return fetch({
+    url: '/'+baseurl+'/usercenter/aflcCouponUse/v1/BatchDistribution',
+    method: 'post',
+    data: multipartFile
   })
 }

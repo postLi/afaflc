@@ -12,10 +12,7 @@
               <el-button type="primary" plain icon="el-icon-circle-plus-outline" @click="produceCoupon">生成</el-button>
               </el-form-item>
               </el-form>
-
            </div>
-             
-
            <div :class="editType=='Build'?'tableDataAllBox2':'tableDataAllBox1'">
             <el-table style="width: 100%" stripe border height="77%" :data="tableDataAll" >
             <el-table-column  label="优惠券名称" prop="couponName">
@@ -64,15 +61,8 @@
                 <div class="couponGive_piece">
                  <h3 class="couponGive_piece_H3">请上传模板批量发放</h3>
                  <p class="couponGive_piece_P">格式：txt文档，一行一个手机号</p>
-                 <el-upload
-                    class="upload-demo"
-                    drag
-                    multiple>
-                    <i class="el-icon-upload"></i>
-                    <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
-                    <div class="el-upload__tip" slot="tip">只能上传txt文件，且不超过500kb</div>
-                    </el-upload>
-                    <el-button type="primary" @click="grantCoupon">确认发放</el-button>
+                    <input type="file" ref="inputer">
+                    <el-button type="primary" @click="BatchDistribution">确认发放</el-button>
                 </div>
             </el-tab-pane>            
           </el-tabs>
@@ -83,7 +73,7 @@
 </template>
 <script>
 import { data_Commission ,data_CarList,data_MaidLevel,data_ServerClassList} from '@/api/server/areaPrice.js'
-import { data_get_couponActive2_Id,data_get_produceCoupon} from '@/api/marketing/shippermarkting/couponActive.js'
+import { data_get_couponActive2_Id,data_get_produceCoupon,data_get_BatchDistribution} from '@/api/marketing/shippermarkting/couponActive.js'
 import Upload from '@/components/Upload/singleImage'
 import vregion from '@/components/vregion/Region'
 import { eventBus } from '@/eventBus'
@@ -206,14 +196,41 @@ export default {
          })
         }        
        },
+    
+       uploadConfig(e){
+        // let inputFile = this.$refs.inputer;
+        // var formdata = new FormData()
+        // console.log('inputFile',inputFile.files[0]);
+        // formdata.append('id',this.params.id);
+        // formdata.append('multipartFile',inputFile.files[0]);
+        // console.log('formdata',formdata);
+        // data_get_BatchDistribution(this.params.id,formdata).then(res=>{
+        //      console.log('res',res)
+        // })
+       },
+
+       BatchDistribution(){
+        let inputFile = this.$refs.inputer;
+        var formdata = new FormData()
+        console.log('inputFile',inputFile.files[0]);
+        formdata.append('id',this.params.id);
+        formdata.append('multipartFile',inputFile.files[0]);
+        console.log('formdata',formdata);
+        data_get_BatchDistribution(this.params.id,formdata).then(res=>{
+             console.log('res',res)
+             this.$message.success('发放成功');
+             this.dialogFormVisible_add = false;
+        })
+       },
        grantCoupon(){
            console.log('mo',this.mobile)
            let mobile_Araay = this.mobile.split('\n')
-           console.log('mobile_Araay',mobile_Araay)
+           console.log('mobile_Araay',mobile_Araay);
         //   data_get_produceCoupon(this.params.id,this.mobile).then(res=>{
-        //       console.log('fdfdf',res);
+        //       console.log('data',res);
         //  })   
        },
+
   }
 }
 </script>

@@ -56,9 +56,9 @@
           </el-row>
           <el-row >
             <el-col>
-               <el-form-item  label="所属区域：" :label-width="formLabelWidth"  prop="areaCode"> 
+               <el-form-item  label="所属区域：" :label-width="formLabelWidth"  prop="areaName"> 
                 <vregion :ui="true" @values="regionChange" class="form-control" >
-                    <el-input v-model="formAllData.areaCode" placeholder="请选择出发地"></el-input>
+                    <el-input v-model="formAllData.areaName" placeholder="请选择出发地"></el-input>
                 </vregion>
                </el-form-item>  
             </el-col>
@@ -134,8 +134,7 @@
                                 placeholder="选择日期">
                                 </el-date-picker>
                      </span>
-
-                                </div>
+              </div>
              <div class="ht_table_td table_th11">
                          <el-select v-model="formAllData.aflcCouponList[keys].serivceCode" clearable placeholder="请选择" >
                           <el-option
@@ -160,7 +159,7 @@
                  </div>  
              <div class="ht_table_td table_th13">
              <vregion :ui="true" @values="regionChange1" class="form-control">
-                <el-input v-model="formAllData.aflcCouponList[keys].areaCode" placeholder="请选择出发地" @focus="changeInput(keys)"></el-input>
+                <el-input v-model="formAllData.aflcCouponList[keys].areaName" placeholder="请选择出发地" @focus="changeInput(keys)"></el-input>
             </vregion>
               </div>
              <div class="ht_table_td table_th14">
@@ -284,24 +283,9 @@ export default {
         }        
     return{
         inputKey:null,
-        optionsCar:[
-        {
-          code:null,
-          name:'全部'
-        }
-         ],
-        MaidLevel:[
-        {    
-          code:null,
-          name:'全部'
-        }
-        ],
-        serviceCardList:[
-        {    
-          code:null,
-          name:'全部'
-        }
-        ],
+        optionsCar:[],
+        MaidLevel:[],
+        serviceCardList:[],
         vouchersuperposition:[
         {    
           code:0,
@@ -322,7 +306,11 @@ export default {
             activityName:null,
             activityType:null,
             usingStatus:null,
+            areaName:null,
             areaCode: null,
+            province:null,
+            city:null,
+            area:null,
             startTime:null,
             createTime:null,
             endTime:null,
@@ -338,7 +326,11 @@ export default {
             endTime:null,
             serivceCode:null,
             carType:null,
-            areaCode:null,
+            areaName:null,
+            areaCode:null,            
+            province:null,
+            city:null,
+            area:null,
             ifvouchersuperposition:null,
         }]
         },
@@ -347,18 +339,58 @@ export default {
             activityName:{trigger:'change',required:true,validator: activityNameValidator},
             createTime:{trigger:'change',required:true,validator:createTimeValidator},
             activityDes:{trigger:'change',required:true,validator:activityDesValidator},
-            areaCode:{trigger:'change',required:true,validator:areaCodeValidator},
+            areaName:{trigger:'change',required:true,validator:areaCodeValidator},
             },
     }
  },
   methods:{
     regionChange(d) {
                 console.log('data:',d)
-                this.formAllData.areaCode = (!d.province&&!d.city&&!d.area&&!d.town) ? '': `${this.getValue(d.province)}${this.getValue(d.city)}${this.getValue(d.area)}${this.getValue(d.town)}`.trim();
+                this.formAllData.areaName = (!d.province&&!d.city&&!d.area&&!d.town) ? '': `${this.getValue(d.province)}${this.getValue(d.city)}${this.getValue(d.area)}${this.getValue(d.town)}`.trim();
+                this.formAllData.areaCode = d.province.code;
+                this.formAllData.province = d.province.name;
+                this.formAllData.city = null;
+                this.formAllData.area = null;
+                if(d.city)
+                {
+                this.formAllData.areaCode = d.city.code;
+                this.formAllData.province = d.province.name;
+                this.formAllData.city = d.city.name;
+                this.formAllData.area = null;
+                }    
+                if(d.area)
+                {
+                this.formAllData.areaCode = d.area.code;
+                this.formAllData.province = d.province.name;
+                this.formAllData.city = d.city.name;
+                this.formAllData.area = d.area.name;
+                }           
+                console.log('this.formAllData.areaCode',this.formAllData.areaCode)
+              
     },
     regionChange1(d) {
                 console.log('data:',d)
-               this.formAllData.aflcCouponList[this.inputKey].areaCode = (!d.province&&!d.city&&!d.area&&!d.town) ? '': `${this.getValue(d.province)}${this.getValue(d.city)}${this.getValue(d.area)}${this.getValue(d.town)}`.trim();
+                 this.formAllData.aflcCouponList[this.inputKey].areaName = (!d.province&&!d.city&&!d.area&&!d.town) ? '': `${this.getValue(d.province)}${this.getValue(d.city)}${this.getValue(d.area)}${this.getValue(d.town)}`.trim();
+                this.formAllData.aflcCouponList[this.inputKey].areaCode = d.province.code;
+                this.formAllData.aflcCouponList[this.inputKey].province = d.province.name;
+                this.formAllData.aflcCouponList[this.inputKey].city = null;
+                this.formAllData.aflcCouponList[this.inputKey].area = null;
+                if(d.city)
+                {
+                this.formAllData.aflcCouponList[this.inputKey].areaCode = d.city.code;
+                this.formAllData.aflcCouponList[this.inputKey].province = d.province.name;
+                this.formAllData.aflcCouponList[this.inputKey].city = d.city.name;
+                this.formAllData.aflcCouponList[this.inputKey].area = null;
+                }    
+                if(d.area)
+                {
+                this.formAllData.aflcCouponList[this.inputKey].areaCode = d.area.code;
+                this.formAllData.aflcCouponList[this.inputKey].province = d.province.name;
+                this.formAllData.aflcCouponList[this.inputKey].city = d.city.name;
+                this.formAllData.aflcCouponList[this.inputKey].area = d.area.name;
+                }     
+
+              
     },
     getValue(obj){
         console.log('dd',obj)
@@ -424,6 +456,7 @@ export default {
            serivceCode:null,
            carType:null,
            areaCode:null,
+           areaName:null,
            ifvouchersuperposition:null,
            }) 
         },
@@ -489,12 +522,18 @@ export default {
                return
             }
             else{
-            this.$refs['formAllData'].validate(valid=>{
+            this.$refs['formAllData'].validate(valid=>{        
               if(valid){
               delete this.formAllData["createTime"];
+              delete this.formAllData["areaName"];
+               console.log('this.formAllData.areaCode',this.formAllData.areaCode)
+              for(var i = 0;i<this.formAllData.aflcCouponList.length;i++){
+                  delete this.formAllData.aflcCouponList[i]["areaName"];
+              }
               if(this.editType=='two'){
                   this.formAllData.activityType = 'AF046101';
               } 
+              this.formAllData.areaCode=this.formAllData.areaCode
               data_get_couponActive_create(this.formAllData).then((res)=>{
               this.dialogFormVisible_add = false;
               this.$refs['formAllData'].resetFields();
@@ -510,6 +549,7 @@ export default {
                 serivceCode:null,
                 carType:null,
                 areaCode:null,
+                areaName:null,
                 ifvouchersuperposition:null,
               }]
               eventBus.$emit('changeListtwo')

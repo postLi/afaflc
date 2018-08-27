@@ -111,18 +111,8 @@ export default {
       dataTotal:null,
       tableDataAll:[],
       radio: 1,
-       optionsCar:[
-       {
-          code:null,
-          name:'全部'
-      }
-      ],
-      serviceCardList:[
-      {    
-          code:null,
-          name:'全部'
-        }
-      ],
+      optionsCar:[],
+      serviceCardList:[],
 		formAllData:{
             areaCode2: null,
             carType:null,

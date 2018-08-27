@@ -51,7 +51,6 @@ export default {
      }
 }
 </script>
-
 <style lang="scss" >
     @import "../../../../styles/tab.scss";
     .completeinfo{

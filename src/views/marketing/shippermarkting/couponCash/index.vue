@@ -111,18 +111,8 @@ export default {
       dataTotal:null,
       tableDataAll:[],
       radio: 1,
-       optionsCar:[
-       {
-          code:null,
-          name:'全部'
-      }
-      ],
-      serviceCardList:[
-      {    
-          code:null,
-          name:'全部'
-        }
-      ],
+       optionsCar:[],
+      serviceCardList:[],
 		formAllData:{
             areaCode2: null,
             carType:null,
@@ -232,7 +222,6 @@ export default {
                         return
                 }else{
                     this.selectId.push(this.selectRowData.id)
-                    console.log('fdf',this.selectRowData.id);
                   data_Able_shipperOwnerFrom(this.selectId).then(res=>{
                      this.selectId.splice(0,1);
                      if(this.selectRowData.usingStatus==0)
