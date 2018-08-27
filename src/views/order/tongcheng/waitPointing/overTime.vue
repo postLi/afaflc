@@ -4,7 +4,8 @@
             <div class="classify_info">
                 <div class="btns_box">
                     <el-button type="primary" plain @click="handleSearch('search')" size="mini">指派司机</el-button>
-                    <el-button type="primary" plain @click="handleSearch('search')" size="mini">取消订单</el-button>
+                    <el-button type="primary" plain @click="handleSearch('cancel')" size="mini">取消订单</el-button>
+                    <el-button type="primary" plain @click="handleSearch('search')" size="mini">新增订单</el-button>
                     <el-button type="primary" plain @click="handleSearch('search')" size="mini">导出Exce</el-button>
                 </div>
                 <div class="info_news" style="height:87%;">
@@ -79,7 +80,7 @@
                             width="250">
                                 <template  slot-scope="scope">
                                     <span class="timeChoose">
-                                        {{ parseTimeFunction(scope.row.useCarTime)}}    
+                                        {{ scope.row.useCarTime | parseTime}}    
                                     </span>
                                 </template>
                         </el-table-column>
@@ -114,7 +115,7 @@
                             label="下单时间"
                             width="250">
                             <template  slot-scope="scope">
-                                {{ parseTimeFunction(scope.row.useTime)}}
+                                {{ scope.row.useTime | parseTime}}
                             </template>
                         </el-table-column>
                     </el-table>
@@ -124,6 +125,8 @@
             <div class="info_tab_footer">共计:{{ dataTotal }} <div class="show_pager"> <Pager :total="dataTotal" @change="handlePageChange"  :sizes="sizes"/></div> </div>    
 
             <Details :dialogFormVisible_details.sync = "dialogFormVisible_details" :orderSerial="DetailsOrderSerial" ></Details>
+            <cancelCompnent :dialogVisible.sync="dialogVisible" :orderSerial = "currentOrderSerial"   @close = "shuaxin"/>
+
     </div>
 </template>
 
@@ -134,16 +137,25 @@ import { parseTime,pickerOptions2 } from '@/utils/index.js'
 import Pager from '@/components/Pagination/index'
 import Details from '../components/detailsInformations'
 import searchInfo from './components/searchInfo'
+import cancelCompnent from '../components/cancel'
 
     export default{
-
+        props: {
+            isvisible: {
+                type: Boolean,
+                default: false
+            },
+        },
         components:{
             Pager,
             Details,
-            searchInfo
+            searchInfo,
+            cancelCompnent
         },
         data(){
             return{
+                dialogVisible:false,
+                currentOrderSerial:'',
                 timeOut:null,
                 loading: false,//加载
                 sizes:[20,50,100],
@@ -156,17 +168,19 @@ import searchInfo from './components/searchInfo'
                     startOrderDate:'',//下单起始时间
                     endOrderDate:'',//下单结束时间
                     orderSerial:'',//订单号
-                    parentOrderStatus:'AF00801',//订单状态
+                    orderStatus:'AF0080504',
+                    parentOrderStatus:'AF00805',//订单状态
                 },
                 tableData:[],
-                parseTimeFunction:null,
                 dialogFormVisible_details:false,//详情弹窗
                 DetailsOrderSerial:'',
+                checkedinformation:[],
             }
         },
         watch:{
             isvisible: {
                 handler(newVal, oldVal) {
+                    console.log(this.isvisible)
                     if(newVal){
                         this.firstblood();
                     }
@@ -186,8 +200,9 @@ import searchInfo from './components/searchInfo'
         },
         methods: {
             handlePageChange(obj) {
-                this.page = obj.pageNum
-                this.pagesize = obj.pageSize
+                this.page = obj.pageNum;
+                this.pagesize = obj.pageSize;
+                this.firstblood();
             },
             //刷新页面  
             firstblood(){
@@ -204,7 +219,6 @@ import searchInfo from './components/searchInfo'
                 })
 
                 this.loading = false;
-                this.parseTimeFunction = parseTime;
             },
            
             //模糊查询 分类名称或者code
@@ -226,6 +240,24 @@ import searchInfo from './components/searchInfo'
                             orderSerial:'',//订单号
                             parentOrderStatus:'AF00801',//订单状态待支付
                         }
+                        break;
+                    case 'cancel':
+                        console.log(this.checkedinformation.length)
+                        if(this.checkedinformation.length == 0){
+                            return this.$message({
+                                type: 'info',
+                                message: '请选择一个订单' 
+                            })
+                        } else if(this.checkedinformation.length > 1){
+                            return this.$message({
+                                type: 'info',
+                                message: '只能选择一个订单' 
+                            })
+                        }else{
+                            this.currentOrderSerial = this.checkedinformation[0].orderSerial;
+                            this.dialogVisible = true;
+                        }
+                        break;
                 }
                 this.firstblood();
             },
@@ -242,6 +274,9 @@ import searchInfo from './components/searchInfo'
                 // console.log(item)
                 this.dialogFormVisible_details = true;
                 this.DetailsOrderSerial = item.orderSerial;
+            },
+            shuaxin(){
+                this.firstblood();
             }
         }
     }

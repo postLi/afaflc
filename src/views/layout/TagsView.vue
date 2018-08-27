@@ -5,7 +5,8 @@
         <div class="scroll-wrapper" ref="scrollWrapper" :style="{left: left + 'px'}">
           <router-link class="tags-view-item" ref='tagIndex' :class="isActive(indexTag)?'active':''" to="/dashboard" >
           首页
-          </router-link><router-link ref='tag' class="tags-view-item" :class="isActive(tag)?'active':''" v-for="tag in Array.from(visitedViews)"
+          </router-link>
+          <router-link ref='tag' class="tags-view-item" :class="isActive(tag)?'active':''" v-for="tag in Array.from(visitedViews)"
             :to="tag.path" :key="tag.path"> <span class="el-icon-refresh" title="刷新" @click.prevent.stop="refreshSelectedTag(tag)"></span>
             {{generateTitle(tag.title)}}<span class='el-icon-close' title="关闭" @click.prevent.stop='closeSelectedTag(tag)'></span>
           </router-link>
@@ -42,21 +43,22 @@
 const padding = 0
 
 export default {
-  data() {
-    return {
-      visible: true,
-      top: 0,
-      left: 0,
-      selectedTag: {},
-      hideCloseCurrentMenu: false,
-      indexTag: {path:'/dashboard', name:'首页', lock: true}
-    }
-  },
-  computed: {
-    visitedViews() {
-      return this.$store.state.tagsView.visitedViews
-    }
-  },
+    data() {
+        return {
+        visible: true,
+        top: 0,
+        left: 0,
+        selectedTag: {},
+        hideCloseCurrentMenu: false,
+        indexTag: {path:'/dashboard', name:'首页', lock: true}
+        }
+    },
+    computed: {
+        visitedViews() {
+            console.log('this.$store.state.tagsView',this.$store.state.tagsView)
+        return this.$store.state.tagsView.visitedViews
+        }
+    },
   watch: {
     $route(newpath, oldpath) {
       // 如果新的路径是三级路径以上，则不进行加入

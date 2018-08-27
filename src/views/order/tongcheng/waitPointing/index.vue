@@ -8,7 +8,7 @@
 
         <!-- 超时无人人接单 -->
             <el-tab-pane label="超时无人人接单" name="overTime">
-                <overTime :isvisible="pointName === 'overTime'"></overTime>
+                <overTime :isvisible=" pointName === 'overTime'"></overTime>
             </el-tab-pane>
 
         <!-- 公海无司机 -->

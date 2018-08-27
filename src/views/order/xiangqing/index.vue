@@ -54,74 +54,47 @@ export default {
         driverTrail,
         rate
     },
-    props: {
-        // listOrderSerial:{
-        //     type:String,
-        //     required:true
-        // },
-        // record:{
-        //     type:Boolean,
-        // }
-    },
     data() {
         return {
             orderTabName:'orderInfo',
-            loading:true,
-            listInformation:{},
-            parseTimeFunction:null,
-            activeNames: ['1','2','3','4','5','6','7'],
-            tableData: [{
-                date: '2016-05-02',
-                name: '王小虎',
-                address: '上海市普陀区金沙江路 1518 弄'
-            }, {
-                date: '2016-05-04',
-                name: '王小虎',
-                address: '上海市普陀区金沙江路 1517 弄'
-            }, {
-                date: '2016-05-01',
-                name: '王小虎',
-                address: '上海市普陀区金沙江路 1519 弄'
-            }, {
-                date: '2016-05-03', 
-                name: '王小虎',
-                address: '上海市普陀区金沙江路 1516 弄'
-            }],
-            // tableDataArray:[],
+            routeQuery:'',
         };
     },
     computed: {
     　　
     },
     watch: {
-        // listOrderSerial: {
-        //     handler (cval, oval) {
-        //         console.log('--------')
-        //         console.log(cval, oval)
-        //         if(cval){
-        //             // this.init();
-        //         }
-        //     },
-        //     deep: true,
-        //     immediate:true
+        // $route(to,from){
+        //     console.log('to.path',to.path);
         // },
-    },
-    mounted(){
+        '$route.query':{
+            handler(newVal, oldVal) {
+                console.log(newVal, oldVal)
+            },
+            deep:true,
 
+        }
+    },
+    
+    // created() {
+    //     this.routeQuery = sessionStorage.getItem('routeQuery') || 'first';
+    // },
+
+    // beforeUpdate () {
+    //     sessionStorage.setItem('routeQuery', this.routeQuery);
+    // },
+
+    // beforeDestroy () {
+    //     sessionStorage.setItem('routeQuery', 'first');
+    // },
+
+
+    mounted(){
+        // console.log('this.$route',this.$route)
     },
     methods: {
-        handleChange(val) {
-            console.log(val);
-        },
         init(){
-            orderDetailsList(this.listOrderSerial).then(res => {
-                console.log('details',res)
-                this.listInformation = res.data;
-                this.listInformation.aflcOrderAddresses.sort(function(a,b){  
-                    return a.viaOrder - b.viaOrder;  
-                })
-                this.loading = false;
-            })
+
         },
         handleClick(tab, event){
             this.orderTabName = tab.name;
@@ -154,6 +127,7 @@ export default {
 
         .el-tabs__item{
             border: 1px solid #d2d2d2;
+            border-top-width:2px; 
             border-radius: 4px 4px 0px 0px;
             border-bottom: 0 none;
             height: 30px;
@@ -165,8 +139,6 @@ export default {
             border-color: #03a9f4;
             background: #ffffff;
             border-bottom-color: #f0f0f0;
-            line-height: 29px;
-
         }
 
         .el-tabs__content{
@@ -180,6 +152,63 @@ export default {
                 overflow: hidden;
                 min-height: 30px;
                 line-height: 30px;
+            }
+        }
+
+        .collapseInfo{
+            border: 1px solid #e2e2e2;
+            background: #ffffff;
+            color: #333;
+            padding: 0 24px;
+            padding-bottom: 10px;
+            margin-bottom: 12px;
+            h2{
+                font-size: 16px;
+                line-height: 20px;
+                padding: 19px 0 10px 0;
+                border-bottom: 1px solid #e2e2e2; 
+            }
+            .essentialInformation{
+                font-size: 14px;
+                margin: 5px;
+                p{
+                    display: inline-block;
+                    color:#333333;
+                    line-height: 30px;
+                    vertical-align: top;
+                    width: 24%;
+                    font-size: 14px;
+                    .spanDiv{
+                        display: block;
+                    }
+                    span{
+                        color:#333;
+                        display: inline-block;
+                    }
+                    span:first-child{
+                        text-align: center;
+                    }
+                    span + span{
+                        font-weight: bold;
+                        
+                    }
+                    .fontRed{
+                        color: red;
+                    }
+                }
+                .minwidth{
+                    width: 200px;
+                }
+                .morewidth{
+                    width: 48.4%;
+                }
+                .lesswidth{
+                    width: 521px;
+                }
+
+                .markInfo{
+                    width: 50%;
+                }
             }
         }
     }

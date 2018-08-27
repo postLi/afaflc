@@ -24,6 +24,15 @@ export function orderDetailsList(orderSerial) {
     })
   }
 
+// 取消订单
+export function cancelOrder(data) {
+    return fetch({
+      url: '/'+baseurl+'/order/aflcOrder/v1/cancelOrder',
+      method: 'post',
+      data:data,
+    })
+  }
+
 
 
 

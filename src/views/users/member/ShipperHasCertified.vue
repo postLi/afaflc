@@ -45,7 +45,7 @@
                         <el-radio class="textRadio" @change.native="getCurrentRow(scope.$index,scope.row)" :label="scope.$index" v-model="templateRadio">&nbsp;</el-radio>
                     </template>
                 </el-table-column>
-               <el-table-column label="序号" width="50" fixed>
+               <el-table-column label="序号" width="80" fixed>
                     <template slot-scope="scope">
                         {{ (page - 1)*pagesize + scope.$index + 1 }}
                     </template>

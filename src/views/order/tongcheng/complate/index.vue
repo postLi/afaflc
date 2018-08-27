@@ -111,7 +111,7 @@
                             width="250">
                                 <template  slot-scope="scope">
                                     <span class="timeChoose">
-                                        {{ parseTimeFunction(scope.row.useCarTime)}}    
+                                        {{ scope.row.useCarTime | parseTime}}    
                                     </span>
                                 </template>
                         </el-table-column>
@@ -146,7 +146,7 @@
                             label="下单时间"
                             width="250">
                             <template  slot-scope="scope">
-                                {{ parseTimeFunction(scope.row.useTime)}}
+                                {{ scope.row.useTime | parseTime}}
                             </template>
                         </el-table-column>
                     </el-table>
@@ -198,7 +198,6 @@ import vregion from '@/components/vregion/Region'
                 },
                 chooseTime:'',
                 tableData:[],
-                parseTimeFunction:null,
                 dialogFormVisible_details:false,//详情弹窗
                 DetailsOrderSerial:'',
             }
@@ -224,7 +223,7 @@ import vregion from '@/components/vregion/Region'
                     this.searchInfo.belongCity = d.province.code;
                 }
             },
-             getValue(obj){
+            getValue(obj){
                 return obj ? obj.value:'';
             },
             handlePageChange(obj) {
@@ -251,7 +250,6 @@ import vregion from '@/components/vregion/Region'
                 })
 
                 this.loading = false;
-                this.parseTimeFunction = parseTime;
             },
            
             //模糊查询 分类名称或者code
