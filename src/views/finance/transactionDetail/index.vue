@@ -20,7 +20,6 @@
                 </label> 
                 <label><span>交易方式&nbsp;</span>
                    <el-select v-model="data.payWay" clearable placeholder="请选择">
-                      
                        <el-option label="支付宝" value="0"></el-option>
                        <el-option label="微信" value="1"></el-option>
                        <el-option label="余额支付" value="2"></el-option>
@@ -99,10 +98,10 @@
                             width="100">
                         </el-table-column>
                         <el-table-column
-                        align = "center"
+                          align = "center"
                           prop="tradeSerial"
                           label="交易流水号"
-                          width="80">
+                          width="120">
                         </el-table-column>
                         <el-table-column
                         align = "center"
@@ -445,7 +444,7 @@ import { parseTime,formatTime } from '@/utils/index.js'
                 }
             }
             .info_news{
-                height:90%;
+                height:100%;
             }
             .Pagination{
                 margin-top:13px;

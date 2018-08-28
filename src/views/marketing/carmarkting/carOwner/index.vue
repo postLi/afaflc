@@ -172,7 +172,7 @@ export default {
          // 选择行
          clickDetails(i){
            this.selectRowData = i;
-
+             
            console.log('selectRowData',this.selectRowData)
          },
         //每页显示数据量变更
@@ -225,7 +225,7 @@ export default {
                     console.log('fdf',this.selectRowData.id);
                   data_Able_ownerFromsame(this.selectId).then(res=>{
                      this.selectId.splice(0,1);
-                     if(this.selectRowData.usingStatus==0)
+                     if(this.selectRowData.usingStatus==1)
                      {
                          this.$message.warning('已禁用');
                      }
@@ -306,7 +306,11 @@ export default {
     margin-bottom: 10px;
     }
     .info_city{
-      height:88%
+      height:88%;
+      .cell{
+      color: #333;
+      font-size: 14px;
+      }
     }
     .el-button{
       margin-right: 20px;

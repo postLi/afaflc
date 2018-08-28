@@ -156,14 +156,8 @@ export function data_get_aflcCoupon_list(page,pagesize,data) {
 }
 
 // 发放优惠卷
-export function data_get_grantCoupon(id,mobile) {
-  return fetch({
-    url: '/'+baseurl+'/usercenter/aflcCouponUse/v1/grantCoupon/'+id,
-    method: 'post',
-    data:{
-      mobiles :mobile,
-    }
-  })
+export function data_get_grantCoupon(id,data) {
+return fetch.post('/'+baseurl+'/usercenter/aflcCouponUse/v1/grantCoupon/'+id, data)
 }
 
 // txt文件上传

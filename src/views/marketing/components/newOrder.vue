@@ -41,14 +41,16 @@
              <tr>
              <td>
                  <el-form-item  prop="areaCode"> 
-                    <vregion :ui="true" @values="regionChange" class="form-control">
-                        <el-input v-model="formAll.areaCode" placeholder="请选择省/市/区/街道"></el-input>
+                     
+                    <vregion :ui="true" @values="regionChange" class="form-control" v-if="editType=='add'">
+                        <el-input v-model="formAll.areaCode" placeholder="请选择省/市/区/街道" ></el-input>
                     </vregion>
+                    <el-input v-model="formAll.areaCode" placeholder="请选择省/市/区/街道" disabled></el-input>
                  </el-form-item>
             </td>
              <td> 
                  <el-form-item  prop="carType"> 
-                 <el-select  v-model="formAll.carType" clearable placeholder="请选择" >
+                 <el-select  v-model="formAll.carType" clearable placeholder="请选择" :disabled="editType!=='add'">
                           <el-option
                              v-for="item in optionsCar"
                               :key="item.code"
@@ -61,7 +63,7 @@
             </td>
              <td>
                  <el-form-item  prop="commissionGrade"> 
-                  <el-select v-model="formAll.commissionGrade" clearable placeholder="请选择" >
+                  <el-select v-model="formAll.commissionGrade" clearable placeholder="请选择" :disabled="editType!=='add'">
                           <el-option
                              v-for="item in MaidLevel"
                               :key="item.code"
@@ -74,7 +76,7 @@
              </td>
              <td>
                  <el-form-item  prop="reward1"> 
-                 <el-input min="0" maxlength="3"  v-model="formAll.reward1"></el-input>
+                 <el-input min="0" maxlength="3"  v-model="formAll.reward1" ></el-input>
                  </el-form-item>
              </td>
              <td>
@@ -350,8 +352,10 @@ export default {
             commissionLowest:null,
             }
            this.$refs['formAll'].resetFields();
+        this.$message.success('新增成功');
         }).catch(res=>{
             console.log(res)
+        this.$message.success('新增失败');
        });
        }
        }
@@ -367,9 +371,10 @@ export default {
             this.dialogFormVisible_add = false;
             this.changeList();
             this.$refs['formAll'].resetFields();
+            this.$message.success('修改成功');
         }).catch(res=>{
             console.log(res)
-            this.$message.error('车主达量等级已存在');
+            this.$message.error('修改失败');
        });
        }
        }

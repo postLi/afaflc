@@ -6,7 +6,7 @@
                    <el-cascader
                     size="large"
                     :options="options"
-                    v-model="formAllData.areaCode"
+                    v-model="formAllData.areaName"
                     @change="handleChange">
                     </el-cascader>
              <!-- <vregion :ui="true" @values="regionChange" class="form-control">
@@ -124,6 +124,7 @@ export default {
       MaidLevel:[],
 		formAllData:{
             areaCode: null,
+            areaName:null,
             carType:null,
             commissionGrade:null,
      },
@@ -139,19 +140,26 @@ export default {
            console.log('d',d)
            if(d.length<3){
                 this.$message.info('请选择具体的城市');
-                this.formAllData.areaCode = [];
+                this.formAllData.areaCode = null;
+                this.formAllData.province = null,
+                this.formAllData.city = null,
+                this.formAllData.area = null,
+                this.formAllData.areaName = [];
+                console.log('d1',this.formAllData.province)
+                console.log('d2',this.formAllData.city)
+                console.log('d3',this.formAllData.area)
+                console.log('d4',this.formAllData.areaName)
            }
            else{
                 this.formAllData.areaCode = d
                 this.formAllData.province = CodeToText[d[0]]
                 this.formAllData.city =  CodeToText[d[1]]
-
                 if(d[2]==''){
-                this.formAllData.area =  CodeToText[d[2]]
+                this.formAllData.area = ''
                 }
-                console.log('d1',this.formAllData.province)
-                console.log('d2',this.formAllData.city)
-                console.log('d3',this.formAllData.area)
+                else{
+                this.formAllData.area = CodeToText[d[2]]
+                }
            }
         },
         
@@ -266,7 +274,7 @@ export default {
                     
                   data_Able_Marketingsame(this.selectId).then(res=>{
                      this.selectId.splice(0,1);
-                     if(this.selectRowData.usingStatus==0)
+                     if(this.selectRowData.usingStatus==1)
                      {
                          this.$message.warning('已禁用');
                      }
@@ -343,7 +351,11 @@ export default {
     margin-bottom: 10px;
     }
     .info_city{
-      height:88%
+      height:88%;
+      .cell{
+      color: #333;
+      font-size: 14px;
+      }
     }
     .el-button{
       margin-right: 20px;

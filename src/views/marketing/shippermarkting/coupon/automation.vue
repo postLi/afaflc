@@ -192,8 +192,8 @@ export default {
           activeList:[],
           activeStatus:[
            { code:null,name:'不限'},
-           { code:'0',name:'启用'},
-           { code:'1',name:'停用'},
+           { code:'1',name:'启用'},
+           { code:'0',name:'停用'},
           ],
         optionsCarList:[],
         MaidLevelList:[],
@@ -249,6 +249,7 @@ export default {
 
         // 选择行
          clickDetails(i){
+             console.log(i)
            this.selectRowData = i
          },
        // 选择删除
@@ -271,7 +272,6 @@ export default {
                         this.firstblood();       
                         this.selectRowData=''; 
                     }).catch(err => {
-                      console.log('rr',res)
                         this.$message({
                             type: 'info',
                             message: '操作失败，原因：' + err.text ? err.text : err
@@ -295,7 +295,7 @@ export default {
                     
                   data_Able_couponActive(this.selectId).then(res=>{
                      this.selectId.splice(0,1);
-                     if(this.selectRowData.usingStatus==0)
+                     if(this.selectRowData.usingStatus==1)
                      {
                          this.$message.warning('已禁用');
                      }
@@ -352,10 +352,10 @@ export default {
     },
      mounted(){
            if(this.types=='two'){
-                 this.formAllData.usingStatus = "0";
+                 this.formAllData.usingStatus = "1";
            }
            else{
-               this.formAllData.usingStatus = null;
+                 this.formAllData.usingStatus = null;
            }
          this.getMoreInformation();
          eventBus.$on('changeListtwo', () => {
@@ -418,7 +418,11 @@ export default {
     margin-bottom: 10px;
     }
     .info_city{
-      height:88%
+      height:88%;
+      .cell{
+      color: #333;
+      font-size: 14px;
+      }
     }
     .el-button{
       margin-right: 20px;

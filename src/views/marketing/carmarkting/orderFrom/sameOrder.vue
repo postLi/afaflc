@@ -238,7 +238,7 @@ export default {
                     
                   data_Able_orderFromsame(this.selectId).then(res=>{
                      this.selectId.splice(0,1);
-                     if(this.selectRowData.usingStatus==0)
+                     if(this.selectRowData.usingStatus==1)
                      {
                          this.$message.warning('已禁用');
                      }
@@ -315,7 +315,11 @@ export default {
     margin-bottom: 10px;
     }
     .info_city{
-      height:100%
+      height:100%;
+      .cell{
+      color: #333;
+      font-size: 14px;
+      }
     }
     .el-button{
       margin-right: 20px;

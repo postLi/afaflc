@@ -37,10 +37,17 @@
             </tr>
              <tr>
              <td>
-                 <el-form-item  prop="areaCode"> 
-                    <vregion :ui="true" @values="regionChange" class="form-control">
+                 <el-form-item  prop="areaName"> 
+                   <el-cascader
+                    size="large"
+                    :options="options"
+                    v-model="formAll.areaName"
+                    @change="handleChange">
+                    </el-cascader>
+
+                    <!-- <vregion :ui="true" @values="regionChange" class="form-control">
                         <el-input v-model="formAll.areaCode" placeholder="请选择省/市/区/街道"></el-input>
-                    </vregion>
+                    </vregion> -->
                  </el-form-item>
             </td>
              <td> 
@@ -113,6 +120,7 @@ import { data_get_Marketingsame_create,data_get_Marketingsame_update,data_get_Ma
 import Upload from '@/components/Upload/singleImage'
 import vregion from '@/components/vregion/Region'
 import { eventBus } from '@/eventBus'
+import { regionDataPlus, CodeToText, TextToCode } from 'element-china-area-data'
 import {data_get_shipper_type,data_get_shipper_create,data_get_shipper_change,data_get_shipper_view,} from '@/api/users/shipper/all_shipper.js'
 export default {
   components:{
@@ -158,7 +166,7 @@ export default {
   data(){
     //    选择省市校验
         const belongCityNameValidator = (rule, val, cb) => {
-            if(!val){
+            if(val.length<1){
             cb(new Error('所属地区不能为空'))
             }
             else{
@@ -244,12 +252,14 @@ export default {
         }
 
         return{
+        options:regionDataPlus,
         dialogFormVisible_add: false,
         MaidLevelValueCar:'',
         optionsCar:[],
         MaidLevel:[],
         formAll:{
-            areaCode: null,
+            areaCode: [],
+            areaName:[],
             carType:null,
             commissionGrade:null,
             startNum:null,
@@ -259,7 +269,7 @@ export default {
             usingStatus:null,
             },
             rulesForm:{
-            areaCode:{trigger:'change',required:true,validator: belongCityNameValidator},
+            areaName:{trigger:'change',required:true,validator: belongCityNameValidator},
             carType:{trigger:'change',required:true,validator:carTypeValidator},
             commissionGrade:{trigger:'change',required:true,validator:commissionGradeValidator},
             startNum:{trigger:'change',required:true,validator:startNumValidator},
@@ -272,6 +282,18 @@ export default {
   watch:{
    dialogFormVisible_add:{
         handler: function(val, oldVal) {
+            if(!val){
+            this.$refs['formAll'].resetFields();
+            this.formAll={
+            areaCode: [],
+            carType:null,
+            commissionGrade:null,
+            startNum:null,
+            endNum:null,
+            commissionPer:null,
+            commissionLowest:null,
+            }
+            }
         },
     },
   },
@@ -288,13 +310,28 @@ export default {
     this.getMoreInformation();
   },
   methods:{
-     regionChange(d) {
-                console.log('data:',d)
-                this.formAll.areaCode = (!d.province&&!d.city&&!d.area&&!d.town) ? '': `${this.getValue(d.province)}${this.getValue(d.city)}${this.getValue(d.area)}${this.getValue(d.town)}`.trim();
-            },
-             getValue(obj){
-                return obj ? obj.value:'';
-            },
+        handleChange(d){
+           console.log('d',d)
+           if(d.length<3){
+                this.$message.info('请选择具体的城市');
+                this.formAll.areaName = [];
+                this.formAll.areaCode = [];
+                this.formAll.province = null
+                this.formAll.city = null
+                this.formAll.area = null
+           }
+           else{
+                this.formAll.areaCode = d
+                this.formAll.province = CodeToText[d[0]]
+                this.formAll.city =  CodeToText[d[1]]
+                if(d[2]==''){
+                this.formAll.area = null
+                }
+                else{
+                this.formAll.area = CodeToText[d[2]]
+                }
+           }
+        },
    openDialog:function(){
        if(this.editType=='edit'){
            if(!this.params.id){
@@ -348,15 +385,35 @@ export default {
         },   
     // 同城新增    
    add_data(){
+
        this.$refs['formAll'].validate(valid=>{
-        var forms= Object.assign({}, this.formAll);
         if(valid){
+            if(this.formAll.area){
+                this.formAll.areaCode.splice(0,2)
+            }
+            else{
+                 this.formAll.areaCode.splice(0,1)
+                 this.formAll.areaCode.pop()
+            }
+         this.formAll.areaCode =String(this.formAll.areaCode)
+         let formAllData = {
+             areaCode: this.formAll.areaCode,
+             carType:this.formAll.carType,
+             commissionGrade:this.formAll.commissionGrade,
+             startNum:this.formAll.startNum,
+             endNum:this.formAll.endNum,
+             commissionPer:this.formAll.commissionPer,
+             commissionLowest:this.formAll.commissionLowest,
+         }
+         var forms= Object.assign({},formAllData);
         data_get_Marketingsame_create(forms).then(res=>{
             console.log('res',res);
             this.dialogFormVisible_add = false;
             this.changeList();
+            this.$message.success('新增成功');
+        }).catch(res=>{
             this.formAll={
-            areaCode2: null,
+            areaCode:[],
             carType:null,
             commissionGrade:null,
             startNum:null,
@@ -364,10 +421,10 @@ export default {
             commissionPer:null,
             commissionLowest:null,
             }
-            this.$refs['vestList'].resetFields();
-        }).catch(res=>{
-            console.log(res)
+            this.dialogFormVisible_add = false;
+            this.$message.error('新增失败');
        });
+
        }
        }
        )
@@ -382,9 +439,10 @@ export default {
             this.dialogFormVisible_add = false;
             this.changeList();
             this.$refs['formAll'].resetFields();
+             this.$message.success('修改成功');
         }).catch(res=>{
             console.log(res)
-            this.$message.error('车辆类型车主抽佣等级已存在');
+            this.$message.error('修改失败');
        });
        }
        }

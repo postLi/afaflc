@@ -159,7 +159,7 @@
                  </div>  
              <div class="ht_table_td table_th13">
              <vregion :ui="true" @values="regionChange1" class="form-control">
-                <el-input v-model="formAllData.aflcCouponList[keys].areaName" placeholder="请选择出发地" @focus="changeInput(keys)"></el-input>
+                <el-input v-model="formAllData.aflcCouponList[keys].areaCode" placeholder="请选择出发地" @focus="changeInput(keys)"></el-input>
             </vregion>
               </div>
              <div class="ht_table_td table_th14">

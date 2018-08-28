@@ -534,8 +534,9 @@ export default {
             this.$refs['formAll'].resetFields();
             this.dialogFormVisible_add = false;
             this.changeList();
+            this.$message.success('新增成功');
         }).catch(res=>{
-            console.log(res)
+            console.log('新增失败')
        });
 
        }

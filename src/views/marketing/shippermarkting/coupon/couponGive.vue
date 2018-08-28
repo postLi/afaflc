@@ -225,11 +225,12 @@ export default {
        grantCoupon(){
            console.log('mo',this.mobile)
            let mobile_Araay = this.mobile.split('\n')
-           console.log('mobile_Araay',mobile_Araay);
-          
-        //    console.log('fdf',typeof(mobile_Araay));
           data_get_grantCoupon(this.params.id,mobile_Araay).then(res=>{
-              console.log('data',res);
+              this.$message.success('发放成功');
+              this.dialogFormVisible_add = false;
+         }).catch(res=>{
+              this.$message.success('发放失败');
+              this.dialogFormVisible_add = false; 
          })   
        },
 

@@ -308,7 +308,11 @@ export default {
     margin-bottom: 10px;
     }
     .info_city{
-      height:89%
+      height:89%;
+      .cell{
+      color: #333;
+      font-size: 14px;
+      }
     }
     .el-button{
       margin-right: 20px;

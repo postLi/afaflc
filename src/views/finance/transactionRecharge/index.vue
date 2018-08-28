@@ -1,6 +1,6 @@
 <template>
- <div class="finance clearfix">
-             <div class="classify_searchinfo">
+ <div class="transactionRecharge clearfix">
+  <div class="finance_searchinfo">
    <el-form :inline="true">
             <el-form-item label="用户姓名：">
             <el-input v-model="fromData.a1" placeholder="请输入内容" clearable></el-input>
@@ -25,7 +25,6 @@
                         placeholder="选择时间范围"
                         value-format="yyyy-MM-dd HH:mm:ss"
                         :default-time="['00:00:00', '23:59:59']"
-                        @change='cTime'
                         >
                     </el-date-picker>
             </el-form-item>                  
@@ -35,6 +34,22 @@
           </el-form>
             </div>
             <div class="classify_info">
+           <el-table style="width: 100%" stripe border height="100%" highlight-current-row>
+            <el-table-column  label="序号" width="80px" type="index">
+            </el-table-column>
+            <el-table-column  label="用户账号" >
+            </el-table-column>
+            <el-table-column  label="充值赠送" >
+            </el-table-column>
+            <el-table-column  label="充值渠道" >
+            </el-table-column>
+            <el-table-column  label="充值方式" >
+            </el-table-column>
+            <el-table-column  label="流水号" >
+            </el-table-column>
+            <el-table-column  label="充值时间" >
+            </el-table-column>    
+           </el-table>                                                                
                 <div class="info_news">
                       <!-- 页码 -->
                     
@@ -77,10 +92,10 @@ import {data_financeList,data_GetServerType,data_GetServerType2,data_GetServerTy
 </script>
 
 <style lang="scss">
-.finance{
+.transactionRecharge{
         height:100%;    
         position: relative;
-.classify_searchinfo{
+.finance_searchinfo{
     position: absolute;
     left: 0;
     top: 0;
@@ -99,13 +114,27 @@ import {data_financeList,data_GetServerType,data_GetServerType2,data_GetServerTy
         top:35px!important;
         left:0px!important;
     }
-    .el-form-item__content{}
+    .el-range-editor{
+        margin-left:0px;
+        margin-top:5px;
+        .el-range__icon{
+            line-height: 24px;
+        }
+        .el-range-separator{
+             line-height: 24px;
+             width:7%;
+        }
+         .el-range__close-icon{
+             line-height: 24px;
+         }
+         width: 280px;
+    }   
     .el-button{
       margin-right: 20px;
       padding: 8px 20px!important;
     }
 }
-.classify_cityinfo{
+.classify_info{
     height: 100%;
     padding: 70px 15px 0 15px;
     .commoncss{
@@ -117,10 +146,14 @@ import {data_financeList,data_GetServerType,data_GetServerType2,data_GetServerTy
     .info_city{
       height:89%
     }
+    .cell{
+      color: #333;
+      font-size: 14px;
+      }    
     .el-button{
       margin-right: 20px;
       padding: 8px 20px!important;
-    }
+    } 
 }
 .info1_tab_footer{
     padding-left: 20px;
