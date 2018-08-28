@@ -1,5 +1,5 @@
 <template>
-  <div>
-    客服页面
+  <div style="height:100%;">
+    <router-view></router-view>
   </div>
 </template>

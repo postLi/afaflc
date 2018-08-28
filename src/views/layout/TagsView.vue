@@ -7,7 +7,7 @@
           首页
           </router-link>
           <router-link ref='tag' class="tags-view-item" :class="isActive(tag)?'active':''" v-for="tag in Array.from(visitedViews)"
-            :to="tag.path" :key="tag.path"> <span class="el-icon-refresh" title="刷新" @click.prevent.stop="refreshSelectedTag(tag)"></span>
+            :to="tag.fullPath" :key="tag.fullPath"> <span class="el-icon-refresh" title="刷新" @click.prevent.stop="refreshSelectedTag(tag)"></span>
             {{generateTitle(tag.title)}}<span class='el-icon-close' title="关闭" @click.prevent.stop='closeSelectedTag(tag)'></span>
           </router-link>
         </div>
@@ -28,7 +28,7 @@
             首页
           </router-link>
           <router-link :class="isActive(tag)?'active-menu':''" tag="li" v-for="tag in Array.from(visitedViews)"
-          :to="tag.path" :key="tag.path">
+          :to="tag.fullPath" :key="tag.fullPath">
           <i class="el-icon-check"></i>
           {{generateTitle(tag.title)}}
           </router-link>
@@ -50,7 +50,7 @@ export default {
         left: 0,
         selectedTag: {},
         hideCloseCurrentMenu: false,
-        indexTag: {path:'/dashboard', name:'首页', lock: true}
+        indexTag: {path:'/dashboard', fullPath:'/dashboard', name:'首页', lock: true}
         }
     },
     computed: {
@@ -61,11 +61,12 @@ export default {
     },
   watch: {
     $route(newpath, oldpath) {
+      
       // 如果新的路径是三级路径以上，则不进行加入
-      if(/^(\/[^/]*){1,3}$/.test(newpath.fullPath)){
+      //if(/^(\/[^/]*){1,3}$/.test(newpath.fullPath)){
         this.addViewTags()
         this.moveToCurrentTag()
-      }
+      //}
       
     },
     visible(value) {
@@ -84,6 +85,7 @@ export default {
       return title
     },
     generateRoute() {
+        console.log('$router', this.$route)
       if (this.$route.name && this.$route.name !== '首页' ) {
         return this.$route
       }

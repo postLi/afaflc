@@ -57,35 +57,40 @@ export default {
     data() {
         return {
             orderTabName:'orderInfo',
-            routeQuery:'',
         };
     },
     computed: {
     　　
     },
     watch: {
-        // $route(to,from){
-        //     console.log('to.path',to.path);
-        // },
-        '$route.query':{
-            handler(newVal, oldVal) {
-                console.log(newVal, oldVal)
+        '$route':{
+            handler(to,from) {
+                // console.log('```')
+                console.log(to,from)
+                // if(!to.query.orderSerial){
+                //     to.query.orderSerial = sessionStorage.getItem('orderSerial');
+                // }else{
+                //     sessionStorage.setItem('orderSerial', to.query.orderSerial);
+                // }
             },
             deep:true,
-
+            immediate: true
         }
     },
     
     // created() {
-    //     this.routeQuery = sessionStorage.getItem('routeQuery') || 'first';
+    //     this.routeQuery = sessionStorage.getItem('orderSerial');
+    //     console.log('created',this.routeQuery)
     // },
 
     // beforeUpdate () {
-    //     sessionStorage.setItem('routeQuery', this.routeQuery);
+    //     sessionStorage.setItem('orderSerial', this.routeQuery);
+    //     console.log('beforeUpdate',this.routeQuery)
     // },
 
     // beforeDestroy () {
-    //     sessionStorage.setItem('routeQuery', 'first');
+    //     sessionStorage.setItem('orderSerial', this.routeQuery);
+    //     console.log('beforeDestroy',this.routeQuery)
     // },
 
 
@@ -94,7 +99,7 @@ export default {
     },
     methods: {
         init(){
-
+            this.routeQuery = this.$route.query.orderSerial ||'';
         },
         handleClick(tab, event){
             this.orderTabName = tab.name;

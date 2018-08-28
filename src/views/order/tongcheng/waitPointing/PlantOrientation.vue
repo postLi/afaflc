@@ -3,7 +3,7 @@
             <searchInfo @change="getSearchParam"></searchInfo>
             <div class="classify_info">
                 <div class="btns_box">
-                    <el-button type="primary" plain @click="handleSearch('search')" size="mini">指派司机</el-button>
+                    <el-button type="primary" plain @click="handleSearch('appoint')" size="mini">指派司机</el-button>
                     <el-button type="primary" plain @click="handleSearch('search')" size="mini">推回公海</el-button>
                     <el-button type="primary" plain @click="handleSearch('cancel')" size="mini">取消订单</el-button>
                     <el-button type="primary" plain @click="handleSearch('search')" size="mini">新增订单</el-button>
@@ -120,8 +120,11 @@
                 <!-- 页码 -->
             <div class="info_tab_footer">共计:{{ dataTotal }} <div class="show_pager"> <Pager :total="dataTotal" @change="handlePageChange"  :sizes="sizes"/></div> </div>    
 
-            <Details :dialogFormVisible_details.sync = "dialogFormVisible_details" :orderSerial="DetailsOrderSerial" ></Details>
+            <!-- <Details :dialogFormVisible_details.sync = "dialogFormVisible_details" :orderSerial="DetailsOrderSerial" ></Details> -->
             <cancelCompnent :dialogVisible.sync="dialogVisible" :orderSerial = "currentOrderSerial"   @close = "shuaxin"/>
+            <appointDriver :dialogFormVisible.sync = "dialogFormVisible"  @close = "shuaxin" ></appointDriver>
+
+
 
     </div>
 </template>
@@ -134,7 +137,7 @@ import Pager from '@/components/Pagination/index'
 import Details from '../components/detailsInformations'
 import searchInfo from './components/searchInfo'
 import cancelCompnent from '../components/cancel'
-
+import appointDriver from '../components/appointDriver'
     export default{
         props: {
             isvisible: {
@@ -146,11 +149,13 @@ import cancelCompnent from '../components/cancel'
             Pager,
             Details,
             searchInfo,
-            cancelCompnent
+            cancelCompnent,
+            appointDriver
         },
         data(){
             return{
                 dialogVisible:false,
+                dialogFormVisible:false,
                 currentOrderSerial:'',
                 timeOut:null,
                 loading: false,//加载
@@ -220,6 +225,9 @@ import cancelCompnent from '../components/cancel'
             handleSearch(type){
                 // console.log(this.chooseTime)
                 switch(type){
+                    case 'appoint':
+                        this.dialogFormVisible = true;
+                        break;
                     case 'search':
                         if(this.chooseTime){
                             this.searchInfo.startOrderDate = this.chooseTime[0];

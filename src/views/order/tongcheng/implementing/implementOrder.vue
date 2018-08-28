@@ -6,7 +6,7 @@
                     <el-button type="primary" plain @click="handleSearch('cancel')" size="mini">取消订单</el-button>
                     <el-button type="primary" plain @click="handleSearch('export')" size="mini">导出Exce</el-button>
                 </div>
-                <div class="info_news" style="height:85%;">
+                <div class="info_news" style="height:88%;">
                     <el-table
                         ref="multipleTable"
                         :data="tableData"
