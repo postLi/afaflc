@@ -115,7 +115,7 @@
                         <el-radio class="textRadio" @change.native="getCurrentRow(scope.$index,scope.row)" :label="scope.$index" v-model="templateRadio">&nbsp;</el-radio>
                     </template>
                 </el-table-column>
-                <el-table-column label="序号" width="80" fixed>
+                <el-table-column label="序号" width="80">
                     <template slot-scope="scope">
                         {{ (page - 1)*pagesize + scope.$index + 1 }}
                     </template>
@@ -142,16 +142,16 @@
 				</el-table-column>
 				<el-table-column prop="authStatusName" label="认证状态" width="120">
 				</el-table-column>
-                <el-table-column prop="qq" label="QQ号码" width="150">
+                <el-table-column prop="qq" label="QQ号码" width="200">
 				</el-table-column>
-				<el-table-column prop="otherService" label="会员服务承诺" width="200"  align="left">
-                    <!-- <template slot-scope="scope" >
+				<el-table-column prop="otherService" label="会员服务承诺" width="225"  align="left">
+                    <template slot-scope="scope" >
                         <div class="otherServiceTD">
                             <span class="otherService" v-for="(item,key) in JSON.parse(scope.row.otherService) " :key="key">
                                 {{item}}
                             </span>
                         </div>
-                    </template> -->
+                    </template>
 				</el-table-column>
                 <el-table-column prop="isOpenTms" label="是否开通TMS" width="120">
                     <template slot-scope="scope">

@@ -3,24 +3,30 @@
         <!-- 指派司机 -->
             <div class="appoint commoncss">
                 <el-dialog title='指派司机' :close-on-click-modal="false"  :visible="dialogFormVisible" @close="close">
-                    <div class="pointSearch">
-                         <el-form :model="searchInfo" ref="ruleForm" class="demo-ruleForm classify_searchinfo">
-                            <el-form-item label="车主" prop="pointName">
-                                <el-input v-model="searchInfo.orderSerial" clearable placeholder="车主姓名/手机账号/车牌号码">
-                                </el-input>
-                            </el-form-item>
-                            <el-form-item label="车型" prop="orderSerial">
-                                
-                            </el-form-item>
-                            <el-form-item>
-                               
-                            </el-form-item>
-                            <el-form-item class="btnChoose fr"  style="margin-left:0;">
-                                <el-button type="primary" plain @click="pointSearch('search')">搜索</el-button>
-                                <el-button type="info" plain @click="pointSearch('clear')">清空</el-button>
-                            </el-form-item>
-                        </el-form>
-                    </div>
+                    <el-form :model="searchInfo" ref="ruleForm" class="demo-ruleForm classify_searchinfo">
+                        <el-form-item label="车主" prop="pointName">
+                            <el-input v-model="searchInfo.orderSerial" clearable placeholder="车主姓名/手机账号/车牌号码">
+                            </el-input>
+                        </el-form-item>
+                        <el-form-item label="车型" prop="orderSerial">
+                            <el-select v-model="searchInfo.orderSerial" clearable placeholder="请选择">
+                                <el-option
+                                v-for="item in optionsCarType"
+                                :key="item.id"
+                                :label="item.name"
+                                :value="item.code">
+                                </el-option>
+                            </el-select>
+                        </el-form-item>
+                        <el-form-item>
+                            <el-checkbox v-model="iftequan" @change = "ifTequan">特权车</el-checkbox>
+                            {{searchInfo.if}}
+                        </el-form-item>
+                        <el-form-item class="btnChoose fr"  style="margin-left:0;">
+                            <el-button type="primary" plain @click="pointSearch('search')">搜索</el-button>
+                            <el-button type="info" plain @click="pointSearch('clear')">清空</el-button>
+                        </el-form-item>
+                    </el-form>
                     <div class="pointInfo">
                         <div class="pointChoose">
                             <el-button type="primary" class="el-icon-edit" plain  @click="pointXX">指派给选中车主</el-button>
@@ -93,7 +99,8 @@
 
 <script>
 
-import { data_findAflcDriverList,data_findAflcShipperList,data_NewData } from '@/api/dispatch/Directional.js'
+import { getDictionary } from '@/api/common.js'
+import { appointDriverList,nearDriverList } from '@/api/order/ordermange.js'
 // import detailsComponent from './details';
 
 export default {
@@ -109,30 +116,18 @@ export default {
       
     },
     data() {
-      return {
-        activeNames: ['1','2','3'],
-        searchInfo:{
-            orderSerial:'',
-        },
-        tableData_point:[],//车主列表
-        tableData: [{
-            date: '2016-05-02',
-            name: '王小虎',
-            address: '上海市普陀区金沙江路 1518 弄'
-          }, {
-            date: '2016-05-04',
-            name: '王小虎',
-            address: '上海市普陀区金沙江路 1517 弄'
-          }, {
-            date: '2016-05-01',
-            name: '王小虎',
-            address: '上海市普陀区金沙江路 1519 弄'
-          }, {
-            date: '2016-05-03',
-            name: '王小虎',
-            address: '上海市普陀区金沙江路 1516 弄'
-          }]
-      };
+        return {
+            carType:'AF018',//车型
+            iftequan:false,
+            searchInfo:{
+                orderSerial:'',
+                if:''
+            },
+            optionsCarType:[
+              
+            ],
+            tableData_point:[],//车主列表
+        };
     },
      computed: {
     　　newValue() {
@@ -140,13 +135,24 @@ export default {
     　　}
     },
     watch:{
-       
+        dialogFormVisible(newValue,oldValue){
+            if(newValue){
+                this.init()
+            }
+        }
         
     },
     mounted(){
-        // this.init();
     },
     methods: {
+        //初始化选择项数据
+        init(){
+            getDictionary(this.carType).then(res => {
+                console.log('```````',res)
+                this.optionsCarType = res.data;
+            });
+
+        },
         handleChange(val) {
             console.log(val);
         },
@@ -164,20 +170,12 @@ export default {
         pointXX(){
 
         },
-        ifWrong(val){
-            console.log(val)
-        },
         close(){
             this.$emit('update:dialogFormVisible',false)
         },
-        //初始化选择项数据
-        init(){
-           
-        },
-        closeAddNewInfo(){
-            this.close();  
-            
-        },
+        ifTequan(value){
+            this.searchInfo.if = value == true ? '1' : '0';
+        }
         
     },
    
@@ -204,15 +202,13 @@ export default {
                 .el-input{
                     width: 213px;
                     margin-left: 5px;
-                   
                 }
                 .el-button{
                     margin-left: 5px;
                 }
             }
             .pointInfo{
-                padding: 20px 10px 0 ;
-                
+                padding: 40px 10px 0 ;
                 .pointChoose{
                     .el-button{
                         span{
@@ -237,7 +233,14 @@ export default {
                 padding:20px 2px;
                 border-bottom:0 none;
                 position: relative;
-
+                .el-form-item__content{
+                    width:200px;
+                    .el-select{
+                        width: 100%;
+                    }
+                }
+                .el-form-item__content:last-child{
+                 }
                 .pointInfo{
                     .pointChoose{
                         margin-bottom:14px;
@@ -258,6 +261,11 @@ export default {
                 }
                
             }
+        }
+
+        .el-dialog .el-dialog__body .el-form .el-form-item .el-form-item__content .el-input .el-input__inner{
+            height: 30px;
+            line-height:30px;
         }
 
     }

@@ -36,12 +36,12 @@
                     <el-radio class="textRadio" @change.native="getCurrentRow(scope.$index,scope.row)" :label="scope.$index" v-model="templateRadio">&nbsp;</el-radio>
                 </template>
             </el-table-column>
-			<el-table-column label="序号" width="80" fixed>
+			<el-table-column label="序号" width="80">
                 <template slot-scope="scope">
                     {{ (page - 1)*pagesize + scope.$index + 1 }}
                 </template>
             </el-table-column>  
-				<el-table-column label="手机号(会员账号)" width="150" fixed>
+				<el-table-column label="手机号(会员账号)" width="150">
                     <template slot-scope="scope">
                         <createdDialog :paramsView="scope.row" btntype="text" :btntext="scope.row.mobile" editType="view" btntitle="详情"></createdDialog>
                     </template>
@@ -63,9 +63,9 @@
 				</el-table-column>
 				<el-table-column prop="authStatusName" label="认证状态" width="120">
 				</el-table-column>
-                <el-table-column prop="qq" label="QQ号码" width="150">
+                <el-table-column prop="qq" label="QQ号码" width="200">
 				</el-table-column>
-				<el-table-column prop="otherService" label="会员服务承诺" width="200"  align="left">
+				<el-table-column prop="otherService" label="会员服务承诺" width="225"  align="left">
                     <template slot-scope="scope" >
                         <div class="otherServiceTD">
                             <span class="otherService" v-for="(item,key) in JSON.parse(scope.row.otherService) " :key="key">
@@ -82,12 +82,11 @@
 			</el-table>
 		</div>
         <div class="info_tab_footer">共计:{{ totalCount }} <div class="show_pager"> <Pager :total="totalCount" @change="handlePageChange" /></div> </div>    
-
 	  </div>
 
        <!--认证审核部分 -->
     <div class="shenghe commoncss">
-        <el-dialog title="认证审核" :visible.sync="dialogFormVisible">
+        <el-dialog title="认证审核" :visible.sync="dialogFormVisible" :close-on-click-modal = "false">
           <el-form :model="shengheform" ref="shengheform" :rules="shengheformRules">
             <el-row>
               <el-col :span="12">
@@ -123,9 +122,6 @@
               <el-col :span="12">
                   <el-form-item label="所在地" :label-width="formLabelWidth" prop="address">
                     <el-input v-model="shengheform.belongCityName"  disabled></el-input>
-                    <!-- <span v-else> -->
-                    <!-- <GetCityList v-model="shengheform.belongCity" ref="area"></GetCityList> @focus="changeCity" v-if="selectDiaologFlag"-->
-                    <!-- </span> -->
                 </el-form-item>
               </el-col>
             </el-row>
@@ -156,7 +152,6 @@
              <el-row>    
                 <el-col :span="24" class="moreLength">
                     <el-form-item label="会员服务承诺 ：" :label-width="formLabelWidth" >
-                        <!-- <el-input :maxlength="20" v-model="xinzengform.companyName"  v-if="editType=='view'" disabled></el-input> -->
                         <el-checkbox-group v-model="otherServiceCode" >
                             <el-checkbox v-for="obj in optionsLogisticsCompany" :label="obj.code" :key="obj.id" >{{obj.name}}</el-checkbox>
                         </el-checkbox-group>
@@ -179,36 +174,29 @@
                 <div class="data_pic_yyzz data_pic_c">  
                     <img  class="picURL" :src="shengheform.businessLicenceFile ? shengheform.businessLicenceFile : defaultImg" @click="changeIMG"/>
                     <h2>营业执照</h2>
-                    <!-- <el-form-item prop="radio1"> -->
-                      <el-radio-group v-model="radio1" @change="pictureTypeChange">
+                      <el-radio-group v-model="radio1">
                         <el-radio label="上传合格">上传合格</el-radio><br />
                         <el-radio label="不清晰">不清晰</el-radio><br />
                         <el-radio label="内容不符">内容不符</el-radio>
                       </el-radio-group>
-                    <!-- </el-form-item>  -->
                 </div>
                 <div class="data_pic_company data_pic_c">   
                     <img  class="picURL" :src="shengheform.companyFacadeFile ? shengheform.companyFacadeFile : defaultImg" @click="changeIMG"/>
                     <h2>公司或档口照片</h2>
-                    <!-- <el-form-item prop="radio2"> -->
-                      <el-radio-group v-model="radio2" @change="pictureTypeChange">
+                      <el-radio-group v-model="radio2">
                         <el-radio label="上传合格">上传合格</el-radio><br />
                         <el-radio label="不清晰">不清晰</el-radio><br />
                         <el-radio label="内容不符">内容不符</el-radio>
                       </el-radio-group>
-                    <!-- </el-form-item> -->
                 </div>
                 <div class="data_pic_callingcode data_pic_c">
-                    <!-- <upload class="licensePicture" tip="（必须为jpg/png并且小于5M）" v-model="shengheform.shipperCardFile" /> -->
                     <img  class="picURL" :src="shengheform.takeIdCardFile ? shengheform.takeIdCardFile : defaultImg" @click="changeIMG"/>
                     <h2>手持身份证</h2>
-                    <!-- <el-form-item prop="radio3"> -->
-                      <el-radio-group v-model="radio3" @change="pictureTypeChange">
+                      <el-radio-group v-model="radio3">
                         <el-radio label="上传合格">上传合格</el-radio><br />
                         <el-radio label="不清晰">不清晰</el-radio><br />
                         <el-radio label="内容不符">内容不符</el-radio>
                       </el-radio-group>
-                    <!-- </el-form-item> -->
                 </div>
             </div>
           </el-form>
@@ -320,8 +308,8 @@ export default {
         otherServiceCode:{
             handler(newVal,oldVal){
                 if(newVal){
-                    this.shengheform.otherServiceCode = newVal.join(',');
-                    // console.log(this.shengheform.otherServiceCode)
+                    this.shengheform.otherServiceCode = JSON.stringify(newVal);
+                    console.log('1111',this.shengheform.otherServiceCode)
                     let otherService = [];
                     this.optionsLogisticsCompany.find((item)=>{
                         this.otherServiceCode.forEach(el => {
@@ -331,9 +319,7 @@ export default {
                         })
                     })
 
-                    this.shengheform.otherService = otherService.join(',');
-                    // console.log(otherService)
-                    // console.log(this.shengheform.otherServiceCode,this.shengheform.otherService)
+                    this.shengheform.otherService = JSON.stringify(otherService);
                 }
             }
         }
@@ -347,6 +333,7 @@ export default {
     methods:{
         getCurrentRow(index,row){       
             this.shengheform = Object.assign({},row);
+            this.otherServiceCode = JSON.parse(this.shengheform.otherServiceCode);
             this.shengheform.isOpenTms = '0';
             this.templateRadio = index;
             console.log('选中内容',row)
@@ -379,8 +366,8 @@ export default {
                 this.$message.info('至少选择一条数据！');
             }else{
                 this.dialogFormVisible = true;
+                this.defaultImg =  this.shengheform.businessLicenceFile ?  this.shengheform.businessLicenceFile : this.defaultImg;
             }
-            this.defaultImg =  this.shengheform.businessLicenceFile ?  this.shengheform.businessLicenceFile : this.defaultImg;
         },
         handleCurrentChangeRow(val){
             console.log(val)
@@ -435,28 +422,28 @@ export default {
         },
 
         completeData(){
-        //获取城市name
-        if(this.$refs.area.selectedOptions.length > 1){
-            let province;
-            this.$refs.area.areaData.forEach((item) =>{
-                if(item.code == this.$refs.area.selectedOptions[0]){
-                    province = item
-                }
-            })
-            province.children.forEach( item => {
-                if(item.code == this.$refs.area.selectedOptions[1]){
-                    this.shengheform.belongCity = item.code;
-                    this.shengheform.belongCityName = item.name;
-                }
-            })
-        }else{
-            this.$refs.area.areaData.forEach((item) =>{
-                if(item.code == this.$refs.area.selectedOptions[0]){
-                    this.shengheform.belongCity = item.code;
-                    this.shengheform.belongCityName = item.name;
-                }
-            })
-        }
+            //获取城市name
+            // if(this.$refs.area.selectedOptions.length > 1){
+            //     let province;
+            //     this.$refs.area.areaData.forEach((item) =>{
+            //         if(item.code == this.$refs.area.selectedOptions[0]){
+            //             province = item
+            //         }
+            //     })
+            //     province.children.forEach( item => {
+            //         if(item.code == this.$refs.area.selectedOptions[1]){
+            //             this.shengheform.belongCity = item.code;
+            //             this.shengheform.belongCityName = item.name;
+            //         }
+            //     })
+            // }else{
+            //     this.$refs.area.areaData.forEach((item) =>{
+            //         if(item.code == this.$refs.area.selectedOptions[0]){
+            //             this.shengheform.belongCity = item.code;
+            //             this.shengheform.belongCityName = item.name;
+            //         }
+            //     })
+            // }
         },
         // 审核不通过
         handlerOut(){
@@ -466,7 +453,6 @@ export default {
                     //         this.pictureValue.splice(idx,1)
             this.$refs['shengheform'].validate((valid)=>{
                 if(valid){
-                    this.completeData();
                     let item =  this.shengheform.contacts;
                     this.$confirm('确定要不通过'+ item +' 货主吗？', '提示', {
                         confirmButtonText: '确定',
@@ -514,8 +500,8 @@ export default {
             })
             this.$refs['shengheform'].validate((valid)=>{
                 if(valid && ifQualified){
-                    this.completeData();
-                    var forms=Object.assign({},this.shengheform,{authStatus:"AF0010403",authStatusName:'已认证'},{authNoPassCause:JSON.stringify(this.pictureValue)});
+                    var forms = Object.assign({},this.shengheform,{authStatus:"AF0010403",authStatusName:'已认证'},{authNoPassCause:JSON.stringify(this.pictureValue)});
+                    console.log(forms)
                     data_ChangeLogisticsCompany(forms).then(res=>{
                     // console.log(res)
                         this.dialogFormVisible = false;
@@ -539,24 +525,6 @@ export default {
                 }
             })
         },
-
-        // 图片质量的选择拼接
-        pictureTypeChange(val){
-            console.log(val)
-        console.log('pictureValue:', this.pictureValue)
-        let authNoPassCause
-        switch(val){
-            case 1:
-
-            break
-            case 2:
-
-            break
-            case 3:
-
-            break
-        }
-    }
   }
 }
 </script>
@@ -598,6 +566,13 @@ export default {
             }
             .data_pic_yyzz,.data_pic_company{
                 margin-right: 2%;
+            }
+        }
+
+        .el-checkbox-group{
+            .el-checkbox{
+                margin: 0px 30px 0 0;
+
             }
         }
     }

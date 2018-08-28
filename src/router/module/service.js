@@ -4,7 +4,7 @@ const _import = require('../_import_' + process.env.NODE_ENV)
 export default {
   path: '/service',
   component: Layout,
-  redirect: '/service/index',
+  redirect: '/service/index', 
   name: '客服管理',
   icon: 'kehuguanli',
   hidden: false,
@@ -18,10 +18,10 @@ export default {
     //   }]
 
       children: [{
-        path: '/service/plantService/index', name: '平台类', component: _import('service/plantService/index'), meta: { role: ['admin'], title: '平台', noCache: true }
+        path: '/service/plantService/index', name: '平台类', component: _import('service/plantService/index'), meta: { role: ['admin'], title: '平台类', noCache: true }
       },
       {
-        path: '/service/couseService/index', name: '用户类', component: _import('service/couseService/index'), meta: { role: ['admin'], title: '用户', noCache: true }
+        path: '/service/couseService/index', name: '用户类', component: _import('service/couseService/index'), meta: { role: ['admin'], title: '用户类', noCache: true }
       }]
     },
   ]

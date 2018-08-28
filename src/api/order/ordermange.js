@@ -33,8 +33,23 @@ export function cancelOrder(data) {
     })
   }
 
+//web端指派司机
+export function appointDriverList(data) {
+    return fetch({
+      url: '/'+baseurl+'/order/aflcOrder/v1/appointDriver',
+      method: 'post',
+      data:data
+    })
+  }
 
 
+  //web端指派司机时查询司机列表
+export function nearDriverList(orderSerial) {
+    return fetch({
+      url: '/'+baseurl+'/order/aflcOrder/v1/nearDriverList/' + orderSerial,
+      method: 'post',
+    })
+  }
 
 
 

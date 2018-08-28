@@ -4,7 +4,7 @@
       <el-dialog :title="title" :visible.sync="dialogFormVisible_add" :before-close="change" :close-on-click-modal="false" >
         <el-form :model="xinzengform" ref="xinzengform" :rules="rulesForm">
             <el-row>
-                <el-col :span="12">
+                <!-- <el-col :span="12">
                     <el-form-item label="会员账号 ：" :label-width="formLabelWidth" required>
                         <el-select v-model="xinzengform.account" placeholder="请选择" v-if="editType=='add'" >
                             <el-option
@@ -18,7 +18,7 @@
                         <el-input v-model="cc" auto-complete="off" v-else-if="editType=='identification'" disabled></el-input>
                         <el-input v-model="xinzengform.shipperTypeName" auto-complete="off" v-else disabled></el-input>
                     </el-form-item>
-                </el-col>
+                </el-col> -->
                 <el-col :span="12">
                     <el-form-item label="会员手机号码 ：" :label-width="formLabelWidth" required  v-if="editType !='add'">
                         <el-input v-model="xinzengform.mobile" auto-complete="off"  disabled></el-input>
@@ -27,9 +27,6 @@
                         <el-input v-model="xinzengform.mobile" auto-complete="off" ></el-input>
                     </el-form-item>
                 </el-col>
-            </el-row>
-
-            <el-row>
                 <el-col :span="12">
                     <el-form-item label="注册人姓名 ：" :label-width="formLabelWidth">
                         <el-input v-model="xinzengform.contactsName" auto-complete="off"  :disabled="editType=='view'"></el-input>
@@ -43,15 +40,13 @@
                     </el-form-item>
                 </el-col>
                 <el-col :span="12">
-                     <el-form-item label="所在地 ："  v-if = "editType=='view'" :label-width="formLabelWidth" required>
-                            <el-input v-model="xinzengform.belongCityName" auto-complete="off" disabled></el-input>
+                    <el-form-item label="所在地 ："  v-if = "editType=='view'" :label-width="formLabelWidth" required>
+                        <el-input v-model="xinzengform.belongCityName" auto-complete="off" disabled></el-input>
                     </el-form-item>
                     <el-form-item label="所在地 ："  props = "belongCity"  :label-width="formLabelWidth" v-else required>
-                        <el-input v-model="xinzengform.belongCityName" :disabled="editType=='view'" @focus="changeSelect" v-if="editType !='add' && !selectFlag"></el-input>
-                        <span v-else>
-                            <el-input v-model="xinzengform.belongCityName" auto-complete="off"  v-if = "editType=='view'"   disabled></el-input>
-                            <GetCityList   ref="area"  v-else></GetCityList>
-                        </span>
+                        <vregion :ui="true" @values="regionChange" class="form-control">
+                            <el-input v-model="xinzengform.belongCityName" placeholder="请选择出发地"></el-input>
+                        </vregion>
                     </el-form-item>
                 </el-col>
             </el-row>
@@ -83,11 +78,9 @@
                 <el-col :span="24" class="moreLength">
                     <el-form-item label="会员服务承诺 ：" :label-width="formLabelWidth">
                         <p v-if="editType == 'view'">
-                            <!-- <p v-if="xinzengform.otherService"></p>
-                            <span v-for="(item,key) in xinzengform.otherService" :key="key">
+                            <span v-for="(item,key) in otherService" :key="key" class="serviceChoose">
                                 {{item}}
-                            </span> -->
-
+                            </span>
                         </p>
                         <el-checkbox-group v-model="otherServiceCode" v-else>
                             <span>
@@ -152,12 +145,14 @@ import GetCityList from '@/components/GetCityList'
 import { eventBus } from '@/eventBus'
 import {data_get_shipper_type} from '@/api/users/shipper/all_shipper.js'
 import {data_ChangeLogisticsCompany} from '@/api/users/logistics/LogisticsCompany.js'
+import vregion from '@/components/vregion/Region.vue'
 
 import { data_LogisticsCompany } from '@/api/common.js'
 export default {
   components:{
     Upload,
-    GetCityList
+    GetCityList,
+    vregion
   },
   props:{
     paramsView:{
@@ -232,10 +227,10 @@ export default {
             type:'primary',
             title:'',
             text:'',
+            otherService:[],
             optionsLogisticsCompany:[],//会员服务承诺
             otherServiceCode:[],//选择增值服务
             citylist:[],
-            options:[],
             belongCity: [],
             areadata:[],  
             formLabelWidth:'120px',
@@ -293,7 +288,7 @@ export default {
         otherServiceCode:{
             handler(newVal,oldVal){
                 if(newVal){
-                    this.xinzengform.otherServiceCode = newVal.join(',');
+                    this.xinzengform.otherServiceCode = JSON.stringify(newVal);
                     let otherService = [];
                     this.optionsLogisticsCompany.find((item)=>{
                         this.otherServiceCode.forEach(el => {
@@ -302,9 +297,7 @@ export default {
                             }
                         })
                     })
-                    this.xinzengform.otherService = otherService.join(',');
-                    // console.log(this.xinzengform.isOpenTms)
-                    // console.log(this.xinzengform.otherService)
+                    this.xinzengform.otherService = JSON.stringify(otherService);
                 }
             }
         }
@@ -321,6 +314,15 @@ export default {
         this.getMoreInformation()
     },
     methods:{
+        regionChange(d) {
+            console.log('data:',d)
+            this.xinzengform.belongCityName = (!d.province&&!d.city&&!d.area&&!d.town) ? '': `${this.getValue(d.province)}${this.getValue(d.city)}${this.getValue(d.area)}${this.getValue(d.town)}`.trim();
+
+            
+        },
+        getValue(obj){
+            return obj ? obj.value:'';
+        },
         //关闭弹框
         close(formName){
             this.dialogFormVisible_add = false;
@@ -332,14 +334,6 @@ export default {
         openDialog(){
             // console.log('parmas:',this.params)
             console.log(this.editType)
-                    this.dialogFormVisible_add = true;
-
-
-            // if(this.editType  == 'add'){
-            //     this.dialogFormVisible_add = true;
-            //     return
-            // }else 
-            
             if(this.editType == 'edit'){
                     this.xinzengform = JSON.parse(JSON.stringify(this.params))
                     this.dialogFormVisible_add = true;
@@ -349,11 +343,6 @@ export default {
 
                     this.xinzengform.isOpenTms = this.xinzengform.isOpenTms == 1 ? '1' : '0'
             }
-            // else if(this.editType == 'identification'){
-            //         this.xinzengform =JSON.parse(JSON.stringify(this.params))
-            //         this.dialogFormVisible_add = true;
-            // }
-            
             else if(this.editType == 'view'){
                     this.dialogFormVisible_add = true;
                     this.xinzengform  = Object.assign({},this.paramsView) ;
@@ -379,11 +368,11 @@ export default {
         },
         //获取货主类型
         getMoreInformation(){
-            data_get_shipper_type().then(res=>{
-                // console.log('货主类型',res)
-                this.options = res.data;
+            // data_get_shipper_type().then(res=>{
+            //     // console.log('货主类型',res)
+            //     this.options = res.data;
             
-            }),
+            // }),
             data_LogisticsCompany().then(res=>{
 
                 this.optionsLogisticsCompany = res.data;
@@ -391,63 +380,12 @@ export default {
                 // console.log(this.optionsLogisticsCompany)
             })
         },
-        //完善数据
-        completeData(){
-        //获取城市name
-            if(!this.$refs.area){
-                return
-            }  
-            else if(this.$refs.area.selectedOptions.length > 1){
-                let province;
-                this.$refs.area.areaData.forEach((item) =>{
-                    if(item.code == this.$refs.area.selectedOptions[0]){
-                        province = item
-                    }
-                })
-                province.children.forEach( item => {
-                    if(item.code == this.$refs.area.selectedOptions[1]){
-                        this.xinzengform.belongCity = item.code;
-                        this.xinzengform.belongCityName = item.name;
-                    }
-                })
-            }else{
-                this.$refs.area.areaData.forEach((item) =>{
-                    if(item.code == this.$refs.area.selectedOptions[0]){
-                        this.xinzengform.belongCity = item.code;
-                        this.xinzengform.belongCityName = item.name;
-                    }
-                })
-            }
-        },
         // 保存
         onSubmit(){
-            this.completeData();
             this.$refs['xinzengform'].validate((valid)=>{
                 if(valid){
                     var forms=Object.assign({},this.xinzengform)
                     switch  (this.editType){
-                        // case 'add':
-                        //     if(!forms.companyName){
-                        //         forms.companyName = '个人业务' ;
-                        //     }
-                        //     forms).then(res=>{
-                        //     // console.log(res)
-                        //         this.$alert('操作成功', '提示', {
-                        //             confirmButtonText: '确定',
-                        //             callback: action => {
-                        //                 this.dialogFormVisible_add = false;
-                        //                 this.$emit('getData')
-                        //                 this.changeList();
-
-                        //             }
-                        //         });
-                        //     }).catch(err=>{
-                        //         this.$message({
-                        //             type: 'info',
-                        //             message: '操作失败，原因：' + err.text ? err.text : err
-                        //         })
-                        //     })
-                        //     break;
                         case 'edit':
                             data_ChangeLogisticsCompany(forms).then(res=>{
                                 // console.log(res)
@@ -462,48 +400,16 @@ export default {
                             }).catch(err=>{
                                 this.$message({
                                     type: 'info',
-                                    message: '操作失败，原因：' + err.text ? err.text : err
+                                    message: '操作失败，原因：' + err.text ? err.text : err.errinfo
                                 })
                             })
                             break;
-                        // case 'identification':
-                        //     let item =  forms.contacts;
-
-                        //     this.$confirm('确定要认证通过'+ item +' 该货主吗？', '提示', {
-                        //         confirmButtonText: '确定',
-                        //         cancelButtonText: '取消',
-                        //         type: 'warning'
-                        //     }).then(() => {
-                        //         forms.currentShipperStatus = forms.shipperStatus;
-                        //         forms.shipperStatus =  "AF0010403";
-                        //         this.options.filter( el => {
-                        //             if(el.name == "企业货主" ){
-                        //                 forms.shipperTypeName = el.name;
-                        //                 forms.shipperType = el.code;
-                        //             }
-                        //         })
-                        //         forms).then(res => {
-                        //             this.dialogFormVisible_add = false;
-                        //             this.$message({
-                        //                 type: 'success',
-                        //                 message: '该货主已认证成功',
-                        //                 duration:2000
-                        //             })
-                        //             this.$emit('getData'),
-                        //             this.changeList();
-                        //         }).catch(err => {
-                        //             this.$message.error('操作失败，失败原因：',err.text)
-                        //         })
-                        //     }).catch(() => {
-                        //         this.$message({
-                        //             type: 'info',
-                        //             message: '已取消'
-                        //         })
-                        //     })
-                        //     break;
                     }
                 }else{
-                    console.log('123')
+                    this.$message({
+                        type: 'info',
+                        message: '请填写完整信息' 
+                    })
                     return false
                 }
             })
@@ -537,6 +443,26 @@ export default {
                     margin-left: 0;
                 }
             }
+        }
+
+        .el-form-item__content{
+            .v-region{
+                .v-dropdown-container{
+                    top: 38px !important;
+                    left: -151px !important;
+                }
+            }
+        }
+
+        .serviceChoose{
+            display: inline-block;
+            padding: 0px 10px;
+            margin-right: 10px;
+            color: #fff;
+            background: rgb(44, 193, 219);
+            -webkit-box-shadow:3px 3px 30px #888888;;
+            -moz-box-shadow:3px 3px 30px #888888;;
+
         }
     }
 </style>

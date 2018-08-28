@@ -18,13 +18,13 @@
                         tooltip-effect="dark"
                         @row-click="clickDetails"
                         style="width: 100%"> 
-                         <el-table-column label="序号" fixed width="80">
+                         <el-table-column label="序号"  width="80">
                             <template slot-scope="scope">
                                 {{ (page - 1)*pagesize + scope.$index + 1 }}
                             </template>
                         </el-table-column>  
                         <el-table-column
-                            fixed
+                            
                             prop="orderSerial"
                             label="工单编号"
                             width="300">
@@ -61,9 +61,9 @@
                             prop="complainStatusName"
                             label="处理状态"
                             width="150">
-                            <template  slot-scope="scope">
+                            <!-- <template  slot-scope="scope">
                                 <span :class="{reMark:scope.row.complainStatusName == '待处理',sussces:scope.row.complainStatusName == '已处理'}">{{ scope.row.complainStatusName}}</span>
-                            </template>
+                            </template> -->
                         </el-table-column>
                         <el-table-column
                             label="处理时间"
@@ -126,7 +126,6 @@ import searchInfo from '../components/searchInfo'
                     workSerial:'',//工单号                    
                 },
                 tableData:[],
-                parseTimeFunction:null,
                 dialogFormVisible_details:false,//详情弹窗
                 DetailsOrderSerial:'',
                 dialogVisible:false,//取消订单弹框
@@ -152,15 +151,13 @@ import searchInfo from '../components/searchInfo'
             },
             //刷新页面  
             firstblood(){
+                this.loading = true;
                 getListCouseComplain(this.page,this.pagesize,this.searchInfo).then(res => {
                     console.log('是否刷新',res.data)
                     this.tableData = res.data.list;
                     this.dataTotal = res.data.totalCount;
                     this.loading = false;
                 })
-
-                this.loading = false;
-                this.parseTimeFunction = parseTime;
             },
             //模糊查询 分类名称或者code
             handleSearch(type){

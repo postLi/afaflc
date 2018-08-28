@@ -18,13 +18,13 @@
                         tooltip-effect="dark"
                         @row-click="clickDetails"
                         style="width: 100%"> 
-                        <el-table-column label="序号" fixed width="80">
+                        <el-table-column label="序号"  width="80">
                             <template slot-scope="scope">
                                 {{ (page - 1)*pagesize + scope.$index + 1 }}
                             </template>
                         </el-table-column>  
                         <el-table-column
-                            fixed
+                            
                             label="工单编号"
                             width="300">
                                 <template  slot-scope="scope">
@@ -72,11 +72,12 @@
                             width="250">
                         </el-table-column>
                         <el-table-column
+                            prop="complainStatusName"
                             label="处理状态"
                             width="150">
-                                <template  slot-scope="scope">
+                                <!-- <template  slot-scope="scope">
                                     <span :class="{reMark:scope.row.complainStatusName == '待处理',sussces:scope.row.complainStatusName == '已处理'}">{{ scope.row.complainStatusName}}</span>
-                                </template>
+                                </template> -->
                         </el-table-column>
                         <el-table-column
                             prop="platformTime"
@@ -95,14 +96,13 @@
                                 {{scope.row.reply}}
                             </template>
                         </el-table-column><el-table-column
-                            fixed="right"
                             label="操作"
-                            width="200">
+                            width="220">
                             <template  slot-scope="scope">
-                                <el-button-group>
+                                <!-- <el-button-group> -->
                                     <el-button type="primary" plain icon="el-icon-document" @click="handleClick(scope.row,'reply')">回复</el-button>
-                                    <el-button type="warning" plain icon="el-icon-delete" @click="handleClick(scope.row,'delet')">删除</el-button>
-                                </el-button-group>
+                                    <el-button type="danger" plain icon="el-icon-delete" @click="handleClick(scope.row,'delet')">删除</el-button>
+                                <!-- </el-button-group> -->
                             </template>
                         </el-table-column>
                     </el-table>

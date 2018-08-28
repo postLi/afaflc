@@ -1,6 +1,6 @@
 import fetch from '@/utils/fetch'
 
-const baseurl = "aflcorderservice-lyc"
+const baseurl = "aflcorderservice"
 
 
 // 客服管理-平台类-客服管理首页-投诉列表

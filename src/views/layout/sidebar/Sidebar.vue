@@ -52,7 +52,7 @@ import { mapGetters } from 'vuex'
 import SidebarItem from './SidebarItem'
 import SidebarMenuSearch from './SidebarMenuSearch'
 import Hamburger from '@/components/Hamburger'
-import './memu.scss'
+
 
 export default {
   components: { SidebarItem, Hamburger, SidebarMenuSearch },
@@ -126,6 +126,8 @@ export default {
 <style rel="stylesheet/scss" lang="scss">
 @import "src/styles/variate.scss";
 @import "src/styles/mixin.scss";
+@import './memu.scss';
+
 #app .sidebar-menu{
     padding-top: 10px;
   min-height: 100%;

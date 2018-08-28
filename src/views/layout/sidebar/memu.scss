@@ -21,23 +21,6 @@ $sidebarBackgroundColor: #002039;
     .sidebar-submenu{
         display: none;
     }
-
-    // a{
-    //     display: block;
-    // }
-
-    // .is-opened>.sidebar-submenu{
-    //     display: block;
-    // }
-
-    // .menu-item{
-    //     height: 40px;
-    //     line-height: 40px;
-    //     font-size: $sidebarFontSize;
-    //     color: rgba(255, 255, 255, 0.8);
-    //     position: relative;
-    //     transition: height .4s ease;
-    // }
     .is-opened{
         height: auto;
         background: #002039;
@@ -57,7 +40,7 @@ $sidebarBackgroundColor: #002039;
     //     font-size: $sidebarFontSize - 2px;
     // }
 
-    .is-active,.el-menu-item .is-active{
+    .is-active{
         background: $hoverBackgroundColor;
         border-left-color: #104193;
 
@@ -78,11 +61,11 @@ $sidebarBackgroundColor: #002039;
         font-size: 14px;
         min-width: 100%;
     }
-        .is-active{
-            &>a {
-            color: #fff;
-        }
-    }
+    //     .is-active{
+    //         &>a {
+    //         color: #fff;
+    //     }
+    // }
 
     // .sidebar_menu_toggle, .submenu-item-tab{
     //     cursor: pointer;

@@ -1,31 +1,31 @@
 <template>
   <div class="member">
-    <el-tabs v-model="shipperName" type="card" @tab-click="handleClick" >
+    <el-tabs v-model="memberName" type="card" @tab-click="handleClick" >
         <!-- 全部 -->
         <!-- <el-badge :value="12" class="item"> -->
             <el-tab-pane label="全部" name="first">
-                <ShipperAll :isvisible="shipperName === 'first'"></ShipperAll>
+                <ShipperAll :isvisible="memberName === 'first'"></ShipperAll>
             </el-tab-pane>
         <!-- </el-badge> -->
 
         <!-- 未认证 -->
             <el-tab-pane label="未认证" name="second">
-                <ShipperUnauthorized :isvisible="shipperName === 'second'"></ShipperUnauthorized>
+                <ShipperUnauthorized :isvisible="memberName === 'second'"></ShipperUnauthorized>
             </el-tab-pane>
 
         <!-- 待认证 -->
             <el-tab-pane label="待认证" name="third">
-                <ShipperCertified :isvisible="shipperName === 'third'"></ShipperCertified>
+                <ShipperCertified :isvisible="memberName === 'third'"></ShipperCertified>
             </el-tab-pane>
             
         <!-- 已认证部分 -->
             <el-tab-pane label="已认证" name="fourth">
-                <ShipperHasCertified :isvisible="shipperName === 'fourth'"></ShipperHasCertified>
+                <ShipperHasCertified :isvisible="memberName === 'fourth'"></ShipperHasCertified>
             </el-tab-pane>
 
         <!-- 认证不通过 -->
             <el-tab-pane label="认证不通过" name="fifth">
-                <ShipperDisqualification :isvisible="shipperName === 'fifth'"></ShipperDisqualification>
+                <ShipperDisqualification :isvisible="memberName === 'fifth'"></ShipperDisqualification>
             </el-tab-pane>
     </el-tabs>
   </div>
@@ -52,35 +52,35 @@
         },
         data() {
           return {
-            shipperName:'first',
+            memberName:'first',
           };
         },
         watch:{
-            shipperName(newVal,oldVal){
+            memberName(newVal,oldVal){
                 // console.log('newVal,oldVal',newVal,oldVal)
                 if(newVal){
-                    this.shipperName = newVal;
+                    this.memberName = newVal;
                 }else{
-                    this.shipperName = oldVal;
+                    this.memberName = oldVal;
                 }
             }
         },
         created() {
-            this.shipperName = localStorage.getItem('shipperName') || 'first';
+            this.memberName = sessionStorage.getItem('memberName') || 'first';
         },
 
         beforeUpdate () {
-            localStorage.setItem('shipperName', this.shipperName);
+            sessionStorage.setItem('memberName', this.memberName);
         },
 
         beforeDestroy () {
-            localStorage.setItem('shipperName', 'first');
+            sessionStorage.setItem('memberName', 'first');
         },
         methods: {
 
             handleClick(tab, event) {
                 // console.log(tab, event);
-                this.shipperName = tab.name;
+                this.memberName = tab.name;
             }
         }
     }
@@ -170,44 +170,40 @@
             .freezeName{
                 color: #e6a23c;
                 font-weight: bold;
-                font-size: 16px;
             }
 
             .blackName{
                 color: red;
                 font-weight: bold;
-                font-size: 16px;
             }
 
             .normalName{
-                color: #8bc34a;
+                color: #0da0e4;
                 font-weight: bold;
-                font-size: 16px;
             }
 
             .otherServiceTD{
                 text-align: left;
-                padding-left: 10px;
+                // white-space: nowrap;  
+                // text-overflow:ellipsis; 
+                // overflow:hidden;
             }
             .otherService{
                 text-align: left;
                 display: inline-block;
-                margin: 0 10px 10px 0 ;
-                border-radius:20% / 50%;
-                padding: 5px 10px;
-                background: #ef6c00;
-                color: #fff;
+                margin: 2px 5px;
+                padding: 5px 15px;
+                background: #d0d7e5;
+                color: #333333;
             }
 
             .isTMS{
-                color: #8bc34a;
-                font-size: 16px;
+                color: #0da0e4;
                 font-weight: bold;
             }
 
             .noTMS{
                 color: red;
-                font-size: 16px;
                 font-weight: bold;
             }
         }
