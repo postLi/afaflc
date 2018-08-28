@@ -37,9 +37,9 @@
             </tr>
              <tr>
              <td>
-                 <el-form-item  prop="areaCode2"> 
+                 <el-form-item  prop="areaCode"> 
                     <vregion :ui="true" @values="regionChange" class="form-control">
-                        <el-input v-model="formAll.areaCode2" placeholder="请选择省/市/区/街道"></el-input>
+                        <el-input v-model="formAll.areaCode" placeholder="请选择省/市/区/街道"></el-input>
                     </vregion>
                  </el-form-item>
             </td>
@@ -249,7 +249,7 @@ export default {
         optionsCar:[],
         MaidLevel:[],
         formAll:{
-            areaCode2: null,
+            areaCode: null,
             carType:null,
             commissionGrade:null,
             startNum:null,
@@ -259,7 +259,7 @@ export default {
             usingStatus:null,
             },
             rulesForm:{
-            areaCode2:{trigger:'change',required:true,validator: belongCityNameValidator},
+            areaCode:{trigger:'change',required:true,validator: belongCityNameValidator},
             carType:{trigger:'change',required:true,validator:carTypeValidator},
             commissionGrade:{trigger:'change',required:true,validator:commissionGradeValidator},
             startNum:{trigger:'change',required:true,validator:startNumValidator},
@@ -290,7 +290,7 @@ export default {
   methods:{
      regionChange(d) {
                 console.log('data:',d)
-                this.formAll.areaCode2 = (!d.province&&!d.city&&!d.area&&!d.town) ? '': `${this.getValue(d.province)}${this.getValue(d.city)}${this.getValue(d.area)}${this.getValue(d.town)}`.trim();
+                this.formAll.areaCode = (!d.province&&!d.city&&!d.area&&!d.town) ? '': `${this.getValue(d.province)}${this.getValue(d.city)}${this.getValue(d.area)}${this.getValue(d.town)}`.trim();
             },
              getValue(obj){
                 return obj ? obj.value:'';
@@ -301,14 +301,16 @@ export default {
                
             this.$message.info('未选中需要修改内容');
            }
+           else if(this.params.usingStatus==0){
+            this.$message.info('选中内容被已禁用，不能进行修改操作');
+           }
            else{
             this.dialogFormVisible_add = true;
             console.log('id',this.params.id)
             data_get_Marketingsame_Id(this.params.id).then(res=>{
-                                this.formAll = res.data
-                    })
-
-
+            this.formAll = res.data
+            console.log('i',this.formAll)
+        })
            }
 
        }

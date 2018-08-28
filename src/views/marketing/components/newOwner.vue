@@ -6,9 +6,9 @@
         <el-form :model="formAll" ref="formAll" :rules="rulesForm">
           <el-row >
               <el-col :span="12">
-                <el-form-item label="所属区域：" :label-width="formLabelWidth" prop="areaCode2">
+                <el-form-item label="所属区域：" :label-width="formLabelWidth" prop="areaCode">
                     <vregion :ui="true" @values="regionChange" class="form-control">
-                        <el-input v-model="formAll.areaCode2" placeholder="请选择省/市/区/街道"></el-input>
+                        <el-input v-model="formAll.areaCode" placeholder="请选择省/市/区/街道"></el-input>
                     </vregion>
                 </el-form-item>
                 </el-col>
@@ -299,7 +299,7 @@ export default {
         serviceCardList:[],
         FormData:null,
         formAll:{
-            areaCode2: null,
+            areaCode: null,
             rewardMax:null,
             carType:null,
             serivceCode:null,
@@ -311,7 +311,7 @@ export default {
             },
             
             rulesForm:{
-            areaCode2:{trigger:'change',required:true,validator: belongCityNameValidator},
+            areaCode:{trigger:'change',required:true,validator: belongCityNameValidator},
             carType:{trigger:'change',required:true,validator:carTypeValidator},
             serivceCode:{trigger:'change',required:true,validator:serivceCodeValidator},
             rewardMax:{trigger:'change',required:true,validator:rewardMaxValidator},
@@ -385,7 +385,7 @@ export default {
   methods:{
      regionChange(d) {
                 console.log('data:',d)
-                this.formAll.areaCode2 = (!d.province&&!d.city&&!d.area&&!d.town) ? '': `${this.getValue(d.province)}${this.getValue(d.city)}${this.getValue(d.area)}${this.getValue(d.town)}`.trim();
+                this.formAll.areaCode = (!d.province&&!d.city&&!d.area&&!d.town) ? '': `${this.getValue(d.province)}${this.getValue(d.city)}${this.getValue(d.area)}${this.getValue(d.town)}`.trim();
             },
              getValue(obj){
                 return obj ? obj.value:'';
@@ -395,6 +395,9 @@ export default {
            if(!this.params.id){
                
             this.$message.info('未选中需要修改内容');
+           }
+           else if(this.params.usingStatus==0){
+            this.$message.info('选中内容被已禁用，不能进行修改操作');
            }
            else{
             this.dialogFormVisible_add = true;
@@ -494,7 +497,7 @@ export default {
            {startPrice:this.formAll.reward13,endPrice:this.formAll.reward14,rewardGrade:'皇冠',reward:this.formAll.data47,orderNum:this.formAll.maxnum6},
            {startPrice:this.formAll.reward15,endPrice:this.formAll.reward16,rewardGrade:'皇冠',reward:this.formAll.data48,orderNum:this.formAll.maxnum6},           
            ]}
-       var forms= Object.assign({}, this.FormData,{areaCode2:this.formAll.areaCode2},{rewardMax:this.formAll.rewardMax},{carType:this.formAll.carType},{serivceCode:this.formAll.serivceCode});
+       var forms= Object.assign({}, this.FormData,{areaCode:this.formAll.areaCode},{rewardMax:this.formAll.rewardMax},{carType:this.formAll.carType},{serivceCode:this.formAll.serivceCode});
        console.log('forms',forms)
        this.$refs['formAll'].validate(valid=>{
         if(valid){

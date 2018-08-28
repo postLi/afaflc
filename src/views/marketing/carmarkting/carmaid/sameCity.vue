@@ -1,11 +1,17 @@
 <template>
     <div class=" identicalStyle clearfix" style="height:100%">
-        <div class="shipper_city ">
+        <div class="shipper_city">
           <el-form :inline="true">
             <el-form-item label="所属区域：">
-             <vregion :ui="true" @values="regionChange" class="form-control">
-                <el-input v-model="formAllData.areaCode2" placeholder="请选择出发地"></el-input>
-            </vregion>
+                   <el-cascader
+                    size="large"
+                    :options="options"
+                    v-model="formAllData.areaCode"
+                    @change="handleChange">
+                    </el-cascader>
+             <!-- <vregion :ui="true" @values="regionChange" class="form-control">
+                <el-input v-model="formAllData.areaCode" placeholder="请选择出发地"></el-input>
+            </vregion> -->
             </el-form-item>
             <el-form-item label="车主抽佣等级：">
                  <el-select v-model="formAllData.commissionGrade" clearable placeholder="请选择" >
@@ -65,7 +71,7 @@
             <el-table style="width: 100%" stripe border height="100%" @row-click="clickDetails" highlight-current-row :data="tableDataAll"  tooltip-effect="dark">
             <el-table-column  label="序号" width="80px" type="index">
             </el-table-column>
-            <el-table-column  label="所属区域" prop="areaCode2">
+            <el-table-column  label="所属区域" prop="areaCode">
             </el-table-column>
             <el-table-column  label="车辆类型" prop="carType">
             </el-table-column>
@@ -81,7 +87,7 @@
             </el-table-column>
             <el-table-column  label="启用状态" >
             <template  slot-scope="scope">
-              {{ scope.row.usingStatus == 0 ? '启用' : '停用' }}
+              {{ scope.row.usingStatus == 1 ? '启用' : '停用' }}
             </template>
             </el-table-column>          
             </el-table> 
@@ -94,6 +100,7 @@
 <script>
 import { data_Commission ,data_CarList,data_MaidLevel} from '@/api/server/areaPrice.js'
 import { data_get_Marketingsame_list,data_Del_Marketingsame,data_Able_Marketingsame } from '@/api/marketing/carmarkting/carmarkting.js'
+import { regionDataPlus, CodeToText, TextToCode } from 'element-china-area-data'
 import vregion from '@/components/vregion/Region'
 import newCity from '../../components/newCity.vue'
 import { eventBus } from '@/eventBus'
@@ -102,6 +109,7 @@ import {parseTime} from '@/utils/'
 export default {
   data(){
     return{
+      options:regionDataPlus,
       selectRowData:{},
       selectId:[],
       sizes:[30,50,100],
@@ -115,7 +123,7 @@ export default {
       optionsCar:[],
       MaidLevel:[],
 		formAllData:{
-            areaCode2: null,
+            areaCode: null,
             carType:null,
             commissionGrade:null,
      },
@@ -124,35 +132,52 @@ export default {
     components:{
         newCity,
         vregion,
-        Pager
+        Pager,
     },
     methods:{
+        handleChange(d){
+           console.log('d',d)
+           if(d.length<3){
+                this.$message.info('请选择具体的城市');
+                this.formAllData.areaCode = [];
+           }
+           else{
+                this.formAllData.areaCode = d
+                this.formAllData.province = CodeToText[d[0]]
+                this.formAllData.city =  CodeToText[d[1]]
+
+                if(d[2]==''){
+                this.formAllData.area =  CodeToText[d[2]]
+                }
+                console.log('d1',this.formAllData.province)
+                console.log('d2',this.formAllData.city)
+                console.log('d3',this.formAllData.area)
+           }
+        },
+        
+            
             regionChange(d) {
                 console.log('data:',d)
 
-                this.formAllData.areaCode = d.province.code;
-                this.formAllData.province = d.province.name;
-                this.formAllData.city = null;
-                this.formAllData.area = null;
-                if(d.city)
-                {
-                this.formAllData.areaCode = d.city.code;
-                this.formAllData.province = d.province.name;
-                this.formAllData.city = d.city.name;
-                this.formAllData.area = null;
-                }    
-                if(d.area)
-                {
-                this.formAllData.areaCode = d.area.code;
-                this.formAllData.province = d.province.name;
-                this.formAllData.city = d.city.name;
-                this.formAllData.area = d.area.name;
-                }     
-                console.log('1',this.formAllData.areaCode);       
-                console.log('2',this.formAllData.province);   
-                console.log('3',this.formAllData.city);   
-                console.log('4',this.formAllData.area);  
-                // this.formAllData.areaCode2 = (!d.province&&!d.city&&!d.area&&!d.town) ? '': `${this.getValue(d.province)}${this.getValue(d.city)}${this.getValue(d.area)}${this.getValue(d.town)}`.trim();
+                // this.formAllData.areaCode = d.province.code;
+                // this.formAllData.province = d.province.name;
+                // this.formAllData.city = null;
+                // this.formAllData.area = null;
+                // if(d.city)
+                // {
+                // this.formAllData.areaCode = d.city.code;
+                // this.formAllData.province = d.province.name;
+                // this.formAllData.city = d.city.name;
+                // this.formAllData.area = null;
+                // }    
+                // if(d.area)
+                // {
+                // this.formAllData.areaCode = d.area.code;
+                // this.formAllData.province = d.province.name;
+                // this.formAllData.city = d.city.name;
+                // this.formAllData.area = d.area.name;
+                // }     
+                this.formAllData.areaCode = (!d.province&&!d.city&&!d.area&&!d.town) ? '': `${this.getValue(d.province)}${this.getValue(d.city)}${this.getValue(d.area)}${this.getValue(d.town)}`.trim();
             },
              getValue(obj){
                 return obj ? obj.value:'';
@@ -166,6 +191,7 @@ export default {
                     })
                     })
                 data_MaidLevel().then(res=>{
+                    console.log('df',res)
                       res.data.map((item)=>{
                         this.MaidLevel.push(item);
                     })
@@ -217,7 +243,6 @@ export default {
                         this.firstblood();       
                         this.selectRowData=''; 
                     }).catch(err => {
-                      console.log('rr',res)
                         this.$message({
                             type: 'info',
                             message: '操作失败，原因：' + err.text ? err.text : err
@@ -265,7 +290,7 @@ export default {
     },
 }
 </script>
-<style lang="scss">
+<style lang="scss">  
 .export{
   .el-button{
     margin-right:20px;

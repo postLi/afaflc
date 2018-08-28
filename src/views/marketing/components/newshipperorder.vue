@@ -6,10 +6,17 @@
         <el-form :model="formAll" ref="formAll" :rules="rulesForm">
           <el-row >
               <el-col :span="12">
-                <el-form-item label="所属区域：" :label-width="formLabelWidth" prop="areaCode2">
-                    <vregion :ui="true" @values="regionChange" class="form-control">
-                        <el-input v-model="formAll.areaCode2" placeholder="请选择省/市/区/街道"></el-input>
-                    </vregion>
+                <el-form-item label="所属区域：" :label-width="formLabelWidth">
+                   <el-cascader
+                    size="large"
+                    :options="options"
+                    v-model="formAll.areaName"
+                    @change="handleChange">
+                    </el-cascader>
+
+                    <!-- <vregion :ui="true" @values="regionChange" class="form-control">
+                        <el-input v-model="formAll.areaCode" placeholder="请选择省/市/区/街道"></el-input>
+                    </vregion> -->
                 </el-form-item>
                 </el-col>
                 <el-col :span="12">
@@ -155,6 +162,7 @@
 <script>
 import { data_Commission ,data_CarList,data_MaidLevel,data_ServerClassList} from '@/api/server/areaPrice.js'
 import { data_get_shipperOwnerFrom_create} from '@/api/marketing/shippermarkting/shipperOwner.js'
+import { regionDataPlus, CodeToText, TextToCode } from 'element-china-area-data'
 import Upload from '@/components/Upload/singleImage'
 import vregion from '@/components/vregion/Region'
 import { eventBus } from '@/eventBus'
@@ -291,6 +299,7 @@ export default {
             cb(new Error('不能小于前框值'))}else{cb()} }       
 
         return{
+        options:regionDataPlus,
         formLabelWidth:'130px',
         dialogFormVisible_add: false,
         MaidLevelValueCar:'',
@@ -298,7 +307,8 @@ export default {
         serviceCardList:[],
         FormData:null,
         formAll:{
-            areaCode2: null,
+            areaCode: null,
+            areaName:null,
             rewardMax:null,
             carType:null,
             serivceCode:null,
@@ -310,7 +320,7 @@ export default {
             },
             
             rulesForm:{
-            areaCode2:{trigger:'change',required:true,validator: belongCityNameValidator},
+            areaCode:{trigger:'change',required:true,validator: belongCityNameValidator},
             carType:{trigger:'change',required:true,validator:carTypeValidator},
             serivceCode:{trigger:'change',required:true,validator:serivceCodeValidator},
             rewardMax:{trigger:'change',required:true,validator:rewardMaxValidator},
@@ -382,9 +392,32 @@ export default {
     this.getMoreInformation();
   },
   methods:{
+        handleChange(d){
+           console.log('d',d)
+           if(d.length<3){
+                this.$message.info('请选择具体的城市');
+                this.formAll.areaCode = [];
+           }
+           else{
+                this.formAll.areaCode = d[2]
+                this.formAll.province = CodeToText[d[0]]
+                this.formAll.city =  CodeToText[d[1]]
+                this.formAll.area =  CodeToText[d[2]]
+                // if(d[2]==''){
+                // this.formAll.area =  CodeToText[d[2]]
+                // }
+                // else{
+                //  this.formAll.area =  CodeToText[d[2]]    
+                // }
+                console.log('dd',this.formAll.areaCode)
+                console.log('d1',this.formAll.province)
+                console.log('d2',this.formAll.city)
+                console.log('d3',this.formAll.area)
+           }
+        },
      regionChange(d) {
                 console.log('data:',d)
-                this.formAll.areaCode2 = (!d.province&&!d.city&&!d.area&&!d.town) ? '': `${this.getValue(d.province)}${this.getValue(d.city)}${this.getValue(d.area)}${this.getValue(d.town)}`.trim();
+                this.formAll.areaCode = (!d.province&&!d.city&&!d.area&&!d.town) ? '': `${this.getValue(d.province)}${this.getValue(d.city)}${this.getValue(d.area)}${this.getValue(d.town)}`.trim();
             },
              getValue(obj){
                 return obj ? obj.value:'';
@@ -443,56 +476,56 @@ export default {
     // 同城新增    
    add_data(){
        this.FormData = {aflcShipperPreferentialtDetailList:[
-           {startPrice:this.formAll.reward1,endPrice:this.formAll.reward2,rewardGrade:'未分类',reward:this.formAll.data1,orderNum:this.formAll.maxnum1},
-           {startPrice:this.formAll.reward3,endPrice:this.formAll.reward4,rewardGrade:'未分类',reward:this.formAll.data2,orderNum:this.formAll.maxnum1},
-           {startPrice:this.formAll.reward5,endPrice:this.formAll.reward6,rewardGrade:'未分类',reward:this.formAll.data3,orderNum:this.formAll.maxnum1},
-           {startPrice:this.formAll.reward7,endPrice:this.formAll.reward8,rewardGrade:'未分类',reward:this.formAll.data4,orderNum:this.formAll.maxnum1},
-           {startPrice:this.formAll.reward9,endPrice:this.formAll.reward10,rewardGrade:'未分类',reward:this.formAll.data5,orderNum:this.formAll.maxnum1},
-           {startPrice:this.formAll.reward11,endPrice:this.formAll.reward12,rewardGrade:'未分类',reward:this.formAll.data6,orderNum:this.formAll.maxnum1},
-           {startPrice:this.formAll.reward13,endPrice:this.formAll.reward14,rewardGrade:'未分类',reward:this.formAll.data7,orderNum:this.formAll.maxnum1},
-           {startPrice:this.formAll.reward15,endPrice:this.formAll.reward16,rewardGrade:'未分类',reward:this.formAll.data8,orderNum:this.formAll.maxnum1},
-                      {startPrice:this.formAll.reward1,endPrice:this.formAll.reward2,rewardGrade:'普通',reward:this.formAll.data9,orderNum:this.formAll.maxnum2},
-           {startPrice:this.formAll.reward3,endPrice:this.formAll.reward4,rewardGrade:'普通',reward:this.formAll.data10,orderNum:this.formAll.maxnum2},
-           {startPrice:this.formAll.reward5,endPrice:this.formAll.reward6,rewardGrade:'普通',reward:this.formAll.data11,orderNum:this.formAll.maxnum2},
-           {startPrice:this.formAll.reward7,endPrice:this.formAll.reward8,rewardGrade:'普通',reward:this.formAll.data12,orderNum:this.formAll.maxnum2},
-           {startPrice:this.formAll.reward9,endPrice:this.formAll.reward10,rewardGrade:'普通',reward:this.formAll.data13,orderNum:this.formAll.maxnum2},
-           {startPrice:this.formAll.reward11,endPrice:this.formAll.reward12,rewardGrade:'普通',reward:this.formAll.data14,orderNum:this.formAll.maxnum2},
-           {startPrice:this.formAll.reward13,endPrice:this.formAll.reward14,rewardGrade:'普通',reward:this.formAll.data15,orderNum:this.formAll.maxnum2},
-           {startPrice:this.formAll.reward15,endPrice:this.formAll.reward16,rewardGrade:'普通',reward:this.formAll.data16,orderNum:this.formAll.maxnum2},
-                      {startPrice:this.formAll.reward1,endPrice:this.formAll.reward2,rewardGrade:'银牌',reward:this.formAll.data17,orderNum:this.formAll.maxnum3},
-           {startPrice:this.formAll.reward3,endPrice:this.formAll.reward4,rewardGrade:'银牌',reward:this.formAll.data18,orderNum:this.formAll.maxnum3},
-           {startPrice:this.formAll.reward5,endPrice:this.formAll.reward6,rewardGrade:'银牌',reward:this.formAll.data19,orderNum:this.formAll.maxnum3},
-           {startPrice:this.formAll.reward7,endPrice:this.formAll.reward8,rewardGrade:'银牌',reward:this.formAll.data20,orderNum:this.formAll.maxnum3},
-           {startPrice:this.formAll.reward9,endPrice:this.formAll.reward10,rewardGrade:'银牌',reward:this.formAll.data21,orderNum:this.formAll.maxnum3},
-           {startPrice:this.formAll.reward11,endPrice:this.formAll.reward12,rewardGrade:'银牌',reward:this.formAll.data22,orderNum:this.formAll.maxnum3},
-           {startPrice:this.formAll.reward13,endPrice:this.formAll.reward14,rewardGrade:'银牌',reward:this.formAll.data23,orderNum:this.formAll.maxnum3},
-           {startPrice:this.formAll.reward15,endPrice:this.formAll.reward16,rewardGrade:'银牌',reward:this.formAll.data24,orderNum:this.formAll.maxnum3},
-                      {startPrice:this.formAll.reward1,endPrice:this.formAll.reward2,rewardGrade:'金牌',reward:this.formAll.data25,orderNum:this.formAll.maxnum4},
-           {startPrice:this.formAll.reward3,endPrice:this.formAll.reward4,rewardGrade:'金牌',reward:this.formAll.data26,orderNum:this.formAll.maxnum4},
-           {startPrice:this.formAll.reward5,endPrice:this.formAll.reward6,rewardGrade:'金牌',reward:this.formAll.data27,orderNum:this.formAll.maxnum4},
-           {startPrice:this.formAll.reward7,endPrice:this.formAll.reward8,rewardGrade:'金牌',reward:this.formAll.data28,orderNum:this.formAll.maxnum4},
-           {startPrice:this.formAll.reward9,endPrice:this.formAll.reward10,rewardGrade:'金牌',reward:this.formAll.data29,orderNum:this.formAll.maxnum4},
-           {startPrice:this.formAll.reward11,endPrice:this.formAll.reward12,rewardGrade:'金牌',reward:this.formAll.data30,orderNum:this.formAll.maxnum4},
-           {startPrice:this.formAll.reward13,endPrice:this.formAll.reward14,rewardGrade:'金牌',reward:this.formAll.data31,orderNum:this.formAll.maxnum4},
-           {startPrice:this.formAll.reward15,endPrice:this.formAll.reward16,rewardGrade:'金牌',reward:this.formAll.data32,orderNum:this.formAll.maxnum4},
-                      {startPrice:this.formAll.reward1,endPrice:this.formAll.reward2,rewardGrade:'钻石',reward:this.formAll.data33,orderNum:this.formAll.maxnum5},
-           {startPrice:this.formAll.reward3,endPrice:this.formAll.reward4,rewardGrade:'钻石',reward:this.formAll.data34,orderNum:this.formAll.maxnum5},
-           {startPrice:this.formAll.reward5,endPrice:this.formAll.reward6,rewardGrade:'钻石',reward:this.formAll.data35,orderNum:this.formAll.maxnum5},
-           {startPrice:this.formAll.reward7,endPrice:this.formAll.reward8,rewardGrade:'钻石',reward:this.formAll.data36,orderNum:this.formAll.maxnum5},
-           {startPrice:this.formAll.reward9,endPrice:this.formAll.reward10,rewardGrade:'钻石',reward:this.formAll.data37,orderNum:this.formAll.maxnum5},
-           {startPrice:this.formAll.reward11,endPrice:this.formAll.reward12,rewardGrade:'钻石',reward:this.formAll.data38,orderNum:this.formAll.maxnum5},
-           {startPrice:this.formAll.reward13,endPrice:this.formAll.reward14,rewardGrade:'钻石',reward:this.formAll.data39,orderNum:this.formAll.maxnum5},
-           {startPrice:this.formAll.reward15,endPrice:this.formAll.reward16,rewardGrade:'钻石',reward:this.formAll.data40,orderNum:this.formAll.maxnum5},
-                      {startPrice:this.formAll.reward1,endPrice:this.formAll.reward2,rewardGrade:'皇冠',reward:this.formAll.data41,orderNum:this.formAll.maxnum6},
-           {startPrice:this.formAll.reward3,endPrice:this.formAll.reward4,rewardGrade:'皇冠',reward:this.formAll.data42,orderNum:this.formAll.maxnum6},
-           {startPrice:this.formAll.reward5,endPrice:this.formAll.reward6,rewardGrade:'皇冠',reward:this.formAll.data43,orderNum:this.formAll.maxnum6},
-           {startPrice:this.formAll.reward7,endPrice:this.formAll.reward8,rewardGrade:'皇冠',reward:this.formAll.data44,orderNum:this.formAll.maxnum6},
-           {startPrice:this.formAll.reward9,endPrice:this.formAll.reward10,rewardGrade:'皇冠',reward:this.formAll.data45,orderNum:this.formAll.maxnum6},
-           {startPrice:this.formAll.reward11,endPrice:this.formAll.reward12,rewardGrade:'皇冠',reward:this.formAll.data46,orderNum:this.formAll.maxnum6},
-           {startPrice:this.formAll.reward13,endPrice:this.formAll.reward14,rewardGrade:'皇冠',reward:this.formAll.data47,orderNum:this.formAll.maxnum6},
-           {startPrice:this.formAll.reward15,endPrice:this.formAll.reward16,rewardGrade:'皇冠',reward:this.formAll.data48,orderNum:this.formAll.maxnum6},           
+           {startPrice:this.formAll.reward1,endPrice:this.formAll.reward2,rewardGrade:'AF0020806',reward:this.formAll.data1,orderNum:this.formAll.maxnum1},
+           {startPrice:this.formAll.reward3,endPrice:this.formAll.reward4,rewardGrade:'AF0020806',reward:this.formAll.data2,orderNum:this.formAll.maxnum1},
+           {startPrice:this.formAll.reward5,endPrice:this.formAll.reward6,rewardGrade:'AF0020806',reward:this.formAll.data3,orderNum:this.formAll.maxnum1},
+           {startPrice:this.formAll.reward7,endPrice:this.formAll.reward8,rewardGrade:'AF0020806',reward:this.formAll.data4,orderNum:this.formAll.maxnum1},
+           {startPrice:this.formAll.reward9,endPrice:this.formAll.reward10,rewardGrade:'AF0020806',reward:this.formAll.data5,orderNum:this.formAll.maxnum1},
+           {startPrice:this.formAll.reward11,endPrice:this.formAll.reward12,rewardGrade:'AF0020806',reward:this.formAll.data6,orderNum:this.formAll.maxnum1},
+           {startPrice:this.formAll.reward13,endPrice:this.formAll.reward14,rewardGrade:'AF0020806',reward:this.formAll.data7,orderNum:this.formAll.maxnum1},
+           {startPrice:this.formAll.reward15,endPrice:this.formAll.reward16,rewardGrade:'AF0020806',reward:this.formAll.data8,orderNum:this.formAll.maxnum1},
+                      {startPrice:this.formAll.reward1,endPrice:this.formAll.reward2,rewardGrade:'AF0020801',reward:this.formAll.data9,orderNum:this.formAll.maxnum2},
+           {startPrice:this.formAll.reward3,endPrice:this.formAll.reward4,rewardGrade:'AF0020801',reward:this.formAll.data10,orderNum:this.formAll.maxnum2},
+           {startPrice:this.formAll.reward5,endPrice:this.formAll.reward6,rewardGrade:'AF0020801',reward:this.formAll.data11,orderNum:this.formAll.maxnum2},
+           {startPrice:this.formAll.reward7,endPrice:this.formAll.reward8,rewardGrade:'AF0020801',reward:this.formAll.data12,orderNum:this.formAll.maxnum2},
+           {startPrice:this.formAll.reward9,endPrice:this.formAll.reward10,rewardGrade:'AF0020801',reward:this.formAll.data13,orderNum:this.formAll.maxnum2},
+           {startPrice:this.formAll.reward11,endPrice:this.formAll.reward12,rewardGrade:'AF0020801',reward:this.formAll.data14,orderNum:this.formAll.maxnum2},
+           {startPrice:this.formAll.reward13,endPrice:this.formAll.reward14,rewardGrade:'AF0020801',reward:this.formAll.data15,orderNum:this.formAll.maxnum2},
+           {startPrice:this.formAll.reward15,endPrice:this.formAll.reward16,rewardGrade:'AF0020801',reward:this.formAll.data16,orderNum:this.formAll.maxnum2},
+                      {startPrice:this.formAll.reward1,endPrice:this.formAll.reward2,rewardGrade:'AF0020802',reward:this.formAll.data17,orderNum:this.formAll.maxnum3},
+           {startPrice:this.formAll.reward3,endPrice:this.formAll.reward4,rewardGrade:'AF0020802',reward:this.formAll.data18,orderNum:this.formAll.maxnum3},
+           {startPrice:this.formAll.reward5,endPrice:this.formAll.reward6,rewardGrade:'AF0020802',reward:this.formAll.data19,orderNum:this.formAll.maxnum3},
+           {startPrice:this.formAll.reward7,endPrice:this.formAll.reward8,rewardGrade:'AF0020802',reward:this.formAll.data20,orderNum:this.formAll.maxnum3},
+           {startPrice:this.formAll.reward9,endPrice:this.formAll.reward10,rewardGrade:'AF0020802',reward:this.formAll.data21,orderNum:this.formAll.maxnum3},
+           {startPrice:this.formAll.reward11,endPrice:this.formAll.reward12,rewardGrade:'AF0020802',reward:this.formAll.data22,orderNum:this.formAll.maxnum3},
+           {startPrice:this.formAll.reward13,endPrice:this.formAll.reward14,rewardGrade:'AF0020802',reward:this.formAll.data23,orderNum:this.formAll.maxnum3},
+           {startPrice:this.formAll.reward15,endPrice:this.formAll.reward16,rewardGrade:'AF0020802',reward:this.formAll.data24,orderNum:this.formAll.maxnum3},
+                      {startPrice:this.formAll.reward1,endPrice:this.formAll.reward2,rewardGrade:'AF0020803',reward:this.formAll.data25,orderNum:this.formAll.maxnum4},
+           {startPrice:this.formAll.reward3,endPrice:this.formAll.reward4,rewardGrade:'AF0020803',reward:this.formAll.data26,orderNum:this.formAll.maxnum4},
+           {startPrice:this.formAll.reward5,endPrice:this.formAll.reward6,rewardGrade:'AF0020803',reward:this.formAll.data27,orderNum:this.formAll.maxnum4},
+           {startPrice:this.formAll.reward7,endPrice:this.formAll.reward8,rewardGrade:'AF0020803',reward:this.formAll.data28,orderNum:this.formAll.maxnum4},
+           {startPrice:this.formAll.reward9,endPrice:this.formAll.reward10,rewardGrade:'AF0020803',reward:this.formAll.data29,orderNum:this.formAll.maxnum4},
+           {startPrice:this.formAll.reward11,endPrice:this.formAll.reward12,rewardGrade:'AF0020803',reward:this.formAll.data30,orderNum:this.formAll.maxnum4},
+           {startPrice:this.formAll.reward13,endPrice:this.formAll.reward14,rewardGrade:'AF0020803',reward:this.formAll.data31,orderNum:this.formAll.maxnum4},
+           {startPrice:this.formAll.reward15,endPrice:this.formAll.reward16,rewardGrade:'AF0020803',reward:this.formAll.data32,orderNum:this.formAll.maxnum4},
+                      {startPrice:this.formAll.reward1,endPrice:this.formAll.reward2,rewardGrade:'AF0020804',reward:this.formAll.data33,orderNum:this.formAll.maxnum5},
+           {startPrice:this.formAll.reward3,endPrice:this.formAll.reward4,rewardGrade:'AF0020804',reward:this.formAll.data34,orderNum:this.formAll.maxnum5},
+           {startPrice:this.formAll.reward5,endPrice:this.formAll.reward6,rewardGrade:'AF0020804',reward:this.formAll.data35,orderNum:this.formAll.maxnum5},
+           {startPrice:this.formAll.reward7,endPrice:this.formAll.reward8,rewardGrade:'AF0020804',reward:this.formAll.data36,orderNum:this.formAll.maxnum5},
+           {startPrice:this.formAll.reward9,endPrice:this.formAll.reward10,rewardGrade:'AF0020804',reward:this.formAll.data37,orderNum:this.formAll.maxnum5},
+           {startPrice:this.formAll.reward11,endPrice:this.formAll.reward12,rewardGrade:'AF0020804',reward:this.formAll.data38,orderNum:this.formAll.maxnum5},
+           {startPrice:this.formAll.reward13,endPrice:this.formAll.reward14,rewardGrade:'AF0020804',reward:this.formAll.data39,orderNum:this.formAll.maxnum5},
+           {startPrice:this.formAll.reward15,endPrice:this.formAll.reward16,rewardGrade:'AF0020804',reward:this.formAll.data40,orderNum:this.formAll.maxnum5},
+                      {startPrice:this.formAll.reward1,endPrice:this.formAll.reward2,rewardGrade:'AF0020805',reward:this.formAll.data41,orderNum:this.formAll.maxnum6},
+           {startPrice:this.formAll.reward3,endPrice:this.formAll.reward4,rewardGrade:'AF0020805',reward:this.formAll.data42,orderNum:this.formAll.maxnum6},
+           {startPrice:this.formAll.reward5,endPrice:this.formAll.reward6,rewardGrade:'AF0020805',reward:this.formAll.data43,orderNum:this.formAll.maxnum6},
+           {startPrice:this.formAll.reward7,endPrice:this.formAll.reward8,rewardGrade:'AF0020805',reward:this.formAll.data44,orderNum:this.formAll.maxnum6},
+           {startPrice:this.formAll.reward9,endPrice:this.formAll.reward10,rewardGrade:'AF0020805',reward:this.formAll.data45,orderNum:this.formAll.maxnum6},
+           {startPrice:this.formAll.reward11,endPrice:this.formAll.reward12,rewardGrade:'AF0020805',reward:this.formAll.data46,orderNum:this.formAll.maxnum6},
+           {startPrice:this.formAll.reward13,endPrice:this.formAll.reward14,rewardGrade:'AF0020805',reward:this.formAll.data47,orderNum:this.formAll.maxnum6},
+           {startPrice:this.formAll.reward15,endPrice:this.formAll.reward16,rewardGrade:'AF0020805',reward:this.formAll.data48,orderNum:this.formAll.maxnum6},           
            ]}
-       var forms= Object.assign({}, this.FormData,{areaCode2:this.formAll.areaCode2},{rewardMax:this.formAll.rewardMax},{carType:this.formAll.carType},{serivceCode:this.formAll.serivceCode});
+       var forms= Object.assign({}, this.FormData,{province:this.formAll.province},{city:this.formAll.city},{area:this.formAll.area},{areaCode:this.formAll.areaCode},{rewardMax:this.formAll.rewardMax},{carType:this.formAll.carType},{serivceCode:this.formAll.serivceCode});
        console.log('forms',forms)
        this.$refs['formAll'].validate(valid=>{
         if(valid){

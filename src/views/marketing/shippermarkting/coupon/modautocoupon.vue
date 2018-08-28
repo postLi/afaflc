@@ -389,6 +389,9 @@ export default {
                
             this.$message.info('未选中需要修改内容');
         }
+        else if(this.params.usingStatus==0){
+            this.$message.info('选中内容被已禁用，不能进行修改操作');
+           }
         else{
       data_get_couponActive_Id(this.params.id).then((res)=>{
           

@@ -56,9 +56,9 @@
           </el-row>
           <el-row >
             <el-col>
-               <el-form-item  label="所属区域：" :label-width="formLabelWidth"  prop="areaName"> 
+               <el-form-item  label="所属区域：" :label-width="formLabelWidth"  prop="areaCode"> 
                 <vregion :ui="true" @values="regionChange" class="form-control" >
-                    <el-input v-model="formAllData.areaName" placeholder="请选择出发地"></el-input>
+                    <el-input v-model="formAllData.areaCode" placeholder="请选择出发地"></el-input>
                 </vregion>
                </el-form-item>  
             </el-col>
@@ -339,57 +339,41 @@ export default {
             activityName:{trigger:'change',required:true,validator: activityNameValidator},
             createTime:{trigger:'change',required:true,validator:createTimeValidator},
             activityDes:{trigger:'change',required:true,validator:activityDesValidator},
-            areaName:{trigger:'change',required:true,validator:areaCodeValidator},
+            areaCode:{trigger:'change',required:true,validator:areaCodeValidator},
             },
     }
  },
   methods:{
+
+
+      
     regionChange(d) {
                 console.log('data:',d)
-                this.formAllData.areaName = (!d.province&&!d.city&&!d.area&&!d.town) ? '': `${this.getValue(d.province)}${this.getValue(d.city)}${this.getValue(d.area)}${this.getValue(d.town)}`.trim();
-                this.formAllData.areaCode = d.province.code;
-                this.formAllData.province = d.province.name;
-                this.formAllData.city = null;
-                this.formAllData.area = null;
-                if(d.city)
-                {
-                this.formAllData.areaCode = d.city.code;
-                this.formAllData.province = d.province.name;
-                this.formAllData.city = d.city.name;
-                this.formAllData.area = null;
-                }    
-                if(d.area)
-                {
-                this.formAllData.areaCode = d.area.code;
-                this.formAllData.province = d.province.name;
-                this.formAllData.city = d.city.name;
-                this.formAllData.area = d.area.name;
-                }           
-                console.log('this.formAllData.areaCode',this.formAllData.areaCode)
+                this.formAllData.areaCode = (!d.province&&!d.city&&!d.area&&!d.town) ? '': `${this.getValue(d.province)}${this.getValue(d.city)}${this.getValue(d.area)}${this.getValue(d.town)}`.trim();
+                // this.formAllData.areaCode = d.province.code;
+                // this.formAllData.province = d.province.name;
+                // this.formAllData.city = null;
+                // this.formAllData.area = null;
+                // if(d.city)
+                // {
+                // this.formAllData.areaCode = d.city.code;
+                // this.formAllData.province = d.province.name;
+                // this.formAllData.city = d.city.name;
+                // this.formAllData.area = null;
+                // }    
+                // if(d.area)
+                // {
+                // this.formAllData.areaCode = d.area.code;
+                // this.formAllData.province = d.province.name;
+                // this.formAllData.city = d.city.name;
+                // this.formAllData.area = d.area.name;
+                // }           
+                // console.log('this.formAllData.areaCode',this.formAllData.areaCode)
               
     },
     regionChange1(d) {
                 console.log('data:',d)
-                 this.formAllData.aflcCouponList[this.inputKey].areaName = (!d.province&&!d.city&&!d.area&&!d.town) ? '': `${this.getValue(d.province)}${this.getValue(d.city)}${this.getValue(d.area)}${this.getValue(d.town)}`.trim();
-                this.formAllData.aflcCouponList[this.inputKey].areaCode = d.province.code;
-                this.formAllData.aflcCouponList[this.inputKey].province = d.province.name;
-                this.formAllData.aflcCouponList[this.inputKey].city = null;
-                this.formAllData.aflcCouponList[this.inputKey].area = null;
-                if(d.city)
-                {
-                this.formAllData.aflcCouponList[this.inputKey].areaCode = d.city.code;
-                this.formAllData.aflcCouponList[this.inputKey].province = d.province.name;
-                this.formAllData.aflcCouponList[this.inputKey].city = d.city.name;
-                this.formAllData.aflcCouponList[this.inputKey].area = null;
-                }    
-                if(d.area)
-                {
-                this.formAllData.aflcCouponList[this.inputKey].areaCode = d.area.code;
-                this.formAllData.aflcCouponList[this.inputKey].province = d.province.name;
-                this.formAllData.aflcCouponList[this.inputKey].city = d.city.name;
-                this.formAllData.aflcCouponList[this.inputKey].area = d.area.name;
-                }     
-
+                this.formAllData.aflcCouponList[this.inputKey].areaCode = (!d.province&&!d.city&&!d.area&&!d.town) ? '': `${this.getValue(d.province)}${this.getValue(d.city)}${this.getValue(d.area)}${this.getValue(d.town)}`.trim();
               
     },
     getValue(obj){
@@ -525,15 +509,9 @@ export default {
             this.$refs['formAllData'].validate(valid=>{        
               if(valid){
               delete this.formAllData["createTime"];
-              delete this.formAllData["areaName"];
-               console.log('this.formAllData.areaCode',this.formAllData.areaCode)
-              for(var i = 0;i<this.formAllData.aflcCouponList.length;i++){
-                  delete this.formAllData.aflcCouponList[i]["areaName"];
-              }
               if(this.editType=='two'){
                   this.formAllData.activityType = 'AF046101';
               } 
-              this.formAllData.areaCode=this.formAllData.areaCode
               data_get_couponActive_create(this.formAllData).then((res)=>{
               this.dialogFormVisible_add = false;
               this.$refs['formAllData'].resetFields();

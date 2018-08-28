@@ -5,7 +5,7 @@
           <el-form :inline="true">
             <el-form-item label="所属区域：">
              <vregion :ui="true" @values="regionChange" class="form-control">
-                <el-input v-model="formAllData.areaCode2" placeholder="请选择出发地"></el-input>
+                <el-input v-model="formAllData.areaCode" placeholder="请选择出发地"></el-input>
             </vregion>
             </el-form-item>
             <el-form-item label="服务类型：">
@@ -64,7 +64,7 @@
                <el-table style="width: 100%" stripe border height="100%" @row-click="clickDetails" highlight-current-row :data="tableDataAll"  >
             <el-table-column  label="序号" width="80px" type="index">
             </el-table-column>
-            <el-table-column  label="所属区域" prop="areaCode2" show-overflow-tooltip>
+            <el-table-column  label="所属区域" prop="areaCode" show-overflow-tooltip>
             </el-table-column>
             <el-table-column  label="奖励额度限制" prop="rewardMax">
             </el-table-column>
@@ -74,7 +74,7 @@
             </el-table-column>                          
             <el-table-column  label="启用状态" >
             <template  slot-scope="scope">
-              {{ scope.row.usingStatus == 0 ? '启用' : '禁用' }}
+              {{ scope.row.usingStatus == 1 ? '启用' : '禁用' }}
             </template>
             </el-table-column>         
             <el-table-column  label="创建时间" prop="createTime">
@@ -114,7 +114,7 @@ export default {
        optionsCar:[],
       serviceCardList:[],
 		formAllData:{
-            areaCode2: null,
+            areaCode: null,
             carType:null,
             serivceCode:null,
             commissionGrade:null,
@@ -130,7 +130,7 @@ export default {
     methods:{
             regionChange(d) {
                 console.log('data:',d)
-                this.formAllData.areaCode2 = (!d.province&&!d.city&&!d.area&&!d.town) ? '': `${this.getValue(d.province)}${this.getValue(d.city)}${this.getValue(d.area)}${this.getValue(d.town)}`.trim();
+                this.formAllData.areaCode = (!d.province&&!d.city&&!d.area&&!d.town) ? '': `${this.getValue(d.province)}${this.getValue(d.city)}${this.getValue(d.area)}${this.getValue(d.town)}`.trim();
             },
              getValue(obj){
                 return obj ? obj.value:'';
@@ -148,7 +148,7 @@ export default {
                         this.MaidLevel.push(item);
                     })     
                 }).catch(res=>{
-                    console.log(res)
+                    console.log('res',res)
                 });    
                 data_ServerClassList().then(res=>{
                       res.data.map((item)=>{
@@ -163,6 +163,8 @@ export default {
                 data_get_shipperOwnerFrom_list(this.page,this.pagesize,this.formAllData).then(res => {
                     this.dataTotal = res.data.totalCount
                     this.tableDataAll = res.data.list;
+                }).catch(res=>{
+                    console.log('res',res)
                 })
             },
          //  查询
@@ -175,6 +177,7 @@ export default {
 
            console.log('selectRowData',this.selectRowData)
          },
+         
         //每页显示数据量变更
             handlePageChange(obj) {
                 this.page = obj.pageNum
@@ -224,7 +227,7 @@ export default {
                     this.selectId.push(this.selectRowData.id)
                   data_Able_shipperOwnerFrom(this.selectId).then(res=>{
                      this.selectId.splice(0,1);
-                     if(this.selectRowData.usingStatus==0)
+                     if(this.selectRowData.usingStatus==1)
                      {
                          this.$message.warning('已禁用');
                      }
@@ -243,7 +246,7 @@ export default {
      eventBus.$on('pushListtwo', () => {
        this.firstblood()
         })
-    this.getMoreInformation();
+    // this.getMoreInformation();
     this.firstblood();
     },
 }

@@ -208,7 +208,15 @@
             
                   </el-form-item> 
                     <el-form-item  label="卷码状态：" :label-width="formLabelWidth">
-                   <el-input v-model="searchData.couponStatus"></el-input>
+                        <el-select v-model="searchData.couponStatus" clearable placeholder="">
+                          <el-option
+                             v-for="item in couponStatusLists"
+                              :key="item.code"
+                             :label="item.name"
+                             :value="item.code"
+                             :disabled="item.disabled">
+                         </el-option>
+                 </el-select>
                </el-form-item>  
           <el-form-item>       
           <el-button type="primary"  plain   @click="getData_query">查询</el-button> 
@@ -310,7 +318,10 @@ export default {
     },
     couponTimeLists:{
     type: Array, 
-    }            
+    },
+    couponStatusLists:{
+    type: Array, 
+    }      
   },
   components:{
       GetCityList,
