@@ -6,10 +6,14 @@
         <el-form :model="formAll" ref="formAll" :rules="rulesForm">
           <el-row >
               <el-col :span="12">
-                <el-form-item label="所属区域：" :label-width="formLabelWidth" prop="areaCode">
-                    <vregion :ui="true" @values="regionChange" class="form-control">
-                        <el-input v-model="formAll.areaCode" placeholder="请选择省/市/区/街道"></el-input>
-                    </vregion>
+                <el-form-item label="所属区域：" :label-width="formLabelWidth" prop="areaName">
+                   <el-cascader
+                    size="large"
+                    :options="options"
+                    v-model="formAll.areaName"
+                    @change="handleChange"
+                     >
+                    </el-cascader>
                 </el-form-item>
                 </el-col>
                 <el-col :span="12">
@@ -157,13 +161,12 @@
 import { data_Commission ,data_CarList,data_MaidLevel,data_ServerClassList} from '@/api/server/areaPrice.js'
 import { data_get_ownerFromsame_create} from '@/api/marketing/carmarkting/carOwner.js'
 import Upload from '@/components/Upload/singleImage'
-import vregion from '@/components/vregion/Region'
 import { eventBus } from '@/eventBus'
+import { regionDataPlus, CodeToText, TextToCode } from 'element-china-area-data'
 import {data_get_shipper_type,data_get_shipper_create,data_get_shipper_change,data_get_shipper_view} from '@/api/users/shipper/all_shipper.js'
 export default {
   components:{
     Upload,
-       vregion,
   },
   props:{
     paramsView:{
@@ -204,12 +207,16 @@ export default {
   data(){
     //    选择省市校验
         const belongCityNameValidator = (rule, val, cb) => {
-            if(!val){
+            if(val){
+            if(val.length<1){
             cb(new Error('所属地区不能为空'))
             }
             else{
                 cb()
-            }        
+            }                 
+            }else{
+            cb(new Error('所属地区不能为空'))
+            }
         }
 
     //    选择车辆类型校验
@@ -292,6 +299,7 @@ export default {
             cb(new Error('不能小于前框值'))}else{cb()} }       
 
         return{
+        options:regionDataPlus,            
         formLabelWidth:'130px',
         dialogFormVisible_add: false,
         MaidLevelValueCar:'',
@@ -299,7 +307,8 @@ export default {
         serviceCardList:[],
         FormData:null,
         formAll:{
-            areaCode: null,
+            areaCode: [],
+            areaName:[],
             rewardMax:null,
             carType:null,
             serivceCode:null,
@@ -310,7 +319,7 @@ export default {
             data41:null,data42:null,data43:null,data44:null,data45:null,data46:null,data47:null,data48:null
             },
             rulesForm:{
-            areaCode:{trigger:'change',required:true,validator: belongCityNameValidator},
+            areaName:{trigger:'change',required:true,validator: belongCityNameValidator},
             carType:{trigger:'change',required:true,validator:carTypeValidator},
             serivceCode:{trigger:'change',required:true,validator:serivceCodeValidator},
             rewardMax:{trigger:'change',required:true,validator:rewardMaxValidator},
@@ -366,11 +375,13 @@ export default {
   watch:{
    dialogFormVisible_add:{
         handler: function(val, oldVal) {
+            if(!val){
+            this.$refs['formAll'].resetFields();
+            }
         },
     },
   },
   components:{
-        vregion,
   },
   mounted(){
     //按钮类型text,primary...
@@ -382,13 +393,28 @@ export default {
     this.getMoreInformation();
   },
   methods:{
-     regionChange(d) {
-                console.log('data:',d)
-                this.formAll.areaCode = (!d.province&&!d.city&&!d.area&&!d.town) ? '': `${this.getValue(d.province)}${this.getValue(d.city)}${this.getValue(d.area)}${this.getValue(d.town)}`.trim();
-            },
-             getValue(obj){
-                return obj ? obj.value:'';
-            },
+        handleChange(d){
+           console.log('d',d)
+           if(d.length<3){
+                this.$message.info('请选择具体的城市');
+                this.formAll.areaName = [];
+                this.formAll.areaCode = [];
+                this.formAll.province = null
+                this.formAll.city = null
+                this.formAll.area = null
+           }
+           else{
+                this.formAll.areaCode = d
+                this.formAll.province = CodeToText[d[0]]
+                this.formAll.city =  CodeToText[d[1]]
+                if(d[2]==''){
+                this.formAll.area = null
+                }
+                else{
+                this.formAll.area = CodeToText[d[2]]
+                }
+           }
+        },
    openDialog:function(){
        if(this.editType=='edit'){
            if(!this.params.id){
@@ -496,19 +522,26 @@ export default {
            {startPrice:this.formAll.reward13,endPrice:this.formAll.reward14,rewardGrade:'AF0020805',reward:this.formAll.data47,orderNum:this.formAll.maxnum6},
            {startPrice:this.formAll.reward15,endPrice:this.formAll.reward16,rewardGrade:'AF0020805',reward:this.formAll.data48,orderNum:this.formAll.maxnum6},           
            ]}
-       var forms= Object.assign({}, this.FormData,{areaCode:this.formAll.areaCode},{rewardMax:this.formAll.rewardMax},{carType:this.formAll.carType},{serivceCode:this.formAll.serivceCode});
-       console.log('forms',forms)
        this.$refs['formAll'].validate(valid=>{
         if(valid){
+            if(this.formAll.area){
+                this.formAll.areaCode.splice(0,2)
+            }
+            else{
+                 this.formAll.areaCode.splice(0,1)
+                 this.formAll.areaCode.pop()
+            }
+         this.formAll.areaCode =String(this.formAll.areaCode)
+        let forms= Object.assign({}, this.FormData,{areaCode:this.formAll.areaCode},{rewardMax:this.formAll.rewardMax},{carType:this.formAll.carType},{serivceCode:this.formAll.serivceCode});
         data_get_ownerFromsame_create(forms).then(res=>{
             console.log('res',res);
-            this.$refs['formAll'].resetFields();
             this.dialogFormVisible_add = false;
             this.changeList();
             this.$message.success('新增成功');
         }).catch(res=>{
             console.log(res)
-            console.log('新增失败')
+            this.dialogFormVisible_add = false;
+            this.$message.error('新增失败')
        });
        }
        }

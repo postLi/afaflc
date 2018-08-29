@@ -34,6 +34,86 @@ export default {
                 }
             ]
         },
-        
+        { 
+            path: '/finance/transactionChinaDoor', 
+            icon: 'txgl', 
+            hidden: false, 
+            name: '安发中国户', 
+            component: _import('finance/transactionChinaDoor/index'), 
+            meta: { title: '安发中国户', noCache: true },
+            children:[
+                { 
+                    path: '/finance/transactionChinaDoor/cashAccount', 
+                    hidden: false, 
+                    name: '现金账户交易明细', 
+                    component: _import('finance/transactionChinaDoor/cashAccount'), 
+                    meta: { title: '现金账户交易明细', stitle: '现金',noCache: true },
+                },
+                { 
+                    path: '/finance/transactionChinaDoor/operatingAccount', 
+                    hidden: false, 
+                    name: '运营账户交易明细', 
+                    component: _import('finance/transactionChinaDoor/operatingAccount'), 
+                    meta: { title: '运营账户交易明细', stitle: '运营',noCache: true },
+                },
+                { 
+                    path: '/finance/transactionChinaDoor/chinaDoor', 
+                    hidden: false, 
+                    name: '中国安发账户概况', 
+                    component: _import('finance/transactionChinaDoor/chinaDoor'), 
+                    meta: { title: '中国安发账户概况', stitle: '安发',noCache: true },
+                }                
+            ]
+        },        
+        { 
+            path: '/finance/transactionCar', 
+            icon: 'txgl', 
+            hidden: false, 
+            name: '车主', 
+            component: _import('finance/transactionCar/index'), 
+            meta: { title: '车主', noCache: true },
+            children:[
+                { 
+                    path: '/finance/transactionCar/transactionCarWallet', 
+                    hidden: false, 
+                    name: '车主钱包概况', 
+                    component: _import('finance/transactionCar/transactionCarWallet/index'), 
+                    meta: { title: '车主钱包概况', stitle: '钱包',noCache: true },
+                },
+                { 
+                    path: '/finance/transactionCar/transactionCarDeal', 
+                    hidden: false, 
+                    name: '车主交易明细', 
+                    component: _import('finance/transactionCar/transactionCarDeal/index'), 
+                    meta: { title: '车主交易明细', stitle: '交易',noCache: true },
+                },            
+            ]
+        }, 
+
+        { 
+            path: '/finance/transactionShipper', 
+            icon: 'txgl', 
+            hidden: false, 
+            name: '货主', 
+            component: _import('finance/transactionShipper/index'), 
+            meta: { title: '货主', noCache: true },
+            children:[
+                { 
+                    path: '/finance/transactionShipper/transactionShipperWallet', 
+                    hidden: false, 
+                    name: '货主钱包概况', 
+                    component: _import('finance/transactionShipper/transactionShipperWallet/index'), 
+                    meta: { title: '货主钱包概况', stitle: '钱包',noCache: true },
+                },
+                { 
+                    path: '/finance/transactionShipper/transactionShipperDeal', 
+                    hidden: false, 
+                    name: '货主交易明细', 
+                    component: _import('finance/transactionShipper/transactionShipperDeal/index'), 
+                    meta: { title: '货主交易明细', stitle: '交易',noCache: true },
+                },            
+            ]
+        }, 
+
   ]
 }
