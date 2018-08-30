@@ -3,7 +3,7 @@
             <searchInfo></searchInfo>
             <div class="classify_info">
                 <div class="btns_box">
-                    <el-button type="primary" plain @click="handleSearch('search')" size="mini">指派司机</el-button>
+                    <el-button type="primary" plain @click="handleSearch('appoint')" size="mini">指派司机</el-button>
                     <el-button type="primary" plain @click="handleSearch('cancel')" size="mini">取消订单</el-button>
                     <el-button type="primary" plain @click="handleSearch('search')" size="mini">新增订单</el-button>
                     <el-button type="primary" plain @click="handleSearch('search')" size="mini">导出Exce</el-button>
@@ -21,17 +21,16 @@
                         @row-click="clickDetails"
                         style="width: 100%"> 
                         <el-table-column
-                            fixed
                             type="selection"
                             width="55">
                         </el-table-column>
-                        <el-table-column label="序号" fixed width="80">
+                        <el-table-column label="序号"  width="80">
                             <template slot-scope="scope">
                                 {{ (page - 1)*pagesize + scope.$index + 1 }}
                             </template>
                         </el-table-column>  
                         <el-table-column
-                            fixed
+                            
                             prop="orderSerial"
                             label="订单号"
                             width="250">
@@ -119,8 +118,9 @@
                 <!-- 页码 -->
             <div class="info_tab_footer">共计:{{ dataTotal }} <div class="show_pager"> <Pager :total="dataTotal" @change="handlePageChange"  :sizes="sizes"/></div> </div>    
 
-            <Details :dialogFormVisible_details.sync = "dialogFormVisible_details" :orderSerial="DetailsOrderSerial" ></Details>
+            <!-- <Details :dialogFormVisible_details.sync = "dialogFormVisible_details" :orderSerial="DetailsOrderSerial" ></Details> -->
             <cancelCompnent :dialogVisible.sync="dialogVisible" :orderSerial = "currentOrderSerial"   @close = "shuaxin"/>
+            <appointDriver :dialogFormVisible.sync = "dialogFormVisible" :orderSerial = "appontOrderSerial" @close = "shuaxin" ></appointDriver>
 
     </div>
 </template>
@@ -130,9 +130,10 @@
 import { orderStatusList } from '@/api/order/ordermange'
 import { parseTime,pickerOptions2 } from '@/utils/index.js'
 import Pager from '@/components/Pagination/index'
-import Details from '../components/detailsInformations'
+// import Details from '../components/detailsInformations'
 import searchInfo from './components/searchInfo'
 import cancelCompnent from '../components/cancel'
+import appointDriver from '../components/appointDriver'
 
     export default{
         props: {
@@ -143,16 +144,17 @@ import cancelCompnent from '../components/cancel'
         },
         components:{
             Pager,
-            Details,
+            // Details,
             searchInfo,
-            cancelCompnent
+            cancelCompnent,
+            appointDriver
         },
         data(){
             return{
                 dialogVisible:false,
                 currentOrderSerial:'',
-                timeOut:null,
-                loading: false,//加载
+                timeOutAss:null,
+                loading: true,//加载
                 sizes:[20,50,100],
                 pagesize:20,//初始化加载数量
                 page:1,//初始化页码
@@ -170,6 +172,8 @@ import cancelCompnent from '../components/cancel'
                 dialogFormVisible_details:false,//详情弹窗
                 DetailsOrderSerial:'',
                 checkedinformation:[],
+                appontOrderSerial:'',
+                dialogFormVisible:false,
             }
         },
         watch:{
@@ -177,6 +181,10 @@ import cancelCompnent from '../components/cancel'
                 handler(newVal, oldVal) {
                     if(newVal){
                         this.firstblood();
+                        this.timeOutAss = setInterval(this.firstblood,2000);
+
+                    }else{
+                        clearInterval(this.timeOutAss);
                     }
                 },
                 // 代表在wacth里声明了firstName这个方法之后立即先去执行handler方法
@@ -188,19 +196,23 @@ import cancelCompnent from '../components/cancel'
         },
         mounted(){
             // this.firstblood();
+
         },  
         beforeDestroy(){
-            clearInterval(this.timeOut);
+            clearInterval(this.timeOutAss);
         },
         methods: {
             handlePageChange(obj) {
-                this.page = obj.pageNum
-                this.pagesize = obj.pageSize
+                this.page = obj.pageNum;
+                this.pagesize = obj.pageSize;
+                this.firstblood();
             },
             //刷新页面  
             firstblood(){
+                this.loading = true;
+
                 orderStatusList(this.page,this.pagesize,this.searchInfo).then(res => {
-                    console.log(res)
+                    console.log('车主改派',res)
                     this.tableData = res.data.list;
                     this.dataTotal = res.data.totalCount;
 
@@ -209,15 +221,33 @@ import cancelCompnent from '../components/cancel'
                             return a.viaOrder - b.viaOrder;  
                         })  
                     })
+
+                    this.loading = false;
+
                 })
 
-                this.loading = false;
             },
            
             //模糊查询 分类名称或者code
             handleSearch(type){
                 // console.log(this.chooseTime)
                 switch(type){
+                    case 'appoint':
+                        if(this.checkedinformation.length == 0){
+                            return this.$message({
+                                type: 'info',
+                                message: '请选择一个订单' 
+                            })
+                        } else if(this.checkedinformation.length > 1){
+                            return this.$message({
+                                type: 'info',
+                                message: '只能选择一个订单' 
+                            })
+                        }else{
+                            this.appontOrderSerial = this.checkedinformation[0].orderSerial;
+                            this.dialogFormVisible = true;
+                        }
+                        break;
                     case 'search':
                         if(this.chooseTime){
                             this.searchInfo.startOrderDate = this.chooseTime[0];
@@ -266,8 +296,10 @@ import cancelCompnent from '../components/cancel'
             //详情弹窗
             pushOrderSerial(item){
                 // console.log(item)
-                this.dialogFormVisible_details = true;
-                this.DetailsOrderSerial = item.orderSerial;
+                // this.dialogFormVisible_details = true;
+                // this.DetailsOrderSerial = item.orderSerial;
+                this.$router.push({name: '订单详情',query:{ orderSerial:item.orderSerial }});
+
             },
             shuaxin(){
                 this.firstblood();

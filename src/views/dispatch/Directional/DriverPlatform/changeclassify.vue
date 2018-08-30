@@ -2,7 +2,7 @@
     <div>
         
     <!-- 新增分类信息 -->
-        <div class="addclassify commoncss">
+        <div class="shipperOfdispatch commoncss">
             <el-dialog :title='formtitle' :close-on-click-modal="true"  :visible="dialogFormVisibleChange" @close="close">
                 <div class="bindLeft fl bind">
                         <div class="chooseShipper chooseCommon">
@@ -167,7 +167,7 @@ export default {
 </script>
 
 <style rel="stylesheet/scss" lang="scss" >
-    .addclassify{
+    .shipperOfdispatch{
         
         .nowData{
             display: inline-block;

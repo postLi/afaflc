@@ -43,9 +43,13 @@
                             width="300">
                         </el-table-column>
                         <el-table-column
+                            :show-overflow-tooltip="true"
                             prop="complainDes"
                             label="提交内容"
                             width="300">
+                            <!-- <template  slot-scope="scope">
+                               
+                            </template> -->
                         </el-table-column>
                         <el-table-column
                             prop="complainTime"
@@ -80,6 +84,7 @@
                             </template>
                         </el-table-column>
                         <el-table-column
+                            :show-overflow-tooltip="true"
                             label="回复内容"
                             width="350">
                             <template  slot-scope="scope">
@@ -226,11 +231,11 @@ import searchInfo from '../components/searchInfo'
     .couseService{
         height: 100%;
         .info_news{
-            .el-table .cell {
-                white-space: inherit;
-                overflow: hidden;
-                text-overflow: ellipsis;
-            }
+            // .el-table .cell {
+            //     white-space: inherit;
+            //     overflow: hidden;
+            //     text-overflow: ellipsis;
+            // }
         }
     }
 </style>

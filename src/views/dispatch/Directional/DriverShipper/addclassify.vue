@@ -331,10 +331,10 @@ export default {
                }
                .el-input__prefix{
                    left: 0px;
-                   top:-7px;
+                   top:1px;
                }
                .el-input__suffix{
-                   top: -7px;
+                   top: 1px;
                }
            }
             .chooseCommon{
@@ -356,7 +356,7 @@ export default {
                         left: 0;
                     }
                     .el-checkbox-group{
-                        padding-top: 30px;
+                        padding-top: 40px;
                         .el-checkbox{
                             display: block; 
                             margin-left: 0;

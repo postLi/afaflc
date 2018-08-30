@@ -342,7 +342,7 @@ export default {
                 textStyle: {color: 'ccc'},
             },
             grid: {
-                left: '15%',
+                left: '18%',
                 right: '8%',
                 top: '15%',
                 shadowColor:"red",               //阴影颜色
@@ -409,7 +409,7 @@ export default {
                 textStyle: {color: 'ccc'},
             },
             grid: {
-                left: '15%',
+                left: '18%',
                 right: '8%',
                 top: '15%',
                 shadowColor:"red",               //阴影颜色

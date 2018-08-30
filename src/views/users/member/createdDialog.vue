@@ -4,24 +4,10 @@
       <el-dialog :title="title" :visible.sync="dialogFormVisible_add" :before-close="change" :close-on-click-modal="false" >
         <el-form :model="xinzengform" ref="xinzengform" :rules="rulesForm">
             <el-row>
-                <!-- <el-col :span="12">
-                    <el-form-item label="会员账号 ：" :label-width="formLabelWidth" required>
-                        <el-select v-model="xinzengform.account" placeholder="请选择" v-if="editType=='add'" >
-                            <el-option
-                                v-for="item in options"
-                                :key="item.id"
-                                :label="item.name"
-                                :value="item.code"
-                                :disabled="item.disabled">
-                            </el-option>
-                        </el-select>
-                        <el-input v-model="cc" auto-complete="off" v-else-if="editType=='identification'" disabled></el-input>
-                        <el-input v-model="xinzengform.shipperTypeName" auto-complete="off" v-else disabled></el-input>
-                    </el-form-item>
-                </el-col> -->
                 <el-col :span="12">
-                    <el-form-item label="会员手机号码 ：" :label-width="formLabelWidth" required  v-if="editType !='add'">
-                        <el-input v-model="xinzengform.mobile" auto-complete="off"  disabled></el-input>
+                    <el-form-item label="会员手机号码 ：" :label-width="formLabelWidth"  v-if="editType !='add'">
+                        <!-- <el-input v-model="xinzengform.mobile" auto-complete="off"  disabled></el-input> -->
+                        <span class="onlyShow" disabled>{{xinzengform.mobile}}</span>
                     </el-form-item>
                     <el-form-item label="会员手机号码 ：" prop="mobile" :label-width="formLabelWidth" required v-else>
                         <el-input v-model="xinzengform.mobile" auto-complete="off" ></el-input>
@@ -29,19 +15,22 @@
                 </el-col>
                 <el-col :span="12">
                     <el-form-item label="注册人姓名 ：" :label-width="formLabelWidth">
-                        <el-input v-model="xinzengform.contactsName" auto-complete="off"  :disabled="editType=='view'"></el-input>
+                        <span class="onlyShow" v-if="editType=='view'" disabled>{{xinzengform.contactsName}}</span>
+                        <el-input v-model="xinzengform.contactsName" auto-complete="off" v-else></el-input>
                     </el-form-item>
                 </el-col>
             </el-row>
             <el-row>
                 <el-col :span="12">
                     <el-form-item label="公司名称 ：" :label-width="formLabelWidth">
-                        <el-input :maxlength="20" v-model="xinzengform.companyName"  :disabled="editType=='view'"></el-input>
+                        <span class="onlyShow" v-if="editType=='view'" disabled>{{xinzengform.companyName}}</span>
+
+                        <el-input :maxlength="20" v-model="xinzengform.companyName"  v-else></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col :span="12">
-                    <el-form-item label="所在地 ："  v-if = "editType=='view'" :label-width="formLabelWidth" required>
-                        <el-input v-model="xinzengform.belongCityName" auto-complete="off" disabled></el-input>
+                    <el-form-item label="所在地 ："  v-if = "editType=='view'" :label-width="formLabelWidth">
+                        <span class="onlyShow" v-if="editType=='view'" disabled>{{xinzengform.belongCityName}}</span>
                     </el-form-item>
                     <el-form-item label="所在地 ："  props = "belongCity"  :label-width="formLabelWidth" v-else required>
                         <vregion :ui="true" @values="regionChange" class="form-control">
@@ -53,28 +42,162 @@
             <el-row>
                 <el-col :span="12">
                     <el-form-item label="注册来源 ：" :label-width="formLabelWidth">
-                        <el-input :maxlength="20" v-model="xinzengform.registerOriginName"  disabled></el-input>
+                        <!-- <el-input :maxlength="20" v-model="xinzengform.registerOriginName"  disabled></el-input> -->
+                        <span class="onlyShow"  disabled>{{xinzengform.registerOriginName}}</span>
+
                     </el-form-item>
                 </el-col>
                 <el-col :span="12">
                     <el-form-item label="注册日期 ：" :label-width="formLabelWidth">
-                        <el-input :maxlength="20" v-model="xinzengform.registerTime"  disabled></el-input>
+                        <!-- <el-input :maxlength="20" v-model="xinzengform.registerTime"  disabled></el-input> -->
+                        <span class="onlyShow"  disabled>{{xinzengform.registerTime}}</span>
+
                     </el-form-item>
                 </el-col>
             </el-row>
             <el-row>
                 <el-col :span="12">
                     <el-form-item label="账户状态 ：" :label-width="formLabelWidth">
-                        <el-input :maxlength="20" v-model="xinzengform.accountStatusName"  disabled></el-input>
+                        <!-- <el-input :maxlength="20" v-model="xinzengform.accountStatusName"  disabled></el-input> -->
+                        <span class="onlyShow"  disabled>{{xinzengform.accountStatusName}}</span>
+                        
                     </el-form-item>
                 </el-col>
                 <el-col :span="12">
                     <el-form-item label="认证状态 ：" :label-width="formLabelWidth">
-                        <el-input :maxlength="20" v-model="xinzengform.authStatusName"  disabled></el-input>
+                        <!-- <el-input :maxlength="20" v-model="xinzengform.authStatusName"  disabled></el-input> -->
+                        <span class="onlyShow"  disabled>{{xinzengform.authStatusName}}</span>
+
+                    </el-form-item>
+                </el-col>
+            </el-row>
+            <el-row>
+                <el-col :span="12">
+                    <el-form-item label="法人/负责人 ：" :label-width="formLabelWidth">
+                        <span class="onlyShow" v-if="editType=='view'" disabled>{{xinzengform.corporation}}</span>
+
+                        <el-input :maxlength="20" v-model="xinzengform.corporation"  v-else></el-input>
+                    </el-form-item>
+                </el-col>
+                <el-col :span="12">
+                    <el-form-item label="所属品牌 ：" :label-width="formLabelWidth">
+                        <span class="onlyShow" v-if="editType=='view'" disabled>{{xinzengform.belongBrand}}</span>
+
+                        <el-select v-model="xinzengform.belongBrandCode" placeholder="请选择" v-else>
+                            <el-option
+                            v-for="item in optionsBelongBrand"
+                            :key="item.id"
+                            :label="item.name"
+                            :value="item.code">
+                            </el-option>
+                        </el-select>
+                    </el-form-item>
+                </el-col>
+            </el-row>
+            <el-row>
+                <el-col :span="12">
+                    <el-form-item label="是否开通会员 ：" :label-width="formLabelWidth">
+                        <!-- <el-input :maxlength="20"  v-model="xinzengform.isVipName"  v-if="editType=='view'" disabled></el-input> -->
+                        <span class="onlyShow" v-if="editType=='view'" disabled>{{xinzengform.isVip == 1 ? '是' : '否'}}</span>
+
+                        <el-radio-group v-model="xinzengform.isVip" v-else>
+                            <el-radio  v-for="(obj,key) in optionsStatus" :label="obj.value" :key='key'>{{obj.name}}</el-radio>
+                        </el-radio-group>
+                    </el-form-item>
+                </el-col>
+                <el-col :span="12" >
+                    <el-form-item label="公司成立时间 ：" :label-width="formLabelWidth">
+                        <span class="onlyShow"  disabled>{{xinzengform.foundTime ? xinzengform.foundTime :'未填写'}}</span>
+                        <!-- <el-date-picker
+                            v-elsev-if="editType=='view'"
+                            v-model="xinzengform.foundTime"
+                            type="date"
+                            placeholder="选择日期"
+                            value-format="timestamp">
+                        </el-date-picker> -->
+                    </el-form-item>
+                </el-col>
+            </el-row>
+
+            <!-- <el-row v-if="xinzengform.isVip == 1">
+                <el-col :span="12">
+                    <el-form-item label="会员期限 ：" :label-width="formLabelWidth">
+                        <span class="onlyShow" v-if="editType=='view'" disabled>{{xinzengform.isVip}}</span>
+                            <el-date-picker
+                            v-model="ifVipTimes"
+                            type="daterange"
+                            align="right"
+                            unlink-panels
+                            range-separator="-"
+                            start-placeholder="开始日期"
+                            end-placeholder="结束日期"
+                            :picker-options="pickerOptions">
+                            </el-date-picker>
+                            <el-radio-group v-model="radio" @change="timeChange">
+                                <el-radio :label="1">1天</el-radio>
+                                <el-radio :label="3">3天</el-radio>
+                                <el-radio :label="7">一周</el-radio>
+                                <el-radio :label="9">一个月</el-radio>
+                                <el-radio :label="10">永久</el-radio>
+                            </el-radio-group>
+                    </el-form-item>
+                </el-col>
+            </el-row> -->
+
+            <el-row>
+                <el-col :span="12">
+                    <el-form-item label="是否开通TMS ：" :label-width="formLabelWidth">
+                        <span class="onlyShow" v-if="editType=='view'" disabled>{{xinzengform.isOpenTms == 1 ? '是' : '否'}}</span>
+                        <!-- <el-input :maxlength="20"  v-model="xinzengform.isOpenTmsName"  v-if="editType=='view'" disabled></el-input> -->
+                        <el-radio-group v-model="xinzengform.isOpenTms" v-else>
+                            <el-radio  v-for="(obj,key) in optionsStatus" :label="obj.value" :key='key'>{{obj.name}}</el-radio>
+                        </el-radio-group>
+                    </el-form-item>
+                </el-col>
+                <el-col :span="12">
+                    <el-form-item label="保证金 ：" :label-width="formLabelWidth">
+                        <span class="onlyShow" v-if="editType=='view'" disabled>{{xinzengform.collateral ? xinzengform.collateral :'无'}}</span>
+                        <el-input placeholder="请输入" v-model="xinzengform.collateral" :maxlength="20" v-numberOnly v-else>
+                            <template slot="append">元</template>
+                        </el-input>
                     </el-form-item>
                 </el-col>
             </el-row>
             <el-row>        
+                <el-col :span="24" class="moreLength">
+                    <el-form-item label="服务类型 ：" :label-width="formLabelWidth">
+                        <p v-if="editType == 'view'">
+                            <span v-for="(item,key) in serviceTypeName" :key="key" class="serviceChoose">
+                                {{item}}
+                            </span>
+                        </p>
+                        <el-checkbox-group v-model="optionsServerArr" v-else>
+                            <span>
+                                <el-checkbox v-for="obj in optionsServer" :label="obj.code" :key="obj.id" >{{obj.name}}</el-checkbox>
+                            </span>
+                        </el-checkbox-group>
+                    </el-form-item>
+                </el-col>
+            </el-row>
+            
+             <el-row>        
+                <el-col :span="24" class="moreLength">
+                    <el-form-item label="产品与服务 ：" :label-width="formLabelWidth">
+                        <p v-if="editType == 'view'">
+                            <span v-for="(item,key) in productService" :key="key" class="serviceChoose">
+                                {{item}}
+                            </span>
+                        </p>
+                        <el-checkbox-group v-model="optionsProductArr" v-else>
+                            <span>
+                                <el-checkbox v-for="obj in optionsProductService" :label="obj.code" :key="obj.id" >{{obj.name}}</el-checkbox>
+                            </span>
+                        </el-checkbox-group>
+                    </el-form-item>
+                </el-col>
+            </el-row>
+
+             <el-row>        
                 <el-col :span="24" class="moreLength">
                     <el-form-item label="会员服务承诺 ：" :label-width="formLabelWidth">
                         <p v-if="editType == 'view'">
@@ -90,16 +213,7 @@
                     </el-form-item>
                 </el-col>
             </el-row>
-            <el-row>
-                <el-col :span="24" class="moreLength">
-                    <el-form-item label="是否开通TMS ：" :label-width="formLabelWidth">
-                        <el-input :maxlength="20"  v-model="xinzengform.isOpenTmsName"  v-if="editType=='view'" disabled></el-input>
-                        <el-radio-group v-model="xinzengform.isOpenTms" v-else>
-                            <el-radio  v-for="(obj,key) in optionsStatus" :label="obj.value" :key='key'>{{obj.name}}</el-radio>
-                        </el-radio-group>
-                    </el-form-item>
-                </el-col>
-            </el-row>
+
             <el-row>
             <el-col :span="9">
               <el-form-item label="上传营业执照照片 ：" label-width="165px">
@@ -146,8 +260,8 @@ import { eventBus } from '@/eventBus'
 import {data_get_shipper_type} from '@/api/users/shipper/all_shipper.js'
 import {data_ChangeLogisticsCompany} from '@/api/users/logistics/LogisticsCompany.js'
 import vregion from '@/components/vregion/Region.vue'
-
-import { data_LogisticsCompany } from '@/api/common.js'
+import { pickerOptions3 } from '@/utils/index.js'
+import { data_LogisticsCompany,getDictionary } from '@/api/common.js'
 export default {
   components:{
     Upload,
@@ -220,6 +334,17 @@ export default {
             // }
         }
         return{
+            ifVipTimes:[],
+             pickerOptions: {
+                disabledDate(time) {
+                    return time.getTime() < Date.now();
+                },
+                shortcuts: pickerOptions3
+            },
+            serviceType:'AF028',//服务类型
+            belongBrand:'AF029',//品牌code
+            productServiceCode:'AF027',//产品与服务code
+            otherServiceCode:'AF025',//增值服务code
             defaultImg:'/static/test.jpg',//默认第一张图片的url
             cc:'企业货主',
             selectFlag:false,
@@ -227,12 +352,16 @@ export default {
             type:'primary',
             title:'',
             text:'',
-            otherService:[],
+            otherService:[],//会员承诺服务
+            serviceTypeName:[],
+            productService:[],
             optionsLogisticsCompany:[],//会员服务承诺
+            optionsBelongBrand:[],//品牌类型
+            optionsProductService:[],//产品与服务
+            optionsProductArr:[],
+            optionsServer:[],//服务类型
+            optionsServerArr:[],//
             otherServiceCode:[],//选择增值服务
-            citylist:[],
-            belongCity: [],
-            areadata:[],  
             formLabelWidth:'120px',
             companyFlag:false,
             xinzengform:{
@@ -317,8 +446,6 @@ export default {
         regionChange(d) {
             console.log('data:',d)
             this.xinzengform.belongCityName = (!d.province&&!d.city&&!d.area&&!d.town) ? '': `${this.getValue(d.province)}${this.getValue(d.city)}${this.getValue(d.area)}${this.getValue(d.town)}`.trim();
-
-            
         },
         getValue(obj){
             return obj ? obj.value:'';
@@ -332,29 +459,46 @@ export default {
             eventBus.$emit('changeList')
         },
         openDialog(){
-            // console.log('parmas:',this.params)
+            console.log('parmas:',this.params)
             console.log(this.editType)
-            if(this.editType == 'edit'){
+            if(Object.keys(this.params).length == 0){
+                return this.$message({
+                    type: 'info',
+                    message: '请选择一条记录进行操作'
+                })
+            }else{
+                if(this.editType == 'edit'){
                     this.xinzengform = JSON.parse(JSON.stringify(this.params))
                     this.dialogFormVisible_add = true;
                     if(this.xinzengform.otherServiceCode != ''){
                         this.otherServiceCode = JSON.parse(this.xinzengform.otherServiceCode) 
                     }
-
-                    this.xinzengform.isOpenTms = this.xinzengform.isOpenTms == 1 ? '1' : '0'
-            }
-            else if(this.editType == 'view'){
+                    if(this.xinzengform.serviceType != ''){
+                        this.optionsServerArr = JSON.parse(this.xinzengform.serviceType) 
+                    }
+                    if(this.xinzengform.productServiceCode != ''){
+                        this.optionsProductArr = JSON.parse(this.xinzengform.productServiceCode) 
+                    }
+                    // this.xinzengform.isVip = this.xinzengform.isVip == 1 ? '1' : '0'
+                }
+                else if(this.editType == 'view'){
                     this.dialogFormVisible_add = true;
                     this.xinzengform  = Object.assign({},this.paramsView) ;
                     if(this.xinzengform.otherService != ''){
                         this.otherService = JSON.parse(this.xinzengform.otherService) 
                     }
-                    this.xinzengform.isOpenTmsName = this.xinzengform.isOpenTms == 1 ? '是' : '否';
-                    console.log(this.xinzengform)
+                    if(this.xinzengform.serviceType != ''){
+                        this.serviceTypeName = JSON.parse(this.xinzengform.serviceTypeName) 
+                    }
+                    if(this.xinzengform.productServiceCode != ''){
+                        this.productService = JSON.parse(this.xinzengform.productService) 
+                    }
+                }
 
-                    console.log(this.xinzengform.isOpenTmsName)
             }
-
+            
+            
+            
         },
         change() {
             this.dialogFormVisible_add = false;
@@ -368,16 +512,14 @@ export default {
         },
         //获取货主类型
         getMoreInformation(){
-            // data_get_shipper_type().then(res=>{
-            //     // console.log('货主类型',res)
-            //     this.options = res.data;
-            
-            // }),
             data_LogisticsCompany().then(res=>{
-
                 this.optionsLogisticsCompany = res.data;
-
-                // console.log(this.optionsLogisticsCompany)
+            })
+            Promise.all([getDictionary(this.belongBrand),getDictionary(this.productServiceCode),getDictionary(this.serviceType)]).then(resArr => {
+                console.log('resAll',resArr)
+                this.optionsBelongBrand = resArr[0].data;
+                this.optionsProductService = resArr[1].data;
+                this.optionsServer = resArr[2].data;
             })
         },
         // 保存
@@ -463,6 +605,29 @@ export default {
             -webkit-box-shadow:3px 3px 30px #888888;;
             -moz-box-shadow:3px 3px 30px #888888;;
 
+        }
+
+        .onlyShow{
+            display: inline-block;
+            width: 250px;
+            height: 40px;
+            line-height: 40px;
+            text-align: left;
+            text-indent: 10px;
+            color: #3e9ff1;
+            // border: 1px solid #cccccc;
+            background: rgba(227, 233, 235, 0.479);
+           
+        }
+        .el-form-item__content{
+            .el-date-editor{
+                width: 250px;
+                height: 26px;
+                line-height: 26px;
+                .el-input__icon,.el-range-separator{
+                    line-height: 16px;
+                }
+            }
         }
     }
 </style>

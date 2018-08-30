@@ -147,7 +147,6 @@ export default {
                     this.$refs.cue.hint(this.informationTime)
                     this.forms.bindingStartDate = null;
                     this.forms.bindingEndDate = null;
-
                 }
             }
         },
@@ -304,10 +303,10 @@ export default {
                }
                .el-input__prefix{
                    left: 0px;
-                   top:-7px;
+                   top:1px;
                }
                .el-input__suffix{
-                   top: -7px;
+                   top: 1px;
                }
            }
             .chooseCommon{
@@ -329,7 +328,7 @@ export default {
                         left: 0;
                     }
                     .el-checkbox-group{
-                        padding-top: 30px;
+                        padding-top: 40px;
                         .el-checkbox{
                             margin-left: 0;
                             display: block;

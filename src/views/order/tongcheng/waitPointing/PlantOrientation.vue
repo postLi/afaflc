@@ -22,17 +22,17 @@
                         @row-click="clickDetails"
                         style="width: 100%">
                         <el-table-column
-                            fixed
+                            
                             type="selection"
                             width="55">
                         </el-table-column>
-                        <el-table-column label="序号" fixed width="80">
+                        <el-table-column label="序号"  width="80">
                             <template slot-scope="scope">
                                 {{ (page - 1)*pagesize + scope.$index + 1 }}
                             </template>
                         </el-table-column>  
                         <el-table-column
-                            fixed
+                            
                             prop="orderSerial"
                             label="订单号"
                             width="250">
@@ -122,10 +122,7 @@
 
             <!-- <Details :dialogFormVisible_details.sync = "dialogFormVisible_details" :orderSerial="DetailsOrderSerial" ></Details> -->
             <cancelCompnent :dialogVisible.sync="dialogVisible" :orderSerial = "currentOrderSerial"   @close = "shuaxin"/>
-            <appointDriver :dialogFormVisible.sync = "dialogFormVisible"  @close = "shuaxin" ></appointDriver>
-
-
-
+            <appointDriver :dialogFormVisible.sync = "dialogFormVisible" :orderSerial = "appontOrderSerial" @close = "shuaxin" ></appointDriver>
     </div>
 </template>
 
@@ -156,9 +153,10 @@ import appointDriver from '../components/appointDriver'
             return{
                 dialogVisible:false,
                 dialogFormVisible:false,
+                appontOrderSerial:'',
                 currentOrderSerial:'',
-                timeOut:null,
-                loading: false,//加载
+                timeOutPlant:null,
+                loading: true,//加载
                 sizes:[20,50,100],
                 pagesize:20,//初始化加载数量
                 page:1,//初始化页码
@@ -183,6 +181,10 @@ import appointDriver from '../components/appointDriver'
                 handler(newVal, oldVal) {
                     if(newVal){
                         this.firstblood();
+                        this.timeOutPlant = setInterval(this.firstblood,2000);
+
+                    }else{
+                        clearInterval(this.timeOutPlant);
                     }
                 },
                 // 代表在wacth里声明了firstName这个方法之后立即先去执行handler方法
@@ -194,9 +196,10 @@ import appointDriver from '../components/appointDriver'
         },
         mounted(){
             // this.firstblood();
+
         },  
         beforeDestroy(){
-            clearInterval(this.timeOut);
+            clearInterval(this.timeOutPlant);
         },
         methods: {
             handlePageChange(obj) {
@@ -206,8 +209,10 @@ import appointDriver from '../components/appointDriver'
             },
             //刷新页面  
             firstblood(){
+                this.loading = true;
+
                 orderStatusList(this.page,this.pagesize,this.searchInfo).then(res => {
-                    console.log('是否刷新',res.data)
+                    console.log('平台定向',res.data)
                     this.tableData = res.data.list;
                     this.dataTotal = res.data.totalCount;
 
@@ -226,7 +231,20 @@ import appointDriver from '../components/appointDriver'
                 // console.log(this.chooseTime)
                 switch(type){
                     case 'appoint':
-                        this.dialogFormVisible = true;
+                        if(this.checkedinformation.length == 0){
+                            return this.$message({
+                                type: 'info',
+                                message: '请选择一个订单' 
+                            })
+                        } else if(this.checkedinformation.length > 1){
+                            return this.$message({
+                                type: 'info',
+                                message: '只能选择一个订单' 
+                            })
+                        }else{
+                            this.appontOrderSerial = this.checkedinformation[0].orderSerial;
+                            this.dialogFormVisible = true;
+                        }
                         break;
                     case 'search':
                         if(this.chooseTime){
@@ -275,8 +293,10 @@ import appointDriver from '../components/appointDriver'
             //详情弹窗
             pushOrderSerial(item){
                 // console.log(item)
-                this.dialogFormVisible_details = true;
-                this.DetailsOrderSerial = item.orderSerial;
+                // this.dialogFormVisible_details = true;
+                // this.DetailsOrderSerial = item.orderSerial;
+                this.$router.push({name: '订单详情',query:{ orderSerial:item.orderSerial }});
+
             },
             getSearchParam(obj) {
                 console.log(obj)

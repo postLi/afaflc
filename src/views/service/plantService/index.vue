@@ -24,9 +24,8 @@
                             </template>
                         </el-table-column>  
                         <el-table-column
-                            
                             label="工单编号"
-                            width="300">
+                            width="230">
                                 <template  slot-scope="scope">
                                         <h4 class="needMoreInfo" @click="pushOrderSerial(scope.row)">{{ scope.row.workSerial}}</h4>
                                 </template>
@@ -34,47 +33,48 @@
                         <el-table-column
                             prop="complainTypeName"
                             label="提交类型"
-                            width="150">
+                            width="100">
                         </el-table-column>
                         <el-table-column
                             prop="orderSerial"
                             label="运单号"
-                            width="300">
+                            width="230">
                         </el-table-column>
                         <el-table-column
                             prop="title"
                             label="提交主题"
-                            width="200">
+                            width="100">
                         </el-table-column>
                         <el-table-column
+                            :show-overflow-tooltip="true"
                             prop="complainDes"
                             label="提交内容"
-                            width="250">
+                            width="300">
                         </el-table-column>
                         <el-table-column
                             prop="complainTime"
                             label="提交时间"
-                            width="250">
+                            width="200">
                         </el-table-column>
                          <el-table-column
                             prop="complainName"
                             label="提交人"
-                            width="150">
+                            width="100">
                         </el-table-column> 
                         <el-table-column
                             prop="phone"
                             label="联系电话"
-                            width="200">
+                            width="150">
                         </el-table-column>
                          <el-table-column
                          prop="email"
                             label="电子邮箱"
-                            width="250">
+                            width="200">
                         </el-table-column>
                         <el-table-column
                             prop="complainStatusName"
                             label="处理状态"
-                            width="150">
+                            width="100">
                                 <!-- <template  slot-scope="scope">
                                     <span :class="{reMark:scope.row.complainStatusName == '待处理',sussces:scope.row.complainStatusName == '已处理'}">{{ scope.row.complainStatusName}}</span>
                                 </template> -->
@@ -82,14 +82,15 @@
                         <el-table-column
                             prop="platformTime"
                             label="处理时间"
-                            width="250">
+                            width="200">
                         </el-table-column>
                         <el-table-column
                         prop="replyName"
                             label="处理人"
-                            width="150">
+                            width="100">
                         </el-table-column>
                         <el-table-column
+                            :show-overflow-tooltip="true"
                             label="回复内容"
                             width="300">
                             <template  slot-scope="scope">

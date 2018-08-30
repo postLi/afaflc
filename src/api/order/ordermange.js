@@ -44,10 +44,11 @@ export function appointDriverList(data) {
 
 
   //web端指派司机时查询司机列表
-export function nearDriverList(orderSerial) {
+export function nearDriverList(data) {
     return fetch({
-      url: '/'+baseurl+'/order/aflcOrder/v1/nearDriverList/' + orderSerial,
+      url: '/'+baseurl+'/order/aflcOrder/v1/nearDriverList',
       method: 'post',
+      data:data
     })
   }
 

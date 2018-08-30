@@ -85,7 +85,7 @@
                 </div>
             </div>
         <!-- loading -->
-        <!-- <spinner v-show="show"></spinner>  -->\
+        <!-- <spinner v-show="show"></spinner>  -->
         <cue ref="cueInfo"></cue>
     </div>
 </template>

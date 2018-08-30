@@ -333,6 +333,56 @@ export function parseTime(time, cFormat) {
     }
     element.className = classString
   }
+
+  export const pickerOptions3 = [{
+        text: '一天',
+        onClick(picker) {
+        const end = new Date();
+        const start = new Date();
+        end.setTime(end.getTime() + 3600 * 1000 * 24 * 1);
+        picker.$emit('pick', [start, end]);
+        }
+    }, {
+        text: '一周',
+        onClick(picker) {
+        const end = new Date();
+        const start = new Date();
+        end.setTime(end.getTime() + 3600 * 1000 * 24 * 7);
+        picker.$emit('pick', [start, end]);
+        }
+    }, {
+        text: '一个月',
+        onClick(picker) {
+        const end = new Date();
+        const start = new Date();
+        end.setTime(end.getTime() + 3600 * 1000 * 24 * 30);
+        picker.$emit('pick', [start, end]);
+        }
+    }, {
+        text: '三个月',
+        onClick(picker) {
+        const end = new Date();
+        const start = new Date();
+        end.setTime(end.getTime() + 3600 * 1000 * 24 * 90);
+        picker.$emit('pick', [start, end]);
+        }
+    }, {
+        text: '半年',
+        onClick(picker) {
+        const end = new Date();
+        const start = new Date();
+        end.setTime(end.getTime() + 3600 * 1000 * 24 * 180);
+        picker.$emit('pick', [start, end]);
+        }
+    }, {
+        text: '一年',
+        onClick(picker) {
+        const end = new Date();
+        const start = new Date();
+        end.setTime(end.getTime() + 3600 * 1000 * 24 * 365);
+        picker.$emit('pick', [start, end]);
+        }
+    }]
   
   export const pickerOptions2 = [{
     text: '今天',

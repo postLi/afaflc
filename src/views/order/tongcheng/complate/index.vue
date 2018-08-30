@@ -53,17 +53,17 @@
                         @row-click="clickDetails"
                         style="width: 100%"> 
                         <el-table-column
-                            fixed
+                            
                             type="selection"
                             width="55">
                         </el-table-column>
-                        <el-table-column label="序号" fixed width="80">
+                        <el-table-column label="序号"  width="80">
                             <template slot-scope="scope">
                                 {{ (page - 1)*pagesize + scope.$index + 1 }}
                             </template>
                         </el-table-column>  
                         <el-table-column
-                            fixed
+                            
                             prop="orderSerial"
                             label="订单号"
                             width="250">
@@ -155,7 +155,7 @@
                 </div>
             </div>
 
-            <Details :dialogFormVisible_details.sync = "dialogFormVisible_details" :orderSerial="DetailsOrderSerial" ></Details>
+            <!-- <Details :dialogFormVisible_details.sync = "dialogFormVisible_details" :orderSerial="DetailsOrderSerial" ></Details> -->
     </div>
 </template>
 
@@ -165,19 +165,19 @@ import '@/styles/dialog.scss'
 import { orderStatusList } from '@/api/order/ordermange'
 import { parseTime,pickerOptions2 } from '@/utils/index.js'
 import Pager from '@/components/Pagination/index'
-import Details from '../components/detailsInformations'
+// import Details from '../components/detailsInformations'
 import vregion from '@/components/vregion/Region'
 
 
     export default{
         components:{
             Pager,
-            Details,
+            // Details,
             vregion
         },
         data(){
             return{
-                timeOut:null,
+                timeOutComplate:null,
                 loading: true,//加载
                 sizes:[20,50,100],
                 pagesize:20,//初始化加载数量
@@ -207,11 +207,11 @@ import vregion from '@/components/vregion/Region'
         },
         mounted(){
             this.firstblood();
-            // this.timeOut = setInterval(this.firstblood,2000)
+            this.timeOutComplate = setInterval(this.firstblood,2000)
             // console.log(this.$store)
         },  
         beforeDestroy(){
-            clearInterval(this.timeOut);
+            clearInterval(this.timeOutComplate);
         },
         methods: {
             regionChange(d) {
@@ -237,8 +237,9 @@ import vregion from '@/components/vregion/Region'
             },
             //刷新页面  
             firstblood(){
+                this.loading = true;
                 orderStatusList(this.page,this.pagesize,this.searchInfo).then(res => {
-                    console.log(res)
+                    console.log('已完成',res)
                     this.tableData = res.data.list;
                     this.dataTotal = res.data.totalCount;
 
@@ -247,9 +248,9 @@ import vregion from '@/components/vregion/Region'
                             return a.viaOrder - b.viaOrder;  
                         })  
                     })
+                    this.loading = false;
                 })
 
-                this.loading = false;
             },
            
             //模糊查询 分类名称或者code
@@ -286,8 +287,10 @@ import vregion from '@/components/vregion/Region'
             //详情弹窗
             pushOrderSerial(item){
                 // console.log(item)
-                this.dialogFormVisible_details = true;
-                this.DetailsOrderSerial = item.orderSerial;
+                // this.dialogFormVisible_details = true;
+                // this.DetailsOrderSerial = item.orderSerial;
+                this.$router.push({name: '订单详情',query:{ orderSerial:item.orderSerial }});
+
             }
         }
     }

@@ -21,14 +21,13 @@
             </el-col>
             <el-col :span="12">
               <el-form-item label="手机号码 ：" :label-width="formLabelWidth" required  v-if="editType !='add'">
-                <el-input v-model="xinzengform.mobile" auto-complete="off"  disabled></el-input>
+                <el-input v-model="xinzengform.mobile" auto-complete="off" maxlength="11" disabled></el-input>
               </el-form-item>
               <el-form-item label="手机号码 ：" prop="mobile" :label-width="formLabelWidth" required v-else>
-                <el-input v-model="xinzengform.mobile" auto-complete="off" ></el-input>
+                <el-input v-model="xinzengform.mobile" auto-complete="off" maxlength="11"></el-input>
               </el-form-item>
             </el-col>
           </el-row>
-
           <el-row>
             <el-col :span="12">
               <el-form-item label="联系人 ：" :label-width="formLabelWidth">
@@ -55,16 +54,7 @@
                 <el-input :maxlength="20" v-model="xinzengform.address" auto-complete="off"  :disabled="editType=='view'"></el-input>
               </el-form-item>
             </el-col>
-            <!-- <el-col :span="12">
-              <el-form-item label="是否定向:" :label-width="formLabelWidth">
-                <el-radio-group v-model="xinzengform.isDirectional"  :disabled="editType!='add'">
-                  <el-radio label="0">否</el-radio>
-                  <el-radio label="1">是</el-radio>
-                </el-radio-group>
-              </el-form-item>
-            </el-col> -->
           </el-row>
-
           <el-row>
             <el-col :span="12">
               <el-form-item label="公司名称 ：" :label-width="formLabelWidth" v-show="companyFlag || editType=='identification'">
@@ -246,8 +236,8 @@ export default {
   watch:{
     'xinzengform.shipperType': {
         handler: function(val, oldVal) {
-            // console.log(val)
-            if(val === 'AF0010202'){
+            console.log('````````',val)
+            if(val == 'AF0010102'){
                 this.companyFlag= true
             }else{
                 this.companyFlag= false

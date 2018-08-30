@@ -34,10 +34,11 @@
               </el-form>
             <div class="classify_info">
                 <div class="btns_box">
-                    <el-button type="primary" plain @click="handleSearch('search')" size="mini">导出Exce</el-button>
+                    <el-button type="primary" plain @click="handleSearch('outExce')" size="mini">导出Exce</el-button>
                 </div>
                 <div class="info_news" style="height:87%;">
                     <el-table
+                        id="out-table"
                         ref="multipleTable"
                         :data="tableData"
                         stripe
@@ -49,17 +50,16 @@
                         @row-click="clickDetails"
                         style="width: 100%"> 
                         <el-table-column
-                            fixed
+                            
                             type="selection"
                             width="55">
                         </el-table-column>
-                        <el-table-column label="序号" fixed width="80">
+                        <el-table-column label="序号"  width="80">
                             <template slot-scope="scope">
                                 {{ (page - 1)*pagesize + scope.$index + 1 }}
                             </template>
                         </el-table-column>  
                         <el-table-column
-                            fixed
                             prop="orderSerial"
                             label="订单号"
                             width="250">
@@ -147,29 +147,31 @@
                 </div>
             </div>
 
-            <Details :dialogFormVisible_details.sync = "dialogFormVisible_details" :orderSerial="DetailsOrderSerial" ></Details>
+            <!-- <Details :dialogFormVisible_details.sync = "dialogFormVisible_details" :orderSerial="DetailsOrderSerial" ></Details> -->
     </div>
 </template>
 
 <script type="text/javascript">
 
+import FileSaver from 'file-saver'
+import XLSX from 'xlsx'
 import '@/styles/dialog.scss'
 import { orderStatusList } from '@/api/order/ordermange'
 import { parseTime,pickerOptions2 } from '@/utils/index.js'
 import Pager from '@/components/Pagination/index'
-import Details from '../components/detailsInformations'
+// import Details from '../components/detailsInformations'
 import vregion from '@/components/vregion/Region'
 
 
     export default{
         components:{
             Pager,
-            Details,
+            // Details,
             vregion
         },
         data(){
             return{
-                timeOut:null,
+                timeOutWaitPay:null,
                 loading: true,//加载
                 sizes:[20,50,100],
                 pagesize:20,//初始化加载数量
@@ -201,13 +203,24 @@ import vregion from '@/components/vregion/Region'
         },
         mounted(){
             this.firstblood();
-            // this.timeOut = setInterval(this.firstblood,2000)
+            // this.timeOutWaitPay = setInterval(this.firstblood,2000)
             // console.log(this.$store)
         },  
         beforeDestroy(){
-            clearInterval(this.timeOut);
+            clearInterval(this.timeOutWaitPay);
         },
         methods: {
+            exportExcel () {
+                /* generate workbook object from table */
+                var wb = XLSX.utils.table_to_book(document.querySelector('#out-table'))
+                /* get binary string as output */
+                var wbout = XLSX.write(wb, { bookType: 'xlsx', bookSST: true, type: 'array' })
+                console.log(wbout)
+                try {
+                    FileSaver.saveAs(new Blob([wbout], { type: 'application/octet-stream' }), 'sheetjs.xlsx')
+                } catch (e) { if (typeof console !== 'undefined') console.log(e, wbout) }
+                return wbout
+            },
             regionChange(d) {
                 console.log('data:',d)
                 this.searchInfo.belongCityName = (!d.province&&!d.city&&!d.area&&!d.town) ? '': `${this.getValue(d.province)}${this.getValue(d.city)}${this.getValue(d.area)}${this.getValue(d.town)}`.trim();
@@ -231,8 +244,10 @@ import vregion from '@/components/vregion/Region'
             },
             //刷新页面  
             firstblood(){
+                this.loading = true;
+
                 orderStatusList(this.page,this.pagesize,this.searchInfo).then(res => {
-                    console.log(res)
+                    console.log('待付款',res)
                     this.tableData = res.data.list;
                     this.dataTotal = res.data.totalCount;
 
@@ -240,10 +255,12 @@ import vregion from '@/components/vregion/Region'
                         item.aflcOrderAddresses.sort(function(a,b){  
                             return a.viaOrder - b.viaOrder;  
                         })  
+
+                        // item.useCar = parseTime(item.useCarTime)
                     })
+                    this.loading = false;
                 })
 
-                this.loading = false;
             },
            
             //模糊查询 分类名称或者code
@@ -266,6 +283,9 @@ import vregion from '@/components/vregion/Region'
                             parentOrderStatus:'AF00801',//订单状态待支付
                         };
                         this.chooseTime = [];
+                    case 'outExce':
+                        this.exportExcel();
+                        break;
                 }
                 this.firstblood();
             },

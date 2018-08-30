@@ -64,7 +64,7 @@
                     <el-select v-model="formFroze.freezeCause" v-else placeholder="请选择" clearable>
                         <el-option
                         v-for="item in optionsReason"
-                        :key="item.value"
+                        :key="item.id"
                         :label="item.name"
                         :value="item.code">
                         </el-option>

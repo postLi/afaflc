@@ -4,12 +4,12 @@
             <div class="appoint commoncss">
                 <el-dialog title='指派司机' :close-on-click-modal="false"  :visible="dialogFormVisible" @close="close">
                     <el-form :model="searchInfo" ref="ruleForm" class="demo-ruleForm classify_searchinfo">
-                        <el-form-item label="车主" prop="pointName">
-                            <el-input v-model="searchInfo.orderSerial" clearable placeholder="车主姓名/手机账号/车牌号码">
+                        <el-form-item label="车主" prop="search">
+                            <el-input v-model="searchInfo.search" clearable placeholder="车主姓名/手机账号/车牌号码">
                             </el-input>
                         </el-form-item>
-                        <el-form-item label="车型" prop="orderSerial">
-                            <el-select v-model="searchInfo.orderSerial" clearable placeholder="请选择">
+                        <el-form-item label="车型" prop="carType">
+                            <el-select v-model="searchInfo.carType" clearable placeholder="请选择">
                                 <el-option
                                 v-for="item in optionsCarType"
                                 :key="item.id"
@@ -18,7 +18,7 @@
                                 </el-option>
                             </el-select>
                         </el-form-item>
-                        <el-form-item>
+                        <el-form-item prop="iftequan">
                             <el-checkbox v-model="iftequan" @change = "ifTequan">特权车</el-checkbox>
                             {{searchInfo.if}}
                         </el-form-item>
@@ -40,32 +40,61 @@
                             tooltip-effect="dark"
                             @row-click="clickDetails"
                             style="width: 100%"> 
+                                <el-table-column label="选择" width="60" fixed>
+                                    <template slot-scope="scope">
+                                        <el-radio class="textRadio" @change.native="getCurrentRow(scope.$index,scope.row)" :label="scope.$index" v-model="templateRadio">&nbsp;</el-radio>
+                                    </template>
+                                </el-table-column>
+                                <el-table-column label="序号"  width="80">
+                                    <template slot-scope="scope">
+                                        {{ (page - 1)*pagesize + scope.$index + 1 }}
+                                    </template>
+                                </el-table-column>  
                                 <el-table-column
                                     align = "center"
-                                    fixed
-                                    type="selection"
-                                    width="55">
+                                    prop="driverMobile"
+                                    label="车主账号">
                                 </el-table-column>
                                 <el-table-column
                                     align = "center"
-                                    fixed
-                                    prop="shipperInfo"
+                                    prop="driverName"
                                     label="车主姓名">
                                 </el-table-column>
                                 <el-table-column
                                 align = "center"
-                                prop="carInfo"
-                                label="车主账号">
-                                </el-table-column>
-                                <el-table-column
-                                align = "center"
-                                prop="startTime"
+                                prop="carNumber"
                                 label="车牌号码">
                                 </el-table-column>
                                 <el-table-column
                                 align = "center"
-                                prop="endTime"
-                                label="距离(KM)">
+                                prop="carType"
+                                label="车型">
+                                </el-table-column>
+                                <el-table-column
+                                align = "center"
+                                prop="distance"
+                                label="距离提货地(KM)">
+                                    <template slot-scope="scope">
+                                        <span class="pointStance">{{scope.row.distance}}</span>
+                                    </template>
+                                </el-table-column>
+                                <el-table-column
+                                align = "center"
+                                prop="obtainGrade"
+                                label="中单等级">
+                                </el-table-column>
+                                <el-table-column
+                                align = "center"
+                                prop="isVipCar"
+                                label="是否特权车">
+                                    <template slot-scope="scope">
+                                        <span>{{scope.row.isVipCar == 1 ? '是' : '否'}}</span>
+                                    </template>
+                                </el-table-column>
+                                 <el-table-column
+                                align = "center"
+                                prop="distance"
+                                label="是否货主收藏司机">
                                 </el-table-column>
                                 <el-table-column
                                 align = "center"
@@ -89,11 +118,13 @@
                                 </el-table-column>
                             </el-table>
                         </div>
+                        <div class="info_tab_footer">共计:{{ dataTotal }} <div class="show_pager"> <Pager :total="dataTotal" @change="handlePageChange"  :sizes="sizes"/></div> </div>    
                     </div>
+                    <!-- 页码 -->
+
                     <!-- <detailsComponent v-if="Object.keys(listInformation).length != 0" :listInformation = "listInformation"></detailsComponent> -->
                 </el-dialog>
             </div>
-
     </div>
 </template>
 
@@ -101,6 +132,8 @@
 
 import { getDictionary } from '@/api/common.js'
 import { appointDriverList,nearDriverList } from '@/api/order/ordermange.js'
+import Pager from '@/components/Pagination/index'
+
 // import detailsComponent from './details';
 
 export default {
@@ -108,25 +141,37 @@ export default {
     props: {
         dialogFormVisible:{
             type:Boolean,
-            required:true
+            required:true,
         },
+        orderSerial:{
+            type:String,
+            required:true,
+        }
     },
    
     components:{
-      
+        Pager
     },
     data() {
         return {
+            page:1,
+            pagesize:20,
+            dataTotal:0,
+            sizes:[10,20,30],
             carType:'AF018',//车型
             iftequan:false,
             searchInfo:{
                 orderSerial:'',
-                if:''
+                carType:'',//车辆类型
+                isVipCar:'0',//是否vip司机(1为是，0为否)(可选)
+                search:'',//车主账号(可选)，姓名，车牌号
             },
             optionsCarType:[
               
             ],
             tableData_point:[],//车主列表
+            selectRowData:{},
+            templateRadio:'',
         };
     },
      computed: {
@@ -145,12 +190,33 @@ export default {
     mounted(){
     },
     methods: {
+        getCurrentRow(index,row){       
+            this.selectRowData = Object.assign({},row);
+            this.templateRadio = index;
+            console.log('选中内容',row)
+        },
+        handlePageChange(obj) {
+            this.page = obj.pageNum;
+            this.pagesize = obj.pageSize;
+            this.init();
+        },
         //初始化选择项数据
         init(){
+
+            this.searchInfo.orderSerial = this.orderSerial;
+
             getDictionary(this.carType).then(res => {
                 console.log('```````',res)
                 this.optionsCarType = res.data;
             });
+
+            nearDriverList(this.searchInfo).then(res => {
+                console.log('111111',res)
+                this.dataTotal = res.data.length;
+                let pageStart =  (this.page - 1) * this.pagesize;
+                let pageEnd = this.page * this.pagesize;
+                this.tableData_point = res.data.slice(pageStart,pageEnd);
+            })
 
         },
         handleChange(val) {
@@ -164,17 +230,42 @@ export default {
         clickDetails(row, event, column){
             this.$refs.multipleTable.toggleRowSelection(row);
         },
-        pointSearch(){
-
+        pointSearch(type){
+            switch(type){
+                case 'search':
+                    this.init();
+                    break;
+                case 'clear':
+                    this.iftequan = false;
+                    this.$refs.ruleForm.resetFields();
+                    this.init();
+                    break;
+            }
         },
         pointXX(){
-
+            let pointData = Object.assign({},{orderSerial:this.orderSerial,driverId:this.selectRowData.driverId})
+            appointDriverList(pointData).then(res => {
+                console.log(res)
+                this.close()
+            }).catch(err => {
+                this.$message({
+                    type: 'info',
+                    message: '操作失败，原因：' + err.text ? err.text : err.errinfo
+                })
+            })
+            //  this.close()
         },
         close(){
             this.$emit('update:dialogFormVisible',false)
+            this.$refs.ruleForm.resetFields();
+            this.iftequan = false;
+            this.$emit('close');
+            if (typeof done === 'function') {
+                done()
+            }
         },
         ifTequan(value){
-            this.searchInfo.if = value == true ? '1' : '0';
+            this.searchInfo.isVipCar = value == true ? '1' : '0';
         }
         
     },
@@ -217,6 +308,7 @@ export default {
                     }
                     .el-table{
                         margin-top: 10px;
+                       
                     }
                 }
             }
@@ -256,7 +348,22 @@ export default {
                             th{
                                 color:#333;
                             }
+                            th .cell {
+                                white-space: normal;
+                                overflow: hidden;
+                                text-overflow: ellipsis;
+                                min-height: 26px;
+                                line-height: 26px;
+                            }
+                            .pointStance{
+                                color:red;
+                                font-weight:bold;
+                            }
                         }
+                    }
+
+                    .info_tab_footer{
+                        position: relative;
                     }
                 }
                

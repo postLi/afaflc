@@ -74,7 +74,8 @@
 				icon="el-icon-warning"
 				:params="selectRowData"
 				@getData="getDataList"
-				></shipperBlackDialog>
+				>
+                </shipperBlackDialog>
                 <shipperBlackDialog
 				btntext="移出黑名单"
 				type="info" 
@@ -166,7 +167,7 @@
 </template>
 
 <script>
-import {data_get_shipper_freezeType,data_get_shipper_BlackType,data_get_shipper_change,data_get_shipper_status,data_get_shipper_auid} from '@/api/users/shipper/all_shipper.js'
+import {data_get_shipper_status,data_get_shipper_auid} from '@/api/users/shipper/all_shipper.js'
 import { data_LogisticsCompanyList } from '@/api/users/logistics/LogisticsCompany.js'
 import createdDialog from './createdDialog.vue'
 import GetCityList from '@/components/GetCityList'
