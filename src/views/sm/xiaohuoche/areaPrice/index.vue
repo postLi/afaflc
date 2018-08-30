@@ -139,7 +139,7 @@
                                                 <el-select v-model="newValueService" clearable placeholder="请选择" @change="choseStyle">
                                                     <el-option
                                                         v-for="item in optionsService"
-                                                        :key="item.value"
+                                                        :key="item.id"
                                                         :label="item.name"
                                                         :value="item.code"
                                                         :disabled="item.disabled">
@@ -151,7 +151,7 @@
                                                 <el-select v-model="newValueCar" clearable placeholder="请选择" @change="choseStyle">
                                                     <el-option
                                                         v-for="item in optionsCar"
-                                                        :key="item.value"
+                                                        :key="item.id"
                                                         :label="item.name"
                                                         :value="item.code"
                                                         :disabled="item.disabled">
@@ -163,7 +163,7 @@
                                                 <el-select v-model="newValueStyle" clearable placeholder="请选择"   @change="choseVule">
                                                     <el-option
                                                         v-for="item in optionsStyle"
-                                                        :key="item.value"
+                                                        :key="item.id"
                                                         :label="item.carStyle"
                                                         :value="item.standardPid"
                                                         :disabled="item.disabled">

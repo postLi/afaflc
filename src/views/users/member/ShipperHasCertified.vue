@@ -66,13 +66,14 @@
 				</el-table-column>
                 <el-table-column prop="qq" label="QQ号码" width="200">
 				</el-table-column>
-                <el-table-column prop="otherService" label="会员服务承诺" width="225"  align="left">
+                <el-table-column prop="otherService" label="会员服务承诺" width="225" :show-overflow-tooltip="true" align="left">
                     <template slot-scope="scope" >
                         <div class="otherServiceTD">
                             <span class="otherService" v-for="(item,key) in JSON.parse(scope.row.otherService) " :key="key">
                                 {{item}}
                             </span>
                         </div>
+                        <!-- {{JSON.parse(scope.row.otherService)}} -->
                     </template>
 				</el-table-column>
                 <el-table-column prop="isOpenTms" label="是否开通TMS" width="120">
@@ -80,7 +81,6 @@
                         <span :class="scope.row.isOpenTms == 1 ? 'isTMS' : 'noTMS'"> {{scope.row.isOpenTms == 1 ? '是' : '否'}}</span>
                     </template>
 				</el-table-column>
-
                 </el-table>
             </div>
             <div class="info_tab_footer">共计:{{ totalCount }} <div class="show_pager"> <Pager :total="totalCount" @change="handlePageChange" /></div> </div>    

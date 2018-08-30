@@ -865,6 +865,9 @@ import '@/styles/dialog.scss'
                             .el-radio-group{
                                 display: inline-block;
                                 margin:0 9px;
+                                .el-radio{
+                                    margin: 5px 20px 5px 0px; 
+                                }
                             }
                             .el-checkbox-group{
                                 display: inline-block;

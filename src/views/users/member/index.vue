@@ -91,7 +91,7 @@
     // @import "@/styles/tab.scss";
     .member{
         .el-tabs--card>.el-tabs__header .el-tabs__item.is-active {
-           
+            background: rgba(236, 233, 230, 0.445);
             border-bottom-color: #ffffff;
         }
         .shipper_searchinfo{
@@ -173,11 +173,12 @@
                 // overflow:hidden;
             }
             .otherService{
-                text-align: left;
+                text-align: center;
                 display: inline-block;
                 margin: 2px 5px;
                 padding: 5px 15px;
                 background: #d0d7e5;
+                width: 90px;
                 color: #333333;
             }
 

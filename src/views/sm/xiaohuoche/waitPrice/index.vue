@@ -168,7 +168,7 @@
                                     <h4><span>* </span> 选择服务分类</h4>
                                     <div class="lesscommon">
                                         <el-checkbox-group v-model="serverCheckList">
-                                            <el-checkbox v-for="item in optionsServiceNew" :label="item.code" :key="item.name" >{{item.name}}</el-checkbox>
+                                            <el-checkbox v-for="item in optionsServiceNew" :label="item.code" :key="item.id" >{{item.name}}</el-checkbox>
                                         </el-checkbox-group>
                                     </div>
                                     <div class="infowrite">
@@ -188,7 +188,7 @@
                                     <div class="lesscommon ">
                                         <el-checkbox-group v-model="carCheckList">
 
-                                            <el-checkbox v-for="item in optionsCarNew" :label="item.code" :key="item.name">{{item.name}}</el-checkbox>
+                                            <el-checkbox v-for="item in optionsCarNew" :label="item.code" :key="item.id">{{item.name}}</el-checkbox>
                                             
                                         </el-checkbox-group>
                                     </div>
