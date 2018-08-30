@@ -14,8 +14,8 @@
             active-color="#ff4949"
             inactive-color="#13ce66"
             active-text="停用"
-            active-value="1"
-            inactive-value="0"
+            active-value="0"
+            inactive-value="1"
             inactive-text="启用">
             </el-switch>
              </div>
@@ -26,7 +26,7 @@
              <table class="ht_table">
             <tbody>
              <tr>
-             <th width="150">所属区域</th>
+             <th width="200">所属区域</th>
              <th width="100">车辆类型</th>   
              <th width="100">车主抽佣等级</th>                            
              <th width="70">1单/ 天</th>
@@ -40,12 +40,18 @@
             </tr>
              <tr>
              <td>
-                 <el-form-item  prop="areaCode"> 
-                     
-                    <vregion :ui="true" @values="regionChange" class="form-control" v-if="editType=='add'">
-                        <el-input v-model="formAll.areaCode" placeholder="请选择省/市/区/街道" ></el-input>
-                    </vregion>
+                 <el-form-item  prop="areaName" v-if="editType=='add'"> 
+                   <el-cascader
+                    size="large"
+                    :options="options"
+                    v-model="formAll.areaName"
+                    @change="handleChange"
+                     >
+                    </el-cascader>
                  </el-form-item>
+                <el-form-item v-else> 
+                    <el-input v-model="areaName" placeholder="" disabled ></el-input>   
+                </el-form-item>
             </td>
              <td> 
                  <el-form-item  prop="carType"> 
@@ -134,20 +140,19 @@
 import { data_Commission ,data_CarList,data_MaidLevel} from '@/api/server/areaPrice.js'
 import { data_get_orderFromsame_create,data_get_orderFromsame_update,data_get_orderFromsame_Id} from '@/api/marketing/carmarkting/orderFrom.js'
 import Upload from '@/components/Upload/singleImage'
-import vregion from '@/components/vregion/Region'
+import { regionDataPlus, CodeToText, TextToCode } from 'element-china-area-data'
 import { eventBus } from '@/eventBus'
 import {data_get_shipper_type,data_get_shipper_create,data_get_shipper_change,data_get_shipper_view} from '@/api/users/shipper/all_shipper.js'
 export default {
   components:{
     Upload,
-       vregion,
   },
   props:{
     paramsView:{
       type:Object,
     },
     params:{
-      type:[Object,String],
+      type:[Object,String,Array],
     },
     value:{
       type: String,
@@ -181,12 +186,16 @@ export default {
   data(){
     //    选择省市校验
         const belongCityNameValidator = (rule, val, cb) => {
-            if(!val){
+            if(val){
+            if(val.length<1){
             cb(new Error('所属地区不能为空'))
             }
             else{
                 cb()
-            }        
+            }                 
+            }else{
+            cb(new Error('所属地区不能为空'))
+            }   
         }
 
     //    选择车辆类型校验
@@ -225,12 +234,14 @@ export default {
     
 
         return{
+        areaName:null,
+        options:regionDataPlus,      
         dialogFormVisible_add: false,
         MaidLevelValueCar:'',
         optionsCar:[],
         MaidLevel:[],
         formAll:{
-            areaCode: null,
+            areaCode: [],
             carType:null,
             commissionGrade:null,
             reward1:null,
@@ -260,11 +271,11 @@ export default {
   watch:{
    dialogFormVisible_add:{
         handler: function(val, oldVal) {
+            if(!val){
+            this.$refs['formAll'].resetFields();
+            }            
         },
     },
-  },
-  components:{
-        vregion,
   },
   mounted(){
     //按钮类型text,primary...
@@ -276,13 +287,28 @@ export default {
     this.getMoreInformation();
   },
   methods:{
-     regionChange(d) {
-                console.log('data:',d)
-                this.formAll.areaCode = (!d.province&&!d.city&&!d.area&&!d.town) ? '': `${this.getValue(d.province)}${this.getValue(d.city)}${this.getValue(d.area)}${this.getValue(d.town)}`.trim();
-            },
-             getValue(obj){
-                return obj ? obj.value:'';
-            },
+        handleChange(d){
+           console.log('d',d)
+           if(d.length<3){
+                this.$message.info('请选择具体的城市');
+                this.formAll.areaName = [];
+                this.formAll.areaCode = [];
+                this.formAll.province = null
+                this.formAll.city = null
+                this.formAll.area = null
+           }
+           else{
+                this.formAll.areaCode = d
+                this.formAll.province = CodeToText[d[0]]
+                this.formAll.city =  CodeToText[d[1]]
+                if(d[2]==''){
+                this.formAll.area = null
+                }
+                else{
+                this.formAll.area = CodeToText[d[2]]
+                }
+           }
+        },
    openDialog:function(){
        if(this.editType=='edit'){
            if(!this.params.id){
@@ -295,6 +321,7 @@ export default {
            else{
             this.dialogFormVisible_add = true;
            data_get_orderFromsame_Id(this.params.id).then(res=>{
+                this.areaName = res.data.province+res.data.city+res.data.area
                 this.formAll = res.data
            })
            }
@@ -322,12 +349,9 @@ export default {
                       res.data.map((item)=>{
                         this.MaidLevel.push(item);
                     })
-                
-                      
                 }).catch(res=>{
                     console.log(res)
                 });    
-                
           }, 
     changeList(){
             eventBus.$emit('pushListtwo')
@@ -335,26 +359,42 @@ export default {
     // 同城新增    
    add_data(){
        this.$refs['formAll'].validate(valid=>{
-        var forms= Object.assign({}, this.formAll);
         if(valid){
+            if(this.formAll.area){
+                this.formAll.areaCode.splice(0,2)
+            }
+            else{
+                 this.formAll.areaCode.splice(0,1)
+                 this.formAll.areaCode.pop()
+            }
+         this.formAll.areaCode =String(this.formAll.areaCode)
+        var forms=[{
+            areaCode:this.formAll.areaCode,
+            carType:this.formAll.carType,
+            commissionGrade:this.formAll.commissionGrade,
+            reward1:this.formAll.reward1,
+            reward2:this.formAll.reward2,
+            reward3:this.formAll.reward3,
+            reward4:this.formAll.reward4,
+            reward5:this.formAll.reward5,
+            reward6:this.formAll.reward6,
+            reward7:this.formAll.reward7,
+            reward8:this.formAll.reward8,
+            province:this.formAll.province,
+            city:this.formAll.city,
+            area:this.formAll.area,
+        }]
+
         data_get_orderFromsame_create(forms).then(res=>{
             console.log('res',res);
             this.dialogFormVisible_add = false;
             this.changeList();
-            this.formAll={
-            areaCode: null,
-            carType:null,
-            commissionGrade:null,
-            startNum:null,
-            endNum:null,
-            commissionPer:null,
-            commissionLowest:null,
-            }
-           this.$refs['formAll'].resetFields();
-        this.$message.success('新增成功');
+            this.$refs['formAll'].resetFields();
+            this.$message.success('新增成功');
         }).catch(res=>{
             console.log(res)
-        this.$message.success('新增失败');
+            this.dialogFormVisible_add = false;    
+            this.$message.error('新增失败');
        });
        }
        }
@@ -425,6 +465,10 @@ export default {
             border-right:1px solid #d0d7e5;
             .el-form-item{
             margin-bottom: 0px!important;
+            width:100%;
+            }
+            .el-cascader{
+                width:100%
             }
             .el-input{
                 width:100%;
@@ -443,10 +487,6 @@ export default {
             .el-switch{
                 display: inline-block!important;
             }
-        }
-        .v-dropdown-container{
-          top: 41px!important;
-          left: 0px!important;
         }
         .el-dialog__footer{
             padding: 20px 20px 20px;

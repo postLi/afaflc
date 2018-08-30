@@ -64,7 +64,10 @@
                <el-table style="width: 100%" stripe border height="100%" @row-click="clickDetails" highlight-current-row :data="tableDataAll"  >
             <el-table-column  label="序号" width="80px" type="index">
             </el-table-column>
-            <el-table-column  label="所属区域" prop="areaCode" show-overflow-tooltip>
+            <el-table-column  label="所属区域" show-overflow-tooltip>
+                <template slot-scope="scope">
+                    {{scope.row.province+scope.row.city+scope.row.area}}
+                </template>
             </el-table-column>
             <el-table-column  label="奖励额度限制" prop="rewardMax">
             </el-table-column>

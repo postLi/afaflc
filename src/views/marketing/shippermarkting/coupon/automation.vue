@@ -129,7 +129,10 @@
                     ></automationcheck>
                 </template>
             </el-table-column>
-            <el-table-column  label="所属区域" prop="areaCode">
+            <el-table-column  label="所属区域" >
+                <template slot-scope="scope">
+                    {{scope.row.province+scope.row.city+scope.row.area}}
+                </template>
             </el-table-column>
             <el-table-column  label="已派发优惠券金额" prop="distribution">
             </el-table-column>       

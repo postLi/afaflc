@@ -306,10 +306,6 @@ export default {
       height: 30px;
       line-height: 30px;
     }
-    .v-dropdown-container{
-        top:35px!important;
-        left:0px!important;
-    }
     .el-button{
       padding: 8px 20px!important;
     }
