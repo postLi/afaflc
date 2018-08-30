@@ -8,7 +8,7 @@ export default {
   name: '用户管理',
   icon: 'zonghe', 
   children: [
-      { path: '/users/index', icon: 'hzyx', hidden: false, name: '货主管理', component: _import('users/index'), meta: { title: '货主管理', stitle: '货主',noCache: true },
+      { path: '/users/index', icon: 'hzyx', hidden: false, name: '货主管理', component: _import('users/index'), meta: { title: '货主管理', stitle: '货主',noCache: false },
       },
       { path: '/users/carowner', icon: 'chezgl', hidden: false, name: '车主管理', component: _import('users/carowner/index'), meta: { title: '车主管理',stitle: '车主', noCache: true }},
       { path: '/users/member', icon: 'wlgs', hidden: false, name: '物流公司', component: _import('users/member/index'), meta: { title: '物流公司',stitle: '会员', noCache: true }},
