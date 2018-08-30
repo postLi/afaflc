@@ -104,9 +104,9 @@ export default {
       errInfo: false,
       //模拟登陆信息
       loginForm: {
-        accNum: '',
-        username: '',
-        password: ''
+        accNum: '4',
+        username: 'admin',
+        password: '123456'
       },
       loginRules: {
         accNum: [{ required: true, trigger: 'blur' }],
