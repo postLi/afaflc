@@ -114,8 +114,8 @@ export default {
       dataTotal:null,
       tableDataAll:[],
       radio: 1,
-      optionsCar:[],
-      serviceCardList:[],
+      optionsCar:[{code:null,name:'全部'}],
+      serviceCardList:[{code:null,name:'全部'}],
 		formAllData:{
             areaCode: null,
             carType:null,
@@ -131,13 +131,28 @@ export default {
         modOwner
     },
     methods:{
-            regionChange(d) {
-                console.log('data:',d)
-                this.formAllData.areaCode = (!d.province&&!d.city&&!d.area&&!d.town) ? '': `${this.getValue(d.province)}${this.getValue(d.city)}${this.getValue(d.area)}${this.getValue(d.town)}`.trim();
-            },
-             getValue(obj){
-                return obj ? obj.value:'';
-            },
+        handleChange(d){
+           console.log('d',d)
+           if(d.length<3){
+                this.$message.info('请选择具体的城市');
+                this.formAllData.areaCode = null;
+                this.formAllData.province = null,
+                this.formAllData.city = null,
+                this.formAllData.area = null,
+                this.formAllData.areaName = [];
+           }
+           else{
+                this.formAllData.areaCode = d
+                this.formAllData.province = CodeToText[d[0]]
+                this.formAllData.city =  CodeToText[d[1]]
+                if(d[2]==''){
+                this.formAllData.area = ''
+                }
+                else{
+                this.formAllData.area = CodeToText[d[2]]
+                }
+           }
+        },
             //获取  服务和车辆 类型列表
             getMoreInformation(){
                 data_CarList().then(res=>{

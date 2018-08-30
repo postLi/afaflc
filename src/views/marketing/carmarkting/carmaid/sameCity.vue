@@ -145,10 +145,6 @@ export default {
                 this.formAllData.city = null,
                 this.formAllData.area = null,
                 this.formAllData.areaName = [];
-                console.log('d1',this.formAllData.province)
-                console.log('d2',this.formAllData.city)
-                console.log('d3',this.formAllData.area)
-                console.log('d4',this.formAllData.areaName)
            }
            else{
                 this.formAllData.areaCode = d
@@ -171,7 +167,6 @@ export default {
                     })
                     })
                 data_MaidLevel().then(res=>{
-                    console.log('df',res)
                       res.data.map((item)=>{
                         this.MaidLevel.push(item);
                     })
@@ -182,7 +177,24 @@ export default {
           },
           // 列表刷新页面  
             firstblood(){
-                data_get_Marketingsame_list(this.page,this.pagesize,this.formAllData).then(res => {
+                let FromData = {}
+                if(this.formAllData.area) {
+                    FromData = {
+                     area:this.formAllData.area,
+                     city:null,
+                     carType:this.formAllData.carType,
+                     commissionGrade:this.formAllData.commissionGrade,               
+                    }
+                }
+                else if(this.formAllData.city){
+                    FromData = {
+                     area:null,
+                     city:this.formAllData.city,
+                     carType:this.formAllData.carType,
+                     commissionGrade:this.formAllData.commissionGrade,               
+                    }                    
+                }
+                data_get_Marketingsame_list(this.page,this.pagesize,FromData).then(res => {
                   console.log(res)
                     this.dataTotal = res.data.totalCount
                     this.tableDataAll = res.data.list;
@@ -193,6 +205,7 @@ export default {
          getData_query(){
           this.firstblood();
           },
+  
          // 选择行
          clickDetails(i){
            this.selectRowData = i

@@ -346,7 +346,7 @@ export default {
         dataTotal:null,
         autocheck:'first',
         dialogFormVisible_add:false,
-         createTime:[],
+        createTime:[],
         inputKey:null,   
         dialogFormVisible_add:false,
         formLabelWidth:'120px',

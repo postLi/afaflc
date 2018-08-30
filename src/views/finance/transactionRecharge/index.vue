@@ -2,48 +2,62 @@
  <div class="transactionRecharge clearfix">
   <div class="finance_searchinfo">
    <el-form :inline="true">
-            <el-form-item label="用户姓名：">
-            <el-input v-model="fromData.a1" placeholder="请输入内容" clearable></el-input>
-            </el-form-item>
             <el-form-item label="电话号码：">
-                  <el-input v-model="fromData.a2" placeholder="请输入内容" clearable></el-input>
+                  <el-input v-model="formAllData.mobile" placeholder="请输入内容" clearable></el-input>
             </el-form-item>
             <el-form-item label="充值渠道：">
-                  <el-input v-model="fromData.a3" placeholder="请输入内容" clearable></el-input>
+                  <el-select v-model="formAllData.rechargeChannel" clearable placeholder="请选择" >
+                          <el-option
+                              v-for="item in rechargeChannelList"
+                               :key="item.code"
+                               :label="item.name"
+                               :value="item.code"
+                               :disabled="item.disabled">
+                         </el-option>
+                 </el-select>               
             </el-form-item>
             <el-form-item label="充值方式：">
-                  <el-input v-model="fromData.a4" placeholder="请输入内容" clearable></el-input>
+                  <el-select v-model="formAllData.rechargeWay" clearable placeholder="请选择" >
+                          <el-option
+                              v-for="item in rechargeWayList"
+                               :key="item.code"
+                               :label="item.name"
+                               :value="item.code"
+                               :disabled="item.disabled">
+                         </el-option>
+                 </el-select>                  
             </el-form-item>
             <el-form-item label="充值时间：">
                     <el-date-picker
                         is-range
                         type="daterange"
-                        v-model="fromData.a5"
+                        v-model="createTime"
                         range-separator="至"
                         start-placeholder="开始时间"
                         end-placeholder="结束时间"
                         placeholder="选择时间范围"
                         value-format="yyyy-MM-dd HH:mm:ss"
                         :default-time="['00:00:00', '23:59:59']"
+                        @change='cTime'
                         >
                     </el-date-picker>
             </el-form-item>                  
             <el-form-item>       
-          <el-button type="primary"  plain>查询</el-button> 
+          <el-button type="primary"  plain @click="seach_data">查询</el-button> 
           </el-form-item>
           </el-form>
             </div>
             <div class="classify_info">
-           <el-table style="width: 100%" stripe border height="100%" highlight-current-row :data="tableDataAll">
+           <el-table style="width: 100%" stripe border height="100%" highlight-current-row :data="tableDataAll" @row-click="clickDetails">
             <el-table-column  label="序号" width="80px" type="index">
             </el-table-column>
-            <el-table-column  label="用户账号" prop="name">
+            <el-table-column  label="用户账号" prop="mobile">
             </el-table-column>
             <el-table-column  label="充值赠送" prop="giveSum">
             </el-table-column>
-            <el-table-column  label="充值渠道" prop="rechargeChannel">
+            <el-table-column  label="充值渠道" prop="rechargeChannelName">
             </el-table-column>
-            <el-table-column  label="充值方式" prop="rechargeWay">
+            <el-table-column  label="充值方式" prop="rechargeWayName">
             </el-table-column>
             <el-table-column  label="流水号" prop="rechargeSerial">
             </el-table-column>
@@ -55,8 +69,6 @@
         <div class="info1_tab_footer">共计:{{ dataTotal }} <div class="show_pager"> <Pager :total="dataTotal" @change="handlePageChange"  :sizes="sizes"/></div> </div>  
                 </div>
             </div>
-     
-        
     </div>
 </template>
 
@@ -68,19 +80,41 @@ import {data_financeList,data_GetServerType,data_GetServerType2,data_GetServerTy
  export default{
         data(){
             return{
-              sizes:[30,50,100],
-              tableDataAll:[],
-              totalCount:null,
-              dataTotal:0,                
-              fromData:{
-               a1:null,
-               a2:null,
-               a3:null,
-               a4:null,
-               a5:null,
-              },
-               pagesize:30,//每页显示数
+               sizes:[20,50,100],
+               tableDataAll:[],
+               totalCount:null,
+               dataTotal:0,                
+               pagesize:20,//每页显示数
                page:1,//当前页     
+               createTime:[],
+               rechargeChannelList:[
+                {
+                    code:null,
+                    name:'全部'
+                },
+                {
+                   code:'0',
+                   name:'APP',
+                },
+                {
+                   code:'1',
+                   name:'WEB',                
+                }
+                ],
+                rechargeWayList:[
+                 {
+                    code:null,
+                    name:'全部'
+                 },
+                   {
+                   code:'0',
+                   name:'支付宝',
+                },
+                {
+                   code:'1',
+                   name:'微信',                
+                }
+                ],               
                formAllData:{
                    name:null,
                    mobile:null,
@@ -111,6 +145,16 @@ import {data_financeList,data_GetServerType,data_GetServerType2,data_GetServerTy
                 this.pagesize = obj.pageSize
                 this.firstblood();
         },      
+        cTime(i){
+            this.formAllData.startRechargeTime = i[0];
+            this.formAllData.endRechargeTime = i[1];
+        },
+        seach_data(){
+                this.firstblood()
+        },
+        clickDetails(i){
+           console.log(i)
+        }
         }
     }
 </script>
@@ -133,10 +177,6 @@ import {data_financeList,data_GetServerType,data_GetServerType2,data_GetServerTy
     }
     .el-date-editor{
         width: 280px;
-    }
-    .v-dropdown-container{
-        top:35px!important;
-        left:0px!important;
     }
     .el-range-editor{
         margin-left:0px;

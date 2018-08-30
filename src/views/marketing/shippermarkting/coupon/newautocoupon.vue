@@ -452,8 +452,6 @@ export default {
                    this.$message.warning('派发数量仅能输入正整数');
                      return false
                     }
-
-
                     if(this.formAllData.aflcCouponList[i].remissionDiscount){
                    if(this.formAllData.aflcCouponList[i].couponType==null){
                        this.$message.warning('请选择优惠卷类型');
@@ -606,20 +604,6 @@ export default {
             border-right:1px solid #d0d7e5;
             border-bottom:1px solid #d0d7e5;
         }
-        // .table_th1{width: 68px;}
-        // .table_th2{width: 82px;}
-        // .table_th3{width: 82px;}
-        // .table_th4{width: 72px;}
-        // .table_th5{width: 128px;}
-        // .table_th6{width: 68px;}
-        // .table_th7{width: 68px;}
-        // .table_th8{width: 68px;}
-        // .table_th9{width: 90px;text-align: center;}
-        // .table_th10{width: 90px;text-align: center;}
-        // .table_th11{width: 96px;}
-        // .table_th12{width: 96px;}
-        // .table_th13{width: 68px}
-        // .table_th14{width: 124px}
         .table_th1{width: 5%;}
         .table_th2{width: 10%;}
         .table_th3{width: 6%;}

@@ -18,7 +18,7 @@ export default {
             component: _import('finance/transactionCash/index'), 
             meta: { title: '提现管理', noCache: true },
             children:[
-                { 
+                {
                     path: '/finance/transactionCash/cashSet', 
                     hidden: false, 
                     name: '提现配置', 
