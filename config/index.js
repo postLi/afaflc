@@ -4,7 +4,9 @@ var path = require('path')
 module.exports = {
   build: {
     env: require('./prod.env'),
-    index: path.resolve(__dirname, '../dist/index.html'),
+    //index: path.resolve(__dirname, '../dist/index.html'),
+    index: path.resolve(__dirname, '../tmpdist/index.html'),
+    assetsRootTemp: path.resolve(__dirname, '../tmpdist'),
     assetsRoot: path.resolve(__dirname, '../dist'),
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
@@ -20,7 +22,7 @@ module.exports = {
     // `npm run build --report`
     // Set to `true` or `false` to always turn it on or off
     bundleAnalyzerReport: process.env.npm_config_report,
-    productionSourceMap: true,
+    productionSourceMap: false,
     // https://webpack.js.org/configuration/devtool/#production
     devtool: '#source-map',
   },
@@ -29,21 +31,44 @@ module.exports = {
   },
   dev: {
     env: require('./dev.env'),
-    port: 9520,
+    host: '0.0.0.0',
+    port: 9529,
     autoOpenBrowser: true,
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
     proxyTable: {
       '/api' : {
-
         target: "http://192.168.1.78:7010",
-        // target: "http://192.168.1.157:7010",
-
-        //target: "http://192.168.1.233:7010",
-        pathRewrite: {'^/api': ''}
+        pathRewrite: {'^/api': ''},
+        changeOrigin: true
+      },
+    //   '/localapi' : {
+    //     target: "http://192.168.1.233:7010",
+    //     // target: 'http://192.168.1.23:7010',
+    //     pathRewrite: {'^/localapi': ''}
+    //   },
+    //   '/wukunzhi': {
+    //     target: "http://192.168.1.42:7010",
+    //     pathRewrite: {'^/wukunzhi': ''},
+    //     changeOrigin: true
+    //   },
+    //   '/huangyuwen': {
+    //     target: "http://192.168.1.23:7010",
+    //     pathRewrite: {'^/huangyuwen': ''},
+    //     changeOrigin: true
+    //   },
+    //   '/dingfei': {
+    //     target: "http://192.168.1.34:7010",
+    //     pathRewrite: {'^/dingfei': ''},
+    //     changeOrigin: true
+    //   },
+      '/ceshi': {
+        target: "http://192.168.1.169:7010",
+        pathRewrite: {'^/ceshi': ''},
+        changeOrigin: true
       }
     },
-    // vue-cli 
+    // vue-cli
     errorOverlay: true,
     notifyOnErrors: true,
     poll: false, // https://webpack.js.org/configuration/dev-server/#devserver-watchoptions-
