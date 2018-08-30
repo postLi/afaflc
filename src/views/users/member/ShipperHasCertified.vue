@@ -19,16 +19,7 @@
         </div>
         <div class="classify_info">
 		    <div class="btns_box">
-                <createdDialog 
-                btntext="修改"
-                :plain="true"
-                type="primary" 
-                btntype="primary"
-                icon="el-icon-edit"
-                editType="edit"
-                btntitle="修改"
-                :params="selectRowData"
-                @getData="getDataList"></createdDialog>
+                <el-button type="primary" plain @click="handleChange">修改</el-button>
 		    </div>
             <div class="info_news">
                 <el-table
@@ -52,7 +43,8 @@
                 </el-table-column>   
 				<el-table-column label="手机号(会员账号)" width="150">
                     <template slot-scope="scope">
-                        <createdDialog :paramsView="scope.row" btntype="text" :btntext="scope.row.mobile" editType="view" btntitle="详情"></createdDialog>
+                        <!-- <createdDialog :paramsView="scope.row" btntype="text" :btntext="scope.row.mobile" editType="view" btntitle="详情"></createdDialog> -->
+                        <h4 class="needMoreInfo" @click="pushOrderSerial(scope.row)">{{ scope.row.mobile}}</h4>
                     </template>
 				</el-table-column>
 				<el-table-column prop="contactsName" label="注册人姓名" width="150">
@@ -93,6 +85,7 @@
             </div>
             <div class="info_tab_footer">共计:{{ totalCount }} <div class="show_pager"> <Pager :total="totalCount" @change="handlePageChange" /></div> </div>    
 
+            <createdDialog :paramsView="paramsView" :editType="type"  :dialogFormVisible_add.sync = "dialogFormVisible_add" @getData="getDataList"/>
 	    </div>
     </div>
 </template>
@@ -116,6 +109,7 @@ export default {
     },
     data(){
         return {
+            paramsView:{},
             templateRadio:'',
             options:[],
             tableData3:[],
@@ -128,7 +122,9 @@ export default {
                 mobile:'',
                 authStatus:"AF0010403",//已认证的状态码
             },
-            selectRowData:{}
+            selectRowData:{},
+            dialogFormVisible_add:false,
+            type:'',
         }
     },
     watch: {
@@ -156,10 +152,22 @@ export default {
             this.pagesize = obj.pageSize
             this.firstblood()
         },
-         getCurrentRow(index,row){       
+        getCurrentRow(index,row){       
             this.selectRowData = Object.assign({},row);
             this.templateRadio = index;
             console.log('选中内容',row)
+        },
+        handleChange(){
+            if(Object.keys(this.selectRowData).length == 0){
+                return this.$message({
+                    type: 'info',
+                    message: '请选择一条记录进行操作'
+                })
+            }else{
+                this.type = 'edit';
+                this.paramsView = this.selectRowData;
+                this.dialogFormVisible_add =true;
+            }
         },
         // 选中值判断
         handleCurrentChangeRow(val){
@@ -167,24 +175,19 @@ export default {
             this.selectRowData = val
         },
         //刷新页面
-      firstblood(){
-        data_LogisticsCompanyList(this.page,this.pagesize,this.formInline).then(res=>{
-            this.totalCount = res.data.totalCount;
-            this.tableData3 = res.data.list;
-            // this.inited = false;
+        firstblood(){
+            data_LogisticsCompanyList(this.page,this.pagesize,this.formInline).then(res=>{
+                this.totalCount = res.data.totalCount;
+                this.tableData3 = res.data.list;
+                // this.inited = false;
 
-        })
-      },
-        handleSizeChange(val) {
-        console.log(`每页 ${val} 条`);
-        this.pagesize=val
-        this.firstblood()
-      },
-      handleCurrentChange(val) {
-        console.log(`当前页: ${val}`);
-        this.page=val
-        this.firstblood()
-      },
+            })
+        },
+        pushOrderSerial(row){
+            this.type = 'view';
+            this.paramsView = row;
+            this.dialogFormVisible_add =true;
+        },
        //点击查询按纽，按条件查询列表
         getdata_search(event){
             this.firstblood()

@@ -123,7 +123,8 @@
                 </el-table-column>  
 				<el-table-column label="手机号(会员账号)" width="150">
                     <template slot-scope="scope">
-                        <createdDialog :paramsView="scope.row" btntype="text" :btntext="scope.row.mobile" editType="view" btntitle="详情"></createdDialog>
+                        <!-- <createdDialog :paramsView="scope.row" btntype="text" :btntext="scope.row.mobile" editType="view" btntitle="详情"></createdDialog> -->
+                        <h4 class="needMoreInfo" @click="pushOrderSerial(scope.row)">{{ scope.row.mobile}}</h4>
                     </template>
 				</el-table-column>
 				<el-table-column prop="contactsName" label="注册人姓名" width="150">
@@ -162,8 +163,12 @@
 				</el-table>
 			</div>
 		</div>
-        <div class="info_tab_footer">共计:{{ totalCount }} <div class="show_pager"> <Pager :total="totalCount" @change="handlePageChange" /></div> </div>    
+        <div class="info_tab_footer">共计:{{ totalCount }} <div class="show_pager"> <Pager :total="totalCount" @change="handlePageChange" /></div> </div>
+
+        <createdDialog :paramsView="paramsView" :editType="type"  :dialogFormVisible_add.sync = "dialogFormVisible_add" @getData="getDataList"/>
     </div>
+
+    
 </template>
 
 <script>
@@ -192,36 +197,39 @@ export default {
 	},
   data(){
       return{
-        templateRadio:'',
-        ul:true,
-		freeze:true,//是否冻结
-		options:[],
-		optionsStatus:[
-			{
-			code:null,
-			name:'全部'
-			}
-		],
-		optionsAuidSataus:[
-			{
-			code:null,
-			name:'全部'
-			}
-		],
-		formAll:{
-			belongCity: null,
-			authStatus:null,
-			accountStatus:null,
-			accountName:null,
-			mobile:null
-		},
-		selectRowData:{},
-		page:1,
-		pagesize:20,
-		totalCount:null,
-		tableDataAll:[],
-		
-		}
+            dialogFormVisible_add:false,
+            type:'',
+            paramsView:{},
+            templateRadio:'',
+            ul:true,
+            freeze:true,//是否冻结
+            options:[],
+            optionsStatus:[
+                {
+                code:null,
+                name:'全部'
+                }
+            ],
+            optionsAuidSataus:[
+                {
+                code:null,
+                name:'全部'
+                }
+            ],
+            formAll:{
+                belongCity: null,
+                authStatus:null,
+                accountStatus:null,
+                accountName:null,
+                mobile:null
+            },
+            selectRowData:{},
+            page:1,
+            pagesize:20,
+            totalCount:null,
+            tableDataAll:[],
+            
+            }
     },
     created(){
 
@@ -246,6 +254,11 @@ export default {
         })
     },
     methods:{
+        pushOrderSerial(row){
+            this.type = 'view';
+            this.paramsView = row;
+            this.dialogFormVisible_add =true;
+        },
         getCurrentRow(index,row){       
             this.selectRowData = Object.assign({},row);
             this.templateRadio = index;

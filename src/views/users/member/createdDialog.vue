@@ -1,12 +1,11 @@
 <template>
      <div class="creatDialog commoncss">
-      <el-button :type="type" :value="value" :plain="plain" :icon="icon" @click="openDialog">{{text}}</el-button>
-      <el-dialog :title="title" :visible.sync="dialogFormVisible_add" :before-close="change" :close-on-click-modal="false" >
+      <!-- <el-button :type="type" :value="value" :plain="plain" :icon="icon" @click="openDialog">{{text}}</el-button> -->
+      <el-dialog :title="title" :visible="dialogFormVisible_add" :before-close="close" :close-on-click-modal="false" >
         <el-form :model="xinzengform" ref="xinzengform" :rules="rulesForm">
             <el-row>
                 <el-col :span="12">
                     <el-form-item label="会员手机号码 ：" :label-width="formLabelWidth"  v-if="editType !='add'">
-                        <!-- <el-input v-model="xinzengform.mobile" auto-complete="off"  disabled></el-input> -->
                         <span class="onlyShow" disabled>{{xinzengform.mobile}}</span>
                     </el-form-item>
                     <el-form-item label="会员手机号码 ：" prop="mobile" :label-width="formLabelWidth" required v-else>
@@ -148,7 +147,6 @@
                 <el-col :span="12">
                     <el-form-item label="是否开通TMS ：" :label-width="formLabelWidth">
                         <span class="onlyShow" v-if="editType=='view'" disabled>{{xinzengform.isOpenTms == 1 ? '是' : '否'}}</span>
-                        <!-- <el-input :maxlength="20"  v-model="xinzengform.isOpenTmsName"  v-if="editType=='view'" disabled></el-input> -->
                         <el-radio-group v-model="xinzengform.isOpenTms" v-else>
                             <el-radio  v-for="(obj,key) in optionsStatus" :label="obj.value" :key='key'>{{obj.name}}</el-radio>
                         </el-radio-group>
@@ -172,9 +170,7 @@
                             </span>
                         </p>
                         <el-checkbox-group v-model="optionsServerArr" v-else>
-                            <span>
                                 <el-checkbox v-for="obj in optionsServer" :label="obj.code" :key="obj.id" >{{obj.name}}</el-checkbox>
-                            </span>
                         </el-checkbox-group>
                     </el-form-item>
                 </el-col>
@@ -189,9 +185,7 @@
                             </span>
                         </p>
                         <el-checkbox-group v-model="optionsProductArr" v-else>
-                            <span>
                                 <el-checkbox v-for="obj in optionsProductService" :label="obj.code" :key="obj.id" >{{obj.name}}</el-checkbox>
-                            </span>
                         </el-checkbox-group>
                     </el-form-item>
                 </el-col>
@@ -206,9 +200,7 @@
                             </span>
                         </p>
                         <el-checkbox-group v-model="otherServiceCode" v-else>
-                            <span>
                                 <el-checkbox v-for="obj in optionsLogisticsCompany" :label="obj.code" :key="obj.id" >{{obj.name}}</el-checkbox>
-                            </span>
                         </el-checkbox-group>
                     </el-form-item>
                 </el-col>
@@ -302,6 +294,10 @@ export default {
     /*add新增，edit编辑，view查看*/
     editType: {
       type: String,
+    },
+    dialogFormVisible_add:{
+        type:Boolean,
+        // required:true
     }
   },
   data(){
@@ -348,7 +344,7 @@ export default {
             defaultImg:'/static/test.jpg',//默认第一张图片的url
             cc:'企业货主',
             selectFlag:false,
-            dialogFormVisible_add: false,
+            // dialogFormVisible_add: false,
             type:'primary',
             title:'',
             text:'',
@@ -395,18 +391,10 @@ export default {
     watch:{
         dialogFormVisible_add:{
             handler: function(val, oldVal) {
-                if(!val){
-                    this.selectFlag=false;
-                    this.$refs.xinzengform.resetFields();
-                    if(this.editType == 'add'){
-                        this.xinzengform = {
-                            registerOrigin:'WEB',
-                            isDirectional: '0',
-                        }
-                    }
-                    if(this.$refs.area){
-                        this.$refs.area.selectedOptions = [];
-                    }
+                if(val){
+                    console.log(val)
+                    this.openDialog();
+                    this.getMoreInformation()
                 }
             },
         },
@@ -429,7 +417,7 @@ export default {
                     this.xinzengform.otherService = JSON.stringify(otherService);
                 }
             }
-        }
+        },
     },
     mounted(){
         //按钮类型text,primary...
@@ -440,7 +428,7 @@ export default {
         this.title = this.btntitle;
 
         // console.log('btntitle',this.text)
-        this.getMoreInformation()
+        // this.getMoreInformation()
     },
     methods:{
         regionChange(d) {
@@ -450,64 +438,39 @@ export default {
         getValue(obj){
             return obj ? obj.value:'';
         },
-        //关闭弹框
-        close(formName){
-            this.dialogFormVisible_add = false;
-        },
         //事件分发
         changeList(){
-            eventBus.$emit('changeList')
+            eventBus.$emit('changeList');
         },
         openDialog(){
-            console.log('parmas:',this.params)
+            // console.log('parmas:',this.params)
             console.log(this.editType)
-            if(Object.keys(this.params).length == 0){
-                return this.$message({
-                    type: 'info',
-                    message: '请选择一条记录进行操作'
-                })
-            }else{
-                if(this.editType == 'edit'){
-                    this.xinzengform = JSON.parse(JSON.stringify(this.params))
-                    this.dialogFormVisible_add = true;
-                    if(this.xinzengform.otherServiceCode != ''){
-                        this.otherServiceCode = JSON.parse(this.xinzengform.otherServiceCode) 
-                    }
-                    if(this.xinzengform.serviceType != ''){
-                        this.optionsServerArr = JSON.parse(this.xinzengform.serviceType) 
-                    }
-                    if(this.xinzengform.productServiceCode != ''){
-                        this.optionsProductArr = JSON.parse(this.xinzengform.productServiceCode) 
-                    }
+            if(this.editType == 'edit'){
+
+                this.xinzengform = JSON.parse(JSON.stringify(this.paramsView))
+                if(this.xinzengform.otherServiceCode != ''){
+                    this.otherServiceCode = JSON.parse(this.xinzengform.otherServiceCode) 
+                }
+                if(this.xinzengform.serviceType != ''){
+                    this.optionsServerArr = JSON.parse(this.xinzengform.serviceType) 
+                }
+                if(this.xinzengform.productServiceCode != ''){
+                    this.optionsProductArr = JSON.parse(this.xinzengform.productServiceCode) 
+                }
                     // this.xinzengform.isVip = this.xinzengform.isVip == 1 ? '1' : '0'
-                }
-                else if(this.editType == 'view'){
-                    this.dialogFormVisible_add = true;
-                    this.xinzengform  = Object.assign({},this.paramsView) ;
-                    if(this.xinzengform.otherService != ''){
-                        this.otherService = JSON.parse(this.xinzengform.otherService) 
-                    }
-                    if(this.xinzengform.serviceType != ''){
-                        this.serviceTypeName = JSON.parse(this.xinzengform.serviceTypeName) 
-                    }
-                    if(this.xinzengform.productServiceCode != ''){
-                        this.productService = JSON.parse(this.xinzengform.productService) 
-                    }
-                }
 
             }
-            
-            
-            
-        },
-        change() {
-            this.dialogFormVisible_add = false;
-        },
-        changeSelect(){
-            if(this.editType==='add'){
-                this.selectFlag=false
-            } else{
-                this.selectFlag=true
+            else if(this.editType == 'view'){
+                this.xinzengform  = Object.assign({},this.paramsView) ;
+                if(this.xinzengform.otherService != ''){
+                    this.otherService = JSON.parse(this.xinzengform.otherService) 
+                }
+                if(this.xinzengform.serviceType != ''){
+                    this.serviceTypeName = JSON.parse(this.xinzengform.serviceTypeName) 
+                }
+                if(this.xinzengform.productServiceCode != ''){
+                    this.productService = JSON.parse(this.xinzengform.productService) 
+                }
             }
         },
         //获取货主类型
@@ -522,11 +485,56 @@ export default {
                 this.optionsServer = resArr[2].data;
             })
         },
+        close(done) {
+            this.$emit('update:dialogFormVisible_add', false);
+            this.$emit('getData');
+            if (typeof done === 'function') {
+                done()
+            }
+        },
+        completeInfo(){
+            if(this.xinzengform.belongBrandCode){
+                this.xinzengform.belongBrand = this.optionsBelongBrand.find(item => item.code === this.xinzengform.belongBrandCode)['name'];
+            }
+            //  console.log(this.xinzengform.belongBrandCode,this.xinzengform.belongBrand)
+
+            let serviceTypeName = [];
+            let productServiceName = [];
+            // let otherServiceName =  [];
+
+            this.optionsServerArr.forEach(el=>{
+                this.optionsServer.forEach(item => {
+                    if(el == item.code){
+                        serviceTypeName.push(item.name)
+                    }
+                })
+            })
+            
+            this.optionsProductArr.forEach(el=>{
+                this.optionsProductService.forEach(item => {
+                    if(el == item.code){
+                        productServiceName.push(item.name)
+                    }
+                })
+            })
+
+            //服务类型
+            this.xinzengform.serviceType = JSON.stringify(this.optionsServerArr);                         
+            this.xinzengform.serviceTypeName = JSON.stringify(serviceTypeName);
+            //产品与服务
+            this.xinzengform.productServiceCode = JSON.stringify(this.optionsProductArr);                         
+            this.xinzengform.productService = JSON.stringify(productServiceName);
+            //增值服务
+            // this.xinzengform.otherServiceCode = JSON.stringify(this.otherServiceCodeArr);                         
+            // this.xinzengform.otherService = JSON.stringify(otherServiceName);
+        },
         // 保存
         onSubmit(){
             this.$refs['xinzengform'].validate((valid)=>{
                 if(valid){
+                    this.completeInfo();
                     var forms=Object.assign({},this.xinzengform)
+                    console.log(forms)
                     switch  (this.editType){
                         case 'edit':
                             data_ChangeLogisticsCompany(forms).then(res=>{
@@ -534,8 +542,7 @@ export default {
                                 this.$alert('操作成功', '提示', {
                                     confirmButtonText: '确定',
                                     callback: action => {
-                                        this.dialogFormVisible_add = false;
-                                        this.$emit('getData')
+                                        this.close();
                                         this.changeList();
                                     }
                                 });
@@ -559,9 +566,11 @@ export default {
     }
     }
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
     .creatDialog{
-        
+        .el-row{
+            margin: 5px 0;
+        }
         .el-dialog__footer{
             border-top:1px solid #ccc;   
             margin: 0 10px;
@@ -575,14 +584,10 @@ export default {
                 height: 100%;
             }
         }
-
         .moreLength{
             .el-checkbox-group{
-                span:nth-child(2n){
-                    margin-right: 20px;
-                }
                 .el-checkbox{
-                    margin-left: 0;
+                    margin:0px 30px 0 0 ;
                 }
             }
         }

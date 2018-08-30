@@ -88,28 +88,55 @@
 
 <style type="text/css" lang="scss">
     @import "../../../styles/tab.scss";
-    .completeinfo{
-      .detailinfo{
-        margin-left: 26px;
-        p{
-            width:160px;
-            height: 40px;
-            line-height: 40px;
-            text-align: left;
-            display: inline-block;
-            vertical-align: top;
-            span{
-                color:red;
-            }
-        }
-        .upload-demo{
-          display: inline-block ;
-        }
-      }
-    }
     .member{
         height:100%;    
         position: relative;
+        padding-right: 16px;
+        .el-tabs--card>.el-tabs__header {
+            border-bottom: 1px solid #03a9f4;
+            padding-left: 10px;
+            padding-top: 12px;
+        }
+        .el-tabs__content {
+            overflow: auto;
+        }
+        .el-tabs--card>.el-tabs__header .el-tabs__nav{
+            border: 0 none;
+        }
+
+        .el-tabs--card>.el-tabs__header .el-tabs__item:first-child {
+            border-left: 1px solid #d2d2d2;
+        }
+
+        .el-tabs__item{
+            border: 1px solid #d2d2d2;
+            border-top-width:2px; 
+            border-radius: 4px 4px 0px 0px;
+            border-bottom: 0 none;
+            height: 30px;
+            line-height: 30px;
+        }
+
+        .el-tabs--card>.el-tabs__header .el-tabs__item.is-active {
+            border-top-width: 2px;
+            border-color: #03a9f4;
+            background: #ffffff;
+            border-bottom-color: #f0f0f0;
+        }
+
+        .el-tabs__content{
+            padding-left: 10px;
+            padding-top: 12px;
+        }
+
+        .el-tab-pane{
+            .el-table th .cell {
+                white-space: initial;
+                overflow: hidden;
+                min-height: 30px;
+                line-height: 30px;
+            }
+        }
         .shipper_searchinfo{
             position: absolute;
             left:0;

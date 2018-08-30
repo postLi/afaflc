@@ -215,11 +215,12 @@ import vregion from '@/components/vregion/Region'
                 var wb = XLSX.utils.table_to_book(document.querySelector('#out-table'))
                 /* get binary string as output */
                 var wbout = XLSX.write(wb, { bookType: 'xlsx', bookSST: true, type: 'array' })
+                console.log(wb)
                 console.log(wbout)
-                try {
-                    FileSaver.saveAs(new Blob([wbout], { type: 'application/octet-stream' }), 'sheetjs.xlsx')
-                } catch (e) { if (typeof console !== 'undefined') console.log(e, wbout) }
-                return wbout
+                // try {
+                //     FileSaver.saveAs(new Blob([wbout], { type: 'application/octet-stream' }), 'sheetjs.xlsx')
+                // } catch (e) { if (typeof console !== 'undefined') console.log(e, wbout) }
+                // return wbout
             },
             regionChange(d) {
                 console.log('data:',d)
@@ -271,7 +272,13 @@ import vregion from '@/components/vregion/Region'
                         if(this.chooseTime){
                             this.searchInfo.startOrderDate = this.chooseTime[0];
                             this.searchInfo.endOrderDate = this.chooseTime[1];
+                       
+                        }else{
+                            this.searchInfo.startOrderDate ='' ;
+                            this.searchInfo.endOrderDate = '';
                         }
+
+                        this.firstblood();
                         break;
                     case 'clear':
                         this.searchInfo = {
@@ -282,12 +289,12 @@ import vregion from '@/components/vregion/Region'
                             orderSerial:'',//订单号
                             parentOrderStatus:'AF00801',//订单状态待支付
                         };
-                        this.chooseTime = [];
+                        this.chooseTime = '';
+                        this.firstblood();
                     case 'outExce':
                         this.exportExcel();
                         break;
                 }
-                this.firstblood();
             },
                  //判断是否选中
             getinfomation(selection){
