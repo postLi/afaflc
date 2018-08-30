@@ -30,7 +30,7 @@ export default {
     data(){
         return{
            dialogFormVisible_add:false,
-           formLabelWidth:'150px'
+           formLabelWidth:'200px'
         }
     },
     props:{

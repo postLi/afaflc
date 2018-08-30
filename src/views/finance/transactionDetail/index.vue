@@ -93,14 +93,14 @@
                             prop="orderSerial"
                             label="订单流水号"
                              show-overflow-tooltip
-                            width="150">
+                            width="180">
                         </el-table-column>
                         <el-table-column
                           align = "center"
                           prop="tradeSerial"
                           label="交易流水号"
                            show-overflow-tooltip
-                          width="150">
+                          width="180">
                         </el-table-column>
                         <el-table-column
                         align = "center"
@@ -113,7 +113,7 @@
                         align = "center"
                           prop="accountName"
                           label="用户账号 / 姓名"
-                          width="120">
+                          width="150">
                         </el-table-column>
                         <el-table-column
                         align = "center"
@@ -124,16 +124,19 @@
                          <el-table-column
                         align = "center"
                           prop="payTotal"
+                          width="110"
                           label="交易金额">
                         </el-table-column>
                          <el-table-column
                         align = "center"
                           prop="incomeExpendTypeName"
+                          width="110"
                           label="收支类型">
                         </el-table-column>
                          <el-table-column
                         align = "center"
                           prop="payWayName"
+                          width="110"
                           label="交易方式">
                         </el-table-column>
                         <el-table-column
@@ -145,11 +148,13 @@
                          <el-table-column
                         align = "center"
                           prop="orderTypeName"
+                          width="110"
                           label="服务分类">
                         </el-table-column>
                          <el-table-column
                         align = "center"
                           prop="payTime"
+                           show-overflow-tooltip
                           label="付款时间">
                         </el-table-column>
                         
@@ -164,7 +169,6 @@
                             </template>
                         </el-table-column>
                     </el-table>
-                    
                       <!-- 页码 -->
                     <div class="Pagination ">
                         <div class="block">
@@ -178,13 +182,8 @@
                             </el-pagination>
                         </div>
                     </div>
-                    
                 </div>
-                
-                
             </div>
-     
-        
     </div>
 </template>
 
@@ -208,7 +207,7 @@ import { parseTime,formatTime } from '@/utils/index.js'
                   orderType:'',
                   tradeStartTime:'',
                   tradeEndTime:'',
-                  incomeExpendType:'',
+                  incomeExpendType:'1',
                 },
                 payTime:'',
                 currentPage4:1,
@@ -282,7 +281,7 @@ import { parseTime,formatTime } from '@/utils/index.js'
                   orderType:'',
                   tradeStartTime:'',
                   tradeEndTime:'',
-                  incomeExpendType:'',
+                  incomeExpendType:'1',
                 };
                 //  this.payTime=null
                 this.load();

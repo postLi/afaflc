@@ -69,8 +69,6 @@
         <div class="info1_tab_footer">共计:{{ dataTotal }} <div class="show_pager"> <Pager :total="dataTotal" @change="handlePageChange"  :sizes="sizes"/></div> </div>  
                 </div>
             </div>
-     
-        
     </div>
 </template>
 
