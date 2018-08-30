@@ -76,10 +76,13 @@
 				    </el-table-column>
                    <el-table-column prop="otherService" label="会员服务承诺" width="225"  align="left">
                         <template slot-scope="scope" >
-                            <div class="otherServiceTD">
+                            <div class="otherServiceTD" v-if="scope.row.otherService != ''">
                                 <span class="otherService" v-for="(item,key) in JSON.parse(scope.row.otherService) " :key="key">
                                     {{item}}
                                 </span>
+                            </div>
+                            <div v-else>
+                                未填写
                             </div>
                         </template>
                     </el-table-column>

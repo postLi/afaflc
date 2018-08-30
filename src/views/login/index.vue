@@ -70,20 +70,20 @@ import { isvalidUsername } from '@/utils/validate'
 export default {
   name: 'login',
   data() {
-    const validateUsername = (rule, value, callback) => {
-      if (!isvalidUsername(value)) {
-        callback(new Error('请输入正确的公司ID'))
-      } else {
-        callback()
-      }
-    }
     // const validateUsername = (rule, value, callback) => {
     //   if (!isvalidUsername(value)) {
-    //     callback(new Error('请输入正确的用户名'))
+    //     callback(new Error('请输入正确的公司ID'))
     //   } else {
     //     callback()
     //   }
     // }
+    const validateUsername = (rule, value, callback) => {
+      if (!isvalidUsername(value)) {
+        callback(new Error('请输入正确的用户名'))
+      } else {
+        callback()
+      }
+    }
     const validatePass = (rule, value, callback) => {
       if (value.length < 6) {
         callback(new Error('密码不能小于6位'))
@@ -105,7 +105,7 @@ export default {
       //模拟登陆信息
       loginForm: {
         accNum: '4',
-        username: 'fangjian',
+        username: 'admin',
         password: '123456'
       },
       loginRules: {
@@ -121,8 +121,10 @@ export default {
       this.$refs.loginForm.validate(valid => {
         console.log(valid)
         if (valid) {
-          this.loading = true
-          this.$store.dispatch('Login', this.loginForm).then(() => {
+          this.loading = true ;
+          const data = Object.assign({}, this.loginForm) ;
+          data.username = data.username + '|' + "aflc-7" ;
+          this.$store.dispatch('Login', data).then(() => {
             // if (!this.loginForm.accNum) {
             //   this.errInfo = true
             //   this.errInfo = '该公司Id不存在'
@@ -136,8 +138,9 @@ export default {
             this.loading = false
             // 获取登录前的页面地址
             // 有可能会出现前一个页面是现在登录账号没有权限访问的？
-            const nexturl = this.$route.query.tourl
-            this.$router.push({ path: nexturl && nexturl.indexOf('/login') === -1 ? nexturl : '/' })
+            // const nexturl = this.$route.query.tourl
+            // this.$router.push({ path: nexturl && nexturl.indexOf('/login') === -1 ? nexturl : '/' })
+            this.$router.push({ path: '/' })
           }).catch(() => {
             this.loading = false
           })
