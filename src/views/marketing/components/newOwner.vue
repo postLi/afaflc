@@ -300,7 +300,7 @@ export default {
 
         return{
         options:regionDataPlus,            
-        formLabelWidth:'130px',
+        formLabelWidth:'150px',
         dialogFormVisible_add: false,
         MaidLevelValueCar:'',
         optionsCar:[],
@@ -384,12 +384,6 @@ export default {
   components:{
   },
   mounted(){
-    //按钮类型text,primary...
-    this.type = this.btntype;
-    //按钮文本内容
-    this.text = this.btntext;
-    //弹出框标题
-    this.title = this.btntitle;
     this.getMoreInformation();
   },
   methods:{
@@ -436,7 +430,7 @@ export default {
    },
    change:function(){
       this.dialogFormVisible_add = false;
-      this.$refs['formAll'].resetFields();  
+        this.$refs['formAll'].resetFields();  
    },
    close:function(){
       this.dialogFormVisible_add = false;
@@ -472,7 +466,7 @@ export default {
         },  
     // 同城新增    
    add_data(){
-       this.FormData = {aflcDriverOrderamountDetailList:[
+       this.FormData = [
            {startPrice:this.formAll.reward1,endPrice:this.formAll.reward2,rewardGrade:'AF0020806',reward:this.formAll.data1,orderNum:this.formAll.maxnum1},
            {startPrice:this.formAll.reward3,endPrice:this.formAll.reward4,rewardGrade:'AF0020806',reward:this.formAll.data2,orderNum:this.formAll.maxnum1},
            {startPrice:this.formAll.reward5,endPrice:this.formAll.reward6,rewardGrade:'AF0020806',reward:this.formAll.data3,orderNum:this.formAll.maxnum1},
@@ -521,7 +515,7 @@ export default {
            {startPrice:this.formAll.reward11,endPrice:this.formAll.reward12,rewardGrade:'AF0020805',reward:this.formAll.data46,orderNum:this.formAll.maxnum6},
            {startPrice:this.formAll.reward13,endPrice:this.formAll.reward14,rewardGrade:'AF0020805',reward:this.formAll.data47,orderNum:this.formAll.maxnum6},
            {startPrice:this.formAll.reward15,endPrice:this.formAll.reward16,rewardGrade:'AF0020805',reward:this.formAll.data48,orderNum:this.formAll.maxnum6},           
-           ]}
+           ]
        this.$refs['formAll'].validate(valid=>{
         if(valid){
             if(this.formAll.area){
@@ -532,7 +526,16 @@ export default {
                  this.formAll.areaCode.pop()
             }
          this.formAll.areaCode =String(this.formAll.areaCode)
-        let forms= Object.assign({}, this.FormData,{areaCode:this.formAll.areaCode},{rewardMax:this.formAll.rewardMax},{carType:this.formAll.carType},{serivceCode:this.formAll.serivceCode});
+        let forms=[{
+            areaCode:this.formAll.areaCode,
+            province:this.formAll.province,
+            city:this.formAll.city,
+            area:this.formAll.area,
+            rewardMax:this.formAll.rewardMax,
+            carType:this.formAll.carType,
+            serivceCode:this.formAll.serivceCode,
+            aflcDriverOrderamountDetailList:this.FormData
+        }]
         data_get_ownerFromsame_create(forms).then(res=>{
             console.log('res',res);
             this.dialogFormVisible_add = false;

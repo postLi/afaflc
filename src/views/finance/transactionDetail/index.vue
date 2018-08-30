@@ -13,23 +13,25 @@
                 
                 <label><span>账号类型&nbsp;</span>
                    <el-select v-model="data.accountType" clearable placeholder="请选择">
-                        <el-option label="货主" value="0"></el-option>
-                       <el-option label="车主" value="1"></el-option>
-                       <el-option label="平台" value="2"></el-option>
+                       <el-option label="货主" value="AF00101"></el-option>
+                       <el-option label="车主" value="AF00102"></el-option>
+                       <el-option label="现金账户" value="AF01601"></el-option>
+                       <el-option label="运营账户" value="AF01602"></el-option>
+                       <el-option label="合伙人" value="AF00103"></el-option>
                     </el-select>
                 </label> 
                 <label><span>交易方式&nbsp;</span>
                    <el-select v-model="data.payWay" clearable placeholder="请选择">
-                       <el-option label="支付宝" value="0"></el-option>
-                       <el-option label="微信" value="1"></el-option>
-                       <el-option label="余额支付" value="2"></el-option>
+                       <el-option label="支付宝" value="AF0041803"></el-option>
+                       <el-option label="微信" value="AF0041802"></el-option>
+                       <el-option label="钱包" value="AF0041801"></el-option>
                     </el-select>
                 </label>
                 <label><span>交易类型&nbsp;</span>
                    <el-select v-model="data.tradeType" clearable placeholder="请选择">
                         <el-option
                           v-for="item in optionsAccountType2"
-                          :key="item.name"
+                          :key="item.code"
                           :label="item.name"
                           :value="item.code"
                           >
@@ -40,7 +42,7 @@
                    <el-select v-model="data.orderType" clearable placeholder="请选择">
                         <el-option
                           v-for="item in optionsAccountType"
-                          :key="item.name"
+                          :key="item.code"
                           :label="item.name"
                           :value="item.code"
                           >
@@ -49,8 +51,8 @@
                 </label>
                 <label><span>收支类型&nbsp;</span>
                    <el-select v-model="data.incomeExpendType" clearable placeholder="请选择">
-                          <el-option label="入账" value="AF014"></el-option>
-                          <el-option label="出帐" value="AF015"></el-option>
+                          <el-option label="收入" value="1"></el-option>
+                          <el-option label="支出" value="0"></el-option>
                     </el-select>
                 </label>         
                 <label ><span>付款时间&nbsp;</span>
@@ -84,30 +86,27 @@
                         tooltip-effect="dark"
                         @row-click="clickDetails"
                         style="width: 100%"> 
+                    <el-table-column  label="序号" width="80px" type="index">
+                    </el-table-column>
                         <el-table-column
                             align = "center"
-                            fixed
-                             type="selection"
-                             width="55">
-                           </el-table-column>
-                        <el-table-column
-                            align = "center"
-                            fixed
                             prop="orderSerial"
                             label="订单流水号"
-                            width="100">
+                             show-overflow-tooltip
+                            width="150">
                         </el-table-column>
                         <el-table-column
                           align = "center"
                           prop="tradeSerial"
                           label="交易流水号"
-                          width="120">
+                           show-overflow-tooltip
+                          width="150">
                         </el-table-column>
                         <el-table-column
                         align = "center"
                           prop="createTime"
                           label="创建时间"
-                          width="120">
+                          width="170">
                              
                         </el-table-column>
                         <el-table-column
@@ -147,11 +146,6 @@
                         align = "center"
                           prop="orderTypeName"
                           label="服务分类">
-                        </el-table-column>
-                         <el-table-column
-                        align = "center"
-                          prop="tradeStatusName"
-                          label="交易状态">
                         </el-table-column>
                          <el-table-column
                         align = "center"
@@ -222,8 +216,29 @@ import { parseTime,formatTime } from '@/utils/index.js'
                 pagesize:20,
                 dataTotal:null,
                 tableDataTree:[],
-                optionsAccountType: [],
-                optionsAccountType2: [],
+                optionsAccountType: [
+                    {code:'AF01701',name:'同城'},
+                    {code:'AF01702',name:'零担'},
+                    {code:'AF01703',name:'城际'},                    
+                ],
+                optionsAccountType2: [
+                    {code:'AF01403',name:'订单多退'},
+                    {code:'AF01404',name:'理赔收入'},
+                    {code:'AF01407',name:'退运费'},
+                    {code:'AF01408',name:'运费收入'},
+                    {code:'AF01411',name:'支付运费'},
+                    {code:'AF01412',name:'支付理赔'},
+                    {code:'AF01414',name:'平台抽佣'},
+                    {code:'AF01501',name:'支付运费'},
+                    {code:'AF01503',name:'支付理赔'},
+                    {code:'AF01505',name:'优惠券'},
+                    {code:'AF01508',name:'运费收入'},
+                    {code:'AF01509',name:'理赔收入'},
+                    {code:'AF01510',name:'订单多退'},
+                    {code:'AF01511',name:'退运费'},
+                    {code:'AF01515',name:'优惠金'},
+                    {code:'AF01516',name:'奖励金'},                    
+                    ],
                 alloption1:{},
                 alloption2:{},
             }
@@ -257,18 +272,19 @@ import { parseTime,formatTime } from '@/utils/index.js'
            //重置
             reset(){
                 this.data = {
-                    orderSerial:null,
-                    tradeSerial:null,
-                    accountName:null,
-                    accountType:null,
-                    payWay:null,
-                    tradeType:null,
-                    payTime:null,
-                    incomeExpendType:null,
-                    optionsAccountType:[],
-                    optionsAccountType2: [],
+                  orderSerial:'',
+                  tradeSerial:'',
+                  tradeStatus:'',
+                  accountName:'',
+                  accountType:'',                 
+                  payWay:'',
+                  tradeType:'',
+                  orderType:'',
+                  tradeStartTime:'',
+                  tradeEndTime:'',
+                  incomeExpendType:'',
                 };
-                 this.payTime=null
+                //  this.payTime=null
                 this.load();
             },
              //点击选中当前行
@@ -281,28 +297,10 @@ import { parseTime,formatTime } from '@/utils/index.js'
                
             },
             //获取信息列表
-            getMoreInformation(){
-                data_GetServerType().then(res=>{
-                    res.data.map((item)=>{
-                        this.optionsAccountType.push(item);
-                    })
-                })              
-                data_GetServerType2().then(res=>{                 
-                    this.alloption1 = res.data;                 
-                })
-                data_GetServerType3().then(res=>{                 
-                  this.alloption2 = res.data;
-                  for(var i in this.alloption2){
-                    this.alloption1.push(this.alloption2[i])
-                  }
-                  this.alloption1.map((item)=>{                     
-                      this.optionsAccountType2.push(item);
-                  })
-                })
+            getMoreInformation(){    
             },
             //相关信息
             handleClick(row){
-                
                 this.data.orderSerial = row.orderSerial;
                 this.load();
             },
@@ -312,45 +310,9 @@ import { parseTime,formatTime } from '@/utils/index.js'
             },
             //刷新页面  
             load(){                   
-             
-                this.data.tradeStartTime = parseTime(this.payTime[0],"{y}-{m}-{d}");
-                this.data.tradeEndTime = parseTime(this.payTime[1]+24*60*60*1000,"{y}-{m}-{d}");
                 data_financeList(this.page,this.pagesize,this.data).then(res=>{                   
                     this.tableDataTree = res.data.list;
                     this.dataTotal = res.data.totalCount;
-                    this.tableDataTree.forEach(item => {
-                        item.createTime = parseTime(item.createTime,"{y}-{m}-{d}");
-                    })
-                    this.tableDataTree.forEach(item => {
-                        switch(item.accountType){
-                            case "0":
-                                item.accountType = "货主";
-                                break;
-                            case "1":
-                                item.accountType = "车主";
-                                break;
-                            case "2":
-                                item.accountType = "平台";
-                                break;
-
-                    }
-                    })
-                     this.tableDataTree.forEach(item => {
-                        switch(item.payWay){
-                            case "0":
-                                item.payWay = "支付宝";
-                                break;
-                            case "1":
-                                item.payWay = "微信";
-                                break;
-                            case "2":
-                                item.payWay = "余额支付";
-                                break;
-                            
-                    }
-                   }) 
-                 
-
                 })
             },
             

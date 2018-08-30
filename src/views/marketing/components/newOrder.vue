@@ -442,7 +442,32 @@ export default {
             }
         }
     }
-    .ht_table{
+</style>
+
+<style lang="scss" >
+    .newMarketingOrder{
+        .el-dialog{
+            width: 1000px!important;
+        }
+        .swith{
+            margin:0px 0px 10px 10px;
+            .el-switch{
+                display: inline-block!important;
+            }
+        }
+        .el-dialog__footer{
+            padding: 20px 20px 20px;
+        }
+       .el-dialog{
+           overflow: unset;
+       }
+    }
+    .ordercreatcity{
+        .el-input__inner{
+            line-height: 40px !important; 
+            height: 40px !important; 
+        }
+            .ht_table{
         width: 980px;
         margin:0px 10px;
         color: #333;
@@ -474,31 +499,6 @@ export default {
                 width:100%;
             }
         }
-        }
-</style>
-
-<style lang="scss" >
-    .newMarketingOrder{
-        .el-dialog{
-            width: 1000px!important;
-        }
-        .swith{
-            margin:0px 0px 10px 10px;
-            .el-switch{
-                display: inline-block!important;
-            }
-        }
-        .el-dialog__footer{
-            padding: 20px 20px 20px;
-        }
-       .el-dialog{
-           overflow: unset;
-       }
-    }
-    .ordercreatcity{
-        .el-input__inner{
-            line-height: 40px !important; 
-            height: 40px !important; 
         }
     }
 </style>

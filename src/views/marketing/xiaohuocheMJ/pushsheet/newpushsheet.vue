@@ -249,7 +249,7 @@ data(){
             text:'',
             shipperTypeName:'',
             shipperType:'',
-            formLabelWidth:'120px',
+            formLabelWidth:'150px',
             createTime:'',
             serviceCardList:[],
             serviceValue:null,
@@ -804,7 +804,6 @@ methods:{
                 }).catch(res=>{
                     console.log(res)
                 });
-                    this.$refs['vestList'].resetFields();
                 }
                 })
             }
@@ -826,7 +825,7 @@ methods:{
                 }).catch(res=>{
                     console.log(res)
                 });
-                    this.$refs['vestList'].resetFields();
+
                 }
                 })
         }
@@ -834,8 +833,12 @@ methods:{
 watch:{
 driverTemplateDialogFlag:{
             handler: function(val, oldVal) {
+           if(!val){
                 if(this.$refs.area){
                this.$refs.area.selectedOptions = [];
+                this.$refs['vestList'].resetFields();
+            }
+
 }
 }
 }

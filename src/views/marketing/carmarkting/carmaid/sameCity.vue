@@ -171,7 +171,6 @@ export default {
                     })
                     })
                 data_MaidLevel().then(res=>{
-                    console.log('df',res)
                       res.data.map((item)=>{
                         this.MaidLevel.push(item);
                     })

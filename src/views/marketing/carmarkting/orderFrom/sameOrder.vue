@@ -58,7 +58,6 @@
                 <el-button  type="primary" value="value" plain icon="el-icon-bell" @click="handleUseStates">启用/停用</el-button>
                 <el-button type="primary" plain icon="el-icon-delete" @click="delete_data">删除</el-button>
             	</div>
-
             <div class="info_city">    
                <el-table style="width: 100%" stripe border height="100%" @row-click="clickDetails" highlight-current-row :data="tableDataAll"  >
             <el-table-column  label="序号" width="80px" type="index">
@@ -123,18 +122,8 @@ export default {
       dataTotal:null,
       tableDataAll:[],
       radio: 1,
-       optionsCar:[
-       {
-          code:null,
-          name:'全部'
-      }
-      ],
-      MaidLevel:[
-      {    
-          code:null,
-          name:'全部'
-        }
-      ],
+      optionsCar:[{code:null,name:'全部'}],
+      MaidLevel:[{code:null,name:'全部'}],
 		formAllData:{
             areaCode: null,
             carType:null,
@@ -158,7 +147,6 @@ export default {
             //获取  服务和车辆 类型列表
             getMoreInformation(){
                 data_CarList().then(res=>{
-                    // console.log(res.data)
                     res.data.map((item)=>{
                         this.optionsCar.push(item);
                     })
@@ -167,8 +155,6 @@ export default {
                       res.data.map((item)=>{
                         this.MaidLevel.push(item);
                     })
-                
-                      
                 }).catch(res=>{
                     console.log(res)
                 });    
@@ -254,8 +240,6 @@ export default {
                 }
         }
    },
-
-   
   mounted(){
      eventBus.$on('pushListtwo', () => {
        this.firstblood()

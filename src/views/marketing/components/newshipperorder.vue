@@ -6,17 +6,13 @@
         <el-form :model="formAll" ref="formAll" :rules="rulesForm">
           <el-row >
               <el-col :span="12">
-                <el-form-item label="所属区域：" :label-width="formLabelWidth">
+                <el-form-item label="所属区域：" :label-width="formLabelWidth" prop="areaName">
                    <el-cascader
                     size="large"
                     :options="options"
                     v-model="formAll.areaName"
                     @change="handleChange">
                     </el-cascader>
-
-                    <!-- <vregion :ui="true" @values="regionChange" class="form-control">
-                        <el-input v-model="formAll.areaCode" placeholder="请选择省/市/区/街道"></el-input>
-                    </vregion> -->
                 </el-form-item>
                 </el-col>
                 <el-col :span="12">
@@ -211,12 +207,16 @@ export default {
   data(){
     //    选择省市校验
         const belongCityNameValidator = (rule, val, cb) => {
-            if(!val){
+            if(val){
+            if(val.length<1){
             cb(new Error('所属地区不能为空'))
             }
             else{
                 cb()
-            }        
+            }                 
+            }else{
+            cb(new Error('所属地区不能为空'))
+            } 
         }
 
     //    选择车辆类型校验
@@ -300,15 +300,15 @@ export default {
 
         return{
         options:regionDataPlus,
-        formLabelWidth:'130px',
+        formLabelWidth:'150px',
         dialogFormVisible_add: false,
         MaidLevelValueCar:'',
         optionsCar:[],
         serviceCardList:[],
         FormData:null,
         formAll:{
-            areaCode: null,
-            areaName:null,
+            areaCode: [],
+            areaName:[],
             rewardMax:null,
             carType:null,
             serivceCode:null,
@@ -320,7 +320,7 @@ export default {
             },
             
             rulesForm:{
-            areaCode:{trigger:'change',required:true,validator: belongCityNameValidator},
+            areaName:{trigger:'change',required:true,validator: belongCityNameValidator},
             carType:{trigger:'change',required:true,validator:carTypeValidator},
             serivceCode:{trigger:'change',required:true,validator:serivceCodeValidator},
             rewardMax:{trigger:'change',required:true,validator:rewardMaxValidator},
@@ -376,6 +376,9 @@ export default {
   watch:{
    dialogFormVisible_add:{
         handler: function(val, oldVal) {
+            if(!val){
+            this.$refs['formAll'].resetFields();
+            }
         },
     },
   },
@@ -383,12 +386,6 @@ export default {
         vregion,
   },
   mounted(){
-    //按钮类型text,primary...
-    this.type = this.btntype;
-    //按钮文本内容
-    this.text = this.btntext;
-    //弹出框标题
-    this.title = this.btntitle;
     this.getMoreInformation();
   },
   methods:{
@@ -396,32 +393,24 @@ export default {
            console.log('d',d)
            if(d.length<3){
                 this.$message.info('请选择具体的城市');
+                this.formAll.areaName = [];
                 this.formAll.areaCode = [];
+                this.formAll.province = null
+                this.formAll.city = null
+                this.formAll.area = null
            }
            else{
-                this.formAll.areaCode = d[2]
+                this.formAll.areaCode = d
                 this.formAll.province = CodeToText[d[0]]
                 this.formAll.city =  CodeToText[d[1]]
-                this.formAll.area =  CodeToText[d[2]]
-                // if(d[2]==''){
-                // this.formAll.area =  CodeToText[d[2]]
-                // }
-                // else{
-                //  this.formAll.area =  CodeToText[d[2]]    
-                // }
-                console.log('dd',this.formAll.areaCode)
-                console.log('d1',this.formAll.province)
-                console.log('d2',this.formAll.city)
-                console.log('d3',this.formAll.area)
+                if(d[2]==''){
+                this.formAll.area = null
+                }
+                else{
+                this.formAll.area = CodeToText[d[2]]
+                }
            }
         },
-     regionChange(d) {
-                console.log('data:',d)
-                this.formAll.areaCode = (!d.province&&!d.city&&!d.area&&!d.town) ? '': `${this.getValue(d.province)}${this.getValue(d.city)}${this.getValue(d.area)}${this.getValue(d.town)}`.trim();
-            },
-             getValue(obj){
-                return obj ? obj.value:'';
-            },
    openDialog:function(){
        if(this.editType=='edit'){
            if(!this.params.id){
@@ -463,7 +452,6 @@ export default {
                 });
                 data_ServerClassList().then(res=>{
                       res.data.map((item)=>{
-                          console.log('a',item)
                        this.serviceCardList.push(item);
                     })     
                 }).catch(res=>{
@@ -475,60 +463,76 @@ export default {
         },  
     // 同城新增    
    add_data(){
-       this.FormData = {aflcShipperPreferentialtDetailList:[
-           {startPrice:this.formAll.reward1,endPrice:this.formAll.reward2,rewardGrade:'AF0020806',reward:this.formAll.data1,orderNum:this.formAll.maxnum1},
-           {startPrice:this.formAll.reward3,endPrice:this.formAll.reward4,rewardGrade:'AF0020806',reward:this.formAll.data2,orderNum:this.formAll.maxnum1},
-           {startPrice:this.formAll.reward5,endPrice:this.formAll.reward6,rewardGrade:'AF0020806',reward:this.formAll.data3,orderNum:this.formAll.maxnum1},
-           {startPrice:this.formAll.reward7,endPrice:this.formAll.reward8,rewardGrade:'AF0020806',reward:this.formAll.data4,orderNum:this.formAll.maxnum1},
-           {startPrice:this.formAll.reward9,endPrice:this.formAll.reward10,rewardGrade:'AF0020806',reward:this.formAll.data5,orderNum:this.formAll.maxnum1},
-           {startPrice:this.formAll.reward11,endPrice:this.formAll.reward12,rewardGrade:'AF0020806',reward:this.formAll.data6,orderNum:this.formAll.maxnum1},
-           {startPrice:this.formAll.reward13,endPrice:this.formAll.reward14,rewardGrade:'AF0020806',reward:this.formAll.data7,orderNum:this.formAll.maxnum1},
-           {startPrice:this.formAll.reward15,endPrice:this.formAll.reward16,rewardGrade:'AF0020806',reward:this.formAll.data8,orderNum:this.formAll.maxnum1},
-                      {startPrice:this.formAll.reward1,endPrice:this.formAll.reward2,rewardGrade:'AF0020801',reward:this.formAll.data9,orderNum:this.formAll.maxnum2},
-           {startPrice:this.formAll.reward3,endPrice:this.formAll.reward4,rewardGrade:'AF0020801',reward:this.formAll.data10,orderNum:this.formAll.maxnum2},
-           {startPrice:this.formAll.reward5,endPrice:this.formAll.reward6,rewardGrade:'AF0020801',reward:this.formAll.data11,orderNum:this.formAll.maxnum2},
-           {startPrice:this.formAll.reward7,endPrice:this.formAll.reward8,rewardGrade:'AF0020801',reward:this.formAll.data12,orderNum:this.formAll.maxnum2},
-           {startPrice:this.formAll.reward9,endPrice:this.formAll.reward10,rewardGrade:'AF0020801',reward:this.formAll.data13,orderNum:this.formAll.maxnum2},
-           {startPrice:this.formAll.reward11,endPrice:this.formAll.reward12,rewardGrade:'AF0020801',reward:this.formAll.data14,orderNum:this.formAll.maxnum2},
-           {startPrice:this.formAll.reward13,endPrice:this.formAll.reward14,rewardGrade:'AF0020801',reward:this.formAll.data15,orderNum:this.formAll.maxnum2},
-           {startPrice:this.formAll.reward15,endPrice:this.formAll.reward16,rewardGrade:'AF0020801',reward:this.formAll.data16,orderNum:this.formAll.maxnum2},
-                      {startPrice:this.formAll.reward1,endPrice:this.formAll.reward2,rewardGrade:'AF0020802',reward:this.formAll.data17,orderNum:this.formAll.maxnum3},
-           {startPrice:this.formAll.reward3,endPrice:this.formAll.reward4,rewardGrade:'AF0020802',reward:this.formAll.data18,orderNum:this.formAll.maxnum3},
-           {startPrice:this.formAll.reward5,endPrice:this.formAll.reward6,rewardGrade:'AF0020802',reward:this.formAll.data19,orderNum:this.formAll.maxnum3},
-           {startPrice:this.formAll.reward7,endPrice:this.formAll.reward8,rewardGrade:'AF0020802',reward:this.formAll.data20,orderNum:this.formAll.maxnum3},
-           {startPrice:this.formAll.reward9,endPrice:this.formAll.reward10,rewardGrade:'AF0020802',reward:this.formAll.data21,orderNum:this.formAll.maxnum3},
-           {startPrice:this.formAll.reward11,endPrice:this.formAll.reward12,rewardGrade:'AF0020802',reward:this.formAll.data22,orderNum:this.formAll.maxnum3},
-           {startPrice:this.formAll.reward13,endPrice:this.formAll.reward14,rewardGrade:'AF0020802',reward:this.formAll.data23,orderNum:this.formAll.maxnum3},
-           {startPrice:this.formAll.reward15,endPrice:this.formAll.reward16,rewardGrade:'AF0020802',reward:this.formAll.data24,orderNum:this.formAll.maxnum3},
-                      {startPrice:this.formAll.reward1,endPrice:this.formAll.reward2,rewardGrade:'AF0020803',reward:this.formAll.data25,orderNum:this.formAll.maxnum4},
-           {startPrice:this.formAll.reward3,endPrice:this.formAll.reward4,rewardGrade:'AF0020803',reward:this.formAll.data26,orderNum:this.formAll.maxnum4},
-           {startPrice:this.formAll.reward5,endPrice:this.formAll.reward6,rewardGrade:'AF0020803',reward:this.formAll.data27,orderNum:this.formAll.maxnum4},
-           {startPrice:this.formAll.reward7,endPrice:this.formAll.reward8,rewardGrade:'AF0020803',reward:this.formAll.data28,orderNum:this.formAll.maxnum4},
-           {startPrice:this.formAll.reward9,endPrice:this.formAll.reward10,rewardGrade:'AF0020803',reward:this.formAll.data29,orderNum:this.formAll.maxnum4},
-           {startPrice:this.formAll.reward11,endPrice:this.formAll.reward12,rewardGrade:'AF0020803',reward:this.formAll.data30,orderNum:this.formAll.maxnum4},
-           {startPrice:this.formAll.reward13,endPrice:this.formAll.reward14,rewardGrade:'AF0020803',reward:this.formAll.data31,orderNum:this.formAll.maxnum4},
-           {startPrice:this.formAll.reward15,endPrice:this.formAll.reward16,rewardGrade:'AF0020803',reward:this.formAll.data32,orderNum:this.formAll.maxnum4},
-                      {startPrice:this.formAll.reward1,endPrice:this.formAll.reward2,rewardGrade:'AF0020804',reward:this.formAll.data33,orderNum:this.formAll.maxnum5},
-           {startPrice:this.formAll.reward3,endPrice:this.formAll.reward4,rewardGrade:'AF0020804',reward:this.formAll.data34,orderNum:this.formAll.maxnum5},
-           {startPrice:this.formAll.reward5,endPrice:this.formAll.reward6,rewardGrade:'AF0020804',reward:this.formAll.data35,orderNum:this.formAll.maxnum5},
-           {startPrice:this.formAll.reward7,endPrice:this.formAll.reward8,rewardGrade:'AF0020804',reward:this.formAll.data36,orderNum:this.formAll.maxnum5},
-           {startPrice:this.formAll.reward9,endPrice:this.formAll.reward10,rewardGrade:'AF0020804',reward:this.formAll.data37,orderNum:this.formAll.maxnum5},
-           {startPrice:this.formAll.reward11,endPrice:this.formAll.reward12,rewardGrade:'AF0020804',reward:this.formAll.data38,orderNum:this.formAll.maxnum5},
-           {startPrice:this.formAll.reward13,endPrice:this.formAll.reward14,rewardGrade:'AF0020804',reward:this.formAll.data39,orderNum:this.formAll.maxnum5},
-           {startPrice:this.formAll.reward15,endPrice:this.formAll.reward16,rewardGrade:'AF0020804',reward:this.formAll.data40,orderNum:this.formAll.maxnum5},
-                      {startPrice:this.formAll.reward1,endPrice:this.formAll.reward2,rewardGrade:'AF0020805',reward:this.formAll.data41,orderNum:this.formAll.maxnum6},
-           {startPrice:this.formAll.reward3,endPrice:this.formAll.reward4,rewardGrade:'AF0020805',reward:this.formAll.data42,orderNum:this.formAll.maxnum6},
-           {startPrice:this.formAll.reward5,endPrice:this.formAll.reward6,rewardGrade:'AF0020805',reward:this.formAll.data43,orderNum:this.formAll.maxnum6},
-           {startPrice:this.formAll.reward7,endPrice:this.formAll.reward8,rewardGrade:'AF0020805',reward:this.formAll.data44,orderNum:this.formAll.maxnum6},
-           {startPrice:this.formAll.reward9,endPrice:this.formAll.reward10,rewardGrade:'AF0020805',reward:this.formAll.data45,orderNum:this.formAll.maxnum6},
-           {startPrice:this.formAll.reward11,endPrice:this.formAll.reward12,rewardGrade:'AF0020805',reward:this.formAll.data46,orderNum:this.formAll.maxnum6},
-           {startPrice:this.formAll.reward13,endPrice:this.formAll.reward14,rewardGrade:'AF0020805',reward:this.formAll.data47,orderNum:this.formAll.maxnum6},
-           {startPrice:this.formAll.reward15,endPrice:this.formAll.reward16,rewardGrade:'AF0020805',reward:this.formAll.data48,orderNum:this.formAll.maxnum6},           
-           ]}
-       var forms= Object.assign({}, this.FormData,{province:this.formAll.province},{city:this.formAll.city},{area:this.formAll.area},{areaCode:this.formAll.areaCode},{rewardMax:this.formAll.rewardMax},{carType:this.formAll.carType},{serivceCode:this.formAll.serivceCode});
-       console.log('forms',forms)
+       this.FormData = [
+           {aflcShipperPreferential:{},startPrice:this.formAll.reward1,endPrice:this.formAll.reward2,rewardGrade:'AF0020806',reward:this.formAll.data1,orderNum:this.formAll.maxnum1},
+           {aflcShipperPreferential:{},startPrice:this.formAll.reward3,endPrice:this.formAll.reward4,rewardGrade:'AF0020806',reward:this.formAll.data2,orderNum:this.formAll.maxnum1},
+           {aflcShipperPreferential:{},startPrice:this.formAll.reward5,endPrice:this.formAll.reward6,rewardGrade:'AF0020806',reward:this.formAll.data3,orderNum:this.formAll.maxnum1},
+           {aflcShipperPreferential:{},startPrice:this.formAll.reward7,endPrice:this.formAll.reward8,rewardGrade:'AF0020806',reward:this.formAll.data4,orderNum:this.formAll.maxnum1},
+           {aflcShipperPreferential:{},startPrice:this.formAll.reward9,endPrice:this.formAll.reward10,rewardGrade:'AF0020806',reward:this.formAll.data5,orderNum:this.formAll.maxnum1},
+           {aflcShipperPreferential:{},startPrice:this.formAll.reward11,endPrice:this.formAll.reward12,rewardGrade:'AF0020806',reward:this.formAll.data6,orderNum:this.formAll.maxnum1},
+           {aflcShipperPreferential:{},startPrice:this.formAll.reward13,endPrice:this.formAll.reward14,rewardGrade:'AF0020806',reward:this.formAll.data7,orderNum:this.formAll.maxnum1},
+           {aflcShipperPreferential:{},startPrice:this.formAll.reward15,endPrice:this.formAll.reward16,rewardGrade:'AF0020806',reward:this.formAll.data8,orderNum:this.formAll.maxnum1},
+                      {aflcShipperPreferential:{},startPrice:this.formAll.reward1,endPrice:this.formAll.reward2,rewardGrade:'AF0020801',reward:this.formAll.data9,orderNum:this.formAll.maxnum2},
+           {aflcShipperPreferential:{},startPrice:this.formAll.reward3,endPrice:this.formAll.reward4,rewardGrade:'AF0020801',reward:this.formAll.data10,orderNum:this.formAll.maxnum2},
+           {aflcShipperPreferential:{},startPrice:this.formAll.reward5,endPrice:this.formAll.reward6,rewardGrade:'AF0020801',reward:this.formAll.data11,orderNum:this.formAll.maxnum2},
+           {aflcShipperPreferential:{},startPrice:this.formAll.reward7,endPrice:this.formAll.reward8,rewardGrade:'AF0020801',reward:this.formAll.data12,orderNum:this.formAll.maxnum2},
+           {aflcShipperPreferential:{},startPrice:this.formAll.reward9,endPrice:this.formAll.reward10,rewardGrade:'AF0020801',reward:this.formAll.data13,orderNum:this.formAll.maxnum2},
+           {aflcShipperPreferential:{},startPrice:this.formAll.reward11,endPrice:this.formAll.reward12,rewardGrade:'AF0020801',reward:this.formAll.data14,orderNum:this.formAll.maxnum2},
+           {aflcShipperPreferential:{},startPrice:this.formAll.reward13,endPrice:this.formAll.reward14,rewardGrade:'AF0020801',reward:this.formAll.data15,orderNum:this.formAll.maxnum2},
+           {aflcShipperPreferential:{},startPrice:this.formAll.reward15,endPrice:this.formAll.reward16,rewardGrade:'AF0020801',reward:this.formAll.data16,orderNum:this.formAll.maxnum2},
+                      {aflcShipperPreferential:{},startPrice:this.formAll.reward1,endPrice:this.formAll.reward2,rewardGrade:'AF0020802',reward:this.formAll.data17,orderNum:this.formAll.maxnum3},
+           {aflcShipperPreferential:{},startPrice:this.formAll.reward3,endPrice:this.formAll.reward4,rewardGrade:'AF0020802',reward:this.formAll.data18,orderNum:this.formAll.maxnum3},
+           {aflcShipperPreferential:{},startPrice:this.formAll.reward5,endPrice:this.formAll.reward6,rewardGrade:'AF0020802',reward:this.formAll.data19,orderNum:this.formAll.maxnum3},
+           {aflcShipperPreferential:{},startPrice:this.formAll.reward7,endPrice:this.formAll.reward8,rewardGrade:'AF0020802',reward:this.formAll.data20,orderNum:this.formAll.maxnum3},
+           {aflcShipperPreferential:{},startPrice:this.formAll.reward9,endPrice:this.formAll.reward10,rewardGrade:'AF0020802',reward:this.formAll.data21,orderNum:this.formAll.maxnum3},
+           {aflcShipperPreferential:{},startPrice:this.formAll.reward11,endPrice:this.formAll.reward12,rewardGrade:'AF0020802',reward:this.formAll.data22,orderNum:this.formAll.maxnum3},
+           {aflcShipperPreferential:{},startPrice:this.formAll.reward13,endPrice:this.formAll.reward14,rewardGrade:'AF0020802',reward:this.formAll.data23,orderNum:this.formAll.maxnum3},
+           {aflcShipperPreferential:{},startPrice:this.formAll.reward15,endPrice:this.formAll.reward16,rewardGrade:'AF0020802',reward:this.formAll.data24,orderNum:this.formAll.maxnum3},
+                      {aflcShipperPreferential:{},startPrice:this.formAll.reward1,endPrice:this.formAll.reward2,rewardGrade:'AF0020803',reward:this.formAll.data25,orderNum:this.formAll.maxnum4},
+           {aflcShipperPreferential:{},startPrice:this.formAll.reward3,endPrice:this.formAll.reward4,rewardGrade:'AF0020803',reward:this.formAll.data26,orderNum:this.formAll.maxnum4},
+           {aflcShipperPreferential:{},startPrice:this.formAll.reward5,endPrice:this.formAll.reward6,rewardGrade:'AF0020803',reward:this.formAll.data27,orderNum:this.formAll.maxnum4},
+           {aflcShipperPreferential:{},startPrice:this.formAll.reward7,endPrice:this.formAll.reward8,rewardGrade:'AF0020803',reward:this.formAll.data28,orderNum:this.formAll.maxnum4},
+           {aflcShipperPreferential:{},startPrice:this.formAll.reward9,endPrice:this.formAll.reward10,rewardGrade:'AF0020803',reward:this.formAll.data29,orderNum:this.formAll.maxnum4},
+           {aflcShipperPreferential:{},startPrice:this.formAll.reward11,endPrice:this.formAll.reward12,rewardGrade:'AF0020803',reward:this.formAll.data30,orderNum:this.formAll.maxnum4},
+           {aflcShipperPreferential:{},startPrice:this.formAll.reward13,endPrice:this.formAll.reward14,rewardGrade:'AF0020803',reward:this.formAll.data31,orderNum:this.formAll.maxnum4},
+           {aflcShipperPreferential:{},startPrice:this.formAll.reward15,endPrice:this.formAll.reward16,rewardGrade:'AF0020803',reward:this.formAll.data32,orderNum:this.formAll.maxnum4},
+                      {aflcShipperPreferential:{},startPrice:this.formAll.reward1,endPrice:this.formAll.reward2,rewardGrade:'AF0020804',reward:this.formAll.data33,orderNum:this.formAll.maxnum5},
+           {aflcShipperPreferential:{},startPrice:this.formAll.reward3,endPrice:this.formAll.reward4,rewardGrade:'AF0020804',reward:this.formAll.data34,orderNum:this.formAll.maxnum5},
+           {aflcShipperPreferential:{},startPrice:this.formAll.reward5,endPrice:this.formAll.reward6,rewardGrade:'AF0020804',reward:this.formAll.data35,orderNum:this.formAll.maxnum5},
+           {aflcShipperPreferential:{},startPrice:this.formAll.reward7,endPrice:this.formAll.reward8,rewardGrade:'AF0020804',reward:this.formAll.data36,orderNum:this.formAll.maxnum5},
+           {aflcShipperPreferential:{},startPrice:this.formAll.reward9,endPrice:this.formAll.reward10,rewardGrade:'AF0020804',reward:this.formAll.data37,orderNum:this.formAll.maxnum5},
+           {aflcShipperPreferential:{},startPrice:this.formAll.reward11,endPrice:this.formAll.reward12,rewardGrade:'AF0020804',reward:this.formAll.data38,orderNum:this.formAll.maxnum5},
+           {aflcShipperPreferential:{},startPrice:this.formAll.reward13,endPrice:this.formAll.reward14,rewardGrade:'AF0020804',reward:this.formAll.data39,orderNum:this.formAll.maxnum5},
+           {aflcShipperPreferential:{},startPrice:this.formAll.reward15,endPrice:this.formAll.reward16,rewardGrade:'AF0020804',reward:this.formAll.data40,orderNum:this.formAll.maxnum5},
+                      {aflcShipperPreferential:{},startPrice:this.formAll.reward1,endPrice:this.formAll.reward2,rewardGrade:'AF0020805',reward:this.formAll.data41,orderNum:this.formAll.maxnum6},
+           {aflcShipperPreferential:{},startPrice:this.formAll.reward3,endPrice:this.formAll.reward4,rewardGrade:'AF0020805',reward:this.formAll.data42,orderNum:this.formAll.maxnum6},
+           {aflcShipperPreferential:{},startPrice:this.formAll.reward5,endPrice:this.formAll.reward6,rewardGrade:'AF0020805',reward:this.formAll.data43,orderNum:this.formAll.maxnum6},
+           {aflcShipperPreferential:{},startPrice:this.formAll.reward7,endPrice:this.formAll.reward8,rewardGrade:'AF0020805',reward:this.formAll.data44,orderNum:this.formAll.maxnum6},
+           {aflcShipperPreferential:{},startPrice:this.formAll.reward9,endPrice:this.formAll.reward10,rewardGrade:'AF0020805',reward:this.formAll.data45,orderNum:this.formAll.maxnum6},
+           {aflcShipperPreferential:{},startPrice:this.formAll.reward11,endPrice:this.formAll.reward12,rewardGrade:'AF0020805',reward:this.formAll.data46,orderNum:this.formAll.maxnum6},
+           {aflcShipperPreferential:{},startPrice:this.formAll.reward13,endPrice:this.formAll.reward14,rewardGrade:'AF0020805',reward:this.formAll.data47,orderNum:this.formAll.maxnum6},
+           {aflcShipperPreferential:{},startPrice:this.formAll.reward15,endPrice:this.formAll.reward16,rewardGrade:'AF0020805',reward:this.formAll.data48,orderNum:this.formAll.maxnum6},           
+           ]
        this.$refs['formAll'].validate(valid=>{
         if(valid){
+            if(this.formAll.area){
+                this.formAll.areaCode.splice(0,2)
+            }
+            else{
+                 this.formAll.areaCode.splice(0,1)
+                 this.formAll.areaCode.pop()
+            }
+         this.formAll.areaCode =String(this.formAll.areaCode)
+        let forms=[{
+            areaCode:this.formAll.areaCode,
+            province:this.formAll.province,
+            city:this.formAll.city,
+            area:this.formAll.area,
+            rewardMax:this.formAll.rewardMax,
+            carType:this.formAll.carType,
+            serivceCode:this.formAll.serivceCode,
+            aflcShipperPreferentialtDetailList:this.FormData
+        }]
         data_get_shipperOwnerFrom_create(forms).then(res=>{
             console.log('res',res);
             this.$refs['formAll'].resetFields();
@@ -536,7 +540,8 @@ export default {
             this.changeList();
             this.$message.success('新增成功');
         }).catch(res=>{
-            console.log('新增失败')
+            console.log('res',res);
+            this.$message.error('新增失败');
        });
 
        }
