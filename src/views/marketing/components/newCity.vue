@@ -27,32 +27,32 @@
              <table class="ht_table">
             <tbody>
              <tr>
-             <th width="150">所属区域</th>
-             <th width="100">车辆类型</th>
+             <th width="200">所属区域</th>
+             <th width="150">车辆类型</th>
              <th width="150">车主抽佣等级</th>                            
              <th width="100">开始抽佣单数</th>
-             <th width="100">开始抽佣单数</th>
+             <th width="100">结束抽佣单数</th>
              <th width="100">每单抽佣（%）</th>
              <th width="100">至少抽佣金额</th>        
             </tr>
              <tr>
              <td>
-                 <el-form-item  prop="areaName"> 
+                 <el-form-item  prop="areaName" v-if="editType=='add'"> 
                    <el-cascader
                     size="large"
                     :options="options"
                     v-model="formAll.areaName"
-                    @change="handleChange">
+                    @change="handleChange"
+                     >
                     </el-cascader>
-
-                    <!-- <vregion :ui="true" @values="regionChange" class="form-control">
-                        <el-input v-model="formAll.areaCode" placeholder="请选择省/市/区/街道"></el-input>
-                    </vregion> -->
                  </el-form-item>
+                <el-form-item v-else> 
+                    <el-input v-model="areaName" placeholder="" disabled ></el-input>   
+                </el-form-item>
             </td>
              <td> 
                  <el-form-item  prop="carType"> 
-                 <el-select  v-model="formAll.carType" clearable placeholder="请选择" >
+                 <el-select  v-model="formAll.carType" clearable placeholder="请选择" :disabled="editType!=='add'">
                           <el-option
                              v-for="item in optionsCar"
                               :key="item.code"
@@ -65,7 +65,7 @@
             </td>
              <td>
                  <el-form-item  prop="commissionGrade"> 
-                  <el-select v-model="formAll.commissionGrade" clearable placeholder="请选择" >
+                  <el-select v-model="formAll.commissionGrade" clearable placeholder="请选择" :disabled="editType!=='add'">
                           <el-option
                              v-for="item in MaidLevel"
                               :key="item.code"
@@ -118,21 +118,19 @@
 import { data_Commission,data_CarList,data_MaidLevel} from '@/api/server/areaPrice.js'
 import { data_get_Marketingsame_create,data_get_Marketingsame_update,data_get_Marketingsame_Id} from '@/api/marketing/carmarkting/carmarkting.js'
 import Upload from '@/components/Upload/singleImage'
-import vregion from '@/components/vregion/Region'
 import { eventBus } from '@/eventBus'
 import { regionDataPlus, CodeToText, TextToCode } from 'element-china-area-data'
 import {data_get_shipper_type,data_get_shipper_create,data_get_shipper_change,data_get_shipper_view,} from '@/api/users/shipper/all_shipper.js'
 export default {
   components:{
     Upload,
-       vregion,
   },
   props:{
     paramsView:{
       type:Object,
     },
     params:{
-      type:[Object,String],
+      type:[Object,String,Array],
     },
     value:{
       type: String,
@@ -166,12 +164,16 @@ export default {
   data(){
     //    选择省市校验
         const belongCityNameValidator = (rule, val, cb) => {
+            if(val){
             if(val.length<1){
             cb(new Error('所属地区不能为空'))
             }
             else{
                 cb()
-            }        
+            }                 
+            }else{
+            cb(new Error('所属地区不能为空'))
+            }
         }
 
     //    选择车辆类型校验
@@ -257,6 +259,7 @@ export default {
         MaidLevelValueCar:'',
         optionsCar:[],
         MaidLevel:[],
+        areaName:null,
         formAll:{
             areaCode: [],
             areaName:[],
@@ -284,21 +287,9 @@ export default {
         handler: function(val, oldVal) {
             if(!val){
             this.$refs['formAll'].resetFields();
-            this.formAll={
-            areaCode: [],
-            carType:null,
-            commissionGrade:null,
-            startNum:null,
-            endNum:null,
-            commissionPer:null,
-            commissionLowest:null,
-            }
             }
         },
     },
-  },
-  components:{
-        vregion,
   },
   mounted(){
     //按钮类型text,primary...
@@ -343,9 +334,10 @@ export default {
            }
            else{
             this.dialogFormVisible_add = true;
-            console.log('id',this.params.id)
+
             data_get_Marketingsame_Id(this.params.id).then(res=>{
             this.formAll = res.data
+            this.areaName = res.data.province+res.data.city+res.data.area
             console.log('i',this.formAll)
         })
            }
@@ -396,31 +388,26 @@ export default {
                  this.formAll.areaCode.pop()
             }
          this.formAll.areaCode =String(this.formAll.areaCode)
-         let formAllData = {
+         let formAllData = 
+             [{
              areaCode: this.formAll.areaCode,
              carType:this.formAll.carType,
              commissionGrade:this.formAll.commissionGrade,
              startNum:this.formAll.startNum,
              endNum:this.formAll.endNum,
              commissionPer:this.formAll.commissionPer,
+             province:this.formAll.province,
+             city:this.formAll.city,
+             area:this.formAll.area,
              commissionLowest:this.formAll.commissionLowest,
-         }
-         var forms= Object.assign({},formAllData);
-        data_get_Marketingsame_create(forms).then(res=>{
+             }]
+        data_get_Marketingsame_create(formAllData).then(res=>{
             console.log('res',res);
             this.dialogFormVisible_add = false;
             this.changeList();
             this.$message.success('新增成功');
         }).catch(res=>{
-            this.formAll={
-            areaCode:[],
-            carType:null,
-            commissionGrade:null,
-            startNum:null,
-            endNum:null,
-            commissionPer:null,
-            commissionLowest:null,
-            }
+            console.log('res',res)
             this.dialogFormVisible_add = false;
             this.$message.error('新增失败');
        });
@@ -470,7 +457,6 @@ export default {
                 height: 100%;
             }
         }
-        
     }
 
 </style>
@@ -526,6 +512,10 @@ export default {
             border-right:1px solid #d0d7e5;
             .el-form-item{
             margin-bottom: 0px!important;
+            width:100%;
+            .el-cascader{
+                width:100%
+            }
             }
             .el-input{
                 width:100%;

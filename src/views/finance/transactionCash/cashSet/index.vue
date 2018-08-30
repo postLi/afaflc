@@ -2,7 +2,7 @@
     <div class="transactionCash">
           	<div class="classify_cityinfo">
             	<div class="btns_box">
-                <el-button  type="primary" value="value" plain icon="el-icon-bell">修改</el-button>
+                <modcashSet  btntext="修改" :plain="true" type="primary" btntype="primary" icon="el-icon-edit" editType="edit"></modcashSet>
                 <el-button type="primary" plain icon="el-icon-delete" >停用</el-button>
             	</div>
           	
@@ -35,6 +35,7 @@
 
 <script>
 import Pager from '@/components/Pagination/index'
+import modcashSet from './modcashSet'
 export default {
     data(){
         return{
@@ -42,7 +43,8 @@ export default {
         }
     },
     components:{
-        Pager
+        Pager,
+        modcashSet
     }
 }
 </script>

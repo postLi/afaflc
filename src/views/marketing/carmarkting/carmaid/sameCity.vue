@@ -9,9 +9,6 @@
                     v-model="formAllData.areaName"
                     @change="handleChange">
                     </el-cascader>
-             <!-- <vregion :ui="true" @values="regionChange" class="form-control">
-                <el-input v-model="formAllData.areaCode" placeholder="请选择出发地"></el-input>
-            </vregion> -->
             </el-form-item>
             <el-form-item label="车主抽佣等级：">
                  <el-select v-model="formAllData.commissionGrade" clearable placeholder="请选择" >
@@ -71,7 +68,10 @@
             <el-table style="width: 100%" stripe border height="100%" @row-click="clickDetails" highlight-current-row :data="tableDataAll"  tooltip-effect="dark">
             <el-table-column  label="序号" width="80px" type="index">
             </el-table-column>
-            <el-table-column  label="所属区域" prop="areaCode">
+            <el-table-column  label="所属区域">
+                <template slot-scope="scope">
+                    {{scope.row.province+scope.row.city+scope.row.area}}
+                </template>
             </el-table-column>
             <el-table-column  label="车辆类型" prop="carType">
             </el-table-column>
@@ -120,8 +120,8 @@ export default {
       dataTotal:0,
       tableDataAll:[],
       radio: 1,
-      optionsCar:[],
-      MaidLevel:[],
+      optionsCar:[{code:null,name:'全部'}],
+      MaidLevel:[{code:null,name:'全部'}],
 		formAllData:{
             areaCode: null,
             areaName:null,
@@ -162,34 +162,6 @@ export default {
                 }
            }
         },
-        
-            
-            regionChange(d) {
-                console.log('data:',d)
-
-                // this.formAllData.areaCode = d.province.code;
-                // this.formAllData.province = d.province.name;
-                // this.formAllData.city = null;
-                // this.formAllData.area = null;
-                // if(d.city)
-                // {
-                // this.formAllData.areaCode = d.city.code;
-                // this.formAllData.province = d.province.name;
-                // this.formAllData.city = d.city.name;
-                // this.formAllData.area = null;
-                // }    
-                // if(d.area)
-                // {
-                // this.formAllData.areaCode = d.area.code;
-                // this.formAllData.province = d.province.name;
-                // this.formAllData.city = d.city.name;
-                // this.formAllData.area = d.area.name;
-                // }     
-                this.formAllData.areaCode = (!d.province&&!d.city&&!d.area&&!d.town) ? '': `${this.getValue(d.province)}${this.getValue(d.city)}${this.getValue(d.area)}${this.getValue(d.town)}`.trim();
-            },
-             getValue(obj){
-                return obj ? obj.value:'';
-            },
             //获取  服务和车辆 类型列表
             getMoreInformation(){
                 data_CarList().then(res=>{
@@ -214,6 +186,7 @@ export default {
                   console.log(res)
                     this.dataTotal = res.data.totalCount
                     this.tableDataAll = res.data.list;
+                    
                 })
             },
          //  查询

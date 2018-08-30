@@ -16,7 +16,7 @@
              <th >启用状态</th>
             </tr>     
             <tr>
-             <td><el-input v-model="formAll.areaCode" disabled></el-input></td>
+             <td><el-input v-model="areaName" disabled></el-input></td>
              <td><el-input v-model="formAll.rewardMax" placeholder="请选择"></el-input></td>   
              <td>
                  <el-select v-model="formAll.serivceCode" clearable placeholder="请选择" disabled>
@@ -303,6 +303,7 @@ export default {
             cb(new Error('不能小于前框值'))}else{cb()} }       
 
         return{
+        areaName:null,
         formLabelWidth:'130px',
         dialogFormVisible_add: false,
         MaidLevelValueCar:'',
@@ -416,6 +417,7 @@ export default {
             this.$forceUpdate()
             this.dialogFormVisible_add = true;
             data_get_ownerFromsame1_Id(this.params.id).then(res=>{
+            this.areaName = res.data.province+res.data.city+res.data.area
             this.formAll.areaCode=res.data.areaCode
             this.formAll.rewardMax=res.data.rewardMax
             this.formAll.carType=res.data.carType
@@ -457,7 +459,6 @@ export default {
           }, 
           update1:function(){
               data_get_ownerFromsame2_Id(this.params.id).then(res=>{
-                  console.log('fdfd',res)
             this.formAll.reward1 = res.data[0].startPrice;this.formAll.reward2 = res.data[0].endPrice;
             this.formAll.reward3 = res.data[1].startPrice;this.formAll.reward4 = res.data[1].endPrice;
             this.formAll.reward5 = res.data[2].startPrice;this.formAll.reward6 = res.data[2].endPrice;

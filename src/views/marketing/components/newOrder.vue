@@ -45,7 +45,6 @@
                     <vregion :ui="true" @values="regionChange" class="form-control" v-if="editType=='add'">
                         <el-input v-model="formAll.areaCode" placeholder="请选择省/市/区/街道" ></el-input>
                     </vregion>
-                    <el-input v-model="formAll.areaCode" placeholder="请选择省/市/区/街道" disabled></el-input>
                  </el-form-item>
             </td>
              <td> 
