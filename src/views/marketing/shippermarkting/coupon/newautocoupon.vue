@@ -350,25 +350,7 @@ export default {
     regionChange(d) {
                 console.log('data:',d)
                 this.formAllData.areaCode = (!d.province&&!d.city&&!d.area&&!d.town) ? '': `${this.getValue(d.province)}${this.getValue(d.city)}${this.getValue(d.area)}${this.getValue(d.town)}`.trim();
-                // this.formAllData.areaCode = d.province.code;
-                // this.formAllData.province = d.province.name;
-                // this.formAllData.city = null;
-                // this.formAllData.area = null;
-                // if(d.city)
-                // {
-                // this.formAllData.areaCode = d.city.code;
-                // this.formAllData.province = d.province.name;
-                // this.formAllData.city = d.city.name;
-                // this.formAllData.area = null;
-                // }    
-                // if(d.area)
-                // {
-                // this.formAllData.areaCode = d.area.code;
-                // this.formAllData.province = d.province.name;
-                // this.formAllData.city = d.city.name;
-                // this.formAllData.area = d.area.name;
-                // }           
-                // console.log('this.formAllData.areaCode',this.formAllData.areaCode)
+
               
     },
     regionChange1(d) {
@@ -429,6 +411,9 @@ export default {
     //添加子节点新增
         addItem(){
            this.formAllData.aflcCouponList.push({
+           province:null,
+           city:null,
+           area:null,     
            couponNum:null,
            couponName:null,
            couponType:null,

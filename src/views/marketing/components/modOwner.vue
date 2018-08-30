@@ -47,8 +47,8 @@
             active-color="#ff4949"
             inactive-color="#13ce66"
             active-text="停用"
-            active-value="1"
-            inactive-value="0"
+            active-value="0"
+            inactive-value="1"
             inactive-text="启用"
             >
             </el-switch></td>           

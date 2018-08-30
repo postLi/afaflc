@@ -34,28 +34,26 @@
           </el-form>
             </div>
             <div class="classify_info">
-           <el-table style="width: 100%" stripe border height="100%" highlight-current-row>
+           <el-table style="width: 100%" stripe border height="100%" highlight-current-row :data="tableDataAll">
             <el-table-column  label="序号" width="80px" type="index">
             </el-table-column>
-            <el-table-column  label="用户账号" >
+            <el-table-column  label="用户账号" prop="name">
             </el-table-column>
-            <el-table-column  label="充值赠送" >
+            <el-table-column  label="充值赠送" prop="giveSum">
             </el-table-column>
-            <el-table-column  label="充值渠道" >
+            <el-table-column  label="充值渠道" prop="rechargeChannel">
             </el-table-column>
-            <el-table-column  label="充值方式" >
+            <el-table-column  label="充值方式" prop="rechargeWay">
             </el-table-column>
-            <el-table-column  label="流水号" >
+            <el-table-column  label="流水号" prop="rechargeSerial">
             </el-table-column>
-            <el-table-column  label="充值时间" >
+            <el-table-column  label="充值时间" prop="rechargeTime">
             </el-table-column>    
            </el-table>                                                                
                 <div class="info_news">
                       <!-- 页码 -->
-                    
+        <div class="info1_tab_footer">共计:{{ dataTotal }} <div class="show_pager"> <Pager :total="dataTotal" @change="handlePageChange"  :sizes="sizes"/></div> </div>  
                 </div>
-                
-                
             </div>
      
         
@@ -64,29 +62,55 @@
 
 <script type="text/javascript">
 import '@/styles/dialog.scss'
+import Pager from '@/components/Pagination/index'
+import {data_aflcRechargeList} from '@/api/finance/transactionRecharge.js'
 import {data_financeList,data_GetServerType,data_GetServerType2,data_GetServerType3} from '@/api/finance/financeServer.js'
  export default{
         data(){
             return{
+              sizes:[30,50,100],
+              tableDataAll:[],
+              totalCount:null,
+              dataTotal:0,                
               fromData:{
                a1:null,
                a2:null,
                a3:null,
                a4:null,
                a5:null,
-              }
+              },
+               pagesize:30,//每页显示数
+               page:1,//当前页     
+               formAllData:{
+                   name:null,
+                   mobile:null,
+                   rechargeChannel:null,
+                   rechargeWay:null,
+                   rechargeTime:null,
+               },
             }
         },
         components:{
-            
-
+        Pager
         },
         mounted(){
-            
+            this.firstblood()
         },  
         methods: {
-           
-           
+          // 列表刷新页面  
+            firstblood(){
+                data_aflcRechargeList(this.page,this.pagesize,this.formAllData).then(res => {
+                  console.log(res)
+                    this.dataTotal = res.data.totalCount
+                    this.tableDataAll = res.data.list;
+                })
+            }, 
+        //每页显示数据量变更
+            handlePageChange(obj) {
+                this.page = obj.pageNum
+                this.pagesize = obj.pageSize
+                this.firstblood();
+        },      
         }
     }
 </script>
@@ -135,7 +159,7 @@ import {data_financeList,data_GetServerType,data_GetServerType2,data_GetServerTy
     }
 }
 .classify_info{
-    height: 100%;
+    height: 94%;
     padding: 70px 15px 0 15px;
     .commoncss{
       display: inline-block!important;

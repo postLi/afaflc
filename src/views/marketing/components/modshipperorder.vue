@@ -27,8 +27,8 @@
             active-color="#ff4949"
             inactive-color="#13ce66"
             active-text="停用"
-            active-value="1"
-            inactive-value="0"
+            active-value="0"
+            inactive-value="1"
             inactive-text="启用"
             >
             </el-switch></td>           
@@ -55,7 +55,6 @@
               <td><el-form-item prop="reward11"><el-input class="Order_input" v-model="formAll.reward11" ref='reward11' maxlength='5'></el-input></el-form-item>-<el-form-item prop="reward12"><el-input class="Order_input" v-model="formAll.reward12" ref='reward12'  maxlength='5'></el-input></el-form-item></td> 
               <td><el-form-item prop="reward13"><el-input class="Order_input" v-model="formAll.reward13" ref='reward13' maxlength='5'></el-input></el-form-item>-<el-form-item prop="reward14"><el-input class="Order_input" v-model="formAll.reward14" ref='reward14'  maxlength='5'></el-input></el-form-item></td> 
               <td><el-form-item prop="reward15"><el-input class="Order_input" v-model="formAll.reward15" ref='reward15' maxlength='5'></el-input></el-form-item>-<el-form-item prop="reward16"><el-input class="Order_input" v-model="formAll.reward16" ref='reward16'  maxlength='5'></el-input></el-form-item></td> 
-                 
             </tr>
             <tr>
               <td>未分类</td>
