@@ -4,9 +4,12 @@
         <div class="shipper_Owner ">
           <el-form :inline="true">
             <el-form-item label="所属区域：">
-             <vregion :ui="true" @values="regionChange" class="form-control">
-                <el-input v-model="formAllData.areaCode" placeholder="请选择出发地"></el-input>
-            </vregion>
+                   <el-cascader
+                    size="large"
+                    :options="options"
+                    v-model="formAllData.areaName"
+                    @change="handleChange">
+                    </el-cascader>
             </el-form-item>
             <el-form-item label="服务类型：">
                  <el-select v-model="formAllData.serivceCode" clearable placeholder="请选择" >
@@ -95,7 +98,7 @@
 <script>
 import { data_Commission ,data_CarList,data_MaidLevel,data_ServerClassList} from '@/api/server/areaPrice.js'
 import { data_get_ownerFromsame_list,data_get_ownerFromsame2_Id,data_Able_ownerFromsame,data_Del_ownerFromsame} from '@/api/marketing/carmarkting/carOwner.js'
-import vregion from '@/components/vregion/Region'
+import { regionDataPlus, CodeToText, TextToCode } from 'element-china-area-data'
 import newOwner from '../../components/newOwner.vue'
 import modOwner from '../../components/modOwner.vue'
 import { eventBus } from '@/eventBus'
@@ -104,6 +107,7 @@ import {parseTime} from '@/utils/'
 export default {
   data(){
     return{
+      options:regionDataPlus,        
       selectRowData:{},
       selectId:[],
       sizes:[30,50,100],
@@ -126,7 +130,6 @@ export default {
   },
     components:{
         newOwner,
-        vregion,
         Pager,
         modOwner
     },
@@ -134,7 +137,9 @@ export default {
         handleChange(d){
            console.log('d',d)
            if(d.length<3){
+                if(d.length==2){
                 this.$message.info('请选择具体的城市');
+                }
                 this.formAllData.areaCode = null;
                 this.formAllData.province = null,
                 this.formAllData.city = null,
@@ -178,7 +183,32 @@ export default {
           },
           // 列表刷新页面  
             firstblood(){
-                data_get_ownerFromsame_list(this.page,this.pagesize,this.formAllData).then(res => {
+                let FromData = {}
+                if(this.formAllData.area) {
+                    FromData = {
+                     area:this.formAllData.area,
+                     city:null,
+                     carType:this.formAllData.carType,
+                     commissionGrade:this.formAllData.commissionGrade,               
+                    }
+                }
+                else if(this.formAllData.city){
+                    FromData = {
+                     area:null,
+                     city:this.formAllData.city,
+                     carType:this.formAllData.carType,
+                     commissionGrade:this.formAllData.commissionGrade,               
+                    }                    
+                }
+                else{
+                    FromData = {
+                     area:null,
+                     city:null,
+                     carType:this.formAllData.carType,
+                     commissionGrade:this.formAllData.commissionGrade,               
+                    }  
+                }
+                data_get_ownerFromsame_list(this.page,this.pagesize,FromData).then(res => {
                     this.dataTotal = res.data.totalCount
                     this.tableDataAll = res.data.list;
                 })

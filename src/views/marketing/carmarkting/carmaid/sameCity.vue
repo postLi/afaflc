@@ -139,7 +139,9 @@ export default {
         handleChange(d){
            console.log('d',d)
            if(d.length<3){
+                if(d.length==2){
                 this.$message.info('请选择具体的城市');
+                }
                 this.formAllData.areaCode = null;
                 this.formAllData.province = null,
                 this.formAllData.city = null,
@@ -193,6 +195,14 @@ export default {
                      carType:this.formAllData.carType,
                      commissionGrade:this.formAllData.commissionGrade,               
                     }                    
+                }
+                else{
+                    FromData = {
+                     area:null,
+                     city:this.formAllData.city,
+                     carType:this.formAllData.carType,
+                     commissionGrade:this.formAllData.commissionGrade,               
+                    }  
                 }
                 data_get_Marketingsame_list(this.page,this.pagesize,FromData).then(res => {
                   console.log(res)
