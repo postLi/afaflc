@@ -1,7 +1,6 @@
 import fetch from '@/utils/fetch'
 
 const baseurl = "aflcusercenterservice"
-const baseurl_two = "aflccommonservice"
 
 
 //获取车主列表

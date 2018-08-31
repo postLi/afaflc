@@ -9,6 +9,9 @@
         class="sidebar-menu" 
         :default-active="$route.path"
         router
+        ref="sidebarmenu"
+        @open="setLastPath"
+        @select="getCurrentPath"
         unique-opened
         text-color="#fff">
         <template v-if="!item.hidden" v-for="(item,index) in sidebarRouters" ref="sidebaritem">
@@ -53,7 +56,6 @@ import SidebarItem from './SidebarItem'
 import SidebarMenuSearch from './SidebarMenuSearch'
 import Hamburger from '@/components/Hamburger'
 
-
 export default {
   components: { SidebarItem, Hamburger, SidebarMenuSearch },
   computed: {
@@ -64,6 +66,17 @@ export default {
     ])
   },
   methods: {
+    setLastPath(index) {
+      console.log('setLastPath:', index)
+    },
+    getCurrentPath(index, path) {
+      if (this.lastindex) {
+         // 关闭前一个展开的
+        this.$refs['sidebarmenu'].close(this.lastindex)
+      }
+      this.lastindex = path[0]
+      console.log('getCurrentPath:', index, path)
+    },
     toggleSideBar() {
       this.$store.dispatch('ToggleSideBar')
     },

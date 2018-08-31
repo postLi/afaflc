@@ -6,7 +6,7 @@ $sidebarBackgroundColor: #002039;
 
 .sidebar-menu{
     color: rgba(255, 255, 255, 0.8);
-    &>.el-menu-item,&>.el-submenu__title,&>.el-submenu{
+    &>.el-menu-item,&>.el-submenu{
         background: $sidebarBackgroundColor;
         border-left: 4px solid #002039;
     }

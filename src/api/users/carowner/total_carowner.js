@@ -3,7 +3,6 @@ import fetch from '@/utils/fetch'
 const baseurl = 'aflcusercenterservice'
 const baseurl_two = 'aflccommonservice'
 const baseurl_three = 'aflcsmservice'
-const baseurl_four = 'aflcusercenterservice'
 
 // 获取车主列表
 export function data_get_driver_list(page, pagesize, data) {
