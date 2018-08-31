@@ -179,7 +179,7 @@ import cancelCompnent from '../components/cancel'
                 handler(newVal, oldVal) {
                     if(newVal){
                         this.firstblood();
-                        this.timeOut = setInterval(this.firstblood,2000)
+                        // this.timeOut = setInterval(this.firstblood,60000)
                     }else{
                         clearInterval(this.timeOut);
                     }

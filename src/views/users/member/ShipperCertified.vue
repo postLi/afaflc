@@ -66,15 +66,18 @@
 				</el-table-column>
                 <el-table-column prop="qq" label="QQ号码" width="200">
 				</el-table-column>
-				<el-table-column prop="otherService" label="会员服务承诺" width="225"  align="left">
+				<!-- <el-table-column prop="otherService" label="会员服务承诺" width="225"  align="left">
                     <template slot-scope="scope" >
-                        <div class="otherServiceTD">
+                        <div class="otherServiceTD" v-if="scope.row.otherService != ''">
                             <span class="otherService" v-for="(item,key) in JSON.parse(scope.row.otherService) " :key="key">
                                 {{item}}
                             </span>
                         </div>
+                        <div v-else>
+                            未填写
+                        </div>
                     </template>
-				</el-table-column>
+				</el-table-column> -->
                 <el-table-column prop="isOpenTms" label="是否开通TMS" width="120">
                     <template slot-scope="scope">
                         <span :class="scope.row.isOpenTms == 1 ? 'isTMS' : 'noTMS'"> {{scope.row.isOpenTms == 1 ? '是' : '否'}}</span>
@@ -272,7 +275,7 @@
           <div slot="footer" class="dialog-footer">
             <el-button type="primary" plain @click="handlerPass">确认审核通过</el-button>
             <el-button @click="handlerOut">审核不通过</el-button>
-            <el-button @click="dialogFormVisible = false">取 消</el-button>
+            <el-button @click="handlerCancel">取 消</el-button>
           </div>
         </el-dialog>
      </div> 
@@ -559,8 +562,8 @@ export default {
                     //         this.pictureValue.splice(idx,1)
             this.$refs['shengheform'].validate((valid)=>{
                 if(valid){
-                    let item =  this.shengheform.contacts;
-                    this.$confirm('确定要不通过'+ item +' 货主吗？', '提示', {
+                    let item =  this.shengheform.account;
+                    this.$confirm('确定要不通过'+ item +'该用户吗？', '提示', {
                         confirmButtonText: '确定',
                         cancelButtonText: '取消',
                         type: 'warning'
@@ -571,12 +574,13 @@ export default {
                             // console.log(res)
                             this.$message({
                                 type: 'success',
-                                message: '该货主未通过审核',
+                                message: '该用户未通过审核',
                                 duration:2000
                             })
                             this.dialogFormVisible = false;
                             this.changeList();
                             this.firstblood();
+                            this.templateRadio = ''
                         }).catch(err=>{
                             this.$message({
                                 type: 'info',
@@ -588,10 +592,12 @@ export default {
                             type: 'info',
                             message: '已取消'
                         })
+                        this.templateRadio = ''
+
                     })
                 
                 } else {
-                    // console.log('error submit!!');
+                    this.$message.error('审核未通过需资料图片全部未合格！')
                     return false;
                 }
             })
@@ -612,12 +618,13 @@ export default {
                     console.log(forms)
                     data_ChangeLogisticsCompany(forms).then(res=>{
                     // console.log(res)
-                        this.dialogFormVisible = false;
                         this.$alert('操作成功', '提示', {
                             confirmButtonText: '确定',
                             callback: action => {
+                                this.dialogFormVisible = false;
                                 this.changeList();
-                                this.firstblood()
+                                this.firstblood();
+                                this.templateRadio = ''
                             }
                         });
                     }).catch(err=>{
@@ -633,6 +640,10 @@ export default {
                 }
             })
         },
+        handlerCancel(){
+            this.dialogFormVisible = false;
+            this.templateRadio = '';
+        }
   }
 }
 </script>

@@ -2,7 +2,7 @@
     <div class="trail clearfix">
         <div class="trailData fl">
             <el-table
-                :data="tableData"
+                :data="listInformation"
                 border
                 style="width: 100%">
                 <el-table-column
@@ -17,10 +17,13 @@
                     >
                 </el-table-column>
                 <el-table-column
-                    prop="date"
+                    prop="coordinateTime"
                     label="定位时间"
                     width="200"
                     >
+                    <template slot-scope="scope">
+                            {{scope.row.coordinateTime |parseTime}}
+                    </template>
                 </el-table-column>
             </el-table>
             <!-- <div class="info_tab_footer">共计:{{ totalCount }} <div class="show_pager"> <Pager :total="totalCount" @change="handlePageChange" :sizes="sizes"/></div> </div>     -->
@@ -54,6 +57,7 @@ export default {
             page:1,
             pagesize:20,
             sizes:[20,30,50],
+            listInformation:[],
             tableData: [{
                 date: '2016-05-02',
                 name: '王小虎',

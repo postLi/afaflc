@@ -182,7 +182,7 @@ import appointDriver from '../components/appointDriver'
                 handler(newVal, oldVal) {
                     if(newVal){
                         this.firstblood();
-                        this.timeOutNoDriver = setInterval(this.firstblood,2000);
+                        // this.timeOutNoDriver = setInterval(this.firstblood,30000);
 
                     }else{
                         clearInterval(this.timeOutNoDriver);

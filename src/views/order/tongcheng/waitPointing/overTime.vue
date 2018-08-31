@@ -189,7 +189,7 @@ import appointDriver from '../components/appointDriver'
                     console.log(this.isvisible)
                     if(newVal){
                         this.firstblood();
-                        this.timeOutOverTime = setInterval(this.firstblood,2000)
+                        // this.timeOutOverTime = setInterval(this.firstblood,30000)
                     }else{
                         clearInterval(this.timeOutOverTime);
                     }

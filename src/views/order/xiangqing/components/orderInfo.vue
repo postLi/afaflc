@@ -10,7 +10,7 @@
                  </p>
                 <p>
                     <span>所属区域：</span>
-                    <span>{{listInformation.belongCity}}</span>
+                    <span>{{listInformation.provinceCityArea}}</span>
                 </p>
                 <p>
                     <span>服务分类：</span>
@@ -24,7 +24,7 @@
             <div class="essentialInformation">
                 <p>
                     <span>订单类型：</span>
-                    <span>{{listInformation.orderClass === '1' ? '实时订单' : '预约订单'}}</span>
+                    <span>{{listInformation.orderClass}}</span>
                 </p>
                 <p>
                     <span>用车时间：</span>
@@ -117,11 +117,12 @@
                  </p>
                 <p>
                     <span>货主支付：</span>
-                    <span class="fontRed">￥{{listInformation.aflcOrderExpenses.factPay}}({{listInformation.payWay}})</span>
+                    <span class="fontRed">￥{{listInformation.aflcOrderExpenses.factPay}}</span>
+                    <span v-if="listInformation.payWay">({{listInformation.payWay}})</span>
                 </p>
                 <p> 
                     <span>车主收入：</span>
-                    <span class="fontRed">￥{{listInformation.driverIncome}}</span>
+                    <span class="fontRed">￥{{listInformation.aflcOrderExpenses.driverIncome}}</span>
                 </p>
                 <p>
                     <span>付款状态：</span>
@@ -150,25 +151,33 @@
             <div class="essentialInformation">
                 <p>
                     <span>等候费：</span>
-                    <span>￥{{listInformation.shipperName}}</span>
+                    <span v-if="listInformation.aflcOrderExpenses.unloadingFee">￥{{listInformation.aflcOrderExpenses.unloadingFee}}</span>
+                    <span class="noneNun" v-else>无</span>
+
                 </p>
                 <p>
                     <span>小费：</span>
-                    <span>￥{{listInformation.aflcOrderExpenses.tip}} </span>
+                    <span v-if="listInformation.aflcOrderExpenses.tip">￥{{listInformation.aflcOrderExpenses.tip}} </span>
+                    <span class="noneNun" v-else>无</span>
+                   
                 </p>
                 <p>
                     <span>车主改价：</span>
-                    <span>￥{{listInformation.aflcOrderExpenses.driverChangeFee}}</span>
+                    <span v-if="listInformation.aflcOrderExpenses.driverChangeFee">￥{{listInformation.aflcOrderExpenses.driverChangeFee}}</span>
+                    <span class="noneNun" v-else>无</span>
                 </p>
                 <p>
                     <span>优惠券抵扣：</span>
-                    <span>￥{{listInformation.aflcOrderExpenses.preferentialPrice}}</span>
+                    <span v-if="listInformation.aflcOrderExpenses.preferentialPrice">￥{{listInformation.aflcOrderExpenses.preferentialPrice}}</span>
+                    <span class="noneNun" v-else>无</span>
+
                 </p>
             </div>
             <div class="essentialInformation">
                 <p>
                     <span>平台奖励车主：</span>
-                    <span>￥{{listInformation.aflcOrderExpenses.reward}}</span>
+                    <span v-if="listInformation.aflcOrderExpenses.reward">￥{{listInformation.aflcOrderExpenses.reward}}</span>
+                    <span class="noneNun" v-else>无</span>
                 </p>
             </div>
         </div>
@@ -179,19 +188,19 @@
             <div class="essentialInformation">
                 <p>
                     <span>车主账号：</span>
-                    <!-- <span>{{listInformation.aflcDriverStatus.driverMobile ? listInformation.aflcDriverStatus.driverMobile :''}}</span> -->
+                    <span>{{listInformation.aflcDriverStatus.driverMobile ? listInformation.aflcDriverStatus.driverMobile :''}}</span>
                  </p>
                 <p>
                     <span>车主姓名：</span>
-                    <!-- <span>{{listInformation.aflcDriverStatus.driverName}}</span> -->
+                    <span>{{listInformation.aflcDriverStatus.driverName}}</span>
                 </p>
                 <p>
                     <span>车牌号：</span>
-                    <!-- <span>{{listInformation.aflcDriverStatus.carNumber}}</span> -->
+                    <span>{{listInformation.aflcDriverStatus.carNumber}}</span>
                 </p>
                 <p>
                     <span>车型：</span>
-                    <!-- <span>{{listInformation.aflcDriverStatus.carType}}</span> -->
+                    <span>{{listInformation.aflcDriverStatus.carType}}</span>
                 </p>
             </div>
             <div class="essentialInformation">
@@ -201,7 +210,7 @@
                 </p>
                 <p>
                     <span>派单方式：</span>
-                    <span></span>
+                    <span>{{listInformation.aflcDriverStatus.dispatchWay? listInformation.aflcDriverStatus.dispatchWay : '未知'}}</span>
                 </p>
             </div>
         </div>
