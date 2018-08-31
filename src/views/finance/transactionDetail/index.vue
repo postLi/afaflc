@@ -58,11 +58,16 @@
                 <label ><span>付款时间&nbsp;</span>
                     <el-date-picker
                     v-model="payTime"
-                    value-format="timestamp"
-                    type="daterange"
-                    range-separator="至"
-                    start-placeholder="开始日期"
-                    end-placeholder="结束日期">
+                        is-range
+                        type="daterange"
+                        range-separator="至"
+                        start-placeholder="开始时间"
+                        end-placeholder="结束时间"
+                        placeholder="选择时间范围"
+                        value-format="yyyy-MM-dd HH:mm:ss"
+                        :default-time="['00:00:00', '23:59:59']"
+                         @change='cTime'
+                    >
                     </el-date-picker>
                 </label>    
                 <!-- {{value6}}  -->
@@ -197,19 +202,19 @@ import { parseTime,formatTime } from '@/utils/index.js'
         data(){
             return{
                 data:{
-                  orderSerial:'',
-                  tradeSerial:'',
-                  tradeStatus:'',
-                  accountName:'',
-                  accountType:'',                 
-                  payWay:'',
-                  tradeType:'',
-                  orderType:'',
-                  tradeStartTime:'',
-                  tradeEndTime:'',
-                  incomeExpendType:'1',
+                  orderSerial:null,
+                  tradeSerial:null,
+                  tradeStatus:null,
+                  accountName:null,
+                  accountType:null,                 
+                  payWay:null,
+                  tradeType:null,
+                  orderType:null,
+                  tradeStartTime:null,
+                  tradeEndTime:null,
+                  incomeExpendType:null,
                 },
-                payTime:'',
+                payTime:null,
                 currentPage4:1,
                 page:1,
                 pagesize:20,
@@ -271,19 +276,21 @@ import { parseTime,formatTime } from '@/utils/index.js'
            //重置
             reset(){
                 this.data = {
-                  orderSerial:'',
-                  tradeSerial:'',
-                  tradeStatus:'',
-                  accountName:'',
-                  accountType:'',                 
-                  payWay:'',
-                  tradeType:'',
-                  orderType:'',
-                  tradeStartTime:'',
-                  tradeEndTime:'',
-                  incomeExpendType:'1',
+                  orderSerial:null,
+                  tradeSerial:null,
+                  tradeStatus:null,
+                  accountName:null,
+                  accountType:null,                 
+                  payWay:null,
+                  tradeType:null,
+                  orderType:null,
+                  tradeStartTime:null,
+                  tradeEndTime:null,
+                  incomeExpendType:null,
+                  tradeStartTime:null,
+                  tradeEndTime:null,
                 };
-                //  this.payTime=null
+                  this.payTime=null
                 this.load();
             },
              //点击选中当前行
@@ -307,11 +314,18 @@ import { parseTime,formatTime } from '@/utils/index.js'
             getinfomation(selection){
                
             },
+            cTime(i){
+            this.data.tradeStartTime = i[0];
+            this.data.tradeEndTime = i[1];
+            },
             //刷新页面  
             load(){                   
-                data_financeList(this.page,this.pagesize,this.data).then(res=>{                   
+                data_financeList(this.page,this.pagesize,this.data).then(res=>{              
                     this.tableDataTree = res.data.list;
                     this.dataTotal = res.data.totalCount;
+                     for(var i = 0;i<this.tableDataTree.length;i++){
+                        this.tableDataTree[i].payTime = parseTime(this.tableDataTree[i].payTime,"{y}-{m}-{d} {h}:{i}:{s}");
+                    }  
                 })
             },
             

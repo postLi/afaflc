@@ -190,25 +190,16 @@ export default {
                this.$message.warning('生成张数输入框仅能输入正整数');
            }
            else{
-         data_get_grantCoupon(this.params.id,this.num).then(res=>{
+         data_get_produceCoupon(this.params.id,this.num).then(res=>{
              this.$message.success('生成成功');
              this.dialogFormVisible_add = false;
-         })
+         }).catch(res=>{
+             this.dialogFormVisible_add = false;
+             this.$message.error('生成失败')
+        })
         }        
        },
     
-       uploadConfig(e){
-        // let inputFile = this.$refs.inputer;
-        // var formdata = new FormData()
-        // console.log('inputFile',inputFile.files[0]);
-        // formdata.append('id',this.params.id);
-        // formdata.append('multipartFile',inputFile.files[0]);
-        // console.log('formdata',formdata);
-        // data_get_BatchDistribution(this.params.id,formdata).then(res=>{
-        //      console.log('res',res)
-        // })
-       },
-
        BatchDistribution(){
         let inputFile = this.$refs.inputer;
         var formdata = new FormData()
@@ -220,10 +211,12 @@ export default {
              console.log('res',res)
              this.$message.success('发放成功');
              this.dialogFormVisible_add = false;
+        }).catch(res=>{
+             this.dialogFormVisible_add = false;
+             this.$message.error('发放失败')
         })
        },
        grantCoupon(){
-           console.log('mo',this.mobile)
            let mobile_Araay = this.mobile.split('\n')
           data_get_grantCoupon(this.params.id,mobile_Araay).then(res=>{
               this.$message.success('发放成功');

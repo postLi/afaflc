@@ -31,6 +31,7 @@
                         end-placeholder="结束时间"
                         placeholder="选择时间范围"
                         value-format="timestamp"
+                        :default-time="['00:00:00', '23:59:59']"
                         @change='cTime'
                         >
                     </el-date-picker>
@@ -56,10 +57,14 @@
           </el-row>
           <el-row >
             <el-col>
-               <el-form-item  label="所属区域：" :label-width="formLabelWidth"  prop="areaCode"> 
-                <vregion :ui="true" @values="regionChange" class="form-control" >
-                    <el-input v-model="formAllData.areaCode" placeholder="请选择出发地"></el-input>
-                </vregion>
+               <el-form-item  label="所属区域：" :label-width="formLabelWidth"  prop="areaName"> 
+                   <el-cascader
+                    size="large"
+                    :options="options"
+                    v-model="formAllData.areaName"
+                    @change="handleChange"
+                     >
+                    </el-cascader>
                </el-form-item>  
             </el-col>
           </el-row>
@@ -158,9 +163,14 @@
                  </el-select>
                  </div>  
              <div class="ht_table_td table_th13">
-             <vregion :ui="true" @values="regionChange1" class="form-control">
-                <el-input v-model="formAllData.aflcCouponList[keys].areaCode" placeholder="请选择出发地" @focus="changeInput(keys)"></el-input>
-            </vregion>
+                   <el-cascader
+                    size="large"
+                    :options="options"
+                    v-model="formAllData.aflcCouponList[keys].areaName"
+                    @change="handleChange1"
+                    @focus="changeInput(keys)"
+                     >
+                    </el-cascader>
               </div>
              <div class="ht_table_td table_th14">
                  <el-select v-model="formAllData.aflcCouponList[keys].ifvouchersuperposition" clearable placeholder="请选择" >
@@ -192,13 +202,12 @@
 import { data_Commission ,data_CarList,data_MaidLevel,data_ServerClassList} from '@/api/server/areaPrice.js'
 import {data_get_couponActive_list,data_get_couponActive_create,data_couponActive,data_couponActiveTime} from '@/api/marketing/shippermarkting/couponActive.js'
 import Upload from '@/components/Upload/singleImage'
-import vregion from '@/components/vregion/Region'
+import { regionDataPlus, CodeToText, TextToCode } from 'element-china-area-data'
 import { eventBus } from '@/eventBus'
 import GetCityList from '@/components/GetCityList'
 export default {
   components:{
     Upload,
-    vregion,
   },
   props:{
     paramsView:{
@@ -238,16 +247,19 @@ export default {
   },
   components:{
       GetCityList,
-        vregion
   },
   data(){
         const activityTypeValidator = (rule, val, cb) => {
-         if(!val){
-            cb(new Error('触发条件不能为空'))
+            if(val){
+            if(val.length<1){
+            cb(new Error('所属地区不能为空'))
             }
             else{
                 cb()
-            }        
+            }                 
+            }else{
+            cb(new Error('所属地区不能为空'))
+            }     
         }
         const activityNameValidator = (rule, val, cb) => {
             if(!val){
@@ -282,17 +294,18 @@ export default {
             }        
         }        
     return{
+        options:regionDataPlus,   
         inputKey:null,
         optionsCar:[],
         MaidLevel:[],
         serviceCardList:[],
         vouchersuperposition:[
         {    
-          code:0,
+          code:'0',
           name:'不能'
         },
         {
-          code:1,
+          code:'1',
           name:'能'
         }
         ],
@@ -306,8 +319,8 @@ export default {
             activityName:null,
             activityType:null,
             usingStatus:null,
-            areaName:null,
-            areaCode: null,
+            areaName:[],
+            areaCode: [],
             province:null,
             city:null,
             area:null,
@@ -326,8 +339,8 @@ export default {
             endTime:null,
             serivceCode:null,
             carType:null,
-            areaName:null,
-            areaCode:null,            
+            areaName:[],
+            areaCode:[],            
             province:null,
             city:null,
             area:null,
@@ -339,29 +352,83 @@ export default {
             activityName:{trigger:'change',required:true,validator: activityNameValidator},
             createTime:{trigger:'change',required:true,validator:createTimeValidator},
             activityDes:{trigger:'change',required:true,validator:activityDesValidator},
-            areaCode:{trigger:'change',required:true,validator:areaCodeValidator},
+            areaName:{trigger:'change',required:true,validator:areaCodeValidator},
             },
     }
  },
+  watch:{
+   dialogFormVisible_add:{
+        handler: function(val, oldVal) {
+            if(!val){
+            this.$refs['formAllData'].resetFields();
+          this.formAllData.aflcCouponList=[{
+           province:null,
+           city:null,
+           area:null,     
+           couponNum:null,
+           couponName:null,
+           couponType:null,
+           remissionDiscount:null,
+           timeType:null,
+           conditionDeduction:null,
+           startTime:null,
+           endTime:null,
+           overTime:null,
+           serivceCode:null,
+           carType:null,
+           areaCode:[],
+           areaName:[],
+           ifvouchersuperposition:null,
+           }]
+            }
+        },
+    },
+  },
   methods:{
-
-
-      
-    regionChange(d) {
-                console.log('data:',d)
-                this.formAllData.areaCode = (!d.province&&!d.city&&!d.area&&!d.town) ? '': `${this.getValue(d.province)}${this.getValue(d.city)}${this.getValue(d.area)}${this.getValue(d.town)}`.trim();
-
-              
-    },
-    regionChange1(d) {
-                console.log('data:',d)
-                this.formAllData.aflcCouponList[this.inputKey].areaCode = (!d.province&&!d.city&&!d.area&&!d.town) ? '': `${this.getValue(d.province)}${this.getValue(d.city)}${this.getValue(d.area)}${this.getValue(d.town)}`.trim();
-              
-    },
-    getValue(obj){
-        console.log('dd',obj)
-                return obj ? obj.value:'';
-    },      
+        handleChange(d){
+           console.log('d',d)
+           if(d.length<3){
+                this.$message.info('请选择具体的城市');
+                this.formAllData.areaName = [];
+                this.formAllData.areaCode = [];
+                this.formAllData.province = null
+                this.formAllData.city = null
+                this.formAllData.area = null
+           }
+           else{
+                this.formAllData.areaCode = d
+                this.formAllData.province = CodeToText[d[0]]
+                this.formAllData.city =  CodeToText[d[1]]
+                if(d[2]==''){
+                this.formAllData.area = null
+                }
+                else{
+                this.formAllData.area = CodeToText[d[2]]
+                }
+           }
+        },
+         handleChange1(d){
+           console.log('d',d)
+           if(d.length<3){
+                this.$message.info('请选择具体的城市');
+                this.formAllData.aflcCouponList[this.inputKey].areaName = [];
+                this.formAllData.aflcCouponList[this.inputKey].areaCode = [];
+                this.formAllData.aflcCouponList[this.inputKey].province = null
+                this.formAllData.aflcCouponList[this.inputKey].city = null
+                this.formAllData.aflcCouponList[this.inputKey].area = null
+           }
+           else{
+                this.formAllData.aflcCouponList[this.inputKey].areaCode = d
+                this.formAllData.aflcCouponList[this.inputKey].province = CodeToText[d[0]]
+                this.formAllData.aflcCouponList[this.inputKey].city =  CodeToText[d[1]]
+                if(d[2]==''){
+                this.formAllData.aflcCouponList[this.inputKey].area = null
+                }
+                else{
+                this.formAllData.aflcCouponList[this.inputKey].area = CodeToText[d[2]]
+                }
+           }
+        },    
     //获取  服务和车辆 类型列表
             getMoreInformation(){
                 data_CarList().then(res=>{
@@ -397,9 +464,9 @@ export default {
           },
     changeInput:function(i){
        this.inputKey = i;
+       console.log(i)
     },
     openDialog:function(){
-        console.log('types',this.editType)
         this.dialogFormVisible_add = true;
    },
     change:function(){
@@ -421,11 +488,12 @@ export default {
            timeType:null,
            conditionDeduction:null,
            startTime:null,
+           endTime:null,
            overTime:null,
            serivceCode:null,
            carType:null,
-           areaCode:null,
-           areaName:null,
+           areaCode:[],
+           areaName:[],
            ifvouchersuperposition:null,
            }) 
         },
@@ -448,10 +516,70 @@ export default {
              let reg= /^[1-9]\d*$/  //输入正整数正则
              let reg2=/^(\d|10)(\.\d)?$/  //输入0到10正数正则
                 for(var i=0;i<this.formAllData.aflcCouponList.length;i++){
+                  if(!this.formAllData.aflcCouponList[i].couponNum){
+                     this.$message.warning('派发数量都不能为空');
+                     return false
+                   }
+                  if(!this.formAllData.aflcCouponList[i].couponName){
+                     this.$message.warning('优惠券名称都不能为空');
+                     return false
+                   }  
+                  if(!this.formAllData.aflcCouponList[i].couponType){
+                     this.$message.warning('优惠券类型都不能为空');
+                     return false
+                   } 
+                  if(!this.formAllData.aflcCouponList[i].remissionDiscount){
+                     this.$message.warning('满减/折扣都不能为空');
+                     return false
+                   }
+                  if(!this.formAllData.aflcCouponList[i].conditionDeduction){
+                     this.$message.warning('满减条件/最高抵扣都不能为空');
+                     return false
+                   }
+                  if(!this.formAllData.aflcCouponList[i].timeType){
+                     this.$message.warning('时效类型都不能为空');
+                     return false
+                   }
+                  if(!this.formAllData.aflcCouponList[i].timeType){
+                     this.$message.warning('时效类型都不能为空');
+                     return false
+                   }
+                  if(this.formAllData.aflcCouponList[i].timeType=='AF046301'){
+                      if(!this.formAllData.aflcCouponList[i].overTime){
+                     this.$message.warning('过期时间不能为空');  
+                     return false  
+                      }
+                  }
+                  if(this.formAllData.aflcCouponList[i].timeType=='AF046302'){
+                      if(!this.formAllData.aflcCouponList[i].startTime){
+                     this.$message.warning('开始时间不能为空');  
+                     return false  
+                      }
+                      if(!this.formAllData.aflcCouponList[i].endTime){
+                     this.$message.warning('过期时间不能为空');  
+                     return false  
+                      }
+                  }
+                  if(!this.formAllData.aflcCouponList[i].serivceCode){
+                     this.$message.warning('适用服务类型不能为空');  
+                     return false  
+                  }
+                  if(!this.formAllData.aflcCouponList[i].carType){
+                     this.$message.warning('适用车辆类型不能为空');  
+                     return false  
+                  }
+                  if(!this.formAllData.aflcCouponList[i].areaCode){
+                     this.$message.warning('所属区域不能为空');  
+                     return false  
+                  }     
+                  if(!this.formAllData.aflcCouponList[i].ifvouchersuperposition){
+                     this.$message.warning('能否与大户券叠加不能为空');  
+                     return false  
+                  }                                 
                   if(!reg.test(this.formAllData.aflcCouponList[i].couponNum)&&this.formAllData.aflcCouponList[i].couponNum!==null){
                    this.$message.warning('派发数量仅能输入正整数');
                      return false
-                    }
+                   }
                     if(this.formAllData.aflcCouponList[i].remissionDiscount){
                    if(this.formAllData.aflcCouponList[i].couponType==null){
                        this.$message.warning('请选择优惠卷类型');
@@ -491,35 +619,75 @@ export default {
             else{
             this.$refs['formAllData'].validate(valid=>{        
               if(valid){
-              delete this.formAllData["createTime"];
-              if(this.editType=='two'){
+                if(this.editType=='two'){
                   this.formAllData.activityType = 'AF046101';
-              } 
-              data_get_couponActive_create(this.formAllData).then((res)=>{
-              this.dialogFormVisible_add = false;
+                } 
+                else if(this.formAllData.area){
+                    this.formAllData.areaCode.splice(0,2)
+                }
+                else{
+                    this.formAllData.areaCode.splice(0,1)
+                    this.formAllData.areaCode.pop()
+                }
+                this.formAllData.areaCode =String(this.formAllData.areaCode)
+                    let aflcCouponList = []
+                    this.formAllData.aflcCouponList.map((list,index)=>{
+                    if(list.area){
+                       list.areaCode.splice(0,2)
+                    }
+                    else{
+                      list.areaCode.splice(0,1)
+                      list.areaCode.pop()
+                    }
+                      list.areaCode  = String(list.areaCode)
+                      console.log(list.areaCode)
+                        aflcCouponList.push(
+                            {
+                                province:list.province,
+                                city:list.city,
+                                area:list.area,     
+                                couponNum:list.couponNum,
+                                couponName:list.couponName,
+                                couponType:list.couponType,
+                                remissionDiscount:list.remissionDiscount,
+                                timeType:list.timeType,
+                                conditionDeduction:list.conditionDeduction,
+                                startTime:list.startTime,
+                                overTime:list.overTime,
+                                endTime:list.endTime,
+                                serivceCode:list.serivceCode,
+                                carType:list.carType,
+                                areaCode:list.areaCode,
+                                ifvouchersuperposition:list.ifvouchersuperposition,                              
+                            }
+                        )
+                        })
+                    let forms=[{
+                        activityType:this.formAllData.activityType,
+                        activityName:this.formAllData.activityName,
+                        startTime:this.formAllData.startTime,
+                        endTime:this.formAllData.endTime,
+                        activityDes:this.formAllData.activityDes,
+                        areaCode:this.formAllData.areaCode,
+                        province:this.formAllData.province,
+                        city:this.formAllData.city,
+                        area:this.formAllData.area,
+                        aflcCouponList:aflcCouponList
+                    }]
+              data_get_couponActive_create(forms).then((res)=>{
+              
               this.$refs['formAllData'].resetFields();
-              this.formAllData.aflcCouponList=[{
-                couponNum:null,
-                couponName:null,
-                couponType:null,
-                remissionDiscount:null,
-                timeType:null,
-                conditionDeduction:null,
-                startTime:null,
-                overTime:null,
-                serivceCode:null,
-                carType:null,
-                areaCode:null,
-                areaName:null,
-                ifvouchersuperposition:null,
-              }]
               eventBus.$emit('changeListtwo')
-           })
+              this.dialogFormVisible_add = false;
+              this.$message.success('新增成功');
+                }).catch(res=>{
+                    console.log(res)
+                    this.dialogFormVisible_add = false;
+                    this.$message.error('新增失败')
+            });
               }
          })
         }
-            
-
      }       
   },
   mounted(){
@@ -537,16 +705,12 @@ export default {
     .el-row{
         padding-bottom: 10px;
     }
-    .v-dropdown-container{
-        top:35px!important;
-        left:0px!important;
-    }
     .el-radio.is-bordered{
         height: 30px;
         padding: 7px 20px 0 10px;
     }
      .textareaBox {
-        width: 990px;
+        width: 500px;
     }
     .el-input__inner{
         line-height: 30px;
@@ -649,6 +813,9 @@ export default {
             }
             .el-input{
                 width:100%;
+            }
+            .el-cascader{
+                line-height: 30px;  
             }
         }
         .el-input__icon{

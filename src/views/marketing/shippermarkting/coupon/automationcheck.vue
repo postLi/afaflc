@@ -63,7 +63,7 @@
           <el-row >
             <el-col :span="10">
                <el-form-item  label="所属区域：" :label-width="formLabelWidth"> 
-                    <el-input v-model="formAllData.areaCode"  disabled></el-input>
+                    <el-input v-model="formAllData.areaName1"  disabled></el-input>
                </el-form-item>  
             </el-col>
           </el-row>
@@ -166,7 +166,9 @@
                  </el-select>
                  </div>  
              <div class="ht_table_td table_th13">
-                <el-input v-model="formAllData.aflcCouponList[keys].areaCode" placeholder="" disabled></el-input>
+                 <el-tooltip :content="formAllData.aflcCouponList[keys].areaName1" placement="top">
+                <el-input v-model="formAllData.aflcCouponList[keys].areaName1" placeholder="" disabled></el-input>
+                 </el-tooltip>
               </div>
              <div class="ht_table_td table_th14">
                   <el-input v-model="formAllData.aflcCouponList[keys].ifvouchersuperposition" placeholder="" disabled></el-input>
@@ -230,17 +232,17 @@
             </el-table-column>
             <el-table-column  label="优惠券名称" prop="couponName">
             </el-table-column>
-            <el-table-column  label="优惠券类型" prop="couponType">
+            <el-table-column  label="优惠券类型" prop="couponTypeName">
             </el-table-column>  
             <el-table-column  label="优惠券码" prop="couponNum">
             </el-table-column>        
-            <el-table-column  label="用户账号" prop="name">
+            <el-table-column  label="手机号码" prop="mobile">
             </el-table-column>       
             <el-table-column  label="派发时间" prop="grantTime">
             </el-table-column>     
             <el-table-column  label="过期时间" prop="endTime">
             </el-table-column>
-            <el-table-column  label="券码状态" prop="couponStatus">
+            <el-table-column  label="券码状态" prop="couponStatusName">
             </el-table-column>     
             <el-table-column  label="订单号" prop="orderSerial">
             </el-table-column>    
@@ -374,6 +376,7 @@ export default {
             areaCode: null,
             startTime:null,
             endTime:null,
+            areaName1:null,
            aflcCouponList:[{
            couponNum:null,
            couponName:null,
@@ -387,6 +390,7 @@ export default {
            serivceCode:null,
            carType:null,
            areaCode:null,
+           areaName1:null,
            ifvouchersuperposition:null,
         }]
         },
@@ -442,6 +446,7 @@ export default {
           this.formAllData.activityType= res.data.activityType
           Ctime.push(now1.getTime(),now2.getTime())
           this.createTime = Ctime
+          this.formAllData.areaName1 =res.data.province+res.data.city+res.data.area
       })
       data_get_couponActive2_Id(this.templateItem.id).then((res)=>{
               this.formAllData.aflcCouponList = res.data
@@ -454,6 +459,7 @@ export default {
               else{
                    this.formAllData.aflcCouponList[i].ifvouchersuperposition='能'
               }
+               this.formAllData.aflcCouponList[i].areaName1 = this.formAllData.aflcCouponList[i].province+ this.formAllData.aflcCouponList[i].city+ this.formAllData.aflcCouponList[i].area
           }
       })
      this.firstblood();
@@ -543,7 +549,7 @@ export default {
         padding: 7px 20px 0 10px;
     }
      .textareaBox {
-        width: 850px;
+        width: 500px;
     }
     .el-radio-group{
             margin-left:0px;
