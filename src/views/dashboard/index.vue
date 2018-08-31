@@ -68,19 +68,23 @@ export default {
 </script>
 
 <style rel="stylesheet/scss" lang="scss" scoped>
-.dashboard {
-  &-container {
-    // padding: 24px 20px;
-    background: #f2f2f2;
-  }
-  &-text {
-    font-size: 30px;
-    line-height: 46px;
-  }
-}
+    .dashboard {
+        &-container {
+            // padding: 24px 20px;
+            background: #f2f2f2;
+        }
+        &-text {
+            font-size: 30px;
+            line-height: 46px;
+        }
+    }
     .lsit-tab{
         .list-tab-title{
             background: #fff;
         }
+    }
+
+    .dashboard-container{
+        height: 100%;
     }
 </style>

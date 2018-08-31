@@ -215,7 +215,7 @@ import vregion from '@/components/vregion/Region'
         },
         mounted(){
             this.firstblood();
-            this.timeOutCancel = setInterval(this.firstblood,2000)
+            // this.timeOutCancel = setInterval(this.firstblood,60000)
             // console.log(this.$store)
         },  
         beforeDestroy(){

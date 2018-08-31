@@ -9,7 +9,7 @@
             <h2>与装卸点距离</h2>
         </div>
         <div class="orderTrackInfo orderTrackStyle" v-for="(item,key) in listInformation" :key="key">
-            <p><span></span><span>{{item.createTime}}</span></p>
+            <p><span></span><span>{{item.createTime | parseTime}}</span></p>
             <p>{{item.address}}</p>
             <p>{{item.address}}</p>
             <p>{{item.remark}}</p>
@@ -22,7 +22,7 @@
 <script>
 
 import { orderDetailsList } from '@/api/order/ordermange'
-
+import { parseTime } from '@/utils/index.js'
 export default {
     name: 'ordertrack',
     components:{

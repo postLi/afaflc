@@ -66,7 +66,7 @@
 				</el-table-column>
                 <el-table-column prop="qq" label="QQ号码" width="200">
 				</el-table-column>
-                <el-table-column prop="otherService" label="会员服务承诺" width="225" :show-overflow-tooltip="true" align="left">
+                <!-- <el-table-column prop="otherService" label="会员服务承诺" width="225" :show-overflow-tooltip="true" align="left">
                     <template slot-scope="scope" >
                         <div class="otherServiceTD" v-if="scope.row.otherService != ''">
                             <span class="otherService" v-for="(item,key) in JSON.parse(scope.row.otherService) " :key="key">
@@ -76,9 +76,8 @@
                         <div v-else>
                             未填写
                         </div>
-                        <!-- {{JSON.parse(scope.row.otherService)}} -->
                     </template>
-				</el-table-column>
+				</el-table-column> -->
                 <el-table-column prop="isOpenTms" label="是否开通TMS" width="120">
                     <template slot-scope="scope">
                         <span :class="scope.row.isOpenTms == 1 ? 'isTMS' : 'noTMS'"> {{scope.row.isOpenTms == 1 ? '是' : '否'}}</span>

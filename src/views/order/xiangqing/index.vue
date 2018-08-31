@@ -20,7 +20,6 @@
                 <el-tab-pane label="抢单记录" name="robbingList">
                     <robbingList :isvisible="orderTabName === 'robbingList'"></robbingList>
                 </el-tab-pane>
-
                 
             <!-- 行驶轨迹 -->
                 <el-tab-pane label="行驶轨迹" name="driveTrail">

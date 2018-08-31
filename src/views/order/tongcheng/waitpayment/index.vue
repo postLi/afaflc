@@ -203,7 +203,9 @@ import vregion from '@/components/vregion/Region'
         },
         mounted(){
             this.firstblood();
-            // this.timeOutWaitPay = setInterval(this.firstblood,2000)
+
+            console.log('```````````',process.env.NODE_ENV)
+            // this.timeOutWaitPay = setInterval(this.firstblood,60000)
             // console.log(this.$store)
         },  
         beforeDestroy(){

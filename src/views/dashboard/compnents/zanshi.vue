@@ -1,98 +1,84 @@
 <template>
-    <el-container>
-        <el-main class="main_content ">
-        <div class="head_title clearfix">
-            <h4 class="fl">数据总览</h4>
-            <ul class="clearfix ">
-            <li>今天</li>
-            <li>昨天</li>
-            <li>最近七天</li>
-            <li>最近一个月</li>
-            <li>最近两个月</li>
-            <li>2018-06-4至2019-08-09</li>
-            </ul>
-        </div>
-        <div class="main_forthUl">
-            <ul>
-            <li>需求资源池 <span>({{title}})</span>
-            </li>
-            <li><span>求货需求订单:</span> <span>34755</span>单</li>
-            <li><span>求车需求订单:</span><span>5568</span>单</li>
-            <li><span>零担订单:</span><span>23888</span>单</li>
-            <li><span>小货车订单:</span><span>12352</span>单</li>
-            </ul>
-            <ul>
-                <li>
-                    用户注册
-                    <span>({{title}})</span>
-                    <!-- <i class="el-icon-check"></i> -->
-                </li>
-                <li><span>货主:</span><span>7989</span>人</li>
-                <li><span>车主:</span><span>32456</span>人</li>
-                <li><span>物流公司:</span><span>3455</span>家</li>
-                <li><span>区代:</span><span>32</span>家</li>
-            </ul>
-            <ul>
-                <li>
-                    用户认证
-                    <span>({{title}})</span>
-                    <!-- <i class="el-icon-check"></i> -->
-                </li>
-                <li><span>货主:</span><span>9986</span>人</li>
-                <li><span>车主:</span><span>32514</span>人</li>
-                <li><span>物流公司:</span><span>3422</span>家</li>
-                <li><span>区代:</span><span>30</span>家</li>
-            </ul>
-            <ul>
-                <li>
-                    货主下单
-                    <span>({{title}})</span>
-                    <!-- <i class="el-icon-check"></i> -->
-                </li>
-                <div id="xiadan" style="width:100%;height:150px;">
+        <div class="main_content ">
+            <div class="head_title clearfix">
+                <h4 class="fl">数据总览</h4>
+                <ul class=" clearfix ">
+                    <li>今天</li>
+                    <li>昨天</li>
+                    <li>最近七天</li>
+                    <li>最近一个月</li>
+                    <li>最近两个月</li>
+                    <li>2018-06-4至2019-08-09</li>
+                </ul>
+            </div>
+            <el-row class="main_forthUl">
+                <!-- <el-col :span="24"></el-col> -->
+                <ul>
+                    <li>需求资源池 <span>({{title}})</span>
+                    </li>
+                    <li><span>求货需求订单:</span> <span>34755</span>单</li>
+                    <li><span>求车需求订单:</span><span>5568</span>单</li>
+                    <li><span>零担订单:</span><span>23888</span>单</li>
+                    <li><span>小货车订单:</span><span>12352</span>单</li>
+                </ul>
+                <ul>
+                    <li>
+                        用户注册
+                        <span>({{title}})</span>
+                        <!-- <i class="el-icon-check"></i> -->
+                    </li>
+                    <li><span>货主:</span><span>7989</span>人</li>
+                    <li><span>车主:</span><span>32456</span>人</li>
+                    <li><span>物流公司:</span><span>3455</span>家</li>
+                    <li><span>区代:</span><span>32</span>家</li>
+                </ul>
+                <ul>
+                    <li>
+                        用户认证
+                        <span>({{title}})</span>
+                        <!-- <i class="el-icon-check"></i> -->
+                    </li>
+                    <li><span>货主:</span><span>9986</span>人</li>
+                    <li><span>车主:</span><span>32514</span>人</li>
+                    <li><span>物流公司:</span><span>3422</span>家</li>
+                    <li><span>区代:</span><span>30</span>家</li>
+                </ul>
+                <ul>
+                    <li>
+                        货主下单
+                        <span>({{title}})</span>
+                        <!-- <i class="el-icon-check"></i> -->
+                    </li>
+                    <div id="xiadan" style="width:100%;height:150px;">
 
-                </div>
-                <!-- <li><span>小货车:</span><span>9989单,2356元</span></li>
-                <li><span>大货车:</span><span>2312单,4564元</span></li>
-                <li><span>零担:</span><span>3455单,4564元</span></li>
-                <li><span>总计:</span><span>3212321</span>单,<span>1312323</span>元</li> -->
-            </ul>
-            <ul>
-                <li>
-                    交易成功
-                    <span>({{title}})</span>
-                    <!-- <i class="el-icon-check"></i> -->
-                </li>
-                <div id="jiaoyi" style="width:100%;height:150px;">
+                    </div>
+                    <!-- <li><span>小货车:</span><span>9989单,2356元</span></li>
+                    <li><span>大货车:</span><span>2312单,4564元</span></li>
+                    <li><span>零担:</span><span>3455单,4564元</span></li>
+                    <li><span>总计:</span><span>3212321</span>单,<span>1312323</span>元</li> -->
+                </ul>
+                <ul>
+                    <li>
+                        交易成功
+                        <span>({{title}})</span>
+                        <!-- <i class="el-icon-check"></i> -->
+                    </li>
+                    <div id="jiaoyi" style="width:100%;height:150px;">
 
-                </div>
-                <!-- <li><span>小货车:</span><span>20</span>单</li>
-                <li><span>大货车:</span><span>2312单,4564元</span></li>
-                <li><span>零担:</span><span>3455单,4564元</span></li>
-                <li><span>总计:</span><span>3212321</span>单,<span>1312323</span>元</li> -->
-            </ul>
-        </div>
-        
-        <el-main class="main_left">
-            <ul class="ul_left" id="main"></ul>
-            <ul class="ul_right">
-                <li >
-                    <!-- <p>运费收入</p> -->
+                    </div>
+                    <!-- <li><span>小货车:</span><span>20</span>单</li>
+                    <li><span>大货车:</span><span>2312单,4564元</span></li>
+                    <li><span>零担:</span><span>3455单,4564元</span></li>
+                    <li><span>总计:</span><span>3212321</span>单,<span>1312323</span>元</li> -->
+                </ul>
+            </el-row>
+            <div class="main_left clearfix">
+                <div class="ul_left" id="main"></div>
+                <div class="ul_right">
                     <div id="main_lefttop"></div>
-                </li>
-                <!-- <li>
-                    <p>运费收支对比</p>
-                    <div id="main_leftdown"></div>
-                </li> -->
-
-                <!-- <div id="xiadan" style="width:100%;height:150px;">
-
-                </div> -->
-            </ul>
-        </el-main>
-    </el-main>
-    
-  </el-container>
+                </div>
+            </div>
+        </div>
 </template>
 
 <script>
@@ -334,7 +320,7 @@ export default {
             legend: {
                 data: ['订单数', '订单金额'],
                 orient: 'horizontal', // 'vertical'
-                x: 'right', // 'center' | 'left' | {number},
+                x: 'center', // 'center' | 'left' | {number},
                 y: '-5px', // 'center' | 'bottom' | {number}
                 backgroundColor: '#fff',
                 padding: 5,    // [5, 10, 15, 20]
@@ -401,7 +387,7 @@ export default {
             legend: {
                 data: ['订单数', '订单金额'],
                 orient: 'horizontal', // 'vertical'
-                x: 'right', // 'center' | 'left' | {number},
+                x: 'center', // 'center' | 'left' | {number},
                 y: '-5px', // 'center' | 'bottom' | {number}
                 backgroundColor: '#fff',
                 padding: 5,    // [5, 10, 15, 20]
@@ -449,7 +435,6 @@ export default {
                 },
             ]
         };
-
         // 为echarts对象加载数据
         myChart.setOption(option)
         // myChart2.setOption(option2)
@@ -463,29 +448,27 @@ export default {
 </script>
 <style lang="scss">
 .main_content{
-  padding-bottom: 100px !important;
- .clearfix:after{
-    display: block;
-    clear: both;
-    content: "";
-    visibility: hidden;
-    height: 0;
-}
-.clearfix{
-    zoom:1;
-}
+    padding: 15px 20px;
+    height: 100%;
+    min-width: 1100px;
+    height: 100%;
+    min-height: 666px;
     background:rgb(235,235,235);
+    display: flex;
+    -ms-flex-direction: column;
+    flex-direction: column;
     .head_title{
-        line-height: 30px !important;
+        line-height: 30px;
+        height: 50px;
         background: #ffff;
-        padding: 10px 40px;
-        overflow: hidden;
+        padding: 10px 20px;
         margin-bottom: 2px;
+        box-sizing: border-box;
         h4{
             color: #333;
         }
         ul{
-        margin-left: 65%;
+            margin-left: 65%;
         li{
             float: left;
             padding: 0 10px;
@@ -496,6 +479,8 @@ export default {
         li:hover{
             color:#3e9ff1;
             font-weight: bold;
+            font-size: 14px;
+            margin-top: -2px;
         }
         li:first-child{
                 float: left;
@@ -503,154 +488,149 @@ export default {
     }
   }
   .main_forthUl{
-    width: 100%;
-    display: flex;
-    float: left;
-    background: #fff;
-    justify-content: space-between;
-    padding: 15px 20px;
-    ul{
-        box-sizing: border-box;
-        border-radius: 2px;
-        border: solid 1px #1790ff;
-        float: left;
-        flex: 15%;
-        height: 185px;
-        margin: 0 20px 0px 0;
-      li{
-        line-height: 20px;
-        font-size: 14px;
-        padding: 0 20px;
-        margin: 5px 0 ;
-
-        span{
-          color:#333;
-          padding:0 10px;
-        }
-        span:first-child{                                         
-            color: #333;
-            width: 10%;
-            text-align: right;
-        }
-        em{
-          // text-align: right;
-          float:right;
-        }
-      }
-      li:nth-child(1){
-        position: relative;
-        padding: 14px 20px ;
-        font-size: 16px;
-        font-weight: bold;
-        margin: 0px;
-        background:  rgb(211, 234, 253);
-        margin-bottom: 10px;
-        span{
-            color:red;
-            font-size: 14px;
-        }
-        .box_gg{
-          position: relative;
-          width:30px;
-          height:30px;
-          // background:red;
-          top:-31px;
-          left:355px;
-          
-          /*向下*/
-          .triangle_border_down{
-              width:0;
-              height:0;
-              border-width:31px 15px 2px;
-              border-style:solid;
-              border-color: #3e9ff1 transparent transparent;/*灰 透明 透明 */
-              margin:40px auto;
-              position: absolute;
-              top:-40px;
-              display: none;
-              // left:371;
-              .el-icon-check{
-                position: absolute;
-                font-size: 20px;
-                top:-31px;
-                left:-8px;
-                color:#ffff;
-                display: none;
-              }
-          }
-          /*向左*/
-          .triangle_border_left{
-              width:0;
-              height:0;
-              border-width:31px 15px 33px 0;
-              border-style:solid;
-              border-color:transparent #3e9ff1 transparent transparent;/*透明 灰 透明 透明 */
-              margin:40px auto;
-              position: absolute;
-              top:-41px;
-              left:15px;
-              display: none;
-          }
-        }
-      }
-    }
-    ul:last-child{
-    //   margin:10px 0 10px 0;
-    margin-right: 0;
-    }
-    
-  }
-  .main_forthUl ul:hover {
-      border:1px solid #3e9ff1;
-      cursor: pointer;
-    }
-  .main_forthUl ul:hover .el-icon-check{
-    display: block;
-    font-weight: bold;
-  }
-  .main_forthUl ul:hover .triangle_border_down{
-    display: block;
-  }
-  .main_left{
-    padding: 10px 0 !important ;
-    width: 100%;
-    height: 840px;
-    .ul_left{
-      float: left;
-      width: 74.6%;
-      background:#fff;
-      height:600px;
-    }
-    .ul_right{
-      width: 24.8%;
-      float:right;
-      // background:yellow;
-      height:600px;
-      li{
-        width: 100%;
-        height:100%;
         background: #fff;
-        p{
-          font-size: 14px;
-          padding: 10px;
-        }
-      }
-      li:nth-child(1){
-        border-bottom: 2px solid #ddd;
-      } 
-      #main_lefttop{
-        height: 100%;
-      }
-      #main_leftdown,#xiadan{
-        height: 100%;
-      }
-      #main{
-        height: 100%;
-      }
+        padding: 15px 20px;
+        margin-bottom: 10px;
+        ul{
+            width: 19%;
+            box-sizing: border-box;
+            border-radius: 2px;
+            border: solid 1px #1790ff;
+            float: left;
+            height: 185px;
+            margin-right: 20px;
+            box-shadow: 2px 2px 2px 2px rgba(0,0,0,.1);
+            transition: color 4s ease;
+            border-radius: 5px;
+        li{
+            line-height: 20px;
+            font-size: 14px;
+            padding: 0 20px;
+            margin: 5px 0 ;
 
-      #xiadan{
-      }
+            span{
+                color:#333;
+                padding:0 10px;
+            }
+            span:first-child{                                         
+                color: #333;
+                width: 10%;
+                text-align: right;
+            }
+            em{
+                // text-align: right;
+                float:right;
+            }
+        }
+        li:nth-child(1){
+            position: relative;
+            padding: 14px 20px ;
+            font-size: 16px;
+            font-weight: bold;
+            margin: 0px;
+            background:  rgb(211, 234, 253);
+            margin-bottom: 10px;
+            span{
+                color:red;
+                font-size: 14px;
+            }
+            .box_gg{
+            position: relative;
+            width:30px;
+            height:30px;
+            // background:red;
+            top:-31px;
+            left:355px;
+            /*向下*/
+            .triangle_border_down{
+                width:0;
+                height:0;
+                border-width:31px 15px 2px;
+                border-style:solid;
+                border-color: #3e9ff1 transparent transparent;/*灰 透明 透明 */
+                margin:40px auto;
+                position: absolute;
+                top:-40px;
+                display: none;
+                // left:371;
+                    .el-icon-check{
+                        position: absolute;
+                        font-size: 20px;
+                        top:-31px;
+                        left:-8px;
+                        color:#ffff;
+                        display: none;
+                    }
+                }
+            /*向左*/
+                .triangle_border_left{
+                    width:0;
+                    height:0;
+                    border-width:31px 15px 33px 0;
+                    border-style:solid;
+                    border-color:transparent #3e9ff1 transparent transparent;/*透明 灰 透明 透明 */
+                    margin:40px auto;
+                    position: absolute;
+                    top:-41px;
+                    left:15px;
+                    display: none;
+                }
+            }
+        }
+        }
+        ul:last-child{
+            margin-right: 0;
+        }
+
+        ul:hover{
+            margin-top: -2px;
+            cursor: pointer;
+            box-sizing: border-box;
+            transition: all 0.2s ease-out; 
+            box-shadow: 0px 35px 77px -17px rgba(0, 0, 0, 0.40); 
+            overflow: hidden;
+            color: red;
+
+        }
+        
     }
-  }
-}
+    .main_forthUl ul:hover {
+        border:1px solid #3e9ff1;
+        cursor: pointer;
+    }
+    .main_forthUl ul:hover .el-icon-check{
+        display: block;
+        font-weight: bold;
+    }
+    .main_forthUl ul:hover .triangle_border_down{
+        display: block;
+    }
+        .main_left{
+            flex: 1;
+            .ul_left{
+                float: left;
+                width: 74.6%;
+                background:#fff;
+                height:100%;
+            }
+            .ul_right{
+                width: 24.8%;
+                float:right;
+                height:100%;
+                background: #fff;
+                #main_lefttop{
+                    height: 100%;
+                }
+                #main_leftdown,#xiadan{
+                    height: 100%;
+                }
+                #main{
+                    height: 100%;
+                }
+
+                #xiadan{
+                }
+            }
+        }
+    }
 </style>
