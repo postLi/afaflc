@@ -250,7 +250,7 @@
             </el-table-column>                                                                                              
             </el-table> 
             </div>
-                            <!-- 页码 -->
+         <!-- 页码 -->
         <div class="info_tab_footer">共计:{{ dataTotal }} <div class="show_pager"> <Pager :total="dataTotal" @change="handlePageChange"  :sizes="sizes"></Pager></div> </div>
              </div>
             </el-tab-pane>            
