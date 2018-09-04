@@ -137,8 +137,8 @@ export default {
 
 
 <style rel="stylesheet/scss" lang="scss">
-@import "src/styles/variate.scss";
-@import "src/styles/mixin.scss";
+// @import "src/styles/variate.scss";
+// @import "src/styles/mixin.scss";
 @import './memu.scss';
 
 // #app .sidebar-menu{

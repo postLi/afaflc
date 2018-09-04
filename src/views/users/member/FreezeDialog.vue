@@ -1,7 +1,7 @@
 <template>
   <div class="freezeDialog commoncss">
     <el-button :type="type" :value="value" :plain="plain" :icon="icon" @click="openDialog()">{{text}}</el-button>
-    <el-dialog :title="title" :visible.sync="freezeDialogFlag" :before-close="change()" :close-on-click-modal="false" >
+    <el-dialog :title="title" :visible.sync="freezeDialogFlag" :before-close="change()" v-dialogDrag :close-on-click-modal="false" >
       <el-form :model="formFroze" ref="formFroze" :rules="formFrozeRules" >
         <!-- <el-row>
             <el-col :span="12"> 

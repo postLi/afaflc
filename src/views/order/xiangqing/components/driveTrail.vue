@@ -1,5 +1,5 @@
 <template>
-    <div class="trail clearfix">
+    <div class="trail clearfix" v-loading = "loading">
         <div class="trailData fl">
             <el-table
                 :data="listInformation"
@@ -29,7 +29,7 @@
             <!-- <div class="info_tab_footer">共计:{{ totalCount }} <div class="show_pager"> <Pager :total="totalCount" @change="handlePageChange" :sizes="sizes"/></div> </div>     -->
         </div>
         <div class="tarilMap fr">
-
+            <DriverTrack></DriverTrack>
         </div>
     </div>
 </template>
@@ -39,11 +39,12 @@
 import Pager from '@/components/Pagination/index'
 import { parseTime } from '@/utils/index.js'
 import { orderDetailsList } from '@/api/order/ordermange'
-
+import DriverTrack from '@/components/baiduTrack/index'
 export default {
     name: 'trail',
     components:{
         Pager,
+        DriverTrack
     },
     props: {
        isvisible: {
@@ -53,6 +54,7 @@ export default {
     },
     data() {
         return {
+            loading:true,
             totalCount:0,
             page:1,
             pagesize:20,
@@ -92,6 +94,7 @@ export default {
     },
     methods: {
         init(){
+            this.loading = true;
             orderDetailsList(this.$route.query.orderSerial).then(res => {
                 console.log('details',res)
                 this.listInformation = res.data.aflcOrderCarTrails;
@@ -114,8 +117,14 @@ export default {
 
 <style rel="stylesheet/scss" lang="scss" scoped>
     .trail{
-        .trailData,.tarilMap{
-            width: 50%;
+        height: 100%;
+        .trailData{
+            width: 35%;
+            height: 100%;
+        }
+        .tarilMap{
+            width: 63%;
+            height: 100%;
         }
     }
     

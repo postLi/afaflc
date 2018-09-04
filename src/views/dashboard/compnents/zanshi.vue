@@ -620,12 +620,17 @@ export default {
                 background: #fff;
                 #main_lefttop{
                     height: 100%;
+                    width: 100%;
                 }
                 #main_leftdown,#xiadan{
                     height: 100%;
+                    width: 100%;
+
                 }
                 #main{
                     height: 100%;
+                    width: 100%;
+
                 }
 
                 #xiadan{

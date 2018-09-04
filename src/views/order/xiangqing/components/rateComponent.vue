@@ -5,7 +5,8 @@
             <div class="essentialInformation">
                 <p>
                     <span>装货照片：</span>
-                    <img src="../../../../../static/test.jpg" v-showPicture imgurl="../../../../../static/test.jpg" alt="">
+                    <img class="showPicture" :src="ratePictures.filePath ? ratePictures.filePath: defaultImg" v-showPicture :imgurl="ratePictures.filePath" alt="" >
+
                 </p>
                 <p>
                     <span>回单照片：</span>
@@ -87,7 +88,11 @@ export default {
     },
     data() {
         return {
+            defaultImg:'/static/test.jpg',//默认加载失败图片
             loading:true,
+            ratePictures:{},//照片信息装货照片
+            ratePictures_huidan:{},//照片信息回单照片
+
         };
     },
     watch:{
@@ -108,7 +113,16 @@ export default {
         init(){
             orderDetailsList(this.$route.query.orderSerial).then(res => {
                 console.log('details',res)
-                this.tableData = res.data.aflcOrderEvaluations;
+                res.data.aflcOrderFollowingFiles.forEach(el => {
+                    console.log('el.transportStatus',el.transportStatus)
+                    if(el.transportStatus == 'AF0080604CZ'){
+                        this.ratePictures = el;
+                    }
+                    if(el.transportStatus == 'AF0080607CZ'){
+                        this.ratePictures_huidan = el;
+                    }
+                });
+                console.log('111', this.ratePictures)
                 this.loading = false;
             })
         },

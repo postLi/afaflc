@@ -6,6 +6,12 @@ $sidebarBackgroundColor: #002039;
 
 .sidebar-menu{
     color: rgba(255, 255, 255, 0.8);
+    &>.is-opened:hover{
+        background: $backgroundColor;
+        .is-active{
+            border: none;
+        }
+    }
     &>.el-menu-item,&>.el-submenu{
         background: $sidebarBackgroundColor;
         border-left: 4px solid #002039;
@@ -15,9 +21,7 @@ $sidebarBackgroundColor: #002039;
         top: 55%;
         right: 14px;
     }
-    // &>.menu-item>a{
-    //     padding-left: 24px;
-    // }
+
     .sidebar-submenu{
         display: none;
     }
@@ -33,17 +37,9 @@ $sidebarBackgroundColor: #002039;
     .sidebar-nav-title{
         display: inline-block;
     }
-
-    // .sidebar-submenu .submenu-item{
-    //     min-width: 100%;
-    //     padding-left: $sidebarFontSize * 1.2 + 34px;
-    //     font-size: $sidebarFontSize - 2px;
-    // }
-
     .is-active{
-        background: $hoverBackgroundColor;
-        border-left-color: #104193;
-
+        background: $hoverBackgroundColor !important;
+        border-left-color: #104193 !important;
     }
 
     &>.is-opened{
@@ -51,40 +47,22 @@ $sidebarBackgroundColor: #002039;
         border-left-color: #104193;
         
     }
-    .el-submenu >.is-opened{
-        background: $backgroundColor;
+    .el-submenu {
+        &>.is-opened{
+            background: $backgroundColor;
+        }
+        .el-menu-item {
+            height: 50px;
+            line-height: 50px;
+            width: 100%;
+            font-size: 14px;
+            min-width: 100%;
+        }
     }
-    .el-submenu .el-menu-item {
-        height: 50px;
-        line-height: 50px;
-        width: 100%;
-        font-size: 14px;
-        min-width: 100%;
-    }
-    //     .is-active{
-    //         &>a {
-    //         color: #fff;
-    //     }
-    // }
-
-    // .sidebar_menu_toggle, .submenu-item-tab{
-    //     cursor: pointer;
-    //     display: block;
-    //     padding-left: 24px;
-    // }
-
-    // .menu-item:focus, .menu-item:hover,.sidebar_menu_toggle:hover, 
-    // .sidebar-submenu .submenu-item:hover, 
+   
     .el-submenu:hover,.el-submenu__title:hover,.el-menu-item:hover{
             background: $hoverBackgroundColor;
             border-left-color: #104193;
-    }
-
-    &>.is-opened:hover{
-        background: $backgroundColor;
-        .is-active{
-            border: none;
-        }
     }
 
     .svg-icon {
@@ -125,10 +103,10 @@ $sidebarBackgroundColor: #002039;
             }
             }
             .menu-item:hover{
-            .sidebar-submenu{
-                background: $sidebarBackgroundColor;
-                display: none;
-            }
+                .sidebar-submenu{
+                    background: $sidebarBackgroundColor;
+                    display: none;
+                }
             }
             .svg-icon{
                 margin-left: -4px;
@@ -138,7 +116,7 @@ $sidebarBackgroundColor: #002039;
             }
             
             .el-menu--popup{
-            background: $sidebarBackgroundColor;
+                background: $sidebarBackgroundColor;
             }
             .el-submenu__icon-arrow{
                 display: none;
@@ -147,13 +125,12 @@ $sidebarBackgroundColor: #002039;
             a:hover{
             color: #3e9ff1;
             }
-
-                .el-submenu .el-menu-item {
-                    padding: 0 !important;
-                    .svg-icon{
-                        margin-left: 16px;
-                    }
+            .el-submenu .el-menu-item {
+                padding: 0 !important;
+                .svg-icon{
+                    margin-left: 16px;
                 }
+            }
             .menu-item>.el-menu>.menuitem>.sidebar-nav-title,.sidebar-nav-title,{
                 position: absolute;
                 left: 0;

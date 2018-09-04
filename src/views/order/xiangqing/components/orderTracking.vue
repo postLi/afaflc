@@ -12,7 +12,7 @@
             <p><span></span><span>{{item.createTime | parseTime}}</span></p>
             <p>{{item.address}}</p>
             <p>{{item.address}}</p>
-            <p>{{item.remark}}</p>
+            <p>{{item.remark}}</p>  
             <p>{{item.address}}</p>
             <p>{{item.remark}}</p>
         </div>
