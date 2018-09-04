@@ -111,7 +111,7 @@ export default {
 <style rel="stylesheet/scss" lang="scss">
     .dingdanxiangqing{
         height: 100%;
-        background-color: #f0f0f0;
+        background-color: #fafeff;
         padding-right: 16px;
         .el-tabs--card>.el-tabs__header {
             border-bottom: 1px solid #03a9f4;
@@ -142,7 +142,7 @@ export default {
             border-top-width: 2px;
             border-color: #03a9f4;
             background: #ffffff;
-            border-bottom-color: #f0f0f0;
+            border-bottom-color: #fafeff;
         }
 
         .el-tabs__content{
@@ -212,6 +212,21 @@ export default {
 
                 .markInfo{
                     width: 50%;
+                }
+            }
+
+
+            .essentialInformationNull{
+                font-size: 14px;
+                font-weight: bold;
+                margin: 20px;
+                padding-left: 40%;
+                img{
+                    vertical-align: middle;
+                }
+                span{
+                    margin-left: 10px;
+                    vertical-align: middle;
                 }
             }
         }

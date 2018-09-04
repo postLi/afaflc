@@ -1,5 +1,5 @@
 <template>
-    <div class="robbingList clearfix">
+    <div class="robbingList clearfix" v-loading="loading">
         <el-table
             :data="tableData"
             border
@@ -127,6 +127,7 @@ export default {
             pagesize:20,
             sizes:[20,30,50],
             tableData: null,
+            loading:true,
         };
     },
     watch:{
@@ -144,6 +145,7 @@ export default {
     },
     methods: {
         init(){
+            this.loading = true;
             orderDetailsList(this.$route.query.orderSerial).then(res => {
                 console.log('details',res)
                 this.tableData = res.data.aflcOrderGrabs;

@@ -339,6 +339,8 @@ export default {
                 companyName:'',
                 mobile:'',
                 authStatus:"AF0010402",//待认证的状态码
+                isVest:'0'
+
             },
             formLabelWidth: '120px',
             dialogFormVisible:false, //认证审核弹框控制
@@ -483,7 +485,7 @@ export default {
         },
         //点击查询按纽，按条件查询列表
         getdata_search(event){
-                this.formAll.belongCity = this.$refs.area.selectedOptions.pop();
+                // this.formAll.belongCity = this.$refs.area.selectedOptions.pop();
                 this.firstblood();
         },
          //获取增值服务
@@ -501,12 +503,14 @@ export default {
         },
         //清空
         clearSearch(){
-            this.$refs.area.selectedOptions = [];
+            // this.$refs.area.selectedOptions = [];
             this.formAll = {
                 belongCity:null,
                 companyName:'',
                 mobile:'',
                 authStatus:"AF0010402",//待认证的状态码
+                isVest:'0'
+
             }
             this.firstblood()
         },

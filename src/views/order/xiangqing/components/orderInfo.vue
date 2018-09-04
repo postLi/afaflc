@@ -72,7 +72,7 @@
                 <p>
                     <span v-if="idx == 0">发货人：</span>
                     <span v-else>收货人：</span>
-                    <span>{{obj.contacts}}</span>
+                    <span>{{obj.contacts ? obj.contacts : obj.contactsPhone}}</span>
                 </p>
                     <p>
                     <span>联系方式：</span>
@@ -170,7 +170,6 @@
                     <span>优惠券抵扣：</span>
                     <span v-if="listInformation.aflcOrderExpenses.preferentialPrice">￥{{listInformation.aflcOrderExpenses.preferentialPrice}}</span>
                     <span class="noneNun" v-else>无</span>
-
                 </p>
             </div>
             <div class="essentialInformation">
@@ -185,52 +184,64 @@
         <!--  车主信息 -->
         <div class="mark-collapse collapseInfo">
             <h2> 车主信息</h2>
-            <div class="essentialInformation">
-                <p>
-                    <span>车主账号：</span>
-                    <span>{{listInformation.aflcDriverStatus.driverMobile ? listInformation.aflcDriverStatus.driverMobile :''}}</span>
-                 </p>
-                <p>
-                    <span>车主姓名：</span>
-                    <span>{{listInformation.aflcDriverStatus.driverName}}</span>
-                </p>
-                <p>
-                    <span>车牌号：</span>
-                    <span>{{listInformation.aflcDriverStatus.carNumber}}</span>
-                </p>
-                <p>
-                    <span>车型：</span>
-                    <span>{{listInformation.aflcDriverStatus.carType}}</span>
-                </p>
+            <div v-if="listInformation.aflcDriverStatus">
+                <div class="essentialInformation">
+                    <p>
+                        <span>车主账号：</span>
+                        <span>{{listInformation.aflcDriverStatus.driverMobile}}</span>
+                    </p>
+                    <p>
+                        <span>车主姓名：</span>
+                        <span>{{listInformation.aflcDriverStatus.driverName}}</span>
+                    </p>
+                    <p>
+                        <span>车牌号：</span>
+                        <span>{{listInformation.aflcDriverStatus.carNumber}}</span>
+                    </p>
+                    <p>
+                        <span>车型：</span>
+                        <span>{{listInformation.aflcDriverStatus.carType}}</span>
+                    </p>
+                </div>
+            
+                <div class="essentialInformation">
+                    <!-- <p>
+                        <span>中单等级：</span>
+                        <span>{{listInformation.orderClass === '1' ? '实时订单' : '预约订单'}}</span>
+                    </p> -->
+                    <p>
+                        <span>派单方式：</span>
+                        <span>{{listInformation.aflcDriverStatus.dispatchWay? listInformation.aflcDriverStatus.dispatchWay : '未知'}}</span>
+                    </p>
+                </div>
             </div>
-            <div class="essentialInformation">
-                <p>
-                    <span>中单等级：</span>
-                    <!-- <span>{{listInformation.orderClass === '1' ? '实时订单' : '预约订单'}}</span> -->
-                </p>
-                <p>
-                    <span>派单方式：</span>
-                    <span>{{listInformation.aflcDriverStatus.dispatchWay? listInformation.aflcDriverStatus.dispatchWay : '未知'}}</span>
-                </p>
+
+            <div class="essentialInformationNull" v-else>
+                <img src="../../../../assets/icom/25xinxi.png" alt="">
+                <span>车主未接单!</span>
             </div>
         </div>
 
         <!--  客服备注 -->
         <div class="mark-collapse collapseInfo">
             <h2> 客服备注</h2>
-             <div class="essentialInformation">
+            <div class="essentialInformation" v-if="listInformation.aflcOrderRemarks.length != 0">
                 <p>
                     <span>客服：</span>
-                    <!-- <span>{{listInformation.aflcDriverStatus.driverMobile}}</span> -->
+                    <span>{{listInformation.aflcOrderRemarks.userName}}</span>
                  </p>
                 <p>
                     <span>备注时间：</span>
-                    <!-- <span>{{listInformation.aflcDriverStatus.driverName}}</span> -->
+                    <span>{{listInformation.aflcOrderRemarks.createTime | parseTime}}</span>
                 </p>
                 <p class="markInfo">
                     <span>备注内容：</span>
-                    <!-- <span>{{listInformation.aflcDriverStatus.carNumber}}</span> -->
+                    <span>{{listInformation.aflcOrderRemarks.remark}}</span>
                 </p>
+            </div>
+            <div class="essentialInformationNull" v-else>
+                <img src="../../../../assets/icom/25xinxi.png" alt="">
+                <span>客服未备注!</span>
             </div>
         </div>
     </div>

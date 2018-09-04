@@ -160,6 +160,8 @@ export default {
             belongCity:'',
             mobile:'',
             authStatus:"AF0010401",//未认证的状态码
+            isVest:'0'
+
         },
         formLabelWidth:'120px',
         information:null,
@@ -248,6 +250,8 @@ export default {
                 belongCity:'',
                 mobile:'',
                 authStatus:"AF0010401",//未认证的状态码
+                isVest:'0'
+
             },
             this.firstblood();
         },

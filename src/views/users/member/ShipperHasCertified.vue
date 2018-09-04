@@ -123,6 +123,8 @@ export default {
                 belongCity:'',
                 mobile:'',
                 authStatus:"AF0010403",//已认证的状态码
+                isVest:'0'
+
             },
             selectRowData:{},
             dialogFormVisible_add:false,
@@ -202,6 +204,8 @@ export default {
                 belongCity:'',
                 mobile:'',
                 authStatus:"AF0010403",//已认证的状态码
+                isVest:'0'
+
             }
             this.firstblood()
         },

@@ -135,6 +135,8 @@ export default {
                 belongCity:'',
                 mobile:'',
                 authStatus:"AF0010404",//未认证的状态码
+                isVest:'0'
+
             },
             selectRowData:{},
             multipleSelection:[]
@@ -203,6 +205,8 @@ export default {
             belongCity:'',
             mobile:'',
             authStatus:"AF0010404",//未认证的状态码
+            isVest:'0'
+
         },
         this.firstblood()
       },

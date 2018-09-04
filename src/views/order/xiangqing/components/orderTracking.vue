@@ -9,7 +9,8 @@
             <h2>与装卸点距离</h2>
         </div>
         <div class="orderTrackInfo orderTrackStyle" v-for="(item,key) in listInformation" :key="key">
-            <p><span></span><span>{{item.createTime | parseTime}}</span></p>
+            {{key}}{{listInformation.length-1}}
+            <p :class="{current: key == 0 ,cancel:key ==  (listInformation.length-1)}"><i></i><span>{{item.createTime | parseTime}}</span></p>
             <p>{{item.address}}</p>
             <p>{{item.address}}</p>
             <p>{{item.remark}}</p>  
@@ -99,30 +100,72 @@ export default {
             h2:first-child{
                 padding-left:50px; 
             }
-            
+            .current{
+                i{
+                    background: url("../../../../assets/zhishi2.png") no-repeat center !important;
+                }
+                span{
+                    background: url("../../../../assets/jiantou1.png") no-repeat !important;
+                    color: #ffffff !important;
+                }
+                &::before{
+                    background-color: #3e9ff1 !important;
+                }
+            }
             p:first-child{
-                padding-left:30px; 
+                padding-left:26px; 
+                position: relative;
+                i{
+                    display: block;
+                    width: 18px;
+                    height: 18px;
+                    position: absolute;
+                    left: 0;
+                    top: 4px;
+                    background: url("../../../../assets/zhishi1.png") no-repeat center;
+                    background-size:100% 100%;
+                }
                 span{
                     display: inline-block;
                     line-height: 24px;
                     vertical-align: middle;
                     background:  #3e9ff1;
-                    color: #ffffff;
+                    color: #333;
+                    padding: 0 20px;
+                    background: url("../../../../assets/jiantou2.png") no-repeat;
+                    background-size:100% 100%;
                 }
-                span:first-child{
-                    display: inline-block;
-                    width:0px;
-                    height:0px;
-                    background: none;
-                    border-top:12px solid rgba(0,0,0,0);
-                    border-right:19px solid  #3e9ff1;
-                    border-bottom:12px solid rgba(0,0,0,0);
-                    border-left:12px solid  rgba(0,0,0,0);
-                }
-                span:nth-child(2){
-                    padding: 0 10px;
+                // span:first-child{
+                //     display: inline-block;
+                //     width:0px;
+                //     height:0px;
+                //     background: none;
+                //     border-top:12px solid rgba(0,0,0,0);
+                //     border-right:19px solid  #3e9ff1;
+                //     border-bottom:12px solid rgba(0,0,0,0);
+                //     border-left:12px solid  rgba(0,0,0,0);
+                // }
+                // span:nth-child(2){
+                //     padding: 0 10px;
+                // }
+
+                &::before{
+                    content: '';
+                    position: absolute;
+                    top: 22px;
+                    left: 8px;
+                    width: 2px;
+                    height: 22px;
+                    background-color: #e2e2e2;
                 }
             }
+
+            .cancel{
+                &::before{
+                    width: 0 !important;
+                }
+            }
+          
         }
         .orderTrackInfo{
             margin: 15px 0;

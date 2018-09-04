@@ -5,15 +5,11 @@
             <div class="essentialInformation">
                 <p>
                     <span>装货照片：</span>
-                    <img class="showPicture" :src="ratePictures.filePath ? ratePictures.filePath: defaultImg" v-showPicture :imgurl="ratePictures.filePath" alt="" >
-
+                    <img class="showPicture" :src="listInformation.loadingUrl ? listInformation.loadingUrl: defaultImg" v-showPicture :imgurl="listInformation.loadingUrl" alt="" >
                 </p>
                 <p>
                     <span>回单照片：</span>
-                    <img src="../../../../../static/test.jpg" v-showPicture imgurl="../../../../../static/test.jpg" alt="">
-                    <img src="../../../../../static/test.jpg" v-showPicture imgurl="../../../../../static/test.jpg" alt="">
-                    <img src="../../../../../static/test.jpg" v-showPicture imgurl="../../../../../static/test.jpg" alt="">
-                    <img src="../../../../../static/test.jpg" v-showPicture imgurl="../../../../../static/test.jpg" alt="">
+                    <img v-for="(item,key) in listInformation.returnUrls" :key="key" :src="item ? item: defaultImg" v-showPicture :imgurl="item" alt="">
                 </p>
             </div>
         </div>
@@ -60,7 +56,7 @@
             </div>
         </div>
         <div class="rateHuikuan collapseInfo">
-            <h2>汇款信息信息</h2>   
+            <h2>汇款信息</h2>   
             <div class="essentialInformation">
                 <p>
                     <span>车主回款时间：</span>
@@ -79,6 +75,7 @@ import { orderDetailsList } from '@/api/order/ordermange'
 export default {
     name: 'rate',
     components:{
+
     },
     props: {
        isvisible: {
@@ -92,7 +89,7 @@ export default {
             loading:true,
             ratePictures:{},//照片信息装货照片
             ratePictures_huidan:{},//照片信息回单照片
-
+            listInformation:{},
         };
     },
     watch:{
@@ -111,18 +108,10 @@ export default {
     },
     methods: {
         init(){
+            this.loading = true
             orderDetailsList(this.$route.query.orderSerial).then(res => {
                 console.log('details',res)
-                res.data.aflcOrderFollowingFiles.forEach(el => {
-                    console.log('el.transportStatus',el.transportStatus)
-                    if(el.transportStatus == 'AF0080604CZ'){
-                        this.ratePictures = el;
-                    }
-                    if(el.transportStatus == 'AF0080607CZ'){
-                        this.ratePictures_huidan = el;
-                    }
-                });
-                console.log('111', this.ratePictures)
+                this.listInformation = res.data;
                 this.loading = false;
             })
         },
@@ -141,6 +130,7 @@ export default {
                     height: 118px;
                     margin-top: 10px;
                     // margin-right: 10px;
+                    cursor: pointer;
                 }
                 
                 p:nth-child(2){

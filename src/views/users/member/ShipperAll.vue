@@ -3,7 +3,10 @@
         <div class="shipper_searchinfo" >
           <el-form :inline="true">
             <el-form-item label="所在地：">
-              <GetCityList v-model="formAll.belongCity" ref="area"></GetCityList>
+              <!-- <GetCityList v-model="formAll.belongCity" ref="area"></GetCityList> -->
+                <vregion :ui="true" @values="regionChange" class="form-control">
+                    <el-input v-model="formAll.belongCityName" placeholder="请选择"></el-input>
+                </vregion>
             </el-form-item>
             <el-form-item label="认证状态：">
               <el-select v-model="formAll.authStatus" clearable placeholder="请选择">
@@ -183,6 +186,7 @@ import FreezeDialog from './FreezeDialog'
 import shipperBlackDialog from './shipperBlackDialog'
 import { eventBus } from '@/eventBus'
 import Pager from '@/components/Pagination/index'
+import vregion from '@/components/vregion/Region.vue'
 
 export default {
   components:{
@@ -191,6 +195,7 @@ export default {
     FreezeDialog,
     shipperBlackDialog,
     Pager,
+    vregion
   },
     props: {
 		isvisible: {
@@ -209,27 +214,29 @@ export default {
             options:[],
             optionsStatus:[
                 {
-                code:null,
+                code:'',
                 name:'全部'
                 }
             ],
             optionsAuidSataus:[
                 {
-                code:null,
+                code:'',
                 name:'全部'
                 }
             ],
             formAll:{
-                belongCity: null,
-                authStatus:null,
-                accountStatus:null,
-                accountName:null,
-                mobile:null
+                belongCity: '',
+                belongCityName:'',
+                authStatus:'',
+                accountStatus:'',
+                accountName:'',
+                mobile:'',
+                isVest:'0'
             },
             selectRowData:{},
             page:1,
             pagesize:20,
-            totalCount:null,
+            totalCount:0,
             tableDataAll:[],
             
             }
@@ -257,6 +264,13 @@ export default {
         })
     },
     methods:{
+        regionChange(d) {
+            console.log('data:',d)
+            this.formAll.belongCityName = (!d.province&&!d.city&&!d.area&&!d.town) ? '': `${this.getValue(d.province)}${this.getValue(d.city)}${this.getValue(d.area)}${this.getValue(d.town)}`.trim();
+        },
+        getValue(obj){
+            return obj ? obj.value:'';
+        },
         pushOrderSerial(row){
             this.type = 'view';
             this.paramsView = row;
@@ -305,20 +319,22 @@ export default {
         },
         //点击查询按纽，按条件查询列表
         getdata_search(event) {
-            this.formAll.belongCity = this.$refs.area.selectedOptions.pop();
+            // this.formAll.belongCity = this.$refs.area.selectedOptions.pop();
 
             console.log(this.formAll)
             this.firstblood();
         },
         //清空
         clearSearch(){
-            this.$refs.area.selectedOptions = [];
+            // this.$refs.area.selectedOptions = [];
             this.formAll = {
-                belongCity: null,
-                authStatus:null,
-                accountStatus:null,
-                accountName:null,
-                mobile:null
+                belongCity: '',
+                authStatus:'',
+                accountStatus:'',
+                accountName:'',
+                mobile:'',
+                isVest:'0'
+
             },
             this.firstblood();
         },
