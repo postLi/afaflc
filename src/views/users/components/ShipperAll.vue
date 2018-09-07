@@ -1,46 +1,43 @@
 <template>
     <div style="height:100%;" class="identicalStyle">
-        <div class="shipper_searchinfo" >
-          <el-form :inline="true">
+          <el-form :model="formAll" ref="ruleForm" class="classify_searchinfo">
             <el-form-item label="所在地：">
-              <GetCityList v-model="formAll.belongCity" ref="area"></GetCityList>
+                <GetCityList v-model="formAll.belongCity" ref="area"></GetCityList>
             </el-form-item>
             <el-form-item label="认证状态：">
-              <el-select v-model="formAll.shipperStatus" clearable placeholder="请选择">
-                <el-option
-                  v-for="item in optionsStatus"
-                  :key="item.id"
-                  :label="item.name"
-                  :value="item.code"
-                  :disabled="item.disabled">
-                </el-option>
-              </el-select>
+                <el-select v-model="formAll.shipperStatus" clearable placeholder="请选择">
+                    <el-option
+                    v-for="item in optionsStatus"
+                    :key="item.id"
+                    :label="item.name"
+                    :value="item.code"
+                    :disabled="item.disabled">
+                    </el-option>
+                </el-select>
             </el-form-item>
-			<el-form-item label="账户状态：">
-              <el-select v-model="formAll.accountStatus" clearable placeholder="请选择">
-                <el-option
-                  v-for="item in optionsAuidSataus"
-                  :key="item.id"
-                  :label="item.name"
-                  :value="item.code"
-                  :disabled="item.disabled">
-                </el-option>
-              </el-select>
+            <el-form-item label="账户状态：">
+                <el-select v-model="formAll.accountStatus" clearable placeholder="请选择">
+                    <el-option
+                    v-for="item in optionsAuidSataus"
+                    :key="item.id"
+                    :label="item.name"
+                    :value="item.code"
+                    :disabled="item.disabled">
+                    </el-option>
+                </el-select>
             </el-form-item>
             <el-form-item label="公司名称:">
-              <el-input v-model.trim="formAll.companyName"></el-input>
+                <el-input v-model.trim="formAll.companyName"></el-input>
             </el-form-item>
-             <el-form-item label="手机号：">
-             <el-input v-model.trim="formAll.mobile"></el-input>
-          </el-form-item>
-          <el-form-item class="fr">
-            <el-button type="primary" plain @click="getdata_search">查询</el-button>
-            <el-button type="info" plain @click="clearSearch">清空</el-button>
-          </el-form-item>
-          </el-form>
-        </div>
+            <el-form-item label="手机号：">
+                <el-input v-model.trim="formAll.mobile"></el-input>
+            </el-form-item>
+            <el-form-item class="fr">
+                <el-button type="primary" plain @click="getdata_search">查询</el-button>
+                <el-button type="info" plain @click="clearSearch">清空</el-button>
+            </el-form-item>
+        </el-form>
 		<div class="classify_info">
-            <!-- <v-region  class="form-control" :text = false  :ui = false  ></v-region> -->
 			<div class="btns_box">
 				<createdDialog btntext="新增" :plain="true" type="primary" btntype="primary" icon="el-icon-circle-plus" editType="add" btntitle="新增货主" @getData="getDataList"></createdDialog>
 				<FreezeDialog
@@ -105,7 +102,7 @@
 				>
 				</FreezeDialog>
 			</div>
-			<div class="info_news">
+			<div class="info_news" >
 				<el-table
 				ref="multipleTable"
 				:data="tableDataAll"
@@ -129,6 +126,7 @@
 				<el-table-column label="手机号">
                     <template slot-scope="scope">
                         <createdDialog :paramsView="scope.row" btntype="text" :btntext="scope.row.mobile" editType="view" btntitle="详情"></createdDialog>
+                            <!-- <h4 class="needMoreInfo" @click="pushOrderSerial(scope.row)">{{ scope.row.mobile}}</h4> -->
                     </template>
 				</el-table-column>
 				<el-table-column prop="companyName" label="公司名称">
@@ -152,17 +150,14 @@
                     </template>
 				</el-table-column>
 				</el-table>
-				<el-pagination
-					@size-change="handleSizeChange"
-					@current-change="handleCurrentChange"
-					:current-page="page"
-					:page-sizes="[20, 50, 200, 400]"
-					:page-size="pagesize"
-					layout="total, sizes, prev, pager, next, jumper"
-					:total="totalCount">
-				</el-pagination>
 			</div>
 		</div>
+
+        <div class="info_tab_footer">共计:{{ totalCount }} <div class="show_pager"> <Pager :total="totalCount" @change="handlePageChange" /></div> </div>    
+        <!-- <createdDialog :paramsView="paramsView" :editType="type"  :dialogFormVisible_add.sync = "dialogFormVisible_add" @getData="getDataList"/>
+        <FreezeDialog :params="selectRowData" :editType="freezetype"  :freezeDialogFlag.sync = "freezeDialogFlag" @getData="getDataList"/>
+        <shipperBlackDialog :params="selectRowData" :editType="blacktype"  :BlackDialogFlag.sync = "BlackDialogFlag" @getData="getDataList"/> -->
+
     </div>
 </template>
 
@@ -174,6 +169,7 @@ import FreezeDialog from './FreezeDialog'
 import shipperBlackDialog from './shipperBlackDialog'
 import { eventBus } from '@/eventBus'
 import { parseTime } from '@/utils/index.js'
+import Pager from '@/components/Pagination/index'
 
 
 
@@ -183,6 +179,7 @@ export default {
     GetCityList,
     FreezeDialog,
     shipperBlackDialog,
+    Pager
   },
     props: {
 		isvisible: {
@@ -191,59 +188,65 @@ export default {
 		}
 	},
   data(){
-      return{
+    return{
         templateRadio:'',
-        ul:true,
-		freeze:true,//是否冻结
-		options:[],
-		optionsStatus:[
-			{
-			code:null,
-			name:'全部'
-			}
-		],
-		optionsAuidSataus:[
-			{
-			code:null,
-			name:'全部'
-			}
-		],//账户状态
-		pickerOptions:{
-			disabledDate(time) {
-			return time.getTime() < Date.now();
-			},
-		},
-		optionsReason:[],
-		optionsFormBlack:[],
-		// information:null,
-		// centerDialogVisible: false,
-		formBlack:{ // 移除黑名单的表单
-			mobile:'',
-			contacts:'',
-			companyName:'',
-			belongCity:null,
-			shipperType:null,
-			address:'',
-			registerOrigin:'',
-			putBlackCause:'',
-			popBlackRemark:'',
-			putBlackCauseRemark:'',
-			belongCityName:''
-		},
-		formAll:{
-			belongCity: null,
-			shipperStatus:null,
-			accountStatus:null,
-			companyName:null,
-			mobile:null
-		},
-		selectRowData:{},
-		page:1,
-		pagesize:20,
-		totalCount:null,
-		tableDataAll:[],
-		
-		}
+        dialogFormVisible_add:false,
+        freezeDialogFlag:false,
+        BlackDialogFlag:false,
+        freezetype:'',
+        blacktype:'',
+        type:'',
+        paramsView:{},
+        freeze:true,//是否冻结
+        options:[],
+        optionsStatus:[
+            {
+            code:null,
+            name:'全部'
+            }
+        ],
+        optionsAuidSataus:[
+            {
+            code:null,
+            name:'全部'
+            }
+        ],//账户状态
+        pickerOptions:{
+            disabledDate(time) {
+            return time.getTime() < Date.now();
+            },
+        },
+        optionsReason:[],
+        optionsFormBlack:[],
+        // information:null,
+        // centerDialogVisible: false,
+        formBlack:{ // 移除黑名单的表单
+            mobile:'',
+            contacts:'',
+            companyName:'',
+            belongCity:null,
+            shipperType:null,
+            address:'',
+            registerOrigin:'',
+            putBlackCause:'',
+            popBlackRemark:'',
+            putBlackCauseRemark:'',
+            belongCityName:''
+        },
+        formAll:{
+            belongCity: null,
+            shipperStatus:null,
+            accountStatus:null,
+            companyName:null,
+            mobile:null
+        },
+        selectRowData:{},
+        page:1,
+        pagesize:20,
+        totalCount:0,
+        tableDataAll:[],
+        
+        }
     },
     created(){
 
@@ -268,6 +271,16 @@ export default {
         })
     },
     methods:{
+        // pushOrderSerial(row){
+        //     this.type = 'view';
+        //     this.paramsView = Object.assign({},row);;
+        //     this.dialogFormVisible_add =true;
+        // },
+        handlePageChange(obj) {
+            this.page = obj.pageNum
+            this.pagesize = obj.pageSize
+            this.firstblood()
+        },
         getCurrentRow(index,row){       
 
             this.selectRowData = Object.assign({},row);
@@ -336,27 +349,6 @@ export default {
             companyName:''
         },
         this.firstblood();
-    },
-    handleChange(value){
-      console.log(value)
-    },
-
-    handleClick (row) {
-      console.log('row:',row)
-    },
-
-    // 码数
-    handleSizeChange(val) {
-      console.log(`每页 ${val} 条`);
-      this.pagesize=val
-      this.firstblood()
-    },
-
-    // 页数
-    handleCurrentChange(val) {
-      console.log(`当前页: ${val}`);
-      this.page=val
-      this.firstblood()
     },
     getDataList(){
       this.firstblood()

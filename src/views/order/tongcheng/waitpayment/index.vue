@@ -1,6 +1,6 @@
 <template>
     <div class="identicalStyle clearfix waitpayment" v-loading="loading">
-              <el-form :model="searchInfo" ref="ruleForm" class="demo-ruleForm classify_searchinfo">
+            <el-form :model="searchInfo" ref="ruleForm" class="demo-ruleForm classify_searchinfo">
                     <el-form-item label="区域" prop="pointName">
                         <vregion :ui="true" @values="regionChange" class="form-control">
                             <el-input v-model="searchInfo.belongCityName" placeholder="请选择出发地" clearable></el-input>
@@ -31,7 +31,7 @@
                         <el-button type="primary" plain @click="handleSearch('search')">搜索</el-button>
                         <el-button type="info" plain @click="handleSearch('clear')">清空</el-button>
                     </el-form-item>
-              </el-form>
+            </el-form>
             <div class="classify_info">
                 <div class="btns_box">
                     <el-button type="primary" plain @click="handleSearch('outExce')" size="mini">导出Exce</el-button>
@@ -50,7 +50,6 @@
                         @row-click="clickDetails"
                         style="width: 100%"> 
                         <el-table-column
-                            
                             type="selection"
                             width="55">
                         </el-table-column>
@@ -64,7 +63,7 @@
                             label="订单号"
                             width="250">
                                 <template  slot-scope="scope">
-                                        <h4 class="needMoreInfo" @click="pushOrderSerial(scope.row)">{{ scope.row.orderSerial}}</h4>
+                                    <h4 class="needMoreInfo" @click="pushOrderSerial(scope.row)">{{ scope.row.orderSerial}}</h4>
                                 </template>
                         </el-table-column>
                         <el-table-column
@@ -237,13 +236,9 @@ import vregion from '@/components/vregion/Region'
                 return obj ? obj.value:'';
             },
             handlePageChange(obj) {
-                this.page = obj.pageNum
-                this.pagesize = obj.pageSize
-            },
-            //单选中当前数据
-            handleCurrentTask(val){
-                // console.log(val)
-                this.tasktest = val;
+                this.page = obj.pageNum;
+                this.pagesize = obj.pageSize;
+                this.firstblood();
             },
             //刷新页面  
             firstblood(){
@@ -297,6 +292,8 @@ import vregion from '@/components/vregion/Region'
                         this.exportExcel();
                         break;
                 }
+                // 清除选中状态，避免影响下个操作
+                this.$refs.multipleTable.clearSelection()
             },
                  //判断是否选中
             getinfomation(selection){

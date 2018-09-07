@@ -2,11 +2,9 @@
   <div class="member tabsWrap">
     <el-tabs v-model="memberName" type="card" @tab-click="handleClick" >
         <!-- 全部 -->
-        <!-- <el-badge :value="12" class="item"> -->
             <el-tab-pane label="全部" name="first">
                 <ShipperAll :isvisible="memberName === 'first'"></ShipperAll>
             </el-tab-pane>
-        <!-- </el-badge> -->
 
         <!-- 未认证 -->
             <el-tab-pane label="未认证" name="second">
@@ -88,54 +86,19 @@
 </script>
 
 <style type="text/css" lang="scss">
-    // @import "@/styles/tab.scss";
     .member{
         .el-tabs--card>.el-tabs__header .el-tabs__item.is-active {
             background: rgba(236, 233, 230, 0.445);
             border-bottom-color: #ffffff;
         }
-        .shipper_searchinfo{
-            position: absolute;
-            left:0;
-            top:0;
-            padding:15px 16px;
-            // border-bottom:2px dashed #ccc;
-            // height:70px;
-            width:100%;
-            line-height: 35px;
-            .el-form-item{
-                margin-right: 30px;
-                margin-bottom: 0px;
-                .el-form-item__content{
-                    .el-input{
-                        .el-input__inner{
-                            color:#3e9ff1;
-                            height:30px;
-                            line-height: 30px;
-                        }
-                    }
-                    .el-button{
-                        padding:8px 20px;
-                    }
+        .el-tabs__content{
+            .el-tab-pane{
+                .classify_searchinfo{
+                    padding: 0;
                 }
-            }
-        }
-        .classify_info{
-            height:100%;
-            padding:70px 0 0 0;
-            &>.btns_box{
-                margin-bottom:10px;
-                .el-button{
-                    margin-right:20px;
-                    padding:10px 20px;
+                .classify_info{
+                    padding: 50px 0;
                 }
-            }
-            .info_news{
-                height:88%;
-            }
-            .el-pagination{
-                margin-top:13px;
-                text-align:right;
             }
         }
 
@@ -236,9 +199,6 @@
                         vertical-align: top;
                         font-size: 12px;
                         padding-top: 5px;
-                    }
-                    .textArea{
-                        
                     }
                 }
             }

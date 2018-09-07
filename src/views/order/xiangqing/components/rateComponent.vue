@@ -15,27 +15,52 @@
         </div>
         <div class="rateInfo collapseInfo">
             <h2>评价信息</h2>   
-            <div class="essentialInformation">
-                <p>
-                    <span>货主评价车主：</span>
-                </p>
-                <p>
-                    <span>评价内容：</span>
-                </p>
-                <p>
-                    <span>评价标签：</span>
-                </p>
+            <div class="essentialInformation" v-for="item in listInformation.aflcOrderEvaluations" :key="item.id">
+                <div v-if="item.type == 1">
+                    <p>
+                        <span>货主评价车主：</span>
+                        <span>
+                            <el-rate
+                                v-model="item.starLevel"
+                                disabled
+                                :colors="['#99A9BF', '#F7BA2A', '#FF9900']"
+                                >
+                            </el-rate>
+                        </span>
+                    </p>
+                    <p>
+                        <span>评价内容：</span>
+                        <span>{{item.evaluationDes}}</span>
+                    </p>
+                    <p>
+                        <span>评价标签：</span>
+                        <span></span>
+                    </p>
+                </div>
+                <div v-else>
+                    <p>
+                        <span>车主评价货主：</span>
+                        <span>
+                            <el-rate
+                                v-model="item.starLevel"
+                                disabled
+                                :colors="['#99A9BF', '#F7BA2A', '#FF9900']"
+                                >
+                            </el-rate>
+                        </span>
+                    </p>
+                    <p>
+                        <span>评价内容：</span>
+                        <span>{{item.evaluationDes}}</span>
+                    </p>
+                    <p>
+                        <span>评价标签：</span>
+                        <span class="evaluationMark" v-for="mark in evaluationTypeName" :key="mark">{{mark}}</span>
+                    </p>
+                </div>
             </div>
              <div class="essentialInformation">
-                <p>
-                    <span>车主评价货主：</span>
-                </p>
-                <p>
-                    <span>评价内容：</span>
-                </p>
-                <p>
-                    <span>评价标签：</span>
-                </p>
+               
             </div>
         </div>
         <div class="rateHuidan collapseInfo">
@@ -56,7 +81,7 @@
             </div>
         </div>
         <div class="rateHuikuan collapseInfo">
-            <h2>汇款信息</h2>   
+            <h2>回款信息</h2>   
             <div class="essentialInformation">
                 <p>
                     <span>车主回款时间：</span>
@@ -113,6 +138,9 @@ export default {
                 console.log('details',res)
                 this.listInformation = res.data;
                 this.loading = false;
+                this.listInformation.aflcOrderEvaluations.forEach(item => {
+                    item.evaluationTypeName = item.evaluationType == '' ? [] : item.evaluationType.split(",")
+                })
             })
         },
     },

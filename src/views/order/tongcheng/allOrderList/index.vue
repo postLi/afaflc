@@ -227,8 +227,10 @@ import vregion from '@/components/vregion/Region'
                 return obj ? obj.value:'';
             },
             handlePageChange(obj) {
-                this.page = obj.pageNum
-                this.pagesize = obj.pageSize
+                this.page = obj.pageNum;
+                this.pagesize = obj.pageSize;
+                this.firstblood();
+
             },
             //单选中当前数据
             handleCurrentTask(val){

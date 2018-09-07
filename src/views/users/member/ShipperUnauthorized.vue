@@ -1,17 +1,15 @@
 <template>
     <div style="height:100%;"  class="identicalStyle">
-        <div class="shipper_searchinfo">
-          <el-form :inline="true">
+          <el-form :model="formAll" ref="ruleForm" class="classify_searchinfo">
             <el-form-item label="所在地：">
               <!-- <GetCityList v-model="formInline.belongCity" ref="area"></GetCityList> -->
                 <el-input v-model="formInline.belongCityName" placeholder="请输入"></el-input>
-
             </el-form-item>
             <el-form-item label="账户状态：">
               <el-select v-model="formInline.accountStatus" clearable placeholder="请选择">
                 <el-option
                   v-for="item in optionsAuidSataus"
-                  :key="item.code"
+                  :key="item.id"
                   :label="item.name"
                   :value="item.code"
                   :disabled="item.disabled">
@@ -25,79 +23,62 @@
                 clearable>
               </el-input>
             </el-form-item>
-            <el-form-item>
+            <el-form-item class="fr">
               <el-button type="primary" plain @click="getdata_search">查询</el-button>
               <el-button type="info" plain @click="clearSearch">清空</el-button>
             </el-form-item>
           </el-form>
-      </div>
 	  	<div class="classify_info">
-		  	<!-- <div class="btns_box"> -->
-				<!-- <createdDialog 
-				btntext="代客认证"
-				:params="selectRowData"
-				:plain="true" type="primary" 
-				btntype="primary" 
-				icon="el-icon-news"
-				editType="identification" 
-				btntitle="代客提交"
-				@getData="getDataList">
-				</createdDialog>
-                <createdDialog 
-				btntext="修改"
-				:params="selectRowData"
-				:plain="true" type="primary" 
-				btntype="primary" 
-				icon="el-icon-news"
-				editType="edit" 
-				btntitle="修改"
-				@getData="getDataList">
-				</createdDialog> -->
-			<!-- </div> -->
-			<div class="info_news" style="height:93.9%">
+			<div class="info_news" style="height:100.2%">
 				<el-table
 				ref="multipleTable"
 				:data="tableData4"
 				stripe
 				border
+                @row-click="clickDetails"
                 height="100%"
-				highlight-current-row
+                :default-sort = "{prop: 'registerTime', order: 'descending'}"
 				tooltip-effect="dark"
 				style="width: 100%">
-                <el-table-column label="" width="60" fixed>
+                <!-- <el-table-column label="" width="60" fixed>
                     <template slot-scope="scope">
                         <el-radio class="textRadio" @change.native="getCurrentRow(scope.$index,scope.row)" :label="scope.$index" v-model="templateRadio">&nbsp;</el-radio>
                     </template>
+                </el-table-column> -->
+                 <el-table-column
+                    fixed
+                    sortable
+                    type="selection"    
+                    width="50">
                 </el-table-column>
-				<el-table-column label="序号" width="80">
+				<el-table-column label="序号"  width="80">
                     <template slot-scope="scope">
                         {{ (page - 1)*pagesize + scope.$index + 1 }}
                     </template>
                 </el-table-column>  
-				<el-table-column label="手机号(会员账号)" width="150">
+				<el-table-column label="手机号(会员账号)" prop="mobile" sortable width="180">
                     <template slot-scope="scope">
-                        <!-- <createdDialog :paramsView="scope.row" btntype="text" :btntext="scope.row.mobile" editType="view" btntitle="详情"></createdDialog> -->
                         <h4 class="needMoreInfo" @click="pushOrderSerial(scope.row)">{{ scope.row.mobile}}</h4>
                     </template>
 				</el-table-column>
-				<el-table-column prop="contactsName" label="注册人姓名" width="150">
+				<el-table-column prop="contactsName" sortable label="注册人姓名" width="150">
 				</el-table-column>
-				<el-table-column prop="companyName" label="公司名称" width="300">
+				<el-table-column prop="companyName" sortable label="公司名称" width="300">
 				</el-table-column>
-				<el-table-column prop="belongCityName" label="所在地" width="250">
+				<el-table-column prop="belongCityName" sortable label="所在地" width="250">
 				</el-table-column>
-				<el-table-column prop="registerOriginName" label="注册来源" width="120">
+				<el-table-column prop="registerOriginName" sortable label="注册来源" width="120">
 				</el-table-column>
-				<el-table-column prop="registerTime" label="注册日期" width="200">
+				<el-table-column prop="registerTime" sortable label="注册日期" width="200">
 				</el-table-column>
-				<el-table-column prop="accountStatusName" label="账户状态" width="120">
+				<el-table-column prop="accountStatusName" sortable label="账户状态" width="120">
                     <template slot-scope="scope">
                         <span :class="{freezeName: scope.row.accountStatusName == '冻结中' ,blackName: scope.row.accountStatusName == '黑名单',normalName :scope.row.accountStatusName == '正常'}">{{scope.row.accountStatusName}}</span>
                     </template>
 				</el-table-column>
-				<el-table-column prop="authStatusName" label="认证状态" width="120">
+				<el-table-column prop="authStatusName" sortable label="认证状态" width="120">
 				</el-table-column>
-                <el-table-column prop="qq" label="QQ号码" width="200">
+                <el-table-column prop="qq" label="QQ号码" sortable width="200">
 				</el-table-column>
                 <!-- <el-table-column prop="otherService" label="会员服务承诺" width="225"  align="left">
                     <template slot-scope="scope" >
@@ -111,7 +92,7 @@
                         </div>
                     </template>
 				</el-table-column> -->
-                <el-table-column prop="isOpenTms" label="是否开通TMS" width="120">
+                <el-table-column prop="isOpenTms" sortable label="是否开通TMS" width="150">
                     <template slot-scope="scope">
                         <span :class="scope.row.isOpenTms == 1 ? 'isTMS' : 'noTMS'"> {{scope.row.isOpenTms == 1 ? '是' : '否'}}</span>
                     </template>
@@ -244,7 +225,10 @@ export default {
             // this.formInline.belongCity = this.$refs.area.selectedOptions.pop();
             this.firstblood();
         },
-        
+         //点击选中当前行
+        clickDetails(row, event, column){
+            this.$refs.multipleTable.toggleRowSelection(row);
+        },
         //清空
         clearSearch(){
             // this.$refs.area.selectedOptions = [];

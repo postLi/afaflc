@@ -1,7 +1,6 @@
 <template>
     <div class="identicalStyle">
-        <div class="shipper_searchinfo">
-            <el-form inline>
+          <el-form :model="formAll" ref="ruleForm" class="classify_searchinfo">
                 <el-form-item label="所在地">
                     <GetCityList v-model="formAll.belongCity" ref="area"></GetCityList>
                 </el-form-item>
@@ -11,12 +10,11 @@
                 <el-form-item label="手机号：">
                     <el-input v-model.trim="formAll.mobile"></el-input>
                 </el-form-item>
-                <el-form-item label="">
+                <el-form-item class="fr">
                     <el-button type="primary" plain @click="getdata_search">查询</el-button>
                     <el-button type="info" plain @click="clearSearch">清空</el-button>
                 </el-form-item>
             </el-form>
-        </div>
         <div class="classify_info">
 		    <div class="btns_box">
                 <createdDialog btntext="代客认证"
@@ -35,6 +33,7 @@
                     :data="tableData1"
                     stripe
                     border
+                    height="100%"
                     highlight-current-row
                     tooltip-effect="dark"
                     style="width: 100%">
@@ -71,17 +70,9 @@
                         </template>
                     </el-table-column>
                 </el-table>
-                <el-pagination
-                    @size-change="handleSizeChange"
-                    @current-change="handleCurrentChange"
-                    :current-page="page"
-                    :page-sizes="[20, 50, 200, 400]"
-                    :page-size="pagesize"
-                    layout="total, sizes, prev, pager, next, jumper"
-                    :total="totalCount">
-                </el-pagination>
             </div>
 	     </div>
+        <div class="info_tab_footer">共计:{{ totalCount }} <div class="show_pager"> <Pager :total="totalCount" @change="handlePageChange" /></div> </div>    
     </div>
 </template>
 <script>
@@ -89,7 +80,7 @@ import createdDialog from './createdDialog.vue'
 import GetCityList from '@/components/GetCityList'
 import { eventBus } from '@/eventBus'
 import { parseTime } from '@/utils/index.js'
-
+import Pager from '@/components/Pagination/index'
 import {data_get_shipper_list} from '@/api/users/shipper/all_shipper.js'
 export default {
     props: {
@@ -100,13 +91,14 @@ export default {
     },
     components:{
         createdDialog,
-        GetCityList
+        GetCityList,
+        Pager
     },
     data(){
         return{
             templateRadio:'',
             tableData1:[],
-            totalCount:null,
+            totalCount:0,
             page:1,
             pagesize:20,
             options:[],
@@ -139,6 +131,11 @@ export default {
         })
     },
     methods:{
+        handlePageChange(obj) {
+            this.page = obj.pageNum
+            this.pagesize = obj.pageSize
+            this.firstblood()
+        },
         getCurrentRow(index,row){       
             this.selectRowData = Object.assign({},row);
             this.templateRadio = index;
@@ -162,10 +159,7 @@ export default {
          //点击查询按纽，按条件查询列表
         getdata_search(event){
             this.formAll.belongCity = this.$refs.area.selectedOptions.pop();
-            data_get_shipper_list(this.page,this.pagesize,this.formAll).then(res=>{
-                this.totalCount = res.data.totalCount;
-                this.tableData1= res.data.list;
-            })
+            this.firstblood()
         },
         
       //清空
@@ -178,19 +172,7 @@ export default {
             },
             this.firstblood()
         },
-        handleSizeChange(val) {
-            console.log(`每页 ${val} 条`);
-            this.pagesize=val
-            this.firstblood()
-        },
-        handleCurrentChange(val) {
-            console.log(`当前页: ${val}`);
-            this.page=val
-            this.firstblood()
-        },
-            handleChange(value){
-                console.log(value)
-            }
+          
         }
 }
 </script>

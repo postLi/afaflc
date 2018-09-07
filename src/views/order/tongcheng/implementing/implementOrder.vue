@@ -201,8 +201,10 @@ import cancelCompnent from '../components/cancel'
         },
         methods: {
             handlePageChange(obj) {
-                this.page = obj.pageNum
-                this.pagesize = obj.pageSize
+                this.page = obj.pageNum;
+                this.pagesize = obj.pageSize;
+                this.firstblood();
+
             },
             //刷新页面  
             firstblood(){
