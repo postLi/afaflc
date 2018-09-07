@@ -1,260 +1,308 @@
 <template>
-    <div class="identicalStyle clearfix">
-            <div class="classify_searchinfo">
-                <label>标题&nbsp;
-                   <el-input v-model="searchInfo.title" placeholder="请输入内容" clearable></el-input>
-                </label>
-                <label>发布时间&nbsp;
-                    <el-date-picker
-                        v-model="chooseTime"
-                        type="datetimerange"
-                        :picker-options="pickerOptions2"
-                        range-separator="至"
-                        start-placeholder="开始日期"
-                        end-placeholder="结束日期"
-                        align="right"
-                        :default-time="['00:00:00', '23:59:59']"
-                        value-format="timestamp">
-                    </el-date-picker>
-                </label>    
-                <label>发布者&nbsp;
-                   <el-input v-model="searchInfo.publishName" placeholder="请输入内容" clearable></el-input>
-                </label>    
-                <el-button type="primary"  plain @click="getdata_search">查询</el-button>
-                <el-button type="primary"  plain @click="clearable">重置</el-button>
+    <div class="TransportRange identicalStyle"  v-loading="loading">
+        <el-form :model="logisticsForm" ref="ruleForm" class="demo-ruleForm classify_searchinfo">
+            <div class="searchInformation information">
+                <el-form-item label="出发地：" prop="startLocation">
+                    <el-input v-model="logisticsForm.startLocation">
+                    </el-input>
+                </el-form-item>
+                <el-form-item label="到达地：" prop="endLocation">
+                    <el-input v-model="logisticsForm.endLocation">
+                    </el-input>
+                </el-form-item>
+                <el-form-item class="btnChoose fr" style="margin-left:20px;">
+                    <el-button type="primary" @click="handleSearch">搜索</el-button>
+                    <el-button type="primary" @click="clearSearch">重置</el-button>
+                </el-form-item>
             </div>
+        </el-form>
             <div class="classify_info">
-                <div class="info_news">
+                <!-- <div class="btns_box">
+                    <el-button type="primary" @click="handleNew">发布专线</el-button>  
+                </div> -->
+                <div class="info_news" style="height:94%;">
                     <el-table
-                        ref="multipleTable"
-                        :data="tableExecute"
-                        stripe
-                        border
-                        highlight-current-row
-                        @current-change="handleCurrentTask"
-                        align = "center"
-                        height="100%"
-                        tooltip-effect="dark"
-                        style="width: 100%"> 
+                    :data="tableData"
+                    ref="multipleTable"
+                    stripe
+                    border
+                    :default-sort = "{prop: 'Time', order: 'descending'}"
+                    height="100%"
+                    style="width: 100%">
                         <el-table-column
-                            align = "center"
-                            fixed
-                            label="排序"
-                            prop="order"
-                            width="55">
-                           </el-table-column>
-                        <el-table-column
-                        align = "center"
-                            prop="title"
-                          label="标题">
+                            label="序号"
+                            type="index"
+                            width="80">
                         </el-table-column>
                         <el-table-column
-                        align = "center"
-                          prop="time"
-                          label="发布时间">
+                            sortable
+                            prop="startLocation"
+                            label="出发地"
+                            width="180">
+                            <template slot-scope="scope">
+                               <span class="moreInfo" @click="handleInfo(scope.row)">{{scope.row.startLocation}}</span>
+                            </template>
                         </el-table-column>
                         <el-table-column
-                        align = "center"
-                          prop="publishName"
-                          label="发布者">
+                            sortable
+                            prop="endLocation"
+                            label="到达地"
+                            width="250">
                         </el-table-column>
                         <el-table-column
-                        align = "center"
-                          prop="browseNumber"
-                          label="浏览量">
+                            sortable
+                            prop="transportAging"
+                            label="运输时效"
+                            width="150">
+                             <template slot-scope="scope">
+                                <span v-if="scope.row.transportAging">{{scope.row.transportAging}} {{scope.row.transportAgingUnit}}</span>
+                                <span v-else>暂未填写</span>
+                            </template>
                         </el-table-column>
-                         <el-table-column label="操作">
-                        <template slot-scope="scope">
-                            <el-button
-                            size="mini"
-                            type="danger"
-                            @click="handleDelete(scope.$index, scope.row)">删除</el-button>
-                        </template>
+                        <el-table-column
+                            sortable
+                            prop="departureHzData"
+                            label="发车频率"
+                            width="150">
+                            <template slot-scope="scope">
+                               <span v-if="scope.row.departureHzData">{{scope.row.departureHzData}}天/{{scope.row.departureHzTime}}次</span> 
+                               <span v-else>暂未填写</span>
+                            </template>
                         </el-table-column>
-                      </el-table>
-                      <!-- 页码 -->
-                    <div class="Pagination "> 
-                        <div class="block">
-                            <el-pagination
-                            @size-change="handleSizeChange"
-                            @current-change="handleCurrentChange"
-                            :current-page="currentPage4"
-                            :page-size="pagesize"
-                            layout="total, sizes, prev, pager, next, jumper"
-                            :total="dataTotal">
-                            </el-pagination>
-                        </div>
-                    </div>
-                    <!-- <div class="info_tab_footer">共计:{{ dataTotal }} <div class="show_pager"> <Pager :total="dataTotal" @change="handlePageChange" /></div> </div>     -->
-
+                        <el-table-column
+                            sortable
+                            prop="weightcargo"
+                            label="重货价格" 
+                            width="220">
+                            <template slot-scope="scope">
+                                <p v-if="scope.row.weightcargo.length == 0">
+                                    <span class="interview">面谈</span>
+                                </p>
+                                <p class="cargo" v-for="(item,idx) in scope.row.weightcargo" :key="item.id" v-else>
+                                    <span v-if="idx == 0">{{item.endVolume}}公斤以下,{{item.discountPrice ? item.discountPrice :item.primeryPrice}}元/公斤</span>
+                                    <span v-else-if="idx == scope.row.weightcargo.length-1 &&  item.endVolume == ''">{{item.startVolume}}公斤以上,{{item.discountPrice ? item.discountPrice :item.primeryPrice}}元/公斤</span>
+                                    <span v-else>{{item.startVolume}}-{{item.endVolume}}公斤,{{item.discountPrice ? item.discountPrice :item.primeryPrice}}元/公斤</span>
+                                </p>
+                            </template>
+                        </el-table-column>
+                        <el-table-column
+                            sortable
+                            prop="lightcargo"
+                            label="轻货价格"
+                            width="220">
+                            <template slot-scope="scope">
+                                <p v-if="scope.row.lightcargo.length == 0">
+                                    <span class="interview">面谈</span>
+                                </p>
+                                <p class="cargo" v-for="(item,idx) in scope.row.lightcargo" :key="idx"  v-else>
+                                    <span v-if="idx == 0">{{item.endVolume}}立方以下,{{item.discountPrice ? item.discountPrice :item.primeryPrice}}元/立方</span>
+                                    <span v-else-if="idx == scope.row.lightcargo.length-1 && item.endVolume == ''">{{item.startVolume}}立方以上,{{item.discountPrice ? item.discountPrice :item.primeryPrice}}元/立方</span>
+                                    <span v-else>{{item.startVolume}}-{{item.endVolume}}立方,{{item.discountPrice ? item.discountPrice :item.primeryPrice}}元/立方</span>
+                                </p>
+                            </template>
+                        </el-table-column>
+                        <el-table-column
+                            sortable
+                            prop="lowerPrice"
+                            label="最低一票价格(元)" 
+                            width="180">
+                        </el-table-column>
+                        <el-table-column
+                            sortable
+                            prop="publishName"
+                            label="创建人" 
+                            width="180">
+                        </el-table-column>
+                        <el-table-column
+                            sortable
+                            prop="createTime"
+                            label="创建时间" 
+                            width="220">
+                        </el-table-column>
+                        <el-table-column
+                            sortable
+                            prop="rangeTypeName"
+                            label="专线类型" 
+                            width="120">
+                            <template slot-scope="scope">
+                               <span class="rangeTypeName">{{scope.row.rangeTypeName}}</span> 
+                            </template>
+                        </el-table-column>
+                        <!-- <el-table-column
+                            prop="address"
+                            label="操作"
+                            width="250"
+                            >
+                                <template slot-scope="scope"> -->
+                                    <!-- <el-button-group> -->
+                                        <!-- <el-button @click="handleEdit(scope.row)" type="primary" size="mini">修改</el-button> -->
+                                        <!-- <el-button @click="handleDelete(scope.row)" type="danger" size="mini">删除</el-button> -->
+                                        <!-- <el-button @click="handleStatus(scope.row)" :type="scope.row.rangeStatus == 0 ? 'primary' : 'info'" size="mini">{{scope.row.rangeStatus == 0 ? '启用' : '禁用'}}</el-button> -->
+                                    <!-- </el-button-group> -->
+                                <!-- </template> -->
+                        <!-- </el-table-column> -->
+                    </el-table>
                 </div>
-                
-            </div>
-        <!-- loading   -->
-        <!-- <spinner v-show="show"></spinner>  -->
-        
+            </div>  
+            <div class="info_tab_footer">共计:{{ totalCount }} <div class="show_pager"> <Pager :total="totalCount" @change="handlePageChange" /></div> </div>    
     </div>
 </template>
 
-<script type="text/javascript">
+<script>
 
-import '@/styles/dialog.scss'
-import { data_TransportRangeList,data_DelTransportRange } from '@/api/users/logistics/TransportRange.js'
-import { parseTime,formatTime } from '@/utils/index.js'
-// import spinner from '../../../spinner/spinner'
+// import '@/styles/identification.scss'
+import { getTransportRangeList,TransportRangeStatus,deleteTransportRange } from '@/api/server/lingdan/TransportRange.js'
+import { parseTime } from '@/utils/index.js'
+import Pager from '@/components/Pagination/index'
 
-    export default{
-        data(){
-            return{
-                formtitle:'新增执行器',//新增任务
-                dialogFormVisible:false,
-                tableExecute:[],
-                currentPage4:1,
-                pagesize:20,
-                page:1,
-                dataTotal:null,
-                searchInfo:{
-                    title:null,
-                    pulishName:null,
-                },
-                pickerOptions2: {
-                    shortcuts: [{
-                        text: '最近三天',
-                        onClick(picker) {
-                        const end = new Date();
-                        const start = new Date();
-                        start.setTime(start.getTime() - 3600 * 1000 * 24 * 3);
-                        picker.$emit('pick', [start, end]);
-                        }
-                    },{
-                        text: '最近一周',
-                        onClick(picker) {
-                        const end = new Date();
-                        const start = new Date();
-                        start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
-                        picker.$emit('pick', [start, end]);
-                        }
-                    }, {
-                        text: '最近一个月',
-                        onClick(picker) {
-                        const end = new Date();
-                        const start = new Date();
-                        start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
-                        picker.$emit('pick', [start, end]);
-                        }
-                    }, {
-                        text: '最近三个月',
-                        onClick(picker) {
-                        const end = new Date();
-                        const start = new Date();
-                        start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
-                        picker.$emit('pick', [start, end]);
-                        }
-                    }]
-                },
-                chooseTime:null,
-            }
-        },
-        components:{
-            // spinner,
 
-        },
-        mounted(){
-            this.firstblood();
-            
-            // console.log(this.$store)
-        },  
-        methods: {
-            // 获取翻页返回的数据
-            handlePageChange (obj) {
-                console.log(obj)
-                // Object.assign(this.searchForm, obj)
-                // this.fetchData()
+export default {
+    components:{
+        Pager,
+    },
+    data() {
+       
+        return {
+            loading:true,
+            defaultImg:'/static/default.png',//默认加载失败图片
+            totalCount:0,
+            page:1,
+            pagesize:20,
+            logisticsForm: {
+                startLocation: '',//出发地
+                endLocation: '',//到达地
             },
-            //单选中当前数据
-            handleCurrentTask(val){
-                // console.log(val)
-                this.tasktest = val;
-            },
-            
-            handleSizeChange(val) {
-                console.log(`每页 ${val} 条`);
-                this.pagesize = val ;
-                this.firstblood();
-            },
-            handleCurrentChange(val) {
-                console.log(`当前页: ${val}`);
-                this.page = val;
-                this.firstblood();
-            },
-          
-            //刷新页面  
-            firstblood(){
-                data_TransportRangeList(this.page,this.pagesize,this.searchInfo).then(res => {
-                    console.log(res)
-                    this.tableExecute = res.data.list;
-                    this.dataTotal = res.data.totalPage;
-                    this.tableExecute.forEach(el => {
-                        el.title =  el.startLocation +'->'+ el.endLocation;
-                        el.time = parseTime(el.createTime);
+            tableData: [],
+        };
+    },
+    watch:{
+
+    },
+    mounted(){
+        this.firstblood();
+    },  
+    methods: {
+        firstblood(){
+            getTransportRangeList(this.page,this.pagesize,this.logisticsForm).then(res=>{
+                this.tableData = res.data.list;
+                this.totalCount = res.data.totalCount;
+                this.tableData.forEach(el=>{
+                    el.weightcargo =[];
+                    el.lightcargo = [];
+                    el.rangePrices.forEach(item => {
+                        switch(item.type){
+                            case '0':
+                                el.lightcargo.push(item);
+                                break;
+                            case '1':
+                                el.weightcargo.push(item)
+                                break;
+                        }
                     })
+                    el.lightcargo.sort(function(a,b){  
+                        return a.startVolume - b.startVolume;  
+                    })  
+                    el.weightcargo.sort(function(a,b){  
+                        return a.startVolume - b.startVolume;  
+                    })  
                 })
-            },
-           
-            //模糊查询 分类名称或者code
-            getdata_search(){
-                // console.log(this.chooseTime)
-                if(this.chooseTime){
-                    this.searchInfo.startTime = this.chooseTime[0];
-                    this.searchInfo.endTime = this.chooseTime[1];
-                }
-                this.firstblood();
-            },
-            //删除
-            handleDelete(index, row) {
-                console.log(index, row);
-                this.$confirm('确定要删除'+ row.title +' 该条线路吗？', '提示', {
-                    confirmButtonText: '确定',
-                    cancelButtonText: '取消',
-                    type: 'warning'
-                }).then(()=>{
-                    data_DelTransportRange(row.id).then(res=>{
-                        console.log(res)
-                        this.$alert('操作成功', '提示', {
-                            confirmButtonText: '确定',
-                            callback: action => {
-                               this.firstblood();
-                            }
-                        });
-                    }).catch(err => {
-                        this.$message({
-                            type: 'info',
-                            message: '操作失败，原因：' + err.text ? err.text : err
-                        })
-                    })
-                }).catch(() => {
+                this.loading = false;
+                console.log(this.tableData)
+            })
+        },
+        handlePageChange(obj) {
+            this.page = obj.pageNum
+            this.pagesize = obj.pageSize
+        },
+        clearSearch(){
+            this.$refs.ruleForm.resetFields();
+            this.firstblood();
+        },
+        //搜索
+        handleSearch(){
+            this.firstblood()
+        },
+        //查看详情
+        handleInfo(row){
+            this.$router.push({name: '发布物流专线',query:{data:row,ifrevise:'2'}});
+        },
+        //新增网点
+        handleNew(){
+            this.$router.push({name: '发布物流专线'});
+        },
+        //修改
+        handleEdit(row) {
+            this.$router.push({name: '发布物流专线',query:{data:row,ifrevise:'1'}});
+        },
+        //删除网点
+        handleDelete(row) {
+            this.$confirm('确定要删除 '+ row.startLocation +'-'+ row.endLocation +' 该条专线吗？', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+            }).then(()=>{
+                deleteTransportRange(row.id).then(res => {
+                    this.firstblood();
+                }).catch(err => {
                     this.$message({
                         type: 'info',
-                        message: '已取消'
+                        message: '操作失败，原因：' + errorInfo ? errorInfo : err.text
                     })
                 })
-            },
-            //clearable
-            clearable(){
-                this.searchInfo = {
-                    title:null,
-                    pulishName:null,
-                }
-                this.chooseTime = [];
+            }).catch(() => {
+                this.$message({
+                    type: 'info',
+                    message: '已取消'
+                })
+            })
+        },
+        //更改状态
+        handleStatus(row) {
+            TransportRangeStatus(row.id).then(res => {
                 this.firstblood();
-            }
-
-        }
-    }
+            }).catch(err=>{
+                this.$message({
+                    type: 'info',
+                    message: '操作失败，原因：' + err.text ? err.text : err
+                })
+            })
+        },
+    },
+  
+}
 </script>
 
-<style type="text/css" lang="scss" scoped>
-    .identicalStyle{
-       
+<style type="text/css" lang="scss">
+    .TransportRange{
+        .el-form{
+            .syStyle{
+                height: 76%;
+            }
+            .tableStyle{
+                height: 80%;
+                .cargo{
+                    text-align: left;
+                    text-indent: 20px;
+                }
+                .rangeTypeName{
+                    padding: 5px 15px;
+                    border-radius: 20%  / 50%;
+                    background: #eca438;
+                    color: #fff;
+                }
+                .interview{
+                    padding: 5px 15px;
+                    border-radius: 5px;
+                    background: #eb0a0a;
+                    color: #fff;
+                }
+                .moreInfo{
+                    cursor: pointer;
+                    display: inline-block;
+                    color: #169BD5;
+                }
+            }
+          
+        }
     }
 </style>

@@ -1,5 +1,5 @@
 <template>
-    <div class="OpenseaRecommend clearfix">
+    <div class="OpenseaRecommend identicalStyle clearfix" v-loading="loading">
             <div class="classify_info">
                 <div class="btns_box">
                     <el-button type="primary" plain icon="el-icon-circle-plus" @click="addClassfy">新增</el-button>
@@ -14,7 +14,6 @@
                         height="100%"
                         border
                         @selection-change = "getinfomation"
-                        @row-dblclick="moreinfo"
                         tooltip-effect="dark"
                         @row-click="clickDetails"
                         style="width: 100%"> 
@@ -51,19 +50,6 @@
                             </template>
                         </el-table-column> -->
                       </el-table>
-                      <!-- 页码 -->
-                    <div class="Pagination ">
-                        <div class="block">
-                            <el-pagination
-                            @size-change="handleSizeChange"
-                            @current-change="handleCurrentChange"
-                            :current-page="currentPage4"
-                            :page-size="pagesize"
-                            layout="total, sizes, prev, pager, next, jumper"
-                            :total="dataTotal">
-                            </el-pagination>
-                        </div>
-                    </div>
                 </div>
                 <!-- 新增数据 -->
                 <addClassfy :dialogFormVisible.sync = "dialogFormVisible" :formtitle = "formtitle" @renovate="Onrenovate" ></addClassfy>
@@ -84,8 +70,7 @@
                     </el-dialog>
                 </div>
             </div>
-        <!-- loading -->
-        <!-- <spinner v-show="show"></spinner>  -->
+            <div class="info_tab_footer">共计:{{ totalCount }} <div class="show_pager"> <Pager :total="totalCount" @change="handlePageChange" /></div> </div>
         <cue ref="cueInfo"></cue>
     </div>
 </template>
@@ -94,16 +79,16 @@
 import { data_dispatchList,data_DeletInfo } from '@/api/dispatch/OrderObtain.js'
 
 import '@/styles/dialog.scss'
-import spinner from '../../spinner/spinner'
 import addClassfy from './addclassify'
 import changeclassify from './changeclassify'
 import cue from '../../../components/Message/cue'
+import Pager from '@/components/Pagination/index'
 
     export default{
 
         data(){
             return{
-                show:false,//遮罩层
+                loading:true,
                 page:1,//页码
                 pagesize:20,//每页显示数量
                 formtitle:'新增额外服务',
@@ -113,7 +98,7 @@ import cue from '../../../components/Message/cue'
                 dialogFormVisibleChange:false,//修改弹窗
                 centerDialogVisible:false,//提示弹窗
                 delDialogVisible:false,//删除提示弹窗
-                dataTotal:null,//当前页面数据总数
+                totalCount:0,//当前页面数据总数
                 data:{},//获取页面数据 后端要求传参{}
                 changeforms:{},
                 information:'你想知道什么',
@@ -123,7 +108,7 @@ import cue from '../../../components/Message/cue'
             }
         },
         components:{
-            spinner,
+            Pager,
             addClassfy,
             changeclassify,
             cue
@@ -133,6 +118,11 @@ import cue from '../../../components/Message/cue'
             this.firstblood()
         },  
         methods: {
+            handlePageChange(obj) {
+                this.page = obj.pageNum;
+                this.pagesize = obj.pageSize;
+                this.firstblood();
+            },
              regionChange(data){
                 console.log(data);
             },
@@ -140,11 +130,6 @@ import cue from '../../../components/Message/cue'
             Onrenovate(){
                 this.firstblood();
                 this.dialogFormVisible = false;
-            },
-            //shuangji
-            moreinfo(row, event){
-                console.log(row, event)
-              
             },
             //点击选中当前行
             clickDetails(row, event, column){
@@ -167,6 +152,8 @@ import cue from '../../../components/Message/cue'
                     console.log(this.checkedinformation)
                     this.dialogFormVisibleChange = true; 
                     this.changeforms = this.checkedinformation[0]
+                    this.$refs.multipleTable.clearSelection()
+
                 }
             },
             // 禁用/启用
@@ -202,6 +189,8 @@ import cue from '../../../components/Message/cue'
                     })
                     this.delID  = delID.join(',');
                     this.delDialogVisible = true;
+                    this.$refs.multipleTable.clearSelection()
+
                     console.log(this.delID)
                 }
             },
@@ -215,32 +204,26 @@ import cue from '../../../components/Message/cue'
                     this.hint(information);
                 })
             },
-            handleSizeChange(val) {
-                this.pagesize = val ;
-                this.firstblood();
-            },
-            handleCurrentChange(val) {
-                this.page = val;
-                this.firstblood();
-            },
             //刷新页面和初始化数据
             firstblood(){
-                this.show = true;
+                this.loading = true;
                 data_dispatchList(this.page,this.pagesize,this.data).then(res=>{
                     console.log('res:',res)
-                    this.dataTotal = res.data.totalCount;
+                    this.totalCount = res.data.totalCount;
                     this.tableDataTree = res.data.list;
                     this.tableDataTree.forEach(item=>{
                         item.obtainTimeM = item.obtainTime +'秒';
                         item.obtainKmM = item.obtainKm +'公里';
                     })
-                    this.show = false;
+                    this.loading = false;
                     // console.log(this.tableDataTree)
                 })
             },
             //新增分类信息
             addClassfy(){
                 this.dialogFormVisible = true;
+                this.$refs.multipleTable.clearSelection()
+
             },
             
            

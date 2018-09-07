@@ -7,8 +7,8 @@
             :load="loadNode"
             lazy
             :highlight-current = "true"
-            @node-click="handleNodeClick"
-            @check-change="handleCheckChange">
+            @node-expand="handleNodeClick"
+            >
             </el-tree>
         </div>
         <div class="side_right">
@@ -217,8 +217,7 @@
                                             lazy
                                             :load="loadNodeMore"
                                             :highlight-current = "true"
-                                            @node-click="handleNodeClickMore"
-                                            @check-change="handleCheckChangeMore"
+                                            @node-expand="handleNodeClickMore"
                                             :filter-node-method="filterNode"
                                             >
                                             </el-tree>
@@ -387,7 +386,6 @@
                 </div>
             </div>
         </div>
-        <!-- <spinner v-show="show"></spinner>  -->
     </div>
 </template>
 
@@ -395,8 +393,6 @@
 
 import { data_Area,data_GetCityList,data_GetCityInfo,data_CarList,data_ServerClassList,data_ChangeStatus,data_Delete,data_GetCarStyle,data_NewOrChange,data_OnlyChange } from '@/api/server/areaPrice.js'
 import '@/styles/dialog.scss'
-// import spinner from '../../spinner/spinner'
-
     export default{
         data(){
             return{
@@ -625,10 +621,6 @@ import '@/styles/dialog.scss'
                     this.hint(information);
                 })
             },
-            //
-            handleCheckChange(data, checked, indeterminate) {
-                console.log(data, checked, indeterminate);
-            },
             handleNodeClick(data,checked) {
                 // console.log(data,checked);
                 data_GetCityList(data.code).then(res=>{
@@ -690,9 +682,6 @@ import '@/styles/dialog.scss'
                 else{
                    
                 }
-            },
-            handleCheckChangeMore(data, checked, indeterminate) {
-                // console.log(data, checked, indeterminate);
             },
             //sousuodizhi
             filterNode(value, data){
@@ -953,8 +942,6 @@ import '@/styles/dialog.scss'
             left:0;
             top:0;
             padding:15px 16px;
-            // border-bottom:2px dashed #ccc;
-            // height:70px;
             width:100%;
             line-height: 35px;
             label{
@@ -1172,9 +1159,6 @@ import '@/styles/dialog.scss'
                                 color: red;
                             }
                         }
-                        // .el-input__inner{
-                        //     text-align: center;
-                        // }
                     }
                     .chose{
                         display: inline-block;
@@ -1187,9 +1171,6 @@ import '@/styles/dialog.scss'
                                 color: red;
                             }
                         }
-                        // .el-input{
-                        //     width: 110px;
-                        // }
                         
                     }
                     .reference{
@@ -1199,7 +1180,6 @@ import '@/styles/dialog.scss'
                         font-size: 12px;
                         .referenceM{
                             display: inline-block;
-                            
                             padding: 5px; 
                             margin-left: 65px;
                         }

@@ -1,10 +1,10 @@
 <template>
     <div>
-        
     <!-- 新增分类信息 -->
-        <div class="shipperOfdispatch commoncss">
+        <div class="shipperOfdispatch plantform commoncss">
             <el-dialog :title='formtitle' :close-on-click-modal="true"  :visible="dialogFormVisibleChange" @close="close">
-                <div class="bindLeft fl bind">
+                <div class="clearfix">
+                    <div class="bindLeft fl bind">
                         <div class="chooseShipper chooseCommon">
                             <p><span>* </span>当前货主账号 ：</p>
                             <div class="nowData">
@@ -42,9 +42,11 @@
                             </el-date-picker>
                         </div>
                     </div>
+                    
+                </div>
                 <div slot="footer" class="dialog-footer">
-                <el-button type="primary" @click="changeInfoSave">保 存</el-button>
-                <el-button @click="closeChangeInfo">取 消</el-button>
+                    <el-button type="primary" @click="changeInfoSave">保 存</el-button>
+                    <el-button @click="closeChangeInfo">取 消</el-button>
                 </div> 
             </el-dialog>
         </div>
@@ -54,7 +56,7 @@
 </template>
 
 <script>
-import { data_ChangeData } from '@/api/dispatch/Directional.js'
+import { aflcShipperPlatformUpdata } from '@/api/dispatch/Directional.js'
 import cue from "@/components/Message/cue";
 
 
@@ -147,7 +149,7 @@ export default {
             }
             else{
 
-                data_ChangeData(this.changeforms).then(res=>{
+                aflcShipperPlatformUpdata(this.changeforms).then(res=>{
                     // console.log(res)
                     this.$emit('renovate')
                     this.close()
@@ -162,13 +164,17 @@ export default {
             
         },
     },
-   
 }
 </script>
 
 <style rel="stylesheet/scss" lang="scss" >
-    .shipperOfdispatch{
-        
+    .plantform{
+        .el-dialog__body {
+            border-bottom: 1px solid #ccc;
+            margin-bottom: 0;
+            overflow: hidden;
+            margin: 0 20px;
+        }
         .nowData{
             display: inline-block;
             margin-bottom: 20px;

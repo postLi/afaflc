@@ -1,5 +1,5 @@
 <template>
-    <div class="OpenseaRecommend clearfix">
+    <div class="OpenseaRecommend identicalStyle clearfix" v-loading="loading">
             <div class="classify_info">
                 <div class="btns_box">
                     <el-button type="primary" plain icon="el-icon-circle-plus" @click="addClassfy">新增</el-button>
@@ -15,7 +15,6 @@
                         height="100%"
                         border
                         @selection-change = "getinfomation"
-                        @row-dblclick="moreinfo"
                         tooltip-effect="dark"
                         @row-click="clickDetails"
                         style="width: 100%"> 
@@ -56,20 +55,9 @@
                             </template>
                         </el-table-column>
                       </el-table>
-                      <!-- 页码 -->
-                    <div class="Pagination ">
-                        <div class="block">
-                            <el-pagination
-                            @size-change="handleSizeChange"
-                            @current-change="handleCurrentChange"
-                            :current-page="currentPage4"
-                            :page-size="pagesize"
-                            layout="total, sizes, prev, pager, next, jumper"
-                            :total="dataTotal">
-                            </el-pagination>
-                        </div>
-                    </div>
                 </div>
+
+
                 <!-- 新增数据 -->
                 <addClassfy :dialogFormVisible.sync = "dialogFormVisible" :formtitle = "formtitle" @renovate="Onrenovate" @ifError="hint" ></addClassfy>
                 <!-- 修改数据 -->
@@ -98,8 +86,7 @@
                     </el-dialog>
                 </div>
             </div>
-        <!-- loading -->
-        <!-- <spinner v-show="show"></spinner>  -->
+            <div class="info_tab_footer">共计:{{ totalCount }} <div class="show_pager"> <Pager :total="totalCount" @change="handlePageChange" /></div> </div>
     </div>
 </template>
 
@@ -108,15 +95,15 @@
 import { data_dispatchList,data_ChangeStatus,data_DeletInfo } from '@/api/dispatch/OpenseaRecommend.js'
 
 import '@/styles/dialog.scss'
-import spinner from '../../spinner/spinner'
 import addClassfy from './addclassify'
 import changeclassify from './changeclassify'
+import Pager from '@/components/Pagination/index'
 
     export default{
 
         data(){
             return{
-                show:false,//遮罩层
+                loading:true,//遮罩层
                 page:1,//页码
                 pagesize:20,//每页显示数量
                 formtitle:'新增额外服务',
@@ -126,7 +113,7 @@ import changeclassify from './changeclassify'
                 dialogFormVisibleChange:false,//修改弹窗
                 centerDialogVisible:false,//提示弹窗
                 delDialogVisible:false,//删除提示弹窗
-                dataTotal:null,//当前页面数据总数
+                totalCount:0,//当前页面数据总数
                 data:{},//获取页面数据 后端要求传参{}
                 changeforms:{},
                 information:'你想知道什么',
@@ -136,7 +123,7 @@ import changeclassify from './changeclassify'
             }
         },
         components:{
-            spinner,
+            Pager,
             addClassfy,
             changeclassify
         },
@@ -145,15 +132,15 @@ import changeclassify from './changeclassify'
             this.firstblood()
         },  
         methods: {
+            handlePageChange(obj) {
+                this.page = obj.pageNum;
+                this.pagesize = obj.pageSize;
+                this.firstblood();
+            },
             //子组件调用父组件刷新页面  
             Onrenovate(){
                 this.firstblood();
                 this.dialogFormVisible = false;
-            },
-            //shuangji
-            moreinfo(row, event){
-                console.log(row, event)
-              
             },
             //点击选中当前行
             clickDetails(row, event, column){
@@ -176,6 +163,8 @@ import changeclassify from './changeclassify'
                     console.log(this.checkedinformation)
                     this.dialogFormVisibleChange = true; 
                     this.changeforms = this.checkedinformation[0]
+                    this.$refs.multipleTable.clearSelection()
+
                 }
             },
             // 禁用/启用
@@ -195,6 +184,8 @@ import changeclassify from './changeclassify'
                         // console.log(res)
                        this.firstblood();
                     })
+                    this.$refs.multipleTable.clearSelection()
+
                 }
             },
             // 是否删除
@@ -211,6 +202,7 @@ import changeclassify from './changeclassify'
                     })
                     this.delID  = delID.join(',');
                     this.delDialogVisible = true;
+                    
                     console.log(this.delID)
                 }
             },
@@ -227,40 +219,25 @@ import changeclassify from './changeclassify'
                 })
                 
             },
-            handleUse(index, row) {
-                console.log(index, row);
-            },
-            handleSizeChange(val) {
-                this.pagesize = val ;
-                this.firstblood();
-            },
-            handleCurrentChange(val) {
-                this.page = val;
-                this.firstblood();
-            },
             //刷新页面和初始化数据
             firstblood(){
-                this.show = true;
+                this.loading = true;
                 data_dispatchList(this.page,this.pagesize,this.data).then(res=>{
                     // console.log(res)
-                    this.dataTotal = res.data.totalCount;
+                    this.totalCount = res.data.totalCount;
                     this.tableDataTree = res.data.list;
                     this.tableDataTree.map(item=>{
                         item.firstPush = item.firstRecommendKm +'公里/'+item.firstRecommendTime+'秒';
                         // item.secondPush = item.secondRecommendKm +'公里/'+item.secondRecommendTime+'秒';
                     })
-                    this.show = false;
-                    // console.log(this.tableDataTree)
+                    this.loading = false;
                 })
-            },
-            //模糊查询 分类名称或者code
-            getdata_search(event){
-                // console.log(event)
-                this.show = true;
             },
             //新增分类信息
             addClassfy(){
                 this.dialogFormVisible = true;
+                this.$refs.multipleTable.clearSelection()
+
             },
             
             hint(val){

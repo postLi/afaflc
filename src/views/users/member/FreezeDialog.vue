@@ -1,64 +1,11 @@
 <template>
   <div class="freezeDialog commoncss">
-    <el-button :type="type" :value="value" :plain="plain" :icon="icon" @click="openDialog()">{{text}}</el-button>
-    <el-dialog :title="title" :visible.sync="freezeDialogFlag" :before-close="change()" v-dialogDrag :close-on-click-modal="false" >
+    <!-- <el-button :type="type" :value="value" :plain="plain" :icon="icon" @click="openDialog()">{{text}}</el-button> -->
+    <el-dialog :title="title" :visible="freezeDialogFlag"  :before-close="close" v-dialogDrag :close-on-click-modal="false" >
       <el-form :model="formFroze" ref="formFroze" :rules="formFrozeRules" >
-        <!-- <el-row>
-            <el-col :span="12"> 
-              <el-form-item label="手机号码：" :label-width="formLabelWidth">
-                <el-input v-model="formFroze.mobile" disabled></el-input>
-              </el-form-item>
-            </el-col>
-            <el-col :span="12">
-              <el-form-item label="公司名称：" :label-width="formLabelWidth">
-                <el-input v-model="formFroze.companyName" disabled></el-input>
-              </el-form-item>
-            </el-col>
-          </el-row>
-          
-          <el-row>
-            <el-col :span="12">
-              <el-form-item label="联系人：" :label-width="formLabelWidth">
-                <el-input v-model="formFroze.contacts" disabled></el-input>
-              </el-form-item>
-            </el-col>
-            <el-col :span="12">
-              <el-form-item label="所在地：" :label-width="formLabelWidth">
-              <el-input v-model="formFroze.belongCityName" disabled></el-input>
-            </el-form-item>
-            </el-col>
-          </el-row>
-
-          <el-row>
-            <el-col :span="24" class="moreLength">
-              <el-form-item label="详细地址：" :label-width="formLabelWidth">
-              <el-input v-model="formFroze.address" :maxlength="20" disabled></el-input>
-            </el-form-item>
-            </el-col>
-          </el-row>
-          <el-row>
-            <el-col :span="12">
-              	<el-form-item label="货主类型：" :label-width="formLabelWidth">
-				<el-input
-				v-if="freeze == true"
-				placeholder="请输入内容"
-				v-model="formFroze.shipperTypeName"
-				:disabled="true">
-				</el-input>
-            </el-form-item>
-            </el-col>
-            <el-col :span="12">
-              <el-form-item label="注册来源：" :label-width="formLabelWidth">
-                <el-input v-model="formFroze.registerOrigin" :maxlength="20" disabled></el-input>
-              </el-form-item>
-            </el-col>
-          </el-row> 
-          <div class="shipper_information">
-            <h2>冻结信息</h2>
-          </div>-->
           <el-row>
             <el-col :span="24">
-                <el-form-item label="冻结原因：" prop="freezeCause" :label-width="formLabelWidth">
+                <el-form-item label="冻结原因：" prop="freezeCause" :label-width="formLabelWidth" >
                     <el-input v-model="formFroze.freezeCauseName" v-if="editType == 'remove'" disabled></el-input>
 
                     <el-select v-model="formFroze.freezeCause" v-else placeholder="请选择" clearable>
@@ -97,7 +44,7 @@
           </el-row>
           <el-row>
             <el-col :span="24">
-              <el-form-item label="冻结原因说明：" :label-width="formLabelWidth">
+              <el-form-item label="冻结原因说明：" :label-width="formLabelWidth" prop="freezeCauseRemark">
                 <el-input type="textarea" :rows="2" :maxlength="100" v-model="formFroze.freezeCauseRemark " :disabled="editType == 'remove'" class="textArea"></el-input>
               </el-form-item>
             </el-col>
@@ -108,7 +55,7 @@
             </div>
             <el-row>
                 <el-col :span="24">
-                <el-form-item label="解冻原因说明：" :label-width="formLabelWidth">
+                <el-form-item label="解冻原因说明：" :label-width="formLabelWidth" prop="unfreezeRemark">
                     <el-input type="textarea" :rows="2" :maxlength="100" v-model="formFroze.unfreezeRemark " class="textArea"></el-input>
                 </el-form-item>
                 </el-col>
@@ -156,17 +103,17 @@ export default {
       type: String,
       default: ''
     },
-    value:{
-      type: String,
-      default:''
-    },
-     editType: {
+    editType: {
       type: String,
       default: 'edit'
 	},
 	freeze:{
 		type:Boolean
-	}
+    },
+    freezeDialogFlag:{
+        type:Boolean,
+        required:true
+    }
   },
   data(){
     return{
@@ -175,7 +122,6 @@ export default {
       text:'',
       optionsReason:[],
       formLabelWidth:'120px',
-      freezeDialogFlag:false,
       formFroze: { // 冻结弹框表单
         freezeCause:null,
         unfreezeTime:null,
@@ -198,20 +144,15 @@ export default {
   watch:{
     freezeDialogFlag:{
         handler: function(val, oldVal) {
-            if(!val){
-                this.$refs.formFroze.resetFields();
+            if(val){
+                this.openDialog();
+                this.getMoreInformation()
             }
         },
-    }
+    },
   },
   mounted(){
-    //按钮类型text,primary...
-    this.type = this.btntype;
-    //按钮文本内容
-    this.text = this.btntext;
-    //弹出框标题
-    this.title = this.btntitle;
-    this.getMoreInformation()
+
   },
   methods:{
     //事件分发
@@ -240,56 +181,38 @@ export default {
         }
         this.formFroze.unfreezeTime = time
     },
-    change(){
-      this.freezeDialogFlag!=this.freezeDialogFlag
-    },
-    setCurrent(row) {
-      this.$refs.singleTable.setCurrentRow(row);
-    },
-    openDialog(){
-        console.log('this.params',this.params)
-        if(Object.keys(this.params).length == 0){
-            return this.$message.info('请选择您要冻结的用户');
-            
-        }
-        else if(this.params.accountStatusName == '冻结中' && this.editType == 'add'){
-            return this.$message.info('您选中的货主已被冻结，不需多次冻结！');
-            
-        }
-        else if(this.params.accountStatusName != '冻结中' && this.editType == 'edit'){
-            return this.$message.info('您选中的货主未被冻结，不可做此操作！');
-            
-        }
-        else if(this.params.accountStatusName != '冻结中' && this.editType == 'remove'){
-            return this.$message.info('您选中的货主未被冻结，无需移除！');
-
-        }
-        else{
-            if(this.editType == 'add'){
-                this.freezeDialogFlag = true ;
-                this.formFroze.unfreezeTime = this.formFroze.unfreezeTime ? this.formFroze.unfreezeTime : new Date();
-                this.formFroze.id = this.params.id;
-                this.formFroze.mobile = this.params.mobile;
-
-            }else{
-                this.formFroze = Object.assign({},this.params) ;
-                this.freezeDialogFlag = true ;
-                this.formFroze.unfreezeTime = this.formFroze.unfreezeTime ? this.formFroze.unfreezeTime : new Date();
-            }
-        }
-
-        console.log(this.params.mobile)
-    },
-    close(){
-        this.freezeDialogFlag = false;
+    close(done) {
+        this.$emit('update:freezeDialogFlag', false);
         this.$emit('getData');
-        this.$refs['formFroze'].resetFields();
+        this.$refs.formFroze.resetFields();
+
         this.formFroze = { // 冻结弹框表单
             freezeCause:null,
             unfreezeTime:null,
             freezeCauseRemark:null,
             unfreezeRemark:null
         }
+        if (typeof done === 'function') {
+            done()
+        }
+    },
+    openDialog(){
+        console.log('this.params',this.params)
+        if(this.editType == 'add'){
+            console.log('add')
+            this.formFroze.unfreezeTime = this.formFroze.unfreezeTime ? this.formFroze.unfreezeTime : new Date();
+            this.formFroze.id = this.params.id;
+            this.formFroze.mobile = this.params.mobile;
+
+        }else{
+            console.log('freez')
+
+            this.formFroze = Object.assign({},this.params) ;
+            this.formFroze.unfreezeTime = this.formFroze.unfreezeTime ? this.formFroze.unfreezeTime : new Date();
+        }
+        // }
+
+        console.log(this.params.mobile)
     },
     getMoreInformation(){
       // 获取冻结原因下拉

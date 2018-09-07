@@ -3,7 +3,9 @@
         <div class="shipper_searchinfo">
           <el-form :inline="true">
             <el-form-item label="所在地：">
-              <GetCityList v-model="formInline.belongCity" ref="area"></GetCityList>
+              <!-- <GetCityList v-model="formInline.belongCity" ref="area"></GetCityList> -->
+                <el-input v-model="formInline.belongCityName" placeholder="请输入"></el-input>
+
             </el-form-item>
             <el-form-item label="账户状态：">
               <el-select v-model="formInline.accountStatus" clearable placeholder="请选择">
@@ -158,6 +160,7 @@ export default {
         formInline: {
             accountStatus:null,
             belongCity:'',
+            belongCityName:'',
             mobile:'',
             authStatus:"AF0010401",//未认证的状态码
             isVest:'0'
@@ -238,13 +241,13 @@ export default {
         },
         //点击查询按纽，按条件查询列表
         getdata_search(event){
-            this.formInline.belongCity = this.$refs.area.selectedOptions.pop();
+            // this.formInline.belongCity = this.$refs.area.selectedOptions.pop();
             this.firstblood();
         },
         
         //清空
         clearSearch(){
-            this.$refs.area.selectedOptions = [];
+            // this.$refs.area.selectedOptions = [];
             this.formInline = {
                 accountStatus:null,
                 belongCity:'',

@@ -3,7 +3,9 @@
         <div class="shipper_searchinfo">
           <el-form :inline="true">
             <el-form-item label="所在地：">
-              <GetCityList v-model="formAll.belongCity" ref="area"></GetCityList>
+              <!-- <GetCityList v-model="formAll.belongCity" ref="area"></GetCityList> -->
+                <el-input v-model="formAll.belongCityName" placeholder="请输入"></el-input>
+
             </el-form-item>
             <el-form-item label="公司名称：">
               <el-input v-model.trim="formAll.companyName"></el-input>
@@ -239,36 +241,38 @@
                 </el-col>
             </el-row>
            
-            <div class="data_pic clearfix">  
+            <div class="data_pic">  
                 <div class="data_pic_default">
                     <img  :src= 'defaultImg'/>
                 </div>
-                <div class="data_pic_yyzz data_pic_c">  
-                    <img  class="picURL" :src="shengheform.businessLicenceFile ? shengheform.businessLicenceFile : defaultImg" @click="changeIMG"/>
-                    <h2>营业执照</h2>
-                      <el-radio-group v-model="radio1">
-                        <el-radio label="上传合格">上传合格</el-radio><br />
-                        <el-radio label="不清晰">不清晰</el-radio><br />
-                        <el-radio label="内容不符">内容不符</el-radio>
-                      </el-radio-group>
-                </div>
-                <div class="data_pic_company data_pic_c">   
-                    <img  class="picURL" :src="shengheform.companyFacadeFile ? shengheform.companyFacadeFile : defaultImg" @click="changeIMG"/>
-                    <h2>公司或档口照片</h2>
-                      <el-radio-group v-model="radio2">
-                        <el-radio label="上传合格">上传合格</el-radio><br />
-                        <el-radio label="不清晰">不清晰</el-radio><br />
-                        <el-radio label="内容不符">内容不符</el-radio>
-                      </el-radio-group>
-                </div>
-                <div class="data_pic_callingcode data_pic_c">
-                    <img  class="picURL" :src="shengheform.takeIdCardFile ? shengheform.takeIdCardFile : defaultImg" @click="changeIMG"/>
-                    <h2>手持身份证</h2>
-                      <el-radio-group v-model="radio3">
-                        <el-radio label="上传合格">上传合格</el-radio><br />
-                        <el-radio label="不清晰">不清晰</el-radio><br />
-                        <el-radio label="内容不符">内容不符</el-radio>
-                      </el-radio-group>
+                <div class="clearfix">
+                    <div class="data_pic_yyzz data_pic_c">  
+                        <img  class="picURL" :src="shengheform.businessLicenceFile ? shengheform.businessLicenceFile : defaultImg" @click="changeIMG"/>
+                        <h2>营业执照</h2>
+                        <el-radio-group v-model="radio1">
+                            <el-radio label="上传合格">上传合格</el-radio><br />
+                            <el-radio label="不清晰">不清晰</el-radio><br />
+                            <el-radio label="内容不符">内容不符</el-radio>
+                        </el-radio-group>
+                    </div>
+                    <div class="data_pic_company data_pic_c">   
+                        <img  class="picURL" :src="shengheform.companyFacadeFile ? shengheform.companyFacadeFile : defaultImg" @click="changeIMG"/>
+                        <h2>公司或档口照片</h2>
+                        <el-radio-group v-model="radio2">
+                            <el-radio label="上传合格">上传合格</el-radio><br />
+                            <el-radio label="不清晰">不清晰</el-radio><br />
+                            <el-radio label="内容不符">内容不符</el-radio>
+                        </el-radio-group>
+                    </div>
+                    <div class="data_pic_callingcode data_pic_c">
+                        <img  class="picURL" :src="shengheform.takeIdCardFile ? shengheform.takeIdCardFile : defaultImg" @click="changeIMG"/>
+                        <h2>手持身份证</h2>
+                        <el-radio-group v-model="radio3">
+                            <el-radio label="上传合格">上传合格</el-radio><br />
+                            <el-radio label="不清晰">不清晰</el-radio><br />
+                            <el-radio label="内容不符">内容不符</el-radio>
+                        </el-radio-group>
+                    </div>
                 </div>
             </div>
           </el-form>
@@ -336,6 +340,7 @@ export default {
             pagesize:20,
             formAll:{
                 belongCity:null,
+                belongCityName:'',
                 companyName:'',
                 mobile:'',
                 authStatus:"AF0010402",//待认证的状态码
@@ -506,6 +511,7 @@ export default {
             // this.$refs.area.selectedOptions = [];
             this.formAll = {
                 belongCity:null,
+                belongCityName:'',
                 companyName:'',
                 mobile:'',
                 authStatus:"AF0010402",//待认证的状态码
@@ -659,10 +665,10 @@ export default {
             padding-bottom: 20px;
             border-bottom: 1px solid #ccc;
             .data_pic_default{
-                width: 100%;
                 height: 410px;
                 margin-bottom: 15px;
                 img{
+                    display: block;
                     width: 100%;
                     height: 100%;
                 }

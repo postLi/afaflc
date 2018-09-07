@@ -4,6 +4,13 @@
         max-height:80%;
         overflow:auto;
         border-radius: 10px 10px 0px 0px;
+        .el-input__inner{
+            height: 30px;
+            line-height: 30px;
+        }
+        .el-input__icon{
+            line-height: 30px;
+        }
         .el-dialog__header{
             border-bottom:1px solid #ccc;
             text-align:center;
@@ -111,6 +118,8 @@
                                 line-height: 26px;
                                 font-size:14px;
                                 padding:2px 10px;
+                                height: 30px;
+                                line-height: 30px;
                             }
                         }
                     }

@@ -59,6 +59,14 @@ export default {
                 component: _import('order/xuqiuku/driverInfo/index'), 
                 meta: { title: '货源信息',stitle: '货源',  noCache: true 
             }},
+
+            { 
+                path: '/order/xuqiuku/manageGroup', 
+                hidden: false,
+                name: '网点信息', 
+                component: _import('order/xuqiuku/manageGroup/index'), 
+                meta: { title: '网点信息',stitle: '网点',  noCache: true 
+            }},
         ]
     },
     {

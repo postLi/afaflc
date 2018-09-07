@@ -4,17 +4,18 @@
         class="menu-item"
         v-for="(route, index) in routes"
         :key="index"
+        
         v-if="!route.hidden"
         :class="{'is-active': route.path === $route.path}" 
         ref="sidebaritem"
         >
         <!-- 有子菜单但不展示 && 没有子菜单 -->
-        <router-link v-if="isFolder(route) ? route.noDropdown : (!route.tab && true)" :to="route.path" :key="route.name" >
+        <router-link  v-if="isFolder(route) ? route.noDropdown : (!route.tab && true)" :to="route.path" :key="route.name" >
           <icon-svg v-if='route.icon' :icon-class="route.icon" /> <span class="sidebar-nav-title">{{ !sidebar.opened ? (route.meta.stitle||route.meta.title) : route.meta.title}}</span>
         </router-link>
         <!-- 带子菜单展示 -->
         <template v-if="isFolder(route)">
-          <span class="sidebar_menu_toggle" @mouseover="showSubNav" @mouseout="hideSubNav"  @click.stop="toggle($event)" >
+          <span  class="sidebar_menu_toggle" @mouseover="showSubNav" @mouseout="hideSubNav"  @click.stop="toggle($event)" >
             <icon-svg v-if='route.icon' :icon-class="route.icon" /> <span class="sidebar-nav-title">{{ !sidebar.opened ? (route.meta.stitle||route.meta.title) : route.meta.title}}</span>
             <i class="el-icon-caret-bottom dropdownIcon" ></i>
            </span>
@@ -23,7 +24,7 @@
             <li v-for="(item, index) in route.children"
               v-if="!item.hidden"
               :key="index"
-              :class="{'is-active': item.path === $route.path}"
+              :class="{'is-active': isFolder(item) ? item.meta.title === $route.meta.ptitle : item.path === $route.path}"
               class="submenu-item">
               <router-link :to="item.path" :index="item.path" :key="item.name">
                 <!-- <icon-svg v-if='item.icon' :icon-class="item.icon" />  --><span class="sidebar-nav-title">{{ item.meta.title }}</span>
@@ -32,7 +33,7 @@
           </ul>
         </template>
         <!-- 带tab菜单展示 -->
-        <template v-if="route.tab">
+        <template  v-if="route.tab">
           <span class="sidebar_menu_toggle"  @click.stop="toggle($event)" >
             <icon-svg v-if='route.icon' :icon-class="route.icon" /> <span class="sidebar-nav-title">{{ !sidebar.opened ? (route.meta.stitle||route.meta.title) : route.meta.title}}</span>
             <i class="el-icon-caret-bottom dropdownIcon" ></i>
@@ -43,7 +44,7 @@
               v-if="!item.hidden"
               :key="index"
               :path="item.path"
-              :class="{'is-active': item.path === $route.path}"
+              :class="{'is-active': isFolder(item) ? item.meta.title === $route.meta.ptitle : item.path === $route.path}"
               class="submenu-item submenu-item-tab">
                 <!-- <icon-svg v-if='item.icon' :icon-class="item.icon" />  --><span class="sidebar-nav-title">{{ item.meta.title }}</span>
             </li>
@@ -52,7 +53,6 @@
       </li>
     </ul>
 </template>
-
 <script>
 import { mapGetters } from 'vuex'
 import { closest } from '@/utils/index'
@@ -90,11 +90,15 @@ export default {
     isOpen (route) {
       return true
     },
-    toggle (event) {
-      const el = closest(event.target, 'li');
-      el.classList.toggle('isOpen');
-    //   el.siblings('li').classList.removeCLass('isOpen');
-      console.log(event)
+    toggle(event) {
+      const el = closest(event.target, 'li')
+      const ul = closest(el, 'ul')
+      const lis = Array.from(ul.querySelectorAll('.isOpen') || []).filter(l => {
+        return l !== el
+      }).forEach(el2 => {
+        el2.classList.toggle('isOpen')
+      })
+      el.classList.toggle('isOpen')
     },
     setSubNav(type, event){
       let parentEle = document.querySelector('.sidebar-menu')
@@ -188,13 +192,18 @@ $sidebarBackgroundColor: #002039;
     position: relative;
     transition: height .4s ease;
   }
-  .isOpen{
-    height: auto;
-    .dropdownIcon{
-      transform-origin: center center;
-      transform: rotate(180deg);
+    .isOpen{
+        height:auto;
+        transition:height 1.5s linear;
+        // -moz-transition: max-height 1.5s linear;	/* Firefox 4 */
+        // -webkit-transition: max-height 1.5s linear;	/* Safari 和 Chrome */
+        // -o-transition: max-height 1.5s linear;	/* Opera */
+
+        .dropdownIcon{
+            transform-origin: center center;
+            transform: rotate(180deg);
+        }
     }
-  }
 
   .sidebar-nav-title{
     display: inline-block;

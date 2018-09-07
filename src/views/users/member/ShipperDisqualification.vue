@@ -3,7 +3,9 @@
         <div class="shipper_searchinfo">
             <el-form inline>
                 <el-form-item label="所在地">
-                    <GetCityList v-model="formAll.belongCity" ref="area"></GetCityList>
+                    <!-- <GetCityList v-model="formAll.belongCity" ref="area"></GetCityList> -->
+                <el-input v-model="formAll.belongCityName" placeholder="请输入"></el-input>
+
                 </el-form-item>
                 <el-form-item label="公司名称">
                     <el-input v-model.trim="formAll.companyName"></el-input>
@@ -135,7 +137,8 @@ export default {
                 belongCity:'',
                 mobile:'',
                 authStatus:"AF0010404",//未认证的状态码
-                isVest:'0'
+                isVest:'0',
+                belongCityName:'',
 
             },
             selectRowData:{},
@@ -194,7 +197,7 @@ export default {
       },
          //点击查询按纽，按条件查询列表
       getdata_search(event){
-            this.formAll.belongCity = this.$refs.area.selectedOptions.pop();
+            // this.formAll.belongCity = this.$refs.area.selectedOptions.pop();
             this.firstblood()
       },
       
@@ -205,7 +208,8 @@ export default {
             belongCity:'',
             mobile:'',
             authStatus:"AF0010404",//未认证的状态码
-            isVest:'0'
+            isVest:'0',
+            belongCityName:'',
 
         },
         this.firstblood()

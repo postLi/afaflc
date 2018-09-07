@@ -346,7 +346,7 @@ export default {
             margin: 5px 0;
             margin-right: 48px;
             .el-input{
-                width: 50px;
+                width: 100px;
             }
             span{
                 font-size: 12px;

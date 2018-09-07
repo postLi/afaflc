@@ -4,9 +4,9 @@
           <el-form :inline="true">
             <el-form-item label="所在地：">
               <!-- <GetCityList v-model="formAll.belongCity" ref="area"></GetCityList> -->
-                <vregion :ui="true" @values="regionChange" class="form-control">
-                    <el-input v-model="formAll.belongCityName" placeholder="请选择"></el-input>
-                </vregion>
+                <!-- <vregion :ui="true" @values="regionChange" class="form-control"> -->
+                    <el-input v-model="formAll.belongCityName" placeholder="请输入"></el-input>
+                <!-- </vregion> -->
             </el-form-item>
             <el-form-item label="认证状态：">
               <el-select v-model="formAll.authStatus" clearable placeholder="请选择">
@@ -41,113 +41,61 @@
         </div>
 		<div class="classify_info">
 			<div class="btns_box">
-				<FreezeDialog
-				btntext="冻结"
-				type="warning" 
-				btntitle="冻结"
-				:plain="true"
-				editType='add'
-				freeze = 'freeze'
-				btntype="warning"
-				icon="el-icon-info"
-				:params="selectRowData"
-				@getData="getDataList"
-				>
-				</FreezeDialog>
-				<FreezeDialog
-				btntext="冻结修改"
-				type="warning" 
-				btntitle="冻结修改"
-				freeze = 'freeze'
-				:plain="true"
-				editType='edit'
-				btntype="warning"
-				icon="el-icon-edit"
-				:params="selectRowData"
-				@getData="getDataList"
-				>
-				</FreezeDialog>
-				<shipperBlackDialog
-				btntext="移入黑名单"
-				type="info" 
-				btntitle="移入黑名单"
-				:plain="true"
-				editType='add'
-				btntype="info"
-				icon="el-icon-warning"
-				:params="selectRowData"
-				@getData="getDataList"
-				>
-                </shipperBlackDialog>
-                <shipperBlackDialog
-				btntext="移出黑名单"
-				type="info" 
-				btntitle="移出黑名单"
-				:plain="true"
-				editType='edit'
-				btntype="info"
-				icon="el-icon-success"
-				:params="selectRowData"
-				@getData="getDataList"
-				></shipperBlackDialog>
-				<FreezeDialog
-				btntext="解冻"
-				type="success" 
-				btntitle="解冻"
-				freeze = 'freeze'
-				:plain="true"
-				editType='remove'
-				btntype="success"
-				icon="el-icon-success"
-				:params="selectRowData"
-				@getData="getDataList"
-				>
-				</FreezeDialog>
+                <el-button type="primary" plain @click="handleClick('pushFreeze')">冻结</el-button>
+                <el-button type="primary" plain @click="handleClick('editFreeze')">冻结修改</el-button>
+                <el-button type="primary" plain @click="handleClick('pushBlack')">移入黑名单</el-button>
+                <el-button type="primary" plain @click="handleClick('removeBlack')">移除黑名单</el-button>
+                <el-button type="primary" plain @click="handleClick('removeFreeze')">解冻</el-button>
 			</div>
 			<div class="info_news">
 				<el-table
 				ref="multipleTable"
 				:data="tableDataAll"
+                :default-sort = "{prop: 'registerTime', order: 'descending'}"
 				stripe
 				border
                 height="100%"
-                highlight-current-row
 				tooltip-effect="dark"
 				style="width: 100%">
-				<el-table-column label="" width="60" fixed>
+				<el-table-column label="" width="60" sortable  fixed>
                     <template slot-scope="scope">
                         <el-radio class="textRadio" @change.native="getCurrentRow(scope.$index,scope.row)" :label="scope.$index" v-model="templateRadio">&nbsp;</el-radio>
                     </template>
                 </el-table-column>
+                <!-- <el-table-column
+                    fixed
+                    sortable
+                    type="selection"
+                    width="50">
+                </el-table-column> -->
                 <el-table-column label="序号" width="80">
                     <template slot-scope="scope">
                         {{ (page - 1)*pagesize + scope.$index + 1 }}
                     </template>
                 </el-table-column>  
-				<el-table-column label="手机号(会员账号)" width="150">
+				<el-table-column label="手机号(会员账号)" width="200">
                     <template slot-scope="scope">
-                        <!-- <createdDialog :paramsView="scope.row" btntype="text" :btntext="scope.row.mobile" editType="view" btntitle="详情"></createdDialog> -->
                         <h4 class="needMoreInfo" @click="pushOrderSerial(scope.row)">{{ scope.row.mobile}}</h4>
                     </template>
 				</el-table-column>
-				<el-table-column prop="contactsName" label="注册人姓名" width="150">
+				<el-table-column prop="contactsName" sortable label="注册人姓名" width="150">
 				</el-table-column>
-				<el-table-column prop="companyName" label="公司名称" width="300">
+				<el-table-column prop="companyName" sortable label="公司名称" width="300">
 				</el-table-column>
-				<el-table-column prop="belongCityName" label="所在地" width="250">
+				<el-table-column prop="belongCityName" sortable label="所在地" width="250">
 				</el-table-column>
-				<el-table-column prop="registerOriginName" label="注册来源" width="120">
+				<el-table-column prop="registerOriginName" sortable label="注册来源" width="120">
 				</el-table-column>
-				<el-table-column prop="registerTime" label="注册日期" width="200">
+				<el-table-column prop="registerTime" sortable label="注册日期" width="200">
 				</el-table-column>
-				<el-table-column prop="accountStatusName" label="账户状态" width="120">
+				<el-table-column prop="accountStatusName" sortable label="账户状态" width="120">
                     <template slot-scope="scope">
                         <span :class="{freezeName: scope.row.accountStatusName == '冻结中' ,blackName: scope.row.accountStatusName == '黑名单',normalName :scope.row.accountStatusName == '正常'}">{{scope.row.accountStatusName}}</span>
                     </template>
 				</el-table-column>
-				<el-table-column prop="authStatusName" label="认证状态" width="120">
+				<el-table-column prop="authStatusName" sortable label="认证状态" width="120">
 				</el-table-column>
-                <el-table-column prop="qq" label="QQ号码" width="200">
+                <el-table-column prop="qq" label="QQ号码" sortable width="200">
 				</el-table-column>
 				<!-- <el-table-column prop="otherService" label="会员服务承诺" width="225"  align="left">
                     <template slot-scope="scope" >
@@ -161,7 +109,7 @@
                         </div>
                     </template>
 				</el-table-column> -->
-                <el-table-column prop="isOpenTms" label="是否开通TMS" width="120">
+                <el-table-column prop="isOpenTms" sortable label="是否开通TMS" width="120">
                     <template slot-scope="scope">
                         <span :class="scope.row.isOpenTms == 1 ? 'isTMS' : 'noTMS'"> {{scope.row.isOpenTms == 1 ? '是' : '否'}}</span>
                     </template>
@@ -172,6 +120,8 @@
         <div class="info_tab_footer">共计:{{ totalCount }} <div class="show_pager"> <Pager :total="totalCount" @change="handlePageChange" /></div> </div>
 
         <createdDialog :paramsView="paramsView" :editType="type"  :dialogFormVisible_add.sync = "dialogFormVisible_add" @getData="getDataList"/>
+        <FreezeDialog :params="selectRowData" :editType="freezetype"  :freezeDialogFlag.sync = "freezeDialogFlag" @getData="getDataList"/>
+        <shipperBlackDialog :params="selectRowData" :editType="blacktype"  :BlackDialogFlag.sync = "BlackDialogFlag" @getData="getDataList"/>
     </div>
 
     
@@ -206,10 +156,13 @@ export default {
   data(){
       return{
             dialogFormVisible_add:false,
+            freezeDialogFlag:false,
+            BlackDialogFlag:false,
+            freezetype:'',
+            blacktype:'',
             type:'',
             paramsView:{},
             templateRadio:'',
-            ul:true,
             freeze:true,//是否冻结
             options:[],
             optionsStatus:[
@@ -267,13 +220,14 @@ export default {
         regionChange(d) {
             console.log('data:',d)
             this.formAll.belongCityName = (!d.province&&!d.city&&!d.area&&!d.town) ? '': `${this.getValue(d.province)}${this.getValue(d.city)}${this.getValue(d.area)}${this.getValue(d.town)}`.trim();
+
         },
         getValue(obj){
             return obj ? obj.value:'';
         },
         pushOrderSerial(row){
             this.type = 'view';
-            this.paramsView = row;
+            this.paramsView = Object.assign({},row);;
             this.dialogFormVisible_add =true;
         },
         getCurrentRow(index,row){       
@@ -329,12 +283,12 @@ export default {
             // this.$refs.area.selectedOptions = [];
             this.formAll = {
                 belongCity: '',
+                belongCityName:'',
                 authStatus:'',
                 accountStatus:'',
                 accountName:'',
                 mobile:'',
                 isVest:'0'
-
             },
             this.firstblood();
         },
@@ -346,7 +300,60 @@ export default {
         },
         getDataList(){
             this.firstblood()
-        }
+        },
+        handleClick(type){
+            // console.log(this.chooseTime)
+            if(Object.keys(this.selectRowData).length == 0){
+                return this.$message.info('请选择您要操作的用户');
+            }else{
+                switch(type){
+                    case 'pushFreeze':
+                        this.freezetype = 'add';
+                        if(this.selectRowData.accountStatusName == '冻结中' && this.freezetype == 'add'){
+                            return this.$message.info('您选中的货主已被冻结，不需多次冻结！');
+                        }else{
+                            this.freezeDialogFlag = true;
+                        }
+                        break;
+                    case 'editFreeze':
+                        this.freezetype = 'edit';
+                        if(this.selectRowData.accountStatusName != '冻结中' && this.freezetype == 'edit'){
+                            return this.$message.info('您选中的货主未被冻结，不可做此操作！');
+                        }else{
+                            this.freezeDialogFlag = true;
+                        }
+                        break;
+                    case 'removeFreeze':
+                        this.freezetype = 'remove';
+                        if(this.selectRowData.accountStatusName != '冻结中' && this.freezetype == 'remove'){
+                            return this.$message.info('您选中的货主未被冻结，无需移除！');
+                        }else{
+                            this.freezeDialogFlag = true;
+                        }
+                        break;
+                    case 'pushBlack':
+                        this.blacktype = 'add';
+                        if(this.selectRowData.accountStatusName == '黑名单' && this.blacktype == 'add'){
+                            return this.$message.info('您选中的货主已被移入黑名单，不需多次拉黑！');
+                            
+                        }else{
+
+                            this.BlackDialogFlag = true;
+                        }
+                        break;
+                    case 'removeBlack':
+                        this.blacktype = 'edit' ;
+                        if(this.selectRowData.accountStatusName != '黑名单' && this.blacktype == 'edit'){
+                            return this.$message.info('您选中的货主未被移入黑名单，不可做此操作！');
+                            
+                        }else{
+                            this.BlackDialogFlag = true;
+                        }
+                        break;
+                }
+
+            }
+        },
     }
 }
 </script>

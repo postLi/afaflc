@@ -171,7 +171,6 @@ export default {
 
 <style rel="stylesheet/scss" lang="scss" >
     .shipperOfdispatch{
-        
         .nowData{
             display: inline-block;
             margin-bottom: 20px;

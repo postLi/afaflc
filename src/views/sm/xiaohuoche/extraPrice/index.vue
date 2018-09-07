@@ -559,6 +559,7 @@ import '@/styles/dialog.scss'
                             }
                         }
                         .el-input{
+                            width: 250px;
                             .el-input__inner{
                                 height: 24px;
                                 line-height:24px;

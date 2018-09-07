@@ -27,7 +27,7 @@
                             label="工单编号"
                             width="230">
                                 <template  slot-scope="scope">
-                                        <h4 class="needMoreInfo" @click="pushOrderSerial(scope.row)">{{ scope.row.workSerial}}</h4>
+                                    <h4 class="needMoreInfo" @click="pushOrderSerial(scope.row)">{{ scope.row.workSerial}}</h4>
                                 </template>
                         </el-table-column>
                         <el-table-column
@@ -166,8 +166,9 @@ import Reply from './replyComponent'
         },
         methods: {
             handlePageChange(obj) {
-                this.page = obj.pageNum
-                this.pagesize = obj.pageSize
+                this.page = obj.pageNum;
+                this.pagesize = obj.pageSize;
+                this.firstblood();
             },
             //刷新页面  
             firstblood(){

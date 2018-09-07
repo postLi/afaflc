@@ -1,5 +1,5 @@
 <template>
-    <div class="identicalStyle clearfix">
+    <div class="identicalStyle clearfix" v-loading ="loading">
              <div class="classify_searchinfo">
                 <label>货主账号&nbsp;
                    <el-input v-model="data.shipperName" placeholder="请输入内容" clearable></el-input>
@@ -17,7 +17,7 @@
                     <!-- <el-button type="primary" plain icon="el-icon-delete" @click="handleDelete">删除</el-button> -->
                     <el-button type="primary" plain icon="el-icon-bell" @click="handleUseStates">启用/禁用</el-button>
                 </div>
-                <div class="info_news">
+                <div class="info_news" style="height:88%">
                     <el-table
                         ref="multipleTable"
                         :data="tableDataTree"
@@ -26,7 +26,6 @@
                         align = "center"
                         height="100%"
                         @selection-change = "getinfomation"
-                        @row-dblclick="moreinfo"
                         tooltip-effect="dark"
                         @row-click="clickDetails"
                         style="width: 100%"> 
@@ -51,11 +50,17 @@
                         align = "center"
                           prop="startTime"
                           label="绑定开始时间">
+                            <!-- <template slot-scope="scope">
+                                {{scope.row.bindingStartDate | parseTime}}
+                            </template> -->
                         </el-table-column>
                         <el-table-column
                         align = "center"
                           prop="endTime"
                           label="绑定结束时间">
+                            <!-- <template slot-scope="scope">
+                                {{scope.row.bindingEndDate | parseTime}}
+                            </template> -->
                         </el-table-column>
                         <el-table-column
                         align = "center"
@@ -74,21 +79,6 @@
                             </template>
                         </el-table-column>
                       </el-table>
-                      <!-- 页码 -->
-                    <div class="Pagination ">
-                        <div class="block">
-                            <el-pagination
-                            @size-change="handleSizeChange"
-                            @current-change="handleCurrentChange"
-                            :current-page="currentPage4"
-                            :page-size="pagesize"
-                            layout="total, sizes, prev, pager, next, jumper"
-                            :total="dataTotal">
-                            </el-pagination>
-                        </div>
-                    </div>
-                    <!-- <div class="info_tab_footer">共计:{{ dataTotal }} <div class="show_pager"> <Pager :total="dataTotal" @change="handlePageChange" /></div> </div>     -->
-
                 </div>
                 
                 <!-- 新增数据 -->
@@ -118,9 +108,8 @@
                     </el-dialog>
                 </div>
             </div>
-        <!-- loading   -->
-        <!-- <spinner v-show="show"></spinner>  -->
-        
+            <div class="info_tab_footer">共计:{{ totalCount }} <div class="show_pager"> <Pager :total="totalCount" @change="handlePageChange" /></div> </div>
+
     </div>
 </template>
 
@@ -128,20 +117,21 @@
 
 import { data_dispatchList,data_ChangeStatus } from '@/api/dispatch/Directional.js'
 import '@/styles/dialog.scss'
-import spinner from '../../../spinner/spinner'
 import { parseTime,formatTime } from '../../../../utils/index.js'
 import addClassfy from './addclassify'
 import changeclassify from './changeclassify'
+import Pager from '@/components/Pagination/index'
 
     export default{
 
         data(){
             return{
-                carNumber:null,//车主账号
-                shipperNumber:null,//货主账号
+                loading:true,
+                carNumber:'',//车主账号
+                shipperNumber:'',//货主账号
                 data:{
-                    shipperName:null,
-                    driverName:null,
+                    shipperName:'',
+                    driverName:'',
                 },//获取页面数据 后端要求传参{}
                 changeforms:{},
                 page:1,
@@ -154,18 +144,17 @@ import changeclassify from './changeclassify'
                 dialogFormVisible_change:false,
                 centerDialogVisible:false,
                 delDialogVisible:false,
-                dataTotal:null,
+                totalCount:0,
                 information:'你想知道什么',
                 delIDTree:'',
                 checkedinformation:[],
-                tableDataTree:[],
+                tableDataTree:[],                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          
             }
         },
         components:{
-            spinner,
             addClassfy,
-            changeclassify
-
+            changeclassify,
+            Pager
         },
         mounted(){
             this.firstblood();
@@ -173,6 +162,11 @@ import changeclassify from './changeclassify'
             // console.log(this.$store)
         },  
         methods: {
+            handlePageChange(obj) {
+                this.page = obj.pageNum;
+                this.pagesize = obj.pageSize;
+                this.firstblood();
+            },
             //子组件调用父组件刷新页面  
             Onrenovate(){
                 this.firstblood();
@@ -183,11 +177,6 @@ import changeclassify from './changeclassify'
                 console.log(obj)
                 // Object.assign(this.searchForm, obj)
                 // this.fetchData()
-            },
-            //shuangji
-            moreinfo(row, event){
-                // console.log(row, event)
-               
             },
             //点击选中当前行
             clickDetails(row, event, column){
@@ -212,11 +201,13 @@ import changeclassify from './changeclassify'
                     this.dialogFormVisibleChange = true;
                     this.changeforms= this.checkedinformation[0];
                     console.log('开始：',this.changeforms.bindingStartDate,this.changeforms.bindingEndDate)
-                    
+
+                    this.$refs.multipleTable.clearSelection()
                 }
             },
             // 禁用/启用
             handleUseStates(){
+
                 if(this.checkedinformation.length === 0){
                     //未选择任何修改内容的提示
                     let information = "未选中任何更改状态内容";
@@ -240,6 +231,8 @@ import changeclassify from './changeclassify'
             },
             // 是否删除
             handleDelete() {
+                this.$refs.multipleTable.clearSelection()
+
                 if(this.checkedinformation.length === 0){
                     //未选择任何修改内容的提示
                     let information = "未选中任何删除内容";
@@ -268,25 +261,13 @@ import changeclassify from './changeclassify'
                 })
                 
             },
-            handleSizeChange(val) {
-                console.log(`每页 ${val} 条`);
-                this.pagesize = val ;
-                this.firstblood();
-            },
-            handleCurrentChange(val) {
-                console.log(`当前页: ${val}`);
-                this.page = val;
-                this.firstblood();
-            },
-            handleNodeClick(data,checked){  
-                console.log(data)
-            },
             //刷新页面  
             firstblood(){
+                this.loading = true;
                 data_dispatchList(this.page,this.pagesize,this.data).then(res=>{
                     console.log('res:',res.data.list)
                     this.tableDataTree = res.data.list;
-                    this.dataTotal = res.data.totalCount;
+                    this.totalCount = res.data.totalCount;
                     this.tableDataTree.forEach(item => {
                         item.carInfo = item.driverPhone +'/'+item.driverName;
                         item.shipperInfo = item.shipperPhone+ '/' +item.shipperName;
@@ -294,8 +275,7 @@ import changeclassify from './changeclassify'
                         item.startTime = parseTime(item.bindingStartDate,"{y}-{m}-{d}");
                         item.endTime = parseTime(item.bindingEndDate,"{y}-{m}-{d}");
                     })
-                    // console.log(parseTime("1528710180","{y}-{m}-{d}"))
-                    // console.log(formatTime("1528710180"))
+                    this.loading = false;
                 })
             },
            
@@ -306,14 +286,15 @@ import changeclassify from './changeclassify'
             //重置
             reset(){
                 this.data = {
-                    shipperName:null,
-                    driverName:null,
+                    shipperName:'',
+                    driverName:'',
                 };
                 this.firstblood();
             },
             //新增分类信息
             addClassfy(){
                 this.dialogFormVisible = true;
+                this.$refs.multipleTable.clearSelection()
             },
             hint(val){
                 this.information = val;

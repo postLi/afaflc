@@ -123,8 +123,6 @@
                     </div>
                 </div>
 
-                <!-- <span>{{$store.state.count}}</span> -->
-
                 <!-- 新增分类信息 -->
                 <div class="waitAdd commoncss">
                     <el-dialog title='新增等待费用'  :visible.sync="dialogFormVisible" :before-close = "beforClose">
@@ -147,21 +145,20 @@
                                         lazy
                                         :load="loadNodeMore"
                                         :highlight-current = "true"
-                                        @node-click="handleNodeClickMore"
-                                        @check-change="handleCheckChangeMore"
+                                        @node-expand="handleNodeClickMore"
                                         :filter-node-method="filterNode">
                                         </el-tree>
                                     </div>
                                     <div class="infowrite">
                                         <p><span>* </span>免费</p>
-                                        <el-input
-                                            @blur="valuerules"
+                                        <el-input  
+                                           @blur="valuerules"
                                             placeholder="请输入内容"
                                             v-model="freeTime"
                                             ref="freetime"
                                             clearable>
+                                            <template slot="append">小时</template>
                                         </el-input>
-                                        <span>小时</span>
                                     </div>
                                 </div>
                                 <div class="chooseServer chooseCommon fl">
@@ -173,14 +170,14 @@
                                     </div>
                                     <div class="infowrite">
                                         <p><span>* </span>每间隔</p>
-                                        <el-input
+                                        <el-input  
                                             @blur="valuerules"
                                             placeholder="请输入内容"
                                             v-model="intervalTime"
                                             ref="intervaltime"
                                             clearable>
+                                            <template slot="append">分钟</template>
                                         </el-input>
-                                        <span>分钟</span>
                                     </div>
                                 </div>
                                 <div class="chooseCar chooseCommon fr">
@@ -194,14 +191,14 @@
                                     </div>
                                     <div class="infowrite">
                                         <p><span>* </span>超时费用</p>
-                                        <el-input
+                                        <el-input  
                                             @blur="valuerules"
                                             placeholder="请输入内容"
                                             v-model="timeOutstripPrice"
                                             ref="timeoutstripprice"
                                             clearable>
+                                            <template slot="append">元</template>
                                         </el-input>
-                                        <span>元</span>
                                     </div>
                                 </div>
                             </div>
@@ -256,33 +253,33 @@
                             <br/>
                             <div class="infowrite">
                                 <p><span>* </span>免费</p>
-                                <el-input
+                                <el-input  
                                     @blur="valuerules"
                                     placeholder="请输入内容"
                                     v-model="changeforms.freeTime"
                                     clearable>
+                                    <template slot="append">小时</template>
                                 </el-input>
-                                <span>小时</span>
                             </div>
                             <div class="infowrite">
                                 <p><span>* </span>每间隔</p>
-                                <el-input
+                                <el-input  
                                     @blur="valuerules"
                                     placeholder="请输入内容"
                                     v-model="changeforms.intervalTime"
                                     clearable>
+                                    <template slot="append">分钟</template>
                                 </el-input>
-                                <span>分钟</span>
                             </div>
                             <div class="infowrite">
                                 <p><span>* </span>超时费用</p>
-                                <el-input
+                                <el-input  
                                     @blur="valuerules"
                                     placeholder="请输入内容"
                                     v-model="changeforms.timeOutstripPrice"
                                     clearable>
+                                    <template slot="append">元</template>
                                 </el-input>
-                                <span>元</span>
                             </div>
                             <div class="additional ">
                                 <p>{{remarkinfo}}</p>
@@ -565,9 +562,6 @@ import { REGEX }  from '@/utils/validate'
                 else{
                    
                 }
-            },
-            handleCheckChangeMore(data, checked, indeterminate) {
-                // console.log(data, checked, indeterminate);
             },
             //sousuodizhi
             filterNode(value, data){
@@ -943,6 +937,7 @@ import { REGEX }  from '@/utils/validate'
                             }
                             .el-input{
                                 margin:0 5px;
+                                width: 155px;
                                 .el-input__inner{
                                     height: 24px;
                                     line-height: 24px;
@@ -1017,9 +1012,10 @@ import { REGEX }  from '@/utils/validate'
                    }
                    .el-textarea{
                         vertical-align:middle; 
-                        width: 685px;
+                        width: 680px;
                         font-size: 12px;
                         line-height: 20px;
+                        vertical-align: top;
                         .el-textarea__inner{
                             color: #3e9ff1;
                         }
@@ -1047,6 +1043,9 @@ import { REGEX }  from '@/utils/validate'
                             color:red;
                         }
 
+                    }
+                    .el-input{
+                        width: 240px;
                     }
                     .el-input__inner{
                         height: 24px;
@@ -1085,6 +1084,8 @@ import { REGEX }  from '@/utils/validate'
                     }
 
                     .el-input{
+                        width: 138px;
+
                         .el-input__inner{
                             height: 24px;
                             line-height: 24px;
@@ -1109,7 +1110,7 @@ import { REGEX }  from '@/utils/validate'
                        text-align: right;
                    }
                     .el-textarea{
-                        vertical-align:middle; 
+                        vertical-align:top; 
                         width: 685px;
                         font-size: 12px;
                         line-height: 20px;

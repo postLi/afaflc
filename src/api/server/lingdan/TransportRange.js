@@ -5,7 +5,7 @@ const baseUrl = 'aflcusercenterservice'
 //根据条件获取专线列表
 export function getTransportRangeList(page,pagesize,data){
     return fetch({
-      url: '/'+baseUrl+'/usercenter/aflcTransportRange/v1/getMemberAflcTransportRangeList',
+      url: '/'+baseUrl+'/usercenter/aflcTransportRange/v1/getAflcTransportRangeList',
       method: 'post',
       data:{
         "currentPage": page,

@@ -28,7 +28,6 @@ export function data_ChangeStatus(id) {
 }
 
 
-
 //新增车主货主绑定
 export function data_NewData(data) {
   return fetch({
@@ -41,12 +40,25 @@ export function data_NewData(data) {
 //修改车主货主绑定
 export function data_ChangeData(data) {
   return fetch({
-    url: '/'+baseurl+'/dispatch/aflcDriverShipper/v1/update',
+    url: '/aflcorderservice-lyc/dispatch/aflcDriverShipper/v1/update',
     method: 'put',
     data:data
   })
 }
 
+
+
+//修改货主平台绑定
+export function aflcShipperPlatformUpdata(data) {
+    return fetch({
+      url: '/aflcorderservice-lyc/dispatch/aflcShipperPlatform/v1/update',
+      method: 'put',
+      data:data
+    })
+  }
+
+
+  
 //获取车主列表，可根据模糊查询 search
 export function data_findAflcDriverList(data) {
   return fetch({

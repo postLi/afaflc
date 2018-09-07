@@ -5,7 +5,7 @@
         <span>{{ name }}</span><br><span>{{ company }}</span>
       </div> -->
       <SidebarMenuSearch :searchItem="sidebarRouters" />
-      <el-menu
+      <!-- <el-menu
         class="sidebar-menu" 
         :default-active="$route.path"
         router
@@ -36,8 +36,8 @@
             </template>
           </el-submenu>
         </template>
-      </el-menu>
-      <!-- <sidebar-item ref="sidebaritem" :routes='sidebarRouters'></sidebar-item> -->
+      </el-menu> -->
+      <sidebar-item ref="sidebaritem" :routes='sidebarRouters'></sidebar-item>
       <div @mouseover="showSubnav" @mouseout="hideSubnav" class="subNavWrapper"></div>
       <hamburger class="hamburger-container" :toggleClick="toggleSideBar" :isActive="sidebar.opened"></hamburger>
       <div class="nologin">
@@ -47,7 +47,6 @@
       </div>
       <iframe src="http://www.56lines.cn/member/autologin2.php" frameborder="0" style="width:0;height:0;"></iframe>
   </div>
-  
 </template>
 
 <script>
@@ -67,15 +66,16 @@ export default {
   },
   methods: {
     setLastPath(index) {
-      console.log('setLastPath:', index)
+        console.log('setLastPath:', index)
+        
     },
     getCurrentPath(index, path) {
-      if (this.lastindex) {
-         // 关闭前一个展开的
-        this.$refs['sidebarmenu'].close(this.lastindex)
-      }
-      this.lastindex = path[0]
-      console.log('getCurrentPath:', index, path)
+        if (this.lastindex) {
+            // 关闭前一个展开的
+            this.$refs['sidebarmenu'].close(this.lastindex)
+        }
+        this.lastindex = path[0]
+        console.log('getCurrentPath:', index, path)
     },
     toggleSideBar() {
       this.$store.dispatch('ToggleSideBar')
@@ -86,45 +86,45 @@ export default {
     hideSubnav () {
       this.$refs.sidebaritem.hideSubNav()
     },
-    setSubNav(type, event){
-      let parentEle = document.querySelector('.sidebar-menu')
-      let isHide = document.querySelector('.hideSidebar') ? true : false
-      let showBox = document.querySelector('.subNavWrapper')
+    // setSubNav(type, event){
+    //   let parentEle = document.querySelector('.sidebar-menu')
+    //   let isHide = document.querySelector('.hideSidebar') ? true : false
+    //   let showBox = document.querySelector('.subNavWrapper')
 
-      if(type === 'show'){
-        if(isHide){
-          let el = closest(event.target, 'li.menu-item')
-          let ul = el ? el.querySelector('.sidebar-submenu') : ''
+    //   if(type === 'show'){
+    //     if(isHide){
+    //       let el = closest(event.target, 'li.menu-item')
+    //       let ul = el ? el.querySelector('.sidebar-submenu') : ''
 
-          if(ul){
-            showBox.innerHTML = ''
-            showBox.appendChild(ul.cloneNode(true))
-            let elHeight = showBox.offsetHeight
-            let winHeight = window.innerHeight
-            let parentY = el.offsetTop + parentEle.offsetTop - parentEle.scrollTop
-            // 50 为顶部导航的高度
-            // 保证底端对齐
-            // 当子菜单为超长时，需要设置滚动条显示
-            if((parentY + elHeight + 50) > winHeight){
-              parentY = winHeight - elHeight - 50
-            }
-            showBox.style.display = "block"
-            showBox.style.top = parentY + 'px'
-          }
+    //       if(ul){
+    //         showBox.innerHTML = ''
+    //         showBox.appendChild(ul.cloneNode(true))
+    //         let elHeight = showBox.offsetHeight
+    //         let winHeight = window.innerHeight
+    //         let parentY = el.offsetTop + parentEle.offsetTop - parentEle.scrollTop
+    //         // 50 为顶部导航的高度
+    //         // 保证底端对齐
+    //         // 当子菜单为超长时，需要设置滚动条显示
+    //         if((parentY + elHeight + 50) > winHeight){
+    //           parentY = winHeight - elHeight - 50
+    //         }
+    //         showBox.style.display = "block"
+    //         showBox.style.top = parentY + 'px'
+    //       }
           
-        }
-      } else {
-        showBox.innerHTML = ''
-      }
-    },
-    clearTimer () {
-      clearTimeout(this.subMenuTimer)
-    },
-    showSubNav (event) {
-      this.clearTimer()
-      this.setSubNav('show', event)  ;
-      console.log(event)
-    },
+    //     }
+    //   } else {
+    //     showBox.innerHTML = ''
+    //   }
+    // },
+    // clearTimer () {
+    //   clearTimeout(this.subMenuTimer)
+    // },
+    // showSubNav (event) {
+    //   this.clearTimer()
+    //   this.setSubNav('show', event)  ;
+    //   console.log(event)
+    // },
     hideSubNav (event) {
       this.clearTimer()
       this.subMenuTimer = setTimeout(() => {

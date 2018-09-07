@@ -297,7 +297,7 @@ export default {
     },
     dialogFormVisible_add:{
         type:Boolean,
-        // required:true
+        required:true
     }
   },
   data(){
@@ -344,7 +344,6 @@ export default {
             defaultImg:'/static/test.jpg',//默认第一张图片的url
             cc:'企业货主',
             selectFlag:false,
-            // dialogFormVisible_add: false,
             type:'primary',
             title:'',
             text:'',
@@ -434,6 +433,9 @@ export default {
         regionChange(d) {
             console.log('data:',d)
             this.xinzengform.belongCityName = (!d.province&&!d.city&&!d.area&&!d.town) ? '': `${this.getValue(d.province)}${this.getValue(d.city)}${this.getValue(d.area)}${this.getValue(d.town)}`.trim();
+            this.xinzengform.provinceCode = d.province ? d.province.code : '';
+            this.xinzengform.cityCode = d.city ? d.city.code : '';
+            this.xinzengform.areaCode = d.area ? d.area.code : '';
         },
         getValue(obj){
             return obj ? obj.value:'';
@@ -634,5 +636,14 @@ export default {
                 }
             }
         }
+    }
+</style>
+
+
+<style lang="scss">
+
+    .creatDialog  .el-form-item__content .v-dropdown-container {
+        top: 38px !important;
+        left: -151px !important;
     }
 </style>
