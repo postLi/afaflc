@@ -16,3 +16,12 @@ export function CommonNoticeList(page,pagesize,data) {
     })
   }
   
+
+  //新增发布公告表
+  export function newNotice(data) {
+    return fetch({
+      url: '/'+baseurl+'/common/aflcCommonNotice/v1/add',
+      method: 'post',
+      data: data
+    })
+  }

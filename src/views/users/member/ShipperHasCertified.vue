@@ -1,6 +1,6 @@
 <template>
     <div style="height:100%;"  class="identicalStyle">
-          <el-form :model="formAll" ref="ruleForm" class="classify_searchinfo">
+          <el-form :model="formInline" ref="ruleForm" class="classify_searchinfo">
                 <el-form-item label="手机号：">
                     <el-input placeholder="请输入内容" v-model.trim="formInline.mobile" clearable></el-input>
                 </el-form-item>

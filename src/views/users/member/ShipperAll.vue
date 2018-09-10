@@ -1,14 +1,14 @@
 <template>
     <div style="height:100%;"  class="identicalStyle">
-          <el-form :model="formAll" ref="ruleForm" class="classify_searchinfo">
+          <el-form :model="shipperAll" ref="ruleForm" class="classify_searchinfo">
             <el-form-item label="所在地：">
-              <!-- <GetCityList v-model="formAll.belongCity" ref="area"></GetCityList> -->
+              <!-- <GetCityList v-model="shipperAll.belongCity" ref="area"></GetCityList> -->
                 <!-- <vregion :ui="true" @values="regionChange" class="form-control"> -->
-                    <el-input v-model="formAll.belongCityName" placeholder="请输入"></el-input>
+                    <el-input v-model="shipperAll.belongCityName" placeholder="请输入"></el-input>
                 <!-- </vregion> -->
             </el-form-item>
             <el-form-item label="认证状态：">
-              <el-select v-model="formAll.authStatus" clearable placeholder="请选择">
+              <el-select v-model="shipperAll.authStatus" clearable placeholder="请选择">
                 <el-option
                   v-for="item in optionsStatus"
                   :key="item.id"
@@ -19,7 +19,7 @@
               </el-select>
             </el-form-item>
 			<el-form-item label="账户状态：">
-              <el-select v-model="formAll.accountStatus" clearable placeholder="请选择">
+              <el-select v-model="shipperAll.accountStatus" clearable placeholder="请选择">
                 <el-option
                   v-for="item in optionsAuidSataus"
                   :key="item.id + 'shipperAll' "
@@ -30,7 +30,7 @@
               </el-select>
             </el-form-item>
             <el-form-item label="手机号：">
-                <el-input v-model.trim="formAll.mobile"></el-input>
+                <el-input v-model.trim="shipperAll.mobile"></el-input>
             </el-form-item>
             <el-form-item class="fr"> 
                 <el-button type="primary" plain @click="getdata_search">查询</el-button>
@@ -162,7 +162,7 @@ export default {
                 name:'全部'
                 }
             ],
-            formAll:{
+            shipperAll:{
                 belongCity: '',
                 belongCityName:'',
                 authStatus:'',
@@ -205,7 +205,7 @@ export default {
     methods:{
         regionChange(d) {
             console.log('data:',d)
-            this.formAll.belongCityName = (!d.province&&!d.city&&!d.area&&!d.town) ? '': `${this.getValue(d.province)}${this.getValue(d.city)}${this.getValue(d.area)}${this.getValue(d.town)}`.trim();
+            this.shipperAll.belongCityName = (!d.province&&!d.city&&!d.area&&!d.town) ? '': `${this.getValue(d.province)}${this.getValue(d.city)}${this.getValue(d.area)}${this.getValue(d.town)}`.trim();
 
         },
         getValue(obj){
@@ -235,7 +235,7 @@ export default {
         },
         //刷新页面
         firstblood(){
-            data_LogisticsCompanyList(this.page,this.pagesize,this.formAll).then(res=>{
+            data_LogisticsCompanyList(this.page,this.pagesize,this.shipperAll).then(res=>{
                 console.log('shipperAll',res)
                 this.totalCount = res.data.totalCount;
                 this.tableDataAll = res.data.list;
@@ -262,15 +262,15 @@ export default {
         },
         //点击查询按纽，按条件查询列表
         getdata_search(event) {
-            // this.formAll.belongCity = this.$refs.area.selectedOptions.pop();
+            // this.shipperAll.belongCity = this.$refs.area.selectedOptions.pop();
 
-            console.log(this.formAll)
+            console.log(this.shipperAll)
             this.firstblood();
         },
         //清空
         clearSearch(){
             // this.$refs.area.selectedOptions = [];
-            this.formAll = {
+            this.shipperAll = {
                 belongCity: '',
                 belongCityName:'',
                 authStatus:'',

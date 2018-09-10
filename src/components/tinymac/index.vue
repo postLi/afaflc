@@ -3,21 +3,24 @@
 </template>
  
 <script>
-  // Import TinyMCE
-  import tinymce from 'tinymce/tinymce'
-  import 'tinymce/themes/modern/theme'
-  import 'tinymce/plugins/advlist' // 这几条引入是因为我的导入不了，不知道为啥
-  import 'tinymce/plugins/link'
-  import 'tinymce/plugins/image'
-  import 'tinymce/plugins/code'
-  import 'tinymce/plugins/table'
-  import 'tinymce/plugins/textcolor'
-  import 'tinymce/plugins/paste'
-  import 'tinymce/plugins/textcolor'
-  import 'tinymce/plugins/colorpicker'
-  const INIT = 0
-  const CHANGED = 2
-  // var EDITOR = null
+    // Import TinyMCE
+    import tinymce from 'tinymce/tinymce'
+    import 'tinymce/themes/modern/theme'
+    import 'tinymce/plugins/advlist' // 这几条引入是因为我的导入不了，不知道为啥
+    import 'tinymce/plugins/link'
+    import 'tinymce/plugins/image'
+    import 'tinymce/plugins/code'
+    import 'tinymce/plugins/table'
+    import 'tinymce/plugins/textcolor'
+    import 'tinymce/plugins/paste'
+    import 'tinymce/plugins/textcolor'
+    import 'tinymce/plugins/colorpicker'
+    import { getUploadPolicy } from '@/api/common'
+    import fetch from '@/utils/fetch'
+
+    const INIT = 0
+    const CHANGED = 2
+    // var EDITOR = null
   export default {
     props: {
       value: {
@@ -26,10 +29,10 @@
         required: true
       },
       setting: {},
-      url: { // 接口
-        default: '',
-        type: String
-      },
+    //   url: { // 接口
+    //     default: '',
+    //     type: String
+    //   },
       accept: { // 文件类型
         default: 'image/jpeg, image/png',
         type: String
@@ -55,17 +58,56 @@
     data() {
       return {
         status: INIT,
-        id: 'editor-' + new Date().getMilliseconds()
-      }
+        id: 'editor-' + new Date().getMilliseconds(),
+        upload: {
+        'key': '', // 文件名称
+        'policy': '',
+        'OSSAccessKeyId': '',
+        'success_action_status': '201', // 让服务端返回200,不然，默认会返回204;201会返回xml格式
+        // 'callback': 'callbackbody',
+        'signature': ''
+        },
+        uploadUrl: '',
+        }
     },
     methods: {
+         // 设置随机的文件名
+        random_string(len) {
+        　　len = len || 32
+        　　var chars = 'ABCDEFGHJKMNPQRSTWXYZabcdefhijkmnprstwxyz2345678'
+        　　var maxPos = chars.length
+        　　var pwd = ''
+        　　for (var i = 0; i < len; i++) {
+             pwd += chars.charAt(Math.floor(Math.random() * maxPos))
+            }
+            return pwd
+        },
+        getAliPolicy(){
+            getUploadPolicy().then(data => {
+                this.upload.OSSAccessKeyId = data.accessid
+                this.upload.policy = data.policy
+                this.upload.signature = data.signature
+                this.uploadUrl = data.host
+                this.dir = data.dir
+                this.upload.key = data.dir + this.random_string() + type
+            }).catch(err => {
+    
+            })
+            
+        }
+
+        
     },
     mounted() {
       const _this = this
       const setting =
       {
+        menubar: true,
+        branding: false,
+        visualblocks_default_state: true,
+        end_container_on_empty_block: true,
         selector: '#' + _this.id,
-        // upload_image_url: '/upload/cloud', // 配置的上传图片的路由
+        upload_image_url: '/upload/cloud', // 配置的上传图片的路由
         language_url: '../../../static/tinymce/zh_CN.js',
         language: 'zh_CN',
         skin_url: '../../../static/tinymce/skins/lightgray',
@@ -104,8 +146,10 @@
         ], // 配置
         'toolbar_items_size': 'small',
         'block_formats': 'Paragraph=p;Heading 1=h1;Heading 2=h2;Heading 3=h3;Heading 4=h4;Heading 5=h5;Heading 6=h6;',
-        'toolbar1': 'table |insertfile undo redo | formatselect | link unlink | uploadimg image media', // 工具栏1
-        'toolbar2': ' fontsizeselect | forecolor backcolor | fontselect bold italic underline strikethrough | alignleft aligncenter alignright alignjustify | outdent indent | removeformat', // 工具栏2
+        // 'toolbar1': 'table |insertfile undo redo | formatselect | link unlink | uploadimg image media', // 工具栏1
+        // 'toolbar2': ' fontsizeselect | forecolor backcolor | fontselect bold italic underline strikethrough | alignleft aligncenter alignright alignjustify | outdent indent | removeformat', // 工具栏2
+        toolbar:
+          'bold italic underline strikethrough | fontsizeselect | forecolor backcolor | alignleft aligncenter alignright alignjustify | bullist numlist | outdent indent blockquote | undo redo | link unlink image code | removeformat',
         fontsize_formats: '12px 14px 16px 18px 20px 24px 26px 28px 30px 32px 34px 36px 40px 50px',
         font_formats: `
             微软雅黑=微软雅黑;
@@ -138,6 +182,7 @@
         images_upload_handler: function(blobInfo, success, failure) {
           // failure(blobInfo)
           // _this.$emit('on-ready', blobInfo.blob().size, blobInfo.blob())
+          console.log('blobInfo',blobInfo)
           if (blobInfo.blob().size > _this.maxSize) {
             failure('文件体积过大')
           }
@@ -147,35 +192,66 @@
             failure('图片格式错误')
           }
           function uploadPic() { // 发送请求
-            const xhr = new XMLHttpRequest()
-            const formData = new FormData()
-            xhr.withCredentials = _this.withCredentials
-            xhr.open('POST', _this.url)
-            xhr.onload = function() {
-              failure('上传---' + xhr.status)
-              if (xhr.status !== 200) {
-                // 抛出 'on-upload-fail' 钩子
-                _this.$emit('on-upload-fail')
-                failure('上传失败: ' + xhr.status)
-                return
-              }
-              const json = JSON.parse(xhr.responseText)
-              // 抛出 'on-upload-success' 钩子
-              _this.$emit('on-upload-success', [
-                json, success, failure
-              ])
-            }
-            xhr.onerror = function() {
-              _this.$emit('on-ready', '上传失败')
-            }
-            formData.append('file', blobInfo.blob())
-            xhr.send(formData)
+            console.log('11111111111111',_this)
+            _this.getAliPolicy();
+
+            console.log('_this.url',_this.uploadUrl)
+            let formData = new FormData();
+            // 服务端接收文件的参数名，文件数据，文件名
+            formData.append('upfile', blobInfo.blob(), blobInfo.filename(),_this.upload)
+            console.log('formData',formData)
+            fetch({
+                method: 'POST',
+                // 这里是你的上传地址
+                url: _this.uploadUrl ,
+                data: formData,
+            })
+            .then((res) => {
+            // 这里返回的是你图片的地址
+            success(res)
+            })
+            .catch(() => {
+            failure('上传失败')
+            })
+            // const xhr = new XMLHttpRequest()
+            // const formData = new FormData()
+            // xhr.withCredentials = _this.withCredentials
+            // xhr.open('POST', _this.url)
+            // xhr.onload = function() {
+            //   failure('上传---' + xhr.status)
+            //   if (xhr.status !== 200) {
+            //     // 抛出 'on-upload-fail' 钩子
+            //     _this.$emit('on-upload-fail')
+            //     failure('上传失败: ' + xhr.status)
+            //     return
+            //   }
+            //   const json = JSON.parse(xhr.responseText)
+            //   // 抛出 'on-upload-success' 钩子
+            //   _this.$emit('on-upload-success', [
+            //     json, success, failure
+            //   ])
+            // }
+            // xhr.onerror = function() {
+            //   _this.$emit('on-ready', '上传失败')
+            // }
+            // formData.append('file', blobInfo.blob())
+            // xhr.send(formData)
           }
         }
       }
       Object.assign(setting, _this.setting)
  
-      tinymce.init(setting)
+        tinymce.init(setting);
+        // 从后台获取policy
+        getUploadPolicy().then(data => {
+            this.upload.OSSAccessKeyId = data.accessid
+            this.upload.policy = data.policy
+            this.upload.signature = data.signature
+            this.uploadUrl = data.host
+            this.dir = data.dir
+            this.upload.key = data.dir + this.random_string() + type
+        }).catch(err => {
+        })
     },
     beforeDestroy: function() {
       tinymce.get(this.id).destroy()

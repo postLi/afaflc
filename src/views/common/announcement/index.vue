@@ -5,7 +5,7 @@
                 <div class="btns_box">
                     <el-button type="primary" class="el-icon-tickets" plain @click="handleSearch('publish')" size="mini">发布公告</el-button>
                 </div>
-                <!-- <div class="info_news" style="height:89%;">
+                <div class="info_news" style="height:89%;">
                     <el-table
                         ref="multipleTable"
                         :data="tableData"
@@ -44,22 +44,7 @@
                             </template>
                         </el-table-column>
                     </el-table>
-                </div> -->
-
-                 <div style="margin:0 5%; width: 90%;">
-                    <editor
-                        class="editor"
-                        :value="content"
-                        :setting="editorSetting"
-                        @show="editors"
-                        :url              = "Url"
-                        :max-size         = "MaxSize"
-                        :accept           = "Accept"
-                        :with-credentials = "withCredentials"
-                        @on-upload-fail         = "onEditorReady"
-                        @on-upload-success= "onEditorUploadComplete"></editor>
                 </div>
-
             </div>
             <div class="info_tab_footer">共计:{{ dataTotal }} <div class="show_pager"> <Pager :total="dataTotal" @change="handlePageChange"  :sizes="sizes"/></div> </div>  
             <announcement :dialogFormVisible.sync = "dialogFormVisible"  @close = "shuaxin" />
@@ -91,15 +76,6 @@ import editor from '@/components/tinymac/index'
         },
         data(){
             return{
-                 editorSetting: { // 配置富文本编辑器高
-          height: 300
-        },
-        Url: 'http://localhost:9528/api/PublicTransaction-SYS-Web/upload/singleUpload', // 图片对应的上传地址
-        MaxSize: 75765, // 文件大小
-        Accept: 'image/jpeg, image/png', // 文件格式
-        withCredentials: true,
-        content: '', // 富文本编辑器双向绑定的内容
-
                 dialogFormVisible:false,
                 tablekey: '',
                 timeOutWaitPay:null,

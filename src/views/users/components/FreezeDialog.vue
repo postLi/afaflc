@@ -258,7 +258,7 @@ export default {
         }
         else{
             this.freezeDialogFlag = true ;
-            this.formFroze.freezeTime = this.formFroze.freezeTime ? this.formFroze.freezeTime : new Date();
+            this.formFroze.freezeTime = this.formFroze.freezeTime ? this.formFroze.freezeTime : Date.parse(new Date());;
         }
         
     },

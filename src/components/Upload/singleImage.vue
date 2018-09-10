@@ -120,13 +120,13 @@ export default {
   methods: {
     init() {
         // 从后台获取policy
-      getUploadPolicy().then(data => {
-          this.upload.OSSAccessKeyId = data.accessid
-          this.upload.policy = data.policy
-          this.upload.signature = data.signature
-          this.uploadUrl = data.host
-          this.dir = data.dir
-          this.upload.key = data.dir + this.random_string() + type
+        getUploadPolicy().then(data => {
+            this.upload.OSSAccessKeyId = data.accessid
+            this.upload.policy = data.policy
+            this.upload.signature = data.signature
+            this.uploadUrl = data.host
+            this.dir = data.dir
+            this.upload.key = data.dir + this.random_string() + type
         }).catch(err => {
         })
     },
