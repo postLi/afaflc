@@ -53,6 +53,8 @@
             </el-table-column>
             <el-table-column  label="用户账号" prop="mobile">
             </el-table-column>
+            <el-table-column  label="充值金额" prop="enterSum">
+            </el-table-column>            
             <el-table-column  label="充值赠送" prop="giveSum">
             </el-table-column>
             <el-table-column  label="充值渠道" prop="rechargeChannelName">
@@ -134,7 +136,6 @@ import {data_financeList,data_GetServerType,data_GetServerType2,data_GetServerTy
           // 列表刷新页面  
             firstblood(){
                 data_aflcRechargeList(this.page,this.pagesize,this.formAllData).then(res => {
-                  console.log(res)
                     this.dataTotal = res.data.totalCount
                     this.tableDataAll = res.data.list;
                 })

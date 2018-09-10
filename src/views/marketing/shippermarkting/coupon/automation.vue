@@ -29,9 +29,12 @@
                  </el-select>
             </el-form-item>  
             <el-form-item label="所属区域：">
-             <vregion :ui="true" @values="regionChange" class="form-control">
-                <el-input v-model="formAllData.areaCode" placeholder="请选择出发地"></el-input>
-            </vregion>
+                   <el-cascader
+                    size="large"
+                    :options="options"
+                    v-model="formAllData.areaName"
+                    @change="handleChange">
+                    </el-cascader>
             </el-form-item> 
             <el-form-item label="活动时间：">
                     <el-date-picker
@@ -156,7 +159,7 @@
 <script>
 import {data_CarList,data_MaidLevel,data_ServerClassList} from '@/api/server/areaPrice.js'
 import {data_get_couponActive_list,data_Del_couponActive,data_Able_couponActive,data_automationActive,data_couponActive,data_couponActiveTime,data_couponStatus} from '@/api/marketing/shippermarkting/couponActive.js'
-import vregion from '@/components/vregion/Region'
+import { regionDataPlus, CodeToText, TextToCode } from 'element-china-area-data'
 import { eventBus } from '@/eventBus'
 import Pager from '@/components/Pagination/index'
 import {parseTime} from '@/utils/'
@@ -173,6 +176,7 @@ export default {
     },
     data(){
         return{
+            options:regionDataPlus,
             selectRowData:[],
             selectId:[],
             createTime:null,
@@ -188,6 +192,7 @@ export default {
             areaCode: null,
             startTime:null,
             endTime:null,
+            areaName:null,
          },
           activeList:[],
           activeStatus:[
@@ -204,7 +209,6 @@ export default {
         }
     },
     components:{
-        vregion,
         Pager,
         newautocoupon,
         automationcheck,
@@ -214,24 +218,80 @@ export default {
     methods:{
              // 列表刷新页面  
             firstblood(){
-                data_get_couponActive_list(this.page,this.pagesize,this.formAllData).then(res => {
+                let FromData = {}
+                if(this.formAllData.area) {
+                    FromData = {
+                     area:this.formAllData.area,
+                     city:null,
+                     activityName:this.formAllData.activityName,
+                     activityType:this.formAllData.activityType,  
+                     usingStatus:this.formAllData.usingStatus,
+                     activityType:this.formAllData.activityType, 
+                     startTime:this.formAllData.startTime, 
+                     endTime:this.formAllData.endTime,                              
+                    }
+                }
+                else if(this.formAllData.city){
+                    FromData = {
+                     area:null,
+                     city:this.formAllData.city,
+                     activityName:this.formAllData.activityName,
+                     activityType:this.formAllData.activityType,  
+                     usingStatus:this.formAllData.usingStatus,
+                     activityType:this.formAllData.activityType, 
+                     startTime:this.formAllData.startTime, 
+                     endTime:this.formAllData.endTime,          
+                    }                    
+                }
+                else{
+                    FromData = {
+                     area:null,
+                     city:this.formAllData.city,
+                     activityName:this.formAllData.activityName,
+                     activityType:this.formAllData.activityType,  
+                     usingStatus:this.formAllData.usingStatus,
+                     activityType:this.formAllData.activityType, 
+                     startTime:this.formAllData.startTime, 
+                     endTime:this.formAllData.endTime,           
+                    }  
+                }
+
+                data_get_couponActive_list(this.page,this.pagesize,FromData).then(res => {
                   console.log(res)
                     this.dataTotal = res.data.totalCount
                     this.tableDataAll = res.data.list;
                 })
             },
-             regionChange(d) {
-                console.log('data:',d)
-                this.formAllData.areaCode = (!d.province&&!d.city&&!d.area&&!d.town) ? '': `${this.getValue(d.province)}${this.getValue(d.city)}${this.getValue(d.area)}${this.getValue(d.town)}`.trim();
-            },
-             getValue(obj){
-                return obj ? obj.value:'';
+            handleChange(d){
+            console.log('d',d)
+            if(d.length<3){
+                    if(d.length==2){
+                    this.$message.info('请选择具体的城市');
+                    }
+                    this.formAllData.areaCode = null;
+                    this.formAllData.province = null,
+                    this.formAllData.city = null,
+                    this.formAllData.area = null,
+                    this.formAllData.areaName = [];
+            }
+            else{
+                    this.formAllData.areaCode = d
+                    this.formAllData.province = CodeToText[d[0]]
+                    this.formAllData.city =  CodeToText[d[1]]
+                    if(d[2]==''){
+                    this.formAllData.area = ''
+                    }
+                    else{
+                    this.formAllData.area = CodeToText[d[2]]
+                    }
+            }
             },
             //每页显示数据量变更
             handlePageChange(obj) {
                 this.page = obj.pageNum
                 this.pagesize = obj.pageSize
-        },
+                this.firstblood()
+            },
             cTime(i){
                 if(i!==null){
                 this.formAllData.startTime = i[0]
@@ -381,10 +441,6 @@ export default {
       height: 30px;
       line-height: 30px;
     }
-    .v-dropdown-container{
-        top:35px!important;
-        left:0px!important;
-    }
     .el-button{
       margin-right: 20px;
       padding: 8px 20px!important;
@@ -397,12 +453,12 @@ export default {
         }
         .el-range-separator{
              line-height: 24px;
-             width:7%;
+             width:9%;
         }
          .el-range__close-icon{
              line-height: 24px;
          }
-         width: 280px;
+         width: 270px;
     }
     .el-form-item{
         margin-bottom:0px;

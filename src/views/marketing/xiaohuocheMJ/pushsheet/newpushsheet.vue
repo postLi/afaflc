@@ -266,74 +266,74 @@ data(){
                 sett:{
                   AF01801:{
                       zero:{
-                        AF0010401: null,
-                        AF0020401: null,                        
-                        AF0020402: null,
-                        AF0020403: null,
-                        AF0020404: null,
-                        AF0020405: null,
+                        AF0010401: '0',
+                        AF0020401: '0',                        
+                        AF0020402: '0',
+                        AF0020403: '0',
+                        AF0020404: '0',
+                        AF0020405: '0',
                       },
                       one:{
-                        AF0010401: null,
-                        AF0020401: null,                        
-                        AF0020402: null,
-                        AF0020403: null,
-                        AF0020404: null,
-                        AF0020405: null,
+                        AF0010401: '0',
+                        AF0020401: '0',                        
+                        AF0020402: '0',
+                        AF0020403: '0',
+                        AF0020404: '0',
+                        AF0020405: '0',
                       },
                   },
                   AF01802:{
                       zero:{
-                        AF0010401: null,
-                        AF0020401: null,                        
-                        AF0020402: null,
-                        AF0020403: null,
-                        AF0020404: null,
-                        AF0020405: null,
+                        AF0010401: '0',
+                        AF0020401: '0',                        
+                        AF0020402: '0',
+                        AF0020403: '0',
+                        AF0020404: '0',
+                        AF0020405: '0',
                       },
                       one:{
-                        AF0010401: null,
-                        AF0020401: null,                        
-                        AF0020402: null,
-                        AF0020403: null,
-                        AF0020404: null,
-                        AF0020405: null,
+                        AF0010401: '0',
+                        AF0020401: '0',                        
+                        AF0020402: '0',
+                        AF0020403: '0',
+                        AF0020404: '0',
+                        AF0020405: '0',
                       },
                   },
                   AF01803:{
                       zero:{
-                        AF0010401: null,
-                        AF0020401: null,                        
-                        AF0020402: null,
-                        AF0020403: null,
-                        AF0020404: null,
-                        AF0020405: null,
+                        AF0010401: '0',
+                        AF0020401: '0',                        
+                        AF0020402: '0',
+                        AF0020403: '0',
+                        AF0020404: '0',
+                        AF0020405: '0',
                       },
                      one:{
-                        AF0010401: null,
-                        AF0020401: null,                        
-                        AF0020402: null,
-                        AF0020403: null,
-                        AF0020404: null,
-                        AF0020405: null,
+                        AF0010401: '0',
+                        AF0020401: '0',                        
+                        AF0020402: '0',
+                        AF0020403: '0',
+                        AF0020404: '0',
+                        AF0020405: '0',
                       },
                   },
                   AF01804:{
                      zero:{
-                        AF0010401: null,
-                        AF0020401: null,                        
-                        AF0020402: null,
-                        AF0020403: null,
-                        AF0020404: null,
-                        AF0020405: null,
+                        AF0010401: '0',
+                        AF0020401: '0',                        
+                        AF0020402: '0',
+                        AF0020403: '0',
+                        AF0020404: '0',
+                        AF0020405: '0',
                       },
                       one:{
-                        AF0010401: null,
-                        AF0020401: null,                        
-                        AF0020402: null,
-                        AF0020403: null,
-                        AF0020404: null,
-                        AF0020405: null,
+                        AF0010401: '0',
+                        AF0020401: '0',                        
+                        AF0020402: '0',
+                        AF0020403: '0',
+                        AF0020404: '0',
+                        AF0020405: '0',
                       },
                   },
                 }
@@ -353,87 +353,85 @@ data(){
                 sett:{
                   AF01801:{
                       zero:{
-                        AF0010401: null,
-                        AF0020401: null,                        
-                        AF0020402: null,
-                        AF0020403: null,
-                        AF0020404: null,
-                        AF0020405: null,
+                        AF0010401: '0',
+                        AF0020401: '0',                        
+                        AF0020402: '0',
+                        AF0020403: '0',
+                        AF0020404: '0',
+                        AF0020405: '0',
                       },
                       one:{
-                        AF0010401: null,
-                        AF0020401: null,                        
-                        AF0020402: null,
-                        AF0020403: null,
-                        AF0020404: null,
-                        AF0020405: null,
+                        AF0010401: '0',
+                        AF0020401: '0',                        
+                        AF0020402: '0',
+                        AF0020403: '0',
+                        AF0020404: '0',
+                        AF0020405: '0',
                       },
                   },
                   AF01802:{
                       zero:{
-                        AF0010401: null,
-                        AF0020401: null,                        
-                        AF0020402: null,
-                        AF0020403: null,
-                        AF0020404: null,
-                        AF0020405: null,
+                        AF0010401: '0',
+                        AF0020401: '0',                        
+                        AF0020402: '0',
+                        AF0020403: '0',
+                        AF0020404: '0',
+                        AF0020405: '0',
                       },
                       one:{
-                        AF0010401: null,
-                        AF0020401: null,                        
-                        AF0020402: null,
-                        AF0020403: null,
-                        AF0020404: null,
-                        AF0020405: null,
+                        AF0010401: '0',
+                        AF0020401: '0',                        
+                        AF0020402: '0',
+                        AF0020403: '0',
+                        AF0020404: '0',
+                        AF0020405: '0',
                       },
                   },
                   AF01803:{
                       zero:{
-                        AF0010401: null,
-                        AF0020401: null,                        
-                        AF0020402: null,
-                        AF0020403: null,
-                        AF0020404: null,
-                        AF0020405: null,
+                        AF0010401: '0',
+                        AF0020401: '0',                        
+                        AF0020402: '0',
+                        AF0020403: '0',
+                        AF0020404: '0',
+                        AF0020405: '0',
                       },
                      one:{
-                        AF0010401: null,
-                        AF0020401: null,                        
-                        AF0020402: null,
-                        AF0020403: null,
-                        AF0020404: null,
-                        AF0020405: null,
+                        AF0010401: '0',
+                        AF0020401: '0',                        
+                        AF0020402: '0',
+                        AF0020403: '0',
+                        AF0020404: '0',
+                        AF0020405: '0',
                       },
                   },
                   AF01804:{
                      zero:{
-                        AF0010401: null,
-                        AF0020401: null,                        
-                        AF0020402: null,
-                        AF0020403: null,
-                        AF0020404: null,
-                        AF0020405: null,
+                        AF0010401: '0',
+                        AF0020401: '0',                        
+                        AF0020402: '0',
+                        AF0020403: '0',
+                        AF0020404: '0',
+                        AF0020405: '0',
                       },
                       one:{
-                        AF0010401: null,
-                        AF0020401: null,                        
-                        AF0020402: null,
-                        AF0020403: null,
-                        AF0020404: null,
-                        AF0020405: null,
+                        AF0010401: '0',
+                        AF0020401: '0',                        
+                        AF0020402: '0',
+                        AF0020403: '0',
+                        AF0020404: '0',
+                        AF0020405: '0',
                       },
                   },
                 }
             }]
             },
-
             rulesForm:{
             areaCode:{trigger:'change',required:true,validator: belongCityNameValidator},
             serivceCode:{trigger:'change',required:true,validator:serivceCodeValidator},
             price:{trigger:'change',required:true,validator:priceValidator},
             createTime:[{value: '',trigger:'change',}],
             },
-            
     }
 },
 props:{
@@ -510,74 +508,74 @@ methods:{
                                sett:{
                             AF01801:{
                                 zero:{
-                                    AF0010401: null,
-                                    AF0020401: null,                        
-                                    AF0020402: null,
-                                    AF0020403: null,
-                                    AF0020404: null,
-                                    AF0020405: null,
+                                    AF0010401: '0',
+                                    AF0020401: '0',                    
+                                    AF0020402: '0',
+                                    AF0020403: '0',
+                                    AF0020404: '0',
+                                    AF0020405: '0',
                                 },
                                 one:{
-                                    AF0010401: null,
-                                    AF0020401: null,                        
-                                    AF0020402: null,
-                                    AF0020403: null,
-                                    AF0020404: null,
-                                    AF0020405: null,
+                                    AF0010401: '0',
+                                    AF0020401: '0',                        
+                                    AF0020402: '0',
+                                    AF0020403: '0',
+                                    AF0020404: '0',
+                                    AF0020405: '0',
                                 },
                             },
                             AF01802:{
                                 zero:{
-                                    AF0010401: null,
-                                    AF0020401: null,                        
-                                    AF0020402: null,
-                                    AF0020403: null,
-                                    AF0020404: null,
-                                    AF0020405: null,
+                                    AF0010401: '0',
+                                    AF0020401: '0',                        
+                                    AF0020402: '0',
+                                    AF0020403: '0',
+                                    AF0020404: '0',
+                                    AF0020405: '0',
                                 },
                                 one:{
-                                    AF0010401: null,
-                                    AF0020401: null,                        
-                                    AF0020402: null,
-                                    AF0020403: null,
-                                    AF0020404: null,
-                                    AF0020405: null,
+                                    AF0010401: '0',
+                                    AF0020401: '0',                        
+                                    AF0020402: '0',
+                                    AF0020403: '0',
+                                    AF0020404: '0',
+                                    AF0020405: '0',
                                 },
                             },
                             AF01803:{
                                 zero:{
-                                    AF0010401: null,
-                                    AF0020401: null,                        
-                                    AF0020402: null,
-                                    AF0020403: null,
-                                    AF0020404: null,
-                                    AF0020405: null,
+                                    AF0010401: '0',
+                                    AF0020401: '0',                        
+                                    AF0020402: '0',
+                                    AF0020403: '0',
+                                    AF0020404: '0',
+                                    AF0020405: '0',
                                 },
                                 one:{
-                                    AF0010401: null,
-                                    AF0020401: null,                        
-                                    AF0020402: null,
-                                    AF0020403: null,
-                                    AF0020404: null,
-                                    AF0020405: null,
+                                    AF0010401: '0',
+                                    AF0020401: '0',                        
+                                    AF0020402: '0',
+                                    AF0020403: '0',
+                                    AF0020404: '0',
+                                    AF0020405: '0',
                                 },
                             },
                             AF01804:{
                                 zero:{
-                                    AF0010401: null,
-                                    AF0020401: null,                        
-                                    AF0020402: null,
-                                    AF0020403: null,
-                                    AF0020404: null,
-                                    AF0020405: null,
+                                    AF0010401: '0',
+                                    AF0020401: '0',                        
+                                    AF0020402: '0',
+                                    AF0020403: '0',
+                                    AF0020404: '0',
+                                    AF0020405: '0',
                                 },
                                 one:{
-                                    AF0010401: null,
-                                    AF0020401: null,                        
-                                    AF0020402: null,
-                                    AF0020403: null,
-                                    AF0020404: null,
-                                    AF0020405: null,
+                                    AF0010401: '0',
+                                    AF0020401: '0',                        
+                                    AF0020402: '0',
+                                    AF0020403: '0',
+                                    AF0020404: '0',
+                                    AF0020405: '0',
                                 },
                             },
                             }
@@ -622,74 +620,74 @@ methods:{
                                sett:{
                             AF01801:{
                                 zero:{
-                                    AF0010401: null,
-                                    AF0020401: null,                        
-                                    AF0020402: null,
-                                    AF0020403: null,
-                                    AF0020404: null,
-                                    AF0020405: null,
+                                    AF0010401: '0',
+                                    AF0020401: '0',                        
+                                    AF0020402: '0',
+                                    AF0020403: '0',
+                                    AF0020404: '0',
+                                    AF0020405: '0',
                                 },
                                 one:{
-                                    AF0010401: null,
-                                    AF0020401: null,                        
-                                    AF0020402: null,
-                                    AF0020403: null,
-                                    AF0020404: null,
-                                    AF0020405: null,
+                                    AF0010401: '0',
+                                    AF0020401: '0',                        
+                                    AF0020402: '0',
+                                    AF0020403: '0',
+                                    AF0020404: '0',
+                                    AF0020405: '0',
                                 },
                             },
                             AF01802:{
                                 zero:{
-                                    AF0010401: null,
-                                    AF0020401: null,                        
-                                    AF0020402: null,
-                                    AF0020403: null,
-                                    AF0020404: null,
-                                    AF0020405: null,
+                                    AF0010401: '0',
+                                    AF0020401: '0',                        
+                                    AF0020402: '0',
+                                    AF0020403: '0',
+                                    AF0020404: '0',
+                                    AF0020405: '0',
                                 },
                                 one:{
-                                    AF0010401: null,
-                                    AF0020401: null,                        
-                                    AF0020402: null,
-                                    AF0020403: null,
-                                    AF0020404: null,
-                                    AF0020405: null,
+                                    AF0010401: '0',
+                                    AF0020401: '0',                        
+                                    AF0020402: '0',
+                                    AF0020403: '0',
+                                    AF0020404: '0',
+                                    AF0020405: '0',
                                 },
                             },
                             AF01803:{
                                 zero:{
-                                    AF0010401: null,
-                                    AF0020401: null,                        
-                                    AF0020402: null,
-                                    AF0020403: null,
-                                    AF0020404: null,
-                                    AF0020405: null,
+                                    AF0010401: '0',
+                                    AF0020401: '0',                        
+                                    AF0020402: '0',
+                                    AF0020403: '0',
+                                    AF0020404: '0',
+                                    AF0020405: '0',
                                 },
                                 one:{
-                                    AF0010401: null,
-                                    AF0020401: null,                        
-                                    AF0020402: null,
-                                    AF0020403: null,
-                                    AF0020404: null,
-                                    AF0020405: null,
+                                    AF0010401: '0',
+                                    AF0020401: '0',                        
+                                    AF0020402: '0',
+                                    AF0020403: '0',
+                                    AF0020404: '0',
+                                    AF0020405: '0',
                                 },
                             },
                             AF01804:{
                                 zero:{
-                                    AF0010401: null,
-                                    AF0020401: null,                        
-                                    AF0020402: null,
-                                    AF0020403: null,
-                                    AF0020404: null,
-                                    AF0020405: null,
+                                    AF0010401: '0',
+                                    AF0020401: '0',                        
+                                    AF0020402: '0',
+                                    AF0020403: '0',
+                                    AF0020404: '0',
+                                    AF0020405: '0',
                                 },
                                 one:{
-                                    AF0010401: null,
-                                    AF0020401: null,                        
-                                    AF0020402: null,
-                                    AF0020403: null,
-                                    AF0020404: null,
-                                    AF0020405: null,
+                                    AF0010401: '0',
+                                    AF0020401: '0',                        
+                                    AF0020402: '0',
+                                    AF0020403: '0',
+                                    AF0020404: '0',
+                                    AF0020405: '0',
                                 },
                             },
                             }
@@ -725,11 +723,6 @@ methods:{
 
             //完善数据
             completeData(){
-                
-                // if(this.$refs.priceStart.value&&this.$refs.priceEnd.value){
-                // this.vestList.priceEnd= this.$refs.priceStart.value.substr(0,this.$refs.priceStart.value.indexOf(".")+3)
-                // this.vestList.priceStart=this.$refs.priceEnd.value.substr(0,this.$refs.priceEnd.value.indexOf(".")+3)
-                // }
                 for(var i=0;i<this.vestList.setting.length;i++){
                     if(this.vestList.setting[i].createTime==null){
                    this.$message.warning('推送时间段必须都填写');
@@ -741,14 +734,33 @@ methods:{
                 this.vestList.setting[i].startTime = this.vestList.setting[i].createTime[0];
                 this.vestList.setting[i].endTime = this.vestList.setting[i].createTime[1];
                     }
-
                 }
+                let Carst = ['AF01801','AF01802','AF01803','AF01804'];
+                let Cartype = ['zero','one'];
+                let CarActive = ['AF0010401','AF0020401','AF0020402','AF0020403','AF0020404','AF0020405']
+                this.vestList.setting.map((subList,index) => {
+                    Carst.map(i=>{
+                        Cartype.map(j=>{
+                            CarActive.map(k=>{
+                                console.log(i,j,k,this.vestList.setting[index].sett[i][j][k])
+                            let reg= /^[0-5]\d*$/  //输入正整数正则
+                            if(!reg.test(this.vestList.setting[index].sett[i][j][k]))
+                            {
+                                this.$message.warning('推单单数范围在0-5之间');
+                                return false
+                            }
+                            })
+                        })
+                    })
+                })
+
+
+
 
             //获取城市name
                 if(!this.$refs.area){
                     return
                 }  
-                
                 else if(this.$refs.area.selectedOptions.length > 1){
                     let province;
                     this.$refs.area.areaData.forEach((item) =>{
@@ -801,7 +813,9 @@ methods:{
                         this.vestList.priceEnd=null,
                         this.vestList.priceStart=null,
                 this.changeList();
+                this.$message.success('新增成功');
                 }).catch(res=>{
+                    this.$message.error('新增失败');
                     console.log(res)
                 });
                 }
@@ -811,6 +825,11 @@ methods:{
         // 修改 保存
         updateInfoSave(){
         this.completeData();
+            if(this.completeData()==false)
+            {
+               return
+            }
+            else{
             this.$refs['vestList'].validate(valid=>{
             var forms= Object.assign({}, this.vestList)
             if(valid){
@@ -822,12 +841,14 @@ methods:{
                 this.driverTemplateDialogFlag=false;
                 this.selectFlag=false;
                 this.changeList();
+                this.$message.success('修改成功');
                 }).catch(res=>{
+                    this.$message.error('修改失败');
                     console.log(res)
                 });
-
                 }
                 })
+                }
         }
 },
 watch:{

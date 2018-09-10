@@ -40,7 +40,7 @@
           <el-form-item label="服务类型：" :label-width="formLabelWidth" v-if='creadFlag'>
             <el-input v-model="vestAll.serivceCode" disabled></el-input>
            </el-form-item>
-          <el-form-item label="服务类型" :label-width="formLabelWidth" prop="serivceCode" v-else>
+          <el-form-item label="服务类型：" :label-width="formLabelWidth" prop="serivceCode" v-else>
                     <el-select v-model="vestAll.serivceCode" clearable placeholder="请选择">
                         <el-option
                         v-for="item in serviceCardList"
@@ -629,6 +629,7 @@ export default {
                     startAddressCoordinate:this.startAddressCoordinate,
                     startAddressName:this.startAddressName,
                 }); 
+                this.pickaddAera = ''
             console.log(this.pickAera)
         },
         // 提货地减少
@@ -646,6 +647,7 @@ export default {
                     endAddressCoordinate:this.endAddressCoordinate,
                     endAddressName:this.endAddressName
             }); 
+            this.destinationaddAera =''
         },
         // 目的地减少
         reduceItemdestination(i){
