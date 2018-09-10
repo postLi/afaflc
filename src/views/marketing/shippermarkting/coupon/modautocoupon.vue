@@ -528,7 +528,13 @@ export default {
           this.formAllData.province = res.data.province
           this.formAllData.city = res.data.city
           this.formAllData.area = res.data.area
+          if(res.data.area==null){
+          this.formAllData.areaName1 =res.data.province+res.data.city
+          }
+          else{
           this.formAllData.areaName1 =res.data.province+res.data.city+res.data.area
+          }
+          
       })
       data_get_couponActive2_Id(this.params.id).then((res)=>{
           this.formAllData.aflcCouponList = res.data

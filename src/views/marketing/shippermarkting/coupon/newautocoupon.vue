@@ -699,7 +699,7 @@ export default {
 <style lang="scss">
 .newcouponBox{
     .el-dialog{
-        width: 80%;
+        width: 80%!important;
         overflow:unset;
     }
     .el-row{
@@ -717,7 +717,7 @@ export default {
         height: 30px;
     }
     .el-range__icon{
-      line-height: 24px;
+      line-height: 24px!important;
     }
     .el-date-editor .el-range-separator{
         line-height: 24px;
@@ -731,7 +731,7 @@ export default {
         }    
     .table_box{
     .ht_table{
-        width: 95!important;
+        width: 95%!important;
         margin:0px 10px;
         color: #333;
         .ht_table_tr{
@@ -768,18 +768,18 @@ export default {
             border-right:1px solid #d0d7e5;
             border-bottom:1px solid #d0d7e5;
         }
-        .table_th1{width: 5%;}
+        .table_th1{width: 7%;}
         .table_th2{width: 10%;}
-        .table_th3{width: 6%;}
+        .table_th3{width: 7%;}
         .table_th4{width: 6%;}
         .table_th5{width: 10%;}
         .table_th6{width: 4%;}
         .table_th7{width: 6%;}
-        .table_th8{width: 6%;}
+        .table_th8{width: 8%;}
         .table_th9{width: 11%;}
         .table_th10{width: 11%;}
-        .table_th11{width: 7%;}
-        .table_th12{width: 7%;}
+        .table_th11{width: 8%;}
+        .table_th12{width: 8%;}
         .table_th13{width: 9%}
         .table_th14{width: 11%}
         .ht_table_td1{

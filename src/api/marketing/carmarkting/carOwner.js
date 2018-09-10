@@ -1,7 +1,7 @@
 import fetch from '@/utils/fetch'
 
 // const baseurl_two = "aflcsmservice"
-const baseurl = "aflcsmservice"
+const baseurl = "aflcsmservice_"
 const baseurl_one= "aflcsmservice_1"
 
 //获取车主奖励列表

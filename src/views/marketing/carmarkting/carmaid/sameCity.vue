@@ -63,7 +63,6 @@
                 <el-button  type="primary" value="value" plain icon="el-icon-bell" @click="handleUseStates">启用/停用</el-button>
                 <el-button type="primary" plain icon="el-icon-delete" @click="delete_data">删除</el-button>
             		</div>
-
             <div class="info_city">    
             <el-table style="width: 100%" stripe border height="100%" @row-click="clickDetails" highlight-current-row :data="tableDataAll"  tooltip-effect="dark">
             <el-table-column  label="序号" width="80px" type="index">
@@ -101,7 +100,6 @@
 import { data_Commission ,data_CarList,data_MaidLevel} from '@/api/server/areaPrice.js'
 import { data_get_Marketingsame_list,data_Del_Marketingsame,data_Able_Marketingsame } from '@/api/marketing/carmarkting/carmarkting.js'
 import { regionDataPlus, CodeToText, TextToCode } from 'element-china-area-data'
-import vregion from '@/components/vregion/Region'
 import newCity from '../../components/newCity.vue'
 import { eventBus } from '@/eventBus'
 import Pager from '@/components/Pagination/index'
@@ -132,7 +130,6 @@ export default {
   },
     components:{
         newCity,
-        vregion,
         Pager,
     },
     methods:{

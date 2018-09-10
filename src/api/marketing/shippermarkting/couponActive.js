@@ -8,7 +8,7 @@ const baseurl_two = "aflccommonservice"
 //获取优惠卷活动列表
 export function data_get_couponActive_list(page,pagesize,data) {
     return fetch({
-      url: '/'+baseurl+'/usercenter/aflcCouponActivity/v1/list',
+      url: '/'+baseurl+'/sm/aflcCouponActivity/v1/list',
       method: 'post',
       data:{
         "currentPage": page,
@@ -20,14 +20,14 @@ export function data_get_couponActive_list(page,pagesize,data) {
 
 //优惠卷活动列表新增
 export function data_get_couponActive_create(data) {
-  return fetch.post('/' + baseurl + '/usercenter/aflcCouponActivity/v1/add', data)
+  return fetch.post('/' + baseurl + '/sm/aflcCouponActivity/v1/add', data)
 }
 
 //删除优惠卷活动列表
 export function data_Del_couponActive(id) {
     
   return fetch({
-        url: '/'+baseurl+'/usercenter/aflcCouponActivity/v1/delete/'+id,
+        url: '/'+baseurl+'/sm/aflcCouponActivity/v1/delete/'+id,
         method: 'delete',
       })
     }
@@ -36,7 +36,7 @@ export function data_Del_couponActive(id) {
 export function data_Able_couponActive(ids) {
         
   return fetch({
-           url: '/'+baseurl+'/usercenter/aflcCouponActivity/v1/enableOrDisable',
+           url: '/'+baseurl+'/sm/aflcCouponActivity/v1/enableOrDisable',
            method: 'post',
            data:ids
          })
@@ -80,7 +80,7 @@ export function data_couponStatus() {
  //activity_id获取优惠卷活动列表
  export function data_get_couponActive2_Id(activity_id) {
   return fetch({
-    url: '/'+baseurl+'/usercenter/aflcCoupon/v1/query/' + activity_id,
+    url: '/'+baseurl+'/sm/aflcCoupon/v1/query/' + activity_id,
     method: 'get',
   })
 }
@@ -88,7 +88,7 @@ export function data_couponStatus() {
  //id优惠卷活动列表
  export function data_get_couponActive_Id(id) {
   return fetch({
-    url: '/'+baseurl+'/usercenter/aflcCouponActivity/v1/'+ id,
+    url: '/'+baseurl+'/sm/aflcCouponActivity/v1/'+ id,
     method: 'get',
   })
 }
@@ -97,7 +97,7 @@ export function data_couponStatus() {
 //获取优惠卷领用明细列表
 export function data_get_aflcCouponUse_list(page,pagesize,data) {
   return fetch({
-    url: '/'+baseurl+'/usercenter/aflcCouponUse/v1/listDetail',
+    url: '/'+baseurl+'/sm/aflcCouponUse/v1/listDetail',
     method: 'post',
     data:{
       "currentPage": page,
@@ -109,13 +109,13 @@ export function data_get_aflcCouponUse_list(page,pagesize,data) {
 
 //  修改优惠卷领用明细列表
 export function data_get_couponActive_update(data) {
-  return fetch.put('/' + baseurl + '/usercenter/aflcCouponActivity/v1/update', data)
+  return fetch.put('/' + baseurl + '/sm/aflcCouponActivity/v1/update', data)
 }      
 
 //  新增优惠卷
 export function data_get_aflcCoupon_add(data) {
   return fetch({
-    url: '/'+baseurl+'/usercenter/aflcCoupon/v1/add',
+    url: '/'+baseurl+'/sm/aflcCoupon/v1/add',
     method: 'post',
     data:{
       "activityId": data
@@ -127,7 +127,7 @@ export function data_get_aflcCoupon_add(data) {
 export function data_get_aflcCoupon_delete(id) {
     
   return fetch({
-        url: '/'+baseurl+'/usercenter/aflcCoupon/v1/delete/'+id,
+        url: '/'+baseurl+'/sm/aflcCoupon/v1/delete/'+id,
         method: 'delete',
       })
     }
@@ -136,7 +136,7 @@ export function data_get_aflcCoupon_delete(id) {
 //获取优惠卷列表
 export function data_get_aflcCoupon_list(page,pagesize,data) {
   return fetch({
-    url: '/'+baseurl+'/usercenter/aflcCoupon/v1/list',
+    url: '/'+baseurl+'/sm/aflcCoupon/v1/list',
     method: 'post',
     data:{
       "currentPage": page,
@@ -150,21 +150,30 @@ export function data_get_aflcCoupon_list(page,pagesize,data) {
 // 生成优惠卷
  export function data_get_produceCoupon(activity_id,num) {
   return fetch({
-    url: '/'+baseurl+'/usercenter/aflcCouponUse/v1/produceCoupon/?id=' + activity_id+'&num='+num,
+    url: '/'+baseurl+'/sm/aflcCouponUse/v1/produceCoupon/?id=' + activity_id+'&num='+num,
     method: 'get',
   })
 }
 
 // 发放优惠卷
 export function data_get_grantCoupon(id,data) {
-return fetch.post('/'+baseurl+'/usercenter/aflcCouponUse/v1/grantCoupon/'+id, data)
+return fetch.post('/'+baseurl+'/sm/aflcCouponUse/v1/grantCoupon/'+id, data)
 }
 
 // txt文件上传
 export function data_get_BatchDistribution(id,multipartFile) {
   return fetch({
-    url: '/'+baseurl+'/usercenter/aflcCouponUse/v1/BatchDistribution',
+    url: '/'+baseurl+'/sm/aflcCouponUse/v1/BatchDistribution',
     method: 'post',
     data: multipartFile
+  })
+}
+
+// excel文件导出
+export function data_get_produceCouponExcel(id,num) {
+  return fetch({
+    url: '/'+baseurl+'/sm/aflcCouponUse/v1/produceCoupon/?id='+id+'&num='+num,
+    method: 'get',
+    responseType:'blob',
   })
 }
