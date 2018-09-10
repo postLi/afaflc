@@ -339,12 +339,10 @@ import { parseTime,formatTime } from '@/utils/index.js'
         position: relative;
         margin-left:7px;
         .classify_searchinfo{
-            
             position: absolute;
             left:0;
             top:0;
             padding:15px 16px;
-            border-bottom:2px dashed #ccc;
             height:160px;
             width:100%;
             line-height: 35px;

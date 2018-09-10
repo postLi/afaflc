@@ -1,25 +1,11 @@
 <template>
     <div class="identicalStyle clearfix waitpayment" v-loading="loading">
-            <el-form :model="searchInfo" ref="ruleForm" class="demo-ruleForm classify_searchinfo">
-                    <el-form-item label="区域" prop="pointName">
-                        <vregion :ui="true" @values="regionChange" class="form-control">
-                            <el-input v-model="searchInfo.belongCityName" placeholder="请选择出发地" clearable></el-input>
-                        </vregion>
-                    </el-form-item>
-                    <el-form-item label="标题" prop="orderSerial">
-                        <el-input v-model="searchInfo.orderSerial" clearable>
-                        </el-input>
-                    </el-form-item>
-                    <el-form-item class="btnChoose fr"  style="margin-left:0;">
-                        <el-button type="primary" plain @click="handleSearch('search')">搜索</el-button>
-                        <el-button type="info" plain @click="handleSearch('clear')">清空</el-button>
-                    </el-form-item>
-            </el-form>
+            <searchInfo @change="getSearchParam"></searchInfo>
             <div class="classify_info">
                 <div class="btns_box">
-                    <el-button type="primary" plain @click="handleSearch('outExce')" size="mini">导出Exce</el-button>
+                    <el-button type="primary" class="el-icon-tickets" plain @click="handleSearch('publish')" size="mini">发布公告</el-button>
                 </div>
-                <div class="info_news" style="height:89%;">
+                <!-- <div class="info_news" style="height:89%;">
                     <el-table
                         ref="multipleTable"
                         :data="tableData"
@@ -47,33 +33,74 @@
                             </template>
                             </el-table-column>
                         </template>
+                        <el-table-column label="操作">
+                            <template slot-scope="scope">
+                                <el-button
+                                size="mini"
+                                @click="handleClick(scope.$index, scope.row)">置顶</el-button>
+                                <el-button
+                                size="mini"
+                                @click="handleClick(scope.$index, scope.row)">修改</el-button>
+                            </template>
+                        </el-table-column>
                     </el-table>
+                </div> -->
+
+                 <div style="margin:0 5%; width: 90%;">
+                    <editor
+                        class="editor"
+                        :value="content"
+                        :setting="editorSetting"
+                        @show="editors"
+                        :url              = "Url"
+                        :max-size         = "MaxSize"
+                        :accept           = "Accept"
+                        :with-credentials = "withCredentials"
+                        @on-upload-fail         = "onEditorReady"
+                        @on-upload-success= "onEditorUploadComplete"></editor>
                 </div>
+
             </div>
-                    <div class="info_tab_footer">共计:{{ dataTotal }} <div class="show_pager"> <Pager :total="dataTotal" @change="handlePageChange"  :sizes="sizes"/></div> </div>    
+            <div class="info_tab_footer">共计:{{ dataTotal }} <div class="show_pager"> <Pager :total="dataTotal" @change="handlePageChange"  :sizes="sizes"/></div> </div>  
+            <announcement :dialogFormVisible.sync = "dialogFormVisible"  @close = "shuaxin" />
+
     </div>
 </template>
 
 <script type="text/javascript">
 
-import FileSaver from 'file-saver'
-import XLSX from 'xlsx'
+// import FileSaver from 'file-saver'
+// import XLSX from 'xlsx'
 import '@/styles/dialog.scss'
-import { orderStatusList } from '@/api/order/ordermange'
-import { parseTime,pickerOptions2 } from '@/utils/index.js'
+import { CommonNoticeList } from '@/api/company/announcement.js'
+import { parseTime } from '@/utils/index.js'
 import Pager from '@/components/Pagination/index'
-// import Details from '../components/detailsInformations'
 import vregion from '@/components/vregion/Region'
+import searchInfo from './components/searchInfo'
+import announcement from './components/newAnnounce'
+import editor from '@/components/tinymac/index'
 
 
     export default{
         components:{
             Pager,
-            // Details,
-            vregion
+            searchInfo,
+            vregion,
+            announcement,
+            editor
         },
         data(){
             return{
+                 editorSetting: { // 配置富文本编辑器高
+          height: 300
+        },
+        Url: 'http://localhost:9528/api/PublicTransaction-SYS-Web/upload/singleUpload', // 图片对应的上传地址
+        MaxSize: 75765, // 文件大小
+        Accept: 'image/jpeg, image/png', // 文件格式
+        withCredentials: true,
+        content: '', // 富文本编辑器双向绑定的内容
+
+                dialogFormVisible:false,
                 tablekey: '',
                 timeOutWaitPay:null,
                 loading: false,//加载
@@ -82,21 +109,11 @@ import vregion from '@/components/vregion/Region'
                 page:1,//初始化页码
                 dataTotal:0,
                 searchInfo:{
-                    belongCity:'',//区域
-                    belongCityName:'',//区域
-                    shipperName:'',//货主
-                    startOrderDate:'',//下单起始时间
-                    endOrderDate:'',//下单结束时间
-                    orderSerial:'',//订单号
-                    parentOrderStatus:'AF00801',//订单状态
+                    city: "",//区域
+                    title:'',//标题
+                   
                 },
-                pickerOptions2:{
-                    shortcuts:pickerOptions2
-                },
-                chooseTime:'',
                 tableData:[],
-                dialogFormVisible_details:false,//详情弹窗
-                DetailsOrderSerial:'',
                 tableColumn: [{
                     label: '序号',
                     prop: 'id',
@@ -107,40 +124,47 @@ import vregion from '@/components/vregion/Region'
                     }
                 }, {
                     label: '区域',
-                    prop: 'carrierName',
-                    width: '120',
+                    prop: 'city',
+                    width: '150',
                     fixed: false
                 }, {
                     label: '标题',
-                    prop: 'orgName',
+                    prop: 'title',
                     width: '400',
                     fixed: false
                 }, {
                     label: '有效期',
-                    prop: 'carrierSn',
+                    prop: 'endTime',
                     width: '250',
-                    fixed: false
+                    fixed: false,
+                    slot: (scope) => {
+                        return parseTime(scope.row.endTime, '{y}-{m}-{d} {h}:{i}:{s}')
+                    }
                 }, {
                     label: '操作人',
-                    prop: 'liableName',
+                    prop: 'creater',
                     width: '150',
                     fixed: false
                 }, {
                     label: '操作时间',
-                    prop: 'liablePhone',
+                    prop: 'startTime',
                     width: '250',
                     fixed: false,
                     slot: (scope) => {
-                        return parseTime(scope.row.contractStarttime, '{y}-{m}-{d} {h}:{i}:{s}')
+                        return parseTime(scope.row.startTime, '{y}-{m}-{d} {h}:{i}:{s}')
                     }
-                }, {
-                    label: '操作',
-                    prop: 'carrierRemarks',
-                    fixed: false,
-                    slot: (scope) => {
-                        return parseTime(scope.row.contractStarttime, '{y}-{m}-{d} {h}:{i}:{s}')
-                    }
-                }]
+                },
+                //  {
+                //     label: '操作',
+                //     fixed: false,
+                //     // click:true,
+                //     slot: (scope) => {
+                //         // <el-button type="text" size="small">编辑</el-button>;
+                     
+                //         return  '<el-button @click="handleClick(scope.row)" type="text" size="small">查看</el-button>';
+                //     }
+                // }
+                ]
             }
         },
         watch:{
@@ -150,14 +174,30 @@ import vregion from '@/components/vregion/Region'
 
         },
         mounted(){
-            // this.firstblood();
+            this.firstblood();
 
-            console.log('```````````',process.env.NODE_ENV)
+            // console.log('```````````',process.env.NODE_ENV)
         },  
         beforeDestroy(){
             clearInterval(this.timeOutWaitPay);
         },
         methods: {
+             editors(content) { // editor组件传过来的值赋给content
+                console.log(content)
+                this.content = content
+            },
+            onEditorReady(ins, ina) { // 上传失败的函数
+                console.log('ins')
+                console.log(ins)
+                console.log(ina)
+            },
+            onEditorUploadComplete(json) { // 处理上传图片后返回数据，添加img标签到编辑框内
+                console.log('json')
+                console.log(json)
+                console.log(json[0].data.filePath)
+                this.content = this.content + '<img src=' + json[0].data.filePath + '>'
+            },
+
             exportExcel () {
                 /* generate workbook object from table */
                 var wb = XLSX.utils.table_to_book(document.querySelector('#out-table'))
@@ -173,11 +213,11 @@ import vregion from '@/components/vregion/Region'
             regionChange(d) {
                 console.log('data:',d)
                 this.searchInfo.belongCityName = (!d.province&&!d.city&&!d.area&&!d.town) ? '': `${this.getValue(d.province)}${this.getValue(d.city)}${this.getValue(d.area)}${this.getValue(d.town)}`.trim();
-                if(d.city){
-                    this.searchInfo.belongCity = d.city.code;
-                }else{
-                    this.searchInfo.belongCity = d.province.code;
-                }
+                // if(d.city){
+                //     this.searchInfo.belongCity = d.city.code;
+                // }else{
+                //     this.searchInfo.belongCity = d.province.code;
+                // }
             },
              getValue(obj){
                 return obj ? obj.value:'';
@@ -190,53 +230,32 @@ import vregion from '@/components/vregion/Region'
             //刷新页面  
             firstblood(){
                 this.loading = true;
-
-                orderStatusList(this.page,this.pagesize,this.searchInfo).then(res => {
-                    console.log('待付款',res)
-                    this.tableData = res.data.list;
+                CommonNoticeList(this.page,this.pagesize,this.searchInfo).then(res => {
+                    console.log('公告',res)
                     this.dataTotal = res.data.totalCount;
-
-                    this.tableData.forEach(item => {
-                        item.aflcOrderAddresses.sort(function(a,b){  
-                            return a.viaOrder - b.viaOrder;  
-                        })  
-
-                        // item.useCar = parseTime(item.useCarTime)
-                    })
+                    this.tableData = res.data.list;
                     this.loading = false;
                 })
+            },
+            shuaxin(){
+                this.firstblood();
+            },
+             handleClick(row) {
+                console.log(row);
+            },
+            getSearchParam(obj) {
+                console.log(obj)
+                this.searchInfo = Object.assign(this.searchInfo, obj);
+                this.firstblood();
+            },
+            getSelection(){
 
             },
-           
             //模糊查询 分类名称或者code
             handleSearch(type){
-                // console.log(this.chooseTime)
                 switch(type){
-                    case 'search':
-                        if(this.chooseTime){
-                            this.searchInfo.startOrderDate = this.chooseTime[0];
-                            this.searchInfo.endOrderDate = this.chooseTime[1];
-                       
-                        }else{
-                            this.searchInfo.startOrderDate ='' ;
-                            this.searchInfo.endOrderDate = '';
-                        }
-
-                        this.firstblood();
-                        break;
-                    case 'clear':
-                        this.searchInfo = {
-                            belongCity:'',//区域
-                            shipperName:'',//货主
-                            startOrderDate:'',//下单起始时间
-                            endOrderDate:'',//下单结束时间
-                            orderSerial:'',//订单号
-                            parentOrderStatus:'AF00801',//订单状态待支付
-                        };
-                        this.chooseTime = '';
-                        this.firstblood();
-                    case 'outExce':
-                        this.exportExcel();
+                    case 'publish':
+                        this.dialogFormVisible = true;
                         break;
                 }
                 // 清除选中状态，避免影响下个操作
@@ -250,13 +269,6 @@ import vregion from '@/components/vregion/Region'
             clickDetails(row, event, column){
                 this.$refs.multipleTable.toggleRowSelection(row);
             },
-            //详情弹窗
-            pushOrderSerial(item){
-                // console.log(item)
-                // this.dialogFormVisible_details = true;
-                // this.DetailsOrderSerial = item.orderSerial;
-                this.$router.push({name: '订单详情',query:{ orderSerial:item.orderSerial }});
-            }
         }
     }
 </script>

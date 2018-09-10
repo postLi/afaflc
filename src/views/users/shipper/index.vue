@@ -100,6 +100,9 @@
             .el-tab-pane{
                 .classify_searchinfo{
                     padding: 0;
+                    .el-form-item:last-child{
+                        margin: 0px;
+                    }
                 }
                 .classify_info{
                     padding: 50px 0;

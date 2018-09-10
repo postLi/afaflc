@@ -619,8 +619,6 @@ import '../../../styles/dialog.scss'
             left:0;
             top:0;
             padding:15px 16px;
-            border-bottom:2px dashed #ccc;
-            height:70px;
             width:100%;
             line-height: 35px;
             label{
