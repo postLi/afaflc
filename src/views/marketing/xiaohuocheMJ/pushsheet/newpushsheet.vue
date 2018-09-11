@@ -7,8 +7,6 @@
             <el-form :inline="true" :model="vestList" ref="vestList" :rules="rulesForm">
              <el-row>
             <el-col :span="12">
-
-
             <el-form-item label="省市：" :label-width="formLabelWidth" prop="areaCode" > 
                 <el-input v-model="vestList.areaName"  @focus="changeSelect" v-if="editType !=='add' && !selectFlag"></el-input>
                  <span v-else-if="editType=='add'">
@@ -63,24 +61,12 @@
                         @change='cTime'
                         >
                     </el-time-picker>
-
-
-                    <!-- <el-date-picker
-                    v-model="vestList.setting[keys].createTime"
-                    value-format="timestamp"
-                    type="daterange"
-                    range-separator="至"
-                    start-placeholder="开始日期"
-                    end-placeholder="结束日期"
-                    :default-time="['00:00:00', '23:59:59']"
-                    >
-                    </el-date-picker> -->
             </el-form-item>
             </el-col>
             <el-col :span="6">
            <el-form-item>       
            <el-button type="primary" @click="addItem" plain  v-if="keys == 0" >继续添加推送时段</el-button>
-           <el-button type="danger" @click="reduceItem(keys)" plain class='reduceItem1'  v-else>删除推送时段</el-button> 
+           <el-button type="danger" @click="reduceItem(keys)" plain class='VestreduceItem'  v-else>删除推送时段</el-button> 
            </el-form-item>
             </el-col>
               </el-row> 
@@ -723,39 +709,44 @@ methods:{
 
             //完善数据
             completeData(){
-                for(var i=0;i<this.vestList.setting.length;i++){
-                    if(this.vestList.setting[i].createTime==null){
-                   this.$message.warning('推送时间段必须都填写');
-                   this.vestList.setting[i].startTime = null;
-                   this.vestList.setting[i].endTime = null;
-                  return false
-                    }
-                    else{
-                this.vestList.setting[i].startTime = this.vestList.setting[i].createTime[0];
-                this.vestList.setting[i].endTime = this.vestList.setting[i].createTime[1];
-                    }
-                }
                 let Carst = ['AF01801','AF01802','AF01803','AF01804'];
                 let Cartype = ['zero','one'];
                 let CarActive = ['AF0010401','AF0020401','AF0020402','AF0020403','AF0020404','AF0020405']
-                this.vestList.setting.map((subList,index) => {
-                    Carst.map(i=>{
-                        Cartype.map(j=>{
-                            CarActive.map(k=>{
-                                console.log(i,j,k,this.vestList.setting[index].sett[i][j][k])
-                            let reg= /^[0-5]\d*$/  //输入正整数正则
-                            if(!reg.test(this.vestList.setting[index].sett[i][j][k]))
+                // this.vestList.setting.map((subList,index) => {
+                //     Carst.map(i=>{
+                //         Cartype.map(j=>{
+                //             CarActive.map(k=>{
+                //             let reg= /^[0-5]\d*$/  //输入正整数正则
+                //             if(!reg.test(this.vestList.setting[index].sett[i][j][k]))
+                //             {
+                //                 this.$message.warning('推单单数范围在0-5之间')
+                                
+                //             }
+                //             })
+                //         })
+                //     })
+                // })
+               
+                let reg= /^[0-5]\d*$/  //输入正整数正则
+                for(var i=0;i<this.vestList.setting.length;i++){
+
+                    for(var j=0;j<Carst.length;j++)
+                    {
+                         for(var k=0;k<Cartype.length;k++)
+                         {
+                          for(var n=0;n<CarActive.length;n++)
+                         {
+                            if(!reg.test(this.vestList.setting[i].sett[Carst[j]][Cartype[k]][CarActive[n]]))
                             {
-                                this.$message.warning('推单单数范围在0-5之间');
+                                this.$message.warning('推单单数范围在0-5之间')
                                 return false
+                                break;
                             }
-                            })
-                        })
-                    })
-                })
-
-
-
+                            
+                         }  
+                         }
+                    }
+                }
 
             //获取城市name
                 if(!this.$refs.area){
@@ -785,13 +776,30 @@ methods:{
                     })
                 }
             },
-
+            completeData2(){
+                for(var i=0;i<this.vestList.setting.length;i++){
+                    if(this.vestList.setting[i].createTime==null){
+                   this.$message.warning('推送时间段必须都填写');
+                   this.vestList.setting[i].startTime = null;
+                   this.vestList.setting[i].endTime = null;
+                  return false
+                    }
+                    else{
+                this.vestList.setting[i].startTime = this.vestList.setting[i].createTime[0];
+                this.vestList.setting[i].endTime = this.vestList.setting[i].createTime[1];
+                    }
+                }
+            },
         // 新增保存
         changeInfoSave(){
             this.completeData();
+            this.completeData2()
             if(this.completeData()==false)
             {
-               return
+               return false
+            }
+            else if(this.completeData2()==false){
+               return false
             }
             else{
             this.$refs['vestList'].validate(valid=>{
@@ -824,10 +832,14 @@ methods:{
         },
         // 修改 保存
         updateInfoSave(){
-        this.completeData();
+            this.completeData();
+            this.completeData2()
             if(this.completeData()==false)
             {
-               return
+               return false
+            }
+            else if(this.completeData2()==false){
+               return false
             }
             else{
             this.$refs['vestList'].validate(valid=>{
@@ -865,7 +877,6 @@ driverTemplateDialogFlag:{
 }
 },
 mounted(){
-    console.log('selectRowData',this.params)
 this.getMoreInformation();
 }
 }
@@ -924,7 +935,7 @@ this.getMoreInformation();
             color:red;
          }
         }
-             .reduceItem1{
+            .VestreduceItem{
              width: 154px!important;
              height: 34px!important;
          }
@@ -937,7 +948,7 @@ this.getMoreInformation();
 
     }
         .el-date-editor .el-range__icon {
-        line-height: 24px!important;
+        line-height: 24px;
     }
 
 </style>
@@ -946,9 +957,9 @@ this.getMoreInformation();
 .vestDialogBox {
     display: inline-block;
     .commoncss{
-                .el-dialog{
-               width:960px!important;
-                  }
+    .el-dialog{
+   width:960px!important;
+     }
     }
     .vestDialog .el-dialog {
 
@@ -961,7 +972,7 @@ this.getMoreInformation();
 }
 
 .commoncss .el-date-editor .el-range__icon {
-        line-height: 24px!important;
+        line-height: 24px;
 }
 .commoncss .el-date-editor .el-range-separator {
     padding: 0 0px;
@@ -980,7 +991,7 @@ this.getMoreInformation();
 }
     .el-date-editor .el-range__close-icon
     {
-        line-height: 24px!important;
+        line-height: 24px;
     }
 }
 

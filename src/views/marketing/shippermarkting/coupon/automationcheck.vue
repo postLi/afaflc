@@ -204,10 +204,10 @@
                         end-placeholder="结束日期"
                         :default-time="['00:00:00', '23:59:59']"
                         value-format="yyyy-MM-dd HH:mm:ss"
-                        @change='cTime2'                        
+                        @change='cTime2'    
+                        class="automationTime"                    
                         >
                         </el-date-picker>
-            
                   </el-form-item> 
                     <el-form-item  label="卷码状态：" :label-width="formLabelWidth">
                         <el-select v-model="searchData.couponStatus" clearable placeholder="">
@@ -431,6 +431,8 @@ export default {
         }        
     },
     getData_query(){
+        console.log('fdfdf')
+        this.page = 1;
         this.firstblood();
     },    
     
@@ -446,7 +448,12 @@ export default {
           this.formAllData.activityType= res.data.activityType
           Ctime.push(now1.getTime(),now2.getTime())
           this.createTime = Ctime
+          if(res.data.area==null){
+          this.formAllData.areaName1 =res.data.province+res.data.city
+          }
+          else{
           this.formAllData.areaName1 =res.data.province+res.data.city+res.data.area
+          }
       })
       data_get_couponActive2_Id(this.templateItem.id).then((res)=>{
               this.formAllData.aflcCouponList = res.data
@@ -507,11 +514,7 @@ export default {
         overflow:unset;
     }
     .el-button{
-        margin-right:0px!important;
-    }
-    .v-dropdown-container{
-        top:35px!important;
-        left:0px!important;
+        margin-right:0px;
     }
     .el-radio.is-bordered{
         height: 30px;
@@ -539,10 +542,6 @@ export default {
     .el-dialog{
         width: 1200px!important;
         overflow:unset;
-    }
-    .v-dropdown-container{
-        top:35px!important;
-        left:0px!important;
     }
     .el-radio.is-bordered{
         height: 30px;
@@ -573,7 +572,7 @@ export default {
     }
     .table_box{
     .ht_table{
-        width: 95%!important;
+        width: 95%;
         margin:0px 10px;
         color: #333;
         .ht_table_tr{
@@ -651,7 +650,7 @@ export default {
                  left:25px;  
              }
             .el-form-item{
-            margin-bottom: 0px!important;
+            margin-bottom: 0px;
             }
             .el-input{
                 width:100%;
@@ -666,12 +665,12 @@ export default {
         .el-form-item{
             width: 100%;
             padding-top:10px;
-            padding-bottom: 10px!important;
+            padding-bottom: 10px;
         }
         .el-input{
-                 width: 98%!important;
+                 width: 98%;
                  .el-input__inner{
-                  padding: 0px 2px!important;
+                  padding: 0px 2px;
                  }
              }
         }
@@ -680,7 +679,7 @@ export default {
             padding:10px;
         }
         .el-input__inner{
-            height: 30px!important;
+            height: 30px;
         }
 }
         .automationcheckTabTwo{
@@ -706,10 +705,16 @@ export default {
             .el-input__inner{
             height: 30px;
             line-height: 30px; 
-            
             }
          }
-        }}
+        }
+        .automationTime{
+            vertical-align: middle;
+            .el-input__icon {
+             line-height: 24px;
+            }
+        }
+        }
 
 }
 </style>

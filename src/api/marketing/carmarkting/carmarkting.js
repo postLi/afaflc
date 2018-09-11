@@ -2,7 +2,7 @@ import fetch from '@/utils/fetch'
 
 // const baseurl_two = "aflcsmservice"
 const baseurl = "aflcsmservice"
-const baseurl_one= "aflcsmservice_1"
+const baseurl_one= "aflcsmservice"
 
 //获取同城列表
 export function data_get_Marketingsame_list(page,pagesize,data) {

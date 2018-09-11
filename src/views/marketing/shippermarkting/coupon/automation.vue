@@ -266,7 +266,7 @@ export default {
             console.log('d',d)
             if(d.length<3){
                     if(d.length==2){
-                    this.$message.info('请选择具体的城市');
+                    this.$message.error('请选择具体的城市');
                     }
                     this.formAllData.areaCode = null;
                     this.formAllData.province = null,
@@ -443,7 +443,7 @@ export default {
     }
     .el-button{
       margin-right: 20px;
-      padding: 8px 20px!important;
+      padding: 8px 20px;
     }
     .el-range-editor{
         margin-left:0px;
@@ -468,7 +468,7 @@ export default {
     height: 100%;
     padding: 70px 15px 0 15px;
     .commoncss{
-      display: inline-block!important;
+      display: inline-block;
     }
     .btns_box{
     margin-bottom: 10px;
@@ -482,7 +482,7 @@ export default {
     }
     .el-button{
       margin-right: 20px;
-      padding: 8px 20px!important;
+      padding: 10px 20px;
     }
 }
 .info1_tab_footer{

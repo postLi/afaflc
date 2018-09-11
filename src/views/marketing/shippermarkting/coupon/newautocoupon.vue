@@ -410,7 +410,7 @@ export default {
          handleChange1(d){
            console.log('d',d)
            if(d.length<3){
-                this.$message.info('请选择具体的城市');
+                this.$message.error('请选择具体的城市');
                 this.formAllData.aflcCouponList[this.inputKey].areaName = [];
                 this.formAllData.aflcCouponList[this.inputKey].areaCode = [];
                 this.formAllData.aflcCouponList[this.inputKey].province = null
@@ -712,12 +712,12 @@ export default {
      .textareaBox {
         width: 500px;
     }
-    .el-input__inner{
-        line-height: 30px;
-        height: 30px;
+    .el-input__icon{
+        line-height: 24px;
+        height: 24px;
     }
     .el-range__icon{
-      line-height: 24px!important;
+      line-height: 24px;
     }
     .el-date-editor .el-range-separator{
         line-height: 24px;
@@ -731,7 +731,7 @@ export default {
         }    
     .table_box{
     .ht_table{
-        width: 95%!important;
+        width: 95%;
         margin:0px 10px;
         color: #333;
         .ht_table_tr{
@@ -772,7 +772,7 @@ export default {
         .table_th2{width: 10%;}
         .table_th3{width: 7%;}
         .table_th4{width: 6%;}
-        .table_th5{width: 10%;}
+        .table_th5{width: 12%;}
         .table_th6{width: 4%;}
         .table_th7{width: 6%;}
         .table_th8{width: 8%;}
@@ -803,13 +803,13 @@ export default {
             border-right:1px solid #d0d7e5;
             position: relative;
             text-align: center;
-                        height: 32px;
+            height: 32px;
             .reduceItem{
                  top:5px;
                  left:25px;  
              }
             .el-form-item{
-            margin-bottom: 0px!important;
+            margin-bottom: 0px;
             }
             .el-input{
                 width:100%;
@@ -827,12 +827,12 @@ export default {
         .el-form-item{
             width: 100%;
             padding-top:10px;
-            padding-bottom: 10px!important;
+            padding-bottom: 10px;
         }
         .el-input{
-                 width: 98%!important;
+                 width: 98%;
                  .el-input__inner{
-                  padding: 0px 5px!important;
+                  padding: 0px 5px;
                  }
                 
              } 

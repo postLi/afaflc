@@ -17,7 +17,7 @@
                 </el-col>
                 <el-col :span="12">
                 <el-form-item label="区域奖励额度上限：" :label-width="formLabelWidth" prop="rewardMax">
-                        <el-input v-model="formAll.rewardMax" placeholder="请选择区域奖励额度上限" maxlength='7'></el-input>
+                        <el-input v-model="formAll.rewardMax" placeholder="请选择区域奖励额度上限" maxlength='4'></el-input>
                 </el-form-item>
                 </el-col>
             </el-row>
@@ -157,7 +157,7 @@
 </template>
 <script>
 import { data_Commission ,data_CarList,data_MaidLevel,data_ServerClassList} from '@/api/server/areaPrice.js'
-import { data_get_shipperOwnerFrom_create} from '@/api/marketing/shippermarkting/shipperOwner.js'
+import { data_get_shipperOwnerFrom_create,data_get_areaCode_rewardMax} from '@/api/marketing/shippermarkting/shipperOwner.js'
 import { regionDataPlus, CodeToText, TextToCode } from 'element-china-area-data'
 import Upload from '@/components/Upload/singleImage'
 import vregion from '@/components/vregion/Region'
@@ -247,7 +247,7 @@ export default {
             }
             else if(reg.test(val)){
             cb(new Error('请输入正整数'))
-            }            
+            }         
             else{
                 cb()
             }        
@@ -268,38 +268,39 @@ export default {
             }    
         }   
 
-        const reward2Validator = (rule, val, cb) => {if(!val){cb(new Error('数据不能为空'))}else if(parseInt(val)<parseInt(this.$refs['reward1'].value)){
-            cb(new Error('不能小于前框值'))}else{cb()} }   
-        const reward3Validator = (rule, val, cb) => {if(!val){cb(new Error('数据不能为空'))}else if(parseInt(val)<parseInt(this.$refs['reward2'].value)){
-            cb(new Error('不能小于前框值'))}else{cb()} }   
-        const reward4Validator = (rule, val, cb) => {if(!val){cb(new Error('数据不能为空'))}else if(parseInt(val)<parseInt(this.$refs['reward3'].value)){
-            cb(new Error('不能小于前框值'))}else{cb()} }   
-        const reward5Validator = (rule, val, cb) => {if(!val){cb(new Error('数据不能为空'))}else if(parseInt(val)<parseInt(this.$refs['reward4'].value)){
-            cb(new Error('不能小于前框值'))}else{cb()} }           
-        const reward6Validator = (rule, val, cb) => {if(!val){cb(new Error('数据不能为空'))}else if(parseInt(val)<parseInt(this.$refs['reward5'].value)){
-            cb(new Error('不能小于前框值'))}else{cb()} }   
-        const reward7Validator = (rule, val, cb) => {if(!val){cb(new Error('数据不能为空'))}else if(parseInt(val)<parseInt(this.$refs['reward6'].value)){
-            cb(new Error('不能小于前框值'))}else{cb()} }       
-        const reward8Validator = (rule, val, cb) => {if(!val){cb(new Error('数据不能为空'))}else if(parseInt(val)<parseInt(this.$refs['reward7'].value)){
-            cb(new Error('不能小于前框值'))}else{cb()} }   
-        const reward9Validator = (rule, val, cb) => {if(!val){cb(new Error('数据不能为空'))}else if(parseInt(val)<parseInt(this.$refs['reward8'].value)){
-            cb(new Error('不能小于前框值'))}else{cb()} }       
-        const reward10Validator = (rule, val, cb) => {if(!val){cb(new Error('数据不能为空'))}else if(parseInt(val)<parseInt(this.$refs['reward9'].value)){
-            cb(new Error('不能小于前框值'))}else{cb()} }   
-        const reward11Validator = (rule, val, cb) => {if(!val){cb(new Error('数据不能为空'))}else if(parseInt(val)<parseInt(this.$refs['reward10'].value)){
-            cb(new Error('不能小于前框值'))}else{cb()} }   
-        const reward12Validator = (rule, val, cb) => {if(!val){cb(new Error('数据不能为空'))}else if(parseInt(val)<parseInt(this.$refs['reward11'].value)){
-            cb(new Error('不能小于前框值'))}else{cb()} }   
-        const reward13Validator = (rule, val, cb) => {if(!val){cb(new Error('数据不能为空'))}else if(parseInt(val)<parseInt(this.$refs['reward12'].value)){
-            cb(new Error('不能小于前框值'))}else{cb()} }       
-        const reward14Validator = (rule, val, cb) => {if(!val){cb(new Error('数据不能为空'))}else if(parseInt(val)<parseInt(this.$refs['reward13'].value)){
-            cb(new Error('不能小于前框值'))}else{cb()} }   
-        const reward15Validator = (rule, val, cb) => {if(!val){cb(new Error('数据不能为空'))}else if(parseInt(val)<parseInt(this.$refs['reward14'].value)){
-            cb(new Error('不能小于前框值'))}else{cb()} }   
-        const reward16Validator = (rule, val, cb) => {if(!val){cb(new Error('数据不能为空'))}else if(parseInt(val)<parseInt(this.$refs['reward15'].value)){
-            cb(new Error('不能小于前框值'))}else{cb()} }       
+        const reward2Validator = (rule, val, cb) => {if(!val){cb(new Error('数据不能为空'))}else if(parseInt(val)<=parseInt(this.$refs['reward1'].value)){
+            cb(new Error('必须大于前框值'))}else{cb()} }   
+        const reward3Validator = (rule, val, cb) => {if(!val){cb(new Error('数据不能为空'))}else if(parseInt(val)<=parseInt(this.$refs['reward2'].value)){
+            cb(new Error('必须大于前框值'))}else{cb()} }   
+        const reward4Validator = (rule, val, cb) => {if(!val){cb(new Error('数据不能为空'))}else if(parseInt(val)<=parseInt(this.$refs['reward3'].value)){
+            cb(new Error('必须大于前框值'))}else{cb()} }   
+        const reward5Validator = (rule, val, cb) => {if(!val){cb(new Error('数据不能为空'))}else if(parseInt(val)<=parseInt(this.$refs['reward4'].value)){
+            cb(new Error('必须大于前框值'))}else{cb()} }           
+        const reward6Validator = (rule, val, cb) => {if(!val){cb(new Error('数据不能为空'))}else if(parseInt(val)<=parseInt(this.$refs['reward5'].value)){
+            cb(new Error('必须大于前框值'))}else{cb()} }   
+        const reward7Validator = (rule, val, cb) => {if(!val){cb(new Error('数据不能为空'))}else if(parseInt(val)<=parseInt(this.$refs['reward6'].value)){
+            cb(new Error('必须大于前框值'))}else{cb()} }       
+        const reward8Validator = (rule, val, cb) => {if(!val){cb(new Error('数据不能为空'))}else if(parseInt(val)<=parseInt(this.$refs['reward7'].value)){
+            cb(new Error('必须大于前框值'))}else{cb()} }   
+        const reward9Validator = (rule, val, cb) => {if(!val){cb(new Error('数据不能为空'))}else if(parseInt(val)<=parseInt(this.$refs['reward8'].value)){
+            cb(new Error('必须大于前框值'))}else{cb()} }       
+        const reward10Validator = (rule, val, cb) => {if(!val){cb(new Error('数据不能为空'))}else if(parseInt(val)<=parseInt(this.$refs['reward9'].value)){
+            cb(new Error('必须大于前框值'))}else{cb()} }   
+        const reward11Validator = (rule, val, cb) => {if(!val){cb(new Error('数据不能为空'))}else if(parseInt(val)<=parseInt(this.$refs['reward10'].value)){
+            cb(new Error('必须大于前框值'))}else{cb()} }   
+        const reward12Validator = (rule, val, cb) => {if(!val){cb(new Error('数据不能为空'))}else if(parseInt(val)<=parseInt(this.$refs['reward11'].value)){
+            cb(new Error('必须大于前框值'))}else{cb()} }   
+        const reward13Validator = (rule, val, cb) => {if(!val){cb(new Error('数据不能为空'))}else if(parseInt(val)<=parseInt(this.$refs['reward12'].value)){
+            cb(new Error('必须大于前框值'))}else{cb()} }       
+        const reward14Validator = (rule, val, cb) => {if(!val){cb(new Error('数据不能为空'))}else if(parseInt(val)<=parseInt(this.$refs['reward13'].value)){
+            cb(new Error('必须大于前框值'))}else{cb()} }   
+        const reward15Validator = (rule, val, cb) => {if(!val){cb(new Error('数据不能为空'))}else if(parseInt(val)<=parseInt(this.$refs['reward14'].value)){
+            cb(new Error('必须大于前框值'))}else{cb()} }   
+        const reward16Validator = (rule, val, cb) => {if(!val){cb(new Error('数据不能为空'))}else if(parseInt(val)<=parseInt(this.$refs['reward15'].value)){
+            cb(new Error('必须大于前框值'))}else{cb()} }       
 
         return{
+        areaStatus:null,
         options:regionDataPlus,
         formLabelWidth:'150px',
         dialogFormVisible_add: false,
@@ -314,10 +315,10 @@ export default {
             carType:null,
             serivceCode:null,
             reward1:'0',reward2:null,reward3:null,reward4:null,reward5:null,reward6:null,reward7:null,reward8:null, reward9:null,reward10:null,reward11:null,reward12:null,reward13:null,reward14:null,reward15:null,reward16:null,
-            maxnum1:null,maxnum2:null,maxnum3:null,maxnum4:null,maxnum5:null,maxnum6:null,
-            data1:null,data2:null,data3:null,data4:null,data5:null,data6:null,data7:null,data8:null,data9:null,data10:null,data11:null,data12:null,data13:null,data14:null,data15:null,data16:null,data17:null,data18:null,data19:null,data20:null,
-            data21:null,data22:null,data23:null,data24:null,data25:null,data26:null,data27:null,data28:null,data29:null,data30:null,data31:null,data32:null,data33:null,data34:null,data35:null,data36:null,data37:null,data38:null,data39:null,data40:null,
-            data41:null,data42:null,data43:null,data44:null,data45:null,data46:null,data47:null,data48:null
+            maxnum1:'0',maxnum2:'0',maxnum3:'0',maxnum4:'0',maxnum5:'0',maxnum6:'0',
+            data1:'0',data2:'0',data3:'0',data4:'0',data5:'0',data6:'0',data7:'0',data8:'0',data9:'0',data10:'0',data11:'0',data12:'0',data13:'0',data14:'0',data15:'0',data16:'0',data17:'0',data18:'0',data19:'0',data20:'0',
+            data21:'0',data22:'0',data23:'0',data24:'0',data25:'0',data26:'0',data27:'0',data28:'0',data29:'0',data30:'0',data31:'0',data32:'0',data33:'0',data34:'0',data35:'0',data36:'0',data37:'0',data38:'0',data39:'0',data40:'0',
+            data41:'0',data42:'0',data43:'0',data44:'0',data45:'0',data46:'0',data47:'0',data48:'0'
             },
             
             rulesForm:{
@@ -393,7 +394,7 @@ export default {
         handleChange(d){
            console.log('d',d)
            if(d.length<3){
-                this.$message.info('请选择具体的城市');
+                this.$message.error('请选择具体的城市');
                 this.formAll.areaName = [];
                 this.formAll.areaCode = [];
                 this.formAll.province = null
@@ -431,52 +432,54 @@ export default {
         inputChange(i){
         switch (i) {
         case 1:
-        this.formAll.reward3 = this.formAll.reward2
+        this.formAll.reward3 = (parseInt(this.formAll.reward2)+1).toString() 
         break;
         case 2:
-        this.formAll.reward2 = this.formAll.reward3
+        this.formAll.reward2 = (parseInt(this.formAll.reward3)-1).toString() 
         break;
         case 3:
-        this.formAll.reward5 = this.formAll.reward4
+        this.formAll.reward5 = (parseInt(this.formAll.reward4)+1).toString() 
         break;
         case 4:
-        this.formAll.reward4 = this.formAll.reward5
+        this.formAll.reward4 = (parseInt(this.formAll.reward5)-1).toString() 
         break;
         case 5:
-        this.formAll.reward7 = this.formAll.reward6
+        this.formAll.reward7 = (parseInt(this.formAll.reward6)+1).toString() 
         break;
         case 6:
-        this.formAll.reward6= this.formAll.reward7
+        this.formAll.reward6= (parseInt(this.formAll.reward7)-1).toString() 
         break; 
         case 7:
-        this.formAll.reward9= this.formAll.reward8
+        this.formAll.reward9= (parseInt(this.formAll.reward8)+1).toString() 
         break;
         case 8:
-        this.formAll.reward8 = this.formAll.reward9
+        this.formAll.reward8 = (parseInt(this.formAll.reward9)-1).toString() 
         break;
         case 9:
-        this.formAll.reward11= this.formAll.reward10
+        this.formAll.reward11= (parseInt(this.formAll.reward10)+1).toString() 
         break; 
         case 10:
-        this.formAll.reward10= this.formAll.reward11
+        this.formAll.reward10= (parseInt(this.formAll.reward11)-1).toString() 
         break;        
         case 11:
-        this.formAll.reward13= this.formAll.reward12
+        this.formAll.reward13= (parseInt(this.formAll.reward12)+1).toString() 
         break;  
         case 12:
-        this.formAll.reward12= this.formAll.reward13
+        this.formAll.reward12= (parseInt(this.formAll.reward13)-1).toString() 
         break;  
         case 13:
-        this.formAll.reward15= this.formAll.reward14
+        this.formAll.reward15= (parseInt(this.formAll.reward14)+1).toString() 
         break;  
         case 14:
-        this.formAll.reward14= this.formAll.reward15
+        this.formAll.reward14= (parseInt(this.formAll.reward15)-1).toString() 
         break;                                                                                        
         }
          },   
+
+
    change:function(){
       this.dialogFormVisible_add = false;
-      this.$refs['formAll'].resetFields();  
+      this.$refs['formAll'].resetFields(); 
    },
    close:function(){
       this.dialogFormVisible_add = false;
@@ -563,15 +566,13 @@ export default {
        this.$refs['formAll'].validate(valid=>{
         if(valid){
             if(this.formAll.area){
-                this.formAll.areaCode.splice(0,2)
+               this.areaStatus = this.formAll.areaCode[2]
             }
             else{
-                 this.formAll.areaCode.splice(0,1)
-                 this.formAll.areaCode.pop()
+               this.areaStatus = this.formAll.areaCode[1]
             }
-         this.formAll.areaCode =String(this.formAll.areaCode)
         let forms=[{
-            areaCode:this.formAll.areaCode,
+            areaCode:this.areaStatus,
             province:this.formAll.province,
             city:this.formAll.city,
             area:this.formAll.area,
@@ -582,13 +583,12 @@ export default {
         }]
         data_get_shipperOwnerFrom_create(forms).then(res=>{
             console.log('res',res);
-            this.$refs['formAll'].resetFields();
             this.dialogFormVisible_add = false;
             this.changeList();
             this.$message.success('新增成功');
         }).catch(res=>{
             console.log('res',res);
-            this.$message.error('新增失败');
+            this.$message.error('新增失败,同一个地区奖励上限必须相同');
        });
 
        }
@@ -617,13 +617,8 @@ export default {
         .swith{
             margin:0px 0px 10px 10px;
             .el-switch{
-                display: inline-block!important;
+                display: inline-block;
             }
-        }
-        .v-dropdown-container{
-          top: 41px!important;
-          left: 0px!important;
-          z-index:101!important;
         }
         .el-dialog__footer{
             padding: 20px 20px 20px;

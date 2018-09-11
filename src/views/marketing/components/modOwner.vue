@@ -17,7 +17,7 @@
             </tr>     
             <tr>
              <td><el-input v-model="areaName" disabled></el-input></td>
-             <td><el-input v-model="formAll.rewardMax" placeholder="请选择"></el-input></td>   
+             <td><el-input v-model="formAll.rewardMax" placeholder="请选择" maxlength='4'></el-input></td>   
              <td>
                  <el-select v-model="formAll.serivceCode" clearable placeholder="请选择" disabled>
                           <el-option
@@ -174,7 +174,7 @@ import {data_get_shipper_type,data_get_shipper_create,data_get_shipper_change,da
 export default {
   components:{
     Upload,
-       vregion,
+    vregion,
   },
   props:{
     paramsView:{
@@ -273,36 +273,36 @@ export default {
             }    
         }   
 
-        const reward2Validator = (rule, val, cb) => {if(!val){cb(new Error('数据不能为空'))}else if(parseInt(val)<parseInt(this.$refs['reward1'].value)){
-            cb(new Error('不能小于前框值'))}else{cb()} }   
-        const reward3Validator = (rule, val, cb) => {if(!val){cb(new Error('数据不能为空'))}else if(parseInt(val)<parseInt(this.$refs['reward2'].value)){
-            cb(new Error('不能小于前框值'))}else{cb()} }   
-        const reward4Validator = (rule, val, cb) => {if(!val){cb(new Error('数据不能为空'))}else if(parseInt(val)<parseInt(this.$refs['reward3'].value)){
-            cb(new Error('不能小于前框值'))}else{cb()} }   
-        const reward5Validator = (rule, val, cb) => {if(!val){cb(new Error('数据不能为空'))}else if(parseInt(val)<parseInt(this.$refs['reward4'].value)){
-            cb(new Error('不能小于前框值'))}else{cb()} }           
-        const reward6Validator = (rule, val, cb) => {if(!val){cb(new Error('数据不能为空'))}else if(parseInt(val)<parseInt(this.$refs['reward5'].value)){
-            cb(new Error('不能小于前框值'))}else{cb()} }   
-        const reward7Validator = (rule, val, cb) => {if(!val){cb(new Error('数据不能为空'))}else if(parseInt(val)<parseInt(this.$refs['reward6'].value)){
-            cb(new Error('不能小于前框值'))}else{cb()} }       
-        const reward8Validator = (rule, val, cb) => {if(!val){cb(new Error('数据不能为空'))}else if(parseInt(val)<parseInt(this.$refs['reward7'].value)){
-            cb(new Error('不能小于前框值'))}else{cb()} }   
-        const reward9Validator = (rule, val, cb) => {if(!val){cb(new Error('数据不能为空'))}else if(parseInt(val)<parseInt(this.$refs['reward8'].value)){
-            cb(new Error('不能小于前框值'))}else{cb()} }       
-        const reward10Validator = (rule, val, cb) => {if(!val){cb(new Error('数据不能为空'))}else if(parseInt(val)<parseInt(this.$refs['reward9'].value)){
-            cb(new Error('不能小于前框值'))}else{cb()} }   
-        const reward11Validator = (rule, val, cb) => {if(!val){cb(new Error('数据不能为空'))}else if(parseInt(val)<parseInt(this.$refs['reward10'].value)){
-            cb(new Error('不能小于前框值'))}else{cb()} }   
-        const reward12Validator = (rule, val, cb) => {if(!val){cb(new Error('数据不能为空'))}else if(parseInt(val)<parseInt(this.$refs['reward11'].value)){
-            cb(new Error('不能小于前框值'))}else{cb()} }   
-        const reward13Validator = (rule, val, cb) => {if(!val){cb(new Error('数据不能为空'))}else if(parseInt(val)<parseInt(this.$refs['reward12'].value)){
-            cb(new Error('不能小于前框值'))}else{cb()} }       
-        const reward14Validator = (rule, val, cb) => {if(!val){cb(new Error('数据不能为空'))}else if(parseInt(val)<parseInt(this.$refs['reward13'].value)){
-            cb(new Error('不能小于前框值'))}else{cb()} }   
-        const reward15Validator = (rule, val, cb) => {if(!val){cb(new Error('数据不能为空'))}else if(parseInt(val)<parseInt(this.$refs['reward14'].value)){
-            cb(new Error('不能小于前框值'))}else{cb()} }   
-        const reward16Validator = (rule, val, cb) => {if(!val){cb(new Error('数据不能为空'))}else if(parseInt(val)<parseInt(this.$refs['reward15'].value)){
-            cb(new Error('不能小于前框值'))}else{cb()} }       
+        const reward2Validator = (rule, val, cb) => {if(!val){cb(new Error('数据不能为空'))}else if(parseInt(val)<=parseInt(this.$refs['reward1'].value)){
+            cb(new Error('必须大于前框值'))}else{cb()} }   
+        const reward3Validator = (rule, val, cb) => {if(!val){cb(new Error('数据不能为空'))}else if(parseInt(val)<=parseInt(this.$refs['reward2'].value)){
+            cb(new Error('必须大于前框值'))}else{cb()} }   
+        const reward4Validator = (rule, val, cb) => {if(!val){cb(new Error('数据不能为空'))}else if(parseInt(val)<=parseInt(this.$refs['reward3'].value)){
+            cb(new Error('必须大于前框值'))}else{cb()} }   
+        const reward5Validator = (rule, val, cb) => {if(!val){cb(new Error('数据不能为空'))}else if(parseInt(val)<=parseInt(this.$refs['reward4'].value)){
+            cb(new Error('必须大于前框值'))}else{cb()} }           
+        const reward6Validator = (rule, val, cb) => {if(!val){cb(new Error('数据不能为空'))}else if(parseInt(val)<=parseInt(this.$refs['reward5'].value)){
+            cb(new Error('必须大于前框值'))}else{cb()} }   
+        const reward7Validator = (rule, val, cb) => {if(!val){cb(new Error('数据不能为空'))}else if(parseInt(val)<=parseInt(this.$refs['reward6'].value)){
+            cb(new Error('必须大于前框值'))}else{cb()} }       
+        const reward8Validator = (rule, val, cb) => {if(!val){cb(new Error('数据不能为空'))}else if(parseInt(val)<=parseInt(this.$refs['reward7'].value)){
+            cb(new Error('必须大于前框值'))}else{cb()} }   
+        const reward9Validator = (rule, val, cb) => {if(!val){cb(new Error('数据不能为空'))}else if(parseInt(val)<=parseInt(this.$refs['reward8'].value)){
+            cb(new Error('必须大于前框值'))}else{cb()} }       
+        const reward10Validator = (rule, val, cb) => {if(!val){cb(new Error('数据不能为空'))}else if(parseInt(val)<=parseInt(this.$refs['reward9'].value)){
+            cb(new Error('必须大于前框值'))}else{cb()} }   
+        const reward11Validator = (rule, val, cb) => {if(!val){cb(new Error('数据不能为空'))}else if(parseInt(val)<=parseInt(this.$refs['reward10'].value)){
+            cb(new Error('必须大于前框值'))}else{cb()} }   
+        const reward12Validator = (rule, val, cb) => {if(!val){cb(new Error('数据不能为空'))}else if(parseInt(val)<=parseInt(this.$refs['reward11'].value)){
+            cb(new Error('必须大于前框值'))}else{cb()} }   
+        const reward13Validator = (rule, val, cb) => {if(!val){cb(new Error('数据不能为空'))}else if(parseInt(val)<=parseInt(this.$refs['reward12'].value)){
+            cb(new Error('必须大于前框值'))}else{cb()} }       
+        const reward14Validator = (rule, val, cb) => {if(!val){cb(new Error('数据不能为空'))}else if(parseInt(val)<=parseInt(this.$refs['reward13'].value)){
+            cb(new Error('必须大于前框值'))}else{cb()} }   
+        const reward15Validator = (rule, val, cb) => {if(!val){cb(new Error('数据不能为空'))}else if(parseInt(val)<=parseInt(this.$refs['reward14'].value)){
+            cb(new Error('必须大于前框值'))}else{cb()} }   
+        const reward16Validator = (rule, val, cb) => {if(!val){cb(new Error('数据不能为空'))}else if(parseInt(val)<=parseInt(this.$refs['reward15'].value)){
+            cb(new Error('必须大于前框值'))}else{cb()} }     
 
         return{
         areaName:null,
@@ -429,52 +429,52 @@ export default {
 
            }
    },
-           inputChange(i){
+        inputChange(i){
         switch (i) {
         case 1:
-        this.formAll.reward3 = this.formAll.reward2
+        this.formAll.reward3 = (parseInt(this.formAll.reward2)+1).toString() 
         break;
         case 2:
-        this.formAll.reward2 = this.formAll.reward3
+        this.formAll.reward2 = (parseInt(this.formAll.reward3)-1).toString() 
         break;
         case 3:
-        this.formAll.reward5 = this.formAll.reward4
+        this.formAll.reward5 = (parseInt(this.formAll.reward4)+1).toString() 
         break;
         case 4:
-        this.formAll.reward4 = this.formAll.reward5
+        this.formAll.reward4 = (parseInt(this.formAll.reward5)-1).toString() 
         break;
         case 5:
-        this.formAll.reward7 = this.formAll.reward6
+        this.formAll.reward7 = (parseInt(this.formAll.reward6)+1).toString() 
         break;
         case 6:
-        this.formAll.reward6= this.formAll.reward7
+        this.formAll.reward6= (parseInt(this.formAll.reward7)-1).toString() 
         break; 
         case 7:
-        this.formAll.reward9= this.formAll.reward8
+        this.formAll.reward9= (parseInt(this.formAll.reward8)+1).toString() 
         break;
         case 8:
-        this.formAll.reward8 = this.formAll.reward9
+        this.formAll.reward8 = (parseInt(this.formAll.reward9)-1).toString() 
         break;
         case 9:
-        this.formAll.reward11= this.formAll.reward10
+        this.formAll.reward11= (parseInt(this.formAll.reward10)+1).toString() 
         break; 
         case 10:
-        this.formAll.reward10= this.formAll.reward11
+        this.formAll.reward10= (parseInt(this.formAll.reward11)-1).toString() 
         break;        
         case 11:
-        this.formAll.reward13= this.formAll.reward12
+        this.formAll.reward13= (parseInt(this.formAll.reward12)+1).toString() 
         break;  
         case 12:
-        this.formAll.reward12= this.formAll.reward13
+        this.formAll.reward12= (parseInt(this.formAll.reward13)-1).toString() 
         break;  
         case 13:
-        this.formAll.reward15= this.formAll.reward14
+        this.formAll.reward15= (parseInt(this.formAll.reward14)+1).toString() 
         break;  
         case 14:
-        this.formAll.reward14= this.formAll.reward15
+        this.formAll.reward14= (parseInt(this.formAll.reward15)-1).toString() 
         break;                                                                                        
         }
-         },
+         },   
    change:function(){
       this.dialogFormVisible_add = false;
    },
@@ -507,6 +507,7 @@ export default {
           }, 
           update1:function(){
               data_get_ownerFromsame2_Id(this.params.id).then(res=>{
+                  console.log('111',res)
             this.formAll.reward1 = res.data[0].startPrice;this.formAll.reward2 = res.data[0].endPrice;
             this.formAll.reward3 = res.data[1].startPrice;this.formAll.reward4 = res.data[1].endPrice;
             this.formAll.reward5 = res.data[2].startPrice;this.formAll.reward6 = res.data[2].endPrice;
@@ -629,13 +630,8 @@ export default {
         .swith{
             margin:0px 0px 10px 10px;
             .el-switch{
-                display: inline-block!important;
+                display: inline-block;
             }
-        }
-        .v-dropdown-container{
-          top: 41px!important;
-          left: 0px!important;
-          z-index:101!important;
         }
         .el-dialog__footer{
             padding: 20px 20px 20px;

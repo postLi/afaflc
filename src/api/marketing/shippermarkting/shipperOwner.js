@@ -62,3 +62,11 @@ export function data_get_shipperOwnerFrom_update(data) {
     method: 'get',
   })
 }
+
+ //获取货主奖励上限
+ export function data_get_areaCode_rewardMax(areaCode) {
+  return fetch({
+    url: '/'+baseurl+'/sm/aflcShipperPreferential/v1/address/'+ areaCode,
+    method: 'get',
+  })
+}
