@@ -195,32 +195,15 @@ export default {
                this.$message.warning('生成张数输入框仅能输入正整数');
            }
            else{
-
-
-         console.log()
-
-
         // exportWithIframe('/api/aflcsmservice/sm/aflcCouponUse/v1/produceCoupon/?id='+this.params.id+'&num='+this.num+'&access_token=' + Cookies.get(TokenKey))
-        location.href = ('/api/aflcsmservice/sm/aflcCouponUse/v1/produceCoupon/?id='+this.params.id+'&num='+this.num+'&access_token=' + Cookies.get(TokenKey))
-        return 
          data_get_produceCouponExcel(this.params.id,this.num).then(res=>{
-             this.$message.success('生成成功1111');
+             this.$message.success('生成成功');
              this.dialogFormVisible_add = false;
          }).catch(res=>{
-
-            // window.location.href = 'http://192.168.1.78:7010/aflcsmservice/sm/aflcCouponUse/v1/produceCoupon/?id='+this.params.id+'&num='+this.num+'&access_token='+Cookies.get(TokenKey)
-
+             location.href = ('/api/aflcsmservice/sm/aflcCouponUse/v1/produceCoupon/?id='+this.params.id+'&num='+this.num+'&access_token=' + Cookies.get(TokenKey))
              console.log(res)
-            //  let blob = new Blob([res]);
-            //  let objUrl = window.URL.createObjectURL(blob)
-            //  let link = document.createElement('a')
-            //  link.style.display = 'none'
-            //  link.href = objUrl
-            //  link.setAttribute('download', '33333.xls')
-            //  document.body.appendChild(link)
-            //  link.click()
-            //  this.dialogFormVisible_add = false;
-            //  this.$message.error('生成失败1111')
+             this.dialogFormVisible_add = false;
+             this.$message.success('生成成功')
         })
         }        
        },

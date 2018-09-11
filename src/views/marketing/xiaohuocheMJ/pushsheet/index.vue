@@ -1,6 +1,6 @@
 <template>
-  <div class="shipper clearfix">
-        <div class="shipper_searchinfo" >
+  <div class="pushsheet clearfix">
+        <div class="pushsheet_searchinfo" >
           <el-form :inline="true">
             <el-form-item label="所在地：">
               <GetCityList v-model="formAll.areaCode" ref="area"></GetCityList>
@@ -23,7 +23,7 @@
            </el-form> 
   </div>
 
-  <div class="classify_info">
+  <div class="classify_pushsheetinfo">
    <div class="btns_box">
     <newpushsheet  btntext="新增" :plain="true" type="primary" btntype="primary" icon="el-icon-news" editType="add" btntitle="新增货主"></newpushsheet>
     <el-button type="primary" plain icon="el-icon-bell" @click="handleUseStates">启用/禁用</el-button>
@@ -246,8 +246,7 @@ export default {
 </script>
 
 <style lang="scss">
-.el-input__inner{line-height: 30px!important;height: 30px!important;}
-.shipper{
+.pushsheet{
         height:100%;    
         position: relative;
         .el-tabs{
@@ -259,12 +258,11 @@ export default {
                 }
             }
         }
-        .shipper_searchinfo{
+        .pushsheet_searchinfo{
             position: absolute;
             left:0;
             top:0;
             padding:15px 16px;
-            border-bottom:2px dashed #ccc;
             height:70px;
             width:100%;
             line-height: 35px;
@@ -283,9 +281,9 @@ export default {
                 }
             }
         }
-        .classify_info{
+        .classify_pushsheetinfo{
             height:100%;
-            padding:90px 15px 0 15px;
+            padding:70px 15px 0 15px;
             .btns_box{
                 margin-bottom:10px;
                 .el-button{

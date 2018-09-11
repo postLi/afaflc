@@ -138,7 +138,7 @@ export default {
            console.log('d',d)
            if(d.length<3){
                 if(d.length==2){
-                this.$message.info('请选择具体的城市');
+                this.$message.error('请选择具体的城市');
                 }
                 this.formAllData.areaCode = null;
                 this.formAllData.province = null,
@@ -298,28 +298,6 @@ export default {
 }
 </script>
 <style lang="scss" >
-.export{
-  .el-button{
-    margin-right:20px;
-    padding:10px 20px;
-  }
-}
-.frozeclassify{
-  margin-top: 10px;
-  .info{
-    span{
-      margin-left: 60px;
-      font-size: 16px;
-    }
-    .mc-line{
-      width: 100%;
-      border-bottom: 1px solid #000;
-    }
-    .frozerol{
-      margin: 10px  0 10px 50px;
-    }
-  }
-} 
 .same_shipper{
         height:100%;    
         position: relative;
@@ -335,20 +313,16 @@ export default {
       height: 30px;
       line-height: 30px;
     }
-    .v-dropdown-container{
-        top:35px!important;
-        left:0px!important;
-    }
     .el-button{
       margin-right: 20px;
-      padding: 8px 20px!important;
+      padding: 10px 20px;
     }
 }
 .classify_cityinfo{
     height: 100%;
     padding: 70px 15px 0 15px;
     .commoncss{
-      display: inline-block!important;
+      display: inline-block;
     }
     .btns_box{
     margin-bottom: 10px;
@@ -362,7 +336,7 @@ export default {
     }
     .el-button{
       margin-right: 20px;
-      padding: 8px 20px!important;
+      padding: 10px 20px;
     }
 }
 .info1_tab_footer{

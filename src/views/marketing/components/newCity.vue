@@ -469,7 +469,7 @@ export default {
         .swith{
             margin:0px 0px 10px 10px;
             .el-switch{
-                display: inline-block!important;
+                display: inline-block;
             }
         }
         .el-dialog__footer{

@@ -1,6 +1,6 @@
 <template>
-  <div class="shipper clearfix">
-        <div class="shipper_searchinfo" >
+  <div class="onesource clearfix">
+        <div class="onesource_searchinfo" >
           <el-form :inline="true">
             <el-form-item label="所在地：">
               <GetCityList v-model="formAll.areaCode" ref="area"></GetCityList>
@@ -25,9 +25,8 @@
          </el-form-item>
            </el-form> 
   </div>
-  <div class="classify_info">
+  <div class="classify_onesourceinfo">
    <div class="btns_box">
-
   <!-- 马甲单新增 -->
   <div class="vestDialogBox">
  <div class="vestonceDialog commoncss">
@@ -156,7 +155,7 @@
             <el-input v-model="selectRowData.serivceCode" disabled></el-input>
            </el-form-item>
             <el-form-item label="服务类型：" :label-width="formLabelWidth" v-else>
-         <el-select v-model="selectRowData.serivceCode" clearable placeholder="请选择">
+         <el-select v-model="selectRowData3.serivceCode" clearable placeholder="请选择">
                         <el-option
                          v-for="item in serviceCardList"
                         :key="item.id"
@@ -172,7 +171,7 @@
              <el-input v-model="selectRowData.districtName" disabled></el-input>
            </el-form-item>
            <el-form-item label="片区名称：" :label-width="formLabelWidth" v-else>
-          <el-input @focus="()=>{showMap('selectdistrictName')}" v-model="selectRowData.districtName"></el-input>
+          <el-input @focus="()=>{showMap('selectdistrictName')}" v-model="selectRowData3.districtName"></el-input>
            </el-form-item>
             </el-col>
               </el-row>
@@ -182,7 +181,7 @@
              <el-input v-model="selectRowData.districtAddress"  disabled></el-input>
             </el-form-item>
              <el-form-item label="中心地址：" :label-width="formLabelWidth" v-else>
-             <el-input @focus="()=>{showMap('selectdistrictAddress')}" v-model="selectRowData.districtAddress"></el-input>
+             <el-input @focus="()=>{showMap('selectdistrictAddress')}" v-model="selectRowData3.districtAddress"></el-input>
             </el-form-item>
             </el-col>
              <el-col :span="12">
@@ -195,14 +194,10 @@
                  </span>
                  <span v-else>
                     <el-form-item label="省市：" :label-width="formLabelWidth" prop="areaCode">
-                 <el-input v-model="selectRowData.areaName"  @focus="changeSelect" v-if="openFlag !==0 && !selectFlag"></el-input>
-                <GetCityList ref="area2" v-model="selectRowData.areaCode"  @focus="changeSelect" v-else></GetCityList>
+                 <el-input v-model="selectRowData3.areaName"  @focus="changeSelect" v-if="openFlag !==0 && !selectFlag"></el-input>
+                <GetCityList ref="area2" v-model="selectRowData3.areaCode"  @focus="changeSelect" v-else></GetCityList>
                     </el-form-item>
                  </span>
-
-
-
-
             </el-col>
             </el-row>
              </el-form>    
@@ -325,7 +320,7 @@
 
 <script>
 import { data_ServerClassList} from '@/api/server/areaPrice.js'
-import  { data_get_onesource_list,data_add_onesource_list,data_Del_onesource,data_UseStates_onesource,data_get_onesourceAddress_list,data_Del_onesourceAddress,data_get_onesource_Id,data_get_onesource_update,data_get_onesource_addDetailAddress} from '@/api/vest/onesource/onesource.js'
+import  { data_get_onesource_list,data_add_onesource_list,data_Del_onesource,data_UseStates_onesource,data_get_onesourceAddress_list,data_Del_onesourceAddress,data_get_onesource_Id,data_get_onesource_update,data_get_onesource_addDetailAddress,data_get_aflcVestUnisource_Id} from '@/api/vest/onesource/onesource.js'
 import { parseTime,formatTime } from '@/utils/index.js'
 import Pager from '@/components/Pagination/index'
 import GetCityList from '@/components/GetCityList'
@@ -382,6 +377,7 @@ export default {
         viewStatus:'add',
         selectRowData:{},
         selectRowData2:{},
+        selectRowData3:{},
         selectId:[],
         driverTemplateDialogFlag:false,
         driverTemplateDialogFlag2: false,
@@ -608,6 +604,9 @@ export default {
          }
          else{
          this.openFlag='1';
+         data_get_aflcVestUnisource_Id(this.selectRowData.id).then(res=>{
+            this.selectRowData3 = res.data
+         })
          this.firstblood2()
          this.driverTemplateDialogFlag2=true;
          }
@@ -826,16 +825,16 @@ export default {
                     })
                     province.children.forEach( item => {
                         if(item.code == this.$refs.area2.selectedOptions[1]){
-                            this.selectRowData.areaCode = item.code;
-                            this.selectRowData.areaName = item.name;
+                            this.selectRowData3.areaCode = item.code;
+                            this.selectRowData3.areaName = item.name;
                             console.log('item.name',item.name)
                         }
                     })
                 }else{
                     this.$refs.area2.areaData.forEach((item) =>{
                         if(item.code == this.$refs.area2.selectedOptions[0]){
-                            this.selectRowData.areaCode = item.code;
-                            this.selectRowData.areaName = item.name;
+                            this.selectRowData3.areaCode = item.code;
+                            this.selectRowData3.areaName = item.name;
                             console.log('item.name',item.name)
                         }
                     })
@@ -906,9 +905,9 @@ export default {
         // 修改保存
         changeInfoSave2(){
             this.completeData1()
-            this.selectRowData.flcVestUnisourceAddressaList=this.tableDataTree1;
-             console.log('this.selectRowData',this.selectRowData);
-            data_get_onesource_update(this.selectRowData).then(res=>{
+            this.selectRowData3.flcVestUnisourceAddressaList=this.tableDataTree1;
+             console.log('this.selectRowData3',this.selectRowData3);
+            data_get_onesource_update(this.selectRowData3).then(res=>{
             console.log(res)
                 this.firstblood()
                 this.driverTemplateDialogFlag2 = false;
@@ -952,8 +951,7 @@ export default {
 </script>
 
 <style lang="scss">
-.el-input__inner{line-height: 30px!important;height: 30px!important;}
-.shipper{
+.onesource{
         height:100%;    
         position: relative;
         .el-tabs{
@@ -965,12 +963,11 @@ export default {
                 }
             }
         }
-        .shipper_searchinfo{
+        .onesource_searchinfo{
             position: absolute;
             left:0;
             top:0;
             padding:15px 16px;
-            border-bottom:2px dashed #ccc;
             height:70px;
             width:100%;
             line-height: 35px;
@@ -989,9 +986,9 @@ export default {
                 }
             }
         }
-        .classify_info{
+        .classify_onesourceinfo{
             height:100%;
-            padding:90px 15px 0 15px;
+            padding:70px 15px 0 15px;
             .btns_box{
                 margin-bottom:10px;
                 .el-button{
@@ -1076,11 +1073,11 @@ export default {
     background-color: #0b4b7c;
     }
     .price_one{
-            width:105px!important;
+            width:105px;
             margin-right: 10px;
     }
     .price_two{
-            width:105px!important;
+            width:105px;
             margin-left: 10px;
     }    
     .vestOrder{
@@ -1159,11 +1156,11 @@ export default {
     width: 250px;
     }
     .price_one{
-            width:105px!important;
+            width:105px;
             margin-right: 10px;
     }
     .price_two{
-            width:105px!important;
+            width:105px;
             margin-left: 10px;
     }    
     .vestOrder{

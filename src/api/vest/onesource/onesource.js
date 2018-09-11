@@ -63,6 +63,11 @@ export function data_get_onesourceAddress_list(page,pagesize,data) {
     }
   })
 }
+//id获取马甲单源表
+export function data_get_aflcVestUnisource_Id(id) {
+  return fetch.get('/' + baseurl_one+'/sm/aflcVestUnisource/v1/' + id)
+
+}
 
 
 //id获取马甲单源表

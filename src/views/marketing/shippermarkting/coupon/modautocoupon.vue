@@ -438,7 +438,7 @@ export default {
          handleChange1(d){
            console.log('d',d)
            if(d.length<3){
-                this.$message.info('请选择具体的城市');
+                this.$message.error('请选择具体的城市');
                 this.formAllData.aflcCouponList[this.inputKey].areaName = [];
                 this.formAllData.aflcCouponList[this.inputKey].areaCode = [];
                 this.formAllData.aflcCouponList[this.inputKey].province = null
@@ -543,7 +543,13 @@ export default {
               console.log(this.formAllData.aflcCouponList[i].endTime)
               this.formAllData.aflcCouponList[i].endTime  = new Date(this.formAllData.aflcCouponList[i].endTime).getTime()
               this.formAllData.aflcCouponList[i].areaName1= this.formAllData.aflcCouponList[i].province+this.formAllData.aflcCouponList[i].city+this.formAllData.aflcCouponList[i].area
+          if(this.formAllData.aflcCouponList[i].area==null){
+         this.formAllData.aflcCouponList[i].areaName1 =this.formAllData.aflcCouponList[i].province+this.formAllData.aflcCouponList[i].city
           }
+          else{
+         this.formAllData.aflcCouponList[i].areaName1 =this.formAllData.aflcCouponList[i].province+this.formAllData.aflcCouponList[i].city+this.formAllData.aflcCouponList[i].area
+          }
+        }
          })
          this.dialogFormVisible_add = true;
         }
