@@ -205,9 +205,6 @@ import { data_taskExecuteList,data_removeTaskExecute } from '@/api/task/taskExec
                 color: #444;
                 font-weight: normal;
             }
-            .el-button{
-
-            }
         }
         .registryStyle{
             display: inline-block;

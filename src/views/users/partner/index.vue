@@ -980,7 +980,6 @@
             padding:10px 30px;
             border-bottom:1px solid #ccc;
             label{
-                margin-right:50px;
                 .el-input{
                     width:300px;
                 }

@@ -410,6 +410,7 @@
                     if(val) {
                         this.query = '';
                         this.$nextTick(()=>that.$refs.input.focus({preventScroll:true}));
+                        // this.clear();
                     }
                 }
             },

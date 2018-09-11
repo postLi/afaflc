@@ -622,7 +622,6 @@ import '../../../styles/dialog.scss'
             width:100%;
             line-height: 35px;
             label{
-                margin-right:50px;
                 color: #666;
                 font-size:14px;
                 .el-input{

@@ -129,6 +129,8 @@ export default {
             this.upload.key = data.dir + this.random_string() + type
         }).catch(err => {
         })
+
+        // console.log(' this.upload.key', this.upload)
     },
     rmImage() {
       this.emitInput('')

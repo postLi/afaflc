@@ -1,6 +1,5 @@
 .commoncss{
     .el-dialog{
-        margin-top: 15vh !important;
         max-height:80%;
         overflow:auto;
         border-radius: 10px 10px 0px 0px;
@@ -21,7 +20,6 @@
             background-color: #0b4b7c;
             .el-dialog__title{
                 height: 13px;
-                font-family: MicrosoftYaHei;
                 font-size: 13px;
                 font-weight: normal;
                 font-stretch: normal;
@@ -36,25 +34,6 @@
         }
         .el-dialog__body{
             padding: 20px 0;
-            .xx{
-                display: block;
-                width: 16px;
-                height: 18px;
-                font-family: element-icons !important;
-                line-height: 18px;
-                font-size: 16px;
-                color: #909399;
-                position:absolute;
-                right: 8px;
-                top: 13px;
-                z-index: 9999;
-                text-align: center;
-                cursor: pointer;
-                &:hover {
-                    color: #3e9ff1;
-                    
-                }
-            }
             .addItem{
                 display:inline-block;
                 height: 26px;
@@ -90,21 +69,9 @@
                     }
                 }
                 .el-form-item{
-                    display:inline-block;
+                    display:inline-block;//这里要做修改
                     border:0 none;
-                    margin-bottom:12px;
                     position: relative;
-                    // &::before{
-                    //     content: "*";
-                    //     color:red;
-                    //     height: 100%;
-                    //     width: 1px;
-                    //     // background-color: #4c6578;
-                    //     position: absolute;
-                    //     top: 10px;
-                    //     left: 20px;
-
-                    // }
                     .el-form-item__label{
                         font-size:14px;
                         padding:1px 5px 0 0;
@@ -122,9 +89,12 @@
                                 line-height: 30px;
                             }
                         }
+                        .el-date-editor{
+                            .el-input__inner{
+                                padding: 2px 35px;
+                            }
+                        }
                     }
-                    
-                    
                 }
             }
         }
@@ -144,9 +114,6 @@
                     height: 12px;
                 }
             }
-            .el-radio__label{
-
-            }
         }
         .el-radio+.el-radio{
             margin-left: 25px;
@@ -156,7 +123,6 @@
 
 .cue{
     .el-dialog{
-        // margin-top: 10vh !important;
         width:340px;
         height:105px;
         background-color: #fffcd8;
@@ -186,9 +152,6 @@
 
 .delData{
     .el-dialog{
-        // margin-top:15vh !important;
-        // width: 486px;
-	    // height: 195px;
 	    background-color: #ffffff;
 	    box-shadow: 0px 0px 15px 0px 
 		rgba(0, 0, 0, 0.32);
@@ -216,7 +179,6 @@
             }
         }
         .el-dialog__body{
-            // padding:45px 0 0 84px;
             p{
                 text-align: center;
                 margin-bottom: 20px;
@@ -262,37 +224,6 @@
 
 .el-tree{
     .el-tree-node{
-
-        // .el-tree-node__content{
-        //     position: relative;
-        //     &::before{
-        //         content: "";
-        //         height: 100%;
-        //         width: 1px;
-        //         background-color: #4c6578;
-        //         position: absolute;
-        //         top: 0;
-        //         left: 10px;
-        //     }
-        //     &:before{
-        //         height:15px;
-        //     }
-
-        //     &::after{
-        //         content: "";
-        //         width: 8px;
-        //         height: 1px;
-        //         background-color: #4c6578;
-        //         position: absolute;
-        //         top: 15px;
-        //         left: 10px;
-        //     }
-        //     &:after{
-
-        //     }
-        //     .el-tree-node__children{
-
-        //     }
-        // }
+       
     }
 }

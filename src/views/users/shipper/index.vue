@@ -1,5 +1,5 @@
 <template>
-  <div class="shipper tabsWrap">
+  <div class="huozhu tabsWrap">
     <el-tabs v-model="shipperName" type="card" @tab-click="handleClick" >
         <!-- 全部 -->
             <el-tab-pane label="全部" name="first">
@@ -42,7 +42,7 @@
     // import ShipperBlacklist from '../components/ShipperBlacklist.vue'
      
     export default {
-      name:'shipper',
+      name:'huozhu',
       components:{
           ShipperAll,
           ShipperUnauthorized,
@@ -88,7 +88,7 @@
 
 <style type="text/css" lang="scss">
   
-    .shipper{
+    .huozhu{
         height:100%;    
         position: relative;
         .el-tabs--card>.el-tabs__header .el-tabs__item.is-active {

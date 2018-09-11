@@ -9,7 +9,6 @@
             <h2>与装卸点距离</h2>
         </div>
         <div class="orderTrackInfo orderTrackStyle" v-for="(item,key) in listInformation" :key="key">
-            {{key}}{{listInformation.length-1}}
             <p :class="{current: key == 0 ,cancel:key ==  (listInformation.length-1)}"><i></i><span>{{item.createTime | parseTime}}</span></p>
             <p>{{item.address}}</p>
             <p>{{item.address}}</p>

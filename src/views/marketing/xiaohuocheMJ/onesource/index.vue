@@ -991,7 +991,7 @@ export default {
         }
         .classify_info{
             height:100%;
-            padding:90px 15px 0 15px!important;
+            padding:90px 15px 0 15px;
             .btns_box{
                 margin-bottom:10px;
                 .el-button{

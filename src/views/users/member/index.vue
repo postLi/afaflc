@@ -131,9 +131,7 @@
 
             .otherServiceTD{
                 text-align: left;
-                // white-space: nowrap;  
-                // text-overflow:ellipsis; 
-                // overflow:hidden;
+              
             }
             .otherService{
                 text-align: center;

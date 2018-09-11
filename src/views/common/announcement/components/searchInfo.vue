@@ -3,11 +3,11 @@
         <el-form :model="searchInfo" ref="ruleForm" class="demo-ruleForm classify_searchinfo">
                 <el-form-item label="区域" prop="pointName">
                     <vregion :ui="true" @values="regionChange" class="form-control">
-                        <el-input v-model="searchInfo.city" placeholder="请选择出发地" clearable></el-input>
+                        <el-input v-model="searchInfo.belongCityName" placeholder="请选择出发地" clearable></el-input>
                     </vregion>
                 </el-form-item>
                 <el-form-item label="标题" prop="orderSerial">
-                    <el-input v-model="searchInfo.title" clearable>
+                    <el-input v-model="searchInfo.title" placeholder="请输入标题内容" clearable>
                     </el-input>
                 </el-form-item>
                 <el-form-item class="btnChoose fr"  style="margin-left:0;">
@@ -34,16 +34,19 @@ import vregion from '@/components/vregion/Region'
                     shortcuts:pickerOptions2
                 },
                 searchInfo:{
-                    city: "",//区域
+                    belongCityName: "",//区域
                     title:'',//标题
-                   
+                    province:'',
+                    city:'',
                 },
             }
         },
         methods: {
             regionChange(d) {
                 console.log('data:',d)
-                this.searchInfo.belongCity = (!d.province&&!d.city&&!d.area&&!d.town) ? '': `${this.getValue(d.province)}${this.getValue(d.city)}${this.getValue(d.area)}${this.getValue(d.town)}`.trim();
+                this.searchInfo.belongCityName = (!d.province&&!d.city&&!d.area&&!d.town) ? '': `${this.getValue(d.province)}${this.getValue(d.city)}${this.getValue(d.area)}${this.getValue(d.town)}`.trim();
+                this.searchInfo.province = d.province ? d.province.code : '';
+                this.searchInfo.city = d.city ? d.city.code : '';
             },
             getValue(obj){
                 return obj ? obj.value:'';
@@ -57,8 +60,10 @@ import vregion from '@/components/vregion/Region'
                         break;
                     case 'clear':
                         this.searchInfo = {
-                            city: "",//区域
+                            belongCityName: "",//区域
                             title:'',//标题
+                            province:'',
+                            city:'',
                         }
                         searchObj = this.searchInfo ;
                         break;

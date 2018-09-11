@@ -27,7 +27,7 @@
         type="number"
         ref="input"
         :disabled="pages <= 1"
-        @keyup="handleKeyup"
+        @keydown.native="handleKeyup"
         @change="handleChange"
         @focus="handleFocus"
         @blur="handleBlur"/> 页
@@ -40,12 +40,11 @@
       <span class="last-page"></span>
     </span>
     <span class="tms-pagination__sizes">
-      <el-select class="page-select" v-model="size" placeholder="请选择">
+      <el-select class="page-select" @change="sizesChange" v-model="size" placeholder="请选择">
         <el-option
           v-for="(item,index) in sizes"
           :key="index"
           :label="item"
-          :disabled="pages <= 1"
           :value="item">
         </el-option>
       </el-select>
@@ -57,7 +56,7 @@ export default {
   props: {
     sizes: {
       type: Array,
-      default: () => [20, 50, 100, 200]
+      default: () => [20, 50, 100, 400,]
     },
     total: {
       type: Number,
@@ -77,21 +76,29 @@ export default {
       this.pageNum = 1
     }
   },
+  mounted() {
+    this.size = this.sizes[0]
+  },
   data() {
     return {
       pageNum: 1,
       oldValue: 0,
       inputval: 1,
       oldNum: 1,
-      size: 20
+      size: 100
     }
-  },
-  mounted() {
-    this.size = this.sizes[0]
   },
   methods: {
     handleFocus(event) {
       this.oldValue = event.target.value
+    },
+    sizesChange() {
+      this.pageNum = 1
+      this.oldNum = this.pageNum
+      this.$emit('change', {
+        pageNum: this.pageNum,
+        pageSize: this.size
+      })
     },
     changeEvent() {
       // 判断页码是否实际发生了变化
@@ -133,7 +140,7 @@ export default {
       this.jumpTo(this.inputval)
     },
     handleKeyup({ keyCode, target }) {
-      console.log(keyCode, target)
+      console.log('page keydown:', keyCode, target)
       if (keyCode === 13 && this.oldValue && target.value !== this.oldValue) {
         this.handleChange(target.value)
         this.oldValue = ''
@@ -239,21 +246,11 @@ $borderWidth: 6px;
   
 </style>
 <style lang="scss">
-    .tms-pagination__sizes .el-input .el-input__inner:hover {
-        border-color: #409EFF;
-    }
-    .tms-pagenation .el-select .el-input{
-    width: 70px;
-    margin: 0 5px;
-
-    }
-
-    .page-jumper{
-        &>.el-pagination__editor{
-            .el-input__inner{
-                padding:0;
-                text-align:center;
-            }
-        }
-    }
+.tms-pagination__sizes .el-input .el-input__inner:hover {
+    border-color: #409EFF;
+}
+.tms-pagenation .el-select .el-input{
+  width: 70px;
+  margin: 0 5px;
+}
 </style>

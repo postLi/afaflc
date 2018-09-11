@@ -16,7 +16,8 @@
     import 'tinymce/plugins/textcolor'
     import 'tinymce/plugins/colorpicker'
     import { getUploadPolicy } from '@/api/common'
-    import fetch from '@/utils/fetch'
+    import axios from 'axios'
+    import { parseTime } from '@/utils/'
 
     const INIT = 0
     const CHANGED = 2
@@ -29,10 +30,10 @@
         required: true
       },
       setting: {},
-    //   url: { // 接口
-    //     default: '',
-    //     type: String
-    //   },
+      url: { // 接口
+        default: '',
+        type: String
+      },
       accept: { // 文件类型
         default: 'image/jpeg, image/png',
         type: String
@@ -44,7 +45,11 @@
       withCredentials: {
         default: false,
         type: Boolean
-      }
+      },
+    //   uploadAli:{
+    //       type:Object,
+    //       default:{},
+    //   }
     },
     watch: {
       value: function(val) {
@@ -56,21 +61,36 @@
       }
     },
     data() {
-      return {
-        status: INIT,
-        id: 'editor-' + new Date().getMilliseconds(),
-        upload: {
-        'key': '', // 文件名称
-        'policy': '',
-        'OSSAccessKeyId': '',
-        'success_action_status': '201', // 让服务端返回200,不然，默认会返回204;201会返回xml格式
-        // 'callback': 'callbackbody',
-        'signature': ''
-        },
-        uploadUrl: '',
+        return {
+            status: INIT,
+            id: 'editor-' + new Date().getMilliseconds(),
+            uploadAli:{
+                'key': '', // 文件名称
+                'policy': '',
+                'OSSAccessKeyId': '',
+                'success_action_status': '201', // 让服务端返回200,不然，默认会返回204;201会返回xml格式
+                // 'callback': 'callbackbody',
+                'signature': '',
+                'dir':''
+            },
+            dir:'',
+            uploadUrl: '',
         }
     },
     methods: {
+        init() {
+            // 从后台获取policy
+            getUploadPolicy().then(data => {
+                this.uploadAli.OSSAccessKeyId = data.accessid
+                this.uploadAli.policy = data.policy
+                this.uploadAli.signature = data.signature
+                this.uploadUrl = data.host
+                this.dir = data.dir
+                this.uploadAli.key = data.dir + this.random_string() + type
+            }).catch(err => {
+            })
+            console.log()
+        },
          // 设置随机的文件名
         random_string(len) {
         　　len = len || 32
@@ -78,36 +98,23 @@
         　　var maxPos = chars.length
         　　var pwd = ''
         　　for (var i = 0; i < len; i++) {
-             pwd += chars.charAt(Math.floor(Math.random() * maxPos))
+                pwd += chars.charAt(Math.floor(Math.random() * maxPos))
             }
             return pwd
         },
-        getAliPolicy(){
-            getUploadPolicy().then(data => {
-                this.upload.OSSAccessKeyId = data.accessid
-                this.upload.policy = data.policy
-                this.upload.signature = data.signature
-                this.uploadUrl = data.host
-                this.dir = data.dir
-                this.upload.key = data.dir + this.random_string() + type
-            }).catch(err => {
-    
-            })
-            
-        }
 
-        
     },
     mounted() {
-      const _this = this
+        const _this = this
+        _this .init();
       const setting =
       {
         menubar: true,
-        branding: false,
+        branding: false,//是否显示POWERED BY TINYMCE
         visualblocks_default_state: true,
         end_container_on_empty_block: true,
         selector: '#' + _this.id,
-        upload_image_url: '/upload/cloud', // 配置的上传图片的路由
+        images_upload_url: _this.uploadUrl,
         language_url: '../../../static/tinymce/zh_CN.js',
         language: 'zh_CN',
         skin_url: '../../../static/tinymce/skins/lightgray',
@@ -177,12 +184,41 @@
             Verdana=verdana,geneva;
             Webdings=webdings;
             Wingdings=wingdings,zapf dingbats`,
-
+        setup: function (editor) {
+            editor.addButton('mybutton', {
+                text: '上传图片',
+                icon: false,
+                onclick: function () {
+                    tinymceEditor = editor;
+                    $("#uploadofedit").dialog({
+                        modal: false,
+                        resizable: false,
+                        width: 400,
+                        height: 200,
+                        dialogClass: "mceuploadify"
+                    });
+                }
+            });
+        },
+         //TinyMCE 会将所有的 font 元素转换成 span 元素
+        convert_fonts_to_spans: true,
+        //换行符会被转换成 br 元素
+        convert_newlines_to_brs: false,
+        //在换行处 TinyMCE 会用 BR 元素而不是插入段落
+        force_br_newlines: false,
+        //当返回或进入 Mozilla/Firefox 时，这个选项可以打开/关闭段落的建立
+        force_p_newlines: false,
+        //这个选项控制是否将换行符从输出的 HTML 中去除。选项默认打开，因为许多服务端系统将换行转换成 <br />，因为文本是在无格式的 textarea 中输入的。使用这个选项可以让所有内容在同一行。
+        remove_linebreaks: false,
+        //不能把这个设置去掉，不然图片路径会出错
+        relative_urls: false,
+        //不允许拖动大小
+        resize: false,
         // 图片上传
         images_upload_handler: function(blobInfo, success, failure) {
           // failure(blobInfo)
           // _this.$emit('on-ready', blobInfo.blob().size, blobInfo.blob())
-          console.log('blobInfo',blobInfo)
+          console.log('blobInfo',blobInfo,)
           if (blobInfo.blob().size > _this.maxSize) {
             failure('文件体积过大')
           }
@@ -191,16 +227,21 @@
           } else {
             failure('图片格式错误')
           }
-          function uploadPic() { // 发送请求
-            console.log('11111111111111',_this)
-            _this.getAliPolicy();
-
-            console.log('_this.url',_this.uploadUrl)
+            let type = blobInfo.filename().match(/([^\.]+)$/)
+            type = type ? '.' + type[1] : ''
+            console.log('_this.uploadAli',_this.uploadAli)
+        function uploadPic() { // 发送请求
             let formData = new FormData();
             // 服务端接收文件的参数名，文件数据，文件名
-            formData.append('upfile', blobInfo.blob(), blobInfo.filename(),_this.upload)
+            formData.append('key',  _this.dir + parseTime(new Date(), '{y}{m}{d}') + '/' + _this.random_string() + blobInfo.filename());
+            formData.append('OSSAccessKeyId',  _this.uploadAli.OSSAccessKeyId);
+            formData.append('policy', _this.uploadAli.policy);
+            formData.append('signature',  _this.uploadAli.signature);
+            formData.append('success_action_status',  _this.uploadAli.success_action_status);
+            formData.append('file', blobInfo.blob(),blobInfo.filename());
+
             console.log('formData',formData)
-            fetch({
+            axios({
                 method: 'POST',
                 // 这里是你的上传地址
                 url: _this.uploadUrl ,
@@ -208,10 +249,17 @@
             })
             .then((res) => {
             // 这里返回的是你图片的地址
-            success(res)
+                // console.log('上传成功的回调',res.data)
+                let url = ''
+                if (res.data.indexOf('Location') !== -1) {
+                    url = res.data.match(/<Location>([^<]+)<\/Location>/m)
+                    url = url ? url[1] : ''
+                }
+                console.log('上传成功的链接',url)
+                success(url);
             })
-            .catch(() => {
-            failure('上传失败')
+            .catch((err) => {
+                failure('上传失败',err)
             })
             // const xhr = new XMLHttpRequest()
             // const formData = new FormData()
@@ -239,19 +287,9 @@
           }
         }
       }
-      Object.assign(setting, _this.setting)
+        Object.assign(setting, _this.setting)
  
         tinymce.init(setting);
-        // 从后台获取policy
-        getUploadPolicy().then(data => {
-            this.upload.OSSAccessKeyId = data.accessid
-            this.upload.policy = data.policy
-            this.upload.signature = data.signature
-            this.uploadUrl = data.host
-            this.dir = data.dir
-            this.upload.key = data.dir + this.random_string() + type
-        }).catch(err => {
-        })
     },
     beforeDestroy: function() {
       tinymce.get(this.id).destroy()

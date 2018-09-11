@@ -3,7 +3,7 @@
         <!-- 指派司机 -->
         <div class="newAnnounce commoncss">
             <el-dialog title='指派司机' :close-on-click-modal="false"   :visible="dialogFormVisible" @close="close">
-                <el-form :model="announce" :label-position="labelPosition" ref="ruleForm" label-width="80px" class="demo-ruleForm">
+                <el-form :model="announce" :rules="rules" :label-position="labelPosition" ref="ruleForm" label-width="80px" class="demo-ruleForm">
                     <el-form-item label="发布区域" prop="noticeLocation">
                         <vregion :ui="true" :area="false" @values="regionChange" class="form-control">
                             <el-input v-model="announce.noticeLocation" placeholder="请选择出发地" clearable></el-input>
@@ -13,10 +13,10 @@
                         <el-input v-model="announce.title" maxlength="30" clearable >
                         </el-input>
                     </el-form-item>
-                    <el-form-item prop="titleLogo" label="标题图片">
+                    <el-form-item prop="titleLogo" label="标题图片" >
                         <upload class="licensePicture" tip="（必须为jpg/png并且小于5M）" v-model="announce.titleLogo"  />
                     </el-form-item>
-                    <el-form-item label="内容" class="editors">
+                    <el-form-item label="内容" class="editors" prop="noticeContent">
                         <div>
                             <editor
                                 class="editor"
@@ -34,7 +34,7 @@
                     <el-form-item label="链接" prop="noticeUrl">
                         <el-input v-model="announce.noticeUrl"></el-input>
                     </el-form-item>
-                    <el-form-item >
+                    <el-form-item prop="release">
                         <el-checkbox v-model="releaseDriver" >发布到车主端</el-checkbox>
                         <el-checkbox v-model="releaseShipper" >发布到货主端</el-checkbox>
                     </el-form-item>
@@ -48,7 +48,7 @@
                             </el-option>
                         </el-select>
                     </el-form-item>
-                    <el-form-item label="有效期">
+                    <el-form-item label="有效期" prop="startTime">
                        <el-date-picker
                         v-model="announce.startTime"
                         type="date"
@@ -64,12 +64,12 @@
                         format="yyyy 年 MM 月 dd 日"
                         value-format="timestamp">
                         </el-date-picker>
+                        <el-checkbox v-model="isTop" >置顶</el-checkbox>
                     </el-form-item>
                 </el-form>
-
                 <div slot="footer" class="dialog-footer">
-                    <el-button type="primary" @click="submitForm('ruleForm')">立即创建</el-button>
-                    <el-button @click="resetForm('ruleForm')">重置</el-button>
+                    <el-button type="primary" @click="submitForm('ruleForm')">{{operateType == 'publish' ? '立即发布' : '保存修改'}}</el-button>
+                    <el-button @click="close">重置</el-button>
                 </div> 
             </el-dialog>
         </div>
@@ -78,12 +78,10 @@
 <script>
 
 import { getDictionary } from '@/api/common.js'
-import { appointDriverList,nearDriverList, } from '@/api/order/ordermange.js'
 import vregion from '@/components/vregion/Region'
 import editor from '@/components/tinymac/index'
-import { getUploadPolicy } from '@/api/common'
 import upload from '@/components/Upload/singleImage'
-import { newNotice } from '@/api/company/announcement.js'
+import { newNotice,updateNotice } from '@/api/company/announcement.js'
 
 export default {
     name: 'newAnnounce',
@@ -92,6 +90,13 @@ export default {
             type:Boolean,
             required:true,
         },
+        announceForm:{
+            type:Object,
+        },
+        operateType:{
+            type:String,
+            default:'publish'
+        }
     },
     components:{
         vregion,
@@ -100,9 +105,17 @@ export default {
 
     },
     data() {
+        var checkRelease = (rule, value, callback) => {
+            if (!this.releaseDriver && !this.releaseShipper) {
+                callback(new Error('至少选择一项'));
+            } else {
+                callback();
+            }
+        };
         return {
             releaseDriver:false,//发布到车主分组
             releaseShipper:false,//发布到货主分组
+            isTop:false,//是否置顶
             noticeGroupCode:'AF045',
             labelPosition:'left',
             announce:{
@@ -118,17 +131,40 @@ export default {
                 noticeGroupCode:'',//车主端公告分组
                 startTime:'',
                 endTime:null,
+                isTop:'0',//是否置顶
             },
             optionsGroupCode:[],
             announceTime:[],
             editorSetting: { // 配置富文本编辑器高
                 height: 300
             },
-            Url: '', // 图片对应的上传地址
+            Url: '', // 图片对应的上传地址,不传!
             MaxSize: 2097152, // 文件大小
             Accept: 'image/jpeg, image/png', // 文件格式
             withCredentials: true,
-           
+            rules: {
+                noticeLocation: [
+                    { required: true, message: '请选择发布区域', trigger: 'change' },
+                ],
+                title: [
+                    { required: true, message: '请填写标题', trigger: 'change' }
+                ],
+                titleLogo: [
+                    { required: true, message: '请上传标题图片', trigger: 'change' }
+                ],
+                noticeContent: [
+                    { required: true, message: '请填写公告内容', trigger: 'change' }
+                ],
+                noticeGroupCode: [
+                    { required: true, message: '请选择车主端公告分组', trigger: 'change' }
+                ],
+                startTime: [
+                    { required: true, message: '请选择有效期开始时间', trigger: 'change' }
+                ],
+                release:[
+                    {required: true, validator: checkRelease, trigger: 'blur'}
+                ]
+            }
         };
     },
     computed: {
@@ -140,9 +176,18 @@ export default {
                 this.init();
             }
         },
+        announceForm(newValue,oldValue){
+            console.log('+++++++++',newValue,oldValue)
+            if(Object.keys(newValue).length != 0){
+                this.announce = newValue;
+                this.releaseDriver= newValue.releaseDriver == '0' ? false :true;//发布到车主分组
+                this.releaseShipper= newValue.releaseShipper == '0' ? false :true;//发布到货主分组
+                this.isTop= newValue.isTop == '0' ? false :true;//是否置顶
+            }
+        },
         releaseDriver:{
             handler(curVal,oldVal){
-                console.log(curVal);
+                // console.log(curVal);
                 if(curVal){
                     this.announce.releaseDriver = '1'
                 }else{
@@ -153,7 +198,7 @@ export default {
         },
         releaseShipper:{
             handler(curVal,oldVal){
-                console.log(curVal);
+                // console.log(curVal);
                 if(curVal){
                     this.announce.releaseShipper = '1'
                 }else{
@@ -161,7 +206,18 @@ export default {
                 }
             },
             deep: true, 
-        }
+        },
+        isTop:{
+            handler(curVal,oldVal){
+                // console.log(curVal);
+                if(curVal){
+                    this.announce.isTop = '1'
+                }else{
+                    this.announce.isTop = '0'
+                }
+            },
+            deep: true, 
+        },
     },
     mounted(){
 
@@ -178,16 +234,12 @@ export default {
         },
         //初始化选择项数据
         init(){
-            getUploadPolicy().then(res => {
-                console.log('upload',res)
-                this.Url = res.host
-            });
             getDictionary(this.noticeGroupCode).then(res => {
                 this.optionsGroupCode = res.data;
             });
 
             this.announce.startTime = Date.parse(new Date());;
-            console.log('this.announce.startTime',this.announce.startTime)
+            // console.log('this.announce.startTime',this.announce.startTime)
         },
         editors(content) { // editor组件传过来的值赋给content
             console.log(content)
@@ -201,20 +253,49 @@ export default {
         onEditorUploadComplete(json) { // 处理上传图片后返回数据，添加img标签到编辑框内
             console.log('json')
             console.log(json)
-            console.log(json[0].data.filePath)
+            // console.log(json[0].data.filePath)
             this.announce.noticeContent = this.announce.noticeContent + '<img src=' + json[0].data.filePath + '>';
         },
         submitForm(formName) {
             this.$refs[formName].validate((valid) => {
-                newNotice(this.announce).then(res => {
-                    console.log(res)
+            if (valid) {
+                let announceform = Object.assign({},this.announce);
+                console.log('announceform',announceform);
+                let config = this.operateType == 'publish' ? '确定要将发布该条公告吗？' : '确定要修改该条公告吗？'
+                this.$confirm(config, '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(()=>{
+                    let noticeFuncton;
+                    if(this.operateType == 'publish'){
+                        noticeFuncton = newNotice(announceform);
+                    }else{
+                        noticeFuncton = updateNotice(announceform);
+                    }
+                    noticeFuncton.then(res => {
+                        console.log('发布',res)
+                        this.close()
+                    }).catch(err=>{
+                        this.$message({
+                            type: 'info',
+                            message: '操作失败，原因：' + res.errorInfo ? res.errorInfo : res.text
+                        })
+                    })
+                }).catch(() => {
+                    this.$message({
+                        type: 'info',
+                        message: '已取消'
+                    })
                 })
-            // if (valid) {
-            //     alert('submit!');
-            // } else {
-            //     console.log('error submit!!');
-            //     return false;
-            // }
+            } else {
+                // console.log('error submit!!');
+                this.$message({
+                    type: 'info',
+                    message: '操作失败，原因：未填写完整内容！' 
+                })
+                return false;
+            }
             });
         },
         resetForm(formName) {
@@ -223,7 +304,10 @@ export default {
         close(){
             this.$emit('update:dialogFormVisible',false)
             this.$refs.ruleForm.resetFields();
-            this.iftequan = false;
+            this.releaseDriver = false;//发布到车主分组
+            this.releaseShipper = false;//发布到货主分组
+            this.isTop = false;//是否置顶
+            this.announce.endTime = null;
             this.$emit('close');
             if (typeof done === 'function') {
                 done()
@@ -237,7 +321,7 @@ export default {
     .newAnnounce{
         .el-dialog{
             .el-dialog__body{
-                position: relative;
+                position:relative;
                 .el-form-item{
                     display: block;
                     margin-right: 30%;

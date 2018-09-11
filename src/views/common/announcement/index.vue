@@ -1,5 +1,5 @@
 <template>
-    <div class="identicalStyle clearfix waitpayment" v-loading="loading">
+    <div class="identicalStyle clearfix announcement" v-loading="loading">
             <searchInfo @change="getSearchParam"></searchInfo>
             <div class="classify_info">
                 <div class="btns_box">
@@ -25,8 +25,9 @@
                             width="50">
                         </el-table-column>
                         <template v-for="column in tableColumn">
-                            <el-table-column :key="column.id" :fixed="column.fixed" sortable :label="column.label" :prop="column.prop" v-if="!column.slot" :width="column.width"></el-table-column>
-                            <el-table-column :key="column.id" :fixed="column.fixed" sortable :label="column.label" v-else :width="column.width || ''">
+                            
+                            <el-table-column :key="column.id" :fixed="column.fixed" :align='column.alignName' sortable :label="column.label" :show-overflow-tooltip="column.overflow" :prop="column.prop" v-if="!column.slot" :width="column.width"></el-table-column>
+                            <el-table-column :key="column.id" :fixed="column.fixed" :align='column.alignName' sortable :label="column.label" :show-overflow-tooltip="column.overflow" v-else :width="column.width || ''">
                             <template slot-scope="scope">
                                 <span class="clickitem" v-if="column.click" v-html="column.slot(scope)" @click.stop="column.click(scope)"></span>
                                 <span v-else v-html="column.slot(scope)"></span>
@@ -37,34 +38,32 @@
                             <template slot-scope="scope">
                                 <el-button
                                 size="mini"
-                                @click="handleClick(scope.$index, scope.row)">置顶</el-button>
+                                :type="scope.row.isTop == 0 ? 'primary' : 'info'"
+                                @click="handleClick(scope.row,'ifTop')">{{scope.row.isTop == 0 ? '置顶' : '取消'}}</el-button>
                                 <el-button
                                 size="mini"
-                                @click="handleClick(scope.$index, scope.row)">修改</el-button>
+                                @click="handleClick(scope.row,'revise')">修改</el-button>
                             </template>
                         </el-table-column>
                     </el-table>
                 </div>
             </div>
             <div class="info_tab_footer">共计:{{ dataTotal }} <div class="show_pager"> <Pager :total="dataTotal" @change="handlePageChange"  :sizes="sizes"/></div> </div>  
-            <announcement :dialogFormVisible.sync = "dialogFormVisible"  @close = "shuaxin" />
+            <announcement :dialogFormVisible.sync = "dialogFormVisible"  :announceForm="announceForm" :operateType="operateType" @close = "shuaxin" />
 
     </div>
 </template>
 
 <script type="text/javascript">
 
-// import FileSaver from 'file-saver'
-// import XLSX from 'xlsx'
 import '@/styles/dialog.scss'
-import { CommonNoticeList } from '@/api/company/announcement.js'
+import { CommonNoticeList,updateNotice } from '@/api/company/announcement.js'
 import { parseTime } from '@/utils/index.js'
 import Pager from '@/components/Pagination/index'
 import vregion from '@/components/vregion/Region'
 import searchInfo from './components/searchInfo'
 import announcement from './components/newAnnounce'
 import editor from '@/components/tinymac/index'
-
 
     export default{
         components:{
@@ -76,6 +75,8 @@ import editor from '@/components/tinymac/index'
         },
         data(){
             return{
+                operateType:'',//操作类型：新增，修改
+                announceForm:{},//传递的对象
                 dialogFormVisible:false,
                 tablekey: '',
                 timeOutWaitPay:null,
@@ -85,9 +86,10 @@ import editor from '@/components/tinymac/index'
                 page:1,//初始化页码
                 dataTotal:0,
                 searchInfo:{
-                    city: "",//区域
+                    belongCityName: "",//区域
                     title:'',//标题
-                   
+                    province:'',
+                    city:'',
                 },
                 tableData:[],
                 tableColumn: [{
@@ -95,37 +97,55 @@ import editor from '@/components/tinymac/index'
                     prop: 'id',
                     width: '80',
                     fixed: true,
+                    overflow:false,
+                    alignName:'center',
                     slot: (scope) => {
-                    return ((this.page - 1) * this.pagesize) + scope.$index + 1
+                    return ((this.page - 1) * this.pagesize) + scope.$index + 1;
                     }
                 }, {
                     label: '区域',
-                    prop: 'city',
-                    width: '150',
-                    fixed: false
+                    prop: 'noticeLocation',
+                    width: '200',
+                    fixed: false,
+                    overflow:true,
+                    alignName:'center',
+
                 }, {
                     label: '标题',
                     prop: 'title',
                     width: '400',
-                    fixed: false
+                    fixed: false,
+                    overflow:true,
+                    alignName:'center',
+
                 }, {
                     label: '有效期',
                     prop: 'endTime',
-                    width: '250',
+                    width: '400',
                     fixed: false,
+                    overflow:true,
+                    alignName:'center',
+
                     slot: (scope) => {
-                        return parseTime(scope.row.endTime, '{y}-{m}-{d} {h}:{i}:{s}')
+                        let startTime = parseTime(scope.row.startTime, '{y}-{m}-{d} {h}:{i}:{s}');
+                        let endTime = scope.row.endTime ? parseTime(scope.row.startTime, '{y}-{m}-{d} {h}:{i}:{s}') : '长期';
+                        return startTime + '<span class="youxiaoqi">至</span>' + endTime;
                     }
                 }, {
                     label: '操作人',
                     prop: 'creater',
                     width: '150',
-                    fixed: false
+                    fixed: false,
+                    overflow:true,
+                    alignName:'center',
+
                 }, {
                     label: '操作时间',
                     prop: 'startTime',
                     width: '250',
                     fixed: false,
+                    overflow:true,
+                    alignName:'center',
                     slot: (scope) => {
                         return parseTime(scope.row.startTime, '{y}-{m}-{d} {h}:{i}:{s}')
                     }
@@ -173,31 +193,6 @@ import editor from '@/components/tinymac/index'
                 console.log(json[0].data.filePath)
                 this.content = this.content + '<img src=' + json[0].data.filePath + '>'
             },
-
-            exportExcel () {
-                /* generate workbook object from table */
-                var wb = XLSX.utils.table_to_book(document.querySelector('#out-table'))
-                /* get binary string as output */
-                var wbout = XLSX.write(wb, { bookType: 'xlsx', bookSST: true, type: 'array' })
-                console.log(wb)
-                console.log(wbout)
-                // try {
-                //     FileSaver.saveAs(new Blob([wbout], { type: 'application/octet-stream' }), 'sheetjs.xlsx')
-                // } catch (e) { if (typeof console !== 'undefined') console.log(e, wbout) }
-                // return wbout
-            },
-            regionChange(d) {
-                console.log('data:',d)
-                this.searchInfo.belongCityName = (!d.province&&!d.city&&!d.area&&!d.town) ? '': `${this.getValue(d.province)}${this.getValue(d.city)}${this.getValue(d.area)}${this.getValue(d.town)}`.trim();
-                // if(d.city){
-                //     this.searchInfo.belongCity = d.city.code;
-                // }else{
-                //     this.searchInfo.belongCity = d.province.code;
-                // }
-            },
-             getValue(obj){
-                return obj ? obj.value:'';
-            },
             handlePageChange(obj) {
                 this.page = obj.pageNum;
                 this.pagesize = obj.pageSize;
@@ -216,8 +211,26 @@ import editor from '@/components/tinymac/index'
             shuaxin(){
                 this.firstblood();
             },
-             handleClick(row) {
-                console.log(row);
+            //按钮功能
+            handleClick(row,type) {
+                console.log(row,type);
+                switch(type){
+                    case 'ifTop':
+                        let ifTop = row.isTop == '0' ? '1' : '0';
+                        let rowData = Object.assign({},row,{isTop:ifTop})
+                        updateNotice(rowData).then(res => {
+                            console.log('iftop',res)
+                            this.firstblood()
+                        })
+                        break;
+                    case 'revise':
+                        this.announceForm = Object.assign({},row);
+                        this.operateType   = type ;
+                        this.dialogFormVisible = true;
+                        break;
+                }
+                  // 清除选中状态，避免影响下个操作
+                this.$refs.multipleTable.clearSelection()
             },
             getSearchParam(obj) {
                 console.log(obj)
@@ -231,6 +244,7 @@ import editor from '@/components/tinymac/index'
             handleSearch(type){
                 switch(type){
                     case 'publish':
+                        this.operateType   = type ;
                         this.dialogFormVisible = true;
                         break;
                 }
@@ -249,8 +263,22 @@ import editor from '@/components/tinymac/index'
     }
 </script>
 
-<style type="text/css" lang="scss" scoped>
-    .waitpayment{
-       
+<style type="text/css" lang="scss">
+    .announcement{
+        .info_news{
+            .el-table{
+                td{
+                    .cell{
+                        .youxiaoqi{
+                            display: inline-block;
+                            margin: 0 10px;
+                            color: #3e9ff1;
+                            font-weight: bold;
+                        }
+                    }
+                }
+            }
+        }
+        
     }
 </style>
