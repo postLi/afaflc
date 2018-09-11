@@ -466,7 +466,12 @@ export default {
               else{
                    this.formAllData.aflcCouponList[i].ifvouchersuperposition='能'
               }
-               this.formAllData.aflcCouponList[i].areaName1 = this.formAllData.aflcCouponList[i].province+ this.formAllData.aflcCouponList[i].city+ this.formAllData.aflcCouponList[i].area
+           if(this.formAllData.aflcCouponList[i].area==null){
+           this.formAllData.aflcCouponList[i].areaName1 =this.formAllData.aflcCouponList[i].province+this.formAllData.aflcCouponList[i].city
+          }
+           else{
+         this.formAllData.aflcCouponList[i].areaName1 =this.formAllData.aflcCouponList[i].province+this.formAllData.aflcCouponList[i].city+this.formAllData.aflcCouponList[i].area
+          }
           }
       })
      this.firstblood();
