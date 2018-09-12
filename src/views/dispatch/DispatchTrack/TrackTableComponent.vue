@@ -362,74 +362,74 @@ import cue from '../../../components/Message/cue'
 </script>
 
 <style type="text/css" lang="scss">
-    .DispatchTrack{
-        height:100%;    
-        position: relative;
-        margin-left:7px;
-        .classify_searchinfo{
-            position: absolute;
-            left:0;
-            top:0;
-            padding:15px 16px;
-            width:100%;
-            line-height: 35px;
-            label{
-                color: #666;
-                font-size:14px; 
-                .el-input{
-                    width:300px;
-                    .el-input__inner{
-                        color:#3e9ff1;
-                        height:30px;
-                        line-height: 30px;
-                    }
-                }
-                .el-date-editor{
-                    height: 30px;
-                    line-height: 30px;
-                    vertical-align: middle;
-                    .el-range-separator{
-                        width: 10%;
-                        margin-top:-10px; 
-                    }
-                    .el-input__icon{
-                        margin-top:-10px; 
-                    }
-                }
-            }
-            .el-button{
-               padding:8px 20px;
-            }
-        }
-        .aflcOrderAddresses{
-            text-align: left;
-            text-indent: 0px;
-            span{
-                display: inline-block;
-                width: 80px;
-                text-indent: 0;
-                white-space: nowrap;
-                text-align: right;
-                color: #888;
-            }
-        }
-        .classify_info{
-            height:100%;
-            padding:90px 13px 18px;
-            .btns_box{
-                margin-bottom:10px;
-                .el-button{
-                    margin-right:20px;
-                    padding:10px 20px;
-                }
-            }
-            .info_news{
-                height:91%;
-            }
-            .Pagination{
-                margin-top:13px;
-                text-align:right;
-            }
-        }
-    }
+    // .DispatchTrack{
+    //     height:100%;    
+    //     position: relative;
+    //     margin-left:7px;
+    //     .classify_searchinfo{
+    //         position: absolute;
+    //         left:0;
+    //         top:0;
+    //         padding:15px 16px;
+    //         width:100%;
+    //         line-height: 35px;
+    //         label{
+    //             color: #666;
+    //             font-size:14px; 
+    //             .el-input{
+    //                 width:300px;
+    //                 .el-input__inner{
+    //                     color:#3e9ff1;
+    //                     height:30px;
+    //                     line-height: 30px;
+    //                 }
+    //             }
+    //             .el-date-editor{
+    //                 height: 30px;
+    //                 line-height: 30px;
+    //                 vertical-align: middle;
+    //                 .el-range-separator{
+    //                     width: 10%;
+    //                     margin-top:-10px; 
+    //                 }
+    //                 .el-input__icon{
+    //                     margin-top:-10px; 
+    //                 }
+    //             }
+    //         }
+    //         .el-button{
+    //            padding:8px 20px;
+    //         }
+    //     }
+    //     .aflcOrderAddresses{
+    //         text-align: left;
+    //         text-indent: 0px;
+    //         span{
+    //             display: inline-block;
+    //             width: 80px;
+    //             text-indent: 0;
+    //             white-space: nowrap;
+    //             text-align: right;
+    //             color: #888;
+    //         }
+    //     }
+    //     .classify_info{
+    //         height:100%;
+    //         padding:90px 13px 18px;
+    //         .btns_box{
+    //             margin-bottom:10px;
+    //             .el-button{
+    //                 margin-right:20px;
+    //                 padding:10px 20px;
+    //             }
+    //         }
+    //         .info_news{
+    //             height:91%;
+    //         }
+    //         .Pagination{
+    //             margin-top:13px;
+    //             text-align:right;
+    //         }
+    //     }
+    // }
 </style>

@@ -809,7 +809,7 @@ import '@/styles/dialog.scss'
         height:100%;    
         position: relative;
         margin-left:7px;
-        .classify_searchinfo{
+        &>.classify_searchinfo{
             position: absolute;
             left:0;
             top:0;

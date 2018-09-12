@@ -1,5 +1,5 @@
 <template>
-    <div class="identicalStyle clearfix">
+    <div class="taskExeute clearfix">
              <div class="classify_searchinfo">
                 <el-button type="primary"  plain  icon="el-icon-circle-plus" @click="creatTask('add')" >新增执行器</el-button>
                 <el-button type="warning"  plain  icon="el-icon-edit" @click="creatTask('edit')" >编辑执行器</el-button>
@@ -195,8 +195,8 @@ import { data_taskExecuteList,data_removeTaskExecute } from '@/api/task/taskExec
 </script>
 
 <style type="text/css" lang="scss" scoped>
-    .identicalStyle{
-        .classify_searchinfo{
+    .taskExeute{
+        &>.classify_searchinfo{
             h3{
                 display: inline-block;
                 font-size: 18px;

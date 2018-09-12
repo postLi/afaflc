@@ -937,7 +937,7 @@ import '@/styles/dialog.scss'
             position: relative;
             border-top:2px solid #ccc;
         }
-        .classify_searchinfo{
+        &>.classify_searchinfo{
             position: absolute;
             left:0;
             top:0;
