@@ -26,7 +26,7 @@
                         is-range
                         type="daterange"
                         v-model="formAllData.createTime"
-                        range-separator="至"
+                        range-separator="至" 
                         start-placeholder="开始时间"
                         end-placeholder="结束时间"
                         placeholder="选择时间范围"
@@ -90,7 +90,7 @@
             </div>
              <div  class="ht_table_tr1">
              <div class="ht_table_td1"><span  class="reduceItem" @click="reduceItem(keys)"> </span></div>
-             <div class="ht_table_td table_th1"><el-input v-model="formAllData.aflcCouponList[keys].couponNum"></el-input></div>
+             <div class="ht_table_td table_th1"><el-input v-model="formAllData.aflcCouponList[keys].couponNum" maxlength='2'></el-input></div>
              <div class="ht_table_td table_th2"><el-input v-model="formAllData.aflcCouponList[keys].couponName"></el-input></div> 
              <div class="ht_table_td table_th3">
                      <el-select v-model="formAllData.aflcCouponList[keys].couponType" clearable placeholder="请选择" >
@@ -129,7 +129,7 @@
                    </div> 
              <div class="ht_table_td table_th10">
                      <span v-if="formAllData.aflcCouponList[keys].timeType =='AF046301'">
-                         <el-input v-model="formAllData.aflcCouponList[keys].overTime" placeholder="过期天数" max="3"></el-input>
+                         <el-input v-model="formAllData.aflcCouponList[keys].overTime" placeholder="过期天数" maxlength="3"></el-input>
                      </span>
                      <span v-else>
                                <el-date-picker
@@ -155,7 +155,7 @@
                     <el-select v-model="formAllData.aflcCouponList[keys].carType" clearable placeholder="请选择" >
                           <el-option
                              v-for="item in optionsCar"
-                              :key="item.code"
+                             :key="item.code"
                              :label="item.name"
                              :value="item.code"
                              :disabled="item.disabled">
@@ -176,7 +176,7 @@
                  <el-select v-model="formAllData.aflcCouponList[keys].ifvouchersuperposition" clearable placeholder="请选择" >
                           <el-option
                              v-for="item in vouchersuperposition"
-                              :key="item.code"
+                             :key="item.code"
                              :label="item.name"
                              :value="item.code"
                              :disabled="item.disabled">
@@ -250,16 +250,12 @@ export default {
   },
   data(){
         const activityTypeValidator = (rule, val, cb) => {
-            if(val){
-            if(val.length<1){
-            cb(new Error('所属地区不能为空'))
+            if(!val){
+            cb(new Error('触发条件不能为空'))
             }
             else{
                 cb()
-            }                 
-            }else{
-            cb(new Error('所属地区不能为空'))
-            }     
+            }       
         }
         const activityNameValidator = (rule, val, cb) => {
             if(!val){
@@ -286,12 +282,16 @@ export default {
             }        
         }
         const areaCodeValidator = (rule, val, cb) => {
-            if(!val){
-            cb(new Error('所属区域不能为空'))
+            if(val){
+            if(val.length<1){
+            cb(new Error('所属地区不能为空'))
             }
             else{
                 cb()
-            }        
+            }                 
+            }else{
+            cb(new Error('所属地区不能为空'))
+            }   
         }        
     return{
         options:regionDataPlus,   
@@ -514,12 +514,17 @@ export default {
     },
     completeData(){
              let reg= /^[1-9]\d*$/  //输入正整数正则
-             let reg2=/^(\d|10)(\.\d)?$/  //输入0到10正数正则
+             let reg2=/^(\d|9)(\.\d)?$/  //输入0到9
+             let reg3=/^(\d|10)(\.\d)?$/  //输入0到10
                 for(var i=0;i<this.formAllData.aflcCouponList.length;i++){
                   if(!this.formAllData.aflcCouponList[i].couponNum){
                      this.$message.warning('派发数量都不能为空');
                      return false
                    }
+                  if(!reg3.test(this.formAllData.aflcCouponList[i].couponNum)&&this.formAllData.aflcCouponList[i].couponNum!==null){
+                   this.$message.warning('派发数量仅能输入0-10之间正整数');
+                     return false
+                   }                   
                   if(!this.formAllData.aflcCouponList[i].couponName){
                      this.$message.warning('优惠券名称都不能为空');
                      return false
@@ -576,10 +581,6 @@ export default {
                      this.$message.warning('能否与大户券叠加不能为空');  
                      return false  
                   }                                 
-                  if(!reg.test(this.formAllData.aflcCouponList[i].couponNum)&&this.formAllData.aflcCouponList[i].couponNum!==null){
-                   this.$message.warning('派发数量仅能输入正整数');
-                     return false
-                   }
                     if(this.formAllData.aflcCouponList[i].remissionDiscount){
                    if(this.formAllData.aflcCouponList[i].couponType==null){
                        this.$message.warning('请选择优惠卷类型');
@@ -589,7 +590,11 @@ export default {
                   if(this.formAllData.aflcCouponList[i].couponType=='AF046201'){
                    if(!reg.test(this.formAllData.aflcCouponList[i].remissionDiscount))
                    {
-                       this.$message.warning('减免卷输入正整数');
+                       this.$message.warning('满减卷输入0以上的正整数');
+                        return false
+                   }
+                   else if(this.formAllData.aflcCouponList[i].remissionDiscount>this.formAllData.aflcCouponList[i].conditionDeduction){
+                       this.$message.warning('满减卷不能大于最高满减条件');
                         return false
                    }
                     }
@@ -599,13 +604,12 @@ export default {
                    {
                        this.$message.warning('折扣卷输入数字，输入的范围值为 0<x<10，精确到小数点后一位');
                         return false
-                   }    
+                   }      
                    }
                     if(!reg.test(this.formAllData.aflcCouponList[i].conditionDeduction)&&this.formAllData.aflcCouponList[i].conditionDeduction!==null){
                      this.$message.warning('满减条件/最高抵扣仅能输入正整数');
                      return false
                     }
-                   
                  }
                  
     },

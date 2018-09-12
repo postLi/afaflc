@@ -98,7 +98,7 @@
               </el-col>
           </el-row>
        </el-form>
-            <el-table style="width: 100%"  border height="80%"  >
+            <el-table style="width: 100%"  border height="80%">
             <el-table-column  label="序号" width="80px" type="index">
             </el-table-column>
             <el-table-column  label="流水号" prop="">
@@ -159,7 +159,7 @@ export default {
   components:{
   },
  watch:{
-     autocheck(newVal,oldVal){
+   autocheck(newVal,oldVal){
         if(newVal){
             this.autocheck = newVal;
           }else{
@@ -183,10 +183,10 @@ export default {
    },
    openDialog(){
        this.dialogFormVisible_add = true;
+   },  
    },
-   },     
    mounted(){
-  
+
     }
     }
 </script>
