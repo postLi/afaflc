@@ -1,0 +1,111 @@
+// .tab-wrapper{
+//     height: 100%;
+//     padding-top: 8px;
+//     .eltab{
+//       width: 100%;
+//       height: 32px;
+//       line-height: 30px;
+//       border-bottom: 1px solid #91cbf7;
+//     }
+//     .tab-label:first-child{
+//       margin-left: 1px;
+//       border-left-width: 1px; 
+      
+//     }
+//     .tab-label{
+//       float: left;
+//       padding-left: 12px;
+//       padding-right: 12px;
+//       border-radius: 3px 3px 0px 0px;
+//       border: solid 1px #d2d2d2;
+//       font-size: 14px;
+//       border-left-width: 0;
+//       border-bottom: 1px solid #3e9ff1;
+//       position: relative;
+//       top: 0px;
+//       cursor: pointer;
+  
+//       &:hover{
+//         background: #ffffee;
+//       }
+//     }
+//     .active-tab{
+//       color:#3e9ff1;
+//       border-color: #3e9ff1;
+//       border-bottom-color: #fff;
+//       z-index: 2;
+//       left: -1px;
+//       top: -1px;
+//       border-left: 1px solid #3e9ff1;
+//       border-top-width: 2px;
+//     }
+//     .tab-content{
+//       width: 100%;
+//       padding: 0 20px;
+//     }
+//   }
+  
+.el-tabs{
+    height: 100%;
+    .el-tabs__content{
+        height: 95%;
+        .el-tab-pane{
+            height: 100%;
+        }
+    }
+    .el-tabs__header {
+        margin: 0;
+        /* margin: 0 0 15px; */
+    }
+}
+
+.tabsWrap{
+    height:100%;    
+    position: relative;
+    padding-right: 10px;
+    padding-top: 12px;
+    .el-tabs,.el-tabs--card,.el-tabs--top{
+        display: flex;
+        flex-direction: column;
+    }
+    .el-tabs--card>.el-tabs__header {
+        border-bottom: 1px solid #03a9f4;
+        padding-left: 10px;
+        // padding-top: 12px;
+    }
+    .el-tabs__content {
+        // overflow: auto;
+        flex: 1;
+        flex-grow: 1;
+    }
+    .el-tabs--card>.el-tabs__header .el-tabs__nav{
+        border: 0 none;
+    }
+
+    .el-tabs--card>.el-tabs__header .el-tabs__item:first-child {
+        border-left: 1px solid #d2d2d2;
+    }
+    .el-tabs__item{
+        border: 1px solid #d2d2d2;
+        border-top-width:2px; 
+        border-radius: 4px 4px 0px 0px;
+        border-bottom: 0 none;
+        height: 30px;
+        line-height: 30px;
+    }
+
+    .el-tabs--card>.el-tabs__header .el-tabs__item.is-active {
+        font-weight: bold;
+        border-color: #03a9f4;
+        background: #ffffff;
+        border-bottom-color: #f0f0f0;
+    }
+    .el-tab-pane{
+        .el-table th .cell {
+            white-space: initial;
+            overflow: hidden;
+            min-height: 30px;
+            line-height: 30px;
+        }
+    }
+}
