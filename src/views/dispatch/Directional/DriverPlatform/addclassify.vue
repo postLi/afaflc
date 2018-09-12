@@ -51,8 +51,6 @@
                     </div> 
                 </el-dialog>
             </div>
-
-            <cue ref="cue"></cue>
     </div>
 </template>
 
@@ -76,7 +74,7 @@ export default {
         }
     },
     components:{
-        cue
+        
     },
     data() {
       return {
@@ -103,7 +101,6 @@ export default {
         filterOptionsSystemUsers:{
             search:''
         },//筛选平台人员
-        informationTime:'拦截结束时间怎么能比拦截开始早呢！'
       };
     },
     computed: {
@@ -144,7 +141,10 @@ export default {
                 return
             }else{
                 if(this.forms.bindingStartDate  > this.forms.bindingEndDate){
-                    this.$refs.cue.hint(this.informationTime)
+                    return this.$message({
+                        type: 'warning',
+                        message: '拦截结束时间怎么能比拦截开始早呢！~'
+                    })
                     this.forms.bindingStartDate = null;
                     this.forms.bindingEndDate = null;
                 }
@@ -160,7 +160,7 @@ export default {
         },
         getAflcShipperList(){
             data_findAflcShipperList(this.filterOptionsShipper).then(res=>{
-                console.log(res)
+                // console.log(res)
                 this.optionsShipper = res.data;
                 this.optionsShipper.map(el=>{
                     el.label =  el.contacts +'/'+el.mobile;
@@ -170,7 +170,7 @@ export default {
         },
         getAflcSystemUserList(){
             data_findAflcSystemUserList(this.filterOptionsSystemUsers).then(res=>{
-                console.log(res)
+                // console.log(res)
                 this.optionsSystem = res.data;
                 this.optionsSystem.map(el=>{
                     el.label =  el.name +'/'+el.mobilephone;
@@ -209,26 +209,29 @@ export default {
             this.forms.orgPhone =  mobilephone.join(',');
             
             if(!this.forms.bindingStartDate){
-                let information = "请填写拦截开始时间";
-                this.$refs.cue.hint(information)
-                return
+                return this.$message({
+                    type: 'warning',
+                    message: '请填写拦截开始时间~'
+                })
+                
             }
             else if(!this.forms.bindingEndDate){
-                let information = "请填写拦截结束时间";
-                this.$refs.cue.hint(information)
-                return
-
+                return this.$message({
+                        type: 'warning',
+                        message: '请填写拦截结束时间~'
+                    })
             }
             else if(this.checkListShpper.length == 0){
-                let information = "请选择至少一个货主账号";
-                this.$refs.cue.hint(information)
-                return
-
+                return this.$message({
+                    type: 'warning',
+                    message: '请选择至少一个货主账号~'
+                })
             }
             else if(this.checkListSystemUsers.length == 0){
-                let information = "请选择至少一个车主账号";
-                this.$refs.cue.hint(information) 
-                return
+                return this.$message({
+                        type: 'warning',
+                        message: '请选择至少一个车主账号~'
+                    })
             }
             else{
                 data_NewData(this.forms).then(res=>{
@@ -237,7 +240,7 @@ export default {
                         confirmButtonText: '确定',
                         callback: action => {
                             this.$emit('renovate');
-                            this.clearForms();
+                            this.closeAddNewInfo();
                         }
                     });
                 }).catch( err => {

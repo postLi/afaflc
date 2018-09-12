@@ -251,15 +251,6 @@ import Pager from '@/components/Pagination/index'
 
 <style type="text/css" lang="scss">
     .OpenseaRecommend{
-        height:100%;    
-        position: relative;
-        margin-left:7px;
-        &>.classify_info{
-            height:100%;
-            padding:20px 13px 40px 0px;
-            .info_news{
-                height:94%;
-            }
-        }
+      
     }
 </style>

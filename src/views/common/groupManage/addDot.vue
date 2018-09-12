@@ -577,8 +577,8 @@
   }
 </script>
 <style type="text/css" lang="scss">
-//   @import "../../../styles/mixin.scss";
-//   @import "../../../styles/addDot.css";
+  @import "../../../styles/mixin.scss";
+  @import "./addDot.scss";
 
   .addEmployeerPop {
     left: auto;

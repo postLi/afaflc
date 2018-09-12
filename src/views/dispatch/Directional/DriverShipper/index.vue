@@ -1,21 +1,23 @@
 <template>
     <div class="identicalStyle clearfix" v-loading ="loading">
-             <div class="classify_searchinfo">
-                <label>货主账号&nbsp;
-                   <el-input v-model="data.shipperName" placeholder="请输入内容" clearable></el-input>
-                </label>
-                <label>车主账号&nbsp;
-                   <el-input v-model="data.driverName" placeholder="请输入内容" clearable></el-input>
-                </label>    
-                <el-button type="primary"  plain @click="getdata_search">查询</el-button>
-                <el-button type="primary"  plain @click="reset">重置</el-button>
-            </div>
+             <el-form :inline="true" :model="data" ref="ruleForm" class="demo-ruleForm classify_searchinfo">
+                <el-form-item label="货主账号" prop="pointName">
+                    <el-input v-model="data.shipperName" placeholder="请输入内容" clearable></el-input>
+                </el-form-item>
+                <el-form-item label="车主账号" prop="orderSerial">
+                    <el-input v-model="data.driverName" placeholder="请输入内容" clearable></el-input>
+                </el-form-item>
+                <el-form-item class="btnChoose fr"  style="margin-left:0;">
+                    <el-button type="primary" :size="btnsize" plain @click="getdata_search">搜索</el-button>
+                    <el-button type="info" :size="btnsize" plain @click="reset">清空</el-button>
+                </el-form-item>
+            </el-form>
             <div class="classify_info">
                 <div class="btns_box">
-                    <el-button type="primary" plain icon="el-icon-circle-plus" @click="addClassfy">新增</el-button>
-                    <el-button type="primary" plain icon="el-icon-edit" @click="handleEdit">修改</el-button>
+                    <el-button type="primary" :size="btnsize" plain icon="el-icon-circle-plus" @click="addClassfy">新增</el-button>
+                    <el-button type="primary" :size="btnsize" plain icon="el-icon-edit" @click="handleEdit">修改</el-button>
                     <!-- <el-button type="primary" plain icon="el-icon-delete" @click="handleDelete">删除</el-button> -->
-                    <el-button type="primary" plain icon="el-icon-bell" @click="handleUseStates">启用/禁用</el-button>
+                    <el-button type="primary" :size="btnsize" plain icon="el-icon-bell" @click="handleUseStates">启用/禁用</el-button>
                 </div>
                 <div class="info_news" style="height:88%">
                     <el-table
@@ -117,7 +119,7 @@
 
 import { data_dispatchList,data_ChangeStatus } from '@/api/dispatch/Directional.js'
 import '@/styles/dialog.scss'
-import { parseTime,formatTime } from '../../../../utils/index.js'
+import { parseTime } from '@/utils/index.js'
 import addClassfy from './addclassify'
 import changeclassify from './changeclassify'
 import Pager from '@/components/Pagination/index'
@@ -126,6 +128,7 @@ import Pager from '@/components/Pagination/index'
 
         data(){
             return{
+                btnsize:'mini',
                 loading:true,
                 carNumber:'',//车主账号
                 shipperNumber:'',//货主账号
@@ -148,7 +151,7 @@ import Pager from '@/components/Pagination/index'
                 information:'你想知道什么',
                 delIDTree:'',
                 checkedinformation:[],
-                tableDataTree:[],                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          
+                tableDataTree:[],
             }
         },
         components:{
@@ -191,6 +194,7 @@ import Pager from '@/components/Pagination/index'
                 if(Object.keys(this.checkedinformation).length == 0){
                     //未选择任何修改内容的提示
                     let information = "未选中任何修改内容";
+                    
                     this.hint(information);
                 }else if(this.checkedinformation.length >1){
                     let information = "不可修改多个内容";
@@ -271,7 +275,6 @@ import Pager from '@/components/Pagination/index'
                     this.tableDataTree.forEach(item => {
                         item.carInfo = item.driverPhone +'/'+item.driverName;
                         item.shipperInfo = item.shipperPhone+ '/' +item.shipperName;
-                        
                         item.startTime = parseTime(item.bindingStartDate,"{y}-{m}-{d}");
                         item.endTime = parseTime(item.bindingEndDate,"{y}-{m}-{d}");
                     })

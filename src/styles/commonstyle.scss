@@ -10,7 +10,7 @@
         margin-bottom: 10px;
         .el-form-item{
             margin-right: 5px;
-            margin-bottom:  0px;
+            margin-bottom:  10px;
             .el-form-item__label {
                 color: #333;
                 font-size: 14px;
@@ -21,6 +21,7 @@
             .el-form-item__content{
                 vertical-align: top;
                 line-height: 30px;
+                height: 30px;
                 .el-input{
                     width: 100%;
                     .el-input__inner{
@@ -32,7 +33,7 @@
                 }
             }
             .el-date-editor{
-                height: 28px;
+                height: 30px;
                 line-height: 30px;
                 width: 230px;
                 .el-range-separator{

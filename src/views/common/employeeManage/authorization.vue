@@ -29,7 +29,7 @@
   </pop-right>
 </template>
 <script>
-import { putEmployeerAuth, getAuthInfo } from '../../../api/company/employeeManage'
+import { putEmployeerAuth, getAuthInfo } from '@/api/company/employeeManage'
 import popRight from '@/components/PopRight/index'
 import { mapGetters } from 'vuex'
 

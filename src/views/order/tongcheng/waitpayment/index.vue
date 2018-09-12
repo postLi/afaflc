@@ -121,6 +121,22 @@
                                 </template>
                         </el-table-column>
                         <el-table-column
+                            label="提货地"
+                            :show-overflow-tooltip="true"
+                            width="250">
+                            <template  slot-scope="scope">
+                                {{ scope.row.aflcOrderAddresses[0].viaAddress }}
+                            </template>
+                        </el-table-column>
+                        <el-table-column
+                            label="目的地"
+                            :show-overflow-tooltip="true"
+                            width="250">
+                            <template  slot-scope="scope">
+                                {{ scope.row.aflcOrderAddresses[scope.row.aflcOrderAddresses.length-1].viaAddress }}
+                            </template>
+                        </el-table-column>
+                        <!-- <el-table-column
                             prop="aflcOrderAddresses"
                             label="配送路径"
                             width="450">
@@ -132,10 +148,10 @@
                                     {{obj.viaAddress}}
                                 </p>
                             </template>
-                        </el-table-column>
+                        </el-table-column> -->
                         <el-table-column
                             label="下单时间"
-                            width="250">
+                            width="200">
                             <template  slot-scope="scope">
                                 {{ scope.row.useTime | parseTime}}
                             </template>
@@ -145,7 +161,6 @@
                     <div class="info_tab_footer">共计:{{ dataTotal }} <div class="show_pager"> <Pager :total="dataTotal" @change="handlePageChange"  :sizes="sizes"/></div> </div>    
                 </div>
             </div>
-
     </div>
 </template>
 
@@ -169,8 +184,8 @@ import vregion from '@/components/vregion/Region'
                 btnsize:'mini',
                 timeOutWaitPay:null,
                 loading: true,//加载
-                sizes:[20,50,100],
-                pagesize:20,//初始化加载数量
+                sizes:[30,50,100],
+                pagesize:30,//初始化加载数量
                 page:1,//初始化页码
                 dataTotal:0,
                 searchInfo:{
@@ -250,8 +265,6 @@ import vregion from '@/components/vregion/Region'
                         item.aflcOrderAddresses.sort(function(a,b){  
                             return a.viaOrder - b.viaOrder;  
                         })  
-
-                        // item.useCar = parseTime(item.useCarTime)
                     })
                     this.loading = false;
                 })
@@ -266,12 +279,10 @@ import vregion from '@/components/vregion/Region'
                         if(this.chooseTime){
                             this.searchInfo.startOrderDate = this.chooseTime[0];
                             this.searchInfo.endOrderDate = this.chooseTime[1];
-                       
                         }else{
                             this.searchInfo.startOrderDate ='' ;
                             this.searchInfo.endOrderDate = '';
                         }
-
                         this.firstblood();
                         break;
                     case 'clear':

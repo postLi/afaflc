@@ -1,10 +1,10 @@
 <template>
-    <div class="OpenseaRecommend identicalStyle clearfix" v-loading="loading">
+    <div class="orderObtain identicalStyle clearfix" v-loading="loading">
             <div class="classify_info">
                 <div class="btns_box">
-                    <el-button type="primary" plain icon="el-icon-circle-plus" :size="btnsize" @click="addClassfy">新增</el-button>
-                    <el-button type="primary" plain icon="el-icon-edit" :size="btnsize" @click="handleEdit">修改</el-button>
-                    <el-button type="primary" plain icon="el-icon-delete" :size="btnsize" @click="handleDelete">删除</el-button>
+                    <el-button type="primary" plain icon="el-icon-circle-plus" :size="btnsize" @click="handleClick('new')">新增</el-button>
+                    <el-button type="primary" plain icon="el-icon-edit" :size="btnsize" @click="handleClick('revise')">修改</el-button>
+                    <el-button type="primary" plain icon="el-icon-delete" :size="btnsize" @click="handleClick('delet')">删除</el-button>
                 </div>
                 <div class="info_news">
                     <el-table
@@ -18,7 +18,6 @@
                         @row-click="clickDetails"
                         style="width: 100%"> 
                         <el-table-column
-                            fixed
                             type="selection"
                             width="55">
                         </el-table-column>
@@ -35,12 +34,18 @@
                           label="用车类型">
                         </el-table-column>
                         <el-table-column
-                          prop="obtainTimeM"
+                          prop="obtainTime"
                           label="公布中单时间">
+                          <template slot-scope="scope">
+                                {{ scope.row.obtainTime +'秒'}}
+                          </template>
                         </el-table-column>
                         <el-table-column
-                          prop="obtainKmM"
+                          prop="obtainKm"
                           label="公布中单距离">
+                           <template slot-scope="scope">
+                                {{ scope.row.obtainKm +'公里'}}
+                          </template>
                         </el-table-column>
                         <!-- <el-table-column
                           prop="usingStatus"
@@ -55,23 +60,9 @@
                 <addClassfy :dialogFormVisible.sync = "dialogFormVisible" :formtitle = "formtitle" @renovate="Onrenovate" ></addClassfy>
                 <!-- 修改数据 -->
                 <changeclassify :dialogFormVisibleChange.sync = "dialogFormVisibleChange" :formtitle = "formtitle_change" @renovate="Onrenovate" :changeforms = 'changeforms'></changeclassify>
-
-                <!-- 删除信息提示 -->
-                <div class="delData">
-                    <el-dialog
-                    title="提示"
-                    :visible.sync="delDialogVisible">
-                    <span class="delwarn"></span>
-                    <span class="delinfo">确认删除信息吗 ?</span>
-                    <span slot="footer" class="dialog-footer">
-                        <el-button :size="btnsize" type="primary" @click="delDataInformation">确 定</el-button>
-                        <el-button :size="btnsize" @click="delDialogVisible = false" type="info" plain>取 消</el-button>
-                    </span>
-                    </el-dialog>
-                </div>
             </div>
-            <div class="info_tab_footer">共计:{{ totalCount }} <div class="show_pager"> <Pager :total="totalCount" @change="handlePageChange" /></div> </div>
-        <cue ref="cueInfo"></cue>
+            <div class="info_tab_footer">共计:{{ totalCount }} <div class="show_pager"> <Pager :total="totalCount" @change="handlePageChange" /></div>
+        </div>
     </div>
 </template>
 <script type="text/javascript">
@@ -81,7 +72,6 @@ import { data_dispatchList,data_DeletInfo } from '@/api/dispatch/OrderObtain.js'
 import '@/styles/dialog.scss'
 import addClassfy from './addclassify'
 import changeclassify from './changeclassify'
-import cue from '../../../components/Message/cue'
 import Pager from '@/components/Pagination/index'
 
     export default{
@@ -111,7 +101,6 @@ import Pager from '@/components/Pagination/index'
             Pager,
             addClassfy,
             changeclassify,
-            cue
         },
         
         mounted(){
@@ -129,7 +118,6 @@ import Pager from '@/components/Pagination/index'
             //子组件调用父组件刷新页面  
             Onrenovate(){
                 this.firstblood();
-                this.dialogFormVisible = false;
             },
             //点击选中当前行
             clickDetails(row, event, column){
@@ -139,109 +127,81 @@ import Pager from '@/components/Pagination/index'
             getinfomation(selection){
                 this.checkedinformation = selection;
             },
-            //修改
-            handleEdit() {
-                if(Object.keys(this.checkedinformation).length == 0){
-                    //未选择任何修改内容的提示
-                    let information = "未选中任何修改内容";
-                    this.$refs.cueInfo.hint(information)
-                }else if(this.checkedinformation.length >1){
-                    let information = "不可修改多个内容";
-                    this.$refs.cueInfo.hint(information)
-                }else{
-                    console.log(this.checkedinformation)
-                    this.dialogFormVisibleChange = true; 
-                    this.changeforms = this.checkedinformation[0]
-                    this.$refs.multipleTable.clearSelection()
 
-                }
-            },
-            // 禁用/启用
-            handleUseStates(){
-                if(this.checkedinformation.length === 0){
+            handleClick(type){
+                if(Object.keys(this.checkedinformation).length == 0 && type != 'new'){
                     //未选择任何修改内容的提示
-                    let information = "未选中任何更改状态内容";
-                    this.$refs.cueInfo.hint(information)
-                }else{
-                    console.log(this.checkedinformation)
-                    let statusID = [];
-                    this.checkedinformation.map((item)=>{
-                        return statusID.push(item.id)
+                    return this.$message({
+                        type: 'warning',
+                        message: '请选择您要操作的内容~'
                     })
-                    statusID = statusID.join(',');
-                    data_ChangeStatus(statusID).then(res=>{
-                        // console.log(res)
-                       this.firstblood();
+                }else if(this.checkedinformation.length >1 && type != 'new'){
+                    return this.$message({
+                        type: 'warning',
+                        message: '不可同时操作多项设置~'
                     })
                 }
-            },
-            // 是否删除
-            handleDelete() {
-                if(this.checkedinformation.length === 0){
-                    //未选择任何修改内容的提示
-                    let information = "未选中任何删除内容";
-                    this.$refs.cueInfo.hint(information)
-                }else{
-                    console.log(this.checkedinformation)
-                    let delID = [];
-                    this.checkedinformation.map((item)=>{
-                        return delID.push(item.id)
-                    })
-                    this.delID  = delID.join(',');
-                    this.delDialogVisible = true;
-                    this.$refs.multipleTable.clearSelection()
-
-                    console.log(this.delID)
+                else{
+                    switch(type){
+                        case 'new':
+                            this.dialogFormVisible = true;
+                            break;
+                        case 'revise':
+                            this.dialogFormVisibleChange = true; 
+                            this.changeforms = Object.assign({},this.checkedinformation[0]) 
+                            break;
+                        case 'delet':
+                            let delID = [];
+                            this.checkedinformation.map((item)=>{
+                                return delID.push(item.id)
+                            });
+                            let item = delID.length > 1 ? '这些' : '该条';
+                            this.$confirm('确定要删除'+ item +'设置吗？', '提示', {
+                                confirmButtonText: '确定',
+                                cancelButtonText: '取消',
+                                type: 'warning'
+                            }).then( ()=>{
+                                data_DeletInfo(delID).then(res=>{
+                                // console.log(res)
+                                this.$message({
+                                    type: 'success',
+                                    message: '您选中的中单设置已被删除！',
+                                    duration:2000
+                                })
+                                this.close();
+                                this.changeList();
+                                }).catch(err => {
+                                    this.$message.error('操作失败，失败原因：',err.errorInfo)
+                                })
+                            }).catch(() => {
+                                this.$message({
+                                    type: 'info',
+                                    message: '已取消'
+                                })
+                            })
+                            break;
+                    }
                 }
-            },
-            //确认删除
-            delDataInformation(){
-                this.delDialogVisible = false;
-                data_DeletInfo(this.delID).then(res => {
-                    this.firstblood();
-                }).catch(res=>{
-                    let information = res.text;
-                    this.hint(information);
-                })
+                //清空选中内容以免影响其他操作
+                this.$refs.multipleTable.clearSelection();
             },
             //刷新页面和初始化数据
             firstblood(){
                 this.loading = true;
                 data_dispatchList(this.page,this.pagesize,this.data).then(res=>{
-                    console.log('res:',res)
+                    // console.log('res:',res)
                     this.totalCount = res.data.totalCount;
                     this.tableDataTree = res.data.list;
-                    this.tableDataTree.forEach(item=>{
-                        item.obtainTimeM = item.obtainTime +'秒';
-                        item.obtainKmM = item.obtainKm +'公里';
-                    })
                     this.loading = false;
-                    // console.log(this.tableDataTree)
                 })
             },
-            //新增分类信息
-            addClassfy(){
-                this.dialogFormVisible = true;
-                this.$refs.multipleTable.clearSelection()
-
-            },
-            
            
         }
     }
 </script>
 
 <style type="text/css" lang="scss">
-    .OpenseaRecommend{
-        height:100%;    
-        position: relative;
-        margin-left:7px;
-        .classify_info{
-            height:100%;
-            padding:20px 13px 40px 0px;
-            .info_news{
-                height:94%;
-            }
-        }
+    .orderObtain{
+      
     }
 </style>
