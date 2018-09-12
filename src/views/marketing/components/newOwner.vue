@@ -18,7 +18,7 @@
                 </el-col>
                 <el-col :span="12">
                 <el-form-item label="区域奖励额度上限：" :label-width="formLabelWidth" prop="rewardMax">
-                        <el-input v-model="formAll.rewardMax" placeholder="请选择" maxlength='4'></el-input>
+                        <el-input v-model="formAll.rewardMax" placeholder="请选择" maxlength='5'></el-input>
                 </el-form-item>
                 </el-col>
             </el-row>
@@ -269,6 +269,54 @@ export default {
             }    
         }   
 
+    //   参数校验1
+        const rewardValidator1 = (rule, val, cb) => {
+            var reg= /[^\d.]/g
+            if(!val){cb()}
+            else{if(reg.test(val)){cb(new Error('请输入正整数'))}
+            else if(parseInt(val)>parseInt(this.$refs['reward2'].value)){cb(new Error('不能大于订单金额范围'))}else{cb()}}}   
+    //   参数校验2
+        const rewardValidator2 = (rule, val, cb) => {
+            var reg= /[^\d.]/g
+            if(!val){cb()}
+            else{if(reg.test(val)){cb(new Error('请输入正整数'))}
+            else if(parseInt(val)>parseInt(this.$refs['reward4'].value)){cb(new Error('不能大于订单金额范围'))}else{cb()}}}   
+    //   参数校验3
+        const rewardValidator3 = (rule, val, cb) => {
+            var reg= /[^\d.]/g
+            if(!val){cb()}
+            else{if(reg.test(val)){cb(new Error('请输入正整数'))}
+            else if(parseInt(val)>parseInt(this.$refs['reward6'].value)){cb(new Error('不能大于订单金额范围'))}else{cb()}}}   
+    //   参数校验4
+        const rewardValidator4 = (rule, val, cb) => {
+            var reg= /[^\d.]/g
+            if(!val){cb()}
+            else{if(reg.test(val)){cb(new Error('请输入正整数'))}
+            else if(parseInt(val)>parseInt(this.$refs['reward8'].value)){cb(new Error('不能大于订单金额范围'))}else{cb()}}}   
+    //   参数校验5
+        const rewardValidator5 = (rule, val, cb) => {
+            var reg= /[^\d.]/g
+            if(!val){cb()}
+            else{if(reg.test(val)){cb(new Error('请输入正整数'))}
+            else if(parseInt(val)>parseInt(this.$refs['reward10'].value)){cb(new Error('不能大于订单金额范围'))}else{cb()}}}   
+    //   参数校验6
+        const rewardValidator6 = (rule, val, cb) => {
+            var reg= /[^\d.]/g
+            if(!val){cb()}
+            else{if(reg.test(val)){cb(new Error('请输入正整数'))}
+            else if(parseInt(val)>parseInt(this.$refs['reward12'].value)){cb(new Error('不能大于订单金额范围'))}else{cb()}}}   
+    //   参数校验7
+        const rewardValidator7 = (rule, val, cb) => {
+            var reg= /[^\d.]/g
+            if(!val){cb()}
+            else{if(reg.test(val)){cb(new Error('请输入正整数'))}
+            else if(parseInt(val)>parseInt(this.$refs['reward14'].value)){cb(new Error('不能大于订单金额范围'))}else{cb()}}}   
+    //   参数校验8
+        const rewardValidator8 = (rule, val, cb) => {
+            var reg= /[^\d.]/g
+            if(!val){cb()}
+            else{if(reg.test(val)){cb(new Error('请输入正整数'))}
+            else if(parseInt(val)>parseInt(this.$refs['reward16'].value)){cb(new Error('不能大于订单金额范围'))}else{cb()}}}   
 
         const reward2Validator = (rule, val, cb) => {if(!val){cb(new Error('数据不能为空'))}else if(parseInt(val)<=parseInt(this.$refs['reward1'].value)){
             cb(new Error('必须大于前框值'))}else{cb()} }   
@@ -348,30 +396,30 @@ export default {
             maxnum4:{trigger:'change',required:true,validator:rewardValidator},
             maxnum5:{trigger:'change',required:true,validator:rewardValidator},
             maxnum6:{trigger:'change',required:true,validator:rewardValidator},
-            data1:{trigger:'change',required:true,validator:rewardValidator},data2:{trigger:'change',required:true,validator:rewardValidator},
-            data3:{trigger:'change',required:true,validator:rewardValidator},data4:{trigger:'change',required:true,validator:rewardValidator},
-            data5:{trigger:'change',required:true,validator:rewardValidator},data6:{trigger:'change',required:true,validator:rewardValidator},
-            data7:{trigger:'change',required:true,validator:rewardValidator},data8:{trigger:'change',required:true,validator:rewardValidator},
-            data9:{trigger:'change',required:true,validator:rewardValidator},data10:{trigger:'change',required:true,validator:rewardValidator},
-            data11:{trigger:'change',required:true,validator:rewardValidator},data12:{trigger:'change',required:true,validator:rewardValidator},
-            data13:{trigger:'change',required:true,validator:rewardValidator},data14:{trigger:'change',required:true,validator:rewardValidator},
-            data15:{trigger:'change',required:true,validator:rewardValidator},data16:{trigger:'change',required:true,validator:rewardValidator},
-            data17:{trigger:'change',required:true,validator:rewardValidator},data18:{trigger:'change',required:true,validator:rewardValidator},
-            data19:{trigger:'change',required:true,validator:rewardValidator},data20:{trigger:'change',required:true,validator:rewardValidator},
-            data21:{trigger:'change',required:true,validator:rewardValidator},data22:{trigger:'change',required:true,validator:rewardValidator},
-            data23:{trigger:'change',required:true,validator:rewardValidator},data24:{trigger:'change',required:true,validator:rewardValidator},
-            data25:{trigger:'change',required:true,validator:rewardValidator},data26:{trigger:'change',required:true,validator:rewardValidator},
-            data27:{trigger:'change',required:true,validator:rewardValidator},data28:{trigger:'change',required:true,validator:rewardValidator},
-            data29:{trigger:'change',required:true,validator:rewardValidator},data30:{trigger:'change',required:true,validator:rewardValidator},
-            data31:{trigger:'change',required:true,validator:rewardValidator},data32:{trigger:'change',required:true,validator:rewardValidator},
-            data33:{trigger:'change',required:true,validator:rewardValidator},data34:{trigger:'change',required:true,validator:rewardValidator},
-            data35:{trigger:'change',required:true,validator:rewardValidator},data36:{trigger:'change',required:true,validator:rewardValidator},
-            data37:{trigger:'change',required:true,validator:rewardValidator},data38:{trigger:'change',required:true,validator:rewardValidator},
-            data39:{trigger:'change',required:true,validator:rewardValidator},data40:{trigger:'change',required:true,validator:rewardValidator},
-            data41:{trigger:'change',required:true,validator:rewardValidator},data42:{trigger:'change',required:true,validator:rewardValidator},
-            data43:{trigger:'change',required:true,validator:rewardValidator},data44:{trigger:'change',required:true,validator:rewardValidator},  
-            data45:{trigger:'change',required:true,validator:rewardValidator},data46:{trigger:'change',required:true,validator:rewardValidator},
-            data47:{trigger:'change',required:true,validator:rewardValidator},data48:{trigger:'change',required:true,validator:rewardValidator},                
+            data1:{trigger:'change',required:true,validator:rewardValidator1},data2:{trigger:'change',required:true,validator:rewardValidator2},
+            data3:{trigger:'change',required:true,validator:rewardValidator3},data4:{trigger:'change',required:true,validator:rewardValidator4},
+            data5:{trigger:'change',required:true,validator:rewardValidator5},data6:{trigger:'change',required:true,validator:rewardValidator6},
+            data7:{trigger:'change',required:true,validator:rewardValidator7},data8:{trigger:'change',required:true,validator:rewardValidator8},
+            data9:{trigger:'change',required:true,validator:rewardValidator1},data10:{trigger:'change',required:true,validator:rewardValidator2},
+            data11:{trigger:'change',required:true,validator:rewardValidator3},data12:{trigger:'change',required:true,validator:rewardValidator4},
+            data13:{trigger:'change',required:true,validator:rewardValidator5},data14:{trigger:'change',required:true,validator:rewardValidator6},
+            data15:{trigger:'change',required:true,validator:rewardValidator7},data16:{trigger:'change',required:true,validator:rewardValidator8},
+            data17:{trigger:'change',required:true,validator:rewardValidator1},data18:{trigger:'change',required:true,validator:rewardValidator2},
+            data19:{trigger:'change',required:true,validator:rewardValidator3},data20:{trigger:'change',required:true,validator:rewardValidator4},
+            data21:{trigger:'change',required:true,validator:rewardValidator5},data22:{trigger:'change',required:true,validator:rewardValidator6},
+            data23:{trigger:'change',required:true,validator:rewardValidator7},data24:{trigger:'change',required:true,validator:rewardValidator8},
+            data25:{trigger:'change',required:true,validator:rewardValidator1},data26:{trigger:'change',required:true,validator:rewardValidator2},
+            data27:{trigger:'change',required:true,validator:rewardValidator3},data28:{trigger:'change',required:true,validator:rewardValidator4},
+            data29:{trigger:'change',required:true,validator:rewardValidator5},data30:{trigger:'change',required:true,validator:rewardValidator6},
+            data31:{trigger:'change',required:true,validator:rewardValidator7},data32:{trigger:'change',required:true,validator:rewardValidator8},
+            data33:{trigger:'change',required:true,validator:rewardValidator1},data34:{trigger:'change',required:true,validator:rewardValidator2},
+            data35:{trigger:'change',required:true,validator:rewardValidator3},data36:{trigger:'change',required:true,validator:rewardValidator4},
+            data37:{trigger:'change',required:true,validator:rewardValidator5},data38:{trigger:'change',required:true,validator:rewardValidator6},
+            data39:{trigger:'change',required:true,validator:rewardValidator7},data40:{trigger:'change',required:true,validator:rewardValidator8},
+            data41:{trigger:'change',required:true,validator:rewardValidator1},data42:{trigger:'change',required:true,validator:rewardValidator2},
+            data43:{trigger:'change',required:true,validator:rewardValidator3},data44:{trigger:'change',required:true,validator:rewardValidator4},  
+            data45:{trigger:'change',required:true,validator:rewardValidator5},data46:{trigger:'change',required:true,validator:rewardValidator6},
+            data47:{trigger:'change',required:true,validator:rewardValidator7},data48:{trigger:'change',required:true,validator:rewardValidator8},                
             },
         }
   },

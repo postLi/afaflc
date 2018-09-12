@@ -76,7 +76,7 @@ import XLSX from 'xlsx'
 import Cookies from 'js-cookie'
 const TokenKey = 'TMS-Token'
 import { data_Commission ,data_CarList,data_MaidLevel,data_ServerClassList} from '@/api/server/areaPrice.js'
-import { data_get_couponActive2_Id,data_get_produceCoupon,data_get_BatchDistribution,data_get_grantCoupon,data_get_produceCouponExcel} from '@/api/marketing/shippermarkting/couponActive.js'
+import { data_get_couponActive3_Id,data_get_produceCoupon,data_get_BatchDistribution,data_get_grantCoupon,data_get_produceCouponExcel} from '@/api/marketing/shippermarkting/couponActive.js'
 import Upload from '@/components/Upload/singleImage'
 import vregion from '@/components/vregion/Region'
 import { eventBus } from '@/eventBus'
@@ -154,7 +154,7 @@ export default {
             this.$message.info('未选中需要生成优惠卷的活动');
            }
            else{
-            data_get_couponActive2_Id(this.params.id).then(res=>{
+            data_get_couponActive3_Id(this.params.id).then(res=>{
                 console.log(res)
             this.tableDataAll = res.data;
             })

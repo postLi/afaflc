@@ -10,7 +10,7 @@
 
         <!-- 手动化 -->
             <el-tab-pane label="手动化设置"  name="second">
-                <automation types='two'></automation>
+                <handmation types='two'></handmation>
             </el-tab-pane>            
     </el-tabs>
   </div>
@@ -19,6 +19,7 @@
 
 <script>
 import automation from './automation.vue'
+import handmation from './handmation.vue'
 export default {
     data(){
         return{
@@ -27,6 +28,7 @@ export default {
     },
     components:{    
             automation,
+            handmation,
     },
     watch:{
      shipperName(newVal,oldVal){

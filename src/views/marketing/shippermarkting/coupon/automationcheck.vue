@@ -400,6 +400,7 @@ export default {
         grantTime:null,
         endTime:null,
         couponStatus:'',
+        activityId:null,
        },
     }
  },
@@ -438,6 +439,7 @@ export default {
     
    openDialog(){
        this.dialogFormVisible_add = true;
+       this.searchData.activityId = this.templateItem.id;
       data_get_couponActive_Id(this.templateItem.id).then((res)=>{
           let now1 = new Date(res.data.startTime);
           let now2 = new Date(res.data.endTime);

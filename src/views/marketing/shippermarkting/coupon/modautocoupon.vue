@@ -4,7 +4,7 @@
       <div class="newcoupon1">
       <el-dialog  :visible="dialogFormVisible_add" :before-close="change" :title="btntitle">
         <el-form :model="formAllData" ref="formAllData" :rules="rulesForm">
-          <el-row >
+          <el-row v-if="editType=='one'">
             <el-col>
                <el-form-item  label="触发条件：" :label-width="formLabelWidth" prop="activityType"> 
                     <el-radio-group v-model="formAllData.activityType" size="small">
@@ -132,7 +132,7 @@
                    </div> 
              <div class="ht_table_td table_th10">
                      <span v-if="formAllData.aflcCouponList[keys].timeType =='AF046301'">
-                         <el-input v-model="formAllData.aflcCouponList[keys].overTime" placeholder="过期天数" max="3"></el-input>
+                         <el-input v-model="formAllData.aflcCouponList[keys].overTime" placeholder="过期天数" maxlength="3"></el-input>
                      </span>
                      <span v-else>
                                <el-date-picker
@@ -513,13 +513,14 @@ export default {
            }
         else{
       data_get_couponActive_Id(this.params.id).then((res)=>{
+          console.log('11111',res)
           let now1 = new Date(res.data.startTime);
           let now2 = new Date(res.data.endTime);
           let Ctime = [];
           this.formAllData.id = this.params.id
           this.formAllData.activityName= res.data.activityName
           this.formAllData.activityDes= res.data.activityDes
-          this.formAllData.areaCode= res.data.areaCode
+          this.formAllData.areaCode=res.data.areaCode
           this.formAllData.activityType= res.data.activityType
           Ctime.push(now1.getTime(),now2.getTime())
           this.formAllData.createTime = Ctime
@@ -537,6 +538,7 @@ export default {
           
       })
       data_get_couponActive2_Id(this.params.id).then((res)=>{
+           console.log('222222',res)
           this.formAllData.aflcCouponList = res.data
           for(var i= 0;i<this.formAllData.aflcCouponList.length;i++){
               this.formAllData.aflcCouponList[i].startTime  = new Date(this.formAllData.aflcCouponList[i].startTime).getTime()
@@ -698,7 +700,7 @@ export default {
                  }
     },
      add_data(){
-            console.log('this.formAllData.endTime',this.formAllData)     
+            console.log('this.formAllData.endTime') 
             this.completeData(); 
             if(this.completeData()==false)
             {
@@ -707,29 +709,56 @@ export default {
             else{
             this.$refs['formAllData'].validate(valid=>{
               if(valid){
-                if(!typeof(this.formAllData.areaCode)=='string'){
+                if(typeof(this.formAllData.areaCode)=='string'){
+                console.log('this.formAllData.areaCode',typeof(this.formAllData.areaCode))
+                if(!this.formAllData.area){
+                   this.formAllData.areaCode = this.formAllData.areaCode.split(",").splice(0,2)
+                   console.log('111',this.formAllData.areaCode)
+                   this.formAllData.areaCode = String(this.formAllData.areaCode)
+                }
+                else{
+                    
+                  this.formAllData.areaCode = this.formAllData.areaCode.split(",").splice(0,1).pop()
+                  console.log('222',this.formAllData.areaCode)
+                this.formAllData.areaCode = String(this.formAllData.areaCode)
+                } 
+                    console.log('11111', this.formAllData.areaCode)
+                }
+                else{
                 if(this.formAllData.area){
                     this.formAllData.areaCode.splice(0,2)
+                    this.formAllData.areaCode = String(this.formAllData.areaCode)
                 }
                 else{
                     this.formAllData.areaCode.splice(0,1)
                     this.formAllData.areaCode.pop()
-                }                
+                    this.formAllData.areaCode = String(this.formAllData.areaCode)
+                }              
                 }
-                this.formAllData.areaCode = String(this.formAllData.areaCode)
+
                     let aflcCouponList = []
                     this.formAllData.aflcCouponList.map((list,index)=>{
-                    if(!typeof(list.areaCode)=='string'){
+                    if(typeof(list.areaCode)=='string'){
                     if(list.area){
+                      list.areaCode = this.formAllData.areaCode.split(",").splice(0,2)
+                    //   list.areaCode.splice(0,2)
+                    }
+                    else{
+                      list.areaCode = this.formAllData.areaCode.split(",").splice(0,1).pop()
+                    //   list.areaCode.splice(0,1)
+                    //   list.areaCode.pop()
+                    }
+                    }
+                    else{
+                     if(list.area){
                       list.areaCode.splice(0,2)
                     }
                     else{
                       list.areaCode.splice(0,1)
                       list.areaCode.pop()
-                    }
+                    }                  
                     }
                       list.areaCode  = String(list.areaCode)
-                      console.log(list.areaCode)
                         aflcCouponList.push(
                             {
                                 province:list.province,
