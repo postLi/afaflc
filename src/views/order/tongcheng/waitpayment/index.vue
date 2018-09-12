@@ -1,6 +1,6 @@
 <template>
     <div class="identicalStyle clearfix waitpayment" v-loading="loading">
-            <el-form :model="searchInfo" ref="ruleForm" class="demo-ruleForm classify_searchinfo">
+            <el-form :inline="true" :model="searchInfo" ref="ruleForm" class="demo-ruleForm classify_searchinfo">
                     <el-form-item label="区域" prop="pointName">
                         <vregion :ui="true" @values="regionChange" class="form-control">
                             <el-input v-model="searchInfo.belongCityName" placeholder="请选择出发地" clearable></el-input>
@@ -28,15 +28,15 @@
                         </el-date-picker>
                     </el-form-item>
                     <el-form-item class="btnChoose fr"  style="margin-left:0;">
-                        <el-button type="primary" plain @click="handleSearch('search')">搜索</el-button>
-                        <el-button type="info" plain @click="handleSearch('clear')">清空</el-button>
+                        <el-button type="primary" :size="btnsize" plain @click="handleSearch('search')">搜索</el-button>
+                        <el-button type="info" :size="btnsize" plain @click="handleSearch('clear')">清空</el-button>
                     </el-form-item>
             </el-form>
             <div class="classify_info">
                 <div class="btns_box">
-                    <el-button type="primary" plain @click="handleSearch('outExce')" size="mini">导出Exce</el-button>
+                    <el-button type="primary" :size="btnsize" plain @click="handleSearch('outExce')">导出Exce</el-button>
                 </div>
-                <div class="info_news" style="height:87%;">
+                <div class="info_news">
                     <el-table
                         id="out-table"
                         ref="multipleTable"
@@ -121,6 +121,22 @@
                                 </template>
                         </el-table-column>
                         <el-table-column
+                            label="提货地"
+                            :show-overflow-tooltip="true"
+                            width="250">
+                            <template  slot-scope="scope">
+                                {{ scope.row.aflcOrderAddresses[0].viaAddress }}
+                            </template>
+                        </el-table-column>
+                        <el-table-column
+                            label="目的地"
+                            :show-overflow-tooltip="true"
+                            width="250">
+                            <template  slot-scope="scope">
+                                {{ scope.row.aflcOrderAddresses[scope.row.aflcOrderAddresses.length-1].viaAddress }}
+                            </template>
+                        </el-table-column>
+                        <!-- <el-table-column
                             prop="aflcOrderAddresses"
                             label="配送路径"
                             width="450">
@@ -132,10 +148,10 @@
                                     {{obj.viaAddress}}
                                 </p>
                             </template>
-                        </el-table-column>
+                        </el-table-column> -->
                         <el-table-column
                             label="下单时间"
-                            width="250">
+                            width="200">
                             <template  slot-scope="scope">
                                 {{ scope.row.useTime | parseTime}}
                             </template>
@@ -145,8 +161,6 @@
                     <div class="info_tab_footer">共计:{{ dataTotal }} <div class="show_pager"> <Pager :total="dataTotal" @change="handlePageChange"  :sizes="sizes"/></div> </div>    
                 </div>
             </div>
-
-            <!-- <Details :dialogFormVisible_details.sync = "dialogFormVisible_details" :orderSerial="DetailsOrderSerial" ></Details> -->
     </div>
 </template>
 
@@ -158,22 +172,20 @@ import '@/styles/dialog.scss'
 import { orderStatusList } from '@/api/order/ordermange'
 import { parseTime,pickerOptions2 } from '@/utils/index.js'
 import Pager from '@/components/Pagination/index'
-// import Details from '../components/detailsInformations'
 import vregion from '@/components/vregion/Region'
-
 
     export default{
         components:{
             Pager,
-            // Details,
             vregion
         },
         data(){
             return{
+                btnsize:'mini',
                 timeOutWaitPay:null,
                 loading: true,//加载
-                sizes:[20,50,100],
-                pagesize:20,//初始化加载数量
+                sizes:[30,50,100],
+                pagesize:30,//初始化加载数量
                 page:1,//初始化页码
                 dataTotal:0,
                 searchInfo:{
@@ -253,8 +265,6 @@ import vregion from '@/components/vregion/Region'
                         item.aflcOrderAddresses.sort(function(a,b){  
                             return a.viaOrder - b.viaOrder;  
                         })  
-
-                        // item.useCar = parseTime(item.useCarTime)
                     })
                     this.loading = false;
                 })
@@ -269,12 +279,10 @@ import vregion from '@/components/vregion/Region'
                         if(this.chooseTime){
                             this.searchInfo.startOrderDate = this.chooseTime[0];
                             this.searchInfo.endOrderDate = this.chooseTime[1];
-                       
                         }else{
                             this.searchInfo.startOrderDate ='' ;
                             this.searchInfo.endOrderDate = '';
                         }
-
                         this.firstblood();
                         break;
                     case 'clear':
@@ -305,9 +313,6 @@ import vregion from '@/components/vregion/Region'
             },
             //详情弹窗
             pushOrderSerial(item){
-                // console.log(item)
-                // this.dialogFormVisible_details = true;
-                // this.DetailsOrderSerial = item.orderSerial;
                 this.$router.push({name: '订单详情',query:{ orderSerial:item.orderSerial }});
             }
         }

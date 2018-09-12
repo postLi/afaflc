@@ -50,14 +50,11 @@
                 </div> 
             </el-dialog>
         </div>
-        <cue ref="cue"></cue>
     </div>
-        
 </template>
 
 <script>
 import { aflcShipperPlatformUpdata } from '@/api/dispatch/Directional.js'
-import cue from "@/components/Message/cue";
 
 
 export default {
@@ -83,7 +80,6 @@ export default {
       };
     },
     components:{
-        cue
     },
     computed: {
         startTimeStatus() {
@@ -140,12 +136,17 @@ export default {
                 // console.log('结束:',this.changeforms.bindingStartDate,this.changeforms.bindingEndDate)
                 
            if(!this.changeforms.bindingStartDate){
-                let information = "请填写绑定开始时间";
-                this.$refs.cue.hint(information) 
+              
+                 return this.$message({
+                    type: 'warning',
+                    message: '请填写绑定开始时间~'
+                })
             }
             else if(!this.changeforms.bindingEndDate ){
-                let information = "请填写绑定结束时间";
-                this.$refs.cue.hint(information)
+                 return this.$message({
+                    type: 'warning',
+                    message: '请填写绑定结束时间~'
+                })
             }
             else{
 
@@ -161,7 +162,6 @@ export default {
         //修改关闭
         closeChangeInfo(){
             this.close();
-            
         },
     },
 }

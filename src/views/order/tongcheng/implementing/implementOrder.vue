@@ -3,10 +3,10 @@
             <searchInfo @change="getSearchParam"></searchInfo>
             <div class="classify_info">
                 <div class="btns_box">
-                    <el-button type="primary" plain @click="handleSearch('cancel')" size="mini">取消订单</el-button>
-                    <el-button type="primary" plain @click="handleSearch('export')" size="mini">导出Exce</el-button>
+                    <el-button type="primary" :size="btnsize" plain @click="handleSearch('cancel')">取消订单</el-button>
+                    <el-button type="primary" :size="btnsize" plain @click="handleSearch('export')">导出Exce</el-button>
                 </div>
-                <div class="info_news" style="height:88%;">
+                <div class="info_news" style="height:89%;">
                     <el-table
                         ref="multipleTable"
                         :data="tableData"
@@ -117,7 +117,6 @@
                 <!-- 页码 -->
             <div class="info_tab_footer">共计:{{ dataTotal }} <div class="show_pager"> <Pager :total="dataTotal" @change="handlePageChange"  :sizes="sizes"/></div> </div>    
 
-            <!-- <Details :dialogFormVisible_details.sync = "dialogFormVisible_details" :orderSerial="DetailsOrderSerial" ></Details> -->
             <cancelCompnent :dialogVisible.sync="dialogVisible" :orderSerial = "currentOrderSerial"   @close = "shuaxin"/>
     </div>
 </template>
@@ -127,7 +126,6 @@
 import { orderStatusList } from '@/api/order/ordermange'
 import { parseTime } from '@/utils/index.js'
 import Pager from '@/components/Pagination/index'
-// import Details from '../components/detailsInformations'
 import searchInfo from './components/searchInfo'
 import cancelCompnent from '../components/cancel'
 
@@ -150,6 +148,7 @@ import cancelCompnent from '../components/cancel'
         },
         data(){
             return{
+                btnsize:'mini',
                 currentOrderSerial:'',//当前选择的流水号
                 timeOut:null,
                 loading: true,//加载

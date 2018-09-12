@@ -1,6 +1,6 @@
 <template>
     <div style="height:100%;"  class="identicalStyle">
-          <el-form :model="formInline" ref="ruleForm" class="classify_searchinfo">
+          <el-form :inline="true" :model="formInline" ref="ruleForm" class="classify_searchinfo">
                 <el-form-item label="手机号：">
                     <el-input placeholder="请输入内容" v-model.trim="formInline.mobile" clearable></el-input>
                 </el-form-item>
@@ -11,13 +11,13 @@
                     <el-input placeholder="请输入内容" v-model.trim="formInline.contacts" clearable></el-input>
                 </el-form-item>
                 <el-form-item class="fr">
-                    <el-button type="primary" plain @click="getdata_search">查询</el-button>
-                    <el-button type="info" plain @click="clearSearch">清空</el-button>
+                    <el-button type="primary" :size="btnsize" plain @click="getdata_search">查询</el-button>
+                    <el-button type="info" :size="btnsize" plain @click="clearSearch">清空</el-button>
                 </el-form-item>
             </el-form>
         <div class="classify_info">
 		    <div class="btns_box">
-                <el-button type="primary" plain @click="handleChange">修改</el-button>
+                <el-button type="primary" :size="btnsize" plain @click="handleChange">修改</el-button>
 		    </div>
             <div class="info_news">
                 <el-table
@@ -116,6 +116,7 @@ export default {
     },
     data(){
         return {
+            btnsize:'mini',
             paramsView:{},
             templateRadio:'',
             options:[],

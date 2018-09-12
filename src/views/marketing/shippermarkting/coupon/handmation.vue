@@ -158,7 +158,7 @@
 
 <script>
 import {data_CarList,data_MaidLevel,data_ServerClassList} from '@/api/server/areaPrice.js'
-import {data_get_couponActiveauto_list,data_Del_couponActive,data_Able_couponActive,data_automationActive,data_couponActive,data_couponActiveTime,data_couponStatus} from '@/api/marketing/shippermarkting/couponActive.js'
+import {data_get_couponActivehand_list,data_Del_couponActive,data_Able_couponActive,data_automationActive,data_couponActive,data_couponActiveTime,data_couponStatus} from '@/api/marketing/shippermarkting/couponActive.js'
 import { regionDataPlus, CodeToText, TextToCode } from 'element-china-area-data'
 import { eventBus } from '@/eventBus'
 import Pager from '@/components/Pagination/index'
@@ -254,9 +254,9 @@ export default {
                      startTime:this.formAllData.startTime, 
                      endTime:this.formAllData.endTime,           
                     }  
-                }
+                }   
 
-                data_get_couponActiveauto_list(this.page,this.pagesize,FromData).then(res => {
+                data_get_couponActivehand_list(this.page,this.pagesize,FromData).then(res => {
                   console.log(res)
                     this.dataTotal = res.data.totalCount
                     this.tableDataAll = res.data.list;
@@ -369,10 +369,11 @@ export default {
         },
         getMoreInformation(){
             data_automationActive().then(res=>{
-                   res.data.map((item)=>{
-                        this.activeList.push(item);
+                    let activeListType = []
+                    res.data.map((item)=>{
+                       activeListType.push(item);
                     })
-                    this.activeList.splice(0,1)
+                    this.activeList.push(activeListType[0])
                 })
                 data_CarList().then(res=>{
                     // console.log(res.data)
@@ -412,7 +413,8 @@ export default {
         }
     },
      mounted(){
-         this.formAllData.usingStatus = null;
+         if(this.types=='two')
+         this.formAllData.usingStatus = "1";
          this.getMoreInformation();
          eventBus.$on('changeListtwo', () => {
                 this.firstblood()

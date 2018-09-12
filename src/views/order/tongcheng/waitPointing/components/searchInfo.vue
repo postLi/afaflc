@@ -1,5 +1,5 @@
 <template>
-    <el-form :model="searchInfo" ref="ruleForm" class="demo-ruleForm classify_searchinfo">
+    <el-form  :inline="true" :model="searchInfo" ref="ruleForm" class="demo-ruleForm classify_searchinfo">
         <el-form-item label="区域" prop="pointName">
             <vregion :ui="true" @values="regionChange" class="form-control">
                 <el-input v-model="searchInfo.belongCity" placeholder="请选择出发地"></el-input>
@@ -27,8 +27,8 @@
             </el-date-picker>
         </el-form-item>
         <el-form-item class="btnChoose fr"  style="margin-left:0;">
-            <el-button type="primary" plain @click="handleSearch('search')">搜索</el-button>
-            <el-button type="info" plain @click="handleSearch('clear')">清空</el-button>
+            <el-button type="primary" :size="btnsize" plain @click="handleSearch('search')">搜索</el-button>
+            <el-button type="info" :size="btnsize" plain @click="handleSearch('clear')">清空</el-button>
         </el-form-item>
     </el-form>
 </template>
@@ -44,6 +44,7 @@ import vregion from '@/components/vregion/Region'
         },
         data(){
             return{
+                btnsize:'mini',
                 chooseTime:[],
                 pickerOptions2:{
                     shortcuts:pickerOptions2

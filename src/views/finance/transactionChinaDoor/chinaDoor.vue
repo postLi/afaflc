@@ -1,3 +1,3 @@
 <template>
-    <div>3</div>
+    <div>平台账户概况</div>
 </template>

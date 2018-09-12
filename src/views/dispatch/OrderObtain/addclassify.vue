@@ -36,12 +36,12 @@
                         <div class="publishSet">
                             <div class="chooseTime publishStyle">
                                 <span>公布中单时间 ：</span>
-                                <el-input v-model="form.time" placeholder="请输入内容" maxlength="4" clearable ref="times" @blur="valuerules"></el-input>
+                                <el-input v-model="form.time" placeholder="请输入内容" maxlength="4" clearable ref="times" v-number-only:point></el-input>
                                 <span> / 秒</span>
                             </div>
                             <div class="chooseKM publishStyle">
                                 <span>公布中单距离 ：</span>
-                                <el-input v-model="form.km" placeholder="请输入内容" maxlength="4" clearable></el-input>
+                                <el-input v-model="form.km" placeholder="请输入内容" maxlength="4" v-number-only:point clearable></el-input>
                                 <span> / 公里</span>
                             </div>
                         </div>
@@ -56,8 +56,6 @@
                     </div> 
                 </el-dialog>
             </div>
-
-            <cue ref="cue"></cue>
     </div>
 </template>
 
@@ -66,7 +64,6 @@
 import getCityList from '@/components/GetCityList/index'
 import { data_CarList,data_ServerClassList } from '@/api/common.js'
 import { data_NewData } from '@/api/dispatch/OrderObtain.js'
-import cue from "../../../components/Message/cue";
 
 
 export default {
@@ -83,7 +80,6 @@ export default {
     },
     components:{
         getCityList,
-        cue
     },
     data() {
       return {
@@ -146,44 +142,45 @@ export default {
 
             // this.forms.areaCode = this.$refs.area.selectedOptions.pop();
             if(!this.forms.areaCode){
-                let information = "请选择地区";
-                this.$refs.cue.hint(information)
-                return
+                return this.$message({
+                    type: 'warning',
+                    message: '请选择地区~'
+                })
             }
             else if(!this.forms.serivceCode){
-                let information = "请选择服务类型";
-                this.$refs.cue.hint(information)
-                 return
+                return this.$message({
+                    type: 'warning',
+                    message: '请选择服务类型~'
+                })
             }
             else if(!this.forms.carType){
-                let information = "请选择车辆类型";
-                this.$refs.cue.hint(information)
-                 return
+                return this.$message({
+                    type: 'warning',
+                    message: '请选择车辆类型~'
+                })
             }
             else if(!this.forms.obtainKmList){
-                let information = "公布中单时间必填且为数字整数";
-                this.$refs.cue.hint(information) 
-                 return
+                return this.$message({
+                    type: 'warning',
+                    message: '公布中单时间必填且为数字整数~'
+                })
             }
             else if(!this.forms.obtainTimeList){
-                let information = "公布距离必填且为数字整数";
-                this.$refs.cue.hint(information)
-                 return
+                return this.$message({
+                    type: 'warning',
+                    message: '公布距离必填且为数字整数~'
+                })
             }
             else{
-                
-            //     console.log(this.forms)
-    
                 data_NewData(this.forms).then(res=>{
                     console.log(res)
                     this.$alert('操作成功', '提示', {
                         confirmButtonText: '确定',
                         callback: action => {
                             this.$emit('renovate');
-                            this.clearForms();
+                            this.closeAddNewInfo();
                         }
                     });
-                    
                 }).catch( err => {
                     this.$message({
                         type: 'info',
@@ -191,7 +188,7 @@ export default {
                     })
                 })
             }
-            console.log(this.forms)
+            // console.log(this.forms)
         },
         //关闭清空
         closeAddNewInfo(){
@@ -271,28 +268,6 @@ export default {
 
             this.forms.obtainTimeList = TimeList.join(',');
             this.forms.obtainKmList = KmList.join(',');
-
-
-        },
-        //验证数据值
-        valuerules(event){
-            if(!event.target.value){
-                return 
-            }else{
-                if(!/^[0-9]+$/.test(event.target.value)){
-                    let information = "请输入数字类型内容";
-                    this.$refs.cue.hint(information)
-                    this.ifMoreForms.forEach(el => {
-                        for(let item in el){
-                            console.log(item);
-                            if(el[item] == event.target.value){
-                                el[item] = null;
-                            }
-                        }
-                    })
-                    event.target.focus()
-                }
-            }
         },
     },
    

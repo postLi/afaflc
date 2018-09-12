@@ -1,6 +1,6 @@
 <template>
     <div class="identicalStyle clearfix waitpayment" v-loading="loading">
-              <el-form :model="searchInfo" ref="ruleForm" class="demo-ruleForm classify_searchinfo">
+              <el-form  :inline="true" :model="searchInfo" ref="ruleForm" class="demo-ruleForm classify_searchinfo">
                     <el-form-item label="区域" prop="pointName">
                         <vregion :ui="true" @values="regionChange" class="form-control">
                             <el-input v-model="searchInfo.belongCityName" placeholder="请选择出发地" clearable></el-input>
@@ -28,15 +28,15 @@
                         </el-date-picker>
                     </el-form-item>
                     <el-form-item class="btnChoose fr"  style="margin-left:0;">
-                        <el-button type="primary" plain @click="handleSearch('search')">搜索</el-button>
-                        <el-button type="info" plain @click="handleSearch('clear')">清空</el-button>
+                        <el-button type="primary" :size="btnsize" plain @click="handleSearch('search')">搜索</el-button>
+                        <el-button type="info" :size="btnsize" plain @click="handleSearch('clear')">清空</el-button>
                     </el-form-item>
               </el-form>
             <div class="classify_info">
                 <div class="btns_box">
-                    <el-button type="primary" plain @click="handleSearch('search')" size="mini">导出Exce</el-button>
+                    <el-button type="primary" :size="btnsize" plain @click="handleSearch('search')">导出Exce</el-button>
                 </div>
-                <div class="info_news" style="height:87%;">
+                <div class="info_news">
                     <el-table
                         ref="multipleTable"
                         :data="tableData"
@@ -186,6 +186,7 @@ import vregion from '@/components/vregion/Region'
         },
         data(){
             return{
+                btnsize:'mini',
                 timeOutCancel:null,
                 loading: true,//加载
                 sizes:[20,50,100],

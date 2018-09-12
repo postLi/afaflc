@@ -1,14 +1,12 @@
 import fetch from '../../utils/fetch'
-
-
-const baseurl = "aflc-"
+const baseUrl = 'aflccommonservice-lyc'
 
 /**
  * 获取指定网点的所有下级节点
  * @param {*} orgid 网点ID
  */
 export function getGroupName(orgid) {
-  return fetch.get('/aflccommonservice/system/org/v1/getChildInfo/' + orgid).then(res => {
+  return fetch.get('/'+baseUrl+'/system/org/v1/getChildInfo/' + orgid).then(res => {
     return res.data || []
   })
 }
@@ -48,12 +46,19 @@ export function getGroupName(orgid) {
 } */
 /**
  * 获取所有网点的信息，树形结构
+ * 过滤掉无效的网点
  */
 const LocalAllOrgInfo = {}
 export function getAllOrgInfo(orgId, isRefresh) {
+  return fetch.get('/'+baseUrl+'/system/org/v1/tree/' + orgId).then(res => {
+    const data = res.data || []
+    LocalAllOrgInfo[orgId] = data
+    return data
+  })
+
   // 如果是强制刷新或者无本地缓存则请求服务器
-  if (isRefresh || (!LocalAllOrgInfo[orgId])) {
-    return fetch.get('/aflccommonservice/system/org/v1/tree/' + orgId).then(res => {
+  /* if (isRefresh || (!LocalAllOrgInfo[orgId])) {
+    return fetch.get('/'+baseUrl+'/system/org/v1/tree/' + orgId).then(res => {
       const data = res.data || []
       LocalAllOrgInfo[orgId] = data
       return data
@@ -62,9 +67,9 @@ export function getAllOrgInfo(orgId, isRefresh) {
     return new Promise(resolve => {
       resolve(LocalAllOrgInfo[orgId])
     })
-  }
+  }*/
 
-  /* return fetch.get('/aflccommonservice/system/org/v1/tree').then(res => {
+  /* return fetch.get('/'+baseUrl+'/system/org/v1/tree').then(res => {
     let data = res.data
     if (orgid) {
       data = getOrgChild(data, orgid)
@@ -72,15 +77,23 @@ export function getAllOrgInfo(orgId, isRefresh) {
     return data || []
   }) */
 }
+/** 返回全部的数据 */
+export function postAllOrgInfo(orgId, isRefresh) {
+  return fetch.post('/'+baseUrl+'/system/org/v1/tree/' + orgId).then(res => {
+    const data = res.data || []
+    LocalAllOrgInfo[orgId] = data
+    return data
+  })
+}
 /**
  * 获取指定网点的部门信息
  * @param {*} orgid 网点id
  */
-export function getDepartmentInfo(orgid) {
-  return fetch.get('/aflccommonservice/system/dict/v1/selectDictInfo', {
+export function getDepartmentInfo(orgId) {
+  return fetch.get('/'+baseUrl+'/system/dict/v1/selectDictInfo', {
     params: {
       dictType: 'department_type',
-      orgid
+      orgId
     }
   }).then(res => {
     return res.data || []
@@ -92,7 +105,7 @@ export function getDepartmentInfo(orgid) {
  * @param {*} pagesize 获取权限列表的长度
  */
 export function getAuthInfo(orgid, pageSize = 50, currentPage = 1) {
-  return fetch.post('/aflccommonservice/system/role/v1/findAllInfo', {
+  return fetch.post('/'+baseUrl+'/system/role/v1/findAllInfo', {
     currentPage,
     pageSize,
     vo: {
@@ -110,14 +123,32 @@ export function getAuthInfo(orgid, pageSize = 50, currentPage = 1) {
  * @param {*} orgid 组织ID
  */
 export function getAllUser(orgid, name, mobilephone, pageSize = 100, currentPage = 1) {
-    let params = orgid
-    if (typeof orgid !== 'object') {
-        params = { pageSize, currentPage, vo: {
-            name, orgid, mobilephone
-        }
+  let params = orgid
+  if (typeof orgid !== 'object') {
+    params = { pageSize, currentPage, vo: {
+      name, orgid, mobilephone
+    }
     }
   }
-  return fetch.post('/aflccommonservice/system/user/v1/findAllInfo', params).then(res => {
+  return fetch.post('/'+baseUrl+'/system/user/v1/findAllInfo', params).then(res => {
+    return res.data || { total: 0, list: [] }
+  })
+}
+
+/**
+ * 获取当前网点的全部用户
+ * @param {*} name 姓名
+ * @param {*} orgid 组织ID
+ */
+export function getAllOrgUser(orgid, name, mobilephone, pageSize = 100, currentPage = 1) {
+  let params = orgid
+  if (typeof orgid !== 'object') {
+    params = { pageSize, currentPage, vo: {
+      name, orgid, mobilephone
+    }
+    }
+  }
+  return fetch.post('/'+baseUrl+'/system/user/v1/findAllInfoByOrgId', params).then(res => {
     return res.data || { total: 0, list: [] }
   })
 }
@@ -134,26 +165,26 @@ export function getOrgInfo(orgid) {
  * @param {*} data 要传输的数据
  */
 export function postEmployeer(data) {
-  return fetch.post('/aflccommonservice/system/user/v1/', data)
+  return fetch.post('/'+baseUrl+'/system/user/v1/', data)
 }
 /**
  * 修改员工
  * @param {*} data 要传输的数据
  */
 export function putEmployeer(data) {
-  return fetch.put('/aflccommonservice/system/user/v1/', data)
+  return fetch.put('/'+baseUrl+'/system/user/v1/', data)
 }
 /**
  * 删除员工
  * @param {*} data 要传输的数据
  */
 export function deleteEmployeer(id) {
-  return fetch.delete('/aflccommonservice/system/user/v1/' + id)
+  return fetch.delete('/'+baseUrl+'/system/user/v1/' + id)
 }
 /**
  * 修改员工的权限信息
  * @param {*} data 员工权限数据
  */
 export function putEmployeerAuth(data) {
-  return fetch.put('/aflccommonservice/system/user/v1/usersAuth', data)
+  return fetch.put('/'+baseUrl+'/system/user/v1/usersAuth', data)
 }

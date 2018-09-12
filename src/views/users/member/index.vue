@@ -87,6 +87,9 @@
 
 <style type="text/css" lang="scss">
     .member{
+        .identicalStyle{
+            padding-right: 0;
+        }
         .el-tabs--card>.el-tabs__header .el-tabs__item.is-active {
             background: rgba(236, 233, 230, 0.445);
             border-bottom-color: #ffffff;
@@ -95,9 +98,6 @@
             .el-tab-pane{
                 .classify_searchinfo{
                     padding: 0;
-                }
-                .classify_info{
-                    padding: 50px 0;
                 }
             }
         }

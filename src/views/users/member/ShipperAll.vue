@@ -1,6 +1,6 @@
 <template>
     <div style="height:100%;"  class="identicalStyle">
-          <el-form :model="shipperAll" ref="ruleForm" class="classify_searchinfo">
+          <el-form :inline="true" :model="shipperAll" ref="ruleForm" class="classify_searchinfo">
             <el-form-item label="所在地：">
               <!-- <GetCityList v-model="shipperAll.belongCity" ref="area"></GetCityList> -->
                 <!-- <vregion :ui="true" @values="regionChange" class="form-control"> -->
@@ -33,17 +33,17 @@
                 <el-input v-model.trim="shipperAll.mobile"></el-input>
             </el-form-item>
             <el-form-item class="fr"> 
-                <el-button type="primary" plain @click="getdata_search">查询</el-button>
-                <el-button type="info" plain @click="clearSearch">清空</el-button>
+                <el-button type="primary" plain :size="btnsize"  @click="getdata_search">查询</el-button>
+                <el-button type="info" plain :size="btnsize" @click="clearSearch">清空</el-button>
             </el-form-item>
           </el-form>
-		<div class="classify_info">
+		<div class="classify_info" >
 			<div class="btns_box">
-                <el-button type="primary" plain @click="handleClick('pushFreeze')">冻结</el-button>
-                <el-button type="primary" plain @click="handleClick('editFreeze')">冻结修改</el-button>
-                <el-button type="primary" plain @click="handleClick('pushBlack')">移入黑名单</el-button>
-                <el-button type="primary" plain @click="handleClick('removeBlack')">移除黑名单</el-button>
-                <el-button type="primary" plain @click="handleClick('removeFreeze')">解冻</el-button>
+                <el-button type="primary" plain :size="btnsize" @click="handleClick('pushFreeze')">冻结</el-button>
+                <el-button type="primary" plain :size="btnsize" @click="handleClick('editFreeze')">冻结修改</el-button>
+                <el-button type="primary" plain :size="btnsize" @click="handleClick('pushBlack')">移入黑名单</el-button>
+                <el-button type="primary" plain :size="btnsize" @click="handleClick('removeBlack')">移除黑名单</el-button>
+                <el-button type="primary" plain :size="btnsize" @click="handleClick('removeFreeze')">解冻</el-button>
 			</div>
 			<div class="info_news">
 				<el-table
@@ -142,6 +142,7 @@ export default {
 	},
   data(){
       return{
+            btnsize:'mini',
             dialogFormVisible_add:false,
             freezeDialogFlag:false,
             BlackDialogFlag:false,

@@ -3,12 +3,12 @@
             <searchInfo ></searchInfo>
             <div class="classify_info">
                 <div class="btns_box">
-                    <el-button type="primary" plain @click="handleSearch('appoint')" size="mini">指派司机</el-button>
-                    <el-button type="primary" plain @click="handleSearch('cancel')" size="mini">取消订单</el-button>
-                    <el-button type="primary" plain @click="handleSearch('search')" size="mini">新增订单</el-button>
-                    <el-button type="primary" plain @click="handleSearch('search')" size="mini">导出Exce</el-button>
+                    <el-button type="primary" plain @click="handleSearch('appoint')" :size="btnsize">指派司机</el-button>
+                    <el-button type="primary" plain @click="handleSearch('cancel')" :size="btnsize">取消订单</el-button>
+                    <el-button type="primary" plain @click="handleSearch('search')" :size="btnsize">新增订单</el-button>
+                    <el-button type="primary" plain @click="handleSearch('search')" :size="btnsize">导出Exce</el-button>
                 </div>
-                <div class="info_news" style="height:87%;">
+                <div class="info_news" style="height:89%">
                     <el-table
                         ref="multipleTable"
                         :data="tableData"
@@ -152,6 +152,7 @@ import appointDriver from '../components/appointDriver'
         },
         data(){
             return{
+                btnsize:'mini',
                 dialogVisible:false,
                 currentOrderSerial:'',
                 timeOutNoDriver:null,

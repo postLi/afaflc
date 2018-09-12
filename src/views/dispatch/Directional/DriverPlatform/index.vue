@@ -1,21 +1,23 @@
 <template>
     <div class="identicalStyle clearfix" v-loading = "loading">
-             <div class="classify_searchinfo">
-                <label>货主账号&nbsp;
-                   <el-input v-model="data.shipperName" placeholder="请输入内容"></el-input>
-                </label>
-                <label>平台运营人员&nbsp;
-                   <el-input v-model="data.orgName" placeholder="请输入内容"></el-input>
-                </label>    
-                <el-button type="primary"  plain @click="getdata_search">查询</el-button>
-                <el-button type="primary"  plain @click="reset">重置</el-button>
-            </div>
+            <el-form :inline="true" :model="data" ref="ruleForm" class="demo-ruleForm classify_searchinfo">
+                <el-form-item label="货主账号" prop="pointName">
+                    <el-input v-model="data.shipperName" placeholder="请输入内容"></el-input>
+                </el-form-item>
+                <el-form-item label="平台运营人员" prop="orderSerial">
+                    <el-input v-model="data.orgName" placeholder="请输入内容"></el-input>
+                </el-form-item>
+                <el-form-item class="btnChoose fr"  style="margin-left:0;">
+                    <el-button type="primary" :size="btnsize" plain @click="getdata_search">搜索</el-button>
+                    <el-button type="info" :size="btnsize" plain @click="reset">清空</el-button>
+                </el-form-item>
+            </el-form>
             <div class="classify_info">
                 <div class="btns_box">
-                    <el-button type="primary" plain icon="el-icon-circle-plus" @click="addClassfy">新增</el-button>
-                    <el-button type="primary" plain icon="el-icon-edit" @click="handleEdit">修改</el-button>
+                    <el-button type="primary" :size="btnsize" plain icon="el-icon-circle-plus" @click="addClassfy">新增</el-button>
+                    <el-button type="primary" :size="btnsize" plain icon="el-icon-edit" @click="handleEdit">修改</el-button>
                     <!-- <el-button type="primary" plain icon="el-icon-delete" @click="handleDelete">删除</el-button> -->
-                    <el-button type="primary" plain icon="el-icon-bell" @click="handleUseStates">启用/禁用</el-button>
+                    <el-button type="primary" :size="btnsize" plain icon="el-icon-bell" @click="handleUseStates">启用/禁用</el-button>
                 </div>
                 <div class="info_news">
                     <el-table
@@ -77,53 +79,14 @@
                             </template>
                         </el-table-column>
                       </el-table>
-                      <!-- 页码 -->
-                    <div class="Pagination ">
-                        <div class="block">
-                            <el-pagination
-                            @size-change="handleSizeChange"
-                            @current-change="handleCurrentChange"
-                            :current-page="currentPage4"
-                            :page-size="pagesize"
-                            layout="total, sizes, prev, pager, next, jumper"
-                            :total="totalCount">
-                            </el-pagination>
-                        </div>
-                    </div>
-                    <!-- <div class="info_tab_footer">共计:{{ totalCount }} <div class="show_pager"> <Pager :total="totalCount" @change="handlePageChange" /></div> </div>     -->
-
                 </div>
                 
                 <!-- 新增数据 -->
-                <addClassfy :dialogFormVisible.sync = "dialogFormVisible" :formtitle = "formtitle" @renovate="Onrenovate" @ifError="hint" ></addClassfy>
+                <addClassfy :dialogFormVisible.sync = "dialogFormVisible" :formtitle = "formtitle" @renovate="Onrenovate" ></addClassfy>
                 <!-- 修改数据 -->
-                <changeclassify :dialogFormVisibleChange.sync = "dialogFormVisibleChange" :formtitle = "formtitle_change" @ifError="hint" @renovate="Onrenovate" :changeforms = 'changeforms'></changeclassify>
-
-                <!-- 新增分类提示不可为空 -->
-                <div class="cue">
-                    <el-dialog
-                    :visible.sync="centerDialogVisible"
-                    center>
-                    <span>{{information}}</span>
-                    </el-dialog>
-                </div>
-                <!-- 删除信息提示 -->
-                <div class="delData">
-                    <el-dialog
-                    title="提示"
-                    :visible.sync="delDialogVisible">
-                    <span class="delwarn"></span>
-                    <span class="delinfo">确认删除信息吗 ?</span>
-                    <span slot="footer" class="dialog-footer">
-                        <el-button type="primary" @click="delDataInformation">确 定</el-button>
-                        <el-button @click="delDialogVisible = false" type="info" plain>取 消</el-button>
-                    </span>
-                    </el-dialog>
-                </div>
+                <changeclassify :dialogFormVisibleChange.sync = "dialogFormVisibleChange" :formtitle = "formtitle_change" @renovate="Onrenovate" :changeforms = 'changeforms'></changeclassify>
             </div>
             <div class="info_tab_footer">共计:{{ totalCount }} <div class="show_pager"> <Pager :total="totalCount" @change="handlePageChange" /></div> </div>
-
-        
     </div>
 </template>
 
@@ -131,7 +94,7 @@
 
 import { data_dispatchList,data_ChangeStatus } from '@/api/dispatch/PlatForm.js'
 import '@/styles/dialog.scss'
-import { parseTime,formatTime } from '../../../../utils/index.js'
+import { parseTime,formatTime } from '@/utils/index.js'
 import addClassfy from './addclassify'
 import changeclassify from './changeclassify'
 import Pager from '@/components/Pagination/index'
@@ -140,6 +103,7 @@ import Pager from '@/components/Pagination/index'
 
         data(){
             return{
+                btnsize:'mini',
                 loading:true,
                 carNumber:'',//车主账号
                 shipperNumber:'',//货主账号
@@ -158,7 +122,7 @@ import Pager from '@/components/Pagination/index'
                 dialogFormVisible_change:false,
                 centerDialogVisible:false,
                 delDialogVisible:false,
-                totalCount:'',
+                totalCount:0,
                 information:'你想知道什么',
                 delIDTree:'',
                 checkedinformation:[],
@@ -182,7 +146,6 @@ import Pager from '@/components/Pagination/index'
             //子组件调用父组件刷新页面  
             Onrenovate(){
                 this.firstblood();
-                this.dialogFormVisible = false;
             },
             // 获取翻页返回的数据
             handlePageChange (obj) {
@@ -202,12 +165,15 @@ import Pager from '@/components/Pagination/index'
             handleEdit() {
                 if(Object.keys(this.checkedinformation).length == 0){
                     //未选择任何修改内容的提示
-                    let information = "未选中任何修改内容";
-                    this.hint(information);
+                    this.$message({
+                        type: 'warning',
+                        message: '请选择您要操作的用户~'
+                    })
                 }else if(this.checkedinformation.length >1){
-                    let information = "不可修改多个内容";
-                    this.hint(information);
-
+                    this.$message({
+                        type: 'warning',
+                        message: '不可同时操作多个用户~'
+                    })
                 }else{
                     console.log(this.checkedinformation)
                     this.dialogFormVisibleChange = true;
@@ -221,22 +187,27 @@ import Pager from '@/components/Pagination/index'
             handleUseStates(){
                 if(this.checkedinformation.length === 0){
                     //未选择任何修改内容的提示
-                    let information = "未选中任何更改状态内容";
-                    this.hint(information);
+                    this.$message({
+                        type: 'warning',
+                        message: '请选择您要操作的用户~'
+                    })
                 }else{
                     let statusID = [];
                     console.log(this.checkedinformation)
                     this.checkedinformation.map((item)=>{
                         return statusID.push(item.id)
                     })
-                    console.log(statusID)
+
                     statusID = statusID.join(',');
-                    console.log(statusID)
+
                     data_ChangeStatus(statusID).then(res=>{
-                        console.log(res)
+
                         this.firstblood();
                     }).catch(err => {
-                        console.log(err)
+                        this.$message({
+                            type: 'info',
+                            message: '操作失败，原因：' + err.text ? err.text : err.errinfo
+                        })
                     })
                     this.$refs.multipleTable.clearSelection()
                 }
@@ -245,31 +216,39 @@ import Pager from '@/components/Pagination/index'
             handleDelete() {
                 if(this.checkedinformation.length === 0){
                     //未选择任何修改内容的提示
-                    let information = "未选中任何删除内容";
-                    this.hint(information);
+                    this.$message({
+                        type: 'warning',
+                        message: '请选择您要操作的用户~'
+                    })
                 }else{
-                    console.log(this.checkedinformation)
                     let delID = [];
                     this.checkedinformation.map((item)=>{
                         return delID.push(item.standardPid)
                     })
-                    this.delID = delID;
-                    this.delDialogVisible = true;
-                    console.log(this.delID)
+                    this.$confirm('确定要将手机号码为'+ item +'用户冻结吗？', '提示', {
+                        confirmButtonText: '确定',
+                        cancelButtonText: '取消',
+                        type: 'warning'
+                    }).then( ()=>{
+                            data_DeletInfo(this.delID).then(res=>{
+                            // console.log(res)
+                            this.$message({
+                                type: 'success',
+                                message: '用户已被删除',
+                                duration:2000
+                            })
+                            this.close();
+                            this.changeList();
+                        }).catch(err => {
+                            this.$message.error('操作失败，失败原因：',err.errorInfo)
+                        })
+                    }).catch(() => {
+                        this.$message({
+                            type: 'info',
+                            message: '已取消'
+                        })
+                    })
                 }
-            },
-            //确认删除
-            delDataInformation(){
-                this.delDialogVisible = false;
-                data_DeletInfo(this.delID).then(res => {
-                    if(res.status == 200){
-                      this.firstblood();
-                    }
-                }).catch(res=>{
-                    let information = res.text;
-                    this.hint(information);
-                })
-                
             },
             //刷新页面  
             firstblood(){
@@ -284,10 +263,8 @@ import Pager from '@/components/Pagination/index'
                         item.shipperInfo = item.shipperPhone+ '/' +item.shipperName;
                     })
                     this.loading = false ;
-
                 })
             },
-           
             //模糊查询 分类名称或者code
             getdata_search(){
                 this.firstblood();
@@ -305,14 +282,6 @@ import Pager from '@/components/Pagination/index'
                 this.dialogFormVisible = true;
                 this.$refs.multipleTable.clearSelection()
             },
-            hint(val){
-                this.information = val;
-                this.centerDialogVisible = true;
-                let timer = setTimeout(()=>{
-                    this.centerDialogVisible = false;
-                    clearTimeout(timer)
-                },2000)
-            }
         }
     }
 </script>

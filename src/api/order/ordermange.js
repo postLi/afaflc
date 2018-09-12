@@ -54,7 +54,18 @@ export function nearDriverList(data) {
 
 
 
-
+// 获取订单行车轨迹
+export function getOrderCarTrailList(page,pagesize,data) {
+    return fetch({
+      url: '/'+baseurl+'/order/aflcOrder/v1/getOrderCarTrailList',
+      method: 'post',
+      data:{
+        "currentPage": page,
+        "pageSize": pagesize,
+        "vo": data,
+      }
+    })
+  }
 
   
 
