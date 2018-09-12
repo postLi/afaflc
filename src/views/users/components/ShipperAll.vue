@@ -1,6 +1,6 @@
 <template>
     <div style="height:100%;" class="identicalStyle">
-          <el-form :model="formAll" ref="ruleForm" class="classify_searchinfo">
+          <el-form :inline="true" :model="formAll" ref="ruleForm" class="classify_searchinfo">
             <el-form-item label="所在地：">
                 <GetCityList v-model="formAll.belongCity" ref="area"></GetCityList>
             </el-form-item>
@@ -33,21 +33,19 @@
                 <el-input v-model.trim="formAll.mobile"></el-input>
             </el-form-item>
             <el-form-item class="fr">
-                <el-button type="primary" plain @click="getdata_search">查询</el-button>
-                <el-button type="info" plain @click="clearSearch">清空</el-button>
+                <el-button type="primary" plain @click="getdata_search" :size="btnsize">查询</el-button>
+                <el-button type="info" plain @click="clearSearch" :size="btnsize">清空</el-button>
             </el-form-item>
         </el-form>
 		<div class="classify_info">
 			<div class="btns_box">
-				<createdDialog btntext="新增" :plain="true" type="primary" btntype="primary" icon="el-icon-circle-plus" editType="add" btntitle="新增货主" @getData="getDataList"></createdDialog>
+				<createdDialog btntext="新增"  type="primary" icon="el-icon-circle-plus" editType="add" btntitle="新增货主" @getData="getDataList"></createdDialog>
 				<FreezeDialog
 				btntext="冻结"
 				type="primary" 
 				btntitle="冻结"
-				:plain="true"
 				editType='add'
 				freeze = 'freeze'
-				btntype="warning"
 				icon="el-icon-info"
 				:params="selectRowData"
 				@getData="getDataList"
@@ -58,9 +56,7 @@
 				type="primary" 
 				btntitle="冻结修改"
 				freeze = 'freeze'
-				:plain="true"
 				editType='edit'
-				btntype="warning"
 				icon="el-icon-edit"
 				:params="selectRowData"
 				@getData="getDataList"
@@ -70,9 +66,7 @@
 				btntext="移入黑名单"
 				type="primary" 
 				btntitle="移入黑名单"
-				:plain="true"
 				editType='add'
-				btntype="info"
 				icon="el-icon-warning"
 				:params="selectRowData"
 				@getData="getDataList"
@@ -81,9 +75,7 @@
 				btntext="移出黑名单"
 				type="primary" 
 				btntitle="移出黑名单"
-				:plain="true"
 				editType='edit'
-				btntype="info"
 				icon="el-icon-success"
 				:params="selectRowData"
 				@getData="getDataList"
@@ -93,9 +85,7 @@
 				type="primary" 
 				btntitle="解冻"
 				freeze = 'freeze'
-				:plain="true"
 				editType='remove'
-				btntype="success"
 				icon="el-icon-success"
 				:params="selectRowData"
 				@getData="getDataList"
@@ -189,6 +179,7 @@ export default {
 	},
   data(){
     return{
+        btnsize:'mini',
         templateRadio:'',
         dialogFormVisible_add:false,
         freezeDialogFlag:false,

@@ -62,14 +62,21 @@
 .tabsWrap{
     height:100%;    
     position: relative;
-    padding-right: 16px;
+    padding-right: 10px;
+    padding-top: 10px;
+    .el-tabs,.el-tabs--card,.el-tabs--top{
+        display: flex;
+        flex-direction: column;
+    }
     .el-tabs--card>.el-tabs__header {
         border-bottom: 1px solid #03a9f4;
-        padding-left: 10px;
-        padding-top: 12px;
+        // padding-left: 10px;
+        // padding-top: 12px;
     }
     .el-tabs__content {
         // overflow: auto;
+        flex: 1;
+        flex-grow: 1;
     }
     .el-tabs--card>.el-tabs__header .el-tabs__nav{
         border: 0 none;
@@ -93,12 +100,6 @@
         background: #ffffff;
         border-bottom-color: #f0f0f0;
     }
-
-    .el-tabs__content{
-        padding-left: 10px;
-        padding-top: 12px;
-    }
-
     .el-tab-pane{
         .el-table th .cell {
             white-space: initial;

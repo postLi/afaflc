@@ -2,10 +2,10 @@
     <div class="OpenseaRecommend identicalStyle clearfix" v-loading="loading">
             <div class="classify_info">
                 <div class="btns_box">
-                    <el-button type="primary" plain icon="el-icon-circle-plus" @click="addClassfy">新增</el-button>
-                    <el-button type="primary" plain icon="el-icon-edit" @click="handleEdit">修改</el-button>
-                    <el-button type="primary" plain icon="el-icon-delete" @click="handleDelete">删除</el-button>
-                    <el-button type="primary" plain icon="el-icon-bell" @click="handleUseStates">启用/禁用</el-button>
+                    <el-button type="primary" plain icon="el-icon-circle-plus" :size="btnsize" @click="addClassfy">新增</el-button>
+                    <el-button type="primary" plain icon="el-icon-edit" :size="btnsize" @click="handleEdit">修改</el-button>
+                    <el-button type="primary" plain icon="el-icon-delete" :size="btnsize" @click="handleDelete">删除</el-button>
+                    <el-button type="primary" plain icon="el-icon-bell" :size="btnsize" @click="handleUseStates">启用/禁用</el-button>
                 </div>
                 <div class="info_news">
                     <el-table
@@ -71,7 +71,6 @@
                     <span>{{information}}</span>
                     </el-dialog>
                 </div>
-
                 <!-- 删除信息提示 -->
                 <div class="delData">
                     <el-dialog
@@ -100,9 +99,9 @@ import changeclassify from './changeclassify'
 import Pager from '@/components/Pagination/index'
 
     export default{
-
         data(){
             return{
+                btnsize:'mini',
                 loading:true,//遮罩层
                 page:1,//页码
                 pagesize:20,//每页显示数量
@@ -164,7 +163,6 @@ import Pager from '@/components/Pagination/index'
                     this.dialogFormVisibleChange = true; 
                     this.changeforms = this.checkedinformation[0]
                     this.$refs.multipleTable.clearSelection()
-
                 }
             },
             // 禁用/启用
@@ -217,7 +215,6 @@ import Pager from '@/components/Pagination/index'
                     let information = res.text;
                     this.hint(information);
                 })
-                
             },
             //刷新页面和初始化数据
             firstblood(){
@@ -257,129 +254,11 @@ import Pager from '@/components/Pagination/index'
         height:100%;    
         position: relative;
         margin-left:7px;
-        .addclassify,.changeclassify{
-            .el-dialog{
-                position: relative;
-                .el-dialog__body{
-                    margin:0 20px;
-                    margin-bottom: 20px;
-                    .chooseinfo-item{
-                        font-size: 12px;
-                        line-height: 20px;
-                        color:#666;
-                        p{
-                            display: inline-block;
-                            span{
-                                color:red;
-                            }
-                        }
-                        .el-input{
-                            .el-input__inner{
-                                height: 24px;
-                                line-height:24px;
-                            }
-                        }
-                    }
-                    .extrainfo{
-                        border:1px solid #e6e6e6;
-                        width:680px;
-                        padding:16px 0;
-                        position: relative;
-                        margin-top:15px;
-                        p{
-                            width: 100px;
-                            text-align: right;
-                            padding-right: 12px;
-                            display: inline-block;
-                            font-size: 12px;
-                            line-height: 20px;
-                            color:#666;
-                            span{
-                                color:red;
-                            }
-                        }
-                        .ifprice{
-                            width:200px;
-                            text-align: left;
-                            span{
-                                color:#666;
-                                margin-left:5px;
-                            }
-                        }
-                        .nomore{
-                            margin-top:14px;
-                            .el-input{
-                                width:560px;
-                            }
-                        }
-                        .el-input{
-                            height:22px;
-                            width: 150px;
-                            input{
-                                height:22px;
-                                line-height: 22px;
-                                font-size:12px;
-                                color: #3e9ff1;
-                                padding:0 10px;
-                            }
-                        }
-                        .el-textarea{
-                            width: 560px;   
-                            vertical-align: middle;
-                            .el-textarea__inner{
-                                font-size:12px;
-                                line-height: 20px;
-                                color: #3e9ff1;
-                            }
-                        }
-                        .el-checkbox{
-                            margin:0 10px;
-                            .el-checkbox__input{
-                                .el-checkbox__inner{
-                                    width:12px;
-                                    height:12px;
-                                }
-                            }
-                            .el-checkbox__label{
-                                padding-left:5px;
-                                font-size: 12px;
-                                line-height: 20px;
-                                color:#666;
-                            }
-                        }
-                        .addItem,.reduceItem{
-                            top:0px;
-                            left: 101%;
-                        }
-                    }
-                }
-            }
-            
-        }
-        .classify_info{
+        &>.classify_info{
             height:100%;
-            padding:20px 13px 18px;
-            .btns_box{
-                margin-bottom:10px;
-                .el-button{
-                    margin-right:20px;
-                    padding:10px 20px;
-                }
-            }
+            padding:20px 13px 40px 0px;
             .info_news{
-                height:91%;
-                .el-table{
-                    table{
-                        width: 100% !important;
-                        th,td{
-                            text-align:center;
-                        }
-                    }
-                }
-            }
-            .Pagination{
-                margin-top:13px;
-                text-align:right;
+                height:94%;
             }
         }
     }

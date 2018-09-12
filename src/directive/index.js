@@ -5,6 +5,7 @@ import DragDialog from './el-dragDialog'
 import Waves from './waves'
 import vueSticky from './sticky'
 // import install from './fangda'
+import { getUserInfo } from '@/utils/auth'
 
 Clipboard.install()
 DragDialog.install()
@@ -200,3 +201,36 @@ Vue.directive('dialogDrag', {
    *  注意：如果是el-dialog弹出的表单el-form，最好不要把提交按钮当做el-form-item（elementUI文档是这么用的），放在el-dialog里。
    *  不然按钮会同el-dialog中标签一样被overflow；
   */
+
+
+  /** 权限指令**/
+Vue.directive('has', {
+    inserted: function(el, binding) {
+      // 判断是用value还是arg
+      // 优先使用arg
+      const val = binding.arg || binding.value
+      // console.log('v-has:', val)
+      if (val && !Vue.prototype.$_has_permission(val)) {
+        el.parentNode.removeChild(el)
+      }
+    }
+  })
+  // 权限检查方法
+  Vue.prototype.$_has_permission = function(value) {
+    let isExist = false
+    const buttonperms = getUserInfo()
+    if (buttonperms == undefined || buttonperms == null) {
+      return false
+    }
+    if (!buttonperms.permissionTrees || !buttonperms.permissionTrees.length) {
+      return false
+    }
+    const ptree = buttonperms.permissionTrees
+    for (let i = 0; i < ptree.length; i++) {
+      if (ptree[i].code === value) {
+        isExist = true
+        break
+      }
+    }
+    return isExist
+  }

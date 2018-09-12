@@ -1,6 +1,6 @@
 <template>
     <div class="identicalStyle">
-          <el-form :model="formAll" ref="ruleForm" class="classify_searchinfo">
+          <el-form :inline="true" :model="formAll" ref="ruleForm" class="classify_searchinfo">
             <el-form-item label="所在地：">
               <GetCityList v-model="formAll.belongCity" ref="area"></GetCityList>
             </el-form-item>

@@ -3,7 +3,7 @@
             <searchInfo @change="getSearchParam"></searchInfo>
             <div class="classify_info">
                 <div class="btns_box">
-                    <el-button type="primary" class="el-icon-tickets" plain @click="handleSearch('publish')" size="mini">发布公告</el-button>
+                    <el-button type="primary" class="el-icon-tickets" :size="btnsize" plain @click="handleSearch('publish')">发布公告</el-button>
                 </div>
                 <div class="info_news" style="height:89%;">
                     <el-table
@@ -37,11 +37,11 @@
                         <el-table-column label="操作">
                             <template slot-scope="scope">
                                 <el-button
-                                size="mini"
+                                :size="btnsize"
                                 :type="scope.row.isTop == 0 ? 'primary' : 'info'"
                                 @click="handleClick(scope.row,'ifTop')">{{scope.row.isTop == 0 ? '置顶' : '取消'}}</el-button>
                                 <el-button
-                                size="mini"
+                                :size="btnsize"
                                 @click="handleClick(scope.row,'revise')">修改</el-button>
                             </template>
                         </el-table-column>
@@ -75,6 +75,7 @@ import editor from '@/components/tinymac/index'
         },
         data(){
             return{
+                btnsize:'mini',
                 operateType:'',//操作类型：新增，修改
                 announceForm:{},//传递的对象
                 dialogFormVisible:false,
@@ -128,7 +129,7 @@ import editor from '@/components/tinymac/index'
 
                     slot: (scope) => {
                         let startTime = parseTime(scope.row.startTime, '{y}-{m}-{d} {h}:{i}:{s}');
-                        let endTime = scope.row.endTime ? parseTime(scope.row.startTime, '{y}-{m}-{d} {h}:{i}:{s}') : '长期';
+                        let endTime = scope.row.endTime ? parseTime(scope.row.endTime, '{y}-{m}-{d} {h}:{i}:{s}') : '长期';
                         return startTime + '<span class="youxiaoqi">至</span>' + endTime;
                     }
                 }, {
@@ -141,13 +142,13 @@ import editor from '@/components/tinymac/index'
 
                 }, {
                     label: '操作时间',
-                    prop: 'startTime',
+                    prop: 'createTime',
                     width: '250',
                     fixed: false,
                     overflow:true,
                     alignName:'center',
                     slot: (scope) => {
-                        return parseTime(scope.row.startTime, '{y}-{m}-{d} {h}:{i}:{s}')
+                        return parseTime(scope.row.createTime, '{y}-{m}-{d} {h}:{i}:{s}')
                     }
                 },
                 //  {

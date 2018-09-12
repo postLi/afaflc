@@ -1,5 +1,5 @@
 <template>
-    <el-form :model="searchInfo" ref="ruleForm" class="demo-ruleForm classify_searchinfo" >
+    <el-form :inline="true" :model="searchInfo" ref="ruleForm" class="demo-ruleForm classify_searchinfo" >
         <el-form-item label="类型" prop="pointName">
             <el-select v-model="searchInfo.complainType" clearable placeholder="请选择" v-if="serviceType == 'plant'">
                 <el-option
@@ -44,8 +44,8 @@
             </el-date-picker>
         </el-form-item> -->
         <el-form-item class="btnChoose fr"  style="margin-left:0;">
-            <el-button type="primary" plain @click="handleSearch('search')">搜索</el-button>
-            <el-button type="info" plain @click="handleSearch('clear')">清空</el-button>
+            <el-button type="primary" :size = "btnsize" plain @click="handleSearch('search')">搜索</el-button>
+            <el-button type="info" :size = "btnsize" plain @click="handleSearch('clear')">清空</el-button>
         </el-form-item>
     </el-form>
 </template>
@@ -68,6 +68,7 @@ import { getDictionary } from '@/api/common.js'
         },
         data(){
             return{
+                btnsize:"mini",
                 chooseTime:[],
                 dataType:'AF041',
                 pickerOptions2:{

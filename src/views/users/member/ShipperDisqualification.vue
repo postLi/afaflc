@@ -1,6 +1,6 @@
 <template>
     <div style="height:100%;"  class="identicalStyle">
-          <el-form :model="formAll" ref="ruleForm" class="classify_searchinfo">
+          <el-form :inline="true" :model="formAll" ref="ruleForm" class="classify_searchinfo">
                 <el-form-item label="所在地">
                     <!-- <GetCityList v-model="formAll.belongCity" ref="area"></GetCityList> -->
                 <el-input v-model="formAll.belongCityName" placeholder="请输入"></el-input>
@@ -12,12 +12,12 @@
                     <el-input v-model.trim="formAll.mobile"></el-input>
                 </el-form-item>
                 <el-form-item class="fr">
-                    <el-button type="primary" plain @click="getdata_search">查询</el-button>
-                    <el-button type="info" plain @click="clearSearch">清空</el-button>
+                    <el-button type="primary" :size="btnsize" plain @click="getdata_search">查询</el-button>
+                    <el-button type="info" :size="btnsize" plain @click="clearSearch">清空</el-button>
                 </el-form-item>
             </el-form>
         <div class="classify_info">
-            <div class="info_news" style="height:100.2%">
+            <div class="info_news">
                 <el-table 
                     ref="multipleTable"
                     :data="tableData1"
@@ -115,6 +115,7 @@ export default {
     },
     data(){
         return{
+            btnsize:'mini',
             dialogFormVisible_add:false,
             type:'',
             paramsView:{},

@@ -10,7 +10,7 @@
                  </p>
                 <p>
                     <span>所属区域：</span>
-                    <span>{{listInformation.provinceCityArea}}</span>
+                    <span>{{listInformation.belongCity}}</span>
                 </p>
                 <p>
                     <span>服务分类：</span>
@@ -122,7 +122,8 @@
                 </p>
                 <p> 
                     <span>车主收入：</span>
-                    <span class="fontRed">￥{{listInformation.aflcOrderExpenses.driverIncome}}</span>
+                    <span class="fontRed" v-if="listInformation.aflcOrderExpenses.driverIncome">￥{{listInformation.aflcOrderExpenses.driverIncome}}</span>
+                    <span v-else>暂未结算</span>
                 </p>
                 <p>
                     <span>付款状态：</span>

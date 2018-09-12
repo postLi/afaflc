@@ -191,7 +191,8 @@ export default {
                 if(curVal){
                     this.announce.releaseDriver = '1'
                 }else{
-                    this.announce.releaseDriver = '0'
+                    this.announce.releaseDriver = '0';
+                    this.announce.noticeGroupCode = '';
                 }
             },
             deep: true, 

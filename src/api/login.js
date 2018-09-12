@@ -41,7 +41,6 @@ export function login(username, password, orgid) {
     })
   }
 
-
 export function getInfo(username, orgid) {
   return fetch({
     url: '/api-system/system/user/v1/getCurrentUser',

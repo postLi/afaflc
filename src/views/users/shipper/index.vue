@@ -91,40 +91,14 @@
     .huozhu{
         height:100%;    
         position: relative;
+        .identicalStyle{
+            padding-right: 0;
+        }
         .el-tabs--card>.el-tabs__header .el-tabs__item.is-active {
             background: rgba(236, 233, 230, 0.445);
             border-bottom-color: #ffffff;
         }
-
-        .el-tabs__content{
-            .el-tab-pane{
-                .classify_searchinfo{
-                    padding: 0;
-                    .el-form-item:last-child{
-                        margin: 0px;
-                    }
-                }
-                .classify_info{
-                    padding: 50px 0;
-                }
-            }
-        }
-        .el-table{
-            th,td{
-                text-align: center;
-            }
-            .el-radio__input{
-                margin-left: 10px;
-            }
-        }
     }
-
-    .item {
-        margin-top: 10px;
-        margin-right: 40px;
-    }
-
-
     .creatDialog,.freezeDialog,.shipperBlackDialog,.shenghe{
         display: inline-block;
         .el-dialog{

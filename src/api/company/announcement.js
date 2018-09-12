@@ -1,6 +1,6 @@
 import fetch from '@/utils/fetch'
 
-const baseurl = "aflc-common"
+const baseurl = "aflccommonservice-lyc"
 
 
 //根据条件获取发布公告表列表

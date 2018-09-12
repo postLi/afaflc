@@ -1,22 +1,20 @@
 import fetch from '../../utils/fetch'
 
-const baseurl = "aflc-"
-
-
+const baseUrl = 'aflccommonservice-lyc'
 
 /**
  * 获取所有网点的信息
  * @returns {AxiosPromise<any>}
  */
 export function getAllOrgInfo() {
-  return fetch.get('/aflccommonservice/system/org/v1/tree')
+  return fetch.get('/'+baseUrl+'/system/org/v1/tree')
 }
 
 /**
  * 根据组织id获取列表
  */
 export function getOrgId(id) {
-  return fetch.get('/aflccommonservice/system/org/v1/'+id)
+  return fetch.get('/'+baseUrl+'/system/org/v1/'+id)
 }
 
 /**
@@ -25,7 +23,7 @@ export function getOrgId(id) {
  * @returns {AxiosPromise<any>}
  */
 export function postOrgSaveDate(data) {
-  return fetch.post('/aflccommonservice/system/org/v1/save/', data)
+  return fetch.post('/'+baseUrl+'/system/org/v1/save/', data)
 }
 
 /**
@@ -34,7 +32,7 @@ export function postOrgSaveDate(data) {
  * @returns {AxiosPromise<any>}
  */
 export function putOrgData(data) {
-  return fetch.put('/aflccommonservice/system/org/v1/edit/', data)
+  return fetch.put('/'+baseUrl+'/system/org/v1/edit/', data)
 }
 
 /**
@@ -42,7 +40,7 @@ export function putOrgData(data) {
  * @param {*} orgid 网点id
  */
 export function getSelectDictInfo(orgId) {
-  return fetch.get('/aflccommonservice/system/dict/v1/selectDictInfo', {
+  return fetch.get('/'+baseUrl+'/system/dict/v1/selectDictInfo', {
     params: {
       dictType: 'department_type',
       orgId
@@ -60,7 +58,7 @@ export function getSelectDictInfo(orgId) {
  * @param "orgid":3,
  */
 export function postDict(orgid, dictName) {
-  return fetch.post('/aflccommonservice/system/dict/v1/', {
+  return fetch.post('/'+baseUrl+'/system/dict/v1/', {
     dictType: 'department_type',
     dictRemark: '部门类型',
     dict_value: '',
@@ -75,7 +73,7 @@ export function postDict(orgid, dictName) {
  * @param "id":"",
  */
 export function deletePerManage(id) {
-  return fetch.delete('/aflccommonservice/system/dict/v1/' + id)
+  return fetch.delete('/'+baseUrl+'/system/dict/v1/' + id)
 }
 /**
  *修改字典信息
@@ -86,7 +84,7 @@ export function deletePerManage(id) {
  * @param  "id":16,
  */
 export function putDict(orgid, dictName, id) {
-  return fetch.put('/aflccommonservice/system/dict/v1/', {
+  return fetch.put('/'+baseUrl+'/system/dict/v1/', {
     dictType: 'department_type',
     dictRemark: '部门类型',
     id,
@@ -103,11 +101,11 @@ export function putDict(orgid, dictName, id) {
  * 营业网点 0
  * 分拨中心 1
  */
-export function getNetWorkTypeInfo(orgid) {
-  return fetch.get('/aflccommonservice/system/dict/v1/selectDictInfo', {
+export function getNetWorkTypeInfo(orgId) {
+  return fetch.get('/'+baseUrl+'/system/dict/v1/selectDictInfo', {
     params: {
       dictType: 'network_type',
-      orgid
+      orgId
     }
   }).then(res => {
     return res.data || []
@@ -120,11 +118,11 @@ export function getNetWorkTypeInfo(orgid) {
  * 自营 0
  * 加盟 1
  */
-export function getManageTypeInfo(orgid) {
-  return fetch.get('/aflccommonservice/system/dict/v1/selectDictInfo', {
+export function getManageTypeInfo(orgId) {
+  return fetch.get('/'+baseUrl+'/system/dict/v1/selectDictInfo', {
     params: {
       dictType: 'manage_type',
-      orgid
+      orgId
     }
   }).then(res => {
     return res.data || []
@@ -136,11 +134,11 @@ export function getManageTypeInfo(orgid) {
  * 无效   0
  * 有效   1
  */
-export function getNetworkStatusInfo(orgid) {
-  return fetch.get('/'+baseurl+' api-system/system/dict/v1/selectDictInfo', {
+export function getNetworkStatusInfo(orgId) {
+  return fetch.get('/'+baseUrl+'/system/dict/v1/selectDictInfo', {
     params: {
       dictType: 'network_status',
-      orgid
+      orgId
     }
   }).then(res => {
     return res.data || []
