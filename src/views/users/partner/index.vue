@@ -976,7 +976,7 @@
 
 <style type="text/css" lang="scss">
     .partner{
-        .classify_searchinfo{
+        &>.classify_searchinfo{
             padding:10px 30px;
             border-bottom:1px solid #ccc;
             label{
@@ -1066,7 +1066,7 @@
                 .el-dialog__body{
                     padding:10px 0;
                 }
-                .classify_searchinfo{
+                &>.classify_searchinfo{
                     padding:10px;
                     label{
                         display:inline-block;

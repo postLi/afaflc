@@ -85,7 +85,7 @@
 
 <script>
   import PopFrame from '@/components/PopFrame/index'
-//   import {getSelectDictInfo, postDict, deletePerManage, putDict} from '../../../api/company/groupManage'
+  import {getSelectDictInfo, postDict, deletePerManage, putDict} from '@/api/company/groupManage'
 
   export default {
     components: {

@@ -1,5 +1,5 @@
 <template>
-    <div class="serviceArea clearfix">
+    <div class="waitPrice clearfix">
         <div class="side_left">
             <el-tree
             :data="areadata"
@@ -788,7 +788,7 @@ import { REGEX }  from '@/utils/validate'
 </script>
 
 <style type="text/css" lang="scss">
-       .serviceArea{
+       .waitPrice{
         height:100%;    
         position: relative;
         margin-left:7px;
@@ -809,7 +809,7 @@ import { REGEX }  from '@/utils/validate'
             position: relative;
             border-top:2px solid #ccc;
         }
-        .classify_searchinfo{
+        &>.classify_searchinfo{
             position: absolute;
             left:0;
             top:0;

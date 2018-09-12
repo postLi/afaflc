@@ -1,6 +1,7 @@
 import fetch from '../../utils/fetch'
 
-const baseurl = "aflc-"
+const baseUrl = ''+baseUrl+'-lyc'
+
 
 /**
  * 插入角色信息
@@ -13,7 +14,7 @@ const baseurl = "aflc-"
  "createrId":"string",
  */
 export function postRoleInfo(data) {
-  return fetch.post('/'+baseurl+'api-system/system/role/v1/', data).then(res => {
+  return fetch.post('/'+baseUrl+'api-system/system/role/v1/', data).then(res => {
     return res.data ? res.data : {}
   })
 }
@@ -29,7 +30,7 @@ export function postRoleInfo(data) {
 
  */
 export function putRoleInfo(data) {
-  return fetch.put('/'+baseurl+'api-system/system/role/v1/', data).then(res => {
+  return fetch.put('/'+baseUrl+'api-system/system/role/v1/', data).then(res => {
     return res.data ? res.data : {}
   })
 }
@@ -38,7 +39,7 @@ export function putRoleInfo(data) {
  * id 要设置失效的id
  */
 export function deleteRoleInfo(id) {
-  return fetch.delete('/'+baseurl+'api-system/system/role/v1/' + id).then(res => {
+  return fetch.delete('/'+baseUrl+'api-system/system/role/v1/' + id).then(res => {
     return res.data ? res.data : {}
   })
 }
@@ -48,7 +49,7 @@ export function deleteRoleInfo(id) {
  * @param {*} pagesize 获取权限列表的长度
  */
 export function getAuthInfo(orgid, rolesName, currentPage = 1, pageSize = 100) {
-  return fetch.post('/aflccommonservice/system/role/v1/findAllInfo', {
+  return fetch.post('/'+baseUrl+'/system/role/v1/findAllInfo', {
     currentPage,
     pageSize,
     vo: {
@@ -66,7 +67,7 @@ export function getAuthInfo(orgid, rolesName, currentPage = 1, pageSize = 100) {
  * @returns {Promise<AxiosResponse<any>>}
  */
 export function getauthTreeInfo(role_id) {
-  return fetch.get('/aflccommonservice/system/menu/v1/menuTree/',{
+  return fetch.get('/'+baseUrl+'/system/menu/v1/menuTree/',{
     params: {
       role_id: role_id || 0
     }
@@ -80,7 +81,7 @@ export function getauthTreeInfo(role_id) {
  * @param {*} orgid 网点id
  */
 export function getSelectDictInfo(orgid) {
-  return fetch.get('/aflccommonservice/system/dict/v1/selectDictInfo', {
+  return fetch.get('/'+baseUrl+'/system/dict/v1/selectDictInfo', {
     params: {
       dictType: 'menu_type',
       orgid
