@@ -506,10 +506,6 @@ this.getMoreInformation();
         .el-input{
         width: 250px;
         }
-        .v-dropdown-container{
-            top:35px!important;
-            left:0px!important;
-        }
 .chooseCityList .el-cascader .el-input {
     width: 250px;
 }
