@@ -31,58 +31,58 @@
 
 <script type="text/javascript">
     import '@/styles/dialog.scss'
-    import "@/styles/tab.scss";
+    import '@/styles/tab.scss'
 
-    import ShipperAll from '../components/ShipperAll.vue'
-    import ShipperUnauthorized from '../components/ShipperUnauthorized.vue' 
+import ShipperAll from '../components/ShipperAll.vue'
+    import ShipperUnauthorized from '../components/ShipperUnauthorized.vue'
     import ShipperCertified from '../components/ShipperCertified.vue'
     import ShipperHasCertified from '../components/ShipperHasCertified.vue'
     import ShipperDisqualification from '../components/ShipperDisqualification.vue'
     // import ShipperFreezing from '../components/ShipperFreezing.vue'
     // import ShipperBlacklist from '../components/ShipperBlacklist.vue'
-     
+    
     export default {
-      name:'huozhu',
-      components:{
-          ShipperAll,
-          ShipperUnauthorized,
-          ShipperCertified,
-          ShipperHasCertified,
-          ShipperDisqualification,
+      name: 'huozhu',
+      components: {
+        ShipperAll,
+        ShipperUnauthorized,
+        ShipperCertified,
+        ShipperHasCertified,
+        ShipperDisqualification
         //   ShipperFreezing,
         //   ShipperBlacklist
-        },
-        data() {
-            return {
-                shipperName:'first',
-            };
-        },
-        watch:{
-            shipperName(newVal,oldVal){
-                if(newVal){
-                    this.shipperName = newVal;
-                }else{
-                    this.shipperName = oldVal;
-                }
-            }
-        },
-        created() {
-            this.shipperName = localStorage.getItem('shipperName') || 'first';
-        },
-
-        beforeUpdate () {
-            localStorage.setItem('shipperName', this.shipperName);
-        },
-
-        beforeDestroy () {
-            localStorage.setItem('shipperName', 'first');
-        },
-        methods: {
-            handleClick(tab, event) {
-                // console.log(tab, event);
-                this.shipperName = tab.name;
-            }
+      },
+      data() {
+        return {
+          shipperName: 'first'
         }
+      },
+      watch: {
+        shipperName(newVal, oldVal) {
+          if (newVal) {
+            this.shipperName = newVal
+          } else {
+            this.shipperName = oldVal
+          }
+        }
+      },
+      created() {
+        this.shipperName = localStorage.getItem('shipperName') || 'first'
+      },
+
+      beforeUpdate() {
+        localStorage.setItem('shipperName', this.shipperName)
+      },
+
+      beforeDestroy() {
+        localStorage.setItem('shipperName', 'first')
+      },
+      methods: {
+        handleClick(tab, event) {
+                // console.log(tab, event);
+          this.shipperName = tab.name
+        }
+      }
     }
 </script>
 

@@ -18,37 +18,35 @@
     </el-tabs>
   </div>
 </template>
-
-
 <script>
 import SameCity from './sameCity.vue'
 import InterCity from './interCity.vue'
 import IoadCity from './loadCity.vue'
 export default {
-    data(){
-        return{
-            shipperName:'first',
-        }
-    },
-    components:{    
-            SameCity,
-            InterCity,
-            IoadCity
-    },
-    watch:{
-     shipperName(newVal,oldVal){
-        if(newVal){
-            this.shipperName = newVal;
-          }else{
-        this.shipperName = oldVal;
-          }
-        }
-        },
-     methods: {
-     handleClick(tab, event) {
-      this.shipperName = tab.name;
-       }
-     }
+  data() {
+    return {
+      shipperName: 'first'
+    }
+  },
+  components: {
+    SameCity,
+    InterCity,
+    IoadCity
+  },
+  watch: {
+    shipperName(newVal, oldVal) {
+      if (newVal) {
+        this.shipperName = newVal
+      } else {
+        this.shipperName = oldVal
+      }
+    }
+  },
+  methods: {
+    handleClick(tab, event) {
+      this.shipperName = tab.name
+    }
+  }
 }
 </script>
 <style lang="scss" >
@@ -78,6 +76,5 @@ export default {
          .el-tabs__content{
            padding:0px 0px;
        }     
-        
     }
 </style>
