@@ -33,13 +33,11 @@
                         style="width: 100%"> 
                         <el-table-column
                         align = "center"
-                            fixed
                              type="selection"
                              width="55">
                            </el-table-column>
                         <el-table-column
                         align = "center"
-                        fixed
                           prop="shipperInfo"
                           label="货主账号">
                         </el-table-column>

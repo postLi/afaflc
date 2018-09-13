@@ -1,245 +1,212 @@
 <template>
-    <div class="identicalStyle clearfix">
-            <div class="classify_searchinfo">
-                <label>标题&nbsp;
-                   <el-input v-model="searchInfo.title" placeholder="请输入内容"></el-input>
-                </label>
-                <label>发布时间&nbsp;
-                    <el-date-picker
-                        v-model="chooseTime"
-                        type="datetimerange"
-                        :picker-options="pickerOptions2"
-                        range-separator="至"
-                        start-placeholder="开始日期"
-                        end-placeholder="结束日期"
-                        align="right"
-                        :default-time="['00:00:00', '23:59:59']"
-                        value-format="timestamp">
-                    </el-date-picker>
-                </label>    
-                <label>发布者&nbsp;
-                   <el-input v-model="searchInfo.belongDriver" placeholder="请输入内容"></el-input>
-                </label>    
-                <el-button type="primary"  plain @click="getdata_search">查询</el-button>
-            </div>
-            <div class="classify_info">
-                <div class="info_news">
-                    <el-table
-                        ref="multipleTable"
-                        :data="tableExecute"
-                        stripe
-                        border
-                        highlight-current-row
-                        @current-change="handleCurrentTask"
-                        align = "center"
-                        height="100%"
-                        tooltip-effect="dark"
-                        style="width: 100%"> 
-                        <el-table-column
-                            align = "center"
-                            fixed
-                            label="排序"
-                            prop="order"
-                            width="55">
-                           </el-table-column>
-                        <el-table-column
-                            align = "center"
-                            prop="title"
-                            label="标题">
-                        </el-table-column>
-                        <el-table-column
-                            align = "center"
-                            prop="time"
-                            label="发布时间">
-                        </el-table-column>
-                        <el-table-column
-                            align = "center"
-                            prop="belongDriver"
-                            label="发布者">
-                        </el-table-column>
-                        <el-table-column
-                            align = "center"
-                            prop="browseNumber"
-                            label="浏览量">
-                        </el-table-column>
-                         <el-table-column label="操作">
+    <div class="TransportRange identicalStyle">
+        <el-form :inline="true" :model="logisticsForm" ref="ruleForm" class="demo-ruleForm classify_searchinfo">
+            <el-form-item label="出发地：" >
+                <el-input v-model="logisticsForm.startAddress">
+                </el-input>
+            </el-form-item>
+            <el-form-item label="到达地：">
+                <el-input v-model="logisticsForm.endAddress">
+                </el-input>
+            </el-form-item>
+                <el-form-item label="商品名称：">
+                <el-input v-model="logisticsForm.goodsName">
+                </el-input>
+            </el-form-item>
+            <el-form-item class="btnChoose fr" style="margin-left:20px;">
+                <el-button type="primary" :size="btnsize" @click="handleSearch">搜索</el-button>
+                <el-button type="primary" :size="btnsize" @click="clearSearch">重置</el-button>
+            </el-form-item>
+        </el-form>
+        <div class="classify_info">
+            <div class="info_news">
+                <el-table
+                :data="tableData"
+                ref="multipleTable"
+                stripe
+                border
+                height="100%"
+                style="width: 100% ;">
+                    <el-table-column
+                        label="序号"
+                        type="index"
+                        width="80">
+                    </el-table-column>
+                    <el-table-column
+                        label="出发地"
+                        width="250">
                         <template slot-scope="scope">
-                            <el-button
-                            size="mini"
-                            type="danger"
-                            @click="handleDelete(scope.$index, scope.row)">删除</el-button>
+                            <span>{{scope.row.startProvinceCityArea}}</span>
                         </template>
-                        </el-table-column>
-                    </el-table>
-                      <!-- 页码 -->
-                    <div class="Pagination ">
-                        <div class="block">
-                            <el-pagination
-                            @size-change="handleSizeChange"
-                            @current-change="handleCurrentChange"
-                            :current-page="currentPage4"
-                            :page-size="pagesize"
-                            layout="total, sizes, prev, pager, next, jumper"
-                            :total="dataTotal">
-                            </el-pagination>
-                        </div>
-                    </div>
-                    <!-- <div class="info_tab_footer">共计:{{ dataTotal }} <div class="show_pager"> <Pager :total="dataTotal" @change="handlePageChange" /></div> </div>     -->
-
-                </div>
-                
+                    </el-table-column>
+                    <el-table-column
+                        prop="endProvinceCityArea"
+                        label="到达地"
+                        width="250">
+                    </el-table-column>
+                    <el-table-column
+                        prop="goodsName"
+                        label="商品名称"
+                        width="200">
+                    </el-table-column>
+                    <el-table-column
+                        prop="goodsNum"
+                        label="货品总数量（件）"
+                        width="150">
+                    </el-table-column>
+                    <el-table-column
+                        prop="goodsWeight"
+                        label="预估总重量（公斤）" 
+                        width="150">
+                    </el-table-column>
+                    <el-table-column
+                        prop="goodsVolume"
+                        label="预估总体积（方）"
+                        width="150">
+                    </el-table-column>
+                    <el-table-column
+                        prop="consignor"
+                        label="发货人" 
+                        width="180">
+                    </el-table-column>
+                    <el-table-column
+                        prop="time"
+                        label="发布时间" 
+                        width="180">
+                    </el-table-column>
+                    <el-table-column
+                        prop="address"
+                        label="操作" 
+                        >
+                            <template slot-scope="scope">
+                                <!-- <el-button-group> -->
+                                    <el-button @click="handleEdit(scope.row)" type="primary" size="mini">修改</el-button>
+                                    <!-- <el-button @click="handleDelete(scope.row)" type="primary" size="mini">删除</el-button> -->
+                                    <el-button @click="handleStatus(scope.row)" :type="scope.row.isEnable == 0 ? 'primary' : 'info'" size="mini">{{scope.row.isEnable == 0 ? '启用' : '禁用'}}</el-button>
+                                <!-- </el-button-group> -->
+                            </template>
+                    </el-table-column>
+                </el-table>
             </div>
-        <!-- loading   -->
-        <!-- <spinner v-show="show"></spinner>  -->
-        
+        </div>  
+        <div class="info_tab_footer">共计:{{ totalCount }} <div class="show_pager"> <Pager :total="totalCount" @change="handlePageChange" :sizes="sizes"/></div> </div>    
+
     </div>
 </template>
 
-<script type="text/javascript">
+<script>
 
-import '@/styles/dialog.scss'
-import { data_CarInfoList,data_DelCarInfo } from '@/api/users/logistics/TransportRange.js'
-import { parseTime,formatTime } from '@/utils/index.js'
-// import spinner from '../../../spinner/spinner'
+// import '@/styles/identification.scss'
+import { parseTime } from '@/utils/index.js'
+import { getGoodsSourceList,GoodsSourceStatus } from '@/api/order/xuqiuku/goodssource.js'
+import Pager from '@/components/Pagination/index'
+ 
+export default {
+    components:{
+        Pager
+    },
+    data() {
+       
+        return {
+            btnsize:'mini',
+            defaultImg:'/static/default.png',//默认加载失败图片
+            totalCount:0,
+            page:1,
+            sizes:[20,50,100],
+            pagesize:20,
+            logisticsForm: {
+                queryType:'2',
+                startAddress: '',//出发地
+                endAddress: '',//到达地
+                goodsName:'',//商品名称
+            },
+            tableData: [],
+        };
+    },
+    watch:{
 
-    export default{
-        data(){
-            return{
-                formtitle:'新增执行器',//新增任务
-                dialogFormVisible:false,
-                tableExecute:[],
-                currentPage4:1,
-                pagesize:20,
-                page:1,
-                dataTotal:null,
-                searchInfo:{
-                    title:null,
-                    belongDriver:null,
-
-                },
-                pickerOptions2: {
-                    shortcuts: [{
-                        text: '最近一周',
-                        onClick(picker) {
-                        const end = new Date();
-                        const start = new Date();
-                        start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
-                        picker.$emit('pick', [start, end]);
-                        }
-                    }, {
-                        text: '最近一个月',
-                        onClick(picker) {
-                        const end = new Date();
-                        const start = new Date();
-                        start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
-                        picker.$emit('pick', [start, end]);
-                        }
-                    }, {
-                        text: '最近三个月',
-                        onClick(picker) {
-                        const end = new Date();
-                        const start = new Date();
-                        start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
-                        picker.$emit('pick', [start, end]);
-                        }
-                    }]
-                },
-                chooseTime:null,
-
-            }
-        },
-        components:{
-            // spinner,
-
-        },
-        mounted(){
+    },
+    mounted(){
+        this.firstblood();
+    },  
+    methods: {
+        handlePageChange(obj) {
+            console.log(obj)
+            this.page = obj.pageNum;
+            this.pagesize = obj.pageSize;
             this.firstblood();
-            
-            // console.log(this.$store)
-        },  
-        methods: {
-            // 获取翻页返回的数据
-            handlePageChange (obj) {
-                console.log(obj)
-                // Object.assign(this.searchForm, obj)
-                // this.fetchData()
-            },
-            //单选中当前数据
-            handleCurrentTask(val){
-                // console.log(val)
-                this.tasktest = val;
-            },
-            
-            handleSizeChange(val) {
-                console.log(`每页 ${val} 条`);
-                this.pagesize = val ;
-                this.firstblood();
-            },
-            handleCurrentChange(val) {
-                console.log(`当前页: ${val}`);
-                this.page = val;
-                this.firstblood();
-            },
-          
-            //刷新页面  
-            firstblood(){
-                data_CarInfoList(this.page,this.pagesize,this.searchInfo).then(res => {
-                    console.log(res)
-                    this.tableExecute = res.data.list;
-                    this.dataTotal = res.data.totalCount;
-                    this.tableExecute.forEach(el => {
-                        // el.title =  el.strartAddressName +'->'+ el.endAddressName;
-                        el.time = parseTime(el.createTime);
-                    })
+        },
+        firstblood(){
+            getGoodsSourceList(this.page,this.pagesize,this.logisticsForm).then(res=>{
+                console.log(res)
+                this.tableData = res.data.list;
+                this.totalCount = res.data.totalCount;
+                this.tableData.forEach(el => {
+                    el.time = parseTime(el.createTime)
                 })
-            },
-           
-            //模糊查询 分类名称或者code
-            getdata_search(){
-                // console.log(this.chooseTime)
-                if(this.chooseTime){
-                    this.searchInfo.beginTime  = this.chooseTime[0];
-                    this.searchInfo.endTime = this.chooseTime[1];
-                }
-                this.firstblood();
-            },
-            //删除
-            handleDelete(index, row) {
-                console.log(index, row);
-                this.$confirm('确定要删除'+ row.title +' 该条线路吗？', '提示', {
-                    confirmButtonText: '确定',
-                    cancelButtonText: '取消',
-                    type: 'warning'
-                }).then(()=>{
-                    data_DelCarInfo(row.id).then(res=>{
-                        console.log(res)
-                        this.$alert('操作成功', '提示', {
-                            confirmButtonText: '确定',
-                            callback: action => {
-                               this.firstblood();
-                            }
-                        });
-                    }).catch(err => {
-                        this.$message({
-                            type: 'info',
-                            message: '操作失败，原因：' + err.text ? err.text : err
-                        })
-                    })
-                }).catch(() => {
+            })
+        },
+        clearSearch(){
+            this.$refs.ruleForm.resetFields();
+            this.firstblood();
+        },
+        //搜索
+        handleSearch(){
+
+            this.firstblood()
+        },
+        //新增网点
+        handleNew(){
+            this.$router.push({name: '发布物流专线'});
+        },
+        //修改
+        handleEdit(row) {
+            this.$router.push('/cargoInfo/create?cid='+row.id)
+            //this.$router.push({name: '发布物流专线',params:{ data:row}});
+        },
+        //删除网点
+        handleDelete(row) {
+            this.$confirm('确定要删除 '+ row.startLocation +'-'+ row.endLocation +' 该条专线吗？', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+            }).then(()=>{
+                deleteTransportRange(row.id).then(res => {
+                    this.firstblood();
+                }).catch(err => {
                     this.$message({
                         type: 'info',
-                        message: '已取消'
+                        message: '操作失败，原因：' + errorInfo ? errorInfo : err.text
                     })
                 })
-            }
-           
-
-        }
-    }
+            }).catch(() => {
+                this.$message({
+                    type: 'info',
+                    message: '已取消'
+                })
+            })
+        },
+        //更改状态
+        handleStatus(row) {
+            let type = row.isEnable == '0' ? '1' : '0';
+            GoodsSourceStatus(row.id,type).then(res => {
+                this.firstblood();
+            }).catch(err=>{
+                this.$message({
+                    type: 'info',
+                    message: '操作失败，原因：' + err.text ? err.text : err
+                })
+            })
+        },
+    },
+  
+}
 </script>
 
-<style type="text/css" lang="scss" scoped>
-    .identicalStyle{
-       
+<style type="text/css" lang="scss">
+    .TransportRange{
+        .el-form{
+           
+        }
     }
 </style>

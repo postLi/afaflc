@@ -105,22 +105,10 @@
                             </template>
                         </el-table-column>
                       </el-table>
-                      <!-- 页码 -->
-                    <div class="Pagination ">
-                        <div class="block">
-                            <el-pagination
-                            @size-change="handleSizeChange"
-                            @current-change="handleCurrentChange"
-                            :current-page="currentPage4"
-                            :page-size="pagesize"
-                            layout="total, sizes, prev, pager, next, jumper"
-                            :total="dataTotal">
-                            </el-pagination>
-                        </div>
+                    
+                    <!-- 页码 -->
+                    <div class="info_tab_footer">共计:{{ dataTotal }} <div class="show_pager"> <Pager :total="dataTotal" @change="handlePageChange"  :sizes="sizes"/></div> </div>   
                     </div>
-                    <!-- <div class="info_tab_footer">共计:{{ dataTotal }} <div class="show_pager"> <Pager :total="dataTotal" @change="handlePageChange" /></div> </div>     -->
-
-                </div>
                 
                 <!-- 新增分类信息 -->
                  <div class="addclassify commoncss">
@@ -408,11 +396,11 @@ import { data_GetCarType } from '@/api/common.js'
 import Upload from '@/components/Upload/singleImage'    
 import Pager from '@/components/Pagination/index'
 import '@/styles/dialog.scss'
-// import spinner from '../../spinner/spinner'
 
     export default{
         data(){
             return{
+                sizes:[20,50,100],
                 btnsize:'mini',
                 forms:{
                     serivceCode:null,
@@ -475,7 +463,7 @@ import '@/styles/dialog.scss'
                 centerDialogVisible:false,
                 delDialogVisible:false,
                 nowcode:null,
-                dataTotal:null,
+                dataTotal:0,
                 information:'你想知道什么',
                 waitchange:{},
                 delID:[],
@@ -495,7 +483,6 @@ import '@/styles/dialog.scss'
         components:{
             Upload,
             Pager,
-
         },
         mounted(){
             this.firstblood();
@@ -505,9 +492,10 @@ import '@/styles/dialog.scss'
         methods: {
             // 获取翻页返回的数据
             handlePageChange (obj) {
-                console.log(obj)
-                // Object.assign(this.searchForm, obj)
-                // this.fetchData()
+                this.page = obj.pageNum;
+                this.pagesize = obj.pageSize;
+                this.firstblood();
+
             },
             //获取  服务和车辆 类型列表
             getMoreInformation(){
@@ -616,23 +604,6 @@ import '@/styles/dialog.scss'
                     let information = res.text;
                     this.hint(information);
                 })
-                
-            },
-            handleUse(index, row) {
-                console.log(index, row);
-            },
-            handleSizeChange(val) {
-                console.log(`每页 ${val} 条`);
-                this.pagesize = val ;
-                this.firstblood();
-            },
-            handleCurrentChange(val) {
-                console.log(`当前页: ${val}`);
-                this.page = val;
-                this.firstblood();
-            },
-            handleNodeClick(data,checked){  
-                console.log(data)
             },
             //刷新页面  
             firstblood(){
@@ -657,7 +628,6 @@ import '@/styles/dialog.scss'
            
             //模糊查询 分类名称或者code
             getdata_search(event){
-                console.log(event)
                 this.firstblood();
             },
             //新增分类信息

@@ -1,32 +1,32 @@
 <template>
-    <div class="serviceOrder clearfix">
-            <div class="classify_searchinfo">
-                <label>关键字查询：&nbsp;
-                     <el-input
-                      placeholder="请输入内容"
-                      v-model="input_search"
-                      clearable>
-                    </el-input>
-                </label>      
-                <el-button type="primary"  plain @click="getdata_search">查询</el-button>
-                <el-button type="info" plain >清空</el-button>
-
-            </div>
+    <div class="serviceOrder identicalStyle clearfix">
+            <el-form :inline="true" :model="searchInfo" ref="ruleForm" class="demo-ruleForm classify_searchinfo">
+                    <el-form-item label="关键字查询：" prop="pointName">
+                        <el-input
+                        placeholder="请输入内容"
+                        v-model="searchInfo.keyword"
+                        clearable>
+                        </el-input>
+                    </el-form-item>
+                    <el-form-item class="btnChoose fr"  style="margin-left:0;">
+                        <el-button type="primary" :size="btnsize" plain @click="handleSearch('search')">搜索</el-button>
+                        <el-button type="info" :size="btnsize" plain @click="handleSearch('clear')">重置</el-button>
+                    </el-form-item>
+            </el-form>
             <div class="classify_info">
                 <div class="btns_box">
-                    <el-button type="primary" plain icon="el-icon-circle-plus" @click="addClassfy">新增</el-button>
-                    <el-button type="primary" plain icon="el-icon-edit" @click="handleEdit">修改</el-button>
-                    <el-button type="primary" plain icon="el-icon-delete" @click="handleDelete">删除</el-button>
-                    <el-button type="primary" plain icon="el-icon-bell" @click="handleUseStates">启用/禁用</el-button>
+                    <el-button type="primary" :size="btnsize" plain icon="el-icon-circle-plus" @click="addClassfy">新增</el-button>
+                    <el-button type="primary" :size="btnsize" plain icon="el-icon-edit" @click="handleEdit">修改</el-button>
+                    <el-button type="primary" :size="btnsize" plain icon="el-icon-delete" @click="handleDelete">删除</el-button>
+                    <el-button type="primary" :size="btnsize" plain icon="el-icon-bell" @click="handleUseStates">启用/禁用</el-button>
                 </div>
                 <div class="info_news">
                     <el-table
                         ref="multipleTable"
-                        :data="tableDataTree"
+                        :data="tableData"
                         stripe
                         border
                         @selection-change = "getinfomation"
-                        @row-dblclick="moreinfo"
                         tooltip-effect="dark"
                         @row-click="clickDetails"
                         style="width: 100%"> 
@@ -56,28 +56,17 @@
                             </template>
                         </el-table-column>
                       </el-table>
-                      <!-- 页码 -->
-                    <div class="Pagination ">
-                        <div class="block">
-                            <el-pagination
-                            @size-change="handleSizeChange"
-                            @current-change="handleCurrentChange"
-                            :current-page="currentPage4"
-                            :page-size="pagesize"
-                            layout="total, sizes, prev, pager, next, jumper"
-                            :total="dataTotal">
-                            </el-pagination>
-                        </div>
-                    </div>
                 </div>
-                  
+                <!-- 页码 -->
+                <div class="info_tab_footer">共计:{{ dataTotal }} <div class="show_pager"> <Pager :total="dataTotal" @change="handlePageChange"  /></div> </div>   
+                </div>
                 <!-- 新增分类信息 -->
                  <div class="addclassify commoncss">
                     <el-dialog :title='formtitle'  :visible.sync="dialogFormVisible">
                         <div class="chooseinfo-item">
                             <p><span>* </span>服务一级分类 ：</p>
                             <el-radio-group v-model="classfyradio" >
-                                <el-radio   v-for="(obj,key) in formclassfy" :label="obj.code" :key='key' @change="chooseradio">{{obj.name}}</el-radio>
+                                <el-radio   v-for="(obj,key) in formclassfy" :label="obj.code" :key='key' >{{obj.name}}</el-radio>
                             </el-radio-group>
                         </div>
                         <div class="extrainfo"  v-for="(form,keys) in forms" :key='keys'>
@@ -87,10 +76,10 @@
                                 v-model="form.extraName"
                                 clearable>
                             </el-input>
-                            <el-checkbox v-model="form.isFree" true-label="1" false-label="0" @change="changeformprice">收费</el-checkbox>
+                            <el-checkbox v-model="form.isFree" true-label="1" false-label="0">收费</el-checkbox>
                             <p class="ifprice" v-if = "form.isFree === '1'">
                                 <el-input
-                                    @blur="valuerules"
+                                    v-number-only:point
                                     placeholder="请输入价格"
                                     maxlength="4"
                                     v-model="form.extraPrice"
@@ -145,7 +134,7 @@
                             <el-checkbox v-model="changeform.isFree" true-label="1" false-label="0"  >收费</el-checkbox>
                             <p class="ifprice" v-if = "changeform.isFree === '1'">
                                 <el-input
-                                    @blur="valuerules"
+                                    v-number-only:point
                                     placeholder="请输入价格"
                                     maxlength="4"
                                     v-model="changeform.extraPrice"
@@ -197,9 +186,6 @@
                     </el-dialog>
                 </div>
             </div>
-        <!-- </div> -->
-        <!-- <spinner v-show="show"></spinner>  -->
-        
     </div>
 </template>
 
@@ -207,13 +193,15 @@
 
 import { data_GetInformation,data_ServerClassList,data_AddForms,data_DeletInfo,data_ChangeStatus } from '@/api/server/serverExtra.js'
 import '@/styles/dialog.scss'
-// import spinner from '../../../spinner/spinner'
+import Pager from '@/components/Pagination/index'
 
     export default{
         data(){
             return{
-                show:false,
-                keywords:null,
+                btnsize:'mini',
+                searchInfo:{
+                    keywords:'',
+                },
                 formclassfy:[],
                 classfyradio:null,
                 page:1,
@@ -247,7 +235,7 @@ import '@/styles/dialog.scss'
                 checkedinformation:[],
                 formLabelWidth: '80px',
                 input_search: null,
-                tableDataTree:[],
+                tableData:[],
                 defaultProps: {
                   children: 'children',
                   label: 'label'
@@ -255,25 +243,18 @@ import '@/styles/dialog.scss'
             }
         },
         components:{
+            Pager
         },
         
         mounted(){
-            // this.getdata_dic();
             this.firstblood()
         },  
         methods: {
-            //
-            changeformprice(val){
-                console.log(val)
-            },
-            //
-            chooseradio(label){
-                console.log(label)
-            },
-            //shuangji
-            moreinfo(row, event){
-                console.log(row, event)
-              
+            // 获取翻页返回的数据
+            handlePageChange (obj) {
+                this.page = obj.pageNum;
+                this.pagesize = obj.pageSize;
+                this.firstblood();
             },
             //点击选中当前行
             clickDetails(row, event, column){
@@ -314,6 +295,19 @@ import '@/styles/dialog.scss'
             //判断是否选中
             getinfomation(selection){
                 this.checkedinformation = selection;
+            },
+            handleSearch(type){
+                switch(type){
+                    case 'search':
+                        this.firstblood()
+                        break;
+                    case 'clear' :
+                        this.searchInfo = {
+                            keywords : '',
+                        },
+                        this.firstblood()
+                        break;
+                }
             },
             //修改
             handleEdit() {
@@ -380,37 +374,13 @@ import '@/styles/dialog.scss'
                     let information = res.text;
                     this.hint(information);
                 })
-                
-            },
-            handleUse(index, row) {
-                console.log(index, row);
-            },
-            handleSizeChange(val) {
-                this.pagesize = val ;
-                this.firstblood();
-            },
-            handleCurrentChange(val) {
-                this.page = val;
-                this.firstblood();
             },
             //刷新页面
             firstblood(){
-                this.show = true;
-                data_GetInformation(this.page,this.pagesize,this.keywords).then(res=>{
+                data_GetInformation(this.page,this.pagesize,this.searchInfo).then(res=>{
                     this.dataTotal = res.data.totalCount;
-                    this.tableDataTree = res.data.list;
-                    this.show = false;
-                    console.log(this.tableDataTree)
-                })
-            },
-            //模糊查询 分类名称或者code
-            getdata_search(event){
-                // console.log(event)
-                this.show = true;
-                data_GetInformation(this.page,this.pagesize,this.input_search).then(res=>{
-                    this.tableDataTree = res.data.list;
-                    console.log(this.tableDataTree)
-                    this.show = false;
+                    this.tableData = res.data.list;
+                    // console.log(this.tableData)
                 })
             },
             //新增分类信息
@@ -474,28 +444,6 @@ import '@/styles/dialog.scss'
                     this.firstblood();
                 })
             },
-             //验证数据值
-            valuerules(event){
-                // console.log(event)
-                if(!event.target.value){
-                    return 
-                }else{
-                    if(!/^[0-9\.]+$/.test(event.target.value)){
-                        let information = "请输入数字类型内容";
-                        this.hint(information);
-                         this.forms.forEach(el => {
-                            for(let item in el){
-                                console.log(item);
-                                if(el[item] == event.target.value){
-                                    el[item] = null;
-                                }
-                            }
-                        })
-                        
-                        event.target.focus()
-                    }
-                }
-            },
             hint(val){
                 this.information = val;
                 this.centerDialogVisible = true;
@@ -510,34 +458,6 @@ import '@/styles/dialog.scss'
 
 <style type="text/css" lang="scss">
     .serviceOrder{
-        height:100%;    
-        position: relative;
-        margin-left:7px;
-        &>.classify_searchinfo{
-            position: absolute;
-            left:0;
-            top:0;
-            padding:15px 16px;
-            width:100%;
-            line-height: 35px;
-            label{
-                color: #666;
-                font-size:14px;
-                .el-input{
-                    width:300px;
-                    .el-input__inner{
-                        color:#3e9ff1;
-                        height:30px;
-                        line-height: 30px;
-                    }
-                }
-
-
-            }
-            .el-button{
-               padding:8px 20px;
-            }
-        }
         .addclassify,.changeclassify{
             .el-dialog{
                 position: relative;
@@ -638,32 +558,6 @@ import '@/styles/dialog.scss'
                 }
             }
             
-        }
-        .classify_info{
-            height:100%;
-            padding:70px 13px 18px;
-            .btns_box{
-                margin-bottom:10px;
-                .el-button{
-                    margin-right:20px;
-                    padding:10px 20px;
-                }
-            }
-            .info_news{
-                height:89%;
-                .el-table{
-                    table{
-                        width: 100% !important;
-                        th,td{
-                            text-align:center;
-                        }
-                    }
-                }
-            }
-            .Pagination{
-                margin-top:13px;
-                text-align:right;
-            }
         }
     }
 </style>

@@ -238,9 +238,12 @@ import vregion from '@/components/vregion/Region'
             regionChange(d) {
                 console.log('data:',d)
                 this.searchInfo.belongCityName = (!d.province&&!d.city&&!d.area&&!d.town) ? '': `${this.getValue(d.province)}${this.getValue(d.city)}${this.getValue(d.area)}${this.getValue(d.town)}`.trim();
-                if(d.city){
+                if(d.area){
+                    this.searchInfo.belongCity = d.area.code;
+                }else if(d.city){
                     this.searchInfo.belongCity = d.city.code;
-                }else{
+                }
+                else{
                     this.searchInfo.belongCity = d.province.code;
                 }
             },

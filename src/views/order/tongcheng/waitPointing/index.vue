@@ -1,5 +1,5 @@
 <template>
-  <div class="pointing">
+  <div class="pointing tabsWrap">
     <el-tabs v-model="pointName" type="card" @tab-click="handleClick" >
         <!-- 平台定向 -->
             <el-tab-pane label="平台定向" name="plantOrigin">

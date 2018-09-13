@@ -3,16 +3,14 @@ import fetch from '@/utils/fetch'
 const baseurl = "aflcsmservice"
 
 //获取额外服务费用列表
-export function data_GetInformation(page,pagesize,keywords) {
+export function data_GetInformation(page,pagesize,data) {
     return fetch({
       url: '/'+baseurl+'/sm/aflcExtraPrice/v1/getListByKeywords',
       method: 'post',
       data:{
         "currentPage":page ,
         "pageSize": pagesize,
-        "vo": {
-			  "keywords":keywords
-        }
+        "vo": data
       }
     })
   }

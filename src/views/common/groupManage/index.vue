@@ -1,5 +1,4 @@
 <template>
-  <!--v-loading="loading"-->
   <div class="company clearfix" v-loading="loading">
     <div class="company-box">
       <div class="side_left">
@@ -75,8 +74,6 @@
                 <el-form-item label="详情地址" :label-width="formLabelWidth">
                   <el-input v-model="form.detailedAddr" auto-complete="off" disabled></el-input>
                 </el-form-item>
-
-
               </el-form>
             </div>
           </el-collapse-item>
@@ -195,8 +192,13 @@
                 width="230"
                 label="归属网点">
               </el-table-column>
-              <el-table-column
+              <!-- <el-table-column
                 prop="departmentName"
+                width="150"
+                label="归属部门">
+              </el-table-column> -->
+               <el-table-column
+                prop="departmentId"
                 width="150"
                 label="归属部门">
               </el-table-column>
@@ -205,8 +207,13 @@
                 width="150"
                 label="职务">
               </el-table-column>
-              <el-table-column
+              <!-- <el-table-column
                 prop="username"
+                width="200"
+                label="登录账号">
+              </el-table-column> -->
+                <el-table-column
+                prop="mobilephone"
                 width="200"
                 label="登录账号">
               </el-table-column>
@@ -233,7 +240,6 @@
             </el-table>
           </div>
           <!--表格内容-->
-
         </div>
       </div>
       <AddDot :dotInfo="getform" :orgid="getOrgId || otherinfo.orgid" :companyId="otherinfo.companyId"

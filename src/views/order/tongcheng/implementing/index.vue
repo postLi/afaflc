@@ -1,5 +1,5 @@
 <template>
-    <div class="implement">
+    <div class="implement tabsWrap">
         <el-tabs v-model="orderTabName" type="card" @tab-click="handleClick" >
             <el-tab-pane  
             v-for="item in visibleTabs"

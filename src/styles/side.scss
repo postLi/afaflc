@@ -66,35 +66,15 @@
   
   
   /*右侧栏*/
-  
   .side_right {
     flex: 1;
     flex-wrap:wrap;
-    padding: 10px 10px 40px 10px;
+    padding: 10px 10px 40px 10px !important;
     height: 100%;
     overflow-x: hidden;
     flex-direction: column;
     display: flex;
     position: relative;
-  }
-  .side_right_top{
-    border-bottom:2px dotted #ccc;
-    padding-bottom:10px;
-  }
-  
-  .side_right_top .el-input.is-disabled .el-input__inner{
-    color: #3e9ff1;
-    background: transparent;
-  }
-  .side_right_top .el-input__inner{
-    line-height: 24px;
-    height:24px;
-    border-radius: 2px;
-    width: 75%;
-    color: #3e9ff1;
-  }
-  .side_right_top .el-input{
-    height: 0;
   }
     .classify_searchinfo{
         width:100%;
@@ -155,14 +135,12 @@
         left: 0;
         width: 100%;
     }
-
     .show_pager{
         float: right;
         line-height: 40px;
         height: 40px;
         overflow: hidden;
     }
-  
   /*表格功能*/
   .TwoColumns .side_right_bottom {
     flex: 1;

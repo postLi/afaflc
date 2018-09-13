@@ -58,9 +58,6 @@
 
 import { data_findAflcShipperList,data_findAflcSystemUserList,data_NewData } from '@/api/dispatch/PlatForm.js'
 
-import cue from "@/components/Message/cue";
-
-
 export default {
     name: 'addClassfy',
     props: {
@@ -141,7 +138,7 @@ export default {
                 return
             }else{
                 if(this.forms.bindingStartDate  > this.forms.bindingEndDate){
-                    return this.$message({
+                    this.$message({
                         type: 'warning',
                         message: '拦截结束时间怎么能比拦截开始早呢！~'
                     })
@@ -268,7 +265,11 @@ export default {
                 shipperName:null,//
                 shipperPhone:null,//
             };
+            this.filterOptionsShipper.search = '';
+            this.checkListShpper = [];
 
+            this.filterOptionsSystemUsers.search = '';
+            this.checkListSystemUsers = [];
         }
     },
    

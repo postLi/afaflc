@@ -3,7 +3,7 @@
         <!-- 指派司机 -->
             <div class="appoint commoncss">
                 <el-dialog title='指派司机' :close-on-click-modal="false"  :visible="dialogFormVisible" @close="close">
-                    <el-form :model="searchInfo" ref="ruleForm" class="demo-ruleForm classify_searchinfo">
+                    <el-form :inline="true" :model="searchInfo" ref="ruleForm" class="demo-ruleForm classify_searchinfo">
                         <el-form-item label="车主" prop="search">
                             <el-input v-model="searchInfo.search" clearable placeholder="车主姓名/手机账号/车牌号码">
                             </el-input>
@@ -23,8 +23,8 @@
                             {{searchInfo.if}}
                         </el-form-item>
                         <el-form-item class="btnChoose fr"  style="margin-left:0;">
-                            <el-button type="primary" plain @click="pointSearch('search')">搜索</el-button>
-                            <el-button type="info" plain @click="pointSearch('clear')">清空</el-button>
+                            <el-button type="primary" :size="btnsize" plain @click="pointSearch('search')">搜索</el-button>
+                            <el-button type="info" :size="btnsize" plain @click="pointSearch('clear')">清空</el-button>
                         </el-form-item>
                     </el-form>
                     <div class="pointInfo">
@@ -154,6 +154,7 @@ export default {
     },
     data() {
         return {
+            btnsize:'mini',
             page:1,
             pagesize:20,
             dataTotal:0,
@@ -277,27 +278,6 @@ export default {
     .appoint{
         .el-dialog__body{
             position: relative;
-            .el-button{
-               padding:12px 20px;
-            }
-            .pointSearch{
-                padding-left: 10px;
-                >span{
-                    font-size: 14px;
-                    font-weight: normal;
-                    font-stretch: normal;
-                    line-height: 20px;
-                    letter-spacing: 0px;
-                    color: #333333;
-                }
-                .el-input{
-                    width: 213px;
-                    margin-left: 5px;
-                }
-                .el-button{
-                    margin-left: 5px;
-                }
-            }
             .pointInfo{
                 padding: 40px 10px 0 ;
                 .pointChoose{
@@ -361,7 +341,6 @@ export default {
                             }
                         }
                     }
-
                     .info_tab_footer{
                         position: relative;
                     }
@@ -369,7 +348,6 @@ export default {
                
             }
         }
-
         .el-dialog .el-dialog__body .el-form .el-form-item .el-form-item__content .el-input .el-input__inner{
             height: 30px;
             line-height:30px;

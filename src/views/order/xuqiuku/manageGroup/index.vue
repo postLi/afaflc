@@ -1,6 +1,6 @@
 <template>
     <div class="PointNetwork identicalStyle"  v-loading="loading">
-        <el-form :model="logisticsForm" ref="ruleForm"  class="demo-ruleForm classify_searchinfo">
+        <el-form :inline="true" :model="logisticsForm" ref="ruleForm"  class="demo-ruleForm classify_searchinfo">
             <el-form-item label="网点名称" prop="pointName">
                 <el-input v-model="logisticsForm.pointName">
                 </el-input>
@@ -18,8 +18,8 @@
                 </el-input>
             </el-form-item>
             <el-form-item class="btnChoose fr" style="margin-left:0;">
-                <el-button type="primary" @click="handleSearch">搜索</el-button>
-                <el-button type="primary" @click="clearSearch">重置</el-button>
+                <el-button type="primary" :size="btnsize" @click="handleSearch">搜索</el-button>
+                <el-button type="primary" :size="btnsize" @click="clearSearch">重置</el-button>
             </el-form-item>
         </el-form>
         <div class="classify_info">
@@ -107,6 +107,7 @@ export default {
     },
     data() {
         return {
+            btnsize:'mini',
             defaultImg:'/static/test.jpg',//默认加载失败图片
             loading:true,
             totalCount:0,

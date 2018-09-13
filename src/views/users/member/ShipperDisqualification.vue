@@ -2,8 +2,7 @@
     <div style="height:100%;"  class="identicalStyle">
           <el-form :inline="true" :model="formAll" ref="ruleForm" class="classify_searchinfo">
                 <el-form-item label="所在地">
-                    <!-- <GetCityList v-model="formAll.belongCity" ref="area"></GetCityList> -->
-                <el-input v-model="formAll.belongCityName" placeholder="请输入"></el-input>
+                    <el-input v-model="formAll.belongCityName" placeholder="请输入"></el-input>
                 </el-form-item>
                 <el-form-item label="公司名称">
                     <el-input v-model.trim="formAll.companyName"></el-input>
@@ -44,16 +43,17 @@
                             {{ (page - 1)*pagesize + scope.$index + 1 }}
                         </template>
                     </el-table-column>   
-                    <el-table-column label="手机号(会员账号)" sortable prop="mobile"  width="200">
+                
+                    <el-table-column label="手机号(会员账号)" prop="mobile" sortable width="180">
                         <template slot-scope="scope">
                             <h4 class="needMoreInfo" @click="pushOrderSerial(scope.row)">{{ scope.row.mobile}}</h4>
                         </template>
                     </el-table-column>
                     <el-table-column prop="contactsName" sortable label="注册人姓名" width="150">
                     </el-table-column>
-                    <el-table-column prop="companyName" sortable label="公司名称" width="300">
+                    <el-table-column prop="companyName" sortable label="公司名称" :show-overflow-tooltip="true" width="250">
                     </el-table-column>
-                    <el-table-column prop="belongCityName" sortable label="所在地" width="250">
+                    <el-table-column prop="belongCityName" sortable label="所在地" :show-overflow-tooltip="true" width="200">
                     </el-table-column>
                     <el-table-column prop="registerOriginName" sortable label="注册来源" width="120">
                     </el-table-column>
@@ -66,9 +66,9 @@
                     </el-table-column>
                     <el-table-column prop="authStatusName" sortable label="认证状态" width="120">
                     </el-table-column>
-                    <el-table-column prop="qq" label="QQ号码" sortable width="200">
-				    </el-table-column>
-                   <!-- <el-table-column prop="otherService" label="会员服务承诺" width="225"  align="left">
+                    <el-table-column prop="qq" label="QQ号码" sortable width="120">
+                    </el-table-column>
+                       <!-- <el-table-column prop="otherService" label="会员服务承诺" width="225"  align="left">
                         <template slot-scope="scope" >
                             <div class="otherServiceTD" v-if="scope.row.otherService != ''">
                                 <span class="otherService" v-for="(item,key) in JSON.parse(scope.row.otherService) " :key="key">
@@ -80,7 +80,7 @@
                             </div>
                         </template>
                     </el-table-column> -->
-                    <el-table-column prop="isOpenTms" label="是否开通TMS" sortable width="150">
+                    <el-table-column prop="isOpenTms" sortable label="是否开通TMS" >
                         <template slot-scope="scope">
                             <span :class="scope.row.isOpenTms == 1 ? 'isTMS' : 'noTMS'"> {{scope.row.isOpenTms == 1 ? '是' : '否'}}</span>
                         </template>

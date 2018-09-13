@@ -40,7 +40,7 @@ export function data_NewData(data) {
 //修改车主货主绑定
 export function data_ChangeData(data) {
   return fetch({
-    url: '/aflcorderservice-lyc/dispatch/aflcDriverShipper/v1/update',
+    url: '/'+baseurl+'/dispatch/aflcDriverShipper/v1/update',
     method: 'put',
     data:data
   })
@@ -51,7 +51,7 @@ export function data_ChangeData(data) {
 //修改货主平台绑定
 export function aflcShipperPlatformUpdata(data) {
     return fetch({
-      url: '/aflcorderservice-lyc/dispatch/aflcShipperPlatform/v1/update',
+      url: '/'+baseurl+'/dispatch/aflcShipperPlatform/v1/update',
       method: 'put',
       data:data
     })

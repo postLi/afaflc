@@ -38,10 +38,10 @@
           </el-select>
         </el-form-item>
         <el-form-item label="归属部门" :label-width="formLabelWidth" prop="departmentId">
-          <SelectType :orgid="otherinfo.orgid" v-model="form.departmentId" type="department_type" filterable placeholder="请选择部门" />
-          <!-- <el-select v-model="form.departmentId" placeholder="请选择部门">
+          <!-- <SelectType :orgid="otherinfo.orgid" v-model="form.departmentId" type="department_type" filterable placeholder="请选择部门" /> -->
+          <el-select v-model="form.departmentId" placeholder="请选择部门">
             <el-option v-for="item in departments" :key="item.id" :label="item.dictName" :value="item.id"></el-option>
-          </el-select> -->
+          </el-select>
         </el-form-item>
       </el-form>
       <div class="info" v-if="!isModify">注：密码默认为：123456</div>
@@ -59,14 +59,14 @@ import { postEmployeer, putEmployeer, getAuthInfo, getDepartmentInfo } from '@/a
 import popRight from '@/components/PopRight/index'
 import SelectTree from '@/components/selectTree/index'
 import { mapGetters } from 'vuex'
-import SelectType from '@/components/selectType/index'
+// import SelectType from '@/components/selectType/index'
 // import querySelect from '@/components/querySelect/index'
 
 export default {
   components: {
     popRight,
     SelectTree,
-    SelectType,
+    // SelectType,
     // querySelect
   },
   props: {
@@ -222,7 +222,9 @@ export default {
     },
     initInfo() {
       this.loading = true
+      console.log('this.otherinfo',this.otherinfo)
       return Promise.all([getAuthInfo(this.otherinfo.companyId), getDepartmentInfo(this.otherinfo.companyId)]).then(resArr => {
+          console.log('getDepartmentInfo',resArr)
         this.loading = false
         this.roles = resArr[0].list
         this.roleslist = this.roles

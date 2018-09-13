@@ -1,6 +1,6 @@
 <template>
     <div class="TransportRange identicalStyle">
-        <el-form :model="logisticsForm" ref="ruleForm" class="demo-ruleForm classify_searchinfo">
+        <el-form :inline="true" :model="logisticsForm" ref="ruleForm" class="demo-ruleForm classify_searchinfo">
             <el-form-item label="出发地：" >
                 <el-input v-model="logisticsForm.startAddress">
                 </el-input>
@@ -14,12 +14,12 @@
                 </el-input>
             </el-form-item>
             <el-form-item class="btnChoose fr" style="margin-left:20px;">
-                <el-button type="primary" @click="handleSearch">搜索</el-button>
-                <el-button type="primary" @click="clearSearch">重置</el-button>
+                <el-button type="primary" :size="btnsize" @click="handleSearch">搜索</el-button>
+                <el-button type="primary" :size="btnsize" @click="clearSearch">重置</el-button>
             </el-form-item>
         </el-form>
         <div class="classify_info">
-            <div class="info_news" style="height:92%">
+            <div class="info_news">
                 <el-table
                 :data="tableData"
                 ref="multipleTable"
@@ -90,13 +90,11 @@
             </div>
         </div>  
         <div class="info_tab_footer">共计:{{ totalCount }} <div class="show_pager"> <Pager :total="totalCount" @change="handlePageChange" :sizes="sizes"/></div> </div>    
-
     </div>
 </template>
 
 <script>
 
-// import '@/styles/identification.scss'
 import { parseTime } from '@/utils/index.js'
 import { getGoodsSourceList,GoodsSourceStatus } from '@/api/order/xuqiuku/goodssource.js'
 import Pager from '@/components/Pagination/index'
@@ -108,6 +106,7 @@ export default {
     data() {
        
         return {
+            btnsize:'mini',
             defaultImg:'/static/default.png',//默认加载失败图片
             totalCount:0,
             page:1,

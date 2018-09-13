@@ -53,14 +53,12 @@
                 </el-dialog>
             </div>
 
-            <cue ref="cue"></cue>
     </div>
 </template>
 
 <script>
 
 import { data_findAflcDriverList,data_findAflcShipperList,data_NewData } from '@/api/dispatch/Directional.js'
-import cue from "@/components/Message/cue";
 
 
 export default {
@@ -76,19 +74,18 @@ export default {
         }
     },
     components:{
-        cue
     },
     data() {
       return {
         forms:{
-            bindingStartDate:null,//绑定开始时间
-            bindingEndDate:null,//绑定结束时间
-            driverId:null,//车主
-            driverName:null,//
-            driverPhone:null,//
-            shipperId:null,//货主
-            shipperName:null,//
-            shipperPhone:null,//
+            bindingStartDate:'',//绑定开始时间
+            bindingEndDate:'',//绑定结束时间
+            driverId:'',//车主
+            driverName:'',//
+            driverPhone:'',//
+            shipperId:'',//货主
+            shipperName:'',//
+            shipperPhone:'',//
         },
         searchInfo:'暂无此内容查看',
         optionsShipper:[],//选择货主
@@ -99,11 +96,10 @@ export default {
         filterOptionsShipper:{
             search:''
         },//筛选货主
-        information:null,
+        information:'',
         filterOptionsCar:{
             search:''
         },//筛选车主
-        informationTime:'绑定结束时间怎么能比绑定开始早呢！'
       };
     },
     computed: {
@@ -145,15 +141,15 @@ export default {
                 return
             }else{
                 if(this.forms.bindingStartDate  > this.forms.bindingEndDate){
-                    this.$refs.cue.hint(this.informationTime)
-                    this.forms.bindingStartDate = null;
-                    this.forms.bindingEndDate = null;
+                    
+                    this.$message({
+                        type: 'warning',
+                        message: '绑定结束时间怎么能比绑定开始早呢！~'
+                    })
+                    this.forms.bindingStartDate = '';
+                    this.forms.bindingEndDate = '';
                 }
             }
-        },
-        //
-        point(){
-
         },
         close(){
             this.$emit('update:dialogFormVisible',false)
@@ -167,7 +163,10 @@ export default {
             data_findAflcDriverList(this.filterOptionsCar).then(res=>{
                 this.optionsCar = res.data;
                 if(res.data.length == 0){
-                    this.$refs.cue.hint(this.searchInfo)
+                    this.$message({
+                        type: 'warning',
+                        message: '操作错误：' + this.searchInfo
+                    })
                     this.filterOptionsCar.search = '';
                     this.$refs.filterOptionsCar.focus();
                 }else{
@@ -175,17 +174,18 @@ export default {
                         el.label =  el.driverName +'/'+el.driverMobile;
                     })
                 }
-
             })
         },
         getAflcShipperList(){
             data_findAflcShipperList(this.filterOptionsShipper).then(res=>{
                 this.optionsShipper = res.data;
                 if(res.data.length == 0){
-                    this.$refs.cue.hint(this.searchInfo)
+                    this.$message({
+                        type: 'warning',
+                        message: '操作错误：' + this.searchInfo
+                    })
                     this.filterOptionsShipper.search = '';
                     this.$refs.filterOptionsShipper.focus();
-                   
                 }else{
                     this.optionsShipper.map(el=>{
                         el.label =  el.contacts +'/'+el.mobile;
@@ -222,31 +222,32 @@ export default {
             this.forms.driverId =  driverId.join(',');
             this.forms.driverName =  driverName.join(',');
             this.forms.driverPhone =  driverMobile.join(',');
-            
 
-            // console.log(this.forms)
-            // console.log(this.checkListShpper)
-            // console.log(this.checkListCar)
-            
             if(!this.forms.bindingStartDate){
-                let information = "请填写绑定开始时间";
-                this.$refs.cue.hint(information)
-                return
+                return this.$message({
+                    type: 'warning',
+                    message: '请填写绑定开始时间~'
+                })
             }
             else if(!this.forms.bindingEndDate){
-                let information = "请填写绑定结束时间";
-                this.$refs.cue.hint(information)
-                return
+                return this.$message({
+                    type: 'warning',
+                    message: '请填写绑定结束时间~'
+                })
+               
             }
             else if(this.checkListShpper.length == 0){
-                let information = "请选择至少一个货主账号";
-                this.$refs.cue.hint(information)
-                return
+                return this.$message({
+                    type: 'warning',
+                    message: '请选择至少一个货主账号~'
+                })
             }
             else if(this.checkListCar.length == 0){
-                let information = "请选择至少一个车主账号";
-                this.$refs.cue.hint(information) 
-                return
+                return this.$message({
+                    type: 'warning',
+                    message: '请选择至少一个车主账号~'
+                })
+                
             }
             else{
                 data_NewData(this.forms).then(res=>{
@@ -271,29 +272,17 @@ export default {
         },
         clearForms(){
             this.forms = {
-                bindingStartDate:null,//绑定开始时间
-                bindingEndDate:null,//绑定结束时间
-                driverId:null,//车主
-                driverName:null,//
-                driverPhone:null,//
-                shipperId:null,//货主
-                shipperName:null,//
-                shipperPhone:null,//
+                bindingStartDate:'',//绑定开始时间
+                bindingEndDate:'',//绑定结束时间
+                driverId:'',//车主
+                driverName:'',//
+                driverPhone:'',//
+                shipperId:'',//货主
+                shipperName:'',//
+                shipperPhone:'',//
             };
             this.checkListShpper  = [];
             this.checkListCar = [];
-        },
-        //验证数据值
-        valuerules(event){
-            if(!event.target.value){
-                return 
-            }else{
-                if(!/^[0-9]+$/.test(event.target.value)){
-                    let information = "请输入数字类型内容";
-                    this.$refs.cue.hint(information)
-                    event.target.focus()
-                }
-            }
         },
     },
    

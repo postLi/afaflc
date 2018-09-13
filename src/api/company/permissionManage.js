@@ -1,6 +1,6 @@
-import fetch from '../../utils/fetch'
+import fetch from '@/utils/fetch'
 
-const baseUrl = ''+baseUrl+'-lyc'
+const baseUrl = 'aflccommonservice-lyc'
 
 
 /**

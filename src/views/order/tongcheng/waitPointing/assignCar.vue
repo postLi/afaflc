@@ -92,7 +92,23 @@
                                     {{ scope.row.payStatus == 'AF00801' ? '待付款' : '已付款' }}
                                 </template>
                         </el-table-column>
+                         <el-table-column
+                            label="提货地"
+                            :show-overflow-tooltip="true"
+                            width="250">
+                            <template  slot-scope="scope">
+                                {{ scope.row.aflcOrderAddresses[0].viaAddress }}
+                            </template>
+                        </el-table-column>
                         <el-table-column
+                            label="目的地"
+                            :show-overflow-tooltip="true"
+                            width="250">
+                            <template  slot-scope="scope">
+                                {{ scope.row.aflcOrderAddresses[scope.row.aflcOrderAddresses.length-1].viaAddress }}
+                            </template>
+                        </el-table-column>
+                        <!-- <el-table-column
                             prop="aflcOrderAddresses"
                             label="配送路径"
                             width="500">
@@ -104,7 +120,7 @@
                                     {{obj.viaAddress}}
                                 </p>
                             </template>
-                        </el-table-column>
+                        </el-table-column> -->
                         <el-table-column
                             label="下单时间"
                             width="250">
