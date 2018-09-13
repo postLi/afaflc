@@ -170,153 +170,152 @@ import FileSaver from 'file-saver'
 import XLSX from 'xlsx'
 import '@/styles/dialog.scss'
 import { orderStatusList } from '@/api/order/ordermange'
-import { parseTime,pickerOptions2 } from '@/utils/index.js'
+import { parseTime, pickerOptions2 } from '@/utils/index.js'
 import Pager from '@/components/Pagination/index'
 import vregion from '@/components/vregion/Region'
 
-    export default{
-        components:{
-            Pager,
-            vregion
-        },
-        data(){
-            return{
-                btnsize:'mini',
-                timeOutWaitPay:null,
-                loading: true,//加载
-                sizes:[30,50,100],
-                pagesize:30,//初始化加载数量
-                page:1,//初始化页码
-                dataTotal:0,
-                searchInfo:{
-                    belongCity:'',//区域
-                    belongCityName:'',//区域
-                    shipperName:'',//货主
-                    startOrderDate:'',//下单起始时间
-                    endOrderDate:'',//下单结束时间
-                    orderSerial:'',//订单号
-                    parentOrderStatus:'AF00801',//订单状态
-                },
-                pickerOptions2:{
-                    shortcuts:pickerOptions2
-                },
-                chooseTime:'',
-                tableData:[],
-                dialogFormVisible_details:false,//详情弹窗
-                DetailsOrderSerial:'',
-            }
-        },
-        watch:{
+export default{
+  components: {
+    Pager,
+    vregion
+  },
+  data() {
+    return {
+      btnsize: 'mini',
+      timeOutWaitPay: null,
+      loading: true, // 加载
+      sizes: [30, 50, 100],
+      pagesize: 30, // 初始化加载数量
+      page: 1, // 初始化页码
+      dataTotal: 0,
+      searchInfo: {
+        belongCity: '', // 区域
+        belongCityName: '', // 区域
+        shipperName: '', // 货主
+        startOrderDate: '', // 下单起始时间
+        endOrderDate: '', // 下单结束时间
+        orderSerial: '', // 订单号
+        parentOrderStatus: 'AF00801' // 订单状态
+      },
+      pickerOptions2: {
+        shortcuts: pickerOptions2
+      },
+      chooseTime: '',
+      tableData: [],
+      dialogFormVisible_details: false, // 详情弹窗
+      DetailsOrderSerial: ''
+    }
+  },
+  watch: {
 
-        },
-        created(){
+  },
+  created() {
 
-        },
-        mounted(){
-            this.firstblood();
+  },
+  mounted() {
+    this.firstblood()
 
-            console.log('```````````',process.env.NODE_ENV)
+    console.log('```````````', process.env.NODE_ENV)
             // this.timeOutWaitPay = setInterval(this.firstblood,60000)
             // console.log(this.$store)
-        },  
-        beforeDestroy(){
-            clearInterval(this.timeOutWaitPay);
-        },
-        methods: {
-            exportExcel () {
+  },
+  beforeDestroy() {
+    clearInterval(this.timeOutWaitPay)
+  },
+  methods: {
+    exportExcel() {
                 /* generate workbook object from table */
-                var wb = XLSX.utils.table_to_book(document.querySelector('#out-table'))
+      var wb = XLSX.utils.table_to_book(document.querySelector('#out-table'))
                 /* get binary string as output */
-                var wbout = XLSX.write(wb, { bookType: 'xlsx', bookSST: true, type: 'array' })
-                console.log(wb)
-                console.log(wbout)
+      var wbout = XLSX.write(wb, { bookType: 'xlsx', bookSST: true, type: 'array' })
+      console.log(wb)
+      console.log(wbout)
                 // try {
                 //     FileSaver.saveAs(new Blob([wbout], { type: 'application/octet-stream' }), 'sheetjs.xlsx')
                 // } catch (e) { if (typeof console !== 'undefined') console.log(e, wbout) }
                 // return wbout
-            },
-            regionChange(d) {
-                console.log('data:',d)
-                this.searchInfo.belongCityName = (!d.province&&!d.city&&!d.area&&!d.town) ? '': `${this.getValue(d.province)}${this.getValue(d.city)}${this.getValue(d.area)}${this.getValue(d.town)}`.trim();
-                if(d.city){
-                    this.searchInfo.belongCity = d.city.code;
-                }else{
-                    this.searchInfo.belongCity = d.province.code;
-                }
-            },
-             getValue(obj){
-                return obj ? obj.value:'';
-            },
-            handlePageChange(obj) {
-                this.page = obj.pageNum;
-                this.pagesize = obj.pageSize;
-                this.firstblood();
-            },
-            //刷新页面  
-            firstblood(){
-                this.loading = true;
+    },
+    regionChange(d) {
+      console.log('data:', d)
+      this.searchInfo.belongCityName = (!d.province && !d.city && !d.area && !d.town) ? '' : `${this.getValue(d.province)}${this.getValue(d.city)}${this.getValue(d.area)}${this.getValue(d.town)}`.trim()
+      if (d.city) {
+        this.searchInfo.belongCity = d.city.code
+      } else {
+        this.searchInfo.belongCity = d.province.code
+      }
+    },
+    getValue(obj) {
+      return obj ? obj.value : ''
+    },
+    handlePageChange(obj) {
+      this.page = obj.pageNum
+      this.pagesize = obj.pageSize
+      this.firstblood()
+    },
+            // 刷新页面
+    firstblood() {
+      this.loading = true
 
-                orderStatusList(this.page,this.pagesize,this.searchInfo).then(res => {
-                    console.log('待付款',res)
-                    this.tableData = res.data.list;
-                    this.dataTotal = res.data.totalCount;
+      orderStatusList(this.page, this.pagesize, this.searchInfo).then(res => {
+        console.log('待付款', res)
+        this.tableData = res.data.list
+        this.dataTotal = res.data.totalCount
 
-                    this.tableData.forEach(item => {
-                        item.aflcOrderAddresses.sort(function(a,b){  
-                            return a.viaOrder - b.viaOrder;  
-                        })  
-                    })
-                    this.loading = false;
-                })
+        this.tableData.forEach(item => {
+          item.aflcOrderAddresses.sort(function(a, b) {
+            return a.viaOrder - b.viaOrder
+          })
+        })
+        this.loading = false
+      })
+    },
 
-            },
-           
-            //模糊查询 分类名称或者code
-            handleSearch(type){
+            // 模糊查询 分类名称或者code
+    handleSearch(type) {
                 // console.log(this.chooseTime)
-                switch(type){
-                    case 'search':
-                        if(this.chooseTime){
-                            this.searchInfo.startOrderDate = this.chooseTime[0];
-                            this.searchInfo.endOrderDate = this.chooseTime[1];
-                        }else{
-                            this.searchInfo.startOrderDate ='' ;
-                            this.searchInfo.endOrderDate = '';
-                        }
-                        this.firstblood();
-                        break;
-                    case 'clear':
-                        this.searchInfo = {
-                            belongCity:'',//区域
-                            shipperName:'',//货主
-                            startOrderDate:'',//下单起始时间
-                            endOrderDate:'',//下单结束时间
-                            orderSerial:'',//订单号
-                            parentOrderStatus:'AF00801',//订单状态待支付
-                        };
-                        this.chooseTime = '';
-                        this.firstblood();
-                    case 'outExce':
-                        this.exportExcel();
-                        break;
-                }
+      switch (type) {
+        case 'search':
+          if (this.chooseTime) {
+            this.searchInfo.startOrderDate = this.chooseTime[0]
+            this.searchInfo.endOrderDate = this.chooseTime[1]
+          } else {
+            this.searchInfo.startOrderDate = ''
+            this.searchInfo.endOrderDate = ''
+          }
+          this.firstblood()
+          break
+        case 'clear':
+          this.searchInfo = {
+            belongCity: '', // 区域
+            shipperName: '', // 货主
+            startOrderDate: '', // 下单起始时间
+            endOrderDate: '', // 下单结束时间
+            orderSerial: '', // 订单号
+            parentOrderStatus: 'AF00801' // 订单状态待支付
+          }
+          this.chooseTime = ''
+          this.firstblood()
+        case 'outExce':
+          this.exportExcel()
+          break
+      }
                 // 清除选中状态，避免影响下个操作
-                this.$refs.multipleTable.clearSelection()
-            },
-                 //判断是否选中
-            getinfomation(selection){
-                this.checkedinformation = selection;
-            },
-             //点击选中当前行
-            clickDetails(row, event, column){
-                this.$refs.multipleTable.toggleRowSelection(row);
-            },
-            //详情弹窗
-            pushOrderSerial(item){
-                this.$router.push({name: '订单详情',query:{ orderSerial:item.orderSerial }});
-            }
-        }
+      this.$refs.multipleTable.clearSelection()
+    },
+                 // 判断是否选中
+    getinfomation(selection) {
+      this.checkedinformation = selection
+    },
+             // 点击选中当前行
+    clickDetails(row, event, column) {
+      this.$refs.multipleTable.toggleRowSelection(row)
+    },
+            // 详情弹窗
+    pushOrderSerial(item) {
+      this.$router.push({ name: '订单详情', query: { orderSerial: item.orderSerial }})
     }
+  }
+}
 </script>
 
 <style type="text/css" lang="scss" scoped>
