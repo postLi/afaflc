@@ -1,390 +1,385 @@
 <template>
-    <div class="serviceArea clearfix">
-        <div class="side_left">
-            <el-tree
-            :data="areadata"
-            :props="props"
-            :load="loadNode"
-            lazy
-            :highlight-current = "true"
-            @node-expand="handleNodeClick"
-            >
-            </el-tree>
-        </div>
-        <div class="side_right">
-            <div class="classify_searchinfo">
-                <label>服务分类&nbsp;
-                    <el-select v-model="valueService" clearable placeholder="请选择">
-                        <el-option
-                            v-for="item in optionsService"
+    <div class="TwoColumns serviceArea clearfix">
+        <div class="columnsContainer">
+            <div class="side_left">
+                <el-tree
+                :data="areadata"
+                :props="props"
+                :load="loadNode"
+                lazy
+                :highlight-current = "true"
+                @node-expand="handleNodeClick"
+                >
+                </el-tree>
+            </div>
+            <div class="side_right">
+                <el-form :inline="true" :model="searchInfo" ref="ruleForm" class="demo-ruleForm classify_searchinfo">
+                    <el-form-item label="服务分类" prop="pointName">
+                       <el-select v-model="searchInfo.valueService" clearable placeholder="请选择">
+                            <el-option
+                                v-for="item in optionsService"
+                                :key="item.id"
+                                :label="item.name"
+                                :value="item.code"
+                                :disabled="item.disabled">
+                            </el-option>
+                        </el-select>
+                    </el-form-item>
+                    <el-form-item label="车辆类型" prop="orderSerial">
+                        <el-select v-model="searchInfo.valueCarlist" clearable placeholder="请选择">
+                            <el-option
+                            v-for="item in optionsCar"
                             :key="item.id"
                             :label="item.name"
                             :value="item.code"
                             :disabled="item.disabled">
-                        </el-option>
-                    </el-select>
-                </label>
-                <label>车辆类型&nbsp;
-                    <el-select v-model="valueCarlist" clearable placeholder="请选择">
-                        <el-option
-                        v-for="item in optionsCar"
-                        :key="item.id"
-                        :label="item.name"
-                        :value="item.code"
-                        :disabled="item.disabled">
-                        </el-option>
-                    </el-select>
-                </label>    
-                <label>状态&nbsp;
-                    <el-select v-model="valueStatus" clearable placeholder="请选择">
-                        <el-option
-                        v-for="item in optionsStatus"
-                        :key="item.id"
-                        :label="item.label"
-                        :value="item.value"
-                        :disabled="item.disabled">
-                        </el-option>
-                    </el-select>
-                </label>        
-                <el-button type="primary"  plain @click="getdata_search">查询</el-button>
-                <el-button type="info" plain >清空</el-button>
-            </div>
-            <div class="classify_info">
-                <div class="btns_box">
-                    <el-button type="primary" plain icon="el-icon-circle-plus" @click="addClassfy">新增</el-button>
-                    <el-button type="primary" plain icon="el-icon-edit" @click="handleEdit">修改</el-button>
-                    <el-button type="primary" plain icon="el-icon-delete" @click="handleDelete">删除</el-button>
-                    <el-button type="primary" plain icon="el-icon-bell" @click="handleUseStates">启用/禁用</el-button>
-                </div>
-                <div class="info_news">
-                    <el-table
-                        ref="multipleTable"
-                        :data="tableDataTree"
-                        stripe
-                        border
-                        height="93%"
-                        @row-click="clickDetails"
-                        @selection-change = "getinfomation"
-                        @row-dblclick="moreinfo"
-                        tooltip-effect="dark"
-                        style="width: 100%"> 
-                        <el-table-column
+                            </el-option>
+                        </el-select>
+                    </el-form-item>
+                    <el-form-item label="状态" maxlength="18"  prop="shipperName">
+                        <el-select v-model="searchInfo.valueStatus" clearable placeholder="请选择">
+                            <el-option
+                            v-for="item in optionsStatus"
+                            :key="item.id"
+                            :label="item.label"
+                            :value="item.value"
+                            :disabled="item.disabled">
+                            </el-option>
+                        </el-select>
+                    </el-form-item>
+                    <el-form-item class="btnChoose fr"  style="margin-left:0;">
+                        <el-button type="primary" :size="btnsize" plain @click="handleSearch('search')">查询</el-button>
+                        <el-button type="info" :size="btnsize" plain @click="handleSearch('clear')">重置</el-button>
+                    </el-form-item>
+                </el-form>
+                <div class="side_right_bottom clearfix">
+                    <div class="btns_box clearfix">
+                        <el-button type="primary" :size="btnsize" plain icon="el-icon-circle-plus" @click="addClassfy">新增</el-button>
+                        <el-button type="primary" :size="btnsize" plain icon="el-icon-edit" @click="handleEdit">修改</el-button>
+                        <el-button type="primary" :size="btnsize" plain icon="el-icon-delete" @click="handleDelete">删除</el-button>
+                        <el-button type="primary" :size="btnsize" plain icon="el-icon-bell" @click="handleUseStates">启用/禁用</el-button>
+                    </div>
+                    <div class="info_news">
+                        <el-table
+                            ref="multipleTable"
+                            :data="tableDataTree"
+                            stripe
+                            border
+                            height="100%"
+                            @row-click="clickDetails"
+                            @selection-change = "getinfomation"
+                            tooltip-effect="dark"
+                            style="width: 100%"> 
+                            <el-table-column
+                                fixed
+                                type="selection"
+                                width="55">
+                            </el-table-column>
+                            <el-table-column
                             fixed
-                             type="selection"
-                             width="55">
-                           </el-table-column>
-                        <el-table-column
-                        fixed
-                          prop="areaName"
-                          label="区域">
-                        </el-table-column>
-                        <el-table-column
-                          prop="serviceName"
-                          label="服务分类">
-                        </el-table-column>
-                        <el-table-column
-                          prop="carTypeName"
-                          label="车辆类型">
-                        </el-table-column>
-                        <el-table-column
-                          prop="standardPriceM"
-                          label="标准起步价">
-                        </el-table-column>
-                        <el-table-column
-                          prop="outstripPriceM"
-                          label="标准超里程费   ">
-                        </el-table-column>
-                        <el-table-column
-                          prop="areaPriceM"
-                          label="区域起步价">
-                        </el-table-column>
-                        <el-table-column
-                          prop="areaOutstripPriceM"
-                          label="区域超里程费">
-                        </el-table-column>
-                         <el-table-column
-                          prop="usingStatus"
-                          label="状态">
-                           <template  slot-scope="scope">
-                                {{ scope.row.usingStatus === '1' ? '启用' : '禁用' }}
-                            </template>
-                        </el-table-column>
-                      </el-table>
-                      <!-- 页码 -->
-                    <div class="Pagination ">
-                        <div class="block">
-                            <el-pagination
-                            @size-change="handleSizeChange"
-                            @current-change="handleCurrentChange"
-                            :current-page="currentPage4"
-                            :page-size="pagesize"
-                            layout="total, sizes, prev, pager, next, jumper"
-                            :total="dataTotal">
-                            </el-pagination>
-                        </div>
+                            prop="areaName"
+                            label="区域">
+                            </el-table-column>
+                            <el-table-column
+                            prop="serviceName"
+                            label="服务分类">
+                            </el-table-column>
+                            <el-table-column
+                            prop="carTypeName"
+                            label="车辆类型">
+                            </el-table-column>
+                            <el-table-column
+                            prop="standardPriceM"
+                            label="标准起步价">
+                            </el-table-column>
+                            <el-table-column
+                            prop="outstripPriceM"
+                            label="标准超里程费   ">
+                            </el-table-column>
+                            <el-table-column
+                            prop="areaPriceM"
+                            label="区域起步价">
+                            </el-table-column>
+                            <el-table-column
+                            prop="areaOutstripPriceM"
+                            label="区域超里程费">
+                            </el-table-column>
+                            <el-table-column
+                            prop="usingStatus"
+                            label="状态">
+                            <template  slot-scope="scope">
+                                    {{ scope.row.usingStatus === '1' ? '启用' : '禁用' }}
+                                </template>
+                            </el-table-column>
+                        </el-table>
                     </div>
                 </div>
-                <!-- 新增分类信息 -->
-                <div class="addclassify commoncss">
-                    <el-dialog :visible.sync="dialogFormVisible"  :before-close = "beforClose">
-                        <div class="infoinner clearfix">
-                            <div class="slot_info clearfix">
-                                <div class="newarea area_left">
-                                    <span class="slot_head">新增区域定价</span>
-                                    <div class="area_left_server area_server">
-                                        <h4><span>* </span> 选择标准服务类型</h4>
-                                        <div class="eltree_search chooseclassfy">
-                                            <div class="chose">
-                                                <p><span>* </span>选择服务分类 ：</p>
-                                                <el-select v-model="newValueService" clearable placeholder="请选择" @change="choseStyle">
-                                                    <el-option
-                                                        v-for="item in optionsService"
-                                                        :key="item.id"
-                                                        :label="item.name"
-                                                        :value="item.code"
-                                                        :disabled="item.disabled">
-                                                    </el-option>
-                                                </el-select>
+
+                <!-- 页码 -->
+                <div class="info_tab_footer">共计:{{ dataTotal }} <div class="show_pager"> <Pager :total="dataTotal" @change="handlePageChange"  :sizes="sizes"/></div> </div>    
+
+                    <!-- 新增分类信息 -->
+                    <div class="addclassify commoncss">
+                        <el-dialog :visible.sync="dialogFormVisible"  :before-close = "beforClose">
+                            <div class="infoinner clearfix">
+                                <div class="slot_info clearfix">
+                                    <div class="newarea area_left">
+                                        <span class="slot_head">新增区域定价</span>
+                                        <div class="area_left_server area_server">
+                                            <h4><span>* </span> 选择标准服务类型</h4>
+                                            <div class="eltree_search chooseclassfy">
+                                                <div class="chose">
+                                                    <p><span>* </span>选择服务分类 ：</p>
+                                                    <el-select v-model="newValueService" clearable placeholder="请选择" @change="choseStyle">
+                                                        <el-option
+                                                            v-for="item in optionsService"
+                                                            :key="item.id"
+                                                            :label="item.name"
+                                                            :value="item.code"
+                                                            :disabled="item.disabled">
+                                                        </el-option>
+                                                    </el-select>
+                                                </div>
+                                                <div class="chose">
+                                                    <p><span>* </span>选择车辆类型 ：</p>
+                                                    <el-select v-model="newValueCar" clearable placeholder="请选择" @change="choseStyle">
+                                                        <el-option
+                                                            v-for="item in optionsCar"
+                                                            :key="item.id"
+                                                            :label="item.name"
+                                                            :value="item.code"
+                                                            :disabled="item.disabled">
+                                                        </el-option>
+                                                    </el-select>
+                                                </div>
+                                                <div class="chose">
+                                                    <p><span>* </span>车长 ：</p>
+                                                    <el-select v-model="newValueStyle" clearable placeholder="请选择"   @change="choseVule">
+                                                        <el-option
+                                                            v-for="item in optionsStyle"
+                                                            :key="item.id"
+                                                            :label="item.carStyle"
+                                                            :value="item.standardPid"
+                                                            :disabled="item.disabled">
+                                                        </el-option>
+                                                    </el-select>
+                                                </div>
                                             </div>
-                                             <div class="chose">
-                                                <p><span>* </span>选择车辆类型 ：</p>
-                                                <el-select v-model="newValueCar" clearable placeholder="请选择" @change="choseStyle">
-                                                    <el-option
-                                                        v-for="item in optionsCar"
-                                                        :key="item.id"
-                                                        :label="item.name"
-                                                        :value="item.code"
-                                                        :disabled="item.disabled">
-                                                    </el-option>
-                                                </el-select>
-                                            </div>
-                                             <div class="chose">
-                                                <p><span>* </span>车长 ：</p>
-                                                <el-select v-model="newValueStyle" clearable placeholder="请选择"   @change="choseVule">
-                                                    <el-option
-                                                        v-for="item in optionsStyle"
-                                                        :key="item.id"
-                                                        :label="item.carStyle"
-                                                        :value="item.standardPid"
-                                                        :disabled="item.disabled">
-                                                    </el-option>
-                                                </el-select>
-                                            </div>
+                                            <label>
+                                                <span class="control">标准起步价</span>
+                                                <el-input
+                                                    disabled
+                                                    v-model="standPrice"
+                                                    clearable>
+                                                </el-input>
+                                                <span>元</span>
+                                                <el-input
+                                                    disabled
+                                                    v-model="standKm"
+                                                    clearable>
+                                                </el-input>
+                                                <span>公里</span>
+                                            </label>
+                                            <label>
+                                                <span class="control">超里程费</span>         
+                                                <el-input
+                                                    disabled
+                                                    v-model="standMorePrice"
+                                                    clearable>
+                                                </el-input>
+                                                <span>元 / 公里</span>
+                                            </label>       
                                         </div>
-                                        <label>
+                                        
+                                    </div>
+                                    <div class="newarea area_right">
+                                        <span class="slot_head">设置区域价</span>
+                                        <div class="area_right_server area_server">
+                                            <h4><span>* </span> 选择省市</h4>
+                                            <div class="eltree_search">
+                                                <el-input
+                                                class="el_search"
+                                                placeholder=""
+                                                suffix-icon="el-icon-search"
+                                                v-model="filterText">
+                                                </el-input>
+                                                <el-tree
+                                            :props="propsAdd"
+                                                show-checkbox
+                                                node-key="code"
+                                                ref = 'trees'
+                                                lazy
+                                                :load="loadNodeMore"
+                                                :highlight-current = "true"
+                                                @node-expand="handleNodeClickMore"
+                                                :filter-node-method="filterNode"
+                                                >
+                                                </el-tree>
+                                            </div>
+                                            <label>
+                                                <span class="control">区域起步价</span>
+                                                <el-input
+                                                    @blur="valuerules"
+                                                    placeholder="请输入内容"
+                                                    v-model="newPrice"
+                                                    ref="newPrice"
+                                                    clearable>
+                                                </el-input>
+                                                <span>元</span>
+                                                <el-input
+                                                    placeholder="请输入内容"
+                                                    @blur="valuerules"
+                                                    v-model="newInfoKm"
+                                                    ref="newInfoKm"
+                                                    clearable>
+                                                </el-input>
+                                                <span>公里</span>
+                                            </label>
+                                            <label>
+                                                <span class="control">区域超里程费</span>         
+                                                <el-input
+                                                    @blur="valuerules"
+                                                    placeholder="请输入内容"
+                                                    v-model="newMorePrice"
+                                                    ref="newMorePrice"
+                                                    clearable>
+                                                </el-input>
+                                                <span>元 / 公里</span>
+                                            </label>       
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div slot="footer" class="dialog-footer">
+                            <el-button type="primary" @click="newInfoSave">保 存</el-button>
+                            <el-button @mouseover.native="setCanClose" @mouseout.native="canclose=false" @click="closeAddNewInfo">取 消</el-button>
+                            </div>
+                        </el-dialog>
+                    </div>
+
+                    <!-- 修改分类信息 -->
+                    <div class="changeclassify commoncss">
+                        <el-dialog title='修改分类信息'  :visible.sync="dialogFormVisible_change">
+                            <div class="changeInforMation">
+                                <div class="nowCity">
+                                    <h4><span>* </span>当前城市</h4>
+                                    <el-input
+                                        v-model="changeforms.areaName"
+                                        disabled
+                                        clearable>
+                                    </el-input>
+                                </div>
+                                <div class="chose">
+                                    <p><span>* </span>当前服务分类 ：</p>
+                                    <el-input
+                                        v-model="changeforms.serviceName"
+                                        :disabled="true">
+                                    </el-input>
+                                </div>
+                                    <div class="chose">
+                                    <p><span>* </span>当前车辆类型 ：</p>
+                                    <el-input
+                                        v-model="changeforms.carTypeName"
+                                        :disabled="true">
+                                    </el-input>
+                                </div>
+                                <div class="chose">
+                                    <p><span>* </span>车长 ：</p>
+                                    <el-input
+                                    
+                                        v-model="changeforms.carTypeStyle"
+                                        :disabled="true">
+                                    </el-input>
+                                </div>
+                                <div class="reference">
+                                    <div class="referenceM">
                                             <span class="control">标准起步价</span>
                                             <el-input
                                                 disabled
-                                                v-model="standPrice"
+                                                v-model="changeforms.standardPrice"
                                                 clearable>
                                             </el-input>
                                             <span>元</span>
                                             <el-input
                                                 disabled
-                                                v-model="standKm"
+                                                v-model="changeforms.standardKm"
                                                 clearable>
                                             </el-input>
                                             <span>公里</span>
-                                        </label>
-                                        <label>
+                                        </div>
+                                        <div class="referenceM">
                                             <span class="control">超里程费</span>         
                                             <el-input
                                                 disabled
-                                                v-model="standMorePrice"
+                                                v-model="changeforms.outstripPrice"
                                                 clearable>
                                             </el-input>
                                             <span>元 / 公里</span>
-                                        </label>       
-                                    </div>
+                                        </div>       
+                                </div>
+                                <div class="nowChange">
+                                    <span class="control">区域起步价</span>
+                                    <el-input
+                                        @blur="valuerules"
+                                        placeholder="请输入内容"
+                                        v-model="changeforms.areaPrice"
+                                        ref="newPrice"
+                                        clearable>
+                                    </el-input>
+                                    <span>元</span>
+                                    <el-input
+                                        @blur="valuerules"
+                                        placeholder="请输入内容"
+                                        v-model="changeforms.areaKm"
+                                        ref="newInfoKm"
+                                        clearable>
+                                    </el-input>
+                                    <span>公里</span>
+                                </div>
+                                <div class="nowChange nowChangeInfo">
+                                    <span class="control">区域超里程费</span>         
+                                    <el-input
+                                        @blur="valuerules"
                                     
-                                </div>
-                                <div class="newarea area_right">
-                                    <span class="slot_head">设置区域价</span>
-                                     <div class="area_right_server area_server">
-                                        <h4><span>* </span> 选择省市</h4>
-                                        <div class="eltree_search">
-                                            <el-input
-                                            class="el_search"
-                                            placeholder=""
-                                            suffix-icon="el-icon-search"
-                                            v-model="filterText">
-                                            </el-input>
-                                            <el-tree
-                                           :props="propsAdd"
-                                            show-checkbox
-                                            node-key="code"
-                                            ref = 'trees'
-                                            lazy
-                                            :load="loadNodeMore"
-                                            :highlight-current = "true"
-                                            @node-expand="handleNodeClickMore"
-                                            :filter-node-method="filterNode"
-                                            >
-                                            </el-tree>
-                                        </div>
-                                        <label>
-                                            <span class="control">区域起步价</span>
-                                            <el-input
-                                                @blur="valuerules"
-                                                placeholder="请输入内容"
-                                                v-model="newPrice"
-                                                ref="newPrice"
-                                                clearable>
-                                            </el-input>
-                                            <span>元</span>
-                                            <el-input
-                                                placeholder="请输入内容"
-                                                @blur="valuerules"
-                                                v-model="newInfoKm"
-                                                ref="newInfoKm"
-                                                clearable>
-                                            </el-input>
-                                            <span>公里</span>
-                                        </label>
-                                        <label>
-                                            <span class="control">区域超里程费</span>         
-                                            <el-input
-                                                @blur="valuerules"
-                                                placeholder="请输入内容"
-                                                v-model="newMorePrice"
-                                                ref="newMorePrice"
-                                                clearable>
-                                            </el-input>
-                                            <span>元 / 公里</span>
-                                        </label>       
-                                    </div>
-                                </div>
+                                        placeholder="请输入内容"
+                                        v-model="changeforms.areaOutstripPrice"
+                                        ref="newMorePrice"
+                                        clearable>
+                                    </el-input>
+                                    <span>元 / 公里</span>
+                                </div>       
                             </div>
-                        </div>
-                        <div slot="footer" class="dialog-footer">
-                        <el-button type="primary" @click="newInfoSave">保 存</el-button>
-                        <el-button @mouseover.native="setCanClose" @mouseout.native="canclose=false" @click="closeAddNewInfo">取 消</el-button>
-                        </div>
-                    </el-dialog>
-                </div>
+                            <div slot="footer" class="dialog-footer">
+                                <el-button type="primary" @click="changeInfoSave">保 存</el-button>
+                                <el-button  @click="dialogFormVisible_change = false">取 消</el-button>
+                            </div>
+                        </el-dialog>
+                    </div>
 
-                <!-- 修改分类信息 -->
-                <div class="changeclassify commoncss">
-                    <el-dialog title='修改分类信息'  :visible.sync="dialogFormVisible_change">
-                        <div class="changeInforMation">
-                             <div class="nowCity">
-                                <h4><span>* </span>当前城市</h4>
-                                 <el-input
-                                    v-model="changeforms.areaName"
-                                    disabled
-                                    clearable>
-                                </el-input>
-                            </div>
-                             <div class="chose">
-                                <p><span>* </span>当前服务分类 ：</p>
-                                <el-input
-                                    v-model="changeforms.serviceName"
-                                    :disabled="true">
-                                </el-input>
-                            </div>
-                                <div class="chose">
-                                <p><span>* </span>当前车辆类型 ：</p>
-                                <el-input
-                                    v-model="changeforms.carTypeName"
-                                    :disabled="true">
-                                </el-input>
-                            </div>
-                            <div class="chose">
-                                <p><span>* </span>车长 ：</p>
-                                <el-input
-                                
-                                    v-model="changeforms.carTypeStyle"
-                                    :disabled="true">
-                                </el-input>
-                            </div>
-                            <div class="reference">
-                                 <div class="referenceM">
-                                        <span class="control">标准起步价</span>
-                                        <el-input
-                                            disabled
-                                            v-model="changeforms.standardPrice"
-                                            clearable>
-                                        </el-input>
-                                        <span>元</span>
-                                        <el-input
-                                            disabled
-                                            v-model="changeforms.standardKm"
-                                            clearable>
-                                        </el-input>
-                                        <span>公里</span>
-                                    </div>
-                                    <div class="referenceM">
-                                        <span class="control">超里程费</span>         
-                                        <el-input
-                                            disabled
-                                            v-model="changeforms.outstripPrice"
-                                            clearable>
-                                        </el-input>
-                                        <span>元 / 公里</span>
-                                    </div>       
-                            </div>
-                            <div class="nowChange">
-                                <span class="control">区域起步价</span>
-                                <el-input
-                                    @blur="valuerules"
-                                    placeholder="请输入内容"
-                                    v-model="changeforms.areaPrice"
-                                    ref="newPrice"
-                                    clearable>
-                                </el-input>
-                                <span>元</span>
-                                <el-input
-                                    @blur="valuerules"
-                                    placeholder="请输入内容"
-                                    v-model="changeforms.areaKm"
-                                    ref="newInfoKm"
-                                    clearable>
-                                </el-input>
-                                <span>公里</span>
-                            </div>
-                            <div class="nowChange nowChangeInfo">
-                                <span class="control">区域超里程费</span>         
-                                <el-input
-                                    @blur="valuerules"
-                                   
-                                    placeholder="请输入内容"
-                                    v-model="changeforms.areaOutstripPrice"
-                                    ref="newMorePrice"
-                                    clearable>
-                                </el-input>
-                                <span>元 / 公里</span>
-                            </div>       
-                        </div>
-                        <div slot="footer" class="dialog-footer">
-                            <el-button type="primary" @click="changeInfoSave">保 存</el-button>
-                            <el-button  @click="dialogFormVisible_change = false">取 消</el-button>
-                        </div>
-                    </el-dialog>
-                </div>
+                    <!-- 新增分类提示不可为空 -->
+                    <div class="cue">
+                        <el-dialog
+                        :visible.sync="centerDialogVisible"
+                        center>
+                        <span>{{information}}</span>
+                        </el-dialog>
+                    </div>
 
-                <!-- 新增分类提示不可为空 -->
-                <div class="cue">
-                    <el-dialog
-                    :visible.sync="centerDialogVisible"
-                    center>
-                    <span>{{information}}</span>
-                    </el-dialog>
-                </div>
-
-                <!-- 删除信息提示 -->
-                <div class="delData">
-                    <el-dialog
-                    title="提示"
-                    :visible.sync="delDialogVisible">
-                    <span class="delwarn"></span>
-                    <span class="delinfo">确认删除信息吗 ?</span>
-                    <span slot="footer" class="dialog-footer">
-                        <el-button type="primary" @click="delDataInformation">确 定</el-button>
-                        <el-button @click="delDialogVisible = false" type="info" plain>取 消</el-button>
-                    </span>
-                    </el-dialog>
-                </div>
+                    <!-- 删除信息提示 -->
+                    <div class="delData">
+                        <el-dialog
+                        title="提示"
+                        :visible.sync="delDialogVisible">
+                        <span class="delwarn"></span>
+                        <span class="delinfo">确认删除信息吗 ?</span>
+                        <span slot="footer" class="dialog-footer">
+                            <el-button type="primary" @click="delDataInformation">确 定</el-button>
+                            <el-button @click="delDialogVisible = false" type="info" plain>取 消</el-button>
+                        </span>
+                        </el-dialog>
+                    </div>
             </div>
+
         </div>
     </div>
 </template>
@@ -392,10 +387,15 @@
 <script type="text/javascript">
 
 import { data_Area,data_GetCityList,data_GetCityInfo,data_CarList,data_ServerClassList,data_ChangeStatus,data_Delete,data_GetCarStyle,data_NewOrChange,data_OnlyChange } from '@/api/server/areaPrice.js'
+import Pager from '@/components/Pagination/index'
+
 import '@/styles/dialog.scss'
+import '@/styles/side.scss'
     export default{
         data(){
             return{
+                btnsize:'mini',
+                sizes:[20,50,100],
                 canclose: false,
                 cacheData: {},
                 catchData:{},
@@ -413,7 +413,11 @@ import '@/styles/dialog.scss'
                      label: 'name',
                     children: 'children'
                 },
-                valueService:null,//服务分类
+                searchInfo:{
+                    valueService:'',//服务分类
+                    valueCarlist:'',
+                    valueStatus:'',
+                },
                 newValueService:null,//新增服务分类
                 newValueCar:null,//车辆分类
                 newValueStyle:null,//车长
@@ -430,14 +434,12 @@ import '@/styles/dialog.scss'
                     name:'全部'
                     }
                 ],
-                valueCarlist:null,
                 optionsCar:[
                     {
                     code:null,
                     name:'全部'
                     }
                 ],
-                valueStatus:null,
                 optionsStatus:[
                     {
                     value:null,
@@ -488,6 +490,7 @@ import '@/styles/dialog.scss'
             }
         },
         components:{
+            Pager
         },
         
         mounted(){
@@ -504,6 +507,11 @@ import '@/styles/dialog.scss'
 
         },
         methods: {
+            handlePageChange(obj) {
+                this.page = obj.pageNum;
+                this.pagesize = obj.pageSize;
+                this.getCommonFunction();
+            },
             //关闭前事件
             beforClose(done){
                 // console.log(done)
@@ -571,11 +579,8 @@ import '@/styles/dialog.scss'
                     })
                 }).catch(res=>{
                     console.log(res)
-                    // if(res.status == 40001)
-                    // let information = res.text;
-                    // this.hint(information);
+                   
                 });
-                // console.log(this.optionsService,this.optionsCar)
             },
             //刷新页面
             firstblood(){
@@ -586,20 +591,25 @@ import '@/styles/dialog.scss'
                     this.getCommonFunction();
                 })
             },
-            
-            //模糊查询 分类名称或者code
-            getdata_search(event){
-                this.getCommonFunction()
+            handleSearch(type){
+                switch(type){
+                    case 'search':
+                        this.getCommonFunction()
+                        break;
+                    case 'clear' :
+                        this.search = {
+                            valueService:'',
+                            valueCarlist:'',
+                            valueStatus:'',
+                        },
+                        this.getCommonFunction()
+                        break;
+                }
+                
             },
             //查询和获取对应区域的数据
             getCommonFunction(){
-                let data  = {
-                    cityId: this.cityId,
-                    provinceId: this.provinceId,
-                    carType : this.valueCarlist,
-                    serivceCode : this.valueService,
-                    usingStatus: this.valueStatus
-                }
+                let data  = Object.assign({},{cityId: this.cityId,provinceId: this.provinceId},this.searchInfo)
                 // console.log(data);
                 data_GetCityInfo(this.page,this.pagesize,data).then(res=>{
                     console.log(res.data.list)
@@ -612,11 +622,9 @@ import '@/styles/dialog.scss'
                         item.areaPriceM = item.areaPrice + '元'+''+'('+item.areaKm+'公里)';
                         item.areaOutstripPriceM = item.areaOutstripPrice + '元/公里';
                     })
-                    this.show = false;
                     
                 }).catch(res=>{
                     console.log(res)
-                    // if(res.status == 40001)
                     let information = res.text;
                     this.hint(information);
                 })
@@ -688,11 +696,6 @@ import '@/styles/dialog.scss'
                 // console.log(value,data)
                 if (!value) return true;
                 return data.name.indexOf(value) !== -1;
-            },
-            //shuangji
-            moreinfo(row, event){
-                console.log(row, event)
-                
             },
             //点击选中当前行
             clickDetails(row, event, column){
@@ -777,27 +780,10 @@ import '@/styles/dialog.scss'
                 })
                 
             },
-            handleUse(index, row) {
-                console.log(index, row);
-            },
-            handleSizeChange(val) {
-                console.log(`每页 ${val} 条`);
-                this.pagesize = val;
-                this.getCommonFunction();
-            },
-            handleCurrentChange(val) {
-                console.log(`当前页: ${val}`);
-                this.page = val;
-                this.getCommonFunction();
-            },
-
-
             //新增分类信息获取code值
             addClassfy(){
                 this.dialogFormVisible = true;
-
             },
-           
             //保存信息
             newInfoSave(){
                 this.NewOrChange()
@@ -847,17 +833,17 @@ import '@/styles/dialog.scss'
                     this.hint(information);
                 }
                 else(
-                        data_NewOrChange(data).then(res=>{
-                            console.log(res)
-                            this.getCommonFunction();
-                            this.dialogFormVisible = false;
-                            this.clearData();
-                        }).catch(res=>{
-                            console.log(res)
-                            // if(res.status == 40001)
-                            let information = res.text;
-                            this.hint(information);
-                        })
+                    data_NewOrChange(data).then(res=>{
+                        console.log(res)
+                        this.getCommonFunction();
+                        this.dialogFormVisible = false;
+                        this.clearData();
+                    }).catch(res=>{
+                        console.log(res)
+                        // if(res.status == 40001)
+                        let information = res.text;
+                        this.hint(information);
+                    })
                 )
             },
             //清空数据
@@ -900,8 +886,6 @@ import '@/styles/dialog.scss'
                         // event.target.focus()
                     }
                 }
-                
-            
             },
             hint(val){
                 this.information = val;
@@ -920,48 +904,6 @@ import '@/styles/dialog.scss'
         height:100%;    
         position: relative;
         margin-left:7px;
-        .side_left{
-            width: 10%;
-            height:100%;
-            float:left;
-            padding-top:10px;
-            border-right:1px solid #ccc;
-            border-top:2px solid #ccc;
-            overflow:auto;
-        }
-        .side_right{
-            height:99%;
-            width:90%;
-            padding-bottom: 20px;
-            float:left;
-            position: relative;
-            border-top:2px solid #ccc;
-        }
-        &>.classify_searchinfo{
-            position: absolute;
-            left:0;
-            top:0;
-            padding:15px 16px;
-            width:100%;
-            line-height: 35px;
-            label{
-                color: #666;
-                font-size:14px;
-                .el-input{
-                    width:300px;
-                    .el-input__inner{
-                        color:#3e9ff1;
-                        height:30px;
-                        line-height: 30px;
-                    }
-                }
-
-
-            }
-            .el-button{
-               padding:8px 20px;
-            }
-        }
         .addclassify{
             .el-dialog{
                 position: relative;
@@ -1198,32 +1140,6 @@ import '@/styles/dialog.scss'
                     }
                     
                 }
-            }
-        }
-        .classify_info{
-            height:100%;
-            padding:70px 13px 18px;
-            .btns_box{
-                margin-bottom:10px;
-                .el-button{
-                    margin-right:20px;
-                    padding:10px 20px;
-                }
-            }
-            .info_news{
-                height:100%;
-                .el-table{
-                    table{
-                        width: 100% !important;
-                        th,td{
-                            text-align:center;
-                        }
-                    }
-                }
-            }
-            .Pagination{
-                margin-top:13px;
-                text-align:right;
             }
         }
     }

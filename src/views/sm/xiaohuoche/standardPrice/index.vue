@@ -1,49 +1,52 @@
 <template>
-    <div class="serviceOrder clearfix">
-             <div class="classify_searchinfo">
-                <label>服务分类&nbsp;
-                    <el-select v-model="valueService" clearable placeholder="请选择">
-                        <el-option
-                            v-for="item in optionsService"
+    <div class="standarPrice identicalStyle clearfix">
+             <el-form :inline="true" :model="searchInfo" ref="ruleForm" class="demo-ruleForm classify_searchinfo">
+                    <el-form-item label="服务分类" prop="pointName">
+                        <el-select v-model="valueService" clearable placeholder="请选择">
+                            <el-option
+                                v-for="item in optionsService"
+                                :key="item.id"
+                                :label="item.name"
+                                :value="item.code"
+                                :disabled="item.disabled">
+                            </el-option>
+                        </el-select>
+                    </el-form-item>
+                    <el-form-item label="车辆类型" prop="orderSerial">
+                        <el-select v-model="valueCarlist" clearable placeholder="请选择">
+                            <el-option
+                            v-for="item in optionsCar"
                             :key="item.id"
                             :label="item.name"
                             :value="item.code"
                             :disabled="item.disabled">
-                        </el-option>
-                    </el-select>
-                </label>
-                <label>车辆类型&nbsp;
-                    <el-select v-model="valueCarlist" clearable placeholder="请选择">
-                        <el-option
-                        v-for="item in optionsCar"
-                        :key="item.id"
-                        :label="item.name"
-                        :value="item.code"
-                        :disabled="item.disabled">
-                        </el-option>
-                    </el-select>
-                </label>    
-                <label>状态&nbsp;
-                    <el-select v-model="valueStatus" clearable placeholder="请选择">
-                        <el-option
-                        v-for="item in optionsStatus"
-                        :key="item.id"
-                        :label="item.label"
-                        :value="item.value"
-                        :disabled="item.disabled">
-                        </el-option>
-                    </el-select>
-                </label>        
-                <el-button type="primary"  plain @click="getdata_search">查询</el-button>
-                <el-button type="info" plain >清空</el-button>
-
-            </div>
+                            </el-option>
+                        </el-select>
+                    </el-form-item>
+                    <el-form-item label="状态" maxlength="18"  prop="shipperName">
+                        <el-select v-model="valueStatus" clearable placeholder="请选择">
+                            <el-option
+                            v-for="item in optionsStatus"
+                            :key="item.id"
+                            :label="item.label"
+                            :value="item.value"
+                            :disabled="item.disabled">
+                            </el-option>
+                        </el-select>
+                    </el-form-item>
+                    <el-form-item class="btnChoose fr"  style="margin-left:0;">
+                        <!-- <el-button type="primary" :size="btnsize" plain @click="handleSearch('search')">搜索</el-button>
+                        <el-button type="info" :size="btnsize" plain @click="handleSearch('clear')">清空</el-button> -->
+                        <el-button type="primary" :size="btnsize"  plain @click="getdata_search">搜索</el-button>
+                        <el-button type="info" :size="btnsize" plain >重置</el-button>
+                    </el-form-item>
+            </el-form>
             <div class="classify_info">
                 <div class="btns_box">
-                    <el-button type="primary" plain icon="el-icon-circle-plus" @click="addClassfy">新增</el-button>
-                    <el-button type="primary" plain icon="el-icon-edit" @click="handleEdit">修改</el-button>
-                    <el-button type="primary" plain icon="el-icon-delete" @click="handleDelete">删除</el-button>
-                    <el-button type="primary" plain icon="el-icon-bell" @click="handleUseStates">启用/禁用</el-button>
+                    <el-button type="primary" :size="btnsize" plain icon="el-icon-circle-plus" @click="addClassfy">新增</el-button>
+                    <el-button type="primary" :size="btnsize" plain icon="el-icon-edit" @click="handleEdit">修改</el-button>
+                    <el-button type="primary" :size="btnsize" plain icon="el-icon-delete" @click="handleDelete">删除</el-button>
+                    <el-button type="primary" :size="btnsize" plain icon="el-icon-bell" @click="handleUseStates">启用/禁用</el-button>
                 </div>
                 <div class="info_news">
                     <el-table
@@ -51,19 +54,15 @@
                         :data="tableDataTree"
                         stripe
                         border
-                        height="93%"
                         @selection-change = "getinfomation"
-                        @row-dblclick="moreinfo"
                         tooltip-effect="dark"
                         @row-click="clickDetails"
                         style="width: 100%"> 
                         <el-table-column
-                            fixed
                              type="selection"
                              width="55">
                            </el-table-column>
                         <el-table-column
-                        fixed
                           prop="serviceName"
                           label="服务分类">
                         </el-table-column>
@@ -414,6 +413,7 @@ import '@/styles/dialog.scss'
     export default{
         data(){
             return{
+                btnsize:'mini',
                 forms:{
                     serivceCode:null,
                     carType:null,
@@ -534,11 +534,7 @@ import '@/styles/dialog.scss'
 
 
             },
-            //shuangji
-            moreinfo(row, event){
-                // console.log(row, event)
-               
-            },
+           
             //点击选中当前行
             clickDetails(row, event, column){
                 this.$refs.multipleTable.toggleRowSelection(row);
@@ -805,35 +801,7 @@ import '@/styles/dialog.scss'
 </script>
 
 <style type="text/css" lang="scss">
-    .serviceOrder{
-        height:100%;    
-        position: relative;
-        margin-left:7px;
-        &>.classify_searchinfo{
-            position: absolute;
-            left:0;
-            top:0;
-            padding:15px 16px;
-            width:100%;
-            line-height: 35px;
-            label{
-                color: #666;
-                font-size:14px;
-                .el-input{
-                    width:300px;
-                    .el-input__inner{
-                        color:#3e9ff1;
-                        height:30px;
-                        line-height: 30px;
-                    }
-                }
-
-
-            }
-            .el-button{
-               padding:8px 20px;
-            }
-        }
+    .standarPrice{
         .addclassify{
             .el-dialog{
                 position: relative;
@@ -944,39 +912,22 @@ import '@/styles/dialog.scss'
                     }
                 }
             }
-            
         }
         .classify_info{
-            height:100%;
-            padding:70px 13px 18px;
-            .btns_box{
-                margin-bottom:10px;
-                .el-button{
-                    margin-right:20px;
-                    padding:10px 20px;
-                }
-            }
-            .info_news{
-                height:89%;
-                .el-table{
-                    table{
-                        width: 100% !important;
-                        th,td{
-                            text-align:center;
-                        }
-                    }
-                    .cell{
-                        img{
-                            display: inline-block;
-                            width: 100px;
-                            height: 50px;
-                        }
+            .el-table{
+                table{
+                    width: 100% !important;
+                    th,td{
+                        text-align:center;
                     }
                 }
-            }
-            .Pagination{
-                margin-top:13px;
-                text-align:right;
+                .cell{
+                    img{
+                        display: inline-block;
+                        width: 100px;
+                        height: 50px;
+                    }
+                }
             }
         }
     }
