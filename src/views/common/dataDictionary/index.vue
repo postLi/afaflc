@@ -1,198 +1,192 @@
 <template>
-    <div class="DIC clearfix">
-        <div class="side_left">
-            <el-tree
-                :data="treeData"
-                node-key="key"
-                :highlight-current = "true"
-                :expand-on-click-node = "false"
-                :default-expanded-keys="[1]"
-                @node-click="handleNodeClick"
-                :default-checked-keys="[]"
-                :props="defaultProps">
-            </el-tree>
-        </div>
-        <div class="side_right">
-            <div class="classify_searchinfo">
-                <label>关键词查询 &nbsp;
-                    <el-input
-                      placeholder="请输入内容"
-                      v-model="input_search"
-                      clearable>
-                    </el-input>
-                </label>    
-                <el-button type="primary"  plain @click="getdata_search">查询</el-button>
+    <div class="DIC TwoColumns clearfix">
+        <div class="columnsContainer">
+            <div class="side_left">
+                <el-tree
+                    :data="treeData"
+                    node-key="key"
+                    :highlight-current = "true"
+                    :expand-on-click-node = "false"
+                    :default-expanded-keys="[1]"
+                    @node-click="handleNodeClick"
+                    :default-checked-keys="[]"
+                    :props="defaultProps">
+                </el-tree>
             </div>
-            <div class="classify_info">
-                <div class="btns_box">
-                    <el-button type="primary" plain icon="el-icon-news" @click="addClassfy">新增</el-button>
-                    <el-button type="primary" plain icon="el-icon-edit" @click="handleEdit">修改</el-button>
-                    <el-button type="primary" plain icon="el-icon-delete" @click="handleDelete">删除</el-button>
-                    <el-button type="primary" plain icon="el-icon-edit" @click="handleUseStates">启用/禁用</el-button>
-                </div>
-                <div class="info_news">
-                    <el-table
-                        ref="multipleTable"
-                        :data="tableDataTree"
-                        stripe
-                        border
-                        height="90%"
-                        @selection-change = "getinfomation"
-                        @row-dblclick="moreinfo"
-                        tooltip-effect="dark"
-                        @row-click="clickDetails"
-                        style="width: 100%"> 
-                        <el-table-column
-                            fixed
-                             type="selection"
-                             width="55">
-                           </el-table-column>
-                        <el-table-column
-                        fixed
-                          prop="name"
-                          label="分类名称">
-                        </el-table-column>
-                        <el-table-column
-                          prop="pidName"
-                          label="上级分类">
-                           <template  slot-scope="scope">
-                                {{ scope.row.pidName ? scope.row.pidName: '无'   }}
-                            </template>
-                        </el-table-column>
-                        <el-table-column
-                          prop="code"
-                          label="编码">
-                        </el-table-column>
-                        <el-table-column
-                          prop="value"
-                          label="数据值">
-                        </el-table-column>
-                        <el-table-column
-                          prop="status"
-                          label="状态">
-                             <template  slot-scope="scope">
-                                {{ scope.row.status == true ? '启用' : '禁用' }}
-                            </template>
-                        </el-table-column>
-                        <el-table-column
-                          prop="remark"
-                          label="描述">
-                        </el-table-column>
-                        <el-table-column
-                          prop="isDefault"
-                          label="是否初始值">
-                             <template  slot-scope="scope">
-                                {{ scope.row.isDefault == true ? '是' : '否' }}
-                            </template>
-                        </el-table-column>
-                      </el-table>
-                      <!-- 页码 -->
-                    <div class="Pagination ">
-                        <div class="block">
-                            <el-pagination
-                            @size-change="handleSizeChange"
-                            @current-change="handleCurrentChange"
-                            :current-page="currentPage4"
-                            :page-size="pagesize"
-                            layout="total, sizes, prev, pager, next, jumper"
-                            :total="dataTotal">
-                            </el-pagination>
-                        </div>
+            <div class="side_right">
+                  <el-form :inline="true" ref="ruleForm" class="demo-ruleForm classify_searchinfo">
+                    <el-form-item label="关键词查询" prop="pointName">
+                        <el-input
+                        placeholder="请输入内容"
+                        v-model="input_search"
+                        clearable>
+                        </el-input>
+                    </el-form-item>
+                    <el-form-item class="btnChoose fr"  style="margin-left:0;">
+                        <el-button type="primary" :size="btnsize" plain @click="handleSearch('search')">查询</el-button>
+                        <el-button type="info" :size="btnsize" plain @click="handleSearch('clear')">重置</el-button>
+                    </el-form-item>
+                </el-form>
+                <div class="side_right_bottom clearfix">
+                    <div class="btns_box clearfix">
+                        <el-button type="primary" :size="btnsize" plain icon="el-icon-news" @click="addClassfy">新增</el-button>
+                        <el-button type="primary" :size="btnsize" plain icon="el-icon-edit" @click="handleEdit">修改</el-button>
+                        <el-button type="primary" :size="btnsize" plain icon="el-icon-delete" @click="handleDelete">删除</el-button>
+                        <el-button type="primary" :size="btnsize" plain icon="el-icon-edit" @click="handleUseStates">启用/禁用</el-button>
                     </div>
-                </div>
-                
-                <!-- 新增分类信息 -->
-                <div class="addclassify commoncss">
-                    <el-dialog :title='formtitle'  :visible.sync="dialogFormVisible">
-                      <el-form :rules="rules">
-                        <el-form-item label="上级分类" :label-width="formLabelWidth">
-                         <el-select v-model="forms[0].pid"  @change="currentValue">
-                           <el-option :label="pidname" :value="pid" v-if="pidname != null && pidname!= undefined && pidname !='无' && pidname !='全部'"></el-option>
-                           <el-option label="无" value=''></el-option>
-                         </el-select>
-                       </el-form-item>
-                         <div  v-for="(form,idx) in forms" :key="idx"> 
-                            <el-form-item label="编码" :label-width="formLabelWidth">
-                              <el-input v-model="form.code" auto-complete="off" :disabled="true" ></el-input>
-                            </el-form-item>
-                            <el-form-item label="分类名称" :label-width="formLabelWidth" class="morewidth">
-                              <el-input v-model="form.name" auto-complete="off" placeholder="少于20字" @blur="namerules" maxlength="20" ></el-input>
-                            </el-form-item>
-                            <el-form-item label="数据值" :label-width="formLabelWidth">
-                              <el-input v-model="form.value" auto-complete="off" @blur="valuerules" maxlength="6" ></el-input>
-                            </el-form-item>
-                            <el-form-item label="描述" :label-width="formLabelWidth" class="morewidth">
-                              <el-input v-model="form.remark" auto-complete="off" maxlength="100"></el-input>
-                            </el-form-item>
-                            <el-form-item>
-                                <span  @click="addItem" class="addItem" v-if="idx == 0">
-                                </span>
-                                <span  @click="reduceItem(idx)" class="reduceItem" v-else>
-                                </span>
-                            </el-form-item>
+                    <div class="info_news">
+                        <el-table
+                            ref="multipleTable"
+                            :data="tableDataTree"
+                            stripe
+                            border
+                            height="100%"
+                            @selection-change = "getinfomation"
+                            @row-dblclick="moreinfo"
+                            tooltip-effect="dark"
+                            @row-click="clickDetails"
+                            style="width: 100%"> 
+                            <el-table-column
+                                fixed
+                                type="selection"
+                                width="55">
+                            </el-table-column>
+                            <el-table-column
+                            fixed
+                            prop="name"
+                            label="分类名称">
+                            </el-table-column>
+                            <el-table-column
+                            prop="pidName"
+                            label="上级分类">
+                            <template  slot-scope="scope">
+                                    {{ scope.row.pidName ? scope.row.pidName: '无'   }}
+                                </template>
+                            </el-table-column>
+                            <el-table-column
+                            prop="code"
+                            label="编码">
+                            </el-table-column>
+                            <el-table-column
+                            prop="value"
+                            label="数据值">
+                            </el-table-column>
+                            <el-table-column
+                            prop="status"
+                            label="状态">
+                                <template  slot-scope="scope">
+                                    {{ scope.row.status == true ? '启用' : '禁用' }}
+                                </template>
+                            </el-table-column>
+                            <el-table-column
+                            prop="remark"
+                            label="描述">
+                            </el-table-column>
+                            <el-table-column
+                            prop="isDefault"
+                            label="是否初始值">
+                                <template  slot-scope="scope">
+                                    {{ scope.row.isDefault == true ? '是' : '否' }}
+                                </template>
+                            </el-table-column>
+                        </el-table>
+
+                    </div>
+                     <!-- 页码 -->
+                    <div class="info_tab_footer">共计:{{ dataTotal }} <div class="show_pager"> <Pager :total="dataTotal" @change="handlePageChange"  :sizes="sizes"/></div> </div>   
+                    <!-- 新增分类信息 -->
+                    <div class="addclassify commoncss">
+                        <el-dialog :title='formtitle'  :visible.sync="dialogFormVisible">
+                        <el-form :rules="rules">
+                            <el-form-item label="上级分类" :label-width="formLabelWidth">
+                            <el-select v-model="forms[0].pid"  @change="currentValue">
+                            <el-option :label="pidname" :value="pid" v-if="pidname != null && pidname!= undefined && pidname !='无' && pidname !='全部'"></el-option>
+                            <el-option label="无" value=''></el-option>
+                            </el-select>
+                        </el-form-item>
+                            <div  v-for="(form,idx) in forms" :key="idx"> 
+                                <el-form-item label="编码" :label-width="formLabelWidth">
+                                <el-input v-model="form.code" auto-complete="off" :disabled="true" ></el-input>
+                                </el-form-item>
+                                <el-form-item label="分类名称" :label-width="formLabelWidth" class="morewidth">
+                                <el-input v-model="form.name" auto-complete="off" placeholder="少于20字" @blur="namerules" maxlength="20" ></el-input>
+                                </el-form-item>
+                                <el-form-item label="数据值" :label-width="formLabelWidth">
+                                <el-input v-model="form.value" auto-complete="off" v-numberOnly maxlength="6" ></el-input>
+                                </el-form-item>
+                                <el-form-item label="描述" :label-width="formLabelWidth" class="morewidth">
+                                <el-input v-model="form.remark" auto-complete="off" maxlength="100"></el-input>
+                                </el-form-item>
+                                <el-form-item>
+                                    <span  @click="addItem" class="addItem" v-if="idx == 0">
+                                    </span>
+                                    <span  @click="reduceItem(idx)" class="reduceItem" v-else>
+                                    </span>
+                                </el-form-item>
+                            </div>
+                        </el-form>
+                        <div slot="footer" class="dialog-footer">
+                            <el-button type="primary" @click="newInfoSave">保 存</el-button>
+                            <el-button @click="closeAddNewInfo">取 消</el-button>
                         </div>
-                      </el-form>
-                      <div slot="footer" class="dialog-footer">
-                        <el-button type="primary" @click="newInfoSave">保 存</el-button>
-                        <el-button @click="closeAddNewInfo">取 消</el-button>
-                      </div>
-                    </el-dialog>
-                </div>
+                        </el-dialog>
+                    </div>
 
-                <!-- 修改分类信息 -->
-                <div class="changeclassify commoncss">
-                    <el-dialog title='修改分类信息'  :visible.sync="dialogFormVisible_change">
-                      <el-form>
-                        <el-form-item label="上级分类" :label-width="formLabelWidth">
-                         <el-select v-model="changeform.pid" >
-                           <el-option :label="pidname" :value="pid"></el-option>
-                           <el-option label="无" value=null></el-option>
-                         </el-select>
-                       </el-form-item>
-                       <div>
-                            <el-form-item label="编码" :label-width="formLabelWidth">
-                              <el-input v-model="changeform.code" auto-complete="off" :disabled="true"></el-input>
-                            </el-form-item>
-                            <el-form-item label="分类名称" :label-width="formLabelWidth" class="morewidth">
-                              <el-input v-model="changeform.name" auto-complete="off" ></el-input>
-                            </el-form-item>
-                            <el-form-item label="数据值" :label-width="formLabelWidth">
-                              <el-input v-model="changeform.value" auto-complete="off"></el-input>
-                            </el-form-item>
-                            <el-form-item label="描述" :label-width="formLabelWidth" class="morewidth">
-                              <el-input v-model="changeform.remark" auto-complete="off"></el-input>
-                            </el-form-item>
+                    <!-- 修改分类信息 -->
+                    <div class="changeclassify commoncss">
+                        <el-dialog title='修改分类信息'  :visible.sync="dialogFormVisible_change">
+                        <el-form>
+                            <el-form-item label="上级分类" :label-width="formLabelWidth">
+                            <el-select v-model="changeform.pid" >
+                            <el-option :label="pidname" :value="pid"></el-option>
+                            <el-option label="无" value=null></el-option>
+                            </el-select>
+                        </el-form-item>
+                        <div>
+                                <el-form-item label="编码" :label-width="formLabelWidth">
+                                <el-input v-model="changeform.code" auto-complete="off" :disabled="true"></el-input>
+                                </el-form-item>
+                                <el-form-item label="分类名称" :label-width="formLabelWidth" class="morewidth">
+                                <el-input v-model="changeform.name" auto-complete="off" ></el-input>
+                                </el-form-item>
+                                <el-form-item label="数据值" :label-width="formLabelWidth">
+                                <el-input v-model="changeform.value" auto-complete="off"></el-input>
+                                </el-form-item>
+                                <el-form-item label="描述" :label-width="formLabelWidth" class="morewidth">
+                                <el-input v-model="changeform.remark" auto-complete="off"></el-input>
+                                </el-form-item>
 
-                       </div>
-                      </el-form>
-                      <div slot="footer" class="dialog-footer">
-                        <el-button type="primary" @click="changeInfoSave">保 存</el-button>
-                        <el-button @click="closeChangeInfo">取 消</el-button>
-                      </div>
-                    </el-dialog>
-                </div>
+                        </div>
+                        </el-form>
+                        <div slot="footer" class="dialog-footer">
+                            <el-button type="primary" @click="changeInfoSave">保 存</el-button>
+                            <el-button @click="closeChangeInfo">取 消</el-button>
+                        </div>
+                        </el-dialog>
+                    </div>
 
-                <!-- 新增分类提示不可为空 -->
-                <div class="cue">
-                    <el-dialog
-                    :visible.sync="centerDialogVisible"
-                    center>
-                    <span>{{information}}</span>
-                    </el-dialog>
-                </div>
+                    <!-- 新增分类提示不可为空 -->
+                    <div class="cue">
+                        <el-dialog
+                        :visible.sync="centerDialogVisible"
+                        center>
+                        <span>{{information}}</span>
+                        </el-dialog>
+                    </div>
 
-                <!-- 删除信息提示 -->
-                <div class="delData">
-                    <el-dialog
-                    title="提示"
-                    :visible.sync="delDialogVisible">
-                    <span class="delwarn"></span>
-                    <span class="delinfo">确认删除信息吗 ?</span>
-                    <span slot="footer" class="dialog-footer">
-                        <el-button type="primary" @click="delDataInformation">确 定</el-button>
-                        <el-button @click="delDialogVisible = false" type="info" plain>取 消</el-button>
-                    </span>
-                    </el-dialog>
+                    <!-- 删除信息提示 -->
+                    <div class="delData">
+                        <el-dialog
+                        title="提示"
+                        :visible.sync="delDialogVisible">
+                        <span class="delwarn"></span>
+                        <span class="delinfo">确认删除信息吗 ?</span>
+                        <span slot="footer" class="dialog-footer">
+                            <el-button type="primary" @click="delDataInformation">确 定</el-button>
+                            <el-button @click="delDialogVisible = false" type="info" plain>取 消</el-button>
+                        </span>
+                        </el-dialog>
+                    </div>
                 </div>
             </div>
         </div>
@@ -203,11 +197,13 @@
 
 import { data_Dic,data_Trees,data_Search,data_CreatCode,data_AddForms,data_Delet,data_ChangeForms,data_CreatCode_top,data_changeStatus } from '@/api/company/data_dic.js'
 import '../../../styles/dialog.scss'
+import Pager from '@/components/Pagination/index'
 
     export default{
-
         data(){
             return{
+                btnsize:'mini',
+                
                 ifclose:false,
                 pid:null,
                 pidname:null,
@@ -242,7 +238,7 @@ import '../../../styles/dialog.scss'
                 delIDTree:null,
                 checkedinformation:[],
                 formLabelWidth: '80px',
-                input_search: null,
+                input_search: '',
                 tableDataTree:[],
                 treeData:[
                     {
@@ -263,6 +259,9 @@ import '../../../styles/dialog.scss'
                 }
             }
         },
+        components:{
+            Pager
+        },
         watch:{
             // treeData:{
             //     handler(newValue, oldValue){
@@ -276,6 +275,11 @@ import '../../../styles/dialog.scss'
             this.firstblood()
         },  
         methods: {
+            handlePageChange(obj) {
+                this.page = obj.pageNum;
+                this.pagesize = obj.pageSize;
+                this.getInformation();
+            },
             //shuangji
             moreinfo(row, event){
                 console.log(row, event)
@@ -318,6 +322,18 @@ import '../../../styles/dialog.scss'
                     remark: null,
                     value: null
                 }); 
+            },
+            handleSearch(type){
+                switch(type){
+                    case 'search':
+                        this.getdata_search();
+                        break;
+                    case 'clear' :
+                        this.input_search = '';
+                        this.getdata_search();
+                        break;
+                }
+                
             },
             //删除子节点新增
             reduceItem(idx){
@@ -419,15 +435,6 @@ import '../../../styles/dialog.scss'
                     this.hint(information);
                 })
                 
-            },
-            handleSizeChange(val) {
-                this.pagesize = val ;
-                this.getInformation();
-            },
-            handleCurrentChange(val) {
-                console.log(`当前页: ${val}`);
-                this.page = val;
-                this.getInformation();
             },
             //数结构选择  渲染数据
             handleNodeClick(data,checked){  
@@ -571,15 +578,6 @@ import '../../../styles/dialog.scss'
                     })
                 }
             },
-            //验证数据值
-            valuerules(event){
-                console.log(event.target.value)
-                if(!/^[0-9]+$/.test(event.target.value)){
-                    let information = "请输入数字类型内容";
-                    this.hint(information);
-                    event.target.focus()
-                }
-            },
             hint(val){
                 this.information = val;
                 this.centerDialogVisible = true;
@@ -589,90 +587,17 @@ import '../../../styles/dialog.scss'
                 },2000)
             }
         }
-
     }
 </script>
 
 <style type="text/css" lang="scss">
     .DIC{
-        height:100%;
-        
-        .side_left{
-            width: 15%;
-            height:100%;
-            float:left;
-            padding-top:10px;
-            border-right:1px solid #ccc;
-            border-top:2px solid #ccc;
-            overflow:auto;
+        .side_left {
+        flex: 0 0 300px;
+      
         }
-        .side_right{
-            height:100%;
-            width:85%;
-            padding-bottom: 20px;
-            float:left;
-            position: relative;
-            border-top:2px solid #ccc;
-        }
-        &>.classify_searchinfo{
-            position: absolute;
-            left:0;
-            top:0;
-            padding:15px 16px;
-            width:100%;
-            line-height: 35px;
-            label{
-                color: #666;
-                font-size:14px;
-                .el-input{
-                    width:300px;
-                    .el-input__inner{
-                        color:#3e9ff1;
-                        height:30px;
-                        line-height: 30px;
-                    }
-                }
-
-
-            }
-            .el-button{
-               padding:8px 20px;
-            }
-        }
-        .addclassify{
-            .el-form{
-                .el-select{
-                    .el-input{
-                        width: 150px;
-                    }
-                }
-            }
-        }
-        .classify_info{
-            height:100%;
-            padding:90px 13px 18px;
-            .btns_box{
-                margin-bottom:10px;
-                .el-button{
-                    margin-right:20px;
-                    padding:10px 20px;
-                }
-            }
-            .info_news{
-                height:89%;
-                .el-table{
-                    table{
-                        width: 100% !important;
-                        th,td{
-                            text-align:center;
-                        }
-                    }
-                }
-            }
-            .Pagination{
-                margin-top:13px;
-                text-align:right;
-            }
+       .side_left .el-tree .el-tree-node {
+            width: 95%;
         }
     }
 </style>
