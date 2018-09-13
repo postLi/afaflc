@@ -1,331 +1,322 @@
 <template>
-    <div class="waitPrice clearfix">
-        <div class="side_left">
-            <el-tree
-            :data="areadata"
-            :props="props"
-            :load="loadNode"
-            lazy
-            :highlight-current = "true"
-            @node-click="handleNodeClick"
-            @check-change="handleCheckChange">
-            </el-tree>
-        </div>
-        <div class="side_right">
-            <div class="classify_searchinfo">
-                <label>服务分类&nbsp;
-                    <el-select v-model="valueService" clearable placeholder="请选择">
-                        <el-option
-                            v-for="item in optionsService"
+    <div class="waitPrice TwoColumns clearfix">
+        <div class="columnsContainer">
+            <div class="side_left">
+                <el-tree
+                :data="areadata"
+                :props="props"
+                :load="loadNode"
+                lazy
+                :highlight-current = "true"
+                @node-click="handleNodeClick"
+                @check-change="handleCheckChange">
+                </el-tree>
+            </div>
+            <div class="side_right">
+                 <el-form :inline="true" :model="searchInfo" ref="ruleForm" class="demo-ruleForm classify_searchinfo">
+                    <el-form-item label="服务分类" prop="pointName">
+                       <el-select v-model="searchInfo.valueService" clearable placeholder="请选择">
+                            <el-option
+                                v-for="item in optionsService"
+                                :key="item.id"
+                                :label="item.name"
+                                :value="item.code"
+                                :disabled="item.disabled">
+                            </el-option>
+                        </el-select>
+                    </el-form-item>
+                    <el-form-item label="车辆类型" prop="orderSerial">
+                         <el-select v-model="searchInfo.valueCarlist" clearable placeholder="请选择">
+                            <el-option
+                            v-for="item in optionsCar"
                             :key="item.id"
                             :label="item.name"
                             :value="item.code"
                             :disabled="item.disabled">
-                        </el-option>
-                    </el-select>
-                </label>
-                <label>车辆类型&nbsp;
-                    <el-select v-model="valueCarlist" clearable placeholder="请选择">
-                        <el-option
-                        v-for="item in optionsCar"
-                        :key="item.id"
-                        :label="item.name"
-                        :value="item.code"
-                        :disabled="item.disabled">
-                        </el-option>
-                    </el-select>
-                </label>    
-                <label>状态&nbsp;
-                    <el-select v-model="valueStatus" clearable placeholder="请选择">
-                        <el-option
-                        v-for="item in optionsStatus"
-                        :key="item.id"
-                        :label="item.label"
-                        :value="item.value"
-                        :disabled="item.disabled">
-                        </el-option>
-                    </el-select>
-                </label>        
-                <el-button type="primary"  plain @click="getdata_search">查询</el-button>
-                <el-button type="info" plain >清空</el-button>
-
-            </div>
-            <div class="classify_info">
-                <div class="btns_box">
-                    <el-button type="primary" plain icon="el-icon-circle-plus" @click="addClassfy">新增</el-button>
-                    <el-button type="primary" plain icon="el-icon-edit" @click="handleEdit">修改</el-button>
-                    <el-button type="primary" plain icon="el-icon-delete" @click="handleDelete">删除</el-button>
-                    <el-button type="primary" plain icon="el-icon-bell" @click="handleUseStates">启用/禁用</el-button>
-                </div>
-                <div class="info_news">
-                    <el-table
-                        ref="multipleTable"
-                        :data="tableDataTree"
-                        stripe
-                        border
-                        height="93%"
-                        @row-click="clickDetails"
-                        @selection-change = "getinfomation"
-                        @row-dblclick="moreinfo"
-                        tooltip-effect="dark"
-                        style="width: 100%"> 
-                        <el-table-column
-                            fixed
-                             type="selection"
-                             width="55">
-                           </el-table-column>
-                        <el-table-column
-                        fixed
-                          prop="areaName"
-                          label="区域">
-                        </el-table-column>
-                        <el-table-column
-                          prop="serviceName"
-                          label="服务分类">
-                        </el-table-column>
-                        <el-table-column
-                          prop="carTypeName"
-                          label="车辆类型">
-                        </el-table-column>
-                        <el-table-column
-                          prop="freeTime"
-                          label="免费时间(分钟)">
-                        </el-table-column>
-                        <el-table-column
-                          prop="intervalTime"
-                          label="每间隔时长(分钟)">
-                        </el-table-column>
-                        <el-table-column
-                          prop="timeOutstripPrice"
-                          label="超时费用(元)">
-                        </el-table-column>
-                         <el-table-column
-                          prop="usingStatus"
-                          label="状态">
-                           <template  slot-scope="scope">
-                                {{ scope.row.usingStatus === '1' ? '启用' : '禁用' }}
-                            </template>
-                        </el-table-column>
-                        
-                      </el-table>
-                      <!-- 页码 -->
-                    <div class="Pagination ">
-                        <div class="block">
-                            <el-pagination
-                            @size-change="handleSizeChange"
-                            @current-change="handleCurrentChange"
-                            :current-page="currentPage4"
-                            :page-size="pagesize"
-                            layout="total, sizes, prev, pager, next, jumper"
-                            :total="dataTotal">
-                            </el-pagination>
-                        </div>
+                            </el-option>
+                        </el-select>
+                    </el-form-item>
+                    <el-form-item label="状态" maxlength="18"  prop="shipperName">
+                        <el-select v-model="searchInfo.valueStatus" clearable placeholder="请选择">
+                            <el-option
+                            v-for="item in optionsStatus"
+                            :key="item.id"
+                            :label="item.label"
+                            :value="item.value"
+                            :disabled="item.disabled">
+                            </el-option>
+                        </el-select>
+                    </el-form-item>
+                    <el-form-item class="btnChoose fr"  style="margin-left:0;">
+                        <el-button type="primary" :size="btnsize" plain @click="handleSearch('search')">查询</el-button>
+                        <el-button type="info" :size="btnsize" plain @click="handleSearch('clear')">重置</el-button>
+                    </el-form-item>
+                </el-form>
+                <div class="side_right_bottom clearfix">
+                    <div class="btns_box">
+                        <el-button type="primary" :size="btnsize" plain icon="el-icon-circle-plus" @click="addClassfy">新增</el-button>
+                        <el-button type="primary" :size="btnsize" plain icon="el-icon-edit" @click="handleEdit">修改</el-button>
+                        <el-button type="primary" :size="btnsize" plain icon="el-icon-delete" @click="handleDelete">删除</el-button>
+                        <el-button type="primary" :size="btnsize" plain icon="el-icon-bell" @click="handleUseStates">启用/禁用</el-button>
                     </div>
-                </div>
+                    <div class="info_news">
+                        <el-table
+                            ref="multipleTable"
+                            :data="tableDataTree"
+                            stripe
+                            border
+                            height="100%"
+                            @row-click="clickDetails"
+                            @selection-change = "getinfomation"
+                            @row-dblclick="moreinfo"
+                            tooltip-effect="dark"
+                            style="width: 100%"> 
+                            <el-table-column
+                                fixed
+                                type="selection"
+                                width="55">
+                            </el-table-column>
+                            <el-table-column
+                            fixed
+                            prop="areaName"
+                            label="区域">
+                            </el-table-column>
+                            <el-table-column
+                            prop="serviceName"
+                            label="服务分类">
+                            </el-table-column>
+                            <el-table-column
+                            prop="carTypeName"
+                            label="车辆类型">
+                            </el-table-column>
+                            <el-table-column
+                            prop="freeTime"
+                            label="免费时间(分钟)">
+                            </el-table-column>
+                            <el-table-column
+                            prop="intervalTime"
+                            label="每间隔时长(分钟)">
+                            </el-table-column>
+                            <el-table-column
+                            prop="timeOutstripPrice"
+                            label="超时费用(元)">
+                            </el-table-column>
+                            <el-table-column
+                            prop="usingStatus"
+                            label="状态">
+                            <template  slot-scope="scope">
+                                    {{ scope.row.usingStatus === '1' ? '启用' : '禁用' }}
+                                </template>
+                            </el-table-column>
+                        </el-table>
+                    </div>
+                      <!-- 页码 -->
+                    <div class="info_tab_footer">共计:{{ dataTotal }} <div class="show_pager"> <Pager :total="dataTotal" @change="handlePageChange"  :sizes="sizes"/></div> </div>    
 
-                <!-- 新增分类信息 -->
-                <div class="waitAdd commoncss">
-                    <el-dialog title='新增等待费用'  :visible.sync="dialogFormVisible" :before-close = "beforClose">
-                        <div class="newWait">
-                            <div class="clearfix">
-                                <div class="chooseAera chooseCommon fl">
-                                    <h4><span>* </span> 选择省市</h4>
-                                    <div class="eltree_search lesscommon">
-                                        <el-input
-                                        class="el_search"
-                                        placeholder=""
-                                        suffix-icon="el-icon-search"
-                                        v-model="filterText">
-                                        </el-input>
-                                        <el-tree
-                                        :props="propsAdd"
-                                        show-checkbox
-                                        node-key="code"
-                                        ref = 'trees'
-                                        lazy
-                                        :load="loadNodeMore"
-                                        :highlight-current = "true"
-                                        @node-expand="handleNodeClickMore"
-                                        :filter-node-method="filterNode">
-                                        </el-tree>
+
+                    <!-- 新增分类信息 -->
+                    <div class="waitAdd commoncss">
+                        <el-dialog title='新增等待费用'  :visible.sync="dialogFormVisible" :before-close = "beforClose">
+                            <div class="newWait">
+                                <div class="clearfix">
+                                    <div class="chooseAera chooseCommon fl">
+                                        <h4><span>* </span> 选择省市</h4>
+                                        <div class="eltree_search lesscommon">
+                                            <el-input
+                                            class="el_search"
+                                            placeholder=""
+                                            suffix-icon="el-icon-search"
+                                            v-model="filterText">
+                                            </el-input>
+                                            <el-tree
+                                            :props="propsAdd"
+                                            show-checkbox
+                                            node-key="code"
+                                            ref = 'trees'
+                                            lazy
+                                            :load="loadNodeMore"
+                                            :highlight-current = "true"
+                                            @node-expand="handleNodeClickMore"
+                                            :filter-node-method="filterNode">
+                                            </el-tree>
+                                        </div>
+                                        <div class="infowrite">
+                                            <p><span>* </span>免费</p>
+                                            <el-input  
+                                            @blur="valuerules"
+                                                placeholder="请输入内容"
+                                                v-model="freeTime"
+                                                ref="freetime"
+                                                clearable>
+                                                <template slot="append">小时</template>
+                                            </el-input>
+                                        </div>
                                     </div>
-                                    <div class="infowrite">
-                                        <p><span>* </span>免费</p>
-                                        <el-input  
-                                           @blur="valuerules"
-                                            placeholder="请输入内容"
-                                            v-model="freeTime"
-                                            ref="freetime"
-                                            clearable>
-                                            <template slot="append">小时</template>
-                                        </el-input>
+                                    <div class="chooseServer chooseCommon fl">
+                                        <h4><span>* </span> 选择服务分类</h4>
+                                        <div class="lesscommon">
+                                            <el-checkbox-group v-model="serverCheckList">
+                                                <el-checkbox v-for="item in optionsServiceNew" :label="item.code" :key="item.id" >{{item.name}}</el-checkbox>
+                                            </el-checkbox-group>
+                                        </div>
+                                        <div class="infowrite">
+                                            <p><span>* </span>每间隔</p>
+                                            <el-input  
+                                                @blur="valuerules"
+                                                placeholder="请输入内容"
+                                                v-model="intervalTime"
+                                                ref="intervaltime"
+                                                clearable>
+                                                <template slot="append">分钟</template>
+                                            </el-input>
+                                        </div>
+                                    </div>
+                                    <div class="chooseCar chooseCommon fr">
+                                        <h4><span>* </span> 选择车辆类型</h4>
+                                        <div class="lesscommon ">
+                                            <el-checkbox-group v-model="carCheckList">
+
+                                                <el-checkbox v-for="item in optionsCarNew" :label="item.code" :key="item.id">{{item.name}}</el-checkbox>
+                                                
+                                            </el-checkbox-group>
+                                        </div>
+                                        <div class="infowrite">
+                                            <p><span>* </span>超时费用</p>
+                                            <el-input  
+                                                @blur="valuerules"
+                                                placeholder="请输入内容"
+                                                v-model="timeOutstripPrice"
+                                                ref="timeoutstripprice"
+                                                clearable>
+                                                <template slot="append">元</template>
+                                            </el-input>
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="chooseServer chooseCommon fl">
-                                    <h4><span>* </span> 选择服务分类</h4>
-                                    <div class="lesscommon">
-                                        <el-checkbox-group v-model="serverCheckList">
-                                            <el-checkbox v-for="item in optionsServiceNew" :label="item.code" :key="item.id" >{{item.name}}</el-checkbox>
-                                        </el-checkbox-group>
-                                    </div>
-                                    <div class="infowrite">
-                                        <p><span>* </span>每间隔</p>
-                                        <el-input  
-                                            @blur="valuerules"
-                                            placeholder="请输入内容"
-                                            v-model="intervalTime"
-                                            ref="intervaltime"
-                                            clearable>
-                                            <template slot="append">分钟</template>
-                                        </el-input>
-                                    </div>
-                                </div>
-                                <div class="chooseCar chooseCommon fr">
-                                    <h4><span>* </span> 选择车辆类型</h4>
-                                    <div class="lesscommon ">
-                                        <el-checkbox-group v-model="carCheckList">
-
-                                            <el-checkbox v-for="item in optionsCarNew" :label="item.code" :key="item.id">{{item.name}}</el-checkbox>
-                                            
-                                        </el-checkbox-group>
-                                    </div>
-                                    <div class="infowrite">
-                                        <p><span>* </span>超时费用</p>
-                                        <el-input  
-                                            @blur="valuerules"
-                                            placeholder="请输入内容"
-                                            v-model="timeOutstripPrice"
-                                            ref="timeoutstripprice"
-                                            clearable>
-                                            <template slot="append">元</template>
-                                        </el-input>
-                                    </div>
+                                <div class="additional ">
+                                    <p>{{remarkinfo}}</p>
+                                    <p>费用说明</p>
+                                    <el-input
+                                        placeholder="少于500字符"
+                                        type="textarea"
+                                        :rows="2"
+                                        maxlength="500"
+                                        clearable
+                                        v-model="waitPriceDes">
+                                    </el-input>
                                 </div>
                             </div>
-                            <div class="additional ">
-                                <p>{{remarkinfo}}</p>
-                                <p>费用说明</p>
-                                <el-input
-                                    placeholder="少于500字符"
-                                    type="textarea"
-                                    :rows="2"
-                                    maxlength="500"
-                                    clearable
-                                    v-model="waitPriceDes">
-                                </el-input>
+                            <div slot="footer" class="dialog-footer">
+                            <el-button type="primary" @click="newInfoSave">保 存</el-button>
+                            <el-button @click="closeAddNewInfo"  @mouseover.native="setCanClose" @mouseout.native="canclose=false">取 消</el-button>
                             </div>
-                        </div>
+                        </el-dialog>
+                    </div>
+
+                    <!-- 修改分类信息 -->
+                    <div class="changeclassify commoncss" :before-close = "beforClose">
+                        <el-dialog title='修改分类信息'  :visible.sync="dialogFormVisible_change">
+                            <div class="changeWait">
+                                <div class="changeifno">
+                                    <h4><span>* </span>当前城市</h4>
+                                    <el-input
+                                        v-model="changeforms.areaName"
+                                        disabled
+                                        clearable>
+                                    </el-input>
+                                </div>
+                                <div class="changeifno serverClass">
+                                    <h4><span>* </span> 当前服务分类</h4>
+                                    <el-input
+                                        v-model="changeforms.serviceName"
+                                        disabled
+                                        clearable>
+                                    </el-input>
+                                </div>
+                                <div class="changeifno carTypeClass">
+                                    <h4><span>* </span> 当前车辆类型</h4>
+                                    <el-input
+                                        v-model="changeforms.carTypeName"
+                                        disabled
+                                        clearable>
+                                    </el-input>
+                                </div>
+                                <br/>
+                                <div class="infowrite">
+                                    <p><span>* </span>免费</p>
+                                    <el-input  
+                                        @blur="valuerules"
+                                        placeholder="请输入内容"
+                                        v-model="changeforms.freeTime"
+                                        clearable>
+                                        <template slot="append">小时</template>
+                                    </el-input>
+                                </div>
+                                <div class="infowrite">
+                                    <p><span>* </span>每间隔</p>
+                                    <el-input  
+                                        @blur="valuerules"
+                                        placeholder="请输入内容"
+                                        v-model="changeforms.intervalTime"
+                                        clearable>
+                                        <template slot="append">分钟</template>
+                                    </el-input>
+                                </div>
+                                <div class="infowrite">
+                                    <p><span>* </span>超时费用</p>
+                                    <el-input  
+                                        @blur="valuerules"
+                                        placeholder="请输入内容"
+                                        v-model="changeforms.timeOutstripPrice"
+                                        clearable>
+                                        <template slot="append">元</template>
+                                    </el-input>
+                                </div>
+                                <div class="additional ">
+                                    <p>{{remarkinfo}}</p>
+                                    <p>费用说明</p>
+                                    <el-input
+                                        placeholder="少于500字符"
+                                        type="textarea"
+                                        :rows="8"
+                                        maxlength="500"
+                                        clearable
+                                        v-model="changeforms.waitPriceDes">
+                                    </el-input>
+                                </div>
+                            </div>
                         <div slot="footer" class="dialog-footer">
-                        <el-button type="primary" @click="newInfoSave">保 存</el-button>
-                        <el-button @click="closeAddNewInfo"  @mouseover.native="setCanClose" @mouseout.native="canclose=false">取 消</el-button>
+                            <el-button type="primary" @click="changeInfoSave">保 存</el-button>
+                            <el-button @click="dialogFormVisible_change = false">取 消</el-button>
                         </div>
-                    </el-dialog>
-                </div>
+                        </el-dialog>
+                    </div>
+    
+                    <!-- 新增分类提示不可为空 -->
+                    <div class="cue">
+                        <el-dialog
+                        :visible.sync="centerDialogVisible"
+                        center>
+                        <span>{{information}}</span>
+                        </el-dialog>
+                    </div>
 
-                <!-- 修改分类信息 -->
-                <div class="changeclassify commoncss" :before-close = "beforClose">
-                    <el-dialog title='修改分类信息'  :visible.sync="dialogFormVisible_change">
-                        <div class="changeWait">
-                            <div class="changeifno">
-                                <h4><span>* </span>当前城市</h4>
-                                 <el-input
-                                    v-model="changeforms.areaName"
-                                    disabled
-                                    clearable>
-                                </el-input>
-                            </div>
-                            <div class="changeifno serverClass">
-                                <h4><span>* </span> 当前服务分类</h4>
-                                <el-input
-                                    v-model="changeforms.serviceName"
-                                    disabled
-                                    clearable>
-                                </el-input>
-                            </div>
-                            <div class="changeifno carTypeClass">
-                                <h4><span>* </span> 当前车辆类型</h4>
-                                <el-input
-                                    v-model="changeforms.carTypeName"
-                                    disabled
-                                    clearable>
-                                </el-input>
-                            </div>
-                            <br/>
-                            <div class="infowrite">
-                                <p><span>* </span>免费</p>
-                                <el-input  
-                                    @blur="valuerules"
-                                    placeholder="请输入内容"
-                                    v-model="changeforms.freeTime"
-                                    clearable>
-                                    <template slot="append">小时</template>
-                                </el-input>
-                            </div>
-                            <div class="infowrite">
-                                <p><span>* </span>每间隔</p>
-                                <el-input  
-                                    @blur="valuerules"
-                                    placeholder="请输入内容"
-                                    v-model="changeforms.intervalTime"
-                                    clearable>
-                                    <template slot="append">分钟</template>
-                                </el-input>
-                            </div>
-                            <div class="infowrite">
-                                <p><span>* </span>超时费用</p>
-                                <el-input  
-                                    @blur="valuerules"
-                                    placeholder="请输入内容"
-                                    v-model="changeforms.timeOutstripPrice"
-                                    clearable>
-                                    <template slot="append">元</template>
-                                </el-input>
-                            </div>
-                            <div class="additional ">
-                                <p>{{remarkinfo}}</p>
-                                <p>费用说明</p>
-                                 <el-input
-                                    placeholder="少于500字符"
-                                    type="textarea"
-                                    :rows="8"
-                                    maxlength="500"
-                                    clearable
-                                    v-model="changeforms.waitPriceDes">
-                                </el-input>
-                            </div>
-                        </div>
-                      <div slot="footer" class="dialog-footer">
-                        <el-button type="primary" @click="changeInfoSave">保 存</el-button>
-                        <el-button @click="dialogFormVisible_change = false">取 消</el-button>
-                      </div>
-                    </el-dialog>
-                </div>
- 
-                <!-- 新增分类提示不可为空 -->
-                <div class="cue">
-                    <el-dialog
-                    :visible.sync="centerDialogVisible"
-                    center>
-                    <span>{{information}}</span>
-                    </el-dialog>
-                </div>
-
-                <!-- 删除信息提示 -->
-                <div class="delData">
-                    <el-dialog
-                    title="提示"
-                    :visible.sync="delDialogVisible">
-                    <span class="delwarn"></span>
-                    <span class="delinfo">确认删除信息吗 ?</span>
-                    <span slot="footer" class="dialog-footer">
-                        <el-button type="primary" @click="delDataInformation">确 定</el-button>
-                        <el-button @click="delDialogVisible = false" type="info" plain>取 消</el-button>
-                    </span>
-                    </el-dialog>
+                    <!-- 删除信息提示 -->
+                    <div class="delData">
+                        <el-dialog
+                        title="提示"
+                        :visible.sync="delDialogVisible">
+                        <span class="delwarn"></span>
+                        <span class="delinfo">确认删除信息吗 ?</span>
+                        <span slot="footer" class="dialog-footer">
+                            <el-button type="primary" @click="delDataInformation">确 定</el-button>
+                            <el-button @click="delDialogVisible = false" type="info" plain>取 消</el-button>
+                        </span>
+                        </el-dialog>
+                    </div>
                 </div>
             </div>
         </div>
-        <!-- <spinner v-show="show"></spinner>  -->
     </div>
 </template>
 
@@ -333,18 +324,17 @@
 
 import { data_Area,data_CarList,data_ServerClassList,data_GetCityList,data_GetBeginInfo,data_GetCityInfo,data_ChangeStatus,data_DeletInfo,data_NewOrChange } from '@/api/server/serverWaitinfo.js'
 import '@/styles/dialog.scss'
-// import spinner from '../../../spinner/spinner'
 import { REGEX }  from '@/utils/validate'
-
+import Pager from '@/components/Pagination/index'
 
     export default{
-
         data(){
             return{
+                sizes:[20,50,100],
+                btnsize:'mini',
                 canclose: false,
                 cacheData: {},
                 catchData:{},
-                show:false,//遮罩层
                 areadata:[],//树结构数据
                 newAreaData:[],//新增界面树结构数据
                 newCityList:[],
@@ -357,6 +347,11 @@ import { REGEX }  from '@/utils/validate'
                 timeOutstripPrice:null,
                 waitPriceDes:null,
                 newWaitInfo:{},
+                searchInfo:{
+                    valueService:'',
+                    valueCarlist:'',
+                    valueStatus:'',
+                },
                 props: {
                     label: 'name',
                     children: 'children'
@@ -368,7 +363,6 @@ import { REGEX }  from '@/utils/validate'
                 serverCheckList:[],
                 carCheckList:[],
                 carBoxs:[],
-                valueService:null,
                 optionsServiceNew:null,
                 optionsService:[
                     {
@@ -376,7 +370,6 @@ import { REGEX }  from '@/utils/validate'
                     name:'全部'
                     }
                 ],
-                valueCarlist:null,
                 optionsCarNew:null,
                 optionsCar:[
                     {
@@ -384,7 +377,6 @@ import { REGEX }  from '@/utils/validate'
                     name:'全部'
                     }
                 ],
-                valueStatus:null,
                 optionsStatus:[
                     {
                     value:null,
@@ -423,7 +415,7 @@ import { REGEX }  from '@/utils/validate'
             }
         },
         components:{
-
+            Pager
         },
         mounted(){
             //...初始化获取数据
@@ -437,6 +429,11 @@ import { REGEX }  from '@/utils/validate'
             }
         },
         methods: {
+             handlePageChange(obj) {
+                this.page = obj.pageNum;
+                this.pagesize = obj.pageSize;
+                this.getCommonFunction();
+            },
              //关闭前事件
             beforClose(done){
                 // console.log(done)
@@ -465,9 +462,6 @@ import { REGEX }  from '@/utils/validate'
                     this.optionsServiceNew = res.data;
                     
                 });
-
-                
-                // console.log(this.optionsService,this.optionsCar)
             },
             //刷新页面
             firstblood(){
@@ -478,19 +472,25 @@ import { REGEX }  from '@/utils/validate'
                     this.getCommonFunction();
                 })
             },
-            //模糊查询 分类名称或者code
-            getdata_search(event){
-                this.getCommonFunction()
+            handleSearch(type){
+                switch(type){
+                    case 'search':
+                        this.getCommonFunction()
+                        break;
+                    case 'clear' :
+                        this.search = {
+                            valueService:'',
+                            valueCarlist:'',
+                            valueStatus:'',
+                        },
+                        this.getCommonFunction()
+                        break;
+                }
+                
             },
             //查询和获取对应区域的数据
             getCommonFunction(){
-                let data  = {
-                    cityId: this.cityId,
-                    provinceId: this.provinceId,
-                    carType : this.valueCarlist,
-                    serviceCode : this.valueService,
-                    usingStatus: this.valueStatus
-                }
+                let data  = Object.assign({},{cityId: this.cityId,provinceId: this.provinceId},this.searchInfo)
                 // console.log(data);
                 data_GetCityInfo(this.page,this.pagesize,data).then(res=>{
                     // console.log(res)
@@ -789,50 +789,6 @@ import { REGEX }  from '@/utils/validate'
 
 <style type="text/css" lang="scss">
        .waitPrice{
-        height:100%;    
-        position: relative;
-        margin-left:7px;
-        .side_left{
-            width: 10%;
-            height:100%;
-            float:left;
-            padding-top:10px;
-            border-right:1px solid #ccc;
-            border-top:2px solid #ccc;
-            overflow:auto;
-        }
-        .side_right{
-            height:99%;
-            width:90%;
-            padding-bottom: 20px;
-            float:left;
-            position: relative;
-            border-top:2px solid #ccc;
-        }
-        &>.classify_searchinfo{
-            position: absolute;
-            left:0;
-            top:0;
-            padding:15px 16px;
-            width:100%;
-            line-height: 35px;
-            label{
-                margin-right:50px;
-                color: #666;
-                font-size:14px;
-                .el-input{
-                    width:300px;
-                    .el-input__inner{
-                        color:#3e9ff1;
-                        height:30px;
-                        line-height: 30px;
-                    }
-                }
-            }
-            .el-button{
-               padding:8px 20px;
-            }
-        }
         .waitAdd,.changeclassify{
             .el-dialog{
                 position: relative;
@@ -1120,32 +1076,6 @@ import { REGEX }  from '@/utils/validate'
             }
             .el-dialog__footer{
                 padding:10px 20px;
-            }
-        }
-        .classify_info{
-            height:100%;
-            padding:70px 13px 18px;
-            .btns_box{
-                margin-bottom:10px;
-                .el-button{
-                    margin-right:20px;
-                    padding:10px 20px;
-                }
-            }
-            .info_news{
-                height:100%;
-                .el-table{
-                    table{
-                        width: 100% !important;
-                        th,td{
-                            text-align:center;
-                        }
-                    }
-                }
-            }
-            .Pagination{
-                margin-top:13px;
-                text-align:right;
             }
         }
     }
