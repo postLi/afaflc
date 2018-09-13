@@ -517,6 +517,7 @@ export default {
              let reg2=/^(\d|9)(\.\d)?$/  //输入0到9
              let reg3=/^(\d|10)(\.\d)?$/  //输入0到10
                 for(var i=0;i<this.formAllData.aflcCouponList.length;i++){
+                    console.log('333',this.formAllData.aflcCouponList[i].endTime)
                   if(!this.formAllData.aflcCouponList[i].couponNum){
                      this.$message.warning('派发数量都不能为空');
                      return false
@@ -551,17 +552,27 @@ export default {
                    }
                   if(this.formAllData.aflcCouponList[i].timeType=='AF046301'){
                       if(!this.formAllData.aflcCouponList[i].overTime){
-                     this.$message.warning('过期时间不能为空');  
+                     this.$message.warning('派发过期时间不能为空');  
                      return false  
                       }
                   }
                   if(this.formAllData.aflcCouponList[i].timeType=='AF046302'){
                       if(!this.formAllData.aflcCouponList[i].startTime){
-                     this.$message.warning('开始时间不能为空');  
+                     this.$message.warning('派发开始时间不能为空');  
                      return false  
                       }
+                      if(this.formAllData.startTime>this.formAllData.aflcCouponList[i].startTime)
+                      {
+                     this.$message.warning('派发开始时间必须大于活动时效的开始时间');  
+                     return false  
+                      }
+                      if(this.formAllData.aflcCouponList[i].endTime<this.formAllData.aflcCouponList[i].startTime)
+                      {
+                      this.$message.warning('派发过期时间必须大于派发开始时间');  
+                      return false  
+                      }                      
                       if(!this.formAllData.aflcCouponList[i].endTime){
-                     this.$message.warning('过期时间不能为空');  
+                     this.$message.warning('派发过期时间不能为空');  
                      return false  
                       }
                   }

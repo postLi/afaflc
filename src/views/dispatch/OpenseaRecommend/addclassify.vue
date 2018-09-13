@@ -76,209 +76,201 @@
 <script>
 
 import getCityList from '@/components/GetCityList/index'
-import { data_CarList,data_ServerClassList } from '@/api/common.js'
+import { data_CarList, data_ServerClassList } from '@/api/common.js'
 import { data_NewData } from '@/api/dispatch/OpenseaRecommend.js'
-import cue from "../../../components/Message/cue";
-
+import cue from '../../../components/Message/cue'
 
 export default {
-    name: 'addClassfy',
-    props: {
-        dialogFormVisible:{
-            type:Boolean,
-            required:true
-        },
-        formtitle:{
-            type:String,
-            required:true
-        }
+  name: 'addClassfy',
+  props: {
+    dialogFormVisible: {
+      type: Boolean,
+      required: true
     },
-    components:{
-        getCityList,
-        cue
-    },
-    data() {
-      return {
-        forms:{
-            areaCode:null,//地区code
-            areaCodeName:null,
-            firstRecommendKm:null,//第一次推送公里
-            firstRecommendTime:null,//第一次推送时间
+    formtitle: {
+      type: String,
+      required: true
+    }
+  },
+  components: {
+    getCityList,
+    cue
+  },
+  data() {
+    return {
+      forms: {
+        areaCode: null, // 地区code
+        areaCodeName: null,
+        firstRecommendKm: null, // 第一次推送公里
+        firstRecommendTime: null, // 第一次推送时间
             // secondRecommendKm:null,//第二次
             // secondRecommendTime:null,//第二次
-            serivceCode:null,//服务类型
-            serivceCodeName:null,
-            shipperCarType:null,//货主用车类型
-            shipperCarTypeName:null,
-            visualCarType:null,//可见车主类型
-            visualCarTypeName:null,
-            usingStatus:'1',//起始状态
+        serivceCode: null, // 服务类型
+        serivceCodeName: null,
+        shipperCarType: null, // 货主用车类型
+        shipperCarTypeName: null,
+        visualCarType: null, // 可见车主类型
+        visualCarTypeName: null,
+        usingStatus: '1' // 起始状态
+      },
+      optionsService: null, // 服务选项
+      optionsCarType: null, // 车辆类型选项
+      optionsVisualCarType: [],
+      visualCarType: [],
+      information: null,
+    // 可见车主类型
+      optionsStatus: [
+        {
+          value: '1',
+          name: '启用'
         },
-        optionsService:null,//服务选项
-        optionsCarType:null,//车辆类型选项
-        optionsVisualCarType:[],
-        visualCarType:[],
-        information:null,
-    //可见车主类型
-        optionsStatus:[
-            {
-                value:'1',
-                name:"启用"
-            },
-                {
-                value:'0',
-                name:"禁用"
-            }
-        ]
-      };
+        {
+          value: '0',
+          name: '禁用'
+        }
+      ]
+    }
+  },
+  watch: {
+
+  },
+  mounted() {
+    this.init()
+    console.log('this.$refs.area', this.$refs.area)
+  },
+  methods: {
+    close() {
+      this.$emit('update:dialogFormVisible', false)
     },
-    watch:{
-        
+        // 初始化选择项数据
+    init() {
+      return Promise.all([data_CarList(), data_ServerClassList()]).then(resArr => {
+        console.log(resArr)
+        this.optionsCarType = resArr[0].data
+        this.optionsService = resArr[1].data
+        this.optionsVisualCarType = resArr[0].data
+      }).catch(err => {
+
+      })
     },
-    mounted(){
-        this.init();
-        console.log("this.$refs.area",this.$refs.area)
+    newInfoSave() {
+      if (this.$refs.area.selectedOptions.length > 1) {
+        let province
+        this.$refs.area.areaData.forEach((item) => {
+          if (item.code == this.$refs.area.selectedOptions[0]) {
+            province = item
+          }
+        })
+        province.children.forEach(item => {
+          if (item.code == this.$refs.area.selectedOptions[1]) {
+            this.forms.areaCode = item.code
+            this.forms.areaCodeName = item.name
+          }
+        })
+      } else {
+        this.$refs.area.areaData.forEach((item) => {
+          if (item.code == this.$refs.area.selectedOptions[0]) {
+            this.forms.areaCode = item.code
+            this.forms.areaCodeName = item.name
+          }
+        })
+      }
+      const visualCar = []
+      this.optionsVisualCarType.forEach(item => {
+        for (var i = 0; i < this.visualCarType.length; i++) {
+          if (item.code == this.visualCarType[i]) {
+            visualCar.push(item.name)
+          }
+        }
+      })
+      console.log(visualCar)
+      this.forms.visualCarTypeName = visualCar.join(',')
+      this.forms.visualCarType = this.visualCarType.join(',')
 
-    },
-    methods: {
-        close(){
-            this.$emit('update:dialogFormVisible',false)
-        },
-        //初始化选择项数据
-        init(){
-             return Promise.all([data_CarList(), data_ServerClassList()]).then(resArr => {
-                 console.log(resArr)
-                 this.optionsCarType = resArr[0].data;
-                 this.optionsService =resArr[1].data;
-                 this.optionsVisualCarType =resArr[0].data;
-            }).catch(err => {
-                
-            })
-        },
-        newInfoSave(){
-            if(this.$refs.area.selectedOptions.length > 1){
-                let province;
-                this.$refs.area.areaData.forEach((item) =>{
-                    if(item.code == this.$refs.area.selectedOptions[0]){
-                        province = item
-                    }
-                })
-                province.children.forEach( item => {
-                    if(item.code == this.$refs.area.selectedOptions[1]){
-                        this.forms.areaCode = item.code;
-                        this.forms.areaCodeName = item.name;
-                    }
-                })
-            }else{
-                this.$refs.area.areaData.forEach((item) =>{
-                    if(item.code == this.$refs.area.selectedOptions[0]){
-                        this.forms.areaCode = item.code;
-                        this.forms.areaCodeName = item.name;
-                    }
-                })
-            }
-            let visualCar = [];
-            this.optionsVisualCarType.forEach(item => {
-                for(var i = 0; i<this.visualCarType.length;i++){
-                    if(item.code == this.visualCarType[i]){
-                        visualCar.push(item.name)
-                    }
-                }
-            })
-            console.log(visualCar)
-            this.forms.visualCarTypeName = visualCar.join(',');
-            this.forms.visualCarType = this.visualCarType.join(',');
+      if (this.forms.serivceCode) {
+        this.forms.serivceCodeName = this.optionsService.find(item => item.code === this.forms.serivceCode)['name']
+      }
+      if (this.forms.shipperCarType) {
+        this.forms.shipperCarTypeName = this.optionsCarType.find(item => item.code === this.forms.shipperCarType)['name']
+      }
 
-            if(this.forms.serivceCode){
-                
-                this.forms.serivceCodeName = this.optionsService.find(item => item.code === this.forms.serivceCode)['name'];
-            }
-            if(this.forms.shipperCarType){
-
-                this.forms.shipperCarTypeName = this.optionsCarType.find(item => item.code === this.forms.shipperCarType)['name'];
-            }
-
-
-            if(!this.forms.areaCode){
-                let information = "请选择地区";
-                this.$refs.cue.hint(information)
-            }
-            else if(!this.forms.serivceCode){
-                let information = "请选择服务类型";
-                this.$refs.cue.hint(information)
-            }
-            else if(!this.forms.shipperCarType){
-                let information = "请选择车辆类型";
-                this.$refs.cue.hint(information)
-            }
-            else if(!this.forms.firstRecommendKm || !this.forms.firstRecommendTime ){
-                let information = "推送公里数和秒数必填且为数字整数";
-                this.$refs.cue.hint(information) 
-            }
+      if (!this.forms.areaCode) {
+        const information = '请选择地区'
+        this.$refs.cue.hint(information)
+      } else if (!this.forms.serivceCode) {
+        const information = '请选择服务类型'
+        this.$refs.cue.hint(information)
+      } else if (!this.forms.shipperCarType) {
+        const information = '请选择车辆类型'
+        this.$refs.cue.hint(information)
+      } else if (!this.forms.firstRecommendKm || !this.forms.firstRecommendTime) {
+        const information = '推送公里数和秒数必填且为数字整数'
+        this.$refs.cue.hint(information)
+      }
             // else if(!this.forms.secondRecommendKm || !this.forms.secondRecommendTime ){
             //     let information = "第二轮及以后推送公里数和秒数必填且为数字整数";
             //     this.$refs.cue.hint(information)
             // }
-            else if(!this.forms.visualCarType){
-                let information = "请选择可见车主类型";
-                this.$refs.cue.hint(information)
-            }else{
-                data_NewData(this.forms).then(res=>{
-                    console.log(res)
-                    this.$alert('操作成功', '提示', {
-                        confirmButtonText: '确定',
-                        callback: action => {
-                            this.$emit('renovate');
-                            this.clearForms();
-                        }
-                    });
-                }).catch( err => {
-                    this.$message({
-                        type: 'info',
-                        message: '操作失败，原因：' + err.text ? err.text : err
-                    })
-                })
+      else if (!this.forms.visualCarType) {
+        const information = '请选择可见车主类型'
+        this.$refs.cue.hint(information)
+      } else {
+        data_NewData(this.forms).then(res => {
+          console.log(res)
+          this.$alert('操作成功', '提示', {
+            confirmButtonText: '确定',
+            callback: action => {
+              this.$emit('renovate')
+              this.clearForms()
             }
-            console.log(this.forms)
-        },
-        closeAddNewInfo(){
-            this.close();  
-            this.clearForms();
-            
-            console.log(this.forms)
-        },
-        clearForms(){
-             this.forms = {
-                areaCode:null,//地区code
-                firstRecommendKm:null,//第一次推送公里
-                firstRecommendTime:null,//第一次推送时间
-                serivceCode:null,//服务类型
-                shipperCarType:null,//货主用车类型
-                visualCarType:null,//可见车主类型
-                usingStatus:'1',//起始状态
-            };       
-            if(this.$refs.area.selectedOptions){
-                this.$refs.area.selectedOptions = [];
-            }
-            this.visualCarType = [];
-        },
-        valuerules(){
-            if(!event.target.value){
-                return 
-            }else{
-                if(!/^[0-9]+$/.test(event.target.value)){
-                    let information = "请输入数字类型内容";
-                    this.$refs.cue.hint(information)
-                    for(let item in this.forms){
-                        if(this.forms[item] == event.target.value){
-                            this.forms[item] = null;
-                        }
-                    }
-                    event.target.focus()
-                }
-            }
-        }
+          })
+        }).catch(err => {
+          this.$message({
+            type: 'info',
+            message: '操作失败，原因：' + err.text ? err.text : err
+          })
+        })
+      }
+      console.log(this.forms)
     },
+    closeAddNewInfo() {
+      this.close()
+      this.clearForms()
+
+      console.log(this.forms)
+    },
+    clearForms() {
+      this.forms = {
+        areaCode: null, // 地区code
+        firstRecommendKm: null, // 第一次推送公里
+        firstRecommendTime: null, // 第一次推送时间
+        serivceCode: null, // 服务类型
+        shipperCarType: null, // 货主用车类型
+        visualCarType: null, // 可见车主类型
+        usingStatus: '1' // 起始状态
+      }
+      if (this.$refs.area.selectedOptions) {
+        this.$refs.area.selectedOptions = []
+      }
+      this.visualCarType = []
+    },
+    valuerules() {
+      if (!event.target.value) {
+        return
+      } else {
+        if (!/^[0-9]+$/.test(event.target.value)) {
+          const information = '请输入数字类型内容'
+          this.$refs.cue.hint(information)
+          for (const item in this.forms) {
+            if (this.forms[item] == event.target.value) {
+              this.forms[item] = null
+            }
+          }
+          event.target.focus()
+        }
+      }
+    }
+  }
 }
 </script>
 

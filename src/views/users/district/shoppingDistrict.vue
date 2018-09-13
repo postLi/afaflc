@@ -1,161 +1,153 @@
 <template>
     <div style="height:100%;"  class="identicalStyle">
-          <el-form :inline="true" :model="shipperAll" ref="ruleForm" class="classify_searchinfo">
+          <el-form :inline="true" class="classify_searchinfo">
             <el-form-item label="所在地：">
-              <!-- <GetCityList v-model="shipperAll.belongCity" ref="area"></GetCityList> -->
-                <!-- <vregion :ui="true" @values="regionChange" class="form-control"> -->
-                    <el-input v-model="shipperAll.belongCityName" placeholder="请输入"></el-input>
-                <!-- </vregion> -->
+                   <el-cascader
+                    size="large"
+                    :options="options"
+                    v-model="formAllData.areaName"
+                    @change="handleChange">
+                    </el-cascader>
             </el-form-item>
-            <el-form-item label="认证状态：">
-              <el-select v-model="shipperAll.authStatus" clearable placeholder="请选择">
-                <el-option
-                  v-for="item in optionsStatus"
-                  :key="item.id"
-                  :label="item.name"
-                  :value="item.code"
-                  :disabled="item.disabled">
-                </el-option>
-              </el-select>
+            <el-form-item label="商圈名称：">
+                <el-input v-model="formAllData.tradeName"></el-input>
             </el-form-item>
-			<el-form-item label="账户状态：">
-              <el-select v-model="shipperAll.accountStatus" clearable placeholder="请选择">
-                <el-option
-                  v-for="item in optionsAuidSataus"
-                  :key="item.id + 'shipperAll' "
-                  :label="item.name"
-                  :value="item.code"
-                  :disabled="item.disabled">
-                </el-option>
-              </el-select>
-            </el-form-item>
-            <el-form-item label="手机号：">
-                <el-input v-model.trim="shipperAll.mobile"></el-input>
+            <el-form-item label="商圈场主：">
+                <el-input v-model="formAllData.tradeOwner"></el-input>
             </el-form-item>
             <el-form-item class="fr"> 
-                <el-button type="primary" plain :size="btnsize" >查询</el-button>
-                <el-button type="info" plain :size="btnsize">清空</el-button>
-            </el-form-item>
-          </el-form>
+                <el-button type="primary" plain :size="btnsize"  >查询</el-button>
+                <el-button type="info" plain :size="btnsize" >清空</el-button>
+            </el-form-item>            
+    </el-form>
 		<div class="classify_info" >
 			<div class="btns_box">
-                <el-button type="primary" plain :size="btnsize" >冻结</el-button>
-                <el-button type="primary" plain :size="btnsize" >冻结修改</el-button>
-                <el-button type="primary" plain :size="btnsize" >移入黑名单</el-button>
-                <el-button type="primary" plain :size="btnsize" >移除黑名单</el-button>
-                <el-button type="primary" plain :size="btnsize" >解冻</el-button>
+                   <shoppingDialog
+                    btntext="新增"
+                    :plain="true"
+                    type="primary" 
+                    btntype="primary"
+                    editType="add"
+                    btntitle="创建">
+                    </shoppingDialog>
+                <el-button type="primary" plain :size="btnsize">修改</el-button>
+                <el-button type="primary" plain :size="btnsize">启用/停用</el-button>
 			</div>
-			<div class="info_news">
-				<el-table
-				ref="multipleTable"
-				:data="tableDataAll"
-                :default-sort = "{prop: 'registerTime', order: 'descending'}"
-				stripe
-				border
-                height="100%"
-				tooltip-effect="dark"
-                @selection-change="getSelection"    
-                @row-click="clickDetails"
-				style="width: 100%">
-				<!-- <el-table-column label="选择" width="60" fixed>
-                    <template slot-scope="scope">
-                        <el-radio class="textRadio" @change.native="getCurrentRow(scope.$index,scope.row)" :label="scope.$index" v-model="templateRadio">&nbsp;</el-radio>
-                    </template>
-                </el-table-column> -->
-                <el-table-column
-                    fixed
-                    type="selection"
-                    width="50">
-                </el-table-column>
-                <el-table-column label="序号"  width="80">
-                    <template slot-scope="scope">
-                        {{ (page - 1)*pagesize + scope.$index + 1 }}
-                    </template>
-                </el-table-column>  
-				<el-table-column label="手机号(会员账号)" prop="mobile" width="180" sortable>
-                    <template slot-scope="scope">
-                        <h4 class="needMoreInfo" @click="pushOrderSerial(scope.row)">{{ scope.row.mobile}}</h4>
-                    </template>
-				</el-table-column>
-				<el-table-column prop="contactsName" sortable label="注册人姓名" width="150">
-				</el-table-column>
-				<el-table-column prop="companyName" sortable label="公司名称" width="300">
-				</el-table-column>
-				<el-table-column prop="belongCityName" sortable label="所在地" width="250">
-				</el-table-column>
-				<el-table-column prop="registerOriginName" sortable label="注册来源" width="120">
-				</el-table-column>
-				<el-table-column prop="registerTime" sortable label="注册日期" width="200">
-				</el-table-column>
-				<el-table-column prop="accountStatusName" sortable label="账户状态" width="120">
-                    <template slot-scope="scope">
-                        <span :class="{freezeName: scope.row.accountStatusName == '冻结中' ,blackName: scope.row.accountStatusName == '黑名单',normalName :scope.row.accountStatusName == '正常'}">{{scope.row.accountStatusName}}</span>
-                    </template>
-				</el-table-column>
-				<el-table-column prop="authStatusName" sortable label="认证状态" width="120">
-				</el-table-column>
-                <el-table-column prop="qq" label="QQ号码" sortable width="200">
-				</el-table-column>
-                <el-table-column prop="isOpenTms" sortable label="是否开通TMS" width="150">
-                    <template slot-scope="scope">
-                        <span :class="scope.row.isOpenTms == 1 ? 'isTMS' : 'noTMS'"> {{scope.row.isOpenTms == 1 ? '是' : '否'}}</span>
-                    </template>
-				</el-table-column>
-				</el-table>
-			</div>
+            <div class="info_news">
+            <el-table style="width: 100%" stripe border height="100%" >
+            <el-table-column  label="商圈名称" prop="">
+            </el-table-column>
+            <el-table-column  label="所在地" prop="">
+            </el-table-column>    
+            <el-table-column  label="商圈场主" prop="">
+            </el-table-column> 
+            <el-table-column  label="满减/折扣" prop="">
+            </el-table-column> 
+            <el-table-column  label="场主手机号" prop="">
+            </el-table-column>
+            <el-table-column  label="商圈货主数量" prop="">
+            </el-table-column>       
+            <el-table-column  label="状态" prop="">
+            </el-table-column>                                                                                                           
+            </el-table> 
+        </div>
 		</div>
-        <div class="info_tab_footer">共计:{{ totalCount }} <div class="show_pager"> <Pager :total="totalCount" @change="handlePageChange" /></div> </div>
     </div>
-
-    
 </template>
 
 <script>
+import {data_get_aflcTradeArea_list} from '@/api/users/district/shoppingDistrict.js'
+import { regionDataPlus, CodeToText, TextToCode } from 'element-china-area-data'
+import shoppingDialog from './shoppingDialog.vue'
 export default {
-  components:{
-  },
-    props: {
-		isvisible: {
-			type: Boolean,
-			default: false
-		}
-	},
-  data(){
-      return{
+    data(){
+        return{
+            options:regionDataPlus,
+            btnsize:'mini',
+            selectRowData:{},
+            page:1,
+            pagesize:20,
+            totalCount:0,
+            selected:[],//选中的数据集
+            tableDataAll:[],
+            formAllData:{
+                areaCode: null,
+                tradeName:null,
+                tradeOwner:null,
             }
+        }
     },
-    created(){
-
-    },
-    watch: {
-        // isvisible: {
-        //     handler(newVal, oldVal) {
-        //         if(newVal && !this.inited){
-        //             this.inited = true;
-        //             this.firstblood();
-        //             this.getMoreInformation();
-        //         }
-        //     },
-
-        // }
+    components:{
+    shoppingDialog
     },
     mounted(){
+        this.firstblood();
     },
     methods:{
+        handleChange(d){
+           console.log('d',d)
+           if(d.length<3){
+                if(d.length==2){
+                this.$message.error('请选择具体的城市');
+                }
+                this.formAllData.areaCode = null;
+                this.formAllData.province = null,
+                this.formAllData.city = null,
+                this.formAllData.area = null,
+                this.formAllData.areaName = [];
+           }
+           else{
+                this.formAllData.areaCode = d
+                this.formAllData.province = CodeToText[d[0]]
+                this.formAllData.city =  CodeToText[d[1]]
+                if(d[2]==''){
+                this.formAllData.area = ''
+                }
+                else{
+                this.formAllData.area = CodeToText[d[2]]
+                }
+           }
+        },
+    // 列表刷新页面  
+        firstblood(){
+                let FromData = {}
+                if(this.formAllData.area) {
+                    FromData = {
+                     area:this.formAllData.area,
+                     city:null,
+                     tradeName:this.formAllData.tradeName,
+                     tradeOwner:this.formAllData.tradeOwner,               
+                    }
+                }
+                else if(this.formAllData.city){
+                    FromData = {
+                     area:null,
+                     city:this.formAllData.city,
+                     tradeName:this.formAllData.tradeName,
+                     tradeOwner:this.formAllData.tradeOwner,                 
+                    }                    
+                }   
+                else{
+                    FromData = {
+                     area:null,
+                     city:null,
+                     tradeName:this.formAllData.tradeName,
+                     tradeOwner:this.formAllData.tradeOwner,                 
+                    }  
+                }             
+        data_get_aflcTradeArea_list(this.page,this.pagesize,FromData).then(res=>{
+            console.log(res)
+        })
+    } 
     }
 }
 </script>
-<style lang="scss">
-    .removeFreeze,.removeBlcak{
-        .shipper_information{
-            h2{ 
-                margin:10px 0 10px 20px;
-            }
-        }
-        .el-textarea{
-            width: 637px;
-        }
-    }
 
-    
+<style lang="scss">
+.identicalStyle{
+.el-cascader{
+    line-height: 30px;
+}
+}
 </style>
+

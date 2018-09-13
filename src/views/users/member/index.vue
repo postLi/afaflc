@@ -31,57 +31,56 @@
 
 <script type="text/javascript">
     import '@/styles/dialog.scss'
-    import "@/styles/tab.scss";
+    import '@/styles/tab.scss'
 
-    import ShipperAll from './ShipperAll.vue'
-    import ShipperUnauthorized from './ShipperUnauthorized.vue' 
+import ShipperAll from './ShipperAll.vue'
+    import ShipperUnauthorized from './ShipperUnauthorized.vue'
     import ShipperCertified from './ShipperCertified.vue'
     import ShipperHasCertified from './ShipperHasCertified.vue'
     import ShipperDisqualification from './ShipperDisqualification.vue'
 
-     
     export default {
-      name:'shipper',
-      components:{
-          ShipperAll,
-          ShipperUnauthorized,
-          ShipperCertified,
-          ShipperHasCertified,
-          ShipperDisqualification,
-        },
-        data() {
-          return {
-            memberName:'first',
-          };
-        },
-        watch:{
-            memberName(newVal,oldVal){
-                // console.log('newVal,oldVal',newVal,oldVal)
-                if(newVal){
-                    this.memberName = newVal;
-                }else{
-                    this.memberName = oldVal;
-                }
-            }
-        },
-        created() {
-            this.memberName = sessionStorage.getItem('memberName') || 'first';
-        },
-
-        beforeUpdate () {
-            sessionStorage.setItem('memberName', this.memberName);
-        },
-
-        beforeDestroy () {
-            sessionStorage.setItem('memberName', 'first');
-        },
-        methods: {
-
-            handleClick(tab, event) {
-                // console.log(tab, event);
-                this.memberName = tab.name;
-            }
+      name: 'shipper',
+      components: {
+        ShipperAll,
+        ShipperUnauthorized,
+        ShipperCertified,
+        ShipperHasCertified,
+        ShipperDisqualification
+      },
+      data() {
+        return {
+          memberName: 'first'
         }
+      },
+      watch: {
+        memberName(newVal, oldVal) {
+                // console.log('newVal,oldVal',newVal,oldVal)
+          if (newVal) {
+            this.memberName = newVal
+          } else {
+            this.memberName = oldVal
+          }
+        }
+      },
+      created() {
+        this.memberName = sessionStorage.getItem('memberName') || 'first'
+      },
+
+      beforeUpdate() {
+        sessionStorage.setItem('memberName', this.memberName)
+      },
+
+      beforeDestroy() {
+        sessionStorage.setItem('memberName', 'first')
+      },
+      methods: {
+
+        handleClick(tab, event) {
+                // console.log(tab, event);
+          this.memberName = tab.name
+        }
+      }
     }
 </script>
 
