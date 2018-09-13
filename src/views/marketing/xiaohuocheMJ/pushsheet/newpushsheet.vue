@@ -805,7 +805,6 @@ methods:{
             this.$refs['vestList'].validate(valid=>{
             var forms= Object.assign({}, this.vestList)
             if(valid){
-            console.log(valid)
             var forms= Object.assign({}, this.vestList)
             forms.setting = JSON.stringify(forms.setting)
             console.log('forms',forms)
@@ -843,9 +842,7 @@ methods:{
             }
             else{
             this.$refs['vestList'].validate(valid=>{
-            var forms= Object.assign({}, this.vestList)
             if(valid){
-            console.log(valid)
             var forms= Object.assign({}, this.vestList)
             forms.setting = JSON.stringify(forms.setting)
                 data_dpdata_pushsheet(forms).then(res=>{
@@ -865,11 +862,93 @@ methods:{
 },
 watch:{
 driverTemplateDialogFlag:{
-            handler: function(val, oldVal) {
+         handler: function(val, oldVal) {
            if(!val){
                 if(this.$refs.area){
-               this.$refs.area.selectedOptions = [];
+                this.$refs.area.selectedOptions = [];
                 this.$refs['vestList'].resetFields();
+                this.vestList.setting=[];
+                this.vestList.setting.push(
+{
+                                 createTime:null,
+                                 startTime:null,
+                                 endTime:null,
+                               sett:{
+                            AF01801:{
+                                zero:{
+                                    AF0010401: '0',
+                                    AF0020401: '0',                        
+                                    AF0020402: '0',
+                                    AF0020403: '0',
+                                    AF0020404: '0',
+                                    AF0020405: '0',
+                                },
+                                one:{
+                                    AF0010401: '0',
+                                    AF0020401: '0',                        
+                                    AF0020402: '0',
+                                    AF0020403: '0',
+                                    AF0020404: '0',
+                                    AF0020405: '0',
+                                },
+                            },
+                            AF01802:{
+                                zero:{
+                                    AF0010401: '0',
+                                    AF0020401: '0',                        
+                                    AF0020402: '0',
+                                    AF0020403: '0',
+                                    AF0020404: '0',
+                                    AF0020405: '0',
+                                },
+                                one:{
+                                    AF0010401: '0',
+                                    AF0020401: '0',                        
+                                    AF0020402: '0',
+                                    AF0020403: '0',
+                                    AF0020404: '0',
+                                    AF0020405: '0',
+                                },
+                            },
+                            AF01803:{
+                                zero:{
+                                    AF0010401: '0',
+                                    AF0020401: '0',                        
+                                    AF0020402: '0',
+                                    AF0020403: '0',
+                                    AF0020404: '0',
+                                    AF0020405: '0',
+                                },
+                                one:{
+                                    AF0010401: '0',
+                                    AF0020401: '0',                        
+                                    AF0020402: '0',
+                                    AF0020403: '0',
+                                    AF0020404: '0',
+                                    AF0020405: '0',
+                                },
+                            },
+                            AF01804:{
+                                zero:{
+                                    AF0010401: '0',
+                                    AF0020401: '0',                        
+                                    AF0020402: '0',
+                                    AF0020403: '0',
+                                    AF0020404: '0',
+                                    AF0020405: '0',
+                                },
+                                one:{
+                                    AF0010401: '0',
+                                    AF0020401: '0',                        
+                                    AF0020402: '0',
+                                    AF0020403: '0',
+                                    AF0020404: '0',
+                                    AF0020405: '0',
+                                },
+                            },
+                            }
+                            }                    
+                )
             }
 
 }

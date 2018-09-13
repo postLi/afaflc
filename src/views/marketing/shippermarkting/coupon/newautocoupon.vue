@@ -721,7 +721,7 @@ export default {
         height: 24px;
     }
     .el-range__icon{
-      line-height: 24px;
+      line-height: 24px!important;
     }
     .el-date-editor .el-range-separator{
         line-height: 24px;
@@ -821,6 +821,7 @@ export default {
             .el-cascader{
                 line-height: 30px;  
             }
+            
         }
         .el-input__icon{
             display:none;

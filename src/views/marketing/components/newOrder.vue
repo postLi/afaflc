@@ -9,7 +9,7 @@
             <div class="swith">
             启用状态：
             <el-switch
-            style="display: block"
+            style="display: inline-block"
             v-model="formAll.usingStatus"
             active-color="#ff4949"
             inactive-color="#13ce66"

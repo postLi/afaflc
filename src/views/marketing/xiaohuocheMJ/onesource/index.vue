@@ -548,10 +548,10 @@ export default {
                 this.formAll2.endAddress = info.formattedAddress;
                 break;
                 case 'selectdistrictName':
-                this.selectRowData.districtName = info.formattedAddress;
+                this.selectRowData3.districtName = info.formattedAddress;
                 break;
                 case 'selectdistrictAddress':
-                this.selectRowData.districtAddress = info.formattedAddress;
+                this.selectRowData3.districtAddress = info.formattedAddress;
                 break;
             }
         },

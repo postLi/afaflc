@@ -32,14 +32,10 @@
    </div>
     <el-table style="width: 100%" stripe border :data="tableDataTree" height="87%" @row-click="clickDetails" highlight-current-row>
    <el-table-column  label="序号" width="80px" type="index">
-       
    </el-table-column>
    <el-table-column  label="省市" prop="areaName">
-       
    </el-table-column>
-
-   <el-table-column  label="服务类型" prop="serivceCode">
-       
+   <el-table-column  label="服务类型" prop="serivceCodeName">
    </el-table-column>
    <el-table-column  label="价格上浮(倍)">
        <template slot-scope="scoped">
@@ -126,7 +122,7 @@ export default {
     },
     mounted(){
         eventBus.$on('pushListtwo', () => {
-                this.firstblood()
+        this.firstblood()
         })
     this.firstblood();          
     this.getMoreInformation();

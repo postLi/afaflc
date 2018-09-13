@@ -192,36 +192,37 @@ export default {
            let reg= /^[1-9]\d*$/  //输入正整数正则
            if(!reg.test(this.num))
            {
-               this.$message.warning('生成张数输入框仅能输入正整数');
+               this.$message.warning('生成张数输入框仅能输入大于0的正整数');
            }
            else{
+                this.$message.success('生成成功');
+               location.href = ('/api/aflcsmservice/sm/aflcCouponUse/v1/produceCoupon/?id='+this.params.id+'&num='+this.num+'&access_token=' + Cookies.get(TokenKey))
+               
+               this.dialogFormVisible_add = false;
         // exportWithIframe('/api/aflcsmservice/sm/aflcCouponUse/v1/produceCoupon/?id='+this.params.id+'&num='+this.num+'&access_token=' + Cookies.get(TokenKey))
-         data_get_produceCouponExcel(this.params.id,this.num).then(res=>{
-             this.$message.success('生成成功');
-             this.dialogFormVisible_add = false;
-         }).catch(res=>{
-             location.href = ('/api/aflcsmservice/sm/aflcCouponUse/v1/produceCoupon/?id='+this.params.id+'&num='+this.num+'&access_token=' + Cookies.get(TokenKey))
-             console.log(res)
-             this.dialogFormVisible_add = false;
-             this.$message.success('生成成功')
-        })
+        //  data_get_produceCouponExcel(this.params.id,this.num).then(res=>{
+        //      this.dialogFormVisible_add = false;
+        //  }).catch(res=>{
+             
+        //      console.log(res)
+        //      this.dialogFormVisible_add = false;
+        //      this.$message.success('生成成功')
+        // })
         }        
        },
     
        BatchDistribution(){
         let inputFile = this.$refs.inputer;
         var formdata = new FormData()
-        console.log('inputFile',inputFile.files[0]);
+        console.log('inputFile',typeof(inputFile.files[0]));
         formdata.append('id',this.params.id);
         formdata.append('multipartFile',inputFile.files[0]);
-        console.log('formdata',formdata);
         data_get_BatchDistribution(this.params.id,formdata).then(res=>{
-             console.log('res',res)
              this.$message.success('发放成功');
              this.dialogFormVisible_add = false;
         }).catch(res=>{
              this.dialogFormVisible_add = false;
-             this.$message.error('发放失败')
+             this.$message.error(res.text)
         })
        },
        grantCoupon(){
@@ -230,11 +231,10 @@ export default {
               this.$message.success('发放成功');
               this.dialogFormVisible_add = false;
          }).catch(res=>{
-              this.$message.error('发放失败');
               this.dialogFormVisible_add = false; 
+              this.$message.error(res.text)
          })   
        },
-
   }
 }
 </script>
