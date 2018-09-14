@@ -32,9 +32,9 @@
                 <div class="side_right_bottom clearfix">
                     <div class="btns_box clearfix">
                         <el-button type="primary" :size="btnsize" plain icon="el-icon-news" @click="handleClick('add')">新增</el-button>
-                        <el-button type="primary" :size="btnsize" plain icon="el-icon-edit" @click="handleClick('revise')">修改</el-button>
+                        <!-- <el-button type="primary" :size="btnsize" plain icon="el-icon-edit" @click="handleClick('revise')">修改</el-button>
                         <el-button type="primary" :size="btnsize" plain icon="el-icon-delete" @click="handleClick('delet')">删除</el-button>
-                        <el-button type="primary" :size="btnsize" plain icon="el-icon-edit" @click="handleClick('status')">启用/禁用</el-button>
+                        <el-button type="primary" :size="btnsize" plain icon="el-icon-edit" @click="handleClick('status')">启用/禁用</el-button> -->
                         
                         <el-button type="primary" :size="btnsize" plain icon="el-icon-edit" @click="handleEdit">修改</el-button>
                         <el-button type="primary" :size="btnsize" plain icon="el-icon-delete" @click="handleDelete">删除</el-button>
