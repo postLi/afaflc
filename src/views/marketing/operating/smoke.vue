@@ -1,0 +1,319 @@
+<template>
+  <div class="identicalStyle clearfix waitpayment" v-loading="loading">
+    <el-form :inline="true" :model="searchInfo" ref="ruleForm" class="demo-ruleForm classify_searchinfo">
+      <el-form-item label="所属区域"  prop="carType">
+        <!-- <el-select clearable placeholder="请选择省/市/区/街道" >
+          <el-option
+            v-for="item in optionsCar"
+            :key="item.code"
+            :label="item.name"
+            :value="item.code"
+            :disabled="item.disabled">
+          </el-option>
+        </el-select> -->
+      </el-form-item>  
+      <el-form-item label="交易时间" prop="mobile">
+        <el-date-picker
+          v-model="chooseTime"
+          type="daterange"
+          :picker-options="pickerOptions2"
+          range-separator="-"
+          start-placeholder="开始日期"
+          end-placeholder="结束日期"
+          align="right"
+          :default-time="['00:00:00', '23:59:59']"
+          value-format="timestamp">
+        </el-date-picker>
+      </el-form-item>
+      <el-form-item class="btnChoose fr"  style="margin-left:0;">
+        <el-button type="primary" :size="btnsize" plain @click="handleSearch('search')">搜索</el-button>
+        <el-button type="info" :size="btnsize" plain @click="handleSearch('clear')">清空</el-button>
+      </el-form-item>
+    </el-form>
+    <div class="classify_info">
+      <div class="btns_box">
+        <el-button type="primary" :size="btnsize" plain @click="handleSearch('outExce')">导出Exce</el-button>
+      </div>
+      <div class="info_news">
+        <!-- tabel内容 -->
+        <el-table
+          id="out-table"
+          ref="multipleTable"
+          :data="tableData"
+          stripe
+          border
+          align = "center"
+          height="100%"
+          @selection-change = "getinfomation"
+          tooltip-effect="dark"
+          @row-click="clickDetails"
+          style="width: 100%"> 
+          <el-table-column
+              type="selection"
+              width="55">
+          </el-table-column>
+          <el-table-column label="序号"  width="80">
+              <template slot-scope="scope">
+                  {{ (page - 1)*pagesize + scope.$index + 1 }}
+              </template>
+          </el-table-column>  
+          <el-table-column
+              prop="orderSerial"
+              label="订单号"
+              width="250">
+                  <template  slot-scope="scope">
+                      <h4 class="needMoreInfo" @click="pushOrderSerial(scope.row)">{{ scope.row.orderSerial}}</h4>
+                  </template>
+          </el-table-column>
+          <el-table-column
+              prop="orderType"
+              label="服务分类"
+              width="110">
+          </el-table-column>
+          <el-table-column
+              prop="belongCity"
+              label="区域"
+              width="180">
+          </el-table-column>
+          <el-table-column
+              prop="shipperMobile"
+              label="货主账号"
+              width="150">
+          </el-table-column>
+          <el-table-column
+              prop="shipperName"
+              label="货主姓名"
+              width="150">
+          </el-table-column>
+          <el-table-column
+              prop="usedCarType"
+              label="所需车型"
+              width="150">
+          </el-table-column>
+          <el-table-column
+              prop="totalAmount"
+              label="运费总额（元）"
+              width="150">
+          </el-table-column> 
+          <el-table-column
+              prop="useCarTime"
+              label="用车时间"
+              width="250">
+                  <template  slot-scope="scope">
+                      <span class="timeChoose">
+                          {{ scope.row.useCarTime | parseTime}}    
+                      </span>
+                  </template>
+          </el-table-column>
+          <el-table-column
+              label="订单类型"
+              width="120">
+                  <template  slot-scope="scope">
+                      {{ scope.row.orderClass == '1' ? '即时订单' : '预约订单' }}
+                  </template>
+          </el-table-column>
+          <el-table-column
+              label="付款状态"
+              width="150">
+                  <template  slot-scope="scope">
+                      {{ scope.row.payStatus == 'AF00801' ? '待付款' : '已付款' }}
+                  </template>
+          </el-table-column>
+          <el-table-column
+              label="提货地"
+              :show-overflow-tooltip="true"
+              width="250">
+              <template  slot-scope="scope">
+                  {{ scope.row.aflcOrderAddresses[0].viaAddress }}
+              </template>
+          </el-table-column>
+          <el-table-column
+              label="目的地"
+              :show-overflow-tooltip="true"
+              width="250">
+              <template  slot-scope="scope">
+                  {{ scope.row.aflcOrderAddresses[scope.row.aflcOrderAddresses.length-1].viaAddress }}
+              </template>
+          </el-table-column>
+          <el-table-column
+            label="下单时间"
+            width="200">
+            <template  slot-scope="scope">
+                {{ scope.row.useTime | parseTime}}
+            </template>
+          </el-table-column>
+        </el-table>
+        <!-- 页码 -->
+        <div class="info_tab_footer">共计:{{ dataTotal }} <div class="show_pager"> <Pager :total="dataTotal" @change="handlePageChange"  :sizes="sizes"/></div> </div>    
+      </div>
+    </div>
+  </div>
+</template>
+
+<script type="text/javascript">
+
+import FileSaver from 'file-saver'
+import XLSX from 'xlsx'
+import '@/styles/dialog.scss'
+import { orderStatusList } from '@/api/order/ordermange'
+import { parseTime, pickerOptions2 } from '@/utils/index.js'
+import Pager from '@/components/Pagination/index'
+import vregion from '@/components/vregion/Region'
+import { postDriverCommissionTransaction } from '@/api/marketing/carmarkting/operating'
+export default{
+  components: {
+    Pager,
+    vregion
+  },
+  props: {
+    isvisible: {
+      type: Boolean,
+      default: false
+    }
+  },
+  data() {
+    return {
+      btnsize: 'mini',
+      timeOutWaitPay: null,
+      loading: true, // 加载
+      sizes: [30, 50, 100],
+      pagesize: 30, // 初始化加载数量
+      page: 1, // 初始化页码
+      dataTotal: 0,
+      optionsCar: [],
+      searchInfo: {
+        belongCity: '', // 区域
+        belongCityName: '', // 区域
+        shipperName: '', // 货主
+        startOrderDate: '', // 下单起始时间
+        endOrderDate: '', // 下单结束时间
+        orderSerial: '', // 订单号
+        parentOrderStatus: 'AF00801' // 订单状态
+      },
+      searchQuery: {
+        'currentPage': 1,
+        'pageSize': 20,
+        'vo': {
+          'areaCodeList': []
+        }
+      },
+      pickerOptions2: {
+        shortcuts: pickerOptions2
+      },
+      chooseTime: '',
+      tableData: [],
+      dialogFormVisible_details: false, // 详情弹窗
+      DetailsOrderSerial: ''
+    }
+  },
+  watch: {
+
+  },
+  created() {
+
+  },
+  mounted() {
+    this.firstblood()
+    console.log('```````````', process.env.NODE_ENV)
+    // this.timeOutWaitPay = setInterval(this.firstblood,60000)
+    // console.log(this.$store)
+  },
+  beforeDestroy() {
+    clearInterval(this.timeOutWaitPay)
+  },
+  methods: {
+    exportExcel() {
+      /* generate workbook object from table */
+      var wb = XLSX.utils.table_to_book(document.querySelector('#out-table'))
+      /* get binary string as output */
+      var wbout = XLSX.write(wb, { bookType: 'xlsx', bookSST: true, type: 'array' })
+      console.log(wb)
+      console.log(wbout)
+      // try {
+      //     FileSaver.saveAs(new Blob([wbout], { type: 'application/octet-stream' }), 'sheetjs.xlsx')
+      // } catch (e) { if (typeof console !== 'undefined') console.log(e, wbout) }
+      // return wbout
+    },
+    regionChange(d) {
+      console.log('data:', d)
+      this.searchInfo.belongCityName = (!d.province && !d.city && !d.area && !d.town) ? '' : `${this.getValue(d.province)}${this.getValue(d.city)}${this.getValue(d.area)}${this.getValue(d.town)}`.trim()
+      if (d.city) {
+        this.searchInfo.belongCity = d.city.code
+      } else {
+        this.searchInfo.belongCity = d.province.code
+      }
+    },
+    getValue(obj) {
+      return obj ? obj.value : ''
+    },
+    handlePageChange(obj) {
+      this.page = obj.pageNum
+      this.pagesize = obj.pageSize
+      this.firstblood()
+    },
+    // 刷新页面
+    firstblood() {
+      this.loading = false
+      postDriverCommissionTransaction(this.searchQuery).then(res => {
+        console.log('待付款', res)
+        // this.tableData = res.data.list
+        // this.dataTotal = res.data.totalCount
+
+        this.tableData.forEach(item => {
+          item.aflcOrderAddresses.sort(function(a, b) {
+            return a.viaOrder - b.viaOrder
+          })
+        })
+        this.loading = false
+      })
+    },
+
+     // 模糊查询 分类名称或者code
+    handleSearch(type) {
+      // console.log(this.chooseTime)
+      switch (type) {
+        case 'search':
+          if (this.chooseTime) {
+            this.searchInfo.startOrderDate = this.chooseTime[0]
+            this.searchInfo.endOrderDate = this.chooseTime[1]
+          } else {
+            this.searchInfo.startOrderDate = ''
+            this.searchInfo.endOrderDate = ''
+          }
+          this.firstblood()
+          break
+        case 'clear':
+          this.searchInfo = {
+            belongCity: '', // 区域
+            shipperName: '', // 货主
+            startOrderDate: '', // 下单起始时间
+            endOrderDate: '', // 下单结束时间
+            orderSerial: '', // 订单号
+            parentOrderStatus: 'AF00801' // 订单状态待支付
+          }
+          this.chooseTime = ''
+          this.firstblood()
+        case 'outExce':
+          this.exportExcel()
+          break
+      }
+      // 清除选中状态，避免影响下个操作
+      this.$refs.multipleTable.clearSelection()
+    },
+    // 判断是否选中
+    getinfomation(selection) {
+      this.checkedinformation = selection
+    },
+    // 点击选中当前行
+    clickDetails(row, event, column) {
+      this.$refs.multipleTable.toggleRowSelection(row)
+    },
+    // 详情弹窗
+    pushOrderSerial(item) {
+      this.$router.push({ name: '订单详情', query: { orderSerial: item.orderSerial }})
+    }
+  }
+}
+</script>
+<style type="text/css" lang="scss" scoped>
+</style>

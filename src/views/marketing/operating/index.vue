@@ -52,6 +52,12 @@ export default {
     bounty,
     amount
   },
+  props: {
+    isvisible: {
+      type: Boolean,
+      default: false
+    }
+  },
   watch: {
     operaName(newVal, oldVal) {
       if (newVal) {

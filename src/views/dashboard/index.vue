@@ -33,37 +33,37 @@ import echartsLine from './compnents/echarts'
 import zanshi from './compnents/zanshi'
 
 export default {
-    name: 'dashboard',
-    components: {
+  name: 'dashboard',
+  components: {
         // echartsLine,
         // now,
         // jinqi,
-        zanshi
-    },
-    computed: {
-        ...mapGetters([
-        'name',
-        'roles'
-        ])
-    },
-    data(){
-        return{
-            tabs: [
-                {
-                    title: '今天',
-                    name: 'now',
-                    type: 'AF03701',
-                    num: 0,
-                }, {
-                    title: '近期',
-                    name: 'jinqi',
-                    type: 'AF03702',
-                    num: 0,
-                }, 
-            ],
-            component: 'now',
+    zanshi
+  },
+  computed: {
+    ...mapGetters([
+      'name',
+      'roles'
+    ])
+  },
+  data() {
+    return {
+      tabs: [
+        {
+          title: '今天',
+          name: 'now',
+          type: 'AF03701',
+          num: 0
+        }, {
+          title: '近期',
+          name: 'jinqi',
+          type: 'AF03702',
+          num: 0
         }
+      ],
+      component: 'now'
     }
+  }
 }
 </script>
 

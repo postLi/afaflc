@@ -12,58 +12,57 @@
 <script>
 
     export default {
-        props:{
-            listtype: {
-                type: String,
-                default: 'now'
+      props: {
+        listtype: {
+          type: String,
+          default: 'now'
+        }
+      },
+      components: {
+
+      },
+      data() {
+        return {
+          from: [
+            {
+              aa: '123',
+              aa: '123',
+              aa: '123',
+              aa: '123',
+              aa: '123'
             },
-        },
-        components:{
-
-        },
-        data(){
-            return {
-                from:[
-                    {
-                        aa: '123',
-                        aa: '123',
-                        aa: '123',
-                        aa: '123',
-                        aa: '123',
-                    },
-                    {
-                        aa: '123',
-                        aa: '123',
-                        aa: '123',
-                        aa: '123',
-                        aa: '123',
-                    },
-                    {
-                        aa: '123',
-                        aa: '123',
-                        aa: '123',
-                        aa: '123',
-                        aa: '123',
-                    },
-                    {
-                        aa: '123',
-                        aa: '123',
-                        aa: '123',
-                        aa: '123',
-                        aa: '123',
-                    },
-                ],
+            {
+              aa: '123',
+              aa: '123',
+              aa: '123',
+              aa: '123',
+              aa: '123'
+            },
+            {
+              aa: '123',
+              aa: '123',
+              aa: '123',
+              aa: '123',
+              aa: '123'
+            },
+            {
+              aa: '123',
+              aa: '123',
+              aa: '123',
+              aa: '123',
+              aa: '123'
             }
-        },
-        mounted(){
+          ]
+        }
+      },
+      mounted() {
+        switch (this.listtype) {
+          case 'now':
 
-            switch (this.listtype) {
-                case 'now':
+            break
+          case 'chengyun':
 
-                    break
-                case 'chengyun':
-
-                    break
+            break
                 // case 'tihuo':
                 //     this.searchQuery.vo.orderStatus = 'AF03703'
                 //     break
@@ -82,8 +81,8 @@
                 // case 'quxiao':
                 //     this.searchQuery.vo.orderStatus = 'AF03708'
                 //     break
-                }
         }
+      }
     }
 </script>
 
