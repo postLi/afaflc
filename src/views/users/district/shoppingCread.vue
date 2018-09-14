@@ -7,16 +7,10 @@
             <el-row>
                 <el-col :span="12">
                     <el-form-item label="商圈名称 ：" :label-width="formLabelWidth" prop="tradeName">
-                    <el-input v-model="formAll.tradeName" :disabled="editType=='view'"></el-input>
+                    <el-input v-model="formAll.tradeName"></el-input>
                     </el-form-item>
                 </el-col>
                  <el-col :span="12">
-                     <span v-if="!selectFlag">
-                    <el-form-item label="所在区域 ：" :label-width="formLabelWidth">
-                    <el-input v-model="formAll.areaName1" @focus="changeSelect()" :disabled="editType=='view'"></el-input>
-                    </el-form-item>
-                     </span>
-                     <span v-else>
                     <el-form-item label="所在区域 ：" :label-width="formLabelWidth" prop="areaName">
                    <el-cascader
                     size="large"
@@ -25,31 +19,30 @@
                     @change="handleChange">
                     </el-cascader>
                     </el-form-item>
-                     </span>
                 </el-col>
             </el-row>
             <el-row>
                 <el-col :span="12">
-                    <el-form-item label="详细地址 ：" :label-width="formLabelWidth">
-                    <el-input v-model="formAll.address" :disabled="editType=='view'"></el-input>
+                    <el-form-item label="详细地址 ：" :label-width="formLabelWidth" >
+                    <el-input v-model="formAll.address"></el-input>
                     </el-form-item>
                 </el-col>
                  <el-col :span="12">
                     <el-form-item label="商圈场主 ：" :label-width="formLabelWidth" prop="tradeOwner">
-                    <el-input v-model="formAll.tradeOwner" :disabled="editType=='view'"></el-input>
+                    <el-input v-model="formAll.tradeOwner"></el-input>
                     </el-form-item>
                 </el-col>
             </el-row>
             <el-row>
                 <el-col :span="12">
                     <el-form-item label="场主手机号 ：" :label-width="formLabelWidth" prop="ownerPhone">
-                    <el-input v-model="formAll.ownerPhone" :disabled="editType=='view'"></el-input>
+                    <el-input v-model="formAll.ownerPhone"></el-input>
                     </el-form-item>
                 </el-col>
             </el-row>                        
         </el-form>
         <div slot="footer" class="dialog-footer">
-          <el-button type="primary"  @click="edit_data">确 定</el-button>
+          <el-button type="primary"  @click="add_data">确 定</el-button>
           <el-button @click="close()">取 消</el-button>
         </div>
       </el-dialog>
@@ -57,7 +50,7 @@
     </div>
 </template>
 <script>
-import {data_get_aflcTradeArea_update,data_get_aflcTradeArea_Id} from '@/api/users/district/shoppingDistrict.js'
+import {data_get_aflcTradeArea_create,data_get_aflcTradeArea_Id} from '@/api/users/district/shoppingDistrict.js'
 import { regionDataPlus, CodeToText, TextToCode } from 'element-china-area-data'
 import { eventBus } from '@/eventBus'
 export default {
@@ -149,7 +142,6 @@ export default {
         formLabelWidth:'120px',
         formAll:{
             tradeName:null,
-            areaName1:null,
             areaName:[],
             areaCode: [],
             province:null,
@@ -206,41 +198,7 @@ export default {
            }
         },
    openDialog:function(){
-       console.log('fdfdfd',this.editType);
-    if(this.editType=='view'){
-        data_get_aflcTradeArea_Id(this.params.id).then(res=>{
-           this.formAll.tradeName = res.data.tradeName
-           this.formAll.address = res.data.address
-           this.formAll.province = res.data.province
-           this.formAll.city = res.data.city
-           this.formAll.area = res.data.area
-           this.formAll.tradeOwner = res.data.tradeOwner
-           this.formAll.ownerPhone = res.data.ownerPhone
-           this.formAll.areaName1 = res.data.areaName
-           this.formAll.areaCode = res.data.areaCode
-        })
-     this.dialogFormVisible_add = true;
-    }
-    else{
-    if(!this.params.id){
-        this.$message.info('未选中需要修改内容');
-    }
-    else{
-        data_get_aflcTradeArea_Id(this.params.id).then(res=>{
-           this.formAll.tradeName = res.data.tradeName
-           this.formAll.address = res.data.address
-           this.formAll.province = res.data.province
-           this.formAll.city = res.data.city
-           this.formAll.area = res.data.area
-           this.formAll.tradeOwner = res.data.tradeOwner
-           this.formAll.ownerPhone = res.data.ownerPhone
-           this.formAll.areaName1 = res.data.areaName
-           this.formAll.areaCode = res.data.areaCode
-        })
          this.dialogFormVisible_add = true;
-    }
-    }
-    
    },
    change:function(){
       this.dialogFormVisible_add = false;
@@ -256,27 +214,17 @@ export default {
         },  
    // 省市状态表
      changeSelect(){
-            if(this.editType=='add'){
-                this.selectFlag=null
-            } else{
                 this.selectFlag='1'
-            }
             },         
-    edit_data(){
+    add_data(){
        this.$refs['formAll'].validate(valid=>{
         if(valid){
-            if(typeof(this.formAll.areaCode)!=='string')
-            {
             if(this.formAll.area){
                this.areaStatus = this.formAll.areaCode[2]
             }
             else{
                this.areaStatus = this.formAll.areaCode[1]
             }
-            }
-      else{
-           this.areaStatus = this.formAll.areaCode
-          }
         let forms={
             areaCode:this.areaStatus,
             province:this.formAll.province,
@@ -285,16 +233,16 @@ export default {
             tradeName:this.formAll.tradeName,
             address:this.formAll.address,
             tradeOwner:this.formAll.tradeOwner,
-            ownerPhone:this.formAll.ownerPhone,
-            id:this.params.id,          
+            ownerPhone:this.formAll.ownerPhone,                  
         }
-        data_get_aflcTradeArea_update(forms).then(res=>{
+        data_get_aflcTradeArea_create(forms).then(res=>{
+           this.$message.success('新增成功');
            this.changeList();
            this.dialogFormVisible_add = false;
            console.log(res);
-            this.$message.success('修改成功');
+
         }).catch(res=>{
-            this.$message.error('修改失败')
+            this.changeList();
             this.dialogFormVisible_add = false;
            console.log(res);
         })

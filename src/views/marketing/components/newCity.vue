@@ -326,7 +326,6 @@ export default {
    openDialog:function(){
        if(this.editType=='edit'){
            if(!this.params.id){
-               
             this.$message.info('未选中需要修改内容');
            }
            else if(this.params.usingStatus==0){

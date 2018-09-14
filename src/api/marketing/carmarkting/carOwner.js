@@ -2,7 +2,6 @@ import fetch from '@/utils/fetch'
 
 // const baseurl_two = "aflcsmservice"
 const baseurl = "aflcsmservice"
-const baseurl_one= "aflcsmservice"
 
 //获取车主奖励列表
 export function data_get_ownerFromsame_list(page,pagesize,data) {
