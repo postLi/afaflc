@@ -16,60 +16,88 @@
                 <el-input v-model="formAllData.tradeOwner"></el-input>
             </el-form-item>
             <el-form-item class="fr"> 
-                <el-button type="primary" plain :size="btnsize"  >查询</el-button>
-                <el-button type="info" plain :size="btnsize" >清空</el-button>
+                <el-button type="primary" plain :size="btnsize"  @click="getdata_search">查询</el-button>
+                <el-button type="info" plain :size="btnsize" @click="clearSearch">清空</el-button>
             </el-form-item>            
     </el-form>
 		<div class="classify_info" >
 			<div class="btns_box">
-                   <shoppingDialog
+                   <shoppingCread
                     btntext="新增"
                     :plain="true"
-                    type="primary" 
                     btntype="primary"
                     editType="add"
-                    btntitle="创建">
+                    btntitle="创建"
+                    >
+                    </shoppingCread>
+                   <shoppingDialog
+                    btntext="修改"
+                    :plain="true"
+                    btntype="primary"
+                    editType="edit"
+                    btntitle="修改"
+                    :params="selectRowData"
+                    >
                     </shoppingDialog>
-                <el-button type="primary" plain :size="btnsize">修改</el-button>
-                <el-button type="primary" plain :size="btnsize">启用/停用</el-button>
+                <el-button type="primary" plain :size="btnsize" @click="handleUseStates">启用/停用</el-button>
+                <el-button type="primary" plain :size="btnsize" @click="delete_data">删除</el-button>
 			</div>
             <div class="info_news">
-            <el-table style="width: 100%" stripe border height="100%" >
-            <el-table-column  label="商圈名称" prop="">
+            <el-table style="width: 100%" stripe border height="100%"  :data="tableDataAll" ref="multipleTable" @current-change="clickDetails" highlight-current-row>
+            <el-table-column  label="序号" width="80px" type="index">
             </el-table-column>
-            <el-table-column  label="所在地" prop="">
+            <el-table-column  label="商圈名称">
+                        <template slot-scope="scoped">
+                        <shoppingDialog
+                            :btntext='scoped.row.tradeName'
+                            btntype="text"
+                            :plain="false"
+                            editType="view"
+                            btntitle="详情"
+                            :params="scoped.row"
+                            >
+                            </shoppingDialog>
+                        </template>
+            </el-table-column>
+            <el-table-column  label="所在地" prop="areaName">
             </el-table-column>    
-            <el-table-column  label="商圈场主" prop="">
+            <el-table-column  label="商圈场主" prop="tradeOwner">
             </el-table-column> 
-            <el-table-column  label="满减/折扣" prop="">
-            </el-table-column> 
-            <el-table-column  label="场主手机号" prop="">
+            <el-table-column  label="场主手机号" prop="ownerPhone">
             </el-table-column>
             <el-table-column  label="商圈货主数量" prop="">
             </el-table-column>       
-            <el-table-column  label="状态" prop="">
+            <el-table-column  label="状态" >
+            <template  slot-scope="scope">
+              {{ scope.row.usingStatus == 1 ? '启用' : '停用' }}
+            </template>
             </el-table-column>                                                                                                           
             </el-table> 
         </div>
 		</div>
+         <div class="info_tab_footer">共计:{{ dataTotal }} <div class="show_pager"> <Pager :total="dataTotal" @change="handlePageChange" /></div> </div>
     </div>
 </template>
 
 <script>
-import {data_get_aflcTradeArea_list} from '@/api/users/district/shoppingDistrict.js'
+import {data_get_aflcTradeArea_list,data_Del_aflcTradeArea,data_Able_aflcTradeArea} from '@/api/users/district/shoppingDistrict.js'
 import { regionDataPlus, CodeToText, TextToCode } from 'element-china-area-data'
+import shoppingCread from './shoppingCread.vue'
 import shoppingDialog from './shoppingDialog.vue'
+import Pager from '@/components/Pagination/index'
+import { eventBus } from '@/eventBus'
 export default {
     data(){
         return{
+            templateRadio: '',
             options:regionDataPlus,
             btnsize:'mini',
             selectRowData:{},
             page:1,
             pagesize:20,
-            totalCount:0,
-            selected:[],//选中的数据集
+            dataTotal:0,
             tableDataAll:[],
+            selectId:[],
             formAllData:{
                 areaCode: null,
                 tradeName:null,
@@ -78,10 +106,15 @@ export default {
         }
     },
     components:{
-    shoppingDialog
+    shoppingCread,
+    shoppingDialog,
+    Pager
     },
     mounted(){
         this.firstblood();
+        eventBus.$on('pushListtwo', () => {
+                this.firstblood()
+          })
     },
     methods:{
         handleChange(d){
@@ -132,14 +165,107 @@ export default {
                      area:null,
                      city:null,
                      tradeName:this.formAllData.tradeName,
-                     tradeOwner:this.formAllData.tradeOwner,                 
+                     tradeOwner:this.formAllData.tradeOwner,
+                                      
                     }  
-                }             
+                }     
+
         data_get_aflcTradeArea_list(this.page,this.pagesize,FromData).then(res=>{
-            console.log(res)
+            console.log('res',res)
+                    this.dataTotal = res.data.totalCount
+                    this.tableDataAll = res.data.list;
         })
-    } 
+    },
+    // 查询
+    getdata_search(){
+        this.firstblood();
+    },
+    // 清空查询
+    clearSearch(){
+                this.formAllData.areaCode = null;
+                this.formAllData.province = null,
+                this.formAllData.city = null,
+                this.formAllData.area = null,
+                this.formAllData.areaName = [];
+                this.formAllData.tradeName=null,
+                this.formAllData.tradeOwner=null,
+                this.firstblood();
+    },
+    //点击选中当前行
+        clickDetails(row, event, column){
+             this.selectRowData = Object.assign({}, row)
+        },
+    // 判断选中与否
+        getSelection(val){
+            console.log('选中内容',val)
+            this.selected = val;
+        },    
+    // 选择删除
+        delete_data(){
+              if(!this.selectRowData.id){
+                this.$message.info('未选中任何删除内容');
+                }else{
+                this.delDataInformation()
+            }
+        },    
+       //确认删除
+            delDataInformation(){         
+                   this.$confirm('确定要删除吗？', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(()=>{
+                    data_Del_aflcTradeArea(this.selectRowData.id).then(res=>{
+                        this.$message.success('删除成功');
+                        this.firstblood();       
+                        this.selectRowData=''; 
+                    }).catch(err => {
+                        this.$message({
+                            type: 'info',
+                            message: '操作失败，原因：' + err.text ? err.text : err
+                        })
+                    })
+                }).catch(() => {
+                    this.$message({
+                        type: 'info',
+                        message: '已取消'
+                    })
+                })   
+            },
+            
+        // 启用禁用
+        handleUseStates(){
+                if(!this.selectRowData.id){
+                    //未选择任何修改内容的提示
+                        this.$message.info('未选中内容');
+                        return
+                }else{
+                    this.selectId.push(this.selectRowData.id) 
+                    
+                  data_Able_aflcTradeArea(this.selectId).then(res=>{
+                     this.selectId.splice(0,1);
+                     if(this.selectRowData.usingStatus==1)
+                     {
+                         this.$message.warning('已停用');
+                     }
+                     else{
+                         this.$message.success('已启用');
+                     }
+                        this.firstblood();       
+                        this.selectRowData='';         
+                    })
+                }
+        },  
+        handlePageChange(obj) {
+            this.page = obj.pageNum
+            this.pagesize = obj.pageSize
+            this.firstblood()
+        },        
+        
     }
+    
+
+
 }
 </script>
 

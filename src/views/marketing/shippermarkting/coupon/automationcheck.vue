@@ -350,7 +350,6 @@ export default {
         dialogFormVisible_add:false,
         createTime:[],
         inputKey:null,   
-        dialogFormVisible_add:false,
         formLabelWidth:'120px',
         formLabelWidth2:'80px',
         vouchersuperpositionList:[
@@ -397,7 +396,7 @@ export default {
        grantTimeAll:null,
        searchData:{
         mobile:'',
-        grantTime:null,
+        startTime:null,
         endTime:null,
         couponStatus:'',
         activityId:null,
@@ -423,16 +422,15 @@ export default {
       },  
     cTime2(i){
         if(i!==null){
-        this.searchData.grantTime = i[0]
+        this.searchData.startTime = i[0]
         this.searchData.endTime = i[1]
         }
         else{
-        this.searchData.grantTime = null
+        this.searchData.startTime = null
         this.searchData.endTime = null
         }        
     },
     getData_query(){
-        console.log('fdfdf')
         this.page = 1;
         this.firstblood();
     },    
