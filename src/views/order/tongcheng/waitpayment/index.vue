@@ -259,18 +259,18 @@ export default{
             firstblood(){
             this.loading = true;
 
-            orderStatusList(this.page, this.pagesize, this.searchInfo).then(res => {
-                console.log('待付款', res)
-                this.tableData = res.data.list
-                this.dataTotal = res.data.totalCount
+                orderStatusList(this.page, this.pagesize, this.searchInfo).then(res => {
+                    console.log('待付款', res)
+                    this.tableData = res.data.list
+                    this.dataTotal = res.data.totalCount
 
-                this.tableData.forEach(item => {
-                item.aflcOrderAddresses.sort(function(a, b) {
-                    return a.viaOrder - b.viaOrder
+                    this.tableData.forEach(item => {
+                        item.aflcOrderAddresses.sort(function(a, b) {
+                            return a.viaOrder - b.viaOrder
+                        })
+                    })
+                    this.loading = false
                 })
-                })
-                this.loading = false
-            })
             },
 
             // 模糊查询 分类名称或者code

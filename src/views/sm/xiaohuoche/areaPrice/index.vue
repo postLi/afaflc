@@ -52,6 +52,9 @@
                         <el-button type="info" :size="btnsize" plain @click="handleSearch('clear')">重置</el-button>
                     </el-form-item>
                 </el-form>
+
+                <!-- <searchInfo @change="getSearchParam"></searchInfo> -->
+
                 <div class="side_right_bottom clearfix">
                     <div class="btns_box clearfix">
                         <el-button type="primary" :size="btnsize" plain icon="el-icon-circle-plus" @click="addClassfy">新增</el-button>
@@ -388,9 +391,11 @@
 
 import { data_Area,data_GetCityList,data_GetCityInfo,data_CarList,data_ServerClassList,data_ChangeStatus,data_Delete,data_GetCarStyle,data_NewOrChange,data_OnlyChange } from '@/api/server/areaPrice.js'
 import Pager from '@/components/Pagination/index'
+import searchInfo from '../component/searchInfo'
 
 import '@/styles/dialog.scss'
 import '@/styles/side.scss'
+
     export default{
         data(){
             return{
@@ -490,13 +495,14 @@ import '@/styles/side.scss'
             }
         },
         components:{
-            Pager
+            Pager,
+            searchInfo
         },
         
         mounted(){
-            //...
+
             this.firstblood();
-            //..
+
 
             this.getMoreInformation();
         },  
@@ -507,6 +513,13 @@ import '@/styles/side.scss'
 
         },
         methods: {
+            getSearchParam(obj) {
+                console.log(obj)
+                this.searchInfo = Object.assign(this.searchInfo, obj)
+                // this.loading = false
+                this.getCommonFunction();
+                
+            },
             handlePageChange(obj) {
                 this.page = obj.pageNum;
                 this.pagesize = obj.pageSize;

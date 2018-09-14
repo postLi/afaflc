@@ -180,7 +180,6 @@ import cancelCompnent from '../components/cancel'
                     orderSerial:'',//订单号
                     orderStatus:'',//订单状态
                     parentOrderStatus:'AF00806PT',//订单状态
-                    
                 },
                 tableData:[],
                 dialogFormVisible_details:false,//详情弹窗
@@ -282,7 +281,8 @@ import cancelCompnent from '../components/cancel'
             getSearchParam(obj) {
                 console.log(obj)
                 this.searchInfo = Object.assign(this.searchInfo, obj)
-                this.loading = false
+                this.loading = false;
+                this.firstblood()
             },
             shuaxin(){
                 this.firstblood();

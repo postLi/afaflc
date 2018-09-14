@@ -1,34 +1,37 @@
 <template>
-    <el-form :inline="true" :model="searchInfo" ref="ruleForm" class="demo-ruleForm classify_searchinfo" >
-        <el-form-item  label="区域" prop="pointName">
-            <vregion :ui="true" @values="regionChange" class="form-control">
-                <el-input v-model="searchInfo.belongCityName" placeholder="请选择出发地"></el-input>
-            </vregion>
+     <el-form :inline="true" :model="searchInfo" ref="ruleForm" class="demo-ruleForm classify_searchinfo">
+        <el-form-item label="服务分类" prop="pointName">
+            <el-select v-model="searchInfo.serivceCode" clearable placeholder="请选择">
+                <el-option
+                    v-for="item in optionsServiceType"
+                    :key="item.id"
+                    :label="item.name"
+                    :value="item.code"
+                    :disabled="item.disabled">
+                </el-option>
+            </el-select>
         </el-form-item>
-        <el-form-item label="订单号" prop="orderSerial">
-            <el-input v-model="searchInfo.orderSerial" clearable>
-            </el-input>
+        <el-form-item label="车辆类型" prop="orderSerial">
+            <el-select v-model="searchInfo.carType" clearable placeholder="请选择">
+                <el-option
+                v-for="item in optionsCarType"
+                :key="item.id"
+                :label="item.name"
+                :value="item.code"
+                :disabled="item.disabled">
+                </el-option>
+            </el-select>
         </el-form-item>
-        <el-form-item label="货主" maxlength="18"  prop="shipperName">
-            <el-input v-model="searchInfo.shipperName" clearable placeholder="账户/姓名">
-            </el-input>
-        </el-form-item>
-        <el-form-item label="车主" maxlength="18"  prop="shipperName">
-            <el-input v-model="searchInfo.driverName" clearable placeholder="账户/姓名/车牌号">
-            </el-input>
-        </el-form-item>
-        <el-form-item label="下单时间" prop="mobile">
-            <el-date-picker
-                v-model="chooseTime"
-                type="daterange"
-                :picker-options="pickerOptions2"
-                range-separator="-"
-                start-placeholder="开始日期"
-                end-placeholder="结束日期"
-                align="right"
-                :default-time="['00:00:00', '23:59:59']"
-                value-format="timestamp">
-            </el-date-picker>
+        <el-form-item label="状态" prop="shipperName">
+            <el-select v-model="searchInfo.usingStatus" clearable placeholder="请选择">
+                <el-option
+                v-for="item in optionsStatus"
+                :key="item.id"
+                :label="item.label"
+                :value="item.value"
+                :disabled="item.disabled">
+                </el-option>
+            </el-select>
         </el-form-item>
         <el-form-item class="btnChoose fr"  style="margin-left:0;">
             <el-button type="primary" :size="btnsize" plain @click="handleSearch('search')">搜索</el-button>
@@ -39,65 +42,85 @@
 
 <script type="text/javascript">
 
-import { parseTime,pickerOptions2 } from '@/utils/index.js'
-import vregion from '@/components/vregion/Region'
+import { getDictionary } from '@/api/common.js'
 
     export default{
         components:{
-            vregion
+
         },
         data(){
             return{
                 btnsize:'mini',
-                chooseTime:[],
-                pickerOptions2:{
-                    shortcuts:pickerOptions2
-                },
+                cartype:'AF018',//车辆类型
+                servicetype:'AF017',//车辆类型
+                optionsCarType:[
+                    {
+                    code:'',
+                    name:'全部'
+                    }
+                ],
+                optionsServiceType:[
+                    {
+                    code:'',
+                    name:'全部'
+                    }
+                ],
+                optionsStatus:[
+                    {
+                    value:'',
+                    label:'全部'
+                    },
+                    {
+                    value: '1',
+                    label: '启用'
+                    },
+                    {
+                    value: '0',
+                    label: '禁用'
+                    }
+                ],
                 searchInfo:{
-                    belongCity:'',//区域
-                    belongCityName:'',
-                    shipperName:'',//货主
-                    startOrderDate:'',//下单起始时间
-                    endOrderDate:'',//下单结束时间
-                    orderSerial:'',//订单号
-                    driverName:''
+                    carType:'',
+                    serivceCode:'',
+                    usingStatus:'',
                 },
             }
         },
+        mounted(){
+            this.init();
+        },
         methods: {
-            regionChange(d) {
-                console.log('data:',d)
-                this.searchInfo.belongCityName = (!d.province&&!d.city&&!d.area&&!d.town) ? '': `${this.getValue(d.province)}${this.getValue(d.city)}${this.getValue(d.area)}${this.getValue(d.town)}`.trim();
-                if(d.area){
-                    this.searchInfo.belongCity = d.area.code;
-                }else if(d.city){
-                    this.searchInfo.belongCity = d.city.code;
-                }
-                else{
-                    this.searchInfo.belongCity = d.province.code;
-                }
-            },
-             getValue(obj){
-                return obj ? obj.value:'';
+                //获取  服务和车辆 类型列表
+            init(){
+                Promise.all([getDictionary(this.cartype),getDictionary(this.servicetype)]).then( resArr => {
+                    console.log('111111',resArr)
+                    resArr[0].data.map(item => {
+                        this.optionsCarType.push(item)
+                    })
+                    resArr[1].data.map(item => {
+                        this.optionsServiceType.push(item)
+                    })
+                })
             },
             //模糊查询 分类名称或者code
             handleSearch(type){
                 // console.log(this.chooseTime)
+                let searchObj;
                 switch(type){
                     case 'search':
-                        const searchObj = Object.assign({}, this.searchInfo);
+                        searchObj = Object.assign({}, this.searchInfo);
                         this.$emit('change', searchObj)
                         break;
                     case 'clear':
                         this.searchInfo = {
-                            belongCity:'',//区域
-                            shipperName:'',//货主
-                            startOrderDate:'',//下单起始时间
-                            endOrderDate:'',//下单结束时间
-                            orderSerial:'',//订单号
+                            carType:'',
+                            serivceCode:'',
+                            usingStatus:'',
                         }
+                        searchObj = Object.assign({}, this.searchInfo);
                         break;
                 }
+                this.$emit('change', searchObj)
             },
         }
     }

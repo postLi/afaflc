@@ -242,7 +242,7 @@ export default {
     reset() {
       // 缓存上一次选择的网点
       const orgid = this.form.orgid
-      this.$refs['ruleForm'].resetFields()
+    //   this.$refs['ruleForm'].resetFields()
       console.log('id', orgid, this.form.orgid)
 
       this.form.orgid = orgid
@@ -291,7 +291,7 @@ export default {
       })
     },
     closeMe(done) {
-      this.$refs['ruleForm'].resetFields()
+    //   this.$refs['ruleForm'].resetFields()
       this.$emit('update:popVisible', false)
       if (typeof done === 'function') {
         done()

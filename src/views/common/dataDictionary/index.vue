@@ -14,22 +14,28 @@
                 </el-tree>
             </div>
             <div class="side_right">
-                  <el-form :inline="true" ref="ruleForm" class="demo-ruleForm classify_searchinfo">
-                    <el-form-item label="关键词查询" prop="pointName">
-                        <el-input
-                        placeholder="请输入内容"
-                        v-model="input_search"
-                        clearable>
-                        </el-input>
-                    </el-form-item>
-                    <el-form-item class="btnChoose fr"  style="margin-left:0;">
-                        <el-button type="primary" :size="btnsize" plain @click="handleSearch('search')">查询</el-button>
-                        <el-button type="info" :size="btnsize" plain @click="handleSearch('clear')">重置</el-button>
-                    </el-form-item>
-                </el-form>
+                <!-- <transition name="show"> -->
+                    <el-form :inline="true" ref="ruleForm" class="demo-ruleForm classify_searchinfo" v-show="!showSearch">
+                        <el-form-item label="关键词查询" prop="pointName">
+                            <el-input
+                            placeholder="请输入内容"
+                            v-model="input_search"
+                            clearable>
+                            </el-input>
+                        </el-form-item>
+                        <el-form-item class="btnChoose fr"  style="margin-left:0;">
+                            <el-button type="primary" :size="btnsize" plain @click="handleSearch('search')">查询</el-button>
+                            <el-button type="info" :size="btnsize" plain @click="handleSearch('clear')">重置</el-button>
+                        </el-form-item>
+                    </el-form>
+                <!-- </transition> -->
                 <div class="side_right_bottom clearfix">
                     <div class="btns_box clearfix">
-                        <el-button type="primary" :size="btnsize" plain icon="el-icon-news" @click="addClassfy">新增</el-button>
+                        <el-button type="primary" :size="btnsize" plain icon="el-icon-news" @click="handleClick('add')">新增</el-button>
+                        <el-button type="primary" :size="btnsize" plain icon="el-icon-edit" @click="handleClick('revise')">修改</el-button>
+                        <el-button type="primary" :size="btnsize" plain icon="el-icon-delete" @click="handleClick('delet')">删除</el-button>
+                        <el-button type="primary" :size="btnsize" plain icon="el-icon-edit" @click="handleClick('status')">启用/禁用</el-button>
+                        
                         <el-button type="primary" :size="btnsize" plain icon="el-icon-edit" @click="handleEdit">修改</el-button>
                         <el-button type="primary" :size="btnsize" plain icon="el-icon-delete" @click="handleDelete">删除</el-button>
                         <el-button type="primary" :size="btnsize" plain icon="el-icon-edit" @click="handleUseStates">启用/禁用</el-button>
@@ -37,7 +43,7 @@
                     <div class="info_news">
                         <el-table
                             ref="multipleTable"
-                            :data="tableDataTree"
+                            :data="tableData"
                             stripe
                             border
                             height="100%"
@@ -93,14 +99,17 @@
 
                     </div>
                      <!-- 页码 -->
-                    <div class="info_tab_footer">共计:{{ dataTotal }} <div class="show_pager"> <Pager :total="dataTotal" @change="handlePageChange"  :sizes="sizes"/></div> </div>   
+                    <div class="info_tab_footer">共计:{{ dataTotal }} <div class="show_pager"> <Pager :total="dataTotal" @change="handlePageChange"  :sizes="sizes"/></div> </div> 
+
+                    <DicDialog :dialogAddDic.sync="dialogVisible" :pid="pid" :pidName="pidname" :formtitle = 'formtitle' :isModify = "isModify"   @close = "shuaxin"/>
+
                     <!-- 新增分类信息 -->
-                    <div class="addclassify commoncss">
+                    <!-- <div class="addclassify commoncss">
                         <el-dialog :title='formtitle'  :visible.sync="dialogFormVisible">
                         <el-form :rules="rules">
                             <el-form-item label="上级分类" :label-width="formLabelWidth">
                             <el-select v-model="forms[0].pid"  @change="currentValue">
-                            <el-option :label="pidname" :value="pid" v-if="pidname != null && pidname!= undefined && pidname !='无' && pidname !='全部'"></el-option>
+                            <el-option :label="pidname" :value="pid" v-if="pidname != '' && pidname!= undefined && pidname !='无' && pidname !='全部'"></el-option>
                             <el-option label="无" value=''></el-option>
                             </el-select>
                         </el-form-item>
@@ -130,7 +139,7 @@
                             <el-button @click="closeAddNewInfo">取 消</el-button>
                         </div>
                         </el-dialog>
-                    </div>
+                    </div> -->
 
                     <!-- 修改分类信息 -->
                     <div class="changeclassify commoncss">
@@ -139,7 +148,7 @@
                             <el-form-item label="上级分类" :label-width="formLabelWidth">
                             <el-select v-model="changeform.pid" >
                             <el-option :label="pidname" :value="pid"></el-option>
-                            <el-option label="无" value=null></el-option>
+                            <el-option label="无" value=''></el-option>
                             </el-select>
                         </el-form-item>
                         <div>
@@ -198,16 +207,20 @@
 import { data_Dic,data_Trees,data_Search,data_CreatCode,data_AddForms,data_Delet,data_ChangeForms,data_CreatCode_top,data_changeStatus } from '@/api/company/data_dic.js'
 import '../../../styles/dialog.scss'
 import Pager from '@/components/Pagination/index'
+import DicDialog from './component/addDictionary'
 
     export default{
         data(){
             return{
+                isshow:false,
+                sizes:[20,50,100,200],
                 btnsize:'mini',
-                
+                isModify:false,
+                dialogVisible:false,
+                showSearch:true,
                 ifclose:false,
                 pid:null,
-                pidname:null,
-                labelName:'无',
+                pidname:'无',
                 page:1,
                 pagesize:20,
                 formtitle:'新增分类信息',
@@ -216,30 +229,30 @@ import Pager from '@/components/Pagination/index'
                 dialogFormVisible_change:false,
                 centerDialogVisible:false,
                 delDialogVisible:false,
-                nowcode:null,
+                nowcode:'',
                 dataTotal:0,
                 forms: [{
-                    code: null,
-                    name: null,
-                    pid: null,
-                    remark: null,
-                    value: null
+                    code: '',
+                    name: '',
+                    pid: '',
+                    remark: '',
+                    value: ''
                 }],
                 changeform:{
-                    id:null,
-                    code: null,
-                    name: null,
-                    pid: null,
-                    remark: null,
-                    value: null
+                    id:'',
+                    code: '',
+                    name: '',
+                    pid: '',
+                    remark: '',
+                    value: ''
                 },
                 information:'你想知道什么',
                 delID:[],
-                delIDTree:null,
+                delIDTree:'',
                 checkedinformation:[],
                 formLabelWidth: '80px',
                 input_search: '',
-                tableDataTree:[],
+                tableData:[],
                 treeData:[
                     {
                         name:'全部',
@@ -260,7 +273,8 @@ import Pager from '@/components/Pagination/index'
             }
         },
         components:{
-            Pager
+            Pager,
+            DicDialog
         },
         watch:{
             // treeData:{
@@ -270,6 +284,20 @@ import Pager from '@/components/Pagination/index'
             //     },
             //     deep:true
             // }
+            pid:{
+                handler(newValue,oldValue){
+                      console.log('pid',this.pid)
+                    if(newValue){
+                        this.showSearch = true;
+                    }else{
+                        this.showSearch = false;
+                    }
+
+                    console.log(this.showSearch)
+                },
+                immediate: true
+            }
+          
         },
         mounted(){
             this.firstblood()
@@ -287,17 +315,17 @@ import Pager from '@/components/Pagination/index'
                     console.log(res)
                     if(res.status == 200 && res.data.list){
                         res.data.list.forEach(function(item){
-                            if(item.pid == null){
+                            if(item.pid == ''){
                                 item.uplabel = '无';
                             }else{
                                 item.uplabel = name;
                             }
                         })
-                        this.tableDataTree = res.data.list;
+                        this.tableData = res.data.list;
                         this.dataTotal= res.data.totalCount;
                         console.log(this.pidname)
                     }else{
-                        this.tableDataTree =[];
+                        this.tableData =[];
                         return
                     }
                 })
@@ -305,6 +333,31 @@ import Pager from '@/components/Pagination/index'
             //点击选中当前行
             clickDetails(row, event, column){
                 this.$refs.multipleTable.toggleRowSelection(row);
+            },
+            handleClick(type){
+                switch(type){
+                    case 'add':
+                        this.dialogVisible = true;
+                        break;
+                    case 'revise':
+
+                        break;
+                    case 'delet':
+
+                        break;
+                    case 'status':
+
+                        break;
+                }
+                
+            },
+            shuaxin(){
+                if(this.pid){
+                    this.getInformation()
+                }else{
+
+                    this.firstblood();
+                }
             },
             //添加子节点新增
             addItem(){
@@ -317,10 +370,10 @@ import Pager from '@/components/Pagination/index'
                 this.nowcode = newCode;
                 this.forms.push({
                     code: newCode,
-                    name: null,
+                    name: '',
                     pid: this.pid,
-                    remark: null,
-                    value: null
+                    remark: '',
+                    value: ''
                 }); 
             },
             handleSearch(type){
@@ -343,16 +396,19 @@ import Pager from '@/components/Pagination/index'
             closeAddNewInfo(){
                 this.dialogFormVisible = false;
                 this.forms = [{
-                    code: null,
-                    name: null,
-                    pid: null,
-                    remark: null,
-                    value: null
+                    code: '',
+                    name: '',
+                    pid: '',
+                    remark: '',
+                    value: ''
                 }]
             },
             //判断是否选中
             getinfomation(selection){
                 this.checkedinformation = selection;
+            },
+               toggle:function(){
+                this.isshow = !this.isshow;
             },
             //修改
             handleEdit() {
@@ -434,7 +490,6 @@ import Pager from '@/components/Pagination/index'
                     let information = res.text;
                     this.hint(information);
                 })
-                
             },
             //数结构选择  渲染数据
             handleNodeClick(data,checked){  
@@ -446,9 +501,9 @@ import Pager from '@/components/Pagination/index'
                 data_Trees(this.page,this.pagesize,this.pid).then(res =>{
                     console.log(res)
                     if(res.data.list){
-                        this.tableDataTree = res.data.list;
+                        this.tableData = res.data.list;
                     }else{
-                         this.tableDataTree = [];
+                         this.tableData = [];
                     }
                     this.dataTotal = res.data.totalCount;
 
@@ -457,14 +512,8 @@ import Pager from '@/components/Pagination/index'
             //初始化渲染数据
             firstblood(){
                  data_Dic().then(res =>{ 
-                    console.log(res)
-                    if(res.data.length !=0){
-                        this.treeData[0].children = res.data;
-                        console.log(this.treeData)
-                        this.getInformation();
-                    }else{
-                        console.log('000')
-                    }
+                    this.treeData[0].children = res.data;
+                    this.getInformation();
                 })
             },  
             //刷新数据
@@ -472,27 +521,27 @@ import Pager from '@/components/Pagination/index'
                 console.log(this.page,this.pagesize,this.pid)
                 data_Trees(this.page,this.pagesize,this.pid).then(res =>{
                     console.log(res)
-                    if(res.status == 200 && res.data.list){
-                        this.tableDataTree = res.data.list;
+                    if(res.data.length !=0){
+                        this.tableData = res.data.list;
                         this.dataTotal= res.data.totalCount;
-                        // console.log(this.pidname)
                     }else{
-                        this.tableDataTree = [];
-                       return
+                        this.tableData = [];
+                        this.dataTotal= 0;
                     }
                 })
             },
             //模糊查询 分类名称或者code
-            getdata_search(event){
-                console.log(event)
+            getdata_search(){
                 data_Search(this.page,this.pagesize,this.pid,this.input_search).then(res=>{
-                    res.data.list.forEach(function(item){
-                        if(item.uplabel == undefined || !item.uplabel){
-                            item.uplabel = '无';
-                        }
-                    })
-                    this.tableDataTree = res.data.list;
-                    this.dataTotal= res.data.totalCount;
+                    console.log('查询',res)
+                    if(res.data.length !=0){
+                        this.tableData = res.data.list;
+                        this.dataTotal= res.data.totalCount;
+                    }else{
+                        this.tableData = [];
+                        this.dataTotal= 0;
+                    }
+                    console.log(this.tableData)
                 })
             },
             //新增分类信息获取code值
@@ -503,7 +552,7 @@ import Pager from '@/components/Pagination/index'
             },
             //添加最高层获取code
             currentValue(val){
-                if(val == '' || val == null){
+                if(val == '' || val == ''){
                     data_CreatCode_top().then(res => {
                         console.log(res)
                         if(res.status == 200){
@@ -534,7 +583,7 @@ import Pager from '@/components/Pagination/index'
                     })
                 }else{
                     this.forms.map((item)=>{
-                        item.pid = null;
+                        item.pid = '';
                     })
                     data_AddForms(this.forms).then(res=>{
                         if(res.status == 200){
@@ -593,11 +642,23 @@ import Pager from '@/components/Pagination/index'
 <style type="text/css" lang="scss">
     .DIC{
         .side_left {
-        flex: 0 0 300px;
-      
+            flex: 0 0 300px;
         }
        .side_left .el-tree .el-tree-node {
             width: 95%;
+        }
+        .show-enter-active,.show-leave-active{
+            transition:all .5s;
+        }
+        .show-enter,.show-leave-to{
+            margin-left: 100%;
+        }
+        .show-enter-to,.show-leave{
+            margin-left:0px;
+        }
+
+        .side_right_bottom{
+            transition:all .5s linear;
         }
     }
 </style>

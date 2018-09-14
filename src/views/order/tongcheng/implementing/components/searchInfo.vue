@@ -83,10 +83,10 @@ import vregion from '@/components/vregion/Region'
             //模糊查询 分类名称或者code
             handleSearch(type){
                 // console.log(this.chooseTime)
+                let searchObj;
                 switch(type){
                     case 'search':
-                        const searchObj = Object.assign({}, this.searchInfo);
-                        this.$emit('change', searchObj)
+                        searchObj = Object.assign({}, this.searchInfo);
                         break;
                     case 'clear':
                         this.searchInfo = {
@@ -96,8 +96,11 @@ import vregion from '@/components/vregion/Region'
                             endOrderDate:'',//下单结束时间
                             orderSerial:'',//订单号
                         }
+                        searchObj = Object.assign({}, this.searchInfo);
                         break;
                 }
+                this.$emit('change', searchObj)
+
             },
         }
     }

@@ -243,7 +243,6 @@ export default {
                                     this.$message({
                                         type: 'success',
                                         message: '用户已被冻结',
-                                        duration:2000
                                     })
                                     this.close();
                                     this.changeList();

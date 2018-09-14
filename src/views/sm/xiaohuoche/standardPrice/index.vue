@@ -1,46 +1,6 @@
 <template>
     <div class="standarPrice identicalStyle clearfix">
-             <el-form :inline="true" :model="searchInfo" ref="ruleForm" class="demo-ruleForm classify_searchinfo">
-                    <el-form-item label="服务分类" prop="pointName">
-                        <el-select v-model="valueService" clearable placeholder="请选择">
-                            <el-option
-                                v-for="item in optionsService"
-                                :key="item.id"
-                                :label="item.name"
-                                :value="item.code"
-                                :disabled="item.disabled">
-                            </el-option>
-                        </el-select>
-                    </el-form-item>
-                    <el-form-item label="车辆类型" prop="orderSerial">
-                        <el-select v-model="valueCarlist" clearable placeholder="请选择">
-                            <el-option
-                            v-for="item in optionsCar"
-                            :key="item.id"
-                            :label="item.name"
-                            :value="item.code"
-                            :disabled="item.disabled">
-                            </el-option>
-                        </el-select>
-                    </el-form-item>
-                    <el-form-item label="状态" maxlength="18"  prop="shipperName">
-                        <el-select v-model="valueStatus" clearable placeholder="请选择">
-                            <el-option
-                            v-for="item in optionsStatus"
-                            :key="item.id"
-                            :label="item.label"
-                            :value="item.value"
-                            :disabled="item.disabled">
-                            </el-option>
-                        </el-select>
-                    </el-form-item>
-                    <el-form-item class="btnChoose fr"  style="margin-left:0;">
-                        <!-- <el-button type="primary" :size="btnsize" plain @click="handleSearch('search')">搜索</el-button>
-                        <el-button type="info" :size="btnsize" plain @click="handleSearch('clear')">清空</el-button> -->
-                        <el-button type="primary" :size="btnsize"  plain @click="getdata_search">搜索</el-button>
-                        <el-button type="info" :size="btnsize" plain >重置</el-button>
-                    </el-form-item>
-            </el-form>
+            <searchInfo @change="getSearchParam"></searchInfo>
             <div class="classify_info">
                 <div class="btns_box">
                     <el-button type="primary" :size="btnsize" plain icon="el-icon-circle-plus" @click="addClassfy">新增</el-button>
@@ -51,7 +11,7 @@
                 <div class="info_news">
                     <el-table
                         ref="multipleTable"
-                        :data="tableDataTree"
+                        :data="tableData"
                         stripe
                         border
                         @selection-change = "getinfomation"
@@ -138,7 +98,7 @@
                                 <p><span>* </span>车长 ：</p>
                                 <el-input
                                     placeholder="长"
-                                    @blur="valuerules"
+                                    v-number-only:point
                                     maxlength="5"
                                     ref="carLength"
                                     v-model="forms.carLength"
@@ -147,14 +107,14 @@
                                 <el-input
                                     placeholder="宽"
                                     maxlength="5"
-                                    @blur="valuerules"
+                                    v-number-only:point
                                     ref="carWidth"
                                     v-model="forms.carWidth"
                                     clearable>
                                 </el-input>
                                 <el-input
                                     placeholder="高"
-                                    @blur="valuerules"
+                                    v-number-only:point
                                     maxlength="5"
                                     ref="carHeight"
                                     v-model="forms.carHeight"
@@ -169,7 +129,7 @@
                             <div class="detailinfo">
                                 <p><span>* </span>负载量 ：</p>
                                 <el-input
-                                    @blur="valuerules"
+                                    v-number-only:point
                                     class="morewidth"
                                     maxlength="5"
                                     ref="capacityTon"
@@ -178,7 +138,7 @@
                                 </el-input>
                                 <span class="dotted">吨</span>
                                 <el-input
-                                    @blur="valuerules"
+                                    v-number-only:point
                                     class="morewidth"   
                                     maxlength="5"
                                     ref="capacitySquare"
@@ -193,7 +153,7 @@
                             <div class="detailinfo">
                                 <p><span>* </span>标准起步价 ：</p>
                                 <el-input
-                                    @blur="valuerules"
+                                    v-number-only:point
                                     class="morewidth"
                                     maxlength="5"
                                     ref="standardPrice"
@@ -202,7 +162,7 @@
                                 </el-input>
                                 <span class="dotted">元</span>
                                 <el-input
-                                    @blur="valuerules"
+                                    v-number-only:point
                                     class="morewidth"
                                     maxlength="5"
                                     ref="standardKm"
@@ -217,7 +177,7 @@
                             <div class="detailinfo">
                                 <p><span>* </span>标准超里程费 ：</p>
                                 <el-input
-                                    @blur="valuerules"
+                                    v-number-only:point
                                     class="morewidth"
                                     maxlength="5"
                                     ref="outstripPrice"
@@ -273,19 +233,19 @@
                             <div class="detailinfo">
                                 <p><span>* </span>车长 ：</p>
                                 <el-input
-                                    @blur="valuerules_change"
+                                    v-number-only:point
                                     placeholder="长"
                                     v-model="changeforms.carLength"
                                     clearable>
                                 </el-input>
                                 <el-input
-                                    @blur="valuerules_change"
+                                    v-number-only:point
                                     placeholder="宽"
                                     v-model="changeforms.carWidth"
                                     clearable>
                                 </el-input>
                                 <el-input
-                                    @blur="valuerules_change"
+                                    v-number-only:point
                                     placeholder="高"
                                     v-model="changeforms.carHeight"
                                     clearable>
@@ -299,14 +259,14 @@
                             <div class="detailinfo">
                                 <p><span>* </span>负载量 ：</p>
                                 <el-input
-                                    @blur="valuerules_change"
+                                    v-number-only:point
                                     class="morewidth"
                                     v-model="changeforms.capacityTon"
                                     clearable>
                                 </el-input>
                                 <span class="dotted">吨</span>
                                 <el-input
-                                    @blur="valuerules_change"
+                                    v-number-only:point
                                     class="morewidth"                                    
                                     v-model="changeforms.capacitySquare"
                                     clearable>
@@ -319,14 +279,14 @@
                             <div class="detailinfo">
                                 <p><span>* </span>标准起步价 ：</p>
                                 <el-input
-                                    @blur="valuerules_change"
+                                    v-number-only:point
                                     class="morewidth"
                                     v-model="changeforms.standardPrice"
                                     clearable>
                                 </el-input>
                                 <span class="dotted">元</span>
                                 <el-input
-                                    @blur="valuerules_change"
+                                    v-number-only:point
                                     class="morewidth"
                                     v-model="changeforms.standardKm"
                                     clearable>
@@ -339,7 +299,7 @@
                             <div class="detailinfo">
                                 <p><span>* </span>标准超里程费 ：</p>
                                 <el-input
-                                    @blur="valuerules_change"
+                                    v-number-only:point
                                     class="morewidth"
                                     v-model="changeforms.outstripPrice"
                                     clearable>
@@ -396,12 +356,18 @@ import { data_GetCarType } from '@/api/common.js'
 import Upload from '@/components/Upload/singleImage'    
 import Pager from '@/components/Pagination/index'
 import '@/styles/dialog.scss'
+import searchInfo from '../component/searchInfo'
 
     export default{
         data(){
             return{
                 sizes:[20,50,100],
                 btnsize:'mini',
+                searchInfo:{
+                    carType:'',
+                    serivceCode:'',
+                    usingStatus:'',
+                },
                 forms:{
                     serivceCode:null,
                     carType:null,
@@ -436,20 +402,6 @@ import '@/styles/dialog.scss'
                 optionsCarM:null,
                 optionsCarTypeM:null,
                 valueStatus:null,
-                optionsStatus:[
-                    {
-                    value:null,
-                    label:'全部'
-                    },
-                    {
-                    value: '1',
-                    label: '启用'
-                    },
-                    {
-                    value: '0',
-                    label: '禁用'
-                    }
-                ],
                 value2:null,
                 pid:null,
                 pidname:null,
@@ -471,7 +423,7 @@ import '@/styles/dialog.scss'
                 checkedinformation:[],
                 formLabelWidth: '80px',
                 input_search: null,
-                tableDataTree:[],
+                tableData:[],
                 treeData:[],
                 defaultProps: {
                   children: 'children',
@@ -483,6 +435,7 @@ import '@/styles/dialog.scss'
         components:{
             Upload,
             Pager,
+            searchInfo
         },
         mounted(){
             this.firstblood();
@@ -490,6 +443,12 @@ import '@/styles/dialog.scss'
             // console.log(this.$store)
         },  
         methods: {
+            getSearchParam(obj) {
+                console.log(obj)
+                this.searchInfo = Object.assign(this.searchInfo, obj)
+                // this.loading = false
+                this.firstblood()
+            },
             // 获取翻页返回的数据
             handlePageChange (obj) {
                 this.page = obj.pageNum;
@@ -518,9 +477,6 @@ import '@/styles/dialog.scss'
                     console.log(res.data)
                     this.optionsCarTypeM = res.data;
                 })
-                // console.log(this.optionsService,this.optionsCar)
-
-
             },
            
             //点击选中当前行
@@ -607,28 +563,16 @@ import '@/styles/dialog.scss'
             },
             //刷新页面  
             firstblood(){
-                 let data  = {
-                    carType : this.valueCarlist,
-                    serivceCode : this.valueService,
-                    usingStatus: this.valueStatus
-                }
-                console.log(data)
-                data_GetInformation(this.page,this.pagesize,data).then(res=>{
+                data_GetInformation(this.page,this.pagesize,this.searchInfo).then(res=>{
                     this.dataTotal = res.data.totalCount;
-                    this.tableDataTree = res.data.list;
-                    this.tableDataTree.map((item)=>{
+                    this.tableData = res.data.list;
+                    this.tableData.map((item)=>{
                         item.carTypeClass = item.carLength +'*'+item.carWidth+'*'+item.carHeight+'M';
                         item.capacityTonM = item.capacityTon + '吨,'+' '+item.capacitySquare+'方';
                         item.standardPriceM = item.standardPrice+'元 '+' '+'('+item.standardKm+'公里)';
                         item.outstripPriceM = item.outstripPrice + '元/公里';
                     })
-                    console.log(this.tableDataTree)
                 })
-            },
-           
-            //模糊查询 分类名称或者code
-            getdata_search(event){
-                this.firstblood();
             },
             //新增分类信息
             addClassfy(){
@@ -724,39 +668,6 @@ import '@/styles/dialog.scss'
                     this.firstblood();
                     this.dialogFormVisible_change = false;
                 })  
-            },
-            //验证数据值
-            valuerules(event){
-                if(!event.target.value){
-                    return 
-                }else{
-                    if(!/^[0-9\.]+$/.test(event.target.value)){
-                        let information = "请输入数字类型内容";
-                        this.hint(information);
-                        for(let item in this.forms){
-                            if(this.forms[item] == event.target.value){
-                                this.forms[item] = null;
-                            }
-                        }
-                        // event.target.focus()
-                    }
-                }
-            },
-            valuerules_change(event){
-                if(!event.target.value){
-                    return 
-                }else{
-                    if(!/^[0-9\.]+$/.test(event.target.value)){
-                        let information = "请输入数字类型内容";
-                        this.hint(information);
-                        for(let item in this.changeforms){
-                            if(this.changeforms[item] == event.target.value){
-                                this.changeforms[item] = null;
-                            }
-                        }
-                        // event.target.focus()
-                    }
-                }
             },
             hint(val){
                 this.information = val;

@@ -12,7 +12,6 @@
                 </ul>
             </div>
             <el-row class="main_forthUl">
-                <!-- <el-col :span="24"></el-col> -->
                 <ul>
                     <li>需求资源池 <span>({{title}})</span>
                     </li>
@@ -52,10 +51,6 @@
                     <div id="xiadan" style="width:100%;height:150px;">
 
                     </div>
-                    <!-- <li><span>小货车:</span><span>9989单,2356元</span></li>
-                    <li><span>大货车:</span><span>2312单,4564元</span></li>
-                    <li><span>零担:</span><span>3455单,4564元</span></li>
-                    <li><span>总计:</span><span>3212321</span>单,<span>1312323</span>元</li> -->
                 </ul>
                 <ul>
                     <li>
@@ -66,10 +61,6 @@
                     <div id="jiaoyi" style="width:100%;height:150px;">
 
                     </div>
-                    <!-- <li><span>小货车:</span><span>20</span>单</li>
-                    <li><span>大货车:</span><span>2312单,4564元</span></li>
-                    <li><span>零担:</span><span>3455单,4564元</span></li>
-                    <li><span>总计:</span><span>3212321</span>单,<span>1312323</span>元</li> -->
                 </ul>
             </el-row>
             <div class="main_left clearfix">
@@ -440,8 +431,25 @@ export default {
         // myChart2.setOption(option2)
         myChart3.setOption(option3)
         myChart4.setOption(option4)
-
         myChart5.setOption(option5)
+        window.onresize = () => {
+            myChart.resize({
+                width: 'auto',
+                height: 'auto'
+            })
+            myChart3.resize({
+                width: 'auto',
+                height: 'auto'
+            })
+            myChart4.resize({
+                width: 'auto',
+                height: 'auto'
+            })
+            myChart5.resize({
+                width: 'auto',
+                height: 'auto'
+            })
+        }
     }
 
  }
@@ -450,9 +458,9 @@ export default {
 .main_content{
     padding: 15px 20px;
     height: 100%;
-    min-width: 1100px;
+    // min-width: 1100px;
     height: 100%;
-    min-height: 666px;
+    // min-height: 666px;
     background:rgb(235,235,235);
     display: flex;
     -ms-flex-direction: column;
@@ -483,7 +491,7 @@ export default {
             margin-top: -2px;
         }
         li:first-child{
-                float: left;
+            float: left;
         }
     }
   }
@@ -491,12 +499,18 @@ export default {
         background: #fff;
         padding: 15px 20px;
         margin-bottom: 10px;
+        display: flex;
+        width: 100%;
+        min-height:215px;
+        justify-content:space-between;
+         overflow: hidden;
+        -moz-box-sizing: border-box;
+        box-sizing: border-box;
         ul{
-            width: 19%;
+            flex: 1;
             box-sizing: border-box;
-            border-radius: 2px;
             border: solid 1px #1790ff;
-            float: left;
+            // float: left;
             height: 185px;
             margin-right: 20px;
             box-shadow: 2px 2px 2px 2px rgba(0,0,0,.1);
@@ -507,7 +521,6 @@ export default {
             font-size: 14px;
             padding: 0 20px;
             margin: 5px 0 ;
-
             span{
                 color:#333;
                 padding:0 10px;
@@ -518,7 +531,6 @@ export default {
                 text-align: right;
             }
             em{
-                // text-align: right;
                 float:right;
             }
         }
@@ -530,51 +542,10 @@ export default {
             margin: 0px;
             background:  rgb(211, 234, 253);
             margin-bottom: 10px;
+            border-radius: 5px 5px 0 0;
             span{
                 color:red;
                 font-size: 14px;
-            }
-            .box_gg{
-            position: relative;
-            width:30px;
-            height:30px;
-            // background:red;
-            top:-31px;
-            left:355px;
-            /*向下*/
-            .triangle_border_down{
-                width:0;
-                height:0;
-                border-width:31px 15px 2px;
-                border-style:solid;
-                border-color: #3e9ff1 transparent transparent;/*灰 透明 透明 */
-                margin:40px auto;
-                position: absolute;
-                top:-40px;
-                display: none;
-                // left:371;
-                    .el-icon-check{
-                        position: absolute;
-                        font-size: 20px;
-                        top:-31px;
-                        left:-8px;
-                        color:#ffff;
-                        display: none;
-                    }
-                }
-            /*向左*/
-                .triangle_border_left{
-                    width:0;
-                    height:0;
-                    border-width:31px 15px 33px 0;
-                    border-style:solid;
-                    border-color:transparent #3e9ff1 transparent transparent;/*透明 灰 透明 透明 */
-                    margin:40px auto;
-                    position: absolute;
-                    top:-41px;
-                    left:15px;
-                    display: none;
-                }
             }
         }
         }
