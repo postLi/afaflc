@@ -1,7 +1,7 @@
 <template>
     <div style="height:100%;"  class="identicalStyle">
           <el-form :inline="true" class="classify_searchinfo">
-            <el-form-item label="区代">
+            <el-form-item label="区代管理">
             </el-form-item>
     </el-form>
     </div>
