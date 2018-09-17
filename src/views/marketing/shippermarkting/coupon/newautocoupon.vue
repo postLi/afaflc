@@ -141,7 +141,7 @@
                      </span>
               </div>
              <div class="ht_table_td table_th11">
-                         <el-select v-model="formAllData.aflcCouponList[keys].serivceCode" clearable placeholder="请选择" >
+                 <el-select v-model="formAllData.aflcCouponList[keys].serivceCode" clearable placeholder="请选择" >
                           <el-option
                               v-for="item in serviceCardList"
                                :key="item.code"
@@ -753,7 +753,7 @@ export default {
             width: 100%;
             overflow: hidden;
             line-height: 32px;
-                        display: flex;
+            display: flex;
         }
          .ht_table_tr1{
             width: 100%;

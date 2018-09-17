@@ -208,9 +208,8 @@ export default {
                      commissionGrade:this.formAllData.commissionGrade,               
                     }  
                 }                             
-                data_get_shipperOwnerFrom_list(this.page,this.pagesize,this.formAllData).then(res => {
+                data_get_shipperOwnerFrom_list(this.page,this.pagesize,FromData).then(res => {
                     this.dataTotal = res.data.totalCount
-                    
                     this.tableDataAll = res.data.list;
                 }).catch(res=>{
                     console.log('res',res)

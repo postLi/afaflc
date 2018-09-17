@@ -1,7 +1,7 @@
 import fetch from '@/utils/fetch'
 
-// const baseurl = "aflc-uc"
-const baseurl = "aflcusercenterservice_wtc"
+const baseurl = "aflc-uc"
+// const baseurl = "aflcusercenterservice_wtc"
 
 
 //获取商圈管理列表
@@ -40,7 +40,7 @@ export function data_Able_aflcTradeArea(ids) {
          })
        }    
 
-//  修改货主奖励列表
+//  修改商圈管理列表
 export function data_get_aflcTradeArea_update(data) {
   return fetch.put('/' + baseurl + '/usercenter/aflcTradeArea/v1/update', data)
 }      

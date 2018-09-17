@@ -316,37 +316,36 @@ export default {
             else{if(reg.test(val)){cb(new Error('请输入正整数'))}
             else if(parseInt(val)>parseInt(this.$refs['reward16'].value)){cb(new Error('不能大于订单金额范围'))}else{cb()}}}   
 
-        const reward2Validator = (rule, val, cb) => {if(!val){cb(new Error('数据不能为空'))}else if(parseInt(val)<=parseInt(this.$refs['reward1'].value)){
+        const reward2Validator = (rule, val, cb) => {if(!val){cb(new Error('数据不能为空'))}else if(/[^\d.]/g.test(val)){cb(new Error('请输入正整数'))}else if(parseInt(val)<=parseInt(this.$refs['reward1'].value)){
             cb(new Error('必须大于前框值'))}else{cb()} }   
-        const reward3Validator = (rule, val, cb) => {if(!val){cb(new Error('数据不能为空'))}else if(parseInt(val)<=parseInt(this.$refs['reward2'].value)){
+        const reward3Validator = (rule, val, cb) => {if(!val){cb(new Error('数据不能为空'))}else if(/[^\d.]/g.test(val)){cb(new Error('请输入正整数'))}else if(parseInt(val)<=parseInt(this.$refs['reward2'].value)){
             cb(new Error('必须大于前框值'))}else{cb()} }   
-        const reward4Validator = (rule, val, cb) => {if(!val){cb(new Error('数据不能为空'))}else if(parseInt(val)<=parseInt(this.$refs['reward3'].value)){
+        const reward4Validator = (rule, val, cb) => {if(!val){cb(new Error('数据不能为空'))}else if(/[^\d.]/g.test(val)){cb(new Error('请输入正整数'))}else if(parseInt(val)<=parseInt(this.$refs['reward3'].value)){
             cb(new Error('必须大于前框值'))}else{cb()} }   
-        const reward5Validator = (rule, val, cb) => {if(!val){cb(new Error('数据不能为空'))}else if(parseInt(val)<=parseInt(this.$refs['reward4'].value)){
+        const reward5Validator = (rule, val, cb) => {if(!val){cb(new Error('数据不能为空'))}else if(/[^\d.]/g.test(val)){cb(new Error('请输入正整数'))}else if(parseInt(val)<=parseInt(this.$refs['reward4'].value)){
             cb(new Error('必须大于前框值'))}else{cb()} }           
-        const reward6Validator = (rule, val, cb) => {if(!val){cb(new Error('数据不能为空'))}else if(parseInt(val)<=parseInt(this.$refs['reward5'].value)){
+        const reward6Validator = (rule, val, cb) => {if(!val){cb(new Error('数据不能为空'))}else if(/[^\d.]/g.test(val)){cb(new Error('请输入正整数'))}else if(parseInt(val)<=parseInt(this.$refs['reward5'].value)){
             cb(new Error('必须大于前框值'))}else{cb()} }   
-        const reward7Validator = (rule, val, cb) => {if(!val){cb(new Error('数据不能为空'))}else if(parseInt(val)<=parseInt(this.$refs['reward6'].value)){
+        const reward7Validator = (rule, val, cb) => {if(!val){cb(new Error('数据不能为空'))}else if(/[^\d.]/g.test(val)){cb(new Error('请输入正整数'))}else if(parseInt(val)<=parseInt(this.$refs['reward6'].value)){
             cb(new Error('必须大于前框值'))}else{cb()} }       
-        const reward8Validator = (rule, val, cb) => {if(!val){cb(new Error('数据不能为空'))}else if(parseInt(val)<=parseInt(this.$refs['reward7'].value)){
+        const reward8Validator = (rule, val, cb) => {if(!val){cb(new Error('数据不能为空'))}else if(/[^\d.]/g.test(val)){cb(new Error('请输入正整数'))}else if(parseInt(val)<=parseInt(this.$refs['reward7'].value)){
             cb(new Error('必须大于前框值'))}else{cb()} }   
-        const reward9Validator = (rule, val, cb) => {if(!val){cb(new Error('数据不能为空'))}else if(parseInt(val)<=parseInt(this.$refs['reward8'].value)){
+        const reward9Validator = (rule, val, cb) => {if(!val){cb(new Error('数据不能为空'))}else if(/[^\d.]/g.test(val)){cb(new Error('请输入正整数'))}else if(parseInt(val)<=parseInt(this.$refs['reward8'].value)){
             cb(new Error('必须大于前框值'))}else{cb()} }       
-        const reward10Validator = (rule, val, cb) => {if(!val){cb(new Error('数据不能为空'))}else if(parseInt(val)<=parseInt(this.$refs['reward9'].value)){
+        const reward10Validator = (rule, val, cb) => {if(!val){cb(new Error('数据不能为空'))}else if(/[^\d.]/g.test(val)){cb(new Error('请输入正整数'))}else if(parseInt(val)<=parseInt(this.$refs['reward9'].value)){
             cb(new Error('必须大于前框值'))}else{cb()} }   
-        const reward11Validator = (rule, val, cb) => {if(!val){cb(new Error('数据不能为空'))}else if(parseInt(val)<=parseInt(this.$refs['reward10'].value)){
+        const reward11Validator = (rule, val, cb) => {if(!val){cb(new Error('数据不能为空'))}else if(/[^\d.]/g.test(val)){cb(new Error('请输入正整数'))}else if(parseInt(val)<=parseInt(this.$refs['reward10'].value)){
             cb(new Error('必须大于前框值'))}else{cb()} }   
-        const reward12Validator = (rule, val, cb) => {if(!val){cb(new Error('数据不能为空'))}else if(parseInt(val)<=parseInt(this.$refs['reward11'].value)){
+        const reward12Validator = (rule, val, cb) => {if(!val){cb(new Error('数据不能为空'))}else if(/[^\d.]/g.test(val)){cb(new Error('请输入正整数'))}else if(parseInt(val)<=parseInt(this.$refs['reward11'].value)){
             cb(new Error('必须大于前框值'))}else{cb()} }   
-        const reward13Validator = (rule, val, cb) => {if(!val){cb(new Error('数据不能为空'))}else if(parseInt(val)<=parseInt(this.$refs['reward12'].value)){
+        const reward13Validator = (rule, val, cb) => {if(!val){cb(new Error('数据不能为空'))}else if(/[^\d.]/g.test(val)){cb(new Error('请输入正整数'))}else if(parseInt(val)<=parseInt(this.$refs['reward12'].value)){
             cb(new Error('必须大于前框值'))}else{cb()} }       
-        const reward14Validator = (rule, val, cb) => {if(!val){cb(new Error('数据不能为空'))}else if(parseInt(val)<=parseInt(this.$refs['reward13'].value)){
+        const reward14Validator = (rule, val, cb) => {if(!val){cb(new Error('数据不能为空'))}else if(/[^\d.]/g.test(val)){cb(new Error('请输入正整数'))}else if(parseInt(val)<=parseInt(this.$refs['reward13'].value)){
             cb(new Error('必须大于前框值'))}else{cb()} }   
-        const reward15Validator = (rule, val, cb) => {if(!val){cb(new Error('数据不能为空'))}else if(parseInt(val)<=parseInt(this.$refs['reward14'].value)){
+        const reward15Validator = (rule, val, cb) => {if(!val){cb(new Error('数据不能为空'))}else if(/[^\d.]/g.test(val)){cb(new Error('请输入正整数'))}else if(parseInt(val)<=parseInt(this.$refs['reward14'].value)){
             cb(new Error('必须大于前框值'))}else{cb()} }   
-        const reward16Validator = (rule, val, cb) => {if(!val){cb(new Error('数据不能为空'))}else if(parseInt(val)<=parseInt(this.$refs['reward15'].value)){
-            cb(new Error('必须大于前框值'))}else{cb()} }       
-
+        const reward16Validator = (rule, val, cb) => {if(!val){cb(new Error('数据不能为空'))}else if(/[^\d.]/g.test(val)){cb(new Error('请输入正整数'))}else if(parseInt(val)<=parseInt(this.$refs['reward15'].value)){
+            cb(new Error('必须大于前框值'))}else{cb()} }    
         return{
         areaStatus:null,
         options:regionDataPlus,

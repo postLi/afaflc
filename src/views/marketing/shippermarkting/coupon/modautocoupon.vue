@@ -540,7 +540,7 @@ export default {
           this.formAllData.aflcCouponList = res.data
           for(var i= 0;i<this.formAllData.aflcCouponList.length;i++){
               this.formAllData.aflcCouponList[i].startTime  = new Date(this.formAllData.aflcCouponList[i].startTime).getTime()
-              console.log(this.formAllData.aflcCouponList[i].endTime)
+              console.log('1111',res)
               this.formAllData.aflcCouponList[i].endTime  = new Date(this.formAllData.aflcCouponList[i].endTime).getTime()
               this.formAllData.aflcCouponList[i].areaName1= this.formAllData.aflcCouponList[i].province+this.formAllData.aflcCouponList[i].city+this.formAllData.aflcCouponList[i].area
           if(this.formAllData.aflcCouponList[i].area==null){

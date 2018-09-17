@@ -1,19 +1,268 @@
 <template>
     <div style="height:100%;"  class="identicalStyle">
           <el-form :inline="true" class="classify_searchinfo">
-            <el-form-item label="区代管理">
+            <el-form-item label="所在地：">
+                   <el-cascader
+                    size="large"
+                    :options="options"
+                    v-model="formAllData.areaName"
+                    @change="handleChange">
+                    </el-cascader>
             </el-form-item>
+            <el-form-item label="区代公司名称：">
+                <el-input v-model="formAllData.partnerCompany"></el-input>
+            </el-form-item>
+            <el-form-item class="fr"> 
+                <el-button type="primary" plain :size="btnsize"  @click="getdata_search">查询</el-button>
+                <el-button type="info" plain :size="btnsize" @click="clearSearch">清空</el-button>
+            </el-form-item>            
     </el-form>
+		<div class="classify_info" >
+			<div class="btns_box">
+                   <manageDistrictCread
+                    btntext="新增"
+                    :plain="true"
+                    btntype="primary"
+                    editType="add"
+                    btntitle="创建"
+                    >
+                    </manageDistrictCread>
+                   <!-- <shoppingDialog
+                    btntext="修改"
+                    :plain="true"
+                    btntype="primary"
+                    editType="edit"
+                    btntitle="修改"
+                    :params="selectRowData"
+                    > 
+                    </shoppingDialog>-->
+                <el-button type="primary" plain :size="btnsize" @click="handleUseStates">启用/停用</el-button>
+                <el-button type="primary" plain :size="btnsize" @click="delete_data">删除</el-button>
+			</div>
+            <div class="info_news">
+            <el-table style="width: 100%" stripe border height="100%"  :data="tableDataAll" ref="multipleTable" @current-change="clickDetails" highlight-current-row>
+            <el-table-column  label="序号" width="80px" type="index">
+            </el-table-column>
+            <el-table-column  label="区代公司名称" prop="partnerCompany">
+                        <!-- <template slot-scope="scoped">
+                        <shoppingDialog
+                            :btntext='scoped.row.tradeName'
+                            btntype="text"
+                            :plain="false"
+                            editType="view"
+                            btntitle="详情"
+                            :params="scoped.row"
+                            >
+                            </shoppingDialog>
+                        </template> -->
+            </el-table-column>
+            <el-table-column  label="联系人" prop="areaName">
+            </el-table-column>    
+            <el-table-column  label="手机号码" prop="tradeOwner">
+            </el-table-column> 
+            <el-table-column  label="代理区域" prop="ownerPhone">
+            </el-table-column>
+            <el-table-column  label="合同开始日期" prop="">
+            </el-table-column>       
+            <el-table-column  label="合同结束日期" prop="">
+            </el-table-column>                                                                                                       
+            </el-table> 
+        </div>
+		</div>
+         <div class="info_tab_footer">共计:{{ dataTotal }} <div class="show_pager"> <Pager :total="dataTotal" @change="handlePageChange" /></div> </div>
     </div>
 </template>
 
 <script>
+import {data_get_aflcPartner_list} from '@/api/users/district/manageDistrict.js'
+import { regionDataPlus, CodeToText, TextToCode } from 'element-china-area-data'
+import manageDistrictCread from './manageDistrictCread.vue'
+import shoppingDialog from './shoppingDialog.vue'
+import Pager from '@/components/Pagination/index'
+import { eventBus } from '@/eventBus'
 export default {
+    data(){
+        return{
+            templateRadio: '',
+            options:regionDataPlus,
+            btnsize:'mini',
+            selectRowData:{},
+            page:1,
+            pagesize:20,
+            dataTotal:0,
+            tableDataAll:[],
+            selectId:[],
+            formAllData:{
+                areaCode: null,
+                partnerCompany:null,
+            }
+        }
+    },
+    components:{
+    manageDistrictCread,
+    shoppingDialog,
+    Pager
+    },
+    mounted(){
+        this.firstblood();
+        eventBus.$on('pushListtwo', () => {
+                this.firstblood()
+          })
+    },
+    methods:{
+        handleChange(d){
+           console.log('d',d)
+           if(d.length<3){
+                if(d.length==2){
+                this.$message.error('请选择具体的城市');
+                }
+                this.formAllData.areaCode = null;
+                this.formAllData.province = null,
+                this.formAllData.city = null,
+                this.formAllData.area = null,
+                this.formAllData.areaName = [];
+           }
+           else{
+                this.formAllData.areaCode = d
+                this.formAllData.province = CodeToText[d[0]]
+                this.formAllData.city =  CodeToText[d[1]]
+                if(d[2]==''){
+                this.formAllData.area = ''
+                }
+                else{
+                this.formAllData.area = CodeToText[d[2]]
+                }
+           }
+        },
+    // 列表刷新页面  
+        firstblood(){
+                let FromData = {}
+                if(this.formAllData.area) {
+                    FromData = {
+                     area:this.formAllData.area,
+                     city:null,
+                     partnerCompany:this.formAllData.partnerCompany,           
+                    }
+                }
+                else if(this.formAllData.city){
+                    FromData = {
+                     area:null,
+                     city:this.formAllData.city,
+                     partnerCompany:this.formAllData.partnerCompany,          
+                    }                    
+                }   
+                else{
+                    FromData = {
+                     area:null,
+                     city:null,
+                     partnerCompany:this.formAllData.partnerCompany,
+                                      
+                    }  
+                }     
+
+        data_get_aflcPartner_list(this.page,this.pagesize,FromData).then(res=>{
+            console.log('res',res)
+                    this.dataTotal = res.data.totalCount
+                    this.tableDataAll = res.data.list;
+        })
+    },
+    // 查询
+    getdata_search(){
+        this.firstblood();
+    },
+    // 清空查询
+    clearSearch(){
+                this.formAllData.areaCode = null;
+                this.formAllData.province = null,
+                this.formAllData.city = null,
+                this.formAllData.area = null,
+                this.formAllData.areaName = [];
+                this.formAllData.partnerCompany=null,
+                this.firstblood();
+    },
+    //点击选中当前行
+        clickDetails(row, event, column){
+             this.selectRowData = Object.assign({}, row)
+        },
+    // 判断选中与否
+        getSelection(val){
+            console.log('选中内容',val)
+            this.selected = val;
+        },    
+    // 选择删除
+        delete_data(){
+              if(!this.selectRowData.id){
+                this.$message.info('未选中任何删除内容');
+                }else{
+                // this.delDataInformation()
+            }
+        },    
+       //确认删除
+            delDataInformation(){         
+                   this.$confirm('确定要删除吗？', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(()=>{
+                    data_Del_aflcTradeArea(this.selectRowData.id).then(res=>{
+                        this.$message.success('删除成功');
+                        this.firstblood();       
+                        this.selectRowData=''; 
+                    }).catch(err => {
+                        this.$message({
+                            type: 'info',
+                            message: '操作失败，原因：' + err.text ? err.text : err
+                        })
+                    })
+                }).catch(() => {
+                    this.$message({
+                        type: 'info',
+                        message: '已取消'
+                    })
+                })   
+            },
+            
+        // 启用禁用
+        handleUseStates(){
+                if(!this.selectRowData.id){
+                    //未选择任何修改内容的提示
+                        this.$message.info('未选中内容');
+                        return
+                }else{
+                    this.selectId.push(this.selectRowData.id) 
+                    
+                  data_Able_aflcTradeArea(this.selectId).then(res=>{
+                     this.selectId.splice(0,1);
+                     if(this.selectRowData.usingStatus==1)
+                     {
+                         this.$message.warning('已停用');
+                     }
+                     else{
+                         this.$message.success('已启用');
+                     }
+                        this.firstblood();       
+                        this.selectRowData='';         
+                    })
+                }
+        },  
+        handlePageChange(obj) {
+            this.page = obj.pageNum
+            this.pagesize = obj.pageSize
+            this.firstblood()
+        },        
+        
+    }
     
+
+
 }
 </script>
 
 <style lang="scss">
-
+.identicalStyle{
+.el-cascader{
+    line-height: 30px;
+}
+}
 </style>
 
