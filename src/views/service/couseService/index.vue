@@ -24,7 +24,6 @@
                             </template>
                         </el-table-column>  
                         <el-table-column
-                            
                             prop="orderSerial"
                             label="工单编号"
                             width="300">
@@ -47,9 +46,6 @@
                             prop="complainDes"
                             label="提交内容"
                             width="300">
-                            <!-- <template  slot-scope="scope">
-                               
-                            </template> -->
                         </el-table-column>
                         <el-table-column
                             prop="complainTime"

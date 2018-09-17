@@ -3,7 +3,7 @@
         <el-dialog :title="formtitle" :close-on-click-modal="false" :visible="dialogAddDic" @close="close" v-loading="loading">
             <el-form :inline="true"  ref="ruleForm"  label-position="right" size="mini">
                 <el-form-item label="上级分类" :label-width="formLabelWidth" required>
-                    <el-select v-model="pidValue" placeholder="请选择" @change="currentValue">
+                    <el-select v-model="pidValue" placeholder="请选择" @change="currentValue" v-if="!isModify">
                         <el-option
                             v-for="item in optionsUptree"
                             :key="item.value"
@@ -11,8 +11,9 @@
                             :value="item.value">
                         </el-option>
                     </el-select>
+                    <el-input v-model="reviseForm.pidNameVal" auto-complete="off" :disabled="true" v-else></el-input>
                 </el-form-item>
-                <div v-for="(form,idx) in AddDictionaryForm" :key="idx" class="moreInfo" > 
+                <div v-for="(form,idx) in AddDictionaryForm" :key="idx" class="moreInfo" v-if="!isModify"> 
                     <el-form-item label="编码" label-width="80px" required>
                         <el-input v-model="form.code" auto-complete="off" :disabled="true" ></el-input>
                     </el-form-item>
@@ -37,6 +38,28 @@
                         </span>
                         <span  @click="reduceItem(idx)" class="reduceItem" v-else>
                         </span>
+                </div>
+                <div class="moreInfo" v-else>
+                    <el-form-item label="编码" label-width="80px" required>
+                        <el-input v-model="reviseForm.code" auto-complete="off" :disabled="true" ></el-input>
+                    </el-form-item>
+                    <el-form-item label="分类名称" required>
+                        <el-input v-model="reviseForm.name" auto-complete="off" placeholder="少于20字" maxlength="20" ></el-input>
+                    </el-form-item>
+                    <el-form-item label="数据值" >
+                        <el-input v-model="reviseForm.value" auto-complete="off" v-numberOnly maxlength="6" ></el-input>
+                    </el-form-item>
+                    <el-form-item label="描述" class="textArea" label-width="80px">
+                        <el-input
+                        type="textarea"
+                        :maxlength="maxlengthNum"
+                        :autosize="{ minRows: 3, maxRows: 5}"
+                        v-model="reviseForm.remark">
+                        </el-input>
+                        <p class="countNum">
+                             <span class="">{{reviseForm.remark.length}}</span> <span>/ {{maxlengthNum}}</span> 
+                        </p>
+                    </el-form-item>
                 </div>
             </el-form>
             <div slot="footer" class="dialog-footer">
@@ -72,7 +95,9 @@ export default {
             type:String,
             default:''
         },
-       
+        reviseForm:{
+            type:Object
+        }
     },
     components:{
 
@@ -111,16 +136,18 @@ export default {
     watch:{
         dialogAddDic:{
             handler(newVal,oldVal){
-                if(newVal){
+                if(newVal && !this.isModify){
                     this.init()
                     this.currentValue(this.pid)
+                }else{
+                    console.log('test',this.reviseForm)
+                    this.reviseForm.pidNameVal = this.reviseForm.pidName ? this.reviseForm.pidName : '无' ;
                 }
             },  
             deep:true
         }
     },
     mounted(){
-
     },
     methods:{
         init(){
@@ -184,33 +211,47 @@ export default {
         reduceItem(idx){
             this.AddDictionaryForm.splice(idx,1);
         },
-        submitForm(){
-
-        },
         submitForm() {
             let required = false;
-            this.AddDictionaryForm.map((item)=>{
-                item.pid = this.pidValue;
-                if(!item.name){
+            if(this.isModify){
+                console.log(this.isModify,this.reviseForm.name)
+                if(!this.reviseForm.name){
                     this.$message({
                         type: 'warning',
                         message: '请填写分类名称!'
                     })
                     required = true;
                 }
-            })
+            }else{
+                this.AddDictionaryForm.map((item)=>{
+                    item.pid = this.pidValue;
+                    if(!item.name){
+                        this.$message({
+                            type: 'warning',
+                            message: '请填写分类名称!'
+                        })
+                        required = true;
+                    }
+                })
+            }
 
             if(required){
                 return false
             }else{
-                
-                this.$confirm('确定要新增该条数据吗？', '提示', {
+                let config = this.isModify ? '确定要修改该条数据吗？' : '确定要新增该条数据吗？';
+                let configFunction;
+                if(this.isModify){
+                    configFunction = data_ChangeForms(this.reviseForm);
+                }else{
+                    configFunction = data_AddForms(this.AddDictionaryForm);
+                }
+                this.$confirm(config, '提示', {
                     confirmButtonText: '确定',
                     cancelButtonText: '取消',
                     type: 'warning'
                 }).then( ()=>{
-                    data_AddForms(this.AddDictionaryForm).then(res=>{
-                        this.$alert('新增成功', '提示', {
+                    configFunction.then(res=>{
+                        this.$alert('操作成功', '提示', {
                             confirmButtonText: '确定',
                             callback: action => {
                                 this.close();
@@ -225,7 +266,6 @@ export default {
                         message: '已取消'
                     })
                 })
-                console.log('this.AddDictionaryForm',this.AddDictionaryForm)
             }
         },  
         close(){

@@ -367,6 +367,7 @@
       this.fetchOrg()// 左边树形数据
     //   // 部门维护
       this.userinfo = getUserInfo()
+      console.log('this.userInfo', this.userinfo)
       if (this.userinfo.companyId === this.userinfo.orgid) {
         this.hiddenDep = true
       }

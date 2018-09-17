@@ -1,7 +1,7 @@
 <template>
      <div class="creatDialog commoncss">
       <el-button :type="type" :value="value" :plain="plain" :icon="icon" @click="openDialog()">{{text}}</el-button>
-      <el-dialog :title="title" :visible="dialogFormVisible_add" :before-close="change">
+      <el-dialog :title="title" :visible="dialogFormVisible_add" :before-close="close" :close-on-click-modal="false">
         <el-form :model="xinzengform" ref="xinzengform" :rules="rulesForm">
           <el-row>
             <el-col :span="12">
@@ -30,20 +30,15 @@
           </el-row>
           <el-row>
             <el-col :span="12">
-              <el-form-item label="联系人 ：" :label-width="formLabelWidth">
-                <el-input v-model="xinzengform.contacts" auto-complete="off"  :disabled="editType=='view'"></el-input>
-              </el-form-item>
+                <el-form-item label="所在地 ：" :label-width="formLabelWidth" required>
+                    <vregion :ui="true"  @values="regionChange" class="form-control">
+                        <el-input v-model="xinzengform.belongCityName" placeholder="请选择" :disabled="editType=='view'"></el-input>
+                    </vregion>
+                </el-form-item>
             </el-col>
             <el-col :span="12">
-              <el-form-item label="所在地 ："  v-if = "editType=='view'" :label-width="formLabelWidth" required>
-                    <el-input v-model="xinzengform.belongCityName" auto-complete="off" disabled></el-input>
-              </el-form-item>
-              <el-form-item label="所在地 ："  props = "belongCity"  :label-width="formLabelWidth" v-else required>
-                <el-input v-model="xinzengform.belongCityName" :disabled="editType=='view'" @focus="changeSelect" v-if="editType !='add' && !selectFlag"></el-input>
-                <span v-else>
-                    <el-input v-model="xinzengform.belongCityName" auto-complete="off"  v-if = "editType=='view'"   disabled></el-input>
-                  	<GetCityList   ref="area"  v-else></GetCityList>
-                </span>
+              <el-form-item label="联系人 ：" :label-width="formLabelWidth">
+                <el-input v-model="xinzengform.contacts" auto-complete="off"  :disabled="editType=='view'"></el-input>
               </el-form-item>
             </el-col>
           </el-row>
@@ -51,7 +46,7 @@
           <el-row>
             <el-col :span="24" class="moreLength">
               <el-form-item label="详细地址 ：" :label-width="formLabelWidth" >
-                <el-input :maxlength="20" v-model="xinzengform.address" auto-complete="off"  :disabled="editType=='view'"></el-input>
+                <el-input :maxlength="40" v-model="xinzengform.address" auto-complete="off"  :disabled="editType=='view'"></el-input>
               </el-form-item>
             </el-col>
           </el-row>
@@ -102,20 +97,22 @@
         </el-form>
         <div slot="footer" class="dialog-footer">
           <el-button type="primary" @click.stop="onSubmit" v-show="editType!='view'" >确 定</el-button>
-          <el-button @click="close('xinzengform')" v-show="editType!='view'">取 消</el-button>
+          <el-button @click="close" v-show="editType!='view'">取 消</el-button>
         </div>
       </el-dialog>
     </div>
 </template>
 <script>
 import Upload from '@/components/Upload/singleImage'
-import GetCityList from '@/components/GetCityList'
 import { eventBus } from '@/eventBus'
-import {data_get_shipper_type,data_get_shipper_create,data_get_shipper_change,data_get_shipper_view} from '../../../api/users/shipper/all_shipper.js'
+import {data_get_shipper_create,data_get_shipper_change,data_get_shipper_view} from '@/api/users/shipper/all_shipper.js'
+import { getDictionary } from '@/api/common.js'
+import vregion from '@/components/vregion/Region'
+
 export default {
   components:{
     Upload,
-    GetCityList
+    vregion
   },
   props:{
     paramsView:{
@@ -151,6 +148,10 @@ export default {
     /*add新增，edit编辑，view查看*/
     editType: {
       type: String,
+    },
+    dialogFormVisible_add:{
+        type:Boolean,
+        default:false
     }
   },
   data(){
@@ -171,7 +172,6 @@ export default {
                     }
                 })
             }
-        
         }
         const companyNameValidator = (rule, val, cb)=>{
             // console.log(val)
@@ -197,15 +197,13 @@ export default {
                 } else {
                     cb()
                 }
-            // }else{
-                // return
-            // }
         }
         return{
         defaultImg:'/static/test.jpg',//默认第一张图片的url
         cc:'企业货主',
         selectFlag:false,
-        dialogFormVisible_add: false,
+        // dialogFormVisible_add: false,
+        shipperType:'AF00101',
         type:'primary',
         title:'',
         text:'',
@@ -213,10 +211,23 @@ export default {
         options:[],
         belongCity: [],
         areadata:[],  
-        formLabelWidth:'120px',
+        formLabelWidth:'135px',
         companyFlag:false,
         xinzengform:{
-            registerOrigin:'WEB',
+            shipperType:'',//货主类型code
+            shipperTypeName:'',//货主类型名称
+            mobile:'',//手机
+            contacts:'',//联系人
+            belongCityName:'',
+            belongCity:'',//所属地区
+            address:'',//详细地址
+            companyName:'',//公司名称
+            creditCode:'',//统一社会代码
+            businessLicenceFile:'',//上传营业执照照片
+            companyFacadeFile:'',//上传公司或者档口照片
+            shipperCardFile:'',//上传发货人名片照片
+            registerOrigin:'AF0030103',
+            registerOriginName:'WEB',
             isDirectional: '0',
         },
         rulesForm:{
@@ -225,7 +236,6 @@ export default {
             belongCity:{required:true,validator:belongCityValidator, trigger:'change'},
             demo:{}
         },
-
         // 上传公司或者档口照片校验
         companyFacadeFileRules:{required:true,validator: companyNameValidator,trigger:'change'},
 
@@ -236,33 +246,21 @@ export default {
   watch:{
     'xinzengform.shipperType': {
         handler: function(val, oldVal) {
-            console.log('````````',val)
-            if(val == 'AF0010102'){
-                this.companyFlag= true
+            // console.log('this.com',this.companyFlag,val)
+            if(val === 'AF0010102'){
+                this.companyFlag = true;
             }else{
-                this.companyFlag= false
+                this.companyFlag = false;
             }
         },
         deep:true
     },
-    
     dialogFormVisible_add:{
         handler: function(val, oldVal) {
-            console.log('fdffrrrr',this.$refs.area)
-            if(!val){
-                this.selectFlag=false;
-                this.$refs.xinzengform.resetFields();
-                if(this.editType == 'add'){
-                    this.xinzengform = {
-                        registerOrigin:'WEB',
-                        isDirectional: '0',
-                    }
-                }
-                if(this.$refs.area){
-                    this.$refs.area.selectedOptions = [];
-                }
-            }
+            this.openDialog();
+            this.getMoreInformation()
         },
+        deep:true
     },
     btntext(newVal,oldVal){
         // console.log(newVal,oldVal)
@@ -276,30 +274,34 @@ export default {
     this.text = this.btntext;
     //弹出框标题
     this.title = this.btntitle;
-    this.getMoreInformation()
+    // this.getMoreInformation()
   },
   methods:{
-    //关闭弹框
-    close(formName){
-        this.dialogFormVisible_add = false;
+    regionChange(d) {
+        console.log('data:',d)
+        this.xinzengform.belongCityName = (!d.province&&!d.city&&!d.area&&!d.town) ? '': `${this.getValue(d.province)}${this.getValue(d.city)}${this.getValue(d.area)}${this.getValue(d.town)}`.trim();
+        if(d.area){
+            this.xinzengform.belongCity = d.area.code;
+        }else if(d.city){
+            this.xinzengform.belongCity = d.city.code;
+        }
+        else{
+            this.xinzengform.belongCity = d.province.code;
+        }
+    },
+    getValue(obj){
+        return obj ? obj.value:'';
     },
     //事件分发
     changeList(){
         eventBus.$emit('changeList')
     },
     openDialog(){
-        // console.log('parmas:',this.params)
         console.log(this.editType)
-
             if(this.editType  == 'add'){
-                return this.dialogFormVisible_add = true;
-
+                return false
             }else if(this.editType == 'view'){
-                this.dialogFormVisible_add = true;
-
-                console.log(this.paramsView)
-                this.xinzengform = JSON.parse(JSON.stringify(this.paramsView))
-
+                this.xinzengform = Object.assign({},this.xinzengform,this.paramsView)
                 console.log('123',this.xinzengform)
             }
             else {
@@ -310,14 +312,19 @@ export default {
                     })
                 }else{
                     this.xinzengform =JSON.parse(JSON.stringify(this.params))
-                    this.dialogFormVisible_add = true;
+                    // this.dialogFormVisible_add = true;
                    
                 }
             }
 
     },
-    change() {
-      	this.dialogFormVisible_add = false;
+    close(done) {
+        this.$emit('update:dialogFormVisible_add', false);
+        this.$emit('getData');
+        this.changeList();
+        if (typeof done === 'function') {
+            done()
+        }
     },
     changeSelect(){
 		if(this.editType==='add'){
@@ -328,7 +335,7 @@ export default {
     },
     //获取货主类型
     getMoreInformation(){
-      data_get_shipper_type().then(res=>{
+      getDictionary(this.shipperType).then(res=>{
         // console.log('货主类型',res)
         this.options = res.data
        
@@ -378,9 +385,8 @@ export default {
                             this.$alert('操作成功', '提示', {
                                 confirmButtonText: '确定',
                                 callback: action => {
-                                    this.dialogFormVisible_add = false;
-                                    this.$emit('getData')
-                                    this.changeList();
+                                    // this.dialogFormVisible_add = false;
+                                    this.close()
 
                                 }
                             });
@@ -397,10 +403,8 @@ export default {
                             this.$alert('操作成功', '提示', {
                                  confirmButtonText: '确定',
                                 callback: action => {
-                                    this.dialogFormVisible_add = false;
-                                    this.$emit('getData')
-                                    this.changeList();
-
+                                    // this.dialogFormVisible_add = false;
+                                    this.close()
                                 }
                             });
                         }).catch(err=>{
@@ -427,14 +431,13 @@ export default {
                                 }
                             })
                             data_get_shipper_change(forms).then(res => {
-                                this.dialogFormVisible_add = false;
+                                // this.dialogFormVisible_add = false;
                                 this.$message({
                                     type: 'success',
                                     message: '该货主已认证成功',
                                     duration:2000
                                 })
-                                this.$emit('getData'),
-                                this.changeList();
+                                this.close();
                             }).catch(err => {
                                 this.$message.error('操作失败，失败原因：',err.text)
                             })
@@ -447,8 +450,11 @@ export default {
                         break;
                 }
             }else{
-                console.log('123')
-                return false
+                
+                return  this.$message({
+                    type: 'warning',
+                    message: '请填写完整数据'
+                })
             }
         })
     },
@@ -457,7 +463,6 @@ export default {
 </script>
 <style lang="scss" scoped>
     .creatDialog{
-        
         .el-dialog__footer{
             border-top:1px solid #ccc;   
             margin: 0 10px;
