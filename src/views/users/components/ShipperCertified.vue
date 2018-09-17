@@ -1,20 +1,7 @@
 <template>
     <div class="identicalStyle">
-          <el-form :inline="true" :model="formAll" ref="ruleForm" class="classify_searchinfo">
-            <el-form-item label="所在地：">
-              <GetCityList v-model="formAll.belongCity" ref="area"></GetCityList>
-            </el-form-item>
-            <el-form-item label="公司名称：">
-              <el-input v-model.trim="formAll.companyName"></el-input>
-            </el-form-item>
-            <el-form-item label="手机号：">
-              <el-input v-model.trim="formAll.mobile"></el-input>
-            </el-form-item>
-            <el-form-item class="fr">
-              <el-button type="primary" plain @click="getdata_search">查询</el-button>
-              <el-button type="info" plain @click="clearSearch">清空</el-button>
-            </el-form-item>
-          </el-form>
+        <searchInfo @change="getSearchParam" :showType = 'tabType'></searchInfo>
+        
       	<div class="classify_info">
 		  <div class="btns_box">
         	<el-button type="primary" plain icon="el-icon-check" @click="handleEdit">认证审核</el-button>
@@ -182,8 +169,8 @@
 import Upload from '@/components/Upload/singleImage'
 import { eventBus } from '@/eventBus'
 import createdDialog from './createdDialog.vue'
-import GetCityList from '@/components/GetCityList'
-import {data_get_shipper_list,data_get_shipper_type,data_get_shipper_change} from '@/api/users/shipper/all_shipper.js'
+import searchInfo from './searchInfo'
+import {data_get_shipper_list,data_get_shipper_change} from '@/api/users/shipper/all_shipper.js'
 // import defaultURL  from '@/assets/404_images/404.png'
 import Pager from '@/components/Pagination/index'
 
@@ -196,7 +183,7 @@ export default {
     },
 	components:{
 		createdDialog,
-		GetCityList,
+		searchInfo,
         Upload,
         Pager
 	},
@@ -215,6 +202,7 @@ export default {
             }
 		}
 		return{
+            tabType:'certified',
             templateRadio:'',
             defaultImage:'',
             defaultImg:'/static/test.jpg',//默认第一张图片的url
@@ -225,7 +213,7 @@ export default {
             totalCount:0, // 总数
             page:1,
             pagesize:20,
-            formAll:{
+            searchInfo:{
                 belongCity:null,
                 companyName:'',
                 mobile:'',
@@ -262,6 +250,12 @@ export default {
         })
     },
     methods:{
+        getSearchParam(obj) {
+            console.log(obj)
+            this.searchInfo = Object.assign({},obj,{shipperStatus:'AF0010402'})
+            this.loading = false;
+            this.firstblood()
+        },
         handlePageChange(obj) {
             this.page = obj.pageNum
             this.pagesize = obj.pageSize
@@ -286,10 +280,6 @@ export default {
         changeCity(){
             this.selectDiaologFlag=false
         },
-        formatTime(da){
-            let time = (+new Date()) - da
-            return parseInt(time / 1000 / (3600*24))+ '天'+ parseInt(time/1000/(3600*24*60*60)*60*60)+ '小时'
-        },
         //认证审核
         handleEdit(){
             
@@ -308,28 +298,11 @@ export default {
         },
         //刷新页面
         firstblood(){
-            data_get_shipper_list(this.page,this.pagesize,this.formAll).then(res=>{
+            data_get_shipper_list(this.page,this.pagesize,this.searchInfo).then(res=>{
                 this.totalCount = res.data.totalCount;
                 this.tableData1 = res.data.list;
                 // this.inited = true
             })
-        },
-        //点击查询按纽，按条件查询列表
-        getdata_search(event){
-            console.log(' this.$refs.area', this.$refs.area.selectedOptions)
-                this.formAll.belongCity = this.$refs.area.selectedOptions[1];
-            this.firstblood()
-        },
-        //清空
-        clearSearch(){
-            this.$refs.area.selectedOptions = [];
-            this.formAll = {
-                belongCity:null,
-                companyName:'',
-                mobile:'',
-                shipperStatus:"AF0010402",//待认证的状态码
-            }
-            this.firstblood()
         },
         completeData(){
             //获取城市name

@@ -1,32 +1,7 @@
 <template>
     <div class="identicalStyle">
-          <el-form :inline="true" :model="formInline" ref="ruleForm" class="classify_searchinfo">
-            <el-form-item label="所在地：">
-              <GetCityList v-model="formInline.belongCity" ref="area"></GetCityList>
-            </el-form-item>
-            <el-form-item label="账户状态：">
-              <el-select v-model="formInline.accountStatus" clearable placeholder="请选择">
-                <el-option
-                  v-for="item in optionsAuidSataus"
-                  :key="item.id"
-                  :label="item.name"
-                  :value="item.code"
-                  :disabled="item.disabled">
-                </el-option>
-              </el-select>
-            </el-form-item>
-            <el-form-item label="手机号：">
-              <el-input
-                placeholder="请输入内容"
-                v-model.trim="formInline.mobile"
-                clearable>
-              </el-input>
-            </el-form-item>
-            <el-form-item class="fr">
-              <el-button type="primary" plain @click="getdata_search">查询</el-button>
-              <el-button type="info" plain @click="clearSearch">清空</el-button>
-            </el-form-item>
-          </el-form>
+        <searchInfo @change="getSearchParam" :showType = 'tabType'></searchInfo>
+        
 	  	<div class="classify_info">
 		  	<div class="btns_box">
 				<createdDialog 
@@ -106,14 +81,11 @@
     </div>
 </template>
 <script>
-import GetCityList from '@/components/GetCityList'
 import createdDialog from './createdDialog.vue'
 import { eventBus } from '@/eventBus'
-import FreezeDialog from './FreezeDialog.vue'
-import { parseTime } from '@/utils/index.js'
 import Pager from '@/components/Pagination/index'
-
-import {data_get_shipper_list,data_get_shipper_change,data_get_shipper_auid,} from '../../../api/users/shipper/all_shipper.js'
+import searchInfo from './searchInfo'
+import {data_get_shipper_list} from '@/api/users/shipper/all_shipper.js'
 export default {
 	props: {
 		isvisible: {
@@ -123,40 +95,34 @@ export default {
 	},
     components:{
         createdDialog,
-        FreezeDialog,
-        GetCityList,
-        Pager
+        Pager,
+        searchInfo
     },
   data(){
     return{
+        tabType:'unauthorized',
         templateRadio:'',
         optionsStatus:[], // 状态列表
         tableData4:[],
         totalCount:0,
         page:1,
         pagesize:20,
-        formInline: {
-            accountStatus:null,
+        searchInfo: {
+            accountStatus:'',
             belongCity:'',
             mobile:'',
             shipperStatus:"AF0010401",//未认证的状态码
         },
         formLabelWidth:'120px',
-        information:null,
         formLabelWidth:'120px',
         changeDialogFlag: false, // 修改弹窗控制
         optionsAuidSataus:[
 			{
-			code:null,
+			code:'',
 			name:'全部'
 			}
         ],//账户状态
         selectRowData:{},
-        pickerOptions:{
-        disabledDate(time) {
-          return time.getTime() < Date.now();
-        }
-      },
     }
   },
     watch: {
@@ -165,13 +131,12 @@ export default {
                 if(newVal && !this.inited){
                     this.inited = true
                     this.firstblood()
-                    this.getMoreInformation()
+                    // this.getMoreInformation()
                 }
             },
             // 代表在wacth里声明了firstName这个方法之后立即先去执行handler方法
             immediate: true
         }
-        
     },
     mounted(){
         eventBus.$on('changeList', () => {
@@ -180,6 +145,12 @@ export default {
         })
     },
   methods:{
+        getSearchParam(obj) {
+            console.log(obj)
+            this.searchInfo = Object.assign({},obj,{shipperStatus:'AF0010401'})
+            this.loading = false;
+            this.firstblood()
+        },
         handlePageChange(obj) {
             this.page = obj.pageNum
             this.pagesize = obj.pageSize
@@ -194,34 +165,20 @@ export default {
             console.log(val)
             this.selectRowData = val;
         },
-        getMoreInformation(){
-            //获取账户状态列表
-            if(this.optionsAuidSataus.length > 1){
-                return
-            }else{
-                
-                data_get_shipper_auid().then(res=>{
-                console.log('车主状态：',res)
-                res.data.map((item)=>{
-                    this.optionsAuidSataus.push(item);
-                })
-                })
-            }
-        },
         //点击查询按纽，按条件查询列表
-        getdata_search(event){
-        this.formInline.belongCity = this.$refs.area.selectedOptions.pop();
-            data_get_shipper_list(this.page,this.pagesize,this.formInline).then(res=>{
-                this.totalCount = res.data.totalCount;
-                this.tableData4 = res.data.list;
-            })
-        },
+        // getdata_search(event){
+        // this.formInline.belongCity = this.$refs.area.selectedOptions.pop();
+        //     data_get_shipper_list(this.page,this.pagesize,this.formInline).then(res=>{
+        //         this.totalCount = res.data.totalCount;
+        //         this.tableData4 = res.data.list;
+        //     })
+        // },
         
         //清空
         clearSearch(){
             this.$refs.area.selectedOptions = [];
             this.formInline = {
-                accountStatus:null,
+                accountStatus:'',
                 belongCity:'',
                 mobile:'',
                 shipperStatus:"AF0010401",//未认证的状态码
@@ -230,7 +187,7 @@ export default {
         },
         //刷新页面
         firstblood(){
-            data_get_shipper_list(this.page,this.pagesize,this.formInline).then(res=>{
+            data_get_shipper_list(this.page,this.pagesize,this.searchInfo).then(res=>{
                 // console.log('未认证',res)
                 this.totalCount = res.data.totalCount;
                 this.tableData4 = res.data.list;

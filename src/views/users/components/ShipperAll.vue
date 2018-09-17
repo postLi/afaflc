@@ -1,45 +1,16 @@
 <template>
     <div style="height:100%;" class="identicalStyle">
-          <el-form :inline="true" :model="formAll" ref="ruleForm" class="classify_searchinfo">
-            <el-form-item label="所在地：">
-                <GetCityList v-model="formAll.belongCity" ref="area"></GetCityList>
-            </el-form-item>
-            <el-form-item label="认证状态：">
-                <el-select v-model="formAll.shipperStatus" clearable placeholder="请选择">
-                    <el-option
-                    v-for="item in optionsStatus"
-                    :key="item.id"
-                    :label="item.name"
-                    :value="item.code"
-                    :disabled="item.disabled">
-                    </el-option>
-                </el-select>
-            </el-form-item>
-            <el-form-item label="账户状态：">
-                <el-select v-model="formAll.accountStatus" clearable placeholder="请选择">
-                    <el-option
-                    v-for="item in optionsAuidSataus"
-                    :key="item.id"
-                    :label="item.name"
-                    :value="item.code"
-                    :disabled="item.disabled">
-                    </el-option>
-                </el-select>
-            </el-form-item>
-            <el-form-item label="公司名称:">
-                <el-input v-model.trim="formAll.companyName"></el-input>
-            </el-form-item>
-            <el-form-item label="手机号：">
-                <el-input v-model.trim="formAll.mobile"></el-input>
-            </el-form-item>
-            <el-form-item class="fr">
-                <el-button type="primary" plain @click="getdata_search" :size="btnsize">查询</el-button>
-                <el-button type="info" plain @click="clearSearch" :size="btnsize">清空</el-button>
-            </el-form-item>
-        </el-form>
+        <searchInfo @change="getSearchParam" :showType = 'tabType'></searchInfo>
 		<div class="classify_info">
 			<div class="btns_box">
-				<createdDialog btntext="新增"  type="primary" icon="el-icon-circle-plus" editType="add" btntitle="新增货主" @getData="getDataList"></createdDialog>
+                <el-button type="primary" icon="el-icon-circle-plus" plain :size="btnsize" @click="handleClick('add')">新增</el-button>
+                <!-- <el-button type="primary" plain :size="btnsize" @click="handleClick('editFreeze')">冻结修改</el-button>
+                <el-button type="primary" plain :size="btnsize" @click="handleClick('pushBlack')">移入黑名单</el-button>
+                <el-button type="primary" plain :size="btnsize" @click="handleClick('removeBlack')">移除黑名单</el-button>
+                <el-button type="primary" plain :size="btnsize" @click="handleClick('removeFreeze')">解冻</el-button> -->
+
+
+				<!-- <createdDialog btntext="新增"  type="primary" icon="el-icon-circle-plus" editType="add" btntitle="新增货主" @getData="getDataList"></createdDialog> -->
 				<FreezeDialog
           btntext="冻结"
           type="primary" 
@@ -117,8 +88,8 @@
 				</el-table-column>  
 				<el-table-column label="手机号">
                     <template slot-scope="scope">
-                        <createdDialog :paramsView="scope.row" btntype="text" :btntext="scope.row.mobile" editType="view" btntitle="详情"></createdDialog>
-                            <!-- <h4 class="needMoreInfo" @click="pushOrderSerial(scope.row)">{{ scope.row.mobile}}</h4> -->
+                        <!-- <createdDialog :paramsView="scope.row" btntype="text" :btntext="scope.row.mobile" editType="view" btntitle="详情"></createdDialog> -->
+                        <h4 class="needMoreInfo" @click="pushOrderSerial(scope.row)">{{ scope.row.mobile}}</h4>
                     </template>
 				</el-table-column>
 				<el-table-column prop="companyName" label="公司名称">
@@ -137,48 +108,48 @@
 				<el-table-column prop="shipperTypeName" label="货主类型">
 				</el-table-column>
 				<el-table-column  label="注册日期">
-          <template  slot-scope="scope">
-              <span v-if="scope.row.registerTime">{{ scope.row.registerTime | parseTime}}</span>
-          </template>
+                    <template  slot-scope="scope">
+                        <span v-if="scope.row.registerTime">{{ scope.row.registerTime | parseTime}}</span>
+                    </template>
 				</el-table-column>
 				</el-table>
 			</div>
 		</div>
 
         <div class="info_tab_footer">共计:{{ totalCount }} <div class="show_pager"> <Pager :total="totalCount" @change="handlePageChange" /></div> </div>    
-        <!-- <createdDialog :paramsView="paramsView" :editType="type"  :dialogFormVisible_add.sync = "dialogFormVisible_add" @getData="getDataList"/>
-        <FreezeDialog :params="selectRowData" :editType="freezetype"  :freezeDialogFlag.sync = "freezeDialogFlag" @getData="getDataList"/>
+        <createdDialog :paramsView="paramsView" :editType="type"  :dialogFormVisible_add.sync = "dialogFormVisible_add" @getData="getDataList"/>
+        <!-- <FreezeDialog :params="selectRowData" :editType="freezetype"  :freezeDialogFlag.sync = "freezeDialogFlag" @getData="getDataList"/>
         <shipperBlackDialog :params="selectRowData" :editType="blacktype"  :BlackDialogFlag.sync = "BlackDialogFlag" @getData="getDataList"/> -->
-
     </div>
 </template>
 
 <script>
-import { data_get_shipper_freezeType, data_get_shipper_BlackType, data_get_shipper_change, data_get_shipper_list, data_get_shipper_status, data_get_shipper_auid } from '@/api/users/shipper/all_shipper.js'
+import { data_get_shipper_list} from '@/api/users/shipper/all_shipper.js'
 import createdDialog from './createdDialog.vue'
-import GetCityList from '@/components/GetCityList'
 import FreezeDialog from './FreezeDialog'
 import shipperBlackDialog from './shipperBlackDialog'
 import { eventBus } from '@/eventBus'
 import { parseTime } from '@/utils/index.js'
 import Pager from '@/components/Pagination/index'
+import searchInfo from './searchInfo'
 
 export default {
   components: {
     createdDialog,
-    GetCityList,
     FreezeDialog,
     shipperBlackDialog,
-    Pager
+    Pager,
+    searchInfo
   },
-  props: {
-    isvisible: {
-      type: Boolean,
-      default: false
-    }
-  },
-  data() {
+    props: {
+        isvisible: {
+            type: Boolean,
+            default: false
+        }
+    },
+    data() {
     return {
+        tabType:'All',
       btnsize: 'mini',
       templateRadio: '',
       dialogFormVisible_add: false,
@@ -208,23 +179,7 @@ export default {
         }
       },
       optionsReason: [],
-      optionsFormBlack: [],
-        // information:null,
-        // centerDialogVisible: false,
-      formBlack: { // 移除黑名单的表单
-        mobile: '',
-        contacts: '',
-        companyName: '',
-        belongCity: null,
-        shipperType: null,
-        address: '',
-        registerOrigin: '',
-        putBlackCause: '',
-        popBlackRemark: '',
-        putBlackCauseRemark: '',
-        belongCityName: ''
-      },
-      formAll: {
+      searchInfo: {
         belongCity: null,
         shipperStatus: null,
         accountStatus: null,
@@ -248,7 +203,6 @@ export default {
         if (newVal && !this.inited) {
           this.inited = true
           this.firstblood()
-          this.getMoreInformation()
         }
       },
             // 代表在wacth里声明了firstName这个方法之后立即先去执行handler方法
@@ -257,94 +211,65 @@ export default {
   },
   mounted() {
     eventBus.$on('changeList', () => {
-      console.log('22222222222222222222')
+    //   console.log('22222222222222222222')
       this.firstblood()
     })
   },
   methods: {
-        // pushOrderSerial(row){
-        //     this.type = 'view';
-        //     this.paramsView = Object.assign({},row);;
-        //     this.dialogFormVisible_add =true;
-        // },
-    handlePageChange(obj) {
-      this.page = obj.pageNum
-      this.pagesize = obj.pageSize
-      this.firstblood()
-    },
-    getCurrentRow(index, row) {
-      this.selectRowData = Object.assign({}, row)
+       getSearchParam(obj) {
+            console.log(obj)
+            this.searchInfo = Object.assign(this.searchInfo, obj)
+            this.loading = false;
+            this.firstblood()
+        },
+        pushOrderSerial(row){
+            this.type = 'view';
+            this.paramsView = Object.assign({},row);;
+            this.dialogFormVisible_add =true;
+        },
+        handlePageChange(obj) {
+            this.page = obj.pageNum
+            this.pagesize = obj.pageSize
+            this.firstblood()
+        },
+        getCurrentRow(index, row) {
+            this.selectRowData = Object.assign({}, row)
 
-      this.templateRadio = index
-      console.log('选中内容', row)
-    },
-    changeList() {
-      eventBus.$emit('changeList')
-    },
-        // 判断选中与否
-    handleCurrentChangeRow(val) {
-            // console.log('选中内容',val)
-      this.selectRowData = val
-    },
-
-    // 刷新页面
-    firstblood() {
-      data_get_shipper_list(this.page, this.pagesize, this.formAll).then(res => {
-        // console.log('shipperAll',res)
-        this.totalCount = res.data.totalCount
-        this.tableDataAll = res.data.list
-        // this.inited = false;
-      }).catch(err => {
-        console.log(err)
-      })
-    },
-    // 获取状态列表
-    getMoreInformation() {
-		// 获取移入黑名单的列表
-      data_get_shipper_BlackType().then(res => {
-        this.optionsFormBlack = res.data
-      })
-		// 获取冻结原因下拉
-      data_get_shipper_freezeType().then(res => {
-        this.optionsReason = res.data
-      })
-		// 获取状态列表
-      data_get_shipper_status().then(res => {
-        console.log('optionsStatus', res)
-        res.data.map((item) => {
-          this.optionsStatus.push(item)
-        })
-      })
-		// 获取账户状态列表
-     	data_get_shipper_auid().then(res => {
-		//   console.log('车主状态：',res)
-       res.data.map((item) => {
-         this.optionsAuidSataus.push(item)
-       })
-      	})
-    },
-    // 点击查询按纽，按条件查询列表
-    getdata_search(event) {
-        // this.formAll.belongCity = this.$refs.area.selectedOptions[1];
-      this.formAll.belongCity = this.$refs.area.selectedOptions.pop()
-      this.firstblood()
-    },
-    // 清空
-    clearSearch() {
-      this.$refs.area.selectedOptions = []
-      this.formAll = {
-        belongCity: null,
-        mobile: '',
-        shipperStatus: '',
-        companyName: ''
-      },
-        this.firstblood()
-    },
-    getDataList() {
-      this.firstblood()
+            this.templateRadio = index
+            console.log('选中内容', row)
+        },
+        changeList() {
+            eventBus.$emit('changeList')
+        },
+            // 判断选中与否
+        handleCurrentChangeRow(val) {
+                // console.log('选中内容',val)
+        this.selectRowData = val
+        },
+        handleClick(type){
+            switch(type){
+                case 'add' :
+                    this.type = "add";
+                    this.dialogFormVisible_add = true;
+                    break;
+            }
+        },
+        // 刷新页面
+        firstblood() {
+            data_get_shipper_list(this.page, this.pagesize, this.searchInfo).then(res => {
+                // console.log('shipperAll',res)
+                this.totalCount = res.data.totalCount
+                this.tableDataAll = res.data.list
+                // this.inited = false;
+            }).catch(err => {
+                console.log(err)
+            })
+        },
+        getDataList() {
+            this.firstblood()
+        }
     }
-  }
-}
+    }
 </script>
 <style lang="scss" scoped>
     .removeFreeze,.removeBlcak{

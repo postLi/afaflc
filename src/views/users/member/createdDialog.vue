@@ -240,7 +240,7 @@
         </el-form>
         <div slot="footer" class="dialog-footer">
           <el-button type="primary" @click.stop="onSubmit" v-show="editType!='view'" >确 定</el-button>
-          <el-button @click="close('xinzengform')" v-show="editType!='view'">取 消</el-button>
+          <el-button @click="close" v-show="editType!='view'">取 消</el-button>
         </div>
       </el-dialog>
     </div>
@@ -448,7 +448,6 @@ export default {
             // console.log('parmas:',this.params)
             console.log(this.editType)
             if(this.editType == 'edit'){
-
                 this.xinzengform = JSON.parse(JSON.stringify(this.paramsView))
                 if(this.xinzengform.otherServiceCode != ''){
                     this.otherServiceCode = JSON.parse(this.xinzengform.otherServiceCode) 
@@ -460,7 +459,6 @@ export default {
                     this.optionsProductArr = JSON.parse(this.xinzengform.productServiceCode) 
                 }
                     // this.xinzengform.isVip = this.xinzengform.isVip == 1 ? '1' : '0'
-
             }
             else if(this.editType == 'view'){
                 this.xinzengform  = Object.assign({},this.paramsView) ;

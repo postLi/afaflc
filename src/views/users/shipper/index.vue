@@ -38,8 +38,6 @@ import ShipperAll from '../components/ShipperAll.vue'
     import ShipperCertified from '../components/ShipperCertified.vue'
     import ShipperHasCertified from '../components/ShipperHasCertified.vue'
     import ShipperDisqualification from '../components/ShipperDisqualification.vue'
-    // import ShipperFreezing from '../components/ShipperFreezing.vue'
-    // import ShipperBlacklist from '../components/ShipperBlacklist.vue'
     
     export default {
       name: 'huozhu',
@@ -49,8 +47,6 @@ import ShipperAll from '../components/ShipperAll.vue'
         ShipperCertified,
         ShipperHasCertified,
         ShipperDisqualification
-        //   ShipperFreezing,
-        //   ShipperBlacklist
       },
       data() {
         return {
@@ -67,20 +63,20 @@ import ShipperAll from '../components/ShipperAll.vue'
         }
       },
       created() {
-        this.shipperName = localStorage.getItem('shipperName') || 'first'
+        this.shipperName = sessionStorage.getItem('shipperName') || 'first'
       },
 
       beforeUpdate() {
-        localStorage.setItem('shipperName', this.shipperName)
+        sessionStorage.setItem('shipperName', this.shipperName)
       },
 
       beforeDestroy() {
-        localStorage.setItem('shipperName', 'first')
+        sessionStorage.setItem('shipperName', 'first')
       },
       methods: {
         handleClick(tab, event) {
-                // console.log(tab, event);
-          this.shipperName = tab.name
+            // console.log(tab, event);
+            this.shipperName = tab.name
         }
       }
     }
@@ -98,42 +94,55 @@ import ShipperAll from '../components/ShipperAll.vue'
             background: rgba(236, 233, 230, 0.445);
             border-bottom-color: #ffffff;
         }
-    }
-    .creatDialog,.freezeDialog,.shipperBlackDialog,.shenghe{
-        display: inline-block;
-        .el-dialog{
-            width: 780px;
-            .el-dialog__body{
-                .el-form{
-                    .shipper_information{
-                        h2{ 
-                            margin:10px 20px;
-                            padding-bottom: 10px;
-                            border-bottom: 2px solid #ccc;
-                        }
-                    }
-                    .el-form-item{
-                        margin-bottom: 0px; 
-                        .el-form-item__content{
-                            .el-input{
-                                width: 250px;
+        .creatDialog,.freezeDialog,.shipperBlackDialog,.shenghe{
+            display: inline-block;
+            .el-dialog{
+                width: 820px;
+                min-height: 700px;
+                position: relative;
+                .el-dialog__body{
+                    .el-form{
+                        .shipper_information{
+                            h2{ 
+                                margin:10px 20px;
+                                padding-bottom: 10px;
+                                border-bottom: 2px solid #ccc;
                             }
                         }
-                    }
-                    .moreLength{
-                        .el-form-item__content{
-                            .el-input{
-                                width: 637px;
+                        .el-form-item{
+                            margin-bottom: 10px; 
+                            .el-form-item__content{
+                                .el-input{
+                                    width: 250px;
+                                }
                             }
                         }
-                    }
-                    .el-textarea{
-                        width: 637px;
-                        vertical-align: top;
-                        font-size: 12px;
-                        padding-top: 5px;
+                        .moreLength{
+                            .el-form-item__content{
+                                .el-input{
+                                    width: 660px;
+                                }
+                            }
+                        }
+                        .el-textarea{
+                            width: 660px;
+                            vertical-align: top;
+                            font-size: 12px;
+                            padding-top: 5px;
+                        }
+                        .v-region{
+                            .v-dropdown-container{
+                                // left: -151px !important;
+                                // top: 38px !important;
+                            }
+                        }
                     }
                 }
+                // .el-dialog__footer{
+                //     position: absolute;
+                //     bottom: 0;
+                //     left: 40%;
+                // }
             }
         }
     }

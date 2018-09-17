@@ -1,20 +1,7 @@
 <template>
     <div class="identicalStyle">
-          <el-form :inline="true" :model="formInline" ref="ruleForm" class="classify_searchinfo">
-                <el-form-item label="手机号：">
-                    <el-input placeholder="请输入内容" v-model.trim="formInline.mobile" clearable></el-input>
-                </el-form-item>
-                <el-form-item label="公司名称：">
-                    <el-input placeholder="请输入内容" v-model.trim="formInline.companyName" clearable></el-input>
-                </el-form-item>
-                <el-form-item label="联系人姓名：">
-                    <el-input placeholder="请输入内容" v-model.trim="formInline.contacts" clearable></el-input>
-                </el-form-item>
-                <el-form-item class="fr">
-                    <el-button type="primary" plain @click="getdata_search">查询</el-button>
-                    <el-button type="info" plain @click="clearSearch">清空</el-button>
-                </el-form-item>
-            </el-form>
+        <searchInfo @change="getSearchParam" :showType = 'tabType'></searchInfo>
+        
         <div class="classify_info">
 		    <div class="btns_box">
                 <createdDialog 
@@ -97,6 +84,8 @@ import { eventBus } from '@/eventBus'
 import { parseTime } from '@/utils/index.js'
 import Pager from '@/components/Pagination/index'
 import {data_get_shipper_list,data_get_shipper_type} from '@/api/users/shipper/all_shipper.js'
+import searchInfo from './searchInfo'
+
 export default {
     props: {
         isvisible: {
@@ -106,18 +95,20 @@ export default {
     },
     components:{
       createdDialog,
-      Pager
+      Pager,
+      searchInfo
 
     },
     data(){
         return {
+            tabType:'hasCertified',
             templateRadio:'',
             options:[],
             tableData3:[],
             totalCount:0,
             page:1,
             pagesize:20,
-            formInline: {
+            searchInfo: {
                 companyName:'',
                 belongCity:'',
                 mobile:'',
@@ -145,6 +136,12 @@ export default {
         })
     },
     methods:{
+        getSearchParam(obj) {
+            console.log(obj)
+            this.searchInfo = Object.assign({},obj,{shipperStatus:'AF0010403'})
+            this.loading = false;
+            this.firstblood()
+        },
         handlePageChange(obj) {
             this.page = obj.pageNum
             this.pagesize = obj.pageSize
@@ -162,27 +159,12 @@ export default {
         },
         //刷新页面
         firstblood(){
-            data_get_shipper_list(this.page,this.pagesize,this.formInline).then(res=>{
+            data_get_shipper_list(this.page,this.pagesize,this.searchInfo).then(res=>{
                 this.totalCount = res.data.totalCount;
                 this.tableData3 = res.data.list;
                 // this.inited = false;
 
             })
-        },
-       //点击查询按纽，按条件查询列表
-        getdata_search(event){
-            this.firstblood()
-        },
-        
-        //清空
-        clearSearch(){
-            this.formInline = {
-                companyName:'',
-                belongCity:'',
-                mobile:'',
-                shipperStatus:"AF0010403",//已认证的状态码
-            }
-            this.firstblood()
         },
         getDataList(){
             this.firstblood()
