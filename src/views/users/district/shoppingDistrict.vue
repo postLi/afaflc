@@ -25,10 +25,10 @@
                    <shoppingCread
                     btntext="新增"
                     :plain="true"
-                    btntype="primary"
+                    btntype="primary" 
                     editType="add"
                     btntitle="创建"
-                    >
+                    > 
                     </shoppingCread>
                    <shoppingDialog
                     btntext="修改"
@@ -43,7 +43,7 @@
                 <el-button type="primary" plain :size="btnsize" @click="delete_data">删除</el-button>
 			</div>
             <div class="info_news">
-            <el-table style="width: 100%" stripe border height="100%"  :data="tableDataAll" ref="multipleTable" @current-change="clickDetails" highlight-current-row>
+            <el-table style="width: 100%" stripe border height="100%" :data="tableDataAll" ref="multipleTable" @current-change="clickDetails" highlight-current-row tooltip-effect="dark">
             <el-table-column  label="序号" width="80px" type="index">
             </el-table-column>
             <el-table-column  label="商圈名称">
@@ -268,12 +268,12 @@ export default {
 
 }
 </script>
-
 <style lang="scss">
 .identicalStyle{
 .el-cascader{
     line-height: 30px;
 }
+
 }
 </style>
 
