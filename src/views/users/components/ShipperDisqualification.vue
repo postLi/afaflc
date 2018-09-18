@@ -1,20 +1,7 @@
 <template>
     <div class="identicalStyle">
-          <el-form :inline="true" :model="formAll" ref="ruleForm" class="classify_searchinfo">
-                <el-form-item label="所在地">
-                    <GetCityList v-model="formAll.belongCity" ref="area"></GetCityList>
-                </el-form-item>
-                <el-form-item label="公司名称">
-                    <el-input v-model.trim="formAll.companyName"></el-input>
-                </el-form-item>
-                <el-form-item label="手机号：">
-                    <el-input v-model.trim="formAll.mobile"></el-input>
-                </el-form-item>
-                <el-form-item class="fr">
-                    <el-button type="primary" plain @click="getdata_search">查询</el-button>
-                    <el-button type="info" plain @click="clearSearch">清空</el-button>
-                </el-form-item>
-            </el-form>
+        <searchInfo @change="getSearchParam" :showType = 'tabType'></searchInfo>
+        
         <div class="classify_info">
 		    <div class="btns_box">
                 <createdDialog btntext="代客认证"
@@ -77,7 +64,8 @@
 </template>
 <script>
 import createdDialog from './createdDialog.vue'
-import GetCityList from '@/components/GetCityList'
+import searchInfo from './searchInfo'
+
 import { eventBus } from '@/eventBus'
 import { parseTime } from '@/utils/index.js'
 import Pager from '@/components/Pagination/index'
@@ -91,18 +79,19 @@ export default {
     },
     components:{
         createdDialog,
-        GetCityList,
+        searchInfo,
         Pager
     },
     data(){
         return{
+            tabType:'disCertified',
             templateRadio:'',
             tableData1:[],
             totalCount:0,
             page:1,
             pagesize:20,
             options:[],
-            formAll:{
+            searchInfo:{
                 companyName:'',
                 belongCity:'',
                 mobile:'',
@@ -131,6 +120,12 @@ export default {
         })
     },
     methods:{
+        getSearchParam(obj) {
+            console.log(obj)
+            this.searchInfo = Object.assign({},obj,{shipperStatus:'AF0010404'})
+            this.loading = false;
+            this.firstblood()
+        },
         handlePageChange(obj) {
             this.page = obj.pageNum
             this.pagesize = obj.pageSize
@@ -150,30 +145,14 @@ export default {
         },
         //刷新页面
         firstblood(){
-            data_get_shipper_list(this.page,this.pagesize,this.formAll).then(res=>{
+            data_get_shipper_list(this.page,this.pagesize,this.searchInfo).then(res=>{
                 this.totalCount = res.data.totalCount;
                 this.tableData1 = res.data.list;
                 // this.inited = true
             })
-        },
-         //点击查询按纽，按条件查询列表
-        getdata_search(event){
-            this.formAll.belongCity = this.$refs.area.selectedOptions.pop();
-            this.firstblood()
-        },
-        
-      //清空
-        clearSearch(){
-            this.formAll = {
-                companyName:'',
-                belongCity:'',
-                mobile:'',
-                shipperStatus:"AF0010404",//未认证的状态码
-            },
-            this.firstblood()
-        },
-          
         }
+     
+    }
 }
 </script>
 
