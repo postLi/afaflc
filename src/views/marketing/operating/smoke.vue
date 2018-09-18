@@ -108,7 +108,6 @@
     </div>
   </div>
 </template>
-
 <script type="text/javascript">
 import FileSaver from 'file-saver'
 import XLSX from 'xlsx'
