@@ -24,8 +24,8 @@
 				btntitle="修改"
 				@getData="getDataList">
 				</createdDialog> -->
-                <el-button type="primary" icon="el-icon-circle-plus" plain :size="btnsize" @click="handleClick('identification')">代客认证</el-button>
-                <el-button type="primary" icon="el-icon-circle-plus" plain :size="btnsize" @click="handleClick('edit')">修改</el-button>
+                <el-button type="primary" icon="el-icon-document" plain :size="btnsize" @click="handleClick('identification')">代客认证</el-button>
+                <el-button type="primary" icon="el-icon-edit-outline" plain :size="btnsize" @click="handleClick('edit')">修改</el-button>
 			</div>
 			<div class="info_news">
 				<el-table
@@ -50,6 +50,9 @@
 				<el-table-column
 					prop="mobile"
 					label="手机号">
+                    <template slot-scope="scope">
+                        <h4 class="needMoreInfo" @click="pushOrderSerial(scope.row)">{{ scope.row.mobile}}</h4>
+                    </template>
 				</el-table-column>
 				<el-table-column prop="contacts" label="联系人">
 				</el-table-column>
@@ -79,7 +82,7 @@
 			</div>	
 		</div>
         <div class="info_tab_footer">共计:{{ totalCount }} <div class="show_pager"> <Pager :total="totalCount" @change="handlePageChange" /></div> </div>    
-        <createdDialog :paramsView="paramsView" :editType="type"  :dialogFormVisible_add.sync = "dialogFormVisible_add" @getData="getDataList"/>
+        <createdDialog :paramsView="paramsView" :typetitle="typetitle" :editType="type"  :dialogFormVisible_add.sync = "dialogFormVisible_add" @getData="getDataList"/>
 
     </div>
 </template>
@@ -105,10 +108,10 @@ export default {
     return{
         tabType:'unauthorized',
         btnsize: 'mini',
-        templateRadio: '',
         dialogFormVisible_add: false,
         type: '',
         paramsView: {},
+        typetitle:'',
         templateRadio:'',
         optionsStatus:[], // 状态列表
         tableData4:[],
@@ -139,7 +142,6 @@ export default {
                 if(newVal && !this.inited){
                     this.inited = true
                     this.firstblood()
-                    // this.getMoreInformation()
                 }
             },
             // 代表在wacth里声明了firstName这个方法之后立即先去执行handler方法
@@ -152,7 +154,13 @@ export default {
                 this.firstblood()
         })
     },
-  methods:{
+    methods:{
+        pushOrderSerial(row){
+            this.type = 'view';
+            this.typetitle = '货主详情';
+            this.paramsView = Object.assign({},row);;
+            this.dialogFormVisible_add =true;
+        },
         getSearchParam(obj) {
             console.log(obj)
             this.searchInfo = Object.assign({},obj,{shipperStatus:'AF0010401'})
@@ -177,12 +185,13 @@ export default {
             switch(type){
                 case 'edit' :
                     this.type = "edit";
+                    this.typetitle = "修改货主";
                     this.paramsView = this.selectRowData;
                     this.dialogFormVisible_add = true;
                     break;
                 case 'identification':
                     this.type = "identification";
-                    paramsView
+                    this.typetitle = "代客认证";
                     this.paramsView = this.selectRowData;
                     this.dialogFormVisible_add = true;
                     break;

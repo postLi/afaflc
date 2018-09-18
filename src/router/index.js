@@ -49,7 +49,14 @@ export const constantRouterMap = [
     children: [{
       path: 'dashboard', name: '首页', icon: 'shouye', component: _import('dashboard/index'),
       meta: { title: '首页', noCache: true }
-    }]
+    },{
+        path: '/common/myinfo',
+        icon: 'information',
+        hidden: true,
+        name: '个人中心',
+        component: _import('common/myinfo/index'),
+        meta: { title: '个人中心', noCache: true }
+      }]
   }
 ]
 

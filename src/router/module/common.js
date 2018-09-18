@@ -4,7 +4,7 @@ const _import = require('../_import_' + process.env.NODE_ENV)
 export default {
   path: '/common',
   component: Layout,
-  redirect: '/common/systemSetup',
+  redirect: '/common/groupManage',
   name: '系统管理',
   icon: 'gongsiguanli',
   children: [

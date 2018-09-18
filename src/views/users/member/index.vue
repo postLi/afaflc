@@ -141,7 +141,6 @@ import ShipperAll from './ShipperAll.vue'
                 width: 90px;
                 color: #333333;
             }
-
             .isTMS{
                 color: #0da0e4;
                 font-weight: bold;
@@ -152,50 +151,45 @@ import ShipperAll from './ShipperAll.vue'
                 font-weight: bold;
             }
         }
-    }
-
-    .item {
-        margin-top: 10px;
-        margin-right: 40px;
-    }
-    .creatDialog,.freezeDialog,.shipperBlackDialog,.shenghe{
-        display: inline-block;
-        .el-dialog{
-            width: 810px;
-            .el-dialog__body{
-                .el-form{
-                    .shipper_information{
-                        h2{ 
-                            margin:10px 20px;
-                            padding-bottom: 10px;
-                            border-bottom: 2px solid #ccc;
-                        }
-                    }
-                    .el-form-item{
-                        margin-left: 10px;
-                        margin-right: 10px;
-                        .el-form-item__content{
-                            .el-input{
-                                width: 250px;
+        .wuliucreatDialog,.freezeDialog,.shipperBlackDialog,.shenghe{
+            display: inline-block;
+            .el-dialog{
+                width: 810px;
+                .el-dialog__body{
+                    .el-form{
+                        .shipper_information{
+                            h2{ 
+                                margin:10px 20px;
+                                padding-bottom: 10px;
+                                border-bottom: 2px solid #ccc;
                             }
                         }
-                    }
-                    .moreLength{
-                        text-align: left;
-                        .el-form-item__content{
-                            .el-input{
-                                width: 650px;
-                            }
-                            .el-radio-group{
-                                margin-left: 0;
+                        .el-form-item{
+                            margin-left: 10px;
+                            margin-right: 10px;
+                            .el-form-item__content{
+                                .el-input{
+                                    width: 250px;
+                                }
                             }
                         }
-                    }
-                    .el-textarea{
-                        width: 650px;
-                        vertical-align: top;
-                        font-size: 12px;
-                        padding-top: 5px;
+                        .moreLength{
+                            text-align: left;
+                            .el-form-item__content{
+                                .el-input{
+                                    width: 650px;
+                                }
+                                .el-radio-group{
+                                    margin-left: 0;
+                                }
+                            }
+                        }
+                        .el-textarea{
+                            width: 650px;
+                            vertical-align: top;
+                            font-size: 12px;
+                            padding-top: 5px;
+                        }
                     }
                 }
             }

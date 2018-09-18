@@ -4,7 +4,7 @@
         
       	<div class="classify_info">
 		  <div class="btns_box">
-        	<el-button type="primary" plain icon="el-icon-check" @click="handleEdit">认证审核</el-button>
+        	<el-button type="primary" plain icon="el-icon-check" :size="btnsize" @click="handleEdit">认证审核</el-button>
 		</div>
 		<div class="info_news">
 			<el-table 
@@ -26,9 +26,9 @@
                     {{ (page - 1)*pagesize + scope.$index + 1 }}
                 </template>
 			</el-table-column>  
-			<el-table-column label="公司名称">
+			<el-table-column label="公司名称" prop="companyName">
                 <template slot-scope="scope">
-                    <createdDialog :paramsView="scope.row" btntype="text" :btntext="scope.row.companyName" editType="view" btntitle="详情"></createdDialog>
+                    <h4 class="needMoreInfo" @click="pushOrderSerial(scope.row)">{{ scope.row.companyName}}</h4>
                 </template>
 			</el-table-column>
 			<el-table-column prop="mobile" label="手机号">
@@ -44,6 +44,9 @@
 			<el-table-column prop="belongCityName" label="所在地">
 			</el-table-column>
 			<el-table-column prop="authenticationTime" label="提交认证时间">
+                 <template slot-scope="scope">
+                     {{scope.row.authenticationTime | parseTime}}
+                </template>
 			</el-table-column>
 			<el-table-column prop="waitTime" label="等待时长">
 			</el-table-column>
@@ -76,10 +79,10 @@
               </el-col>
               <el-col :span="12">
                 <el-form-item label="所在地" :label-width="formLabelWidth" prop="address">
-                 <el-input v-model="shengheform.belongCityName" @focus="changeCity" v-if="selectDiaologFlag" ></el-input>
-                 <span v-else>
-                   <GetCityList v-model="shengheform.belongCity" ref="area"></GetCityList>
-                 </span>
+                    <vregion :ui="true"  @values="regionChange" class="form-control">
+                        <el-input v-model="shengheform.belongCityName" placeholder="请选择" ></el-input>
+                    </vregion>
+
                 </el-form-item>
               </el-col>
             </el-row>
@@ -160,9 +163,8 @@
           </div>
         </el-dialog>
      </div> 
-
         <div class="info_tab_footer">共计:{{ totalCount }} <div class="show_pager"> <Pager :total="totalCount" @change="handlePageChange" /></div> </div>    
-
+        <createdDialog :paramsView="paramsView" :typetitle="typetitle" :editType="type"  :dialogFormVisible_add.sync = "dialogFormVisible_add"/>
     </div>
 </template>
 <script>
@@ -173,6 +175,8 @@ import searchInfo from './searchInfo'
 import {data_get_shipper_list,data_get_shipper_change} from '@/api/users/shipper/all_shipper.js'
 // import defaultURL  from '@/assets/404_images/404.png'
 import Pager from '@/components/Pagination/index'
+import { parseTime } from '@/utils/index'
+import vregion from '@/components/vregion/Region'
 
 export default {
 	props: {
@@ -185,7 +189,8 @@ export default {
 		createdDialog,
 		searchInfo,
         Upload,
-        Pager
+        Pager,
+        vregion
 	},
 	computed: {
 		// pictureValue () {
@@ -202,6 +207,11 @@ export default {
             }
 		}
 		return{
+            dialogFormVisible_add: false,
+            type: '',
+            paramsView: {},
+            typetitle:'',
+            btnsize:'mini',
             tabType:'certified',
             templateRadio:'',
             defaultImage:'',
@@ -250,6 +260,27 @@ export default {
         })
     },
     methods:{
+        regionChange(d) {
+            console.log('data:',d)
+            this.shengheform.belongCityName = (!d.province&&!d.city&&!d.area&&!d.town) ? '': `${this.getValue(d.province)}${this.getValue(d.city)}${this.getValue(d.area)}${this.getValue(d.town)}`.trim();
+            if(d.area){
+                this.shengheform.belongCity = d.area.code;
+            }else if(d.city){
+                this.shengheform.belongCity = d.city.code;
+            }
+            else{
+                this.shengheform.belongCity = d.province.code;
+            }
+        },
+        getValue(obj){
+            return obj ? obj.value:'';
+        },
+        pushOrderSerial(row){
+            this.type = 'view';
+            this.typetitle = '货主详情';
+            this.paramsView = Object.assign({},row);;
+            this.dialogFormVisible_add =true;
+        },
         getSearchParam(obj) {
             console.log(obj)
             this.searchInfo = Object.assign({},obj,{shipperStatus:'AF0010402'})
@@ -304,39 +335,11 @@ export default {
                 // this.inited = true
             })
         },
-        completeData(){
-            //获取城市name
-            if(this.$refs.area.selectedOptions.length > 1){
-                let province;
-                this.$refs.area.areaData.forEach((item) =>{
-                if(item.code == this.$refs.area.selectedOptions[0]){
-                    province = item
-                }
-                })
-                province.children.forEach( item => {
-                if(item.code == this.$refs.area.selectedOptions[1]){
-                    this.shengheform.belongCity = item.code;
-                    this.shengheform.belongCityName = item.name;
-                }
-                })
-            }else{
-                this.$refs.area.areaData.forEach((item) =>{
-                if(item.code == this.$refs.area.selectedOptions[0]){
-                    this.shengheform.belongCity = item.code;
-                    this.shengheform.belongCityName = item.name;
-                }
-                })
-            }
-        },
         // 审核不通过
         handlerOut(){
-            
-            // this.pictureValue.forEach((el,idx) => {
-                //     if(el.result == '上传合格'){
-                    //         this.pictureValue.splice(idx,1)
             this.$refs['shengheform'].validate((valid)=>{
                 if(valid){
-                    this.completeData();
+                    // this.completeData();
                     let item =  this.shengheform.contacts;
                     this.$confirm('确定要不通过'+ item +' 货主吗？', '提示', {
                         confirmButtonText: '确定',
@@ -344,6 +347,7 @@ export default {
                         type: 'warning'
                     }).then(() => {
                         var forms=Object.assign({},this.shengheform,{shipperType:"AF0010202"},{currentShipperStatus:"AF0010402"},{shipperStatus:"AF0010404"});
+                        
                         data_get_shipper_change(forms).then(res=>{
                             // console.log(res)
                             this.$message({
@@ -366,10 +370,11 @@ export default {
                             message: '已取消'
                         })
                     })
-                
                 } else {
-                    // console.log('error submit!!');
-                    return false;
+                    return  this.$message({
+                        type: 'info',
+                        message: '审核未满足通过要求，请填写完整数据'
+                    });
                 }
             })
         },
@@ -377,11 +382,6 @@ export default {
         // 审核通过
         handlerPass(){
             let ifQualified;
-            // this.pictureValue.forEach((el,idx) => {
-                //     if(el.result != "上传合格"){
-                    //         ifQualified = false;
-            //     }
-            // })
             if(this.shengheform.shipperCardFileNoPass = this.shengheform.companyFacadeFileNoPass == "上传合格" ){
                 ifQualified = true ;
             }else{
@@ -389,8 +389,8 @@ export default {
             }
             this.$refs['shengheform'].validate((valid)=>{
                 if(valid && ifQualified){
-                    this.completeData();
                     var forms=Object.assign({},this.shengheform,{shipperType:"AF0010202"},{currentShipperStatus:"AF0010402"},{shipperStatus:"AF0010403"});
+                    console.log('this.forms',forms)
                     data_get_shipper_change(forms).then(res=>{
                     // console.log(res)
                         this.RZdialogFormVisible = false;
@@ -409,8 +409,10 @@ export default {
                         })
                     })
                 }else{
-                    this.$message.error('审核未满足通过要求')
-                    return false
+                    return this.$message({
+                        type: 'info',
+                        message: '审核未满足通过要求，请填写完整数据'
+                    });
                 }
             })
         },

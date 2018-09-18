@@ -83,7 +83,6 @@ import ShipperAll from '../components/ShipperAll.vue'
 </script>
 
 <style type="text/css" lang="scss">
-  
     .huozhu{
         height:100%;    
         position: relative;
@@ -94,11 +93,11 @@ import ShipperAll from '../components/ShipperAll.vue'
             background: rgba(236, 233, 230, 0.445);
             border-bottom-color: #ffffff;
         }
-        .creatDialog,.freezeDialog,.shipperBlackDialog,.shenghe{
+        .shippercreatDialog,.freezeDialog,.shipperBlackDialog,.shenghe{
             display: inline-block;
             .el-dialog{
-                width: 820px;
-                min-height: 700px;
+                width: 810px;
+                min-height: 400px;
                 position: relative;
                 .el-dialog__body{
                     .el-form{
@@ -110,7 +109,7 @@ import ShipperAll from '../components/ShipperAll.vue'
                             }
                         }
                         .el-form-item{
-                            margin-bottom: 10px; 
+                            // margin-bottom: 10px; 
                             .el-form-item__content{
                                 .el-input{
                                     width: 250px;
@@ -120,7 +119,7 @@ import ShipperAll from '../components/ShipperAll.vue'
                         .moreLength{
                             .el-form-item__content{
                                 .el-input{
-                                    width: 660px;
+                                    width: 655px;
                                 }
                             }
                         }
@@ -132,17 +131,12 @@ import ShipperAll from '../components/ShipperAll.vue'
                         }
                         .v-region{
                             .v-dropdown-container{
-                                // left: -151px !important;
-                                // top: 38px !important;
+                                height: 300px !important;
+                                overflow: auto;
                             }
                         }
                     }
                 }
-                // .el-dialog__footer{
-                //     position: absolute;
-                //     bottom: 0;
-                //     left: 40%;
-                // }
             }
         }
     }

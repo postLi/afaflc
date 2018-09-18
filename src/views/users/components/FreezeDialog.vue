@@ -1,7 +1,6 @@
 <template>
   <div class="freezeDialog commoncss">
-    <el-button :type="type" :value="value" :plain="plain" :icon="icon" @click="openDialog()">{{text}}</el-button>
-    <el-dialog :title="title" :visible.sync="freezeDialogFlag" :before-close="change()">
+    <el-dialog :title="title" :visible.sync="freezeDialogFlag" :before-close="close()">
       <el-form :model="formFroze" ref="formFroze" :rules="formFrozeRules">
         <el-row>
             <el-col :span="12">
@@ -117,7 +116,7 @@
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button type="primary" @click="onSubmit">确 定</el-button>
-        <el-button @click="freezeDialogFlag = false">取 消</el-button>
+        <el-button @click="close">取 消</el-button>
       </div>
     </el-dialog>
   </div>
@@ -132,40 +131,17 @@ export default {
 
   },
   props:{
-    params:{
-      type:Object,
-    },
-    icon:{
-      type: String,
-      default: ''
-    },
-    btntype: {
-      type: String,
-      default: ''
-    },
-    btntitle: {
-      type: String,
-      default: ''
-    },
-    plain:{
-      type: Boolean,
-      default: false
-    },
-    btntext: {
-      type: String,
-      default: ''
-    },
-    value:{
-      type: String,
-      default:''
-    },
-     editType: {
-      type: String,
-      default: 'edit'
-	},
-	freeze:{
-		type:Boolean
-	}
+        freezeDialogFlag:{
+            type:Boolean,
+            default:false
+        },
+        editType: {
+            type: String,
+            default: 'edit'
+        },
+        freeze:{
+            type:Boolean
+        }
   },
   data(){
     return{
@@ -174,7 +150,6 @@ export default {
       text:'',
       optionsReason:[],
       formLabelWidth:'120px',
-      freezeDialogFlag:false,
       formFroze: { // 冻结弹框表单
       },
       radio: '',
@@ -191,24 +166,34 @@ export default {
     }
   },
   watch:{
-    freezeDialogFlag:{
+       freezeDialogFlag:{
         handler: function(val, oldVal) {
-            if(!val){
-                this.$refs.formFroze.resetFields();
+            if(val){
+                this.openDialog();
+                this.getMoreInformation()
             }
         },
-    }
+    },
   },
   mounted(){
-    //按钮类型text,primary...
-    this.type = this.btntype;
-    //按钮文本内容
-    this.text = this.btntext;
-    //弹出框标题
-    this.title = this.btntitle;
-    this.getMoreInformation()
+
   },
   methods:{
+    close(done) {
+        this.$emit('update:freezeDialogFlag', false);
+        this.$emit('getData');
+        this.$refs.formFroze.resetFields();
+
+        this.formFroze = { // 冻结弹框表单
+            freezeCause:null,
+            unfreezeTime:null,
+            freezeCauseRemark:null,
+            unfreezeRemark:null
+        }
+        if (typeof done === 'function') {
+            done()
+        }
+    },
     //事件分发
     changeList(){
         eventBus.$emit('changeList')
@@ -235,32 +220,23 @@ export default {
         }
         this.formFroze.freezeTime = time
     },
-    change(){
-      this.freezeDialogFlag!=this.freezeDialogFlag
-    },
-    setCurrent(row) {
-      this.$refs.singleTable.setCurrentRow(row);
-    },
     openDialog(){
-        this.formFroze = this.params;
+        console.log('this.params',this.params)
+        this.formFroze = Object.assign({},this.params) ;
+        // this.freezeDialogFlag = true ;
+        // this.formFroze.freezeTime = this.formFroze.freezeTime ? this.formFroze.freezeTime : Date.parse(new Date());;
+        // if(this.editType == 'add'){
+        //     console.log('add')
+        //     this.formFroze.unfreezeTime = this.formFroze.unfreezeTime ? this.formFroze.unfreezeTime : new Date();
+        //     this.formFroze.id = this.params.id;
+        //     this.formFroze.mobile = this.params.mobile;
 
-        if(this.formFroze.accountStatusName == '冻结中' && this.editType == 'add'){
-            this.$message.info('您选中的货主已被冻结，不需多次冻结！');
-            return
-        }
-        else if(this.formFroze.accountStatusName != '冻结中' && this.editType == 'edit'){
-            this.$message.info('您选中的货主未被冻结，不可做此操作！');
-            return
-        }
-        else if(this.formFroze.accountStatusName != '冻结中' && this.editType == 'remove'){
-            this.$message.info('您选中的货主未被冻结，无需移除！');
-            return
-        }
-        else{
-            this.freezeDialogFlag = true ;
-            this.formFroze.freezeTime = this.formFroze.freezeTime ? this.formFroze.freezeTime : Date.parse(new Date());;
-        }
-        
+        // }else{
+        //     console.log('freez')
+
+        //     this.formFroze = Object.assign({},this.params) ;
+        //     this.formFroze.unfreezeTime = this.formFroze.unfreezeTime ? this.formFroze.unfreezeTime : new Date();
+        // }
     },
 
     getMoreInformation(){

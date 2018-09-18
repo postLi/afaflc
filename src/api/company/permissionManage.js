@@ -14,7 +14,7 @@ const baseUrl = 'aflccommonservice-lyc'
  "createrId":"string",
  */
 export function postRoleInfo(data) {
-  return fetch.post('/'+baseUrl+'api-system/system/role/v1/', data).then(res => {
+  return fetch.post('/'+baseUrl+'/system/role/v1/', data).then(res => {
     return res.data ? res.data : {}
   })
 }
@@ -30,7 +30,7 @@ export function postRoleInfo(data) {
 
  */
 export function putRoleInfo(data) {
-  return fetch.put('/'+baseUrl+'api-system/system/role/v1/', data).then(res => {
+  return fetch.put('/'+baseUrl+'/system/role/v1/', data).then(res => {
     return res.data ? res.data : {}
   })
 }
@@ -39,7 +39,7 @@ export function putRoleInfo(data) {
  * id 要设置失效的id
  */
 export function deleteRoleInfo(id) {
-  return fetch.delete('/'+baseUrl+'api-system/system/role/v1/' + id).then(res => {
+  return fetch.delete('/'+baseUrl+'/system/role/v1/' + id).then(res => {
     return res.data ? res.data : {}
   })
 }

@@ -1,6 +1,5 @@
 <template>
-     <div class="creatDialog commoncss">
-      <!-- <el-button :type="type" :value="value" :plain="plain" :icon="icon" @click="openDialog()">{{text}}</el-button> -->
+     <div class="shippercreatDialog commoncss">
       <el-dialog :title="typetitle" :visible="dialogFormVisible_add" :before-close="close" :close-on-click-modal="false">
         <el-form :model="xinzengform" ref="xinzengform" :rules="rulesForm">
           <el-row>
@@ -31,8 +30,9 @@
           <el-row>
             <el-col :span="12">
                 <el-form-item label="所在地 ：" :label-width="formLabelWidth" required prop="belongCityName">
-                    <vregion :ui="true"  @values="regionChange" class="form-control">
-                        <el-input v-model="xinzengform.belongCityName" placeholder="请选择" :disabled="editType=='view'"></el-input>
+                    <el-input v-model="xinzengform.belongCityName" auto-complete="off" disabled v-if="editType=='view'"></el-input>
+                    <vregion :ui="true"  @values="regionChange" class="form-control" v-else>
+                        <el-input v-model="xinzengform.belongCityName" placeholder="请选择" ></el-input>
                     </vregion>
                 </el-form-item>
             </el-col>
@@ -118,36 +118,9 @@ export default {
     paramsView:{
         type:Object,
     },
-    params:{
-      type:Object,
-    },
-    value:{
-      type: String,
-      default:''
-    },
-    btntype: {
-      type: String,
-      default: ''
-    },
-    btntext: {
-      type: String,
-      default: ''
-    },
-    btntitle: {
-        type: String,
-        default: ''
-    },
     typetitle: {
         type: String,
         default: ''
-    },
-    icon:{
-      type: String,
-      default: ''
-    },
-    plain:{
-      type: Boolean,
-      default: false
     },
     /*add新增，edit编辑，view查看*/
     editType: {
@@ -276,9 +249,6 @@ export default {
     this.type = this.btntype;
     //按钮文本内容
     this.text = this.btntext;
-    //弹出框标题
-    // this.title = this.btntitle;
-    // this.getMoreInformation()
   },
   methods:{
     regionChange(d) {
@@ -309,20 +279,21 @@ export default {
         }
     },
     close(done) {
-        this.$emit('update:dialogFormVisible_add', false);
-        this.$emit('getData');
-         this.$refs.xinzengform.resetFields();
-        this.changeList();
-        if (typeof done === 'function') {
-            done()
+        if(this.editType != 'view'){
+            this.$emit('getData');
+            this.$refs.xinzengform.resetFields();
+            this.changeList();
+            if (typeof done === 'function') {
+                done()
+            }
         }
+        this.$emit('update:dialogFormVisible_add', false);
     },
     //获取货主类型
     getMoreInformation(){
         getDictionary(this.shipperType).then(res=>{
             // console.log('货主类型',res)
             this.options = res.data
-        
         })
     },
     //完善数据
@@ -365,13 +336,10 @@ export default {
                             forms.companyName = '个人业务' ;
                         }
                         data_get_shipper_create(forms).then(res=>{
-                        // console.log(res)
                             this.$alert('操作成功', '提示', {
                                 confirmButtonText: '确定',
                                 callback: action => {
-                                    // this.dialogFormVisible_add = false;
                                     this.close()
-
                                 }
                             });
                         }).catch(err=>{
@@ -383,11 +351,9 @@ export default {
                         break;
                     case 'edit':
                         data_get_shipper_change(forms).then(res=>{
-                            // console.log(res)
                             this.$alert('操作成功', '提示', {
                                  confirmButtonText: '确定',
                                 callback: action => {
-                                    // this.dialogFormVisible_add = false;
                                     this.close()
                                 }
                             });
@@ -400,7 +366,6 @@ export default {
                         break;
                     case 'identification':
                         let item =  forms.contacts;
-
                         this.$confirm('确定要认证通过'+ item +' 该货主吗？', '提示', {
                             confirmButtonText: '确定',
                             cancelButtonText: '取消',
@@ -408,6 +373,7 @@ export default {
                         }).then(() => {
                             forms.currentShipperStatus = forms.shipperStatus;
                             forms.shipperStatus =  "AF0010403";
+                            forms.shipperStatusName =  "已认证";
                             this.options.filter( el => {
                                 if(el.name == "企业货主" ){
                                     forms.shipperTypeName = el.name;
@@ -415,7 +381,6 @@ export default {
                                 }
                             })
                             data_get_shipper_change(forms).then(res => {
-                                // this.dialogFormVisible_add = false;
                                 this.$message({
                                     type: 'success',
                                     message: '该货主已认证成功',
@@ -446,7 +411,7 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-    .creatDialog{
+    .shippercreatDialog{
         .el-dialog__footer{
             border-top:1px solid #ccc;   
             margin: 0 10px;

@@ -57,11 +57,6 @@
                 @selection-change="getSelection"    
                 @row-click="clickDetails"
 				style="width: 100%">
-				<!-- <el-table-column label="选择" width="60" fixed>
-                    <template slot-scope="scope">
-                        <el-radio class="textRadio" @change.native="getCurrentRow(scope.$index,scope.row)" :label="scope.$index" v-model="templateRadio">&nbsp;</el-radio>
-                    </template>
-                </el-table-column> -->
                 <el-table-column
                     fixed
                     type="selection"
@@ -216,6 +211,8 @@ export default {
             this.type = 'view';
             this.paramsView = Object.assign({},row);;
             this.dialogFormVisible_add =true;
+            // 清除选中状态，避免影响下个操作
+            this.$refs.multipleTable.clearSelection()
         },
         getCurrentRow(index,row){       
             this.selectRowData = Object.assign({},row);
@@ -350,7 +347,6 @@ export default {
                 }
                  // 清除选中状态，避免影响下个操作
                 this.$refs.multipleTable.clearSelection()
-                // this.templateRadio = '';
             }
         },
     }
