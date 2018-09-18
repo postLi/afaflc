@@ -1,12 +1,23 @@
 <template>
   <div class="identicalStyle clearfix waitpayment" v-loading="loading">
-    <el-form :inline="true" :model="searchInfo" ref="ruleForm" :rules="rules" class="demo-ruleForm classify_searchinfo">
+    <el-form :inline="true" :model="searchInfo" ref="ruleForm" class="demo-ruleForm classify_searchinfo">
       <el-form-item label="所属区域" prop="areaName">
         <vregion :ui="true"  @values="regionChange" class="form-control">
           <el-input  v-model="areaName" placeholder="请选择省/市/区" clearable @clear="clearName"></el-input>
         </vregion>
       </el-form-item>
       <el-form-item label="交易时间" prop="searchCreatTime">
+        <!-- <el-date-picker
+          v-model="searchCreatTime"
+          :default-value="defaultTime"
+          type="daterange"
+          align="right"
+          popper-class='searchCreatTime'
+          value-format="yyyy-MM-dd"
+          start-placeholder="开始日期"
+          :picker-options="pickerOptions2"
+          end-placeholder="结束日期">
+        </el-date-picker> -->
         <el-date-picker
           v-model="searchCreatTime"
           type="daterange"
@@ -15,9 +26,8 @@
           start-placeholder="开始日期"
           end-placeholder="结束日期"
           align="right"
-          :default-time="['00:00:00', '23:59:59']"
           value-format="timestamp">
-        </el-date-picker>
+      </el-date-picker>
       </el-form-item>
       <el-form-item class="btnChoose fr"  style="margin-left:0;">
         <el-button type="primary" :size="btnsize" plain @click="handleSearch('search')">搜索</el-button>
@@ -38,7 +48,7 @@
           border
           align = "center"
           height="100%"
-          @selection-change = "getinfomation"
+          @selection-change="getinfomation"
           tooltip-effect="dark"
           @row-click="clickDetails"
           style="width: 100%"> 
@@ -96,7 +106,7 @@
             width="250">
             <template  slot-scope="scope">
               <span class="orderSerial">
-                {{ scope.row.commissionTime | parseTime}}    
+                {{ scope.row.commissionTime | parseTime('{y}-{m}-{d} {h}:{i}:{s}')}}    
               </span>
             </template>
             <!-- <template slot-scope="scope">{{ scope.row.commissionTime | parseTime('{y}-{m}-{d} {h}:{i}:{s}')}}</template> -->
@@ -116,9 +126,10 @@ import { orderStatusList } from '@/api/order/ordermange'
 import { parseTime, pickerOptions2 } from '@/utils/index.js'
 import Pager from '@/components/Pagination/index'
 import vregion from '@/components/vregion/Region'
-import { postDriverCommissionTransaction } from '@/api/marketing/carmarkting/operating'
+import { postDriverCommissionTransaction ,postCommissionTransactionExcel} from '@/api/marketing/carmarkting/operating'
 import GetCityList from '@/components/GetCityList'
 import { REGEX } from '@/utils/validate'
+import { getManageTypeInfo } from '@/api/company/groupManage';
 export default{
   components: {
     Pager,
@@ -131,145 +142,130 @@ export default{
     }
   },
   data() {
-    const validateareaName = function(rule, value, callback) {
-      if (value === '' || value === null || !value || value === undefined) {
-        callback(new Error('请输入异常件数'))
-      } else if (REGEX.ONLY_NUMBER_GT.test(value)) {
-        callback()
-      } else {
-        callback(new Error('只能输入数字从1开始'))
-      }
-    }
-    const validatorNull = (rule, value, callback) => {
-      if (value === undefined ) {
-         console.log(value)
-        callback(new Error('导出时不能为空'))
-      }else {
-        callback()
-      }
-    }
+    // const validateareaName = function(rule, value, callback) {
+    //   if (value === '' || value === null || !value || value === undefined) {
+    //     callback(new Error('请输入异常件数'))
+    //   } else if (REGEX.ONLY_NUMBER_GT.test(value)) {
+    //     callback()
+    //   } else {
+    //     callback(new Error('只能输入数字从1开始'))
+    //   }
+    // }
+    // const validatorNull = (rule, value, callback) => {
+    //   if (value === undefined) {
+    //     console.log(value)
+    //     callback(new Error('导出时不能为空'))
+    //   } else {
+    //     callback()
+    //   }
+    // }
     return {
       areaCodeList1: [],
       btnsize: 'mini',
       timeOutWaitPay: null,
       loading: true, // 加载
       sizes: [30, 50, 100],
-      pagesize:20,//初始化加载数量
-      page:1,//初始化页码
+      pagesize: 20, // 初始化加载数量
+      page: 1, // 初始化页码
       dataTotal: 0,
-      areaName:'',
       isEport: false,
+      searchCreatTime: [],
+      // defaultTime:[parseTime(+new Date() - 60 * 24 * 60 * 60 * 1000, '{y}-{m}-{d}'), parseTime(new Date(), '{y}-{m}-{d}')],
+      areaName: '',
       searchInfo: {
         startTime: '', // 下单起始时间
         endTime: '', // 下单结束时间
-        areaCodeList:[]//
+        areaCodeList: []//
       },
       pickerOptions2: {
         shortcuts: pickerOptions2
       },
-      searchCreatTime: '',
-      tableData:[],
+      tableData: [],
       dialogFormVisible_details: false, // 详情弹窗
-      rules: {
-        // areaName: [
-        //   {  trigger: 'blur', validator: validatorNull  }
-        // ],
-        // searchCreatTime: [
-        //   { trigger: 'blur', validator: validatorNull }
-        // ],
-      }
     }
   },
-//   watch: {
-// areaName (newVal) {
-//   if (this.isEport) {
-//  if (!this.areaName && !this.searchCreatTime ) {
-//      console.log('sdjfisdjfi', this.$refs.ruleForm.validateField('areaName'), this.areaName)
-//      this.$refs.ruleForm.validateField('areaName')
-//      this.$refs.ruleForm.validateField('searchCreatTime')
-//    }else {
-//       this.$refs.ruleForm.resetFields('areaName')
-//       this.isEport = false
-//    }
-//   }
-  
-// },
+  // watch:{
+  //   areaName(newVal){
+  //     if(this.isEport){
+  //       if (!this.areaName && !this.searchCreatTime ) {
+  //         // console.log('验证消息', this.$refs.ruleForm.validateField('areaName'), this.areaName)
+  //         this.$refs.ruleForm.validateField('areaName')
+  //         this.$refs.ruleForm.validateField('searchCreatTime')
+  //         console.log(5555,this.isEport)
+  //       }else {
+  //           // this.$refs.ruleForm.resetFields('areaName')
+  //           this.isEport = false
+  //           console.log(6666,this.isEport)
+  //       }
+  //     }
+  //   }
+  // },
   created() {
 
   },
   mounted() {
+    // this.searchCreatTime = this.defaultTime
     this.firstblood()
   },
   beforeDestroy() {
-    clearInterval(this.timeOutWaitPay)
+    // clearInterval(this.timeOutWaitPay)
   },
   methods: {
     exportExcel() {
       this.isEport = true
-      // var wb = XLSX.utils.table_to_book(document.querySelector('#out-table'))
-      // var wbout = XLSX.write(wb, { bookType: 'xlsx', bookSST: true, type: 'array' })
-
-  
-      
-      // this.$refs.ruleForm.validateField('searchCreatTime')
+      if(this.areaName === '' || this.areaName === null || this.areaName === undefined ||this.searchCreatTime === '' || this.searchCreatTime === null || this.searchCreatTime === undefined){
+        // console.log(6666)
+        // this.$refs.ruleForm.validateField('areaName')
+        // this.$refs.ruleForm.validateField('searchCreatTime')
+        this.$message.warning('搜索条件不能为空')
+      }else{
+        console.log(7777)
+        postCommissionTransactionExcel(this.page, this.pagesize, this.searchInfo).then(res => {
+          console.log(res.data.data)
+          // this.window.open(res)
+          // this.tableData = res.data.list
+          // this.loading = false
+        })
+      }
     },
-    clearName(){
+    clearName() {
       this.areaName = ''
       this.searchInfo.areaCodeList = []
       this.areaCodeList1 = []
     },
     regionChange(d) {
-      console.log('data:',d)
-      this.areaName = (!d.province&&!d.city&&!d.area&&!d.town) ? '': `${this.getValue(d.province)}${this.getValue(d.city)}${this.getValue(d.area)}${this.getValue(d.town)}`.trim();
-      if(d.area){
-        this.areaCodeList1[d.area.code] = this.areaName
-        let arr = []
-        let code = []
-        for(let item in this.areaCodeList1){
-          arr.push(this.areaCodeList1[item])
-          code.push(item)
-        }
-        this.searchInfo.areaCodeList = Object.assign([], code)
-        // console.log('areaCodeList1',this.areaCodeList1)
-        this.areaName = arr.join(',')
-        console.log('areaName',this.areaName)
-        arr = []
-        code = []
-      }else if(d.city){
-        // this.searchInfo.areaCodeList = d.city.code
-        this.areaCodeList1[d.city.code] = this.areaName
-        let arr = []
-        let code = []
-        for(let item in this.areaCodeList1){
-          arr.push(this.areaCodeList1[item])
-          code.push(item)
-        }
-        this.searchInfo.areaCodeList = Object.assign([], code)
-        // console.log('areaCodeList1',this.areaCodeList1)
-        this.areaName = arr.join(',')
-        console.log('areaName',this.areaName)
-        arr = []
-        code = []
-      }
-      else if (d.province){
-        // this.searchInfo.areaCodeList = d.province.code ? d.province.code : ''
-        this.areaCodeList1[d.province.code] = this.areaName
-        let arr = []
-        let code = []
-        for(let item in this.areaCodeList1){
-          arr.push(this.areaCodeList1[item])
-          code.push(item)
-        }
-        this.searchInfo.areaCodeList = Object.assign([], code)
-        // console.log('areaCodeList1',this.areaCodeList1)
-        this.areaName = arr.join(',')
-        console.log('areaName',this.areaName)
-        arr = []
-        code = []
-      }else {
-        this.clearName()
-        console.log('sdfsd',d)
+      console.log('11111',typeof this.searchInfo.areaCodeList)
+      this.areaName = (!d.province && !d.city && !d.area && !d.town) ? '' : `${this.getValue(d.province)}${this.getValue(d.city)}${this.getValue(d.area)}${this.getValue(d.town)}`.trim()
+      if (d.area) {
+        // this.searchInfo.areaCodeList = d.area.code
+        // this.areaCodeList.push(d.area.code)
+        // this.searchInfo.argetManageTypeInfoaCodeList)
+        console.log('2222',typeof this.searchInfo.areaCodeList,d.area.code )
         
+        this.searchInfo.areaCodeList.push(d.area.code)
+        // this.areaCodeList1[d.area.code] = this.areaName
+        // let arr = []
+        // let code = []
+        // for (const item in this.areaCodeList1) {
+        //   arr.push(this.areaCodeList1[item])
+        //   code.push(item)
+        // }
+        // this.searchInfo.areaCodeList = Object.assign(code)
+        // // console.log('areaCodeList1',this.areaCodeList1)
+        // this.areaName = arr.join(',')
+        // console.log('areaName', this.areaName)
+        // arr = []
+        // code = []
+      } else if (d.city) {
+        // this.areaCodeList1.push(d.city.code)
+        this.searchInfo.areaCodeList.push(d.city.code)
+        // this.searchInfo.areaCodeList = Object.assign(this.areaCodeList1)
+        
+      } else if (d.province) {
+        this.searchInfo.areaCodeList.push(d.province.code ? d.province.code : '')
+      } else {
+        this.clearName()
+        console.log('sdfsd', d)
       }
     },
     getValue(obj) {
@@ -282,16 +278,19 @@ export default{
     },
     // 刷新页面
     firstblood() {
-      this.loading = false
-      postDriverCommissionTransaction(this.page,this.pagesize,this.searchInfo).then(res => {
-        console.log(res)
-        this.tableData = res.data.list
+      // this.loading = false
+      postDriverCommissionTransaction(this.page, this.pagesize, this.searchInfo).then(res => {
+        if (res) {
+       this.tableData = res.data.list
         this.loading = false
+
+        }
+       
       })
     },
      // 模糊查询 分类名称或者code
     handleSearch(type) {
-      console.log(this.searchCreatTime)
+      // console.log(this.searchCreatTime)
       switch (type) {
         case 'search':
           if (this.searchCreatTime) {
@@ -307,11 +306,18 @@ export default{
           this.searchInfo = {
             startTime: '', // 下单起始时间
             endTime: '', // 下单结束时间
-            areaCodeList:[]
+            areaCodeList: []
           }
           this.searchCreatTime = ''
           this.firstblood()
         case 'outExce':
+          if (this.searchCreatTime) {
+            this.searchInfo.startTime = this.searchCreatTime ? parseTime(this.searchCreatTime[0], '{y}-{m}-{d} ') + '00:00:00' : ''
+            this.searchInfo.endTime = this.searchCreatTime ? parseTime(this.searchCreatTime[1], '{y}-{m}-{d} ') + '23:59:59' : ''
+          } else {
+            this.searchInfo.startTime = ''
+            this.searchInfo.endTime = ''
+          }
           this.exportExcel()
           break
       }
