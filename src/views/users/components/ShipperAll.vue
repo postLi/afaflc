@@ -150,47 +150,28 @@ export default {
     data() {
     return {
         tabType:'All',
-      btnsize: 'mini',
-      templateRadio: '',
-      dialogFormVisible_add: false,
-      freezeDialogFlag: false,
-      BlackDialogFlag: false,
-      freezetype: '',
-      blacktype: '',
-      type: '',
-      paramsView: {},
-      freeze: true, // 是否冻结
-      options: [],
-      optionsStatus: [
-        {
-          code: null,
-          name: '全部'
-        }
-      ],
-      optionsAuidSataus: [
-        {
-          code: null,
-          name: '全部'
-        }
-      ], // 账户状态
-      pickerOptions: {
-        disabledDate(time) {
-          return time.getTime() < Date.now()
-        }
-      },
-      optionsReason: [],
-      searchInfo: {
-        belongCity: null,
-        shipperStatus: null,
-        accountStatus: null,
-        companyName: null,
-        mobile: null
-      },
-      selectRowData: {},
-      page: 1,
-      pagesize: 20,
-      totalCount: 0,
-      tableDataAll: []
+        btnsize: 'mini',
+        templateRadio: '',
+        dialogFormVisible_add: false,
+        freezeDialogFlag: false,
+        BlackDialogFlag: false,
+        freezetype: '',
+        blacktype: '',
+        type: '',
+        paramsView: {},
+        freeze: true, // 是否冻结
+        searchInfo: {
+            belongCity: null,
+            shipperStatus: null,
+            accountStatus: null,
+            companyName: null,
+            mobile: null
+        },
+        selectRowData: {},
+        page: 1,
+        pagesize: 20,
+        totalCount: 0,
+        tableDataAll: []
 
     }
   },

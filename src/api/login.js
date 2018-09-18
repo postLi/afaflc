@@ -31,21 +31,26 @@ export function login(username, password, orgid) {
     form.append('password', password)
     form.append('grant_type', grant_type)
     return fetch.request({
-      url: '/uaa/oauth/token',
-      method: 'post',
-      headers: {
-        'Content-Type': 'multipart/form-data',
-        'authorization': 'Basic d2ViQXBwOndlYkFwcA=='
-      },
-      data: form
+        url: '/uaa/oauth/token',
+        method: 'post',
+        headers: {
+            'Content-Type': 'multipart/form-data',
+            'authorization': 'Basic d2ViQXBwOndlYkFwcA=='
+        },
+        data: form
     })
   }
 
 export function getInfo(username, orgid) {
-  return fetch({
-    url: '/api-system/system/user/v1/getCurrentUser',
-    method: 'get'
+  return fetch.get('/aflccommonservice-lyc/system/user/v1/getCurrentUser').then(res=>{
+      console.log('getinfo:',res)
+      return res
+  }).catch(err=>{
+      console.log('getinfo err:',err)
   })
+//   .then(res => {
+//       renturn 
+//   })
 }
 
 export function logout() {

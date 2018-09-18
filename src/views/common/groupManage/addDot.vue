@@ -5,16 +5,14 @@
 
         <!-- 本网点是父级时显示 -->
         <el-form :model="form" :rules="rules" ref="ruleForm" class="demo-ruleForm" :inline="true" label-position="right"
-                 size="mini" :show-message="checkShowMessage" :key="formKey" v-if="companyId === form.id">
+                 size="mini" :key="formKey" v-if="companyId === form.id">
           <el-form-item label="公司名称" :label-width="formLabelWidth" prop="orgName">
             <el-input v-model="form.orgName" auto-complete="off" :disabled="companyId === form.id || form.status===31 "
                       :maxlength="15"></el-input>
           </el-form-item>
           <el-form-item label="网点类型" :label-width="formLabelWidth">
-            <SelectType v-model="form.orgType" type="network_type" placeholder="请选择" class="" :disabled="companyId === form.id || form.status===31"/>
-            <!--<el-select v-model="form.orgType" :disabled="companyId === form.id || form.status===31">-->
-              <!--<el-option v-for="item in netWorkType" :key="item.id" :label="item.dictName" :value="item.id"></el-option>-->
-            <!--</el-select>-->
+            <SelectType v-model="form.orgType" type="network_type" placeholder="请选择" class=""
+                        :disabled="companyId === form.id || form.status===31"/>
           </el-form-item>
           <el-form-item label="公司状态" :label-width="formLabelWidth" disabled="disabled">
             <el-select v-model="form.status"
@@ -27,23 +25,9 @@
             <el-input v-model="form.networkCode" auto-complete="off "
                       :disabled="form.status===31 || companyId === form.id" :maxlength="10" clearable></el-input>
           </el-form-item>
-
-          <!-- <el-form-item label="上级网点" :label-width="formLabelWidth">
-            <SelectTree v-model="form.parentId"  :disabled="isModify || form.status===31" />
-          </el-form-item> -->
-          <!-- <el-form-item label="经营类型" :label-width="formLabelWidth">
-            <el-select v-model="form.manageType" :disabled="form.status===31" >
-              <el-option v-for="item in manageType" :key="item.id" :label="item.dictName" :value="item.id"></el-option>
-              <el-option label="自营" :value="3"></el-option>
-              <el-option label="加盟" :value="4"></el-option>
-            </el-select>
-          </el-form-item> -->
-          <!-- <el-form-item label="创建时间" v-if="isModify" :label-width="formLabelWidth">
-            <el-input  :value="form.createTime | parseTime('{y}/{m}/{d}')" :disabled="isModify || form.status===31" ></el-input>
-          </el-form-item> -->
           <el-form-item label="负责人" :label-width="formLabelWidth" prop="responsibleName">
             <el-input v-model="form.responsibleName" auto-complete="off" :disabled="form.status===31"
-            clearable></el-input>
+                      clearable></el-input>
           </el-form-item>
           <el-form-item label="负责人电话" :label-width="formLabelWidth" prop="responsibleTelephone">
             <el-input v-model="form.responsibleTelephone" auto-complete="off" :disabled="form.status===31"></el-input>
@@ -53,63 +37,28 @@
             <el-input v-model="form.serviceName" auto-complete="off" :disabled="form.status===31" clearable></el-input>
           </el-form-item>
           <el-form-item label="客服电话" :label-width="formLabelWidth" prop="servicePhone" clearable>
-            <el-input v-model="form.servicePhone" auto-complete="off" :maxlength="11" :disabled="form.status===31"></el-input>
+            <el-input v-model="form.servicePhone" auto-complete="off" :maxlength="11"
+                      :disabled="form.status===31"></el-input>
           </el-form-item>
-          <!-- <el-form-item label="所在城市" :label-width="formLabelWidth" prop="city"> -->
-            <!-- <querySelect filterable show="select" @change="getCity" search="longAddr" valuekey="longAddr"
-            :disabled="companyId === form.id || form.status===31" type="city" v-model="form.city"
-            :remote="true" clearable/> -->
+          <el-form-item label="所在城市" :label-width="formLabelWidth" prop="city">
+            <querySelect filterable show="select" @change="getCity" search="longAddr" valuekey="longAddr"
+                         :disabled="companyId === form.id || form.status===31" type="city" v-model="form.city"
+                         :remote="true" clearable/>
 
 
-          <!-- </el-form-item> -->
+          </el-form-item>
           <el-form-item label="详细地址" :label-width="formLabelWidth">
             <el-input v-model="form.detailedAddr" auto-complete="off" :disabled="form.status===31"></el-input>
           </el-form-item>
-
-          <!-- <el-form-item label="代收款限额" :label-width="formLabelWidth" prop="">
-            <el-input v-model="form.collectionFee" auto-complete="off" :maxlength="9" :disabled="form.status===31" v-number-only ></el-input>
-          </el-form-item>
-          <el-form-item label="提现基准" :label-width="formLabelWidth" prop="">
-            <el-input v-model="form.benchmark"  auto-complete="off" :disabled="form.status===31" v-number-only ></el-input>
-          </el-form-item>
-          <el-form-item label="预警额度" :label-width="formLabelWidth" prop="">
-            <el-input v-model="form.warningQuota" auto-complete="off" :maxlength="9" :disabled="form.status===31" v-number-only ></el-input>
-          </el-form-item>
-          <el-form-item label="锁机额度" :label-width="formLabelWidth" prop="">
-            <el-input v-model="form.lockMachineQuota" auto-complete="off" v-number-only :maxlength="9" :disabled="form.status===31" ></el-input>
-          </el-form-item>
-
-          <div class="ad-add-dot" v-if="!isModify">
-            <el-checkbox :true-label="0" :false-label="1" v-model="form.accountStatus">开通管理员账号</el-checkbox>
-            <p> 密码：123456</p>
-          </div>
-          <el-form-item v-if="form.accountStatus === 0 && !isModify" :label-width="formLabelWidth" prop="">
-            <el-input placeholder="管理员账号" v-model="form.accountName" auto-complete="off" :maxlength="20" ></el-input>
-          </el-form-item>
-
-          <div class="rem-add-dot">
-            <el-form-item label="备注" :label-width="formLabelWidth" prop="">
-              <el-input
-                type="textarea"
-                :rows="2"
-                placeholder="不可超300字"
-                v-model="form.remarks"
-                auto-complete="off" maxlength="300" ></el-input>
-            </el-form-item>
-          </div> -->
         </el-form>
         <el-form :model="form" :rules="rules" ref="ruleForm" class="demo-ruleForm" :inline="true" label-position="right"
-                 size="mini" :show-message="checkShowMessage" :key="formKey" v-else>
+                 size="mini"  :key="formKey" v-else>
           <el-form-item label="网点名称" :label-width="formLabelWidth" prop="orgName">
             <el-input v-model="form.orgName" auto-complete="off" :disabled="form.status===31 "
-            :maxlength="15"></el-input>
+                      :maxlength="15"></el-input>
           </el-form-item>
           <el-form-item label="网点类型" :label-width="formLabelWidth">
             <SelectType v-model="form.orgType" type="network_type" placeholder="请选择" class="" :disabled="isModify"/>
-            <!--<el-select v-model="form.orgType" :disabled="isModify">-->
-              <!--<el-option v-for="item in netWorkType" :key="item.id" :label="item.dictName" :value="item.id"-->
-                         <!--:disabled="form.status===31"></el-option>-->
-            <!--</el-select>-->
           </el-form-item>
           <el-form-item label="网点状态" :label-width="formLabelWidth" disabled="disabled">
             <el-select v-model="form.status" :disabled="isModify ? false : true">
@@ -132,49 +81,51 @@
           </el-form-item>
           <el-form-item label="创建时间" v-if="isModify" :label-width="formLabelWidth">
             <el-input :value="form.createTime | parseTime('{y}/{m}/{d}')"
-            :disabled="isModify || form.status===31"></el-input>
+                      :disabled="isModify || form.status===31"></el-input>
           </el-form-item>
           <el-form-item label="负责人" :label-width="formLabelWidth" prop="responsibleName">
             <el-input v-model="form.responsibleName" auto-complete="off" :disabled="form.status===31"
                       clearable :maxlength="10"></el-input>
           </el-form-item>
           <el-form-item label="负责人电话" :label-width="formLabelWidth" prop="responsibleTelephone">
-            <el-input v-model="form.responsibleTelephone" :maxlength="11" auto-complete="off" :disabled="form.status===31"></el-input>
+            <el-input v-model="form.responsibleTelephone" :maxlength="11" auto-complete="off"
+                      :disabled="form.status===31"></el-input>
           </el-form-item>
-          <!-- <el-form-item label="所在城市" :label-width="formLabelWidth" prop="city"> -->
-
-
-            <!-- <querySelect filterable show="select" @change="getCity" search="longAddr" valuekey="longAddr"
-            :disabled="form.status===31" type="city" v-model="form.city" :remote="true" clearable/> -->
-          <!-- </el-form-item> -->
-          <el-form-item label="客服人员" :label-width="formLabelWidth" prop="serviceName" >
-            <el-input v-model="form.serviceName" auto-complete="off" :disabled="form.status===31" clearable :maxlength="10"></el-input>
+          <!-- <el-form-item label="所在城市" :label-width="formLabelWidth" prop="city">
+            <querySelect filterable show="select" @change="getCity" search="longAddr" valuekey="longAddr"
+                         :disabled="form.status===31" type="city" v-model="form.city" :remote="true" clearable/>
+          </el-form-item> -->
+          <el-form-item label="客服人员" :label-width="formLabelWidth" prop="serviceName">
+            <el-input v-model="form.serviceName" auto-complete="off" :disabled="form.status===31" clearable
+                      :maxlength="10"></el-input>
           </el-form-item>
           <el-form-item label="客服电话" :label-width="formLabelWidth" prop="servicePhone" clearable>
-            <el-input v-model="form.servicePhone" auto-complete="off" :disabled="form.status===31" :maxlength="11"></el-input>
+            <el-input v-model="form.servicePhone" auto-complete="off" :disabled="form.status===31"
+                      :maxlength="11"></el-input>
           </el-form-item>
           <el-form-item label="详细地址" :label-width="formLabelWidth">
-            <el-input v-model="form.detailedAddr" auto-complete="off" :disabled="form.status===31" :maxlength="30"></el-input>
+            <el-input v-model="form.detailedAddr" auto-complete="off" :disabled="form.status===31"
+                      :maxlength="30"></el-input>
           </el-form-item>
           <el-form-item label="网点代码" :label-width="formLabelWidth" prop="networkCode">
             <el-input v-model="form.networkCode" auto-complete="off " :disabled="form.status===31" :maxlength="10"
-            clearable></el-input>
+                      clearable></el-input>
           </el-form-item>
           <el-form-item label="代收款限额" :label-width="formLabelWidth" prop="">
             <el-input v-model="form.collectionFee" auto-complete="off" :maxlength="9" :disabled="form.status===31"
-            v-number-only></el-input>
+                      v-number-only></el-input>
           </el-form-item>
           <el-form-item label="提现基准" :label-width="formLabelWidth" prop="">
             <el-input v-model="form.benchmark" auto-complete="off" :disabled="form.status===31"
-            v-number-only :maxlength="9"></el-input>
+                      v-number-only :maxlength="9"></el-input>
           </el-form-item>
           <el-form-item label="预警额度" :label-width="formLabelWidth" prop="">
             <el-input v-model="form.warningQuota" auto-complete="off" :maxlength="9" :disabled="form.status===31"
-            v-number-only ></el-input>
+                      v-number-only></el-input>
           </el-form-item>
           <el-form-item label="锁机额度" :label-width="formLabelWidth" prop="">
             <el-input v-model="form.lockMachineQuota" auto-complete="off" v-number-only :maxlength="9"
-            :disabled="form.status===31"></el-input>
+                      :disabled="form.status===31"></el-input>
           </el-form-item>
 
           <div class="ad-add-dot" v-if="!isModify">
@@ -184,10 +135,10 @@
           <el-form-item v-if="form.accountStatus  && !isModify" :label-width="formLabelWidth" prop="accountName">
 
             <el-tooltip class="item" effect="dark" placement="top" :enterable="false" :manual="true" :value="tooltip"
-              tabindex="-1">
+                        tabindex="-1">
               <div slot="content">账号可以由字母、数字组成<br/>长度范围2~15个字符</div>
               <el-input v-model.trim="form.accountName" auto-complete="off" @focus="tooltip = true"
-              @blur="tooltip = false"></el-input>
+                        @blur="tooltip = false"></el-input>
             </el-tooltip>
 
             <!--<el-input placeholder="管理员账号" v-model="form.accountName" auto-complete="off" :maxlength="20" ></el-input>-->
@@ -196,7 +147,6 @@
           <div class="rem-add-dot">
             <el-form-item label="备注" :label-width="formLabelWidth" prop="">
               <el-input
-              
                 type="textarea"
                 :rows="2"
                 placeholder="不可超300字"
@@ -213,7 +163,7 @@
         </div>
       </template>
       <div slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="submitForm('ruleForm', true)" >保存并添加</el-button>
+        <el-button type="primary" @click="submitForm('ruleForm', true)">保存并添加</el-button>
         <el-button type="primary" @click="submitForm('ruleForm')">保存</el-button>
         <el-button @click="closeMe">取 消</el-button>
       </div>
@@ -228,22 +178,23 @@
     getNetWorkTypeInfo,
     getManageTypeInfo,
     getNetworkStatusInfo
-  } from '../../../api/company/groupManage'
+  } from '@/api/company/groupManage'
   import popRight from '@/components/PopRight/index'
   import SelectTree from '@/components/selectTree/index'
   import SelectCity from '@/components/selectCity/index'
-//   import querySelect from '@/components/querySelect/index'
-  import { REGEX } from '@/utils/validate'
-  import { objectMerge2 } from '@/utils/index'
-  import { mapGetters } from 'vuex'
+  import querySelect from '@/components/querySelect/index'
+  import {REGEX} from '@/utils/validate'
+  import {objectMerge2} from '@/utils/index'
+  import {mapGetters} from 'vuex'
   import SelectType from '@/components/selectType/index'
-  // import {Obj}
+  import './addDot.scss'
+
   export default {
     components: {
       popRight,
       SelectTree,
       SelectCity,
-    //   querySelect,
+      querySelect,
       SelectType
     },
     computed: {
@@ -273,7 +224,8 @@
         type: Number
       },
       companyId: {
-        type: Number
+        type: Number,
+        default:''
       },
       getCheckedKeyId: {
         type: [Number, String]
@@ -285,22 +237,21 @@
           this.form.accountName = ''
         }
       },
-      checkSystem() {},
       popVisible(val) {
         if (val) {
           this.formKey = Math.random()
-        //   this.fetchData()
+          this.fetchData()
           // console.log(JSON.stringify(this.doInfo))
         }
         this.watchDate(this.doInfo)
       },
       getCheckedKeyId(val) {
-        // this.watchDate()
+        this.watchDate()
       },
       doInfo: {
         handler() {
           this.checkShowMessage = false
-        //   this.watchDate(this.doInfo)
+          this.watchDate(this.doInfo)
         },
         immediate: true,
         deep: true
@@ -308,7 +259,7 @@
 
       isModify: {
         handler() {
-        //   this.watchDate()
+          this.watchDate()
         },
         immediate: true
       }
@@ -319,7 +270,7 @@
       }
       return {
         tooltip: false,
-        formKey: 'lll',
+        formKey: '',
         popTitle: '新增网点',
         // 多选框
         checked: true,
@@ -362,40 +313,36 @@
         },
         rules: {
           orgName: [
-            { required: true, validator: this.validateIsEmpty('请输入网点名称') }
+            {required: true, message: '请输入网点名称'}
           ],
           servicePhone: [
-            { required: true, pattern: REGEX.TELANDPHONE, message: '客服号码格式不正确' }
+            {required: true, pattern: REGEX.TELANDPHONE, message: '客服号码格式不正确'}
           ],
           responsibleName: [
-            { validator: callBackName, trigger: 'blur' },
-            { min: 2, message: '最少2个字符', trigger: 'blur' },
-            { max: 10, message: '不可超过10个字符', trigger: 'blur' }
+            {validator: callBackName, trigger: 'blur'},
+            {min: 2, message: '最少2个字符', trigger: 'blur'},
+            {max: 10, message: '不可超过10个字符', trigger: 'blur'}
           ],
           responsibleTelephone: [
-            { pattern: REGEX.MOBILE, message: '请输入正确的电话号码', trigger: ['blur', 'change'] }
+            {pattern: REGEX.MOBILE, message: '请输入正确的电话号码', trigger: ['blur', 'change']}
           ],
           serviceName: [
-            { validator: callBackName, trigger: 'blur' },
-            { min: 2, message: '最少2个字符', trigger: 'blur' },
-            { max: 10, message: '不可超过10个字符', trigger: 'blur' }
+            {validator: callBackName, trigger: 'blur'},
+            {min: 2, message: '最少2个字符', trigger: 'blur'},
+            {max: 10, message: '不可超过10个字符', trigger: 'blur'}
           ],
-          // servicePhone: [
-          //   { pattern: REGEX.TELEPHONE, message: '请输入正确的客服电话', trigger: ['blur', 'change'] }
-          // ],
-          // 网点代码
           networkCode: [
-            { required: true, validator: this.validateIsEmpty('请输入网点代码') },
-            { min: 2, message: '最少2个字符', trigger: 'blur' },
-            { max: 10, message: '不可超过10个字符', trigger: 'blur' }
+            {required: true, message:'请输入网点代码'},
+            {min: 2, message: '最少2个字符', trigger: 'blur'},
+            {max: 10, message: '不可超过10个字符', trigger: 'blur'}
           ],
           city: [
             // 请选择城市
-            { required: true, validator: this.validateIsEmpty('请选择城市') }
+            {required: true, message:'请选择城市'}
           ],
           accountName: [
-            { required: true, message: '请输入有效的登录账号', pattern: REGEX.USERNAME },
-            { max: 15, message: '不能超过15个字符', trigger: 'blur' }
+            {required: true, message: '请输入有效的登录账号', pattern: REGEX.USERNAME},
+            {max: 15, message: '不能超过15个字符', trigger: 'blur'}
           ]
         },
         dialogVisible: false,
@@ -403,6 +350,7 @@
       }
     },
     mounted() {
+        console.log('this.companyId',this.companyId)
     },
     methods: {
       fetchData() {
@@ -432,6 +380,7 @@
           this.popTitle = '修改网点'
           this.changeDate(this.dotInfo)
           this.form.id = this.dotInfo.id
+          console.log('this.form.id',this.form.id)
           this.form.parentId = this.dotInfo.parentId || this.companyId
         } else {
           this.popTitle = '新增网点'
@@ -444,26 +393,6 @@
           this.form.manageType = 3
           // this.form.parentId = this.companyId
           this.form.parentId = this.getCheckedKeyId || this.otherinfo.orgid
-        }
-      },
-      validateIsEmpty(msg = '不能为空！') {
-        return (rule, value, callback) => {
-          if (!value) {
-            this.showMessage(msg)
-            callback(new Error(msg))
-          } else {
-            callback()
-          }
-        }
-      },
-      showMessage(msg) {
-        if (this.isChecked && !this.isCheckedShow) {
-          this.isCheckedShow = true
-        }
-        if (this.isCheckedShow) {
-          this.checkShowMessage = true
-        } else {
-          this.checkShowMessage = false
         }
       },
       getCity(city) {
@@ -498,9 +427,6 @@
         }
       },
       submitForm(formName, bool) {
-        this.isChecked = true
-        this.isCheckedShow = false
-        this.checkShowMessage = true
         this.$refs[formName].validate((valid) => {
           this.isChecked = false
           this.isCheckedShow = false
@@ -508,7 +434,6 @@
             this.loading = true
             let reqPromise
             if (this.isModify) {
-              // 当修改最上级网点时，传0
               if (this.form.id === this.form.parentId && this.form.parentId === this.otherinfo.companyId) {
                 this.form.parentId = 0
               }
@@ -578,7 +503,6 @@
 </script>
 <style type="text/css" lang="scss">
   @import "../../../styles/mixin.scss";
-  @import "./addDot.scss";
 
   .addEmployeerPop {
     left: auto;
@@ -593,7 +517,7 @@
     .el-select .el-input__inner {
       padding-right: 15px;
     }
-    .el-input--suffix .el-input__inner{
+    .el-input--suffix .el-input__inner {
       padding-right: 15px;
     }
   }

@@ -1,8 +1,8 @@
 <template>
   <el-form :inline="true" :size="btnsize" label-position="right" label-width="70px" :rules="rules" ref="searchFormRef" :model="searchForm"  class="staff_searchinfo clearfix">
-      <div class="staff_searchinfo--input">
+      <div class="staff_searchinfo--input fl">
         <el-form-item label="归属网点">
-            <SelectTree v-model="searchForm.orgid" :orgid="otherinfo.orgid" />
+            <SelectTree v-model="searchForm.orgid" :orgid="this.orgid" />
         </el-form-item>
         <el-form-item label="员工名称">
             <el-input
@@ -21,7 +21,7 @@
             </el-input>
         </el-form-item>
       </div>
-      <el-form-item class="staff_searchinfo--btn">
+      <el-form-item class="staff_searchinfo--btn fr">
           <el-button type="primary" @click="onSubmit">查询</el-button><el-button type="info" @click="clearForm('searchFormRef')" plain>清空</el-button>
       </el-form-item>
   </el-form>
