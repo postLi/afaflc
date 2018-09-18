@@ -27,7 +27,7 @@
                     btntitle="创建"
                     >
                     </manageDistrictCread>
-                   <!-- <shoppingDialog
+                   <manageDistrictDialog
                     btntext="修改"
                     :plain="true"
                     btntype="primary"
@@ -35,36 +35,35 @@
                     btntitle="修改"
                     :params="selectRowData"
                     > 
-                    </shoppingDialog>-->
-                <el-button type="primary" plain :size="btnsize" @click="handleUseStates">启用/停用</el-button>
+                    </manageDistrictDialog>
                 <el-button type="primary" plain :size="btnsize" @click="delete_data">删除</el-button>
 			</div>
             <div class="info_news">
             <el-table style="width: 100%" stripe border height="100%"  :data="tableDataAll" ref="multipleTable" @current-change="clickDetails" highlight-current-row>
             <el-table-column  label="序号" width="80px" type="index">
             </el-table-column>
-            <el-table-column  label="区代公司名称" prop="partnerCompany">
-                        <!-- <template slot-scope="scoped">
-                        <shoppingDialog
-                            :btntext='scoped.row.tradeName'
+            <el-table-column  label="区代公司名称" >
+                        <template slot-scope="scoped">
+                        <manageDistrictDialog
+                            :btntext='scoped.row.partnerCompany'
                             btntype="text"
                             :plain="false"
                             editType="view"
                             btntitle="详情"
                             :params="scoped.row"
                             >
-                            </shoppingDialog>
-                        </template> -->
+                            </manageDistrictDialog>
+                        </template>
             </el-table-column>
-            <el-table-column  label="联系人" prop="areaName">
+            <el-table-column  label="联系人" prop="partnerName">
             </el-table-column>    
-            <el-table-column  label="手机号码" prop="tradeOwner">
+            <el-table-column  label="手机号码" prop="mobile">
             </el-table-column> 
-            <el-table-column  label="代理区域" prop="ownerPhone">
+            <el-table-column  label="代理区域" prop="belongCity">
             </el-table-column>
-            <el-table-column  label="合同开始日期" prop="">
+            <el-table-column  label="合同开始日期" prop="contractStartDate">
             </el-table-column>       
-            <el-table-column  label="合同结束日期" prop="">
+            <el-table-column  label="合同结束日期" prop="contractEndDate">
             </el-table-column>                                                                                                       
             </el-table> 
         </div>
@@ -74,10 +73,11 @@
 </template>
 
 <script>
-import {data_get_aflcPartner_list} from '@/api/users/district/manageDistrict.js'
+import {data_get_aflcPartner_list,data_Del_aflcPartner,data_Able_aflcPartner} from '@/api/users/district/manageDistrict.js'
 import { regionDataPlus, CodeToText, TextToCode } from 'element-china-area-data'
 import manageDistrictCread from './manageDistrictCread.vue'
-import shoppingDialog from './shoppingDialog.vue'
+import { parseTime,formatTime } from '@/utils/index.js'
+import manageDistrictDialog from './manageDistrictDialog.vue'
 import Pager from '@/components/Pagination/index'
 import { eventBus } from '@/eventBus'
 export default {
@@ -100,7 +100,7 @@ export default {
     },
     components:{
     manageDistrictCread,
-    shoppingDialog,
+    manageDistrictDialog,
     Pager
     },
     mounted(){
@@ -164,6 +164,10 @@ export default {
             console.log('res',res)
                     this.dataTotal = res.data.totalCount
                     this.tableDataAll = res.data.list;
+                    this.tableDataAll.forEach(item => {
+                        item.contractStartDate = parseTime(item.contractStartDate,"{y}-{m}-{d}");
+                        item.contractEndDate = parseTime(item.contractEndDate,"{y}-{m}-{d}");
+                    })
         })
     },
     // 查询
@@ -194,7 +198,7 @@ export default {
               if(!this.selectRowData.id){
                 this.$message.info('未选中任何删除内容');
                 }else{
-                // this.delDataInformation()
+                this.delDataInformation()
             }
         },    
        //确认删除
@@ -204,7 +208,7 @@ export default {
                     cancelButtonText: '取消',
                     type: 'warning'
                 }).then(()=>{
-                    data_Del_aflcTradeArea(this.selectRowData.id).then(res=>{
+                    data_Del_aflcPartner(this.selectRowData.id).then(res=>{
                         this.$message.success('删除成功');
                         this.firstblood();       
                         this.selectRowData=''; 
@@ -221,30 +225,6 @@ export default {
                     })
                 })   
             },
-            
-        // 启用禁用
-        handleUseStates(){
-                if(!this.selectRowData.id){
-                    //未选择任何修改内容的提示
-                        this.$message.info('未选中内容');
-                        return
-                }else{
-                    this.selectId.push(this.selectRowData.id) 
-                    
-                  data_Able_aflcTradeArea(this.selectId).then(res=>{
-                     this.selectId.splice(0,1);
-                     if(this.selectRowData.usingStatus==1)
-                     {
-                         this.$message.warning('已停用');
-                     }
-                     else{
-                         this.$message.success('已启用');
-                     }
-                        this.firstblood();       
-                        this.selectRowData='';         
-                    })
-                }
-        },  
         handlePageChange(obj) {
             this.page = obj.pageNum
             this.pagesize = obj.pageSize
@@ -257,7 +237,6 @@ export default {
 
 }
 </script>
-
 <style lang="scss">
 .identicalStyle{
 .el-cascader{

@@ -3,7 +3,7 @@
       <el-button :type="btntype" :value="value" :plain="plain" @click="openDialog()">{{btntext}}</el-button>
       <div class="newshoppingDialog">
       <el-dialog  :visible="dialogFormVisible_add" :before-close="change" :title="btntitle">
-        <el-form ref="formAll" :model="formAll" :rules="rulesForm">
+        <el-form ref="formAll" :model="formAll" :rules="rulesForm" :inline="true">
             <el-row>
                 <el-col :span="12">
                     <el-form-item label="商圈名称 ：" :label-width="formLabelWidth" prop="tradeName">

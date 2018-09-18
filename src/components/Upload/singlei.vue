@@ -229,7 +229,7 @@ export default {
         @include clearfix;
 
         .el-upload .el-upload-dragger{
-            height: 116px;
+            height: 40px;
         }
         .image-uploader {
             width: 100%;
@@ -251,7 +251,7 @@ export default {
                     height: 100%;
                 }
                 span{
-                    color:red
+                    color:#3e9ff1
                 }
             }
             .image-preview-action {
