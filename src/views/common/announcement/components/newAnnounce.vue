@@ -225,10 +225,10 @@ export default {
     },
     methods: {
         regionChange(d) {
-            console.log('data:',d)
-            this.announce.noticeLocation = (!d.province&&!d.city&&!d.area&&!d.town) ? '': `${this.getValue(d.province)}${this.getValue(d.city)}${this.getValue(d.area)}${this.getValue(d.town)}`.trim();
-            this.announce.province = d.province ? d.province.code : '';
-            this.announce.city = d.city ? d.city.code : '';
+          console.log('data:',d)
+          this.announce.noticeLocation = (!d.province&&!d.city&&!d.area&&!d.town) ? '': `${this.getValue(d.province)}${this.getValue(d.city)}${this.getValue(d.area)}${this.getValue(d.town)}`.trim();
+          this.announce.province = d.province ? d.province.code : '';
+          this.announce.city = d.city ? d.city.code : '';
         },
         getValue(obj){
             return obj ? obj.value:'';

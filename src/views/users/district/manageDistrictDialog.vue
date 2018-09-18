@@ -7,23 +7,26 @@
             <el-row>
                 <el-col :span="12">
                     <el-form-item label="区代公司名称 ：" :label-width="formLabelWidth" prop="partnerCompany">
-                    <el-input v-model="formAll.partnerCompany"></el-input>
+                    <el-input v-model="formAll.partnerCompany" :disabled="editType=='view'"></el-input>
                     </el-form-item>
                 </el-col>
                  <el-col :span="12">
                     <el-form-item label="联系人 ：" :label-width="formLabelWidth" prop="partnerName">
-                    <el-input v-model="formAll.partnerName"></el-input>
+                    <el-input v-model="formAll.partnerName" :disabled="editType=='view'"></el-input>
                     </el-form-item>
                 </el-col>
             </el-row>
             <el-row>
                 <el-col :span="12">
                     <el-form-item label="手机号码 ：" :label-width="formLabelWidth" prop="mobile">
-                    <el-input v-model="formAll.mobile"></el-input>
+                    <el-input v-model="formAll.mobile" :disabled="editType=='view'"></el-input>
                     </el-form-item>
                 </el-col>
                  <el-col :span="12">
-                    <el-form-item label="所在地 ：" :label-width="formLabelWidth" prop="areaName">
+                    <el-form-item  label="所在地 ：" :label-width="formLabelWidth" v-if="!selectFlag"> 
+                            <el-input v-model="AreaName" @focus="changeSelect" :disabled="editType=='view'"></el-input>
+                    </el-form-item>  
+                    <el-form-item label="所在地 ：" :label-width="formLabelWidth" prop="areaName" v-else>
                    <el-cascader
                     size="large"
                     :options="options"
@@ -38,6 +41,7 @@
                 <el-col :span="12">
                     <el-form-item label="签约时间 ：" :label-width="formLabelWidth" prop="signingDate">
                     <el-date-picker
+                    :disabled="editType=='view'"
                     v-model="formAll.signingDate"
                     type="date"
                     value-format="timestamp"
@@ -50,6 +54,7 @@
                 <el-col :span="12">
                     <el-form-item label="合同开始日期 ：" :label-width="formLabelWidth" prop="contractStartDate">
                     <el-date-picker
+                    :disabled="editType=='view'"
                     v-model="formAll.contractStartDate"
                     type="date"
                     value-format="timestamp"
@@ -60,6 +65,7 @@
                 <el-col :span="12">
                     <el-form-item label="合同结束日期 ：" :label-width="formLabelWidth" prop="contractEndDate">
                     <el-date-picker
+                    :disabled="editType=='view'"
                     v-model="formAll.contractEndDate"
                     type="date"
                     value-format="timestamp"
@@ -84,6 +90,10 @@
                  </div>
                  <div class="manageDistrict_tr">
                      <div class="manageDistrict_td table_w1"> 
+                   <span  v-if="!formAll.aflcPartnerAreaList[keys].selectFlag">
+                    <el-input v-model="formAll.aflcPartnerAreaList[keys].belongCity" @focus="changeSelect1(keys)" :disabled="editType=='view'"></el-input>
+                  </span>
+                  <span v-else>
                     <el-cascader
                     size="large"
                     :options="options"
@@ -91,9 +101,10 @@
                     @change="handleChange1"
                     @focus="changeInput(keys)"
                     >
-                    </el-cascader></div>
+                    </el-cascader></span></div>
                      <div class="manageDistrict_td table_w2">
                     <el-date-picker
+                    :disabled="editType=='view'"
                     v-model="formAll.aflcPartnerAreaList[keys].contractStartDate"
                     type="date"
                     value-format="timestamp"
@@ -102,6 +113,7 @@
                      </div>
                      <div class="manageDistrict_td table_w3">
                  <el-date-picker
+                    :disabled="editType=='view'"
                     v-model="formAll.aflcPartnerAreaList[keys].contractEndDate"
                     type="date"
                     value-format="timestamp"
@@ -127,9 +139,13 @@
                  </div>
                  <div class="manageDistrict_tr">
                      <div class="manageDistrict_td table_w5">
-                    <span  @click="selectUpload(keys)">
-                    <upload class="licensePicture" tip="（必须为jpg/png并且小于5M）" v-model="formAll.aflcPartnerFileList[keys].saveAddress"  @fileNmeChange = 'fileNmeChange' />
-                   </span>
+                    <span v-if="editType=='view'">
+                    <a :href="formAll.aflcPartnerFileList[keys].saveAddress" target="_blank">{{formAll.aflcPartnerFileList[keys].fileName}}</a>
+                    </span>
+                    <span  @click="selectUpload(keys)" v-else>
+                    <div class="fileNameCss" v-if="formAll.aflcPartnerFileList[keys].fileName&&!formAll.aflcPartnerFileList[keys].selectFlag">{{formAll.aflcPartnerFileList[keys].fileName}}</div>
+                    <upload class="licensePicture" tip="（必须为jpg/png并且小于5M）" v-model="formAll.aflcPartnerFileList[keys].saveAddress"  @fileNmeChange = 'fileNmeChange' v-else/>
+                    </span>
                     </div>
                      <div  class="manageDistrict_td Item_position table_w4"><span  class="addItem" @click="addItemFile()" v-if="keys==0"> </span><span  class="reduceItem" @click="reduceItemFile(keys)" v-else> </span></div>
                  </div>
@@ -147,7 +163,7 @@
     </div>
 </template>
 <script>
-import {data_get_aflcPartner_create,data_get_aflcTradeArea_Id} from '@/api/users/district/manageDistrict.js'
+import {data_get_aflcPartner_update,data_get_aflcPartner_Id} from '@/api/users/district/manageDistrict.js'
 import { regionDataPlus, CodeToText, TextToCode } from 'element-china-area-data'
 import { eventBus } from '@/eventBus'
 import Upload from '@/components/Upload/singlei'
@@ -263,7 +279,8 @@ export default {
         }
 
         return{
-        areaStatus:null,    
+        AreaName:null,    
+        areaStatus:null,
         selectFlag:null,
         options:regionDataPlus,
         dialogFormVisible_add: false,
@@ -289,10 +306,12 @@ export default {
             area:null,
             contractStartDate:null,
             contractEndDate:null,
+            selectFlag:null,
             }],
             aflcPartnerFileList:[{
             saveAddress:null,    
             fileName:null,    
+            selectFlag:null,
             }]       
         },
          rulesForm:{
@@ -317,6 +336,7 @@ export default {
                  this.$refs['formAll'].resetFields();
                  this.formAll.address = null;
                  this.selectFlag = null;
+                 this.AreaName = null;
                 this.formAll.aflcPartnerAreaList=[{
                 areaName: [],
                 areaCode: [],
@@ -325,10 +345,12 @@ export default {
                 area:null,
                 contractStartDate:null,
                 contractEndDate:null,
+                selectFlag:null,
                 }]
                 this.formAll.aflcPartnerFileList=[{
                 saveAddress:null,    
                 fileName:null,    
+                selectFlag:null,
                 }]   
                 this.areaStatus = null 
                 }
@@ -339,12 +361,34 @@ export default {
     this.getMoreInformation();
   },
   methods:{
+   // 省市状态表
+     changeSelect(){
+            if(this.editType=='add'){
+                this.selectFlag=null
+            } else{
+                this.selectFlag='1'
+            }
+            },  
+    changeSelect1:function(i){
+            if(this.editType==='add'){
+                this.formAll.aflcPartnerAreaList[i].selectFlag=null
+            } else{
+                this.formAll.aflcPartnerAreaList[i].selectFlag='1'
+            }
+            this.$forceUpdate()
+    },              
       changeInput:function(i){
         this.inputKey = i;
         console.log(i)
         },
       selectUpload(i){
         this.selectIndex = i;
+            if(this.editType=='add'){
+                this.formAll.aflcPartnerFileList[i].selectFlag=null
+            } else{
+                this.formAll.aflcPartnerFileList[i].selectFlag='1'
+            }
+            this.$forceUpdate()
       },
       fileNmeChange(i){
       this.formAll.aflcPartnerFileList[this.selectIndex].fileName = i
@@ -395,7 +439,51 @@ export default {
         },  
 
    openDialog:function(){
+    if(this.editType=='view'){
+        data_get_aflcPartner_Id(this.params.id).then(res=>{
+        console.log('1',res)
+            this.formAll.partnerCompany=res.data.partnerCompany
+             this.formAll.partnerName=res.data.partnerName
+             this.formAll.mobile=res.data.mobile
+             this.formAll.areaCode=res.data.areaCode
+             this.formAll.province=res.data.province
+             this.formAll.city=res.data.city
+             this.formAll.area=res.data.area
+             this.formAll.signingDate=res.data.signingDate
+             this.formAll.contractStartDate=res.data.contractStartDate
+             this.formAll.contractEndDate=res.data.contractEndDate
+             this.formAll.aflcPartnerAreaList = res.data.aflcPartnerAreaList
+             this.formAll.aflcPartnerFileList = res.data.aflcPartnerFileList
+             this.AreaName = res.data.belongCity
+        })
+     this.dialogFormVisible_add = true;
+    }
+    else{
+    if(!this.params.id){
+        this.$message.info('未选中需要修改内容');
+    }
+    else{
+        data_get_aflcPartner_Id(this.params.id).then(res=>{
+        console.log('2',res)
+            this.formAll.partnerCompany=res.data.partnerCompany
+             this.formAll.partnerName=res.data.partnerName
+             this.formAll.mobile=res.data.mobile
+             this.formAll.areaCode=res.data.areaCode
+             this.formAll.province=res.data.province
+             this.formAll.city=res.data.city
+             this.formAll.area=res.data.area
+             this.formAll.signingDate=res.data.signingDate
+             this.formAll.contractStartDate=res.data.contractStartDate
+             this.formAll.contractEndDate=res.data.contractEndDate
+             this.formAll.aflcPartnerAreaList = res.data.aflcPartnerAreaList
+             this.formAll.aflcPartnerFileList = res.data.aflcPartnerFileList
+             this.AreaName = res.data.belongCity
+             console.log('2', this.formAll.contractStartDate)
+        })
+        
          this.dialogFormVisible_add = true;
+    }
+    }
    },
    change:function(){
       this.dialogFormVisible_add = false;
@@ -452,20 +540,33 @@ export default {
     add_data(){
        this.$refs['formAll'].validate(valid=>{
         if(valid){
+            if(typeof(this.formAll.areaCode)!=='string')
+            {
             if(this.formAll.area){
                this.areaStatus = this.formAll.areaCode[2]
             }
             else{
                this.areaStatus = this.formAll.areaCode[1]
             }
+            }
+           else{
+           this.areaStatus = this.formAll.areaCode
+          }
             let aflcPartnerAreaList = []
+            let aflcPartnerFileList = []
             this.formAll.aflcPartnerAreaList.map((list,index)=>{
+                    if(typeof(this.formAll.aflcPartnerAreaList[index].areaCode)!=='string')
+                     {   
                     if(list.area){
-                       this.formAll.aflcPartnerAreaList[index].areaCode = this.formAll.aflcPartnerAreaList[index].areaCode[2]
+                    this.formAll.aflcPartnerAreaList[index].areaCode = this.formAll.aflcPartnerAreaList[index].areaCode[2]
                     }
                     else{
                        this.formAll.aflcPartnerAreaList[index].areaCode = this.formAll.aflcPartnerAreaList[index].areaCode[1]
                     }
+                    }
+                    else{
+                    this.formAll.aflcPartnerAreaList[index].areaCode = this.formAll.aflcPartnerAreaList[index].areaCode
+                   }                    
                         aflcPartnerAreaList.push(
                             {
                                 province:list.province,
@@ -477,7 +578,13 @@ export default {
                             }
                         )
             })
-        let forms=[
+            this.formAll.aflcPartnerFileList.map((list,index)=>{
+            aflcPartnerFileList.push({
+                saveAddress:list.saveAddress,   
+                fileName:list.fileName,    
+            })
+            })
+        let forms=
             {
             areaCode:this.areaStatus,
             province:this.formAll.province,
@@ -491,18 +598,19 @@ export default {
             signingDate:this.formAll.signingDate,
             contractStartDate:this.formAll.contractStartDate, 
             contractEndDate:this.formAll.contractEndDate,
-            aflcPartnerFileList:this.formAll.aflcPartnerFileList,
+            aflcPartnerFileList:aflcPartnerFileList,
             aflcPartnerAreaList:aflcPartnerAreaList,
-        }]
+            id:this.params.id
+        }
         
-        data_get_aflcPartner_create(forms).then(res=>{
-           this.$message.success('新增成功');
+        data_get_aflcPartner_update(forms).then(res=>{
+           this.$message.success('修改成功');
            this.changeList();
            this.dialogFormVisible_add = false;
            console.log(res);
 
         }).catch(res=>{
-            this.$message.error('新增失败')
+            this.$message.error('修改失败')
             this.changeList();
             this.dialogFormVisible_add = false;
            console.log(res);
@@ -538,11 +646,11 @@ export default {
                 position: relative;
                 .addItem{
                     top: 7px;
-                    left:40%;
+                    left:35%;
                 }                
                 .reduceItem{
                     top: 7px;
-                    left:40%;
+                    left:35%;
                 }
             }
             .manageDistrict_tr{
@@ -573,6 +681,11 @@ export default {
            .table_w3{width: 30%}
            .table_w4{width: 10%;height: 40px;}
            .table_w5{width: 90%}
+        }
+        .fileNameCss{
+            width: 100%;
+            height: 40px;
+            color: #3e9ff1;
         }
     }
 }

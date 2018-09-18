@@ -3,7 +3,7 @@
       <el-button :type="btntype" :value="value" :plain="plain" :icon="icon" @click="openDialog()">{{btntext}}</el-button>
       <div class="newMarketingOrder">
       <el-dialog  :visible="dialogFormVisible_add" :before-close="change">
-        <el-form :model="formAll" ref="formAll" :rules="rulesForm">
+        <el-form :model="formAll" ref="formAll" :rules="rulesForm" :inline="true" >
           <el-row >
               <el-col :span="12">
                 <el-form-item label="所属区域：" :label-width="formLabelWidth" prop="areaName">
@@ -705,6 +705,7 @@ export default {
             border-right:1px solid #d0d7e5;
             .el-form-item{
             margin-bottom: 0px;
+            margin-right: 0px!important;
             }
             .el-input{
                 width:90%;
@@ -716,7 +717,7 @@ export default {
                 }
             }
             .Order_input{
-                width: 40px;
+                width: 40px
             }
             .el-form-item__error{
                 z-index:100;

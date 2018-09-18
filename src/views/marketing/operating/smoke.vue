@@ -1,20 +1,14 @@
 <template>
   <div class="identicalStyle clearfix waitpayment" v-loading="loading">
-    <el-form :inline="true" :model="searchInfo" ref="ruleForm" class="demo-ruleForm classify_searchinfo">
-      <el-form-item label="所属区域"  prop="carType">
-        <!-- <el-select clearable placeholder="请选择省/市/区/街道" >
-          <el-option
-            v-for="item in optionsCar"
-            :key="item.code"
-            :label="item.name"
-            :value="item.code"
-            :disabled="item.disabled">
-          </el-option>
-        </el-select> -->
-      </el-form-item>  
-      <el-form-item label="交易时间" prop="mobile">
+    <el-form :inline="true" :model="searchInfo" ref="ruleForm" :rules="rules" class="demo-ruleForm classify_searchinfo">
+      <el-form-item label="所属区域" prop="areaName">
+        <vregion :ui="true"  @values="regionChange" class="form-control">
+          <el-input  v-model="areaName" placeholder="请选择省/市/区" clearable @clear="clearName"></el-input>
+        </vregion>
+      </el-form-item>
+      <el-form-item label="交易时间" prop="searchCreatTime">
         <el-date-picker
-          v-model="chooseTime"
+          v-model="searchCreatTime"
           type="daterange"
           :picker-options="pickerOptions2"
           range-separator="-"
@@ -49,98 +43,63 @@
           @row-click="clickDetails"
           style="width: 100%"> 
           <el-table-column
-              type="selection"
-              width="55">
+            type="selection"
+            width="100">
           </el-table-column>
-          <el-table-column label="序号"  width="80">
-              <template slot-scope="scope">
-                  {{ (page - 1)*pagesize + scope.$index + 1 }}
-              </template>
+          <el-table-column label="序号" 
+            width="100">
+            <template slot-scope="scope">
+              {{ (page - 1)*pagesize + scope.$index + 1 }}
+            </template>
           </el-table-column>  
           <el-table-column
-              prop="orderSerial"
-              label="订单号"
-              width="250">
-                  <template  slot-scope="scope">
-                      <h4 class="needMoreInfo" @click="pushOrderSerial(scope.row)">{{ scope.row.orderSerial}}</h4>
-                  </template>
+            prop="orderSerial"
+            label="订单号"
+            width="250">
+              <template  slot-scope="scope">
+                <h4 class="needMoreInfo" @click="pushOrderSerial(scope.row)">{{ scope.row.orderSerial}}</h4>
+              </template>
           </el-table-column>
           <el-table-column
-              prop="orderType"
-              label="服务分类"
-              width="110">
+            prop="areaName"
+            label="所属区域"
+            width="250">
           </el-table-column>
           <el-table-column
-              prop="belongCity"
-              label="区域"
-              width="180">
+            prop="shipper"
+            label="货主"
+            width="200">
           </el-table-column>
           <el-table-column
-              prop="shipperMobile"
-              label="货主账号"
-              width="150">
+            prop="driver"
+            label="车主"
+            width="250">
           </el-table-column>
           <el-table-column
-              prop="shipperName"
-              label="货主姓名"
-              width="150">
+            prop="carType"
+            label="车型"
+            width="200">
           </el-table-column>
           <el-table-column
-              prop="usedCarType"
-              label="所需车型"
-              width="150">
+            prop="totalAmount"
+            label="订单金额"
+            width="160">
           </el-table-column>
           <el-table-column
-              prop="totalAmount"
-              label="运费总额（元）"
-              width="150">
+            prop="commissionAmount"
+            label="佣金金额"
+            width="160">
           </el-table-column> 
           <el-table-column
-              prop="useCarTime"
-              label="用车时间"
-              width="250">
-                  <template  slot-scope="scope">
-                      <span class="timeChoose">
-                          {{ scope.row.useCarTime | parseTime}}    
-                      </span>
-                  </template>
-          </el-table-column>
-          <el-table-column
-              label="订单类型"
-              width="120">
-                  <template  slot-scope="scope">
-                      {{ scope.row.orderClass == '1' ? '即时订单' : '预约订单' }}
-                  </template>
-          </el-table-column>
-          <el-table-column
-              label="付款状态"
-              width="150">
-                  <template  slot-scope="scope">
-                      {{ scope.row.payStatus == 'AF00801' ? '待付款' : '已付款' }}
-                  </template>
-          </el-table-column>
-          <el-table-column
-              label="提货地"
-              :show-overflow-tooltip="true"
-              width="250">
-              <template  slot-scope="scope">
-                  {{ scope.row.aflcOrderAddresses[0].viaAddress }}
-              </template>
-          </el-table-column>
-          <el-table-column
-              label="目的地"
-              :show-overflow-tooltip="true"
-              width="250">
-              <template  slot-scope="scope">
-                  {{ scope.row.aflcOrderAddresses[scope.row.aflcOrderAddresses.length-1].viaAddress }}
-              </template>
-          </el-table-column>
-          <el-table-column
-            label="下单时间"
-            width="200">
+            prop="commissionTime"
+            label="交易时间"
+            width="250">
             <template  slot-scope="scope">
-                {{ scope.row.useTime | parseTime}}
+              <span class="orderSerial">
+                {{ scope.row.commissionTime | parseTime}}    
+              </span>
             </template>
+            <!-- <template slot-scope="scope">{{ scope.row.commissionTime | parseTime('{y}-{m}-{d} {h}:{i}:{s}')}}</template> -->
           </el-table-column>
         </el-table>
         <!-- 页码 -->
@@ -149,9 +108,7 @@
     </div>
   </div>
 </template>
-
 <script type="text/javascript">
-
 import FileSaver from 'file-saver'
 import XLSX from 'xlsx'
 import '@/styles/dialog.scss'
@@ -160,6 +117,8 @@ import { parseTime, pickerOptions2 } from '@/utils/index.js'
 import Pager from '@/components/Pagination/index'
 import vregion from '@/components/vregion/Region'
 import { postDriverCommissionTransaction } from '@/api/marketing/carmarkting/operating'
+import GetCityList from '@/components/GetCityList'
+import { REGEX } from '@/utils/validate'
 export default{
   components: {
     Pager,
@@ -172,75 +131,145 @@ export default{
     }
   },
   data() {
+    const validateareaName = function(rule, value, callback) {
+      if (value === '' || value === null || !value || value === undefined) {
+        callback(new Error('请输入异常件数'))
+      } else if (REGEX.ONLY_NUMBER_GT.test(value)) {
+        callback()
+      } else {
+        callback(new Error('只能输入数字从1开始'))
+      }
+    }
+    const validatorNull = (rule, value, callback) => {
+      if (value === undefined ) {
+         console.log(value)
+        callback(new Error('导出时不能为空'))
+      }else {
+        callback()
+      }
+    }
     return {
+      areaCodeList1: [],
       btnsize: 'mini',
       timeOutWaitPay: null,
       loading: true, // 加载
       sizes: [30, 50, 100],
-      pagesize: 30, // 初始化加载数量
-      page: 1, // 初始化页码
+      pagesize:20,//初始化加载数量
+      page:1,//初始化页码
       dataTotal: 0,
-      optionsCar: [],
+      areaName:'',
+      isEport: false,
       searchInfo: {
-        belongCity: '', // 区域
-        belongCityName: '', // 区域
-        shipperName: '', // 货主
-        startOrderDate: '', // 下单起始时间
-        endOrderDate: '', // 下单结束时间
-        orderSerial: '', // 订单号
-        parentOrderStatus: 'AF00801' // 订单状态
-      },
-      searchQuery: {
-        'currentPage': 1,
-        'pageSize': 20,
-        'vo': {
-          'areaCodeList': []
-        }
+        startTime: '', // 下单起始时间
+        endTime: '', // 下单结束时间
+        areaCodeList:[]//
       },
       pickerOptions2: {
         shortcuts: pickerOptions2
       },
-      chooseTime: '',
-      tableData: [],
+      searchCreatTime: '',
+      tableData:[],
       dialogFormVisible_details: false, // 详情弹窗
-      DetailsOrderSerial: ''
+      rules: {
+        // areaName: [
+        //   {  trigger: 'blur', validator: validatorNull  }
+        // ],
+        // searchCreatTime: [
+        //   { trigger: 'blur', validator: validatorNull }
+        // ],
+      }
     }
   },
-  watch: {
-
-  },
+//   watch: {
+// areaName (newVal) {
+//   if (this.isEport) {
+//  if (!this.areaName && !this.searchCreatTime ) {
+//      console.log('sdjfisdjfi', this.$refs.ruleForm.validateField('areaName'), this.areaName)
+//      this.$refs.ruleForm.validateField('areaName')
+//      this.$refs.ruleForm.validateField('searchCreatTime')
+//    }else {
+//       this.$refs.ruleForm.resetFields('areaName')
+//       this.isEport = false
+//    }
+//   }
+  
+// },
   created() {
 
   },
   mounted() {
     this.firstblood()
-    console.log('```````````', process.env.NODE_ENV)
-    // this.timeOutWaitPay = setInterval(this.firstblood,60000)
-    // console.log(this.$store)
   },
   beforeDestroy() {
     clearInterval(this.timeOutWaitPay)
   },
   methods: {
     exportExcel() {
-      /* generate workbook object from table */
-      var wb = XLSX.utils.table_to_book(document.querySelector('#out-table'))
-      /* get binary string as output */
-      var wbout = XLSX.write(wb, { bookType: 'xlsx', bookSST: true, type: 'array' })
-      console.log(wb)
-      console.log(wbout)
-      // try {
-      //     FileSaver.saveAs(new Blob([wbout], { type: 'application/octet-stream' }), 'sheetjs.xlsx')
-      // } catch (e) { if (typeof console !== 'undefined') console.log(e, wbout) }
-      // return wbout
+      this.isEport = true
+      // var wb = XLSX.utils.table_to_book(document.querySelector('#out-table'))
+      // var wbout = XLSX.write(wb, { bookType: 'xlsx', bookSST: true, type: 'array' })
+
+  
+      
+      // this.$refs.ruleForm.validateField('searchCreatTime')
+    },
+    clearName(){
+      this.areaName = ''
+      this.searchInfo.areaCodeList = []
+      this.areaCodeList1 = []
     },
     regionChange(d) {
-      console.log('data:', d)
-      this.searchInfo.belongCityName = (!d.province && !d.city && !d.area && !d.town) ? '' : `${this.getValue(d.province)}${this.getValue(d.city)}${this.getValue(d.area)}${this.getValue(d.town)}`.trim()
-      if (d.city) {
-        this.searchInfo.belongCity = d.city.code
-      } else {
-        this.searchInfo.belongCity = d.province.code
+      console.log('data:',d)
+      this.areaName = (!d.province&&!d.city&&!d.area&&!d.town) ? '': `${this.getValue(d.province)}${this.getValue(d.city)}${this.getValue(d.area)}${this.getValue(d.town)}`.trim();
+      if(d.area){
+        this.areaCodeList1[d.area.code] = this.areaName
+        let arr = []
+        let code = []
+        for(let item in this.areaCodeList1){
+          arr.push(this.areaCodeList1[item])
+          code.push(item)
+        }
+        this.searchInfo.areaCodeList = Object.assign([], code)
+        // console.log('areaCodeList1',this.areaCodeList1)
+        this.areaName = arr.join(',')
+        console.log('areaName',this.areaName)
+        arr = []
+        code = []
+      }else if(d.city){
+        // this.searchInfo.areaCodeList = d.city.code
+        this.areaCodeList1[d.city.code] = this.areaName
+        let arr = []
+        let code = []
+        for(let item in this.areaCodeList1){
+          arr.push(this.areaCodeList1[item])
+          code.push(item)
+        }
+        this.searchInfo.areaCodeList = Object.assign([], code)
+        // console.log('areaCodeList1',this.areaCodeList1)
+        this.areaName = arr.join(',')
+        console.log('areaName',this.areaName)
+        arr = []
+        code = []
+      }
+      else if (d.province){
+        // this.searchInfo.areaCodeList = d.province.code ? d.province.code : ''
+        this.areaCodeList1[d.province.code] = this.areaName
+        let arr = []
+        let code = []
+        for(let item in this.areaCodeList1){
+          arr.push(this.areaCodeList1[item])
+          code.push(item)
+        }
+        this.searchInfo.areaCodeList = Object.assign([], code)
+        // console.log('areaCodeList1',this.areaCodeList1)
+        this.areaName = arr.join(',')
+        console.log('areaName',this.areaName)
+        arr = []
+        code = []
+      }else {
+        this.clearName()
+        console.log('sdfsd',d)
+        
       }
     },
     getValue(obj) {
@@ -254,44 +283,33 @@ export default{
     // 刷新页面
     firstblood() {
       this.loading = false
-      postDriverCommissionTransaction(this.searchQuery).then(res => {
-        console.log('待付款', res)
-        // this.tableData = res.data.list
-        // this.dataTotal = res.data.totalCount
-
-        this.tableData.forEach(item => {
-          item.aflcOrderAddresses.sort(function(a, b) {
-            return a.viaOrder - b.viaOrder
-          })
-        })
+      postDriverCommissionTransaction(this.page,this.pagesize,this.searchInfo).then(res => {
+        console.log(res)
+        this.tableData = res.data.list
         this.loading = false
       })
     },
-
      // 模糊查询 分类名称或者code
     handleSearch(type) {
-      // console.log(this.chooseTime)
+      console.log(this.searchCreatTime)
       switch (type) {
         case 'search':
-          if (this.chooseTime) {
-            this.searchInfo.startOrderDate = this.chooseTime[0]
-            this.searchInfo.endOrderDate = this.chooseTime[1]
+          if (this.searchCreatTime) {
+            this.searchInfo.startTime = this.searchCreatTime ? parseTime(this.searchCreatTime[0], '{y}-{m}-{d} ') + '00:00:00' : ''
+            this.searchInfo.endTime = this.searchCreatTime ? parseTime(this.searchCreatTime[1], '{y}-{m}-{d} ') + '23:59:59' : ''
           } else {
-            this.searchInfo.startOrderDate = ''
-            this.searchInfo.endOrderDate = ''
+            this.searchInfo.startTime = ''
+            this.searchInfo.endTime = ''
           }
           this.firstblood()
           break
         case 'clear':
           this.searchInfo = {
-            belongCity: '', // 区域
-            shipperName: '', // 货主
-            startOrderDate: '', // 下单起始时间
-            endOrderDate: '', // 下单结束时间
-            orderSerial: '', // 订单号
-            parentOrderStatus: 'AF00801' // 订单状态待支付
+            startTime: '', // 下单起始时间
+            endTime: '', // 下单结束时间
+            areaCodeList:[]
           }
-          this.chooseTime = ''
+          this.searchCreatTime = ''
           this.firstblood()
         case 'outExce':
           this.exportExcel()

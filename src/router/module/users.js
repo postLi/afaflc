@@ -36,14 +36,14 @@ export default {
             },            
         ]
     },
-      { 
-        path: '/users/partner', 
-        icon: 'hhrgl', 
-        hidden: false, 
-        name: '合伙人管理', 
-        component: _import('users/partner/index'), 
-        meta: { title: '合伙人管理', stitle: '合伙人',noCache: true }
-    },      
+    //   { 
+    //     path: '/users/partner', 
+    //     icon: 'hhrgl', 
+    //     hidden: false, 
+    //     name: '合伙人管理', 
+    //     component: _import('users/partner/index'), 
+    //     meta: { title: '合伙人管理', stitle: '合伙人',noCache: true }
+    // },      
     { 
         path: '/users/shipperData', 
         icon: 'hzsjgl', 
