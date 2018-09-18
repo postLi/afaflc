@@ -116,8 +116,8 @@
 
         <div class="info_tab_footer">共计:{{ totalCount }} <div class="show_pager"> <Pager :total="totalCount" @change="handlePageChange" /></div> </div>    
         <createdDialog :paramsView="paramsView" :editType="type"  :typetitle="typetitle" :dialogFormVisible_add.sync = "dialogFormVisible_add" @getData="getDataList"/>
-        <FreezeDialog :params="selectRowData" :editType="freezetype"  :freezeDialogFlag.sync = "freezeDialogFlag" @getData="getDataList"/>
-        <shipperBlackDialog :params="selectRowData" :editType="blacktype"  :BlackDialogFlag.sync = "BlackDialogFlag" @getData="getDataList"/>
+        <FreezeDialog :paramsView="selectRowData" :editType="freezetype" :freezetitle="freezetitle"  :freezeDialogFlag.sync = "freezeDialogFlag" @getData="getDataList"/>
+        <shipperBlackDialog :paramsView="selectRowData" :editType="blacktype"  :BlackDialogFlag.sync = "BlackDialogFlag" @getData="getDataList"/>
     </div>
 </template>
 
@@ -156,6 +156,7 @@ export default {
         blacktype: '',
         type: '',
         typetitle:'',
+        freezetitle:'',
         paramsView: {},
         freeze: true, // 是否冻结
         searchInfo: {
@@ -192,7 +193,7 @@ export default {
   mounted() {
     eventBus.$on('changeList', () => {
     //   console.log('22222222222222222222')
-      this.firstblood()
+        this.firstblood()
     })
   },
   methods: {
@@ -247,6 +248,7 @@ export default {
                         if(this.selectRowData.accountStatusName == '冻结中' && this.freezetype == 'add'){
                             return this.$message.warning('您选中的货主已被冻结，不需多次冻结！');
                         }else{
+                            this.freezetitle = '冻结';
                             this.freezeDialogFlag = true;
                         }
                         break;
@@ -255,6 +257,7 @@ export default {
                         if(this.selectRowData.accountStatusName != '冻结中' && this.freezetype == 'edit'){
                             return this.$message.warning('您选中的货主未被冻结，不可做此操作！');
                         }else{
+                            this.freezetitle = '冻结修改';
                             this.freezeDialogFlag = true;
                         }
                         break;
@@ -263,6 +266,7 @@ export default {
                         if(this.selectRowData.accountStatusName != '冻结中' && this.freezetype == 'remove'){
                             return this.$message.warning('您选中的货主未被冻结，无需移除！');
                         }else{
+                            this.freezetitle = '移除冻结';
                             this.freezeDialogFlag = true;
                         }
                         break;
@@ -270,9 +274,7 @@ export default {
                         this.blacktype = 'add';
                         if(this.selectRowData.accountStatusName == '黑名单' && this.blacktype == 'add'){
                             return this.$message.warning('您选中的货主已被移入黑名单，不需多次拉黑！');
-                            
                         }else{
-
                             this.BlackDialogFlag = true;
                         }
                         break;
@@ -280,14 +282,13 @@ export default {
                         this.blacktype = 'edit' ;
                         if(this.selectRowData.accountStatusName != '黑名单' && this.blacktype == 'edit'){
                             return this.$message.warning('您选中的货主未被移入黑名单，不可做此操作！');
-                            
                         }else{
                             this.BlackDialogFlag = true;
                         }
                         break;
                 }
-                 // 清除选中状态，避免影响下个操作
-                this.$refs.multipleTable.clearSelection()
+                // 清除选中状态，避免影响下个操作
+                // this.$refs.multipleTable.clearSelection();
             }
         },
         // 刷新页面

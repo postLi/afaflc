@@ -42,7 +42,7 @@ export function login(username, password, orgid) {
   }
 
 export function getInfo(username, orgid) {
-  return fetch.get('/aflccommonservice-lyc/system/user/v1/getCurrentUser').then(res=>{
+  return fetch.get('/aflccommonservice/system/user/v1/getCurrentUser').then(res=>{
       console.log('getinfo:',res)
       return res
   }).catch(err=>{

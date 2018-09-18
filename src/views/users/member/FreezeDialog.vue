@@ -1,6 +1,5 @@
 <template>
   <div class="freezeDialog commoncss">
-    <!-- <el-button :type="type" :value="value" :plain="plain" :icon="icon" @click="openDialog()">{{text}}</el-button> -->
     <el-dialog :title="title" :visible="freezeDialogFlag"  :before-close="close" v-dialogDrag :close-on-click-modal="false" >
       <el-form :model="formFroze" ref="formFroze" :rules="formFrozeRules" >
           <el-row>
@@ -70,9 +69,8 @@
   </div>
 </template>
 <script>
-import {parseTime} from '@/utils/'
 import {data_get_shipper_freezeType} from '@/api/users/shipper/all_shipper.js'
-import { data_ChangeLogisticsCompany }  from '../../../api/users/logistics/LogisticsCompany.js'
+import { data_ChangeLogisticsCompany }  from '@/api/users/logistics/LogisticsCompany.js'
 import { eventBus } from '@/eventBus'
 export default {
   name:'freezeDialog',

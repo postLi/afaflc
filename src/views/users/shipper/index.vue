@@ -135,6 +135,18 @@ import ShipperAll from '../components/ShipperAll.vue'
                                 overflow: auto;
                             }
                         }
+                        .onlyShow{
+                            display: inline-block;
+                            width: 250px;
+                            height: 40px;
+                            line-height: 40px;
+                            text-align: left;
+                            text-indent: 10px;
+                            color: #3e9ff1;
+                            // border: 1px solid #cccccc;
+                            background: rgba(227, 233, 235, 0.479);
+                        
+                        }
                     }
                 }
             }

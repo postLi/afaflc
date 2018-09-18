@@ -1,6 +1,6 @@
 <template>
   <div class="freezeDialog commoncss">
-    <el-dialog :title="title" :visible.sync="freezeDialogFlag" :before-close="close()">
+    <el-dialog :title="title" :visible="freezeDialogFlag"  :before-close="close" v-dialogDrag :close-on-click-modal="false" >
       <el-form :model="formFroze" ref="formFroze" :rules="formFrozeRules">
         <el-row>
             <el-col :span="12">
@@ -17,34 +17,32 @@
           
           <el-row>
             <el-col :span="12">
-              <el-form-item label="联系人：" :label-width="formLabelWidth">
-                <el-input v-model="formFroze.contacts" disabled></el-input>
-              </el-form-item>
+                <el-form-item label="联系人：" :label-width="formLabelWidth">
+                    <el-input v-model="formFroze.contacts" disabled></el-input>
+                </el-form-item>
             </el-col>
             <el-col :span="12">
-              <el-form-item label="所在地：" :label-width="formLabelWidth">
-              <el-input v-model="formFroze.belongCityName" disabled></el-input>
-            </el-form-item>
+                <el-form-item label="所在地：" :label-width="formLabelWidth">
+                    <el-input v-model="formFroze.belongCityName" disabled></el-input>
+                </el-form-item>
             </el-col>
           </el-row>
 
           <el-row>
             <el-col :span="24" class="moreLength">
-              <el-form-item label="详细地址：" :label-width="formLabelWidth">
-              <el-input v-model="formFroze.address" :maxlength="20" disabled></el-input>
-            </el-form-item>
+                <el-form-item label="详细地址：" :label-width="formLabelWidth">
+                    <el-input v-model="formFroze.address" :maxlength="20" disabled></el-input>
+                </el-form-item>
             </el-col>
           </el-row>
           <el-row>
             <el-col :span="12">
               	<el-form-item label="货主类型：" :label-width="formLabelWidth">
-				<el-input
-				v-if="freeze == true"
-				placeholder="请输入内容"
-				v-model="formFroze.shipperTypeName"
-				:disabled="true">
-				</el-input>
-            </el-form-item>
+                    <el-input
+                        v-model="formFroze.shipperTypeName"
+                        :disabled="true">
+                    </el-input>
+                </el-form-item>
             </el-col>
             <el-col :span="12">
               <el-form-item label="注册来源：" :label-width="formLabelWidth">
@@ -122,26 +120,29 @@
   </div>
 </template>
 <script>
-import {parseTime} from '@/utils/'
+
 import {data_get_shipper_change,data_get_shipper_freezeType} from '@/api/users/shipper/all_shipper.js'
 import { eventBus } from '@/eventBus'
 export default {
-  name:'freezeDialog',
+  name:'shipperfreezeDialog',
   components:{
 
   },
   props:{
-        freezeDialogFlag:{
-            type:Boolean,
-            default:false
-        },
-        editType: {
-            type: String,
-            default: 'edit'
-        },
-        freeze:{
-            type:Boolean
-        }
+    paramsView:{
+        type:Object,
+    },
+    freezeDialogFlag:{
+        type:Boolean,
+        default:false
+    },
+    editType: {
+        type: String,
+        default: 'edit'
+    },
+    freeze:{
+        type:Boolean
+    },
   },
   data(){
     return{
@@ -170,7 +171,7 @@ export default {
         handler: function(val, oldVal) {
             if(val){
                 this.openDialog();
-                this.getMoreInformation()
+                this.getMoreInformation();
             }
         },
     },
@@ -182,8 +183,7 @@ export default {
     close(done) {
         this.$emit('update:freezeDialogFlag', false);
         this.$emit('getData');
-        this.$refs.formFroze.resetFields();
-
+        // this.$refs.formFroze.resetFields();
         this.formFroze = { // 冻结弹框表单
             freezeCause:null,
             unfreezeTime:null,
@@ -221,20 +221,19 @@ export default {
         this.formFroze.freezeTime = time
     },
     openDialog(){
-        console.log('this.params',this.params)
-        this.formFroze = Object.assign({},this.params) ;
-        // this.freezeDialogFlag = true ;
+        console.log('this.paramsView',this.paramsView)
+        this.formFroze = Object.assign({},this.paramsView) ;
         // this.formFroze.freezeTime = this.formFroze.freezeTime ? this.formFroze.freezeTime : Date.parse(new Date());;
         // if(this.editType == 'add'){
         //     console.log('add')
         //     this.formFroze.unfreezeTime = this.formFroze.unfreezeTime ? this.formFroze.unfreezeTime : new Date();
-        //     this.formFroze.id = this.params.id;
-        //     this.formFroze.mobile = this.params.mobile;
+        //     this.formFroze.id = this.paramsView.id;
+        //     this.formFroze.mobile = this.paramsView.mobile;
 
         // }else{
         //     console.log('freez')
 
-        //     this.formFroze = Object.assign({},this.params) ;
+        //     this.formFroze = Object.assign({},this.paramsView) ;
         //     this.formFroze.unfreezeTime = this.formFroze.unfreezeTime ? this.formFroze.unfreezeTime : new Date();
         // }
     },
@@ -264,7 +263,6 @@ export default {
                             }).then( ()=>{
                                 data_get_shipper_change(forms).then(res=>{
                                     // console.log(res)
-                                    this.freezeDialogFlag = false;
                                     this.$message({
                                         type: 'success',
                                         message: '该货主已被冻结',
@@ -292,7 +290,6 @@ export default {
                             }).then( ()=>{
                                 data_get_shipper_change(forms).then(res=>{
                                     // console.log(res)
-                                    this.freezeDialogFlag = false;
                                     this.$message({
                                         type: 'success',
                                         message: '该货主已被解冻',
@@ -318,7 +315,6 @@ export default {
                                 this.$alert('修改成功', '提示', {
                                     confirmButtonText: '确定',
                                     callback: action => {
-                                        this.freezeDialogFlag = false;
                                         this.$emit('getData')
                                         this.changeList();
                                     }
