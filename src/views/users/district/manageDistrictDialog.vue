@@ -155,8 +155,8 @@
 
         </el-form>
         <div slot="footer" class="dialog-footer">
-          <el-button type="primary"  @click="add_data">确 定</el-button>
-          <el-button @click="close()">取 消</el-button>
+          <el-button type="primary"  @click="add_data" v-if="editType!=='view'">确 定</el-button>
+          <el-button @click="close()" v-if="editType!=='view'">取 消</el-button>
         </div>
       </el-dialog>
       </div>
@@ -626,9 +626,14 @@ export default {
 <style lang="scss">
 .shoppingDialog{
      display: inline-block;
+     .el-dialog{
+         width: 1000px;
+     }     
+     .btns_box{
     .el-button{
             padding: 5px 15px 7px;
         }
+    }
     .newmanageDistrict{
         display: inline-block;
         .el-input{

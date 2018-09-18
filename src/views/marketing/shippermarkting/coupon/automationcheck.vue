@@ -7,7 +7,7 @@
         <!-- 活动配置 -->
             <el-tab-pane label="活动配置" name="first">
                 <div class="automationcheckTab">
-        <el-form :model="formAllData" ref="formAllData">
+        <el-form :model="formAllData" ref="formAllData" :inline="true">
           <el-row v-if="editType=='one'">
             <el-col >
                <el-form-item  label="触发条件：" :label-width="formLabelWidth"> 
@@ -191,7 +191,7 @@
       <div class="automationcheckTabTwo">
             <el-row >
             <el-col :span="15">
-                <el-form>
+                <el-form :inline="true">
                <el-form-item  label="手机号码：" :label-width="formLabelWidth">
                    <el-input v-model="searchData.mobile"></el-input>
                </el-form-item>
@@ -705,6 +705,7 @@ export default {
             left: 0;
             width: 100%;
             text-align: left;
+            .el-input{width: 70px!important;}
             .show_pager{float: right}
             .page-select{top:5px;
             .el-input__inner{

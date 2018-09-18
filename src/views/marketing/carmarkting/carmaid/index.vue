@@ -26,7 +26,7 @@ export default {
   data() {
     return {
       shipperName: 'first'
-    }
+    } 
   },
   components: {
     SameCity,

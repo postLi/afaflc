@@ -323,7 +323,7 @@ export default {
 }
 .classify_cityinfo{
     height: 100%;
-    padding: 70px 15px 0 15px;
+    padding: 70px 15px 0 0px;
     .commoncss{
       display: inline-block;
     }

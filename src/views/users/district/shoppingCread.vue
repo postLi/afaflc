@@ -258,6 +258,9 @@ export default {
 <style lang="scss">
 .shoppingDialog{
      display: inline-block;
+        .el-dialog{
+         width: 1000px;
+     }
     .el-button{
             padding: 5px 15px 7px;
         }

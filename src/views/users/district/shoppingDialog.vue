@@ -49,10 +49,10 @@
             </el-row>                        
         </el-form>
         <div slot="footer" class="dialog-footer">
-          <el-button type="primary"  @click="edit_data">确 定</el-button>
-          <el-button @click="close()">取 消</el-button>
+          <el-button type="primary"  @click="edit_data" v-if="editType!=='view'">确 定</el-button>
+          <el-button @click="close()" v-if="editType!=='view'">取 消</el-button>
         </div>
-      </el-dialog>
+      </el-dialog> 
       </div>
     </div>
 </template>
@@ -291,12 +291,10 @@ export default {
         data_get_aflcTradeArea_update(forms).then(res=>{
            this.changeList();
            this.dialogFormVisible_add = false;
-           console.log(res);
             this.$message.success('修改成功');
         }).catch(res=>{
             this.$message.error('修改失败')
             this.dialogFormVisible_add = false;
-           console.log(res);
         })
        }
        })
@@ -309,9 +307,14 @@ export default {
 <style lang="scss">
 .shoppingDialog{
      display: inline-block;
+     .el-dialog{
+         width: 1000px;
+     }
+     .btns_box{
     .el-button{
             padding: 5px 15px 7px;
         }
+    }
     .newshoppingDialog{
         display: inline-block;
     }
