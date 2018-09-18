@@ -26,8 +26,6 @@
 				</createdDialog> -->
                 <el-button type="primary" icon="el-icon-circle-plus" plain :size="btnsize" @click="handleClick('identification')">代客认证</el-button>
                 <el-button type="primary" icon="el-icon-circle-plus" plain :size="btnsize" @click="handleClick('edit')">修改</el-button>
-
-
 			</div>
 			<div class="info_news">
 				<el-table
@@ -179,6 +177,13 @@ export default {
             switch(type){
                 case 'edit' :
                     this.type = "edit";
+                    this.paramsView = this.selectRowData;
+                    this.dialogFormVisible_add = true;
+                    break;
+                case 'identification':
+                    this.type = "identification";
+                    paramsView
+                    this.paramsView = this.selectRowData;
                     this.dialogFormVisible_add = true;
                     break;
             }

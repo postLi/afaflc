@@ -1,7 +1,7 @@
 <template>
      <div class="creatDialog commoncss">
-      <el-button :type="type" :value="value" :plain="plain" :icon="icon" @click="openDialog()">{{text}}</el-button>
-      <el-dialog :title="title" :visible="dialogFormVisible_add" :before-close="close" :close-on-click-modal="false">
+      <!-- <el-button :type="type" :value="value" :plain="plain" :icon="icon" @click="openDialog()">{{text}}</el-button> -->
+      <el-dialog :title="typetitle" :visible="dialogFormVisible_add" :before-close="close" :close-on-click-modal="false">
         <el-form :model="xinzengform" ref="xinzengform" :rules="rulesForm">
           <el-row>
             <el-col :span="12">
@@ -15,7 +15,7 @@
                         :disabled="item.disabled">
                         </el-option>
                     </el-select>
-                    <el-input v-model="cc" auto-complete="off" v-else-if="editType=='identification'" disabled></el-input>
+                    <el-input v-model="identifiy" auto-complete="off" v-else-if="editType=='identification'" disabled></el-input>
                     <el-input v-model="xinzengform.shipperTypeName" auto-complete="off" v-else disabled></el-input>
                 </el-form-item>
             </el-col>
@@ -134,8 +134,12 @@ export default {
       default: ''
     },
     btntitle: {
-    type: String,
-    default: ''
+        type: String,
+        default: ''
+    },
+    typetitle: {
+        type: String,
+        default: ''
     },
     icon:{
       type: String,
@@ -200,7 +204,7 @@ export default {
         }
         return{
         defaultImg:'/static/test.jpg',//默认第一张图片的url
-        cc:'企业货主',
+        identifiy:'企业货主',
         selectFlag:false,
         // dialogFormVisible_add: false,
         shipperType:'AF00101',
@@ -273,7 +277,7 @@ export default {
     //按钮文本内容
     this.text = this.btntext;
     //弹出框标题
-    this.title = this.btntitle;
+    // this.title = this.btntitle;
     // this.getMoreInformation()
   },
   methods:{

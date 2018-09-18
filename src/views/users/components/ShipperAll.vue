@@ -117,7 +117,7 @@
 		</div>
 
         <div class="info_tab_footer">共计:{{ totalCount }} <div class="show_pager"> <Pager :total="totalCount" @change="handlePageChange" /></div> </div>    
-        <createdDialog :paramsView="paramsView" :editType="type"  :dialogFormVisible_add.sync = "dialogFormVisible_add" @getData="getDataList"/>
+        <createdDialog :paramsView="paramsView" :editType="type"  :typetitle="typetitle" :dialogFormVisible_add.sync = "dialogFormVisible_add" @getData="getDataList"/>
         <!-- <FreezeDialog :params="selectRowData" :editType="freezetype"  :freezeDialogFlag.sync = "freezeDialogFlag" @getData="getDataList"/>
         <shipperBlackDialog :params="selectRowData" :editType="blacktype"  :BlackDialogFlag.sync = "BlackDialogFlag" @getData="getDataList"/> -->
     </div>
@@ -158,6 +158,7 @@ export default {
         freezetype: '',
         blacktype: '',
         type: '',
+        typetitle:'',
         paramsView: {},
         freeze: true, // 是否冻结
         searchInfo: {
@@ -231,6 +232,7 @@ export default {
             switch(type){
                 case 'add' :
                     this.type = "add";
+                    this.typetitle = '新增货主'
                     this.dialogFormVisible_add = true;
                     break;
             }
