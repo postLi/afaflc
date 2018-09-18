@@ -161,7 +161,10 @@ export default {
     listdata() {
       // console.log('this.queryFn', this.queryFn)
       return this.types.filter(this.queryFn)
-    }
+    },
+    ...mapGetters([
+    'otherinfo'
+    ]),
   },
   methods: {
     makefilter(query) {

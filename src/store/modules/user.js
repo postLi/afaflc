@@ -60,8 +60,9 @@ const user = {
       return new Promise((resolve, reject) => {
         //resolve({})
         getInfo().then(response => {
-          
+            
           const data = response.data
+          console.log('tms-userinfo',data)
           data.rolesIdList = data.rolesId.split(',')
           commit('SET_ROLES', data.rolesIdList)
           commit('SET_NAME', data.username)

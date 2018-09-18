@@ -85,7 +85,7 @@
 
 <script>
   import PopFrame from '@/components/PopFrame/index'
-  import {getSelectDictInfo, postDict, deletePerManage, putDict} from '@/api/company/groupManage'
+  import {getSelectDictInfo, postDict, deletePerManage, putDict} from '../../../api/company/groupManage'
 
   export default {
     components: {
@@ -160,12 +160,12 @@
     watch: {
       isDepMain() {
         if (this.isDepMain) {
-        //   this.popTitle = '部门'
-        //   this.showBotton = true
-        //   // this.remBotton = false
-        //   this.hiddenAdd = false
-        //   this.hiddenEdit = false
-        //   this.showDate = true
+          this.popTitle = '部门'
+          this.showBotton = true
+          // this.remBotton = false
+          this.hiddenAdd = false
+          this.hiddenEdit = false
+          this.showDate = true
         }
       },
       dotInfo(newVal) {
@@ -322,7 +322,7 @@
             type: 'warning'
           }).then(() => {
             this.loading = true
-            deletePerManage(_id).then(res => {
+            deletePerManage(_id, this.otherinfo.orgid).then(res => {
               this.$message({
                 type: 'success',
                 message: '删除成功!'

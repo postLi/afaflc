@@ -1,50 +1,4 @@
-// .tab-wrapper{
-//     height: 100%;
-//     padding-top: 8px;
-//     .eltab{
-//       width: 100%;
-//       height: 32px;
-//       line-height: 30px;
-//       border-bottom: 1px solid #91cbf7;
-//     }
-//     .tab-label:first-child{
-//       margin-left: 1px;
-//       border-left-width: 1px; 
-      
-//     }
-//     .tab-label{
-//       float: left;
-//       padding-left: 12px;
-//       padding-right: 12px;
-//       border-radius: 3px 3px 0px 0px;
-//       border: solid 1px #d2d2d2;
-//       font-size: 14px;
-//       border-left-width: 0;
-//       border-bottom: 1px solid #3e9ff1;
-//       position: relative;
-//       top: 0px;
-//       cursor: pointer;
-  
-//       &:hover{
-//         background: #ffffee;
-//       }
-//     }
-//     .active-tab{
-//       color:#3e9ff1;
-//       border-color: #3e9ff1;
-//       border-bottom-color: #fff;
-//       z-index: 2;
-//       left: -1px;
-//       top: -1px;
-//       border-left: 1px solid #3e9ff1;
-//       border-top-width: 2px;
-//     }
-//     .tab-content{
-//       width: 100%;
-//       padding: 0 20px;
-//     }
-//   }
-  
+
 .el-tabs{
     height: 100%;
     .el-tabs__content{
@@ -108,4 +62,71 @@
             line-height: 30px;
         }
     }
+}
+
+.viewtip{
+    font-size: 12px;
+    color: #999;
+    margin-left: 10px;
+    line-height: 30px;
+}
+
+@media screen and (max-width:1308px){
+  .tab-content {
+      .staff_searchinfo{
+          .el-form-item{
+              margin-bottom: 10px;
+          }
+      }
+      .staff_searchinfo--btn{
+          float: none;
+      }
+  }
+}
+/**
+搜索框样式
+**/
+.staff_searchinfo{
+    padding:0 0 10px;
+    margin: 0 10px;
+    padding-right: 126px;
+    
+    border-bottom:1px dashed #999;
+    
+    .el-input__inner{
+        border-color: #ccc;
+        border-radius: 2px;
+    }
+
+    .staff_searchinfo--input{
+      float: left;
+      width: 100%;
+      .el-form-item{
+        margin-bottom: 0;
+        margin-right: 0;
+        margin-top: 9px;
+      }
+    }
+    .el-form--inline .el-form-item__label{
+        vertical-align: top;
+    }
+    .el-form-item{
+        margin-bottom: 0;
+    }
+    .el-date-editor--daterange.el-input__inner{
+      width: 193px;
+    }
+    .el-range-editor.el-input__inner{
+        padding: 3px 5px;
+    }
+    .staff_searchinfo--btn{
+      width: 126px;
+      float: right;
+      margin-right: -126px;
+      margin-top: 9px;
+      text-align: right;
+      .el-button{
+          float: left;
+      }
+  }
 }

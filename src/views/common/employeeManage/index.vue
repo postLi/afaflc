@@ -1,13 +1,13 @@
 <template>
   <div class="staff_manage" v-loading="loading">
-    <SearchForm :groups="groupsArr" :orgid="otherinfo.orgid" @change="getSearchParam" :btnsize="btnsize" />
+    <SearchForm :orgid="otherinfo.orgid" @change="getSearchParam" :btnsize="btnsize" />
     <div class="staff_info">
       <div class="btns_box">
-        <el-button type="primary" :size="btnsize" icon="el-icon-circle-plus" plain @click="doAction('add')" >新增员工</el-button>
+        <el-button type="primary" :size="btnsize" icon="el-icon-circle-plus" plain @click="doAction('add')">新增员工</el-button>
         <el-button type="primary" :size="btnsize" icon="el-icon-edit-outline" @click="doAction('auth')" plain >员工授权</el-button>
         <el-button type="primary" :size="btnsize" icon="el-icon-edit" @click="doAction('modify')" plain >修改</el-button>
         <el-button type="danger" :size="btnsize" icon="el-icon-delete" @click="doAction('delete')" plain >删除</el-button>
-        <el-button type="primary" :size="btnsize" icon="el-icon-setting" plain @click="setTable" class="table_setup">表格设置</el-button>
+        <!-- <el-button type="primary" :size="btnsize" icon="el-icon-setting" plain @click="setTable" class="table_setup">表格设置</el-button> -->
       </div>
       <div class="info_news">
         <el-table ref="multipleTable" :data="usersArr" :key="tablekey" stripe border @row-click="clickDetails" @selection-change="getSelection" height="100%" tooltip-effect="dark" :default-sort="{prop: 'id', order: 'ascending'}" style="width: 100%">
@@ -66,7 +66,6 @@ export default {
   data() {
     return {
       // 请求获得的数据
-      groupsArr: [],
       rolesArr: [],
       departmentArr: [],
       usersArr: [],
@@ -167,11 +166,11 @@ export default {
     }
   },
   mounted() {
-    Promise.all([getAllOrgInfo(this.otherinfo.orgid), this.fetchAllUser(this.otherinfo.orgid)]).then(resArr => {
+      console.log('otherinfo',this.otherinfo)
+    Promise.all([this.fetchAllUser(this.otherinfo.orgid)]).then(resArr => {
       this.loading = false
-      this.groupsArr = resArr[0]
-      this.usersArr = resArr[1].list
-      this.total = resArr[1].total
+      this.usersArr = resArr[0].list
+      this.total = resArr[0].total
     }).catch((err) => {
       this.loading = false
       this.$message.error(err.errorInfo || err.text || '未知错误，请重试~')

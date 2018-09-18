@@ -72,68 +72,6 @@
     </div>
     <!-- <setApiUrl /> -->
   </div>
-  <!-- <div class="login-container">
-    <div class="login-wrapper clearfix">
-    <div class="container-left">
-      <img src="../../assets/login_images/left.png" alt="">
-    </div>
-    <div class="container-right">
-        <div class="logo">
-          <img  class="logo-img" src="../../assets/login_images/logo.png" alt="">
-        </div>
-
-      <el-form autoComplete="on" :model="loginForm" :rules="loginRules" ref="loginForm" label-position="left" label-width="0px"
-               class="card-box login-form">
-        <h3 class="title">欢迎使用安发物流</h3>
-
-        <el-form-item prop="accNum">
-         <el-input name="accNum" type="text" v-model="loginForm.accNum" autoComplete="off" :placeholder="holder.accNum" @focus='accNum()'   clearable >
-          <template slot="prepend">公司ID</template>
-         </el-input>
-        </el-form-item>
-
-        <el-form-item prop="username">
-          <el-input name="username" type="text" @keyup.enter.native="handleLogin" v-model="loginForm.username" autoComplete="off"
-                    :placeholder="holder.username" @focus='username()' clearable>
-                    <template slot="prepend">用户名</template>
-         </el-input>
-
-
-        </el-form-item>
-
-        <el-form-item prop="password">
-          <el-input name="password" type="password" @keyup.enter.native="handleLogin" v-model="loginForm.password" autoComplete="off"
-                    :placeholder="holder.password" @focus='password()' clearable>
-            <template slot="prepend">密　码</template>
-          </el-input>
-        </el-form-item>
-
-        <el-form-item class="login">
-          <el-button class="el-but" type="primary" style="width:100%;" :loading="loading" @click.native.prevent="handleLogin">
-            登录
-          </el-button>
-        </el-form-item>
-
-        <div class="rember">
-          <el-checkbox v-model="checked">记住密码</el-checkbox>
-          <p class="rember-tit" @click="forgetPsw">忘记密码</p>
-        </div>
-      </el-form>
-    </div>
-    </div>
-    <div class="button-cont">
-      <ul>
-        <li>广州安发网络科技有限公司</li>
-        <li>地址：天河区天河路石牌桥丰兴广场B座1804</li>
-        <li>电话 ：020-38856254 </li>
-        <li>网址：www.anfanet.com </li>
-      </ul>
-      <div class="down">
-        <img src="../../assets/login_images/code.png" alt="">
-        <p>扫描二维码下载app</p>
-      </div>
-    </div>
-  </div> -->
 </template>
 
 <script>
@@ -190,7 +128,6 @@ export default {
         username: [{ required: true, trigger: 'blur', validator: validateUsername }],
         password: [{ required: true, trigger: 'blur', validator: validatePass }]
       }
-
     }
   },
   methods: {
@@ -219,7 +156,7 @@ export default {
             // this.$router.push({ path: nexturl && nexturl.indexOf('/login') === -1 ? nexturl : '/' })
             this.$router.push({ path: '/' })
           }).catch(() => {
-            this.loginError = true
+            this.loginError = true;
             this.$message({
               message: '您的账号或者密码有误~',
               type: 'warning'

@@ -87,28 +87,28 @@
 import { eventBus } from '@/eventBus'
 // 获取城市信息
 import { getCityInfo } from '@/api/common'
-// 获取承运商信息
-import { getAllCarrier } from '@/api/company/carrierManage'
-// 获取客户信息
-import { getAllCustomer } from '@/api/company/customerManage'
-// 获取司机信息
-import { getAllDriver } from '@/api/company/driverManage'
+// // 获取承运商信息
+// import { getAllCarrier } from '@/api/company/carrierManage'
+// // 获取客户信息
+// import { getAllCustomer } from '@/api/company/customerManage'
+// // 获取司机信息
+// import { getAllDriver } from '@/api/company/driverManage'
 // 获取员工信息
 import { getAllUser } from '@/api/company/employeeManage'
-// 获取车辆信息
-import { getAllTrunk } from '@/api/company/trunkManage'
-// 获取异常列表、控货列表信息
-import { PostGetAbnormalList, PostControlgoods } from '@/api/operation/dashboard'
-// 获取订单列表
-import { getPostlist } from '@/api/operation/manage'
-// 获取运单列表
-import orderManageApi from '@/api/operation/orderManage'
-// 获取提货单列表
-import { fetchPostlist } from '@/api/operation/pickup'
-// 获取回单列表
-import { postReceipt } from '@/api/operation/receipt'
-// 获取库存列表
-import { postAllOrderRepertory } from '@/api/operation/repertory'
+// // 获取车辆信息
+// import { getAllTrunk } from '@/api/company/trunkManage'
+// // 获取异常列表、控货列表信息
+// import { PostGetAbnormalList, PostControlgoods } from '@/api/operation/dashboard'
+// // 获取订单列表
+// import { getPostlist } from '@/api/operation/manage'
+// // 获取运单列表
+// import orderManageApi from '@/api/operation/orderManage'
+// // 获取提货单列表
+// import { fetchPostlist } from '@/api/operation/pickup'
+// // 获取回单列表
+// import { postReceipt } from '@/api/operation/receipt'
+// // 获取库存列表
+// import { postAllOrderRepertory } from '@/api/operation/repertory'
 
 export default {
   props: {

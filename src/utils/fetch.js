@@ -29,7 +29,7 @@ service.interceptors.request.use(config => {
     // 统一加上/api 前缀，方便后台转发接口
     config.url = '/api' + config.url
   }
-
+  
   return config
 }, error => {
   // Do something with request error
@@ -44,6 +44,7 @@ service.interceptors.response.use(
   * status为非200是抛错 可结合自己业务进行修改
   */
     const res = response.data
+    // console.log('请求链接：', response.config.url,response)
 
     if (res.status !== 200 && response.config.url.indexOf('/uaa/oauth/token') === -1) {
       // Message({

@@ -1,4 +1,5 @@
 <template>
+  <!--v-loading="loading"-->
   <div class="company clearfix" v-loading="loading">
     <div class="company-box">
       <div class="side_left">
@@ -10,16 +11,20 @@
           ref="tree"
           default-expand-all
           @node-click="getCheckedKeys"
+
         >
-        <span class="custom-tree-node" slot-scope="{ node, data }">
+            <span class="custom-tree-node" slot-scope="{ node, data }">
              <span v-bind:class="[data.status === 31 ? 'treeClass' : 'treeAct'] ">{{ node.label }}</span>
         </span>
+
+
         </el-tree>
       </div>
 
       <div class="side_right">
-        <!--<h5 style="line-height: 32px;font-size: 14px">网点信息:</h5>-->
         <el-collapse accordion change="doLayout">
+
+
           <el-collapse-item title="公司信息:" v-if="form.parentId === 0">
             <div class="side_right_top" :class="{currActive:form.status ===31}">
               <el-form :model="form" class="demo-ruleForm" :inline="true" label-position="right" size="mini">
@@ -39,22 +44,9 @@
                 <el-form-item label="客服电话" :label-width="formLabelWidth">
                   <el-input v-model="form.servicePhone" auto-complete="off" disabled></el-input>
                 </el-form-item>
-                <!-- <el-form-item label="上级网点" :label-width="formLabelWidth">
-                  <el-input :value="form.parentName || form.orgName" disabled></el-input>
-                </el-form-item>
-                <el-form-item label="经营类型" :label-width="formLabelWidth">
-                  <el-input :value='form.manageType ===4 ? "加盟" : "自营"' disabled></el-input>
-                </el-form-item>
-                <el-form-item label="创建时间" :label-width="formLabelWidth" >
-                  <el-input :value="new Date(form.createTime).toLocaleString()" disabled></el-input>
-                 <el-input :value=" form.createTime| parseTime('{y}/{m}/{d}')" disabled></el-input>
-                </el-form-item> -->
                 <el-form-item label="公司代码" :label-width="formLabelWidth">
                   <el-input v-model="form.networkCode" auto-complete="off" disabled></el-input>
                 </el-form-item>
-                <!-- <el-form-item label="代收款限额" :label-width="formLabelWidth">
-                  <el-input v-model="form.collectionFee" auto-complete="off" disabled></el-input>
-                </el-form-item> -->
                 <el-form-item label="负责人" :label-width="formLabelWidth">
                   <el-input v-model="form.responsibleName" auto-complete="off" disabled></el-input>
                 </el-form-item>
@@ -64,16 +56,11 @@
                 <el-form-item label="所在城市" :label-width="formLabelWidth">
                   <el-input v-model="form.city" auto-complete="off" disabled></el-input>
                 </el-form-item>
-                <!-- <el-form-item label="锁机额度" :label-width="formLabelWidth">
-                  <el-input v-model="form.lockMachineQuota" auto-complete="off" disabled></el-input>
-                </el-form-item>
-
-                <el-form-item label="预警额度" :label-width="formLabelWidth">
-                  <el-input v-model="form.warningQuota" auto-complete="off" disabled ></el-input>
-                </el-form-item> -->
                 <el-form-item label="详情地址" :label-width="formLabelWidth">
                   <el-input v-model="form.detailedAddr" auto-complete="off" disabled></el-input>
                 </el-form-item>
+
+
               </el-form>
             </div>
           </el-collapse-item>
@@ -87,7 +74,6 @@
                 </el-form-item>
                 <el-form-item label="网点类型" :label-width="formLabelWidth">
                   <el-input :value='form.orgTypeName' disabled></el-input>
-                  <!--<el-input :value='form.orgType ===1 ? "营业网点" : "分拨中心"' disabled></el-input>-->
                 </el-form-item>
                 <el-form-item label="网点状态" :label-width="formLabelWidth" disabled="disabled">
                   <el-input :value='form.status ===32 ? "有效" : "无效"' disabled></el-input>
@@ -105,7 +91,6 @@
                   <el-input :value='form.manageType ===4 ? "加盟" : "自营"' disabled></el-input>
                 </el-form-item>
                 <el-form-item label="创建时间" :label-width="formLabelWidth">
-                  <!--<el-input :value="new Date(form.createTime).toLocaleString()" disabled></el-input>-->
                   <el-input :value=" form.createTime| parseTime('{y}/{m}/{d}')" disabled></el-input>
                 </el-form-item>
                 <el-form-item label="网点代码" :label-width="formLabelWidth">
@@ -137,8 +122,8 @@
           </el-collapse-item>
         </el-collapse>
 
+
         <div class="side_right_bottom clearfix">
-          <!--表格功能-->
           <div class="btns_box_lrl clearfix">
             <el-button type="primary" :size="btnsize" icon="el-icon-circle-plus" v-if="form.status ===32" plain @click="doAction('addPeople')" >              新增员工
             </el-button>
@@ -153,10 +138,7 @@
             <el-button type="primary" :size="btnsize" icon="el-icon-edit" @click="doAction('depMain')" plain >部门维护
             </el-button>
             <el-col class="org-name"><p>{{form.orgName}}</p></el-col>
-            <!--表格功能-->
           </div>
-          <!--表格功能-->
-          <!--表格内容-->
           <div class="info_news">
 
             <el-table
@@ -192,13 +174,8 @@
                 width="230"
                 label="归属网点">
               </el-table-column>
-              <!-- <el-table-column
+              <el-table-column
                 prop="departmentName"
-                width="150"
-                label="归属部门">
-              </el-table-column> -->
-               <el-table-column
-                prop="departmentId"
                 width="150"
                 label="归属部门">
               </el-table-column>
@@ -207,13 +184,8 @@
                 width="150"
                 label="职务">
               </el-table-column>
-              <!-- <el-table-column
+              <el-table-column
                 prop="username"
-                width="200"
-                label="登录账号">
-              </el-table-column> -->
-                <el-table-column
-                prop="mobilephone"
                 width="200"
                 label="登录账号">
               </el-table-column>
@@ -239,7 +211,6 @@
               </el-table-column>
             </el-table>
           </div>
-          <!--表格内容-->
         </div>
       </div>
       <AddDot :dotInfo="getform" :orgid="getOrgId || otherinfo.orgid" :companyId="otherinfo.companyId"
@@ -253,7 +224,6 @@
     <div class="info_news_footer">
       <div class="checked_footer">
         <el-checkbox v-model="checkedInput" value="checkbox" checked="checked">过滤失效网点</el-checkbox>
-        <!--<p> 密码：123456</p>-->
       </div>
       <div class="total_footer">共计:{{ total }}</div>
       <div class="show_pager">
@@ -266,12 +236,12 @@
   import AddPeople from '../employeeManage/add'
   import AddDot from './addDot'
   import DepMaintain from './depMaintain'
-  import { getOrgId } from '@/api/company/groupManage'
-  import { getAllOrgInfo, getAllUser, deleteEmployeer, postAllOrgInfo } from '@/api/company/employeeManage'
+  import { getOrgId } from '../../../api/company/groupManage'
+  import { getAllUser, deleteEmployeer, postAllOrgInfo } from '../../../api/company/employeeManage'
 
   import { mapGetters } from 'vuex'
   import Pager from '@/components/Pagination/index'
-  import { getUserInfo } from '@/utils/auth'
+  import { getUserInfo } from '../../../utils/auth'
   import { objectMerge2 } from '@/utils/index'
 
   export default {
@@ -296,7 +266,7 @@
         getCheckedKeyId: '',
         btnsize: 'mini',
         // 加载状态
-        loading: false,
+        loading: true,
         addDoTotVisible: false,
         addPeopleVisible: false,
         addDepMaintainisible: false,
@@ -321,39 +291,33 @@
         formLabelWidth: '120px',
         // 表格内容
         selected: [],
-        // 左边树形初始化数据
         dataTree: [],
         defaultProps: {
           children: 'children',
           label: 'name'
         },
-        // 左边树形初始化数据
-        getOrgId: '', // 根据组织id获取列表
+        getOrgId: '',
         form: {
           orgName: '',
-          // orgType: 1,
           orgTypeName: '',
           status: 32,
           responsibleTelephone: '',
-          // creatTime:'',
           responsibleName: '',
           city: '',
           serviceName: '',
-          parentName: '', // 上级网点
+          parentName: '',
           servicePhone: '',
           detailedAddr: '',
-          networkCode: '', // 网点代码
-          collectionFee: '', // 代收款额度
+          networkCode: '', //
+          collectionFee: '', //
           benchmark: '',
           warningQuota: '',
           lockMachineQuota: '',
           manageType: 3,
           remarks: '',
-          // 默认值
           accountStatus: '0',
           parentId: 0
         },
-        // 缓存节点数据
         orgInfoCache: {},
         userinfo: {},
         pageSize: '',
@@ -364,14 +328,11 @@
 
     mounted() {
       this.loading = true
-      this.fetchOrg()// 左边树形数据
-    //   // 部门维护
+      this.fetchOrg()
       this.userinfo = getUserInfo()
-      console.log('this.userInfo', this.userinfo)
       if (this.userinfo.companyId === this.userinfo.orgid) {
         this.hiddenDep = true
       }
-      //  部门维护
     },
     methods: {
       dataTreeFn(arr) {
@@ -392,27 +353,21 @@
           this.getOrgInfo(this.getOrgId)
         }
       },
-      // 左边树形数据
       fetchOrg() {
         this.loading = true
-        console.log('this.otherinfo',this.$store)
         postAllOrgInfo(this.otherinfo.orgid).then(data => {
           this.dataTree = data
-          // console.log(this.dataTree[0].id,'数据');
-          this.fetchOrgId(this.dataTree[0].id)// 根据组织id显示列表
+          this.fetchOrgId(this.dataTree[0].id)
           this.loading = false
-          // console.log(data)
         }).catch((err) => {
           this.loading = false
           this.$message.error(err.errorInfo || err.text || '未知错误，请重试~')
         })
       },
-      // 处理返回的节点数据
       handleOrgInfo(data) {
-        this.form = data // 顶部隐藏页面
+        this.form = data
         this.getform = objectMerge2({}, this.form)
       },
-      // 根据组织id显示列表
       fetchOrgId(id) {
         this.loading = true
         this.getOrgId = parseInt(id, 10)
@@ -432,28 +387,20 @@
           this.orgInfoCache[id] = res.data
           this.handleOrgInfo(res.data)
           this.loading = false
-        }).catch((err) => {
-          this.loading = false
-          this.$message.error(err.errorInfo || err.text || '未知错误，请重试~')
         })
       },
-      // table项列表展示
       fetchAllUsers(orgid, name = '', mobile = '', pageSize = 100, pageNum = 1) {
         this.loading = true
         getAllUser(orgid, name, mobile, pageSize, pageNum).then(res => {
           this.usersArr = res.list
           this.total = res.total
           this.loading = false
-        }).catch((err) => {
-          this.loading = false
-          this.$message.error(err.errorInfo || err.text || '未知错误，请重试~')
         })
       },
       seleClick(selected) {
         this.selected = selected
       },
       doAction(type) {
-        //  判断是否有选中项
         if (!this.selected.length && type === 'deletePeople') {
           this.$message({
             message: '请选择要操作的员工~',
@@ -462,7 +409,6 @@
           return false
         }
         switch (type) {
-          // 新增员工
           case 'addPeople':
             this.addPeopleVisible = true
             this.addDoTotVisible = false
@@ -470,7 +416,6 @@
             this.isModify = false
             this.isDepMain = false
             break
-          //  新增网点
           case 'addNot':
             this.isModify = false
             this.isDepMain = false
@@ -478,13 +423,11 @@
             this.addPeopleVisible = false
             this.addDepMaintainisible = false
             break
-          // 修改网点
           case 'modifyNot':
             this.isModify = true
             this.isDepMain = false
             this.addDoTotVisible = true
             break
-          //  部门维护
           case 'depMain':
             this.isModify = false
             this.isDepMain = true
@@ -492,20 +435,16 @@
             this.addDoTotVisible = false
             this.addPeopleVisible = false
             break
-          //    删除员工
           case 'deletePeople':
             this.addDepMaintainisible = false
             this.addDoTotVisible = false
             this.addPeopleVisible = false
             var deleteItem = this.selected.length > 1 ? this.selected.length + '名' : this.selected[0].name
-            // =>todo 删除多个
             var ids = ''
             this.selected.map(item => {
               ids += item.id + ','
             })
             ids = ids.slice(0, ids.length - 1)
-
-            // var id = this.selected[0].id
             this.$confirm('确定要删除 ' + deleteItem + ' 员工吗？', '提示', {
               confirmButtonText: '删除',
               cancelButtonText: '取消',
@@ -520,11 +459,6 @@
 
                 this.fetchOrgId(this.getOrgId)
                 this.loading = false
-              }).catch(err => {
-                this.$message({
-                  type: 'info',
-                  message: '删除失败，原因：' + err.errorInfo ? err.errorInfo : err.text
-                })
               })
             }).catch(() => {
               this.$message({
@@ -544,11 +478,10 @@
       getCheckedKeys() {
         this.loading = true
         this.getCheckedKeyId = this.$refs.tree._data.currentNode.node.data.id
-        this.fetchOrgId(this.$refs.tree._data.currentNode.node.data.id)// 根据组织id显示列表
+        this.fetchOrgId(this.$refs.tree._data.currentNode.node.data.id)
         this.addDoTotVisible = false
         this.loading = false
       },
-      // 新增网点
       closeAddDot() {
         this.addDoTotVisible = false
       },
@@ -585,8 +518,4 @@
     padding-left: 10px;
   }
 
-  /*.info_news_footer .total_footer{*/
-  /*float: left;*/
-  /*padding-left: 200px;*/
-  /*}*/
 </style>

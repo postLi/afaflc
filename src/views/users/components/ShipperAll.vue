@@ -117,7 +117,7 @@
 		</div>
 
         <div class="info_tab_footer">共计:{{ totalCount }} <div class="show_pager"> <Pager :total="totalCount" @change="handlePageChange" /></div> </div>    
-        <createdDialog :paramsView="paramsView" :editType="type"  :dialogFormVisible_add.sync = "dialogFormVisible_add" @getData="getDataList"/>
+        <createdDialog :paramsView="paramsView" :editType="type"  :typetitle="typetitle" :dialogFormVisible_add.sync = "dialogFormVisible_add" @getData="getDataList"/>
         <!-- <FreezeDialog :params="selectRowData" :editType="freezetype"  :freezeDialogFlag.sync = "freezeDialogFlag" @getData="getDataList"/>
         <shipperBlackDialog :params="selectRowData" :editType="blacktype"  :BlackDialogFlag.sync = "BlackDialogFlag" @getData="getDataList"/> -->
     </div>
@@ -150,47 +150,29 @@ export default {
     data() {
     return {
         tabType:'All',
-      btnsize: 'mini',
-      templateRadio: '',
-      dialogFormVisible_add: false,
-      freezeDialogFlag: false,
-      BlackDialogFlag: false,
-      freezetype: '',
-      blacktype: '',
-      type: '',
-      paramsView: {},
-      freeze: true, // 是否冻结
-      options: [],
-      optionsStatus: [
-        {
-          code: null,
-          name: '全部'
-        }
-      ],
-      optionsAuidSataus: [
-        {
-          code: null,
-          name: '全部'
-        }
-      ], // 账户状态
-      pickerOptions: {
-        disabledDate(time) {
-          return time.getTime() < Date.now()
-        }
-      },
-      optionsReason: [],
-      searchInfo: {
-        belongCity: null,
-        shipperStatus: null,
-        accountStatus: null,
-        companyName: null,
-        mobile: null
-      },
-      selectRowData: {},
-      page: 1,
-      pagesize: 20,
-      totalCount: 0,
-      tableDataAll: []
+        btnsize: 'mini',
+        templateRadio: '',
+        dialogFormVisible_add: false,
+        freezeDialogFlag: false,
+        BlackDialogFlag: false,
+        freezetype: '',
+        blacktype: '',
+        type: '',
+        typetitle:'',
+        paramsView: {},
+        freeze: true, // 是否冻结
+        searchInfo: {
+            belongCity: null,
+            shipperStatus: null,
+            accountStatus: null,
+            companyName: null,
+            mobile: null
+        },
+        selectRowData: {},
+        page: 1,
+        pagesize: 20,
+        totalCount: 0,
+        tableDataAll: []
 
     }
   },
@@ -250,6 +232,7 @@ export default {
             switch(type){
                 case 'add' :
                     this.type = "add";
+                    this.typetitle = '新增货主'
                     this.dialogFormVisible_add = true;
                     break;
             }

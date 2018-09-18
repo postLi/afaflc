@@ -4,7 +4,7 @@
         
 	  	<div class="classify_info">
 		  	<div class="btns_box">
-				<createdDialog 
+				<!-- <createdDialog 
 				btntext="代客认证"
 				:params="selectRowData"
 				:plain="true" type="primary" 
@@ -23,7 +23,9 @@
 				editType="edit" 
 				btntitle="修改"
 				@getData="getDataList">
-				</createdDialog>
+				</createdDialog> -->
+                <el-button type="primary" icon="el-icon-circle-plus" plain :size="btnsize" @click="handleClick('identification')">代客认证</el-button>
+                <el-button type="primary" icon="el-icon-circle-plus" plain :size="btnsize" @click="handleClick('edit')">修改</el-button>
 			</div>
 			<div class="info_news">
 				<el-table
@@ -77,6 +79,7 @@
 			</div>	
 		</div>
         <div class="info_tab_footer">共计:{{ totalCount }} <div class="show_pager"> <Pager :total="totalCount" @change="handlePageChange" /></div> </div>    
+        <createdDialog :paramsView="paramsView" :editType="type"  :dialogFormVisible_add.sync = "dialogFormVisible_add" @getData="getDataList"/>
 
     </div>
 </template>
@@ -101,6 +104,11 @@ export default {
   data(){
     return{
         tabType:'unauthorized',
+        btnsize: 'mini',
+        templateRadio: '',
+        dialogFormVisible_add: false,
+        type: '',
+        paramsView: {},
         templateRadio:'',
         optionsStatus:[], // 状态列表
         tableData4:[],
@@ -165,25 +173,20 @@ export default {
             console.log(val)
             this.selectRowData = val;
         },
-        //点击查询按纽，按条件查询列表
-        // getdata_search(event){
-        // this.formInline.belongCity = this.$refs.area.selectedOptions.pop();
-        //     data_get_shipper_list(this.page,this.pagesize,this.formInline).then(res=>{
-        //         this.totalCount = res.data.totalCount;
-        //         this.tableData4 = res.data.list;
-        //     })
-        // },
-        
-        //清空
-        clearSearch(){
-            this.$refs.area.selectedOptions = [];
-            this.formInline = {
-                accountStatus:'',
-                belongCity:'',
-                mobile:'',
-                shipperStatus:"AF0010401",//未认证的状态码
-            },
-            this.firstblood();
+        handleClick(type){
+            switch(type){
+                case 'edit' :
+                    this.type = "edit";
+                    this.paramsView = this.selectRowData;
+                    this.dialogFormVisible_add = true;
+                    break;
+                case 'identification':
+                    this.type = "identification";
+                    paramsView
+                    this.paramsView = this.selectRowData;
+                    this.dialogFormVisible_add = true;
+                    break;
+            }
         },
         //刷新页面
         firstblood(){
