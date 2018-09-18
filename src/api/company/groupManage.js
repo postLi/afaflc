@@ -1,6 +1,6 @@
 import fetch from '@/utils/fetch'
 
-const baseUrl = 'aflccommonservice-lyc'
+const baseUrl = 'aflccommonservice'
 
 /**
  * 获取所有网点的信息
