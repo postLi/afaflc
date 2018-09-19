@@ -44,6 +44,7 @@ export function postDriverCommissionTransaction(page, pagesize, data) {
 
 export function postCommissionTransactionExcel(page, pagesize, data) {
   return fetch({
+    responseType: 'blob',
     url: '/' + baseurl + '/usercenter/aflcDriverCommissionDetail/v1/commissionTransactionExcel',
     method: 'post',
     data: {
