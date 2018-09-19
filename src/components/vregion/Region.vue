@@ -22,8 +22,6 @@
             <option :value="t.key" v-for="t in listTown">{{t.value}}</option>
         </select>
 
-
-
         <!-- selector mode -->
         <div class="caller-container" @click.stop.prevent="showDropdown(true)" v-if="ui" ref="caller">
             <slot></slot>

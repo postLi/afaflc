@@ -1,13 +1,13 @@
 import { asyncRouterMap, constantRouterMap } from '@/router/index'
-
+// import {  }
 /**
  * 通过meta.role判断是否与当前用户权限匹配
  * @param roles
  * @param route
  */
 function hasPermission(roles, route) {
-  if (route.meta && route.meta.role) {
-    return roles.some(role => route.meta.role.indexOf(role) >= 0)
+  if (route.meta && route.meta.code) {
+    return roles.some(role => route.meta.code === role.code)
   } else {
     return true
   }
@@ -19,16 +19,18 @@ function hasPermission(roles, route) {
  * @param roles
  */
 function filterAsyncRouter(asyncRouterMap, roles) {
-  const accessedRouters = asyncRouterMap.filter(route => {
-    if (hasPermission(roles, route)) {
-      if (route.children && route.children.length) {
-        route.children = filterAsyncRouter(route.children, roles)
-      }
-      return true
-    }
-    return false
-  })
-  return accessedRouters
+    const accessedRouters = asyncRouterMap.filter(route => {
+        if (hasPermission(roles, route)) {
+            if (route.children && route.children.length) {
+                route.children = filterAsyncRouter(route.children, roles)
+            }
+            return true
+        }
+        return false
+    })
+
+    console.log('accessedRouters',accessedRouters)
+    return accessedRouters
 }
 
 const permission = {
@@ -51,6 +53,7 @@ const permission = {
       return new Promise(resolve => {
         const { roles } = data
         let accessedRouters
+        // console.log('roles:',roles,data)
         // 如果是管理员，则给于全部权限
         /* if (roles.indexOf('2') >= 0) {
           accessedRouters = asyncRouterMap
@@ -58,19 +61,40 @@ const permission = {
           accessedRouters = filterAsyncRouter(asyncRouterMap, roles)
         } */
         // 暂时给于全部权限，等后台权限体系建立好再对接设置
-        accessedRouters = asyncRouterMap
+       // accessedRouters = asyncRouterMap
+
+        if (roles.length == 0) {
+            accessedRouters = asyncRouterMap
+        } else {
+            accessedRouters = filterAsyncRouter(asyncRouterMap, roles)
+            accessedRouters.map(el => {
+              if (el.meta && el.meta.code === 'SYSTEM') {
+                let flag = true
+                el.children.map(ee => {
+                  if (ee.meta && ee.meta.code && flag) {
+                    if (ee.children && ee.children.length) {
+                      el.redirect = ee.children[0].path
+                    } else {
+                      el.redirect = ee.path
+                    }
+                    flag = false
+                  }
+                })
+              }
+            })
+        }
         commit('SET_ROUTERS', accessedRouters)
         resolve()
       })
     },
     GenerateSidebarRoutes({ commit, state }, data) {
-      return new Promise(reslove => {
+      return new Promise(resolve => {
         const currentRouters = state.routers
         const subRouter = currentRouters.find(route => {
           return route.name === data
         })
         commit('SET_SIDEBAR_ROUTERS', subRouter.children || [])
-        reslove()
+        resolve()
       })
     }
   }

@@ -3,12 +3,12 @@
         <searchInfo @change="getSearchParam" :showType = 'tabType'></searchInfo>
 		<div class="classify_info">
 			<div class="btns_box">
-                <el-button type="primary" icon="el-icon-circle-plus" plain :size="btnsize" @click="handleClick('add')">新增</el-button>
-                <el-button type="primary" icon="el-icon-info" plain :size="btnsize" @click="handleClick('pushFreeze')">冻结</el-button>
-                <el-button type="primary" icon="el-icon-edit" plain :size="btnsize" @click="handleClick('editFreeze')">冻结修改</el-button>
-                <el-button type="primary" icon="el-icon-edit" plain :size="btnsize" @click="handleClick('pushBlack')">移入黑名单</el-button>
-                <el-button type="primary" icon="el-icon-warning" plain :size="btnsize" @click="handleClick('removeBlack')">移除黑名单</el-button>
-                <el-button type="primary" icon="el-icon-edit" plain :size="btnsize" @click="handleClick('removeFreeze')">解冻</el-button>
+                <el-button type="primary" icon="el-icon-circle-plus" plain :size="btnsize" @click="handleClick('add')" v-has:SHIPPER_MANAGE_ADD>新增</el-button>
+                <el-button type="primary" icon="el-icon-info" plain :size="btnsize" @click="handleClick('pushFreeze')" v-has:SHIPPER_MANAGE_FREEZE>冻结</el-button>
+                <el-button type="primary" icon="el-icon-edit" plain :size="btnsize" @click="handleClick('editFreeze')" v-has:SHIPPER_MANAGE_FREEZE_UPDATE>冻结修改</el-button>
+                <el-button type="primary" icon="el-icon-edit" plain :size="btnsize" @click="handleClick('pushBlack')" v-has:SHIPPER_MANAGE_PUT_BLACK>移入黑名单</el-button>
+                <el-button type="primary" icon="el-icon-warning" plain :size="btnsize" @click="handleClick('removeBlack')" v-has:SHIPPER_MANAGE_OUT_BLACK>移除黑名单</el-button>
+                <el-button type="primary" icon="el-icon-edit" plain :size="btnsize" @click="handleClick('removeFreeze')" v-has:SHIPPER_MANAGE_UNFREEZE>解冻</el-button>
 			</div>
 			<div class="info_news" >
 				<el-table
@@ -77,9 +77,9 @@ import createdDialog from './createdDialog.vue'
 import FreezeDialog from './FreezeDialog'
 import shipperBlackDialog from './shipperBlackDialog'
 import { eventBus } from '@/eventBus'
-import { parseTime } from '@/utils/index.js'
 import Pager from '@/components/Pagination/index'
 import searchInfo from './searchInfo'
+import { objectMerge2, parseTime } from '@/utils/'
 
 export default {
   components: {
@@ -159,15 +159,16 @@ export default {
         },
         getSearchParam(obj) {
             console.log(obj)
-            this.searchInfo = Object.assign(this.searchInfo, obj)
+            this.searchInfo = objectMerge2(this.searchInfo, obj)
             this.loading = false;
             this.firstblood()
         },
         pushOrderSerial(row){
             this.type = 'view';
             this.typetitle = '货主详情';
-            this.paramsView = Object.assign({},row);;
+            this.paramsView = objectMerge2({},row);;
             this.dialogFormVisible_add =true;
+            this.clearTableSelection();
         },
         handlePageChange(obj) {
             this.page = obj.pageNum
@@ -177,7 +178,10 @@ export default {
         changeList() {
             eventBus.$emit('changeList')
         },
-       
+        clearTableSelection(){
+            //清除选中状态，避免影响下个操作
+            this.$refs.multipleTable.clearSelection();
+        },
         handleClick(type){
             if(this.selected.length == 0 && type != 'add'){
                 return this.$message.warning('请选择您要操作的用户');
@@ -186,6 +190,7 @@ export default {
                     message: '每次只能操作单条数据~',
                     type: 'warning'
                 })
+                this.clearTableSelection();
             }
             else{
                 this.selectRowData = this.selected[0];
@@ -193,6 +198,7 @@ export default {
                     case 'add' :
                         this.type = "add";
                         this.typetitle = '新增货主';
+                        this.paramsView = {};
                         this.dialogFormVisible_add = true;
                         break;
                     case 'pushFreeze':
@@ -241,8 +247,7 @@ export default {
                         }
                         break;
                 }
-                //清除选中状态，避免影响下个操作
-                this.$refs.multipleTable.clearSelection();
+                this.clearTableSelection()
             }
         },
         // 刷新页面
@@ -257,7 +262,7 @@ export default {
             })
         },
         getDataList() {
-            this.firstblood()
+            this.firstblood();
         }
     }
     }

@@ -2,13 +2,16 @@ import Layout from '@/views/layout/Layout'
 const _import = require('../_import_' + process.env.NODE_ENV)
 
 export default {
-  path: '/sm',
-  component: Layout,
-  redirect: '/sm/xiaohuoche/areaPrice',
-  icon: 'yunyingguanli',
-  name: '服务管理',
-  noDropdown: true,
-  children: [
+    path: '/sm',
+    component: Layout,
+    redirect: '/sm/xiaohuoche/areaPrice',
+    icon: 'yunyingguanli',
+    name: '服务管理',
+    noDropdown: true,
+    meta: {
+        title: '服务管理', code: 'SERVICE'
+    },
+    children: [
     {
         path: '/sm/xiaohuoche', icon: 'xiaohuoche', name: '小货车', component: _import('sm/xiaohuoche/index'), meta: { role: ['admin'], title: '小货车',stitle: '小货车',  noCache: true },
         children:[

@@ -45,6 +45,9 @@ export const constantRouterMap = [
     noDropdown: true,
     icon: 'shouye',
     name: '首页',
+    meta: {
+        'code': 'HOME'
+    },
     hidden: true,
     children: [{
       path: 'dashboard', name: '首页', icon: 'shouye', component: _import('dashboard/index'),
@@ -77,8 +80,5 @@ export const asyncRouterMap = [
 //   Report,
 //   Dispatch,
   Common,
-/*   {
-    path: '/createOrder', hidden: true, icon: 'QQ', name: '创建运单', component: _import('operation/order/createOrder/pop'), meta: { role: ['admin'], title: '创建运单', noCache: true }
-  }, */
   { path: '*', redirect: '/404', hidden: true }
 ]

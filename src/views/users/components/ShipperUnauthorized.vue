@@ -72,6 +72,8 @@ import { eventBus } from '@/eventBus'
 import Pager from '@/components/Pagination/index'
 import searchInfo from './searchInfo'
 import {data_get_shipper_list} from '@/api/users/shipper/all_shipper.js'
+import { objectMerge2, parseTime } from '@/utils/'
+
 export default {
 	props: {
 		isvisible: {
@@ -148,12 +150,12 @@ export default {
         pushOrderSerial(row){
             this.type = 'view';
             this.typetitle = '货主详情';
-            this.paramsView = Object.assign({},row);;
+            this.paramsView = objectMerge2({},row);;
             this.dialogFormVisible_add =true;
         },
         getSearchParam(obj) {
             console.log(obj)
-            this.searchInfo = Object.assign({},obj,{shipperStatus:'AF0010401'})
+            this.searchInfo = objectMerge2({},obj,{shipperStatus:'AF0010401'})
             this.loading = false;
             this.firstblood()
         },
@@ -163,7 +165,7 @@ export default {
             this.firstblood()
         },
         getCurrentRow(index,row){       
-            this.selectRowData = Object.assign({},row);
+            this.selectRowData = objectMerge2({},row);
             this.templateRadio = index;
             console.log('选中内容',row)
         },
@@ -175,9 +177,11 @@ export default {
                     message: '每次只能操作单条数据~',
                     type: 'warning'
                 })
+                 //清除选中状态，避免影响下个操作
+                this.$refs.multipleTable.clearSelection();
             }else{
                 this.selectRowData = this.selected[0];
-                this.paramsView =Object.assign({},this.selectRowData) ;
+                this.paramsView =objectMerge2({},this.selectRowData) ;
                 switch(type){
                     case 'edit' :
                         this.type = "edit";
@@ -190,6 +194,8 @@ export default {
                         this.dialogFormVisible_add = true;
                         break;
                 }
+                //清除选中状态，避免影响下个操作
+                this.$refs.multipleTable.clearSelection();
             }
         },
         //刷新页面

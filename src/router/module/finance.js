@@ -2,11 +2,14 @@ import Layout from '@/views/layout/Layout'
 const _import = require('../_import_' + process.env.NODE_ENV)
 
 export default {
-  path: '/finance',
-  component: Layout,
-  redirect: '/finance/transactionRecharge',
-  name: '财务管理',
-  icon: 'caiwu',
+    path: '/finance',
+    component: Layout,
+    redirect: '/finance/transactionRecharge',
+    name: '财务管理',
+    icon: 'caiwu',
+    meta: {
+        title: '财务管理', code: 'FINANCE'
+    },
   children: [
         { path: '/finance/transactionRecharge', icon: 'czmx', hidden: false, name: '充值明细', component: _import('finance/transactionRecharge/index'), meta: { title: '充值明细', noCache: true }},
         { path: '/finance/transactionDetail', icon: 'jymx', hidden: false, name: '交易明细', component: _import('finance/transactionDetail/index'), meta: { title: '交易明细', noCache: true }},

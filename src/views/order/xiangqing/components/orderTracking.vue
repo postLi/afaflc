@@ -10,11 +10,11 @@
         </div>
         <div class="orderTrackInfo orderTrackStyle" v-for="(item,key) in listInformation" :key="key">
             <p :class="{current: key == 0 ,cancel:key ==  (listInformation.length-1)}"><i></i><span>{{item.createTime | parseTime}}</span></p>
-            <p>{{item.address}}</p>
+            <p>{{item.remark}}</p>
             <p>{{item.address}}</p>
             <p>{{item.remark}}</p>  
-            <p>{{item.address}}</p>
-            <p>{{item.remark}}</p>
+            <p>{{item.runException}}</p>
+            <p>{{item.loadAndUnloadException}}</p>
         </div>
     </div>
 </template>

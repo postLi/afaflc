@@ -9,6 +9,9 @@ export default {
   name: '调度管理',
   noDropdown: true, 
   hidden:false,
+    meta: {
+        title: '调度管理', code: 'DISPATCH'
+    },
   children: [
     // {
     //   path: '/dispatch/DispatchTrack', icon: 'QQ', hidden:true,name: '调度追踪', component: _import('dispatch/DispatchTrack/index'), meta: { role: ['admin'], title: '调度追踪',stitle: '调度',  noCache: true }

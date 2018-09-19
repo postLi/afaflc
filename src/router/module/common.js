@@ -2,11 +2,14 @@ import Layout from '@/views/layout/Layout'
 const _import = require('../_import_' + process.env.NODE_ENV)
 
 export default {
-  path: '/common',
-  component: Layout,
-  redirect: '/common/groupManage',
-  name: '系统管理',
-  icon: 'gongsiguanli',
+    path: '/common',
+    component: Layout,
+    redirect: '/common/groupManage',
+    name: '系统管理',
+    icon: 'gongsiguanli',
+    meta: {
+        title: '系统管理', code: 'SYSTEM'
+    },
   children: [
     { path: '/common/index', icon: 'information', hidden: true, name: '公司管理', component: _import('common/index'), meta: { title: '公司管理', stitle: '公司', noCache: true }},
     { path: '/common/systemSetup', icon: 'xitongshezhi', hidden: true, name: '公司管理', component: _import('common/systemSetup/index'), meta: { title: '公司管理', stitle: '公司', noCache: true }},

@@ -42,7 +42,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import { eventBus } from '@/eventBus'
+// import { eventBus } from '@/eventBus'
 
 export default {
   computed: {
@@ -67,11 +67,11 @@ export default {
   methods: {
     showChart() {
       this.popperHide = false
-      this.eventBus.$emit('hideSupcanChart')
+    //   this.eventBus.$emit('hideSupcanChart')
     },
     hideChart() {
       this.popperHide = true
-      this.eventBus.$emit('showSupcanChart')
+    //   this.eventBus.$emit('showSupcanChart')
     },
     logout() {
       this.$store.dispatch('LogOut').then(() => {

@@ -63,7 +63,7 @@
                 </div>
             </el-form>
             <div slot="footer" class="dialog-footer">
-                <el-button type="primary" @click="submitForm('ruleForm')">确 定</el-button>
+                <el-button type="primary" @click="submitForm('ruleForm')" :disabled="btnShow">确 定</el-button>
                 <el-button @click="close">取 消</el-button>
             </div>
         </el-dialog>    
@@ -109,6 +109,7 @@ export default {
             loading:false,
             pidValue:'',//pid
             nowcode:'',//当前编码
+            btnShow:false,
             AddDictionaryForm:[
                 {
                     code: '',
@@ -136,6 +137,7 @@ export default {
     watch:{
         dialogAddDic:{
             handler(newVal,oldVal){
+                console.log('this.isModify',this.isModify)
                 if(newVal && !this.isModify){
                     this.init()
                     this.currentValue(this.pid)
@@ -212,6 +214,7 @@ export default {
             this.AddDictionaryForm.splice(idx,1);
         },
         submitForm() {
+            this.btnShow = true;
             let required = false;
             if(this.isModify){
                 console.log(this.isModify,this.reviseForm.name)
@@ -240,25 +243,25 @@ export default {
             }else{
                 let config = this.isModify ? '确定要修改该条数据吗？' : '确定要新增该条数据吗？';
                 let configFunction;
-                if(this.isModify){
-                    configFunction = data_ChangeForms(this.reviseForm);
-                }else{
-                    configFunction = data_AddForms(this.AddDictionaryForm);
-                }
+               
                 this.$confirm(config, '提示', {
                     confirmButtonText: '确定',
                     cancelButtonText: '取消',
                     type: 'warning'
                 }).then( ()=>{
+                    if(this.isModify){
+                        configFunction = data_ChangeForms(this.reviseForm);
+                    }else{
+                        configFunction = data_AddForms(this.AddDictionaryForm);
+                    }
                     configFunction.then(res=>{
-                        this.$alert('操作成功', '提示', {
-                            confirmButtonText: '确定',
-                            callback: action => {
-                                this.close();
-                            }
-                        });
+                        this.$message.success('新增数据成功！')
+                        this.btnShow = false;
+                        this.close();
+
                     }).catch(err => {
                         this.$message.error('操作失败，失败原因：',err.errorInfo)
+                        this.btnShow = false;
                     })
                 }).catch(() => {
                     this.$message({
@@ -290,7 +293,7 @@ export default {
 
 <style lang="scss" rel="stylesheet/scss">
     .addDictionary{
-         .moreInfo{
+        .moreInfo{
             border:1px solid #e6e6e6;
             padding:16px 0;
             position: relative;

@@ -13,7 +13,8 @@
             <el-table-column
                 prop="date"
                 label="时间"
-                width="200"
+                width="180"
+                :show-overflow-tooltip="true"
                 >
                 <template slot-scope="scope">
                     {{scope.row.createTime | parseTime}}
@@ -21,7 +22,8 @@
             </el-table-column>
             <el-table-column
                 label="用户"
-                width="200"
+                width="180"
+                :show-overflow-tooltip="true"
                 >
                 <template slot-scope="scope">
                     {{scope.row.driverName}} - {{scope.row.driverPhone}}
@@ -30,6 +32,7 @@
             <el-table-column
                 prop="address"
                 label="车辆信息"
+                :show-overflow-tooltip="true"
                 width="200">
                 <template slot-scope="scope">
                     {{scope.row.driverName}} - {{scope.row.driverPhone}}
@@ -46,7 +49,7 @@
              <el-table-column
                 prop="address"
                 label="是否特权车"
-                width="150">
+                >
                 <template slot-scope="scope">
                     {{scope.row.isVipCar == '1' ? '是' : '否'}}
                 </template>
@@ -54,7 +57,7 @@
              <el-table-column
                 prop="address"
                 label="抢入速度"
-                width="150">
+                >
             </el-table-column>
              <el-table-column
                 prop="driverDistance"
@@ -64,37 +67,39 @@
             <el-table-column
                 prop="address"
                 label="本日与该货主交易次数"
-                width="150">
+                width="100"
+                >
             </el-table-column>
              <el-table-column
                 prop="address"
                 label="本月与该货主交易次数"
-                width="150">
+                width="100"
+                >
             </el-table-column>
              <el-table-column
                 prop="address"
                 label="本日累计交易次数"
-                width="150">
+                >
             </el-table-column>
              <el-table-column
                 prop="address"
                 label="本月累计交易次数"
-                width="150">
+                >
             </el-table-column>
              <el-table-column
                 prop="chooseScore"
                 label="中单加权分"
-                width="150">
+                >
             </el-table-column>
              <el-table-column
                 prop="address"
                 label="理论中单"
-                width="150">
+                >
             </el-table-column>
              <el-table-column
                 prop="address"
                 label="实际中单"
-                width="150">
+                >
             </el-table-column>
         </el-table>
         <!-- <div class="info_tab_footer">共计:{{ totalCount }} <div class="show_pager"> <Pager :total="totalCount" @change="handlePageChange" :sizes="sizes"/></div> </div>     -->

@@ -263,27 +263,29 @@ Vue.directive('dialogDrag', {
   */
 
 
-  /** 权限指令**/
-Vue.directive('has', {
-    inserted: function(el, binding) {
-      // 判断是用value还是arg
-      // 优先使用arg
-      const val = binding.arg || binding.value
-      // console.log('v-has:', val)
-      if (val && !Vue.prototype.$_has_permission(val)) {
-        el.parentNode.removeChild(el)
-      }
-    }
-  })
+    /** 权限指令**/
+    Vue.directive('has', {
+        inserted: function(el, binding) {
+        // 判断是用value还是arg
+        // 优先使用arg
+        const val = binding.arg || binding.value
+        // console.log('v-has:', val)
+        if (val && !Vue.prototype.$_has_permission(val)) {
+            el.parentNode.removeChild(el)
+        }   
+        }
+    })
   // 权限检查方法
   Vue.prototype.$_has_permission = function(value) {
     let isExist = false
     const buttonperms = getUserInfo()
+    // console.log('buttonperms',buttonperms)
     if (buttonperms == undefined || buttonperms == null) {
       return false
     }
-    if (!buttonperms.permissionTrees || !buttonperms.permissionTrees.length) {
-      return false
+    if (!buttonperms.permissionTrees || buttonperms.permissionTrees.length == 0) {
+        
+      return isExist = true
     }
     const ptree = buttonperms.permissionTrees
     for (let i = 0; i < ptree.length; i++) {
