@@ -35,9 +35,9 @@
       </el-form-item>
     </el-form>
     <div class="classify_info">
-      <div class="btns_box">
-        <el-button type="primary" :size="btnsize" plain @click="handleSearch('outExce')">导出Exce</el-button>
-      </div>
+      <!-- <div class="btns_box">
+        <el-button type="primary" :size="btnsize" plain @click="handleSearch('outExce')">导出Excel</el-button>
+      </div> -->
       <div class="info_news">
         <!-- tabel内容 -->
         <el-table
@@ -61,11 +61,11 @@
             <template slot-scope="scope">
               {{ (page - 1)*pagesize + scope.$index + 1 }}
             </template>
-          </el-table-column>  
+          </el-table-column>
           <el-table-column
             prop="orderSerial"
             label="订单号"
-            width="250">
+            width="240">
               <template  slot-scope="scope">
                 <h4 class="needMoreInfo" @click="pushOrderSerial(scope.row)">{{ scope.row.orderSerial}}</h4>
               </template>
@@ -88,22 +88,22 @@
           <el-table-column
             prop="carType"
             label="车型"
-            width="200">
+            width="140">
           </el-table-column>
           <el-table-column
             prop="totalAmount"
             label="订单金额"
-            width="160">
+            width="120">
           </el-table-column>
           <el-table-column
             prop="commissionAmount"
             label="佣金金额"
-            width="160">
+            width="120">
           </el-table-column> 
           <el-table-column
             prop="commissionTime"
             label="交易时间"
-            width="250">
+            width="200">
             <template  slot-scope="scope">
               <span class="orderSerial">
                 {{ scope.row.commissionTime | parseTime('{y}-{m}-{d} {h}:{i}:{s}')}}    
@@ -126,10 +126,10 @@ import { orderStatusList } from '@/api/order/ordermange'
 import { parseTime, pickerOptions2 } from '@/utils/index.js'
 import Pager from '@/components/Pagination/index'
 import vregion from '@/components/vregion/Region'
-import { postDriverCommissionTransaction ,postCommissionTransactionExcel} from '@/api/marketing/carmarkting/operating'
+import { postDriverCommissionTransaction, postCommissionTransactionExcel } from '@/api/marketing/carmarkting/operating'
 import GetCityList from '@/components/GetCityList'
 import { REGEX } from '@/utils/validate'
-import { getManageTypeInfo } from '@/api/company/groupManage';
+import { getManageTypeInfo } from '@/api/company/groupManage'
 export default{
   components: {
     Pager,
@@ -181,7 +181,7 @@ export default{
         shortcuts: pickerOptions2
       },
       tableData: [],
-      dialogFormVisible_details: false, // 详情弹窗
+      dialogFormVisible_details: false // 详情弹窗
     }
   },
   // watch:{
@@ -213,18 +213,28 @@ export default{
   methods: {
     exportExcel() {
       this.isEport = true
-      if(this.areaName === '' || this.areaName === null || this.areaName === undefined ||this.searchCreatTime === '' || this.searchCreatTime === null || this.searchCreatTime === undefined){
+      if (this.areaName === '' || this.areaName === null || this.areaName === undefined || this.searchCreatTime === '' || this.searchCreatTime === null || this.searchCreatTime === undefined) {
         // console.log(6666)
         // this.$refs.ruleForm.validateField('areaName')
         // this.$refs.ruleForm.validateField('searchCreatTime')
         this.$message.warning('搜索条件不能为空')
-      }else{
+      } else {
         console.log(7777)
         postCommissionTransactionExcel(this.page, this.pagesize, this.searchInfo).then(res => {
-          console.log(res.data.data)
-          // this.window.open(res)
-          // this.tableData = res.data.list
-          // this.loading = false
+          const blob = new Blob([res], {
+            type: 'application/octet-stream'
+          })
+          if (window.navigator.msSaveOrOpenBlob) {
+            navigator.msSaveBlob(blob)
+          } else {
+            const elink = document.createElement('a')
+            elink.download = '报表.xls'
+            elink.style.display = 'none'
+            elink.href = URL.createObjectURL(blob)
+            document.body.appendChild(elink)
+            elink.click()
+            document.body.removeChild(elink)
+          }
         })
       }
     },
@@ -234,15 +244,19 @@ export default{
       this.areaCodeList1 = []
     },
     regionChange(d) {
-      console.log('11111',typeof this.searchInfo.areaCodeList)
+      // console.log('11111', d, typeof this.searchInfo.areaCodeList)
       this.areaName = (!d.province && !d.city && !d.area && !d.town) ? '' : `${this.getValue(d.province)}${this.getValue(d.city)}${this.getValue(d.area)}${this.getValue(d.town)}`.trim()
       if (d.area) {
         // this.searchInfo.areaCodeList = d.area.code
         // this.areaCodeList.push(d.area.code)
         // this.searchInfo.argetManageTypeInfoaCodeList)
-        console.log('2222',typeof this.searchInfo.areaCodeList,d.area.code )
-        
+        // console.log('2222', typeof this.searchInfo.areaCodeList, d.area.code)
+
         this.searchInfo.areaCodeList.push(d.area.code)
+        this.searchInfo.areaCodeList = this.searchInfo.areaCodeList.filter(e => {
+          return e !== d.city.code
+        })
+        console.log('------searchInfo---', this.searchInfo.areaCodeList)
         // this.areaCodeList1[d.area.code] = this.areaName
         // let arr = []
         // let code = []
@@ -259,13 +273,16 @@ export default{
       } else if (d.city) {
         // this.areaCodeList1.push(d.city.code)
         this.searchInfo.areaCodeList.push(d.city.code)
-        // this.searchInfo.areaCodeList = Object.assign(this.areaCodeList1)
-        
+        this.searchInfo.areaCodeList = this.searchInfo.areaCodeList.filter(e => {
+          return e !== d.province.code
+        })
       } else if (d.province) {
-        this.searchInfo.areaCodeList.push(d.province.code ? d.province.code : '')
+        this.searchInfo.areaCodeList = this.searchInfo.areaCodeList.filter(e => {
+          return e !== d.province.code
+        })
+        this.searchInfo.areaCodeList.push(d.province.code)
       } else {
         this.clearName()
-        console.log('sdfsd', d)
       }
     },
     getValue(obj) {
@@ -281,11 +298,9 @@ export default{
       // this.loading = false
       postDriverCommissionTransaction(this.page, this.pagesize, this.searchInfo).then(res => {
         if (res) {
-       this.tableData = res.data.list
-        this.loading = false
-
+          this.tableData = res.data.list
+          this.loading = false
         }
-       
       })
     },
      // 模糊查询 分类名称或者code

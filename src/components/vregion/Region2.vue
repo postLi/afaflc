@@ -74,410 +74,403 @@
 </template>
 
 <script>
-    import {getCityInfo} from '@/api/common'
-    import Dropdown from './Dropdown';
-    import language from './language';
+    import { getCityInfo } from '@/api/common'
+    import Dropdown from './Dropdown'
+import language from './language'
 
-    export default {
-        name: "vregion2",
-        components: {
-            'v-dropdown': Dropdown
+export default {
+      name: 'vregion2',
+      components: {
+          'v-dropdown': Dropdown
         },
-        props: {
-            blank: {
-                type: Boolean,
-                default: true
+      props: {
+          blank: {
+              type: Boolean,
+              default: true
             },
-            province: {
-                type: Boolean,
-                default: true
+          province: {
+              type: Boolean,
+              default: true
             },
-            city: {
-                type: Boolean,
-                default: true
+          city: {
+              type: Boolean,
+              default: true
             },
-            area: {
-                type: Boolean,
-                default: true
+          area: {
+              type: Boolean,
+              default: true
             },
-            town: {
-                type: Boolean,
-                default: false
+          town: {
+              type: Boolean,
+              default: false
             },
-            i18n: {
-                type: String,
-                default: 'cn'
+          i18n: {
+              type: String,
+              default: 'cn'
             },
-            selected: Object,
-            ui: {
-                type: Boolean,
-                default: false
+          selected: Object,
+          ui: {
+              type: Boolean,
+              default: false
             },
-            search: {
-                type: Boolean,
-                default: true
+          search: {
+              type: Boolean,
+              default: true
             },
-            text: {
-                type: Boolean,
-                default: false
+          text: {
+              type: Boolean,
+              default: false
             }
         },
-        data(){
-            return {
-                listProvince: [],
-                listCity: [],
-                listArea: [],
-                listTown: [],
-                nowProvince: '',
-                nowCity: '',
-                nowArea: '',
-                nowTown: '',
+      data() {
+          return {
+              listProvince: [],
+              listCity: [],
+              listArea: [],
+              listTown: [],
+              nowProvince: '',
+              nowCity: '',
+              nowArea: '',
+              nowTown: '',
 
-                haveCity: true,// is municipality
-                className: '',
-                lang: {},
-                init: this.selected,
-                pauseWatch: false,
+              haveCity: true, // is municipality
+              className: '',
+              lang: {},
+              init: this.selected,
+              pauseWatch: false,
 
-                //ui mode data
-                query: '',
-                levels: [
-                    {index:0,title:'省/直辖市'},
-                    {index:1,title:'市'},
-                    {index:2,title:'区/县'},
-                    {index:3,title:'乡/镇/街道'}
+                // ui mode data
+              query: '',
+              levels: [
+                    { index: 0, title: '省/直辖市' },
+                    { index: 1, title: '市' },
+                    { index: 2, title: '区/县' },
+                    { index: 3, title: '乡/镇/街道' }
                 ],
-                levelIndex: -1,
-                list: [],
+              levelIndex: -1,
+              list: [],
 
-                //return data
-                itemProvince: null,
-                itemCity: null,
-                itemArea: null,
-                itemTown: null
-            };
-        },
-        watch:{
+                // return data
+              itemProvince: null,
+              itemCity: null,
+              itemArea: null,
+              itemTown: null
+            }
+    },
+      watch: {
             /**
              * region search(ui mode)
              * search region description first, if no result, then search region key
              * @param value
              */
-            query(value){
-                let list = this.getList(this.levelIndex),tmp = [];
-                tmp = list.filter(val=>val.value.toLowerCase().includes(value.toLowerCase()));
-                if(tmp.length === 0) tmp = list.filter(val=>val.key.includes(value));
-                this.list = tmp;
-            },
-            nowProvince(value){
-                if(this.pauseWatch) return;
-                // 允许城市级别
-                if(this.city){
-                    this.fetchCity(value).then(res => {
+          query(value) {
+              let list = this.getList(this.levelIndex), tmp = []
+            tmp = list.filter(val => val.value.toLowerCase().includes(value.toLowerCase()))
+            if (tmp.length === 0) tmp = list.filter(val => val.key.includes(value))
+            this.list = tmp
+        },
+          nowProvince(value) {
+              if (this.pauseWatch) return
+            // 允许城市级别
+            if (this.city) {
+                  this.fetchCity(value).then(res => {
                         // 如果不是当前选取的项，则不进行保存渲染
-                        if(res.code !== this.nowProvince){
-                            return
+                      if (res.code !== this.nowProvince) {
+                          return
                         }
-                        let data = res.data
-                        if(this.listArea.length) this.listArea.splice(0, this.listArea.length);
-                        this.listCity = data
+                      const data = res.data
+                      if (this.listArea.length) this.listArea.splice(0, this.listArea.length)
+                    this.listCity = data
 
-                        this.nowCity = '';
-                        if(!this.haveCity) this.nowArea = '';
+                      this.nowCity = ''
+                    if (!this.haveCity) this.nowArea = ''
 
-                        this.itemProvince = this.listProvince.find(val=>val.key === value);
+                    this.itemProvince = this.listProvince.find(val => val.key === value)
 
-                        this.haveCity = this.listCity.length ? true : false;
+                    this.haveCity = !!this.listCity.length;
 
-                        this.$nextTick(()=>{
-                            if(!this.haveCity && this.area) this.changeCity();
-                            else{
-                                this.initSelected(2);
-                            }
+                      this.$nextTick(() => {
+                          if (!this.haveCity && this.area) this.changeCity()
+                        else {
+                              this.initSelected(2)
+                        }
 
-                            if(this.ui) this.levelIndex = this.haveCity ? 1 : 2;
-                        });
-                        this.changeValues();
+                          if (this.ui) this.levelIndex = this.haveCity ? 1 : 2
                     })
-                    
-                }
+                    this.changeValues()
+                })
+            }
             },
-            nowCity(value){
-                if(this.pauseWatch) return;
-                this.changeCity();
+          nowCity(value) {
+              if (this.pauseWatch) return
+            this.changeCity()
 
-                this.itemCity = this.listCity.find(val=>val.key === value);
+            this.itemCity = this.listCity.find(val => val.key === value)
 
-                if(this.ui) this.levelIndex = 2;
+            if (this.ui) this.levelIndex = 2
 
-                this.changeValues();
-            },
-            nowArea(value){
-                if(this.pauseWatch) return;
-                let that = this;
-                if(value && this.town){
-                    let towns = null, tmpArr = [];
-                    try{
-                        //towns = require(`./town/${value}.json`);
-                    }catch (e) {}
-                    if(towns && Object.keys(towns).length){
-                        for(let d in towns){
-                            tmpArr.push({key: d, value: towns[d]})
+            this.changeValues()
+        },
+          nowArea(value) {
+              if (this.pauseWatch) return
+            let that = this
+            if (value && this.town) {
+                  let towns = null, tmpArr = []
+                try {
+                        // towns = require(`./town/${value}.json`);
+                    } catch (e) {}
+                  if (towns && Object.keys(towns).length) {
+                      for (const d in towns) {
+                          tmpArr.push({ key: d, value: towns[d] })
                         }
                     }
-                    this.listTown = tmpArr;
-                }else this.listTown = [];
+                  this.listTown = tmpArr
+            } else this.listTown = []
 
-                if(this.town) this.nowTown = '';
-                // 因为是异步请求，返回数据的可能有先后顺序，造成渲染错误
-                console.log("nowArea:",value,this.listArea)
-                this.itemArea = this.listArea.find(val=>val.key === value);
-                this.initSelected(4);
+            if (this.town) this.nowTown = ''
+            // 因为是异步请求，返回数据的可能有先后顺序，造成渲染错误
+            console.log('nowArea:', value, this.listArea)
+              this.itemArea = this.listArea.find(val => val.key === value)
+            this.initSelected(4)
 
-                if(this.ui && this.town) this.levelIndex = 3;
+            if (this.ui && this.town) this.levelIndex = 3
 
-                this.changeValues();
-            },
-            nowTown(value){
-                if(this.pauseWatch) return;
-                this.itemTown = this.listTown.find(val=>val.key === value);
+            this.changeValues()
+        },
+          nowTown(value) {
+              if (this.pauseWatch) return
+            this.itemTown = this.listTown.find(val => val.key === value)
 
-                this.changeValues();
-            },
+            this.changeValues()
+        },
             /**
              * init region selected
              */
-            selected: {
-                handler(val){
-                    if(val && Object.keys(val).length){
-                        this.init = val;
-                        //if(val.province) this.nowProvince = val.province;
-                        this.initSelected(1);
-                    }
+          selected: {
+              handler(val) {
+                  if (val && Object.keys(val).length) {
+                      this.init = val
+                    //if(val.province) this.nowProvince = val.province;
+                    this.initSelected(1)
+                }
                 },
-                deep: true
+              deep: true
             },
             /**
              * watch current region group
              * @param val
              */
-            levelIndex(val){
-                this.list = this.getList(val);
-            }
+          levelIndex(val) {
+              this.list = this.getList(val)
+        }
         },
-        methods:{
-            changeCity(){
+      methods: {
+          changeCity() {
                 // 如果允许显示区，且没有获取到城市列表，则显示?
-                if(this.area || (!this.haveCity && this.province)){
-                    if((this.haveCity && !this.nowCity) || (!this.haveCity && !this.nowProvince)){
-                        console.log("2222222222:",this.haveCity,this.nowProvince,this.nowCity)
-                        this.listArea = [];
-                    }else{
-                        
-                        let thisCity = Number.parseInt(this.haveCity?this.nowCity:this.nowProvince);
-                        let haveCity = this.haveCity
-                        this.fetchCity(thisCity).then(res => {
-                            let data = res.data
-                            
-                            if(haveCity){
-                                if(this.nowCity!==res.code){
-                                    return
+              if (this.area || (!this.haveCity && this.province)) {
+                  if ((this.haveCity && !this.nowCity) || (!this.haveCity && !this.nowProvince)) {
+                      console.log('2222222222:', this.haveCity, this.nowProvince, this.nowCity)
+                      this.listArea = []
+                } else{
+                  const thisCity = Number.parseInt(this.haveCity ? this.nowCity:this.nowProvince)
+                    let haveCity = this.haveCity
+                      this.fetchCity(thisCity).then(res => {
+                          const data = res.data
+    
+                          if (haveCity) {
+                              if (this.nowCity !== res.code) {
+                                  return
                                 }
                             } else {
-                                if(this.nowProvince!==res.code){
-                                    return
+                              if (this.nowProvince !== res.code) {
+                                  return
                                 }
                             }
                             // 返回了数据才进行渲染
-                            this.listArea = data
-                            console.log("333333333:",this.haveCity,this.nowProvince,this.nowCity,haveCity,res.code,data)
-                            if(data.length){
-                                this.list = this.getList(2);
-                                this.initSelected(3);
-                            }
-                            
-                        })
-                        
+                          this.listArea = data
+                          console.log('333333333:', this.haveCity, this.nowProvince, this.nowCity, haveCity, res.code, data)
+                          if (data.length) {
+                              this.list = this.getList(2)
+                            this.initSelected(3)
+                        }
+                    })
+                }
+                  this.nowArea = ''
+            } else {
+                  this.initSelected(3)
+            }
+        },
+          changeValues() {
+              this.$nextTick(() => {
+                  this.$emit('values', {
+                      province: this.itemProvince,
+                      city: this.itemCity,
+                      area: this.itemArea,
+                      town: this.itemTown
+                    })
+            })
+        },
+          initSelected(level) {
+              let that = this, ini = this.init, count = 0
+            if (ini && Object.keys(ini).length) {
+                  switch (level) {
+                      case 1:// province
+                        if (that.province && ini.province) that.nowProvince = ini.province
+                        break;
+                      case 2:// city
+                        if (that.city && ini.city) that.nowCity = ini.city
+                        break;
+                      case 3:// area
+                        if (that.area && ini.area) that.nowArea = ini.area
+                        break;
+                      case 4:// town
+                        if (that.town && ini.town) that.nowTown = ini.town
+                        break;
                     }
-                    this.nowArea = '';
-                } else {
-                    this.initSelected(3);
+                  if (that.province && ini.province) count++
+                if (that.city && (ini.city || (!ini.city && !that.haveCity && that.area && init.area))) count++
+                if (that.area && ini.area) count++
+                if (that.town && ini.town) count++
+                if (level === count) this.init = null
+            }
+            },
+          getList(val) {
+              let list = []
+            switch (val) {
+                  case 0:
+                    list = this.listProvince
+                    break;
+                  case 1:
+                    list = this.listCity
+                    break;
+                  case 2:
+                    list = this.listArea
+                    break;
+                  case 3:
+                    list = this.listTown
+                    break;
                 }
-                
-            },
-            changeValues(){
-                this.$nextTick(()=>{
-                    this.$emit('values', {
-                        province: this.itemProvince,
-                        city: this.itemCity,
-                        area: this.itemArea,
-                        town: this.itemTown
-                    });
-                });
-            },
-            initSelected(level){
-                let that = this, ini = this.init, count = 0;
-                if(ini && Object.keys(ini).length){
-                    switch(level){
-                        case 1://province
-                            if(that.province && ini.province) that.nowProvince = ini.province;
-                            break;
-                        case 2://city
-                            if(that.city && ini.city) that.nowCity = ini.city;
-                            break;
-                        case 3://area
-                            if(that.area && ini.area) that.nowArea = ini.area;
-                            break;
-                        case 4://town
-                            if(that.town && ini.town) that.nowTown = ini.town;
-                            break;
-                    }
-                    if(that.province && ini.province) count++;
-                    if(that.city && (ini.city || (!ini.city && !that.haveCity && that.area && init.area))) count++;
-                    if(that.area && ini.area) count++;
-                    if(that.town && ini.town) count++;
-                    if(level === count) this.init = null;
+              return list
+        },
+            // check level available
+          checkAvailable(index) {
+              let val = false
+            switch (index) {
+                  case 0:// province
+                    if (this.province) val = true
+                    break;
+                  case 1:// city
+                    if (this.city && this.haveCity) val = true
+                    break;
+                  case 2:// area
+                    if (this.area) val = true
+                    break;
+                  case 3:// town
+                    if (this.town) val = true
+                    break;
                 }
-            },
-            getList(val){
-                let list = [];
-                switch(val){
-                    case 0:
-                        list = this.listProvince;
-                        break;
-                    case 1:
-                        list = this.listCity;
-                        break;
-                    case 2:
-                        list = this.listArea;
-                        break;
-                    case 3:
-                        list = this.listTown;
-                        break;
-                }
-                return list;
-            },
-            //check level available
-            checkAvailable(index){
-                let val = false;
-                switch(index){
-                    case 0://province
-                        if(this.province) val = true;
-                        break;
-                    case 1://city
-                        if(this.city && this.haveCity) val = true;
-                        break;
-                    case 2://area
-                        if(this.area) val = true;
-                        break;
-                    case 3://town
-                        if(this.town) val = true;
-                        break;
-                }
-                return val;
-            },
-            matchItem(item){
-                return item.key === this.nowProvince ||
+              return val
+        },
+          matchItem(item) {
+              return item.key === this.nowProvince ||
                         item.key === this.nowCity ||
                         item.key === this.nowArea ||
-                        item.key === this.nowTown;
-            },
-            itemSelect(item){
-                let that = this;
-                item.selected = !item.selected
-                switch(this.levelIndex){
-                    case 0:
-                        this.nowProvince = item.key;
-                        this.itemProvince = item;
-                        break;
-                    case 1:
-                        this.nowCity = item.key;
-                        this.itemCity = item;
-                        break;
-                    case 2:
-                        this.nowArea = item.key;
-                        this.itemArea = item;
-                        
-                        break;
-                    case 3:
-                        this.nowTown = item.key;
-                        this.itemTown = item;
-                        break;
+                        item.key === this.nowTown
+        },
+          itemSelect(item) {
+              const that = this
+            item.selected = !item.selected
+              switch (this.levelIndex) {
+                  case 0:
+                    this.nowProvince = item.key
+                    this.itemProvince = item
+                    break;
+                  case 1:
+                    this.nowCity = item.key
+                    this.itemCity = item
+                    break;
+                  case 2:
+                    this.nowArea = item.key
+                    this.itemArea = item
+                    
+                    break;
+                  case 3:
+                    this.nowTown = item.key
+                    this.itemTown = item
+                    break;
                 }
             },
-            showDropdown(val){
-                if(typeof(val) === 'boolean') {
-                    let that = this;
-                    this.$refs.dropdown.$emit('show', val, this.$refs.caller);
-                    if(val) {
-                        this.query = '';
-                        this.$nextTick(()=>that.$refs.input.focus({preventScroll:true}));
-                        // this.clear();
-                    }
+          showDropdown(val) {
+              if (typeof (val) === 'boolean') {
+                  const that = this
+                this.$refs.dropdown.$emit('show', val, this.$refs.caller)
+                if (val) {
+                      this.query = ''
+                    this.$nextTick(() => that.$refs.input.focus({ preventScroll: true }))
+                    // this.clear();
+                }
                 }
             },
-            clear(){
-                let that = this;
-                this.pauseWatch = true;
-                this.nowProvince = '';
-                this.nowCity = '';
-                this.nowArea = '';
-                this.nowTown = '';
-                this.itemProvince = null;
-                this.itemCity = null;
-                this.itemArea = null;
-                this.itemTown = null;
-                this.listCity = [];
-                this.listArea = [];
-                this.listTown = [];
-                this.levelIndex = 0;
-                this.$nextTick(()=>{
-                    that.pauseWatch = false;
-                    that.changeValues();
-                });
-            },
-            fetchCity(code=''){
-                return new Promise((resolve) => {
-                    return getCityInfo(code).then(res => {
-                        res.data = this.formatCity(res.data)
-                        resolve(res)
-                        return res
+          clear() {
+              const that = this
+            this.pauseWatch = true
+            this.nowProvince = ''
+            this.nowCity = ''
+            this.nowArea = ''
+            this.nowTown = ''
+            this.itemProvince = null
+            this.itemCity = null
+            this.itemArea = null
+            this.itemTown = null
+            this.listCity = []
+            this.listArea = []
+            this.listTown = []
+            this.levelIndex = 0
+            this.$nextTick(() => {
+                  that.pauseWatch = false
+                that.changeValues()
+            })
+        },
+          fetchCity(code = '') {
+              return new Promise((resolve) => {
+                  return getCityInfo(code).then(res => {
+                      res.data = this.formatCity(res.data)
+                      resolve(res)
+                      return res
                     }).catch(err => {
                         // 如果后台没有返回数据，则隐藏
-                        resolve({code,data:[]})
+                      resolve({ code, data: [] })
                     })
                 })
-                
-            },
-            formatCity(arr){
-                return arr.map(el=>{
-                    el.key = el.code
-                    el.value = el.name
-                    el.selected = false
-                    return el
+        },
+          formatCity(arr) {
+              return arr.map(el => {
+                  el.key = el.code
+                  el.value = el.name
+                  el.selected = false
+                  return el
                 })
             }
         },
-        beforeMount(){
-            this.lang = language[this.i18n];
-        },
-        mounted(){
-            let that = this;
-            let srcProvince = this.fetchCity().then(res => {
-                //sort by length and code
-                let data = res.data
-                this.listProvince = this.ui?data.concat().sort((a,b)=>{
-                    let gap = a.value.length - b.value.length;
-                    return gap === 0?Number(a.key)-Number(b.key):gap;
-                }):data.concat();
-                this.className = this.$el.className;
-                this.$el.className = 'v-region';
+      beforeMount() {
+          this.lang = language[this.i18n]
+    },
+      mounted() {
+          const that = this
+        let srcProvince = this.fetchCity().then(res => {
+                // sort by length and code
+              const data = res.data
+              this.listProvince = this.ui ? data.concat().sort((a, b) => {
+                  const gap = a.value.length - b.value.length
+                return gap === 0 ? Number(a.key) - Number(b.key):gap
+            }):data.concat()
+            this.className = this.$el.className
+            this.$el.className = 'v-region'
 
-                if(this.selected && this.selected.province) this.nowProvince = this.selected.province;
-                if(this.ui) this.levelIndex = 0;
-            })
-            
-        }
+            if (this.selected && this.selected.province) this.nowProvince = this.selected.province
+            if (this.ui) this.levelIndex = 0
+        })
+    }
     }
 </script>
 
