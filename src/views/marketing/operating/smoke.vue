@@ -35,9 +35,9 @@
       </el-form-item>
     </el-form>
     <div class="classify_info">
-      <div class="btns_box">
+      <!-- <div class="btns_box">
         <el-button type="primary" :size="btnsize" plain @click="handleSearch('outExce')">导出Excel</el-button>
-      </div>
+      </div> -->
       <div class="info_news">
         <!-- tabel内容 -->
         <el-table
@@ -61,11 +61,11 @@
             <template slot-scope="scope">
               {{ (page - 1)*pagesize + scope.$index + 1 }}
             </template>
-          </el-table-column>  
+          </el-table-column>
           <el-table-column
             prop="orderSerial"
             label="订单号"
-            width="250">
+            width="240">
               <template  slot-scope="scope">
                 <h4 class="needMoreInfo" @click="pushOrderSerial(scope.row)">{{ scope.row.orderSerial}}</h4>
               </template>
@@ -88,22 +88,22 @@
           <el-table-column
             prop="carType"
             label="车型"
-            width="200">
+            width="140">
           </el-table-column>
           <el-table-column
             prop="totalAmount"
             label="订单金额"
-            width="160">
+            width="120">
           </el-table-column>
           <el-table-column
             prop="commissionAmount"
             label="佣金金额"
-            width="160">
+            width="120">
           </el-table-column> 
           <el-table-column
             prop="commissionTime"
             label="交易时间"
-            width="250">
+            width="200">
             <template  slot-scope="scope">
               <span class="orderSerial">
                 {{ scope.row.commissionTime | parseTime('{y}-{m}-{d} {h}:{i}:{s}')}}    
