@@ -1,7 +1,8 @@
 import fetch from '@/utils/fetch'
 
 // const baseurl = 'aflcorderservice'
-const baseurl = 'aflcusercenterservice_wtc'
+// const baseurl = 'aflcusercenterservice_wtc'
+const baseurl = 'aflcusercenterservice'
 /**
  * 拥抽
  *
@@ -32,6 +33,18 @@ const baseurl = 'aflcusercenterservice_wtc'
 export function postDriverCommissionTransaction(page, pagesize, data) {
   return fetch({
     url: '/' + baseurl + '/usercenter/aflcDriverCommissionDetail/v1/driverCommissionTransaction',
+    method: 'post',
+    data: {
+      'currentPage': page,
+      'pageSize': pagesize,
+      'vo': data
+    }
+  })
+}
+
+export function postCommissionTransactionExcel(page, pagesize, data) {
+  return fetch({
+    url: '/' + baseurl + '/usercenter/aflcDriverCommissionDetail/v1/commissionTransactionExcel',
     method: 'post',
     data: {
       'currentPage': page,
