@@ -9,6 +9,9 @@ export default {
   name: '营销管理',
   // hidden: true,
   noDropdown: false,
+    meta: {
+        title: '营销管理', code: 'MARKETING'
+    },
   children: [
     {
       path: '/marketing/carmarkting', icon: 'czyx', name: '车主营销管理', component: _import('marketing/carmarkting/index'), meta: { role: ['admin'], title: '车主营销管理', stitle: '车主', noCache: true },

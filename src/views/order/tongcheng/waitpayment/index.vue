@@ -33,9 +33,9 @@
                     </el-form-item>
             </el-form>
             <div class="classify_info">
-                <div class="btns_box">
+                <!-- <div class="btns_box">
                     <el-button type="primary" :size="btnsize" plain @click="handleSearch('outExce')">导出Exce</el-button>
-                </div>
+                </div> -->
                 <div class="info_news">
                     <el-table
                         id="out-table"
@@ -230,10 +230,10 @@ export default{
                 var wbout = XLSX.write(wb, { bookType: 'xlsx', bookSST: true, type: 'array' })
                 console.log(wb)
                 console.log(wbout)
-                // try {
-                //     FileSaver.saveAs(new Blob([wbout], { type: 'application/octet-stream' }), 'sheetjs.xlsx')
-                // } catch (e) { if (typeof console !== 'undefined') console.log(e, wbout) }
-                // return wbout
+                try {
+                    FileSaver.saveAs(new Blob([wbout], { type: 'application/octet-stream' }), 'sheetjs.xlsx')
+                } catch (e) { if (typeof console !== 'undefined') console.log(e, wbout) }
+                return wbout
             },
             regionChange(d) {
                 console.log('data:',d)

@@ -1,6 +1,5 @@
 <template>
-     <div class="creatDialog commoncss">
-      <!-- <el-button :type="type" :value="value" :plain="plain" :icon="icon" @click="openDialog">{{text}}</el-button> -->
+     <div class="wuliucreatDialog commoncss">
       <el-dialog :title="title" :visible="dialogFormVisible_add" :before-close="close" :close-on-click-modal="false" >
         <el-form :model="xinzengform" ref="xinzengform" :rules="rulesForm">
             <el-row>
@@ -41,14 +40,12 @@
             <el-row>
                 <el-col :span="12">
                     <el-form-item label="注册来源 ：" :label-width="formLabelWidth">
-                        <!-- <el-input :maxlength="20" v-model="xinzengform.registerOriginName"  disabled></el-input> -->
                         <span class="onlyShow"  disabled>{{xinzengform.registerOriginName}}</span>
 
                     </el-form-item>
                 </el-col>
                 <el-col :span="12">
                     <el-form-item label="注册日期 ：" :label-width="formLabelWidth">
-                        <!-- <el-input :maxlength="20" v-model="xinzengform.registerTime"  disabled></el-input> -->
                         <span class="onlyShow"  disabled>{{xinzengform.registerTime}}</span>
 
                     </el-form-item>
@@ -57,14 +54,12 @@
             <el-row>
                 <el-col :span="12">
                     <el-form-item label="账户状态 ：" :label-width="formLabelWidth">
-                        <!-- <el-input :maxlength="20" v-model="xinzengform.accountStatusName"  disabled></el-input> -->
                         <span class="onlyShow"  disabled>{{xinzengform.accountStatusName}}</span>
                         
                     </el-form-item>
                 </el-col>
                 <el-col :span="12">
                     <el-form-item label="认证状态 ：" :label-width="formLabelWidth">
-                        <!-- <el-input :maxlength="20" v-model="xinzengform.authStatusName"  disabled></el-input> -->
                         <span class="onlyShow"  disabled>{{xinzengform.authStatusName}}</span>
 
                     </el-form-item>
@@ -74,14 +69,12 @@
                 <el-col :span="12">
                     <el-form-item label="法人/负责人 ：" :label-width="formLabelWidth">
                         <span class="onlyShow" v-if="editType=='view'" disabled>{{xinzengform.corporation}}</span>
-
                         <el-input :maxlength="20" v-model="xinzengform.corporation"  v-else></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col :span="12">
                     <el-form-item label="所属品牌 ：" :label-width="formLabelWidth">
                         <span class="onlyShow" v-if="editType=='view'" disabled>{{xinzengform.belongBrand}}</span>
-
                         <el-select v-model="xinzengform.belongBrandCode" placeholder="请选择" v-else>
                             <el-option
                             v-for="item in optionsBelongBrand"
@@ -96,9 +89,7 @@
             <el-row>
                 <el-col :span="12">
                     <el-form-item label="是否开通会员 ：" :label-width="formLabelWidth">
-                        <!-- <el-input :maxlength="20"  v-model="xinzengform.isVipName"  v-if="editType=='view'" disabled></el-input> -->
                         <span class="onlyShow" v-if="editType=='view'" disabled>{{xinzengform.isVip == 1 ? '是' : '否'}}</span>
-
                         <el-radio-group v-model="xinzengform.isVip" v-else>
                             <el-radio  v-for="(obj,key) in optionsStatus" :label="obj.value" :key='key'>{{obj.name}}</el-radio>
                         </el-radio-group>
@@ -424,7 +415,7 @@ export default {
         //按钮文本内容
         this.text = this.btntext;
         //弹出框标题
-        this.title = this.btntitle;
+        // this.title = this.btntitle;
 
         // console.log('btntitle',this.text)
         // this.getMoreInformation()
@@ -448,6 +439,7 @@ export default {
             // console.log('parmas:',this.params)
             console.log(this.editType)
             if(this.editType == 'edit'){
+                this.title = '修改';
                 this.xinzengform = JSON.parse(JSON.stringify(this.paramsView))
                 if(this.xinzengform.otherServiceCode != ''){
                     this.otherServiceCode = JSON.parse(this.xinzengform.otherServiceCode) 
@@ -461,6 +453,7 @@ export default {
                     // this.xinzengform.isVip = this.xinzengform.isVip == 1 ? '1' : '0'
             }
             else if(this.editType == 'view'){
+                this.title = '详细信息';
                 this.xinzengform  = Object.assign({},this.paramsView) ;
                 if(this.xinzengform.otherService != ''){
                     this.otherService = JSON.parse(this.xinzengform.otherService) 
@@ -567,7 +560,7 @@ export default {
     }
 </script>
 <style lang="scss" scoped>
-    .creatDialog{
+    .wuliucreatDialog{
         .el-row{
             margin: 5px 0;
         }
@@ -591,7 +584,6 @@ export default {
                 }
             }
         }
-
         .el-form-item__content{
             .v-region{
                 .v-dropdown-container{
@@ -600,18 +592,17 @@ export default {
                 }
             }
         }
-
         .serviceChoose{
             display: inline-block;
             padding: 0px 10px;
             margin-right: 10px;
+            margin-bottom: 10px;
             color: #fff;
             background: rgb(44, 193, 219);
             -webkit-box-shadow:3px 3px 30px #888888;;
             -moz-box-shadow:3px 3px 30px #888888;;
 
         }
-
         .onlyShow{
             display: inline-block;
             width: 250px;
@@ -639,8 +630,7 @@ export default {
 
 
 <style lang="scss">
-
-    .creatDialog  .el-form-item__content .v-dropdown-container {
+    .wuliucreatDialog  .el-form-item__content .v-dropdown-container {
         top: 38px !important;
         left: -151px !important;
     }

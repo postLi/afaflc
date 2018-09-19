@@ -127,6 +127,7 @@ export default {
         username: '', // 登录账户
         password: '123456',
         position: '', // 职位
+        jobNumber:"",//员工号
         sexFlag: '', // 性别
         orgid: '', // 归属网点
         rolesId: [], // 权限角色

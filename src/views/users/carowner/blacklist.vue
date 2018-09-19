@@ -93,7 +93,7 @@
               <el-select v-model="formFroze.putBlackCause" placeholder="请选择" clearable  v-if = "editType == 'edit-four'">
                 <el-option
                   v-for="item in putBlackCauseoptions"
-                  :key="item.value"
+                  :key="item.id"
                   :label="item.name"
                   :value="item.code">
                 </el-option>
@@ -101,7 +101,7 @@
               <el-select v-model="formFroze.putBlackCause" placeholder="请选择" disabled v-else-if="editType == 'edit-five'">
                 <el-option
                   v-for="item in putBlackCauseoptions"
-                  :key="item.value"
+                  :key="item.id"
                   :label="item.name"
                   :value="item.code">
                 </el-option>
@@ -144,7 +144,9 @@ import GetCityList from '@/components/GetCityList'
 import {parseTime} from '@/utils/'
 import { eventBus } from '@/eventBus'
 import  {data_put_PutBlack,data_put_OutBlack} from '@/api/users/carowner/total_carowner.js'
-import {data_get_shipper_type,data_get_shipper_change,data_get_shipper_freezeType,data_get_freeze_change,data_get_freeze, data_get_shipper_BlackType,data_unbind_freeze_change,data_blacklist,data_remove_blacklist} from '@/api/users/shipper/all_shipper.js'
+import {data_get_shipper_type,data_get_shipper_change,data_get_shipper_freezeType,data_get_freeze_change,data_get_freeze,data_unbind_freeze_change,data_blacklist,data_remove_blacklist} from '@/api/users/shipper/all_shipper.js'
+import {  DicBlackType } from '@/api/common.js'
+
 export default {
   name:'create-Change-ViewDialog',
   components:{
@@ -320,11 +322,8 @@ export default {
         })
       })
       // 获取移入黑名单原因下拉
-      data_get_shipper_BlackType().then(res=>{
-       
-        res.data.map((item)=>{
-          this.putBlackCauseoptions.push(item)
-        })
+      DicBlackType().then(res=>{
+          this.putBlackCauseoptions = res.data;
       })
     },
 

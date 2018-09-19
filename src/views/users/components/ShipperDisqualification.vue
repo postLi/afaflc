@@ -4,15 +4,7 @@
         
         <div class="classify_info">
 		    <div class="btns_box">
-                <createdDialog btntext="代客认证"
-                :params="selectRowData"
-                :plain="true" type="primary" 
-                btntype="primary" 
-                icon="el-icon-news"
-                editType="identification" 
-                btntitle="代客提交"
-                @getData="getDataList">
-                </createdDialog>
+        	    <el-button type="primary" plain icon="el-icon-check" :size="btnsize" @click="handleClick">代客提交</el-button>
 		    </div>
             <div class="info_news">
                 <el-table 
@@ -31,7 +23,7 @@
                     </el-table-column>
                     <el-table-column label="公司名称" >
                         <template slot-scope="scope">
-                            <createdDialog :paramsView="scope.row" btntype="text" :btntext="scope.row.companyName" editType="view" btntitle="详情"></createdDialog>
+                            <h4 class="needMoreInfo" @click="pushOrderSerial(scope.row)">{{ scope.row.companyName}}</h4>
                         </template>
                     </el-table-column>
                     <el-table-column prop="mobile" label="手机号">
@@ -60,12 +52,14 @@
             </div>
 	     </div>
         <div class="info_tab_footer">共计:{{ totalCount }} <div class="show_pager"> <Pager :total="totalCount" @change="handlePageChange" /></div> </div>    
+
+        <createdDialog :paramsView="paramsView" :typetitle="typetitle" :editType="type"  :dialogFormVisible_add.sync = "dialogFormVisible_add"/>
+
     </div>
 </template>
 <script>
 import createdDialog from './createdDialog.vue'
 import searchInfo from './searchInfo'
-
 import { eventBus } from '@/eventBus'
 import { parseTime } from '@/utils/index.js'
 import Pager from '@/components/Pagination/index'
@@ -84,6 +78,11 @@ export default {
     },
     data(){
         return{
+            dialogFormVisible_add: false,
+            type: '',
+            paramsView: {},
+            typetitle:'',
+            btnsize:'mini',
             tabType:'disCertified',
             templateRadio:'',
             tableData1:[],
@@ -120,6 +119,19 @@ export default {
         })
     },
     methods:{
+        pushOrderSerial(row){
+            this.type = 'view';
+            this.typetitle = '货主详情';
+            this.paramsView = Object.assign({},row);;
+            this.dialogFormVisible_add =true;
+        },
+        handleClick(){
+            this.type = "identification";
+            this.typetitle = "代客认证";
+            this.paramsView = this.selectRowData;
+            this.dialogFormVisible_add = true;
+
+        },
         getSearchParam(obj) {
             console.log(obj)
             this.searchInfo = Object.assign({},obj,{shipperStatus:'AF0010404'})

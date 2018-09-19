@@ -113,7 +113,8 @@
 </template>
 <script>
 import GetCityList from '@/components/GetCityList'
-import {data_get_shipper_type,data_get_shipper_change,data_get_shipper_BlackType} from '@/api/users/shipper/all_shipper.js'
+import {data_get_shipper_type,data_get_shipper_change} from '@/api/users/shipper/all_shipper.js'
+import {  DicBlackType } from '@/api/common.js'
 
 export default {
     name:'shipper_blackList-diaolog',
@@ -247,10 +248,8 @@ export default {
                 })
             }),
             // 移入原因列表
-            data_get_shipper_BlackType().then(res=>{
-                res.data.map(item=>{
-                    this.optionsFormBlack.push(item)
-                })
+            DicBlackType().then(res=>{
+                    this.optionsFormBlack = res.data;
             })
         },
         // 提交数据

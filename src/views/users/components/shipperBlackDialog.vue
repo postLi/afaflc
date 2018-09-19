@@ -1,17 +1,16 @@
 <template>
     <div class="shipperBlackDialog commoncss">
-      <el-button :type="type" :value="value" :plain="plain" :icon="icon" @click="openDialog()">{{text}}</el-button>
-      <el-dialog :title="title" :visible.sync="BlackDialogFlag" :before-close="change()" :modal="false">
+      <el-dialog :title="blacktitle" :visible="BlackDialogFlag" :before-close="close" :close-on-click-modal="false" >
         <el-form :model="formBlack" ref="formBlack" :rules="formBlackRules">
             <el-row>
                 <el-col :span="12">
                     <el-form-item label="手机号码" :label-width="formLabelWidth">
-                    <el-input v-model="formBlack.mobile" disabled></el-input>
+                        <span class="onlyShow">{{formBlack.mobile}}</span>
                     </el-form-item>
                 </el-col>
                 <el-col :span="12">
                     <el-form-item label="公司名称" :label-width="formLabelWidth">
-                    <el-input v-model="formBlack.companyName" disabled></el-input>
+                        <span class="onlyShow">{{formBlack.companyName}}</span>
                     </el-form-item>
                 </el-col>
                 </el-row>
@@ -19,32 +18,32 @@
                 <el-row>
                 <el-col :span="12">
                     <el-form-item label="联系人" :label-width="formLabelWidth">
-                    <el-input v-model="formBlack.contacts" disabled></el-input>
+                        <span class="onlyShow">{{formBlack.contacts}}</span>
+
                     </el-form-item>
                 </el-col>
                 <el-col :span="12">
                     <el-form-item label="所在地" :label-width="formLabelWidth">
-                        <el-input v-model="formBlack.belongCityName" disabled></el-input>
+                        <span class="onlyShow">{{formBlack.belongCityName}}</span>
                     </el-form-item>
                 </el-col>
                 </el-row>
-                
                  <el-row>
                     <el-col :span="24" class="moreLength">
                         <el-form-item label="详细地址：" :label-width="formLabelWidth">
-                            <el-input v-model="formBlack.address" :maxlength="20" disabled></el-input>
+                            <span class="onlyShow">{{formBlack.address}}</span>
                         </el-form-item>
                     </el-col>
                 </el-row>
                 <el-row>
                     <el-col :span="12">
                         <el-form-item label="货主类型" :label-width="formLabelWidth">
-                            <el-input v-model="formBlack.shipperTypeName" disabled :maxlength="20"></el-input>
+                            <span class="onlyShow">{{formBlack.shipperTypeName}}</span>
                         </el-form-item>
                     </el-col>
                     <el-col :span="12">
                         <el-form-item label="注册来源" :label-width="formLabelWidth">
-                            <el-input v-model="formBlack.registerOrigin" disabled :maxlength="20"></el-input>
+                            <span class="onlyShow">{{formBlack.registerOrigin}}</span>
                         </el-form-item>
                     </el-col>
                 </el-row>
@@ -53,11 +52,11 @@
                 <el-row>
                     <el-col :span="24">
                     <el-form-item label="移入原因:" :label-width="formLabelWidth" prop="putBlackCause">
-                        <el-input v-model="formBlack.putBlackCauseName" disabled v-if="editType != 'add'" ></el-input>
+                        <span class="onlyShow" v-if="editType != 'add'">{{formBlack.putBlackCauseName}}</span>
                         <el-select v-model="formBlack.putBlackCause" placeholder="请选择" v-else>
                             <el-option
                                 v-for="item in optionsFormBlack"
-                                :key="item.value"
+                                :key="item.id"
                                 :label="item.name"
                                 :value="item.code">
                             </el-option>
@@ -67,14 +66,14 @@
                 </el-row>
                 <el-row>
                     <el-col :span="24">
-                    <el-form-item label="移入黑名单原因说明:" :label-width="formLabelWidth">
+                    <el-form-item label="移入原因说明:" :label-width="formLabelWidth">
                         <el-input v-model="formBlack.putBlackCauseRemark" :rows="2" :disabled="editType != 'add'" placeholder="请输入内容" type="textarea"></el-input>
                     </el-form-item>
                     </el-col>
                 </el-row>
                 <div class="shipper_information" v-show="editType == 'edit'">
 					<h2>移出黑名单信息</h2>
-					<el-form-item label="移出黑名单原因说明:" :label-width="formLabelWidth">
+					<el-form-item label="移出原因说明:" :label-width="formLabelWidth">
 					    <el-input v-model="formBlack.popBlackRemark" :maxlength="100" :rows="2" placeholder="请输入内容" type="textarea"></el-input>
 					</el-form-item>
 				</div>
@@ -83,115 +82,88 @@
         
         <div slot="footer" class="dialog-footer">
             <el-button type="primary" @click="onSubmit">确 定</el-button>
-            <el-button @click="BlackDialogFlag = false">取 消</el-button>
+            <el-button @click="close">取 消</el-button>
         </div>
       </el-dialog>
     </div>
 </template>
 <script>
-import {data_get_shipper_type,data_get_shipper_change,data_get_shipper_BlackType} from '@/api/users/shipper/all_shipper.js'
+import {data_get_shipper_change} from '@/api/users/shipper/all_shipper.js'
 import { eventBus } from '@/eventBus'
+import {  DicBlackType } from '@/api/common.js'
 
 export default {
     name:'shipper_blackList-diaolog',
     components:{
-        // GetCityList
+
     },
     props:{
-        params:{
-        type:Object,
+        blacktitle:{
+            type:String,
+            default:"移入黑名单"
         },
-        icon:{
-        type: String,
-        default: ''
-        },
-        btntype: {
-        type: String,
-        default: ''
-        },
-        btntitle: {
-        type: String,
-        default: ''
-        },
-        plain:{
-        type: Boolean,
-        default: false
-        },
-        btntext: {
-        type: String,
-        default: ''
-        },
-        value:{
-        type: String,
-        default:''
+        paramsView:{
+            type:Object,
         },
         editType: {
-        type: String,
+            type: String,
+        },
+        BlackDialogFlag:{
+            type:Boolean,
+            required:true,
         }
     },
     data(){
         return{
             optionsFormBlack:[],
-            options:[],
-            type:'primary',
-            title:'',
-            text:'',
-            BlackDialogFlag: false, // 弹框控制
             formLabelWidth:'120px',
             formBlack:{},
-            currentRow:{},
             formBlackRules:{
                 putBlackCause:{required:true,message:'请选择移入原因',trigger:"change"}
             }
         }
     },
+    watch:{
+        BlackDialogFlag:{
+            handler: function(val, oldVal) {
+                if(val){
+                    this.openDialog();
+                    if(this.editType == 'add'){
+                        this.getMoreInformation()
+                    }
+                }
+            },
+        },
+    },
     mounted(){
-        //按钮类型text,primary...
-        this.type = this.btntype;
-        //按钮文本内容
-        this.text = this.btntext;
-        //弹出框标题
-        this.title = this.btntitle;
-        this.getMoreInformation()
+     
     },
     methods:{
+        close(done) {
+            this.$emit('update:BlackDialogFlag', false);
+            this.$emit('getData');
+            this.$refs.formBlack.resetFields();
+            if (typeof done === 'function') {
+                done()
+            }
+        },
           //事件分发
         changeList(){
             eventBus.$emit('changeList')
         },
-        change(){
-          this.BlackDialogFlag!=this.BlackDialogFlag
-        },
         openDialog(){
-          
-                this.formBlack = this.params;
-
-                if(this.formBlack.accountStatusName == '黑名单' && this.editType == 'add'){
-                    this.$message.info('您选中的货主已被移入黑名单，不需多次拉黑！');
-                    return
-                }
-                else if(this.formBlack.accountStatusName != '黑名单' && this.editType == 'edit'){
-                    this.$message.info('您选中的货主未被移入黑名单，不可做此操作！');
-                    return
-                }
-                else{
-                    this.BlackDialogFlag = true ;
-                    // this.formBlack.freezeTime = this.formBlack.freezeTime ? this.formBlack.freezeTime : new Date();
-                }
-            
+            console.log('freezeType',this.editType)
+            this.formBlack =Object.assign({},this.paramsView);
+            console.log('this.formBlack',this.formBlack)
         },
-
         getMoreInformation(){
             // 移入原因列表
-            data_get_shipper_BlackType().then(res=>{
-                res.data.map(item=>{
-                    this.optionsFormBlack.push(item)
-                })
+            DicBlackType().then(res=>{
+                this.optionsFormBlack = res.data;
             })
         },
         // 提交数据
         onSubmit(){
-
         this.$refs['formBlack'].validate((valid)=>{
             if(valid){
                 switch (this.editType){
@@ -204,14 +176,12 @@ export default {
                             type: 'warning'
                         }).then( ()=>{
                              data_get_shipper_change(forms).then(res=>{
-                                // console.log(res)
-                                this.BlackDialogFlag = false;
                                 this.$message({
                                     type: 'success',
                                     message: '该货主已被移入黑名单',
                                     duration:2000
                                 })
-                                this.$emit('getData')
+                                this.close();
                                 this.changeList();
                             }).catch(err => {
                                 this.$message.error('操作失败，失败原因：',err.text)
@@ -233,13 +203,12 @@ export default {
                         }).then( ()=>{
                              data_get_shipper_change(forms).then(res=>{
                                 // console.log(res)
-                                this.BlackDialogFlag = false;
                                 this.$message({
                                     type: 'success',
                                     message: '该货主已被移出黑名单',
                                     duration:2000
                                 })
-                                this.$emit('getData')
+                                this.close();
                                 this.changeList();
                             }).catch(err => {
                                 this.$message.error('操作失败，失败原因：',err.text)

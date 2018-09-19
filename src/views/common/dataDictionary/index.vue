@@ -196,6 +196,7 @@ import DicDialog from './component/addDictionary'
                 switch(type){
                     case 'add':
                         this.formtitle = '新增分类信息';
+                        this.isModify = false;
                         this.dialogVisible = true;
                         break;
                     case 'revise':

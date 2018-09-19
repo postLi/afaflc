@@ -1,5 +1,7 @@
+import Vue from 'vue'
 import { login, logout, getInfo } from '@/api/login'
-import { getToken, setToken, removeToken, setUsername, setOrgId, getOrgId, getUsername, setUserInfo } from '@/utils/auth'
+import { getAllSetting } from '@/api/company/systemSetup'
+import { getToken, setToken, removeToken, setUsername, setOrgId, getOrgId, getUsername, setUserInfo, removeUserInfo, removeUsername, removeOrgId } from '@/utils/auth'
 
 const user = {
   state: {
@@ -55,18 +57,67 @@ const user = {
       })
     },
 
+    // 前端设置token信息
+    FeLogin({ commit }, token) {
+      return new Promise((resolve, reject) => {
+        console.log('feLogin:', token)
+        commit('SET_TOKEN', token)
+        setToken(token)
+        resolve()
+      })
+    },
+
     // 获取用户信息
     GetInfo({ commit, state }) {
       return new Promise((resolve, reject) => {
-        //resolve({})
         getInfo().then(response => {
-            
           const data = response.data
-          console.log('tms-userinfo',data)
+          // data.rolesIdList = data.rolesId.split(',')
+          commit('SET_ROLES', data.rolesIdList)
+          commit('SET_NAME', data.username)
+          commit('SET_USERNAME', data.username)
+          setUsername(data.username)
+          commit('SET_COMPANY', data.orgName)
+          setOrgId(data.orgid)
+          commit('SET_AVATAR', require('../../assets/role.png'))
+          data.roleTree = JSON.parse(data.jsonTree) || null
+
+          // 如果有访问系统设置的权限，则先获取下系统设置信息，有利于后面的操作
+          if (Vue.prototype.$_has_permission('SETTING')) {
+            getAllSetting({
+              orgid: data.orgid,
+              type: '',
+              module: 'order'
+            }).then(res => {
+              data.systemSetup = res
+              commit('SET_OTHERINFO', data)
+              setUserInfo(data)
+              resolve({ data })
+            }).catch(error => {
+              data.systemSetup = {}
+              commit('SET_OTHERINFO', data)
+              setUserInfo(data)
+              resolve({ data })
+              // reject(error)
+            })
+          } else {
+            data.systemSetup = {}
+            commit('SET_OTHERINFO', data)
+            setUserInfo(data)
+            resolve({ data })
+          }
+        }).catch(error => {
+          reject(error)
+        })
+        /* Promise.all([getInfo(),getAllSetting({})]).then(arr => {
+          let response = arr[0]
+          let systemSetup = arr[1]
+          const data = response.data
           data.rolesIdList = data.rolesId.split(',')
           commit('SET_ROLES', data.rolesIdList)
           commit('SET_NAME', data.username)
           commit('SET_USERNAME', data.username)
+          setUsername(data.username)
           commit('SET_COMPANY', data.orgName)
           setOrgId(data.orgid)
           commit('SET_AVATAR', require('../../assets/role.png'))
@@ -75,7 +126,7 @@ const user = {
           resolve({ data })
         }).catch(error => {
           reject(error)
-        })
+        }) */
       })
     },
 
@@ -98,6 +149,9 @@ const user = {
       return new Promise(resolve => {
         commit('SET_TOKEN', '')
         removeToken()
+        removeUserInfo()
+        removeOrgId()
+        removeUsername()
         resolve()
       })
     }

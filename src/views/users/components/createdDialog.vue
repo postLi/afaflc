@@ -1,11 +1,10 @@
 <template>
-     <div class="creatDialog commoncss">
-      <!-- <el-button :type="type" :value="value" :plain="plain" :icon="icon" @click="openDialog()">{{text}}</el-button> -->
+     <div class="shippercreatDialog commoncss">
       <el-dialog :title="typetitle" :visible="dialogFormVisible_add" :before-close="close" :close-on-click-modal="false">
         <el-form :model="xinzengform" ref="xinzengform" :rules="rulesForm">
           <el-row>
             <el-col :span="12">
-                <el-form-item label="货主类型 ：" prop="shipperType" :label-width="formLabelWidth" required>
+                <el-form-item label="货主类型 ：" prop="shipperType" :label-width="formLabelWidth" >
                     <el-select v-model="xinzengform.shipperType" placeholder="请选择" v-if="editType=='add'" >
                         <el-option
                         v-for="item in options"
@@ -20,19 +19,17 @@
                 </el-form-item>
             </el-col>
             <el-col :span="12">
-              <el-form-item label="手机号码 ：" :label-width="formLabelWidth" required  v-if="editType !='add'">
-                <el-input v-model="xinzengform.mobile" auto-complete="off" maxlength="11" disabled></el-input>
-              </el-form-item>
-              <el-form-item label="手机号码 ：" prop="mobile" :label-width="formLabelWidth" required v-else>
-                <el-input v-model="xinzengform.mobile" auto-complete="off" maxlength="11"></el-input>
-              </el-form-item>
+                <el-form-item label="手机号码 ：" prop="mobile" :label-width="formLabelWidth"  >
+                    <el-input v-model="xinzengform.mobile" auto-complete="off" maxlength="11"></el-input>
+                </el-form-item>
             </el-col>
           </el-row>
           <el-row>
             <el-col :span="12">
-                <el-form-item label="所在地 ：" :label-width="formLabelWidth" required prop="belongCityName">
-                    <vregion :ui="true"  @values="regionChange" class="form-control">
-                        <el-input v-model="xinzengform.belongCityName" placeholder="请选择" :disabled="editType=='view'"></el-input>
+                <el-form-item label="所在地 ：" :label-width="formLabelWidth"  prop="belongCityName">
+                    <el-input v-model="xinzengform.belongCityName" auto-complete="off" disabled v-if="editType=='view'"></el-input>
+                    <vregion :ui="true"  @values="regionChange" class="form-control" v-else>
+                        <el-input v-model="xinzengform.belongCityName" placeholder="请选择" ></el-input>
                     </vregion>
                 </el-form-item>
             </el-col>
@@ -52,19 +49,19 @@
           </el-row>
           <el-row>
             <el-col :span="12">
-              <el-form-item label="公司名称 ：" prop="companyName" :label-width="formLabelWidth" v-show="companyFlag || editType=='identification'">
+              <el-form-item label="公司名称 ：" prop="companyName" :label-width="formLabelWidth" v-if="companyFlag">
                 <el-input :maxlength="20" v-model="xinzengform.companyName"  :disabled="editType=='view'"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="12">
-            <el-form-item label="统一社会信用代码 ：" prop="creditCode" :label-width="formLabelWidth" v-show="companyFlag || editType=='identification'">
+            <el-form-item label="统一社会信用代码 ：" prop="creditCode" :label-width="formLabelWidth" v-if="companyFlag">
               <el-input :maxlength="20" v-model="xinzengform.creditCode"  :disabled="editType=='view'"></el-input>
             </el-form-item>
             </el-col>
           </el-row>
           <el-row>
             <el-col :span="9"> 
-              <el-form-item label="上传营业执照照片 ：" prop="businessLicenceFile" label-width="165px" v-show="companyFlag || editType=='identification'">
+              <el-form-item label="上传营业执照照片 ：" prop="businessLicenceFile" label-width="210px" v-if="companyFlag">
                     <div class="upload">
                         <img :src='xinzengform.businessLicenceFile ? xinzengform.businessLicenceFile : defaultImg' alt="" v-if="editType == 'view'">
                         <upload class="licensePicture" tip="（必须为jpg/png并且小于5M）" v-else v-model="xinzengform.businessLicenceFile" />
@@ -74,7 +71,7 @@
           </el-row>
           <el-row>
             <el-col :span="9">
-              <el-form-item label="上传公司或者档口照片 ："  label-width="165px" prop="companyFacadeFile" v-show="companyFlag || editType=='identification'" :rules="companyFlag === false ? {} : companyFacadeFileRules">
+              <el-form-item label="上传公司或者档口照片 ："  label-width="210px" prop="companyFacadeFile" v-if="companyFlag">
                 <div class="upload">
                     <img :src='xinzengform.companyFacadeFile ? xinzengform.companyFacadeFile : defaultImg' alt="" v-if="editType == 'view'">
                     <upload class="licensePicture" tip="（必须为jpg/png并且小于5M）" v-else v-model="xinzengform.companyFacadeFile" />
@@ -82,10 +79,9 @@
               </el-form-item>
             </el-col>
           </el-row>
-          
           <el-row>
             <el-col :span="9">
-              <el-form-item label="上传发货人名片照片 ：" label-width="165px" prop="shipperCardFile" v-show="companyFlag || editType=='identification'" :rules="companyFlag === false ? {} : shipperCardFileRules" >
+              <el-form-item label="上传发货人名片照片 ：" label-width="210px" prop="shipperCardFile" v-if="companyFlag" >
                 <div class="upload">
                     <img :src='xinzengform.shipperCardFile ? xinzengform.shipperCardFile : defaultImg' alt="" v-if="editType == 'view'">
                     <upload class="licensePicture" tip="（必须为jpg/png并且小于5M）" v-else v-model="xinzengform.shipperCardFile" />
@@ -93,7 +89,6 @@
               </el-form-item>
             </el-col>
           </el-row>
-          
         </el-form>
         <div slot="footer" class="dialog-footer">
           <el-button type="primary" @click.stop="onSubmit" v-show="editType!='view'" >确 定</el-button>
@@ -118,36 +113,9 @@ export default {
     paramsView:{
         type:Object,
     },
-    params:{
-      type:Object,
-    },
-    value:{
-      type: String,
-      default:''
-    },
-    btntype: {
-      type: String,
-      default: ''
-    },
-    btntext: {
-      type: String,
-      default: ''
-    },
-    btntitle: {
-        type: String,
-        default: ''
-    },
     typetitle: {
         type: String,
         default: ''
-    },
-    icon:{
-      type: String,
-      default: ''
-    },
-    plain:{
-      type: Boolean,
-      default: false
     },
     /*add新增，edit编辑，view查看*/
     editType: {
@@ -177,48 +145,19 @@ export default {
                 })
             }
         }
-        const companyNameValidator = (rule, val, cb)=>{
-            // console.log(val)
-            if(!this.xinzengform.companyFacadeFile){
-                cb(new Error('请上传公司或者档口照片'))
-            }else{
-                cb()
-            }
-        }
-
-        const shipperCardFileValidator=(rule,val,cb) => {
-            if(!this.xinzengform.shipperCardFile){
-                cb(new Error('请上传发货人名片照片'))
-            } else {
-                cb()
-            }
-        }
-
-        const belongCityValidator = (rule, val, cb) => {
-            // if(this.$refs.area){
-                if(!this.$refs.area.selectedOptions[0]) {
-                    cb(new Error('请选择所在地'))
-                } else {
-                    cb()
-                }
-        }
         return{
         defaultImg:'/static/test.jpg',//默认第一张图片的url
         identifiy:'企业货主',
         selectFlag:false,
-        // dialogFormVisible_add: false,
         shipperType:'AF00101',
         type:'primary',
         title:'',
         text:'',
-        citylist:[],
         options:[],
-        belongCity: [],
-        areadata:[],  
         formLabelWidth:'135px',
         companyFlag:false,
         xinzengform:{
-            shipperType:'',//货主类型code
+            shipperType:'AF0010101',//货主类型code
             shipperTypeName:'',//货主类型名称
             mobile:'',//手机
             contacts:'',//联系人
@@ -237,21 +176,16 @@ export default {
         rulesForm:{
             shipperType:{required: true, message:'请选择货主类型', trigger:'change'},
             mobile:{validator: mobileValidator, trigger:'change'},
-            belongCity:{required:true,validator:belongCityValidator, trigger:'change'},
-            demo:{}
+            belongCityName:{required:true, message:'请选择所属地区', trigger:'change'},
+            companyFacadeFile:{required:true, message:'请上传公司或者档口照片', trigger:'change'},
+            shipperCardFile:{required:true, message:'请上传发货人名片照片', trigger:'change'}
         },
-        // 上传公司或者档口照片校验
-        companyFacadeFileRules:{required:true,validator: companyNameValidator,trigger:'change'},
-
-        // 上传发货人名片照片
-        shipperCardFileRules:{required:true,validator: shipperCardFileValidator, trigger: 'change'}
-        }
+    }
   },
   watch:{
     'xinzengform.shipperType': {
         handler: function(val, oldVal) {
-            // console.log('this.com',this.companyFlag,val)
-            if(val === 'AF0010102'){
+            if(val != 'AF0010101'){
                 this.companyFlag = true;
             }else{
                 this.companyFlag = false;
@@ -272,13 +206,7 @@ export default {
     }
   },
   mounted(){
-    //按钮类型text,primary...
-    this.type = this.btntype;
-    //按钮文本内容
-    this.text = this.btntext;
-    //弹出框标题
-    // this.title = this.btntitle;
-    // this.getMoreInformation()
+   
   },
   methods:{
     regionChange(d) {
@@ -302,60 +230,56 @@ export default {
     },
     openDialog(){
         console.log(this.editType)
+        console.log('this.xinzengform',this.xinzengform)
         if(this.editType  == 'add'){
-            return false
+            this.xinzengform ={
+                shipperType:'AF0010101',//货主类型code
+                shipperTypeName:'',//货主类型名称
+                mobile:'',//手机
+                contacts:'',//联系人
+                belongCityName:'',
+                belongCity:'',//所属地区
+                address:'',//详细地址
+                companyName:'',//公司名称
+                creditCode:'',//统一社会代码
+                businessLicenceFile:'',//上传营业执照照片
+                companyFacadeFile:'',//上传公司或者档口照片
+                shipperCardFile:'',//上传发货人名片照片
+                registerOrigin:'AF0030103',
+                registerOriginName:'WEB',
+                isDirectional: '0',
+            }
         }else {
-            this.xinzengform = Object.assign({},this.xinzengform,this.paramsView)
+            this.xinzengform = Object.assign({},this.paramsView)
         }
     },
     close(done) {
-        this.$emit('update:dialogFormVisible_add', false);
+        this.$refs.xinzengform.resetFields();
         this.$emit('getData');
-         this.$refs.xinzengform.resetFields();
         this.changeList();
         if (typeof done === 'function') {
             done()
         }
+        this.$emit('update:dialogFormVisible_add', false);
+     
     },
+    // closeMe(){
+    //     this.$refs.xinzengform.resetFields();
+    //     this.changeList();
+    //     if (typeof done === 'function') {
+    //         done()
+    //     }
+    //     this.$emit('update:dialogFormVisible_add', false);
+    // },
     //获取货主类型
     getMoreInformation(){
         getDictionary(this.shipperType).then(res=>{
             // console.log('货主类型',res)
             this.options = res.data
-        
         })
-    },
-    //完善数据
-    completeData(){
-	  //获取城市name
-		if(!this.$refs.area){
-			return
-		}  
-		else if(this.$refs.area.selectedOptions.length > 1){
-			let province;
-			this.$refs.area.areaData.forEach((item) =>{
-				if(item.code == this.$refs.area.selectedOptions[0]){
-					province = item
-				}
-			})
-			province.children.forEach( item => {
-				if(item.code == this.$refs.area.selectedOptions[1]){
-					this.xinzengform.belongCity = item.code;
-					this.xinzengform.belongCityName = item.name;
-				}
-			})
-		}else{
-			this.$refs.area.areaData.forEach((item) =>{
-				if(item.code == this.$refs.area.selectedOptions[0]){
-					this.xinzengform.belongCity = item.code;
-					this.xinzengform.belongCityName = item.name;
-				}
-			})
-		}
     },
     // 保存
     onSubmit(){
-	    this.completeData();
         this.$refs['xinzengform'].validate((valid)=>{
             if(valid){
                 var forms=Object.assign({},this.xinzengform)
@@ -365,13 +289,10 @@ export default {
                             forms.companyName = '个人业务' ;
                         }
                         data_get_shipper_create(forms).then(res=>{
-                        // console.log(res)
                             this.$alert('操作成功', '提示', {
                                 confirmButtonText: '确定',
                                 callback: action => {
-                                    // this.dialogFormVisible_add = false;
                                     this.close()
-
                                 }
                             });
                         }).catch(err=>{
@@ -383,11 +304,9 @@ export default {
                         break;
                     case 'edit':
                         data_get_shipper_change(forms).then(res=>{
-                            // console.log(res)
                             this.$alert('操作成功', '提示', {
                                  confirmButtonText: '确定',
                                 callback: action => {
-                                    // this.dialogFormVisible_add = false;
                                     this.close()
                                 }
                             });
@@ -400,7 +319,6 @@ export default {
                         break;
                     case 'identification':
                         let item =  forms.contacts;
-
                         this.$confirm('确定要认证通过'+ item +' 该货主吗？', '提示', {
                             confirmButtonText: '确定',
                             cancelButtonText: '取消',
@@ -408,6 +326,7 @@ export default {
                         }).then(() => {
                             forms.currentShipperStatus = forms.shipperStatus;
                             forms.shipperStatus =  "AF0010403";
+                            forms.shipperStatusName =  "已认证";
                             this.options.filter( el => {
                                 if(el.name == "企业货主" ){
                                     forms.shipperTypeName = el.name;
@@ -415,7 +334,6 @@ export default {
                                 }
                             })
                             data_get_shipper_change(forms).then(res => {
-                                // this.dialogFormVisible_add = false;
                                 this.$message({
                                     type: 'success',
                                     message: '该货主已认证成功',
@@ -434,7 +352,6 @@ export default {
                         break;
                 }
             }else{
-                
                 return  this.$message({
                     type: 'warning',
                     message: '请填写完整数据'
@@ -446,7 +363,7 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-    .creatDialog{
+    .shippercreatDialog{
         .el-dialog__footer{
             border-top:1px solid #ccc;   
             margin: 0 10px;

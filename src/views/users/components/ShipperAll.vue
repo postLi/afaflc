@@ -3,67 +3,12 @@
         <searchInfo @change="getSearchParam" :showType = 'tabType'></searchInfo>
 		<div class="classify_info">
 			<div class="btns_box">
-                <el-button type="primary" icon="el-icon-circle-plus" plain :size="btnsize" @click="handleClick('add')">新增</el-button>
-                <!-- <el-button type="primary" plain :size="btnsize" @click="handleClick('editFreeze')">冻结修改</el-button>
-                <el-button type="primary" plain :size="btnsize" @click="handleClick('pushBlack')">移入黑名单</el-button>
-                <el-button type="primary" plain :size="btnsize" @click="handleClick('removeBlack')">移除黑名单</el-button>
-                <el-button type="primary" plain :size="btnsize" @click="handleClick('removeFreeze')">解冻</el-button> -->
-
-
-				<!-- <createdDialog btntext="新增"  type="primary" icon="el-icon-circle-plus" editType="add" btntitle="新增货主" @getData="getDataList"></createdDialog> -->
-				<FreezeDialog
-          btntext="冻结"
-          type="primary" 
-          btntitle="冻结"
-          editType='add'
-          freeze = 'freeze'
-          icon="el-icon-info"
-          :params="selectRowData"
-          @getData="getDataList"
-				>
-				</FreezeDialog>
-				<FreezeDialog
-          btntext="冻结修改"
-          type="primary" 
-          btntitle="冻结修改"
-          freeze = 'freeze'
-          editType='edit'
-          icon="el-icon-edit"
-          :params="selectRowData"
-          @getData="getDataList"
-				>
-				</FreezeDialog>
-				<shipperBlackDialog
-          btntext="移入黑名单"
-          type="primary" 
-          btntitle="移入黑名单"
-          editType='add'
-          icon="el-icon-warning"
-          :params="selectRowData"
-          @getData="getDataList"
-				>
-        </shipperBlackDialog>
-        <shipperBlackDialog
-          btntext="移出黑名单"
-          type="primary" 
-          btntitle="移出黑名单"
-          editType='edit'
-          icon="el-icon-success"
-          :params="selectRowData"
-          @getData="getDataList"
-				>
-        </shipperBlackDialog>
-				<FreezeDialog
-          btntext="解冻"
-          type="primary" 
-          btntitle="解冻"
-          freeze = 'freeze'
-          editType='remove'
-          icon="el-icon-success"
-          :params="selectRowData"
-          @getData="getDataList"
-				>
-				</FreezeDialog>
+                <el-button type="primary" icon="el-icon-circle-plus" plain :size="btnsize" @click="handleClick('add')" v-has:SHIPPER_MANAGE_ADD>新增</el-button>
+                <el-button type="primary" icon="el-icon-info" plain :size="btnsize" @click="handleClick('pushFreeze')" v-has:SHIPPER_MANAGE_FREEZE>冻结</el-button>
+                <el-button type="primary" icon="el-icon-edit" plain :size="btnsize" @click="handleClick('editFreeze')" v-has:SHIPPER_MANAGE_FREEZE_UPDATE>冻结修改</el-button>
+                <el-button type="primary" icon="el-icon-edit" plain :size="btnsize" @click="handleClick('pushBlack')" v-has:SHIPPER_MANAGE_PUT_BLACK>移入黑名单</el-button>
+                <el-button type="primary" icon="el-icon-warning" plain :size="btnsize" @click="handleClick('removeBlack')" v-has:SHIPPER_MANAGE_OUT_BLACK>移除黑名单</el-button>
+                <el-button type="primary" icon="el-icon-edit" plain :size="btnsize" @click="handleClick('removeFreeze')" v-has:SHIPPER_MANAGE_UNFREEZE>解冻</el-button>
 			</div>
 			<div class="info_news" >
 				<el-table
@@ -72,14 +17,14 @@
 				stripe
 				border
                 height="100%"
-                highlight-current-row
-                @current-change="handleCurrentChangeRow"
+                @selection-change="getSelection" 
+                @row-click="clickDetails"
 				tooltip-effect="dark"
 				style="width: 100%">
-                <el-table-column label="" width="65">
-                     <template slot-scope="scope">
-                        <el-radio class="textRadio" @change.native="getCurrentRow(scope.$index,scope.row)" :label="scope.$index" v-model="templateRadio">&nbsp;</el-radio>
-                    </template>
+                <el-table-column
+                    fixed
+                    type="selection"
+                    width="50">
                 </el-table-column>
 				<el-table-column label="序号" width="80px">
                     <template slot-scope="scope">
@@ -88,12 +33,12 @@
 				</el-table-column>  
 				<el-table-column label="手机号">
                     <template slot-scope="scope">
-                        <!-- <createdDialog :paramsView="scope.row" btntype="text" :btntext="scope.row.mobile" editType="view" btntitle="详情"></createdDialog> -->
                         <h4 class="needMoreInfo" @click="pushOrderSerial(scope.row)">{{ scope.row.mobile}}</h4>
                     </template>
 				</el-table-column>
-				<el-table-column prop="companyName" label="公司名称">
-					
+				<el-table-column prop="companyName"
+                    :show-overflow-tooltip="true"
+                    label="公司名称">
 				</el-table-column>
 				<el-table-column prop="contacts" label="联系人">
 				</el-table-column>
@@ -101,7 +46,10 @@
 				</el-table-column>
 				<el-table-column prop="shipperStatusName" label="认证状态">
 				</el-table-column>
-				<el-table-column prop="accountStatusName" label="账户状态">
+				<el-table-column prop="accountStatusName" label="账户状态" width="120">
+                     <template slot-scope="scope">
+                        <span :class="{freezeName: scope.row.accountStatusName == '冻结中' ,blackName: scope.row.accountStatusName == '黑名单',normalName :scope.row.accountStatusName == '正常'}">{{scope.row.accountStatusName}}</span>
+                    </template>
 				</el-table-column>
 				<el-table-column prop="belongCityName" label="所在地">
 				</el-table-column>  
@@ -118,8 +66,8 @@
 
         <div class="info_tab_footer">共计:{{ totalCount }} <div class="show_pager"> <Pager :total="totalCount" @change="handlePageChange" /></div> </div>    
         <createdDialog :paramsView="paramsView" :editType="type"  :typetitle="typetitle" :dialogFormVisible_add.sync = "dialogFormVisible_add" @getData="getDataList"/>
-        <!-- <FreezeDialog :params="selectRowData" :editType="freezetype"  :freezeDialogFlag.sync = "freezeDialogFlag" @getData="getDataList"/>
-        <shipperBlackDialog :params="selectRowData" :editType="blacktype"  :BlackDialogFlag.sync = "BlackDialogFlag" @getData="getDataList"/> -->
+        <FreezeDialog :paramsView="selectRowData" :editType="freezetype" :freezetitle="freezetitle"  :freezeDialogFlag.sync = "freezeDialogFlag" @getData="getDataList"/>
+        <shipperBlackDialog :paramsView="selectRowData" :editType="blacktype" :blacktitle="blacktitle" :BlackDialogFlag.sync = "BlackDialogFlag" @getData="getDataList"/>
     </div>
 </template>
 
@@ -129,9 +77,9 @@ import createdDialog from './createdDialog.vue'
 import FreezeDialog from './FreezeDialog'
 import shipperBlackDialog from './shipperBlackDialog'
 import { eventBus } from '@/eventBus'
-import { parseTime } from '@/utils/index.js'
 import Pager from '@/components/Pagination/index'
 import searchInfo from './searchInfo'
+import { objectMerge2, parseTime } from '@/utils/'
 
 export default {
   components: {
@@ -151,14 +99,15 @@ export default {
     return {
         tabType:'All',
         btnsize: 'mini',
-        templateRadio: '',
         dialogFormVisible_add: false,
         freezeDialogFlag: false,
         BlackDialogFlag: false,
-        freezetype: '',
-        blacktype: '',
-        type: '',
-        typetitle:'',
+        freezetype: '',//冻结类型
+        blacktype: '',//黑名单类型
+        type: '',//新增或者修改或者详情
+        typetitle:'',//新增或者详情title
+        freezetitle:'',//冻结title
+        blacktitle:"",//黑名单titl
         paramsView: {},
         freeze: true, // 是否冻结
         searchInfo: {
@@ -166,13 +115,14 @@ export default {
             shipperStatus: null,
             accountStatus: null,
             companyName: null,
-            mobile: null
+            mobile: null,
         },
-        selectRowData: {},
+        selectRowData: {},//传递的数据
         page: 1,
         pagesize: 20,
         totalCount: 0,
-        tableDataAll: []
+        tableDataAll: [],
+        selected:[],//暂存的数据
 
     }
   },
@@ -194,47 +144,110 @@ export default {
   mounted() {
     eventBus.$on('changeList', () => {
     //   console.log('22222222222222222222')
-      this.firstblood()
+        this.firstblood()
     })
   },
   methods: {
-       getSearchParam(obj) {
+        //点击选中当前行
+        clickDetails(row, event, column){
+            this.$refs.multipleTable.toggleRowSelection(row);
+        },
+         // 判断选中与否
+        getSelection(val){
+            console.log('选中内容',val)
+            this.selected = val;
+        },
+        getSearchParam(obj) {
             console.log(obj)
-            this.searchInfo = Object.assign(this.searchInfo, obj)
+            this.searchInfo = objectMerge2(this.searchInfo, obj)
             this.loading = false;
             this.firstblood()
         },
         pushOrderSerial(row){
             this.type = 'view';
-            this.paramsView = Object.assign({},row);;
+            this.typetitle = '货主详情';
+            this.paramsView = objectMerge2({},row);;
             this.dialogFormVisible_add =true;
+            this.clearTableSelection();
         },
         handlePageChange(obj) {
             this.page = obj.pageNum
             this.pagesize = obj.pageSize
             this.firstblood()
         },
-        getCurrentRow(index, row) {
-            this.selectRowData = Object.assign({}, row)
-
-            this.templateRadio = index
-            console.log('选中内容', row)
-        },
         changeList() {
             eventBus.$emit('changeList')
         },
-            // 判断选中与否
-        handleCurrentChangeRow(val) {
-                // console.log('选中内容',val)
-        this.selectRowData = val
+        clearTableSelection(){
+            //清除选中状态，避免影响下个操作
+            this.$refs.multipleTable.clearSelection();
         },
         handleClick(type){
-            switch(type){
-                case 'add' :
-                    this.type = "add";
-                    this.typetitle = '新增货主'
-                    this.dialogFormVisible_add = true;
-                    break;
+            if(this.selected.length == 0 && type != 'add'){
+                return this.$message.warning('请选择您要操作的用户');
+            }else if (this.selected.length > 1 && type != 'add') {
+                this.$message({
+                    message: '每次只能操作单条数据~',
+                    type: 'warning'
+                })
+                this.clearTableSelection();
+            }
+            else{
+                this.selectRowData = this.selected[0];
+                switch(type){
+                    case 'add' :
+                        this.type = "add";
+                        this.typetitle = '新增货主';
+                        this.paramsView = {};
+                        this.dialogFormVisible_add = true;
+                        break;
+                    case 'pushFreeze':
+                        this.freezetype = 'add';
+                        if(this.selectRowData.accountStatusName == '冻结中' && this.freezetype == 'add'){
+                            return this.$message.warning('您选中的货主已被冻结，不需多次冻结！');
+                        }else{
+                            this.freezetitle = '冻结';
+                            this.freezeDialogFlag = true;
+                        }
+                        break;
+                    case 'editFreeze':
+                        this.freezetype = 'edit';
+                        if(this.selectRowData.accountStatusName != '冻结中' && this.freezetype == 'edit'){
+                            return this.$message.warning('您选中的货主未被冻结，不可做此操作！');
+                        }else{
+                            this.freezetitle = '冻结修改';
+                            this.freezeDialogFlag = true;
+                        }
+                        break;
+                    case 'removeFreeze':
+                        this.freezetype = 'remove';
+                        if(this.selectRowData.accountStatusName != '冻结中' && this.freezetype == 'remove'){
+                            return this.$message.warning('您选中的货主未被冻结，无需移除！');
+                        }else{
+                            this.freezetitle = '移除冻结';
+                            this.freezeDialogFlag = true;
+                        }
+                        break;
+                    case 'pushBlack':
+                        this.blacktype = 'add';
+                        if(this.selectRowData.accountStatusName == '黑名单' && this.blacktype == 'add'){
+                            return this.$message.warning('您选中的货主已被移入黑名单，不需多次拉黑！');
+                        }else{
+                            this.blacktitle = "移入黑名单";
+                            this.BlackDialogFlag = true;
+                        }
+                        break;
+                    case 'removeBlack':
+                        this.blacktype = 'edit' ;
+                        if(this.selectRowData.accountStatusName != '黑名单' && this.blacktype == 'edit'){
+                            return this.$message.warning('您选中的货主未被移入黑名单，不可做此操作！');
+                        }else{
+                            this.blacktitle = "移除黑名单";
+                            this.BlackDialogFlag = true;
+                        }
+                        break;
+                }
+                this.clearTableSelection()
             }
         },
         // 刷新页面
@@ -249,7 +262,7 @@ export default {
             })
         },
         getDataList() {
-            this.firstblood()
+            this.firstblood();
         }
     }
     }

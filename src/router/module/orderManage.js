@@ -2,12 +2,15 @@ import Layout from '@/views/layout/Layout'
 const _import = require('../_import_' + process.env.NODE_ENV)
 
 export default {
-  path: '/order',
-  component: Layout,
-  redirect: '/order/tongcheng/waitpayment',
-  icon: 'from',
-  name: '订单管理',
-  noDropdown: true, 
+    path: '/order',
+    component: Layout,
+    redirect: '/order/tongcheng/waitpayment',
+    icon: 'from',
+    name: '订单管理',
+    noDropdown: true, 
+    meta: {
+        title: '订单管理', code: 'ORDER'
+    },
   children: [
     {
         path: '/order/tongcheng', icon: 'tcdd', name: '同城订单',component: _import('order/index'), meta: { role: ['admin'], title: '同城订单',stitle: '同城',  noCache: true },

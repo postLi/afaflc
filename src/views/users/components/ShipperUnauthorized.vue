@@ -4,28 +4,8 @@
         
 	  	<div class="classify_info">
 		  	<div class="btns_box">
-				<!-- <createdDialog 
-				btntext="代客认证"
-				:params="selectRowData"
-				:plain="true" type="primary" 
-				btntype="primary" 
-				icon="el-icon-news"
-				editType="identification" 
-				btntitle="代客提交"
-				@getData="getDataList">
-				</createdDialog>
-                <createdDialog 
-				btntext="修改"
-				:params="selectRowData"
-				:plain="true" type="primary" 
-				btntype="primary" 
-				icon="el-icon-edit"
-				editType="edit" 
-				btntitle="修改"
-				@getData="getDataList">
-				</createdDialog> -->
-                <el-button type="primary" icon="el-icon-circle-plus" plain :size="btnsize" @click="handleClick('identification')">代客认证</el-button>
-                <el-button type="primary" icon="el-icon-circle-plus" plain :size="btnsize" @click="handleClick('edit')">修改</el-button>
+                <el-button type="primary" icon="el-icon-document" plain :size="btnsize" @click="handleClick('identification')">代客认证</el-button>
+                <el-button type="primary" icon="el-icon-edit-outline" plain :size="btnsize" @click="handleClick('edit')">修改</el-button>
 			</div>
 			<div class="info_news">
 				<el-table
@@ -34,13 +14,14 @@
 				stripe
 				border
                 height="100%"
-				highlight-current-row
+                @selection-change="getSelection" 
+                @row-click="clickDetails"
 				tooltip-effect="dark"
 				style="width: 100%">
-                <el-table-column label="" width="65">
-                     <template slot-scope="scope">
-                        <el-radio class="textRadio" @change.native="getCurrentRow(scope.$index,scope.row)" :label="scope.$index" v-model="templateRadio">&nbsp;</el-radio>
-                    </template>
+                <el-table-column
+                    fixed
+                    type="selection"
+                    width="50">
                 </el-table-column>
 				<el-table-column label="序号" width="80px">
                     <template slot-scope="scope">
@@ -50,6 +31,9 @@
 				<el-table-column
 					prop="mobile"
 					label="手机号">
+                    <template slot-scope="scope">
+                        <h4 class="needMoreInfo" @click="pushOrderSerial(scope.row)">{{ scope.row.mobile}}</h4>
+                    </template>
 				</el-table-column>
 				<el-table-column prop="contacts" label="联系人">
 				</el-table-column>
@@ -79,8 +63,7 @@
 			</div>	
 		</div>
         <div class="info_tab_footer">共计:{{ totalCount }} <div class="show_pager"> <Pager :total="totalCount" @change="handlePageChange" /></div> </div>    
-        <createdDialog :paramsView="paramsView" :editType="type"  :dialogFormVisible_add.sync = "dialogFormVisible_add" @getData="getDataList"/>
-
+        <createdDialog :paramsView="paramsView" :typetitle="typetitle" :editType="type"  :dialogFormVisible_add.sync = "dialogFormVisible_add" @getData="getDataList"/>
     </div>
 </template>
 <script>
@@ -89,6 +72,8 @@ import { eventBus } from '@/eventBus'
 import Pager from '@/components/Pagination/index'
 import searchInfo from './searchInfo'
 import {data_get_shipper_list} from '@/api/users/shipper/all_shipper.js'
+import { objectMerge2, parseTime } from '@/utils/'
+
 export default {
 	props: {
 		isvisible: {
@@ -105,10 +90,10 @@ export default {
     return{
         tabType:'unauthorized',
         btnsize: 'mini',
-        templateRadio: '',
         dialogFormVisible_add: false,
         type: '',
         paramsView: {},
+        typetitle:'',
         templateRadio:'',
         optionsStatus:[], // 状态列表
         tableData4:[],
@@ -131,6 +116,7 @@ export default {
 			}
         ],//账户状态
         selectRowData:{},
+        selected:[],//暂存数据
     }
   },
     watch: {
@@ -139,7 +125,6 @@ export default {
                 if(newVal && !this.inited){
                     this.inited = true
                     this.firstblood()
-                    // this.getMoreInformation()
                 }
             },
             // 代表在wacth里声明了firstName这个方法之后立即先去执行handler方法
@@ -149,13 +134,28 @@ export default {
     mounted(){
         eventBus.$on('changeList', () => {
             // console.log('111111111111111111')
-                this.firstblood()
+            this.firstblood()
         })
     },
-  methods:{
+    methods:{
+        //点击选中当前行
+        clickDetails(row, event, column){
+            this.$refs.multipleTable.toggleRowSelection(row);
+        },
+        // 判断选中与否
+        getSelection(val){
+            console.log('选中内容',val)
+            this.selected = val;
+        },
+        pushOrderSerial(row){
+            this.type = 'view';
+            this.typetitle = '货主详情';
+            this.paramsView = objectMerge2({},row);;
+            this.dialogFormVisible_add =true;
+        },
         getSearchParam(obj) {
             console.log(obj)
-            this.searchInfo = Object.assign({},obj,{shipperStatus:'AF0010401'})
+            this.searchInfo = objectMerge2({},obj,{shipperStatus:'AF0010401'})
             this.loading = false;
             this.firstblood()
         },
@@ -165,27 +165,37 @@ export default {
             this.firstblood()
         },
         getCurrentRow(index,row){       
-            this.selectRowData = Object.assign({},row);
+            this.selectRowData = objectMerge2({},row);
             this.templateRadio = index;
             console.log('选中内容',row)
         },
-        handleCurrentChangeRow(val){
-            console.log(val)
-            this.selectRowData = val;
-        },
         handleClick(type){
-            switch(type){
-                case 'edit' :
-                    this.type = "edit";
-                    this.paramsView = this.selectRowData;
-                    this.dialogFormVisible_add = true;
-                    break;
-                case 'identification':
-                    this.type = "identification";
-                    paramsView
-                    this.paramsView = this.selectRowData;
-                    this.dialogFormVisible_add = true;
-                    break;
+            if(this.selected.length == 0){
+                return this.$message.warning('请选择您要操作的用户');
+            }else if (this.selected.length > 1) {
+                this.$message({
+                    message: '每次只能操作单条数据~',
+                    type: 'warning'
+                })
+                 //清除选中状态，避免影响下个操作
+                this.$refs.multipleTable.clearSelection();
+            }else{
+                this.selectRowData = this.selected[0];
+                this.paramsView =objectMerge2({},this.selectRowData) ;
+                switch(type){
+                    case 'edit' :
+                        this.type = "edit";
+                        this.typetitle = "修改货主";
+                        this.dialogFormVisible_add = true;
+                        break;
+                    case 'identification':
+                        this.type = "identification";
+                        this.typetitle = "代客认证";
+                        this.dialogFormVisible_add = true;
+                        break;
+                }
+                //清除选中状态，避免影响下个操作
+                this.$refs.multipleTable.clearSelection();
             }
         },
         //刷新页面

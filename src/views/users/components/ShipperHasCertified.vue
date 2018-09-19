@@ -4,16 +4,7 @@
         
         <div class="classify_info">
 		    <div class="btns_box">
-                <createdDialog 
-                btntext="修改"
-                :plain="true"
-                type="primary" 
-                btntype="primary"
-                icon="el-icon-edit"
-                editType="edit"
-                btntitle="修改"
-                :params="selectRowData"
-                @getData="getDataList"></createdDialog>
+                <el-button type="primary" icon="el-icon-edit-outline" plain :size="btnsize" @click="handleClick('edit')">修改</el-button>
 		    </div>
             <div class="info_news">
                 <el-table
@@ -35,9 +26,9 @@
                             {{ (page - 1)*pagesize + scope.$index + 1 }}
                         </template>
                     </el-table-column>  
-                    <el-table-column  label="公司名称">
+                    <el-table-column  label="公司名称" prop="companyName">
                         <template slot-scope="scope">
-                            <createdDialog :paramsView="scope.row" btntype="text" :btntext="scope.row.companyName" editType="view" btntitle="详情"></createdDialog>
+                            <h4 class="needMoreInfo" @click="pushOrderSerial(scope.row)">{{ scope.row.companyName}}</h4>
                         </template>
                     </el-table-column>
                     <el-table-column
@@ -75,6 +66,7 @@
             </div>
 	    </div>
         <div class="info_tab_footer">共计:{{ totalCount }} <div class="show_pager"> <Pager :total="totalCount" @change="handlePageChange" /></div> </div>    
+        <createdDialog :paramsView="paramsView" :typetitle="typetitle" :editType="type"  :dialogFormVisible_add.sync = "dialogFormVisible_add"/>
 
     </div>
 </template>
@@ -102,6 +94,11 @@ export default {
     data(){
         return {
             tabType:'hasCertified',
+            btnsize: 'mini',
+            dialogFormVisible_add: false,
+            type: '',
+            paramsView: {},
+            typetitle:'',
             templateRadio:'',
             options:[],
             tableData3:[],
@@ -136,6 +133,12 @@ export default {
         })
     },
     methods:{
+        pushOrderSerial(row){
+            this.type = 'view';
+            this.typetitle = '货主详情';
+            this.paramsView = Object.assign({},row);;
+            this.dialogFormVisible_add =true;
+        },
         getSearchParam(obj) {
             console.log(obj)
             this.searchInfo = Object.assign({},obj,{shipperStatus:'AF0010403'})
@@ -151,6 +154,16 @@ export default {
             this.selectRowData = Object.assign({},row);
             this.templateRadio = index;
             console.log('选中内容',row)
+        },
+        handleClick(type){
+            switch(type){
+                case 'edit' :
+                    this.type = "edit";
+                    this.typetitle = "修改货主";
+                    this.paramsView = this.selectRowData;
+                    this.dialogFormVisible_add = true;
+                    break;
+            }
         },
         // 选中值判断
         handleCurrentChangeRow(val){
