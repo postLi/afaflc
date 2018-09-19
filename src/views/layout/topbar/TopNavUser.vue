@@ -42,6 +42,8 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import { eventBus } from '@/eventBus'
+
 export default {
   computed: {
     ...mapGetters([

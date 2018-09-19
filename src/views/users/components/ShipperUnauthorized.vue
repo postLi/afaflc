@@ -4,26 +4,6 @@
         
 	  	<div class="classify_info">
 		  	<div class="btns_box">
-				<!-- <createdDialog 
-				btntext="代客认证"
-				:params="selectRowData"
-				:plain="true" type="primary" 
-				btntype="primary" 
-				icon="el-icon-news"
-				editType="identification" 
-				btntitle="代客提交"
-				@getData="getDataList">
-				</createdDialog>
-                <createdDialog 
-				btntext="修改"
-				:params="selectRowData"
-				:plain="true" type="primary" 
-				btntype="primary" 
-				icon="el-icon-edit"
-				editType="edit" 
-				btntitle="修改"
-				@getData="getDataList">
-				</createdDialog> -->
                 <el-button type="primary" icon="el-icon-document" plain :size="btnsize" @click="handleClick('identification')">代客认证</el-button>
                 <el-button type="primary" icon="el-icon-edit-outline" plain :size="btnsize" @click="handleClick('edit')">修改</el-button>
 			</div>
@@ -34,13 +14,14 @@
 				stripe
 				border
                 height="100%"
-				highlight-current-row
+                @selection-change="getSelection" 
+                @row-click="clickDetails"
 				tooltip-effect="dark"
 				style="width: 100%">
-                <el-table-column label="" width="65">
-                     <template slot-scope="scope">
-                        <el-radio class="textRadio" @change.native="getCurrentRow(scope.$index,scope.row)" :label="scope.$index" v-model="templateRadio">&nbsp;</el-radio>
-                    </template>
+                <el-table-column
+                    fixed
+                    type="selection"
+                    width="50">
                 </el-table-column>
 				<el-table-column label="序号" width="80px">
                     <template slot-scope="scope">
@@ -83,7 +64,6 @@
 		</div>
         <div class="info_tab_footer">共计:{{ totalCount }} <div class="show_pager"> <Pager :total="totalCount" @change="handlePageChange" /></div> </div>    
         <createdDialog :paramsView="paramsView" :typetitle="typetitle" :editType="type"  :dialogFormVisible_add.sync = "dialogFormVisible_add" @getData="getDataList"/>
-
     </div>
 </template>
 <script>
@@ -134,6 +114,7 @@ export default {
 			}
         ],//账户状态
         selectRowData:{},
+        selected:[],//暂存数据
     }
   },
     watch: {
@@ -151,10 +132,19 @@ export default {
     mounted(){
         eventBus.$on('changeList', () => {
             // console.log('111111111111111111')
-                this.firstblood()
+            this.firstblood()
         })
     },
     methods:{
+        //点击选中当前行
+        clickDetails(row, event, column){
+            this.$refs.multipleTable.toggleRowSelection(row);
+        },
+        // 判断选中与否
+        getSelection(val){
+            console.log('选中内容',val)
+            this.selected = val;
+        },
         pushOrderSerial(row){
             this.type = 'view';
             this.typetitle = '货主详情';
@@ -177,24 +167,29 @@ export default {
             this.templateRadio = index;
             console.log('选中内容',row)
         },
-        handleCurrentChangeRow(val){
-            console.log(val)
-            this.selectRowData = val;
-        },
         handleClick(type){
-            switch(type){
-                case 'edit' :
-                    this.type = "edit";
-                    this.typetitle = "修改货主";
-                    this.paramsView = this.selectRowData;
-                    this.dialogFormVisible_add = true;
-                    break;
-                case 'identification':
-                    this.type = "identification";
-                    this.typetitle = "代客认证";
-                    this.paramsView = this.selectRowData;
-                    this.dialogFormVisible_add = true;
-                    break;
+            if(this.selected.length == 0){
+                return this.$message.warning('请选择您要操作的用户');
+            }else if (this.selected.length > 1) {
+                this.$message({
+                    message: '每次只能操作单条数据~',
+                    type: 'warning'
+                })
+            }else{
+                this.selectRowData = this.selected[0];
+                this.paramsView =Object.assign({},this.selectRowData) ;
+                switch(type){
+                    case 'edit' :
+                        this.type = "edit";
+                        this.typetitle = "修改货主";
+                        this.dialogFormVisible_add = true;
+                        break;
+                    case 'identification':
+                        this.type = "identification";
+                        this.typetitle = "代客认证";
+                        this.dialogFormVisible_add = true;
+                        break;
+                }
             }
         },
         //刷新页面

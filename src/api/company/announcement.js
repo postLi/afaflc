@@ -1,7 +1,5 @@
 import fetch from '@/utils/fetch'
-
-const baseurl = "aflccommonservice-lyc"
-
+const baseurl = "aflccommonservice"
 
 //根据条件获取发布公告表列表
 export function CommonNoticeList(page,pagesize,data) {

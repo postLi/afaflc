@@ -7,7 +7,7 @@
                     <el-button type="primary" plain @click="handleSearch('search')" :size="btnsize">推回公海</el-button>
                     <el-button type="primary" plain @click="handleSearch('cancel')" :size="btnsize">取消订单</el-button>
                     <el-button type="primary" plain @click="handleSearch('search')" :size="btnsize">新增订单</el-button>
-                    <el-button type="primary" plain @click="handleSearch('search')" :size="btnsize">导出Exce</el-button>
+                    <!-- <el-button type="primary" plain @click="handleSearch('search')" :size="btnsize">导出Exce</el-button> -->
                 </div>
                 <div class="info_news" style="height:89%">
                     <el-table

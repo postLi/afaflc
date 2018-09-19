@@ -4,7 +4,7 @@
         
         <div class="classify_info">
 		    <div class="btns_box">
-                <el-button type="primary" icon="el-icon-circle-plus" plain :size="btnsize" @click="handleClick('edit')">修改</el-button>
+                <el-button type="primary" icon="el-icon-edit-outline" plain :size="btnsize" @click="handleClick('edit')">修改</el-button>
 		    </div>
             <div class="info_news">
                 <el-table
@@ -154,6 +154,16 @@ export default {
             this.selectRowData = Object.assign({},row);
             this.templateRadio = index;
             console.log('选中内容',row)
+        },
+        handleClick(type){
+            switch(type){
+                case 'edit' :
+                    this.type = "edit";
+                    this.typetitle = "修改货主";
+                    this.paramsView = this.selectRowData;
+                    this.dialogFormVisible_add = true;
+                    break;
+            }
         },
         // 选中值判断
         handleCurrentChangeRow(val){

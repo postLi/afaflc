@@ -26,6 +26,11 @@ export function getDictionary(code) {
     })
   }
 
+
+  //  数据字典获取移入黑名单原因列表
+export function DicBlackType() {
+    return fetch.get('/' + baseurl_two + '/sysDict/getSysDictByCodeGet/AF02004')
+  }
 /**
  * 获取图片上传的policy
  * callback

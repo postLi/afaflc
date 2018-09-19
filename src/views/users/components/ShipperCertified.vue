@@ -73,16 +73,15 @@
 
             <el-row>
               <el-col :span="12">
-                <el-form-item label="联系人" :label-width="formLabelWidth" prop="linkman">
-                  <el-input v-model="shengheform.contacts" auto-complete="off"></el-input>
-                </el-form-item>
-              </el-col>
-              <el-col :span="12">
                 <el-form-item label="所在地" :label-width="formLabelWidth" prop="address">
                     <vregion :ui="true"  @values="regionChange" class="form-control">
                         <el-input v-model="shengheform.belongCityName" placeholder="请选择" ></el-input>
                     </vregion>
-
+                </el-form-item>
+              </el-col>
+              <el-col :span="12">
+                <el-form-item label="联系人" :label-width="formLabelWidth" prop="linkman">
+                  <el-input v-model="shengheform.contacts" auto-complete="off"></el-input>
                 </el-form-item>
               </el-col>
             </el-row>

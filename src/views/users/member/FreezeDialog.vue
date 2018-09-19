@@ -6,7 +6,7 @@
             <el-col :span="24">
                 <el-form-item label="冻结原因：" prop="freezeCause" :label-width="formLabelWidth" >
                     <el-input v-model="formFroze.freezeCauseName" v-if="editType == 'remove'" disabled></el-input>
-
+                    
                     <el-select v-model="formFroze.freezeCause" v-else placeholder="请选择" clearable>
                         <el-option
                         v-for="item in optionsReason"

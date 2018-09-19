@@ -1,6 +1,5 @@
 <template>
     <div class="shipperBlackDialog commoncss">
-      <!-- <el-button :type="type" :value="value" :plain="plain" :icon="icon" @click="openDialog()">{{text}}</el-button> -->
       <el-dialog :title="title" :visible="BlackDialogFlag" :before-close="close" :close-on-click-modal="false" >
         <el-form :model="formBlack" ref="formBlack" :rules="formBlackRules">
             <div class="shipper_information">
@@ -43,9 +42,8 @@
     </div>
 </template>
 <script>
-import {data_get_shipper_BlackType} from '@/api/users/shipper/all_shipper.js'
-import { data_ChangeLogisticsCompany }  from '../../../api/users/logistics/LogisticsCompany.js'
-
+import {  DicBlackType } from '@/api/common.js'
+import { data_ChangeLogisticsCompany }  from '@/api/users/logistics/LogisticsCompany.js'
 import { eventBus } from '@/eventBus'
 
 export default {
@@ -55,34 +53,10 @@ export default {
     },
     props:{
         params:{
-        type:Object,
-        },
-        icon:{
-        type: String,
-        default: ''
-        },
-        btntype: {
-        type: String,
-        default: ''
-        },
-        btntitle: {
-        type: String,
-        default: ''
-        },
-        plain:{
-        type: Boolean,
-        default: false
-        },
-        btntext: {
-        type: String,
-        default: ''
-        },
-        value:{
-        type: String,
-        default:''
+            type:Object,
         },
         editType: {
-        type: String,
+            type: String,
         },
         BlackDialogFlag:{
             type:Boolean,
@@ -96,7 +70,6 @@ export default {
             type:'primary',
             title:'',
             text:'',
-            // BlackDialogFlag: false, // 弹框控制
             formLabelWidth:'120px',
             formBlack:{},
             currentRow:{},
@@ -131,19 +104,13 @@ export default {
         changeList(){
             eventBus.$emit('changeList')
         },
-        // change(){
-        //   this.BlackDialogFlag!=this.BlackDialogFlag
-        // },
         openDialog(){
             this.formBlack = Object.assign({},this.params);
         },
-
         getMoreInformation(){
             // 移入原因列表
-            data_get_shipper_BlackType().then(res=>{
-                res.data.map(item=>{
-                    this.optionsFormBlack.push(item)
-                })
+            DicBlackType().then(res=>{
+                this.optionsFormBlack = res.data;
             })
         },
         // 提交数据

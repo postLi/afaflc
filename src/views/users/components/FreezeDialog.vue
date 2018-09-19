@@ -1,16 +1,17 @@
 <template>
   <div class="freezeDialog commoncss">
-    <el-dialog :title="title" :visible="freezeDialogFlag"  :before-close="close" v-dialogDrag :close-on-click-modal="false" >
+    <el-dialog :title="freezetitle" :visible="freezeDialogFlag"  :before-close="close" v-dialogDrag :close-on-click-modal="false" >
       <el-form :model="formFroze" ref="formFroze" :rules="formFrozeRules">
         <el-row>
             <el-col :span="12">
               <el-form-item label="手机号码：" :label-width="formLabelWidth">
-                <el-input v-model="formFroze.mobile" disabled></el-input>
+                <span class="onlyShow">{{formFroze.mobile}}</span>
+
               </el-form-item>
             </el-col>
             <el-col :span="12">
               <el-form-item label="公司名称：" :label-width="formLabelWidth">
-                <el-input v-model="formFroze.companyName" disabled></el-input>
+                <span class="onlyShow">{{formFroze.companyName}}</span>
               </el-form-item>
             </el-col>
           </el-row>
@@ -18,12 +19,12 @@
           <el-row>
             <el-col :span="12">
                 <el-form-item label="联系人：" :label-width="formLabelWidth">
-                    <el-input v-model="formFroze.contacts" disabled></el-input>
+                    <span class="onlyShow">{{formFroze.contacts}}</span>
                 </el-form-item>
             </el-col>
             <el-col :span="12">
                 <el-form-item label="所在地：" :label-width="formLabelWidth">
-                    <el-input v-model="formFroze.belongCityName" disabled></el-input>
+                    <span class="onlyShow">{{formFroze.belongCityName}}</span>
                 </el-form-item>
             </el-col>
           </el-row>
@@ -31,22 +32,19 @@
           <el-row>
             <el-col :span="24" class="moreLength">
                 <el-form-item label="详细地址：" :label-width="formLabelWidth">
-                    <el-input v-model="formFroze.address" :maxlength="20" disabled></el-input>
+                    <span class="onlyShow">{{formFroze.address}}</span>
                 </el-form-item>
             </el-col>
           </el-row>
           <el-row>
             <el-col :span="12">
               	<el-form-item label="货主类型：" :label-width="formLabelWidth">
-                    <el-input
-                        v-model="formFroze.shipperTypeName"
-                        :disabled="true">
-                    </el-input>
+                    <span class="onlyShow">{{formFroze.shipperTypeName}}</span>
                 </el-form-item>
             </el-col>
             <el-col :span="12">
               <el-form-item label="注册来源：" :label-width="formLabelWidth">
-                <el-input v-model="formFroze.registerOrigin" :maxlength="20" disabled></el-input>
+                <span class="onlyShow">{{formFroze.registerOrigin}}</span>
               </el-form-item>
             </el-col>
           </el-row>
@@ -56,8 +54,7 @@
           <el-row>
             <el-col :span="24">
                 <el-form-item label="冻结原因：" prop="freezeCause" :label-width="formLabelWidth">
-                    <el-input v-model="formFroze.freezeCauseName" v-if="editType == 'remove'" disabled></el-input>
-
+                    <span class="onlyShow" v-if="editType == 'remove'">{{formFroze.freezeCauseName}}</span>
                     <el-select v-model="formFroze.freezeCause" v-else placeholder="请选择" clearable>
                         <el-option
                         v-for="item in optionsReason"
@@ -72,7 +69,7 @@
           <el-row>
             <el-col :span="24">
               <el-form-item label="解冻日期：" :label-width="formLabelWidth" prop="freezeTime">
-                <el-input v-model="formFroze.freezeTime" v-if="editType == 'remove'" disabled></el-input>
+                <span class="onlyShow" v-if="editType == 'remove'">{{formFroze.freezeTime}}</span>
                 <div v-else>
                     <el-date-picker
                     v-model="formFroze.freezeTime"
@@ -94,7 +91,7 @@
           </el-row>
           <el-row>
             <el-col :span="24">
-              <el-form-item label="冻结原因说明：" :label-width="formLabelWidth">
+              <el-form-item label="冻结说明：" :label-width="formLabelWidth">
                 <el-input type="textarea" :rows="2" :maxlength="100" v-model="formFroze.freezeCauseRemark " :disabled="editType == 'remove'" class="textArea"></el-input>
               </el-form-item>
             </el-col>
@@ -105,7 +102,7 @@
             </div>
             <el-row>
                 <el-col :span="24">
-                <el-form-item label="解冻原因说明：" :label-width="formLabelWidth">
+                <el-form-item label="解冻说明：" :label-width="formLabelWidth">
                     <el-input type="textarea" :rows="2" :maxlength="100" v-model="formFroze.unfreezeRemark " class="textArea"></el-input>
                 </el-form-item>
                 </el-col>
@@ -129,6 +126,10 @@ export default {
 
   },
   props:{
+    freezetitle:{
+        type:String,
+        default:'冻结'
+    },
     paramsView:{
         type:Object,
     },
@@ -171,7 +172,9 @@ export default {
         handler: function(val, oldVal) {
             if(val){
                 this.openDialog();
-                this.getMoreInformation();
+                if(this.editType != 'remove'){
+                    this.getMoreInformation();
+                }
             }
         },
     },
@@ -183,7 +186,7 @@ export default {
     close(done) {
         this.$emit('update:freezeDialogFlag', false);
         this.$emit('getData');
-        // this.$refs.formFroze.resetFields();
+        this.$refs.formFroze.resetFields();
         this.formFroze = { // 冻结弹框表单
             freezeCause:null,
             unfreezeTime:null,
@@ -223,108 +226,99 @@ export default {
     openDialog(){
         console.log('this.paramsView',this.paramsView)
         this.formFroze = Object.assign({},this.paramsView) ;
-        // this.formFroze.freezeTime = this.formFroze.freezeTime ? this.formFroze.freezeTime : Date.parse(new Date());;
-        // if(this.editType == 'add'){
-        //     console.log('add')
-        //     this.formFroze.unfreezeTime = this.formFroze.unfreezeTime ? this.formFroze.unfreezeTime : new Date();
-        //     this.formFroze.id = this.paramsView.id;
-        //     this.formFroze.mobile = this.paramsView.mobile;
-
-        // }else{
-        //     console.log('freez')
-
-        //     this.formFroze = Object.assign({},this.paramsView) ;
-        //     this.formFroze.unfreezeTime = this.formFroze.unfreezeTime ? this.formFroze.unfreezeTime : new Date();
-        // }
+        this.formFroze.freezeTime = this.formFroze.freezeTime ? this.formFroze.freezeTime : Date.parse(new Date());;
+        if(this.editType == 'add'){
+            // this.formFroze.unfreezeTime = this.formFroze.unfreezeTime ? this.formFroze.unfreezeTime : new Date();
+            this.formFroze.id = this.paramsView.id;
+            this.formFroze.mobile = this.paramsView.mobile;
+        }else{
+            this.formFroze = Object.assign({},this.paramsView) ;
+            this.formFroze.unfreezeTime = this.formFroze.unfreezeTime ? this.formFroze.unfreezeTime : new Date();
+        }
     },
 
     getMoreInformation(){
       // 获取冻结原因下拉
-      data_get_shipper_freezeType().then(res=>{
-        // console.log(res)
-        res.data.map((item)=>{
-          this.optionsReason.push(item)
+        data_get_shipper_freezeType().then(res=>{
+            // console.log(res)
+            this.optionsReason = res.data;
         })
-      })
     }, 
     // 提交数据
     onSubmit(){
         this.$refs['formFroze'].validate((valid)=>{
-
-                if(valid){
-                    switch (this.editType){
-                        case 'add' :
-                            var forms= Object.assign({}, this.formFroze,{accountStatus:"AF0010502"})
-                            let item =  forms.contacts;
-                            this.$confirm('确定要将'+ item +' 货主冻结吗？', '提示', {
-                                confirmButtonText: '确定',
-                                cancelButtonText: '取消',
-                                type: 'warning'
-                            }).then( ()=>{
-                                data_get_shipper_change(forms).then(res=>{
-                                    // console.log(res)
-                                    this.$message({
-                                        type: 'success',
-                                        message: '该货主已被冻结',
-                                        duration:2000
-                                    })
-                                    this.$emit('getData')
-                                    this.changeList();
-                                }).catch(err => {
-                                    this.$message.error('操作失败，失败原因：',err.text)
-                                })
-                            }).catch(() => {
-                                this.$message({
-                                    type: 'info',
-                                    message: '已取消'
-                                })
-                            })
-                            break;
-                        case 'remove':
-                            var forms= Object.assign({}, this.formFroze,{accountStatus:"AF0010501"})
-                            let itemMove =  forms.contacts;
-                            this.$confirm('确定要将'+ itemMove +' 货主解冻吗？', '提示', {
-                                confirmButtonText: '确定',
-                                cancelButtonText: '取消',
-                                type: 'warning'
-                            }).then( ()=>{
-                                data_get_shipper_change(forms).then(res=>{
-                                    // console.log(res)
-                                    this.$message({
-                                        type: 'success',
-                                        message: '该货主已被解冻',
-                                        duration:2000
-                                    })
-                                    this.$emit('getData')
-                                    this.changeList();
-                                }).catch(err => {
-                                    this.$message.error('操作失败，失败原因：',err.text)
-                                })
-                            }).catch(() => {
-                                this.$message({
-                                    type: 'info',
-                                    message: '已取消'
-                                })
-                            })
-                            break;
-
-                        case 'edit' :
-                            var forms= Object.assign({}, this.formFroze)
+            if(valid){
+                switch (this.editType){
+                    case 'add' :
+                        var forms= Object.assign({}, this.formFroze,{accountStatus:"AF0010502",accountStatusName:'冻结中'});
+                        forms.freezeCauseName = this.optionsReason.find(item => item.code === forms.freezeCause)['name'];
+                        // console.log(forms)
+                        let item =  forms.contacts;
+                        this.$confirm('确定要将'+ item +' 货主冻结吗？', '提示', {
+                            confirmButtonText: '确定',
+                            cancelButtonText: '取消',
+                            type: 'warning'
+                        }).then( ()=>{
                             data_get_shipper_change(forms).then(res=>{
                                 // console.log(res)
-                                this.$alert('修改成功', '提示', {
-                                    confirmButtonText: '确定',
-                                    callback: action => {
-                                        this.$emit('getData')
-                                        this.changeList();
-                                    }
-                                });
+                                this.$message({
+                                    type: 'success',
+                                    message: '该货主已被冻结',
+                                    duration:2000
+                                })
+                                this.close()
                             }).catch(err => {
                                 this.$message.error('操作失败，失败原因：',err.text)
                             })
-                    }
+                        }).catch(() => {
+                            this.$message({
+                                type: 'info',
+                                message: '已取消'
+                            })
+                        })
+                        break;
+                    case 'remove':
+                        var forms= Object.assign({}, this.formFroze,{accountStatus:"AF0010501",accountStatusName:'正常'})
+                        let itemMove =  forms.contacts;
+                        this.$confirm('确定要将'+ itemMove +' 货主解冻吗？', '提示', {
+                            confirmButtonText: '确定',
+                            cancelButtonText: '取消',
+                            type: 'warning'
+                        }).then( ()=>{
+                            data_get_shipper_change(forms).then(res=>{
+                                // console.log(res)
+                                this.$message({
+                                    type: 'success',
+                                    message: '该货主已被解冻',
+                                    duration:2000
+                                })
+                                this.close()
+                            }).catch(err => {
+                                this.$message.error('操作失败，失败原因：',err.text)
+                            })
+                        }).catch(() => {
+                            this.$message({
+                                type: 'info',
+                                message: '已取消'
+                            })
+                        })
+                        break;
+                    case 'edit' :
+                        var forms= Object.assign({}, this.formFroze)
+                        data_get_shipper_change(forms).then(res=>{
+                            // console.log(res)
+                            this.$alert('修改成功', '提示', {
+                                confirmButtonText: '确定',
+                                callback: action => {
+                                    this.close()
+                                }
+                            });
+                        }).catch(err => {
+                            this.$message.error('操作失败，失败原因：',err.text)
+                        })
                 }
-            })
+            }
+        })
     }
   }
 }

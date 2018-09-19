@@ -33,9 +33,9 @@
                     </el-form-item>
               </el-form>
             <div class="classify_info">
-                <div class="btns_box">
+                <!-- <div class="btns_box">
                     <el-button type="primary" :size="btnsize" plain @click="handleSearch('search')">导出Exce</el-button>
-                </div>
+                </div> -->
                 <div class="info_news">
                     <el-table
                         ref="multipleTable"

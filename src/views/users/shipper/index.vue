@@ -93,6 +93,20 @@ import ShipperAll from '../components/ShipperAll.vue'
             background: rgba(236, 233, 230, 0.445);
             border-bottom-color: #ffffff;
         }
+        .el-table{
+            .freezeName{
+                color: #e6a23c;
+                font-weight: bold;
+            }
+            .blackName{
+                color: red;
+                font-weight: bold;
+            }
+            .normalName{
+                color: #0da0e4;
+                font-weight: bold;
+            }
+        }
         .shippercreatDialog,.freezeDialog,.shipperBlackDialog,.shenghe{
             display: inline-block;
             .el-dialog{
@@ -137,7 +151,7 @@ import ShipperAll from '../components/ShipperAll.vue'
                         }
                         .onlyShow{
                             display: inline-block;
-                            width: 250px;
+                            min-width: 250px;
                             height: 40px;
                             line-height: 40px;
                             text-align: left;
