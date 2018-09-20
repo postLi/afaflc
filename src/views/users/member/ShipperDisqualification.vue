@@ -38,7 +38,7 @@
                         type="selection"
                         width="50">
                     </el-table-column>
-                    <el-table-column label="序号" width="80">
+                    <el-table-column label="序号" sortable width="80">
                         <template slot-scope="scope">
                             {{ (page - 1)*pagesize + scope.$index + 1 }}
                         </template>
@@ -102,127 +102,127 @@ import Pager from '@/components/Pagination/index'
 import { data_LogisticsCompanyList } from '@/api/users/logistics/LogisticsCompany.js'
 
 export default {
-    props: {
-        isvisible: {
-            type: Boolean,
-            default: false
+  props: {
+      isvisible: {
+          type: Boolean,
+          default: false
         }
     },
-    components:{
-        createdDialog,
-        GetCityList,
-        Pager
+  components: {
+      createdDialog,
+      GetCityList,
+      Pager
     },
-    data(){
-        return{
-            btnsize:'mini',
-            dialogFormVisible_add:false,
-            type:'',
-            paramsView:{},
-            templateRadio:'',
-            tableData1:[],
-            totalCount:null,
-            page:1,
-            pagesize:20,
-            options:[],
-            formAll:{
-                companyName:'',
-                belongCity:'',
-                mobile:'',
-                authStatus:"AF0010404",//未认证的状态码
-                isVest:'0',
-                belongCityName:'',
+  data() {
+      return {
+          btnsize: 'mini',
+          dialogFormVisible_add: false,
+          type: '',
+          paramsView: {},
+          templateRadio: '',
+          tableData1: [],
+          totalCount: null,
+          page: 1,
+          pagesize: 20,
+          options: [],
+          formAll: {
+              companyName: '',
+              belongCity: '',
+              mobile: '',
+              authStatus: 'AF0010404', // 未认证的状态码
+              isVest: '0',
+              belongCityName: ''
 
             },
-            selectRowData:{},
-            multipleSelection:[]
+          selectRowData: {},
+          multipleSelection: []
         }
     },
-    watch: {
-        isvisible: {
-            handler(newVal, oldVal) {
-                if(newVal && !this.inited){
-                    this.inited = true
-                    this.firstblood()
+  watch: {
+      isvisible: {
+          handler(newVal, oldVal) {
+              if (newVal && !this.inited) {
+                  this.inited = true
+                  this.firstblood()
                 }
             },
             // 代表在wacth里声明了firstName这个方法之后立即先去执行handler方法
-            immediate: true
+          immediate: true
         }
     },
-    mounted(){
-        eventBus.$on('changeList', () => {
+  mounted() {
+      eventBus.$on('changeList', () => {
             // console.log('6666666666666666')
-            this.firstblood()
+          this.firstblood()
         })
     },
-    methods:{
-        pushOrderSerial(row){
-            this.type = 'view';
-            this.paramsView = row;
-            this.dialogFormVisible_add =true;
+  methods: {
+      pushOrderSerial(row) {
+          this.type = 'view'
+            this.paramsView = row
+            this.dialogFormVisible_add = true
         },
-        handlePageChange(obj) {
-            this.page = obj.pageNum
-            this.pagesize = obj.pageSize
-            this.firstblood()
+      handlePageChange(obj) {
+          this.page = obj.pageNum
+          this.pagesize = obj.pageSize
+          this.firstblood()
         },
         // 选中值判断
-        getCurrentRow(index,row){       
-            this.selectRowData = Object.assign({},row);
-            this.templateRadio = index;
-            console.log('选中内容',row)
+      getCurrentRow(index, row) {
+          this.selectRowData = Object.assign({}, row)
+            this.templateRadio = index
+            console.log('选中内容', row)
         },
-         //点击选中当前行
-        clickDetails(row, event, column){
-            this.$refs.multipleTable.toggleRowSelection(row);
+         // 点击选中当前行
+      clickDetails(row, event, column) {
+          this.$refs.multipleTable.toggleRowSelection(row)
         },
-        getDataList(){
-            this.firstblood()
+      getDataList() {
+          this.firstblood()
         },
-        handleCurrentChangeRow(val){
-            console.log(val)
-            this.selectRowData = val
-    },
-        //刷新页面
-      firstblood(){
-        data_LogisticsCompanyList(this.page,this.pagesize,this.formAll).then(res=>{
-            this.totalCount = res.data.totalCount;
-            this.tableData1 = res.data.list;
+      handleCurrentChangeRow(val) {
+          console.log(val)
+          this.selectRowData = val
+        },
+        // 刷新页面
+      firstblood() {
+        data_LogisticsCompanyList(this.page, this.pagesize, this.formAll).then(res => {
+          this.totalCount = res.data.totalCount
+            this.tableData1 = res.data.list
             // this.inited = true
         })
       },
-         //点击查询按纽，按条件查询列表
-      getdata_search(event){
+         // 点击查询按纽，按条件查询列表
+      getdata_search(event) {
             // this.formAll.belongCity = this.$refs.area.selectedOptions.pop();
-            this.firstblood()
+        this.firstblood()
       },
-      
-      //清空
-      clearSearch(){
+
+      // 清空
+      clearSearch() {
         this.formAll = {
-            companyName:'',
-            belongCity:'',
-            mobile:'',
-            authStatus:"AF0010404",//未认证的状态码
-            isVest:'0',
-            belongCityName:'',
+          companyName: '',
+          belongCity: '',
+          mobile: '',
+          authStatus: 'AF0010404', // 未认证的状态码
+          isVest: '0',
+          belongCityName: ''
 
         },
         this.firstblood()
       },
       handleSizeChange(val) {
-        console.log(`每页 ${val} 条`);
-        this.pagesize=val
+        console.log(`每页 ${val} 条`)
+        this.pagesize = val
         this.firstblood()
       },
       handleCurrentChange(val) {
-        console.log(`当前页: ${val}`);
-        this.page=val
+        console.log(`当前页: ${val}`)
+        this.page = val
         this.firstblood()
       },
-        handleChange(value){
-            console.log(value)
+      handleChange(value) {
+          console.log(value)
         }
     }
 }

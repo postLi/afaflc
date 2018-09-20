@@ -98,3 +98,14 @@ export function data_get_shipper_auid() {
 export function data_post_checkDriverCardid(data) {
   return fetch.get('/' + baseurl + '/usercenter/aflcDriver/v1/checkDriverCardid/' + data, data)
 }
+
+
+// 获取车主冻结原因字典
+export function data_get_car_freezeType() {
+  return fetch.get('/' + baseurl_two + '/sysDict/getSysDictByCodeGet/AF02001')
+}
+
+// 获取黑名单原因字典
+export function data_get_car_BlackType() {
+  return fetch.get('/' + baseurl_two + '/sysDict/getSysDictByCodeGet/AF02002')
+}

@@ -32,6 +32,7 @@
                         <el-table-column
                             label="序号"
                             type="index"
+                            sortable
                             width="80">
                         </el-table-column>
                         <el-table-column
@@ -150,124 +151,123 @@
 
 <script>
 
-import { getTransportRangeList,TransportRangeStatus,deleteTransportRange } from '@/api/server/lingdan/TransportRange.js'
+import { getTransportRangeList, TransportRangeStatus, deleteTransportRange } from '@/api/server/lingdan/TransportRange.js'
 import { parseTime } from '@/utils/index.js'
 import Pager from '@/components/Pagination/index'
 
 export default {
-    components:{
-        Pager,
-    },
-    data() {
-       
-        return {
-            btnsize:'mini',
-            loading:true,
-            defaultImg:'/static/default.png',//默认加载失败图片
-            totalCount:0,
-            page:1,
-            pagesize:20,
-            logisticsForm: {
-                startLocation: '',//出发地
-                endLocation: '',//到达地
-            },
-            tableData: [],
-        };
-    },
-    watch:{
+  components: {
+    Pager
+  },
+  data() {
+    return {
+      btnsize: 'mini',
+      loading: true,
+      defaultImg: '/static/default.png', // 默认加载失败图片
+      totalCount: 0,
+      page: 1,
+      pagesize: 20,
+      logisticsForm: {
+        startLocation: '', // 出发地
+        endLocation: '' // 到达地
+      },
+      tableData: []
+    }
+  },
+  watch: {
 
+  },
+  mounted() {
+    this.firstblood()
+  },
+  methods: {
+    firstblood() {
+      getTransportRangeList(this.page, this.pagesize, this.logisticsForm).then(res => {
+        this.tableData = res.data.list
+        this.totalCount = res.data.totalCount
+        this.tableData.forEach(el => {
+          el.weightcargo = []
+          el.lightcargo = []
+          el.rangePrices.forEach(item => {
+            switch (item.type) {
+              case '0':
+                el.lightcargo.push(item)
+                break
+              case '1':
+                el.weightcargo.push(item)
+                break
+            }
+          })
+          el.lightcargo.sort(function(a, b) {
+            return a.startVolume - b.startVolume
+          })
+          el.weightcargo.sort(function(a, b) {
+            return a.startVolume - b.startVolume
+          })
+        })
+        this.loading = false
+        console.log(this.tableData)
+      })
     },
-    mounted(){
-        this.firstblood();
-    },  
-    methods: {
-        firstblood(){
-            getTransportRangeList(this.page,this.pagesize,this.logisticsForm).then(res=>{
-                this.tableData = res.data.list;
-                this.totalCount = res.data.totalCount;
-                this.tableData.forEach(el=>{
-                    el.weightcargo =[];
-                    el.lightcargo = [];
-                    el.rangePrices.forEach(item => {
-                        switch(item.type){
-                            case '0':
-                                el.lightcargo.push(item);
-                                break;
-                            case '1':
-                                el.weightcargo.push(item)
-                                break;
-                        }
-                    })
-                    el.lightcargo.sort(function(a,b){  
-                        return a.startVolume - b.startVolume;  
-                    })  
-                    el.weightcargo.sort(function(a,b){  
-                        return a.startVolume - b.startVolume;  
-                    })  
-                })
-                this.loading = false;
-                console.log(this.tableData)
-            })
-        },
-        handlePageChange(obj) {
-            this.page = obj.pageNum
-            this.pagesize = obj.pageSize
-        },
-        clearSearch(){
-            this.$refs.ruleForm.resetFields();
-            this.firstblood();
-        },
-        //搜索
-        handleSearch(){
-            this.firstblood()
-        },
-        //查看详情
-        handleInfo(row){
-            this.$router.push({name: '发布物流专线',query:{data:row,ifrevise:'2'}});
-        },
-        //新增网点
-        handleNew(){
-            this.$router.push({name: '发布物流专线'});
-        },
-        //修改
-        handleEdit(row) {
-            this.$router.push({name: '发布物流专线',query:{data:row,ifrevise:'1'}});
-        },
-        //删除网点
-        handleDelete(row) {
-            this.$confirm('确定要删除 '+ row.startLocation +'-'+ row.endLocation +' 该条专线吗？', '提示', {
-                confirmButtonText: '确定',
-                cancelButtonText: '取消',
-                type: 'warning'
-            }).then(()=>{
-                deleteTransportRange(row.id).then(res => {
-                    this.firstblood();
-                }).catch(err => {
-                    this.$message({
-                        type: 'info',
-                        message: '操作失败，原因：' + errorInfo ? errorInfo : err.text
-                    })
-                })
-            }).catch(() => {
-                this.$message({
-                    type: 'info',
-                    message: '已取消'
-                })
-            })
-        },
-        //更改状态
-        handleStatus(row) {
-            TransportRangeStatus(row.id).then(res => {
-                this.firstblood();
-            }).catch(err=>{
-                this.$message({
-                    type: 'info',
-                    message: '操作失败，原因：' + err.text ? err.text : err
-                })
-            })
-        },
+    handlePageChange(obj) {
+      this.page = obj.pageNum
+      this.pagesize = obj.pageSize
     },
-  
+    clearSearch() {
+      this.$refs.ruleForm.resetFields()
+      this.firstblood()
+    },
+        // 搜索
+    handleSearch() {
+      this.firstblood()
+    },
+        // 查看详情
+    handleInfo(row) {
+      this.$router.push({ name: '发布物流专线', query: { data: row, ifrevise: '2' }})
+    },
+        // 新增网点
+    handleNew() {
+      this.$router.push({ name: '发布物流专线' })
+    },
+        // 修改
+    handleEdit(row) {
+      this.$router.push({ name: '发布物流专线', query: { data: row, ifrevise: '1' }})
+    },
+        // 删除网点
+    handleDelete(row) {
+      this.$confirm('确定要删除 ' + row.startLocation + '-' + row.endLocation + ' 该条专线吗？', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        deleteTransportRange(row.id).then(res => {
+          this.firstblood()
+        }).catch(err => {
+          this.$message({
+              type: 'info',
+              message: '操作失败，原因：' + errorInfo ? errorInfo : err.text
+            })
+        })
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消'
+        })
+      })
+    },
+        // 更改状态
+    handleStatus(row) {
+      TransportRangeStatus(row.id).then(res => {
+        this.firstblood()
+      }).catch(err => {
+        this.$message({
+          type: 'info',
+          message: '操作失败，原因：' + err.text ? err.text : err
+        })
+      })
+    }
+  }
+
 }
 </script>
 

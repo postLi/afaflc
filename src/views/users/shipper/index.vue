@@ -48,9 +48,9 @@
         ShipperDisqualification
       },
       data() {
-            return {
-            shipperName: 'first',
-            secondBoolen:false
+        return {
+              shipperName: 'first',
+              secondBoolen: false
             }
       },
       watch: {
@@ -79,7 +79,7 @@
       methods: {
         handleClick(tab, event) {
             // console.log(tab, event);
-            this.shipperName = tab.name
+          this.shipperName = tab.name
         }
       }
     }

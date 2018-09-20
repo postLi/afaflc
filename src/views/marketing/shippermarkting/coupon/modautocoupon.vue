@@ -814,9 +814,16 @@ export default {
               eventBus.$emit('changeListtwo')
               this.$message.success('修改成功')
            }).catch(res=>{
-                    console.log(res)
-                    this.dialogFormVisible_add = false;
+                    console.log('res',res.text)
+                    if(res.text='已发放过优惠卷不能进行修改')
+                    {
+                    this.$message.error('已发放过优惠卷不能进行修改')
+                    }
+                    else{
                     this.$message.error('修改失败')
+                    }
+                    this.dialogFormVisible_add = false;
+                   
             });
               }
          })

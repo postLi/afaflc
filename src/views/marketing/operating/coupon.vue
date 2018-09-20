@@ -46,6 +46,7 @@
             width="100">
           </el-table-column>
           <el-table-column label="序号" 
+          sortable
             width="100">
             <template slot-scope="scope">
               {{ (page - 1)*pagesize + scope.$index + 1 }}
@@ -54,6 +55,7 @@
           <el-table-column
             prop="orderSerial"
             label="订单号"
+            sortable
             width="240">
               <template  slot-scope="scope">
                 <h4 class="needMoreInfo" @click="pushOrderSerial(scope.row)">{{ scope.row.orderSerial}}</h4>
@@ -62,36 +64,43 @@
           <el-table-column
             prop="areaName"
             label="所属区域"
+            sortable
             width="250">
           </el-table-column>
           <el-table-column
             prop="shipper"
             label="货主"
+            sortable
             width="250">
           </el-table-column>
           <el-table-column
             prop="carType"
             label="需求车型"
+            sortable
             width="160">
           </el-table-column>
           <el-table-column
             prop="totalAmount"
             label="订单金额"
+            sortable
             width="140">
           </el-table-column>
           <el-table-column
             prop="couponName"
             label="优惠券名称"
+            sortable
             width="140">
           </el-table-column> 
            <el-table-column
             prop="orderDiscountAmount"
             label="优惠券金额"
+            sortable
             width="140">
           </el-table-column>
           <el-table-column
             prop="tradeTime"
             label="交易时间"
+            sortable
             width="200">
             <template  slot-scope="scope">
               <span class="orderSerial">
@@ -147,7 +156,7 @@ export default{
       searchInfo: {
         startTime: null, // 下单起始时间
         endTime: null, // 下单结束时间
-        areaCodeList: null// 
+        areaCodeList: null//
       },
       pickerOptions2: {
         shortcuts: pickerOptions2
@@ -177,20 +186,20 @@ export default{
         this.areaCodeList1 = this.areaCodeList1.filter(e => {
           return e !== d.city.code
         })
-        this.searchInfo.areaCodeList = Object.assign([],this.areaCodeList1)
+        this.searchInfo.areaCodeList = Object.assign([], this.areaCodeList1)
         // console.log('------searchInfo---', this.areaCodeList1)
       } else if (d.city) {
         this.areaCodeList1.push(d.city.code)
         this.areaCodeList1 = this.areaCodeList1.filter(e => {
           return e !== d.province.code
         })
-        this.searchInfo.areaCodeList = Object.assign([],this.areaCodeList1)
+        this.searchInfo.areaCodeList = Object.assign([], this.areaCodeList1)
       } else if (d.province) {
         this.areaCodeList1 = this.areaCodeList1.filter(e => {
           return e !== d.province.code
         })
         this.areaCodeList1.push(d.province.code)
-        this.searchInfo.areaCodeList = Object.assign([],this.areaCodeList1)
+        this.searchInfo.areaCodeList = Object.assign([], this.areaCodeList1)
       } else {
         this.clearName()
       }
@@ -205,7 +214,7 @@ export default{
     },
     // 刷新页面
     firstblood() {
-      this.loading = false
+      // this.loading = false
       postCouponTransaction(this.page, this.pagesize, this.searchInfo).then(res => {
         if (res) {
           this.tableData = res.data.list

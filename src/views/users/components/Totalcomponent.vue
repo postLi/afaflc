@@ -1,9 +1,10 @@
 <template>
     <div style="height:100%;" class="identicalStyle">
-         <div class="shipper_searchinfo">
-            <el-form inline >
+            <el-form :inline="true"  class="demo-ruleForm classify_searchinfo">
                 <el-form-item label="所在地：">
-                     <GetCityList v-model="formInline.belongCity" ref="area"></GetCityList>
+                    <vregion :ui="true"  @values="regionChange" class="form-control">
+                        <el-input v-model="formInline.belongCityName" placeholder="请选择"></el-input>
+                    </vregion>
                 </el-form-item>
                 <el-form-item label="认证状态：">
                     <el-select v-model="formInline.driverStatus" placeholder="请选择" clearable>
@@ -33,15 +34,13 @@
                     <el-input v-model.trim="formInline.carNumber" clearable placeholder="请输入内容"></el-input>
                 </el-form-item>
                 <el-form-item label="手机号：">
-                    <el-input placeholder="请输入内容" v-model.trim="formInline.driverMobile" clearable></el-input>
+                    <el-input placeholder="请输入内容" v-model.trim="formInline.driverMobile" clearable v-numberOnly></el-input>
                 </el-form-item>
-                <el-form-item>
-                    <el-button type="primary" plain @click="getdata_search">查询</el-button>
-                    <el-button type="info" plain @click="clearSearch">清空</el-button>
+                <el-form-item class="fr">
+                    <el-button type="primary" plain  @click="getdata_search"  :size="btnsize">查询</el-button>
+                    <el-button type="info" plain  @click="clearSearch"  :size="btnsize">清空</el-button>
                 </el-form-item>
             </el-form>
-
-            </div>
             <div class="classify_info">
                 <div class="btns_box">
                     <driver-newTemplate
@@ -49,10 +48,9 @@
                     :plain="true"
                     type="primary" 
                     btntype="primary"
-                    icon="el-icon-news"
+                    icon="el-icon-circle-plus"
                     editType="add"
                     btntitle="新增车主"
-                    v-on:click.native="addClick"
                     @getData="getDataList">
                     </driver-newTemplate>
                     <freeze-change-template
@@ -63,7 +61,6 @@
                     editType='edit'
                     btntype="primary"
                     icon="el-icon-news"
-                    v-on:click.native="freezeClick"
                     :params="selectRowData"
                     @getData="getDataList"
                     >
@@ -76,7 +73,6 @@
                     editType='edit-two'
                     btntype="primary"
                     icon="el-icon-news"
-                     v-on:click.native="freezeClick"
                     :params="selectRowData"
                     @getData="getDataList"
                     >
@@ -89,7 +85,6 @@
                     editType='edit-three'
                     btntype="primary"
                     icon="el-icon-news"
-                     v-on:click.native="freezeClick"
                     :params="selectRowData"
                     @getData="getDataList"
                     >
@@ -102,7 +97,6 @@
                     editType='edit-four'
                     btntype="primary"
                     icon="el-icon-news"
-                    v-on:click.native="freezeClick"
                     :params="selectRowData"
                     @getData="getDataList"
                     >
@@ -115,7 +109,6 @@
                     editType='edit-five'
                     btntype="primary"
                     icon="el-icon-news"
-                     v-on:click.native="freezeClick"
                     :params="selectRowData"
                     @getData="getDataList"
                     >
@@ -132,7 +125,6 @@
                         current-row-key
                         tooltip-effect="dark"
                         @row-click="clickDetails"
-                        @current-change= "handleSelectionChange"
                         style="width: 100%">
                         <el-table-column
                         type="index"
@@ -164,7 +156,7 @@
                         width="200">
                         </el-table-column>
                         <el-table-column
-                        prop="registerOrigin"
+                        prop="registerOriginName"
                         label="注册来源">
                         </el-table-column>
                         <el-table-column prop="accountStatusName" label="账户状态"></el-table-column>
@@ -182,27 +174,18 @@
                         </el-table-column>
                     </el-table>
                         
-                    <el-pagination
-                        @size-change="handleSizeChange"
-                        @current-change="handleCurrentChange"
-                        :current-page="page"
-                        :page-sizes="[20, 50, 200, 400]"
-                        :page-size="pagesize"
-                        layout="total, sizes, prev, pager, next, jumper"
-                        :total="totalCount">
-                    </el-pagination>
+<div class="info_tab_footer">共计:{{ totalCount }} <div class="show_pager"> <Pager :total="totalCount" @change="handlePageChange" /></div> </div>   
                 </div>
             </div>
-             <cue ref="cue"></cue>
     </div>
 </template>
 <script type="text/javascript">
     import {data_get_driver_list,data_get_driver_status,data_get_shipper_auid} from '../../../api/users/carowner/total_carowner.js'
     import DriverNewTemplate from '../carowner/driver-newTemplate'
     import { parseTime,formatTime } from '@/utils/index.js'
-    import GetCityList from '@/components/GetCityList'
-    import cue from '../../../components/Message/cue'
+    import vregion from '@/components/vregion/Region'
     import { eventBus } from '@/eventBus'
+    import Pager from '@/components/Pagination/index'
     import FreezeChangeTemplate from '../carowner/freeze-change-template'
  
     import blacklist from '../carowner/blacklist'
@@ -210,16 +193,18 @@
     export default {
         data(){
             return{
+                btnsize:'mini',
                 optionsAuidSataus:[],// 账户状态列表
                 page:1,//当前页
                 pagesize:20,//每页显示数
                 totalCount:null,//总记录数
                 formInline: {//查询条件
                     driverMobile:'',
-                    belongCity:null,
                     driverStatus:'',
                     carNumber:'',
-                    accountStatus:''
+                    accountStatus:'',
+                    areaCode:null,
+                    belongCityName:null,
                 },
                 tableDataTree:[],//定义列表记录
                 optionsService:[//状态
@@ -230,10 +215,6 @@
                 ],
                 multipleSelection:[],
                 selectRowData:null,
-                
-                ifInformation:'选中一个才可以操作'
-               // driverNewdailogFlag: false, // 新增弹框控制
-               // templateItem:{}, //新增数据填充
             }
         },
         props: {
@@ -243,11 +224,10 @@
             }
         },
         components:{
-            GetCityList,
+            vregion,
             DriverNewTemplate,
-            cue,
             FreezeChangeTemplate,
-           
+            Pager,
             blacklist
         },
         created() {
@@ -277,14 +257,36 @@
         },
  
         methods:{
+            regionChange(d) {
+                console.log('data:',d)
+                this.formInline.belongCityName = (!d.province&&!d.city&&!d.area&&!d.town) ? '': `${this.getValue(d.province)}${this.getValue(d.city)}${this.getValue(d.area)}${this.getValue(d.town)}`.trim();
+                if(d.area){
+                    this.formInline.areaCode = d.area.code;
+                }else if(d.city){
+                    this.formInline.areaCode = d.city.code;
+                }
+                else{
+                    this.formInline.areaCode = d.province.code;
+                }
+            },
+             getValue(obj){
+                return obj ? obj.value:'';
+            },
+            handlePageChange(obj) {
+                this.page = obj.pageNum
+                this.pagesize = obj.pageSize
+                this.firstblood()
+            },
             clearSearch(){
                 this.formInline={
-                    driverMobile:'',
-                    belongCity:null,
-                    driverStatus:'',
-                    carNumber:'',
-                    accountStatus:''
+                    driverMobile:null,
+                    areaCode:null,
+                    belongCityName:null,
+                    driverStatus:null,
+                    carNumber:null,
+                    accountStatus:null
                 }
+                this.firstblood()
             },
 
             // 新增功能
@@ -293,37 +295,11 @@
             },
             //点击选中当前行
             clickDetails(row, event, column){
+                this.selectRowData = row
             },
 
-            // 判断选中与否
-            handleSelectionChange(val){
-              console.log('log1',val)
-              
-             
-              if(val) {
-               this.multipleSelection = val;
-                this.selectRowData=val
-              } else{
-                this.selectRowData= this.multipleSelection
-    
-              }
-            },
-            freezeClick(val){
-             console.log('log2',this.selectRowData)
-                if(this.selectRowData == null) {           
-                    this.selectRowData=null
-                    this.$refs.cue.hint(this.ifInformation)
-               
-                }else{
-                    this.selectionData=this.multipleSelection
-                  } 
-            },
-            addClick(val){
-                this.$refs.multipleTable.setCurrentRow();
-            },
             //刷新页面
             firstblood(){
-              
                 data_get_driver_list(this.page,this.pagesize,this.formInline).then(res=>{
                     this.totalCount = res.data.totalCount;
                     this.tableDataTree = res.data.list;
@@ -335,7 +311,6 @@
 
             //点击查询按纽，按条件查询列表
             getdata_search(event){
-                this.formInline.belongCity = this.$refs.area.selectedOptions.pop();
                 this.firstblood()
             },
             
@@ -352,17 +327,7 @@
                     this.optionsAuidSataus = res.data;
                 })
             },
-             //每页显示数据量变更
-            handleSizeChange: function(val) {
-                this.pagesize = val;
-                this.firstblood()
-            },
 
-            //页码变更
-            handleCurrentChange: function(val) {
-                this.page = val;
-                this.firstblood()
-            },
             getDataList(){
                 this.firstblood()
             }

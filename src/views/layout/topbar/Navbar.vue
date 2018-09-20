@@ -25,7 +25,7 @@ export default {
     TopNavSearch,
     TopNavCreateOrder
   },
-  data () {
+  data() {
     return {
     }
   }
@@ -35,8 +35,19 @@ export default {
 <style rel="stylesheet/scss" lang="scss" scoped>
 @import "src/styles/variate.scss";
     .navbar {
-        background: #003863;
-        border-radius: 0;
+        // background: #003863;
+        // border-radius: 0;
+
+      background: #003863;
+      border-radius: 0;
+      float: left;
+      /* height: 32%; */
+      max-width: 32%;
+      /* background: red; */
+      min-width: 100%;
+      // background: yellow;
+      position: relative;
+      display: flex;
 
         .errLog-container {
             display: inline-block;
@@ -50,18 +61,47 @@ export default {
             color: red;
         }
         .page-top-nav{
-          height: $topNavHeight;
+          // height: $topNavHeight;
+          // float: left;
+          // margin-left: 5px;
+
+          height: 50px;
           float: left;
-          margin-left: 5px;
+          /* margin-left: 5px; */
+          flex: 12 !important;
+          /* min-width: 1156px; */
+          display: flex;
+          // ul{
+          //   border-bottom: none;
+          //   display: flex !important;
+          //   /* flex: 1; */
+          //   min-width: 88%;
+          //   li{
+          //     height: 50px;
+          //     line-height: 50px;
+          //     color: #fff;
+          //     font-size: 16px;
+          //     text-align: center !important;
+          //   }
+          // }
         }
     }
 
     .logo-panel{
+      // padding-left: 32px;
+      // padding-right: 53px;
+      // height: auto;
+      // float: left;
+      // height: $topNavHeight;
+
+
       padding-left: 32px;
       padding-right: 53px;
       height: auto;
       float: left;
-      height: $topNavHeight;
+      height: 50px;
+      // background: blue;
+      flex: 1;
       
 
       a{

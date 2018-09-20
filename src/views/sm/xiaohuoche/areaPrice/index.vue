@@ -80,35 +80,43 @@
                             </el-table-column>
                             <el-table-column
                             fixed
+                            sortable
                             prop="areaName"
                             label="区域">
                             </el-table-column>
                             <el-table-column
                             prop="serviceName"
+                            sortable
                             label="服务分类">
                             </el-table-column>
                             <el-table-column
                             prop="carTypeName"
+                            sortable
                             label="车辆类型">
                             </el-table-column>
                             <el-table-column
                             prop="standardPriceM"
+                            sortable
                             label="标准起步价">
                             </el-table-column>
                             <el-table-column
                             prop="outstripPriceM"
+                            sortable
                             label="标准超里程费   ">
                             </el-table-column>
                             <el-table-column
                             prop="areaPriceM"
+                            sortable
                             label="区域起步价">
                             </el-table-column>
                             <el-table-column
                             prop="areaOutstripPriceM"
+                            sortable
                             label="区域超里程费">
                             </el-table-column>
                             <el-table-column
                             prop="usingStatus"
+                            sortable
                             label="状态">
                             <template  slot-scope="scope">
                                     {{ scope.row.usingStatus === '1' ? '启用' : '禁用' }}
@@ -389,463 +397,449 @@
 
 <script type="text/javascript">
 
-import { data_Area,data_GetCityList,data_GetCityInfo,data_CarList,data_ServerClassList,data_ChangeStatus,data_Delete,data_GetCarStyle,data_NewOrChange,data_OnlyChange } from '@/api/server/areaPrice.js'
+import { data_Area, data_GetCityList, data_GetCityInfo, data_CarList, data_ServerClassList, data_ChangeStatus, data_Delete, data_GetCarStyle, data_NewOrChange, data_OnlyChange } from '@/api/server/areaPrice.js'
 import Pager from '@/components/Pagination/index'
 import searchInfo from '../component/searchInfo'
 
 import '@/styles/dialog.scss'
 import '@/styles/side.scss'
 
-    export default{
-        data(){
-            return{
-                btnsize:'mini',
-                sizes:[20,50,100],
-                canclose: false,
-                cacheData: {},
-                catchData:{},
-                show:false,//遮罩层
-                areadata:[],//左侧树结构数据
-                citylist:[],//城市列表
-                provinceId:null,//省级列表
-                //左侧树结构tree数据定义
-                props: {
-                    label: 'name',
-                    children: 'children'
+export default{
+      data() {
+          return {
+              btnsize: 'mini',
+              sizes: [20, 50, 100],
+              canclose: false,
+              cacheData: {},
+              catchData: {},
+              show: false, // 遮罩层
+              areadata: [], // 左侧树结构数据
+              citylist: [], // 城市列表
+              provinceId: null, // 省级列表
+                // 左侧树结构tree数据定义
+              props: {
+                  label: 'name',
+                  children: 'children'
                 },
-                //新增树结构数据定义
-                propsAdd:{
-                     label: 'name',
-                    children: 'children'
+                // 新增树结构数据定义
+              propsAdd: {
+                  label: 'name',
+                  children: 'children'
                 },
-                searchInfo:{
-                    valueService:'',//服务分类
-                    valueCarlist:'',
-                    valueStatus:'',
+              searchInfo: {
+                  valueService: '', // 服务分类
+                  valueCarlist: '',
+                  valueStatus: ''
                 },
-                newValueService:null,//新增服务分类
-                newValueCar:null,//车辆分类
-                newValueStyle:null,//车长
-                standPrice:null,//标准起步价    
-                standKm:null,//标准起步价公里
-                standMorePrice:null,//  标准起步价超里程费
-                newPrice:null,//区域起步价
-                newInfoKm:null,//区域起步价公里
-                newMorePrice:null,//区域超里程费
-                optionsStyle:[],//车长分类
-                optionsService:[
-                    {
-                    code:null,
-                    name:'全部'
-                    }
+              newValueService: null, // 新增服务分类
+              newValueCar: null, // 车辆分类
+              newValueStyle: null, // 车长
+              standPrice: null, // 标准起步价
+              standKm: null, // 标准起步价公里
+              standMorePrice: null, //  标准起步价超里程费
+              newPrice: null, // 区域起步价
+              newInfoKm: null, // 区域起步价公里
+              newMorePrice: null, // 区域超里程费
+              optionsStyle: [], // 车长分类
+              optionsService: [
+                  {
+                    code: null,
+                    name: '全部'
+                  }
                 ],
-                optionsCar:[
-                    {
-                    code:null,
-                    name:'全部'
-                    }
+              optionsCar: [
+                  {
+                    code: null,
+                    name: '全部'
+                  }
                 ],
-                optionsStatus:[
-                    {
-                    value:null,
-                    label:'全部'
-                    },
-                    {
+              optionsStatus: [
+                  {
+                    value: null,
+                    label: '全部'
+                  },
+                  {
                     value: '1',
                     label: '启用'
-                    },
-                    {
+                  },
+                  {
                     value: '0',
                     label: '禁用'
-                    }
+                  }
                 ],
-                filterText: '',
-                page:1,
-                pagesize:20,
-                formtitle:'新增分类信息',
-                currentPage4:1,
-                dialogFormVisible: false,
-                dialogFormVisible_change:false,
-                centerDialogVisible:false,
-                delDialogVisible:false,
-                dataTotal:0,
-                changeforms:{
-                    areaKm:null,
-                    areaName:null,
-                    areaOutstripPrice:null,
-                    areaPid:null,
-                    areaPrice:null,
-                    carType:null,
-                    cityId:null,
-                    outstripPrice:null,
-                    serivceCode:null,
-                    standardKm:null,
-                    standardPrice:null,
-                    standardPriceId:null,
+              filterText: '',
+              page: 1,
+              pagesize: 20,
+              formtitle: '新增分类信息',
+              currentPage4: 1,
+              dialogFormVisible: false,
+              dialogFormVisible_change: false,
+              centerDialogVisible: false,
+              delDialogVisible: false,
+              dataTotal: 0,
+              changeforms: {
+                  areaKm: null,
+                  areaName: null,
+                  areaOutstripPrice: null,
+                  areaPid: null,
+                  areaPrice: null,
+                  carType: null,
+                  cityId: null,
+                  outstripPrice: null,
+                  serivceCode: null,
+                  standardKm: null,
+                  standardPrice: null,
+                  standardPriceId: null
                 },
-                information:'你想知道什么',
-                delID:[],
-                delIDTree:'',
-                checkedinformation:[],
-                tableDataTree:[],
-                defaultProps: {
+              information: '你想知道什么',
+              delID: [],
+              delIDTree: '',
+              checkedinformation: [],
+              tableDataTree: [],
+              defaultProps: {
                   children: 'children',
                   label: 'label'
-                },
+                }
             }
         },
-        components:{
-            Pager,
-            searchInfo
+      components: {
+          Pager,
+          searchInfo
         },
-        
-        mounted(){
 
-            this.firstblood();
+      mounted() {
+          this.firstblood()
 
 
-            this.getMoreInformation();
-        },  
-        watch: {
-            filterText(val) {
-                this.$refs.tree2.filter(val);
-            },
+            this.getMoreInformation()
+        },
+      watch: {
+          filterText(val) {
+              this.$refs.tree2.filter(val)
+            }
 
         },
-        methods: {
-            getSearchParam(obj) {
-                console.log(obj)
-                this.searchInfo = Object.assign(this.searchInfo, obj)
+      methods: {
+          getSearchParam(obj) {
+              console.log(obj)
+              this.searchInfo = Object.assign(this.searchInfo, obj)
                 // this.loading = false
-                this.getCommonFunction();
+              this.getCommonFunction()
                 
             },
-            handlePageChange(obj) {
-                this.page = obj.pageNum;
-                this.pagesize = obj.pageSize;
-                this.getCommonFunction();
+          handlePageChange(obj) {
+              this.page = obj.pageNum
+                this.pagesize = obj.pageSize
+                this.getCommonFunction()
             },
-            //关闭前事件
-            beforClose(done){
+            // 关闭前事件
+          beforClose(done) {
                 // console.log(done)
-                this.setCanClose();
+              this.setCanClose()
                 done()
             },
-            setCanClose(){
-                this.canclose=true
-                console.log(this.canclose)
+          setCanClose() {
+              this.canclose = true
+              console.log(this.canclose)
             },
-            //根据服务分类和车辆类型选择车长
-            choseStyle(val){
-                console.log(val)
+            // 根据服务分类和车辆类型选择车长
+          choseStyle(val) {
+              console.log(val)
                 // this.newValueStyle = null;
-                if(val){
-                    data_GetCarStyle(this.newValueService,this.newValueCar).then(res=>{
-                       console.log(res)
-                       if(res.data.length > 0){
-                            this.newValueStyle = null;
-                            this.standPrice = null;
-                            this.standKm = null;
-                            this.standMorePrice = null;
-                            this.optionsStyle = res.data;
-                            this.optionsStyle.map((item)=>{
-                                item.carStyle = item.carLength+'*'+item.carWidth+'*'+item.carHeight+'M';
+              if (val) {
+                  data_GetCarStyle(this.newValueService, this.newValueCar).then(res => {
+                      console.log(res)
+                      if (res.data.length > 0) {
+                         this.newValueStyle = null
+                            this.standPrice = null
+                            this.standKm = null
+                            this.standMorePrice = null
+                            this.optionsStyle = res.data
+                            this.optionsStyle.map((item) => {
+                              item.carStyle = item.carLength + '*' + item.carWidth + '*' + item.carHeight + 'M'
                            })
-                       }else{
-                            this.optionsStyle = res.data;
-                            this.newValueStyle = null;
-                            this.standPrice = null;
-                            this.standKm = null;
-                            this.standMorePrice = null;
+                       }else {
+                         this.optionsStyle = res.data
+                            this.newValueStyle = null
+                            this.standPrice = null
+                            this.standKm = null
+                            this.standMorePrice = null
                        }
-                   }).catch(res=>{
-                        console.log(res)
+                    }).catch(res => {
+                     console.log(res)
                         // if(res.status == 40001)
-                        let information = res.text;
-                        this.hint(information);
+                     const information = res.text
+                        this.hint(information)
                     })
                 }
             },
-            //根据车长显示标准定价
-            choseVule(val){
-                this.optionsStyle.map((item)=>{
-                    if(item.standardPid == val ){
-                        this.standPrice = item.standardPrice;
-                        this.standKm = item.standardKm;
-                        this.standMorePrice = item.outstripPrice;
+            // 根据车长显示标准定价
+          choseVule(val) {
+              this.optionsStyle.map((item) => {
+                  if (item.standardPid == val) {
+                      this.standPrice = item.standardPrice
+                        this.standKm = item.standardKm
+                        this.standMorePrice = item.outstripPrice
                     }
                 })
-                console.log(this.optionsStyle)
+              console.log(this.optionsStyle)
             },
-            //获取  服务和车辆 类型列表
-            getMoreInformation(){
-                data_CarList().then(res=>{
+            // 获取  服务和车辆 类型列表
+          getMoreInformation() {
+              data_CarList().then(res => {
                     // console.log(res.data)
-                    res.data.map((item)=>{
-                        this.optionsCar.push(item);
+                  res.data.map((item) => {
+                      this.optionsCar.push(item)
                     })
-                });
-                data_ServerClassList().then(res=>{
+                })
+                data_ServerClassList().then(res => {
                     // console.log(res.data)
-                     res.data.map((item)=>{
-                        this.optionsService.push(item);
+                  res.data.map((item) => {
+                       this.optionsService.push(item)
                     })
-                }).catch(res=>{
-                    console.log(res)
-                   
-                });
-            },
-            //刷新页面
-            firstblood(){
-                this.show = true;
-                data_Area().then(res=>{
-                    this.areadata = res.data.list;
-                    this.provinceId = this.areadata[0].code ;
-                    this.getCommonFunction();
+                }).catch(res => {
+                  console.log(res)
                 })
             },
-            handleSearch(type){
-                switch(type){
-                    case 'search':
-                        this.getCommonFunction()
-                        break;
+            // 刷新页面
+          firstblood() {
+              this.show = true
+                data_Area().then(res => {
+                  this.areadata = res.data.list
+                    this.provinceId = this.areadata[0].code 
+                    this.getCommonFunction()
+                })
+            },
+          handleSearch(type) {
+              switch (type) {
+                  case 'search':
+                    this.getCommonFunction()
+                    break
                     case 'clear' :
-                        this.search = {
-                            valueService:'',
-                            valueCarlist:'',
-                            valueStatus:'',
+                    this.search = {
+                          valueService: '',
+                          valueCarlist: '',
+                          valueStatus: ''
                         },
                         this.getCommonFunction()
-                        break;
+                    break
                 }
-                
             },
-            //查询和获取对应区域的数据
-            getCommonFunction(){
-                let data  = Object.assign({},{cityId: this.cityId,provinceId: this.provinceId},this.searchInfo)
+            // 查询和获取对应区域的数据
+          getCommonFunction() {
+              const data = Object.assign({}, { cityId: this.cityId, provinceId: this.provinceId }, this.searchInfo)
                 // console.log(data);
-                data_GetCityInfo(this.page,this.pagesize,data).then(res=>{
-                    console.log(res.data.list)
-                    this.tableDataTree = res.data.list;
-                    this.dataTotal = res.data.totalCount;
-                     this.tableDataTree.map((item)=>{
-                        item.capacityTonM = item.capacityTon + '吨,'+' '+item.capacitySquare+'方';
-                        item.standardPriceM = item.standardPrice+'元 '+' '+'('+item.standardKm+'公里)';
-                        item.outstripPriceM = item.outstripPrice + '元/公里';
-                        item.areaPriceM = item.areaPrice + '元'+''+'('+item.areaKm+'公里)';
-                        item.areaOutstripPriceM = item.areaOutstripPrice + '元/公里';
+              data_GetCityInfo(this.page, this.pagesize, data).then(res => {
+                  console.log(res.data.list)
+                  this.tableDataTree = res.data.list
+                    this.dataTotal = res.data.totalCount
+                     this.tableDataTree.map((item) => {
+                       item.capacityTonM = item.capacityTon + '吨,' + ' ' + item.capacitySquare + '方'
+                        item.standardPriceM = item.standardPrice + '元 ' + ' ' + '(' + item.standardKm + '公里)'
+                        item.outstripPriceM = item.outstripPrice + '元/公里'
+                        item.areaPriceM = item.areaPrice + '元' + '' + '(' + item.areaKm + '公里)'
+                        item.areaOutstripPriceM = item.areaOutstripPrice + '元/公里'
                     })
-                    
-                }).catch(res=>{
-                    console.log(res)
-                    let information = res.text;
-                    this.hint(information);
+                }).catch(res => {
+                  console.log(res)
+                  const information = res.text
+                    this.hint(information)
                 })
             },
-            handleNodeClick(data,checked) {
+          handleNodeClick(data, checked) {
                 // console.log(data,checked);
-                data_GetCityList(data.code).then(res=>{
-                    this.citylist = res.data.list;
-                    this.cacheData[data.code] = res.data.list;
-                }).catch(res=>{
-                    console.log("res",res)
+              data_GetCityList(data.code).then(res => {
+                  this.citylist = res.data.list
+                    this.cacheData[data.code] = res.data.list
+                }).catch(res => {
+                  console.log('res', res)
                 })
-                if(checked.level === 1){
-                    this.provinceId  = data.code;
-                    this.cityId = null ;
+              if (checked.level === 1) {
+                  this.provinceId = data.code
+                    this.cityId = null 
                 }
-                if(checked.level === 2){
-                    this.cityId  = data.code;
-                    this.provinceId = null ;
+              if (checked.level === 2) {
+                  this.cityId = data.code
+                    this.provinceId = null 
                 }
-                this.getCommonFunction();
+              this.getCommonFunction()
             },
-            loadNode(node, resolve) {
-                if (node.level === 0) {
+          loadNode(node, resolve) {
+              if (node.level === 0) {
                 // 不会触发事件
-                }else{
-                    setTimeout(() => {
-                    //resolve(this.citylist);
-                    resolve(this.cacheData[node.data.code] || []);
-                    }, 500);
-                } 
+                }else {
+                  setTimeout(() => {
+                    // resolve(this.citylist);
+                      resolve(this.cacheData[node.data.code] || [])
+                    }, 500)
+                }
             },
-             //弹窗Tree节点
-            handleNodeClickMore(data,checked){
+             // 弹窗Tree节点
+          handleNodeClickMore(data, checked) {
                 // console.log(data)
-                data_GetCityList(data.code).then(res=>{
-                    console.log(res)
-                    if(!res.errorInfo){
-                        this.newCityList = res.data.list;
-                        this.catchData[data.code] = res.data.list;
-                    }else{
-                        this.newCityList = [];
+              data_GetCityList(data.code).then(res => {
+                  console.log(res)
+                  if (!res.errorInfo) {
+                      this.newCityList = res.data.list
+                        this.catchData[data.code] = res.data.list
+                    } else{
+                      this.newCityList = []
                     }
                     // console.log(this.newCityList)
-                }).catch(res=>{
+                }).catch(res => {
                     // this.newCityList = [];
                 })
             },
-            loadNodeMore(node, resolve) {
+          loadNodeMore(node, resolve) {
                 // console.log(node)
-                if (node.level === 0){
+              if (node.level === 0) {
                 // 不会触发事件
-                    resolve([{name:'全部'}])
-                }else if(node.level === 1){
-                    setTimeout(() => {
-                    resolve(this.areadata);
-                    }, 500);
-                }else if(node.level >1 ){
-                    setTimeout(() => {
-                    resolve(this.catchData[node.data.code] || []);
-                    }, 500);
-                }
-                else{
-                   
+                  resolve([{ name: '全部' }])
+                } else if (node.level === 1) {
+                  setTimeout(() => {
+                      resolve(this.areadata)
+                    }, 500)
+                } else if (node.level > 1) {
+                  setTimeout(() => {
+                      resolve(this.catchData[node.data.code] || [])
+                    }, 500)
+                }                else {
+
                 }
             },
-            //sousuodizhi
-            filterNode(value, data){
+            // sousuodizhi
+          filterNode(value, data) {
                 // console.log(value,data)
-                if (!value) return true;
-                return data.name.indexOf(value) !== -1;
+              if (!value) return true
+                return data.name.indexOf(value) !== -1
             },
-            //点击选中当前行
-            clickDetails(row, event, column){
-                this.$refs.multipleTable.toggleRowSelection(row);
+            // 点击选中当前行
+          clickDetails(row, event, column) {
+              this.$refs.multipleTable.toggleRowSelection(row)
             },
-            //新增关闭返回初始内容
-            closeAddNewInfo(){
-                this.dialogFormVisible = false;
-                this.newPrice = null;//区域起步价
-                this.newInfoKm = null;//区域起步价公里
-                this.newMorePrice = null;//区域超里程费
+            // 新增关闭返回初始内容
+          closeAddNewInfo() {
+              this.dialogFormVisible = false
+                this.newPrice = null//区域起步价
+                this.newInfoKm = null//区域起步价公里
+                this.newMorePrice = null//区域超里程费
             },
-            //判断是否选中
-            getinfomation(selection){
-                this.checkedinformation = selection;
+            // 判断是否选中
+          getinfomation(selection) {
+              this.checkedinformation = selection
             },
-            //修改
-            handleEdit() {
-                if(Object.keys(this.checkedinformation).length == 0){
-                    //未选择任何修改内容的提示
-                    let information = "未选中任何修改内容";
-                    this.hint(information);
-                }else if(this.checkedinformation.length >1){
-                    let information = "不可修改多个内容";
-                    this.hint(information);
+            // 修改
+          handleEdit() {
+              if (Object.keys(this.checkedinformation).length == 0) {
+                    // 未选择任何修改内容的提示
+                  const information = '未选中任何修改内容';
+                  this.hint(information)
+                } else if (this.checkedinformation.length > 1) {
+                  const information = '不可修改多个内容';
+                  this.hint(information)
 
-                }else{
-                    console.log(this.checkedinformation)
-                    this.dialogFormVisible_change = true;
-                    this.checkedinformation.map((item)=>{
-                        this.changeforms = item;
-                        if(item.cityId){
-                            this.changeforms.cityId = item.cityId;
-                        }else{
-                            this.changeforms.cityId = item.provinceId;
+                }else {
+                  console.log(this.checkedinformation)
+                  this.dialogFormVisible_change = true
+                    this.checkedinformation.map((item) => {
+                      this.changeforms = item
+                        if (item.cityId) {
+                          this.changeforms.cityId = item.cityId
+                        }else {
+                          this.changeforms.cityId = item.provinceId
                         }
-                        this.changeforms. carTypeStyle= item.carLength+'*'+item.carWidth+'*'+item.carHeight+'M';
+                      this.changeforms.carTypeStyle = item.carLength + '*' + item.carWidth + '*' + item.carHeight + 'M'
                     })
-
-                
                 }
             },
             // 禁用/启用
-            handleUseStates(){
-                if(this.checkedinformation.length === 0){
-                    //未选择任何修改内容的提示
-                    let information = "未选中任何更改状态内容";
-                    this.hint(information);
-                }else{
-                    console.log(this.checkedinformation)
-                    // this.show = true;   
-                    let statusID = [];
-                    this.checkedinformation.map((item)=>{
-                        return statusID.push(item.areaPid)
+          handleUseStates() {
+              if (this.checkedinformation.length === 0) {
+                    // 未选择任何修改内容的提示
+                  const information = '未选中任何更改状态内容';
+                  this.hint(information)
+                } else{
+                  console.log(this.checkedinformation)
+                    // this.show = true;
+                  const statusID = []
+                    this.checkedinformation.map((item) => {
+                      return statusID.push(item.areaPid)
                     })
-                    data_ChangeStatus(statusID).then(res=>{
-                        this.getCommonFunction();
+                  data_ChangeStatus(statusID).then(res => {
+                      this.getCommonFunction()
                     })
                 }
             },
             // 是否删除
-            handleDelete() {
-                if(this.checkedinformation.length === 0){
-                    //未选择任何修改内容的提示
-                    let information = "未选中任何删除内容";
-                    this.hint(information);
-                }else{
-                    let delID = [];
-                    this.checkedinformation.map((item)=>{
-                        return delID.push(item.areaPid)
+          handleDelete() {
+              if (this.checkedinformation.length === 0) {
+                    // 未选择任何修改内容的提示
+                  const information = '未选中任何删除内容';
+                  this.hint(information)
+                } else{
+                  const delID = []
+                    this.checkedinformation.map((item) => {
+                      return delID.push(item.areaPid)
                     })
-                    this.delID = delID;
-                    this.delDialogVisible = true;
+                  this.delID = delID
+                    this.delDialogVisible = true
                 }
             },
-            //确认删除
-            delDataInformation(){
-                this.show = true;
-                this.delDialogVisible = false;
+            // 确认删除
+          delDataInformation() {
+              this.show = true
+                this.delDialogVisible = false
                 data_Delete(this.delID).then(res => {
-                    this.getCommonFunction();
+                  this.getCommonFunction()
                 })
-                
             },
-            //新增分类信息获取code值
-            addClassfy(){
-                this.dialogFormVisible = true;
+            // 新增分类信息获取code值
+          addClassfy() {
+              this.dialogFormVisible = true
             },
-            //保存信息
-            newInfoSave(){
-                this.NewOrChange()
+            // 保存信息
+          newInfoSave() {
+              this.NewOrChange()
             },
-             //新增和修改Common
-            NewOrChange(){
-                let data = {
-                    standardPrice:this.standPrice,
-                    standardKm:this.standKm,
-                    outstripPrice:this.standMorePrice,
-                    serivceCode:this.newValueService,
-                    carType:this.newValueCar,
-                    areaKm:this.newInfoKm,
-                    areaPrice:this.newPrice,
-                    standardPriceId:this.newValueStyle,
-                    areaOutstripPrice:this.newMorePrice,
-                    cityId:this.$refs.trees.getCheckedKeys().join(',')
-                };
+             // 新增和修改Common
+          NewOrChange() {
+              const data = {
+                  standardPrice: this.standPrice,
+                  standardKm: this.standKm,
+                  outstripPrice: this.standMorePrice,
+                  serivceCode: this.newValueService,
+                  carType: this.newValueCar,
+                  areaKm: this.newInfoKm,
+                  areaPrice: this.newPrice,
+                  standardPriceId: this.newValueStyle,
+                  areaOutstripPrice: this.newMorePrice,
+                  cityId: this.$refs.trees.getCheckedKeys().join(',')
+                }
                 console.log(data)
-               
-                if(!data.serivceCode){
-                    let information = "请选择服务类型";
-                    this.hint(information);
+
+              if (!data.serivceCode) {
+                  const information = '请选择服务类型';
+                  this.hint(information)
+                }                else if (!data.carType) {
+                  const information = '请选择车辆类型';
+                  this.hint(information)
                 }
-                else if(!data.carType){
-                    let information = "请选择车辆类型";
-                    this.hint(information);
-                } 
-                else if(!data.standardPriceId){
-                    let information = "请选择车长";
-                    this.hint(information);
-                }
-                else if(!data.cityId){
-                    let information = "请选择省市";
-                    this.hint(information);
-                }
-                else if(!data.areaPrice){
-                    let information = "请填写区域起步价格";
-                    this.hint(information);
-                }
-                else if(!data.areaKm){
-                    let information = "请填写区域起步公里数";
-                    this.hint(information);
-                }
-                else if(!data.areaOutstripPrice){
-                    let information = "区域超里程费";
-                    this.hint(information);
-                }
-                else(
+              else if (!data.standardPriceId) {
+                  const information = '请选择车长';
+                  this.hint(information)
+                }                else if (!data.cityId) {
+                  const information = '请选择省市';
+                  this.hint(information)
+                }                else if (!data.areaPrice) {
+                  const information = '请填写区域起步价格';
+                  this.hint(information)
+                }                else if (!data.areaKm) {
+                  const information = '请填写区域起步公里数';
+                  this.hint(information)
+                }                else if (!data.areaOutstripPrice) {
+                  const information = '区域超里程费';
+                  this.hint(information)
+                }                else {(
                     data_NewOrChange(data).then(res=>{
                         console.log(res)
                         this.getCommonFunction();
@@ -857,56 +851,56 @@ import '@/styles/side.scss'
                         let information = res.text;
                         this.hint(information);
                     })
-                )
+                )}
             },
-            //清空数据
-            clearData(){
-                this.standPrice = null;
-                this.standKm = null;
-                this.standMorePrice = null;
-                this.newValueService = null;
-                this.newValueCar = null;
-                this.newInfoKm = null;
-                this.newPrice = null;
-                this.newValueStyle = null;
-                this.newMorePrice = null;
+            // 清空数据
+          clearData() {
+              this.standPrice = null
+                this.standKm = null
+                this.standMorePrice = null
+                this.newValueService = null
+                this.newValueCar = null
+                this.newInfoKm = null
+                this.newPrice = null
+                this.newValueStyle = null
+                this.newMorePrice = null
             },
-            //修改保存
-            changeInfoSave(){
-                console.log(this.changeforms)
-                data_OnlyChange(this.changeforms).then(res=>{
-                    console.log(res)
-                    this.dialogFormVisible_change = false;
-                    this.getCommonFunction();
+            // 修改保存
+          changeInfoSave() {
+              console.log(this.changeforms)
+              data_OnlyChange(this.changeforms).then(res => {
+                  console.log(res)
+                  this.dialogFormVisible_change = false
+                    this.getCommonFunction()
                     
-                }).catch(res=>{
-                    console.log(res)
+                }).catch(res => {
+                  console.log(res)
                     // if(res.status == 40001)
-                    let information = res.text;
-                    this.hint(information);
+                  const information = res.text
+                    this.hint(information)
                 })
             },
-            //验证数据值
-            valuerules(event){
-                let _this = this
-                console.log('this.canclose',this.canclose)
-                if(!event.target.value || this.canclose){
-                    return 
-                }else{
-                    if(!/^[0-9\.]+$/.test(event.target.value)){
-                        let information = "请输入数字类型内容";
-                        _this.hint(information);
+            // 验证数据值
+          valuerules(event) {
+              const _this = this
+              console.log('this.canclose', this.canclose)
+              if (!event.target.value || this.canclose) {
+                  return
+                } else{
+                  if (!/^[0-9\.]+$/.test(event.target.value)) {
+                      const information = '请输入数字类型内容';
+                      _this.hint(information)
                         // event.target.focus()
                     }
                 }
             },
-            hint(val){
-                this.information = val;
-                this.centerDialogVisible = true;
-                let timer = setTimeout(()=>{
-                    this.centerDialogVisible = false;
+          hint(val) {
+              this.information = val
+                this.centerDialogVisible = true
+                let timer = setTimeout(() => {
+                  this.centerDialogVisible = false
                     clearTimeout(timer)
-                },2000)
+                }, 2000)
             }
         }
     }

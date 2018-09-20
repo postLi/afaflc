@@ -76,383 +76,383 @@
 import echarts from 'echarts'
 
 export default {
-    data(){
-        return {
-            title:'昨天',
-            tab:[],
-        }
-    },
-    mounted() {
-        var myChart = echarts.init(document.getElementById('main_lefttop'))
+  data() {
+    return {
+      title: '昨天',
+      tab: []
+    }
+  },
+  mounted() {
+    var myChart = echarts.init(document.getElementById('main_lefttop'))
         // var myChart2 = echarts.init(document.getElementById('main_leftdown'))
-        var myChart3 = echarts.init(document.getElementById('main'))
-        var myChart4 = echarts.init(document.getElementById('xiadan'));
-        var myChart5 = echarts.init(document.getElementById('jiaoyi'));
+    var myChart3 = echarts.init(document.getElementById('main'))
+    var myChart4 = echarts.init(document.getElementById('xiadan'))
+    var myChart5 = echarts.init(document.getElementById('jiaoyi'))
 
-        const option = {
-            title: {
-                text: '用户转化比例',
-                subtext: '测试数据',
-                x: 'center'
-            },
-            tooltip: {
-                trigger: 'item',
-                formatter: '{a} <br/>{b} : {c} ({d}%)'
-            },
-            legend: {
-                orient: 'vertical',
-                x: 'left',
-                data: ['小货车', '大货车', '零担']
-            },
-            toolbox: {
-                show: true,
-                feature: {
-                mark: { show: true },
-                dataView: { show: true, readOnly: false },
-                magicType: {
-                    show: true,
-                    type: ['pie', 'funnel'],
-                    option: {
-                    funnel: {
-                        x: '25%',
-                        width: '50%',
-                        funnelAlign: 'left',
-                        max: 1548
-                    }
-                    }
-                },
-                restore: { show: true },
-                saveAsImage: { show: true }
-                }
-            },
-            color:['#35c966', '#1b9aff','#13c9c9'],
-            calculable: true,
-            series: [
-                {
-                    name: '收入来源',
-                    type: 'pie',
-                    radius: '55%',
-                    center: ['50%', '60%'],
-                    data: [
+    const option = {
+      title: {
+        text: '用户转化比例',
+        subtext: '测试数据',
+        x: 'center'
+      },
+      tooltip: {
+        trigger: 'item',
+        formatter: '{a} <br/>{b} : {c} ({d}%)'
+      },
+      legend: {
+        orient: 'vertical',
+        x: 'left',
+        data: ['小货车', '大货车', '零担']
+      },
+      toolbox: {
+        show: true,
+        feature: {
+          mark: { show: true },
+          dataView: { show: true, readOnly: false },
+          magicType: {
+            show: true,
+            type: ['pie', 'funnel'],
+            option: {
+              funnel: {
+                x: '25%',
+                width: '50%',
+                funnelAlign: 'left',
+                max: 1548
+              }
+            }
+          },
+          restore: { show: true },
+          saveAsImage: { show: true }
+        }
+      },
+      color: ['#35c966', '#1b9aff', '#13c9c9'],
+      calculable: true,
+      series: [
+        {
+          name: '收入来源',
+          type: 'pie',
+          radius: '55%',
+          center: ['50%', '60%'],
+          data: [
                         { value: 335, name: '小货车' },
                         { value: 310, name: '大货车' },
                         { value: 234, name: '零担' }
-                    ],
-                }
-            ]
+          ]
         }
-    
-        const option2 = {
-            tooltip: {
-                trigger: 'item',
-                formatter: '{a} <br/>{b} : {c} ({d}%)'
-            },
-            legend: {
-                orient: 'vertical',
-                x: 'left',
-                data: ['收入', '支出']
-            },
-            toolbox: {
-                show: true,
-                feature: {
-                mark: { show: true },
-                dataView: { show: true, readOnly: false },
-                magicType: {
-                    show: true,
-                    type: ['pie', 'funnel'],
-                    option: {
-                    funnel: {
-                        x: '25%',
-                        width: '50%',
-                        funnelAlign: 'center',
-                        max: 1548
-                    }
-                    }
-                },
-                restore: { show: true },
-                saveAsImage: { show: true }
-                }
-            },
-            calculable: true,
-            series: [
-                {
-                name: '2018收入支出比',
-                type: 'pie',
-                radius: ['50%', '70%'],
-                itemStyle: {
-                    normal: {
-                    label: {
-                        show: false
-                    },
-                    labelLine: {
-                        show: false
-                    }
-                    },
-                    emphasis: {
-                    label: {
-                        show: true,
-                        position: 'center',
-                        textStyle: {
-                        fontSize: '30',
-                        fontWeight: 'bold'
-                        }
-                    }
-                    }
-                },
-                data: [
-                    { value: 500, name: '收入' },
-                    { value: 310, name: '支出' }
-                ]
-                }
-            ]
-        }
-    
-        const option3 = {
-            title: {
-                text: '交易走势图',
-                subtext: '测试数据'
-            },
-            tooltip: {
-                trigger: 'axis'
-            },
-            legend: {
-                data: ['小货车', '大货车','零担']
-            },
-            toolbox: {
-                show: true,
-                feature: {
-                mark: { show: true },
-                dataView: { show: true, readOnly: false },
-                magicType: { show: true, type: ['line', 'bar'] },
-                restore: { show: true },
-                saveAsImage: { show: true }
-                }
-            },
-            calculable: true,
-            xAxis: [
-                {
-                type: 'category',
-                data: ['周一', '周二', '周三', '周四', '周五', '周六', '周日']
-                }
-            ],
-            yAxis: [
-                {
-                type: 'value'
-                }
-            ],
-            series: [
-                {
-                    name: '小货车',
-                    type: 'line',
-                    data: [30054, 46666, 33333, 45656, 32314, 46665, 48998],
-                    markPoint: {
-                        data: [
-                                    { type: 'max', name: '最大值' },
-                                    { type: 'min', name: '最小值' }
-                        ]
-                    },
-                    itemStyle:{
-                        normal: {
-                            color: '#35c966'
-                        }
-                    }
-                },
-                {
-                    name: '大货车',
-                    type: 'line',
-                    data: [20323, 35465, 22345,28945, 24545, 31456, 35456],
-                    markPoint: {
-                        data: [
-                                    { type: 'max', name: '最大值' },
-                                    { type: 'min', name: '最小值' }
-                        ]
-                    },
-                    itemStyle:{
-                        normal: {
-                            color: '#1b9aff'
-                        }
-                    }
-                } ,
-                {
-                    name: '零担',
-                    type: 'line',
-                    data: [14012, 16666, 11999, 14444,11555, 21165, 17884, 21632],
-                    markPoint: {
-                        data: [
-                                    { type: 'max', name: '最大值' },
-                                    { type: 'min', name: '最小值' }
-                        ]
-                    },
-                    itemStyle:{
-                        normal: {
-                            color: '#13c9c9'
-                        }
-                    }
-                }
-            ]
-        }
-        
-        const option4 = {
-            title: {
-                // text: '获取的ID分布情况',
-                // subtext: '饼图：左：各层总ID数；右：各层净ID数'
-            },
-            tooltip: {
-                trigger: 'axis',
-            },
-            toolbox: {
-                show: false,
-                feature: {
-                    //dataView: {show: true, readOnly: false},
-                    //restore: {show: true},
-                    saveAsImage: {show: false}
-                }
-            },
-            legend: {
-                data: ['订单数', '订单金额'],
-                orient: 'horizontal', // 'vertical'
-                x: 'center', // 'center' | 'left' | {number},
-                y: '-5px', // 'center' | 'bottom' | {number}
-                backgroundColor: '#fff',
-                padding: 5,    // [5, 10, 15, 20]
-                itemGap: 5,
-                textStyle: {color: 'ccc'},
-            },
-            grid: {
-                left: '18%',
-                right: '8%',
-                top: '15%',
-                shadowColor:"red",               //阴影颜色
-                shadowOffsetX:0,                 //阴影水平方向上的偏移距离
-                shadowOffsetY:0,                 //阴影垂直方向上的偏移距离
-                shadowBlur:10,                    //阴影的模糊大小
-            },
-            xAxis: {
-                type: 'value',
-                boundaryGap: [0, 0.01]
-            },
-            yAxis: {
-                type: 'category',
-                data: ['小货车','大货车','零担','总计']
-            },
-            series: [
-                {
-                    name: '订单数',
-                    type: 'bar',
-                    data: [7999,7601,9366,21762],
-                    itemStyle:{
-                        normal: {
-                            color: '#ff9800'
-                        }
-                    }
-                },
-                {
-                    name: '订单金额',
-                    type: 'bar',
-                    data: [7999,5325,11246,26393],
-                    itemStyle:{
-                        normal: {
-                            color: '#03a9f4'
-
-                        }
-                    }
-                },
-            ]
-        };
-        const option5 = {
-            title: {
-                // text: '获取的ID分布情况',
-                // subtext: '饼图：左：各层总ID数；右：各层净ID数'
-            },
-            tooltip: {
-                trigger: 'axis',
-            },
-            toolbox: {
-                show: false,
-                feature: {
-                    //dataView: {show: true, readOnly: false},
-                    //restore: {show: true},
-                    saveAsImage: {show: false}
-                }
-            },
-            legend: {
-                data: ['订单数', '订单金额'],
-                orient: 'horizontal', // 'vertical'
-                x: 'center', // 'center' | 'left' | {number},
-                y: '-5px', // 'center' | 'bottom' | {number}
-                backgroundColor: '#fff',
-                padding: 5,    // [5, 10, 15, 20]
-                itemGap: 5,
-                textStyle: {color: 'ccc'},
-            },
-            grid: {
-                left: '18%',
-                right: '8%',
-                top: '15%',
-                shadowColor:"red",               //阴影颜色
-                shadowOffsetX:0,                 //阴影水平方向上的偏移距离
-                shadowOffsetY:0,                 //阴影垂直方向上的偏移距离
-                shadowBlur:10,                    //阴影的模糊大小
-            },
-            xAxis: {
-                type: 'value',
-                boundaryGap: [0, 0.01]
-            },
-            yAxis: {
-                type: 'category',
-                data: ['小货车','大货车','零担','总计']
-            },
-            series: [
-                {
-                    name: '订单数',
-                    type: 'bar',
-                    data: [12234,17601,19366,31762],
-                    itemStyle:{
-                        normal: {
-                            color: '#ff9800'
-                        }
-                    }
-                },
-                {
-                    name: '订单金额',
-                    type: 'bar',
-                    data: [5999,15325,21246,36393],
-                    itemStyle:{
-                        normal: {
-                            color: '#03a9f4'
-
-                        }
-                    }
-                },
-            ]
-        };
-        // 为echarts对象加载数据
-        myChart.setOption(option)
-        // myChart2.setOption(option2)
-        myChart3.setOption(option3)
-        myChart4.setOption(option4)
-        myChart5.setOption(option5)
-        window.onresize = () => {
-            myChart.resize({
-                width: 'auto',
-                height: 'auto'
-            })
-            myChart3.resize({
-                width: 'auto',
-                height: 'auto'
-            })
-            myChart4.resize({
-                width: 'auto',
-                height: 'auto'
-            })
-            myChart5.resize({
-                width: 'auto',
-                height: 'auto'
-            })
-        }
+      ]
     }
 
- }
+    const option2 = {
+      tooltip: {
+        trigger: 'item',
+        formatter: '{a} <br/>{b} : {c} ({d}%)'
+      },
+      legend: {
+        orient: 'vertical',
+        x: 'left',
+        data: ['收入', '支出']
+      },
+      toolbox: {
+        show: true,
+        feature: {
+          mark: { show: true },
+          dataView: { show: true, readOnly: false },
+          magicType: {
+            show: true,
+            type: ['pie', 'funnel'],
+            option: {
+              funnel: {
+                x: '25%',
+                width: '50%',
+                funnelAlign: 'center',
+                max: 1548
+              }
+            }
+          },
+          restore: { show: true },
+          saveAsImage: { show: true }
+        }
+      },
+      calculable: true,
+      series: [
+        {
+          name: '2018收入支出比',
+          type: 'pie',
+          radius: ['50%', '70%'],
+          itemStyle: {
+            normal: {
+              label: {
+                show: false
+              },
+              labelLine: {
+                show: false
+              }
+            },
+            emphasis: {
+              label: {
+                show: true,
+                position: 'center',
+                textStyle: {
+                  fontSize: '30',
+                  fontWeight: 'bold'
+                }
+              }
+            }
+          },
+          data: [
+                    { value: 500, name: '收入' },
+                    { value: 310, name: '支出' }
+          ]
+        }
+      ]
+    }
+
+    const option3 = {
+      title: {
+        text: '交易走势图',
+        subtext: '测试数据'
+      },
+      tooltip: {
+        trigger: 'axis'
+      },
+      legend: {
+        data: ['小货车', '大货车', '零担']
+      },
+      toolbox: {
+        show: true,
+        feature: {
+          mark: { show: true },
+          dataView: { show: true, readOnly: false },
+          magicType: { show: true, type: ['line', 'bar'] },
+          restore: { show: true },
+          saveAsImage: { show: true }
+        }
+      },
+      calculable: true,
+      xAxis: [
+        {
+          type: 'category',
+          data: ['周一', '周二', '周三', '周四', '周五', '周六', '周日']
+        }
+      ],
+      yAxis: [
+        {
+          type: 'value'
+        }
+      ],
+      series: [
+        {
+          name: '小货车',
+          type: 'line',
+          data: [30054, 46666, 33333, 45656, 32314, 46665, 48998],
+          markPoint: {
+            data: [
+                                    { type: 'max', name: '最大值' },
+                                    { type: 'min', name: '最小值' }
+            ]
+          },
+          itemStyle: {
+            normal: {
+              color: '#35c966'
+            }
+          }
+        },
+        {
+          name: '大货车',
+          type: 'line',
+          data: [20323, 35465, 22345, 28945, 24545, 31456, 35456],
+          markPoint: {
+            data: [
+                                    { type: 'max', name: '最大值' },
+                                    { type: 'min', name: '最小值' }
+            ]
+          },
+          itemStyle: {
+            normal: {
+              color: '#1b9aff'
+            }
+          }
+        },
+        {
+          name: '零担',
+          type: 'line',
+          data: [14012, 16666, 11999, 14444, 11555, 21165, 17884, 21632],
+          markPoint: {
+            data: [
+                                    { type: 'max', name: '最大值' },
+                                    { type: 'min', name: '最小值' }
+            ]
+          },
+          itemStyle: {
+            normal: {
+              color: '#13c9c9'
+            }
+          }
+        }
+      ]
+    }
+
+    const option4 = {
+      title: {
+                // text: '获取的ID分布情况',
+                // subtext: '饼图：左：各层总ID数；右：各层净ID数'
+      },
+      tooltip: {
+        trigger: 'axis'
+      },
+      toolbox: {
+        show: false,
+        feature: {
+                    // dataView: {show: true, readOnly: false},
+                    // restore: {show: true},
+          saveAsImage: { show: false }
+        }
+      },
+      legend: {
+        data: ['订单数', '订单金额'],
+        orient: 'horizontal', // 'vertical'
+        x: 'center', // 'center' | 'left' | {number},
+        y: '-5px', // 'center' | 'bottom' | {number}
+        backgroundColor: '#fff',
+        padding: 5,    // [5, 10, 15, 20]
+        itemGap: 5,
+        textStyle: { color: 'ccc' }
+      },
+      grid: {
+        left: '18%',
+        right: '8%',
+        top: '15%',
+        shadowColor: 'red',               // 阴影颜色
+        shadowOffsetX: 0,                 // 阴影水平方向上的偏移距离
+        shadowOffsetY: 0,                 // 阴影垂直方向上的偏移距离
+        shadowBlur: 10                    // 阴影的模糊大小
+      },
+      xAxis: {
+        type: 'value',
+        boundaryGap: [0, 0.01]
+      },
+      yAxis: {
+        type: 'category',
+        data: ['小货车', '大货车', '零担', '总计']
+      },
+      series: [
+        {
+          name: '订单数',
+          type: 'bar',
+          data: [7999, 7601, 9366, 21762],
+          itemStyle: {
+            normal: {
+              color: '#ff9800'
+            }
+          }
+        },
+        {
+          name: '订单金额',
+          type: 'bar',
+          data: [7999, 5325, 11246, 26393],
+          itemStyle: {
+            normal: {
+              color: '#03a9f4'
+
+            }
+          }
+        }
+      ]
+    }
+    const option5 = {
+      title: {
+                // text: '获取的ID分布情况',
+                // subtext: '饼图：左：各层总ID数；右：各层净ID数'
+      },
+      tooltip: {
+        trigger: 'axis'
+      },
+      toolbox: {
+        show: false,
+        feature: {
+                    // dataView: {show: true, readOnly: false},
+                    // restore: {show: true},
+          saveAsImage: { show: false }
+        }
+      },
+      legend: {
+        data: ['订单数', '订单金额'],
+        orient: 'horizontal', // 'vertical'
+        x: 'center', // 'center' | 'left' | {number},
+        y: '-5px', // 'center' | 'bottom' | {number}
+        backgroundColor: '#fff',
+        padding: 5,    // [5, 10, 15, 20]
+        itemGap: 5,
+        textStyle: { color: 'ccc' }
+      },
+      grid: {
+        left: '18%',
+        right: '8%',
+        top: '15%',
+        shadowColor: 'red',               // 阴影颜色
+        shadowOffsetX: 0,                 // 阴影水平方向上的偏移距离
+        shadowOffsetY: 0,                 // 阴影垂直方向上的偏移距离
+        shadowBlur: 10                    // 阴影的模糊大小
+      },
+      xAxis: {
+        type: 'value',
+        boundaryGap: [0, 0.01]
+      },
+      yAxis: {
+        type: 'category',
+        data: ['小货车', '大货车', '零担', '总计']
+      },
+      series: [
+        {
+          name: '订单数',
+          type: 'bar',
+          data: [12234, 17601, 19366, 31762],
+          itemStyle: {
+            normal: {
+              color: '#ff9800'
+            }
+          }
+        },
+        {
+          name: '订单金额',
+          type: 'bar',
+          data: [5999, 15325, 21246, 36393],
+          itemStyle: {
+            normal: {
+              color: '#03a9f4'
+
+            }
+          }
+        }
+      ]
+    }
+        // 为echarts对象加载数据
+    myChart.setOption(option)
+        // myChart2.setOption(option2)
+    myChart3.setOption(option3)
+    myChart4.setOption(option4)
+    myChart5.setOption(option5)
+    window.onresize = () => {
+      myChart.resize({
+        width: 'auto',
+        height: 'auto'
+      })
+      myChart3.resize({
+        width: 'auto',
+        height: 'auto'
+      })
+      myChart4.resize({
+        width: 'auto',
+        height: 'auto'
+      })
+      myChart5.resize({
+        width: 'auto',
+        height: 'auto'
+      })
+    }
+  }
+
+}
 </script>
 <style lang="scss">
 .main_content{
@@ -509,7 +509,7 @@ export default {
         ul{
             flex: 1;
             box-sizing: border-box;
-            border: solid 1px #1790ff;
+            // border: solid 1px #1790ff;
             // float: left;
             height: 185px;
             margin-right: 20px;
@@ -518,9 +518,10 @@ export default {
             border-radius: 5px;
         li{
             line-height: 20px;
-            font-size: 14px;
-            padding: 0 20px;
+            font-size: 13px;
+            // padding: 0 20px;
             margin: 5px 0 ;
+            color:#fff;
             span{
                 color:#333;
                 padding:0 10px;
@@ -540,7 +541,8 @@ export default {
             font-size: 16px;
             font-weight: bold;
             margin: 0px;
-            background:  rgb(211, 234, 253);
+            // background:  rgb(211, 234, 253);
+            background-color: #6bc9eb;
             margin-bottom: 10px;
             border-radius: 5px 5px 0 0;
             span{
@@ -561,12 +563,11 @@ export default {
             box-shadow: 0px 35px 77px -17px rgba(0, 0, 0, 0.40); 
             overflow: hidden;
             color: red;
-
         }
         
     }
     .main_forthUl ul:hover {
-        border:1px solid #3e9ff1;
+        // border:1px solid #3e9ff1;
         cursor: pointer;
     }
     .main_forthUl ul:hover .el-icon-check{

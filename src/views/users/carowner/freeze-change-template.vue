@@ -25,11 +25,9 @@
             <el-col :span="12">
               <el-form-item label="所在地" :label-width="formLabelWidth">
               <el-input type="text" v-model="formFroze.belongCityName" disabled ></el-input>
-          
             </el-form-item>
             </el-col>
           </el-row>
-
           <el-row>
             <el-col :span="12">
               <el-form-item label="车牌号：" :label-width="formLabelWidth">
@@ -37,21 +35,37 @@
             </el-form-item>
             </el-col>
             <el-col :span="12">
-              <el-form-item label="车型" :label-width="formLabelWidth">
+              <el-form-item label="车型：" :label-width="formLabelWidth">
                 <el-input v-model="formFroze.carTypeName" disabled></el-input>
             </el-form-item>
             </el-col>
           </el-row>
              <el-row>
             <el-col :span="12">
-              <el-form-item label="中单等级" :label-width="formLabelWidth">
-                <el-input v-model="formFroze.obtainGradeName" disabled></el-input>
+              <el-form-item label="中单等级：" :label-width="formLabelWidth">
+                    <el-select v-model="formFroze.obtainGrade" placeholder="请选择" disabled>
+                                <el-option
+                                    v-for="item in optionsLevel"
+                                    :key="item.code"
+                                    :label="item.name"
+                                    :value="item.code"
+                                    
+                                    >
+                                </el-option>
+                    </el-select>
             </el-form-item>
             </el-col>
             <el-col :span="12">
-              <el-form-item label="中单等级有效期至" :label-width="formLabelWidth">
-               <el-input v-model="formFroze.obtainGradeTime" :maxlength="20" disabled></el-input>
-              
+              <el-form-item label="中单等级有效期至：" :label-width="formLabelWidth">
+                        <el-date-picker
+                            v-model="formFroze.obtainGradeTime"
+                            type="date"
+                            format="yyyy-MM-dd"
+                            placeholder="选择日期"
+                             :picker-options="pickerOptions"
+                             disabled
+                            >
+                        </el-date-picker>
             </el-form-item>
             </el-col>
           </el-row>
@@ -79,8 +93,8 @@
                     </el-form-item>
               </el-col>
             <el-col :span="12">
-              <el-form-item label="注册来源" :label-width="formLabelWidth">
-                <el-input v-model="formFroze.registerOrigin" :maxlength="20" disabled></el-input>
+              <el-form-item label="注册来源：" :label-width="formLabelWidth">
+                <el-input v-model="formFroze.registerOriginName" :maxlength="20" disabled></el-input>
               </el-form-item>
             </el-col>
           </el-row>
@@ -89,13 +103,13 @@
           </div>
           <el-row>
             <el-col :span="24">
-              <el-form-item label="冻结原因" prop="freezeCause" :label-width="formLabelWidth">
+              <el-form-item label="冻结原因：" prop="freezeCause" :label-width="formLabelWidth">
               <el-select v-model="formFroze.freezeCause" placeholder="请选择" v-if=" editType == 'edit'|| editType == 'edit-two'" clearable>
                 <el-option
                   v-for="item in optionsReason"
-                  :key="item.value"
+                  :key="item.code"
                   :label="item.name"
-                  :value="item.code"  >
+                  :value="item.code">
                 </el-option>
               </el-select >
               <el-select v-model="formFroze.freezeCause" placeholder="请选择" v-else-if=" editType == 'edit-three'" disabled>
@@ -111,7 +125,7 @@
           </el-row>
           <el-row>
             <el-col :span="24">
-              <el-form-item label="解冻日期" :label-width="formLabelWidth" prop="freezeTime">
+              <el-form-item label="解冻日期：" :label-width="formLabelWidth" prop="freezeTime">
                 <el-date-picker
                   v-model="formFroze.freezeTime"
                   type="datetime"
@@ -175,9 +189,7 @@
 import GetCityList from '@/components/GetCityList'
 import {parseTime} from '@/utils/'
 import { eventBus } from '@/eventBus'
-import {data_get_shipper_type,data_get_shipper_change,data_get_shipper_freezeType,data_get_freeze_change,data_get_freeze,data_unbind_freeze_change} from '@/api/users/shipper/all_shipper.js'
-
-import  {data_put_freezeDriver,data_get_freezeDriverchange,data_unbind_freezeDriverchange} from '@/api/users/carowner/total_carowner.js'
+import  {data_put_freezeDriver,data_get_freezeDriverchange,data_unbind_freezeDriverchange,data_Get_carType,data_get_car_freezeType,data_get_driver_obStatus} from '@/api/users/carowner/total_carowner.js'
 export default {
   name:'create-Change-ViewDialog',
   components:{
@@ -224,29 +236,27 @@ export default {
       text:'',
       optionsReason:[],
       midoptions:[],
+      optionsLevel:[],
       options:[], 
-      formLabelWidth:'120px',
+      formLabelWidth:'150px',
       freezeDialogFlag:false,
       formFroze: { // 冻结弹框表单
-        driverMobile: '', // 手机号
-        driverName: '', // 公司名称
+        driverMobile:null, // 手机号
+        driverName: null, // 公司名称
         carTypeName:null,
-        carNumber:'', // 详细地址
-        driverCardid:'', // 身份证号码
+        carNumber:null, // 详细地址
+        driverCardid:null, // 身份证号码
         belongCity:null, // 所在地
         registerOrigin:'', // 注册来源
-        creditCode:'', // 统一社会信用代码
-        freezeTime:'',
+        creditCode:null, // 统一社会信用代码
+        freezeTime:null,
         freezeCause:null,
-        freezeCauseRemark :'',
-        belongCityName:'',
-        obtainGrade:'',
-        obtainGradeName:'',
-        obtainGradeTime:'',
-        unfreezeCauseRemark:''
-        // radio1:'',
-        // radio2:'',
-        // radio3:''
+        freezeCauseRemark :null,
+        belongCityName:null,
+        obtainGrade:null,
+        obtainGradeName:null,
+        obtainGradeTime:null,
+        unfreezeCauseRemark:null
       },
       radio: '',
       currentRow:null,
@@ -270,6 +280,15 @@ export default {
     this.title = this.btntitle;
     this.getMoreInformation()
   },
+    watch:{
+        freezeDialogFlag:{
+        handler: function(val, oldVal) {
+            if(!val){
+                this.$refs.formFroze.resetFields();
+            }
+        }
+        }
+        },
   methods:{
     timeChange(val){
       let currentTime = this.formFroze.freezeTime || new Date()
@@ -292,7 +311,6 @@ export default {
           time += 100000 * oneDay
           break
       }
-
       this.formFroze.freezeTime = time
     },
     change(){
@@ -307,53 +325,55 @@ export default {
     },
     openDialog(){
       //冻结
-
+           if(!this.params){
+            this.$message.info('未选中需要修改内容');
+            return
+           }
+           else{
             this.formFroze = this.params;
 
         if(this.formFroze.accountStatusName == '冻结中' && this.editType == 'edit'){
-            this.$message.info('您选中的货主已被冻结，不需多次冻结！');
+            this.$message.info('您选中的车主已被冻结，不需多次冻结！');
             return
         }
         else if(this.formFroze.accountStatusName != '冻结中' && this.editType == 'edit-two'){
-            this.$message.info('您选中的货主未被冻结，不可做此操作！');
+            this.$message.info('您选中的车主未被冻结，不可做此操作！');
             return
         }
         else if(this.formFroze.accountStatusName != '冻结中' && this.editType == 'edit-three'){
-            this.$message.info('您选中的货主未被冻结，无需移除！');
+            this.$message.info('您选中的车主未被冻结，无需移除！');
             return
         }
-        else if(this.params){
-
-     
+        else{
         var obj = JSON.parse(JSON.stringify(this.params));
-       
         this.formFroze=obj;
-        this.formFroze.obtainGradeTime = parseTime(this.formFroze.obtainGradeTime,"{y}-{m}-{d}");
-       /* this.formFroze.forEach(item => {
-            item.obtainGradeTime = parseTime(item.obtainGradeTime,"{y}-{m}-{d}");
-        })*/
-       this.freezeDialogFlag=true
-      }
-      else{
-         this.freezeDialogFlag=true
+        this.freezeDialogFlag=true
+        }
       }
     },
 
     getMoreInformation(){
-      //获取货主类型
-      data_get_shipper_type().then(res=>{
+      //获取车主类型
+      data_Get_carType().then(res=>{
         res.data.map((item)=>{
         this.options.push(item)
         })
       }),
-      // 获取冻结原因下拉
-      data_get_shipper_freezeType().then(res=>{
+      // 获取车主冻结原因下拉
+      data_get_car_freezeType().then(res=>{
        
         res.data.map((item)=>{
           this.optionsReason.push(item)
         })
       })
-      
+            // 中单等级的获取
+            data_get_driver_obStatus().then(res =>{
+                res.data.map(item=>{
+                    this.optionsLevel.push(item)
+                })
+            }).catch(err =>{
+                console.log(err)
+            })      
     },
     // 冻结提交数据
     onSubmit(){

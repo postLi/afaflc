@@ -1,5 +1,5 @@
 <template>
-	<div class="carOwner">
+	<div class="carOwner tabsWrap">
 		<el-tabs v-model="CarActiveName" type="card" @tab-click="handleClick">
 			<el-tab-pane label="全部" name="first">
 				<Total :isvisible="CarActiveName === 'first'"></Total>   
@@ -91,37 +91,13 @@
                 }
             }
         }
-        .shipper_searchinfo{
-            position: absolute;
-            left:0;
-            top:0;
-            padding:15px 16px;
-            height:70px;
-            width:100%;
-            line-height: 35px;
-            .el-form-item{
-                .el-form-item__content{
-                    .el-input{
-                        .el-input__inner{
-                            color:#3e9ff1;
-                            height:30px;
-                            line-height: 30px;
-                        }
-                    }
-                    .el-button{
-                        padding:8px 20px;
-                    }
-                }
-            }
-        }
         .classify_info{
             height:100%;
-            padding:70px 13px 0 0;
             .btns_box{
                 margin-bottom:10px;
                 .el-button{
-                    margin-right:20px;
-                    padding:10px 20px;
+                    margin-right:0px;
+                    padding: 7px 15px 7px;
                 }
             }
             .info_news{
@@ -135,7 +111,7 @@
         .carNewinfo,.freezeInfo,.blackInfo{
             display: inline-block;
             .el-dialog{
-                width: 780px;
+                width:850px;
                 .el-dialog__body{
                     .el-form{
                         .shipper_information{
@@ -154,7 +130,7 @@
                                     width: 80px;
                                 }
                                 &>.el-checkbox{
-                                    margin-left: 130px;
+                                    margin-left:0px;
                                 }
                             }
                         }    

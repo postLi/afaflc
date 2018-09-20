@@ -1,9 +1,10 @@
 <template>
     <div class="identicalStyle">
-         <div class="shipper_searchinfo">
-              <el-form inline>
+              <el-form :inline="true"  class="demo-ruleForm classify_searchinfo">
                 <el-form-item label="所在地：">
-                     <GetCityList v-model="formInline.belongCity" ref="area"></GetCityList>
+                    <vregion :ui="true"  @values="regionChange" class="form-control">
+                        <el-input v-model="formInline.belongCity" placeholder="请选择"></el-input>
+                    </vregion>
                 </el-form-item>
                 <el-form-item label="车牌号：">
                     <el-input placeholder="请输入内容" v-model.trim="formInline.carNumber" clearable></el-input>
@@ -11,13 +12,11 @@
                 <el-form-item label="手机号：">
                     <el-input placeholder="请输入内容" v-model.trim="formInline.driverMobile" clearable></el-input>
                 </el-form-item>
-                <el-form-item>
-                    <el-button type="primary" plain @click="getdata_search">查询</el-button>
-                    <el-button type="info" plain   @click="clearSearch">清空</el-button>
+                <el-form-item class="fr">
+                    <el-button type="primary" plain @click="getdata_search" :size="btnsize">查询</el-button>
+                    <el-button type="info" plain   @click="clearSearch" :size="btnsize">清空</el-button>
                 </el-form-item>
-            </el-form>
-            </div>
-                
+            </el-form>       
             <div class="classify_info">
                 <div class="btns_box">
                     <driver-newTemplate
@@ -27,7 +26,6 @@
                     btntype="primary"
                     icon="el-icon-news"
                     editType="edit"
-                    v-on:click.native="freezeClick"
                     :templateItem="selectionData"
                     btntitle="修改"
                     :updataflag="true"
@@ -40,9 +38,9 @@
                         :data="tableDataTree"
                         stripe
                         border
-                         highlight-current-row
+                        highlight-current-row
+                        @row-click="clickDetails"
                         current-row-key
-                        @current-change="handleSelectionChange"
                         tooltip-effect="dark"
                         style="width: 100%">
                         <el-table-column
@@ -73,7 +71,7 @@
                         width="200">
                         </el-table-column>
                         <el-table-column
-                        prop="registerOrigin"
+                        prop="registerOriginName"
                         label="注册来源">
                         </el-table-column>
                         <el-table-column
@@ -86,26 +84,17 @@
                         </el-table-column>
                     </el-table>
                         
-                    <el-pagination
-                        @size-change="handleSizeChange"
-                        @current-change="handleCurrentChange"
-                        :current-page="page"
-                        :page-sizes="[20, 50, 200, 400]"
-                        :page-size="pagesize"
-                        layout="total, sizes, prev, pager, next, jumper"
-                        :total="totalCount">
-                    </el-pagination>
+<div class="info_tab_footer">共计:{{ totalCount }} <div class="show_pager"> <Pager :total="totalCount" @change="handlePageChange" /></div> </div>   
                 </div>
             </div>
-         <cue ref="cue"></cue>
     </div>
 </template>
 <script type="text/javascript">
     import {data_get_driver_list,data_get_driver_status} from '../../../api/users/carowner/total_carowner.js'
-    import cue from '../../../components/Message/cue'
     import { eventBus } from '@/eventBus'
     import { parseTime,formatTime } from '@/utils/index.js'
-    import GetCityList from '@/components/GetCityList'
+    import vregion from '@/components/vregion/Region'
+    import Pager from '@/components/Pagination/index'
     import DriverNewTemplate from '../carowner/driver-newTemplate'
     export default {
         props: {
@@ -115,21 +104,22 @@
             }
         },
         components:{
-            GetCityList,
+            vregion,
+            Pager,
             DriverNewTemplate,
-            cue,
-            DriverNewTemplate
         },
         data(){
             return{
+                btnsize:'mini',
                 page:1,//当前页
                 pagesize:20,//每页显示数
                 totalCount:null,//总记录数
                 formInline: {//查询条件
-                    driverMobile:'',
-                    belongCity:'',
+                    driverMobile:null,
+                    belongCity:null,
                     driverStatus:'AF0010403',
-                    carNumber:''
+                    carNumber:null,
+                    areaCode:null,
                 },
                 tableDataTree:[],//定义列表记录
                 optionsService:[//状态
@@ -140,27 +130,12 @@
                 ],
                 selectionData:null,
                 multipleSelection:[],
-                 ifInformation:'选中一个才可以操作',
             }
-        },
-        created() {
-          
         },
         watch: {
-            isvisible: {
-                handler(newVal, oldVal) {
-                
-                    if(newVal && !this.inited){
-                        this.inited = true
-                        this.firstblood()
-                        this.getMoreInformation()
-                    }
-                },
-                // 代表在wacth里声明了firstName这个方法之后立即先去执行handler方法
-                immediate: true
-            }
         },
         mounted(){
+            this.firstblood()
           eventBus.$on('changeListtwo', ()=>{
                 if(this.inited || this.isvisible){
                     this.firstblood()
@@ -170,49 +145,40 @@
         },
  
         methods:{
+            regionChange(d) {
+                console.log('data:',d)
+                this.formInline.belongCity = (!d.province&&!d.city&&!d.area&&!d.town) ? '': `${this.getValue(d.province)}${this.getValue(d.city)}${this.getValue(d.area)}${this.getValue(d.town)}`.trim();
+                if(d.area){
+                    this.formInline.areaCode = d.area.code;
+                }else if(d.city){
+                    this.formInline.areaCode = d.city.code;
+                }
+                else{
+                    this.formInline.areaCode = d.province.code;
+                }
+            },
+             getValue(obj){
+                return obj ? obj.value:'';
+            },       
+            handlePageChange(obj) {
+                this.page = obj.pageNum
+                this.pagesize = obj.pageSize
+                this.firstblood()
+            },                 
             clearSearch(){
                 this.formInline={//查询条件
-                    driverMobile:'',
-                    belongCity:'',
-                    driverStatus:'',
-                    carNumber:''
+                    driverMobile:null,
+                    belongCity:null,
+                    areaCode:null,
+                    driverStatus:'AF0010403',
+                    carNumber:null
                 }
+            this.firstblood()    
             },
-            // 判断选中与否
-            handleSelectionChange(val){
-
-                this.multipleSelection = val;
-                if(val){
-                    this.selectionData=val
-                     
-                } else{
-                    this.selectionData1 = null
-                }
+            //点击选中当前行
+            clickDetails(row, event, column){
+                this.selectionData = row
             },
-            freezeClick(){
-             
-                if(this.selectionData == null){                      
-                     this.selectionData=null
-                     this.$refs.cue.hint(this.ifInformation)
-                  } else{
-                       this.selectionData=this.multipleSelection
-                  }
-            },
-            // 修改功能
-            // handleEdit(){
-            //     console.log('修改功能')
-            // },
-
-            // 修改冻结功能
-            // handleFreezeEdit(){
-            //     console.log('修改冻结功能') 
-            // },
-
-            // 移入黑名单功能
-            // handleBlick(){
-            //     console.log('移入黑名单功能')
-            // },
-
             //刷新页面
             firstblood(){
                 data_get_driver_list(this.page,this.pagesize,this.formInline).then(res=>{
@@ -225,11 +191,7 @@
             },
             //点击查询按纽，按条件查询列表
             getdata_search(event){
-                this.formInline.belongCity = this.$refs.area.selectedOptions.pop();
-                data_get_driver_list(this.page,this.pagesize,this.formInline).then(res=>{
-                    this.dataTotal = res.data.totalCount;
-                    this.tableDataTree = res.data.list;
-                })
+             this.firstblood()
             },
             //获取车主状态列表
             getMoreInformation(){
