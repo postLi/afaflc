@@ -101,14 +101,14 @@ import { getDictionary } from '@/api/common.js'
                 console.log('data:',d)
                 this.searchInfo.belongCityName = (!d.province&&!d.city&&!d.area&&!d.town) ? '': `${this.getValue(d.province)}${this.getValue(d.city)}${this.getValue(d.area)}${this.getValue(d.town)}`.trim();
                 if(d.area){
-                    this.xinzengform.areaCode = d.area.code;
+                    this.searchInfo.areaCode = d.area.code;
                 }else if(d.city){
-                    this.xinzengform.belongCity = d.city.code;
-                    this.xinzengform.cityCode = d.city.code;
+                    this.searchInfo.belongCity = d.city.code;
+                    this.searchInfo.cityCode = d.city.code;
                 }
                 else{
-                    this.xinzengform.belongCity = d.province.code;
-                    this.xinzengform.provinceCode = d.province.code;
+                    this.searchInfo.belongCity = d.province.code;
+                    this.searchInfo.provinceCode = d.province.code;
 
                 }
             },

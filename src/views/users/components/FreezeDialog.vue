@@ -69,7 +69,7 @@
           <el-row>
             <el-col :span="24">
               <el-form-item label="解冻日期：" :label-width="formLabelWidth" prop="freezeTime">
-                <span class="onlyShow" v-if="editType == 'remove'">{{formFroze.freezeTime}}</span>
+                <span class="onlyShow" v-if="editType == 'remove'">{{formFroze.freezeTime | parseTime}}</span>
                 <div v-else>
                     <el-date-picker
                     v-model="formFroze.freezeTime"
@@ -118,8 +118,11 @@
 </template>
 <script>
 
-import {data_get_shipper_change,data_get_shipper_freezeType} from '@/api/users/shipper/all_shipper.js'
+import {data_get_shipper_change} from '@/api/users/shipper/all_shipper.js'
+import { DicfreezeType } from '@/api/common.js'
 import { eventBus } from '@/eventBus'
+import { parseTime } from '@/utils/'
+
 export default {
   name:'shipperfreezeDialog',
   components:{
@@ -239,7 +242,7 @@ export default {
 
     getMoreInformation(){
       // 获取冻结原因下拉
-        data_get_shipper_freezeType().then(res=>{
+        DicfreezeType().then(res=>{
             // console.log(res)
             this.optionsReason = res.data;
         })

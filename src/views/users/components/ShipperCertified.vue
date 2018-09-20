@@ -62,12 +62,12 @@
           <el-form :model="shengheform" ref="shengheform" :rules="shengheformRules">
             <el-row>
               <el-col :span="12">
-                <el-form-item label="手机号码" :label-width="formLabelWidth" >
-                  <el-input v-model="shengheform.mobile" disabled auto-complete="off"></el-input>
+                <el-form-item label="手机号码" required :label-width="formLabelWidth"  prop="mobile">
+                    <span class="onlyShow">{{shengheform.mobile}}</span>
                 </el-form-item>
               </el-col>
               <el-col :span="12">
-                <el-form-item label="公司名称" :label-width="formLabelWidth">
+                <el-form-item label="公司名称" :label-width="formLabelWidth" prop="companyName">
                   <el-input v-model="shengheform.companyName" auto-complete="off"></el-input>
                 </el-form-item>
               </el-col>
@@ -75,51 +75,51 @@
 
             <el-row>
               <el-col :span="12">
-                <el-form-item label="所在地" :label-width="formLabelWidth" prop="address">
+                <el-form-item label="所在地" :label-width="formLabelWidth" prop="belongCityName">
                     <vregion :ui="true"  @values="regionChange" class="form-control">
                         <el-input v-model="shengheform.belongCityName" placeholder="请选择" ></el-input>
                     </vregion>
                 </el-form-item>
               </el-col>
               <el-col :span="12">
-                <el-form-item label="联系人" :label-width="formLabelWidth" prop="linkman">
+                <el-form-item label="联系人" :label-width="formLabelWidth" prop="contacts">
                   <el-input v-model="shengheform.contacts" auto-complete="off"></el-input>
                 </el-form-item>
               </el-col>
             </el-row>
             <el-row>
               <el-col :span="12">
-                <el-form-item label="详细地址" :label-width="formLabelWidth" prop="xsaddress">
+                <el-form-item label="详细地址" :label-width="formLabelWidth" prop="address">
                   <el-input v-model="shengheform.address" auto-complete="off"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="12">
-                <el-form-item label="统一社会信用代码" :label-width="formLabelWidth">
+                <el-form-item label="统一社会信用代码" :label-width="formLabelWidth" prop="creditCode">
                   <el-input v-model="shengheform.creditCode" :maxlength="20"></el-input>
                 </el-form-item>
               </el-col>
             </el-row>
             <el-row>
               <el-col :span="12">
-                <el-form-item label="提交认证时间" :label-width="formLabelWidth">
-                    <el-input v-model="shengheform.authenticationTime" disabled></el-input>
+                <el-form-item label="提交认证时间" :label-width="formLabelWidth" prop="authenticationTime">
+                    <span class="onlyShow">{{shengheform.authenticationTime | parseTime}}</span>
                 </el-form-item>
               </el-col>
               <el-col :span="12">
-                <el-form-item label="等待时长:" :label-width="formLabelWidth">
-                  <el-input v-model="shengheform.waitTime" disabled></el-input>
+                <el-form-item label="等待时长:" :label-width="formLabelWidth" prop="waitTime">
+                    <span class="onlyShow">{{shengheform.waitTime}}</span>
                 </el-form-item>
               </el-col>
             </el-row>
             <el-row>
               <el-col :span="12">
-                <el-form-item label="注册来源" :label-width="formLabelWidth">
-                  <el-input v-model="shengheform.registerOrigin" disabled></el-input>
+                <el-form-item label="注册来源" :label-width="formLabelWidth" prop="registerOrigin">
+                    <span class="onlyShow">{{shengheform.registerOrigin}}</span>
                 </el-form-item>
               </el-col>
               <el-col :span="12">
-                <el-form-item label="货主类型" :label-width="formLabelWidth" prop="shipperType">
-                  <el-input v-model="demoData" disabled></el-input>
+                <el-form-item label="货主类型" :label-width="formLabelWidth"  required prop="shipperTypeName">
+                    <span class="onlyShow">{{shengheform.shipperTypeName}}</span>
                 </el-form-item>
               </el-col>
             </el-row>
@@ -131,29 +131,35 @@
                 <div class="data_pic_yyzz data_pic_common">  
                     <img  class="picURL" :src="shengheform.businessLicenceFile ? shengheform.businessLicenceFile : defaultImg" @click="changeIMG"/>
                     <h2>营业执照</h2>
-                      <el-radio-group v-model="shengheform.businessLicenceFileNoPass">
-                        <el-radio label="上传合格">上传合格</el-radio><br />
-                        <el-radio label="不清晰">不清晰</el-radio><br />
-                        <el-radio label="内容不符">内容不符</el-radio>
-                      </el-radio-group>
+                    <el-form-item  prop="businessLicenceFileNoPass">
+                        <el-radio-group v-model="shengheform.businessLicenceFileNoPass">
+                            <el-radio label="上传合格">上传合格</el-radio><br />
+                            <el-radio label="不清晰">不清晰</el-radio><br />
+                            <el-radio label="内容不符">内容不符</el-radio>
+                        </el-radio-group>
+                    </el-form-item>
                 </div>
                 <div class="data_pic_company data_pic_common">   
                     <img  class="picURL" :src="shengheform.companyFacadeFile ? shengheform.companyFacadeFile : defaultImg" @click="changeIMG"/>
                     <h2>公司或档口照片</h2>
-                      <el-radio-group v-model="shengheform.companyFacadeFileNoPass">
-                        <el-radio label="上传合格">上传合格</el-radio><br />
-                        <el-radio label="不清晰">不清晰</el-radio><br />
-                        <el-radio label="内容不符">内容不符</el-radio>
-                      </el-radio-group>
+                    <el-form-item  prop="companyFacadeFileNoPass">
+                        <el-radio-group v-model="shengheform.companyFacadeFileNoPass">
+                            <el-radio label="上传合格">上传合格</el-radio><br />
+                            <el-radio label="不清晰">不清晰</el-radio><br />
+                            <el-radio label="内容不符">内容不符</el-radio>
+                        </el-radio-group>
+                    </el-form-item>
                 </div>
                 <div class="data_pic_callingcode data_pic_common">
                     <img  class="picURL" :src="shengheform.shipperCardFile ? shengheform.shipperCardFile : defaultImg" @click="changeIMG"/>
                     <h2>发货人名片</h2>
-                      <el-radio-group v-model="shengheform.shipperCardFileNoPass">
-                        <el-radio label="上传合格">上传合格</el-radio><br />
-                        <el-radio label="不清晰">不清晰</el-radio><br />
-                        <el-radio label="内容不符">内容不符</el-radio>
-                      </el-radio-group>
+                    <el-form-item  prop="shipperCardFileNoPass">
+                        <el-radio-group v-model="shengheform.shipperCardFileNoPass">
+                            <el-radio label="上传合格">上传合格</el-radio><br />
+                            <el-radio label="不清晰">不清晰</el-radio><br />
+                            <el-radio label="内容不符">内容不符</el-radio>
+                        </el-radio-group>
+                    </el-form-item>
                 </div>
             </div>
           </el-form>
@@ -194,19 +200,9 @@ export default {
         vregion
 	},
 	computed: {
-		// pictureValue () {
-		//     return [{name:'营业执照',result: this.radio1},{name:'公司或档口照片',result: this.radio2},{name:'发货人名片',result: this.radio3}]
-		// }
+		
 	},
 	data(){
-		const radioValidator = (rule,val,cb)=>{
-            // console.log(val)
-            if(!this.radio1){
-                cb(new Error('请选择图片质量'))
-            }else{
-                cb()
-            }
-		}
 		return{
             dialogFormVisible_add: false,
             type: '',
@@ -232,10 +228,18 @@ export default {
             RZdialogFormVisible:false, //认证审核弹框控制
             shengheform:{},
             shengheformRules:{
-                shipperType:{required: true, message:'请选择货主类型',trigger:'change'},
-                radio1:{validator: radioValidator,trigger:'change'},
-                radio2:{validator: radioValidator,trigger:'change'},
-                radio3:{validator: radioValidator,trigger:'change'}
+                belongCityName:[
+                    {required: true, message: '请选择所在地', trigger: 'change'}
+                ],
+                businessLicenceFileNoPass:[
+                    {required: true, message: '请选择营业执照是否合格', trigger: 'change'}
+                ],
+                companyFacadeFileNoPass:[
+                    {required: true, message: '请选择公司或档口照片是否合格', trigger: 'change'}
+                ],
+                shipperCardFileNoPass:[
+                    {required: true, message: '请选择发货人名片是否合格', trigger: 'change'}
+                ]
             },
             selected:[],//暂存数据
         }
@@ -262,14 +266,14 @@ export default {
             console.log('data:',d)
             this.shengheform.belongCityName = (!d.province&&!d.city&&!d.area&&!d.town) ? '': `${this.getValue(d.province)}${this.getValue(d.city)}${this.getValue(d.area)}${this.getValue(d.town)}`.trim();
             if(d.area){
-                this.xinzengform.areaCode = d.area.code;
+                this.shengheform.areaCode = d.area.code;
             }else if(d.city){
-                this.xinzengform.belongCity = d.city.code;
-                this.xinzengform.cityCode = d.city.code;
+                this.shengheform.belongCity = d.city.code;
+                this.shengheform.cityCode = d.city.code;
             }
             else{
-                this.xinzengform.belongCity = d.province.code;
-                this.xinzengform.provinceCode = d.province.code;
+                this.shengheform.belongCity = d.province.code;
+                this.shengheform.provinceCode = d.province.code;
             }
         },
         getValue(obj){
@@ -319,7 +323,8 @@ export default {
                 this.clearTableSelection();
             }else{
                 this.RZdialogFormVisible = true;
-                this.shengheform = objectMerge2({},this.selected[0]) 
+                this.shengheform = objectMerge2({},this.selected[0]) ;
+                this.shengheform.shipperTypeName = '企业货主';
                 this.defaultImage =  this.shengheform.businessLicenceFile ?  this.shengheform.businessLicenceFile : this.defaultImg;
                 this.clearTableSelection();
             }
@@ -347,7 +352,7 @@ export default {
                         cancelButtonText: '取消',
                         type: 'warning'
                     }).then(() => {
-                        var forms=objectMerge2({},this.shengheform,{shipperType:"AF0010202"},{currentShipperStatus:"AF0010402"},{shipperStatus:"AF0010404"});
+                        var forms=objectMerge2({},this.shengheform,{shipperType:"AF0010202"},{currentShipperStatus:"AF0010402"},{shipperStatus:"AF0010404",shipperStatusName:'认证不通过'});
                         
                         data_get_shipper_change(forms).then(res=>{
                             // console.log(res)
@@ -390,7 +395,7 @@ export default {
             }
             this.$refs['shengheform'].validate((valid)=>{
                 if(valid && ifQualified){
-                    var forms=objectMerge2({},this.shengheform,{shipperType:"AF0010202"},{currentShipperStatus:"AF0010402"},{shipperStatus:"AF0010403"});
+                    var forms=objectMerge2({},this.shengheform,{shipperType:"AF0010202"},{currentShipperStatus:"AF0010402"},{shipperStatus:"AF0010403",shipperStatusName:'已认证'});
                     console.log('this.forms',forms)
                     data_get_shipper_change(forms).then(res=>{
                     // console.log(res)

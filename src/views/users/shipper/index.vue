@@ -37,7 +37,6 @@
     import ShipperCertified from '../components/ShipperCertified.vue'
     import ShipperHasCertified from '../components/ShipperHasCertified.vue'
     import ShipperDisqualification from '../components/ShipperDisqualification.vue'
-    import { getUserInfo } from '@/utils/auth.js'
 
     export default {
       name: 'huozhu',
@@ -75,8 +74,6 @@
         sessionStorage.setItem('shipperName', 'first')
       },
       mounted(){
-          let authInfo = getUserInfo();
-          console.log('authInfo',authInfo)
 
       },
       methods: {
@@ -100,6 +97,7 @@
             border-bottom-color: #ffffff;
         }
         .shippercreatDialog,.freezeDialog,.shipperBlackDialog,.shippercertifed{
+            display: inline-block;
             .el-dialog{
                 width: 810px;
                 min-height: 400px;
@@ -111,6 +109,20 @@
                                 margin:10px 20px;
                                 padding-bottom: 10px;
                                 border-bottom: 2px solid #ccc;
+                            }
+                        }
+                        .el-form-item{
+                            .el-form-item__content{
+                                .el-input{
+                                    width: 250px;
+                                }
+                            }
+                        }
+                        .moreLength{
+                            .el-form-item__content{
+                                .el-input{
+                                    width: 655px;
+                                }
                             }
                         }
                         .el-textarea{
@@ -125,7 +137,6 @@
                                 overflow: auto;
                             }
                         }
-                       
                     }
                 }
             }

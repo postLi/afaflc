@@ -31,6 +31,11 @@ export function getDictionary(code) {
 export function DicBlackType() {
     return fetch.get('/' + baseurl_two + '/sysDict/getSysDictByCodeGet/AF02004')
   }
+
+  // 获取冻结原因字典
+export function DicfreezeType() {
+    return fetch.get('/' + baseurl_two + '/sysDict/getSysDictByCodeGet/AF02003')
+  }
 /**
  * 获取图片上传的policy
  * callback
