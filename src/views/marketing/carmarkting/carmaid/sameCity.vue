@@ -1,6 +1,7 @@
 <template>
-    <div class="identicalStyle" style="height:100%">
-          <el-form :inline="true"  class="demo-ruleForm classify_searchinfo">
+    <div class=" identicalStyle clearfix" style="height:100%">
+      <div class="shipper_city">
+          <el-form :inline="true">
             <el-form-item label="所属区域：">
                    <el-cascader
                     size="large"
@@ -35,7 +36,8 @@
           <el-button type="primary"  plain @click="getData_query">查询</el-button> 
           </el-form-item>              
           </el-form>
-          	<div class="classify_info">
+         </div>
+          	<div class="classify_cityinfo">
             		<div class="btns_box">
                    <newCity
                     btntext="新增"
@@ -61,7 +63,7 @@
                 <el-button  type="primary" value="value" plain icon="el-icon-bell" @click="handleUseStates">启用/停用</el-button>
                 <el-button type="primary" plain icon="el-icon-delete" @click="delete_data">删除</el-button>
             		</div>
-            <div class="info_news">    
+            <div class="info_city">    
             <el-table style="width: 100%" stripe border height="100%" @row-click="clickDetails" highlight-current-row :data="tableDataAll"  tooltip-effect="dark">
             <el-table-column  label="序号" width="80px" type="index">
             </el-table-column>
@@ -280,6 +282,65 @@ export default {
   }
 }
 </script>
-<style lang="scss">  
+<style lang="scss" scoped>  
+.export{
+  .el-button{
+    margin-right:20px;
+    padding:10px 20px;
+  }
+}
+.frozeclassify{
+  margin-top: 10px;
+  .info{
+    span{
+      margin-left: 60px;
+      font-size: 16px;
+    }
+    .mc-line{
+      width: 100%;
+      border-bottom: 1px solid #000;
+    }
+    .frozerol{
+      margin: 10px  0 10px 50px;
+    }
+  }
+} 
+.shipper_city{
+    position: absolute;
+    left: 0;
+    top: 0;
+    padding: 15px 16px;
+    height: 70px;
+    width: 100%;
+    line-height: 35px;
+    .el-input__inner{
+      height: 30px;
+      line-height: 30px;
+    }
+    .el-button{
+      padding: 10px 20px;
+    }
+}
+.classify_cityinfo{
+    height: 100%;
+    padding: 70px 15px 0 0px;
+    .commoncss{
+      display: inline-block;
+    }
+    .btns_box{
+    margin-bottom: 10px;
+    }
+    .info_city{
+      height:88%;
+      .cell{
+      color: #333;
+      font-size: 14px;
+      }
+    }
+    .el-button{
+      margin-right: 20px;
+      padding: 10px 20px;
+    }
+}
 </style>
 

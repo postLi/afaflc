@@ -18,7 +18,7 @@
                         </el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="账户状态">
+                <el-form-item label="账户状态：">
                     <el-select v-model="formInline.accountStatus" placeholder="请选择" clearable>
                         <el-option
                             v-for="item in optionsAuidSataus"
