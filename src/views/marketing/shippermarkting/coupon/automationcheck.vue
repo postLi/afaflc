@@ -120,9 +120,10 @@
                  <span v-if="formAllData.aflcCouponList[keys].timeType =='AF046301'">/</span>
                      <span v-else>
                          <el-date-picker v-model="formAllData.aflcCouponList[keys].startTime"
-                                type="date"
+                                type="datetime"
                                 value-format="timestamp"
-                                placeholder=""
+                                default-time="00:00:00"
+                                placeholder="选择日期"
                                 disabled
                                 >
                          </el-date-picker>
@@ -135,9 +136,10 @@
                      <span v-else>
                                <el-date-picker
                                 v-model="formAllData.aflcCouponList[keys].endTime"
-                                type="date"
+                                type="datetime"
                                 value-format="timestamp"
-                                placeholder=""
+                                placeholder="选择日期"
+                                default-time="23:59:59"
                                 disabled
                                 >
                                 </el-date-picker>

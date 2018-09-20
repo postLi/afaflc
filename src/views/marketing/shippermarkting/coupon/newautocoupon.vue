@@ -24,7 +24,9 @@
             <el-form-item label="活动时效："  :label-width="formLabelWidth" prop="createTime">
                     <el-date-picker
                         is-range
+                        :picker-options="pickerOptions2"
                         type="daterange"
+                        align="right"
                         v-model="formAllData.createTime"
                         range-separator="至" 
                         start-placeholder="开始时间"
@@ -121,8 +123,9 @@
                  <span v-if="formAllData.aflcCouponList[keys].timeType =='AF046301'">/</span>
                      <span v-else>
                          <el-date-picker v-model="formAllData.aflcCouponList[keys].startTime"
-                                type="date"
+                                type="datetime"
                                 value-format="timestamp"
+                                default-time="00:00:00"
                                 placeholder="选择日期">
                          </el-date-picker>
                      </span>
@@ -134,9 +137,11 @@
                      <span v-else>
                                <el-date-picker
                                 v-model="formAllData.aflcCouponList[keys].endTime"
-                                type="date"
+                                type="datetime"
                                 value-format="timestamp"
-                                placeholder="选择日期">
+                                placeholder="选择日期"
+                                default-time="23:59:59"
+                                >
                                 </el-date-picker>
                      </span>
               </div>
@@ -204,7 +209,7 @@ import {data_get_couponActive_list,data_get_couponActive_create,data_couponActiv
 import Upload from '@/components/Upload/singleImage'
 import { regionDataPlus, CodeToText, TextToCode } from 'element-china-area-data'
 import { eventBus } from '@/eventBus'
-import GetCityList from '@/components/GetCityList'
+import {parseTime,pickerOptions2} from '@/utils/'
 export default {
   components:{
     Upload,
@@ -246,7 +251,7 @@ export default {
     }
   },
   components:{
-      GetCityList,
+      
   },
   data(){
         const activityTypeValidator = (rule, val, cb) => {
@@ -294,6 +299,9 @@ export default {
             }   
         }        
     return{
+        pickerOptions2: {
+        shortcuts: pickerOptions2
+            },
         options:regionDataPlus,   
         inputKey:null,
         optionsCar:[],
@@ -716,6 +724,9 @@ export default {
     .el-dialog{
         width: 80%!important;
         overflow:unset;
+        .el-input{
+            width: 240px
+        }
     }
     .el-row{
         padding-bottom: 10px;
@@ -746,7 +757,7 @@ export default {
         }    
     .table_box{
     .ht_table{
-        width: 95%;
+        width: 99%;
         margin:0px 10px;
         color: #333;
         .ht_table_tr{
@@ -784,7 +795,7 @@ export default {
             border-bottom:1px solid #d0d7e5;
         }
         .table_th1{width: 7%;}
-        .table_th2{width: 10%;}
+        .table_th2{width: 9%;}
         .table_th3{width: 7%;}
         .table_th4{width: 6%;}
         .table_th5{width: 12%;}

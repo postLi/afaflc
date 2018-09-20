@@ -39,7 +39,9 @@
             <el-form-item label="活动时间：">
                     <el-date-picker
                         is-range
+                        :picker-options="pickerOptions2"
                         type="daterange"
+                        align="right"
                         v-model="createTime"
                         range-separator="至"
                         start-placeholder="开始时间"
@@ -162,7 +164,7 @@ import {data_get_couponActiveauto_list,data_Del_couponActive,data_Able_couponAct
 import { regionDataPlus, CodeToText, TextToCode } from 'element-china-area-data'
 import { eventBus } from '@/eventBus'
 import Pager from '@/components/Pagination/index'
-import {parseTime} from '@/utils/'
+import {parseTime,pickerOptions2} from '@/utils/'
 import newautocoupon from './newautocoupon'
 import automationcheck from './automationcheck'
 import modautocoupon from './modautocoupon'
@@ -176,6 +178,9 @@ export default {
     },
     data(){
         return{
+           pickerOptions2: {
+           shortcuts: pickerOptions2
+            },
             options:regionDataPlus,
             selectRowData:[],
             selectId:[],

@@ -24,9 +24,11 @@
             <el-form-item label="活动时效："  :label-width="formLabelWidth" prop="createTime">
                     <el-date-picker
                         is-range
+                        :picker-options="pickerOptions2"
                         type="daterange"
+                        align="right"
                         v-model="formAllData.createTime"
-                        range-separator="至"
+                        range-separator="至" 
                         start-placeholder="开始时间"
                         end-placeholder="结束时间"
                         placeholder="选择时间范围"
@@ -124,8 +126,9 @@
                  <span v-if="formAllData.aflcCouponList[keys].timeType =='AF046301'">/</span>
                      <span v-else>
                          <el-date-picker v-model="formAllData.aflcCouponList[keys].startTime"
-                                type="date"
+                                type="datetime"
                                 value-format="timestamp"
+                                default-time="00:00:00"
                                 placeholder="选择日期">
                          </el-date-picker>
                      </span>
@@ -137,9 +140,10 @@
                      <span v-else>
                                <el-date-picker
                                 v-model="formAllData.aflcCouponList[keys].endTime"
-                                type="date"
+                                type="datetime"
                                 value-format="timestamp"
-                                placeholder="选择日期">
+                                placeholder="选择日期"
+                                default-time="23:59:59">
                                 </el-date-picker>
                      </span>
                                 </div>
@@ -212,7 +216,7 @@ import {data_get_couponActive_list,data_get_couponActive_create,data_couponActiv
 import Upload from '@/components/Upload/singleImage'
 import { regionDataPlus, CodeToText, TextToCode } from 'element-china-area-data'
 import { eventBus } from '@/eventBus'
-import GetCityList from '@/components/GetCityList'
+import {parseTime,pickerOptions2} from '@/utils/'
 export default {
   components:{
     Upload,
@@ -306,6 +310,8 @@ export default {
             }        
         }        
     return{
+        pickerOptions2: {
+        shortcuts: pickerOptions2},        
         options:regionDataPlus,   
         inputKey:null,
         optionsCar:[],

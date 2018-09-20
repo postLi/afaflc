@@ -462,11 +462,17 @@ export default {
             this.$message.info('选中内容被已禁用，不能进行修改操作');
            }
            else{
+              
             this.update1();
             this.$forceUpdate()
             this.dialogFormVisible_add = true;
             data_get_ownerFromsame1_Id(this.params.id).then(res=>{
-            this.areaName = res.data.province+res.data.city+res.data.area
+            if(res.data.area==null){
+            this.areaName =res.data.province+res.data.city
+            }
+            else{
+            this.areaName =res.data.province+res.data.city+res.data.area
+            }
             this.formAll.areaCode=res.data.areaCode
             this.formAll.rewardMax=res.data.rewardMax
             this.formAll.carType=res.data.carType

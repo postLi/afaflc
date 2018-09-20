@@ -139,6 +139,8 @@ export default {
   watch:{
    dialogFormVisible_add:{
         handler: function(val, oldVal) {
+            this.num= null;
+            this.mobile = null;
         },
     },
   },
