@@ -44,6 +44,9 @@
 				<el-table-column prop="shipperStatusName" label="认证状态">
 				</el-table-column>
 				<el-table-column prop="accountStatusName" label="账户状态">
+                    <template slot-scope="scope">
+                        <span :class="{freezeName: scope.row.accountStatusName == '冻结中' ,blackName: scope.row.accountStatusName == '黑名单',normalName :scope.row.accountStatusName == '正常'}">{{scope.row.accountStatusName}}</span>
+                    </template>
 				</el-table-column>
 				<el-table-column
 					prop="belongCityName"

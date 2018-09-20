@@ -99,22 +99,7 @@
             background: rgba(236, 233, 230, 0.445);
             border-bottom-color: #ffffff;
         }
-        .el-table{
-            .freezeName{
-                color: #e6a23c;
-                font-weight: bold;
-            }
-            .blackName{
-                color: red;
-                font-weight: bold;
-            }
-            .normalName{
-                color: #0da0e4;
-                font-weight: bold;
-            }
-        }
-        .shippercreatDialog,.freezeDialog,.shipperBlackDialog,.shenghe{
-            display: inline-block;
+        .shippercreatDialog,.freezeDialog,.shipperBlackDialog,.shippercertifed{
             .el-dialog{
                 width: 810px;
                 min-height: 400px;
@@ -126,21 +111,6 @@
                                 margin:10px 20px;
                                 padding-bottom: 10px;
                                 border-bottom: 2px solid #ccc;
-                            }
-                        }
-                        .el-form-item{
-                            // margin-bottom: 10px; 
-                            .el-form-item__content{
-                                .el-input{
-                                    width: 250px;
-                                }
-                            }
-                        }
-                        .moreLength{
-                            .el-form-item__content{
-                                .el-input{
-                                    width: 655px;
-                                }
                             }
                         }
                         .el-textarea{
@@ -155,18 +125,7 @@
                                 overflow: auto;
                             }
                         }
-                        .onlyShow{
-                            display: inline-block;
-                            min-width: 250px;
-                            height: 40px;
-                            line-height: 40px;
-                            text-align: left;
-                            text-indent: 10px;
-                            color: #3e9ff1;
-                            // border: 1px solid #cccccc;
-                            background: rgba(227, 233, 235, 0.479);
-                        
-                        }
+                       
                     }
                 }
             }

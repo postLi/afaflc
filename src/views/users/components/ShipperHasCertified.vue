@@ -13,13 +13,13 @@
                     stripe
                     border
                     height="100%"
-                    highlight-current-row
+                    @selection-change="getSelection" 
+                    @row-click="clickDetails"
                     tooltip-effect="dark"
                     style="width: 100%">
-                    <el-table-column label="" width="65">
-                        <template slot-scope="scope">
-                            <el-radio class="textRadio" @change.native="getCurrentRow(scope.$index,scope.row)" :label="scope.$index" v-model="templateRadio">&nbsp;</el-radio>
-                        </template>
+                    <el-table-column
+                        type="selection"
+                        width="50">
                     </el-table-column>
                     <el-table-column label="序号" width="80px">
                         <template slot-scope="scope">
@@ -47,6 +47,9 @@
                     <el-table-column prop="shipperStatusName" label="认证状态">
                     </el-table-column>
                     <el-table-column prop="accountStatusName" label="账户状态">
+                        <template slot-scope="scope">
+                            <span :class="{freezeName: scope.row.accountStatusName == '冻结中' ,blackName: scope.row.accountStatusName == '黑名单',normalName :scope.row.accountStatusName == '正常'}">{{scope.row.accountStatusName}}</span>
+                        </template>
                     </el-table-column>
                     <el-table-column
                         prop="belongCityName"
@@ -73,10 +76,10 @@
 <script>
 import createdDialog from './createdDialog.vue'
 import { eventBus } from '@/eventBus'
-import { parseTime } from '@/utils/index.js'
 import Pager from '@/components/Pagination/index'
 import {data_get_shipper_list,data_get_shipper_type} from '@/api/users/shipper/all_shipper.js'
 import searchInfo from './searchInfo'
+import { objectMerge2, parseTime } from '@/utils/'
 
 export default {
     props: {
@@ -99,10 +102,10 @@ export default {
             type: '',
             paramsView: {},
             typetitle:'',
-            templateRadio:'',
             options:[],
             tableData3:[],
             totalCount:0,
+            selected:[],//暂存数据
             page:1,
             pagesize:20,
             searchInfo: {
@@ -111,7 +114,6 @@ export default {
                 mobile:'',
                 shipperStatus:"AF0010403",//已认证的状态码
             },
-            selectRowData:{}
         }
     },
     watch: {
@@ -136,47 +138,44 @@ export default {
         pushOrderSerial(row){
             this.type = 'view';
             this.typetitle = '货主详情';
-            this.paramsView = Object.assign({},row);;
+            this.paramsView = objectMerge2({},row);;
             this.dialogFormVisible_add =true;
         },
         getSearchParam(obj) {
             console.log(obj)
-            this.searchInfo = Object.assign({},obj,{shipperStatus:'AF0010403'})
+            this.searchInfo = objectMerge2({},obj,{shipperStatus:'AF0010403'})
             this.loading = false;
             this.firstblood()
+        },
+        //点击选中当前行
+        clickDetails(row, event, column){
+            this.$refs.multipleTable.toggleRowSelection(row);
+        },
+        // 判断选中与否
+        getSelection(val){
+            console.log('选中内容',val)
+            this.selected = val;
         },
         handlePageChange(obj) {
             this.page = obj.pageNum
             this.pagesize = obj.pageSize
             this.firstblood()
         },
-        getCurrentRow(index,row){       
-            this.selectRowData = Object.assign({},row);
-            this.templateRadio = index;
-            console.log('选中内容',row)
-        },
         handleClick(type){
             switch(type){
                 case 'edit' :
                     this.type = "edit";
                     this.typetitle = "修改货主";
-                    this.paramsView = this.selectRowData;
+                    this.paramsView = objectMerge2({},this.selected[0]);
                     this.dialogFormVisible_add = true;
                     break;
             }
-        },
-        // 选中值判断
-        handleCurrentChangeRow(val){
-            console.log(val)
-            this.selectRowData = val
         },
         //刷新页面
         firstblood(){
             data_get_shipper_list(this.page,this.pagesize,this.searchInfo).then(res=>{
                 this.totalCount = res.data.totalCount;
                 this.tableData3 = res.data.list;
-                // this.inited = false;
-
             })
         },
         getDataList(){

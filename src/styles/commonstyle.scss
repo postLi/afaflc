@@ -54,7 +54,21 @@
         padding-bottom: 40px;
         
         .info_news{
-           flex: 1;
+            flex: 1;
+            .el-table{
+                .freezeName{
+                    color: #e6a23c;
+                    font-weight: bold;
+                }
+                .blackName{
+                    color: red;
+                    font-weight: bold;
+                }
+                .normalName{
+                    color: #0da0e4;
+                    font-weight: bold;
+                }
+            }
             .cell{
                 .needMoreInfo{
                     cursor:pointer;

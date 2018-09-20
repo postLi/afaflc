@@ -70,7 +70,10 @@ import { getDictionary } from '@/api/common.js'
                     shipperStatus: '',
                     accountStatus: '',
                     companyName: '',
-                    mobile: ''
+                    mobile: '',
+                    provinceCode:"",
+                    cityCode:'',
+                    areaCode:""
                 },
                 optionsStatus: [
                     {
@@ -98,12 +101,15 @@ import { getDictionary } from '@/api/common.js'
                 console.log('data:',d)
                 this.searchInfo.belongCityName = (!d.province&&!d.city&&!d.area&&!d.town) ? '': `${this.getValue(d.province)}${this.getValue(d.city)}${this.getValue(d.area)}${this.getValue(d.town)}`.trim();
                 if(d.area){
-                    this.searchInfo.belongCity = d.area.code;
+                    this.xinzengform.areaCode = d.area.code;
                 }else if(d.city){
-                    this.searchInfo.belongCity = d.city.code;
+                    this.xinzengform.belongCity = d.city.code;
+                    this.xinzengform.cityCode = d.city.code;
                 }
                 else{
-                    this.searchInfo.belongCity = d.province.code;
+                    this.xinzengform.belongCity = d.province.code;
+                    this.xinzengform.provinceCode = d.province.code;
+
                 }
             },
              getValue(obj){

@@ -1,7 +1,6 @@
 <template>
     <div class="identicalStyle">
         <searchInfo @change="getSearchParam" :showType = 'tabType'></searchInfo>
-        
       	<div class="classify_info">
 		  <div class="btns_box">
         	<el-button type="primary" plain icon="el-icon-check" :size="btnsize" @click="handleEdit">认证审核</el-button>
@@ -13,13 +12,13 @@
 			stripe
 			border
             height="100%"
-            highlight-current-row
+            @selection-change="getSelection" 
+            @row-click="clickDetails"
 			tooltip-effect="dark"
 			style="width: 100%">
-			<el-table-column label="" width="65">
-                <template slot-scope="scope">
-                    <el-radio class="textRadio" @change.native="getCurrentRow(scope.$index,scope.row)" :label="scope.$index" v-model="templateRadio">&nbsp;</el-radio>
-                </template>
+            <el-table-column
+                type="selection"
+                width="50">
             </el-table-column>
 			<el-table-column label="序号" width="80px">
                 <template slot-scope="scope">
@@ -40,6 +39,9 @@
 			<el-table-column prop="shipperStatusName" label="认证状态">
 			</el-table-column>
 			<el-table-column prop="accountStatusName" label="账户状态">
+                 <template slot-scope="scope">
+                    <span :class="{freezeName: scope.row.accountStatusName == '冻结中' ,blackName: scope.row.accountStatusName == '黑名单',normalName :scope.row.accountStatusName == '正常'}">{{scope.row.accountStatusName}}</span>
+                </template>
 			</el-table-column>
 			<el-table-column prop="belongCityName" label="所在地">
 			</el-table-column>
@@ -55,7 +57,7 @@
 	  </div>
 
        <!--认证审核部分 -->
-    <div class="certifed commoncss">
+    <div class="shippercertifed commoncss">
         <el-dialog title="认证审核" :visible.sync="RZdialogFormVisible" v-if="Object.keys(shengheform).length != 0">
           <el-form :model="shengheform" ref="shengheform" :rules="shengheformRules">
             <el-row>
@@ -174,8 +176,8 @@ import searchInfo from './searchInfo'
 import {data_get_shipper_list,data_get_shipper_change} from '@/api/users/shipper/all_shipper.js'
 // import defaultURL  from '@/assets/404_images/404.png'
 import Pager from '@/components/Pagination/index'
-import { parseTime } from '@/utils/index'
 import vregion from '@/components/vregion/Region'
+import { objectMerge2, parseTime } from '@/utils/'
 
 export default {
 	props: {
@@ -212,11 +214,9 @@ export default {
             typetitle:'',
             btnsize:'mini',
             tabType:'certified',
-            templateRadio:'',
             defaultImage:'',
             defaultImg:'/static/test.jpg',//默认第一张图片的url
             demoData:"企业货主",//根据项目要求写死
-            selectDiaologFlag:true,
             options:[], // 货主类型列表
             tableData1:[], // 列表数据
             totalCount:0, // 总数
@@ -230,15 +230,14 @@ export default {
             },
             formLabelWidth: '120px',
             RZdialogFormVisible:false, //认证审核弹框控制
-            selectRowData:{},
             shengheform:{},
-            multipleSelection:{},
             shengheformRules:{
                 shipperType:{required: true, message:'请选择货主类型',trigger:'change'},
                 radio1:{validator: radioValidator,trigger:'change'},
                 radio2:{validator: radioValidator,trigger:'change'},
                 radio3:{validator: radioValidator,trigger:'change'}
-            }
+            },
+            selected:[],//暂存数据
         }
 	},
     watch: {
@@ -255,7 +254,7 @@ export default {
     },
     mounted(){
         eventBus.$on('changeList', () => {
-                this.firstblood()
+            this.firstblood()
         })
     },
     methods:{
@@ -263,12 +262,14 @@ export default {
             console.log('data:',d)
             this.shengheform.belongCityName = (!d.province&&!d.city&&!d.area&&!d.town) ? '': `${this.getValue(d.province)}${this.getValue(d.city)}${this.getValue(d.area)}${this.getValue(d.town)}`.trim();
             if(d.area){
-                this.shengheform.belongCity = d.area.code;
+                this.xinzengform.areaCode = d.area.code;
             }else if(d.city){
-                this.shengheform.belongCity = d.city.code;
+                this.xinzengform.belongCity = d.city.code;
+                this.xinzengform.cityCode = d.city.code;
             }
             else{
-                this.shengheform.belongCity = d.province.code;
+                this.xinzengform.belongCity = d.province.code;
+                this.xinzengform.provinceCode = d.province.code;
             }
         },
         getValue(obj){
@@ -277,29 +278,28 @@ export default {
         pushOrderSerial(row){
             this.type = 'view';
             this.typetitle = '货主详情';
-            this.paramsView = Object.assign({},row);;
+            this.paramsView = objectMerge2({},row);;
             this.dialogFormVisible_add =true;
         },
         getSearchParam(obj) {
             console.log(obj)
-            this.searchInfo = Object.assign({},obj,{shipperStatus:'AF0010402'})
+            this.searchInfo = objectMerge2({},obj,{shipperStatus:'AF0010402'})
             this.loading = false;
-            this.firstblood()
+            this.firstblood();
         },
         handlePageChange(obj) {
-            this.page = obj.pageNum
-            this.pagesize = obj.pageSize
-            this.firstblood()
+            this.page = obj.pageNum;
+            this.pagesize = obj.pageSize;
+            this.firstblood();
         },
-        getCurrentRow(index,row){       
-
-            this.selectRowData = Object.assign({},row);
-
-            this.templateRadio = index;
-            console.log('选中内容',row)
+          //点击选中当前行
+        clickDetails(row, event, column){
+            this.$refs.multipleTable.toggleRowSelection(row);
         },
-        getValue(obj){
-            return obj?obj.value:'';
+         // 判断选中与否
+        getSelection(val){
+            console.log('选中内容',val)
+            this.selected = val;
         },
         changeIMG(event){
             this.defaultImage = event.target.src;
@@ -307,24 +307,26 @@ export default {
         changeList(){
             eventBus.$emit('changeList')
         },
-        changeCity(){
-            this.selectDiaologFlag=false
-        },
         //认证审核
         handleEdit(){
-            
-            if(Object.keys(this.selectRowData).length == 0){
-                return this.$message({
-                    type: 'info',
-                    message: '请选择需认证的货主信息' 
+            if(this.selected.length == 0){
+                return this.$message.warning('请选择您要操作的用户');
+            }else if (this.selected.length > 1) {
+                this.$message({
+                    message: '每次只能操作单条数据~',
+                    type: 'warning'
                 })
+                this.clearTableSelection();
             }else{
                 this.RZdialogFormVisible = true;
-                this.shengheform = Object.assign({},this.selectRowData) ;
+                this.shengheform = objectMerge2({},this.selected[0]) 
                 this.defaultImage =  this.shengheform.businessLicenceFile ?  this.shengheform.businessLicenceFile : this.defaultImg;
+                this.clearTableSelection();
             }
-            console.log('`````````````')
-            console.log(' this.RZdialogFormVisible', this.RZdialogFormVisible)
+        },
+        clearTableSelection(){
+            //清除选中状态，避免影响下个操作
+            this.$refs.multipleTable.clearSelection();
         },
         //刷新页面
         firstblood(){
@@ -345,7 +347,7 @@ export default {
                         cancelButtonText: '取消',
                         type: 'warning'
                     }).then(() => {
-                        var forms=Object.assign({},this.shengheform,{shipperType:"AF0010202"},{currentShipperStatus:"AF0010402"},{shipperStatus:"AF0010404"});
+                        var forms=objectMerge2({},this.shengheform,{shipperType:"AF0010202"},{currentShipperStatus:"AF0010402"},{shipperStatus:"AF0010404"});
                         
                         data_get_shipper_change(forms).then(res=>{
                             // console.log(res)
@@ -388,7 +390,7 @@ export default {
             }
             this.$refs['shengheform'].validate((valid)=>{
                 if(valid && ifQualified){
-                    var forms=Object.assign({},this.shengheform,{shipperType:"AF0010202"},{currentShipperStatus:"AF0010402"},{shipperStatus:"AF0010403"});
+                    var forms=objectMerge2({},this.shengheform,{shipperType:"AF0010202"},{currentShipperStatus:"AF0010402"},{shipperStatus:"AF0010403"});
                     console.log('this.forms',forms)
                     data_get_shipper_change(forms).then(res=>{
                     // console.log(res)
@@ -419,7 +421,7 @@ export default {
 }
 </script>
 <style lang="scss">
-    .certifed{
+    .shippercertifed{
         width: 100%;
         .data_pic{
             margin: 0 15px;

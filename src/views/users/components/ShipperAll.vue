@@ -22,7 +22,7 @@
 				tooltip-effect="dark"
 				style="width: 100%">
                 <el-table-column
-                    fixed
+                    label="选择"
                     type="selection"
                     width="50">
                 </el-table-column>
@@ -51,7 +51,10 @@
                         <span :class="{freezeName: scope.row.accountStatusName == '冻结中' ,blackName: scope.row.accountStatusName == '黑名单',normalName :scope.row.accountStatusName == '正常'}">{{scope.row.accountStatusName}}</span>
                     </template>
 				</el-table-column>
-				<el-table-column prop="belongCityName" label="所在地">
+				<el-table-column prop="belongCity" label="所在地">
+                     <template slot-scope="scope">
+                        {{scope.row.belongCityName ? scope.row.belongCityName:scope.row.belongCity}}
+                    </template>
 				</el-table-column>  
 				<el-table-column prop="shipperTypeName" label="货主类型">
 				</el-table-column>
@@ -109,13 +112,12 @@ export default {
         freezetitle:'',//冻结title
         blacktitle:"",//黑名单titl
         paramsView: {},
-        freeze: true, // 是否冻结
         searchInfo: {
-            belongCity: null,
-            shipperStatus: null,
-            accountStatus: null,
-            companyName: null,
-            mobile: null,
+            belongCity: '',
+            shipperStatus: '',
+            accountStatus: '',
+            companyName: '',
+            mobile: '',
         },
         selectRowData: {},//传递的数据
         page: 1,
@@ -123,7 +125,6 @@ export default {
         totalCount: 0,
         tableDataAll: [],
         selected:[],//暂存的数据
-
     }
   },
   created() {

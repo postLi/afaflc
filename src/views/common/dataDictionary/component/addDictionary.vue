@@ -237,7 +237,6 @@ export default {
                     }
                 })
             }
-
             if(required){
                 return false
             }else{
