@@ -1,39 +1,38 @@
 <template>
-  <div class="member tabsWrap">
-    <el-tabs v-model="memberName" type="card" @tab-click="handleClick" >
-        <!-- 全部 -->
-            <el-tab-pane label="全部" name="first">
-                <ShipperAll :isvisible="memberName === 'first'"></ShipperAll>
-            </el-tab-pane>
+    <div class="member tabsWrap">
+        <el-tabs v-model="memberName" type="card" @tab-click="handleClick" >
+            <!-- 全部 -->
+                <el-tab-pane label="全部" name="first">
+                    <ShipperAll :isvisible="memberName === 'first'"></ShipperAll>
+                </el-tab-pane>
 
-        <!-- 未认证 -->
-            <el-tab-pane label="未认证" name="second">
-                <ShipperUnauthorized :isvisible="memberName === 'second'"></ShipperUnauthorized>
-            </el-tab-pane>
+            <!-- 未认证 -->
+                <el-tab-pane label="未认证" name="second">
+                    <ShipperUnauthorized :isvisible="memberName === 'second'"></ShipperUnauthorized>
+                </el-tab-pane>
 
-        <!-- 待认证 -->
-            <el-tab-pane label="待认证" name="third">
-                <ShipperCertified :isvisible="memberName === 'third'"></ShipperCertified>
-            </el-tab-pane>
-            
-        <!-- 已认证部分 -->
-            <el-tab-pane label="已认证" name="fourth">
-                <ShipperHasCertified :isvisible="memberName === 'fourth'"></ShipperHasCertified>
-            </el-tab-pane>
+            <!-- 待认证 -->
+                <el-tab-pane label="待认证" name="third">
+                    <ShipperCertified :isvisible="memberName === 'third'"></ShipperCertified>
+                </el-tab-pane>
+                
+            <!-- 已认证部分 -->
+                <el-tab-pane label="已认证" name="fourth">
+                    <ShipperHasCertified :isvisible="memberName === 'fourth'"></ShipperHasCertified>
+                </el-tab-pane>
 
-        <!-- 认证不通过 -->
-            <el-tab-pane label="认证不通过" name="fifth">
-                <ShipperDisqualification :isvisible="memberName === 'fifth'"></ShipperDisqualification>
-            </el-tab-pane>
-    </el-tabs>
-  </div>
+            <!-- 认证不通过 -->
+                <el-tab-pane label="认证不通过" name="fifth">
+                    <ShipperDisqualification :isvisible="memberName === 'fifth'"></ShipperDisqualification>
+                </el-tab-pane>
+        </el-tabs>
+    </div>
 </template>
 
 <script type="text/javascript">
     import '@/styles/dialog.scss'
     import '@/styles/tab.scss'
-
-import ShipperAll from './ShipperAll.vue'
+    import ShipperAll from './ShipperAll.vue'
     import ShipperUnauthorized from './ShipperUnauthorized.vue'
     import ShipperCertified from './ShipperCertified.vue'
     import ShipperHasCertified from './ShipperHasCertified.vue'
@@ -112,22 +111,6 @@ import ShipperAll from './ShipperAll.vue'
                 white-space: initial;
                 overflow: hidden;
             }
-
-            .freezeName{
-                color: #e6a23c;
-                font-weight: bold;
-            }
-
-            .blackName{
-                color: red;
-                font-weight: bold;
-            }
-
-            .normalName{
-                color: #0da0e4;
-                font-weight: bold;
-            }
-
             .otherServiceTD{
                 text-align: left;
               

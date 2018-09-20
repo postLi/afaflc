@@ -5,8 +5,7 @@
           <el-row>
             <el-col :span="24">
                 <el-form-item label="冻结原因：" prop="freezeCause" :label-width="formLabelWidth" >
-                    <el-input v-model="formFroze.freezeCauseName" v-if="editType == 'remove'" disabled></el-input>
-                    
+                    <span class="onlyShow" v-if="editType == 'remove'">{{formFroze.freezeCauseName}}</span>
                     <el-select v-model="formFroze.freezeCause" v-else placeholder="请选择" clearable>
                         <el-option
                         v-for="item in optionsReason"
@@ -14,14 +13,14 @@
                         :label="item.name"
                         :value="item.code">
                         </el-option>
-                    </el-select >
+                    </el-select>
                 </el-form-item>
             </el-col>
           </el-row>
           <el-row>
             <el-col :span="24">
               <el-form-item label="解冻日期：" :label-width="formLabelWidth" prop="unfreezeTime">
-                <el-input v-model="formFroze.unfreezeTime" v-if="editType == 'remove'" disabled></el-input>
+                <span class="onlyShow" v-if="editType == 'remove'">{{formFroze.unfreezeTime | parseTime}}</span>
                 <div v-else>
                     <el-date-picker
                     v-model="formFroze.unfreezeTime"
@@ -69,9 +68,11 @@
   </div>
 </template>
 <script>
-import {data_get_shipper_freezeType} from '@/api/users/shipper/all_shipper.js'
+import { DicfreezeType } from '@/api/common.js'
 import { data_ChangeLogisticsCompany }  from '@/api/users/logistics/LogisticsCompany.js'
 import { eventBus } from '@/eventBus'
+import { parseTime } from '@/utils/'
+
 export default {
   name:'freezeDialog',
   components:{
@@ -121,13 +122,13 @@ export default {
       optionsReason:[],
       formLabelWidth:'120px',
       formFroze: { // 冻结弹框表单
-        freezeCause:null,
-        unfreezeTime:null,
-        freezeCauseRemark:null,
-        unfreezeRemark:null
+        freezeCause:'',
+        unfreezeTime:'',
+        freezeCauseRemark:'',
+        unfreezeRemark:''
       },
       radio: '',
-      currentRow:null,
+      currentRow:'',
       pickerOptions:{
         disabledDate(time) {
           return time.getTime() < Date.now();
@@ -185,10 +186,10 @@ export default {
         this.$refs.formFroze.resetFields();
 
         this.formFroze = { // 冻结弹框表单
-            freezeCause:null,
-            unfreezeTime:null,
-            freezeCauseRemark:null,
-            unfreezeRemark:null
+            freezeCause:'',
+            unfreezeTime:'',
+            freezeCauseRemark:'',
+            unfreezeRemark:''
         }
         if (typeof done === 'function') {
             done()
@@ -197,25 +198,20 @@ export default {
     openDialog(){
         console.log('this.params',this.params)
         if(this.editType == 'add'){
-            console.log('add')
             this.formFroze.unfreezeTime = this.formFroze.unfreezeTime ? this.formFroze.unfreezeTime : new Date();
             this.formFroze.id = this.params.id;
             this.formFroze.mobile = this.params.mobile;
 
         }else{
-            console.log('freez')
-
             this.formFroze = Object.assign({},this.params) ;
             this.formFroze.unfreezeTime = this.formFroze.unfreezeTime ? this.formFroze.unfreezeTime : new Date();
         }
         // }
-
-        console.log(this.params.mobile)
+        // console.log(this.params.mobile)
     },
     getMoreInformation(){
       // 获取冻结原因下拉
-        data_get_shipper_freezeType().then(res=>{
-            // console.log(res)
+        DicfreezeType().then(res=>{
             this.optionsReason = res.data
         })
     }, 
@@ -225,12 +221,11 @@ export default {
                 if(valid){
                     switch (this.editType){
                         case 'add' :
-                            console.log(this.formFroze)
                             var forms= Object.assign({}, this.formFroze,{accountStatus:"AF0010502",accountStatusName:'冻结中'})
                             forms.freezeCauseName = this.optionsReason.find(item => item.code === forms.freezeCause)['name'];
 
                             let item =  forms.mobile;
-                            console.log(forms)  
+                            // console.log(forms)  
                             this.$confirm('确定要将手机号码为'+ item +'用户冻结吗？', '提示', {
                                 confirmButtonText: '确定',
                                 cancelButtonText: '取消',

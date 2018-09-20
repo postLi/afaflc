@@ -13,13 +13,13 @@
                     stripe
                     border
                     height="100%"
-                    highlight-current-row
                     tooltip-effect="dark"
+                    @selection-change="getSelection" 
+                    @row-click="clickDetails"
                     style="width: 100%">
-                    <el-table-column label="" width="65">
-                        <template slot-scope="scope">
-                            <el-radio class="textRadio" @change.native="getCurrentRow(scope.$index,scope.row)" :label="scope.$index" v-model="templateRadio">&nbsp;</el-radio>
-                        </template>
+                    <el-table-column
+                        type="selection"
+                        width="50">
                     </el-table-column>
                     <el-table-column label="公司名称" >
                         <template slot-scope="scope">
@@ -35,6 +35,9 @@
                     <el-table-column prop="shipperStatusName" label="认证状态">
                     </el-table-column>
                     <el-table-column prop="accountStatusName" label="账户状态">
+                        <template slot-scope="scope">
+                            <span :class="{freezeName: scope.row.accountStatusName == '冻结中' ,blackName: scope.row.accountStatusName == '黑名单',normalName :scope.row.accountStatusName == '正常'}">{{scope.row.accountStatusName}}</span>
+                        </template>
                     </el-table-column>
                     <el-table-column prop="belongCityName" label="所在地">
                     </el-table-column>
@@ -53,7 +56,7 @@
 	     </div>
         <div class="info_tab_footer">共计:{{ totalCount }} <div class="show_pager"> <Pager :total="totalCount" @change="handlePageChange" /></div> </div>    
 
-        <createdDialog :paramsView="paramsView" :typetitle="typetitle" :editType="type"  :dialogFormVisible_add.sync = "dialogFormVisible_add"/>
+        <createdDialog :paramsView="paramsView" :typetitle="typetitle" :editType="type"  :dialogFormVisible_add.sync = "dialogFormVisible_add" @getData="getDataList"/>
 
     </div>
 </template>
@@ -61,7 +64,8 @@
 import createdDialog from './createdDialog.vue'
 import searchInfo from './searchInfo'
 import { eventBus } from '@/eventBus'
-import { parseTime } from '@/utils/index.js'
+import { objectMerge2, parseTime } from '@/utils/'
+
 import Pager from '@/components/Pagination/index'
 import {data_get_shipper_list} from '@/api/users/shipper/all_shipper.js'
 export default {
@@ -84,7 +88,6 @@ export default {
             typetitle:'',
             btnsize:'mini',
             tabType:'disCertified',
-            templateRadio:'',
             tableData1:[],
             totalCount:0,
             page:1,
@@ -97,7 +100,7 @@ export default {
                 shipperStatus:"AF0010404",//未认证的状态码
             },
             selectRowData:{},
-            multipleSelection:[]
+            selected:[],//暂存数据
         }
     },
     watch: {
@@ -119,22 +122,30 @@ export default {
         })
     },
     methods:{
+        //点击选中当前行
+        clickDetails(row, event, column){
+            this.$refs.multipleTable.toggleRowSelection(row);
+        },
+         // 判断选中与否
+        getSelection(val){
+            console.log('选中内容',val)
+            this.selected = val;
+        },
         pushOrderSerial(row){
             this.type = 'view';
             this.typetitle = '货主详情';
-            this.paramsView = Object.assign({},row);;
+            this.paramsView = objectMerge2({},row);;
             this.dialogFormVisible_add =true;
         },
         handleClick(){
             this.type = "identification";
             this.typetitle = "代客认证";
-            this.paramsView = this.selectRowData;
+            this.paramsView = objectMerge2({},this.selected[0]);
             this.dialogFormVisible_add = true;
-
         },
         getSearchParam(obj) {
             console.log(obj)
-            this.searchInfo = Object.assign({},obj,{shipperStatus:'AF0010404'})
+            this.searchInfo = objectMerge2({},obj,{shipperStatus:'AF0010404'})
             this.loading = false;
             this.firstblood()
         },
@@ -143,17 +154,8 @@ export default {
             this.pagesize = obj.pageSize
             this.firstblood()
         },
-        getCurrentRow(index,row){       
-            this.selectRowData = Object.assign({},row);
-            this.templateRadio = index;
-            console.log('选中内容',row)
-        },
         getDataList(){
             this.firstblood();
-        },
-        handleCurrentChangeRow(val){
-            console.log(val)
-            this.selectRowData = val
         },
         //刷新页面
         firstblood(){

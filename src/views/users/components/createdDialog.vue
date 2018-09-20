@@ -14,85 +14,94 @@
                         :disabled="item.disabled">
                         </el-option>
                     </el-select>
-                    <el-input v-model="identifiy" auto-complete="off" v-else-if="editType=='identification'" disabled></el-input>
-                    <el-input v-model="xinzengform.shipperTypeName" auto-complete="off" v-else disabled></el-input>
+                    <span class="onlyShow" v-else-if="editType=='identification'">{{identifiy}}</span>
+                    <span class="onlyShow" v-else>{{xinzengform.shipperTypeName}}</span>
                 </el-form-item>
             </el-col>
             <el-col :span="12">
-                <el-form-item label="手机号码 ：" prop="mobile" :label-width="formLabelWidth"  >
-                    <el-input v-model="xinzengform.mobile" auto-complete="off" maxlength="11"></el-input>
+                <el-form-item label="手机号码 ：" prop="mobile" :label-width="formLabelWidth"  v-if="editType=='add'">
+                    <el-input v-model="xinzengform.mobile" auto-complete="off"   maxlength="11" ></el-input>
+                </el-form-item>
+                <el-form-item label="手机号码 ：" required :label-width="formLabelWidth"  v-else>
+                    <span class="onlyShow" >{{xinzengform.mobile}}</span>
                 </el-form-item>
             </el-col>
           </el-row>
           <el-row>
             <el-col :span="12">
                 <el-form-item label="所在地 ：" :label-width="formLabelWidth"  prop="belongCityName">
-                    <el-input v-model="xinzengform.belongCityName" auto-complete="off" disabled v-if="editType=='view'"></el-input>
+                    <span class="onlyShow" v-if="editType=='view'">{{xinzengform.belongCityName}}</span>
                     <vregion :ui="true"  @values="regionChange" class="form-control" v-else>
                         <el-input v-model="xinzengform.belongCityName" placeholder="请选择" ></el-input>
                     </vregion>
                 </el-form-item>
             </el-col>
             <el-col :span="12">
-              <el-form-item label="联系人 ：" :label-width="formLabelWidth" prop="contacts">
-                <el-input v-model="xinzengform.contacts" auto-complete="off"  :disabled="editType=='view'"></el-input>
-              </el-form-item>
+                <el-form-item label="联系人 ：" :label-width="formLabelWidth" prop="contacts">
+                    <span class="onlyShow" v-if="editType=='view'">{{xinzengform.contacts}}</span>
+                    <el-input v-model="xinzengform.contacts" auto-complete="off"  v-else></el-input>
+                </el-form-item>
             </el-col>
           </el-row>
 
           <el-row>
             <el-col :span="24" class="moreLength">
-              <el-form-item label="详细地址 ：" :label-width="formLabelWidth" prop="address">
-                <el-input :maxlength="40" v-model="xinzengform.address" auto-complete="off"  :disabled="editType=='view'"></el-input>
-              </el-form-item>
+                <el-form-item label="详细地址 ：" :label-width="formLabelWidth" prop="address">
+                    <span class="onlyShow" v-if="editType=='view'">{{xinzengform.address}}</span>
+                    <el-input :maxlength="40" v-model="xinzengform.address" auto-complete="off"  v-else></el-input>
+                </el-form-item>
             </el-col>
           </el-row>
-          <el-row>
-            <el-col :span="12">
-              <el-form-item label="公司名称 ：" prop="companyName" :label-width="formLabelWidth" v-if="companyFlag">
-                <el-input :maxlength="20" v-model="xinzengform.companyName"  :disabled="editType=='view'"></el-input>
-              </el-form-item>
-            </el-col>
-            <el-col :span="12">
-            <el-form-item label="统一社会信用代码 ：" prop="creditCode" :label-width="formLabelWidth" v-if="companyFlag">
-              <el-input :maxlength="20" v-model="xinzengform.creditCode"  :disabled="editType=='view'"></el-input>
-            </el-form-item>
-            </el-col>
-          </el-row>
-          <el-row>
-            <el-col :span="9"> 
-              <el-form-item label="上传营业执照照片 ：" prop="businessLicenceFile" label-width="210px" v-if="companyFlag">
-                    <div class="upload">
-                        <img :src='xinzengform.businessLicenceFile ? xinzengform.businessLicenceFile : defaultImg' alt="" v-if="editType == 'view'">
-                        <upload class="licensePicture" tip="（必须为jpg/png并且小于5M）" v-else v-model="xinzengform.businessLicenceFile" />
-                    </div>
-              </el-form-item>
-            </el-col>
-          </el-row>
-          <el-row>
-            <el-col :span="9">
-              <el-form-item label="上传公司或者档口照片 ："  label-width="210px" prop="companyFacadeFile" v-if="companyFlag">
-                <div class="upload">
-                    <img :src='xinzengform.companyFacadeFile ? xinzengform.companyFacadeFile : defaultImg' alt="" v-if="editType == 'view'">
-                    <upload class="licensePicture" tip="（必须为jpg/png并且小于5M）" v-else v-model="xinzengform.companyFacadeFile" />
-                </div>
-              </el-form-item>
-            </el-col>
-          </el-row>
-          <el-row>
-            <el-col :span="9">
-              <el-form-item label="上传发货人名片照片 ：" label-width="210px" prop="shipperCardFile" v-if="companyFlag" >
-                <div class="upload">
-                    <img :src='xinzengform.shipperCardFile ? xinzengform.shipperCardFile : defaultImg' alt="" v-if="editType == 'view'">
-                    <upload class="licensePicture" tip="（必须为jpg/png并且小于5M）" v-else v-model="xinzengform.shipperCardFile" />
-                </div>
-              </el-form-item>
-            </el-col>
-          </el-row>
+          <div v-if="companyFlag">
+            <el-row>
+                <el-col :span="12">
+                    <el-form-item label="公司名称 ：" prop="companyName" :label-width="formLabelWidth">
+                        <span class="onlyShow" v-if="editType=='view'">{{xinzengform.companyName}}</span>
+                        <el-input :maxlength="20" v-model="xinzengform.companyName"  v-else></el-input>
+                    </el-form-item>
+                </el-col>
+                <el-col :span="12">
+                    <el-form-item label="统一社会信用代码 ：" prop="creditCode" :label-width="formLabelWidth">
+                        <span class="onlyShow" v-if="editType=='view'">{{xinzengform.creditCode}}</span>
+                        <el-input :maxlength="20" v-model="xinzengform.creditCode"  v-else></el-input>
+                    </el-form-item>
+                </el-col>
+            </el-row>
+            <el-row>
+                <el-col :span="9"> 
+                    <el-form-item label="上传营业执照照片 ：" prop="businessLicenceFile" label-width="210px">
+                        <div class="upload">
+                            <img :src='xinzengform.businessLicenceFile ? xinzengform.businessLicenceFile : defaultImg' alt="" v-if="editType == 'view'">
+                            <upload class="licensePicture" tip="（必须为jpg/png并且小于5M）" v-else v-model="xinzengform.businessLicenceFile" />
+                        </div>
+                    </el-form-item>
+                </el-col>
+            </el-row>
+            <el-row>
+                <el-col :span="9">
+                    <el-form-item label="上传公司或者档口照片 ："  label-width="210px" prop="companyFacadeFile">
+                        <div class="upload">
+                            <img :src='xinzengform.companyFacadeFile ? xinzengform.companyFacadeFile : defaultImg' alt="" v-if="editType == 'view'">
+                            <upload class="licensePicture" tip="（必须为jpg/png并且小于5M）" v-else v-model="xinzengform.companyFacadeFile" />
+                        </div>
+                    </el-form-item>
+                </el-col>
+            </el-row>
+            <el-row>
+                <el-col :span="9">
+                    <el-form-item label="上传发货人名片照片 ：" label-width="210px" prop="shipperCardFile" >
+                        <div class="upload">
+                            <img :src='xinzengform.shipperCardFile ? xinzengform.shipperCardFile : defaultImg' alt="" v-if="editType == 'view'">
+                            <upload class="licensePicture" tip="（必须为jpg/png并且小于5M）" v-else v-model="xinzengform.shipperCardFile" />
+                        </div>
+                    </el-form-item>
+                </el-col>
+            </el-row>
+          </div>
         </el-form>
         <div slot="footer" class="dialog-footer">
-          <el-button type="primary" @click.stop="onSubmit" v-show="editType!='view'" >确 定</el-button>
-          <el-button @click="close" v-show="editType!='view'">取 消</el-button>
+            <el-button type="primary" @click.stop="onSubmit" v-show="editType!='view'"  :disabled="ifDisable">确 定</el-button>
+            <el-button @click="close" v-show="editType!='view'">取 消</el-button>
         </div>
       </el-dialog>
     </div>
@@ -134,7 +143,6 @@ export default {
             if(!(phoneTest.test(val))){
                 cb(new Error('请输入正确的手机号码格式'))
             } else {
-                
                 data_get_shipper_view(val).then(res=>{
                     console.log(res)
                     if(res.data){
@@ -153,6 +161,7 @@ export default {
         type:'primary',
         title:'',
         text:'',
+        ifDisable:false,
         options:[],
         formLabelWidth:'135px',
         companyFlag:false,
@@ -172,20 +181,23 @@ export default {
             registerOrigin:'AF0030103',
             registerOriginName:'WEB',
             isDirectional: '0',
+            provinceCode:'',
+            cityCode:'',
+            areaCode:''
         },
         rulesForm:{
             shipperType:{required: true, message:'请选择货主类型', trigger:'change'},
             mobile:{validator: mobileValidator, trigger:'change'},
             belongCityName:{required:true, message:'请选择所属地区', trigger:'change'},
-            companyFacadeFile:{required:true, message:'请上传公司或者档口照片', trigger:'change'},
-            shipperCardFile:{required:true, message:'请上传发货人名片照片', trigger:'change'}
+            companyFacadeFile:{required:true, message:'请上传公司或者档口照片', trigger:'blur'},
+            shipperCardFile:{required:true, message:'请上传发货人名片照片', trigger:'blur'}
         },
     }
   },
   watch:{
     'xinzengform.shipperType': {
         handler: function(val, oldVal) {
-            if(val != 'AF0010101'){
+            if(val != 'AF0010101' || this.editType == 'view' ){
                 this.companyFlag = true;
             }else{
                 this.companyFlag = false;
@@ -205,20 +217,23 @@ export default {
         this.text = newVal;
     }
   },
-  mounted(){
-   
-  },
+    mounted(){
+    
+    },
   methods:{
     regionChange(d) {
         console.log('data:',d)
         this.xinzengform.belongCityName = (!d.province&&!d.city&&!d.area&&!d.town) ? '': `${this.getValue(d.province)}${this.getValue(d.city)}${this.getValue(d.area)}${this.getValue(d.town)}`.trim();
         if(d.area){
-            this.xinzengform.belongCity = d.area.code;
+            this.xinzengform.areaCode = d.area.code;
         }else if(d.city){
             this.xinzengform.belongCity = d.city.code;
+            this.xinzengform.cityCode = d.city.code;
         }
         else{
             this.xinzengform.belongCity = d.province.code;
+            this.xinzengform.provinceCode = d.province.code;
+
         }
     },
     getValue(obj){
@@ -280,6 +295,7 @@ export default {
     },
     // 保存
     onSubmit(){
+        this.ifDisable = true;
         this.$refs['xinzengform'].validate((valid)=>{
             if(valid){
                 var forms=Object.assign({},this.xinzengform)
