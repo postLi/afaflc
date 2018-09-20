@@ -51,7 +51,7 @@
                     type="selection"    
                     width="50">
                 </el-table-column>
-				<el-table-column label="序号"  width="80">
+				<el-table-column label="序号" sortable  width="80">
                     <template slot-scope="scope">
                         {{ (page - 1)*pagesize + scope.$index + 1 }}
                     </template>
@@ -98,153 +98,152 @@ import GetCityList from '@/components/GetCityList'
 import createdDialog from './createdDialog.vue'
 import { eventBus } from '@/eventBus'
 import FreezeDialog from './FreezeDialog.vue'
-import {data_get_shipper_list,data_get_shipper_change,data_get_shipper_auid,} from '@/api/users/shipper/all_shipper.js'
+import { data_get_shipper_list, data_get_shipper_change, data_get_shipper_auid } from '@/api/users/shipper/all_shipper.js'
 import { data_LogisticsCompanyList } from '@/api/users/logistics/LogisticsCompany.js'
 import Pager from '@/components/Pagination/index'
 
 export default {
-	props: {
-		isvisible: {
-			type: Boolean,
-			default: false
-		}
-	},
-    components:{
-        createdDialog,
-        FreezeDialog,
-        GetCityList,
-        Pager
-    },
-  data(){
-    return{
-        btnsize:'mini',
-        dialogFormVisible_add:false,
-        type:'',
-        paramsView:{},
-        templateRadio:'',
-        optionsStatus:[], // 状态列表
-        tableData4:[],
-        totalCount:null,
-        page:1,
-        pagesize:20,
-        formInline: {
-            accountStatus:null,
-            belongCity:'',
-            belongCityName:'',
-            mobile:'',
-            authStatus:"AF0010401",//未认证的状态码
-            isVest:'0'
-
-        },
-        formLabelWidth:'120px',
-        information:null,
-        formLabelWidth:'120px',
-        changeDialogFlag: false, // 修改弹窗控制
-        optionsAuidSataus:[
-			{
-			code:null,
-			name:'全部'
-			}
-        ],//账户状态
-        selectRowData:{},
-        pickerOptions:{
-            disabledDate(time) {
-            return time.getTime() < Date.now();
-        }
-      },
+  props: {
+    isvisible: {
+      type: Boolean,
+      default: false
     }
   },
-    watch: {
-        isvisible: {
-            handler(newVal, oldVal) {
-                if(newVal && !this.inited){
-                    this.inited = true
-                    this.firstblood()
-                    this.getMoreInformation()
-                }
-            },
-            // 代表在wacth里声明了firstName这个方法之后立即先去执行handler方法
-            immediate: true
-        }
-        
-    },
-    mounted(){
-        eventBus.$on('changeList', () => {
-            // console.log('111111111111111111')
-                this.firstblood()
-        })
-    },
-    methods:{
-        pushOrderSerial(row){
-            this.type = 'view';
-            this.paramsView = row;
-            this.dialogFormVisible_add =true;
-        },
-        getCurrentRow(index,row){       
-            this.selectRowData = Object.assign({},row);
-            this.templateRadio = index;
-            console.log('选中内容',row)
-        },
-        handlePageChange(obj) {
-            this.page = obj.pageNum
-            this.pagesize = obj.pageSize
-            this.firstblood()
-        },
-   
-        handleCurrentChangeRow(val){
-            console.log(val)
-            this.selectRowData = val;
-        },
-        getMoreInformation(){
-            //获取账户状态列表
-            if(this.optionsAuidSataus.length > 1){
-                return
-            }else{
-                
-                data_get_shipper_auid().then(res=>{
-                console.log('车主状态：',res)
-                res.data.map((item)=>{
-                    this.optionsAuidSataus.push(item);
-                })
-                })
-            }
-        },
-        //点击查询按纽，按条件查询列表
-        getdata_search(event){
-            // this.formInline.belongCity = this.$refs.area.selectedOptions.pop();
-            this.firstblood();
-        },
-         //点击选中当前行
-        clickDetails(row, event, column){
-            this.$refs.multipleTable.toggleRowSelection(row);
-        },
-        //清空
-        clearSearch(){
-            // this.$refs.area.selectedOptions = [];
-            this.formInline = {
-                accountStatus:null,
-                belongCity:'',
-                mobile:'',
-                authStatus:"AF0010401",//未认证的状态码
-                isVest:'0'
+  components: {
+    createdDialog,
+    FreezeDialog,
+    GetCityList,
+    Pager
+  },
+  data() {
+    return {
+      btnsize: 'mini',
+      dialogFormVisible_add: false,
+      type: '',
+      paramsView: {},
+      templateRadio: '',
+      optionsStatus: [], // 状态列表
+      tableData4: [],
+      totalCount: null,
+      page: 1,
+      pagesize: 20,
+      formInline: {
+        accountStatus: null,
+        belongCity: '',
+        belongCityName: '',
+        mobile: '',
+        authStatus: 'AF0010401', // 未认证的状态码
+        isVest: '0'
 
-            },
-            this.firstblood();
-        },
-        //刷新页面
-        firstblood(){
-            data_LogisticsCompanyList(this.page,this.pagesize,this.formInline).then(res=>{
-                // console.log('未认证',res)
-                this.totalCount = res.data.totalCount;
-                this.tableData4 = res.data.list;
-                // this.inited = false;
-            })
-        },
-       
-        getDataList(){
-            this.firstblood()
-        },
+      },
+      formLabelWidth: '120px',
+      information: null,
+      formLabelWidth: '120px',
+      changeDialogFlag: false, // 修改弹窗控制
+      optionsAuidSataus: [
+        {
+          code: null,
+          name: '全部'
+        }
+      ], // 账户状态
+      selectRowData: {},
+      pickerOptions: {
+        disabledDate(time) {
+          return time.getTime() < Date.now()
+        }
+      }
     }
+  },
+  watch: {
+    isvisible: {
+      handler(newVal, oldVal) {
+        if (newVal && !this.inited) {
+          this.inited = true
+          this.firstblood()
+          this.getMoreInformation()
+        }
+      },
+            // 代表在wacth里声明了firstName这个方法之后立即先去执行handler方法
+      immediate: true
+    }
+
+  },
+  mounted() {
+    eventBus.$on('changeList', () => {
+            // console.log('111111111111111111')
+      this.firstblood()
+    })
+  },
+  methods: {
+    pushOrderSerial(row) {
+      this.type = 'view'
+      this.paramsView = row
+      this.dialogFormVisible_add = true
+    },
+    getCurrentRow(index, row) {
+      this.selectRowData = Object.assign({}, row)
+      this.templateRadio = index
+      console.log('选中内容', row)
+    },
+    handlePageChange(obj) {
+      this.page = obj.pageNum
+      this.pagesize = obj.pageSize
+      this.firstblood()
+    },
+
+    handleCurrentChangeRow(val) {
+      console.log(val)
+      this.selectRowData = val
+    },
+    getMoreInformation() {
+            // 获取账户状态列表
+      if (this.optionsAuidSataus.length > 1) {
+        return
+      } else {
+        data_get_shipper_auid().then(res => {
+          console.log('车主状态：', res)
+          res.data.map((item) => {
+              this.optionsAuidSataus.push(item)
+            })
+        })
+      }
+    },
+        // 点击查询按纽，按条件查询列表
+    getdata_search(event) {
+            // this.formInline.belongCity = this.$refs.area.selectedOptions.pop();
+      this.firstblood()
+    },
+         // 点击选中当前行
+    clickDetails(row, event, column) {
+      this.$refs.multipleTable.toggleRowSelection(row)
+    },
+        // 清空
+    clearSearch() {
+            // this.$refs.area.selectedOptions = [];
+      this.formInline = {
+        accountStatus: null,
+        belongCity: '',
+        mobile: '',
+        authStatus: 'AF0010401', // 未认证的状态码
+        isVest: '0'
+
+      },
+            this.firstblood()
+    },
+        // 刷新页面
+    firstblood() {
+      data_LogisticsCompanyList(this.page, this.pagesize, this.formInline).then(res => {
+                // console.log('未认证',res)
+        this.totalCount = res.data.totalCount
+        this.tableData4 = res.data.list
+                // this.inited = false;
+      })
+    },
+
+    getDataList() {
+      this.firstblood()
+    }
+  }
 }
 </script>
 <style lang="scss">
@@ -271,5 +270,4 @@ export default {
   }
 }
 </style>
-
 

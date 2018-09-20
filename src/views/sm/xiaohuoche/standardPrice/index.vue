@@ -24,34 +24,42 @@
                            </el-table-column>
                         <el-table-column
                           prop="serviceName"
+                          sortable
                           label="服务分类">
                         </el-table-column>
                         <el-table-column
                           prop="carTypeName"
+                          sortable
                           label="车辆类型">
                         </el-table-column>
                         <el-table-column
                           prop="specName"
+                          sortable
                           label="车辆规格">
                         </el-table-column>
                         <el-table-column
                           prop="carTypeClass"
+                          sortable
                           label="车长">
                         </el-table-column>
                         <el-table-column
                           prop="capacityTonM"
+                          sortable
                           label="负载量">
                         </el-table-column>
                         <el-table-column
                           prop="standardPriceM"
+                          sortable
                           label="标准起步价">
                         </el-table-column>
                         <el-table-column
                           prop="outstripPriceM"
+                          sortable
                           label="标准超里程费">
                         </el-table-column>
                         <el-table-column
                           prop="servicePic"
+                          sortable
                           label="服务图片">
                             <template  slot-scope="scope"> 
                                 <img  :src="scope.row.servicePic" />
@@ -59,6 +67,7 @@
                         </el-table-column>
                         <el-table-column
                           prop="usingStatus"
+                          sortable
                           label="状态">
                             <template  slot-scope="scope">
                                 {{ scope.row.usingStatus === '1' ? '启用' : '禁用' }}
@@ -351,331 +360,321 @@
 
 <script type="text/javascript">
 
-import { data_GetInformation,data_CarList,data_ServerClassList,data_ChangeStatus,data_DeletInfo,data_AddForms,data_NewClassfy,data_changeClassfy } from '@/api/server/standardPrice.js'
+import { data_GetInformation, data_CarList, data_ServerClassList, data_ChangeStatus, data_DeletInfo, data_AddForms, data_NewClassfy, data_changeClassfy } from '@/api/server/standardPrice.js'
 import { data_GetCarType } from '@/api/common.js'
-import Upload from '@/components/Upload/singleImage'    
+import Upload from '@/components/Upload/singleImage'
 import Pager from '@/components/Pagination/index'
 import '@/styles/dialog.scss'
 import searchInfo from '../component/searchInfo'
 
-    export default{
-        data(){
-            return{
-                sizes:[20,50,100],
-                btnsize:'mini',
-                searchInfo:{
-                    carType:'',
-                    serivceCode:'',
-                    usingStatus:'',
+export default{
+      data() {
+          return {
+              sizes: [20, 50, 100],
+              btnsize: 'mini',
+              searchInfo: {
+                  carType: '',
+                  serivceCode: '',
+                  usingStatus: ''
                 },
-                forms:{
-                    serivceCode:null,
-                    carType:null,
-                    spec:null,
-                    carLength:null,
-                    carWidth:null,
-                    carHeight:null,
-                    capacityTon:null,
-                    capacitySquare:null,
-                    standardPrice:null,
-                    standardKm:null,
-                    outstripPrice:null,
-                    servicePic:'',
+              forms: {
+                  serivceCode: null,
+                  carType: null,
+                  spec: null,
+                  carLength: null,
+                  carWidth: null,
+                  carHeight: null,
+                  capacityTon: null,
+                  capacitySquare: null,
+                  standardPrice: null,
+                  standardKm: null,
+                  outstripPrice: null,
+                  servicePic: ''
                 },
-                specList:[],
-                changeforms:{},
-                valueService:null,
-                optionsService:[
-                    {
-                    code:null,
-                    name:'全部'
-                    }
+              specList: [],
+              changeforms: {},
+              valueService: null,
+              optionsService: [
+                  {
+                    code: null,
+                    name: '全部'
+                  }
                 ],
-                optionsServiceM:null,
-                valueCarlist:null,
-                optionsCar:[
-                    {
-                    code:null,
-                    name:'全部'
-                    }
+              optionsServiceM: null,
+              valueCarlist: null,
+              optionsCar: [
+                  {
+                    code: null,
+                    name: '全部'
+                  }
                 ],
-                optionsCarM:null,
-                optionsCarTypeM:null,
-                valueStatus:null,
-                value2:null,
-                pid:null,
-                pidname:null,
-                labelName:null,
-                page:1,
-                pagesize:20,
-                formtitle:'新增定价',
-                currentPage4:1,
-                dialogFormVisible: false,
-                dialogFormVisible_change:false,
-                centerDialogVisible:false,
-                delDialogVisible:false,
-                nowcode:null,
-                dataTotal:0,
-                information:'你想知道什么',
-                waitchange:{},
-                delID:[],
-                delIDTree:'',
-                checkedinformation:[],
-                formLabelWidth: '80px',
-                input_search: null,
-                tableData:[],
-                treeData:[],
-                defaultProps: {
+              optionsCarM: null,
+              optionsCarTypeM: null,
+              valueStatus: null,
+              value2: null,
+              pid: null,
+              pidname: null,
+              labelName: null,
+              page: 1,
+              pagesize: 20,
+              formtitle: '新增定价',
+              currentPage4: 1,
+              dialogFormVisible: false,
+              dialogFormVisible_change: false,
+              centerDialogVisible: false,
+              delDialogVisible: false,
+              nowcode: null,
+              dataTotal: 0,
+              information: '你想知道什么',
+              waitchange: {},
+              delID: [],
+              delIDTree: '',
+              checkedinformation: [],
+              formLabelWidth: '80px',
+              input_search: null,
+              tableData: [],
+              treeData: [],
+              defaultProps: {
                   children: 'children',
                   label: 'label'
                 },
-                carTypeRules: '请填写完整车长信息',
+              carTypeRules: '请填写完整车长信息'
             }
         },
-        components:{
-            Upload,
-            Pager,
-            searchInfo
+      components: {
+          Upload,
+          Pager,
+          searchInfo
         },
-        mounted(){
-            this.firstblood();
-            this.getMoreInformation();
+      mounted() {
+          this.firstblood()
+            this.getMoreInformation()
             // console.log(this.$store)
-        },  
-        methods: {
-            getSearchParam(obj) {
-                console.log(obj)
-                this.searchInfo = Object.assign(this.searchInfo, obj)
+        },
+      methods: {
+          getSearchParam(obj) {
+              console.log(obj)
+              this.searchInfo = Object.assign(this.searchInfo, obj)
                 // this.loading = false
-                this.firstblood()
+              this.firstblood()
             },
             // 获取翻页返回的数据
-            handlePageChange (obj) {
-                this.page = obj.pageNum;
-                this.pagesize = obj.pageSize;
-                this.firstblood();
+          handlePageChange(obj) {
+              this.page = obj.pageNum
+                this.pagesize = obj.pageSize
+                this.firstblood()
 
             },
-            //获取  服务和车辆 类型列表
-            getMoreInformation(){
-                data_CarList().then(res=>{
-                    console.log(res.data)
-                    res.data.map((item)=>{
-                        this.optionsCar.push(item);
+            // 获取  服务和车辆 类型列表
+          getMoreInformation() {
+              data_CarList().then(res => {
+                  console.log(res.data)
+                  res.data.map((item) => {
+                      this.optionsCar.push(item)
                     })
-                    this.optionsCarM = res.data;
-                });
-                data_ServerClassList().then(res=>{
-                    console.log(res.data)
-                     res.data.map((item)=>{
-                         this.optionsService.push(item);
+                  this.optionsCarM = res.data
+                })
+                data_ServerClassList().then(res => {
+                  console.log(res.data)
+                  res.data.map((item) => {
+                       this.optionsService.push(item)
                     })
-                    this.optionsServiceM = res.data;
+                  this.optionsServiceM = res.data
                     
-                });
-                data_GetCarType().then(res=>{
-                    console.log(res.data)
-                    this.optionsCarTypeM = res.data;
+                })
+                data_GetCarType().then(res => {
+                  console.log(res.data)
+                  this.optionsCarTypeM = res.data
                 })
             },
-           
-            //点击选中当前行
-            clickDetails(row, event, column){
-                this.$refs.multipleTable.toggleRowSelection(row);
-                this.waitchange = row;
-                if(row.status == "启用"){
-                    this.dataStatus = false;
-                }
-                if(row.status == "禁用"){
-                    this.dataStatus = true;
-                }
-            },
-            //新增关闭返回初始内容
-            closeAddNewInfo(){
-                this.dialogFormVisible = false;
-                this.clearData();
-            },
-            //判断是否选中
-            getinfomation(selection){
-                this.checkedinformation = selection;
-            },
-            //修改
-            handleEdit() {
-                if(Object.keys(this.checkedinformation).length == 0){
-                    //未选择任何修改内容的提示
-                    let information = "未选中任何修改内容";
-                    this.hint(information);
-                }else if(this.checkedinformation.length >1){
-                    let information = "不可修改多个内容";
-                    this.hint(information);
 
-                }else{
-                    console.log(this.checkedinformation)
-                    this.dialogFormVisible_change = true;
-                    this.changeforms  = this.checkedinformation[0];
+            // 点击选中当前行
+          clickDetails(row, event, column) {
+              this.$refs.multipleTable.toggleRowSelection(row)
+                this.waitchange = row
+                if (row.status == '启用') {
+                  this.dataStatus = false
+                }
+              if (row.status == '禁用') {
+                  this.dataStatus = true
+                }
+            },
+            // 新增关闭返回初始内容
+          closeAddNewInfo() {
+              this.dialogFormVisible = false
+                this.clearData()
+            },
+            // 判断是否选中
+          getinfomation(selection) {
+              this.checkedinformation = selection
+            },
+            // 修改
+          handleEdit() {
+              if (Object.keys(this.checkedinformation).length == 0) {
+                    // 未选择任何修改内容的提示
+                  const information = '未选中任何修改内容';
+                  this.hint(information)
+                } else if (this.checkedinformation.length > 1) {
+                  const information = '不可修改多个内容';
+                  this.hint(information)
+
+                } else{
+                  console.log(this.checkedinformation)
+                  this.dialogFormVisible_change = true
+                    this.changeforms = this.checkedinformation[0]
                 }
             },
             // 禁用/启用
-            handleUseStates(){
-                if(this.checkedinformation.length === 0){
-                    //未选择任何修改内容的提示
-                    let information = "未选中任何更改状态内容";
-                    this.hint(information);
-                }else{
-                    let statusID = [];
-                    this.checkedinformation.map((item)=>{
-                        return statusID.push(item.standardPid)
+          handleUseStates() {
+              if (this.checkedinformation.length === 0) {
+                    // 未选择任何修改内容的提示
+                  const information = '未选中任何更改状态内容';
+                  this.hint(information)
+                } else{
+                  const statusID = []
+                    this.checkedinformation.map((item) => {
+                      return statusID.push(item.standardPid)
                     })
-                    data_ChangeStatus(statusID).then(res=>{
+                  data_ChangeStatus(statusID).then(res => {
                         // console.log(res)
-                        this.firstblood();
+                      this.firstblood()
                     })
                 }
             },
             // 是否删除
-            handleDelete() {
-                if(this.checkedinformation.length === 0){
-                    //未选择任何修改内容的提示
-                    let information = "未选中任何删除内容";
-                    this.hint(information);
-                }else{
-                    console.log(this.checkedinformation)
-                    let delID = [];
-                    this.checkedinformation.map((item)=>{
-                        return delID.push(item.standardPid)
+          handleDelete() {
+              if (this.checkedinformation.length === 0) {
+                    // 未选择任何修改内容的提示
+                  const information = '未选中任何删除内容';
+                  this.hint(information)
+                } else{
+                  console.log(this.checkedinformation)
+                  const delID = []
+                    this.checkedinformation.map((item) => {
+                      return delID.push(item.standardPid)
                     })
-                    this.delID = delID;
-                    this.delDialogVisible = true;
+                  this.delID = delID
+                    this.delDialogVisible = true
                     console.log(this.delID)
                 }
             },
-            //确认删除
-            delDataInformation(){
-                this.delDialogVisible = false;
+            // 确认删除
+          delDataInformation() {
+              this.delDialogVisible = false
                 data_DeletInfo(this.delID).then(res => {
-                    if(res.status == 200){
-                      this.firstblood();
+                  if (res.status == 200) {
+                      this.firstblood()
                     }
-                }).catch(res=>{
-                    let information = res.text;
-                    this.hint(information);
+                }).catch(res => {
+                  const information = res.text
+                    this.hint(information)
                 })
             },
-            //刷新页面  
-            firstblood(){
-                data_GetInformation(this.page,this.pagesize,this.searchInfo).then(res=>{
-                    this.dataTotal = res.data.totalCount;
-                    this.tableData = res.data.list;
-                    this.tableData.map((item)=>{
-                        item.carTypeClass = item.carLength +'*'+item.carWidth+'*'+item.carHeight+'M';
-                        item.capacityTonM = item.capacityTon + '吨,'+' '+item.capacitySquare+'方';
-                        item.standardPriceM = item.standardPrice+'元 '+' '+'('+item.standardKm+'公里)';
-                        item.outstripPriceM = item.outstripPrice + '元/公里';
+            // 刷新页面
+          firstblood() {
+              data_GetInformation(this.page, this.pagesize, this.searchInfo).then(res => {
+                  this.dataTotal = res.data.totalCount
+                    this.tableData = res.data.list
+                    this.tableData.map((item) => {
+                      item.carTypeClass = item.carLength + '*' + item.carWidth + '*' + item.carHeight + 'M'
+                        item.capacityTonM = item.capacityTon + '吨,' + ' ' + item.capacitySquare + '方'
+                        item.standardPriceM = item.standardPrice + '元 ' + ' ' + '(' + item.standardKm + '公里)'
+                        item.outstripPriceM = item.outstripPrice + '元/公里'
                     })
                 })
             },
-            //新增分类信息
-            addClassfy(){
-                this.dialogFormVisible = true;
+            // 新增分类信息
+          addClassfy() {
+              this.dialogFormVisible = true
 
             },
-            //保存信息
-            newInfoSave(){
-                this.forms.spec = this.specList.join(',');
-                if(!this.forms.serivceCode){
-                    let information = "请选择服务类型";
-                    this.hint(information);
+            // 保存信息
+          newInfoSave() {
+              this.forms.spec = this.specList.join(',')
+                if (!this.forms.serivceCode) {
+                  const information = '请选择服务类型';
+                  this.hint(information)
+                }                else if (!this.forms.carType) {
+                  const information = '请选择车辆类型';
+                  this.hint(information)
                 }
-                else if(!this.forms.carType){
-                    let information = "请选择车辆类型";
-                    this.hint(information);
-                } 
-                else if(!this.forms.carLength){
-                    let information = "请填写完整车长信息";
-                    this.hint(information);
-                    this.$refs.carLength.focus();
-                }
-                else if(!this.forms.carWidth){
-                    let information = "请填写完整车长信息";
-                    this.hint(information);
-                    this.$refs.carWidth.focus();
-                }
-                else if(!this.forms.carHeight){
-                    let information = "请填写完整车长信息";
-                    this.hint(information);
-                    this.$refs.carHeight.focus();
-                }
-                else if(!this.forms.capacityTon){
-                    let information = "请填写负载量";
-                    this.hint(information);
-                    this.$refs.capacityTon.focus();
-                }
-                 else if(!this.forms.capacitySquare){
-                    let information = "请填写负载量";
-                    this.hint(information);
-                    this.$refs.capacitySquare.focus();
-                }
-                else if(!this.forms.standardPrice){
-                    let information = "请填写标准起步价";
-                    this.hint(information);
-                    this.$refs.standardPrice.focus();
-                }
-                else if(!this.forms.standardKm){
-                    let information = "请填写标准起步价";
-                    this.hint(information);
-                    this.$refs.standardKm.focus();
-                }
-                else if(!this.forms.outstripPrice){
-                    let information = "请填写标准里程费";
-                    this.hint(information);
-                    this.$refs.outstripPrice.focus();
-                }
-                else if(!this.forms.servicePic){
-                    let information = "请上传服务图片";
-                    this.hint(information);
-                }
-                else(
+              else if (!this.forms.carLength) {
+                  const information = '请填写完整车长信息';
+                  this.hint(information)
+                    this.$refs.carLength.focus()
+                }                else if (!this.forms.carWidth) {
+                  const information = '请填写完整车长信息';
+                  this.hint(information)
+                    this.$refs.carWidth.focus()
+                }                else if (!this.forms.carHeight) {
+                  const information = '请填写完整车长信息';
+                  this.hint(information)
+                    this.$refs.carHeight.focus()
+                }                else if (!this.forms.capacityTon) {
+                  const information = '请填写负载量';
+                  this.hint(information)
+                    this.$refs.capacityTon.focus()
+                }                 else if (!this.forms.capacitySquare) {
+                   const information = '请填写负载量';
+                   this.hint(information)
+                    this.$refs.capacitySquare.focus()
+                }                else if (!this.forms.standardPrice) {
+                  const information = '请填写标准起步价';
+                  this.hint(information)
+                    this.$refs.standardPrice.focus()
+                }                else if (!this.forms.standardKm) {
+                  const information = '请填写标准起步价';
+                  this.hint(information)
+                    this.$refs.standardKm.focus()
+                }                else if (!this.forms.outstripPrice) {
+                  const information = '请填写标准里程费';
+                  this.hint(information)
+                    this.$refs.outstripPrice.focus()
+                }                else if (!this.forms.servicePic) {
+                  const information = '请上传服务图片';
+                  this.hint(information)
+                }                else {(
                     data_NewClassfy(this.forms).then(res=>{
                         // console.log(res)
                         this.firstblood();
                         this.dialogFormVisible = false;
                         this.clearData();
                     })
-                )
+                )}
             },
 
-            //清空数据
-            clearData(){
-                this.forms={
-                            serivceCode:null,
-                            carType:null,
-                            spec:null,
-                            carLength:null,
-                            carWidth:null,
-                            carHeight:null,
-                            capacityTon:null,
-                            capacitySquare:null,
-                            standardPrice:null,
-                            standardKm:null,
-                            outstripPrice:null,
-                            servicePic:'',
-                        };
+            // 清空数据
+          clearData() {
+              this.forms = {
+                  serivceCode: null,
+                  carType: null,
+                  spec: null,
+                  carLength: null,
+                  carWidth: null,
+                  carHeight: null,
+                  capacityTon: null,
+                  capacitySquare: null,
+                  standardPrice: null,
+                  standardKm: null,
+                  outstripPrice: null,
+                  servicePic: ''
+                }
             },
-            //修改保存
-            changeInfoSave(){
-                console.log(this.changeform)
-                data_changeClassfy(this.changeforms).then(res=>{
-                    this.firstblood();
-                    this.dialogFormVisible_change = false;
-                })  
+            // 修改保存
+          changeInfoSave() {
+              console.log(this.changeform)
+              data_changeClassfy(this.changeforms).then(res => {
+                  this.firstblood()
+                    this.dialogFormVisible_change = false
+                })
             },
-            hint(val){
-                this.information = val;
-                this.centerDialogVisible = true;
-                let timer = setTimeout(()=>{
-                    this.centerDialogVisible = false;
+          hint(val) {
+              this.information = val
+                this.centerDialogVisible = true
+                let timer = setTimeout(() => {
+                  this.centerDialogVisible = false
                     clearTimeout(timer)
-                },2000)
+                }, 2000)
             }
         }
     }

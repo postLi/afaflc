@@ -49,9 +49,9 @@
         ShipperDisqualification
       },
       data() {
-            return {
-            shipperName: 'first',
-            secondBoolen:false
+        return {
+              shipperName: 'first',
+              secondBoolen: false
             }
       },
       watch: {
@@ -74,15 +74,14 @@
       beforeDestroy() {
         sessionStorage.setItem('shipperName', 'first')
       },
-      mounted(){
-          let authInfo = getUserInfo();
-          console.log('authInfo',authInfo)
-
-      },
+      mounted() {
+        const authInfo = getUserInfo()
+      console.log('authInfo', authInfo)
+  },
       methods: {
         handleClick(tab, event) {
             // console.log(tab, event);
-            this.shipperName = tab.name
+          this.shipperName = tab.name
         }
       }
     }

@@ -42,7 +42,7 @@
                     type="selection"    
                     width="50">
                 </el-table-column>
-               <el-table-column label="序号" width="80">
+               <el-table-column label="序号" sortable width="80">
                     <template slot-scope="scope">
                         {{ (page - 1)*pagesize + scope.$index + 1 }}
                     </template>
@@ -88,140 +88,138 @@
 <script>
 import createdDialog from './createdDialog.vue'
 import { eventBus } from '@/eventBus'
-import {data_get_shipper_type} from '@/api/users/shipper/all_shipper.js'
+import { data_get_shipper_type } from '@/api/users/shipper/all_shipper.js'
 import { data_LogisticsCompanyList } from '@/api/users/logistics/LogisticsCompany.js'
 import Pager from '@/components/Pagination/index'
 
 export default {
-    props: {
-        isvisible: {
-            type: Boolean,
-            default: false
-        }
-    },
-    components:{
-        createdDialog,
-        Pager
-    },
-    data(){
-        return {
-            btnsize:'mini',
-            paramsView:{},
-            templateRadio:'',
-            options:[],
-            tableData3:[],
-            totalCount:null,
-            page:1,
-            pagesize:20,
-            formInline: {
-                companyName:'',
-                belongCity:'',
-                mobile:'',
-                authStatus:"AF0010403",//已认证的状态码
-                isVest:'0'
+  props: {
+    isvisible: {
+      type: Boolean,
+      default: false
+    }
+  },
+  components: {
+    createdDialog,
+    Pager
+  },
+  data() {
+    return {
+      btnsize: 'mini',
+      paramsView: {},
+      templateRadio: '',
+      options: [],
+      tableData3: [],
+      totalCount: null,
+      page: 1,
+      pagesize: 20,
+      formInline: {
+          companyName: '',
+          belongCity: '',
+          mobile: '',
+          authStatus: 'AF0010403', // 已认证的状态码
+          isVest: '0'
 
-            },
-            selectRowData:{},
-            dialogFormVisible_add:false,
-            type:'',
-            selected:[],//当前选择集
-        }
-    },
-    watch: {
-        isvisible: {
-            handler(newVal, oldVal) {
-                if(newVal && !this.inited){
-                    this.inited = true
-                    this.firstblood()
-                }
-            },
+        },
+      selectRowData: {},
+      dialogFormVisible_add: false,
+      type: '',
+      selected: [] // 当前选择集
+    }
+  },
+  watch: {
+    isvisible: {
+      handler(newVal, oldVal) {
+          if (newVal && !this.inited) {
+              this.inited = true
+              this.firstblood()
+            }
+        },
             // 代表在wacth里声明了firstName这个方法之后立即先去执行handler方法
-            immediate: true
-        }
-    },
-    mounted(){
-        eventBus.$on('changeList', () => {
+      immediate: true
+    }
+  },
+  mounted() {
+    eventBus.$on('changeList', () => {
             // console.log('55555555555555')
-                this.firstblood()
-        })
+      this.firstblood()
+    })
+  },
+  methods: {
+
+    handlePageChange(obj) {
+      this.page = obj.pageNum
+      this.pagesize = obj.pageSize
+      this.firstblood()
     },
-    methods:{
-        
-        handlePageChange(obj) {
-            this.page = obj.pageNum
-            this.pagesize = obj.pageSize
-            this.firstblood()
-        },
-        getCurrentRow(index,row){       
-            this.selectRowData = Object.assign({},row);
-            this.templateRadio = index;
-            console.log('选中内容',row)
-        },
-        handleChange(){
-            this.selectRowData =this.selected[0];
-            if(this.selected.length == 0){
-                return this.$message.info('请选择您要操作的用户');
-            }else if (this.selected.length > 1) {
-                this.$message({
+    getCurrentRow(index, row) {
+      this.selectRowData = Object.assign({}, row)
+      this.templateRadio = index
+      console.log('选中内容', row)
+    },
+    handleChange() {
+      this.selectRowData = this.selected[0]
+      if (this.selected.length == 0) {
+          return this.$message.info('请选择您要操作的用户')
+        } else if (this.selected.length > 1) {
+              this.$message({
                 message: '每次只能操作单条数据~',
                 type: 'info'
-                })
-            }else{
-                this.type = 'edit';
-                this.paramsView = Object.assign({},this.selectRowData);
-                this.dialogFormVisible_add =true;
+              })
+            } else {
+              this.type = 'edit'
+              this.paramsView = Object.assign({}, this.selectRowData)
+              this.dialogFormVisible_add = true
             }
              // 清除选中状态，避免影响下个操作
-                this.$refs.multipleTable.clearSelection()
-        },
+      this.$refs.multipleTable.clearSelection()
+    },
         // 判断选中与否
-        getSelection(val){
-            console.log('选中内容',val)
-            this.selected = val;
-        },
-        //点击选中当前行
-        clickDetails(row, event, column){
-            this.$refs.multipleTable.toggleRowSelection(row);
-        },
-        //刷新页面
-        firstblood(){
-            data_LogisticsCompanyList(this.page,this.pagesize,this.formInline).then(res=>{
-                this.totalCount = res.data.totalCount;
-                this.tableData3 = res.data.list;
+    getSelection(val) {
+      console.log('选中内容', val)
+      this.selected = val
+    },
+        // 点击选中当前行
+    clickDetails(row, event, column) {
+      this.$refs.multipleTable.toggleRowSelection(row)
+    },
+        // 刷新页面
+    firstblood() {
+      data_LogisticsCompanyList(this.page, this.pagesize, this.formInline).then(res => {
+          this.totalCount = res.data.totalCount
+          this.tableData3 = res.data.list
                 // this.inited = false;
+        })
+    },
+    pushOrderSerial(row) {
+      this.type = 'view'
+      this.paramsView = row
+      this.dialogFormVisible_add = true
+    },
+       // 点击查询按纽，按条件查询列表
+    getdata_search(event) {
+      this.firstblood()
+    },
 
-            })
-        },
-        pushOrderSerial(row){
-            this.type = 'view';
-            this.paramsView = row;
-            this.dialogFormVisible_add =true;
-        },
-       //点击查询按纽，按条件查询列表
-        getdata_search(event){
-            this.firstblood()
-        },
-      
-        //清空
-        clearSearch(){
-            this.formInline = {
-                companyName:'',
-                belongCity:'',
-                mobile:'',
-                authStatus:"AF0010403",//已认证的状态码
-                isVest:'0'
+        // 清空
+    clearSearch() {
+      this.formInline = {
+          companyName: '',
+          belongCity: '',
+          mobile: '',
+          authStatus: 'AF0010403', // 已认证的状态码
+          isVest: '0'
 
-            }
-            this.firstblood()
-        },
-      getDataList(){
-        this.firstblood()
-      }
+        }
+      this.firstblood()
+    },
+    getDataList() {
+      this.firstblood()
     }
+  }
 }
 </script>
 <style>
 
 </style>
-
 

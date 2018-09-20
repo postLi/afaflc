@@ -43,7 +43,7 @@
                     type="selection"
                     width="50">
             </el-table-column>
-			<el-table-column label="序号"  width="80">
+			<el-table-column label="序号" sortable  width="80">
                 <template slot-scope="scope">
                     {{ (page - 1)*pagesize + scope.$index + 1 }}
                 </template>
@@ -285,266 +285,266 @@ import Upload from '@/components/Upload/singleImage'
 import { eventBus } from '@/eventBus'
 import createdDialog from './createdDialog.vue'
 import GetCityList from '@/components/GetCityList'
-import { data_LogisticsCompanyList,data_ChangeLogisticsCompany } from '../../../api/users/logistics/LogisticsCompany.js'
-import { data_LogisticsCompany,getDictionary } from '@/api/common.js'
+import { data_LogisticsCompanyList, data_ChangeLogisticsCompany } from '../../../api/users/logistics/LogisticsCompany.js'
+import { data_LogisticsCompany, getDictionary } from '@/api/common.js'
 import Pager from '@/components/Pagination/index'
 
-import defaultURL  from '@/assets/404_images/404.png'
+import defaultURL from '@/assets/404_images/404.png'
 export default {
-	props: {
-        isvisible: {
-            type: Boolean,
-            default: false
+  props: {
+  isvisible: {
+          type: Boolean,
+          default: false
         }
-    },
-	components:{
-		createdDialog,
-		GetCityList,
-        Upload,
-        Pager
-	},
-	computed: {
-		pictureValue () {
-		    return [{name:'营业执照',result: this.radio1},{name:'公司或档口照片',result: this.radio2},{name:'手持身份证',result: this.radio3}]
-		}
-	},
-	data(){
-		const radioValidator = (rule,val,cb)=>{
+},
+  components: {
+  createdDialog,
+  GetCityList,
+  Upload,
+  Pager
+},
+  computed: {
+  pictureValue() {
+		    return [{ name: '营业执照', result: this.radio1 }, { name: '公司或档口照片', result: this.radio2 }, { name: '手持身份证', result: this.radio3 }]
+}
+},
+  data() {
+  const radioValidator = (rule, val, cb) => {
             // console.log(val)
-            if(!this.radio1){
-                cb(new Error('请选择图片质量'))
-            }else{
-                cb()
+  if (!this.radio1) {
+              cb(new Error('请选择图片质量'))
+            } else{
+              cb()
             }
-		}
-		return{
-            btnsize:'mini',
-            dialogFormVisible_add:false,
-            type:'',
-            paramsView:{},
-            templateRadio:'',
-            defaultImg:'/static/test.jpg',//默认第一张图片的url
-            demoData:"企业货主",//根据项目要求写死
-            selectDiaologFlag:true,
-            options:[], // 货主类型列表
-            tableData1:[], // 列表数据
-            totalCount:null, // 总数
-            page:1,
-            pagesize:20,
-            formAll:{
-                belongCity:null,
-                belongCityName:'',
-                companyName:'',
-                mobile:'',
-                authStatus:"AF0010402",//待认证的状态码
-                isVest:'0'
+}
+return {
+  btnsize: 'mini',
+  dialogFormVisible_add: false,
+  type: '',
+  paramsView: {},
+  templateRadio: '',
+  defaultImg: '/static/test.jpg', // 默认第一张图片的url
+  demoData: '企业货主', // 根据项目要求写死
+  selectDiaologFlag: true,
+  options: [], // 货主类型列表
+  tableData1: [], // 列表数据
+  totalCount: null, // 总数
+  page: 1,
+  pagesize: 20,
+  formAll: {
+              belongCity: null,
+              belongCityName: '',
+              companyName: '',
+              mobile: '',
+              authStatus: 'AF0010402', // 待认证的状态码
+              isVest: '0'
 
             },
-            formLabelWidth: '120px',
-            dialogFormVisible:false, //认证审核弹框控制
-            shengheform:{
+  formLabelWidth: '120px',
+  dialogFormVisible: false, // 认证审核弹框控制
+  shengheform: {
 
             },
-            serviceType:'AF028',//服务类型
-            belongBrand:'AF029',//品牌code
-            productServiceCode:'AF027',//产品与服务code
-            otherServiceCode:'AF025',//增值服务code
-            otherService:[],//会员承诺服务
-            serviceTypeName:[],
-            productService:[],
-            optionsLogisticsCompany:[],//会员服务承诺
-            optionsBelongBrand:[],//品牌类型
-            optionsProductService:[],//产品与服务
-            optionsProductArr:[],
-            optionsServer:[],//服务类型
-            optionsServerArr:[],//
-            otherServiceCode:[],//选择增值服务
-            centerDialogVisible:false,// 提示语的弹窗控制
-            information:null, // 弹框显示的信息
-            multipleSelection:{},
-            shengheformRules:{
-                shipperType:{required: true, message:'请选择货主类型',trigger:'change'},
-                radio1:{validator: radioValidator,trigger:'change'},
-                radio2:{validator: radioValidator,trigger:'change'},
-                radio3:{validator: radioValidator,trigger:'change'}
+  serviceType: 'AF028', // 服务类型
+  belongBrand: 'AF029', // 品牌code
+  productServiceCode: 'AF027', // 产品与服务code
+  otherServiceCode: 'AF025', // 增值服务code
+  otherService: [], // 会员承诺服务
+  serviceTypeName: [],
+  productService: [],
+  optionsLogisticsCompany: [], // 会员服务承诺
+  optionsBelongBrand: [], // 品牌类型
+  optionsProductService: [], // 产品与服务
+  optionsProductArr: [],
+  optionsServer: [], // 服务类型
+  optionsServerArr: [], //
+  otherServiceCode: [], // 选择增值服务
+  centerDialogVisible: false, // 提示语的弹窗控制
+  information: null, // 弹框显示的信息
+  multipleSelection: {},
+  shengheformRules: {
+              shipperType: { required: true, message: '请选择货主类型', trigger: 'change' },
+              radio1: { validator: radioValidator, trigger: 'change' },
+              radio2: { validator: radioValidator, trigger: 'change' },
+              radio3: { validator: radioValidator, trigger: 'change' }
             },
-            radio1:null,
-            radio2:null,
-            radio3:null,
-            optionsStatus:[
-                {
-                    value:'1',
-                    name:"是"
-                },
-                    {
-                    value:'0',
-                    name:"否"
-                }
+  radio1: null,
+  radio2: null,
+  radio3: null,
+  optionsStatus: [
+              {
+                value: '1',
+                name: '是'
+              },
+              {
+                value: '0',
+                name: '否'
+              }
             ],
-            selected:[],//当前选中内容
-        }
-	},
-    watch: {
-        isvisible: {
-            handler(newVal, oldVal) {
-                if(newVal && !this.inited){
-                    this.inited = true
-                    this.firstblood();
-                    this.getMoreInformation();
+  selected: [] // 当前选中内容
+}
+},
+  watch: {
+      isvisible: {
+          handler(newVal, oldVal) {
+              if (newVal && !this.inited) {
+                  this.inited = true
+                  this.firstblood()
+                    this.getMoreInformation()
                 }
             },
             // 代表在wacth里声明了firstName这个方法之后立即先去执行handler方法
-            immediate: true
+          immediate: true
         },
-        otherServiceCode:{
-            handler(newVal,oldVal){
-                if(newVal){
-                    this.shengheform.otherServiceCode = JSON.stringify(newVal);
-                    console.log('1111',this.shengheform.otherServiceCode)
-                    let otherService = [];
-                    this.optionsLogisticsCompany.find((item)=>{
-                        this.otherServiceCode.forEach(el => {
-                            if(item.code == el ){
-                                otherService.push(item.name)    
+      otherServiceCode: {
+          handler(newVal, oldVal) {
+              if (newVal) {
+                  this.shengheform.otherServiceCode = JSON.stringify(newVal)
+                    console.log('1111', this.shengheform.otherServiceCode)
+                  const otherService = []
+                    this.optionsLogisticsCompany.find((item) => {
+                      this.otherServiceCode.forEach(el => {
+                          if (item.code == el) {
+                              otherService.push(item.name)
                             }
                         })
                     })
 
-                    this.shengheform.otherService = JSON.stringify(otherService);
+                  this.shengheform.otherService = JSON.stringify(otherService)
                 }
             }
         }
     },
-    mounted(){
-        eventBus.$on('changeList', () => {
+  mounted() {
+      eventBus.$on('changeList', () => {
             // console.log('44444444444444444')
-                this.firstblood();
+          this.firstblood()
         })
     },
-    methods:{
-        pushOrderSerial(row){
-            this.type = 'view';
-            this.paramsView = row;
-            this.dialogFormVisible_add =true;
+  methods: {
+      pushOrderSerial(row) {
+          this.type = 'view'
+            this.paramsView = row
+            this.dialogFormVisible_add = true
         },
-        getCurrentRow(index,row){       
-            this.shengheform = Object.assign({},row);
-            this.otherServiceCode = JSON.parse(this.shengheform.otherServiceCode);
-            this.optionsServerArr = JSON.parse(this.shengheform.serviceType) 
-            this.optionsProductArr = JSON.parse(this.shengheform.productServiceCode) 
-            this.shengheform.isOpenTms = '0';
-            this.templateRadio = index;
-            console.log('选中内容',row)
+      getCurrentRow(index, row) {
+          this.shengheform = Object.assign({}, row)
+            this.otherServiceCode = JSON.parse(this.shengheform.otherServiceCode)
+            this.optionsServerArr = JSON.parse(this.shengheform.serviceType)
+          this.optionsProductArr = JSON.parse(this.shengheform.productServiceCode)
+          this.shengheform.isOpenTms = '0'
+            this.templateRadio = index
+            console.log('选中内容', row)
         },
            // 判断选中与否
-        getSelection(val){
-            console.log('选中内容',val)
-            this.selected = val;
+      getSelection(val) {
+          console.log('选中内容', val)
+          this.selected = val
         },
-        handlePageChange(obj) {
-            this.page = obj.pageNum
-            this.pagesize = obj.pageSize
-            this.firstblood()
+      handlePageChange(obj) {
+          this.page = obj.pageNum
+          this.pagesize = obj.pageSize
+          this.firstblood()
         },
-        getValue(obj){
-            return obj?obj.value:'';
+      getValue(obj) {
+          return obj ? obj.value:''
         },
-        changeIMG(event){
+      changeIMG(event) {
             // console.log(event)
-            this.defaultImg = event.target.src;
+          this.defaultImg = event.target.src
         },
-        changeList(){
-            eventBus.$emit('changeList')
+      changeList() {
+          eventBus.$emit('changeList')
         },
-         //点击选中当前行
-        clickDetails(row, event, column){
-            this.$refs.multipleTable.toggleRowSelection(row);
+         // 点击选中当前行
+      clickDetails(row, event, column) {
+          this.$refs.multipleTable.toggleRowSelection(row)
         },
-        handleEdit(){
-            if(this.selected.length == 0){
-                return this.$message.info('请选择您要操作的用户');
-            }else if (this.selected.length > 1) {
-                this.$message({
-                message: '每次只能操作单条数据~',
-                type: 'info'
+      handleEdit() {
+          if (this.selected.length == 0) {
+              return this.$message.info('请选择您要操作的用户')
+            } else if (this.selected.length > 1) {
+              this.$message({
+                  message: '每次只能操作单条数据~',
+                  type: 'info'
                 })
-            }else{
-                this.shengheform = Object.assign({},this.selected[0]);
-                this.otherServiceCode = JSON.parse(this.shengheform.otherServiceCode);
-                this.optionsServerArr = JSON.parse(this.shengheform.serviceType) 
-                this.optionsProductArr = JSON.parse(this.shengheform.productServiceCode) 
-                this.shengheform.isOpenTms = '0';
-                this.dialogFormVisible = true;
-                this.defaultImg =  this.shengheform.businessLicenceFile ?  this.shengheform.businessLicenceFile : this.defaultImg;
+            }else {
+              this.shengheform = Object.assign({}, this.selected[0])
+                this.otherServiceCode = JSON.parse(this.shengheform.otherServiceCode)
+                this.optionsServerArr = JSON.parse(this.shengheform.serviceType)
+              this.optionsProductArr = JSON.parse(this.shengheform.productServiceCode)
+              this.shengheform.isOpenTms = '0'
+                this.dialogFormVisible = true
+                this.defaultImg = this.shengheform.businessLicenceFile ? this.shengheform.businessLicenceFile : this.defaultImg
             }
              // 清除选中状态，避免影响下个操作
-                this.$refs.multipleTable.clearSelection()
+          this.$refs.multipleTable.clearSelection()
         },
-        
-        //刷新页面
-        firstblood(){
-            data_LogisticsCompanyList(this.page,this.pagesize,this.formAll).then(res=>{
-            console.log(res)
-                this.totalCount = res.data.totalCount;
-                this.tableData1 = res.data.list;
+
+        // 刷新页面
+      firstblood() {
+          data_LogisticsCompanyList(this.page, this.pagesize, this.formAll).then(res => {
+              console.log(res)
+              this.totalCount = res.data.totalCount
+                this.tableData1 = res.data.list
                 // this.inited = true
             })
         },
-        //点击查询按纽，按条件查询列表
-        getdata_search(event){
+        // 点击查询按纽，按条件查询列表
+      getdata_search(event) {
                 // this.formAll.belongCity = this.$refs.area.selectedOptions.pop();
-                this.firstblood();
+          this.firstblood()
         },
-         //获取增值服务
-        getMoreInformation(){
-            data_LogisticsCompany().then(res=>{
-                this.optionsLogisticsCompany = res.data;
+         // 获取增值服务
+      getMoreInformation() {
+          data_LogisticsCompany().then(res => {
+              this.optionsLogisticsCompany = res.data
                 // console.log('this.options',this.optionsLogisticsCompany)
             })
-            Promise.all([getDictionary(this.belongBrand),getDictionary(this.productServiceCode),getDictionary(this.serviceType)]).then(resArr => {
-                console.log('resAll',resArr)
-                this.optionsBelongBrand = resArr[0].data;
-                this.optionsProductService = resArr[1].data;
-                this.optionsServer = resArr[2].data;
+          Promise.all([getDictionary(this.belongBrand), getDictionary(this.productServiceCode), getDictionary(this.serviceType)]).then(resArr => {
+              console.log('resAll', resArr)
+              this.optionsBelongBrand = resArr[0].data
+                this.optionsProductService = resArr[1].data
+                this.optionsServer = resArr[2].data
             })
         },
-        //清空
-        clearSearch(){
+        // 清空
+      clearSearch() {
             // this.$refs.area.selectedOptions = [];
-            this.formAll = {
-                belongCity:null,
-                belongCityName:'',
-                companyName:'',
-                mobile:'',
-                authStatus:"AF0010402",//待认证的状态码
-                isVest:'0'
+          this.formAll = {
+              belongCity: null,
+              belongCityName: '',
+              companyName: '',
+              mobile: '',
+              authStatus: 'AF0010402', // 待认证的状态码
+              isVest: '0'
 
             }
-            this.firstblood()
+          this.firstblood()
         },
-        completeInfo(){
-             console.log()
-            if(this.shengheform.belongBrandCode){
-                this.shengheform.belongBrand = this.optionsBelongBrand.find(item => item.code === this.shengheform.belongBrandCode)['name'];
+      completeInfo() {
+          console.log()
+          if (this.shengheform.belongBrandCode) {
+              this.shengheform.belongBrand = this.optionsBelongBrand.find(item => item.code === this.shengheform.belongBrandCode)['name']
             }
-             console.log(this.shengheform.belongBrandCode,this.shengheform.belongBrand)
+          console.log(this.shengheform.belongBrandCode, this.shengheform.belongBrand)
 
-            let serviceTypeName = [];
-            let productServiceName = [];
+          const serviceTypeName = []
+            let productServiceName = []
             // let otherServiceName =  [];
 
-            this.optionsServerArr.forEach(el=>{
-                this.optionsServer.forEach(item => {
-                    if(el == item.code){
-                        serviceTypeName.push(item.name)
+            this.optionsServerArr.forEach(el => {
+              this.optionsServer.forEach(item => {
+                  if (el == item.code) {
+                      serviceTypeName.push(item.name)
                     }
                 })
             })
-            
-            this.optionsProductArr.forEach(el=>{
-                this.optionsProductService.forEach(item => {
-                    if(el == item.code){
-                        productServiceName.push(item.name)
+
+          this.optionsProductArr.forEach(el => {
+              this.optionsProductService.forEach(item => {
+                  if (el == item.code) {
+                      productServiceName.push(item.name)
                     }
                 })
             })
@@ -557,106 +557,104 @@ export default {
             //     })
             // })
 
-            //服务类型
-            this.shengheform.serviceType = JSON.stringify(this.optionsServerArr);                         
-            this.shengheform.serviceTypeName = JSON.stringify(serviceTypeName);
+            // 服务类型
+          this.shengheform.serviceType = JSON.stringify(this.optionsServerArr)                         
+            this.shengheform.serviceTypeName = JSON.stringify(serviceTypeName)
             //产品与服务
-            this.shengheform.productServiceCode = JSON.stringify(this.optionsProductArr);                         
-            this.shengheform.productService = JSON.stringify(productServiceName);
+            this.shengheform.productServiceCode = JSON.stringify(this.optionsProductArr)                         
+            this.shengheform.productService = JSON.stringify(productServiceName)
             //增值服务
             // this.shengheform.otherServiceCode = JSON.stringify(this.otherServiceCodeArr);                         
             // this.shengheform.otherService = JSON.stringify(otherServiceName);
         },
         // 审核不通过
-        handlerOut(){
+      handlerOut() {
             // this.pictureValue.forEach((el,idx) => {
                 //     if(el.result == '上传合格'){
                     //         this.pictureValue.splice(idx,1)
-            this.$refs['shengheform'].validate((valid)=>{
-                if(valid){
-                    let item =  this.shengheform.account;
-                    this.$confirm('确定要不通过'+ item +'该用户吗？', '提示', {
-                        confirmButtonText: '确定',
-                        cancelButtonText: '取消',
-                        type: 'warning'
+          this.$refs['shengheform'].validate((valid) => {
+              if (valid) {
+                  const item = this.shengheform.account
+                    this.$confirm('确定要不通过' + item + '该用户吗？', '提示', {
+                      confirmButtonText: '确定',
+                      cancelButtonText: '取消',
+                      type: 'warning'
                     }).then(() => {
-                        this.completeInfo();
-                        var forms=Object.assign({},this.shengheform,{authStatus:"AF0010404",authStatusName:'认证不通过'},{authNoPassCause:JSON.stringify(this.pictureValue)});
-                        data_ChangeLogisticsCompany(forms).then(res=>{
+                      this.completeInfo()
+                        var forms = Object.assign({}, this.shengheform, { authStatus: 'AF0010404', authStatusName: '认证不通过' }, { authNoPassCause: JSON.stringify(this.pictureValue) })
+                        data_ChangeLogisticsCompany(forms).then(res => {
                             // console.log(res)
-                            this.$message({
-                                type: 'success',
-                                message: '该用户未通过审核',
-                                duration:2000
+                          this.$message({
+                              type: 'success',
+                              message: '该用户未通过审核',
+                              duration: 2000
                             })
-                            this.dialogFormVisible = false;
-                            this.changeList();
-                            this.firstblood();
+                          this.dialogFormVisible = false
+                            this.changeList()
+                            this.firstblood()
                             this.templateRadio = ''
-                        }).catch(err=>{
-                            this.$message({
-                                type: 'info',
-                                message: '操作失败，原因：' + err.text ? err.text : err
+                        }).catch(err => {
+                          this.$message({
+                              type: 'info',
+                              message: '操作失败，原因：' + err.text ? err.text : err
                             })
                         })
                     }).catch(() => {
-                        this.$message({
-                            type: 'info',
-                            message: '已取消'
+                      this.$message({
+                          type: 'info',
+                          message: '已取消'
                         })
-                        this.templateRadio = ''
-
+                      this.templateRadio = ''
                     })
-                
                 } else {
-                    this.$message.error('审核未通过需资料图片全部未合格！')
-                    return false;
+                  this.$message.error('审核未通过需资料图片全部未合格！')
+                  return false
                 }
             })
         },
 
         // 审核通过
-        handlerPass(){
-            let ifQualified = true;
-            this.pictureValue.forEach((el,idx) => {
-                if(el.result != "上传合格"){
-                    ifQualified = false;
+      handlerPass() {
+          let ifQualified = true
+            this.pictureValue.forEach((el, idx) => {
+              if (el.result != '上传合格') {
+                  ifQualified = false
                 }
             })
-            this.$refs['shengheform'].validate((valid)=>{
-                if(valid && ifQualified){
-                    this.completeInfo();
-                    var forms = Object.assign({},this.shengheform,{authStatus:"AF0010403",authStatusName:'已认证'},{authNoPassCause:JSON.stringify(this.pictureValue)});
+          this.$refs['shengheform'].validate((valid) => {
+              if (valid && ifQualified) {
+                  this.completeInfo()
+                    var forms = Object.assign({}, this.shengheform, { authStatus: 'AF0010403', authStatusName: '已认证' }, { authNoPassCause: JSON.stringify(this.pictureValue) })
                     console.log(forms)
-                    data_ChangeLogisticsCompany(forms).then(res=>{
+                  data_ChangeLogisticsCompany(forms).then(res => {
                     // console.log(res)
-                        this.$alert('操作成功', '提示', {
-                            confirmButtonText: '确定',
-                            callback: action => {
-                                this.dialogFormVisible = false;
-                                this.changeList();
-                                this.firstblood();
+                      this.$alert('操作成功', '提示', {
+                          confirmButtonText: '确定',
+                          callback: action => {
+                              this.dialogFormVisible = false
+                                this.changeList()
+                                this.firstblood()
                                 this.templateRadio = ''
                             }
-                        });
-                    }).catch(err=>{
-                        this.dialogFormVisible = true;
+                        })
+                    }).catch(err => {
+                      this.dialogFormVisible = true
                         this.$message({
-                            type: 'info',
-                            message: '删除失败，原因：' + err.text ? err.text : err
+                          type: 'info',
+                          message: '删除失败，原因：' + err.text ? err.text : err
                         })
                     })
-                }else{
-                    this.$message.error('审核未满足通过要求,资料图片未合格')
-                    return false
+                }else {
+                  this.$message.error('审核未满足通过要求,资料图片未合格')
+                  return false
                 }
             })
         },
-        handlerCancel(){
-            this.dialogFormVisible = false;
-            this.templateRadio = '';
+      handlerCancel() {
+          this.dialogFormVisible = false
+            this.templateRadio = ''
         }
-  }
+    }
 }
 </script>
 <style lang="scss">
@@ -711,5 +709,4 @@ export default {
         }
     }
 </style>
-
 

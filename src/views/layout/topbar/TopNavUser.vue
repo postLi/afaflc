@@ -76,7 +76,7 @@ export default {
     logout() {
       this.$store.dispatch('LogOut').then(() => {
         location.reload()  // 为了重新实例化vue-router对象 避免bug
-      }).catch((err)=>{
+      }).catch((err) => {
         location.reload()
       })
     },
@@ -112,16 +112,31 @@ export default {
 <style lang="scss">
 @import "src/styles/variate.scss";
   .navbar{
+    .page-top-nav{
+      height: 50px;
+      float: left;
+      width: 100% !important;
+    }
     .user-avatar {
         border-radius: 50%;
         vertical-align: middle;
       }
     .avatar-container {
-      padding: 0 23px 0 30px;
-      height: $topNavHeight;
-      float: right;
-      white-space: nowrap;
+      // padding: 0 23px 0 30px;
+      // height: $topNavHeight;
+      // float: right;
+      // white-space: nowrap;
       position: relative;
+
+      padding: 0 23px 0 30px;
+    height: 50px;
+    /* float: right; */
+    white-space: nowrap;
+    /* position: relative; */
+    // background: blue;
+    /* position: absolute; */
+    right: 0; 
+    flex: 1;
 
       &::before{
         position: absolute;

@@ -1,6 +1,7 @@
 <template>
      <div class="creatcity commoncss">
       <el-button :type="btntype" :value="value" :plain="plain" :icon="icon" @click="openDialog()">{{btntext}}</el-button>
+      <!-- <el-button :type="btntype" :size="btnsize" plain :icon="icon" @click="openDialog()">{{btntext}}</el-button> -->
       <div class="newMarketingCity">
       <el-dialog  :visible="dialogFormVisible_add" :before-close="change">
         <el-form :model="formAll" ref="formAll" :rules="rulesForm">
@@ -115,26 +116,27 @@
     </div>
 </template>
 <script>
-import { data_Commission,data_CarList,data_MaidLevel} from '@/api/server/areaPrice.js'
-import { data_get_Marketingsame_create,data_get_Marketingsame_update,data_get_Marketingsame_Id} from '@/api/marketing/carmarkting/carmarkting.js'
+import { data_Commission, data_CarList, data_MaidLevel } from '@/api/server/areaPrice.js'
+import { data_get_Marketingsame_create, data_get_Marketingsame_update, data_get_Marketingsame_Id } from '@/api/marketing/carmarkting/carmarkting.js'
 import Upload from '@/components/Upload/singleImage'
 import { eventBus } from '@/eventBus'
 import { regionDataPlus, CodeToText, TextToCode } from 'element-china-area-data'
-import {data_get_shipper_type,data_get_shipper_create,data_get_shipper_change,data_get_shipper_view,} from '@/api/users/shipper/all_shipper.js'
+import { data_get_shipper_type, data_get_shipper_create, data_get_shipper_change, data_get_shipper_view } from '@/api/users/shipper/all_shipper.js'
+
 export default {
-  components:{
-    Upload,
+  components: {
+    Upload
   },
-  props:{
-    paramsView:{
-      type:Object,
+  props: {
+    paramsView: {
+      type: Object
     },
-    params:{
-      type:[Object,String,Array],
+    params: {
+      type: [Object, String, Array]
     },
-    value:{
+    value: {
       type: String,
-      default:''
+      default: ''
     },
     btntype: {
       type: String,
@@ -145,295 +147,272 @@ export default {
       default: ''
     },
     btntitle: {
-    type: String,
-    default: ''
-    },
-    icon:{
       type: String,
       default: ''
     },
-    plain:{
+    icon: {
+      type: String,
+      default: ''
+    },
+    plain: {
       type: Boolean,
       default: false
     },
-    /*add新增，edit编辑，view查看*/
+    /* add新增，edit编辑，view查看*/
     editType: {
-      type: String,
+      type: String
     }
   },
-  data(){
+  data() {
     //    选择省市校验
-        const belongCityNameValidator = (rule, val, cb) => {
-            if(val){
-            if(val.length<1){
-            cb(new Error('所属地区不能为空'))
-            }
-            else{
-                cb()
-            }                 
-            }else{
-            cb(new Error('所属地区不能为空'))
-            }
+    const belongCityNameValidator = (rule, val, cb) => {
+      if (val) {
+        if (val.length < 1) {
+          cb(new Error('所属地区不能为空'))
+        } else {
+          cb()
         }
+      } else {
+        cb(new Error('所属地区不能为空'))
+      }
+    }
 
     //    选择车辆类型校验
-        const carTypeValidator = (rule, val, cb) => {
-            if(!val){
-            cb(new Error('车辆类型不能为空'))
-            }
-            else{
-                cb()
-            }        
-        }
+    const carTypeValidator = (rule, val, cb) => {
+      if (!val) {
+        cb(new Error('车辆类型不能为空'))
+      } else {
+        cb()
+      }
+    }
 
     //    车主抽佣等级校验
-        const commissionGradeValidator = (rule, val, cb) => {
-                    if(!val){
-            cb(new Error('车主抽佣等级不能为空'))
-            }
-            else{
-                cb()
-            }        
-        }
+    const commissionGradeValidator = (rule, val, cb) => {
+      if (!val) {
+        cb(new Error('车主抽佣等级不能为空'))
+      } else {
+        cb()
+      }
+    }
 
     //    开始抽佣单数校验
-        const startNumValidator = (rule, val, cb) => {
-            var reg= /[^\d.]/g
-            if(!val){
-            cb(new Error('开始抽佣不能为空'))
-            }
-            else if(reg.test(val)){
-            cb(new Error('请输入正整数'))
-            }
-            else{
-                cb()
-            }        
-        }     
-        
+    const startNumValidator = (rule, val, cb) => {
+      var reg = /[^\d.]/g
+      if (!val) {
+        cb(new Error('开始抽佣不能为空'))
+      } else if (reg.test(val)) {
+        cb(new Error('请输入正整数'))
+      } else {
+        cb()
+      }
+    }
+
     //    结束抽佣单数校验
-        const endNumValidator = (rule, val, cb) => {
-            var reg= /[^\d.]/g
-             if(!val){
-            cb(new Error(' 结束抽佣不能为空'))
-            }
-             else if(reg.test(val)){
-            cb(new Error('请输入正整数'))
-            }
-            else{
-                cb()
-            }        
-        }         
+    const endNumValidator = (rule, val, cb) => {
+      var reg = /[^\d.]/g
+      if (!val) {
+        cb(new Error(' 结束抽佣不能为空'))
+      } else if (reg.test(val)) {
+        cb(new Error('请输入正整数'))
+      } else {
+        cb()
+      }
+    }
 
     //    每单抽佣比例校验
-        const commissionPerValidator = (rule, val, cb) => {
-            var reg= /[^\d.]/g
-            if(!val){
-            cb(new Error('每单抽佣比例不能为空'))
-            }
-            else if(reg.test(val)){
-            cb(new Error('请输入正整数'))
-            }
-            else{
-                cb()
-            }        
-        }        
-
+    const commissionPerValidator = (rule, val, cb) => {
+      var reg = /[^\d.]/g
+      if (!val) {
+        cb(new Error('每单抽佣比例不能为空'))
+      } else if (reg.test(val)) {
+        cb(new Error('请输入正整数'))
+      } else {
+        cb()
+      }
+    }
 
     //    至少抽佣金额校验
-        const commissionLowestValidator = (rule, val, cb) => {
-            var reg= /[^\d.]/g
-            if(!val){
-            cb(new Error(' 至少抽佣金额不能为空'))
-            }
-            else if(reg.test(val)){
-            cb(new Error('请输入正整数'))
-            }
-            else{
-                cb()
-            }        
-        }
+    const commissionLowestValidator = (rule, val, cb) => {
+      var reg = /[^\d.]/g
+      if (!val) {
+        cb(new Error(' 至少抽佣金额不能为空'))
+      } else if (reg.test(val)) {
+        cb(new Error('请输入正整数'))
+      } else {
+        cb()
+      }
+    }
 
-        return{
-        options:regionDataPlus,
-        dialogFormVisible_add: false,
-        MaidLevelValueCar:'',
-        optionsCar:[],
-        MaidLevel:[],
-        areaName:null,
-        formAll:{
-            areaCode: [],
-            areaName:[],
-            carType:null,
-            commissionGrade:null,
-            startNum:null,
-            endNum:null,
-            commissionPer:null,
-            commissionLowest:null,
-            usingStatus:null,
-            },
-            rulesForm:{
-            areaName:{trigger:'change',required:true,validator: belongCityNameValidator},
-            carType:{trigger:'change',required:true,validator:carTypeValidator},
-            commissionGrade:{trigger:'change',required:true,validator:commissionGradeValidator},
-            startNum:{trigger:'change',required:true,validator:startNumValidator},
-            endNum:{trigger:'change',required:true,validator:endNumValidator},
-            commissionPer:{trigger:'change',required:true,validator:commissionPerValidator},
-            commissionLowest:{trigger:'change',required:true,validator:commissionLowestValidator},                                    
-            },
-        }
+    return {
+      btnsize: 'mini',
+      options: regionDataPlus,
+      dialogFormVisible_add: false,
+      MaidLevelValueCar: '',
+      optionsCar: [],
+      MaidLevel: [],
+      areaName: null,
+      formAll: {
+        areaCode: [],
+        areaName: [],
+        carType: null,
+        commissionGrade: null,
+        startNum: null,
+        endNum: null,
+        commissionPer: null,
+        commissionLowest: null,
+        usingStatus: null
+      },
+      rulesForm: {
+        areaName: { trigger: 'change', required: true, validator: belongCityNameValidator },
+        carType: { trigger: 'change', required: true, validator: carTypeValidator },
+        commissionGrade: { trigger: 'change', required: true, validator: commissionGradeValidator },
+        startNum: { trigger: 'change', required: true, validator: startNumValidator },
+        endNum: { trigger: 'change', required: true, validator: endNumValidator },
+        commissionPer: { trigger: 'change', required: true, validator: commissionPerValidator },
+        commissionLowest: { trigger: 'change', required: true, validator: commissionLowestValidator }
+      }
+    }
   },
-  watch:{
-   dialogFormVisible_add:{
-        handler: function(val, oldVal) {
-            if(!val){
-            this.$refs['formAll'].resetFields();
-            }
-        },
+  watch: {
+    dialogFormVisible_add: {
+      handler: function(val, oldVal) {
+        if (!val) {
+          this.$refs['formAll'].resetFields()
+        }
+      }
+    }
+  },
+  mounted() {
+    // 按钮类型text,primary...
+    this.type = this.btntype
+    // 按钮文本内容
+    this.text = this.btntext
+    // 弹出框标题
+    this.title = this.btntitle
+    this.getMoreInformation()
+  },
+  methods: {
+    handleChange(d) {
+      console.log('d', d)
+      if (d.length < 3) {
+        this.$message.info('请选择具体的城市')
+        this.formAll.areaName = []
+        this.formAll.areaCode = []
+        this.formAll.province = null
+        this.formAll.city = null
+        this.formAll.area = null
+      } else {
+        this.formAll.areaCode = d
+        this.formAll.province = CodeToText[d[0]]
+        this.formAll.city = CodeToText[d[1]]
+        if (d[2] == '') {
+          this.formAll.area = null
+        } else {
+          this.formAll.area = CodeToText[d[2]]
+        }
+      }
     },
-  },
-  mounted(){
-    //按钮类型text,primary...
-    this.type = this.btntype;
-    //按钮文本内容
-    this.text = this.btntext;
-    //弹出框标题
-    this.title = this.btntitle;
-    this.getMoreInformation();
-  },
-  methods:{
-        handleChange(d){
-           console.log('d',d)
-           if(d.length<3){
-                this.$message.info('请选择具体的城市');
-                this.formAll.areaName = [];
-                this.formAll.areaCode = [];
-                this.formAll.province = null
-                this.formAll.city = null
-                this.formAll.area = null
-           }
-           else{
-                this.formAll.areaCode = d
-                this.formAll.province = CodeToText[d[0]]
-                this.formAll.city =  CodeToText[d[1]]
-                if(d[2]==''){
-                this.formAll.area = null
-                }
-                else{
-                this.formAll.area = CodeToText[d[2]]
-                }
-           }
-        },
-   openDialog:function(){
-       if(this.editType=='edit'){
-           if(!this.params.id){
-            this.$message.info('未选中需要修改内容');
-           }
-           else if(this.params.usingStatus==0){
-            this.$message.info('选中内容被已禁用，不能进行修改操作');
-           }
-           else{
-            this.dialogFormVisible_add = true;
+    openDialog: function() {
+      if (this.editType == 'edit') {
+        if (!this.params.id) {
+          this.$message.info('未选中需要修改内容')
+        } else if (this.params.usingStatus == 0) {
+          this.$message.info('选中内容被已禁用，不能进行修改操作')
+        } else {
+          this.dialogFormVisible_add = true
 
-            data_get_Marketingsame_Id(this.params.id).then(res=>{
+          data_get_Marketingsame_Id(this.params.id).then(res => {
             this.formAll = res.data
-            this.areaName = res.data.province+res.data.city+res.data.area
-            console.log('i',this.formAll)
-        })
-           }
-
-       }
-       else{
-        this.dialogFormVisible_add = true;
-       }
-   },
-   change:function(){
-      this.dialogFormVisible_add = false;
-   },
-   close:function(){
-      this.dialogFormVisible_add = false;
-       },
-            //获取  服务和车辆 类型列表
-    getMoreInformation(){
-                data_CarList().then(res=>{
+            this.areaName = res.data.province + res.data.city + res.data.area
+            console.log('i', this.formAll)
+          })
+        }
+      } else {
+        this.dialogFormVisible_add = true
+      }
+    },
+    change: function() {
+      this.dialogFormVisible_add = false
+    },
+    close: function() {
+      this.dialogFormVisible_add = false
+    },
+            // 获取  服务和车辆 类型列表
+    getMoreInformation() {
+      data_CarList().then(res => {
                     // console.log(res.data)
-                    res.data.map((item)=>{
-                        this.optionsCar.push(item);
-                    })
-                    })
-                data_MaidLevel().then(res=>{
-                      res.data.map((item)=>{
-                        this.MaidLevel.push(item);
-                    })
-                
-                      
-                }).catch(res=>{
-                    console.log(res)
-                });    
-                
-          }, 
-    changeList(){
-            eventBus.$emit('pushListtwo')
-        },   
-    // 同城新增    
-   add_data(){
-
-       this.$refs['formAll'].validate(valid=>{
-        if(valid){
-            if(this.formAll.area){
-                this.formAll.areaCode.splice(0,2)
-            }
-            else{
-                 this.formAll.areaCode.splice(0,1)
-                 this.formAll.areaCode.pop()
-            }
-         this.formAll.areaCode =String(this.formAll.areaCode)
-         let formAllData = 
-             [{
-             areaCode: this.formAll.areaCode,
-             carType:this.formAll.carType,
-             commissionGrade:this.formAll.commissionGrade,
-             startNum:this.formAll.startNum,
-             endNum:this.formAll.endNum,
-             commissionPer:this.formAll.commissionPer,
-             province:this.formAll.province,
-             city:this.formAll.city,
-             area:this.formAll.area,
-             commissionLowest:this.formAll.commissionLowest,
-             }]
-        data_get_Marketingsame_create(formAllData).then(res=>{
-            console.log('res',res);
-            this.dialogFormVisible_add = false;
-            this.changeList();
-            this.$message.success('新增成功');
-        }).catch(res=>{
-            console.log('res',res)
-            this.dialogFormVisible_add = false;
-            this.$message.error('新增失败');
-       });
-
-       }
-       }
+        res.data.map((item) => {
+          this.optionsCar.push(item)
+        })
+      })
+      data_MaidLevel().then(res => {
+        res.data.map((item) => {
+          this.MaidLevel.push(item)
+        })
+      }).catch(res => {
+        console.log(res)
+      })
+    },
+    changeList() {
+      eventBus.$emit('pushListtwo')
+    },
+    // 同城新增
+    add_data() {
+      this.$refs['formAll'].validate(valid => {
+        if (valid) {
+          if (this.formAll.area) {
+            this.formAll.areaCode.splice(0, 2)
+          } else {
+            this.formAll.areaCode.splice(0, 1)
+            this.formAll.areaCode.pop()
+          }
+          this.formAll.areaCode = String(this.formAll.areaCode)
+          const formAllData =
+            [{
+              areaCode: this.formAll.areaCode,
+              carType: this.formAll.carType,
+              commissionGrade: this.formAll.commissionGrade,
+              startNum: this.formAll.startNum,
+              endNum: this.formAll.endNum,
+              commissionPer: this.formAll.commissionPer,
+              province: this.formAll.province,
+              city: this.formAll.city,
+              area: this.formAll.area,
+              commissionLowest: this.formAll.commissionLowest
+            }]
+          data_get_Marketingsame_create(formAllData).then(res => {
+            console.log('res', res)
+            this.dialogFormVisible_add = false
+            this.changeList()
+            this.$message.success('新增成功')
+          }).catch(res => {
+            console.log('res', res)
+            this.dialogFormVisible_add = false
+            this.$message.error('新增失败')
+          })
+        }
+      }
        )
-   },
+    },
 //    同城修改
-   updata_data(){
-       this.$refs['formAll'].validate(valid=>{
-        var forms= Object.assign({}, this.formAll);
-        if(valid){
-        data_get_Marketingsame_update(forms).then(res=>{
-            console.log('res',res);
-            this.dialogFormVisible_add = false;
-            this.changeList();
-            this.$refs['formAll'].resetFields();
-             this.$message.success('修改成功');
-        }).catch(res=>{
+    updata_data() {
+      this.$refs['formAll'].validate(valid => {
+        var forms = Object.assign({}, this.formAll)
+        if (valid) {
+          data_get_Marketingsame_update(forms).then(res => {
+            console.log('res', res)
+            this.dialogFormVisible_add = false
+            this.changeList()
+            this.$refs['formAll'].resetFields()
+            this.$message.success('修改成功')
+          }).catch(res => {
             console.log(res)
-            this.$message.error('修改失败');
-       });
-       }
-       }
+            this.$message.error('修改失败')
+          })
+        }
+      }
        )
-   },    
+    }
   }
 }
 </script>
@@ -441,7 +420,7 @@ export default {
     .creatcity{
         .el-button {
                 margin-right: 20px;
-                padding: 10px 20px;
+                padding: 6px 20px;
         }
         .el-dialog__footer{
             border-top:1px solid #ccc;   

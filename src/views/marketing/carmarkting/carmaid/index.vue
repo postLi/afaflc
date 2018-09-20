@@ -1,32 +1,36 @@
 <template>
-  <div class="same_shipper clearfix">
-    <el-tabs v-model="shipperName" type="border-card"  >
+  <div class="member tabsWrap">
+    <el-tabs v-model="shipperName" type="card" @tab-click="handleClick" >
         <!-- 同城 -->
-            <el-tab-pane label="同城" name="first">
-                <SameCity ></SameCity>
+            <el-tab-pane label="同城" name="SameCity">
+                <SameCity :isvisible="shipperName === 'SameCity'"></SameCity>
             </el-tab-pane>
 
         <!-- 城际 -->
-            <el-tab-pane label="城际" name="second">
-                <InterCity ></InterCity>
+            <el-tab-pane label="城际" name="InterCity">
+                <InterCity :isvisible="shipperName === 'InterCity'"></InterCity>
             </el-tab-pane>
 
         <!-- 零担 -->
-            <el-tab-pane label="零担" name="third">
-                <IoadCity ></IoadCity>
+            <el-tab-pane label="零担" name="IoadCity">
+                <IoadCity :isvisible="shipperName === 'IoadCity'"></IoadCity>
             </el-tab-pane>
     </el-tabs>
   </div>
 </template>
+
+
 <script>
 import SameCity from './sameCity.vue'
 import InterCity from './interCity.vue'
 import IoadCity from './loadCity.vue'
+import '@/styles/dialog.scss'
+import '@/styles/tab.scss'
 export default {
   data() {
     return {
       shipperName: 'first'
-    } 
+    }
   },
   components: {
     SameCity,
@@ -42,6 +46,17 @@ export default {
       }
     }
   },
+  created() {
+    this.shipperName = sessionStorage.getItem('shipperName') || 'smoke'
+  },
+
+  beforeUpdate() {
+    sessionStorage.setItem('shipperName', this.shipperName)
+  },
+
+  beforeDestroy() {
+    sessionStorage.setItem('shipperName', 'SameCity')
+  },
   methods: {
     handleClick(tab, event) {
       this.shipperName = tab.name
@@ -49,32 +64,3 @@ export default {
   }
 }
 </script>
-<style lang="scss" >
-    @import "../../../../styles/tab.scss";
-    .completeinfo{
-      .detailinfo{
-        margin-left: 26px;
-        p{
-            width:160px;
-            height: 40px;
-            line-height: 40px;
-            text-align: left;
-            display: inline-block;
-            vertical-align: top;
-            span{
-                color:red;
-            }
-        }
-        .upload-demo{
-          display: inline-block ;
-        }
-      }
-    }
-    .same_shipper{
-        height:100%;    
-        position: relative;
-         .el-tabs__content{
-           padding:0px 0px;
-       }     
-    }
-</style>

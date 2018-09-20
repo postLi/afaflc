@@ -25,31 +25,31 @@ export default {
       'permission_routers'
     ])
   },
-  data () {
+  data() {
     return {
       current: '',
       prevPath: ''
     }
   },
   watch: {
-    $route () {
+    $route() {
       this.setNavHightlight()
     }
   },
-  mounted(){
+  mounted() {
     this.setNavHightlight()
   },
   methods: {
     /**
      * 设置与当前页匹配的菜单高亮
      */
-    setNavHightlight(){
-      let find = this.permission_routers.filter(route => {
-          return route.path !=='/' && this.$route.path.indexOf(route.path) === 0
-        })
-      let current = find[0] || this.$route
+    setNavHightlight() {
+      const find = this.permission_routers.filter(route => {
+        return route.path !== '/' && this.$route.path.indexOf(route.path) === 0
+      })
+      const current = find[0] || this.$route
       this.current = current.path
-      if(this.prevPath!==this.current){
+      if (this.prevPath !== this.current) {
         this.prevPath = this.current
         this.$store.dispatch('GenerateSidebarRoutes', current.name)
       }
@@ -62,11 +62,16 @@ export default {
 <style lang="scss">
 @import "src/styles/variate.scss";
   #app .page-top-nav{
+    height: 50px;
+    float: left;
+    flex: 12 !important;    
+    display: flex;
     .el-menu--horizontal{
       border-bottom: none;
     }
     .el-menu{
       background: #003863;
+      display:flex;
     }
   }
   #app .page-top-nav .el-menu-item{
@@ -74,7 +79,6 @@ export default {
     line-height: $topNavHeight;
     color: #fff;
     font-size: $topNavFontSize;
-
     &.is-active{
       background: #002C4E;
       border-bottom: none;
