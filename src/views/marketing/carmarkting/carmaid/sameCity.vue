@@ -1,7 +1,6 @@
 <template>
-    <div class="identicalStyle clearfix waitpayment">
-      <!-- <div> -->
-          <el-form :inline="true" class="demo-ruleForm classify_searchinfo">
+    <div class="identicalStyle" style="height:100%">
+          <el-form :inline="true"  class="demo-ruleForm classify_searchinfo">
             <el-form-item label="所属区域：">
                    <el-cascader
                     size="large"
@@ -31,14 +30,13 @@
                             :disabled="item.disabled">
                          </el-option>
                  </el-select>
-            </el-form-item>      
-            <el-form-item class="btnChoose fr"  style="margin-left:0;">   
-              <el-button type="primary" :size="btnsize" plain @click="getData_query">查询</el-button>    
-            <!-- <el-button type="primary"  plain @click="getData_query">查询</el-button>  -->
-            </el-form-item>              
+            </el-form-item>          
+            <el-form-item>       
+          <el-button type="primary"  plain @click="getData_query">查询</el-button> 
+          </el-form-item>              
           </el-form>
-          <div class="classify_cityinfo">
-            <div class="btns_box">
+          	<div class="classify_info">
+            		<div class="btns_box">
                    <newCity
                     btntext="新增"
                     :plain="true"
@@ -47,8 +45,6 @@
                     icon="el-icon-news"
                     editType="add"
                     btntitle="创建"
-                    :size="btnsize"
-                    style="float:left;"
                    >
                     </newCity>
                    <newCity
@@ -60,16 +56,12 @@
                     editType="edit"
                     btntitle="修改"
                     :params="selectRowData"
-                    :size="btnsize"
-                    style="float:left"
                    >
                     </newCity>
-                    <el-button type="primary" :size="btnsize" plain icon="el-icon-bell" @click="handleUseStates">启用/停用</el-button>
-                    <el-button type="primary" :size="btnsize" plain icon="el-icon-delete" @click="delete_data">删除</el-button>
-                <!-- <el-button  type="primary" value="value" plain icon="el-icon-bell" @click="handleUseStates">启用/停用</el-button> -->
-                <!-- <el-button type="primary" plain icon="el-icon-delete" @click="delete_data">删除</el-button> -->
+                <el-button  type="primary" value="value" plain icon="el-icon-bell" @click="handleUseStates">启用/停用</el-button>
+                <el-button type="primary" plain icon="el-icon-delete" @click="delete_data">删除</el-button>
             		</div>
-            <div class="info_city">    
+            <div class="info_news">    
             <el-table style="width: 100%" stripe border height="100%" @row-click="clickDetails" highlight-current-row :data="tableDataAll"  tooltip-effect="dark">
             <el-table-column  label="序号" width="80px" type="index">
             </el-table-column>
@@ -96,13 +88,11 @@
             </template>
             </el-table-column>          
             </el-table> 
-            <!-- 页码 -->
-            <div class="info_tab_footer">共计:{{ dataTotal }} <div class="show_pager"> <Pager :total="dataTotal" @change="handlePageChange"  :sizes="sizes"/></div> </div>    
-            </div>
         	</div> 
-      <!-- </div> -->
+         <!-- 页码 -->
+        <div class="info1_tab_footer">共计:{{ dataTotal }} <div class="show_pager"> <Pager :total="dataTotal" @change="handlePageChange"  :sizes="sizes"/></div> </div> 
+        </div>
       </div>
-      
 </template>
 <script>
 import { data_Commission, data_CarList, data_MaidLevel } from '@/api/server/areaPrice.js'
@@ -112,11 +102,9 @@ import newCity from '../../components/newCity.vue'
 import { eventBus } from '@/eventBus'
 import Pager from '@/components/Pagination/index'
 import { parseTime } from '@/utils/'
-import '@/styles/dialog.scss'
 export default {
   data() {
     return {
-      btnsize: 'mini',
       options: regionDataPlus,
       selectRowData: {},
       selectId: [],
@@ -292,26 +280,6 @@ export default {
   }
 }
 </script>
-<style type="text/css" lang="scss" scoped>
-.classify_cityinfo{
-    height: 100%;
-    padding:0 !important;
-    .commoncss{
-      display: inline-block;
-    }
-    .btns_box{
-    margin-bottom: 10px;
-    }
-    .info_city{
-      height:88%;
-      .cell{
-      color: #333;
-      font-size: 14px;
-      }
-    }
-    .el-button{
-      margin-right: 20px;
-      padding: 7px 20px;
-    }
-}
+<style lang="scss">  
 </style>
+

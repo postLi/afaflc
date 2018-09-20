@@ -1,0 +1,655 @@
+<template>
+  <div class="drivercertify commoncss">
+    <el-button type="primary" :value="value" :plain="plain" :icon="icon" @click="openDialog()">{{btntext}}</el-button>
+    <el-dialog :title="btntext" :visible.sync="freezeDialogFlag" :before-close="change()" :modal="false">
+ <el-form :model="templateModel" ref="templateModel" :rules="rulesForm" inline>
+             <el-row>
+                <el-col :span="12">
+                    <el-form-item label="手机号：" :label-width="formLabelWidth" prop="driverMobile">
+                        <el-input v-model="templateModel.driverMobile" disabled></el-input>
+                    </el-form-item>
+                </el-col>
+                <el-col :span="12">
+                    <el-form-item label="车主：" :label-width="formLabelWidth" prop="driverName">
+                        <el-input v-model="templateModel.driverName" ></el-input>
+                    </el-form-item>
+                </el-col>
+            </el-row>
+
+            <el-row>
+                <el-col :span="12">
+                    <el-form-item label="身份证号码：" :label-width="formLabelWidth" prop="driverCardid">
+                        <el-input v-model="templateModel.driverCardid"></el-input>
+                    </el-form-item>
+                </el-col>
+                <el-col :span="12">
+                    <el-form-item label="所在区域：" :label-width="formLabelWidth" prop="belongCity">
+                    <vregion :ui="true"  @values="regionChange" class="form-control">
+                        <el-input v-model="templateModel.belongCity" placeholder="请选择"></el-input>
+                    </vregion>
+                    </el-form-item>
+                </el-col>
+            </el-row>
+
+            <el-row>
+                <el-col :span="12">
+                    <el-form-item label="车牌号：" :label-width="formLabelWidth" prop="carNumber">
+                        <el-input v-model="templateModel.carNumber"></el-input>
+                    </el-form-item>
+                </el-col>
+                <el-col :span="12">
+                    <el-form-item label="车型：" :label-width="formLabelWidth" prop="carType">
+                        <el-select v-model="templateModel.carType" placeholder="请选择">
+                            <el-option
+                                v-for="item in optionscarType"
+                                :key="item.code"
+                                :label="item.name"
+                                :value="item.code">
+                            </el-option>
+                        </el-select>
+                    </el-form-item>
+                </el-col>
+            </el-row>
+
+            <el-row>
+                <el-col :span="12">
+                    <el-form-item label="车长(米)：" :label-width="formLabelWidth"  prop="carLength">
+                      <el-input
+                            class="certifyless"
+                            placeholder="长"
+                            v-model="templateModel.carLength"
+                            clearable
+                            ref="lengths"
+                            :maxlength="10"
+                            >
+                        </el-input>
+                    </el-form-item>
+                    <el-form-item :label-width="formLabelWidth" prop="carWidth">
+                        <el-input
+                            class="certifyless"
+                            placeholder="宽"
+                            v-model="templateModel.carWidth"
+                            clearable
+                            ref="widths"
+                            :maxlength="10"
+                            >
+                        </el-input>
+                    </el-form-item>
+                    <el-form-item  :label-width="formLabelWidth" prop="carHeight">
+                        <el-input
+                            class="certifyless"
+                            placeholder="高"
+                            v-model="templateModel.carHeight"
+                            clearable
+                            ref="heights"
+                            :maxlength="10"
+                            >
+                        </el-input>
+                    </el-form-item>
+                </el-col>
+                <el-col :span="12">
+                    <el-form-item label="车辆规格："  :label-width="formLabelWidth">
+                        <el-select v-model="templateModel.carSpec" placeholder="请选择">
+                            <el-option
+                                v-for="item in optionscarSpec"
+                                :key="item.code"
+                                :label="item.name"
+                                :value="item.code">
+                            </el-option>
+                        </el-select>
+                    </el-form-item>
+                  </el-col>
+            </el-row>
+              <el-row>
+                  <el-col :span="12">
+                      <el-form-item label="中单等级：" :label-width="formLabelWidth" prop="obtainGrade">
+                            <el-select v-model="templateModel.obtainGrade" placeholder="请选择" >
+                                <el-option
+                                    v-for="item in optionsLevel"
+                                    :key="item.code"
+                                    :label="item.name"
+                                    :value="item.code">
+                                </el-option>
+                            </el-select>
+                        </el-form-item>
+                  </el-col>
+                  <el-col :span="12">
+                    <el-form-item label="中单等级有效期至：" :label-width="formLabelWidth" prop="obtainGradeTime">
+                        <el-date-picker
+                            v-model="templateModel.obtainGradeTime"
+                            type="date"
+                            format="yyyy-MM-dd"
+                            placeholder="选择日期"
+                            :picker-options="pickerOptions"
+                            >
+                        </el-date-picker>
+                    </el-form-item>
+                  </el-col>
+              </el-row>
+
+              <el-row>
+                  <el-col :span="12">
+                    <el-form-item :label-width="formLabelWidth" label="特权车：">
+                        <el-checkbox v-model="templateModel.isVipCar" true-label="1" false-label='0' @change='isVip' label="是" border size="medium" ></el-checkbox>
+                    </el-form-item>
+                  </el-col>
+                <el-col :span="12">
+                <el-form-item label="提交认证时间：" :label-width="formLabelWidth">
+                  <el-date-picker
+                    v-model="templateModel.authenticationTime"
+                    type="datetime"
+                    placeholder="选择日期"
+                    disabled>
+                  </el-date-picker>
+                </el-form-item>
+              </el-col>
+              </el-row>
+
+            <el-row>
+              <el-col :span="12">
+                <el-form-item label="等待时长：" :label-width="formLabelWidth">
+                  <!-- <el-input auto-complete="off"></el-input> -->
+                  {{templateModel.authenticationTime? formatTime((+new Date(templateModel.authenticationTime))) : '' }}
+                </el-form-item>
+              </el-col>
+              <el-col :span="12">
+                <el-form-item label="注册来源：" :label-width="formLabelWidth">
+                  <el-input v-model="templateModel.registerOriginName" disabled></el-input>
+                </el-form-item>
+              </el-col>
+            </el-row>
+                 <div class="data_pic_default">
+                    <img  :src= 'defaultImg1'/>
+                </div>
+            <div class="data_pic">
+                <div class="data_pic_callingcode data_pic_c">
+                <div class="uploadImgBox"><img  class="picURL" :src="templateModel.carFile ? templateModel.carFile : defaultImg" @click="changeIMG"/></div>
+              
+                    <h2>车辆45°</h2>
+                    <el-form-item prop="radio1">
+                      <el-radio-group v-model="radio1" @change="pictureTypeChange">
+                        <el-radio label="上传合格">上传合格</el-radio><br />
+                        <el-radio label="不清晰">不清晰</el-radio><br />
+                        <el-radio label="内容不符">内容不符</el-radio>
+                      </el-radio-group>
+                    </el-form-item> 
+                </div>
+                <div class="data_pic_callingcode data_pic_c">
+              <div class="uploadImgBox"><img  class="picURL" :src="templateModel.drivingPermitFile ? templateModel.drivingPermitFile : defaultImg" @click="changeIMG"/></div>
+                    <h2>行驾证</h2>
+                    <el-form-item prop="radio2">
+                      <el-radio-group v-model="radio2" @change="pictureTypeChange">
+                        <el-radio label="上传合格">上传合格</el-radio><br />
+                        <el-radio label="不清晰">不清晰</el-radio><br />
+                        <el-radio label="内容不符">内容不符</el-radio>
+                      </el-radio-group>
+                    </el-form-item>
+                </div>
+                <div class="data_pic_callingcode data_pic_c">
+                 <div class="uploadImgBox"><img  class="picURL" :src="templateModel.drivingLicenceFile ? templateModel.drivingLicenceFile : defaultImg" @click="changeIMG"/></div>
+                    <h2>驾驶证</h2>
+                    <el-form-item prop="radio3">
+                      <el-radio-group v-model="radio3" @change="pictureTypeChange">
+                        <el-radio label="上传合格">上传合格</el-radio><br />
+                        <el-radio label="不清晰">不清晰</el-radio><br />
+                        <el-radio label="内容不符">内容不符</el-radio>
+                      </el-radio-group>
+                    </el-form-item>
+                </div>
+                <div class="data_pic_callingcode data_pic_c">
+                  <div class="uploadImgBox"><img  class="picURL" :src="templateModel.idCardFile ? templateModel.idCardFile : defaultImg" @click="changeIMG"/></div>
+
+                    <h2>身份证</h2>
+                    <el-form-item prop="radio3">
+                      <el-radio-group v-model="radio4" @change="pictureTypeChange">
+                        <el-radio label="上传合格">上传合格</el-radio><br />
+                        <el-radio label="不清晰">不清晰</el-radio><br />
+                        <el-radio label="内容不符">内容不符</el-radio>
+                      </el-radio-group>
+                    </el-form-item>
+                </div>
+                <div class="data_pic_callingcode data_pic_c">
+                  <div class="uploadImgBox"> <img  class="picURL" :src="templateModel.takeIdCardFile ? templateModel.takeIdCardFile : defaultImg" @click="changeIMG"/></div>
+                    <h2>手持身份证</h2>
+                    <el-form-item prop="radio3">
+                      <el-radio-group v-model="radio5" @change="pictureTypeChange">
+                        <el-radio label="上传合格">上传合格</el-radio><br />
+                        <el-radio label="不清晰">不清晰</el-radio><br />
+                        <el-radio label="内容不符">内容不符</el-radio>
+                      </el-radio-group>
+                    </el-form-item>
+                </div>
+            </div>
+          </el-form>
+          <div slot="footer" class="dialog-footer">
+            <el-button type="primary" plain @click="handlerPass">确认审核通过</el-button>
+            <el-button @click="handlerOut">审核不通过</el-button>
+            <el-button @click="freezeDialogFlag = false">取 消</el-button>
+          </div>
+    </el-dialog>
+  </div>
+</template>
+<script>
+import {data_post_checkDriverCardid,data_get_driver_obStatus,data_CarList,data_Get_carType,data_post_audit} from '../../../api/users/carowner/total_carowner.js'
+import {parseTime} from '@/utils/'
+import { eventBus } from '@/eventBus'
+import Upload from '@/components/Upload/singleImage'
+import vregion from '@/components/vregion/Region'
+export default {
+  name:'create-Change-ViewDialog',
+  components:{
+    Upload,
+    vregion
+  },
+  props:{
+    params:null,
+    icon:{
+      type: String,
+      default: ''
+    },
+    btntype: {
+      type: String,
+      default: ''
+    },
+    btntitle: {
+      type: String,
+      default: ''
+    },
+    plain:{
+      type: Boolean,
+      default: false
+    },
+    btntext: {
+      type: String,
+      default: ''
+    },
+    value:{
+      type: String,
+      default:''
+    },
+     editType: {
+      type: String,
+      default: 'edit'
+    },
+  },
+  data(){
+       // 手机号校验
+        const mobileValidator = (rule, val, cb) => {
+            let phoneTest = /(^1[3|4|5|7|8]\d{9}$)|(^09\d{8}$)/
+            !val && cb(new Error('手机号码不能为空'))
+            if(!(phoneTest.test(val))){
+                cb(new Error('请输入正确的手机号码格式'))
+            } 
+            else{
+                cb()
+            }
+        }
+
+    //    车主信息校验
+        const driverNameValidator = (rule, val, cb) => {
+            if(!val){
+            cb(new Error('车主不能为空'))
+            }
+            else{
+                cb()
+            }
+        }
+
+    //    身份证信息校验
+        const driverCardidValidator = (rule, val, cb) => {
+            !val && cb(new Error('身份证不能为空'))
+             let IdTest = /(^\d{18}$)/
+            if(!(IdTest.test(val))){
+                cb(new Error('请输入正确的身份证'))
+            }
+            else {
+                cb()
+            }
+        }
+    //    选择所在地校验
+        const belongCityNameValidator = (rule, val, cb) => {
+             if(!val) {
+                    cb(new Error('请选择所在地'))
+                }
+             else{
+                cb()
+            }                
+        }
+   //    车牌号信息校验
+        const carNumberValidator = (rule, val, cb) => {
+            if(!val){
+            cb(new Error('车牌号不能为空'))
+            }
+            else{
+                cb()
+            }
+        }
+
+    //    车型信息校验
+        const carTypeValidator = (rule, val, cb) => {
+            if(!val){
+            cb(new Error(' 车型信息不能为空'))
+            }
+             else{
+                cb()
+            }
+        }
+    //    车长信息校验
+        const carLengthValidator = (rule, val, cb) => {
+            let reg=/^\d+(\.\d{0,2})?$/
+            if(!reg.test(val)){
+            cb(new Error('请输入数据'))
+            }
+            else{
+                cb()
+            }
+        }
+    //    车宽信息校验
+        const carWidthValidator = (rule, val, cb) => {
+            let reg=/^\d+(\.\d{0,2})?$/
+            if(!reg.test(val)){
+            cb(new Error('请输入数据'))
+            }
+            else{
+                cb()
+              
+            }
+        }
+    //    车高信息校验
+        const carHeightValidator = (rule, val, cb) => {
+            let reg=/^\d+(\.\d{0,2})?$/
+            if(!reg.test(val)){
+            cb(new Error('请输入数据'))
+            }
+            else{
+                cb()
+              
+            }
+        }       
+    //    车辆规格校验  
+        const carSpecValidator = (rule, val, cb) => {
+             if(!val) {
+                    cb(new Error('请选择车辆规格'))
+                }
+             else{
+                cb()
+            }                
+        }
+      // 上传中单等级校验 
+        const obtainGradeValidator = (rule,val,cb)=>{
+            if(!val){
+            cb(new Error('请填写中单等级'))
+            }
+            else{
+                cb()
+            }
+        }   
+
+      // 中单等级有效期校验 
+        const obtainGradeTimeValidator = (rule,val,cb)=>{
+            if(!val){
+            cb(new Error('请填写中单等级有效期'))
+            }
+            else{
+                cb()
+            }
+        }   
+    return{
+        pickerOptions:{
+        disabledDate(time) {
+        return time.getTime() < Date.now();}},
+        defaultImg:'/static/test.jpg',//默认第一张图片的url
+        defaultImg1:'',//默认第一张图片的url        
+        freezeDialogFlag:false,
+        templateModel:{},   // 认证审核表单
+        formLabelWidth:'150px',
+        optionscarType:[],
+        optionscarSpec:[],
+        optionsLevel:[],
+        radio1:'',
+        radio2:'',
+        radio3:'',
+        radio4:'',
+        radio5:'',        
+        rulesForm:{
+        driverMobile:{validator: mobileValidator, trigger:'change',required:true,},
+        driverName:{validator: driverNameValidator, trigger:'change',required:true,},
+        driverCardid:{validator: driverCardidValidator, trigger:'change',required:true,},
+        carNumber:{validator: carNumberValidator, trigger:'change',required:true,},
+        carLength:{validator: carLengthValidator, trigger:'change',required:true,},
+        carWidth:{validator: carWidthValidator, trigger:'change',required:true,},
+        carHeight:{validator:carHeightValidator, trigger:'change',required:true,},
+        carSpec:{validator: carSpecValidator, trigger:'change',required:true,},
+        carType:{validator: carTypeValidator, trigger:'change',required:true,},
+        belongCity:{validator: belongCityNameValidator, trigger:'change',required:true,},            
+        obtainGrade:{validator:obtainGradeValidator, trigger:'change',required:true,},
+        obtainGradeTime:{validator: obtainGradeTimeValidator, trigger:'change',required:true,},
+        },        
+      }
+  },
+  components:{
+   vregion
+  },
+  computed: {
+            pictureValue () {
+            return {'车辆45°':this.radio1 ,'行驾证': this.radio2,'驾驶证':this.radio3 , '身份证':this.radio4 ,'手持身份证':this.radio5}
+            }
+        },  
+  mounted(){
+    this.getMoreInformation()
+  },
+    watch:{
+        freezeDialogFlag:{
+        handler: function(val, oldVal) {
+            if(!val){
+                this.$refs.templateModel.resetFields();
+            }
+        }
+        }
+        },
+  methods:{
+     formatTime(da){
+                let time = (+new Date()) - da
+                return parseInt(time / 1000 / (3600*24))+ '天'+ parseInt(time/1000/(3600*24*60*60)*60*60)+ '小时'
+            },
+    regionChange(d) {
+                console.log('data:',d)
+                this.templateModel.belongCity = (!d.province&&!d.city&&!d.area&&!d.town) ? '': `${this.getValue(d.province)}${this.getValue(d.city)}${this.getValue(d.area)}${this.getValue(d.town)}`.trim();
+                if(d.area){
+                    this.templateModel.areaCode = d.area.code;
+                }else if(d.city){
+                    this.templateModel.areaCode = d.city.code;
+                }
+                else{
+                    this.templateModel.areaCode = d.province.code;
+                }
+            },
+    getValue(obj){
+                return obj ? obj.value:'';
+            },
+
+    change(){
+      this.freezeDialogFlag!=this.freezeDialogFlag
+    },
+    getMoreInformation(){
+    // 中单等级的获取
+    data_get_driver_obStatus().then(res =>{
+        res.data.map(item=>{
+            this.optionsLevel.push(item)
+         })
+         })
+     data_CarList().then(res=>{
+         res.data.map((item)=>{
+            this.optionscarType.push(item);
+         })
+         })
+     data_Get_carType().then(res=>{
+         res.data.map((item)=>{
+           this.optionscarSpec.push(item);
+         })
+         })         
+    },
+     changeIMG(event){
+            // console.log(event)
+            this.defaultImg1 = event.target.src;
+            },    
+    // 图片质量拼接传给后台
+     pictureTypeChange(){
+
+            },            
+    isVip(val){
+            if(this.templateModel.isVipCar == '1'){
+
+                this.templateModel.isVipCar = '1'
+                 console.log(this.templateModel.isVipCar)
+            }
+            else{
+                this.templateModel.isVipCar = '0'
+                 console.log(this.templateModel.isVipCar)
+            }   
+        },      
+    changeList(){
+      eventBus.$emit('changeListtwo')
+    },
+    openDialog(){
+      //冻结
+        if(!this.params){
+            this.$message.info('未选中需要修改内容');
+            return
+           }
+        else{
+        this.formFroze = this.params;
+        var obj = JSON.parse(JSON.stringify(this.params));
+        this.templateModel=obj;
+        this.templateModel.obtainGradeTime = parseTime(this.templateModel.obtainGradeTime,"{y}-{m}-{d}");
+          this.freezeDialogFlag=true
+        }
+      },
+            completeData(){
+                  if(this.radio5==''){
+                      this.$message.info('请勾选手持身份证照片审核结果');
+                      return false
+                  }    
+                  if(this.radio4==''){
+                      this.$message.info('请勾选身份证照片审核结果');
+                      return false
+                  }                 
+                  if(this.radio3==''){
+                      this.$message.info('请勾选驾驶证照片审核结果');
+                      return false
+                  }
+                  if(this.radio2==''){
+                      this.$message.info('请勾选行驶证照片审核结果');
+                      return false
+                  }
+                  if(this.radio1==''){
+                      this.$message.info('请勾选车辆45°照片审核结果');
+                      return false
+                  }
+                },
+
+  // 审核不通过
+    handlerOut(){
+        this.completeData()
+                var forms=Object.assign({},this.templateModel,{driverStatus:"AF0010404"},{authNoPassCause:JSON.stringify(this.pictureValue)})
+                    if(this.completeData()==false)
+                    {
+                    return
+                    }
+                    else{
+                this.$refs['templateModel'].validate((valid)=>{
+                if(valid){
+                    data_post_audit(forms).then(res=>{
+                        // console.log(res)
+                        this.$message.success('审核不通过 提交')
+                        this.freezeDialogFlag = false;
+                        this.changeList()
+                    }).catch(err=>{
+                        console.log(err)
+                    })
+                    }
+                })
+                }
+    },         
+// 审核通过
+    handlerPass(){
+                this.completeData()
+                var forms=Object.assign({},this.templateModel,{driverStatus:"AF0010404"},{authNoPassCause:JSON.stringify(this.pictureValue)})
+                    if(this.completeData()==false)
+                    {
+                    return
+                    }
+                    else{
+                this.$refs['templateModel'].validate((valid)=>{
+                    if(valid){
+                        var forms=Object.assign({},this.templateModel,{driverStatus:"AF0010403",authNoPassCause:JSON.stringify(this.pictureValue)})
+                        data_post_audit(forms).then(res=>{
+                            // console.log(res)
+                            this.$message.success('审核通过成功')
+                            this.freezeDialogFlag = false;
+                            this.changeList()
+                        }).catch(err=>{
+                            console.log(err)
+                        })
+                    }
+                })
+                }     
+
+    }   
+    }, 
+}
+</script>
+<style lang="scss">
+.drivercertify{
+    .el-dialog{
+       overflow: unset;
+       max-height: none;
+       .certifyless{
+         width:62px;
+       }
+.el-date-editor.el-input{
+    width: 192px;
+}
+.data_pic{
+   width: 100%;
+   margin:0px auto;
+   display: flex;
+   justify-content: space-around;
+.data_pic_c{
+    flex-basis: 130px;
+    margin:0px 5px;    
+    h2{
+    line-height: 40px;
+    text-align: center; }
+    .el-radio-group{
+    margin:0px auto;}
+    .picURL{
+        width: 100%;
+        height: 100%;
+    }
+}
+}
+    }
+.data_pic_default
+{
+   margin:20px 0px;
+
+img{
+    width: 500px;
+    margin: 0px auto;
+    display: block
+}
+} 
+.uploadImgBox{
+    width: 150px;
+    height: 150px;
+}
+.lessWidth{
+    width: 80px!important
+}
+}
+</style>
+
+
+
+

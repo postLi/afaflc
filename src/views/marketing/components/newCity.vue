@@ -440,6 +440,12 @@ export default {
 </style>
 
 <style lang="scss" >
+    .creatcity{
+        display: inline-block;
+        .el-input__inner{
+            line-height: 40px!important; 
+            height: 40px !important; 
+        }
     .newMarketingCity{
         .el-dialog{
             width: 955px!important;
@@ -457,11 +463,6 @@ export default {
            overflow: unset;
        }
     }
-    .creatcity{
-        .el-input__inner{
-            line-height: 40px!important; 
-            height: 40px !important; 
-        }
     .table_box{
     .ht_table{
         width: 934px!important;

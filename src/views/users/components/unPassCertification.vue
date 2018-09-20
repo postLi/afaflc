@@ -1,9 +1,10 @@
 <template>
     <div class="identicalStyle">
-         <div class="shipper_searchinfo">
-              <el-form inline>
+              <el-form :inline="true"  class="demo-ruleForm classify_searchinfo">
                 <el-form-item label="所在地：">
-                     <GetCityList v-model="formInline.belongCity" ref="area"></GetCityList>
+                     <vregion :ui="true"  @values="regionChange" class="form-control">
+                        <el-input v-model="formInline.belongCity" placeholder="请选择"></el-input>
+                    </vregion>
                 </el-form-item>
                 <el-form-item label="车牌号：">
                     <el-input placeholder="请输入内容" v-model.trim="formInline.carNumber" clearable></el-input>
@@ -11,13 +12,12 @@
                 <el-form-item label="手机号：">
                     <el-input placeholder="请输入内容" v-model.trim="formInline.driverMobile" clearable></el-input>
                 </el-form-item>
-                <el-form-item>
-                    <el-button type="primary" plain @click="getdata_search">查询</el-button>
-                    <el-button type="info" plain>清空</el-button>
+                <el-form-item class="fr">
+                    <el-button type="primary" plain @click="getdata_search" :size="btnsize">查询</el-button>
+                    <el-button type="info" plain :size="btnsize">清空</el-button>
                 </el-form-item>
             </el-form>
-            </div>
-               
+
             <div class="classify_info">
                 <div class="btns_box">
                     <driver-newTemplate
@@ -27,7 +27,6 @@
                     btntype="primary"
                     icon="el-icon-news"
                     editType="valetAuth"
-                    v-on:click.native="freezeClick"
                     :templateItem="selectionData"
                     btntitle="车主管理"
                     @getData="getDataList"
@@ -43,7 +42,7 @@
                         border
                         highlight-current-row
                         current-row-key
-                        @current-change="handleSelectionChange"
+                        @row-click="clickDetails"
                         tooltip-effect="dark"
                         style="width: 100%">
                       <!--   <el-table-column
@@ -79,7 +78,7 @@
                         width="200">
                         </el-table-column>
                         <el-table-column
-                        prop="registerOrigin"
+                        prop="registerOriginName"
                         label="注册来源">
                         </el-table-column>
                         <el-table-column
@@ -94,36 +93,20 @@
                         prop="authNoPassTime"
                         label="认证不通过时间">
                         </el-table-column>
-                        <!-- <el-table-column
-                        prop="driverStatus"
-                        label="操作">
-                        <template slot-scope="scope">
-                            <el-button type="text">代客认证</el-button>
-                        </template>
-                        </el-table-column> -->
                     </el-table>
                         
-                    <el-pagination
-                        @size-change="handleSizeChange"
-                        @current-change="handleCurrentChange"
-                        :current-page="page"
-                        :page-sizes="[20, 50, 200, 400]"
-                        :page-size="pagesize"
-                        layout="total, sizes, prev, pager, next, jumper"
-                        :total="totalCount">
-                    </el-pagination>
+<div class="info_tab_footer">共计:{{ totalCount }} <div class="show_pager"> <Pager :total="totalCount" @change="handlePageChange" /></div> </div>   
                 </div>
             </div>
-             <cue ref="cue"></cue>
     </div>
 </template>
 <script type="text/javascript">
     import {data_get_driver_list,data_get_driver_status} from '../../../api/users/carowner/total_carowner.js'
-    import GetCityList from '@/components/GetCityList'
-    import cue from '../../../components/Message/cue'
+    import vregion from '@/components/vregion/Region'
     import { eventBus } from '@/eventBus'
     import { parseTime,formatTime } from '@/utils/index.js'
     import DriverNewTemplate from '../carowner/driver-newTemplate'
+    import Pager from '@/components/Pagination/index'
     export default {
         props: {
             isvisible: {
@@ -132,20 +115,22 @@
             }
         },
         components:{
-            GetCityList,
+            vregion,
             DriverNewTemplate,
-            cue
+            Pager
         },
         data(){
             return{
+                btnsize:'mini',
                 page:1,//当前页
                 pagesize:20,//每页显示数
                 totalCount:null,//总记录数
                 formInline: {//查询条件
-                    driverMobile:'',
-                    belongCity:'',
+                    driverMobile:null,
+                    belongCity:null,
+                    areaCode:null,
                     driverStatus:'AF0010404',
-                    carNumber:''
+                    carNumber:null
                 },
                 tableDataTree:[],//定义列表记录
                 optionsService:[//状态
@@ -188,29 +173,30 @@
         },
   
         methods:{
-            // 判断选中与否
-            handleSelectionChange(val){
-                this.multipleSelection = val;
-                if(val){
-                    this.selectionData=val
-                } else{
-                    this.selectionData=null
+            regionChange(d) {
+                console.log('data:',d)
+                this.formInline.belongCity = (!d.province&&!d.city&&!d.area&&!d.town) ? '': `${this.getValue(d.province)}${this.getValue(d.city)}${this.getValue(d.area)}${this.getValue(d.town)}`.trim();
+                if(d.area){
+                    this.formInline.areaCode = d.area.code;
+                }else if(d.city){
+                    this.formInline.areaCode = d.city.code;
+                }
+                else{
+                    this.formInline.areaCode = d.province.code;
                 }
             },
-            //判断选中是否弹窗
-             freezeClick(){
-                
-                  if(this.selectionData == null){                      
-                     this.selectionData=null
-                     this.$refs.cue.hint(this.ifInformation)
-                  } else{
-                       this.selectionData=this.multipleSelection
-                  }
+             getValue(obj){
+                return obj ? obj.value:'';
             },
-            // 代客认证功能
-            // handleEnsure(){
-            //     console.log('代客认证功能')
-            // },
+            handlePageChange(obj) {
+                this.page = obj.pageNum
+                this.pagesize = obj.pageSize
+                this.firstblood()
+            },
+            //点击选中当前行
+            clickDetails(row, event, column){
+                this.selectionData = row
+            },
 
             //刷新页面
             firstblood(){
@@ -223,13 +209,9 @@
                     })
                 })
             },
-
             //点击查询按纽，按条件查询列表
             getdata_search(event){
-                data_get_driver_list(this.page,this.pagesize,this.formInline).then(res=>{
-                    this.dataTotal = res.data.totalCount;
-                    this.tableDataTree = res.data.list;
-                })
+            this.firstblood()
             },
 
             //获取车主状态列表

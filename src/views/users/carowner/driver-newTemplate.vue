@@ -1,6 +1,6 @@
 <template> 
     <div class="carNewinfo commoncss">
-        <el-button :type="type" :value="value" :plain="plain" :icon="icon" @click="openDialog()">{{btntext}}</el-button>
+        <el-button :type="type" :value="value" :plain="plain" :icon="icon" @click="openDialog()"><span class="needMoreInfo">{{btntext}}</span ></el-button>
         <el-dialog :title="title" :visible="driverTemplateDialogFlag" :before-close="change">
              <el-form
               ref="templateModel"
@@ -10,14 +10,14 @@
              >
               <el-row>
                   <el-col :span="12">
-                      <span v-if="this.btntext=='代客认证'">
+                      <span v-if="editType=='view'">
                     <el-form-item label="手机号：" :label-width="formLabelWidth" >
                        <el-input v-model.trim="templateModel.driverMobile" auto-complete="off" disabled></el-input>
                     </el-form-item>
                     </span>
                     <span v-else>
                     <el-form-item label="手机号：" prop="driverMobile" :label-width="formLabelWidth" >
-                       <el-input v-model.trim="templateModel.driverMobile" auto-complete="off" :disabled="editType=='view'"></el-input>
+                       <el-input v-model.trim="templateModel.driverMobile" auto-complete="off"></el-input>
                     </el-form-item>
                     </span>
                   </el-col>
@@ -30,9 +30,16 @@
 
               <el-row>
                   <el-col :span="12">
-                    <el-form-item label="身份证号码："  :label-width="formLabelWidth" prop="driverCardid">
-                        <el-input v-model.trim="templateModel.driverCardid" :disabled="editType=='view'"></el-input>
+                      <span v-if="editType=='view'">
+                    <el-form-item label="身份证号码："  :label-width="formLabelWidth">
+                        <el-input v-model.trim="templateModel.driverCardid" disabled></el-input>
                     </el-form-item>
+                    </span>
+                    <span v-else>
+                     <el-form-item label="身份证号码："  :label-width="formLabelWidth" prop="driverCardid">
+                        <el-input v-model.trim="templateModel.driverCardid" ></el-input>
+                    </el-form-item>
+                    </span>
                   </el-col>
                   <el-col :span="12">
                     <el-form-item label="车牌号：" prop="carNumber" :label-width="formLabelWidth" >
@@ -55,34 +62,41 @@
                     </el-form-item>
                   </el-col>
                   <el-col :span="12">
-                    <el-form-item label="车长(米)：" prop="carLWH" :label-width="formLabelWidth"  >
+                    <el-form-item label="车长(米)：" prop="carLength" :label-width="formLabelWidth"  >
                       <el-input
                             class="lessWidth"
                             placeholder="长"
                             v-model="templateModel.carLength"
                             clearable
                             ref="lengths"
-                            :maxlength="30"
+                            :maxlength="5"
+                            v-numberOnly
                             :disabled="editType=='view'"
                             >
                         </el-input>
+                         </el-form-item>
+                         <el-form-item prop="carWidth" :label-width="formLabelWidth"  >
                         <el-input
                             class="lessWidth"
                             placeholder="宽"
                             v-model="templateModel.carWidth"
                             clearable
+                            v-numberOnly
                             ref="widths"
-                            :maxlength="30"
+                            :maxlength="5"
                             :disabled="editType=='view'"
                             >
                         </el-input>
+                         </el-form-item>
+                         <el-form-item prop="carHeight" :label-width="formLabelWidth"  >
                         <el-input
                             class="lessWidth"
                             placeholder="高"
                             v-model="templateModel.carHeight"
                             clearable
+                            v-numberOnly
                             ref="heights"
-                            :maxlength="30"
+                            :maxlength="5"
                             :disabled="editType=='view'"
                             >
                         </el-input>
@@ -92,7 +106,7 @@
 
               <el-row>
                   <el-col :span="12">
-                    <el-form-item label="车辆规格：" prop="carSpec" :label-width="formLabelWidth">
+                    <el-form-item label="车辆规格：" :label-width="formLabelWidth">
                         <el-select v-model="templateModel.carSpec" placeholder="请选择" :disabled="editType=='view'">
                             <el-option
                                 v-for="item in optionsType"
@@ -104,17 +118,18 @@
                     </el-form-item>
                   </el-col>
                   <el-col :span="12">
-
-              <el-form-item label="所在地 ："  v-if = "editType=='view'" :label-width="formLabelWidth" required>
-                    <el-input v-model="templateModel.belongCityName" auto-complete="off" disabled></el-input>
+               <span v-if="editType=='view'">    
+              <el-form-item label="所在地 ："  :label-width="formLabelWidth" >
+                        <el-input v-model="templateModel.belongCityName" placeholder="请选择" disabled></el-input>
               </el-form-item>
-              <el-form-item label="所在地 ："  props = "belongCity"  :label-width="formLabelWidth" v-else required>
-                <el-input v-model="templateModel.belongCityName" :disabled="editType=='view'" @focus="changeSelect" v-if="editType !='add' && !selectFlag"></el-input>
-                <span v-else>
-                    <el-input v-model="templateModel.belongCity" auto-complete="off"  v-if = "editType=='view'"   disabled></el-input>
-                  	<GetCityList   ref="area"  v-else></GetCityList>
-                </span>
+              </span>   
+              <span v-else>   
+              <el-form-item label="所在地 ："  :label-width="formLabelWidth" prop="belongCityName">
+                    <vregion :ui="true"  @values="regionChange" class="form-control">
+                        <el-input v-model="templateModel.belongCityName" placeholder="请选择"></el-input>
+                    </vregion>
               </el-form-item>
+               </span>   
                   </el-col>
               </el-row>
               
@@ -218,6 +233,7 @@ import  { data_post_createDriver,data_put_changeDriver,data_CarList,data_Get_car
 import Upload from '@/components/Upload/singleImage'
 import GetCityList from '@/components/GetCityList'
 import { eventBus } from '@/eventBus'
+import vregion from '@/components/vregion/Region'
 export default {
     name:'template-create-view-change',
     props:{
@@ -262,7 +278,7 @@ export default {
     },
     components:{
         Upload,
-        GetCityList
+        vregion
     },
     data() {
        // 手机号校验
@@ -299,7 +315,7 @@ export default {
     //    身份证信息校验
         const driverCardidValidator = (rule, val, cb) => {
             !val && cb(new Error('身份证不能为空'))
-             let IdTest = /(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/
+             let IdTest = /(^\d{18}$)/
             if(!(IdTest.test(val))){
                 cb(new Error('请输入正确的身份证'))
             }
@@ -318,7 +334,7 @@ export default {
     //    车牌号信息校验
         const carNumberValidator = (rule, val, cb) => {
             if(!val){
-            cb(new Error('车主不能为空'))
+            cb(new Error('车牌号不能为空'))
             }
             else{
                 cb()
@@ -328,31 +344,48 @@ export default {
     //    车型信息校验
         const carTypeValidator = (rule, val, cb) => {
             if(!val){
-            cb(new Error('车牌不能为空'))
+            cb(new Error(' 车型信息不能为空'))
             }
              else{
                 cb()
             }
         }
     //    车长信息校验
-        const LWHalidator = (rule, val, cb) => {
+        const carLengthValidator = (rule, val, cb) => {
             let reg=/^\d+(\.\d{0,2})?$/
-            let lengths = this.$refs.lengths.value;
-            let widths =  this.$refs.widths.value;
-            let heights = this.$refs.heights.value;
-            if(!reg.test(lengths)||!reg.test(widths)||!reg.test(heights)){
-            cb(new Error('请输入车长须数据'))
+            if(!reg.test(val)){
+            cb(new Error('请输入数据'))
             }
             else{
                 cb()
               
             }
         }
+    //    车宽信息校验
+        const carWidthValidator = (rule, val, cb) => {
+            let reg=/^\d+(\.\d{0,2})?$/
+            if(!reg.test(val)){
+            cb(new Error('请输入数据'))
+            }
+            else{
+                cb()
+            }
+        }
+    //    车高信息校验
+        const carHeightValidator = (rule, val, cb) => {
+            let reg=/^\d+(\.\d{0,2})?$/
+            if(!reg.test(val)){
+            cb(new Error('请输入数据'))
+            }
+            else{
+                cb()
+              
+            }
+        }       
 
-        
     //    选择所在地校验
         const belongCityNameValidator = (rule, val, cb) => {
-             if(!this.$refs.area.selectedOptions[0]) {
+             if(!val) {
                     cb(new Error('请选择所在地'))
                 }
              else{
@@ -429,46 +462,48 @@ export default {
             defaultImg:'/static/test.jpg',//默认第一张图片的url
             selectFlag: false,
             type:'primary',
-            title:'',
-            text:'',
+            title:null,
+            text:null,
             optionsLevel:[],
             options:[], // 车型列表
             optionsType:[], // 车辆规列表
             templateModel:{
-                carType:'',
-                driverMobile:'',
-                driverName:'',
-                carNumber:'',
-                driverCardid:'',
-                carSpec:'',
-                carLength:'',
-                carWidth:'',
-                carHeight:'',
+                carType:null,
+                driverMobile:null,
+                driverName:null,
+                carNumber:null,
+                driverCardid:null,
+                carSpec:null,
+                carLength:null,
+                carWidth:null,
+                carHeight:null,
                 belongCity:null,
-                obtainGrade:'',
-                belongCityName:'',
+                obtainGrade:null,
+                belongCityName:null,
                 obtainGradeTime:null, //中单等级有效时间
                 isVipCar:null, //特权车
-                carFile:'',
-                drivingLicenceFile:'',
-                drivingPermitFile:'',
-                idCardFile:'',
-                takeIdCardFile:'',
-                driverId:''
+                carFile:null,
+                drivingLicenceFile:null,
+                drivingPermitFile:null,
+                idCardFile:null,
+                takeIdCardFile:null,
+                driverId:null,
             },
                 pickerOptions:{
                 disabledDate(time) {
                 return time.getTime() < Date.now();
                 }
             },
-            formLabelWidth:'135px',
+            formLabelWidth:'155px',
             driverTemplateDialogFlag: false,// 弹框控制的控制
             rulesForm:{
             driverMobile:{validator: mobileValidator, trigger:'change',required:true,},
             driverName:{validator: driverNameValidator, trigger:'change',required:true,},
             driverCardid:{validator: driverCardidValidator, trigger:'change',required:true,},
             carNumber:{validator: carNumberValidator, trigger:'change',required:true,},
-            carLWH:{validator: LWHalidator, trigger:'change',required:true,},
+            carLength:{validator: carLengthValidator, trigger:'change',required:true,},
+            carWidth:{validator: carWidthValidator, trigger:'change',required:true,},
+            carHeight:{validator:carHeightValidator, trigger:'change',required:true,},
             carType:{validator: carTypeValidator, trigger:'change',required:true,},
             belongCityName:{validator: belongCityNameValidator, trigger:'change',required:true,},
             obtainGrade:{validator: obtainGradeValidator, trigger:'change',required:true,},
@@ -487,15 +522,12 @@ export default {
             if(!val){
                 this.selectFlag=false;
                 this.$refs.templateModel.resetFields();
-                if(this.editType == 'add'){
-                    this.templateModel = {
-                        registerOrigin:'WEB',
-                        isDirectional: '0',
-                    }
-                }
-                if(this.$refs.area){
-                    this.$refs.area.selectedOptions = [];
-                }
+                this.templateModel.carSpec = null;
+                // if(this.editType == 'add'){
+                //     this.templateModel = {
+                //         registerOrigin:'AF0030103',
+                //     }
+                // }
             }
         }
         }
@@ -510,6 +542,22 @@ export default {
         this.getMoreInformation()
     },
     methods:{
+        // 省市区选择
+            regionChange(d) {
+                console.log('data:',d)
+                this.templateModel.belongCityName = (!d.province&&!d.city&&!d.area&&!d.town) ? '': `${this.getValue(d.province)}${this.getValue(d.city)}${this.getValue(d.area)}${this.getValue(d.town)}`.trim();
+                if(d.area){
+                    this.templateModel.areaCode = d.area.code;
+                }else if(d.city){
+                    this.templateModel.areaCode = d.city.code;
+                }
+                else{
+                    this.templateModel.areaCode = d.province.code;
+                }
+            },
+             getValue(obj){
+                return obj ? obj.value:'';
+            },            
         changeSelect(){
             if(this.editType === 'add'){
                 this.selectFlag=false
@@ -522,21 +570,15 @@ export default {
         },
         isVip(val){
             if(this.templateModel.isVipCar == '1'){
-
                 this.templateModel.isVipCar = '1'
-                                            console.log(this.templateModel.isVipCar)
             }
             else{
                 this.templateModel.isVipCar = '0'
-                            console.log(this.templateModel.isVipCar)
             }   
         },
         // 获取对应的字典列表
         getMoreInformation(){
-            // console.log('等数据来')
-            //  获取车辆规格
             data_CarList().then(res=>{
-                // console.log(res.data)
                 res.data.map((item)=>{
                     this.options.push(item);
                 })
@@ -564,57 +606,25 @@ export default {
         },
 
         openDialog(){
-
             if (this.editType === 'add') {
                 this.driverTemplateDialogFlag = true ;
-            }else if(this.editType=== 'valetAuth'||this.editType==='edit'){
+            }else if(this.editType=== 'valetAuth'||this.editType==='edit'||this.editType==='view'){
               
                 if(this.templateItem!= null){
+                    var obj = JSON.parse(JSON.stringify(this.templateItem));
+                    console.log('dds',this.templateItem)
+                    this.templateModel = obj ;
                     this.driverTemplateDialogFlag = true ;
                 }else{         
+                    this.$message.info('未选中需要认证的内容');
+                    return
                     this.driverTemplateDialogFlag = false ;    
                 }
             }
-            if(this.templateItem){
-                var obj = JSON.parse(JSON.stringify(this.templateItem));
-                console.log('dds',this.templateItem)
-                this.templateModel = obj ;
-            } 
             if(this.editType == 'view'){
                 this.driverTemplateDialogFlag = true ;
-
         }
         },
-         completeData(){
-             console.log("--------------------------"+this.$refs.area)
-            //获取城市name
-		if(!this.$refs.area){
-			return 
-		}  
-           if(this.$refs.area.selectedOptions.length > 1){
-                let province;
-                this.$refs.area.areaData.forEach((item) =>{
-                if(item.code == this.$refs.area.selectedOptions[0]){
-                    province = item
-                }
-                })
-                province.children.forEach( item => {
-                if(item.code == this.$refs.area.selectedOptions[1]){
-                    this.templateModel.belongCity = item.code;
-                    this.templateModel.belongCityName = item.name;
-                }
-                })
-            }else{
-                this.$refs.area.areaData.forEach((item) =>{
-                if(item.code == this.$refs.area.selectedOptions[0]){
-                    this.templateModel.belongCity = item.code;
-                    this.templateModel.belongCityName = item.name;
-                }
-                })
-            }
-        },
-        
-        
 
         //弹框控制
         change() {
@@ -623,11 +633,8 @@ export default {
         },
          // 提交数据
         onSubmit(templateModel){
-
-            this.completeData();
             this.$refs['templateModel'].validate(valid=>{
                 if(valid){
-                    // console.log('等联调')
                     var forms= Object.assign({}, this.templateModel)
                     console.log('this.templateModel',forms)
                     // 新增数据提交
@@ -637,6 +644,8 @@ export default {
                             this.$message.success('新增成功')
                             this.changeList();
                             this.$emit('getData')
+                        }).catch(res=>{
+                            this.$message.error('新增失败')
                         })
                     } else if(this.editType=== 'valetAuth') { 
                         data_post_driverAudit(forms).then(res=>{
@@ -644,6 +653,8 @@ export default {
                             this.$message.success('代客认证成功')
                              this.changeList();
                             this.$emit('getData')
+                        }).catch(res=>{
+                            this.$message.error('代客认证失败')
                         })
                     } else if(this.editType==='edit'){
                         data_put_changeDriver(forms).then(res=>{
@@ -651,6 +662,8 @@ export default {
                             this.$message.success('修改成功')
                              this.changeList();
                             this.$emit('getData')
+                        }).catch(res=>{
+                            this.$message.error('修改失败')
                         })
                     }
                 }
@@ -660,9 +673,20 @@ export default {
 }
 </script>
 <style  lang="scss">
+.carNewinfo{
+    display: inline-block;
+    .el-dialog{
+        overflow: unset;
+        max-height: inherit;
+    }
 .b10{
     padding-bottom: 20px;
-}
+} 
+.el-button{
+    margin-right:0px;
+    padding: 7px 15px 7px;
+
+ }
 .carOwner .el-checkbox{
     margin-left:0px!important;
 }
@@ -680,6 +704,7 @@ export default {
                 width: 100%;
                 height: 100%;
             }
+        }
         }
 </style>
 

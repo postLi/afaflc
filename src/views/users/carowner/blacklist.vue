@@ -2,7 +2,7 @@
   <div class="blackInfo commoncss">
     <el-button :type="type" :value="value" :plain="plain" :icon="icon" @click="openDialog()">{{text}}</el-button>
     <el-dialog :title="title" :visible.sync="freezeDialogFlag" :before-close="change()" :modal="false">
-      <el-form :model="formFroze" ref="formFroze" :rules="formFrozeRules">
+      <el-form :model="formFroze" ref="formFroze" :rules="formFrozeRules" :inline="true">
         <el-row>
             <el-col :span="12">
               <el-form-item label="手机号码：" :label-width="formLabelWidth">
@@ -23,7 +23,7 @@
               </el-form-item>
             </el-col>
             <el-col :span="12">
-              <el-form-item label="所在地" :label-width="formLabelWidth">
+              <el-form-item label="所在地：" :label-width="formLabelWidth">
               <el-input type="text" v-model="formFroze.belongCityName" disabled ></el-input>
           
             </el-form-item>
@@ -37,21 +37,35 @@
             </el-form-item>
             </el-col>
             <el-col :span="12">
-              <el-form-item label="车型" :label-width="formLabelWidth">
+              <el-form-item label="车型：" :label-width="formLabelWidth">
                 <el-input v-model="formFroze.carTypeName" disabled></el-input>
             </el-form-item>
             </el-col>
           </el-row>
              <el-row>
             <el-col :span="12">
-              <el-form-item label="中单等级" :label-width="formLabelWidth">
-                <el-input v-model="formFroze.obtainGradeName" disabled></el-input>
+              <el-form-item label="中单等级：" :label-width="formLabelWidth">
+                            <el-select v-model="formFroze.obtainGrade" placeholder="请选择" disabled>
+                                <el-option
+                                    v-for="item in optionsLevel"
+                                    :key="item.code"
+                                    :label="item.name"
+                                    :value="item.code">
+                                </el-option>
+                            </el-select>
             </el-form-item>
             </el-col>
             <el-col :span="12">
-              <el-form-item label="中单等级有效期至" :label-width="formLabelWidth">
-               <el-input v-model="formFroze.obtainGradeTime" :maxlength="20" disabled></el-input>
-              
+              <el-form-item label="中单等级有效期至：" :label-width="formLabelWidth">
+                        <el-date-picker
+                            v-model="formFroze.obtainGradeTime"
+                            type="date"
+                            format="yyyy-MM-dd"
+                            placeholder="选择日期"
+                             :picker-options="pickerOptions"
+                             disabled
+                            >
+                        </el-date-picker>
             </el-form-item>
             </el-col>
           </el-row>
@@ -79,8 +93,8 @@
                     </el-form-item>
               </el-col>
             <el-col :span="12">
-              <el-form-item label="注册来源" :label-width="formLabelWidth">
-                <el-input v-model="formFroze.registerOrigin" :maxlength="20" disabled></el-input>
+              <el-form-item label="注册来源：" :label-width="formLabelWidth">
+                <el-input v-model="formFroze.registerOriginName" :maxlength="20" disabled></el-input>
               </el-form-item>
             </el-col>
           </el-row>
@@ -93,7 +107,7 @@
               <el-select v-model="formFroze.putBlackCause" placeholder="请选择" clearable  v-if = "editType == 'edit-four'">
                 <el-option
                   v-for="item in putBlackCauseoptions"
-                  :key="item.id"
+                  :key="item.code"
                   :label="item.name"
                   :value="item.code">
                 </el-option>
@@ -101,7 +115,7 @@
               <el-select v-model="formFroze.putBlackCause" placeholder="请选择" disabled v-else-if="editType == 'edit-five'">
                 <el-option
                   v-for="item in putBlackCauseoptions"
-                  :key="item.id"
+                  :key="item.code"
                   :label="item.name"
                   :value="item.code">
                 </el-option>
@@ -112,7 +126,7 @@
           
           <el-row>
             <el-col :span="24">
-              <el-form-item label="移入黑名单原因说明:" :label-width="formLabelWidth">
+              <el-form-item label="移入黑名单原因说明：" :label-width="formLabelWidth">
                 <el-input type="textarea" :rows="2" :maxlength="100" v-model="formFroze.putBlackCauseRemark " v-if = "editType == 'edit-four'"></el-input>
                  <el-input type="textarea" :rows="2" :maxlength="100" v-model="formFroze.putBlackCauseRemark " v-else-if="editType == 'edit-five'" disabled></el-input>
               </el-form-item>
@@ -123,7 +137,7 @@
           </div>
           <el-row v-if = "editType == 'edit-five'">
             <el-col :span="24">
-              <el-form-item label="移出黑名单原因说明:" :label-width="formLabelWidth">
+              <el-form-item label="移出黑名单原因说明：" :label-width="formLabelWidth">
               
                  <el-input class="textArea" type="textarea" :rows="2"  :maxlength="100" v-model="formFroze.outPutBlackCauseRemark " ></el-input>
               </el-form-item>
@@ -136,17 +150,14 @@
         <el-button type="primary" @click="onSubmit2"  v-else-if="editType == 'edit-five'">确定</el-button>
         <el-button @click="freezeDialogFlag = false">取 消</el-button>
       </div>
-    </el-dialog>
+    </el-dialog> 
   </div>
 </template>
 <script>
 import GetCityList from '@/components/GetCityList'
 import {parseTime} from '@/utils/'
 import { eventBus } from '@/eventBus'
-import  {data_put_PutBlack,data_put_OutBlack} from '@/api/users/carowner/total_carowner.js'
-import {data_get_shipper_type,data_get_shipper_change,data_get_shipper_freezeType,data_get_freeze_change,data_get_freeze,data_unbind_freeze_change,data_blacklist,data_remove_blacklist} from '@/api/users/shipper/all_shipper.js'
-import {  DicBlackType } from '@/api/common.js'
-
+import  {data_put_PutBlack,data_put_OutBlack,data_get_car_freezeType,data_get_car_BlackType,data_get_driver_obStatus} from '@/api/users/carowner/total_carowner.js'
 export default {
   name:'create-Change-ViewDialog',
   components:{
@@ -193,9 +204,9 @@ export default {
       text:'',
       optionsReason:[],
       midoptions:[],
+      optionsLevel:[],
       putBlackCauseoptions:[],
-      options:[], 
-      formLabelWidth:'120px',
+      formLabelWidth:'150px',
       freezeDialogFlag:false,
       formFroze: { // 冻结弹框表单
         driverMobile: null, // 手机号
@@ -279,52 +290,56 @@ export default {
       this.$refs.singleTable.setCurrentRow(row);
     },
     openDialog(){
+      if(!this.params){
+            this.$message.info('未选中需要修改内容');
+            return
+           }
+      else{
+            this.formFroze = this.params;
 
-      this.formBlack = this.params;
-
-      if(this.formBlack.accountStatusName == '黑名单' && this.editType == 'edit-four'){
-                    this.$message.info('您选中的货主已被移入黑名单，不需多次拉黑！');
+      if(this.formFroze.accountStatusName == '黑名单' && this.editType == 'edit-four'){
+                    this.$message.info('您选中的车主已被移入黑名单，不需多次拉黑！');
                     return
                 }
-       else if(this.formBlack.accountStatusName != '黑名单' && this.editType == 'edit-five'){
-                    this.$message.info('您选中的货主未被移入黑名单，不可做此操作！');
+      else if(this.formFroze.accountStatusName != '黑名单' && this.editType == 'edit-five'){
+                    this.$message.info('您选中的车主未被移入黑名单，不可做此操作！');
                     return
        }
-      if(this.params){
+      else{
         var obj = JSON.parse(JSON.stringify(this.params));
        
         this.formFroze=obj;
-    
-        this.formFroze.obtainGradeTime = parseTime(this.formFroze.obtainGradeTime,"{y}-{m}-{d}");
-       /* this.formFroze.forEach(item => {
-            item.obtainGradeTime = parseTime(item.obtainGradeTime,"{y}-{m}-{d}");
-        })*/
+        // this.formFroze.obtainGradeTime = parseTime(this.formFroze.obtainGradeTime,"{y}-{m}-{d}");
         this.freezeDialogFlag=true 
 
-      }else{
-        this.formFroze=null;
-       
+      }
       }
     },
 
     getMoreInformation(){
-      //获取货主类型
-      data_get_shipper_type().then(res=>{
-        res.data.map((item)=>{
-        this.options.push(item)
-        })
-      }),
       // 获取冻结原因下拉
-      data_get_shipper_freezeType().then(res=>{
+      data_get_car_freezeType().then(res=>{
        
         res.data.map((item)=>{
           this.optionsReason.push(item)
         })
       })
       // 获取移入黑名单原因下拉
-      DicBlackType().then(res=>{
-          this.putBlackCauseoptions = res.data;
+      data_get_car_BlackType().then(res=>{
+       
+        res.data.map((item)=>{
+          this.putBlackCauseoptions.push(item)
+        })
       })
+      // 中单等级的获取
+      data_get_driver_obStatus().then(res =>{
+                res.data.map(item=>{
+                    this.optionsLevel.push(item)
+                })
+            }).catch(err =>{
+                console.log(err)
+            })
+
     },
 
     //移入黑名单
