@@ -16,10 +16,30 @@
              <th >启用状态</th>
             </tr>     
             <tr>
-             <td><el-input v-model="formAll.areaCode" disabled></el-input></td>
+             <td><el-input v-model="areaName" disabled></el-input></td>
              <td><el-input v-model="formAll.rewardMax" placeholder="请选择" maxlength='5'></el-input></td>   
-             <td><el-input v-model="formAll.serivceCode"  disabled></el-input></td>
-             <td><el-input v-model="formAll.carType"  disabled></el-input></td>
+             <td>
+                 <el-select v-model="formAll.serivceCode" clearable placeholder="请选择" disabled>
+                          <el-option
+                             v-for="item in serviceCardList"
+                              :key="item.code"
+                             :label="item.name"
+                              :value="item.code"
+                               :disabled="item.disabled">
+                         </el-option>
+                 </el-select>
+             </td>
+             <td>
+                <el-select v-model="formAll.carType" clearable placeholder="请选择" disabled>
+                          <el-option
+                             v-for="item in optionsCar"
+                               :key="item.code"
+                               :label="item.name"
+                               :value="item.code"
+                               :disabled="item.disabled">
+                         </el-option>
+                 </el-select>
+             </td>
              <td>
             <el-switch
             style="display: block"
@@ -332,6 +352,7 @@ export default {
         const reward16Validator = (rule, val, cb) => {if(!val){cb(new Error('数据不能为空'))}else if(/[^\d.]/g.test(val)){cb(new Error('请输入正整数'))}else if(parseInt(val)<=parseInt(this.$refs['reward15'].value)){
             cb(new Error('必须大于前框值'))}else{cb()} }    
         return{
+        areaName:null,
         formLabelWidth:'130px',
         dialogFormVisible_add: false,
         MaidLevelValueCar:'',
@@ -445,7 +466,12 @@ export default {
             this.$forceUpdate()
             this.dialogFormVisible_add = true;
             data_get_shipperOwnerFrom1_Id(this.params.id).then(res=>{
-            console.log('res',res)
+            if(res.data.area==null){
+            this.areaName =res.data.province+res.data.city
+            }
+            else{
+            this.areaName =res.data.province+res.data.city+res.data.area
+            }
             this.formAll.areaCode=res.data.areaCode
             this.formAll.rewardMax=res.data.rewardMax
             this.formAll.carType=res.data.carType

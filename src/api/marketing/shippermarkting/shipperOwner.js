@@ -58,7 +58,7 @@ export function data_get_shipperOwnerFrom_update(data) {
  //reward_id获取货主所有订单金额奖励明细
  export function data_get_shipperOwnerFrom2_Id(id) {
   return fetch({
-    url: '/'+baseurl+'/sm/aflcShipperPreferential/v1/{reward_id}?reward_id=' + id,
+    url: '/'+baseurl+'/sm/aflcShipperPreferential/v1/' + id,
     method: 'get',
   })
 }
