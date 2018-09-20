@@ -142,23 +142,6 @@ export default{
     }
   },
   data() {
-    // const validateareaName = function(rule, value, callback) {
-    //   if (value === '' || value === null || !value || value === undefined) {
-    //     callback(new Error('请输入异常件数'))
-    //   } else if (REGEX.ONLY_NUMBER_GT.test(value)) {
-    //     callback()
-    //   } else {
-    //     callback(new Error('只能输入数字从1开始'))
-    //   }
-    // }
-    // const validatorNull = (rule, value, callback) => {
-    //   if (value === undefined) {
-    //     console.log(value)
-    //     callback(new Error('导出时不能为空'))
-    //   } else {
-    //     callback()
-    //   }
-    // }
     return {
       areaCodeList1: [],
       btnsize: 'mini',
