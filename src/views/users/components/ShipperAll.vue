@@ -17,6 +17,7 @@
 				stripe
 				border
                 height="100%"
+                :default-sort = "{prop: 'mobile', order: 'descending'}"
                 @selection-change="getSelection" 
                 @row-click="clickDetails"
 				tooltip-effect="dark"
@@ -31,34 +32,36 @@
                         {{ (page - 1)*pagesize + scope.$index + 1 }}
                     </template>
 				</el-table-column>  
-				<el-table-column label="手机号">
+				<el-table-column label="手机号" prop="mobile" sortable>
                     <template slot-scope="scope">
                         <h4 class="needMoreInfo" @click="pushOrderSerial(scope.row)">{{ scope.row.mobile}}</h4>
                     </template>
 				</el-table-column>
 				<el-table-column prop="companyName"
-                    :show-overflow-tooltip="true"
+                    :show-overflow-tooltip="true" sortable
                     label="公司名称">
 				</el-table-column>
-				<el-table-column prop="contacts" label="联系人">
+				<el-table-column prop="contacts" sortable label="联系人">
 				</el-table-column>
-				<el-table-column prop="registerOrigin" label="注册来源">
+				<el-table-column prop="registerOriginName" sortable label="注册来源">
 				</el-table-column>
-				<el-table-column prop="shipperStatusName" label="认证状态">
+				<el-table-column prop="shipperStatusName" sortable label="认证状态">
 				</el-table-column>
-				<el-table-column prop="accountStatusName" label="账户状态" width="120">
+				<el-table-column prop="accountStatusName" sortable label="账户状态" width="120">
                      <template slot-scope="scope">
                         <span :class="{freezeName: scope.row.accountStatusName == '冻结中' ,blackName: scope.row.accountStatusName == '黑名单',normalName :scope.row.accountStatusName == '正常'}">{{scope.row.accountStatusName}}</span>
                     </template>
 				</el-table-column>
-				<el-table-column prop="belongCity" label="所在地">
+				<el-table-column prop="belongCity" 
+                    :show-overflow-tooltip="true" sortable
+                    label="所在地">
                      <template slot-scope="scope">
                         {{scope.row.belongCityName ? scope.row.belongCityName:scope.row.belongCity}}
                     </template>
 				</el-table-column>  
-				<el-table-column prop="shipperTypeName" label="货主类型">
+				<el-table-column prop="shipperTypeName" sortable label="货主类型">
 				</el-table-column>
-				<el-table-column  label="注册日期">
+				<el-table-column  label="注册日期" sortable prop="registerTime">
                     <template  slot-scope="scope">
                         <span v-if="scope.row.registerTime">{{ scope.row.registerTime | parseTime}}</span>
                     </template>

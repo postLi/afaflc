@@ -15,6 +15,7 @@
 				border
                 height="100%"
                 @selection-change="getSelection" 
+                :default-sort = "{prop: 'mobile', order: 'descending'}"
                 @row-click="clickDetails"
 				tooltip-effect="dark"
 				style="width: 100%">
@@ -30,33 +31,40 @@
 				</el-table-column>  
 				<el-table-column
 					prop="mobile"
+                    sortable
 					label="手机号">
                     <template slot-scope="scope">
                         <h4 class="needMoreInfo" @click="pushOrderSerial(scope.row)">{{ scope.row.mobile}}</h4>
                     </template>
 				</el-table-column>
-				<el-table-column prop="contacts" label="联系人">
+				<el-table-column prop="contacts" sortable label="联系人">
 				</el-table-column>
 				<el-table-column
-					prop="registerOrigin"
-					label="注册来源">
+                    sortable
+					prop="registerOriginName"
+					label="注册来源" >
 				</el-table-column>
-				<el-table-column prop="shipperStatusName" label="认证状态">
+				<el-table-column prop="shipperStatusName" sortable label="认证状态">
 				</el-table-column>
-				<el-table-column prop="accountStatusName" label="账户状态">
+				<el-table-column prop="accountStatusName" sortable label="账户状态">
                     <template slot-scope="scope">
                         <span :class="{freezeName: scope.row.accountStatusName == '冻结中' ,blackName: scope.row.accountStatusName == '黑名单',normalName :scope.row.accountStatusName == '正常'}">{{scope.row.accountStatusName}}</span>
                     </template>
 				</el-table-column>
 				<el-table-column
+                    sortable
+                    :show-overflow-tooltip="true"
 					prop="belongCityName"
 					label="所在地">
 				</el-table-column>
 				<el-table-column
+                    sortable
 					prop="shipperTypeName"
 					label="货主类型">
 				</el-table-column>
 				<el-table-column
+                    sortable
+                    prop="registerTime"
 					label="注册日期">
                     <template  slot-scope="scope">
                         <span v-if="scope.row.registerTime">{{ scope.row.registerTime | parseTime}}</span>

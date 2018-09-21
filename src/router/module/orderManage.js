@@ -76,7 +76,7 @@ export default {
         path: '/order/xiangqing', name: '订单详情',  hidden: true,component: _import('order/xiangqing/index'), meta: { role: ['admin'], title: '订单详情',stitle: '详情',  noCache: false }
     },
     {
-        path: '/order/guiji', name: '车辆轨迹回放', component: _import('order/guiji/index'), meta: { role: ['admin'], title: '车辆轨迹回放',stitle: '轨迹',  noCache: false }
+        path: '/order/guiji',icon: 'guijihf', name: '车辆轨迹回放', component: _import('order/guiji/index'), meta: { role: ['admin'], title: '车辆轨迹回放',stitle: '轨迹',  noCache: false }
     },
 
 

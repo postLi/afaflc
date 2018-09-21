@@ -45,6 +45,7 @@
                         border
                         align = "center"
                         height="100%"
+                        :default-sort = "{prop: 'orderSerial', order: 'descending'}"
                         @selection-change = "getinfomation"
                         tooltip-effect="dark"
                         @row-click="clickDetails"
@@ -60,6 +61,7 @@
                         </el-table-column>  
                         <el-table-column
                             prop="orderSerial"
+                            sortable
                             label="订单号"
                             width="250">
                                 <template  slot-scope="scope">
@@ -68,45 +70,54 @@
                         </el-table-column>
                         <el-table-column
                             prop="orderType"
+                            sortable
                             label="服务分类"
                             width="110">
                         </el-table-column>
                         <el-table-column
+                            sortable
                             prop="belongCity"
                             label="区域"
                             width="180">
                         </el-table-column>
                         <el-table-column
+                            sortable
                             prop="shipperMobile"
                             label="货主账号"
-                            width="150">
+                            width="120">
                         </el-table-column>
                         <el-table-column
+                            sortable
                             prop="shipperName"
                             label="货主姓名"
-                            width="150">
+                            width="120">
                         </el-table-column>
                         <el-table-column
+                            sortable
                             prop="usedCarType"
                             label="所需车型"
-                            width="150">
+                            width="120">
                         </el-table-column>
                          <el-table-column
+                            sortable
                             prop="totalAmount"
                             label="运费总额（元）"
                             width="150">
                         </el-table-column> 
                         <el-table-column
+                            sortable
                             prop="useCarTime"
                             label="用车时间"
-                            width="250">
+                            width="160">
                                 <template  slot-scope="scope">
-                                    <span class="timeChoose">
+                                    <span>
                                         {{ scope.row.useCarTime | parseTime}}    
                                     </span>
                                 </template>
                         </el-table-column>
                          <el-table-column
+                            sortable
+                            prop="orderClass"
                             label="订单类型"
                             width="120">
                                 <template  slot-scope="scope">
@@ -114,13 +125,17 @@
                                 </template>
                         </el-table-column>
                         <el-table-column
+                            sortable
+                            prop="payStatus"
                             label="付款状态"
-                            width="150">
+                            width="120">
                                 <template  slot-scope="scope">
                                     {{ scope.row.payStatus == 'AF00801' ? '待付款' : '已付款' }}
                                 </template>
                         </el-table-column>
                         <el-table-column
+                            sortable
+                            prop="aflcOrderAddresses"
                             label="提货地"
                             :show-overflow-tooltip="true"
                             width="250">
@@ -129,6 +144,8 @@
                             </template>
                         </el-table-column>
                         <el-table-column
+                            sortable
+                            prop="aflcOrderAddresses"
                             label="目的地"
                             :show-overflow-tooltip="true"
                             width="250">
@@ -150,8 +167,10 @@
                             </template>
                         </el-table-column> -->
                         <el-table-column
+                            sortable
+                            prop="useTime"
                             label="下单时间"
-                            width="200">
+                            width="160">
                             <template  slot-scope="scope">
                                 {{ scope.row.useTime | parseTime}}
                             </template>
@@ -184,8 +203,8 @@ export default{
       btnsize: 'mini',
       timeOutWaitPay: null,
       loading: true, // 加载
-      sizes: [30, 50, 100],
-      pagesize: 30, // 初始化加载数量
+      sizes: [20, 50, 100],
+      pagesize: 20, // 初始化加载数量
       page: 1, // 初始化页码
       dataTotal: 0,
       searchInfo: {

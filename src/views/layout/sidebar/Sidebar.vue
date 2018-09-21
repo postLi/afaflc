@@ -137,53 +137,57 @@ export default {
 
 
 <style rel="stylesheet/scss" lang="scss">
-// @import "src/styles/variate.scss";
-// @import "src/styles/mixin.scss";
-@import './memu.scss';
+@import "src/styles/variate.scss";
+@import "src/styles/mixin.scss";
 
-// #app .sidebar-menu{
-//     padding-top: 10px;
-//   min-height: 100%;
-//   .router-link-exact-active{
-//     .el-menu-item{
-//       color: #20a0ff;
-//     }
-//   }
-// }
+#app .sidebar-menu{
+  height: 100%;
+  overflow-y: auto;
+  overflow-x: visible;
+  width: 100%;
+
+  @include hiddenScrollBar;
+
+  .router-link-exact-active{
+    .el-menu-item{
+      color: #20a0ff;
+    }
+  }
+}
 .sidebar-container{
   min-height: 100%;
-  padding-top: 40px;
-  background: #002039;
+  padding-top: 70px;
+  background: #42485B;
   border-radius: 0;
-}
 
   .el-menu{
     border-right: 0;
-    background: #002039;
+    background: #333744;
   }
-//   .sidebar-userinfo{
-//     margin-top: -40px;
-//     margin-bottom: 15px;
-//     img{
-//       float: left;
-//       width: 40px;
-//       height: 40px;
-//       border-radius: 50%;
-//       margin-right: 10px;
-//       margin-left: 5px;
+
+  .sidebar-userinfo{
+    margin-top: -40px;
+    margin-bottom: 15px;
+    img{
+      float: left;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      margin-right: 10px;
+      margin-left: 5px;
       
-//     }
-//     span{
-//       display: inline-block;
-//       width: 100px;
-//       white-space: nowrap;
-//       overflow: hidden;
-//       text-overflow: ellipsis;
-//       font-size: 14px;
-//       color: #eee;
-//       line-height: 20px;
-//     }
-//   }
+    }
+    span{
+      display: inline-block;
+      width: 100px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      font-size: 14px;
+      color: #eee;
+      line-height: 20px;
+    }
+  }
 
   .hamburger-container{
     position: absolute;
@@ -191,35 +195,33 @@ export default {
     right: 10px;
   }
 
-   .subNavWrapper{
+  .subNavWrapper{
     display: none;
     position: absolute;
     left: 100%;
     max-height: 100%;
     overflow: auto;
-
   }
-
-// }
+}
 .nologin{
-    position: absolute;
-    width: 100%;
-    // height: 150px;
-    background: rgb(0,32,57);
-    left: 0;
-    bottom: 0;
-    margin-top: 10px;
-    text-align: center;
+  position: absolute;
+  width: 168px;
+  bottom: 0;
+  left: 0;
+  text-align: center;
+  .el-button2{
+    margin-bottom: 10px;
+    width: 150px;
+  }
   .el-button{
     width: 100%;
     height: 50px;
-    background-color: rgb(0,32,56);
+    background-color: #002038;
     border: 4px solid #000;
     border-top-color: rgb(5,55,93);
     border-right-color: rgb(5,55,93);
     border-left-color: rgb(5,21,39);
     border-bottom-color: rgb(5,21,39);
-    opacity: 0.65;
     border-radius: 0;
     font-size: 16px;
     color: rgba(255,255,255,.65);

@@ -13,54 +13,14 @@
                 </el-tree>
             </div>
             <div class="side_right">
-                <el-form :inline="true" :model="searchInfo" ref="ruleForm" class="demo-ruleForm classify_searchinfo">
-                    <el-form-item label="服务分类" prop="pointName">
-                       <el-select v-model="searchInfo.valueService" clearable placeholder="请选择">
-                            <el-option
-                                v-for="item in optionsService"
-                                :key="item.id"
-                                :label="item.name"
-                                :value="item.code"
-                                :disabled="item.disabled">
-                            </el-option>
-                        </el-select>
-                    </el-form-item>
-                    <el-form-item label="车辆类型" prop="orderSerial">
-                        <el-select v-model="searchInfo.valueCarlist" clearable placeholder="请选择">
-                            <el-option
-                            v-for="item in optionsCar"
-                            :key="item.id"
-                            :label="item.name"
-                            :value="item.code"
-                            :disabled="item.disabled">
-                            </el-option>
-                        </el-select>
-                    </el-form-item>
-                    <el-form-item label="状态" maxlength="18"  prop="shipperName">
-                        <el-select v-model="searchInfo.valueStatus" clearable placeholder="请选择">
-                            <el-option
-                            v-for="item in optionsStatus"
-                            :key="item.id"
-                            :label="item.label"
-                            :value="item.value"
-                            :disabled="item.disabled">
-                            </el-option>
-                        </el-select>
-                    </el-form-item>
-                    <el-form-item class="btnChoose fr"  style="margin-left:0;">
-                        <el-button type="primary" :size="btnsize" plain @click="handleSearch('search')">查询</el-button>
-                        <el-button type="info" :size="btnsize" plain @click="handleSearch('clear')">重置</el-button>
-                    </el-form-item>
-                </el-form>
-
-                <!-- <searchInfo @change="getSearchParam"></searchInfo> -->
+                <searchInfo @change="getSearchParam"></searchInfo>
 
                 <div class="side_right_bottom clearfix">
                     <div class="btns_box clearfix">
-                        <el-button type="primary" :size="btnsize" plain icon="el-icon-circle-plus" @click="addClassfy">新增</el-button>
-                        <el-button type="primary" :size="btnsize" plain icon="el-icon-edit" @click="handleEdit">修改</el-button>
-                        <el-button type="primary" :size="btnsize" plain icon="el-icon-delete" @click="handleDelete">删除</el-button>
-                        <el-button type="primary" :size="btnsize" plain icon="el-icon-bell" @click="handleUseStates">启用/禁用</el-button>
+                        <el-button type="primary" :size="btnsize" plain icon="el-icon-circle-plus" @click="handleClick('add')">新增</el-button>
+                        <el-button type="primary" :size="btnsize" plain icon="el-icon-edit" @click="handleClick('revise')">修改</el-button>
+                        <el-button type="primary" :size="btnsize" plain icon="el-icon-delete" @click="handleClick('delet')">删除</el-button>
+                        <el-button type="primary" :size="btnsize" plain icon="el-icon-bell" @click="handleClick('status')">启用/禁用</el-button>
                     </div>
                     <div class="info_news">
                         <el-table
@@ -228,31 +188,28 @@
                                                 </el-tree>
                                             </div>
                                             <label>
-                                                <span class="control">区域起步价</span>
+                                                <span style="color:red;">* </span><span class="control">区域起步价</span>
                                                 <el-input
-                                                    @blur="valuerules"
+                                                    v-numberOnly
                                                     placeholder="请输入内容"
                                                     v-model="newPrice"
-                                                    ref="newPrice"
                                                     clearable>
                                                 </el-input>
                                                 <span>元</span>
                                                 <el-input
                                                     placeholder="请输入内容"
-                                                    @blur="valuerules"
+                                                    v-numberOnly
                                                     v-model="newInfoKm"
-                                                    ref="newInfoKm"
                                                     clearable>
                                                 </el-input>
                                                 <span>公里</span>
                                             </label>
                                             <label>
-                                                <span class="control">区域超里程费</span>         
+                                                <span style="color:red;">* </span><span class="control">区域超里程费</span>         
                                                 <el-input
-                                                    @blur="valuerules"
+                                                    v-numberOnly
                                                     placeholder="请输入内容"
                                                     v-model="newMorePrice"
-                                                    ref="newMorePrice"
                                                     clearable>
                                                 </el-input>
                                                 <span>元 / 公里</span>
@@ -331,7 +288,7 @@
                                 <div class="nowChange">
                                     <span class="control">区域起步价</span>
                                     <el-input
-                                        @blur="valuerules"
+                                        v-numberOnly
                                         placeholder="请输入内容"
                                         v-model="changeforms.areaPrice"
                                         ref="newPrice"
@@ -339,7 +296,7 @@
                                     </el-input>
                                     <span>元</span>
                                     <el-input
-                                        @blur="valuerules"
+                                        v-numberOnly                                   
                                         placeholder="请输入内容"
                                         v-model="changeforms.areaKm"
                                         ref="newInfoKm"
@@ -350,8 +307,7 @@
                                 <div class="nowChange nowChangeInfo">
                                     <span class="control">区域超里程费</span>         
                                     <el-input
-                                        @blur="valuerules"
-                                    
+                                        v-numberOnly                                    
                                         placeholder="请输入内容"
                                         v-model="changeforms.areaOutstripPrice"
                                         ref="newMorePrice"
@@ -364,29 +320,6 @@
                                 <el-button type="primary" @click="changeInfoSave">保 存</el-button>
                                 <el-button  @click="dialogFormVisible_change = false">取 消</el-button>
                             </div>
-                        </el-dialog>
-                    </div>
-
-                    <!-- 新增分类提示不可为空 -->
-                    <div class="cue">
-                        <el-dialog
-                        :visible.sync="centerDialogVisible"
-                        center>
-                        <span>{{information}}</span>
-                        </el-dialog>
-                    </div>
-
-                    <!-- 删除信息提示 -->
-                    <div class="delData">
-                        <el-dialog
-                        title="提示"
-                        :visible.sync="delDialogVisible">
-                        <span class="delwarn"></span>
-                        <span class="delinfo">确认删除信息吗 ?</span>
-                        <span slot="footer" class="dialog-footer">
-                            <el-button type="primary" @click="delDataInformation">确 定</el-button>
-                            <el-button @click="delDialogVisible = false" type="info" plain>取 消</el-button>
-                        </span>
                         </el-dialog>
                     </div>
             </div>
@@ -415,7 +348,7 @@ export default{
               show: false, // 遮罩层
               areadata: [], // 左侧树结构数据
               citylist: [], // 城市列表
-              provinceId: null, // 省级列表
+              provinceId: '', // 省级列表
                 // 左侧树结构tree数据定义
               props: {
                   label: 'name',
@@ -431,31 +364,31 @@ export default{
                   valueCarlist: '',
                   valueStatus: ''
                 },
-              newValueService: null, // 新增服务分类
-              newValueCar: null, // 车辆分类
-              newValueStyle: null, // 车长
-              standPrice: null, // 标准起步价
-              standKm: null, // 标准起步价公里
-              standMorePrice: null, //  标准起步价超里程费
-              newPrice: null, // 区域起步价
-              newInfoKm: null, // 区域起步价公里
-              newMorePrice: null, // 区域超里程费
+              newValueService: '', // 新增服务分类
+              newValueCar: '', // 车辆分类
+              newValueStyle: '', // 车长
+              standPrice: '', // 标准起步价
+              standKm: '', // 标准起步价公里
+              standMorePrice: '', //  标准起步价超里程费
+              newPrice: '', // 区域起步价
+              newInfoKm: '', // 区域起步价公里
+              newMorePrice: '', // 区域超里程费
               optionsStyle: [], // 车长分类
               optionsService: [
                   {
-                    code: null,
+                    code: '',
                     name: '全部'
                   }
                 ],
               optionsCar: [
                   {
-                    code: null,
+                    code: '',
                     name: '全部'
                   }
                 ],
               optionsStatus: [
                   {
-                    value: null,
+                    value: '',
                     label: '全部'
                   },
                   {
@@ -478,18 +411,18 @@ export default{
               delDialogVisible: false,
               dataTotal: 0,
               changeforms: {
-                  areaKm: null,
-                  areaName: null,
-                  areaOutstripPrice: null,
-                  areaPid: null,
-                  areaPrice: null,
-                  carType: null,
-                  cityId: null,
-                  outstripPrice: null,
-                  serivceCode: null,
-                  standardKm: null,
-                  standardPrice: null,
-                  standardPriceId: null
+                  areaKm: '',
+                  areaName: '',
+                  areaOutstripPrice: '',
+                  areaPid: '',
+                  areaPrice: '',
+                  carType: '',
+                  cityId: '',
+                  outstripPrice: '',
+                  serivceCode: '',
+                  standardKm: '',
+                  standardPrice: '',
+                  standardPriceId: ''
                 },
               information: '你想知道什么',
               delID: [],
@@ -545,25 +478,25 @@ export default{
             // 根据服务分类和车辆类型选择车长
           choseStyle(val) {
               console.log(val)
-                // this.newValueStyle = null;
+                // this.newValueStyle = '';
               if (val) {
                   data_GetCarStyle(this.newValueService, this.newValueCar).then(res => {
                       console.log(res)
                       if (res.data.length > 0) {
-                         this.newValueStyle = null
-                            this.standPrice = null
-                            this.standKm = null
-                            this.standMorePrice = null
+                         this.newValueStyle = ''
+                            this.standPrice = ''
+                            this.standKm = ''
+                            this.standMorePrice = ''
                             this.optionsStyle = res.data
                             this.optionsStyle.map((item) => {
                               item.carStyle = item.carLength + '*' + item.carWidth + '*' + item.carHeight + 'M'
                            })
                        }else {
                          this.optionsStyle = res.data
-                            this.newValueStyle = null
-                            this.standPrice = null
-                            this.standKm = null
-                            this.standMorePrice = null
+                            this.newValueStyle = ''
+                            this.standPrice = ''
+                            this.standKm = ''
+                            this.standMorePrice = ''
                        }
                     }).catch(res => {
                      console.log(res)
@@ -610,19 +543,77 @@ export default{
                     this.getCommonFunction()
                 })
             },
-          handleSearch(type) {
-              switch (type) {
-                  case 'search':
-                    this.getCommonFunction()
-                    break
-                    case 'clear' :
-                    this.search = {
-                          valueService: '',
-                          valueCarlist: '',
-                          valueStatus: ''
-                        },
-                        this.getCommonFunction()
-                    break
+            handleClick(type){
+                if (this.checkedinformation.length == 0 && type != 'add') {
+                    // 未选择任何修改内容的提示
+                   return this.$message({
+                        message: '请选择要操作的数据~',
+                        type: 'warning'
+                    })
+                } else if (this.checkedinformation.length > 1  && type == 'revise') {
+                    return this.$message({
+                        message: '不可同时修改多条数据~',
+                        type: 'warning'
+                    })
+                }
+                switch(type){
+                    case 'add':
+                        this.dialogFormVisible = true;
+                        break;
+                    case 'revise':
+                        this.dialogFormVisible_change = true
+                        this.changeforms = this.checkedinformation[0];
+                        if (this.checkedinformation[0].cityId) {
+                        this.changeforms.cityId = this.checkedinformation[0].cityId
+                        }else {
+                        this.changeforms.cityId = this.checkedinformation[0].provinceId
+                        }
+                        this.changeforms.carTypeStyle = this.checkedinformation[0].carLength + '*' + this.checkedinformation[0].carWidth + '*' + this.checkedinformation[0].carHeight + 'M'
+                        break;
+                    case 'delet':
+                        const delID = []
+                        this.checkedinformation.map((item) => {
+                            return delID.push(item.areaPid)
+                        })
+                        let config = delID.length>1 ?  delID.length + '条' : this.checkedinformation[0].areaName+'这条';
+                        this.$confirm('确定要删除'+config+'数据吗？', '提示', {
+                            confirmButtonText: '确定',
+                            cancelButtonText: '取消',
+                            type: 'warning'
+                        }).then( ()=>{
+                            data_Delete(delID).then(res => {
+                                this.$message({
+                                    type: 'success',
+                                    message: '删除成功'
+                                })
+                                this.getCommonFunction();
+                            }).catch(err=>{
+                                this.$message({
+                                    type: 'info',
+                                    message: '删除失败，原因：' + err.errorInfo ? err.errorInfo : err.text
+                                })
+                            })
+                        }).catch(() => {
+                            this.$message({
+                                type: 'info',
+                                message: '已取消'
+                            })
+                        })
+                        break;
+                    case 'status':
+                        const statusID = []
+                        this.checkedinformation.map((item) => {
+                            return statusID.push(item.areaPid)
+                        })
+                        data_ChangeStatus(statusID).then(res=>{
+                            this.getCommonFunction();
+                        }).catch(err=>{
+                            this.$message({
+                                type: 'info',
+                                message: '操作失败，原因：' + err.errorInfo ? err.errorInfo : err.text
+                            })
+                        })
+                        break;
                 }
             },
             // 查询和获取对应区域的数据
@@ -634,7 +625,7 @@ export default{
                   this.tableDataTree = res.data.list
                     this.dataTotal = res.data.totalCount
                      this.tableDataTree.map((item) => {
-                       item.capacityTonM = item.capacityTon + '吨,' + ' ' + item.capacitySquare + '方'
+                        item.capacityTonM = item.capacityTon + '吨,' + ' ' + item.capacitySquare + '方'
                         item.standardPriceM = item.standardPrice + '元 ' + ' ' + '(' + item.standardKm + '公里)'
                         item.outstripPriceM = item.outstripPrice + '元/公里'
                         item.areaPriceM = item.areaPrice + '元' + '' + '(' + item.areaKm + '公里)'
@@ -656,11 +647,11 @@ export default{
                 })
               if (checked.level === 1) {
                   this.provinceId = data.code
-                    this.cityId = null 
+                    this.cityId = '' 
                 }
               if (checked.level === 2) {
                   this.cityId = data.code
-                    this.provinceId = null 
+                    this.provinceId = '' 
                 }
               this.getCommonFunction()
             },
@@ -703,143 +694,93 @@ export default{
                   setTimeout(() => {
                       resolve(this.catchData[node.data.code] || [])
                     }, 500)
-                }                else {
+                }else {
 
                 }
             },
             // sousuodizhi
-          filterNode(value, data) {
+            filterNode(value, data) {
                 // console.log(value,data)
               if (!value) return true
                 return data.name.indexOf(value) !== -1
             },
             // 点击选中当前行
-          clickDetails(row, event, column) {
+            clickDetails(row, event, column) {
               this.$refs.multipleTable.toggleRowSelection(row)
             },
             // 新增关闭返回初始内容
-          closeAddNewInfo() {
+            closeAddNewInfo() {
               this.dialogFormVisible = false
-                this.newPrice = null//区域起步价
-                this.newInfoKm = null//区域起步价公里
-                this.newMorePrice = null//区域超里程费
+                this.newPrice = ''//区域起步价
+                this.newInfoKm = ''//区域起步价公里
+                this.newMorePrice = ''//区域超里程费
             },
             // 判断是否选中
-          getinfomation(selection) {
+            getinfomation(selection) {
               this.checkedinformation = selection
             },
-            // 修改
-          handleEdit() {
-              if (Object.keys(this.checkedinformation).length == 0) {
-                    // 未选择任何修改内容的提示
-                  const information = '未选中任何修改内容';
-                  this.hint(information)
-                } else if (this.checkedinformation.length > 1) {
-                  const information = '不可修改多个内容';
-                  this.hint(information)
-
-                }else {
-                  console.log(this.checkedinformation)
-                  this.dialogFormVisible_change = true
-                    this.checkedinformation.map((item) => {
-                      this.changeforms = item
-                        if (item.cityId) {
-                          this.changeforms.cityId = item.cityId
-                        }else {
-                          this.changeforms.cityId = item.provinceId
-                        }
-                      this.changeforms.carTypeStyle = item.carLength + '*' + item.carWidth + '*' + item.carHeight + 'M'
-                    })
-                }
-            },
-            // 禁用/启用
-          handleUseStates() {
-              if (this.checkedinformation.length === 0) {
-                    // 未选择任何修改内容的提示
-                  const information = '未选中任何更改状态内容';
-                  this.hint(information)
-                } else{
-                  console.log(this.checkedinformation)
-                    // this.show = true;
-                  const statusID = []
-                    this.checkedinformation.map((item) => {
-                      return statusID.push(item.areaPid)
-                    })
-                  data_ChangeStatus(statusID).then(res => {
-                      this.getCommonFunction()
-                    })
-                }
-            },
-            // 是否删除
-          handleDelete() {
-              if (this.checkedinformation.length === 0) {
-                    // 未选择任何修改内容的提示
-                  const information = '未选中任何删除内容';
-                  this.hint(information)
-                } else{
-                  const delID = []
-                    this.checkedinformation.map((item) => {
-                      return delID.push(item.areaPid)
-                    })
-                  this.delID = delID
-                    this.delDialogVisible = true
-                }
-            },
-            // 确认删除
-          delDataInformation() {
-              this.show = true
-                this.delDialogVisible = false
-                data_Delete(this.delID).then(res => {
-                  this.getCommonFunction()
-                })
-            },
-            // 新增分类信息获取code值
-          addClassfy() {
-              this.dialogFormVisible = true
-            },
             // 保存信息
-          newInfoSave() {
+            newInfoSave() {
               this.NewOrChange()
             },
              // 新增和修改Common
-          NewOrChange() {
-              const data = {
-                  standardPrice: this.standPrice,
-                  standardKm: this.standKm,
-                  outstripPrice: this.standMorePrice,
-                  serivceCode: this.newValueService,
-                  carType: this.newValueCar,
-                  areaKm: this.newInfoKm,
-                  areaPrice: this.newPrice,
-                  standardPriceId: this.newValueStyle,
-                  areaOutstripPrice: this.newMorePrice,
-                  cityId: this.$refs.trees.getCheckedKeys().join(',')
+            NewOrChange() {
+                const data = {
+                    standardPrice: this.standPrice,
+                    standardKm: this.standKm,
+                    outstripPrice: this.standMorePrice,
+                    serivceCode: this.newValueService,
+                    carType: this.newValueCar,
+                    areaKm: this.newInfoKm,
+                    areaPrice: this.newPrice,
+                    standardPriceId: this.newValueStyle,
+                    areaOutstripPrice: this.newMorePrice,
+                    cityId: this.$refs.trees.getCheckedKeys().join(',')
                 }
                 console.log(data)
 
-              if (!data.serivceCode) {
-                  const information = '请选择服务类型';
-                  this.hint(information)
-                }                else if (!data.carType) {
-                  const information = '请选择车辆类型';
-                  this.hint(information)
+                if (!data.serivceCode) {
+                    this.$message({
+                        type: 'warning',
+                        message: '请选择服务分类'
+                    })
+                }else if (!data.carType) {
+                    this.$message({
+                        type: 'warning',
+                        message: '请选择车辆类型'
+                    })
                 }
-              else if (!data.standardPriceId) {
-                  const information = '请选择车长';
-                  this.hint(information)
-                }                else if (!data.cityId) {
-                  const information = '请选择省市';
-                  this.hint(information)
-                }                else if (!data.areaPrice) {
-                  const information = '请填写区域起步价格';
-                  this.hint(information)
-                }                else if (!data.areaKm) {
-                  const information = '请填写区域起步公里数';
-                  this.hint(information)
-                }                else if (!data.areaOutstripPrice) {
-                  const information = '区域超里程费';
-                  this.hint(information)
-                }                else {(
+                else if (!data.standardPriceId) {
+                   this.$message({
+                        type: 'warning',
+                        message: '请选择车长'
+                    })
+                }                
+                else if (!data.cityId) {
+                    this.$message({
+                        type: 'warning',
+                        message: '请选择省市'
+                    })
+                }                
+                else if (!data.areaPrice) {
+                    this.$message({
+                        type: 'warning',
+                        message: '请填写区域起步价格'
+                    })
+                }                
+                else if (!data.areaKm) {
+                    this.$message({
+                        type: 'warning',
+                        message: '请填写区域起步公里数'
+                    })
+                }               
+                else if (!data.areaOutstripPrice) {
+                    this.$message({
+                        type: 'warning',
+                        message: '请填写区域超里程费'
+                    })
+                }                
+                else {(
                     data_NewOrChange(data).then(res=>{
                         console.log(res)
                         this.getCommonFunction();
@@ -854,54 +795,27 @@ export default{
                 )}
             },
             // 清空数据
-          clearData() {
-              this.standPrice = null
-                this.standKm = null
-                this.standMorePrice = null
-                this.newValueService = null
-                this.newValueCar = null
-                this.newInfoKm = null
-                this.newPrice = null
-                this.newValueStyle = null
-                this.newMorePrice = null
+            clearData() {
+                this.standPrice = ''
+                this.standKm = ''
+                this.standMorePrice = ''
+                this.newValueService = ''
+                this.newValueCar = ''
+                this.newInfoKm = ''
+                this.newPrice = ''
+                this.newValueStyle = ''
+                this.newMorePrice = ''
             },
             // 修改保存
-          changeInfoSave() {
-              console.log(this.changeforms)
-              data_OnlyChange(this.changeforms).then(res => {
-                  console.log(res)
-                  this.dialogFormVisible_change = false
+            changeInfoSave() {
+                data_OnlyChange(this.changeforms).then(res => {
+                    console.log(res)
+                    this.dialogFormVisible_change = false
                     this.getCommonFunction()
-                    
-                }).catch(res => {
-                  console.log(res)
-                    // if(res.status == 40001)
-                  const information = res.text
-                    this.hint(information)
+                }).catch(err=>{
+                    this.$message.error('操作失败，失败原因：',err.errorInfo)
                 })
             },
-            // 验证数据值
-          valuerules(event) {
-              const _this = this
-              console.log('this.canclose', this.canclose)
-              if (!event.target.value || this.canclose) {
-                  return
-                } else{
-                  if (!/^[0-9\.]+$/.test(event.target.value)) {
-                      const information = '请输入数字类型内容';
-                      _this.hint(information)
-                        // event.target.focus()
-                    }
-                }
-            },
-          hint(val) {
-              this.information = val
-                this.centerDialogVisible = true
-                let timer = setTimeout(() => {
-                  this.centerDialogVisible = false
-                    clearTimeout(timer)
-                }, 2000)
-            }
         }
     }
 </script>

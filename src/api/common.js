@@ -36,6 +36,12 @@ export function DicBlackType() {
 export function DicfreezeType() {
     return fetch.get('/' + baseurl_two + '/sysDict/getSysDictByCodeGet/AF02003')
   }
+
+  // 获取服务分类
+  export function DicServiceType() {
+    return fetch.get('/' + baseurl_two + '/sysDict/getSysDictByCodeGet/AF017')
+  }
+
 /**
  * 获取图片上传的policy
  * callback

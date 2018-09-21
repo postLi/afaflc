@@ -43,7 +43,7 @@
                     </el-col>
                     <el-col :span="12">
                         <el-form-item label="注册来源" :label-width="formLabelWidth">
-                            <span class="onlyShow">{{formBlack.registerOrigin}}</span>
+                            <span class="onlyShow">{{formBlack.registerOriginName}}</span>
                         </el-form-item>
                     </el-col>
                 </el-row>

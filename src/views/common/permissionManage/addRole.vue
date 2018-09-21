@@ -35,11 +35,13 @@
                 >
                   <span class="custom-tree-node" slot-scope="{ node, data }">
                     <span v-if="data.status===0">
+
                       <img src="../../../assets/icom/link.png" alt="">
                       {{ node.label }}
                       {{ node.label }}
                       </span>
                      <span v-else>
+                         {{data.status}}{{data.type}}
                       <img src="../../../assets/icom/btn.png" alt="">
                       {{ node.label }}
                       </span>

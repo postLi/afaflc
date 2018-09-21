@@ -15,38 +15,48 @@
                     height="100%"
                     tooltip-effect="dark"
                     @selection-change="getSelection" 
+                    :default-sort = "{prop: 'companyName', order: 'descending'}"
                     @row-click="clickDetails"
                     style="width: 100%">
                     <el-table-column
                         type="selection"
                         width="50">
                     </el-table-column>
-                    <el-table-column label="公司名称" >
+                    <el-table-column label="序号" width="80px">
+                        <template slot-scope="scope">
+                            {{ (page - 1)*pagesize + scope.$index + 1 }}
+                        </template>
+                    </el-table-column>  
+                    <el-table-column label="公司名称" 
+                    :show-overflow-tooltip="true"
+                     sortable prop="companyName">
                         <template slot-scope="scope">
                             <h4 class="needMoreInfo" @click="pushOrderSerial(scope.row)">{{ scope.row.companyName}}</h4>
                         </template>
                     </el-table-column>
-                    <el-table-column prop="mobile" label="手机号">
+                    <el-table-column prop="mobile" label="手机号" sortable>
                     </el-table-column>
-                    <el-table-column prop="contacts" label="联系人">
+                    <el-table-column prop="contacts" label="联系人" sortable>
                     </el-table-column>
-                    <el-table-column prop="registerOrigin" label="注册来源">
+                    <el-table-column prop="registerOriginName" label="注册来源" sortable>
                     </el-table-column>
-                    <el-table-column prop="shipperStatusName" label="认证状态">
+                    <el-table-column prop="shipperStatusName" label="认证状态" sortable>
                     </el-table-column>
-                    <el-table-column prop="accountStatusName" label="账户状态">
+                    <el-table-column prop="accountStatusName" label="账户状态" sortable>
                         <template slot-scope="scope">
                             <span :class="{freezeName: scope.row.accountStatusName == '冻结中' ,blackName: scope.row.accountStatusName == '黑名单',normalName :scope.row.accountStatusName == '正常'}">{{scope.row.accountStatusName}}</span>
                         </template>
                     </el-table-column>
-                    <el-table-column prop="belongCityName" label="所在地">
+                    <el-table-column prop="belongCityName" 
+                    :show-overflow-tooltip="true"
+                    label="所在地" sortable>
                     </el-table-column>
-                    <el-table-column prop="authenticationTime" label="提交认证日期">
+                    <el-table-column prop="authenticationTime" label="提交认证日期" sortable>
                         <template  slot-scope="scope">
                             <span v-if="scope.row.authenticationTime">{{ scope.row.authenticationTime | parseTime}}</span>
                         </template>
                     </el-table-column>
-                    <el-table-column prop="authNoPassTime" label="审核不通过日期">
+                    <el-table-column prop="authNoPassTime" label="审核不通过日期" sortable>
                         <template  slot-scope="scope">
                             <span v-if="scope.row.authNoPassTime">{{ scope.row.authNoPassTime | parseTime}}</span>
                         </template>

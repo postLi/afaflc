@@ -2,7 +2,7 @@
     <el-form :inline="true" :model="searchInfo" ref="ruleForm" class="demo-ruleForm classify_searchinfo" >
         <el-form-item  label="所在地" prop="pointName">
             <vregion :ui="true"  @values="regionChange" class="form-control">
-                <el-input v-model="searchInfo.belongCityName" placeholder="请选择"></el-input>
+                <el-input v-model="belongCityName" placeholder="请选择"></el-input>
             </vregion>
         </el-form-item>
         <el-form-item label="认证状态：" v-if="showType == 'All'">
@@ -64,9 +64,9 @@ import { getDictionary } from '@/api/common.js'
                 pickerOptions2:{
                     shortcuts:pickerOptions2
                 },
+                belongCityName:'',
                 searchInfo:{
                     belongCity: '',
-                    belongCityName: '',
                     shipperStatus: '',
                     accountStatus: '',
                     companyName: '',
@@ -99,7 +99,7 @@ import { getDictionary } from '@/api/common.js'
         methods: {
             regionChange(d) {
                 console.log('data:',d)
-                this.searchInfo.belongCityName = (!d.province&&!d.city&&!d.area&&!d.town) ? '': `${this.getValue(d.province)}${this.getValue(d.city)}${this.getValue(d.area)}${this.getValue(d.town)}`.trim();
+                this.belongCityName = (!d.province&&!d.city&&!d.area&&!d.town) ? '': `${this.getValue(d.province)}${this.getValue(d.city)}${this.getValue(d.area)}${this.getValue(d.town)}`.trim();
                 if(d.area){
                     this.searchInfo.areaCode = d.area.code;
                 }else if(d.city){
@@ -143,7 +143,10 @@ import { getDictionary } from '@/api/common.js'
                             shipperStatus: '',
                             accountStatus: '',
                             companyName: '',
-                            mobile: ''
+                            mobile: '',
+                            provinceCode:"",
+                            cityCode:'',
+                            areaCode:""
                         }
                         searchObj = Object.assign({}, this.searchInfo);
                         break;

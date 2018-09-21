@@ -9,49 +9,12 @@
                 lazy
                 :highlight-current = "true"
                 @node-click="handleNodeClick"
-                @check-change="handleCheckChange">
+                >
                 </el-tree>
             </div>
             <div class="side_right">
-                 <el-form :inline="true" :model="searchInfo" ref="ruleForm" class="demo-ruleForm classify_searchinfo">
-                    <el-form-item label="服务分类" prop="pointName">
-                       <el-select v-model="searchInfo.valueService" clearable placeholder="请选择">
-                            <el-option
-                                v-for="item in optionsService"
-                                :key="item.id"
-                                :label="item.name"
-                                :value="item.code"
-                                :disabled="item.disabled">
-                            </el-option>
-                        </el-select>
-                    </el-form-item>
-                    <el-form-item label="车辆类型" prop="orderSerial">
-                         <el-select v-model="searchInfo.valueCarlist" clearable placeholder="请选择">
-                            <el-option
-                            v-for="item in optionsCar"
-                            :key="item.id"
-                            :label="item.name"
-                            :value="item.code"
-                            :disabled="item.disabled">
-                            </el-option>
-                        </el-select>
-                    </el-form-item>
-                    <el-form-item label="状态" maxlength="18"  prop="shipperName">
-                        <el-select v-model="searchInfo.valueStatus" clearable placeholder="请选择">
-                            <el-option
-                            v-for="item in optionsStatus"
-                            :key="item.id"
-                            :label="item.label"
-                            :value="item.value"
-                            :disabled="item.disabled">
-                            </el-option>
-                        </el-select>
-                    </el-form-item>
-                    <el-form-item class="btnChoose fr"  style="margin-left:0;">
-                        <el-button type="primary" :size="btnsize" plain @click="handleSearch('search')">查询</el-button>
-                        <el-button type="info" :size="btnsize" plain @click="handleSearch('clear')">重置</el-button>
-                    </el-form-item>
-                </el-form>
+                <searchInfo @change="getSearchParam"></searchInfo>
+
                 <div class="side_right_bottom clearfix">
                     <div class="btns_box">
                         <el-button type="primary" :size="btnsize" plain icon="el-icon-circle-plus" @click="addClassfy">新增</el-button>
@@ -333,129 +296,129 @@ import { data_Area, data_CarList, data_ServerClassList, data_GetCityList, data_G
 import '@/styles/dialog.scss'
 import { REGEX } from '@/utils/validate'
 import Pager from '@/components/Pagination/index'
+import searchInfo from '../component/searchInfo'
 
 export default{
       data() {
           return {
-              sizes: [20, 50, 100],
-              btnsize: 'mini',
-              canclose: false,
-              cacheData: {},
-              catchData: {},
-              areadata: [], // 树结构数据
-              newAreaData: [], // 新增界面树结构数据
-              newCityList: [],
-              citylist: [],
-              provinceId: null,
-              cityId: null,
-              chooseAllKeys: [],
-              freeTime: null,
-              intervalTime: null,
-              timeOutstripPrice: null,
-              waitPriceDes: null,
-              newWaitInfo: {},
-              searchInfo: {
-                  valueService: '',
-                  valueCarlist: '',
-                  valueStatus: ''
+                sizes: [20, 50, 100],
+                btnsize: 'mini',
+                canclose: false,
+                cacheData: {},
+                catchData: {},
+                areadata: [], // 树结构数据
+                newAreaData: [], // 新增界面树结构数据
+                newCityList: [],
+                citylist: [],
+                provinceId: null,
+                cityId: null,
+                chooseAllKeys: [],
+                freeTime: null,
+                intervalTime: null,
+                timeOutstripPrice: null,
+                waitPriceDes: null,
+                searchInfo: {
+                    carType: '',
+                    serivceCode: '',
+                    usingStatus: ''
                 },
-              props: {
-                  label: 'name',
-                  children: 'children'
-                },
-              propsAdd: {
-                  label: 'name',
-                  children: 'children'
-                },
-              serverCheckList: [],
-              carCheckList: [],
-              carBoxs: [],
-              optionsServiceNew: null,
-              optionsService: [
-                  {
-                    code: null,
-                    name: '全部'
-                  }
-                ],
-              optionsCarNew: null,
-              optionsCar: [
-                  {
-                    code: null,
-                    name: '全部'
-                  }
-                ],
-              optionsStatus: [
-                  {
-                    value: null,
-                    label: '全部'
-                  },
-                  {
-                    value: '1',
-                    label: '启用'
-                  },
-                  {
-                    value: '0',
-                    label: '禁用'
-                  }
-                ],
-              filterText: '',
-              page: 1,
-              pagesize: 20,
-              remarkinfo: '例：免费0.25小时，每15分钟加收5元，不足15分钟按15分钟计价',
-              formtitle: '新增分类信息',
-              currentPage4: 1,
-              dialogFormVisible: false,
-              dialogFormVisible_change: false,
-              centerDialogVisible: false,
-              delDialogVisible: false,
-              dataTotal: 0,
-              changeforms: {},
-              information: '你想知道什么',
-              delID: [],
-              checkedinformation: [],
-              tableDataTree: [],
-              treeData: [],
-              defaultProps: {
-                  children: 'children',
-                  label: 'label'
-                }
+                props: {
+                    label: 'name',
+                    children: 'children'
+                    },
+                propsAdd: {
+                    label: 'name',
+                    children: 'children'
+                    },
+                serverCheckList: [],
+                carCheckList: [],
+                carBoxs: [],
+                optionsServiceNew: null,
+                optionsService: [
+                    {
+                        code: null,
+                        name: '全部'
+                    }
+                    ],
+                optionsCarNew: null,
+                optionsCar: [
+                    {
+                        code: null,
+                        name: '全部'
+                    }
+                    ],
+                optionsStatus: [
+                    {
+                        value: null,
+                        label: '全部'
+                    },
+                    {
+                        value: '1',
+                        label: '启用'
+                    },
+                    {
+                        value: '0',
+                        label: '禁用'
+                    }
+                    ],
+                filterText: '',
+                page: 1,
+                pagesize: 20,
+                remarkinfo: '例：免费0.25小时，每15分钟加收5元，不足15分钟按15分钟计价',
+                formtitle: '新增分类信息',
+                currentPage4: 1,
+                dialogFormVisible: false,
+                dialogFormVisible_change: false,
+                centerDialogVisible: false,
+                delDialogVisible: false,
+                dataTotal: 0,
+                changeforms: {},
+                information: '你想知道什么',
+                delID: [],
+                checkedinformation: [],
+                tableDataTree: [],
+                treeData: [],
             }
         },
-      components: {
-          Pager
+        components: {
+          Pager,
+          searchInfo
         },
-      mounted() {
+        mounted() {
             // ...初始化获取数据
-          this.firstblood()
+            this.firstblood()
             this.getMoreInformation()
-            
         },
-      watch: {
+        watch: {
           filterText(val) {
               this.$refs.trees.filter(val)
             }
         },
-      methods: {
-          handlePageChange(obj) {
+        methods: {
+            getSearchParam(obj) {
+              console.log(obj)
+              this.searchInfo = Object.assign(this.searchInfo, obj)
+              this.getCommonFunction()
+            },
+            handlePageChange(obj) {
                this.page = obj.pageNum
                 this.pagesize = obj.pageSize
                 this.getCommonFunction()
             },
              // 关闭前事件
-          beforClose(done) {
+            beforClose(done) {
                 // console.log(done)
               this.setCanClose()
                 done()
             },
-          setCanClose() {
+            setCanClose() {
               this.canclose = true
                 console.log(this.canclose)
             },
             // 获取  服务和车辆 类型列表
-          getMoreInformation() {
+            getMoreInformation() {
               data_CarList().then(res => {
                     // console.log(res.data)
-
                   res.data.map((item) => {
                       this.optionsCar.push(item)
                     })
@@ -471,7 +434,7 @@ export default{
                 })
             },
             // 刷新页面
-          firstblood() {
+            firstblood() {
               this.show = true
                 data_Area().then(res => {
                   this.areadata = res.data.list
@@ -479,26 +442,11 @@ export default{
                     this.getCommonFunction()
                 })
             },
-          handleSearch(type) {
-              switch (type) {
-                  case 'search':
-                    this.getCommonFunction()
-                    break
-                    case 'clear' :
-                    this.search = {
-                          valueService: '',
-                          valueCarlist: '',
-                          valueStatus: ''
-                        },
-                        this.getCommonFunction()
-                    break
-                }
-            },
             // 查询和获取对应区域的数据
-          getCommonFunction() {
+            getCommonFunction() {
               const data = Object.assign({}, { cityId: this.cityId, provinceId: this.provinceId }, this.searchInfo)
                 // console.log(data);
-              data_GetCityInfo(this.page, this.pagesize, data).then(res => {
+                data_GetCityInfo(this.page, this.pagesize, data).then(res => {
                     // console.log(res)
                   this.tableDataTree = res.data.list
                     this.dataTotal = res.data.totalCount
@@ -506,9 +454,6 @@ export default{
                 })
             },
             //
-          handleCheckChange(data, checked, indeterminate) {
-              console.log(data, checked, indeterminate)
-            },
           handleNodeClick(data, checked) {
                 // console.log(data,checked);
               data_GetCityList(data.code).then(res => {
@@ -563,7 +508,7 @@ export default{
                   setTimeout(() => {
                       resolve(this.catchData[node.data.code] || [])
                     }, 500)
-                }                else {
+                }else {
 
                 }
             },

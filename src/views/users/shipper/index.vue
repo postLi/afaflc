@@ -1,29 +1,29 @@
 <template>
   <div class="huozhu tabsWrap">
-    <el-tabs v-model="shipperName" type="card" @tab-click="handleClick" >
+    <el-tabs v-model="UseshipperName" type="card" @tab-click="handleClick" >
         <!-- 全部 -->
             <el-tab-pane label="全部" v-if="$_has_permission('SHIPPER_MANAGE_LIST_ALL')" name="first">
-                <ShipperAll :isvisible="shipperName === 'first'"></ShipperAll>
+                <ShipperAll :isvisible="UseshipperName === 'first'"></ShipperAll>
             </el-tab-pane>
 
         <!-- 未认证 -->
             <el-tab-pane label="未认证" v-if="$_has_permission('SHIPPER_MANAGE_LIST_UNVALIDAT')"  name="second">
-                <ShipperUnauthorized :isvisible="shipperName === 'second'"></ShipperUnauthorized>
+                <ShipperUnauthorized :isvisible="UseshipperName === 'second'"></ShipperUnauthorized>
             </el-tab-pane>
 
         <!-- 待认证 -->
             <el-tab-pane label="待认证" v-if="$_has_permission('SHIPPER_MANAGE_LIST_VALIDATING')" name="third" >
-                <ShipperCertified :isvisible="shipperName === 'third'"></ShipperCertified>
+                <ShipperCertified :isvisible="UseshipperName === 'third'"></ShipperCertified>
             </el-tab-pane>
             
         <!-- 已认证部分 -->
             <el-tab-pane label="已认证" v-if="$_has_permission('SHIPPER_MANAGE_LIST_VALIDATED')" name="fourth" >
-                <ShipperHasCertified :isvisible="shipperName === 'fourth'"></ShipperHasCertified>
+                <ShipperHasCertified :isvisible="UseshipperName === 'fourth'"></ShipperHasCertified>
             </el-tab-pane>
 
         <!-- 认证不通过 -->
             <el-tab-pane label="认证不通过"  v-if="$_has_permission('SHIPPER_MANAGE_LIST_VALIDATFAIL')" name="fifth" >
-                <ShipperDisqualification :isvisible="shipperName === 'fifth'"></ShipperDisqualification>
+                <ShipperDisqualification :isvisible="UseshipperName === 'fifth'"></ShipperDisqualification>
             </el-tab-pane>
     </el-tabs>
   </div>
@@ -49,29 +49,29 @@
       },
       data() {
         return {
-              shipperName: 'first',
+              UseshipperName: 'first',
               secondBoolen: false
             }
       },
       watch: {
-        shipperName(newVal, oldVal) {
+        UseshipperName(newVal, oldVal) {
           if (newVal) {
-            this.shipperName = newVal
+            this.UseshipperName = newVal
           } else {
-            this.shipperName = oldVal
+            this.UseshipperName = oldVal
           }
         }
       },
       created() {
-        this.shipperName = sessionStorage.getItem('shipperName') || 'first'
+        this.UseshipperName = sessionStorage.getItem('UseshipperName') || 'first'
       },
 
       beforeUpdate() {
-        sessionStorage.setItem('shipperName', this.shipperName)
+        sessionStorage.setItem('UseshipperName', this.UseshipperName)
       },
 
       beforeDestroy() {
-        sessionStorage.setItem('shipperName', 'first')
+        sessionStorage.setItem('UseshipperName', 'first')
       },
       mounted(){
 
@@ -79,7 +79,7 @@
       methods: {
         handleClick(tab, event) {
             // console.log(tab, event);
-          this.shipperName = tab.name
+          this.UseshipperName = tab.name
         }
       }
     }
