@@ -273,6 +273,7 @@ export default {
         handler: function(val, oldVal) {
             if(!val){
             this.$refs['formAll'].resetFields();
+            this.$emit('getData') 
             }            
         },
     },
@@ -311,16 +312,23 @@ export default {
         },
    openDialog:function(){
        if(this.editType=='edit'){
-           if(!this.params.id){
-               
-            this.$message.info('未选中需要修改内容');
-           }
-            else if(this.params.usingStatus==0){
+          if(this.params.length == 0 && this.editType !== 'add'){
+               this.$message.warning('请选择您要操作的用户');
+               return
+          }else if (this.params.length > 1 && this.editType !== 'add') {
+                this.$message({
+                    message: '每次只能操作单条数据~',
+                    type: 'warning'
+                })
+                this.$emit('getData') 
+          }
+            else if(this.params[0].usingStatus==0){
             this.$message.info('选中内容被已禁用，不能进行修改操作');
+            this.$emit('getData') 
            }
            else{
             this.dialogFormVisible_add = true;
-           data_get_orderFromsame_Id(this.params.id).then(res=>{
+           data_get_orderFromsame_Id(this.params[0].id).then(res=>{
                 this.areaName = res.data.province+res.data.city+res.data.area
                 this.formAll = res.data
            })
@@ -422,52 +430,35 @@ export default {
   }
 }
 </script>
-<style lang="scss" scoped>
-    .ordercreatcity{
-        .el-button {
-                margin-right: 20px;
-                padding: 10px 20px;
-        }
-        .el-dialog__footer{
-            border-top:1px solid #ccc;   
-            margin: 0 10px;
-        }
-        .upload{
-            width: 300px;
-            line-height: 20px;
-            img{
-                display: block;
-                width: 100%;
-                height: 100%;
-            }
-        }
-    }
-</style>
-
 <style lang="scss" >
-    .newMarketingOrder{
-        .el-dialog{
-            width: 1000px!important;
-        }
-        .swith{
-            margin:0px 0px 10px 10px;
-            .el-switch{
-                display: inline-block;
-            }
-        }
-        .el-dialog__footer{
-            padding: 20px 20px 20px;
-        }
-       .el-dialog{
-           overflow: unset;
-       }
-    }
     .ordercreatcity{
+        display: inline-block;
+        margin-right: 10px;
+        .el-button {
+        margin-right:0px;
+        padding: 7px 15px 7px;
+        font-size:12px;
+        }
         .el-input__inner{
             line-height: 40px !important; 
             height: 40px !important; 
         }
-            .ht_table{
+        .newMarketingOrder{
+            .el-dialog{
+                width: 1000px!important;
+                overflow: unset;
+            }
+            .swith{
+                margin:0px 0px 10px 10px;
+                .el-switch{
+                    display: inline-block;
+                }
+            }
+            .el-dialog__footer{
+                padding: 20px 20px 20px;
+            }
+        }
+        .ht_table{
         width: 980px;
         margin:0px 10px;
         color: #333;

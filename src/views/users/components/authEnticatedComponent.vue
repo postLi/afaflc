@@ -24,11 +24,11 @@
                     :plain="true"
                     type="primary" 
                     btntype="primary"
-                    icon="el-icon-news"
+                    icon="el-icon-edit"
                     editType="edit"
                     :templateItem="selectionData"
                     btntitle="修改"
-                    :updataflag="true"
+                     @getData="getDataList"
                     >
                     </driver-newTemplate>
                 </div>
@@ -39,17 +39,24 @@
                         stripe
                         border
                         highlight-current-row
+                        @selection-change="getSelection" 
                         @row-click="clickDetails"
                         current-row-key
                         tooltip-effect="dark"
                         style="width: 100%">
-                        <el-table-column
-                        type="index"
-                        label="序号"
-                        width="80">
+                         <el-table-column
+                            label="选择"
+                            type="selection"
+                            width="50">
                         </el-table-column>
+                        <el-table-column label="序号" sortable  width="80">
+                            <template slot-scope="scope">
+                                {{ (page - 1)*pagesize + scope.$index + 1 }}
+                            </template>
+                        </el-table-column> 
                         <el-table-column
                         prop="carNumber"
+                        sortable
                         label="车牌号">
                     <template slot-scope="scope">
                     <driver-newTemplate         
@@ -63,24 +70,32 @@
                         </el-table-column>
                         <el-table-column
                         prop="driverMobile"
+                        sortable
                         label="手机号">
                         </el-table-column>
                         <el-table-column
                         prop="driverName"
+                        sortable
                         label="车主"
                         width="200">
                         </el-table-column>
                         <el-table-column
                         prop="registerOriginName"
+                        sortable
                         label="注册来源">
                         </el-table-column>
                         <el-table-column
                         prop="belongCityName"
+                        sortable
                         label="所在地">
                         </el-table-column>
                         <el-table-column
                         prop="authPassTime"
+                        sortable
                         label="认证通过日期">
+                        <template  slot-scope="scope">
+                            <span v-if="scope.row.authPassTime">{{ scope.row.authPassTime | parseTime}}</span>
+                        </template>
                         </el-table-column>
                     </el-table>
                         
@@ -177,16 +192,18 @@
             },
             //点击选中当前行
             clickDetails(row, event, column){
-                this.selectionData = row
+                this.$refs.multipleTable.toggleRowSelection(row);
+            },
+            // 判断选中与否
+            getSelection(val){
+                console.log('选中内容',val)
+                this.selectionData = val;
             },
             //刷新页面
             firstblood(){
                 data_get_driver_list(this.page,this.pagesize,this.formInline).then(res=>{
                     this.totalCount = res.data.totalCount;
                     this.tableDataTree = res.data.list;
-                    this.tableDataTree.forEach(item => {
-                        item.authPassTime = parseTime(item.authPassTime,"{y}-{m}-{d}");
-                    })
                 })
             },
             //点击查询按纽，按条件查询列表
@@ -212,6 +229,10 @@
                 this.page = val;
                 this.firstblood()
             },  
+            getDataList(){
+                 this.firstblood()
+                 this.$refs.multipleTable.clearSelection();
+            } 
         }
         
     }

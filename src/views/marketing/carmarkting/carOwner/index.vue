@@ -1,8 +1,6 @@
 <template>
-  <div class="same_shipper clearfix">
-    <div class="clearfix" style="height:100%">
-        <div class="shipper_Owner ">
-          <el-form :inline="true">
+  <div  class="identicalStyle Marketing" style="height:100%;">
+          <el-form :inline="true" class="demo-ruleForm classify_searchinfo">
             <el-form-item label="所属区域：">
                    <el-cascader
                     size="large"
@@ -33,20 +31,20 @@
                          </el-option>
                  </el-select>
             </el-form-item>          
-            <el-form-item>       
-          <el-button type="primary"  plain @click="getData_query">查询</el-button> 
+            <el-form-item class="fr">       
+          <el-button type="primary"  plain @click="getData_query"  :size="btnsize">查询</el-button> 
           </el-form-item>
           </el-form>
-         </div>
-          	<div class="classify_cityinfo">
+          	<div class="classify_info">
             	<div class="btns_box">
                    <newOwner
                     btntext="新增"
                     :plain="true"
                     type="primary" 
                     btntype="primary"
-                    icon="el-icon-news"
+                    icon="el-icon-circle-plus"
                     editType="add"
+                    @getData="getDataList"
                     btntitle="创建">
                     </newOwner>
                    <modOwner
@@ -54,45 +52,53 @@
                     :plain="true"
                     type="primary" 
                     btntype="primary"
-                    icon="el-icon-news"
+                    icon="el-icon-edit"
                     editType="edit"
                     btntitle="修改"
+                     @getData="getDataList"
                     :params="selectRowData">
                     </modOwner>
-                <el-button  type="primary" value="value" plain icon="el-icon-bell" @click="handleUseStates">启用/停用</el-button>
-                <el-button type="primary" plain icon="el-icon-delete" @click="delete_data">删除</el-button>
+                <el-button  type="primary" value="value" plain icon="el-icon-bell" @click="handleUseStates" :size="btnsize">启用/停用</el-button>
+                <el-button type="primary" plain icon="el-icon-delete" @click="delete_data" :size="btnsize">删除</el-button>
             	</div>
 
-            <div class="info_city">    
-               <el-table style="width: 100%" stripe border height="100%" @row-click="clickDetails" highlight-current-row :data="tableDataAll"  >
-            <el-table-column  label="序号" width="80px" type="index">
-            </el-table-column>
-            <el-table-column  label="所属区域" show-overflow-tooltip>
+            <div class="info_news">    
+               <el-table ref="multipleTable" style="width: 100%" stripe border height="100%"  @selection-change="getSelection" @row-click="clickDetails" highlight-current-row :data="tableDataAll"  >
+             <el-table-column
+                            label="选择"
+                            type="selection"
+                            width="50">
+              </el-table-column>
+           <el-table-column label="序号" sortable  width="80">
+                            <template slot-scope="scope">
+                             {{ (page - 1)*pagesize + scope.$index + 1 }}
+                            </template>
+            </el-table-column> 
+            <el-table-column  label="所属区域" show-overflow-tooltip sortable>
                 <template slot-scope="scope">
                     {{scope.row.province+scope.row.city+scope.row.area}}
                 </template>
             </el-table-column>
-            <el-table-column  label="奖励额度限制" prop="rewardMax">
+            <el-table-column  label="奖励额度限制" prop="rewardMax" sortable>
             </el-table-column>
-            <el-table-column  label="服务分类" prop="serivceCode">
+            <el-table-column  label="服务分类" prop="serivceCode" sortable>
             </el-table-column>
-            <el-table-column  label="车辆类型" prop="carType">
+            <el-table-column  label="车辆类型" prop="carType" sortable>
             </el-table-column>                          
-            <el-table-column  label="启用状态" >
+            <el-table-column  label="启用状态" sortable>
             <template  slot-scope="scope">
               {{ scope.row.usingStatus == 1 ? '启用' : '禁用' }}
             </template>
             </el-table-column>         
-            <el-table-column  label="创建时间" prop="createTime">
+            <el-table-column  label="创建时间" prop="createTime" sortable>
             </el-table-column>
-            <el-table-column  label="创建人" prop="creater">
+            <el-table-column  label="创建人" prop="creater" sortable>
             </el-table-column>                               
             </el-table> 
                 <!-- 页码 -->
-       <div class="info1_tab_footer">共计:{{ dataTotal }} <div class="show_pager"> <Pager :total="dataTotal" @change="handlePageChange"  :sizes="sizes"/></div> </div>  
+       <div class="info_tab_footer">共计:{{ dataTotal }} <div class="show_pager"> <Pager :total="dataTotal" @change="handlePageChange"  :sizes="sizes"/></div> </div>  
         	</div> 
           </div>
-      </div>
   </div>
 </template>
 <script>
@@ -107,6 +113,7 @@ import {parseTime} from '@/utils/'
 export default {
   data(){
     return{
+      btnsize:'mini',
       options:regionDataPlus,        
       selectRowData:{},
       selectId:[],
@@ -121,10 +128,11 @@ export default {
       optionsCar:[{code:null,name:'全部'}],
       serviceCardList:[{code:null,name:'全部'}],
 		formAllData:{
+            areaName:null,
             areaCode: null,
             carType:null,
             serivceCode:null,
-            commissionGrade:null,
+    
          },
     }
   },
@@ -189,7 +197,7 @@ export default {
                      area:this.formAllData.area,
                      city:null,
                      carType:this.formAllData.carType,
-                     commissionGrade:this.formAllData.commissionGrade,               
+                     serivceCode:this.formAllData.serivceCode,               
                     }
                 }
                 else if(this.formAllData.city){
@@ -197,7 +205,7 @@ export default {
                      area:null,
                      city:this.formAllData.city,
                      carType:this.formAllData.carType,
-                     commissionGrade:this.formAllData.commissionGrade,               
+                     serivceCode:this.formAllData.serivceCode,               
                     }                    
                 }
                 else{
@@ -205,7 +213,7 @@ export default {
                      area:null,
                      city:null,
                      carType:this.formAllData.carType,
-                     commissionGrade:this.formAllData.commissionGrade,               
+                     serivceCode:this.formAllData.serivceCode,               
                     }  
                 }
                 data_get_ownerFromsame_list(this.page,this.pagesize,FromData).then(res => {
@@ -217,12 +225,15 @@ export default {
          getData_query(){
           this.firstblood();
           },
-         // 选择行
-         clickDetails(i){
-           this.selectRowData = i;
-             
-           console.log('selectRowData',this.selectRowData)
-         },
+            // 判断选中与否
+            getSelection(val){
+            console.log('选中内容',val)
+            this.selectRowData = val;
+        },
+            //点击选中当前行
+            clickDetails(row, event, column){
+            this.$refs.multipleTable.toggleRowSelection(row);
+            },
         //每页显示数据量变更
             handlePageChange(obj) {
                 this.page = obj.pageNum
@@ -231,9 +242,16 @@ export default {
         },
         // 选择删除
         delete_data(){
-              if(!this.selectRowData.id){
-                this.$message.info('未选中任何删除内容');
-                }else{
+          if(this.selectRowData.length == 0){
+               this.$message.warning('请选择您要操作的用户');
+               return
+          }else if (this.selectRowData.length > 1) {
+                this.$message({
+                    message: '每次只能操作单条数据~',
+                    type: 'warning'
+                })
+               this.$refs.multipleTable.clearSelection();
+          }else{
                 this.delDataInformation()
             }
         },
@@ -244,12 +262,11 @@ export default {
                     cancelButtonText: '取消',
                     type: 'warning'
                 }).then(()=>{
-                    data_Del_ownerFromsame(this.selectRowData.id).then(res=>{
+                    data_Del_ownerFromsame(this.selectRowData[0].id).then(res=>{
                         this.$message.success('删除成功');
                         this.firstblood();       
                         this.selectRowData=''; 
                     }).catch(err => {
-                      console.log('rr',res)
                         this.$message({
                             type: 'info',
                             message: '操作失败，原因：' + err.text ? err.text : err
@@ -264,27 +281,37 @@ export default {
             },
       // 启用禁用
         handleUseStates(){
-                if(!this.selectRowData.id){
-                    //未选择任何修改内容的提示
-                        this.$message.info('未选中内容');
-                        return
-                }else{
-                    this.selectId.push(this.selectRowData.id)
-                    console.log('fdf',this.selectRowData.id);
+                if(this.selectRowData.length == 0){
+                    this.$message.warning('请选择您要操作的用户');
+                    return
+                }else if (this.selectRowData.length > 1) {
+                        this.$message({
+                            message: '每次只能操作单条数据~',
+                            type: 'warning'
+                        })
+                    this.$refs.multipleTable.clearSelection();
+                }
+                else {
+                    this.selectId.push(this.selectRowData[0].id)
+                    console.log('fdf',this.selectRowData[0].id);
                   data_Able_ownerFromsame(this.selectId).then(res=>{
                      this.selectId.splice(0,1);
-                     if(this.selectRowData.usingStatus==1)
+                     if(this.selectRowData[0].usingStatus==1)
                      {
                          this.$message.warning('已禁用');
                      }
                      else{
                          this.$message.success('已启用');
                      }
-                        this.firstblood();       
-                        this.selectRowData='';         
+                        this.firstblood();
+                        this.$refs.multipleTable.clearSelection();       
                     })
                 }
-        }
+        },
+           getDataList(){
+                this.firstblood()
+                this.$refs.multipleTable.clearSelection();
+         }
    },
 
    
@@ -298,66 +325,10 @@ export default {
 }
 </script>
 <style lang="scss" >
-.same_shipper{
-        height:100%;    
-        position: relative;
-.shipper_Owner{
-    position: absolute;
-    left: 0;
-    top: 0;
-    padding: 15px 16px;
-    height: 70px;
-    width: 100%;
-    line-height: 35px;
-    .el-input__inner{
-      height: 30px;
-      line-height: 30px;
-    }
-    .el-button{
-      margin-right: 20px;
-      padding: 10px 20px;
-    }
-}
-.classify_cityinfo{
-    height: 100%;
-    padding: 70px 15px 0 15px;
-    .commoncss{
-      display: inline-block;
-    }
-    .btns_box{
-    margin-bottom: 10px;
-    }
-    .info_city{
-      height:88%;
-      .cell{
-      color: #333;
-      font-size: 14px;
-      }
-    }
-    .el-button{
-      margin-right: 20px;
-      padding: 10px 20px;
-    }
-}
-.info1_tab_footer{
-    padding-left: 20px;
-    background: #eee;
-    height: 40px;
-    line-height: 40px;
-    box-shadow: 0 -2px 2px rgba(0, 0, 0, 0.1);
-    z-index: 10;
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    .show_pager{float: right}
-    .page-select{top:5px;
-    .el-input__inner{
-      height: 30px;
-      line-height: 30px; 
-    }
-    }
-}
+.Marketing{
+  .el-cascader{
+    margin-top:-10px;
+  }
 }
 </style>
 

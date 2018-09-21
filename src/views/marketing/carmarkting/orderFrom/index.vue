@@ -1,6 +1,6 @@
 <template>
-  <div class="same_shipper clearfix">
-    <el-tabs v-model="shipperName" type="border-card"  >
+  <div class="same_shipper tabsWrap">
+    <el-tabs v-model="shipperName" type="card"  >
         <!-- 同城 -->
             <el-tab-pane label="同城" name="first">
                 <SameOrder></SameOrder>

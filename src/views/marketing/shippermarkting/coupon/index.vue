@@ -1,7 +1,7 @@
 <template>
 <!-- <<<<<<< HEAD -->
-  <div class="same_shipper clearfix">
-    <el-tabs v-model="shipperName" type="border-card"  >
+  <div class="same_shipper tabsWrap">
+    <el-tabs v-model="shipperName" type="card"  >
 
         <!-- 自动化 -->
             <el-tab-pane label="自动化设置" name="first">
@@ -10,7 +10,7 @@
 
         <!-- 手动化 -->
             <el-tab-pane label="手动化设置"  name="second">
-                <handmation types='two'></handmation>
+                <handmation types='two'></handmation> 
             </el-tab-pane>            
     </el-tabs>
   </div>
