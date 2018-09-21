@@ -1,22 +1,16 @@
 <template>
         <div class="main_content ">
             <div class="head_title clearfix">
-        <ul>
-          <li v-for="(item, index) in dataset" :class="{'active':item.keyval === currentkey} " :key="index" @click="currentkey = item.keyval">{{item.text}}</li>
-          <li>
-            <el-date-picker
-              v-model="pickerDate"
-              type="daterange"
-              align="right"
-              range-separator="至"
-              start-placeholder="开始日期"
-              end-placeholder="结束日期"
-              @change="getDateChange"
-              :picker-options="pickerOptions3">
-            </el-date-picker>
-          </li>
-        </ul>
-      </div>
+                <h4 class="fl">数据总览</h4>
+                <ul class=" clearfix ">
+                    <li>今天</li>
+                    <li>昨天</li>
+                    <li>最近七天</li>
+                    <li>最近一个月</li>
+                    <li>最近两个月</li>
+                    <li>2018-06-4至2019-08-09</li>
+                </ul>
+            </div>
             <el-row class="main_forthUl">
                 <ul>
                     <li>需求资源池 <span class="title_span">({{title}})</span>
@@ -80,71 +74,12 @@
 
 <script>
 import echarts from 'echarts'
-import { pickerOptions4 } from '@/utils/index'
+
 export default {
   data() {
     return {
       title: '昨天',
-      tab: [],
-      pickerDate: [],
-      pickerOptions3: {
-        shortcuts: [{
-          text: '今天',
-          keyval: 0,
-          onClick(picker) {
-            // 今天
-            const Today = pickerOptions4.today()
-            // 昨天
-            const yesterDay = pickerOptions4.yesterDay()
-            // console.log(pickerOptions4.today())
-            picker.$emit('pick', Today)
-          }
-        }, {
-          text: '昨天',
-          keyval: 1,
-          onClick(picker) {
-            // 昨天
-            const yesterDay = pickerOptions4.yesterDay()
-            // 前天
-            const beforeDady = pickerOptions4.beforeDady()
-            console.log(pickerOptions4.yesterDay())
-            picker.$emit('pick', YesterDay)
-          }
-        }, {
-          text: '本周',
-          keyval: 2,
-          onClick(picker) {
-            // 最近的星期天的日期，到今天的日期
-            const CurrentWeek = pickerOptions4.currentWeek()
-           // 上上周星期天的日前，到上周六的日期
-            const lastWeek = pickerOptions4.lastWeek()
-            // console.log(pickerOptions4.currentWeek())
-            picker.$emit('pick', CurrentWeek)
-          }
-        }, {
-          text: '本月',
-          keyval: 3,
-          onClick(picker) {
-            // 本月1日到今天的日前
-            const CurrentMonth = pickerOptions4.currentMonth()
-            // 上月1日到上月的结束时间
-            const LastMonth = pickerOptions4.lastMonth()
-            // console.log(pickerOptions4.lastMonth())
-            picker.$emit('pick', CurrentMonth)
-          }
-        }, {
-          text: '本年',
-          keyval: 4,
-          onClick(picker) {
-            const CurrentYear = pickerOptions4.currentYear()
-            const LastYear = pickerOptions4.lastYear()
-            picker.$emit('pick', CurrentYear)
-          }
-        }]
-
-      },
-      value6: '',
-      value7: ''
+      tab: []
     }
   },
   mounted() {
@@ -617,6 +552,7 @@ export default {
         }
         li:nth-child(1){
           position: relative;
+          // padding: 20px 20px;
           padding-left:15px;
           font-size: 16px;
           font-weight: bold;
