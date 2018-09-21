@@ -152,12 +152,18 @@ export default {
   },
   methods:{
        openDialog:function(){
-           if(!this.params.id){
-            this.$message.info('未选中需要生成优惠卷的活动');
-           }
+          if(this.params.length == 0 && this.editType !== 'add'){
+               this.$message.warning('请选择您要操作的用户');
+               return
+          }else if (this.params.length > 1 && this.editType !== 'add') {
+                this.$message({
+                    message: '每次只能操作单条数据~',
+                    type: 'warning'
+                })
+                this.$emit('getData') 
+          }
            else{
-            data_get_couponActive3_Id(this.params.id).then(res=>{
-                console.log(res)
+            data_get_couponActive3_Id(this.params[0].id).then(res=>{
             this.tableDataAll = res.data;
             })
             this.dialogFormVisible_add = true;
@@ -242,6 +248,12 @@ export default {
 </script>
 <style lang="scss" >
     .couponGive{
+        display: inline-block;
+        .el-button {
+        margin-right:0px;
+        padding: 7px 15px 7px;
+        font-size:12px;
+        }
         height: 100%;
         .el-dialog{
             height: 100%;

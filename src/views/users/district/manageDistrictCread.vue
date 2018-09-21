@@ -45,6 +45,14 @@
                     </el-date-picker>
                     </el-form-item>
                 </el-col>
+                <el-col :span="12">
+                    <el-form-item label="是否开通28货运后台 ：" :label-width="formLabelWidth">
+                        <el-radio-group v-model="isVip" >
+                            <el-radio  v-for="(obj,key) in optionsStatus" :label="obj.value" :key='key'>{{obj.name}}</el-radio>
+                        </el-radio-group>
+                    </el-form-item>
+                </el-col>
+
             </el-row>
             <el-row>
                 <el-col :span="12">
@@ -263,11 +271,12 @@ export default {
         }
 
         return{
+        isVip:'0',
         areaStatus:null,    
         selectFlag:null,
         options:regionDataPlus,
         dialogFormVisible_add: false,
-        formLabelWidth:'120px',
+        formLabelWidth:'160px',
         inputKey:null,
         formAll:{
             partnerCompany:null,
@@ -295,6 +304,16 @@ export default {
             fileName:null,    
             }]       
         },
+          optionsStatus: [
+              {
+                value: '1',
+                name: '是'
+              },
+              {
+                value: '0',
+                name: '否'
+              }
+            ],
          rulesForm:{
             partnerCompany:{trigger:'change',required:true,validator: partnerCompanyValidator},     
             mobile:{trigger:'change',required:true,validator: ownerPhoneValidator},

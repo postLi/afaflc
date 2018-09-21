@@ -383,6 +383,7 @@ export default {
         handler: function(val, oldVal) {
           if(!val){
           this.$refs['formAllData'].resetFields();
+          this.$emit('getData') 
           this.selectFlag=false;
           this.formAllData.aflcCouponList=[{
            province:null,
@@ -510,19 +511,26 @@ export default {
      console.log( this.formAllData.aflcCouponList[0].selectFlag)
     },
     openDialog:function(){
-        if(!this.params.id){
-               
-            this.$message.info('未选中需要修改内容');
-        }
-        else if(this.params.usingStatus==0){
+          if(this.params.length == 0 && this.editType !== 'add'){
+               this.$message.warning('请选择您要操作的用户');
+               return
+          }
+          else if (this.params.length > 1 && this.editType !== 'add') {
+                this.$message({
+                    message: '每次只能操作单条数据~',
+                    type: 'warning'
+                })
+                this.$emit('getData') 
+          }
+        else if(this.params[0].usingStatus==0){
             this.$message.info('选中内容被已停用，不能进行修改操作');
            }
         else{
-      data_get_couponActive_Id(this.params.id).then((res)=>{
+      data_get_couponActive_Id(this.params[0].id).then((res)=>{
           let now1 = new Date(res.data.startTime);
           let now2 = new Date(res.data.endTime);
           let Ctime = [];
-          this.formAllData.id = this.params.id
+          this.formAllData.id = res.data.id
           this.formAllData.activityName= res.data.activityName
           this.formAllData.activityDes= res.data.activityDes
           this.formAllData.areaCode=res.data.areaCode
@@ -542,7 +550,7 @@ export default {
           }
           
       })
-      data_get_couponActive2_Id(this.params.id).then((res)=>{
+      data_get_couponActive2_Id(this.params[0].id).then((res)=>{
           this.formAllData.aflcCouponList = res.data
           for(var i= 0;i<this.formAllData.aflcCouponList.length;i++){
               this.formAllData.aflcCouponList[i].startTime  = new Date(this.formAllData.aflcCouponList[i].startTime).getTime()
@@ -795,7 +803,7 @@ export default {
                         )
                         })
                     let forms={
-                        id:this.params.id,
+                        id:this.params[0].id,
                         activityType:this.formAllData.activityType,
                         activityName:this.formAllData.activityName,
                         startTime:this.formAllData.startTime,

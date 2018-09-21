@@ -721,6 +721,13 @@ export default {
 </script>
 <style lang="scss">
 .newcouponBox{
+        display: inline-block;
+        margin-right: 10px;
+        .el-button {
+        margin-right:0px;
+        padding: 7px 15px 7px;
+        font-size:12px;
+        }
     .el-dialog{
         width: 80%!important;
         overflow:unset;

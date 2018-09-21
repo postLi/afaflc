@@ -1,7 +1,6 @@
 <template>
-    <div class=" identicalStyle clearfix" style="height:100%">
-      <div class="shipper_city">
-          <el-form :inline="true">
+    <div class="identicalStyle Marketing" style="height:100%">
+          <el-form :inline="true"  class="demo-ruleForm classify_searchinfo">
             <el-form-item label="所属区域：">
                    <el-cascader
                     size="large"
@@ -32,12 +31,11 @@
                          </el-option>
                  </el-select>
             </el-form-item>          
-            <el-form-item>       
-          <el-button type="primary"  plain @click="getData_query">查询</el-button> 
+            <el-form-item class="fr">       
+          <el-button type="primary"  plain @click="getData_query" :size="btnsize">查询</el-button> 
           </el-form-item>              
           </el-form>
-         </div>
-          	<div class="classify_cityinfo">
+          	<div class="classify_info">
             		<div class="btns_box">
                    <newCity
                     btntext="新增"
@@ -47,6 +45,7 @@
                     icon="el-icon-news"
                     editType="add"
                     btntitle="创建"
+                    @getData="getDataList"
                    >
                     </newCity>
                    <newCity
@@ -57,34 +56,43 @@
                     icon="el-icon-news"
                     editType="edit"
                     btntitle="修改"
+                    @getData="getDataList"
                     :params="selectRowData"
                    >
                     </newCity>
-                <el-button  type="primary" value="value" plain icon="el-icon-bell" @click="handleUseStates">启用/停用</el-button>
-                <el-button type="primary" plain icon="el-icon-delete" @click="delete_data">删除</el-button>
+                <el-button  type="primary" value="value" plain icon="el-icon-bell" @click="handleUseStates" :size="btnsize">启用/停用</el-button>
+                <el-button type="primary" plain icon="el-icon-delete" @click="delete_data" :size="btnsize">删除</el-button>
             		</div>
-            <div class="info_city">    
-            <el-table style="width: 100%" stripe border height="100%" @row-click="clickDetails" highlight-current-row :data="tableDataAll"  tooltip-effect="dark">
-            <el-table-column  label="序号" width="80px" type="index">
-            </el-table-column>
-            <el-table-column  label="所属区域">
+            <div class="info_news">    
+            <el-table ref="multipleTable" style="width: 100%" stripe border height="100%" @selection-change="getSelection" @row-click="clickDetails" highlight-current-row :data="tableDataAll"  tooltip-effect="dark">
+              <el-table-column
+                            label="选择"
+                            type="selection"
+                            width="50">
+              </el-table-column>
+           <el-table-column label="序号" sortable  width="80">
+                            <template slot-scope="scope">
+                             {{ (page - 1)*pagesize + scope.$index + 1 }}
+                            </template>
+            </el-table-column> 
+            <el-table-column  label="所属区域" sortable>
                 <template slot-scope="scope">
                     {{scope.row.province+scope.row.city+scope.row.area}}
                 </template>
             </el-table-column>
-            <el-table-column  label="车辆类型" prop="carType">
+            <el-table-column  label="车辆类型" prop="carType" sortable>
             </el-table-column>
-            <el-table-column  label="车主抽佣等级" prop="commissionGrade">
+            <el-table-column  label="车主抽佣等级" prop="commissionGrade" sortable>
             </el-table-column>
-            <el-table-column  label="开始抽佣单数" prop="startNum">
+            <el-table-column  label="开始抽佣单数" prop="startNum" sortable>
             </el-table-column>
-            <el-table-column  label="结束抽佣单数" prop="endNum">
+            <el-table-column  label="结束抽佣单数" prop="endNum" sortable>
             </el-table-column>       
-            <el-table-column  label="每单抽佣（%）" prop="commissionPer">
+            <el-table-column  label="每单抽佣（%）" prop="commissionPer" sortable>
             </el-table-column>                                                       
-            <el-table-column  label="最低抽佣(元)" prop="commissionLowest">
+            <el-table-column  label="最低抽佣(元)" prop="commissionLowest" sortable>
             </el-table-column>
-            <el-table-column  label="启用状态" >
+            <el-table-column  label="启用状态" sortable>
             <template  slot-scope="scope">
               {{ scope.row.usingStatus == 1 ? '启用' : '停用' }}
             </template>
@@ -92,7 +100,7 @@
             </el-table> 
         	</div> 
          <!-- 页码 -->
-        <div class="info1_tab_footer">共计:{{ dataTotal }} <div class="show_pager"> <Pager :total="dataTotal" @change="handlePageChange"  :sizes="sizes"/></div> </div> 
+        <div class="info_tab_footer">共计:{{ dataTotal }} <div class="show_pager"> <Pager :total="dataTotal" @change="handlePageChange"  :sizes="sizes"/></div> </div> 
         </div>
       </div>
 </template>
@@ -107,6 +115,7 @@ import { parseTime } from '@/utils/'
 export default {
   data() {
     return {
+      btnsize:'mini',
       options: regionDataPlus,
       selectRowData: {},
       selectId: [],
@@ -207,10 +216,14 @@ export default {
       this.firstblood()
     },
 
-         // 选择行
-    clickDetails(i) {
-      this.selectRowData = i
-      console.log('selectRowData', this.selectRowData)
+     // 判断选中与否
+    getSelection(val){
+     console.log('选中内容',val)
+     this.selectRowData = val;
+   },
+    //点击选中当前行
+    clickDetails(row, event, column){
+      this.$refs.multipleTable.toggleRowSelection(row);
     },
         // 每页显示数据量变更
     handlePageChange(obj) {
@@ -220,9 +233,16 @@ export default {
     },
         // 选择删除
     delete_data() {
-      if (!this.selectRowData.id) {
-        this.$message.info('未选中任何删除内容')
-      } else {
+          if(this.selectRowData.length == 0){
+               this.$message.warning('请选择您要操作的用户');
+               return
+          }else if (this.selectRowData.length > 1) {
+                this.$message({
+                    message: '每次只能操作单条数据~',
+                    type: 'warning'
+                })
+               this.$refs.multipleTable.clearSelection();
+          }else {
         this.delDataInformation()
       }
     },
@@ -233,17 +253,21 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        data_Del_Marketingsame(this.selectRowData.id).then(res => {
+        data_Del_Marketingsame(this.selectRowData[0].id).then(res => {
           this.$message.success('删除成功')
           this.firstblood()
-          this.selectRowData = ''
+          this.$refs.multipleTable.clearSelection();
         }).catch(err => {
+          this.firstblood()
+          this.$refs.multipleTable.clearSelection();
           this.$message({
             type: 'info',
             message: '操作失败，原因：' + err.text ? err.text : err
           })
         })
       }).catch(() => {
+          this.firstblood()
+          this.$refs.multipleTable.clearSelection();
         this.$message({
           type: 'info',
           message: '已取消'
@@ -252,24 +276,34 @@ export default {
     },
       // 启用禁用
     handleUseStates() {
-      if (!this.selectRowData.id) {
-                    // 未选择任何修改内容的提示
-        this.$message.info('未选中内容')
-        return
-      } else {
-        this.selectId.push(this.selectRowData.id)
+          if(this.selectRowData.length == 0){
+               this.$message.warning('请选择您要操作的用户');
+               return
+          }else if (this.selectRowData.length > 1) {
+                this.$message({
+                    message: '每次只能操作单条数据~',
+                    type: 'warning'
+                })
+               this.$refs.multipleTable.clearSelection();
+          }
+        else {
+        this.selectId.push(this.selectRowData[0].id)
 
         data_Able_Marketingsame(this.selectId).then(res => {
           this.selectId.splice(0, 1)
-          if (this.selectRowData.usingStatus == 1) {
+          if (this.selectRowData[0].usingStatus == 1) {
             this.$message.warning('已禁用')
           } else {
             this.$message.success('已启用')
           }
-          this.firstblood()
-          this.selectRowData = ''
+          this.firstblood();
+          this.$refs.multipleTable.clearSelection();
         })
       }
+    },
+   getDataList(){
+                this.firstblood()
+                this.$refs.multipleTable.clearSelection();
     }
   },
 
@@ -282,65 +316,11 @@ export default {
   }
 }
 </script>
-<style lang="scss" scoped>  
-.export{
-  .el-button{
-    margin-right:20px;
-    padding:10px 20px;
+<style lang="scss">  
+.Marketing{
+  .el-cascader{
+    margin-top:-10px;
   }
-}
-.frozeclassify{
-  margin-top: 10px;
-  .info{
-    span{
-      margin-left: 60px;
-      font-size: 16px;
-    }
-    .mc-line{
-      width: 100%;
-      border-bottom: 1px solid #000;
-    }
-    .frozerol{
-      margin: 10px  0 10px 50px;
-    }
-  }
-} 
-.shipper_city{
-    position: absolute;
-    left: 0;
-    top: 0;
-    padding: 15px 16px;
-    height: 70px;
-    width: 100%;
-    line-height: 35px;
-    .el-input__inner{
-      height: 30px;
-      line-height: 30px;
-    }
-    .el-button{
-      padding: 10px 20px;
-    }
-}
-.classify_cityinfo{
-    height: 100%;
-    padding: 70px 15px 0 0px;
-    .commoncss{
-      display: inline-block;
-    }
-    .btns_box{
-    margin-bottom: 10px;
-    }
-    .info_city{
-      height:88%;
-      .cell{
-      color: #333;
-      font-size: 14px;
-      }
-    }
-    .el-button{
-      margin-right: 20px;
-      padding: 10px 20px;
-    }
 }
 </style>
 

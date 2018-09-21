@@ -23,7 +23,7 @@
                     :plain="true"
                     type="primary" 
                     btntype="primary"
-                    icon="el-icon-news"
+                    icon="el-icon-edit"
                     editType="valetAuth"
                     :templateItem="selectionData"
                     btntitle="车主管理"
@@ -40,33 +40,52 @@
                         border
                         highlight-current-row
                         current-row-key
+                        @selection-change="getSelection" 
                         @row-click="clickDetails"
                         tooltip-effect="dark"
                         style="width: 100%">
-                       <el-table-column
-                        type="index"
-                        label="序号"
-                        width="80">
+                        <el-table-column
+                            label="选择"
+                            type="selection"
+                            width="50">
                         </el-table-column>
+                        <el-table-column label="序号" sortable  width="80">
+                            <template slot-scope="scope">
+                                {{ (page - 1)*pagesize + scope.$index + 1 }}
+                            </template>
+                        </el-table-column> 
                         <el-table-column
                         prop="driverMobile"
-                        label="手机号">
+                        label="手机号"
+                        sortable
+                        >
                         </el-table-column>
                         <el-table-column
-                        prop="registerOrigin"
-                        label="注册来源">
+                        prop="registerOriginName"
+                        label="注册来源"
+                        sortable
+                        >
                         </el-table-column>
                         <el-table-column
                         prop="belongCityName"
-                        label="所在地">
+                        label="所在地"
+                        sortable
+                        >
                         </el-table-column>
                         <el-table-column
                         prop="driverStatusName"
-                        label="状态">
+                        label="状态"
+                        sortable
+                        >
                         </el-table-column>
                         <el-table-column
                         prop="registerTime"
-                        label="注册日期">
+                        label="注册日期"
+                        sortable
+                        >
+                        <template  slot-scope="scope">
+                            <span v-if="scope.row.registerTime">{{ scope.row.registerTime | parseTime}}</span>
+                        </template>
                         </el-table-column>
                     </el-table>
 <div class="info_tab_footer">共计:{{ totalCount }} <div class="show_pager"> <Pager :total="totalCount" @change="handlePageChange" /></div> </div>   
@@ -113,8 +132,7 @@
                     name:'全部'
                     }
                 ],
-                selectionData:null,
-                multipleSelection:[],
+                selectionData:[],
             }
         },
         created() {
@@ -159,8 +177,12 @@
             },
             //点击选中当前行
             clickDetails(row, event, column){
-                this.selectionData = row
-                console.log(' this.selectRowData', this.selectionData)
+                this.$refs.multipleTable.toggleRowSelection(row);
+            },
+            // 判断选中与否
+            getSelection(val){
+                console.log('选中内容',val)
+                this.selectionData = val;
             },
 
 
@@ -169,9 +191,9 @@
                 data_get_driver_list(this.page,this.pagesize,this.formInline).then(res=>{
                     this.totalCount = res.data.totalCount;
                     this.tableDataTree = res.data.list;
-                     this.tableDataTree.forEach(item => {
-                        item.registerTime = parseTime(item.registerTime,"{y}-{m}-{d}");
-                    })
+                    //  this.tableDataTree.forEach(item => {
+                    //     item.registerTime = parseTime(item.registerTime,"{y}-{m}-{d}");
+                    // })
                 })
             },
             //点击查询按纽，按条件查询列表
@@ -194,6 +216,7 @@
 
             getDataList(){
                  this.firstblood()
+                 this.$refs.multipleTable.clearSelection();
             } 
         } 
     }

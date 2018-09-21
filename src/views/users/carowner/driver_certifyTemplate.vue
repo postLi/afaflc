@@ -242,7 +242,9 @@ export default {
     vregion
   },
   props:{
-    params:null,
+    params:{
+      type:[Object,Array],
+    },
     icon:{
       type: String,
       default: ''
@@ -443,6 +445,7 @@ export default {
         handler: function(val, oldVal) {
             if(!val){
                 this.$refs.templateModel.resetFields();
+                this.$emit('getData') 
             }
         }
         }
@@ -513,14 +516,18 @@ export default {
     },
     openDialog(){
       //冻结
-        if(!this.params){
-            this.$message.info('未选中需要修改内容');
-            return
-           }
+        if(this.params.length == 0 && this.editType !== 'add'){
+               this.$message.warning('请选择您要操作的用户');
+               return
+        }else if (this.params.length > 1 && this.editType !== 'add') {
+                this.$message({
+                    message: '每次只能操作单条数据~',
+                    type: 'warning'
+                })
+                this.$emit('getData') 
+            }
         else{
-        this.formFroze = this.params;
-        var obj = JSON.parse(JSON.stringify(this.params));
-        this.templateModel=obj;
+        this.templateModel=this.params[0];
         this.templateModel.obtainGradeTime = parseTime(this.templateModel.obtainGradeTime,"{y}-{m}-{d}");
           this.freezeDialogFlag=true
         }

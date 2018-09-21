@@ -1,6 +1,6 @@
 <template>
   <div class="freezeInfo commoncss">
-    <el-button :type="type" :value="value" :plain="plain" :icon="icon" @click="openDialog()">{{text}}</el-button>
+    <el-button :type="type" :value="value" :plain="plain" :icon="icon" @click="openDialog()"><span :class="editType=='view'?'BtnInfo':''">{{text}}</span ></el-button>
     <el-dialog :title="title" :visible.sync="freezeDialogFlag" :before-close="change()" :modal="false">
       <el-form :model="formFroze" ref="formFroze" :rules="formFrozeRules">
         <el-row>
@@ -196,7 +196,9 @@ export default {
     GetCityList
   },
   props:{
-    params:null,
+    params:{
+      type:[Object,Array],
+    },
     icon:{
       type: String,
       default: ''
@@ -285,6 +287,7 @@ export default {
         handler: function(val, oldVal) {
             if(!val){
                 this.$refs.formFroze.resetFields();
+                this.$emit('getData') 
             }
         }
         }
@@ -325,31 +328,36 @@ export default {
     },
     openDialog(){
       //冻结
-           if(!this.params){
-            this.$message.info('未选中需要修改内容');
-            return
-           }
-           else{
-            this.formFroze = this.params;
-
-        if(this.formFroze.accountStatusName == '冻结中' && this.editType == 'edit'){
+            if(this.params.length == 0 && this.editType !== 'add'){
+               this.$message.warning('请选择您要操作的用户');
+               return
+            }else if (this.params.length > 1 && this.editType !== 'add') {
+                this.$message({
+                    message: '每次只能操作单条数据~',
+                    type: 'warning'
+                })
+                this.$emit('getData') 
+            }
+        else{
+        this.formFroze = this.params[0];
+        console.log('111', this.formFroze)
+          if(this.formFroze.accountStatusName == '冻结中' && this.editType == 'edit'){
             this.$message.info('您选中的车主已被冻结，不需多次冻结！');
+            this.$emit('getData')
             return
         }
         else if(this.formFroze.accountStatusName != '冻结中' && this.editType == 'edit-two'){
             this.$message.info('您选中的车主未被冻结，不可做此操作！');
+            this.$emit('getData')
             return
         }
         else if(this.formFroze.accountStatusName != '冻结中' && this.editType == 'edit-three'){
             this.$message.info('您选中的车主未被冻结，无需移除！');
+            this.$emit('getData')
             return
         }
-        else{
-        var obj = JSON.parse(JSON.stringify(this.params));
-        this.formFroze=obj;
         this.freezeDialogFlag=true
         }
-      }
     },
 
     getMoreInformation(){
@@ -431,7 +439,9 @@ export default {
 }
 </script>
 <style lang="scss">
-
+.freezeInfo{
+  margin-left:10px;
+}
 </style>
 
 

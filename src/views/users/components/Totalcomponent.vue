@@ -60,7 +60,7 @@
                     :plain="true"
                     editType='edit'
                     btntype="primary"
-                    icon="el-icon-news"
+                    icon="el-icon-info"
                     :params="selectRowData"
                     @getData="getDataList"
                     >
@@ -72,7 +72,7 @@
                     :plain="true"
                     editType='edit-two'
                     btntype="primary"
-                    icon="el-icon-news"
+                    icon="el-icon-edit"
                     :params="selectRowData"
                     @getData="getDataList"
                     >
@@ -84,7 +84,7 @@
                     :plain="true"
                     editType='edit-three'
                     btntype="primary"
-                    icon="el-icon-news"
+                    icon="el-icon-edit"
                     :params="selectRowData"
                     @getData="getDataList"
                     >
@@ -96,19 +96,19 @@
                     :plain="true"
                     editType='edit-four'
                     btntype="primary"
-                    icon="el-icon-news"
+                    icon="el-icon-edit"
                     :params="selectRowData"
                     @getData="getDataList"
                     >
                     </blacklist>
                      <blacklist
-                    btntext="移出黑名单"
+                    btntext="移除黑名单"
                     type="primary" 
-                    btntitle="移出黑名单"
+                    btntitle="移除黑名单"
                     :plain="true"
                     editType='edit-five'
                     btntype="primary"
-                    icon="el-icon-news"
+                    icon="el-icon-warning"
                     :params="selectRowData"
                     @getData="getDataList"
                     >
@@ -124,16 +124,23 @@
                         highlight-current-row
                         current-row-key
                         tooltip-effect="dark"
+                        @selection-change="getSelection" 
                         @row-click="clickDetails"
                         style="width: 100%">
-                        <el-table-column
-                        type="index"
-                        label="序号"
-                        width="80">
+                         <el-table-column
+                            label="选择"
+                            type="selection"
+                            width="50">
                         </el-table-column>
+                        <el-table-column label="序号" sortable  width="80">
+                            <template slot-scope="scope">
+                                {{ (page - 1)*pagesize + scope.$index + 1 }}
+                            </template>
+                        </el-table-column> 
                         <el-table-column
                         prop="driverMobile"
                         label="手机号"
+                        sortable
                         >
                         <template slot-scope="scoped">
                             <driver-newTemplate
@@ -148,29 +155,42 @@
                         </el-table-column>
                         <el-table-column
                         prop="carNumber"
-                        label="车牌号">
+                        label="车牌号"
+                        sortable
+                        >
                         </el-table-column>
                         <el-table-column
                         prop="driverName"
                         label="车主"
-                        width="200">
+                        width="200"
+                        sortable
+                        >
                         </el-table-column>
                         <el-table-column
                         prop="registerOriginName"
-                        label="注册来源">
+                        label="注册来源"
+                        sortable
+                        >
                         </el-table-column>
-                        <el-table-column prop="accountStatusName" label="账户状态"></el-table-column>
+                        <el-table-column prop="accountStatusName" label="账户状态" sortable>
+                      <template slot-scope="scope">
+                        <span :class="{freezeName: scope.row.accountStatusName == '冻结中' ,blackName: scope.row.accountStatusName == '黑名单',normalName :scope.row.accountStatusName == '正常'}">{{scope.row.accountStatusName}}</span>
+                      </template>
+                        </el-table-column>
                         <el-table-column
                         prop="belongCityName"
-                        label="所在地">
+                        label="所在地" sortable>
                         </el-table-column>
                         <el-table-column
                         prop="driverStatusName"
-                        label="状态">
+                        label="状态" sortable>
                         </el-table-column>
                         <el-table-column
                         prop="createTime"
-                        label="注册日期">
+                        label="注册日期" sortable>
+                     <template  slot-scope="scope">
+                        <span v-if="scope.row.createTime">{{ scope.row.createTime | parseTime}}</span>
+                    </template>
                         </el-table-column>
                     </el-table>
                         
@@ -213,8 +233,8 @@
                       name:'全部'
                     }
                 ],
-                multipleSelection:[],
-                selectRowData:null,
+                selectRowData:[],
+                selected:[],//暂存的数据
             }
         },
         props: {
@@ -288,14 +308,14 @@
                 }
                 this.firstblood()
             },
-
-            // 新增功能
-            handleCreate(){
-                console.log('新增功能')
+            // 判断选中与否
+            getSelection(val){
+                console.log('选中内容',val)
+                this.selectRowData = val;
             },
             //点击选中当前行
             clickDetails(row, event, column){
-                this.selectRowData = row
+                this.$refs.multipleTable.toggleRowSelection(row);
             },
 
             //刷新页面
@@ -303,9 +323,9 @@
                 data_get_driver_list(this.page,this.pagesize,this.formInline).then(res=>{
                     this.totalCount = res.data.totalCount;
                     this.tableDataTree = res.data.list;
-                    this.tableDataTree.forEach(item => {
-                        item.createTime = parseTime(item.createTime,"{y}-{m}-{d}");
-                    })
+                    // this.tableDataTree.forEach(item => {
+                    //     item.createTime = parseTime(item.createTime,"{y}-{m}-{d}");
+                    // })
                 })
             },
 
@@ -330,6 +350,7 @@
 
             getDataList(){
                 this.firstblood()
+                this.$refs.multipleTable.clearSelection();
             }
         }
         
@@ -350,5 +371,10 @@
 }
 .addclassify.commoncss{
     display:inline-block;
+}
+.btns_box{
+    .el-button{
+        font-size:12px;
+    }
 }
 </style>

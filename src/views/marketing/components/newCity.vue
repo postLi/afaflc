@@ -1,7 +1,6 @@
 <template>
      <div class="creatcity commoncss">
       <el-button :type="btntype" :value="value" :plain="plain" :icon="icon" @click="openDialog()">{{btntext}}</el-button>
-      <!-- <el-button :type="btntype" :size="btnsize" plain :icon="icon" @click="openDialog()">{{btntext}}</el-button> -->
       <div class="newMarketingCity">
       <el-dialog  :visible="dialogFormVisible_add" :before-close="change">
         <el-form :model="formAll" ref="formAll" :rules="rulesForm">
@@ -244,6 +243,7 @@ export default {
     }
 
     return {
+      areaStatus:null,
       btnsize: 'mini',
       options: regionDataPlus,
       dialogFormVisible_add: false,
@@ -278,6 +278,8 @@ export default {
       handler: function(val, oldVal) {
         if (!val) {
           this.$refs['formAll'].resetFields()
+          this.areaStatus = null 
+          this.$emit('getData') 
         }
       }
     }
@@ -314,17 +316,24 @@ export default {
     },
     openDialog: function() {
       if (this.editType == 'edit') {
-        if (!this.params.id) {
-          this.$message.info('未选中需要修改内容')
-        } else if (this.params.usingStatus == 0) {
-          this.$message.info('选中内容被已禁用，不能进行修改操作')
+          if(this.params.length == 0 && this.editType !== 'add'){
+               this.$message.warning('请选择您要操作的用户');
+               return
+          }else if (this.params.length > 1 && this.editType !== 'add') {
+                this.$message({
+                    message: '每次只能操作单条数据~',
+                    type: 'warning'
+                })
+                this.$emit('getData') 
+          }
+         else if (this.params[0].usingStatus == 0) {
+          this.$message.warning('选中内容被已禁用，不能进行修改操作')
+          this.$emit('getData') 
         } else {
           this.dialogFormVisible_add = true
-
-          data_get_Marketingsame_Id(this.params.id).then(res => {
+          data_get_Marketingsame_Id(this.params[0].id).then(res => {
             this.formAll = res.data
             this.areaName = res.data.province + res.data.city + res.data.area
-            console.log('i', this.formAll)
           })
         }
       } else {
@@ -360,16 +369,15 @@ export default {
     add_data() {
       this.$refs['formAll'].validate(valid => {
         if (valid) {
-          if (this.formAll.area) {
-            this.formAll.areaCode.splice(0, 2)
-          } else {
-            this.formAll.areaCode.splice(0, 1)
-            this.formAll.areaCode.pop()
-          }
-          this.formAll.areaCode = String(this.formAll.areaCode)
+            if(this.formAll.area){
+               this.areaStatus = this.formAll.areaCode[2]
+            }
+            else{
+               this.areaStatus = this.formAll.areaCode[1]
+            }
           const formAllData =
             [{
-              areaCode: this.formAll.areaCode,
+              areaCode: this.areaStatus,
               carType: this.formAll.carType,
               commissionGrade: this.formAll.commissionGrade,
               startNum: this.formAll.startNum,
@@ -416,32 +424,15 @@ export default {
   }
 }
 </script>
-<style lang="scss" scoped>
-    .creatcity{
-        .el-button {
-                margin-right: 20px;
-                padding: 6px 20px;
-        }
-        .el-dialog__footer{
-            border-top:1px solid #ccc;   
-            margin: 0 10px;
-        }
-        .upload{
-            width: 300px;
-            line-height: 20px;
-            img{
-                display: block;
-                width: 100%;
-                height: 100%;
-            }
-        }
-    }
-
-</style>
-
 <style lang="scss" >
-    .creatcity{
+    .creatcity{ 
         display: inline-block;
+        margin-right: 10px;
+        .el-button {
+        margin-right:0px;
+        padding: 7px 15px 7px;
+        font-size:12px;
+        }
         .el-input__inner{
             line-height: 40px!important; 
             height: 40px !important; 

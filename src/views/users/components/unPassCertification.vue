@@ -30,7 +30,6 @@
                     :templateItem="selectionData"
                     btntitle="车主管理"
                     @getData="getDataList"
-                    :updataflag="true"
                     >
                     </driver-newTemplate>
                 </div>
@@ -42,20 +41,23 @@
                         border
                         highlight-current-row
                         current-row-key
+                        @selection-change="getSelection" 
                         @row-click="clickDetails"
                         tooltip-effect="dark"
                         style="width: 100%">
-                      <!--   <el-table-column
-                      type="selection"
-                      width="80">
-                      </el-table-column> -->
-                      <el-table-column
-                        type="index"
-                        label="序号"
-                        width="80">
+                         <el-table-column
+                            label="选择"
+                            type="selection"
+                            width="50">
                         </el-table-column>
+                        <el-table-column label="序号" sortable  width="80">
+                            <template slot-scope="scope">
+                                {{ (page - 1)*pagesize + scope.$index + 1 }}
+                            </template>
+                        </el-table-column> 
                         <el-table-column
                         prop="carNumber"
+                        sortable
                         label="车牌号">
                      <template slot-scope="scope">
                     <driver-newTemplate         
@@ -64,34 +66,47 @@
                     editType="view"
                     :templateItem="scope.row"
                     btntitle="详情"
+                    @getData="getDataList"
                     >
                     </driver-newTemplate>
                               </template>
                         </el-table-column>
                         <el-table-column
                         prop="driverMobile"
+                        sortable
                         label="手机号">
                         </el-table-column>
                         <el-table-column
                         prop="driverName"
                         label="车主"
+                        sortable
                         width="200">
                         </el-table-column>
                         <el-table-column
                         prop="registerOriginName"
+                        sortable
                         label="注册来源">
                         </el-table-column>
                         <el-table-column
                         prop="belongCityName"
+                        sortable
                         label="所在地">
                         </el-table-column>
                         <el-table-column
                         prop="authenticationTime"
+                        sortable
                         label="提交认证时间">
+                        <template  slot-scope="scope">
+                            <span v-if="scope.row.authenticationTime">{{ scope.row.authenticationTime | parseTime}}</span>
+                        </template>
                         </el-table-column>
                         <el-table-column
                         prop="authNoPassTime"
+                        sortable
                         label="认证不通过时间">
+                        <template  slot-scope="scope">
+                            <span v-if="scope.row.authNoPassTime">{{ scope.row.authNoPassTime | parseTime}}</span>
+                        </template>
                         </el-table-column>
                     </el-table>
                         
@@ -195,7 +210,12 @@
             },
             //点击选中当前行
             clickDetails(row, event, column){
-                this.selectionData = row
+                this.$refs.multipleTable.toggleRowSelection(row);
+            },
+            // 判断选中与否
+            getSelection(val){
+                console.log('选中内容',val)
+                this.selectionData = val;
             },
 
             //刷新页面
@@ -203,10 +223,6 @@
                 data_get_driver_list(this.page,this.pagesize,this.formInline).then(res=>{
                     this.totalCount = res.data.totalCount;
                     this.tableDataTree = res.data.list;
-                    this.tableDataTree.forEach(item => {
-                        item.authenticationTime = parseTime(item.authenticationTime,"{y}-{m}-{d}");
-                        item.authNoPassTime = parseTime(item.authNoPassTime,"{y}-{m}-{d}");
-                    })
                 })
             },
             //点击查询按纽，按条件查询列表
@@ -223,17 +239,6 @@
                 })
             },
 
-             //每页显示数据量变更
-            handleSizeChange: function(val) {
-                this.pagesize = val;
-                this.firstblood()
-            },
-
-            //页码变更
-            handleCurrentChange: function(val) {
-                this.page = val;
-                this.firstblood()
-            }, 
             getDataList(){
                 this.firstblood()
             } 

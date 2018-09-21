@@ -164,7 +164,9 @@ export default {
     GetCityList
   },
   props:{
-    params:null,
+    params:{
+      type:[Object,Array],
+    },
     icon:{
       type: String,
       default: ''
@@ -255,6 +257,16 @@ export default {
     this.title = this.btntitle;
     this.getMoreInformation()
   },
+    watch:{
+        freezeDialogFlag:{
+        handler: function(val, oldVal) {
+            if(!val){
+                this.$refs.formFroze.resetFields();
+                this.$emit('getData') 
+            }
+        }
+        }
+        },
   methods:{
     timeChange(val){
       let currentTime = this.formFroze.freezeTime || new Date()
@@ -290,28 +302,31 @@ export default {
       this.$refs.singleTable.setCurrentRow(row);
     },
     openDialog(){
-      if(!this.params){
-            this.$message.info('未选中需要修改内容');
-            return
-           }
-      else{
-            this.formFroze = this.params;
-
+            if(this.params.length == 0 && this.editType !== 'add'){
+               this.$message.warning('请选择您要操作的用户');
+               return
+            }else if (this.params.length > 1 && this.editType !== 'add') {
+                this.$message({
+                    message: '每次只能操作单条数据~',
+                    type: 'warning'
+                })
+                this.$emit('getData') 
+            }
+        else{
+          this.formFroze = this.params[0];
       if(this.formFroze.accountStatusName == '黑名单' && this.editType == 'edit-four'){
-                    this.$message.info('您选中的车主已被移入黑名单，不需多次拉黑！');
-                    return
-                }
+             this.$emit('getData')
+             this.$message.info('您选中的车主已被移入黑名单，不需多次拉黑！');
+             return
+           }
       else if(this.formFroze.accountStatusName != '黑名单' && this.editType == 'edit-five'){
-                    this.$message.info('您选中的车主未被移入黑名单，不可做此操作！');
-                    return
+            this.$message.info('您选中的车主未被移入黑名单，不可做此操作！');
+            this.$emit('getData')
+             return
        }
       else{
-        var obj = JSON.parse(JSON.stringify(this.params));
-       
-        this.formFroze=obj;
         // this.formFroze.obtainGradeTime = parseTime(this.formFroze.obtainGradeTime,"{y}-{m}-{d}");
         this.freezeDialogFlag=true 
-
       }
       }
     },
@@ -381,7 +396,9 @@ export default {
 }
 </script>
 <style lang="scss">
-
+.blackInfo{
+  margin-left: 10px
+}
 </style>
 
 

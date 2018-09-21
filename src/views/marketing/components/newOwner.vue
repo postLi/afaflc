@@ -647,32 +647,35 @@ export default {
 }
 </script>
 <style lang="scss" >
-    .newMarketingOrder{
-        .el-dialog{
-            width: 1000px!important;
-            max-height: 100%;
-        }
-        .swith{
-            margin:0px 0px 10px 10px;
-            .el-switch{
-                display: inline-block;
-            }
-        }
-        .el-dialog__footer{
-            padding: 20px 20px 20px;
-        }
-       .el-dialog{
-           overflow: unset;
-       }
-    }
     .creatOrder{
+        display: inline-block;
+        margin-right: 10px;
         .el-button {
-                margin-right: 20px;
-                padding: 10px 20px;
+        margin-right:0px;
+        padding: 7px 15px 7px;
+        font-size:12px;
         }
         .el-dialog__footer{
             margin: 0 10px;
         }
+        .newMarketingOrder{
+            .el-dialog{
+                width: 1000px!important;
+                max-height: 100%;
+            }
+            .swith{
+                margin:0px 0px 10px 10px;
+                .el-switch{
+                    display: inline-block;
+                }
+            }
+            .el-dialog__footer{
+                padding: 20px 20px 20px;
+            }
+        .el-dialog{
+            overflow: unset;
+        }
+        }        
         .upload{
             width: 300px;
             line-height: 20px;

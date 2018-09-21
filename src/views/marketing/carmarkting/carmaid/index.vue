@@ -29,7 +29,7 @@ import '@/styles/tab.scss'
 export default {
   data() {
     return {
-      shipperName: 'first'
+      shipperName: 'SameCity'
     }
   },
   components: {

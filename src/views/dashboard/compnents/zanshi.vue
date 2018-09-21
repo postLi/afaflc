@@ -13,7 +13,7 @@
             </div>
             <el-row class="main_forthUl">
                 <ul>
-                    <li>需求资源池 <span>({{title}})</span>
+                    <li>需求资源池 <span class="title_span">({{title}})</span>
                     </li>
                     <li><span>求货需求订单:</span> <span>34755</span>单</li>
                     <li><span>求车需求订单:</span><span>5568</span>单</li>
@@ -23,7 +23,7 @@
                 <ul>
                     <li>
                         用户注册
-                        <span>({{title}})</span>
+                        <span class="title_span">({{title}})</span>
                         <!-- <i class="el-icon-check"></i> -->
                     </li>
                     <li><span>货主:</span><span>7989</span>人</li>
@@ -34,7 +34,7 @@
                 <ul>
                     <li>
                         用户认证
-                        <span>({{title}})</span>
+                        <span class="title_span">({{title}})</span>
                         <!-- <i class="el-icon-check"></i> -->
                     </li>
                     <li><span>货主:</span><span>9986</span>人</li>
@@ -45,7 +45,7 @@
                 <ul>
                     <li>
                         货主下单
-                        <span>({{title}})</span>
+                        <span class="title_span">({{title}})</span>
                         <!-- <i class="el-icon-check"></i> -->
                     </li>
                     <div id="xiadan" style="width:100%;height:150px;">
@@ -55,7 +55,7 @@
                 <ul>
                     <li>
                         交易成功
-                        <span>({{title}})</span>
+                        <span class="title_span">({{title}})</span>
                         <!-- <i class="el-icon-check"></i> -->
                     </li>
                     <div id="jiaoyi" style="width:100%;height:150px;">
@@ -516,15 +516,30 @@ export default {
             box-shadow: 2px 2px 2px 2px rgba(0,0,0,.1);
             transition: color 4s ease;
             border-radius: 5px;
+            flex-direction: column;
+            display:flex;
         li{
-            line-height: 20px;
-            font-size: 13px;
-            // padding: 0 20px;
-            margin: 5px 0 ;
-            color:#fff;
+            // line-height: 20px;
+            // font-size: 13px;
+            // // padding: 0 20px;
+            // margin: 5px 0 ;
+            // color:#fff;
+            
+            // flex:1;
+            display: inline-block;
+            // min-width: 318.41px;
+            // text-align: center;
+            color:#Ffff;/* 初始颜色 */
+            white-space: nowrap;
+            font-size: 14px;
+            cursor: pointer;
+            box-sizing: border-box;
+            
             span{
                 color:#333;
                 padding:0 10px;
+                height:30px;
+                line-height: 30px;
             }
             span:first-child{                                         
                 color: #333;
@@ -536,20 +551,25 @@ export default {
             }
         }
         li:nth-child(1){
-            position: relative;
-            padding: 14px 20px ;
-            font-size: 16px;
-            font-weight: bold;
-            margin: 0px;
-            // background:  rgb(211, 234, 253);
-            background-color: #6bc9eb;
-            margin-bottom: 10px;
-            border-radius: 5px 5px 0 0;
+          position: relative;
+          // padding: 20px 20px;
+          padding-left:15px;
+          font-size: 16px;
+          font-weight: bold;
+          margin: 0px;
+          background-color: #6bc9eb;
+          margin-bottom: 10px;
+          height:40px;
+          line-height:40px;
+          border-radius: 5px 5px 0 0;
             span{
                 color:red;
                 font-size: 14px;
+                padding:none;
+                height:0px;
+                line-height: 0px;
             }
-        }
+          }
         }
         ul:last-child{
             margin-right: 0;
@@ -564,7 +584,6 @@ export default {
             overflow: hidden;
             color: red;
         }
-        
     }
     .main_forthUl ul:hover {
         // border:1px solid #3e9ff1;

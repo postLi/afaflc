@@ -1,8 +1,6 @@
 <template>
- <div class="coupon_shipper clearfix">
-    <div class="clearfix" style="height:100%">
-        <div class="shipper_coupon1 ">
-          <el-form :inline="true">
+    <div class="identicalStyle Marketing" style="height:100%">
+          <el-form :inline="true" class="demo-ruleForm classify_searchinfo">
             <el-form-item label="活动名称：">
                <el-input v-model="formAllData.activityName"></el-input>
             </el-form-item>     
@@ -51,12 +49,11 @@
                         >
                     </el-date-picker>
             </el-form-item>        
-            <el-form-item>       
-          <el-button type="primary"  plain @click="getData_query">查询</el-button> 
+            <el-form-item class="fr">       
+          <el-button type="primary"  plain @click="getData_query" :size="btnsize">查询</el-button> 
           </el-form-item>
           </el-form>
-         </div>
-          	<div class="classify_couponinfo">
+          	<div class="classify_info">
             	<div class="btns_box">
               <newautocoupon
                     btntext="新增"
@@ -66,6 +63,7 @@
                     icon="el-icon-news"
                     btntitle="创建"
                     :editType="types"
+                    @getData="getDataList"
                    >
               </newautocoupon>
               <modautocoupon
@@ -77,11 +75,10 @@
                     btntitle="修改"
                     :editType="types"
                     :params = 'selectRowData'
+                    @getData="getDataList"
                     >
               </modautocoupon>
-                <el-button  type="primary" value="value" plain icon="el-icon-bell" @click="handleUseStates"  v-if="types=='one'">启用/停用</el-button>
-                <el-button type="primary" plain icon="el-icon-delete" @click="delete_data">删除</el-button>
-                <span  v-if="types=='two'">
+                <span  v-if="types=='two'" class="sw">
               <couponGive
                     btntext="发放"
                     :plain="true"
@@ -91,6 +88,7 @@
                     editType="Give"
                     btntitle="优惠卷发放"
                     :params = 'selectRowData'
+                    @getData="getDataList"
                     >
               </couponGive>
              <couponGive
@@ -102,19 +100,30 @@
                     editType="Build"
                     btntitle="优惠卷生成"
                     :params = 'selectRowData'
+                    @getData="getDataList"
                     >
               </couponGive>
                 </span>
+                 <el-button  type="primary" value="value" plain icon="el-icon-bell" @click="handleUseStates"  v-if="types=='one'">启用/停用</el-button>
+                <el-button type="primary" plain icon="el-icon-delete" @click="delete_data" :size="btnsize">删除</el-button>
             	</div>
-            <div class="info_city">    
-            <el-table style="width: 100%" stripe border height="100%"   :data="tableDataAll"  @row-click="clickDetails" highlight-current-row>
-            <el-table-column  label="序号" width="80px" type="index">
+            <div class="info_news">    
+            <el-table ref="multipleTable" style="width: 100%" stripe border height="100%"   :data="tableDataAll"  @selection-change="getSelection" @row-click="clickDetails" highlight-current-row>
+              <el-table-column
+                            label="选择"
+                            type="selection"
+                            width="50">
+              </el-table-column>
+           <el-table-column label="序号" sortable  width="80">
+                            <template slot-scope="scope">
+                             {{ (page - 1)*pagesize + scope.$index + 1 }}
+                            </template>
+            </el-table-column> 
+            <el-table-column  label="创建" prop="createTime" sortable>
             </el-table-column>
-            <el-table-column  label="创建" prop="createTime">
+            <el-table-column  label="活动类型" prop="activityType" sortable>
             </el-table-column>
-            <el-table-column  label="活动类型" prop="activityType">
-            </el-table-column>
-            <el-table-column  label="活动名称" prop="activityName">
+            <el-table-column  label="活动名称" prop="activityName" sortable>
                 <template slot-scope="scope">
                     <automationcheck
                           btntype="text"           
@@ -132,27 +141,26 @@
                     ></automationcheck>
                 </template>
             </el-table-column>
-            <el-table-column  label="所属区域" prop="areaName" show-overflow-tooltip >
+            <el-table-column  label="所属区域" prop="areaName" show-overflow-tooltip sortable>
             </el-table-column>
-            <el-table-column  label="已派发优惠券金额" prop="distribution">
+            <el-table-column  label="已派发优惠券金额" prop="distribution" sortable>
             </el-table-column>       
-            <el-table-column  label="已使用优惠券金额" prop="alreadyuse">
+            <el-table-column  label="已使用优惠券金额" prop="alreadyuse" sortable>
             </el-table-column>                                                       
-            <el-table-column  label="开始时间" prop="startTime">
+            <el-table-column  label="开始时间" prop="startTime" sortable>
             </el-table-column>
-            <el-table-column  label="结束时间" prop="endTime">
+            <el-table-column  label="结束时间" prop="endTime" sortable>
             </el-table-column>            
-            <el-table-column  label="启用状态" >
+            <el-table-column  label="启用状态" sortable>
             <template  slot-scope="scope">
               {{ scope.row.usingStatus == 1 ? '启用' : '停用' }}
             </template>
             </el-table-column>          
             </el-table> 
                 <!-- 页码 -->
-        <div class="info1_tab_footer">共计:{{ dataTotal }} <div class="show_pager"> <Pager :total="dataTotal" @change="handlePageChange"  :sizes="sizes"/></div> </div>
+        <div class="info_tab_footer">共计:{{ dataTotal }} <div class="show_pager"> <Pager :total="dataTotal" @change="handlePageChange"  :sizes="sizes"/></div> </div>
         	</div> 
           </div>
-      </div>
   </div>
 </template>
 
@@ -176,6 +184,7 @@ export default {
     },
     data(){
         return{
+            btnsize:'mini',
             options:regionDataPlus,
             selectRowData:[],
             selectId:[],
@@ -307,16 +316,29 @@ export default {
           this.firstblood();
           },
 
-        // 选择行
-         clickDetails(i){
-             console.log(i)
-           this.selectRowData = i
-         },
+
+            // 判断选中与否
+            getSelection(val){
+            console.log('选中内容',val)
+            this.selectRowData = val;
+            },
+            //点击选中当前行
+            clickDetails(row, event, column){
+            this.$refs.multipleTable.toggleRowSelection(row);
+            },
        // 选择删除
         delete_data(){
-              if(!this.selectRowData.id){
-                this.$message.info('未选中任何删除内容');
-                }else{
+          if(this.selectRowData.length == 0){
+               this.$message.warning('请选择您要操作的用户');
+               return
+          }else if (this.selectRowData.length > 1) {
+                this.$message({
+                    message: '每次只能操作单条数据~',
+                    type: 'warning'
+                })
+               this.$refs.multipleTable.clearSelection();
+          }
+        else {
                 this.delDataInformation()
             }
         },
@@ -327,7 +349,7 @@ export default {
                     cancelButtonText: '取消',
                     type: 'warning'
                 }).then(()=>{
-                    data_Del_couponActive(this.selectRowData.id).then(res=>{
+                    data_Del_couponActive(this.selectRowData[0].id).then(res=>{
                         this.$message.success('删除成功');
                         this.firstblood();       
                         this.selectRowData=''; 
@@ -346,12 +368,18 @@ export default {
             },
         // 启用禁用
         handleUseStates(){
-                if(!this.selectRowData.id){
-                    //未选择任何修改内容的提示
-                        this.$message.info('未选中内容');
-                        return
-                }else{
-                    this.selectId.push(this.selectRowData.id)
+                if(this.selectRowData.length == 0){
+                    this.$message.warning('请选择您要操作的用户');
+                    return
+                }else if (this.selectRowData.length > 1) {
+                        this.$message({
+                            message: '每次只能操作单条数据~',
+                            type: 'warning'
+                        })
+                    this.$refs.multipleTable.clearSelection();
+                }
+                else {
+                    this.selectId.push(this.selectRowData[0].id)
                     
                   data_Able_couponActive(this.selectId).then(res=>{
                      this.selectId.splice(0,1);
@@ -410,7 +438,11 @@ export default {
                        this.couponStatusList.push(item);
                     })   
                 })            
-        }
+        },
+                   getDataList(){
+                this.firstblood()
+                this.$refs.multipleTable.clearSelection();
+    }
     },
      mounted(){
          if(this.types=='two')
@@ -424,84 +456,12 @@ export default {
 }
 </script>
 <style lang="scss">
-.coupon_shipper{
-        height:100%;    
-        position: relative;
-.shipper_coupon1{
-    position: absolute;
-    left: 0;
-    top: 0;
-    padding: 15px 16px;
-    height: 70px;
-    width: 100%;
-    line-height: 35px;
-    .el-input__inner{
-      height: 30px;
-      line-height: 30px;
-    }
-    .el-button{
-      margin-right: 20px;
-      padding: 8px 20px;
-    }
-    .el-range-editor{
-        margin-left:0px;
-        margin-top:5px;
-        .el-range__icon{
-            line-height: 24px;
-        }
-        .el-range-separator{
-             line-height: 24px;
-             width:9%;
-        }
-         .el-range__close-icon{
-             line-height: 24px;
-         }
-         width: 270px;
-    }
-    .el-form-item{
-        margin-bottom:0px;
-    }
+.Marketing{
+  .el-cascader{
+    margin-top:-10px;
+  }
+  .sw{
+      display: inline-block
+  }
 }
-.classify_couponinfo{
-    height: 100%;
-    padding: 70px 15px 0 15px;
-    .commoncss{
-      display: inline-block;
-    }
-    .btns_box{
-    margin-bottom: 10px;
-    }
-    .info_city{
-      height:88%;
-      .cell{
-      color: #333;
-      font-size: 14px;
-      }
-    }
-    .el-button{
-      margin-right: 20px;
-      padding: 10px 20px;
-    }
-}
-.info1_tab_footer{
-    padding-left: 20px;
-    background: #eee;
-    height: 40px;
-    line-height: 40px;
-    box-shadow: 0 -2px 2px rgba(0, 0, 0, 0.1);
-    z-index: 10;
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    .show_pager{float: right}
-    .page-select{top:5px;
-    .el-input__inner{
-      height: 30px;
-      line-height: 30px; 
-    }
-    }
-}
-}
-
 </style>

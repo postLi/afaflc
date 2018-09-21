@@ -1,6 +1,6 @@
 <template> 
     <div class="carNewinfo commoncss">
-        <el-button :type="type" :value="value" :plain="plain" :icon="icon" @click="openDialog()"><span class="needMoreInfo">{{btntext}}</span ></el-button>
+        <el-button :type="type" :value="value" :plain="plain" :icon="icon" @click="openDialog()"><span :class="editType=='view'?'BtnInfo':''">{{btntext}}</span ></el-button>
         <el-dialog :title="title" :visible="driverTemplateDialogFlag" :before-close="change">
              <el-form
               ref="templateModel"
@@ -288,9 +288,6 @@ export default {
             if(!(phoneTest.test(val))){
                 cb(new Error('请输入正确的手机号码格式'))
             } 
-            else if(this.updataflag){
-                cb()
-            }
             else {
                 data_post_mobileGetDriver(val).then(res=>{
                     console.log(res)
@@ -318,9 +315,6 @@ export default {
              let IdTest = /(^\d{18}$)/
             if(!(IdTest.test(val))){
                 cb(new Error('请输入正确的身份证'))
-            }
-            else if(this.updataflag){
-                cb()
             }
             else {
                 data_post_checkDriverCardid(val).then(res=>{
@@ -523,6 +517,7 @@ export default {
                 this.selectFlag=false;
                 this.$refs.templateModel.resetFields();
                 this.templateModel.carSpec = null;
+                this.$emit('getData')
                 // if(this.editType == 'add'){
                 //     this.templateModel = {
                 //         registerOrigin:'AF0030103',
@@ -609,19 +604,26 @@ export default {
             if (this.editType === 'add') {
                 this.driverTemplateDialogFlag = true ;
             }else if(this.editType=== 'valetAuth'||this.editType==='edit'||this.editType==='view'){
-              
-                if(this.templateItem!= null){
-                    var obj = JSON.parse(JSON.stringify(this.templateItem));
-                    console.log('dds',this.templateItem)
-                    this.templateModel = obj ;
+            if(this.templateItem.length == 0 && this.editType !== 'add'){
+               this.$message.warning('请选择您要操作的用户');
+               return
+            }else if (this.templateItem.length > 1 && this.editType !== 'add') {
+                this.$message({
+                    message: '每次只能操作单条数据~',
+                    type: 'warning'
+                })
+                this.$emit('getData') 
+            }
+            else{
+                    // var obj = JSON.parse(JSON.stringify(this.templateItem));
+                    // console.log('dds',this.templateItem)
+                    this.templateModel = this.templateItem[0] ;
                     this.driverTemplateDialogFlag = true ;
-                }else{         
-                    this.$message.info('未选中需要认证的内容');
-                    return
-                    this.driverTemplateDialogFlag = false ;    
                 }
             }
             if(this.editType == 'view'){
+                console.log('this.templateItem',this.templateItem)
+                 this.templateModel = this.templateItem
                 this.driverTemplateDialogFlag = true ;
         }
         },
@@ -673,6 +675,9 @@ export default {
 }
 </script>
 <style  lang="scss">
+.BtnInfo{
+    font-weight: bold
+}
 .carNewinfo{
     display: inline-block;
     .el-dialog{
@@ -684,8 +689,7 @@ export default {
 } 
 .el-button{
     margin-right:0px;
-    padding: 7px 15px 7px;
-
+    padding: 0px 15px 0px;
  }
 .carOwner .el-checkbox{
     margin-left:0px!important;

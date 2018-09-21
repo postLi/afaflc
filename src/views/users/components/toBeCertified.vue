@@ -26,9 +26,9 @@
                     :plain="true"
                     type="primary" 
                     btntype="primary"
-                    icon="el-icon-news"
+                    icon="el-icon-check"
                     :params="selectionData"
-                    editType="add"
+                    editType="edit"
                     btntitle="认证审核"
                     @getData="getDataList">
                     </driverCertifyTemplate>
@@ -41,34 +41,42 @@
                         border
                         highlight-current-row
                         current-row-key
+                        @selection-change="getSelection" 
                         @row-click="clickDetails"
                         tooltip-effect="dark"
                         style="width: 100%">
-                        <el-table-column
-                        type="index"
-                        label="序号"
-                        width="80">
+                         <el-table-column
+                            label="选择"
+                            type="selection"
+                            width="50">
                         </el-table-column>
-                        <el-table-column label="车牌号">
-                        <template slot-scope="scope">
-                        <driver-newTemplate         
-                          btntype="text"           
-                         :btntext="scope.row.carNumber"
-                          editType="view"
-                         :templateItem="scope.row"
-                         btntitle="详情"
-                         :updataflag="true"
-                         >
-                        </driver-newTemplate>
+                        <el-table-column label="序号" sortable  width="80">
+                            <template slot-scope="scope">
+                                {{ (page - 1)*pagesize + scope.$index + 1 }}
+                            </template>
+                        </el-table-column> 
+                        <el-table-column label="车牌号" sortable>
+                        <template slot-scope="scoped" >
+                            <driver-newTemplate
+                            :templateItem="scoped.row"
+                                :btntext="scoped.row.driverMobile"
+                                type="primary" 
+                                btntype="text"
+                                editType="view"
+                                btntitle="车主详情">
+                                </driver-newTemplate>
                         </template>
                         </el-table-column>
-                        <el-table-column prop="driverMobile" label="手机号" >
+                        <el-table-column prop="driverMobile" label="手机号" sortable>
                         </el-table-column>
-                        <el-table-column  prop="driverName" label="车主" width="200"></el-table-column>
-                        <el-table-column prop="belongCityName" label="所在地"></el-table-column>
-                        <el-table-column  prop="authenticationTime" label="提交认证时间"></el-table-column>
-                        <el-table-column  prop="waitTime"  label="等待时长"></el-table-column>
-                        <!-- <el-table-column  prop="driverStatus" label="操作"></el-table-column> -->
+                        <el-table-column  prop="driverName" label="车主" width="200" sortable></el-table-column>
+                        <el-table-column prop="belongCityName" label="所在地" sortable></el-table-column>
+                        <el-table-column  prop="authenticationTime" label="提交认证时间" sortable>
+                        <template  slot-scope="scope">
+                            <span v-if="scope.row.authenticationTime">{{ scope.row.authenticationTime | parseTime}}</span>
+                        </template>
+                        </el-table-column>
+                        <el-table-column  prop="waitTime"  label="等待时长" sortable></el-table-column>
                     </el-table>
 <div class="info_tab_footer">共计:{{ totalCount }} <div class="show_pager"> <Pager :total="totalCount" @change="handlePageChange" /></div> </div>                         
                 </div>
@@ -202,16 +210,21 @@
                 data_get_driver_list(this.page,this.pagesize,this.formInline).then(res=>{
                     this.totalCount = res.data.totalCount;
                     this.tableDataTree = res.data.list;
-                    this.tableDataTree.forEach(item => {
-                        item.authenticationTime = parseTime(item.authenticationTime,"{y}-{m}-{d}");
-                    })
+                    // this.tableDataTree.forEach(item => {
+                    //     item.authenticationTime = parseTime(item.authenticationTime,"{y}-{m}-{d}");
+                    // })
                 })
             },
             //点击选中当前行
             clickDetails(row, event, column){
-                this.selectionData = row
-                console.log(' this.selectRowData', this.selectionData)
+                this.$refs.multipleTable.toggleRowSelection(row);
             },
+            // 判断选中与否
+            getSelection(val){
+                console.log('选中内容',val)
+                this.selectionData = val;
+            },
+
             //点击查询按纽，按条件查询列表
             getdata_search(event){
               this. firstblood()
@@ -249,6 +262,7 @@
             },
             getDataList(){
                  this.firstblood()
+                 this.$refs.multipleTable.clearSelection();
             } 
         }
     }
