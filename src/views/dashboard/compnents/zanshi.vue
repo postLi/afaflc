@@ -1,6 +1,6 @@
 <template>
         <div class="main_content ">
-            <div class="head_title clearfix">
+            <!-- <div class="head_title clearfix">
                 <h4 class="fl">数据总览</h4>
                 <ul class=" clearfix ">
                     <li>今天</li>
@@ -10,6 +10,24 @@
                     <li>最近两个月</li>
                     <li>2018-06-4至2019-08-09</li>
                 </ul>
+            </div> -->
+            <div class="head_title clearfix">
+              <h4 class="fl">数据总览</h4>
+              <ul>
+                <li v-for="(item, index) in dataset" :class="{'active':item.keyval === currentkey} " :key="index" @click="currentkey = item.keyval">{{item.text}}</li>
+                <li>
+                  <el-date-picker
+                    v-model="pickerDate"
+                    type="daterange"
+                    align="right"
+                    range-separator="至"
+                    start-placeholder="开始日期"
+                    end-placeholder="结束日期"
+                    @change="getDateChange"
+                    :picker-options="pickerOptions3">
+                  </el-date-picker>
+                </li>
+              </ul>
             </div>
             <el-row class="main_forthUl">
                 <ul>
@@ -74,15 +92,151 @@
 
 <script>
 import echarts from 'echarts'
-
+import { pickerOptions4 } from '@/utils/index'
 export default {
-  data() {
-    return {
-      title: '昨天',
-      tab: []
+  watch: {
+    currentkey(newVal) {
+      if (newVal !== '') {
+        this.doAction(newVal)
+      }
     }
   },
+  data() {
+    return {
+      dataset: [],
+      title: '昨天',
+      currentkey: '',
+      tab: [],
+      pickerDate: [],
+      searchQuery: {
+        vo: {
+          'nowStartTime': '',
+          'nowEndTime': '',
+          'pastStartTime': '',
+          'pastEndTime': '',
+          'buttonKey': 0
+        }
+      },
+      pickerOptions3: {
+        shortcuts: [{
+          text: '今天',
+          keyval: 0,
+          onClick(picker) {
+            // 今天
+            const Today = pickerOptions4.today()
+            // 昨天
+            const yesterDay = pickerOptions4.yesterDay()
+            // console.log(pickerOptions4.today())
+            picker.$emit('pick', Today)
+          }
+        }, {
+          text: '昨天',
+          keyval: 1,
+          onClick(picker) {
+            // 昨天
+            const yesterDay = pickerOptions4.yesterDay()
+            // 前天
+            const beforeDady = pickerOptions4.beforeDady()
+            console.log(pickerOptions4.yesterDay())
+            picker.$emit('pick', YesterDay)
+          }
+        }, {
+          text: '本周',
+          keyval: 2,
+          onClick(picker) {
+            // 最近的星期天的日期，到今天的日期
+            const CurrentWeek = pickerOptions4.currentWeek()
+           // 上上周星期天的日前，到上周六的日期
+            const lastWeek = pickerOptions4.lastWeek()
+            // console.log(pickerOptions4.currentWeek())
+            picker.$emit('pick', CurrentWeek)
+          }
+        }, {
+          text: '本月',
+          keyval: 3,
+          onClick(picker) {
+            // 本月1日到今天的日前
+            const CurrentMonth = pickerOptions4.currentMonth()
+            // 上月1日到上月的结束时间
+            const LastMonth = pickerOptions4.lastMonth()
+            // console.log(pickerOptions4.lastMonth())
+            picker.$emit('pick', CurrentMonth)
+          }
+        }, {
+          text: '本年',
+          keyval: 4,
+          onClick(picker) {
+            const CurrentYear = pickerOptions4.currentYear()
+            const LastYear = pickerOptions4.lastYear()
+            picker.$emit('pick', CurrentYear)
+          }
+        }]
+
+      },
+      value6: '',
+      value7: ''
+    }
+  },
+  methods: {
+    getDateChange(val) {
+      this.searchQuery.vo.buttonKey = 5
+      this.searchQuery.vo.nowStartTime = val[0].getTime()
+      this.searchQuery.vo.nowEndTime = val[0].getTime()
+      this.currentkey = 5
+    },
+    doAction(type) {
+      switch (type) {
+        case 0:
+          const Today = pickerOptions4.today()
+          // console.log(this.dataset)
+          // picker.$emit('pick', Today)
+          this.pickerDate = Today
+          this.searchQuery.vo.buttonKey = 0
+          this.currentkey = 0
+          console.log('今天')
+          break
+        case 1:
+          const YesterDay = pickerOptions4.yesterDay()
+          this.pickerDate = YesterDay
+          console.log('昨天')
+          this.searchQuery.vo.buttonKey = 1
+          this.currentkey = 1
+          break
+        case 2:
+          // 最近的星期天的日期，到今天的日期
+          const CurrentWeek = pickerOptions4.currentWeek()
+          // 上上周星期天的日前，到上周六的日期
+          const lastWeek = pickerOptions4.lastWeek()
+          this.pickerDate = CurrentWeek
+          this.searchQuery.vo.buttonKey = 2
+          this.currentkey = 2
+          console.log('本周')
+          break
+        case 3:
+          // 本月1日到今天的日前
+          const CurrentMonth = pickerOptions4.currentMonth()
+          // 上月1日到上月的结束时间
+          const LastMonth = pickerOptions4.lastMonth()
+          this.pickerDate = CurrentMonth
+          this.searchQuery.vo.buttonKey = 3
+          this.currentkey = 3
+          console.log('本月')
+          break
+        case 4:
+          const CurrentYear = pickerOptions4.currentYear()
+          const LastYear = pickerOptions4.lastYear()
+          this.pickerDate = CurrentYear
+          this.searchQuery.vo.buttonKey = 4
+          this.currentkey = 4
+          break
+      }
+      // this.getData()
+    },
+  },
   mounted() {
+     this.dataset = this.pickerOptions3.shortcuts
+    // 默认展示今天的数据
+    this.currentkey = 0
     var myChart = echarts.init(document.getElementById('main_lefttop'))
         // var myChart2 = echarts.init(document.getElementById('main_leftdown'))
     var myChart3 = echarts.init(document.getElementById('main'))
@@ -456,43 +610,86 @@ export default {
 </script>
 <style lang="scss">
 .main_content{
-    padding: 15px 20px;
-    height: 100%;
-    // min-width: 1100px;
-    height: 100%;
-    // min-height: 666px;
-    background:rgb(235,235,235);
-    display: flex;
-    -ms-flex-direction: column;
-    flex-direction: column;
-    .head_title{
-        line-height: 30px;
-        height: 50px;
-        background: #ffff;
-        padding: 10px 20px;
-        margin-bottom: 2px;
-        box-sizing: border-box;
-        h4{
-            color: #333;
+  padding: 15px 20px;
+  height: 100%;
+  // min-width: 1100px;
+  height: 100%;
+  // min-height: 666px;
+  background:rgb(235,235,235);
+  display: flex;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  .head_title{
+    height: 31px ;
+    line-height: 31px ;
+    overflow: hidden;
+    border-radius: 2px;
+    background: #ffff;
+    box-sizing: border-box;
+    // margin-bottom: 0.6%;
+    // box-shadow: 2px 2px 2px 2px ,-2px -2px -2px -2px rgba(0, 0, 0, 0.10);
+    h4{
+      font-size: 16px;
+      display: inline-block;
+      margin-left:20px;
+    }
+    ul{
+      // margin-right: -50% !important;
+      
+      position: relative;
+      width: 100%;
+      // width: 45%;
+      height: 100%;
+      text-align: right;
+      // background:yellow;
+      li{
+        display: inline-block;
+        min-width: 45px;
+        text-align: center;
+        
+        white-space: nowrap;
+        font-size: 14px;
+        color:#333; /* 初始颜色 */
+        cursor: pointer;
+         box-sizing: border-box;
+        .el-range-editor.el-input__inner{
+          // margin-left:10px !important;
+          height:4%;
+          line-height: 30px;
+          border:none;
+          // position:relative;
+          // position:absolute;
         }
-        ul{
-            margin-left: 65%;
-        li{
-            float: left;
-            padding: 0 10px;
-            cursor: pointer;
-            font-size: 14px;
-            color: #666666;
+        .el-date-editor .el-range__close-icon{
+          // margin-top:-2%;
+          position:absolute;
+          right:10%;
+          top:0%;
         }
-        li:hover{
-            color:#3e9ff1;
-            font-weight: bold;
-            font-size: 14px;
-            margin-top: -2px;
+        .el-date-editor .el-range__icon {
+          display:none;
         }
-        li:first-child{
-            float: left;
+        .el-date-editor .el-range-separator{
+          line-height: 25px;
         }
+        .el-range-editor .el-range-input{
+          margin-left:10px !important;
+        }
+      }
+      // li:nth-child(6){
+      //   width:40%;
+      //   height: 100%;
+      //   background: red;
+      // }
+      li:hover,li.active{
+        color:#3e9ff1;
+        transform: scale(1.4);
+        
+        // font-weight: bold;
+      }
+      li:nth-child(6):hover {
+        transform: none;
+      }
     }
   }
   .main_forthUl{

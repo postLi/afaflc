@@ -156,8 +156,7 @@
           </el-row>
         </el-form>
         <div slot="footer" class="dialog-footer">
-          <el-button type="primary"  v-if="editType=='add'" @click="add_data" >确 定</el-button>
-          <el-button type="primary"  v-else @click="updata_data" >确 定1</el-button>
+          <el-button type="primary" @click="updata_data" >确 定</el-button>
           <el-button @click="close()" >取 消</el-button>
         </div>
       </el-dialog>
@@ -464,9 +463,16 @@ export default {
                 })
                 this.$emit('getData') 
           }
-           else if(this.params[0].usingStatus==0){
+          else if(this.params.length == undefined && this.editType !== 'add')
+          {
+                this.$message.warning('请选择您要操作的用户');
+               return false
+          }          
+           else{
+            if(this.params[0].usingStatus==0){
             this.$message.info('选中内容被已禁用，不能进行修改操作');
             this.$emit('getData') 
+            return
            }
            else{
             this.update1();
@@ -485,7 +491,7 @@ export default {
             this.formAll.serivceCode=res.data.serivceCode
             this.formAll.usingStatus=res.data.usingStatus
            })
-
+            }
            }
    },
         inputChange(i){
@@ -566,7 +572,6 @@ export default {
           }, 
           update1:function(){
               data_get_ownerFromsame2_Id(this.params[0].id).then(res=>{
-                  console.log('111',res)
             this.formAll.reward1 = res.data[0].startPrice;this.formAll.reward2 = res.data[0].endPrice;
             this.formAll.reward3 = res.data[1].startPrice;this.formAll.reward4 = res.data[1].endPrice;
             this.formAll.reward5 = res.data[2].startPrice;this.formAll.reward6 = res.data[2].endPrice;
