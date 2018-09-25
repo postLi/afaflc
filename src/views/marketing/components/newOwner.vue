@@ -149,8 +149,7 @@
           </el-row>
         </el-form>
         <div slot="footer" class="dialog-footer">
-          <el-button type="primary"  v-if="editType=='add'" @click="add_data" >确 定</el-button>
-          <el-button type="primary"  v-else @click="updata_data" >确 定1</el-button>
+          <el-button type="primary"  @click="add_data" >确 定</el-button>
           <el-button @click="close()" >取 消</el-button>
         </div>
       </el-dialog>
@@ -506,23 +505,7 @@ export default {
         }
          },   
        openDialog:function(){
-       if(this.editType=='edit'){
-           if(!this.params.id){
-               
-            this.$message.info('未选中需要修改内容');
-           }
-           else if(this.params.usingStatus==0){
-            this.$message.info('选中内容被已禁用，不能进行修改操作');
-           }
-           else{
-            this.dialogFormVisible_add = true;
-            this.formAll = this.params
-           }
-
-       }
-       else{
         this.dialogFormVisible_add = true;
-       }
    },
    change:function(){
       this.dialogFormVisible_add = false;

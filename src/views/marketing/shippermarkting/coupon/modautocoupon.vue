@@ -521,11 +521,20 @@ export default {
                     type: 'warning'
                 })
                 this.$emit('getData') 
+                return
           }
-        else if(this.params[0].usingStatus==0){
-            this.$message.info('选中内容被已停用，不能进行修改操作');
+          else if(this.params.length == undefined && this.editType !== 'add')
+          {
+                this.$message.warning('请选择您要操作的用户');
+               return false
+          }          
+           else{
+            if(this.params[0].usingStatus==0){
+            this.$message.info('选中内容被已禁用，不能进行修改操作');
+            this.$emit('getData') 
+            return
            }
-        else{
+           else{
       data_get_couponActive_Id(this.params[0].id).then((res)=>{
           let now1 = new Date(res.data.startTime);
           let now2 = new Date(res.data.endTime);
@@ -548,13 +557,11 @@ export default {
           else{
           this.formAllData.areaName1 =res.data.province+res.data.city+res.data.area
           }
-          
       })
       data_get_couponActive2_Id(this.params[0].id).then((res)=>{
           this.formAllData.aflcCouponList = res.data
           for(var i= 0;i<this.formAllData.aflcCouponList.length;i++){
               this.formAllData.aflcCouponList[i].startTime  = new Date(this.formAllData.aflcCouponList[i].startTime).getTime()
-              console.log('1111',res)
               this.formAllData.aflcCouponList[i].endTime  = new Date(this.formAllData.aflcCouponList[i].endTime).getTime()
               this.formAllData.aflcCouponList[i].areaName1= this.formAllData.aflcCouponList[i].province+this.formAllData.aflcCouponList[i].city+this.formAllData.aflcCouponList[i].area
           if(this.formAllData.aflcCouponList[i].area==null){
@@ -567,9 +574,7 @@ export default {
          })
          this.dialogFormVisible_add = true;
         }
-  
-
-
+        }
    },
     change:function(){
       this.dialogFormVisible_add = false;

@@ -234,6 +234,7 @@ export default {
     
 
         return{
+        areaStatus:null,
         areaName:null,
         options:regionDataPlus,      
         dialogFormVisible_add: false,
@@ -241,6 +242,7 @@ export default {
         optionsCar:[],
         MaidLevel:[],
         formAll:{
+            usingStatus:null,
             areaCode: [],
             carType:null,
             commissionGrade:null,
@@ -273,7 +275,8 @@ export default {
         handler: function(val, oldVal) {
             if(!val){
             this.$refs['formAll'].resetFields();
-            this.$emit('getData') 
+            this.$emit('getData');
+            this.areaStatus = null;
             }            
         },
     },
@@ -321,10 +324,18 @@ export default {
                     type: 'warning'
                 })
                 this.$emit('getData') 
+                return
           }
-            else if(this.params[0].usingStatus==0){
+          else if(this.params.length == undefined && this.editType !== 'add')
+          {
+                this.$message.warning('请选择您要操作的用户');
+               return false
+          }
+           else{
+            if(this.params[0].usingStatus==0){
             this.$message.info('选中内容被已禁用，不能进行修改操作');
             this.$emit('getData') 
+            return
            }
            else{
             this.dialogFormVisible_add = true;
@@ -333,7 +344,7 @@ export default {
                 this.formAll = res.data
            })
            }
-
+           }
        }
        else{
         this.dialogFormVisible_add = true;
@@ -369,15 +380,13 @@ export default {
        this.$refs['formAll'].validate(valid=>{
         if(valid){
             if(this.formAll.area){
-                this.formAll.areaCode.splice(0,2)
+               this.areaStatus = this.formAll.areaCode[2]
             }
             else{
-                 this.formAll.areaCode.splice(0,1)
-                 this.formAll.areaCode.pop()
+               this.areaStatus = this.formAll.areaCode[1]
             }
-         this.formAll.areaCode =String(this.formAll.areaCode)
         var forms=[{
-            areaCode:this.formAll.areaCode,
+            areaCode:this.areaStatus,
             carType:this.formAll.carType,
             commissionGrade:this.formAll.commissionGrade,
             reward1:this.formAll.reward1,

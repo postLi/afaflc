@@ -162,6 +162,11 @@ export default {
                 })
                 this.$emit('getData') 
           }
+          else if(this.params.length == undefined && this.editType !== 'add')
+          {
+                this.$message.warning('请选择您要操作的用户');
+               return false
+          }
            else{
             data_get_couponActive3_Id(this.params[0].id).then(res=>{
             this.tableDataAll = res.data;
@@ -204,7 +209,7 @@ export default {
            }
            else{
                 this.$message.success('生成成功');
-               location.href = ('/api/aflcsmservice/sm/aflcCouponUse/v1/produceCoupon/?id='+this.params.id+'&num='+this.num+'&access_token=' + Cookies.get(TokenKey))
+               location.href = ('/api/aflcsmservice/sm/aflcCouponUse/v1/produceCoupon/?id='+this.params[0].id+'&num='+this.num+'&access_token=' + Cookies.get(TokenKey))
                
                this.dialogFormVisible_add = false;
         // exportWithIframe('/api/aflcsmservice/sm/aflcCouponUse/v1/produceCoupon/?id='+this.params.id+'&num='+this.num+'&access_token=' + Cookies.get(TokenKey))
@@ -223,9 +228,9 @@ export default {
         let inputFile = this.$refs.inputer;
         var formdata = new FormData()
         console.log('inputFile',typeof(inputFile.files[0]));
-        formdata.append('id',this.params.id);
+        formdata.append('id',this.params[0].id);
         formdata.append('multipartFile',inputFile.files[0]);
-        data_get_BatchDistribution(this.params.id,formdata).then(res=>{
+        data_get_BatchDistribution(this.params[0].id,formdata).then(res=>{
              this.$message.success('发放成功');
              this.dialogFormVisible_add = false;
         }).catch(res=>{
@@ -235,7 +240,7 @@ export default {
        },
        grantCoupon(){
            let mobile_Araay = this.mobile.split('\n')
-          data_get_grantCoupon(this.params.id,mobile_Araay).then(res=>{
+          data_get_grantCoupon(this.params[0].id,mobile_Araay).then(res=>{
               this.$message.success('发放成功');
               this.dialogFormVisible_add = false;
          }).catch(res=>{

@@ -318,23 +318,33 @@ export default {
       if (this.editType == 'edit') {
           if(this.params.length == 0 && this.editType !== 'add'){
                this.$message.warning('请选择您要操作的用户');
-               return
+               return false
           }else if (this.params.length > 1 && this.editType !== 'add') {
                 this.$message({
                     message: '每次只能操作单条数据~',
                     type: 'warning'
                 })
                 this.$emit('getData') 
+                return false
           }
-         else if (this.params[0].usingStatus == 0) {
-          this.$message.warning('选中内容被已禁用，不能进行修改操作')
-          this.$emit('getData') 
-        } else {
-          this.dialogFormVisible_add = true
+          else if(this.params.length == undefined && this.editType !== 'add')
+          {
+                this.$message.warning('请选择您要操作的用户');
+               return false
+          }
+           else{
+            if(this.params[0].usingStatus==0){
+            this.$message.info('选中内容被已禁用，不能进行修改操作');
+            this.$emit('getData') 
+            return
+           }
+           else{
           data_get_Marketingsame_Id(this.params[0].id).then(res => {
             this.formAll = res.data
             this.areaName = res.data.province + res.data.city + res.data.area
           })
+          this.dialogFormVisible_add = true
+           }
         }
       } else {
         this.dialogFormVisible_add = true

@@ -155,8 +155,7 @@
           </el-row>
         </el-form>
         <div slot="footer" class="dialog-footer">
-          <el-button type="primary"  v-if="editType=='add'" @click="add_data" >确 定</el-button>
-          <el-button type="primary"  v-else @click="updata_data" >确 定1</el-button>
+          <el-button type="primary"  @click="updata_data" >确 定</el-button>
           <el-button @click="close()" >取 消</el-button>
         </div>
       </el-dialog>
@@ -454,18 +453,32 @@ export default {
                 return obj ? obj.value:'';
             },
    openDialog:function(){
-           if(!this.params.id){
-               
-            this.$message.info('未选中需要修改内容');
-           }
-           else if(this.params.usingStatus==0){
+          if(this.params.length == 0 && this.editType !== 'add'){
+               this.$message.warning('请选择您要操作的用户');
+               return
+          }else if (this.params.length > 1 && this.editType !== 'add') {
+                this.$message({
+                    message: '每次只能操作单条数据~',
+                    type: 'warning'
+                })
+                this.$emit('getData') 
+          }
+          else if(this.params.length == undefined && this.editType !== 'add')
+          {
+                this.$message.warning('请选择您要操作的用户');
+               return false
+          }          
+           else{
+            if(this.params[0].usingStatus==0){
             this.$message.info('选中内容被已禁用，不能进行修改操作');
+            this.$emit('getData') 
+            return
            }
            else{
             this.update1();
             this.$forceUpdate()
             this.dialogFormVisible_add = true;
-            data_get_shipperOwnerFrom1_Id(this.params.id).then(res=>{
+            data_get_shipperOwnerFrom1_Id(this.params[0].id).then(res=>{
             if(res.data.area==null){
             this.areaName =res.data.province+res.data.city
             }
@@ -478,7 +491,7 @@ export default {
             this.formAll.serivceCode=res.data.serivceCode
             this.formAll.usingStatus=res.data.usingStatus
            })
-
+           }
            }
    },
         inputChange(i){
@@ -559,7 +572,7 @@ export default {
           }, 
           update1:function(){
               
-              data_get_shipperOwnerFrom2_Id(this.params.id).then(res=>{
+              data_get_shipperOwnerFrom2_Id(this.params[0].id).then(res=>{
             console.log('111',res)
             this.formAll.reward1 = res.data[0].startPrice;this.formAll.reward2 = res.data[0].endPrice;
             this.formAll.reward3 = res.data[1].startPrice;this.formAll.reward4 = res.data[1].endPrice;
@@ -654,7 +667,7 @@ export default {
            {startPrice:this.formAll.reward13,endPrice:this.formAll.reward14,rewardGrade:'AF0020805',reward:this.formAll.data47,orderNum:this.formAll.maxnum6,id: this.formAll.id47},
            {startPrice:this.formAll.reward15,endPrice:this.formAll.reward16,rewardGrade:'AF0020805',reward:this.formAll.data48,orderNum:this.formAll.maxnum6,id: this.formAll.id48},           
            ]}
-       var forms= Object.assign({}, this.FormData,{areaCode:this.formAll.areaCode},{rewardMax:this.formAll.rewardMax},{carType:this.formAll.carType},{serivceCode:this.formAll.serivceCode},{id:this.params.id},{usingStatus:this.formAll.usingStatus});
+       var forms= Object.assign({}, this.FormData,{areaCode:this.formAll.areaCode},{rewardMax:this.formAll.rewardMax},{carType:this.formAll.carType},{serivceCode:this.formAll.serivceCode},{id:this.params[0].id},{usingStatus:this.formAll.usingStatus});
        this.$refs['formAll'].validate(valid=>{
         if(valid){
         data_get_shipperOwnerFrom_update(forms).then(res=>{
@@ -674,82 +687,4 @@ export default {
 }
 </script>
 <style lang="scss" >
-    .newMarketingOrder{
-        .el-dialog{
-            width: 1000px!important;
-            max-height: 100%;
-        }
-        .swith{
-            margin:0px 0px 10px 10px;
-            .el-switch{
-                display: inline-block;
-            }
-        }
-        .el-dialog__footer{
-            padding: 20px 20px 20px;
-        }
-       .el-dialog{
-           overflow: unset;
-       }
-    }
-    .creatOrder{
-        .el-button {
-                margin-right: 20px;
-                padding: 10px 20px;
-        }
-        .el-dialog__footer{
-            margin: 0 10px;
-        }
-        .upload{
-            width: 300px;
-            line-height: 20px;
-            img{
-                display: block;
-                width: 100%;
-                height: 100%;
-            }
-        }
-        .ht_table{
-        width: 980px;
-        margin:10px 10px;
-        color: #333;
-        border-left:1px solid #d0d7e5;
-        border-bottom:1px solid #d0d7e5;
-        tr{
-            width: 100%;
-            line-height: 34px;
-            height: 34px;
-        }
-        th{
-            text-align:center;
-            background: #EAF0FF;
-            border-top:1px solid #d0d7e5;
-            border-right:1px solid #d0d7e5;
-        }
-        td{
-            border-top:1px solid #d0d7e5;
-            text-align: center;
-            border-right:1px solid #d0d7e5;
-            .el-form-item{
-            margin-bottom: 0px!important;
-            margin-right: 0px!important;
-            }
-            .el-input{
-                width:90%;
-                .el-input__inner{
-                    line-height: 30px;
-                    height: 30px;
-                    padding:0px!important;
-                    text-indent:5px;
-                }
-            }
-            .Order_input{
-                width: 40px
-            }
-            .el-form-item__error{
-                z-index:100;
-            }
-        }
-        }
-    }
 </style>
