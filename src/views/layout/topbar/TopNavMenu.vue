@@ -67,6 +67,7 @@ export default {
     }
     .el-menu{
       background: #373d41;
+      display: flex;
     }
   }
   #app .page-top-nav .el-menu-item{
