@@ -604,7 +604,11 @@ export default {
             if (this.editType === 'add') {
                 this.driverTemplateDialogFlag = true ;
             }else if(this.editType=== 'valetAuth'||this.editType==='edit'||this.editType==='view'){
-            if(this.templateItem.length == 0 && this.editType !== 'add'){
+            if(!this.templateItem && this.editType !== 'add'){
+               this.$message.warning('请选择您要操作的用户');
+               return
+            }
+            else if(this.templateItem.length == 0 && this.editType !== 'add'){
                this.$message.warning('请选择您要操作的用户');
                return
             }else if (this.templateItem.length > 1 && this.editType !== 'add') {

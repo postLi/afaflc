@@ -1,6 +1,6 @@
 <template>
      <div class="shoppingDialog commoncss">
-      <el-button :type="btntype" :value="value" :plain="plain" @click="openDialog()">{{btntext}}</el-button>
+      <el-button :type="btntype" :value="value" :plain="plain" :icon="icon" @click="openDialog()">{{btntext}}</el-button>
       <div class="newshoppingDialog">
       <el-dialog  :visible="dialogFormVisible_add" :before-close="change" :title="btntitle">
         <el-form ref="formAll" :model="formAll" :rules="rulesForm" :inline="true">
@@ -262,7 +262,7 @@ export default {
          width: 1000px;
      }
     .el-button{
-            padding: 5px 15px 7px;
+        padding: 7px 15px 7px;
         }
     .newshoppingDialog{
         display: inline-block;

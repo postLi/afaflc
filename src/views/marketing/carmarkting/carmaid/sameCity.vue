@@ -301,10 +301,10 @@ export default {
         })
       }
     },
-   getDataList(){
-                this.firstblood()
-                this.$refs.multipleTable.clearSelection();
-    }
+        getDataList(){
+            this.firstblood()
+            this.$refs.multipleTable.clearSelection();
+          }
   },
 
   mounted() {

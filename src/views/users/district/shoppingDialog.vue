@@ -1,6 +1,6 @@
 <template>
      <div class="shoppingDialog commoncss">
-      <el-button :type="btntype" :value="value" :plain="plain" @click="openDialog()">{{btntext}}</el-button>
+      <el-button :type="btntype" :value="value" :plain="plain" :icon="icon" @click="openDialog()">{{btntext}}</el-button>
       <div class="newshoppingDialog">
       <el-dialog  :visible="dialogFormVisible_add" :before-close="change" :title="btntitle">
         <el-form ref="formAll" :model="formAll" :rules="rulesForm" :inline="true">
@@ -175,6 +175,7 @@ export default {
                  this.$refs['formAll'].resetFields();
                  this.formAll.address = null;
                  this.selectFlag = null;
+                 this.$emit('getData') 
             }
         },
     },
@@ -206,7 +207,6 @@ export default {
            }
         },
    openDialog:function(){
-       console.log('fdfdfd',this.editType);
     if(this.editType=='view'){
         data_get_aflcTradeArea_Id(this.params.id).then(res=>{
            this.formAll.tradeName = res.data.tradeName
@@ -222,11 +222,23 @@ export default {
      this.dialogFormVisible_add = true;
     }
     else{
-    if(!this.params.id){
-        this.$message.info('未选中需要修改内容');
-    }
+          if(!this.params.length){
+               this.$message.warning('请选择您要操作的用户');
+               return
+          }
+          else if(this.params.length == 0 && this.editType !== 'add'){
+               this.$message.warning('请选择您要操作的用户');
+               return false
+          }else if (this.params.length > 1 && this.editType !== 'add') {
+                this.$message({
+                    message: '每次只能操作单条数据~',
+                    type: 'warning'
+                })
+                this.$emit('getData') 
+                return false
+          }
     else{
-        data_get_aflcTradeArea_Id(this.params.id).then(res=>{
+        data_get_aflcTradeArea_Id(this.params[0].id).then(res=>{
            this.formAll.tradeName = res.data.tradeName
            this.formAll.address = res.data.address
            this.formAll.province = res.data.province
@@ -277,7 +289,7 @@ export default {
       else{
            this.areaStatus = this.formAll.areaCode
           }
-        let forms={
+           let forms={
             areaCode:this.areaStatus,
             province:this.formAll.province,
             city:this.formAll.city,
@@ -286,12 +298,13 @@ export default {
             address:this.formAll.address,
             tradeOwner:this.formAll.tradeOwner,
             ownerPhone:this.formAll.ownerPhone,
-            id:this.params.id,          
+            id:this.params[0].id,
         }
+        console.log('111',forms)
         data_get_aflcTradeArea_update(forms).then(res=>{
            this.changeList();
-           this.dialogFormVisible_add = false;
             this.$message.success('修改成功');
+            this.dialogFormVisible_add = false;
         }).catch(res=>{
             this.$message.error('修改失败')
             this.dialogFormVisible_add = false;
@@ -312,7 +325,7 @@ export default {
      }
      .btns_box{
     .el-button{
-            padding: 5px 15px 7px;
+        padding: 7px 15px 7px;
         }
     }
     .newshoppingDialog{

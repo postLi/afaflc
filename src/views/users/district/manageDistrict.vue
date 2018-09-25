@@ -1,5 +1,5 @@
 <template>
-    <div style="height:100%;"  class="identicalStyle">
+    <div style="height:100%;"  class="identicalStyle District">
           <el-form :inline="true" class="classify_searchinfo">
             <el-form-item label="所在地：">
                    <el-cascader
@@ -23,6 +23,7 @@
                     btntext="新增"
                     :plain="true"
                     btntype="primary"
+                    icon="el-icon-circle-plus"
                     editType="add"
                     btntitle="创建"
                     >
@@ -33,16 +34,26 @@
                     btntype="primary"
                     editType="edit"
                     btntitle="修改"
+                    icon="el-icon-edit"
+                    @getData="getDataList"
                     :params="selectRowData"
                     > 
                     </manageDistrictDialog>
-                <el-button type="primary" plain :size="btnsize" @click="delete_data">删除</el-button>
+                <el-button type="primary" plain :size="btnsize" @click="delete_data" icon="el-icon-delete">删除</el-button>
 			</div>
             <div class="info_news">
-            <el-table style="width: 100%" stripe border height="100%"  :data="tableDataAll" ref="multipleTable" @current-change="clickDetails" highlight-current-row>
-            <el-table-column  label="序号" width="80px" type="index">
-            </el-table-column>
-            <el-table-column  label="区代公司名称" >
+            <el-table style="width: 100%" stripe border height="100%"  :data="tableDataAll"  ref="multipleTable"  @selection-change="getSelection" @row-click="clickDetails" highlight-current-row>
+              <el-table-column
+                            label="选择"
+                            type="selection"
+                            width="50">
+              </el-table-column>
+           <el-table-column label="序号" sortable  width="80">
+                            <template slot-scope="scope">
+                             {{ (page - 1)*pagesize + scope.$index + 1 }}
+                            </template>
+            </el-table-column> 
+            <el-table-column  label="区代公司名称" sortable>
                         <template slot-scope="scoped">
                         <manageDistrictDialog
                             :btntext='scoped.row.partnerCompany'
@@ -55,15 +66,15 @@
                             </manageDistrictDialog>
                         </template>
             </el-table-column>
-            <el-table-column  label="联系人" prop="partnerName">
+            <el-table-column  label="联系人" prop="partnerName" sortable>
             </el-table-column>    
-            <el-table-column  label="手机号码" prop="mobile">
+            <el-table-column  label="手机号码" prop="mobile" sortable>
             </el-table-column> 
-            <el-table-column  label="代理区域" prop="belongCity">
+            <el-table-column  label="代理区域" prop="belongCity" sortable>
             </el-table-column>
-            <el-table-column  label="合同开始日期" prop="contractStartDate">
+            <el-table-column  label="合同开始日期" prop="contractStartDate" sortable> 
             </el-table-column>       
-            <el-table-column  label="合同结束日期" prop="contractEndDate">
+            <el-table-column  label="合同结束日期" prop="contractEndDate" sortable>
             </el-table-column>                                                                                                       
             </el-table> 
         </div>
@@ -184,20 +195,31 @@ export default {
                 this.formAllData.partnerCompany=null,
                 this.firstblood();
     },
+    getSelection(val){
+     console.log('选中内容',val)
+     this.selectRowData = val;
+   },
     //点击选中当前行
-        clickDetails(row, event, column){
-             this.selectRowData = Object.assign({}, row)
-        },
-    // 判断选中与否
-        getSelection(val){
-            console.log('选中内容',val)
-            this.selected = val;
-        },    
+    clickDetails(row, event, column){
+      this.$refs.multipleTable.toggleRowSelection(row);
+    }, 
     // 选择删除
         delete_data(){
-              if(!this.selectRowData.id){
-                this.$message.info('未选中任何删除内容');
-                }else{
+                    if(!this.selectRowData.length){
+                        this.$message.warning('请选择您要操作的用户');
+                        return
+                    }
+                    if(this.selectRowData.length == 0){
+                        this.$message.warning('请选择您要操作的用户');
+                        return
+                    }else if (this.selectRowData.length > 1) {
+                            this.$message({
+                                message: '每次只能操作单条数据~',
+                                type: 'warning'
+                            })
+                        this.$refs.multipleTable.clearSelection();
+                    }
+                    else {
                 this.delDataInformation()
             }
         },    
@@ -208,7 +230,7 @@ export default {
                     cancelButtonText: '取消',
                     type: 'warning'
                 }).then(()=>{
-                    data_Del_aflcPartner(this.selectRowData.id).then(res=>{
+                    data_Del_aflcPartner(this.selectRowData[0].id).then(res=>{
                         this.$message.success('删除成功');
                         this.firstblood();       
                         this.selectRowData=''; 
@@ -230,7 +252,10 @@ export default {
             this.pagesize = obj.pageSize
             this.firstblood()
         },        
-        
+        getDataList(){
+            this.firstblood()
+            this.$refs.multipleTable.clearSelection();
+            }       
     }
     
 
@@ -238,9 +263,14 @@ export default {
 }
 </script>
 <style lang="scss">
-.identicalStyle{
+.District{
 .el-cascader{
-    line-height: 30px;
+        margin-top:-10px;
+}
+.btns_box{
+    .el-button{
+        font-size:12px;
+    }
 }
 }
 </style>

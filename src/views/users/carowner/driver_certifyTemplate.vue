@@ -516,7 +516,12 @@ export default {
     },
     openDialog(){
       //冻结
-        if(this.params.length == 0 && this.editType !== 'add'){
+        if(!this.params && this.editType !== 'add')
+          {
+               this.$message.warning('请选择您要操作的用户');
+               return false
+          }
+       else if(this.params.length == 0 && this.editType !== 'add'){
                this.$message.warning('请选择您要操作的用户');
                return
         }else if (this.params.length > 1 && this.editType !== 'add') {
@@ -525,11 +530,13 @@ export default {
                     type: 'warning'
                 })
                 this.$emit('getData') 
+                return
             }
         else{
+            console.log('2323',this.params)
         this.templateModel=this.params[0];
         this.templateModel.obtainGradeTime = parseTime(this.templateModel.obtainGradeTime,"{y}-{m}-{d}");
-          this.freezeDialogFlag=true
+        this.freezeDialogFlag=true
         }
       },
             completeData(){

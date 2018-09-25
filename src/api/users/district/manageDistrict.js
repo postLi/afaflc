@@ -53,3 +53,18 @@ export function data_get_aflcPartner_update(data) {
     method: 'get',
   })
 }
+
+
+ //根据公司名称获取已认证的物流公司
+ export function data_get_aflcPartner_findAuthCompany(page,pagesize,data){
+  return fetch({
+    url: '/'+baseurl+'/usercenter/aflcLogisticsCompany/v1/findAuthCompany',
+    method: 'post',
+    data:{
+      "currentPage": page,
+      "pageSize": pagesize,
+      "vo": data
+    }
+  })
+}
+

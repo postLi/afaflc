@@ -1,5 +1,5 @@
 <template>
-    <div style="height:100%;"  class="identicalStyle">
+    <div style="height:100%;"  class="identicalStyle District">
           <el-form :inline="true" class="classify_searchinfo">
             <el-form-item label="所在地：">
                    <el-cascader
@@ -28,6 +28,7 @@
                     btntype="primary" 
                     editType="add"
                     btntitle="创建"
+                    icon="el-icon-circle-plus"
                     > 
                     </shoppingCread>
                    <shoppingDialog
@@ -36,17 +37,27 @@
                     btntype="primary"
                     editType="edit"
                     btntitle="修改"
+                    icon="el-icon-edit"
+                    @getData="getDataList"
                     :params="selectRowData"
                     >
                     </shoppingDialog>
-                <el-button type="primary" plain :size="btnsize" @click="handleUseStates">启用/停用</el-button>
-                <el-button type="primary" plain :size="btnsize" @click="delete_data">删除</el-button>
+                <el-button type="primary" plain :size="btnsize" @click="handleUseStates" icon="el-icon-bell">启用/停用</el-button>
+                <el-button type="primary" plain :size="btnsize" @click="delete_data" icon="el-icon-delete">删除</el-button>
 			</div>
             <div class="info_news">
-            <el-table style="width: 100%" stripe border height="100%" :data="tableDataAll" ref="multipleTable" @current-change="clickDetails" highlight-current-row tooltip-effect="dark">
-            <el-table-column  label="序号" width="80px" type="index">
-            </el-table-column>
-            <el-table-column  label="商圈名称">
+            <el-table style="width: 100%" stripe border height="100%" :data="tableDataAll" ref="multipleTable"  @selection-change="getSelection" @row-click="clickDetails" highlight-current-row tooltip-effect="dark">
+              <el-table-column
+                            label="选择"
+                            type="selection"
+                            width="50">
+              </el-table-column>
+           <el-table-column label="序号" sortable  width="80">
+                            <template slot-scope="scope">
+                             {{ (page - 1)*pagesize + scope.$index + 1 }}
+                            </template>
+            </el-table-column> 
+            <el-table-column  label="商圈名称" sortable>
                         <template slot-scope="scoped">
                         <shoppingDialog
                             :btntext='scoped.row.tradeName'
@@ -59,15 +70,15 @@
                             </shoppingDialog>
                         </template>
             </el-table-column>
-            <el-table-column  label="所在地" prop="areaName">
+            <el-table-column  label="所在地" prop="areaName" sortable>
             </el-table-column>    
-            <el-table-column  label="商圈场主" prop="tradeOwner">
+            <el-table-column  label="商圈场主" prop="tradeOwner" sortable>
             </el-table-column> 
-            <el-table-column  label="场主手机号" prop="ownerPhone">
+            <el-table-column  label="场主手机号" prop="ownerPhone" sortable>
             </el-table-column>
-            <el-table-column  label="商圈货主数量" prop="">
+            <el-table-column  label="商圈货主数量" prop="" sortable>
             </el-table-column>       
-            <el-table-column  label="状态" >
+            <el-table-column  label="状态" sortable>
             <template  slot-scope="scope">
               {{ scope.row.usingStatus == 1 ? '启用' : '停用' }}
             </template>
@@ -191,20 +202,31 @@ export default {
                 this.formAllData.tradeOwner=null,
                 this.firstblood();
     },
+    getSelection(val){
+     console.log('选中内容',val)
+     this.selectRowData = val;
+   },
     //点击选中当前行
-        clickDetails(row, event, column){
-             this.selectRowData = Object.assign({}, row)
-        },
-    // 判断选中与否
-        getSelection(val){
-            console.log('选中内容',val)
-            this.selected = val;
-        },    
+    clickDetails(row, event, column){
+      this.$refs.multipleTable.toggleRowSelection(row);
+    }, 
     // 选择删除
         delete_data(){
-              if(!this.selectRowData.id){
-                this.$message.info('未选中任何删除内容');
-                }else{
+                    if(!this.selectRowData.length){
+                        this.$message.warning('请选择您要操作的用户');
+                        return
+                    }
+                    if(this.selectRowData.length == 0){
+                        this.$message.warning('请选择您要操作的用户');
+                        return
+                    }else if (this.selectRowData.length > 1) {
+                            this.$message({
+                                message: '每次只能操作单条数据~',
+                                type: 'warning'
+                            })
+                        this.$refs.multipleTable.clearSelection();
+                    }
+                    else {
                 this.delDataInformation()
             }
         },    
@@ -215,33 +237,44 @@ export default {
                     cancelButtonText: '取消',
                     type: 'warning'
                 }).then(()=>{
-                    data_Del_aflcTradeArea(this.selectRowData.id).then(res=>{
+                    data_Del_aflcTradeArea(this.selectRowData[0].id).then(res=>{
                         this.$message.success('删除成功');
                         this.firstblood();       
-                        this.selectRowData=''; 
+                        this.$refs.multipleTable.clearSelection();
                     }).catch(err => {
                         this.$message({
                             type: 'info',
                             message: '操作失败，原因：' + err.text ? err.text : err
                         })
+                        this.$refs.multipleTable.clearSelection();
                     })
                 }).catch(() => {
                     this.$message({
                         type: 'info',
                         message: '已取消'
                     })
+                    this.$refs.multipleTable.clearSelection();
                 })   
             },
             
         // 启用禁用
         handleUseStates(){
-                if(!this.selectRowData.id){
-                    //未选择任何修改内容的提示
-                        this.$message.info('未选中内容');
+                    if(!this.selectRowData.length){
+                        this.$message.warning('请选择您要操作的用户');
                         return
-                }else{
-                    this.selectId.push(this.selectRowData.id) 
-                    
+                    }
+                    if(this.selectRowData.length == 0){
+                        this.$message.warning('请选择您要操作的用户');
+                        return
+                    }else if (this.selectRowData.length > 1) {
+                            this.$message({
+                                message: '每次只能操作单条数据~',
+                                type: 'warning'
+                            })
+                        this.$refs.multipleTable.clearSelection();
+                    }
+                    else {
+                    this.selectId.push(this.selectRowData[0].id) 
                   data_Able_aflcTradeArea(this.selectId).then(res=>{
                      this.selectId.splice(0,1);
                      if(this.selectRowData.usingStatus==1)
@@ -252,7 +285,7 @@ export default {
                          this.$message.success('已启用');
                      }
                         this.firstblood();       
-                        this.selectRowData='';         
+                        this.$refs.multipleTable.clearSelection(); 
                     })
                 }
         },  
@@ -261,19 +294,23 @@ export default {
             this.pagesize = obj.pageSize
             this.firstblood()
         },        
-        
+        getDataList(){
+            this.firstblood()
+            this.$refs.multipleTable.clearSelection();
+            }        
     }
-    
-
-
 }
 </script>
 <style lang="scss">
-.identicalStyle{
+.District{
 .el-cascader{
-    line-height: 30px;
+        margin-top:-10px;
 }
-
+.btns_box{
+    .el-button{
+        font-size:12px;
+    }
+}
 }
 </style>
 

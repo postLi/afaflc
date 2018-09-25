@@ -1,7 +1,6 @@
 <template>
- <div class="transactionRecharge clearfix">
-  <div class="finance_searchinfo">
-   <el-form :inline="true">
+    <div class="identicalStyle clearfix waitpayment" style="height:100%">
+          <el-form :inline="true"  class="demo-ruleForm classify_searchinfo">
             <el-form-item label="电话号码：">
                   <el-input v-model="formAllData.mobile" placeholder="请输入内容" clearable></el-input>
             </el-form-item>
@@ -42,34 +41,41 @@
                         >
                     </el-date-picker>
             </el-form-item>                  
-            <el-form-item>       
-          <el-button type="primary"  plain @click="seach_data">查询</el-button> 
+            <el-form-item class="fr">       
+          <el-button type="primary"  plain @click="seach_data" :size="btnsize">查询</el-button> 
           </el-form-item>
           </el-form>
-            </div>
             <div class="classify_info">
-           <el-table style="width: 100%" stripe border height="100%" highlight-current-row :data="tableDataAll" @row-click="clickDetails">
-            <el-table-column  label="序号" width="80px" type="index">
+            <div class="info_news">    
+           <el-table style="width: 100%" ref="multipleTable" stripe border height="100%" highlight-current-row :data="tableDataAll" @selection-change="getSelection" @row-click="clickDetails">
+              <el-table-column
+                            label="选择"
+                            type="selection"
+                            width="50">
+              </el-table-column>
+           <el-table-column label="序号" sortable  width="80">
+                            <template slot-scope="scope">
+                             {{ (page - 1)*pagesize + scope.$index + 1 }}
+                            </template>
+            </el-table-column> 
+            <el-table-column  label="用户账号" prop="mobile" sortable>
             </el-table-column>
-            <el-table-column  label="用户账号" prop="mobile">
-            </el-table-column>
-            <el-table-column  label="充值金额" prop="enterSum">
+            <el-table-column  label="充值金额" prop="enterSum" sortable>
             </el-table-column>            
-            <el-table-column  label="充值赠送" prop="giveSum">
+            <el-table-column  label="充值赠送" prop="giveSum" sortable>
             </el-table-column>
-            <el-table-column  label="充值渠道" prop="rechargeChannelName">
+            <el-table-column  label="充值渠道" prop="rechargeChannelName" sortable>
             </el-table-column>
-            <el-table-column  label="充值方式" prop="rechargeWayName">
+            <el-table-column  label="充值方式" prop="rechargeWayName" sortable>
             </el-table-column>
-            <el-table-column  label="流水号" prop="rechargeSerial">
+            <el-table-column  label="流水号" prop="rechargeSerial" sortable>
             </el-table-column>
-            <el-table-column  label="充值时间" prop="rechargeTime">
+            <el-table-column  label="充值时间" prop="rechargeTime" sortable>
             </el-table-column>    
-           </el-table>                                                                
-                <div class="info_news">
+           </el-table>    
+            </div>                                                            
                       <!-- 页码 -->
-        <div class="info1_tab_footer">共计:{{ dataTotal }} <div class="show_pager"> <Pager :total="dataTotal" @change="handlePageChange"  :sizes="sizes"/></div> </div>  
-                </div>
+        <div class="info_tab_footer">共计:{{ dataTotal }} <div class="show_pager"> <Pager :total="dataTotal" @change="handlePageChange"  :sizes="sizes"/></div> </div>  
             </div>
     </div>
 </template>
@@ -82,11 +88,13 @@ import {data_financeList,data_GetServerType,data_GetServerType2,data_GetServerTy
  export default{
         data(){
             return{
-               sizes:[20,50,100],
+               btnsize:'mini',
+               selectRowData: {},
+               sizes:[30,50,100],
                tableDataAll:[],
                totalCount:null,
                dataTotal:0,                
-               pagesize:20,//每页显示数
+               pagesize:30,//每页显示数
                page:1,//当前页     
                createTime:[],
                rechargeChannelList:[
@@ -153,9 +161,15 @@ import {data_financeList,data_GetServerType,data_GetServerType2,data_GetServerTy
         seach_data(){
                 this.firstblood()
         },
-        clickDetails(i){
-           console.log(i)
-        }
+        // 判断选中与否
+        getSelection(val){
+        console.log('选中内容',val)
+        this.selectRowData = val;
+    },
+        //点击选中当前行
+        clickDetails(row, event, column){
+        this.$refs.multipleTable.toggleRowSelection(row);
+        },
         }
     }
 </script>

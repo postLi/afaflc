@@ -1,17 +1,16 @@
 <template>
-    <div class="finance clearfix">
-             <div class="classify_searchinfo">
-                <label><span>订单流水号&nbsp;</span>                   
-                  <el-input v-model="data.orderSerial" placeholder="请输入内容" clearable></el-input>
-                </label>
-                <label><span>交易流水号&nbsp;</span>                   
-                  <el-input v-model="data.tradeSerial" placeholder="请输入内容" clearable></el-input>
-                </label>
-                <label><span>用户姓名/账号&nbsp;</span>
-                   <el-input v-model="data.accountName" placeholder="请输入内容" clearable></el-input>
-                </label> 
-                
-                <label><span>账号类型&nbsp;</span>
+    <div class="identicalStyle" style="height:100%">
+          <el-form :inline="true"  class="demo-ruleForm classify_searchinfo">
+            <el-form-item label="订单流水号">
+            <el-input v-model="data.orderSerial" placeholder="请输入内容" clearable></el-input>
+            </el-form-item>
+            <el-form-item label="交易流水号">
+            <el-input v-model="data.tradeSerial" placeholder="请输入内容" clearable></el-input>
+            </el-form-item>
+            <el-form-item label="用户姓名/账号">
+            <el-input v-model="data.accountName" placeholder="请输入内容" clearable></el-input>
+            </el-form-item>
+            <el-form-item label="账号类型">
                    <el-select v-model="data.accountType" clearable placeholder="请选择">
                        <el-option label="货主" value="AF00101"></el-option>
                        <el-option label="车主" value="AF00102"></el-option>
@@ -19,15 +18,16 @@
                        <el-option label="运营账户" value="AF01602"></el-option>
                        <el-option label="合伙人" value="AF00103"></el-option>
                     </el-select>
-                </label> 
-                <label><span>交易方式&nbsp;</span>
+            </el-form-item>
+            <el-form-item label="交易方式">
                    <el-select v-model="data.payWay" clearable placeholder="请选择">
                        <el-option label="支付宝" value="AF0041803"></el-option>
                        <el-option label="微信" value="AF0041802"></el-option>
                        <el-option label="钱包" value="AF0041801"></el-option>
                     </el-select>
-                </label>
-                <label><span>交易类型&nbsp;</span>
+            </el-form-item>
+                        <br>
+            <el-form-item label=" 交易类型" label-width='70px'>
                    <el-select v-model="data.tradeType" clearable placeholder="请选择">
                         <el-option
                           v-for="item in optionsAccountType2"
@@ -37,8 +37,8 @@
                           >
                         </el-option>
                     </el-select>
-                </label> 
-                <label><span>服务分类&nbsp;</span>
+            </el-form-item>                        
+            <el-form-item label="服务分类" label-width='70px'>
                    <el-select v-model="data.orderType" clearable placeholder="请选择">
                         <el-option
                           v-for="item in optionsAccountType"
@@ -48,14 +48,14 @@
                           >
                         </el-option>
                     </el-select>
-                </label>
-                <label><span>收支类型&nbsp;</span>
+            </el-form-item>
+            <el-form-item label="收支类型" label-width='88px'>
                    <el-select v-model="data.incomeExpendType" clearable placeholder="请选择">
                           <el-option label="收入" value="1"></el-option>
                           <el-option label="支出" value="0"></el-option>
                     </el-select>
-                </label>         
-                <label ><span>付款时间&nbsp;</span>
+            </el-form-item>
+            <el-form-item label="付款时间">
                     <el-date-picker
                     v-model="payTime"
                         is-range
@@ -69,14 +69,13 @@
                          @change='cTime'
                     >
                     </el-date-picker>
-                </label>    
-                <!-- {{value6}}  -->
-                <label>
-                  <el-button type="primary"  plain @click="getdata_search">查询</el-button>
-                  <el-button type="primary"  plain @click="reset">重置</el-button>
-                </label>
-                
-            </div>
+            </el-form-item>            
+                <el-form-item class="fr">     
+                  <el-button type="primary"  plain @click="getdata_search" :size="btnsize">查询</el-button>
+                  <el-button type="primary"  plain @click="reset" :size="btnsize">重置</el-button>
+                </el-form-item>    
+          </el-form>
+  
             <div class="classify_info">
                 <div class="info_news">
                     <el-table
@@ -214,6 +213,7 @@ import { parseTime,formatTime } from '@/utils/index.js'
                   tradeEndTime:null,
                   incomeExpendType:null,
                 },
+                btnsize:'mini',
                 payTime:null,
                 currentPage4:1,
                 page:1,
