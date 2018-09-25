@@ -1,5 +1,5 @@
 import fetch from '@/utils/fetch'
-const baseurl_two = "aflccommonservice"
+const baseurl_two = "aflccommonservice-wtc"
 const baseurl = "aflcsmservice"
 
 /**
@@ -128,4 +128,10 @@ export function data_LogisticsCompany() {
       url: '/'+baseurl_two+'/sysDict/getSysDictByCodeGet/AF025',
       method: 'get'
     })
+  }
+
+
+  //根据地区业务城市树表
+  export function aflcCityTree(){
+      return fetch.get('/'+ baseurl_two+'/common/aflcCityTree/v1/treaCode/')
   }

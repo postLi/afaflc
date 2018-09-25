@@ -163,6 +163,11 @@ export default {
                     el.label =  el.contacts +'/'+el.mobile;
                 })
 
+            }).catch(err =>{
+                 this.$message({
+                        type: 'warning',
+                        message: '操作失败，原因：' + err.errorInfo ? err.errorInfo : err.text
+                    })
             })
         },
         getAflcSystemUserList(){
@@ -173,6 +178,11 @@ export default {
                     el.label =  el.name +'/'+el.mobilephone;
                 })
 
+            }).catch(err =>{
+                 this.$message({
+                        type: 'warning',
+                        message: '操作失败，原因：' + err.errorInfo ? err.errorInfo : err.text
+                    })
             })
         },
         newInfoSave(){
@@ -242,8 +252,8 @@ export default {
                     });
                 }).catch( err => {
                     this.$message({
-                        type: 'info',
-                        message: '操作失败，原因：' + err.text ? err.text : err
+                        type: 'warning',
+                        message: '操作失败，原因：' + err.errorInfo ? err.errorInfo : err.text
                     })
                 })
             }

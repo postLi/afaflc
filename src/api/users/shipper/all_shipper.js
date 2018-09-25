@@ -68,10 +68,6 @@ export function data_GetCityList(code) {
 export function data_get_shipper_freezeType() {
   return fetch.get('/' + baseurl_two + '/sysDict/getSysDictByCodeGet/AF02003')
 }
-//  获取移入黑名单原因列表
-// export function data_get_shipper_BlackType() {
-//   return fetch.get('/' + baseurl_two + '/sysDict/getSysDictByCodeGet/AF02004')
-// }
 
 // 获取账户状态列表
 export function data_get_shipper_auid() {

@@ -98,33 +98,29 @@ export default {
 
 
 <style rel="stylesheet/scss" lang="scss">
-@import "src/styles/variate.scss";
-@import "src/styles/mixin.scss";
+// @import "src/styles/variate.scss";
+// @import "src/styles/mixin.scss";
+// @import './memu.scss';
 
-#app .sidebar-menu{
-  height: 100%;
-  overflow-y: auto;
-  overflow-x: visible;
-  width: 100%;
-
-  @include hiddenScrollBar;
-
-  .router-link-exact-active{
-    .el-menu-item{
-      color: #20a0ff;
-    }
-  }
-}
+// #app .sidebar-menu{
+//     padding-top: 10px;
+//   min-height: 100%;
+//   .router-link-exact-active{
+//     .el-menu-item{
+//       color: #20a0ff;
+//     }
+//   }
+// }
 .sidebar-container{
-  min-height: 100%;
-  padding-top: 70px;
-  background: #42485B;
-  border-radius: 0;
+    min-height: 100%;
+    padding-top: 70px;
+    background: #42485B;
+    border-radius: 0;
 
-  .el-menu{
-    border-right: 0;
-    background: #333744;
-  }
+    .el-menu{
+        border-right: 0;
+        background: #333744;
+    }
 
   .sidebar-userinfo{
     margin-top: -40px;
@@ -165,24 +161,24 @@ export default {
   }
 }
 .nologin{
-  position: absolute;
-  width: 168px;
-  bottom: 0;
-  left: 0;
-  text-align: center;
-  .el-button2{
-    margin-bottom: 10px;
-    width: 150px;
-  }
+    position: absolute;
+    width: 100%;
+    // height: 150px;
+    background: rgb(0,32,57);
+    left: 0;
+    bottom: 0;
+    margin-top: 10px;
+    text-align: center;
   .el-button{
     width: 100%;
     height: 50px;
-    background-color: #002038;
+    background-color: rgb(0,32,56);
     border: 4px solid #000;
     border-top-color: rgb(5,55,93);
     border-right-color: rgb(5,55,93);
     border-left-color: rgb(5,21,39);
     border-bottom-color: rgb(5,21,39);
+    opacity: 0.65;
     border-radius: 0;
     font-size: 16px;
     color: rgba(255,255,255,.65);

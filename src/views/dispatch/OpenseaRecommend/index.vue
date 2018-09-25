@@ -2,16 +2,17 @@
     <div class="OpenseaRecommend identicalStyle clearfix" v-loading="loading">
             <div class="classify_info">
                 <div class="btns_box">
-                    <el-button type="primary" plain icon="el-icon-circle-plus" :size="btnsize" @click="addClassfy">新增</el-button>
-                    <el-button type="primary" plain icon="el-icon-edit" :size="btnsize" @click="handleEdit">修改</el-button>
-                    <el-button type="primary" plain icon="el-icon-delete" :size="btnsize" @click="handleDelete">删除</el-button>
-                    <el-button type="primary" plain icon="el-icon-bell" :size="btnsize" @click="handleUseStates">启用/禁用</el-button>
+                    <el-button type="primary" plain icon="el-icon-circle-plus" :size="btnsize" @click="handleClick('new')">新增</el-button>
+                    <el-button type="primary" plain icon="el-icon-edit" :size="btnsize" @click="handleClick('revise')">修改</el-button>
+                    <el-button type="primary" plain icon="el-icon-delete" :size="btnsize" @click="handleClick('delet')">删除</el-button>
+                    <el-button type="primary" plain icon="el-icon-bell" :size="btnsize" @click="handleClick('status')">启用/禁用</el-button>
                 </div>
                 <div class="info_news">
                     <el-table
                         ref="multipleTable"
                         :data="tableDataTree"
                         stripe
+                        :default-sort = "{prop: 'areaCodeName', order: 'descending'}"
                         height="100%"
                         border
                         @selection-change = "getinfomation"
@@ -19,23 +20,26 @@
                         @row-click="clickDetails"
                         style="width: 100%"> 
                         <el-table-column
-                            fixed
                             type="selection"
                             width="55">
                         </el-table-column>
                         <el-table-column
+                            sortable
                           prop="areaCodeName"
                           label="地区">
                         </el-table-column>
                         <el-table-column
+                            sortable
                           prop="serivceCodeName"
                           label="服务类型">
                         </el-table-column>
                         <el-table-column
+                            sortable
                           prop="shipperCarTypeName"
                           label="货主用车类型">
                         </el-table-column>
                         <el-table-column
+                            sortable
                           prop="firstPush"
                           label="推送距离/推送时间">
                         </el-table-column>
@@ -44,10 +48,12 @@
                           label="第二轮及之后推送">
                         </el-table-column> -->
                         <el-table-column
+                            sortable
                           prop="visualCarTypeName"
                           label="可见车主类型">
                         </el-table-column>
                         <el-table-column
+                            sortable
                           prop="usingStatus"
                           label="状态">
                              <template  slot-scope="scope">
@@ -149,72 +155,75 @@ import Pager from '@/components/Pagination/index'
             getinfomation(selection){
                 this.checkedinformation = selection;
             },
-            //修改
-            handleEdit() {
-                if(Object.keys(this.checkedinformation).length == 0){
+            handleClick(type){
+                if(Object.keys(this.checkedinformation).length == 0 && type != 'new'){
                     //未选择任何修改内容的提示
-                    let information = "未选中任何修改内容";
-                    this.hint(information);
-                }else if(this.checkedinformation.length >1){
-                    let information = "不可修改多个内容";
-                    this.hint(information);
-                }else{
-                    console.log(this.checkedinformation)
-                    this.dialogFormVisibleChange = true; 
-                    this.changeforms = this.checkedinformation[0]
-                    this.$refs.multipleTable.clearSelection()
+                    return this.$message({
+                        type: 'warning',
+                        message: '请选择您要操作的内容~'
+                    })
+                }else if(this.checkedinformation.length >1 && type == 'revise'){
+                    return this.$message({
+                        type: 'warning',
+                        message: '不可同时操作多项内容~'
+                    })
                 }
-            },
-            // 禁用/启用
-            handleUseStates(){
-                if(this.checkedinformation.length === 0){
-                    //未选择任何修改内容的提示
-                    let information = "未选中任何更改状态内容";
-                    this.hint(information);
-                }else{
-                    console.log(this.checkedinformation)
-                    let statusID = [];
-                    this.checkedinformation.map((item)=>{
-                        return statusID.push(item.id)
-                    })
-                    statusID = statusID.join(',');
-                    data_ChangeStatus(statusID).then(res=>{
-                        // console.log(res)
-                       this.firstblood();
-                    })
-                    this.$refs.multipleTable.clearSelection()
+                else{
+                    switch(type){
+                        case 'new':
+                            this.dialogFormVisible = true;
+                            break;
+                        case 'revise':
+                            this.dialogFormVisibleChange = true; 
+                            this.changeforms = Object.assign({},this.checkedinformation[0]) ;
+                            break;
+                        case 'delet':
+                            let delID = [];
+                            this.checkedinformation.map((item)=>{
+                                return delID.push(item.id)
+                            });
+                            let item = delID.length > 1 ? '这些' : '该条';
+                            let config = delID.length>1 ?  delID.length + '条' : this.checkedinformation[0].areaCodeName+'这条';
 
+                            this.$confirm('确定要删除'+ config +'设置吗？', '提示', {
+                                confirmButtonText: '确定',
+                                cancelButtonText: '取消',
+                                type: 'warning'
+                            }).then( ()=>{
+                                data_DeletInfo(delID).then(res=>{
+                                    this.$message({
+                                        type: 'success',
+                                        message: '您选中的内容已被删除！',
+                                        duration:2000
+                                    })
+                                    this.firstblood();
+                                }).catch(err => {
+                                    this.$message({
+                                        type: 'warning',
+                                        message: '操作失败，原因：' + err.errorInfo ? err.errorInfo : err.text
+                                    })
+                                })
+                            }).catch(() => {
+                                this.$message({
+                                    type: 'info',
+                                    message: '已取消'
+                                })
+                            })
+                            break;
+                        case 'status':
+                            let statusID = [];
+                            this.checkedinformation.map((item)=>{
+                                return statusID.push(item.id)
+                            })
+                            statusID = statusID.join(',');
+                            data_ChangeStatus(statusID).then(res=>{
+                                this.firstblood();
+                            })
+                            break;
+                    }
                 }
-            },
-            // 是否删除
-            handleDelete() {
-                if(this.checkedinformation.length === 0){
-                    //未选择任何修改内容的提示
-                    let information = "未选中任何删除内容";
-                    this.hint(information);
-                }else{
-                    console.log(this.checkedinformation)
-                    let delID = [];
-                    this.checkedinformation.map((item)=>{
-                        return delID.push(item.id)
-                    })
-                    this.delID  = delID.join(',');
-                    this.delDialogVisible = true;
-                    
-                    console.log(this.delID)
-                }
-            },
-            //确认删除
-            delDataInformation(){
-                this.delDialogVisible = false;
-                data_DeletInfo(this.delID).then(res => {
-                    // console.log(res)
-                    this.firstblood();
-                    
-                }).catch(res=>{
-                    let information = res.text;
-                    this.hint(information);
-                })
+                //清空选中内容以免影响其他操作
+                this.$refs.multipleTable.clearSelection();
             },
             //刷新页面和初始化数据
             firstblood(){
@@ -230,21 +239,6 @@ import Pager from '@/components/Pagination/index'
                     this.loading = false;
                 })
             },
-            //新增分类信息
-            addClassfy(){
-                this.dialogFormVisible = true;
-                this.$refs.multipleTable.clearSelection()
-
-            },
-            
-            hint(val){
-                this.information = val;
-                this.centerDialogVisible = true;
-                let timer = setTimeout(()=>{
-                    this.centerDialogVisible = false;
-                    clearTimeout(timer)
-                },2000)
-            }
         }
     }
 </script>

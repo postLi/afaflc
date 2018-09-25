@@ -1,5 +1,5 @@
 import fetch from '@/utils/fetch'
-const baseUrl = 'aflccommonservice'
+const baseUrl = 'aflccommonservice-lyc'
 
 /**
  * 获取指定网点的所有下级节点

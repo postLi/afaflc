@@ -32,16 +32,17 @@
                 ref="multipleTable"
                 stripe
                 height="100%"
+                :default-sort = "{prop: 'pointName', order: 'descending'}"
                 border
                 style="width: 100%">
                     <el-table-column
-                        fixed
                         label="序号"
                         type="index"
                         width="80">
                     </el-table-column>
                     <el-table-column
-                        fixed
+                        sortable
+                        prop="pointName"
                         label="网点名称"
                         width="180">
                             <template slot-scope="scope">
@@ -49,20 +50,24 @@
                         </template>
                     </el-table-column>
                     <el-table-column
+                        sortable
                         prop="address"
                         label="网点地址">
                     </el-table-column>
                     <el-table-column
+                        sortable
                         prop="name"
                         label="联系人"
                         width="180">
                     </el-table-column>
                     <el-table-column
+                        sortable
                         prop="mobile"
                         label="手机"
                         width="180">
                     </el-table-column>
                     <el-table-column
+                        sortable
                         prop="telNum"
                         label="固话" 
                         width="180">
@@ -140,6 +145,12 @@ export default {
                 // console.log(res)
                 this.tableData = res.data.list;
                 this.totalCount = res.data.totalCount;
+                this.loading = false;
+            }).catch(err=>{
+                this.$message({
+                    type: 'info',
+                    message: '操作失败，原因：' + err.errorInfo ? err.errorInfo : err.text
+                })
                 this.loading = false;
             })
         },

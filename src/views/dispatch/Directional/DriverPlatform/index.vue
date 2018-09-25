@@ -14,10 +14,9 @@
             </el-form>
             <div class="classify_info">
                 <div class="btns_box">
-                    <el-button type="primary" :size="btnsize" plain icon="el-icon-circle-plus" @click="addClassfy">新增</el-button>
-                    <el-button type="primary" :size="btnsize" plain icon="el-icon-edit" @click="handleEdit">修改</el-button>
-                    <!-- <el-button type="primary" plain icon="el-icon-delete" @click="handleDelete">删除</el-button> -->
-                    <el-button type="primary" :size="btnsize" plain icon="el-icon-bell" @click="handleUseStates">启用/禁用</el-button>
+                    <el-button type="primary" plain icon="el-icon-circle-plus" :size="btnsize" @click="handleClick('new')">新增</el-button>
+                    <el-button type="primary" plain icon="el-icon-edit" :size="btnsize" @click="handleClick('revise')">修改</el-button>
+                    <el-button type="primary" plain icon="el-icon-bell" :size="btnsize" @click="handleClick('status')">启用/禁用</el-button>
                 </div>
                 <div class="info_news">
                     <el-table
@@ -25,43 +24,44 @@
                         :data="tableDataTree"
                         stripe
                         border
-                        align = "center"
+                        :default-sort = "{prop: 'shipperInfo', order: 'descending'}"
                         height="100%"
                         @selection-change = "getinfomation"
                         tooltip-effect="dark"
                         @row-click="clickDetails"
                         style="width: 100%"> 
                         <el-table-column
-                        align = "center"
                              type="selection"
                              width="55">
                            </el-table-column>
                         <el-table-column
-                        align = "center"
+                            sortable
                           prop="shipperInfo"
                           label="货主账号">
                         </el-table-column>
                         <el-table-column
-                        align = "center"
+                            sortable
                           prop="platInfo"
                           label="平台运营或客服人员">
                         </el-table-column>
                         <el-table-column
-                        align = "center"
+                            sortable
+                            prop="bindingStartDate"
                           label="拦截开始时间">
                             <template slot-scope="scope">
                                 {{scope.row.bindingStartDate | parseTime}}
                             </template>
                         </el-table-column>
                         <el-table-column
-                        align = "center"
+                            sortable
+                            prop="bindingEndDate"
                           label="拦截结束时间">
                             <template slot-scope="scope">
                                 {{scope.row.bindingEndDate | parseTime}}
                             </template>
                         </el-table-column>
                         <el-table-column
-                        align = "center"
+                            sortable
                           prop="bindingSource"
                           label="绑定来源">
                             <template  slot-scope="scope">
@@ -69,7 +69,7 @@
                             </template>
                         </el-table-column>
                         <el-table-column
-                        align = "center"
+                            sortable
                           prop="usingStatus"
                           label="状态">
                             <template  slot-scope="scope">
@@ -159,94 +159,42 @@ import Pager from '@/components/Pagination/index'
             getinfomation(selection){
                 this.checkedinformation = selection;
             },
-            //修改
-            handleEdit() {
-                if(Object.keys(this.checkedinformation).length == 0){
+              handleClick(type){
+                if(Object.keys(this.checkedinformation).length == 0 && type != 'new'){
                     //未选择任何修改内容的提示
-                    this.$message({
+                    return this.$message({
                         type: 'warning',
-                        message: '请选择您要操作的用户~'
+                        message: '请选择您要操作的内容~'
                     })
-                }else if(this.checkedinformation.length >1){
-                    this.$message({
+                }else if(this.checkedinformation.length >1 && type == 'revise'){
+                    return this.$message({
                         type: 'warning',
-                        message: '不可同时操作多个用户~'
+                        message: '不可同时操作多项内容~'
                     })
-                }else{
-                    console.log(this.checkedinformation)
-                    this.dialogFormVisibleChange = true;
-                    this.changeforms= this.checkedinformation[0];
-                    console.log('开始：',this.changeforms.bindingStartDate,this.changeforms.bindingEndDate)
-                    
                 }
-                this.$refs.multipleTable.clearSelection()
-            },
-            // 禁用/启用
-            handleUseStates(){
-                if(this.checkedinformation.length === 0){
-                    //未选择任何修改内容的提示
-                    this.$message({
-                        type: 'warning',
-                        message: '请选择您要操作的用户~'
-                    })
-                }else{
-                    let statusID = [];
-                    console.log(this.checkedinformation)
-                    this.checkedinformation.map((item)=>{
-                        return statusID.push(item.id)
-                    })
-
-                    statusID = statusID.join(',');
-
-                    data_ChangeStatus(statusID).then(res=>{
-
-                        this.firstblood();
-                    }).catch(err => {
-                        this.$message({
-                            type: 'info',
-                            message: '操作失败，原因：' + err.text ? err.text : err.errinfo
-                        })
-                    })
-                    this.$refs.multipleTable.clearSelection()
-                }
-            },
-            // 是否删除
-            handleDelete() {
-                if(this.checkedinformation.length === 0){
-                    //未选择任何修改内容的提示
-                    this.$message({
-                        type: 'warning',
-                        message: '请选择您要操作的用户~'
-                    })
-                }else{
-                    let delID = [];
-                    this.checkedinformation.map((item)=>{
-                        return delID.push(item.standardPid)
-                    })
-                    this.$confirm('确定要将手机号码为'+ item +'用户冻结吗？', '提示', {
-                        confirmButtonText: '确定',
-                        cancelButtonText: '取消',
-                        type: 'warning'
-                    }).then( ()=>{
-                            data_DeletInfo(this.delID).then(res=>{
-                            // console.log(res)
-                            this.$message({
-                                type: 'success',
-                                message: '用户已被删除',
-                                duration:2000
+                else{
+                    switch(type){
+                        case 'new':
+                            this.dialogFormVisible = true;
+                            break;
+                        case 'revise':
+                            this.dialogFormVisibleChange = true; 
+                            this.changeforms = Object.assign({},this.checkedinformation[0]) ;
+                            break;
+                        case 'status':
+                            let statusID = [];
+                            this.checkedinformation.map((item)=>{
+                                return statusID.push(item.id)
                             })
-                            this.close();
-                            this.changeList();
-                        }).catch(err => {
-                            this.$message.error('操作失败，失败原因：',err.errorInfo)
-                        })
-                    }).catch(() => {
-                        this.$message({
-                            type: 'info',
-                            message: '已取消'
-                        })
-                    })
+                            statusID = statusID.join(',');
+                            data_ChangeStatus(statusID).then(res=>{
+                                this.firstblood();
+                            })
+                            break;
+                    }
                 }
+                //清空选中内容以免影响其他操作
+                this.$refs.multipleTable.clearSelection();
             },
             //刷新页面  
             firstblood(){
@@ -274,11 +222,6 @@ import Pager from '@/components/Pagination/index'
                     driverName:'',
                 };
                 this.firstblood();
-            },
-            //新增分类信息
-            addClassfy(){
-                this.dialogFormVisible = true;
-                this.$refs.multipleTable.clearSelection()
             },
         }
     }

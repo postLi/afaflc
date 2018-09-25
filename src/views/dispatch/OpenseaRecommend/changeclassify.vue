@@ -18,16 +18,16 @@
                 </div>
                 <div class="firstPush choosePush">
                     <p><span>* </span>推送距离/时间  ：</p>
-                    <el-input v-model="changeforms.firstRecommendKm" maxlength="4" @blur="valuerules"></el-input>
+                    <el-input v-model="changeforms.firstRecommendKm" maxlength="4"  v-numberOnly></el-input>
                     <span>公里/</span>
-                    <el-input v-model="changeforms.firstRecommendTime" maxlength="4" @blur="valuerules"></el-input>
+                    <el-input v-model="changeforms.firstRecommendTime" maxlength="4"  v-numberOnly></el-input>
                     <span>秒</span>                    
                 </div>
                  <!-- <div class="secondPush choosePush">
                     <p><span>* </span>第二轮及之后推送 ：</p>
-                     <el-input v-model="changeforms.secondRecommendKm" maxlength="4" @blur="valuerules"></el-input>
+                     <el-input v-model="changeforms.secondRecommendKm" maxlength="4"  v-numberOnly></el-input>
                     <span>公里/</span>
-                    <el-input v-model="changeforms.secondRecommendTime" maxlength="4" @blur="valuerules"></el-input>
+                    <el-input v-model="changeforms.secondRecommendTime" maxlength="4"  v-numberOnly></el-input>
                     <span>秒</span>                    
                 </div> -->
                 <div class="chooseVisual chooseStyle">
@@ -166,7 +166,10 @@ export default {
                     this.$emit('renovate')
                     this.close()
                 }).catch(res=>{
-                    this.$emit('ifError', res.text)
+                     this.$message({
+                        type: 'warning',
+                        message: '操作失败，原因：' + err.errorInfo ? err.errorInfo : err.text
+                    })
                 })  
             }
         },
@@ -174,23 +177,6 @@ export default {
         closeChangeInfo(){
             this.close();
             
-        },
-        //验证数据值
-        valuerules(event){
-            if(!event.target.value){
-                return 
-            }else{
-                if(!/^[0-9]+$/.test(event.target.value)){
-                    let information = "请输入数字类型内容";
-                    this.$refs.cue.hint(information)
-                    for(let item in this.changeforms){
-                        if(this.changeforms[item] == event.target.value){
-                            this.changeforms[item] = null;
-                        }
-                    }
-                    event.target.focus()
-                }
-            }
         },
     },
    

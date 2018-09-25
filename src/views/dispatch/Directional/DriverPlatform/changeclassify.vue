@@ -117,7 +117,10 @@ export default {
                 return
             }else{
                 if(this.changeforms.bindingStartDate  > this.changeforms.bindingEndDate){
-                    this.$refs.cue.hint(this.informationTime)
+                    this.$message({
+                        type: 'warning',
+                        message: '绑定结束时间怎么能比绑定开始早呢！~'
+                    })
                     this.changeforms.bindingStartDate  = this.startTime ;
                     this.changeforms.bindingEndDate = this.endTime ;
                 }
@@ -155,7 +158,10 @@ export default {
                     this.$emit('renovate')
                     this.close()
                 }).catch(res=>{
-                    this.$emit('ifError', res.text)
+                    this.$message({
+                        type: 'warning',
+                        message: '操作失败，原因：' + err.errorInfo ? err.errorInfo : err.text
+                    })
                 })  
             }
         },

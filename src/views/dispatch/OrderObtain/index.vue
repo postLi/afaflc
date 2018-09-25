@@ -13,6 +13,7 @@
                         stripe
                         height="100%"
                         border
+                        :default-sort = "{prop: 'areaCodeName', order: 'descending'}"
                         @selection-change = "getinfomation"
                         tooltip-effect="dark"
                         @row-click="clickDetails"
@@ -22,18 +23,22 @@
                             width="55">
                         </el-table-column>
                         <el-table-column
+                            sortable
                           prop="areaCodeName"
                           label="地区">
                         </el-table-column>
                         <el-table-column
+                            sortable
                           prop="serivceCodeName"
                           label="服务类型">
                         </el-table-column>
                         <el-table-column
+                            sortable
                           prop="carTypeName"
                           label="用车类型">
                         </el-table-column>
                         <el-table-column
+                            sortable
                           prop="obtainTime"
                           label="公布中单时间">
                           <template slot-scope="scope">
@@ -41,6 +46,7 @@
                           </template>
                         </el-table-column>
                         <el-table-column
+                            sortable
                           prop="obtainKm"
                           label="公布中单距离">
                            <template slot-scope="scope">
@@ -135,7 +141,7 @@ import Pager from '@/components/Pagination/index'
                         type: 'warning',
                         message: '请选择您要操作的内容~'
                     })
-                }else if(this.checkedinformation.length >1 && type != 'new'){
+                }else if(this.checkedinformation.length >1 && type == 'revise'){
                     return this.$message({
                         type: 'warning',
                         message: '不可同时操作多项设置~'

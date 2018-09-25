@@ -38,8 +38,8 @@ export default {
         // background: #003863;
         // border-radius: 0;
 
-        background: #373d41;
-        border-radius: 0;
+    background: #373d41;
+      border-radius: 0;
       float: left;
       /* height: 32%; */
       max-width: 32%;
@@ -64,7 +64,7 @@ export default {
           // height: $topNavHeight;
           // float: left;
           // margin-left: 5px;
- 
+
           height: 50px;
           float: left;
           /* margin-left: 5px; */

@@ -76,7 +76,7 @@ export default {
     },
     methods: {
         close(){
-            this.$emit('update:dialogFormVisibleChange',false)
+            this.$emit('update:dialogFormVisibleChange',false);
         },
         init(){
            
@@ -84,18 +84,24 @@ export default {
         //修改保存
         changeInfoSave(){
             
-        //    if(!this.changeforms.firstRecommendKm || !this.changeforms.firstRecommendTime ){
-        //         let information = "第一轮推送公里数和秒数必填且为数字整数";
-        //         this.$refs.cue.hint(information) 
-        //     }
-        //     else if(!this.changeforms.secondRecommendKm || !this.changeforms.secondRecommendTime ){
-        //         let information = "第二轮及以后推送公里数和秒数必填且为数字整数";
-        //         this.$refs.cue.hint(information)
-        //     }
-        //     else if(!this.changeforms.visualCarType){
-        //         let information = "请选择可见车主类型";
-        //         this.$refs.cue.hint(information)
-        //     }else{
+           if(!this.changeforms.firstRecommendKm || !this.changeforms.firstRecommendTime ){
+                this.$message({
+                    type: 'warning',
+                    message: '第一轮推送公里数和秒数必填且为数字整数'
+                })
+            }
+            else if(!this.changeforms.secondRecommendKm || !this.changeforms.secondRecommendTime ){
+                this.$message({
+                    type: 'warning',
+                    message: '第二轮及以后推送公里数和秒数必填且为数字整数'
+                })
+            }
+            else if(!this.changeforms.visualCarType){
+                this.$message({
+                    type: 'warning',
+                    message: '请选择可见车主类型'
+                })
+            }else{
 
                 console.log(this.changeforms)    
                 data_ChangeData(this.changeforms).then(res=>{
@@ -103,9 +109,12 @@ export default {
                     this.$emit('renovate')
                     this.close()
                 }).catch(res=>{
-                    this.$emit('ifError', res.text)
+                    this.$message({
+                        type: 'warning',
+                        message: '操作失败，原因：' + err.errorInfo ? err.errorInfo : err.text
+                    })
                 })  
-            // }
+            }
         },
         //修改关闭
         closeChangeInfo(){

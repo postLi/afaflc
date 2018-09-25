@@ -68,7 +68,7 @@ export default {
       ]
     },
     {
-      path: '/marketing/operating', icon: 'lingdanmj', name: '运营收支', hidden: false, component: _import('marketing/operating/index'), meta: { role: ['admin'], title: '运营收支', stitle: '运营', noCache: true },
+      path: '/marketing/operating', icon: 'yunyingSZ', name: '运营收支', hidden: false, component: _import('marketing/operating/index'), meta: { role: ['admin'], title: '运营收支', stitle: '运营', noCache: true },
       children: [
 
       ]

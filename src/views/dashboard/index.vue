@@ -21,8 +21,8 @@
 
             </div>
         </div> -->
-        <!-- <zanshi></zanshi> -->
-        <router-view></router-view>
+        <zanshi></zanshi>
+        <!-- <router-view></router-view> -->
 
     </div>
 </template>
@@ -32,7 +32,7 @@ import { mapGetters } from 'vuex'
 // import now from './compnents/data'
 // import jinqi from './compnents/data'
 // import echartsLine from './compnents/echarts'
-// import zanshi from './compnents/zanshi'
+import zanshi from './compnents/zanshi'
 
 export default {
   name: 'dashboard',
@@ -40,7 +40,7 @@ export default {
         // echartsLine,
         // now,
         // jinqi,
-    // zanshi
+    zanshi
   },
   computed: {
     ...mapGetters([

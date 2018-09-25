@@ -26,13 +26,12 @@
                     ref="multipleTable"
                     stripe
                     border
-                    :default-sort = "{prop: 'Time', order: 'descending'}"
+                    :default-sort = "{prop: 'startLocation', order: 'descending'}"
                     height="100%"
                     style="width: 100%">
                         <el-table-column
                             label="序号"
                             type="index"
-                            sortable
                             width="80">
                         </el-table-column>
                         <el-table-column
@@ -244,8 +243,8 @@ export default {
           this.firstblood()
         }).catch(err => {
           this.$message({
-              type: 'info',
-              message: '操作失败，原因：' + errorInfo ? errorInfo : err.text
+              type: 'warning',
+              message: '操作失败，原因：' + err.errorInfo ? err.errorInfo : err.text
             })
         })
       }).catch(() => {
@@ -261,8 +260,8 @@ export default {
         this.firstblood()
       }).catch(err => {
         this.$message({
-          type: 'info',
-          message: '操作失败，原因：' + err.text ? err.text : err
+          type: 'warning',
+          message: '操作失败，原因：' + err.errorInfo ? err.errorInfo : err.text
         })
       })
     }

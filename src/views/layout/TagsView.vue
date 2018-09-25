@@ -3,9 +3,9 @@
     <div class="tags-view-scroll">
       <div class="scroll-container tags-view-wrapper" ref="scrollContainer" @wheel.prevent="handleScroll">
         <div class="scroll-wrapper" ref="scrollWrapper" :style="{left: left + 'px'}">
-          <!-- <router-link class="tags-view-item" ref='tagIndex' :class="isActive(indexTag)?'active':''" to="/dashboard" >
+          <router-link class="tags-view-item" ref='tagIndex' :class="isActive(indexTag)?'active':''" to="/dashboard" >
           首页
-          </router-link> -->
+          </router-link>
           <router-link ref='tag' class="tags-view-item" :class="isActive(tag)?'active':''" v-for="tag in Array.from(visitedViews)"
             :to="tag.fullPath" :key="tag.fullPath"> <span class="el-icon-refresh" title="刷新" @click.prevent.stop="refreshSelectedTag(tag)"></span>
             {{generateTitle(tag.title)}}<span class='el-icon-close' title="关闭" @click.prevent.stop='closeSelectedTag(tag)'></span>
@@ -23,10 +23,10 @@
         </ul>
         <div class="menu-line"></div>
         <ul class="contextmenu contextmenu-list">
-          <!-- <router-link tag="li" to="/dashboard">
+          <router-link tag="li" to="/dashboard">
             <i :class="isActive({path:'/dashboard'})?'el-icon-check':''"></i>
             首页
-          </router-link> -->
+          </router-link>
           <router-link :class="isActive(tag)?'active-menu':''" tag="li" v-for="tag in Array.from(visitedViews)"
           :to="tag.fullPath" :key="tag.fullPath">
           <i class="el-icon-check"></i>

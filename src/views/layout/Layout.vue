@@ -118,11 +118,11 @@ export default {
             left: 0;
             top: 0;
             width: 100%;
-            height: 50px;
-            line-height: 50px;
-            border-radius: 0!important;
-            background: #373d41;
-            z-index: 1009;
+            height: $topNavHeight;
+            line-height: $topNavHeight;
+            border-radius: 0px !important;
+            background: #003863;
+            z-index: 999;
             min-width: 1180px;
         }
     }

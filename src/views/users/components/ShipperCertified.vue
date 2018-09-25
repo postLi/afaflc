@@ -123,8 +123,17 @@
                 </el-form-item>
               </el-col>
               <el-col :span="12">
-                <el-form-item label="货主类型" :label-width="formLabelWidth"  required prop="shipperTypeName">
-                    <span class="onlyShow">{{shengheform.shipperTypeName}}</span>
+                <el-form-item label="货主类型" :label-width="formLabelWidth"  required prop="shipperType">
+                    <!-- <span class="onlyShow">{{shengheform.shipperTypeName}}</span> -->
+                     <el-select v-model="shengheform.shipperType" placeholder="请选择">
+                        <el-option
+                        v-for="item in optionsShipperType"
+                        :key="item.id"
+                        :label="item.name"
+                        :value="item.code"
+                        :disabled="item.disabled">
+                        </el-option>
+                    </el-select>
                 </el-form-item>
               </el-col>
             </el-row>
@@ -189,6 +198,7 @@ import {data_get_shipper_list,data_get_shipper_change} from '@/api/users/shipper
 import Pager from '@/components/Pagination/index'
 import vregion from '@/components/vregion/Region'
 import { objectMerge2, parseTime } from '@/utils/'
+import { getDictionary } from '@/api/common.js'
 
 export default {
 	props: {
@@ -212,6 +222,7 @@ export default {
             dialogFormVisible_add: false,
             type: '',
             paramsView: {},
+            optionsShipperType:[],
             typetitle:'',
             btnsize:'mini',
             tabType:'certified',
@@ -254,7 +265,8 @@ export default {
             handler(newVal, oldVal) {
                 if(newVal && !this.inited){
                     this.inited = true
-                    this.firstblood()
+                    this.firstblood();
+                    this.getMoreInformation();
                 }
             },
             // 代表在wacth里声明了firstName这个方法之后立即先去执行handler方法
@@ -283,6 +295,13 @@ export default {
         },
         getValue(obj){
             return obj ? obj.value:'';
+        },
+         //获取货主类型
+        getMoreInformation(){
+            getDictionary(this.shipperType).then(res=>{
+                // console.log('货主类型',res)
+                this.optionsShipperType = res.data;
+            })
         },
         pushOrderSerial(row){
             this.type = 'view';
@@ -356,7 +375,7 @@ export default {
                         cancelButtonText: '取消',
                         type: 'warning'
                     }).then(() => {
-                        var forms=objectMerge2({},this.shengheform,{shipperType:"AF0010102"},{currentShipperStatus:"AF0010402"},{shipperStatus:"AF0010404",shipperStatusName:'认证不通过'});
+                        var forms=objectMerge2({},this.shengheform,{currentShipperStatus:"AF0010402"},{shipperStatus:"AF0010404",shipperStatusName:'认证不通过'});
                         
                         data_get_shipper_change(forms).then(res=>{
                             // console.log(res)
@@ -399,7 +418,7 @@ export default {
             }
             this.$refs['shengheform'].validate((valid)=>{
                 if(valid && ifQualified){
-                    var forms=objectMerge2({},this.shengheform,{shipperType:"AF0010102"},{currentShipperStatus:"AF0010402"},{shipperStatus:"AF0010403",shipperStatusName:'已认证'});
+                    var forms=objectMerge2({},this.shengheform,{currentShipperStatus:"AF0010402"},{shipperStatus:"AF0010403",shipperStatusName:'已认证'});
                     console.log('this.forms',forms)
                     data_get_shipper_change(forms).then(res=>{
                     // console.log(res)

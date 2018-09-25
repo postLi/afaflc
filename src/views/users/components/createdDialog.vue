@@ -5,7 +5,8 @@
           <el-row>
             <el-col :span="12">
                 <el-form-item label="货主类型 ：" prop="shipperType" :label-width="formLabelWidth" >
-                    <el-select v-model="xinzengform.shipperType" placeholder="请选择" v-if="editType=='add'" >
+                    <span class="onlyShow" v-if="editType=='view'">{{xinzengform.shipperTypeName}}</span>
+                    <el-select v-model="xinzengform.shipperType" placeholder="请选择" v-else>
                         <el-option
                         v-for="item in options"
                         :key="item.id"
@@ -14,8 +15,7 @@
                         :disabled="item.disabled">
                         </el-option>
                     </el-select>
-                    <span class="onlyShow" v-else-if="editType=='identification'">{{identifiy}}</span>
-                    <span class="onlyShow" v-else>{{xinzengform.shipperTypeName}}</span>
+                     <!-- <span class="onlyShow" v-else>{{xinzengform.shipperTypeName}}</span> -->
                 </el-form-item>
             </el-col>
             <el-col :span="12">
@@ -272,6 +272,7 @@ export default {
         this.$refs.xinzengform.resetFields();
         this.$emit('getData');
         this.changeList();
+        this.ifDisable = false;
         if (typeof done === 'function') {
             done()
         }
@@ -301,7 +302,7 @@ export default {
                 var forms=Object.assign({},this.xinzengform)
                 switch  (this.editType){
                     case 'add':
-                        if(!forms.companyName){
+                        if(forms.shipperType == 'AF0010101'){
                             forms.companyName = '个人业务' ;
                         }
                         data_get_shipper_create(forms).then(res=>{
@@ -313,8 +314,8 @@ export default {
                             });
                         }).catch(err=>{
                             this.$message({
-                                type: 'info',
-                                message: '操作失败，原因：' + err.text ? err.text : err
+                                type: 'warning',
+                                message: '操作失败，原因：' + err.errorInfo ? err.errorInfo : err.text
                             })
                         })
                         break;
@@ -328,8 +329,8 @@ export default {
                             });
                         }).catch(err=>{
                             this.$message({
-                                type: 'info',
-                                message: '操作失败，原因：' + err.text ? err.text : err
+                                type: 'warning',
+                                message: '操作失败，原因：' + err.errorInfo ? err.errorInfo : err.text
                             })
                         })
                         break;
@@ -343,12 +344,12 @@ export default {
                             forms.currentShipperStatus = forms.shipperStatus;
                             forms.shipperStatus =  "AF0010403";
                             forms.shipperStatusName =  "已认证";
-                            this.options.filter( el => {
-                                if(el.name == "企业货主" ){
-                                    forms.shipperTypeName = el.name;
-                                    forms.shipperType = el.code;
-                                }
-                            })
+                            // this.options.filter( el => {
+                            //     if(el.name == "企业货主" ){
+                            //         forms.shipperTypeName = el.name;
+                            //         forms.shipperType = el.code;
+                            //     }
+                            // })
                             data_get_shipper_change(forms).then(res => {
                                 this.$message({
                                     type: 'success',
@@ -357,7 +358,10 @@ export default {
                                 })
                                 this.close();
                             }).catch(err => {
-                                this.$message.error('操作失败，失败原因：',err.text)
+                                this.$message({
+                                    type: 'warning',
+                                    message: '操作失败，原因：' + err.errorInfo ? err.errorInfo : err.text
+                                })
                             })
                         }).catch(() => {
                             this.$message({

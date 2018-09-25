@@ -47,14 +47,12 @@
                 </div> 
             </el-dialog>
         </div>
-        <cue ref="cue"></cue>
     </div>
         
 </template>
 
 <script>
 import { data_ChangeData } from '@/api/dispatch/Directional.js'
-import cue from "@/components/Message/cue";
 
 
 export default {
@@ -75,14 +73,12 @@ export default {
     },
     data() {
       return {
-        informationTime:'绑定结束时间怎么能比绑定开始早呢！',
         startTime:null,
         endTime:null,
         changeforms_now:null,
       };
     },
     components:{
-        cue
     },
     computed: {
         startTimeStatus() {
@@ -108,14 +104,12 @@ export default {
                 this.endTime = oldValue
             }else{
                 this.endTime = newValue
-
             }
             this.ifWrong();
     　　},
         
     },
     mounted(){
-        // this.init();
     },
     methods: {
         //验证time
@@ -124,7 +118,10 @@ export default {
                 return
             }else{
                 if(this.changeforms.bindingStartDate  > this.changeforms.bindingEndDate){
-                    this.$refs.cue.hint(this.informationTime)
+                    this.$message({
+                        type: 'warning',
+                        message: '绑定结束时间怎么能比绑定开始早呢！~'
+                    })
                     this.changeforms.bindingStartDate  = this.startTime ;
                     this.changeforms.bindingEndDate = this.endTime ;
                 }
@@ -138,25 +135,27 @@ export default {
         },
         //修改保存
         changeInfoSave(){
-                // console.log(this.changeforms)
-                // console.log('结束:',this.changeforms.bindingStartDate,this.changeforms.bindingEndDate)
-                
            if(!this.changeforms.bindingStartDate){
-                let information = "请填写绑定开始时间";
-                this.$refs.cue.hint(information) 
+                this.$message({
+                    type: 'warning',
+                    message: '请填写绑定开始时间~'
+                })
             }
             else if(!this.changeforms.bindingEndDate ){
-                let information = "请填写绑定结束时间";
-                this.$refs.cue.hint(information)
+                this.$message({
+                    type: 'warning',
+                    message: '请填写绑定结束时间~'
+                })
             }
             else{
-
                 data_ChangeData(this.changeforms).then(res=>{
-                    // console.log(res)
                     this.$emit('renovate')
                     this.close()
-                }).catch(res=>{
-                    this.$emit('ifError', res.text)
+                }).catch(err =>{
+                    this.$message({
+                        type: 'warning',
+                        message: '操作失败，原因：' + err.errorInfo ? err.errorInfo : err.text
+                    })
                 })  
             }
         },

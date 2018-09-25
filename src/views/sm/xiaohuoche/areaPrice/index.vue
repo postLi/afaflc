@@ -2,11 +2,19 @@
     <div class="TwoColumns serviceArea clearfix">
         <div class="columnsContainer">
             <div class="side_left">
-                <el-tree
+                <!-- <el-tree
                 :data="areadata"
                 :props="props"
                 :load="loadNode"
                 lazy
+                :highlight-current = "true"
+                @node-expand="handleNodeClick"
+                >
+                </el-tree> -->
+                 <el-tree
+                :data="cityTree"
+                :props="props"
+                :load="loadNode"
                 :highlight-current = "true"
                 @node-expand="handleNodeClick"
                 >
@@ -161,7 +169,6 @@
                                                 <span>元 / 公里</span>
                                             </label>       
                                         </div>
-                                        
                                     </div>
                                     <div class="newarea area_right">
                                         <span class="slot_head">设置区域价</span>
@@ -175,7 +182,7 @@
                                                 v-model="filterText">
                                                 </el-input>
                                                 <el-tree
-                                            :props="propsAdd"
+                                                :props="propsAdd"
                                                 show-checkbox
                                                 node-key="code"
                                                 ref = 'trees'
@@ -331,6 +338,8 @@
 <script type="text/javascript">
 
 import { data_Area, data_GetCityList, data_GetCityInfo, data_CarList, data_ServerClassList, data_ChangeStatus, data_Delete, data_GetCarStyle, data_NewOrChange, data_OnlyChange } from '@/api/server/areaPrice.js'
+import { aflcCityTree } from '@/api/common.js'
+
 import Pager from '@/components/Pagination/index'
 import searchInfo from '../component/searchInfo'
 
@@ -340,6 +349,7 @@ import '@/styles/side.scss'
 export default{
       data() {
           return {
+              cityTree:[],
               btnsize: 'mini',
               sizes: [20, 50, 100],
               canclose: false,
@@ -380,13 +390,13 @@ export default{
                     name: '全部'
                   }
                 ],
-              optionsCar: [
+                optionsCar: [
                   {
                     code: '',
                     name: '全部'
                   }
                 ],
-              optionsStatus: [
+                optionsStatus: [
                   {
                     value: '',
                     label: '全部'
@@ -536,11 +546,15 @@ export default{
             },
             // 刷新页面
           firstblood() {
-              this.show = true
-                data_Area().then(res => {
-                  this.areadata = res.data.list
-                    this.provinceId = this.areadata[0].code 
-                    this.getCommonFunction()
+                // this.show = true
+                // data_Area().then(res => {
+                //     this.areadata = res.data.list
+                //     this.provinceId = this.areadata[0].code 
+                //     this.getCommonFunction()
+                // })
+                aflcCityTree().then(res => {
+                    console.log('aflcCityTree',res)
+                    this.cityTree = res.data;
                 })
             },
             handleClick(type){
@@ -638,32 +652,16 @@ export default{
                 })
             },
           handleNodeClick(data, checked) {
-                // console.log(data,checked);
-              data_GetCityList(data.code).then(res => {
-                  this.citylist = res.data.list
-                    this.cacheData[data.code] = res.data.list
-                }).catch(res => {
-                  console.log('res', res)
-                })
-              if (checked.level === 1) {
-                  this.provinceId = data.code
-                    this.cityId = '' 
+              console.log(data)
+                if (checked.level === 1) {
+                    this.provinceId = data.code;
+                    this.cityId = '' ;
                 }
-              if (checked.level === 2) {
-                  this.cityId = data.code
-                    this.provinceId = '' 
+                if (checked.level === 2) {
+                    this.cityId = data.code;
+                    this.provinceId = '' ;
                 }
-              this.getCommonFunction()
-            },
-          loadNode(node, resolve) {
-              if (node.level === 0) {
-                // 不会触发事件
-                }else {
-                  setTimeout(() => {
-                    // resolve(this.citylist);
-                      resolve(this.cacheData[node.data.code] || [])
-                    }, 500)
-                }
+                this.getCommonFunction()
             },
              // 弹窗Tree节点
           handleNodeClickMore(data, checked) {

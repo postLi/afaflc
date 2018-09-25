@@ -39,20 +39,20 @@ export default {
         },
 
         {          
-            path: '/finance/transactionChinaDoor', icon: 'txgl', name: '平台账户概况',hidden: false, component: _import('finance/transactionChinaDoor/chinaDoor'), meta: { role: ['admin'], title: '平台账户概况', stitle:'平台', noCache: true },
+            path: '/finance/transactionChinaDoor', icon: 'pingtaiZH', name: '平台账户概况',hidden: false, component: _import('finance/transactionChinaDoor/chinaDoor'), meta: { role: ['admin'], title: '平台账户概况', stitle:'平台', noCache: true },
             children:[
                
             ]
           }, 
 
           {          
-            path: '/finance/transactionCar', icon: 'txgl', name: '车主账户概况',hidden: false, component: _import('finance/transactionCar/transactionCarWallet/index'), meta: { role: ['admin'], title: '车主账户概况', stitle:'车主', noCache: true },
+            path: '/finance/transactionCar', icon: 'chezhuZH', name: '车主账户概况',hidden: false, component: _import('finance/transactionCar/transactionCarWallet/index'), meta: { role: ['admin'], title: '车主账户概况', stitle:'车主', noCache: true },
             children:[
                
             ]
           }, 
           {          
-            path: '/finance/transactionShipper', icon: 'txgl', name: '货主账户概况',hidden: false, component: _import('finance/transactionShipper/transactionShipperWallet/index'), meta: { role: ['admin'], title: '货主账户概况', stitle:'货主', noCache: true },
+            path: '/finance/transactionShipper', icon: 'huozhuZH', name: '货主账户概况',hidden: false, component: _import('finance/transactionShipper/transactionShipperWallet/index'), meta: { role: ['admin'], title: '货主账户概况', stitle:'货主', noCache: true },
             children:[
                
             ]

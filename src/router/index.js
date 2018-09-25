@@ -35,43 +35,33 @@ Vue.use(Router)
   * noDropdown : if `noDropdown:true` will not has submenu in the sidebar
   * meta : `{ role: ['admin'] }`  will control the page role
   **/
-export const constantRouterMap = [
-  { path: '/login', component: _import('login/index'), hidden: true },
-  { path: '/404', component: _import('404'), hidden: true },
-  {
-    path: '/',
-    component: Layout,
-    redirect: '/dashboard',
-    noDropdown: true,
-    icon: 'shouye',
-    // name: '首页',
-    name: 'dashboard',
-    meta: {
-        'code': 'HOME'
-    },
-    hidden: true,
-    children: [{
-      path: '/dashboard', 
-      name: 'dashboard', 
-      hidden: true,
-      icon: 'shouye', 
-      component: _import('HomePage/index'),
-      meta: { 
-          title: '首页', 
-          noCache: false ,
+ export const constantRouterMap = [
+    { path: '/login', component: _import('login/index'), hidden: true },
+    { path: '/404', component: _import('404'), hidden: true },
+    {
+      path: '/',
+      component: Layout,
+      redirect: '/dashboard',
+      noDropdown: true,
+      icon: 'shouye',
+      name: '首页',
+      meta: {
           'code': 'HOME'
-        }
-    },{
-        path: '/common/myinfo',
-        icon: 'information',
-        hidden: true,
-        name: '个人中心',
-        component: _import('common/myinfo/index'),
-        meta: { title: '个人中心', noCache: true }
-      }]
-  }
-]
-
+      },
+      hidden: true,
+      children: [{
+        path: 'dashboard', name: '首页', icon: 'shouye', component: _import('dashboard/index'),
+        meta: { title: '首页', noCache: true }
+      },{
+          path: '/common/myinfo',
+          icon: 'information',
+          hidden: true,
+          name: '个人中心',
+          component: _import('common/myinfo/index'),
+          meta: { title: '个人中心', noCache: true }
+        }]
+    }
+  ]
 export default new Router({
   mode: 'history', // 后端支持可开
   scrollBehavior: () => ({ y: 0 }),

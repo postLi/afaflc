@@ -12,7 +12,7 @@
                         <el-select v-model="forms.serivceCode" clearable placeholder="请选择">
                             <el-option
                                 v-for="item in optionsService"
-                                :key="item.value"
+                                :key="item.id"
                                 :label="item.name"
                                 :value="item.code"
                                 :disabled="item.disabled">
@@ -24,7 +24,7 @@
                         <el-select v-model="forms.shipperCarType" clearable placeholder="请选择">
                             <el-option
                                 v-for="item in optionsCarType"
-                                :key="item.value"
+                                :key="item.id"
                                 :label="item.name"
                                 :value="item.code"
                                 :disabled="item.disabled">
@@ -50,7 +50,7 @@
                         <el-select v-model="visualCarType" multiple  clearable placeholder="请选择">
                             <el-option
                                 v-for="item in optionsVisualCarType"
-                                :key="item.code"
+                                :key="item.id"
                                 :label="item.name"
                                 :value="item.code">
                             </el-option>
@@ -225,10 +225,10 @@ export default {
             }
           })
         }).catch(err => {
-          this.$message({
-            type: 'info',
-            message: '操作失败，原因：' + err.text ? err.text : err
-          })
+            this.$message({
+                type: 'warning',
+                message: '操作失败，原因：' + err.errorInfo ? err.errorInfo : err.text
+            })
         })
       }
       console.log(this.forms)
@@ -254,22 +254,6 @@ export default {
       }
       this.visualCarType = []
     },
-    valuerules() {
-      if (!event.target.value) {
-        return
-      } else {
-        if (!/^[0-9]+$/.test(event.target.value)) {
-          const information = '请输入数字类型内容'
-          this.$refs.cue.hint(information)
-          for (const item in this.forms) {
-            if (this.forms[item] == event.target.value) {
-              this.forms[item] = null
-            }
-          }
-          event.target.focus()
-        }
-      }
-    }
   }
 }
 </script>

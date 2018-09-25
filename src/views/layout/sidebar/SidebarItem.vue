@@ -53,7 +53,6 @@
       </li>
     </ul>
 </template>
-
 <script>
 import { mapGetters } from 'vuex'
 import { closest } from '@/utils/index'
@@ -71,30 +70,29 @@ export default {
       'sidebar'
     ])
   },
-  data() {
+  data () {
     return {
       open: true
     }
   },
   methods: {
-    isFolder(item) {
+    isFolder (item) {
       return item.children && item.children.length
     },
-    removeOtherOpenFolder() {
-      const childRef = Array.isArray(this.$refs.sidebarMenuItem) ? this.$refs.sidebarMenuItem : [this.$refs.sidebarMenuItem]
-      childRef.map(el => {
-        if (el.isFolder && el.open) {
+    removeOtherOpenFolder () {
+      let childRef = Array.isArray(this.$refs.sidebarMenuItem) ? this.$refs.sidebarMenuItem : [this.$refs.sidebarMenuItem]
+      childRef.map( el =>{
+        if(el.isFolder && el.open){
           el.open = false
         }
       })
     },
-    isOpen(route) {
+    isOpen (route) {
       return true
     },
     toggle(event) {
       const el = closest(event.target, 'li')
       const ul = closest(el, 'ul')
-      console.log()
       const lis = Array.from(ul.querySelectorAll('.isOpen') || []).filter(l => {
         return l !== el
       }).forEach(el2 => {
@@ -102,54 +100,55 @@ export default {
       })
       el.classList.toggle('isOpen')
     },
-    setSubNav(type, event) {
-      const parentEle = document.querySelector('.sidebar-menu')
-      const isHide = !!document.querySelector('.hideSidebar')
-      const showBox = document.querySelector('.subNavWrapper')
+    setSubNav(type, event){
+      let parentEle = document.querySelector('.sidebar-menu')
+      let isHide = document.querySelector('.hideSidebar') ? true : false
+      let showBox = document.querySelector('.subNavWrapper')
 
-      if (type === 'show') {
-        if (isHide) {
-          const el = closest(event.target, 'li.menu-item')
-          const ul = el ? el.querySelector('.sidebar-submenu') : ''
+      if(type === 'show'){
+        if(isHide){
+          let el = closest(event.target, 'li.menu-item')
+          let ul = el ? el.querySelector('.sidebar-submenu') : ''
 
-          if (ul) {
+          if(ul){
             showBox.innerHTML = ''
             showBox.appendChild(ul.cloneNode(true))
-            const elHeight = showBox.offsetHeight
-            const winHeight = window.innerHeight
+            let elHeight = showBox.offsetHeight
+            let winHeight = window.innerHeight
             let parentY = el.offsetTop + parentEle.offsetTop - parentEle.scrollTop
             // 50 为顶部导航的高度
             // 保证底端对齐
             // 当子菜单为超长时，需要设置滚动条显示
-            if ((parentY + elHeight + 50) > winHeight) {
+            if((parentY + elHeight + 50) > winHeight){
               parentY = winHeight - elHeight - 50
             }
-            showBox.style.display = 'block'
+            showBox.style.display = "block"
             showBox.style.top = parentY + 'px'
           }
+          
         }
       } else {
         showBox.innerHTML = ''
       }
     },
-    clearTimer() {
+    clearTimer () {
       clearTimeout(this.subMenuTimer)
     },
-    showSubNav(event) {
+    showSubNav (event) {
       this.clearTimer()
-      this.setSubNav('show', event)
+      this.setSubNav('show', event)  
     },
-    hideSubNav(event) {
+    hideSubNav (event) {
       this.clearTimer()
       this.subMenuTimer = setTimeout(() => {
-        this.setSubNav('hide')
-      }, 200)
+        this.setSubNav('hide')   
+      }, 200);
     },
-    showTab(event) {
-      const el = closest(event.target, 'li.submenu-item-tab')
-
-      if (el) {
-        eventBus.$emit('changeTab', el.path)
+    showTab (event) {
+      let el = closest(event.target, 'li.submenu-item-tab')
+      
+      if(el){
+        eventBus.$emit('changeTab', el.path)        
       }
     }
   }
@@ -360,4 +359,3 @@ $sidebarBackgroundColor: #42485b;
 }
 
 </style>
-
