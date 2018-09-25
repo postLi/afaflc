@@ -41,6 +41,18 @@ export function DicfreezeType() {
   export function DicServiceType() {
     return fetch.get('/' + baseurl_two + '/sysDict/getSysDictByCodeGet/AF017')
   }
+    // 获取车辆类型
+export function DicCartype() {
+    return fetch.get('/' + baseurl_two + '/sysDict/getSysDictByCodeGet/AF018')
+    }
+
+//根据服务分类和车辆类型选择车长
+export function GetCarStyle(serviceTypeCode,cartypeCode) {
+    return fetch({
+      url: '/'+baseurl+'/sm/aflcStandardPrice/v1/getPriceByServiceAndCarType/'+serviceTypeCode+'/'+cartypeCode,
+      method: 'get'
+    })
+  }
 
 /**
  * 获取图片上传的policy
@@ -131,7 +143,13 @@ export function data_LogisticsCompany() {
   }
 
 
-  //根据地区业务城市树表
-  export function aflcCityTree(){
-      return fetch.get('/'+ baseurl_two+'/common/aflcCityTree/v1/treaCode/')
+  //获取三级业务城市树表
+  export function aflcAreaCode(){
+      return fetch.get('/'+ baseurl_two+'/common/aflcCityTree/v1/treaCode')
   }
+
+  //获取二级业务城市树表
+  export function aflcProvinceCode(){
+    return fetch.get('/'+ baseurl_two+'/common/aflcCityTree/v1/provinceCode')
+}
+
