@@ -231,10 +231,10 @@ export default {
           break
       }
       // this.getData()
-    },
+    }
   },
   mounted() {
-     this.dataset = this.pickerOptions3.shortcuts
+    this.dataset = this.pickerOptions3.shortcuts
     // 默认展示今天的数据
     this.currentkey = 0
     var myChart = echarts.init(document.getElementById('main_lefttop'))
@@ -247,9 +247,9 @@ export default {
       // backgroundColor: '#2c343c',
       // textStyle: {
       //     color: 'rgba(255, 255, 255, 0.3)'
-      // },      
+      // },
       label: {
-       textStyle: {
+        textStyle: {
           color: 'rgba(255, 255, 255, 0.3)'
         }
       },
@@ -295,7 +295,7 @@ export default {
       },
       color: ['#35c966', '#1b9aff', '#13c9c9'],
       calculable: true,
-      
+
       series: [
         {
           name: '收入来源',
@@ -303,9 +303,9 @@ export default {
           radius: '55%',
           center: ['50%', '60%'],
           data: [
-            { value: 335, name: '小货车', itemStyle: {color: '#c23531'}},
-            { value: 310, name: '大货车', itemStyle: {color: '#4682B4'}},
-            { value: 234, name: '零担' , itemStyle: {color: '	#20B2AA'}}
+            { value: 335, name: '小货车', itemStyle: { color: '#c23531' }},
+            { value: 310, name: '大货车', itemStyle: { color: '#4682B4' }},
+            { value: 234, name: '零担', itemStyle: { color: '	#20B2AA' }}
           ]
         }
       ]
