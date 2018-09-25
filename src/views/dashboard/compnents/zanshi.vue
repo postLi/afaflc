@@ -33,10 +33,10 @@
                 <ul>
                     <li>需求资源池 <span class="title_span">({{title}})</span>
                     </li>
-                    <li><span>求货需求订单:</span> <span>34755</span>单</li>
-                    <li><span>求车需求订单:</span><span>5568</span>单</li>
-                    <li><span>零担订单:</span><span>23888</span>单</li>
-                    <li><span>小货车订单:</span><span>12352</span>单</li>
+                    <li>求货需求订单:<span>34755</span>单</li>
+                    <li>求车需求订单:<span>5568</span>单</li>
+                    <li>零担订单:<span>23888</span>单</li>
+                    <li>小货车订单:<span>12352</span>单</li>
                 </ul>
                 <ul>
                     <li>
@@ -44,10 +44,10 @@
                         <span class="title_span">({{title}})</span>
                         <!-- <i class="el-icon-check"></i> -->
                     </li>
-                    <li><span>货主:</span><span>7989</span>人</li>
-                    <li><span>车主:</span><span>32456</span>人</li>
-                    <li><span>物流公司:</span><span>3455</span>家</li>
-                    <li><span>区代:</span><span>32</span>家</li>
+                    <li>货主:<span>7989</span>人</li>
+                    <li>车主:<span>32456</span>人</li>
+                    <li>物流公司:<span>3455</span>家</li>
+                    <li>区代:<span>32</span>家</li>
                 </ul>
                 <ul>
                     <li>
@@ -55,10 +55,10 @@
                         <span class="title_span">({{title}})</span>
                         <!-- <i class="el-icon-check"></i> -->
                     </li>
-                    <li><span>货主:</span><span>9986</span>人</li>
-                    <li><span>车主:</span><span>32514</span>人</li>
-                    <li><span>物流公司:</span><span>3422</span>家</li>
-                    <li><span>区代:</span><span>30</span>家</li>
+                    <li>货主:<span>9986</span>人</li>
+                    <li>车主:<span>32514</span>人</li>
+                    <li>物流公司:<span>3422</span>家</li>
+                    <li>区代:<span>30</span>家</li>
                 </ul>
                 <ul>
                     <li>
@@ -193,11 +193,13 @@ export default {
           this.pickerDate = Today
           this.searchQuery.vo.buttonKey = 0
           this.currentkey = 0
+          this.title = '今天'
           console.log('今天')
           break
         case 1:
           const YesterDay = pickerOptions4.yesterDay()
           this.pickerDate = YesterDay
+          this.title = '昨天'
           console.log('昨天')
           this.searchQuery.vo.buttonKey = 1
           this.currentkey = 1
@@ -210,6 +212,7 @@ export default {
           this.pickerDate = CurrentWeek
           this.searchQuery.vo.buttonKey = 2
           this.currentkey = 2
+          this.title = '本周'
           console.log('本周')
           break
         case 3:
@@ -220,6 +223,7 @@ export default {
           this.pickerDate = CurrentMonth
           this.searchQuery.vo.buttonKey = 3
           this.currentkey = 3
+          this.title = '本月'
           console.log('本月')
           break
         case 4:
@@ -228,6 +232,7 @@ export default {
           this.pickerDate = CurrentYear
           this.searchQuery.vo.buttonKey = 4
           this.currentkey = 4
+          this.title = '本年'
           break
       }
       // this.getData()
@@ -745,20 +750,22 @@ export default {
         display: inline-block;
         // min-width: 318.41px;
         // text-align: center;
-        color:#Ffff;/* 初始颜色 */
+        // color:#Ffff;/* 初始颜色 */
         white-space: nowrap;
         font-size: 14px;
         cursor: pointer;
         box-sizing: border-box;
-            
+        padding-left: 15px;
         span{
-          color:#333;
+          // color:#333;
           padding:0 10px;
           height:30px;
           line-height: 30px;
+          color:red;
         }
         span:first-child{                                         
-          color: #333;
+          // color: #333;
+          // color:#c23531;
           width: 10%;
           text-align: right;
         }
@@ -778,6 +785,7 @@ export default {
         height:40px;
         line-height:40px;
         border-radius: 5px 5px 0 0;
+        color:#fff;
         span{
             color:red;
             font-size: 14px;
@@ -798,7 +806,9 @@ export default {
       transition: all 0.2s ease-out; 
       box-shadow: 0px 35px 77px -17px rgba(0, 0, 0, 0.40); 
       overflow: hidden;
-      color: red;
+      // color: red;
+       color:#6bc9eb;
+       font-weight: bold;
     }
   }
   .main_forthUl ul:hover {
