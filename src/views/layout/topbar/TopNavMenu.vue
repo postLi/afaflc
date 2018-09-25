@@ -67,7 +67,6 @@ export default {
     }
     .el-menu{
       background: #373d41;
-      display: flex;
     }
   }
   #app .page-top-nav .el-menu-item{
@@ -75,6 +74,7 @@ export default {
     line-height: $topNavHeight;
     color: #fff;
     font-size: $topNavFontSize;
+    background: #373d41;
 
     &.is-active{
       background: #2a2f32;

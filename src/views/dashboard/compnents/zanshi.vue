@@ -1,5 +1,5 @@
 <template>
-        <div class="main_content ">
+        <div class="wzlmain_content">
             <!-- <div class="head_title clearfix">
                 <h4 class="fl">数据总览</h4>
                 <ul class=" clearfix ">
@@ -13,7 +13,7 @@
             </div> -->
             <div class="head_title clearfix">
               <h4 class="fl">数据总览</h4>
-              <ul>
+              <ul class="head_list">
                 <li v-for="(item, index) in dataset" :class="{'active':item.keyval === currentkey} " :key="index" @click="currentkey = item.keyval">{{item.text}}</li>
                 <li>
                   <el-date-picker
@@ -244,6 +244,20 @@ export default {
     var myChart5 = echarts.init(document.getElementById('jiaoyi'))
 
     const option = {
+      // backgroundColor: '#2c343c',
+      // textStyle: {
+      //     color: 'rgba(255, 255, 255, 0.3)'
+      // },      
+      label: {
+       textStyle: {
+          color: 'rgba(255, 255, 255, 0.3)'
+        }
+      },
+      // labelLine: {
+      //   lineStyle: {
+      //       color: 'rgba(255, 255, 255, 0.3)'
+      //   }
+      // },
       title: {
         text: '用户转化比例',
         subtext: '测试数据',
@@ -281,6 +295,7 @@ export default {
       },
       color: ['#35c966', '#1b9aff', '#13c9c9'],
       calculable: true,
+      
       series: [
         {
           name: '收入来源',
@@ -288,9 +303,9 @@ export default {
           radius: '55%',
           center: ['50%', '60%'],
           data: [
-                        { value: 335, name: '小货车' },
-                        { value: 310, name: '大货车' },
-                        { value: 234, name: '零担' }
+            { value: 335, name: '小货车', itemStyle: {color: '#c23531'}},
+            { value: 310, name: '大货车', itemStyle: {color: '#4682B4'}},
+            { value: 234, name: '零担' , itemStyle: {color: '	#20B2AA'}}
           ]
         }
       ]
@@ -354,8 +369,8 @@ export default {
             }
           },
           data: [
-                    { value: 500, name: '收入' },
-                    { value: 310, name: '支出' }
+            { value: 500, name: '收入' },
+            { value: 310, name: '支出' }
           ]
         }
       ]
@@ -401,13 +416,13 @@ export default {
           data: [30054, 46666, 33333, 45656, 32314, 46665, 48998],
           markPoint: {
             data: [
-                                    { type: 'max', name: '最大值' },
-                                    { type: 'min', name: '最小值' }
+              { type: 'max', name: '最大值' },
+              { type: 'min', name: '最小值' }
             ]
           },
           itemStyle: {
             normal: {
-              color: '#35c966'
+              color: '#c23531'
             }
           }
         },
@@ -417,13 +432,13 @@ export default {
           data: [20323, 35465, 22345, 28945, 24545, 31456, 35456],
           markPoint: {
             data: [
-                                    { type: 'max', name: '最大值' },
-                                    { type: 'min', name: '最小值' }
+              { type: 'max', name: '最大值' },
+              { type: 'min', name: '最小值' }
             ]
           },
           itemStyle: {
             normal: {
-              color: '#1b9aff'
+              color: '#4682B4'
             }
           }
         },
@@ -433,13 +448,13 @@ export default {
           data: [14012, 16666, 11999, 14444, 11555, 21165, 17884, 21632],
           markPoint: {
             data: [
-                                    { type: 'max', name: '最大值' },
-                                    { type: 'min', name: '最小值' }
+              { type: 'max', name: '最大值' },
+              { type: 'min', name: '最小值' }
             ]
           },
           itemStyle: {
             normal: {
-              color: '#13c9c9'
+              color: '#20B2AA'
             }
           }
         }
@@ -609,33 +624,33 @@ export default {
 }
 </script>
 <style lang="scss">
-.main_content{
+.wzlmain_content{
   padding: 15px 20px;
   height: 100%;
   // min-width: 1100px;
-  height: 100%;
-  // min-height: 666px;
-  background:rgb(235,235,235);
+  // height: 100%;
+  min-height: 666px;
+  // background:rgb(235,235,235);
   display: flex;
   -ms-flex-direction: column;
   flex-direction: column;
+  overflow:hidden;
   .head_title{
-    height: 31px ;
-    line-height: 31px ;
-    overflow: hidden;
-    border-radius: 2px;
+    height: 40px ;
+    line-height: 40px ;
+    // overflow: hidden;
+    border-radius: 5px;
     background: #ffff;
     box-sizing: border-box;
+    // margin-bottom: 5px;
     // margin-bottom: 0.6%;
-    // box-shadow: 2px 2px 2px 2px ,-2px -2px -2px -2px rgba(0, 0, 0, 0.10);
+    box-shadow: 2px 2px 2px 2px rgba(0, 0, 0, 0.10);
     h4{
       font-size: 16px;
       display: inline-block;
       margin-left:20px;
     }
-    ul{
-      // margin-right: -50% !important;
-      
+    .head_list{
       position: relative;
       width: 100%;
       // width: 45%;
@@ -656,7 +671,7 @@ export default {
           // margin-left:10px !important;
           height:4%;
           line-height: 30px;
-          border:none;
+          // border:none;
           // position:relative;
           // position:absolute;
         }
@@ -693,137 +708,150 @@ export default {
     }
   }
   .main_forthUl{
-        background: #fff;
-        padding: 15px 20px;
-        margin-bottom: 10px;
-        display: flex;
-        width: 100%;
-        min-height:215px;
-        justify-content:space-between;
-         overflow: hidden;
-        -moz-box-sizing: border-box;
-        box-sizing: border-box;
-        ul{
-            flex: 1;
-            box-sizing: border-box;
-            // border: solid 1px #1790ff;
-            // float: left;
-            height: 185px;
-            margin-right: 20px;
-            box-shadow: 2px 2px 2px 2px rgba(0,0,0,.1);
-            transition: color 4s ease;
-            border-radius: 5px;
-            flex-direction: column;
-            display:flex;
-        li{
-            // line-height: 20px;
-            // font-size: 13px;
-            // // padding: 0 20px;
-            // margin: 5px 0 ;
-            // color:#fff;
-            
-            // flex:1;
-            display: inline-block;
-            // min-width: 318.41px;
-            // text-align: center;
-            color:#Ffff;/* 初始颜色 */
-            white-space: nowrap;
-            font-size: 14px;
-            cursor: pointer;
-            box-sizing: border-box;
-            
-            span{
-                color:#333;
-                padding:0 10px;
-                height:30px;
-                line-height: 30px;
-            }
-            span:first-child{                                         
-                color: #333;
-                width: 10%;
-                text-align: right;
-            }
-            em{
-                float:right;
-            }
-        }
-        li:nth-child(1){
-          position: relative;
-          // padding: 20px 20px;
-          padding-left:15px;
-          font-size: 16px;
-          font-weight: bold;
-          margin: 0px;
-          background-color: #6bc9eb;
-          margin-bottom: 10px;
-          height:40px;
-          line-height:40px;
-          border-radius: 5px 5px 0 0;
-            span{
-                color:red;
-                font-size: 14px;
-                padding:none;
-                height:0px;
-                line-height: 0px;
-            }
-          }
-        }
-        ul:last-child{
-            margin-right: 0;
-        }
-
-        ul:hover{
-            margin-top: -2px;
-            cursor: pointer;
-            box-sizing: border-box;
-            transition: all 0.2s ease-out; 
-            box-shadow: 0px 35px 77px -17px rgba(0, 0, 0, 0.40); 
-            overflow: hidden;
-            color: red;
-        }
-    }
-    .main_forthUl ul:hover {
-        // border:1px solid #3e9ff1;
+    margin-top:10px;
+    background: #fff;
+    padding: 15px 20px;
+    margin-bottom: 10px;
+    display: flex;
+    width: 100%;
+    min-height:215px;
+    justify-content:space-between;
+      overflow: hidden;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    // border-top-left-radius: 5px;
+    // border-top-right-radius: 5px;
+    box-shadow: 2px 2px 2px 2px rgba(0, 0, 0, 0.10);
+    ul{
+      flex: 1;
+      box-sizing: border-box;
+      // border: solid 1px #1790ff;
+      // float: left;
+      height: 185px;
+      margin-right: 20px;
+      box-shadow: 2px 2px 2px 2px rgba(0,0,0,.1);
+      transition: color 4s ease;
+      border-radius: 5px;
+      flex-direction: column;
+      display:flex;
+      li{
+        // line-height: 20px;
+        // font-size: 13px;
+        // // padding: 0 20px;
+        // margin: 5px 0 ;
+        // color:#fff;
+        
+        // flex:1;
+        display: inline-block;
+        // min-width: 318.41px;
+        // text-align: center;
+        color:#Ffff;/* 初始颜色 */
+        white-space: nowrap;
+        font-size: 14px;
         cursor: pointer;
-    }
-    .main_forthUl ul:hover .el-icon-check{
-        display: block;
+        box-sizing: border-box;
+            
+        span{
+          color:#333;
+          padding:0 10px;
+          height:30px;
+          line-height: 30px;
+        }
+        span:first-child{                                         
+          color: #333;
+          width: 10%;
+          text-align: right;
+        }
+        em{
+            float:right;
+        }
+      }
+      li:nth-child(1){
+        position: relative;
+        // padding: 20px 20px;
+        padding-left:15px;
+        font-size: 16px;
         font-weight: bold;
+        margin: 0px;
+        background-color: #6bc9eb;
+        margin-bottom: 10px;
+        height:40px;
+        line-height:40px;
+        border-radius: 5px 5px 0 0;
+        span{
+            color:red;
+            font-size: 14px;
+            padding:none;
+            height:0px;
+            line-height: 0px;
+        }
+      }
     }
-    .main_forthUl ul:hover .triangle_border_down{
-        display: block;
+    ul:last-child{
+      margin-right: 0;
     }
-        .main_left{
-            flex: 1;
-            .ul_left{
-                float: left;
-                width: 74.6%;
-                background:#fff;
-                height:100%;
+    ul:hover{
+      margin-top: -2px;
+      cursor: pointer;
+      box-sizing: border-box;
+      transition: all 0.2s ease-out; 
+      box-shadow: 0px 35px 77px -17px rgba(0, 0, 0, 0.40); 
+      overflow: hidden;
+      color: red;
+    }
+  }
+  .main_forthUl ul:hover {
+    // border:1px solid #3e9ff1;
+    cursor: pointer;
+  }
+  .main_forthUl ul:hover li span{
+    font-weight: bold;
+    color:#6bc9eb;
+  }
+  .main_forthUl ul:hover li:nth-child(1) span{
+    font-weight: bold;
+    color:#fff;
+  }
+  .main_forthUl ul:hover .el-icon-check{
+      display: block;
+      font-weight: bold;
+  }
+  .main_forthUl ul:hover .triangle_border_down{
+      display: block;
+  }
+  .main_left{
+      flex: 1;
+      box-shadow: 2px 2px 2px 2px rgba(0, 0, 0, 0.10);
+        .ul_left{
+            float: left;
+            width: 74.6%;
+            background:#fff;
+            height:100%;
+            box-shadow: 2px 2px 2px 2px rgba(0, 0, 0, 0.10);
+        }
+        .ul_right{
+            width: 24.8%;
+            float:right;
+            height:100%;
+            background: #fff;
+            #main_lefttop{
+                height: 100%;
+                width: 100%;
             }
-            .ul_right{
-                width: 24.8%;
-                float:right;
-                height:100%;
-                background: #fff;
-                #main_lefttop{
-                    height: 100%;
-                    width: 100%;
-                }
-                #main_leftdown,#xiadan{
-                    height: 100%;
-                    width: 100%;
+            #main_leftdown,#xiadan{
+                height: 100%;
+                width: 100%;
 
-                }
-                #main{
-                    height: 100%;
-                    width: 100%;
+            }
+            #main{
+                height: 100%;
+                // width: 100%;
 
-                }
+            }
 
-                #xiadan{
-                }
+            #xiadan{
             }
         }
     }
+  }
 </style>
