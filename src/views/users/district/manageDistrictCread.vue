@@ -1,28 +1,41 @@
 <template>
      <div class="shoppingDialog commoncss">
-      <el-button :type="btntype" :value="value" :plain="plain" @click="openDialog()">{{btntext}}</el-button>
+      <el-button :type="btntype" :value="value" :plain="plain" :icon="icon" @click="openDialog()">{{btntext}}</el-button>
       <div class="newmanageDistrict">
       <el-dialog  :visible="dialogFormVisible_add" :before-close="change" :title="btntitle">
         <el-form ref="formAll" :model="formAll" :rules="rulesForm" :inline="true">
             <el-row>
                 <el-col :span="12">
                     <el-form-item label="区代公司名称 ：" :label-width="formLabelWidth" prop="partnerCompany">
-                    <el-input v-model="formAll.partnerCompany"></el-input>
+                        <el-autocomplete
+                        class="inline-input"
+                        v-model="formAll.partnerCompany"
+                        :fetch-suggestions="querySearch"
+                        placeholder="请输入内容"
+                        @select="handleSelect"
+                        @keyup.native = "handblur"
+                        ></el-autocomplete>
                     </el-form-item>
                 </el-col>
                  <el-col :span="12">
                     <el-form-item label="联系人 ：" :label-width="formLabelWidth" prop="partnerName">
-                    <el-input v-model="formAll.partnerName"></el-input>
+                    <el-input v-model="formAll.partnerName" :disabled="inputdisabled"></el-input>
                     </el-form-item>
                 </el-col>
             </el-row>
             <el-row>
                 <el-col :span="12">
                     <el-form-item label="手机号码 ：" :label-width="formLabelWidth" prop="mobile">
-                    <el-input v-model="formAll.mobile"></el-input>
+                    <el-input v-model="formAll.mobile" :disabled="inputdisabled"></el-input>
                     </el-form-item>
                 </el-col>
                  <el-col :span="12">
+                    <span v-if='inputdisabled'>
+                        <el-form-item label="所在地 ：" :label-width="formLabelWidth" prop="">
+                        <el-input v-model="areaName" :disabled="inputdisabled"></el-input>
+                        </el-form-item>
+                    </span>
+                    <span v-else>
                     <el-form-item label="所在地 ：" :label-width="formLabelWidth" prop="areaName">
                    <el-cascader
                     size="large"
@@ -32,6 +45,7 @@
                     >
                     </el-cascader>
                     </el-form-item>
+                    </span>
                 </el-col>
             </el-row>
             <el-row>
@@ -155,7 +169,7 @@
     </div>
 </template>
 <script>
-import {data_get_aflcPartner_create,data_get_aflcTradeArea_Id} from '@/api/users/district/manageDistrict.js'
+import {data_get_aflcPartner_create,data_get_aflcTradeArea_Id,data_get_aflcPartner_findAuthCompany} from '@/api/users/district/manageDistrict.js'
 import { regionDataPlus, CodeToText, TextToCode } from 'element-china-area-data'
 import { eventBus } from '@/eventBus'
 import Upload from '@/components/Upload/singlei'
@@ -271,6 +285,14 @@ export default {
         }
 
         return{
+        companyId:null,    
+        areaName:null,
+        areaCode:null,
+        companyNameObject:{
+            companyName:null,
+        },
+        inputdisabled:false,
+        restaurants:[],
         isVip:'0',
         areaStatus:null,    
         selectFlag:null,
@@ -349,7 +371,11 @@ export default {
                 saveAddress:null,    
                 fileName:null,    
                 }]   
-                this.areaStatus = null 
+                this.areaStatus = null
+                this.areaName =null,
+                this.areaCode =null,
+                this.companyId = null,
+                this.companyNameObject.companyName = null;
                 }
         },
     },
@@ -358,6 +384,39 @@ export default {
     this.getMoreInformation();
   },
   methods:{
+    //   区代公司名称
+      querySearch(queryString, cb) {
+        var restaurants = this.restaurants;
+        var results = queryString ? restaurants.filter(this.createFilter(queryString)) : restaurants;
+        // 调用 callback 返回建议列表的数据
+        cb(results);
+      },
+      createFilter(queryString) {
+        return (restaurant) => {
+          return (restaurant.value.indexOf(queryString) === 0);
+        };
+      },
+      handleSelect(item) {
+          this.companyNameObject.companyName = item.value
+          this.inputdisabled = true
+        data_get_aflcPartner_findAuthCompany(1, 10, this.companyNameObject).then(res=>{
+            console.log('res',res)
+            this.formAll.partnerName = res.data[0].contactsName
+            this.formAll.mobile = res.data[0].mobile
+            this.areaCode = res.data[0].belongCity
+            this.formAll.province = res.data[0].provinceCode
+            this.formAll.city = res.data[0].cityCode
+            this.formAll.area = res.data[0].areaCode
+            this.areaName = res.data[0].belongCityName
+            this.companyId = res.data[0].id
+        })
+      },
+      handblur(i){
+     this.formAll.partnerName = null
+     this.formAll.mobile = null
+     this.inputdisabled = false
+     this.companyId = null
+      },
       changeInput:function(i){
         this.inputKey = i;
         console.log(i)
@@ -422,9 +481,21 @@ export default {
    close:function(){
       this.dialogFormVisible_add = false;
        },
+       
     getMoreInformation(){
-    
-          }, 
+         let FromData = {
+             companyName:null,
+        }
+        data_get_aflcPartner_findAuthCompany(1, 1000, FromData).then(res=>{
+         let restaurantsData = res.data;
+         restaurantsData.map(res=>{
+             this.restaurants.push({
+                 value:res.companyName})
+             console.log(this.restaurants)
+         })
+         
+        })
+        }, 
     changeList(){
             eventBus.$emit('pushListtwo')
         },  
@@ -468,14 +539,43 @@ export default {
      changeSelect(){
                 this.selectFlag='1'
             },         
+
+   completeData(){
+   for(var i=0;i<this.formAll.aflcPartnerAreaList.length;i++)
+   {
+     if(!this.formAll.aflcPartnerAreaList[i].province){
+        this.$message.warning('合作区域都不能为空');
+        return false
+      }
+     if(!this.formAll.aflcPartnerAreaList[i].contractStartDate){
+        this.$message.warning('合作区域开始日期都不能为空');
+        return false
+      }
+     if(!this.formAll.aflcPartnerAreaList[i].contractEndDate){
+        this.$message.warning('合作区域截止日期都不能为空');
+        return false
+      }            
+   }
+   },
     add_data(){
+            this.completeData(); 
+            if(this.completeData()==false)
+            {
+               return
+            }
+            else{        
        this.$refs['formAll'].validate(valid=>{
         if(valid){
+            if(!this.inputdisabled){
             if(this.formAll.area){
                this.areaStatus = this.formAll.areaCode[2]
             }
             else{
                this.areaStatus = this.formAll.areaCode[1]
+            }               
+            }
+            else{
+               this.areaStatus = this.areaCode
             }
             let aflcPartnerAreaList = []
             this.formAll.aflcPartnerAreaList.map((list,index)=>{
@@ -498,6 +598,8 @@ export default {
             })
         let forms=[
             {
+            companyId:this.companyId,
+            openAdminManage: this.isVip,
             areaCode:this.areaStatus,
             province:this.formAll.province,
             city:this.formAll.city,
@@ -529,6 +631,7 @@ export default {
        }
        })
     }
+    }
   }
 }
 </script>
@@ -538,7 +641,7 @@ export default {
 .shoppingDialog{
      display: inline-block;
     .el-button{
-            padding: 5px 15px 7px;
+        padding: 7px 15px 7px;
         }
     .newmanageDistrict{
         display: inline-block;

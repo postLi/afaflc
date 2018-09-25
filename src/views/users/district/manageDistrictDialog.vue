@@ -1,13 +1,21 @@
 <template>
      <div class="shoppingDialog commoncss">
-      <el-button :type="btntype" :value="value" :plain="plain" @click="openDialog()">{{btntext}}</el-button>
+      <el-button :type="btntype" :value="value" :plain="plain" :icon="icon" @click="openDialog()">{{btntext}}</el-button>
       <div class="newmanageDistrict">
       <el-dialog  :visible="dialogFormVisible_add" :before-close="change" :title="btntitle">
         <el-form ref="formAll" :model="formAll" :rules="rulesForm" :inline="true">
             <el-row>
                 <el-col :span="12">
                     <el-form-item label="区代公司名称 ：" :label-width="formLabelWidth" prop="partnerCompany">
-                    <el-input v-model="formAll.partnerCompany" :disabled="editType=='view'"></el-input>
+                        <el-autocomplete
+                        class="inline-input"
+                        v-model="formAll.partnerCompany"
+                        :fetch-suggestions="querySearch"
+                        placeholder="请输入内容"
+                        @select="handleSelect"
+                        ></el-autocomplete>
+
+                    <!-- <el-input v-model="formAll.partnerCompany" :disabled="editType=='view'"></el-input> -->
                     </el-form-item>
                 </el-col>
                  <el-col :span="12">
@@ -163,7 +171,7 @@
     </div>
 </template>
 <script>
-import {data_get_aflcPartner_update,data_get_aflcPartner_Id} from '@/api/users/district/manageDistrict.js'
+import {data_get_aflcPartner_update,data_get_aflcPartner_Id,data_get_aflcPartner_findAuthCompany} from '@/api/users/district/manageDistrict.js'
 import { regionDataPlus, CodeToText, TextToCode } from 'element-china-area-data'
 import { eventBus } from '@/eventBus'
 import Upload from '@/components/Upload/singlei'
@@ -279,6 +287,7 @@ export default {
         }
 
         return{
+        restaurants: [],
         AreaName:null,    
         areaStatus:null,
         selectFlag:null,
@@ -332,7 +341,6 @@ export default {
    dialogFormVisible_add:{
         handler: function(val, oldVal) {
             if(!val){
-                console.log('val',val)
                  this.$refs['formAll'].resetFields();
                  this.formAll.address = null;
                  this.selectFlag = null;
@@ -353,6 +361,7 @@ export default {
                 selectFlag:null,
                 }]   
                 this.areaStatus = null 
+                this.$emit('getData') 
                 }
         },
     },
@@ -361,6 +370,24 @@ export default {
     this.getMoreInformation();
   },
   methods:{
+    //   区代公司名称
+      querySearch(queryString, cb) {
+        var restaurants = this.restaurants;
+        var results = queryString ? restaurants.filter(this.createFilter(queryString)) : restaurants;
+        // 调用 callback 返回建议列表的数据
+        cb(results);
+      },
+      createFilter(queryString) {
+        return (restaurant) => {
+          return (restaurant.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0);
+        };
+      },
+      handleSelect(item) {
+        data_get_aflcPartner_findAuthCompany(1, 10, item.value).then(res=>{
+            console.log(res)
+        })
+      },
+
    // 省市状态表
      changeSelect(){
             if(this.editType=='add'){
@@ -459,11 +486,23 @@ export default {
      this.dialogFormVisible_add = true;
     }
     else{
-    if(!this.params.id){
-        this.$message.info('未选中需要修改内容');
-    }
+          if(!this.params.length){
+               this.$message.warning('请选择您要操作的用户');
+               return
+          }
+          else if(this.params.length == 0 && this.editType !== 'add'){
+               this.$message.warning('请选择您要操作的用户');
+               return false
+          }else if (this.params.length > 1 && this.editType !== 'add') {
+                this.$message({
+                    message: '每次只能操作单条数据~',
+                    type: 'warning'
+                })
+                this.$emit('getData') 
+                return false
+          }
     else{
-        data_get_aflcPartner_Id(this.params.id).then(res=>{
+        data_get_aflcPartner_Id(this.params[0].id).then(res=>{
         console.log('2',res)
             this.formAll.partnerCompany=res.data.partnerCompany
              this.formAll.partnerName=res.data.partnerName
@@ -492,8 +531,14 @@ export default {
       this.dialogFormVisible_add = false;
        },
     getMoreInformation(){
-    
-          }, 
+         let FromData = {
+             companyName:null,
+        }
+        data_get_aflcPartner_findAuthCompany(1, 1000, FromData).then(res=>{
+            console.log(res)
+         this.restaurants = res.data
+        })
+        }, 
     changeList(){
             eventBus.$emit('pushListtwo')
         },  
@@ -537,7 +582,32 @@ export default {
      changeSelect(){
                 this.selectFlag='1'
             },         
+
+   completeData(){
+   for(var i=0;i<this.formAll.aflcPartnerAreaList.length;i++)
+   {
+     if(!this.formAll.aflcPartnerAreaList[i].province){
+        this.$message.warning('合作区域都不能为空');
+        return false
+      }
+     if(!this.formAll.aflcPartnerAreaList[i].contractStartDate){
+        this.$message.warning('合作区域开始日期都不能为空');
+        return false
+      }
+     if(!this.formAll.aflcPartnerAreaList[i].contractEndDate){
+        this.$message.warning('合作区域截止日期都不能为空');
+        return false
+      }            
+   }
+   },
+
     add_data(){
+             this.completeData(); 
+            if(this.completeData()==false)
+            {
+               return
+            }
+            else{      
        this.$refs['formAll'].validate(valid=>{
         if(valid){
             if(typeof(this.formAll.areaCode)!=='string')
@@ -600,7 +670,7 @@ export default {
             contractEndDate:this.formAll.contractEndDate,
             aflcPartnerFileList:aflcPartnerFileList,
             aflcPartnerAreaList:aflcPartnerAreaList,
-            id:this.params.id
+            id:this.params[0].id
         }
         
         data_get_aflcPartner_update(forms).then(res=>{
@@ -618,6 +688,7 @@ export default {
        }
        })
     }
+    }
   }
 }
 </script>
@@ -631,7 +702,7 @@ export default {
      }     
      .btns_box{
     .el-button{
-            padding: 5px 15px 7px;
+        padding: 7px 15px 7px;
         }
     }
     .newmanageDistrict{
