@@ -70,6 +70,7 @@ export default {
       border-bottom: none;
     }
     .el-menu{
+       display: flex;
       background: #373d41;
       display:flex;
     }
