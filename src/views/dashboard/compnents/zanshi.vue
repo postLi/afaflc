@@ -787,6 +787,7 @@ export default {
         }
       }
     }
+    
     ul:last-child{
       margin-right: 0;
     }
