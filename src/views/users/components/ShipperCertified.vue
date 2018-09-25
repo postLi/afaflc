@@ -350,14 +350,13 @@ export default {
         handlerOut(){
             this.$refs['shengheform'].validate((valid)=>{
                 if(valid){
-                    // this.completeData();
                     let item =  this.shengheform.contacts;
                     this.$confirm('确定要不通过'+ item +' 货主吗？', '提示', {
                         confirmButtonText: '确定',
                         cancelButtonText: '取消',
                         type: 'warning'
                     }).then(() => {
-                        var forms=objectMerge2({},this.shengheform,{shipperType:"AF0010202"},{currentShipperStatus:"AF0010402"},{shipperStatus:"AF0010404",shipperStatusName:'认证不通过'});
+                        var forms=objectMerge2({},this.shengheform,{shipperType:"AF0010102"},{currentShipperStatus:"AF0010402"},{shipperStatus:"AF0010404",shipperStatusName:'认证不通过'});
                         
                         data_get_shipper_change(forms).then(res=>{
                             // console.log(res)
@@ -400,7 +399,7 @@ export default {
             }
             this.$refs['shengheform'].validate((valid)=>{
                 if(valid && ifQualified){
-                    var forms=objectMerge2({},this.shengheform,{shipperType:"AF0010202"},{currentShipperStatus:"AF0010402"},{shipperStatus:"AF0010403",shipperStatusName:'已认证'});
+                    var forms=objectMerge2({},this.shengheform,{shipperType:"AF0010102"},{currentShipperStatus:"AF0010402"},{shipperStatus:"AF0010403",shipperStatusName:'已认证'});
                     console.log('this.forms',forms)
                     data_get_shipper_change(forms).then(res=>{
                     // console.log(res)

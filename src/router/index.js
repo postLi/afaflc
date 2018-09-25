@@ -44,14 +44,22 @@ export const constantRouterMap = [
     redirect: '/dashboard',
     noDropdown: true,
     icon: 'shouye',
-    name: '首页',
+    // name: '首页',
+    name: 'dashboard',
     meta: {
         'code': 'HOME'
     },
     hidden: true,
     children: [{
-      path: 'dashboard', name: '首页', icon: 'shouye', component: _import('dashboard/index'),
-      meta: { title: '首页', noCache: true }
+      path: '/dashboard', 
+      name: 'dashboard', 
+      icon: 'shouye', 
+      component: _import('HomePage/index'),
+      meta: { 
+          title: '首页', 
+          noCache: false ,
+          'code': 'HOME'
+        }
     },{
         path: '/common/myinfo',
         icon: 'information',
