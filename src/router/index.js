@@ -53,6 +53,7 @@ export const constantRouterMap = [
     children: [{
       path: '/dashboard', 
       name: 'dashboard', 
+      hidden: true,
       icon: 'shouye', 
       component: _import('HomePage/index'),
       meta: { 
