@@ -12,7 +12,8 @@
 <script>
 // 引入事件对象
 import { eventBus } from '@/eventBus'
-  import { getAllOrgInfo  } from '@/api/company/employeeManage'
+  // import { getAllOrgInfo  } from '@/api/company/employeeManage'
+  import { getAllOrgInfo} from '@/api/company/employeeManage'
   import { mapGetters } from 'vuex'
 /**
  * 将多层级树结构展开未扁平数组，并对每个元素添加层级值index

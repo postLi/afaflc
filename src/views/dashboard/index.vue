@@ -32,7 +32,7 @@ import { mapGetters } from 'vuex'
 // import now from './compnents/data'
 // import jinqi from './compnents/data'
 // import echartsLine from './compnents/echarts'
-import zanshi from './compnents/zanshi'
+import zanshi from './components/zanshi'
 
 export default {
   name: 'dashboard',
