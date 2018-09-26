@@ -1,16 +1,5 @@
 <template>
         <div class="wzlmain_content">
-            <!-- <div class="head_title clearfix">
-                <h4 class="fl">数据总览</h4>
-                <ul class=" clearfix ">
-                    <li>今天</li>
-                    <li>昨天</li>
-                    <li>最近七天</li>
-                    <li>最近一个月</li>
-                    <li>最近两个月</li>
-                    <li>2018-06-4至2019-08-09</li>
-                </ul>
-            </div> -->
             <div class="head_title clearfix">
               <h4 class="fl">数据总览</h4>
               <ul class="head_list">
