@@ -143,7 +143,9 @@
                     <img  :src= 'defaultImage ? defaultImage : defaultImg'/>
                 </div> -->
                 <div class="data_pic_yyzz data_pic_common">  
-                    <img  class="picURL" :src="shengheform.businessLicenceFile ? shengheform.businessLicenceFile : defaultImg" @click="changeIMG"/>
+                    <el-tooltip class="item" effect="dark" content="点击图片查看原图" placement="top">
+                        <img  class="picURL" :src="shengheform.businessLicenceFile ? shengheform.businessLicenceFile : defaultImg"  v-showPicture :imgurl="shengheform.businessLicenceFile"/>
+                    </el-tooltip>
                     <h2>营业执照</h2>
                     <el-form-item  prop="businessLicenceFileNoPass">
                         <el-radio-group v-model="shengheform.businessLicenceFileNoPass">
@@ -154,7 +156,9 @@
                     </el-form-item>
                 </div>
                 <div class="data_pic_company data_pic_common">   
-                    <img  class="picURL" :src="shengheform.companyFacadeFile ? shengheform.companyFacadeFile : defaultImg" @click="changeIMG"/>
+                    <el-tooltip class="item" effect="dark" content="点击图片查看原图" placement="top">
+                        <img  class="picURL" :src="shengheform.companyFacadeFile ? shengheform.companyFacadeFile : defaultImg" v-showPicture :imgurl="shengheform.companyFacadeFile"/>
+                    </el-tooltip>
                     <h2>公司或档口照片</h2>
                     <el-form-item  prop="companyFacadeFileNoPass">
                         <el-radio-group v-model="shengheform.companyFacadeFileNoPass">
@@ -165,7 +169,9 @@
                     </el-form-item>
                 </div>
                 <div class="data_pic_callingcode data_pic_common">
-                    <img  class="picURL" :src="shengheform.shipperCardFile ? shengheform.shipperCardFile : defaultImg" @click="changeIMG"/>
+                    <el-tooltip class="item" effect="dark" content="点击图片查看原图" placement="top">
+                        <img  class="picURL" :src="shengheform.shipperCardFile ? shengheform.shipperCardFile : defaultImg" v-showPicture :imgurl="shengheform.shipperCardFile"/>
+                    </el-tooltip>
                     <h2>发货人名片</h2>
                     <el-form-item  prop="shipperCardFileNoPass">
                         <el-radio-group v-model="shengheform.shipperCardFileNoPass">
@@ -451,7 +457,15 @@ export default {
 <style lang="scss">
     .shippercertifed{
         width: 100%;
-
+        .el-dialog__wrapper .el-dialog {
+            width: 910px;
+            .el-dialog__body{
+                padding: 20px;
+                .el-row{
+                    padding-left:45px; 
+                }
+            }
+        }
         .data_pic{
             margin: 0 15px;
             padding-bottom: 20px;
@@ -484,6 +498,7 @@ export default {
                     width: 100%;
                     height: 160px;
                     margin-bottom: 10px;
+                    cursor: pointer;
                 }
             }
             .data_pic_yyzz,.data_pic_company{

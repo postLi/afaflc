@@ -1,6 +1,5 @@
 import fetch from '@/utils/fetch'
 
-// const baseurl_two = "aflcsmservice-lyc"
 const baseurl = "aflcsmservice"
 
 
