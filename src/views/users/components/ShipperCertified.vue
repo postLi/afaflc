@@ -64,15 +64,15 @@
        <!--认证审核部分 -->
     <div class="shippercertifed commoncss">
         <el-dialog title="认证审核" :visible.sync="RZdialogFormVisible" v-if="Object.keys(shengheform).length != 0">
-          <el-form :model="shengheform" ref="shengheform" :rules="shengheformRules">
+          <el-form :model="shengheform" ref="shengheform" :rules="shengheformRules" label-position="left">
             <el-row>
               <el-col :span="12">
-                <el-form-item label="手机号码" required :label-width="formLabelWidth"  prop="mobile">
+                <el-form-item label="手机号码：" required :label-width="formLabelWidth"  prop="mobile">
                     <span class="onlyShow">{{shengheform.mobile}}</span>
                 </el-form-item>
               </el-col>
               <el-col :span="12">
-                <el-form-item label="公司名称" :label-width="formLabelWidth" prop="companyName">
+                <el-form-item label="公司名称：" :label-width="formLabelWidth" prop="companyName">
                   <el-input v-model="shengheform.companyName" auto-complete="off"></el-input>
                 </el-form-item>
               </el-col>
@@ -80,50 +80,50 @@
 
             <el-row>
               <el-col :span="12">
-                <el-form-item label="所在地" :label-width="formLabelWidth" prop="belongCityName">
+                <el-form-item label="所在地：" :label-width="formLabelWidth" prop="belongCityName">
                     <vregion :ui="true"  @values="regionChange" class="form-control">
                         <el-input v-model="shengheform.belongCityName" placeholder="请选择" ></el-input>
                     </vregion>
                 </el-form-item>
               </el-col>
               <el-col :span="12">
-                <el-form-item label="联系人" :label-width="formLabelWidth" prop="contacts">
+                <el-form-item label="联系人：" :label-width="formLabelWidth" prop="contacts">
                   <el-input v-model="shengheform.contacts" auto-complete="off"></el-input>
                 </el-form-item>
               </el-col>
             </el-row>
             <el-row>
               <el-col :span="12">
-                <el-form-item label="详细地址" :label-width="formLabelWidth" prop="address">
+                <el-form-item label="详细地址：" :label-width="formLabelWidth" prop="address">
                   <el-input v-model="shengheform.address" auto-complete="off"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="12">
-                <el-form-item label="统一社会信用代码" :label-width="formLabelWidth" prop="creditCode">
-                  <el-input v-model="shengheform.creditCode" :maxlength="20"></el-input>
+                <el-form-item label="信用代码：" :label-width="formLabelWidth" prop="creditCode">
+                  <el-input v-model="shengheform.creditCode" :maxlength="20" placeholder="统一社会信用代码"></el-input>
                 </el-form-item>
               </el-col>
             </el-row>
             <el-row>
               <el-col :span="12">
-                <el-form-item label="提交认证时间" :label-width="formLabelWidth" prop="authenticationTime">
+                <el-form-item label="提交认证时间：" :label-width="formLabelWidth" prop="authenticationTime">
                     <span class="onlyShow">{{shengheform.authenticationTime | parseTime}}</span>
                 </el-form-item>
               </el-col>
               <el-col :span="12">
-                <el-form-item label="等待时长:" :label-width="formLabelWidth" prop="waitTime">
+                <el-form-item label="等待时长：" :label-width="formLabelWidth" prop="waitTime">
                     <span class="onlyShow">{{shengheform.waitTime}}</span>
                 </el-form-item>
               </el-col>
             </el-row>
             <el-row>
               <el-col :span="12">
-                <el-form-item label="注册来源" :label-width="formLabelWidth" prop="registerOriginName">
+                <el-form-item label="注册来源：" :label-width="formLabelWidth" prop="registerOriginName">
                     <span class="onlyShow">{{shengheform.registerOriginName}}</span>
                 </el-form-item>
               </el-col>
               <el-col :span="12">
-                <el-form-item label="货主类型" :label-width="formLabelWidth"  required prop="shipperType">
+                <el-form-item label="货主类型：" :label-width="formLabelWidth"  required prop="shipperType">
                     <!-- <span class="onlyShow">{{shengheform.shipperTypeName}}</span> -->
                      <el-select v-model="shengheform.shipperType" placeholder="请选择">
                         <el-option
@@ -139,9 +139,9 @@
             </el-row>
  
             <div class="data_pic clearfix">  
-                <div class="data_pic_default">
+                <!-- <div class="data_pic_default">
                     <img  :src= 'defaultImage ? defaultImage : defaultImg'/>
-                </div>
+                </div> -->
                 <div class="data_pic_yyzz data_pic_common">  
                     <img  class="picURL" :src="shengheform.businessLicenceFile ? shengheform.businessLicenceFile : defaultImg" @click="changeIMG"/>
                     <h2>营业执照</h2>
@@ -266,7 +266,6 @@ export default {
                 if(newVal && !this.inited){
                     this.inited = true
                     this.firstblood();
-                    this.getMoreInformation();
                 }
             },
             // 代表在wacth里声明了firstName这个方法之后立即先去执行handler方法
@@ -346,6 +345,7 @@ export default {
                 })
                 this.clearTableSelection();
             }else{
+                this.getMoreInformation();
                 this.RZdialogFormVisible = true;
                 this.shengheform = objectMerge2({},this.selected[0]) ;
                 this.shengheform.shipperTypeName = '企业货主';
@@ -451,6 +451,7 @@ export default {
 <style lang="scss">
     .shippercertifed{
         width: 100%;
+
         .data_pic{
             margin: 0 15px;
             padding-bottom: 20px;

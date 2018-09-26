@@ -50,7 +50,7 @@ Vue.use(Router)
       },
       hidden: true,
       children: [{
-        path: 'dashboard', name: '首页', icon: 'shouye', component: _import('dashboard/index'),
+        path: '/dashboard', name: '首页', icon: 'shouye', component: _import('dashboard/index'),
         meta: { title: '首页', noCache: true }
       },{
           path: '/common/myinfo',
@@ -59,7 +59,14 @@ Vue.use(Router)
           name: '个人中心',
           component: _import('common/myinfo/index'),
           meta: { title: '个人中心', noCache: true }
-        }]
+        },{
+            path: '/report',
+            icon: 'information',
+            hidden: false,
+            name: '测试',
+            component: _import('report/index'),
+            meta: { title: '测试', noCache: true }
+          }]
     }
   ]
 export default new Router({

@@ -262,26 +262,6 @@ export default {
       type: String,
       default:''
     },
-    btntype: {
-      type: String,
-      default: ''
-    },
-    btntext: {
-      type: String,
-      default: null,
-    },
-    btntitle: {
-        type: String,
-        default: ''
-    },
-    icon:{
-      type: String,
-      default: ''
-    },
-    plain:{
-      type: Boolean,
-      default: false
-    },
     /*add新增，edit编辑，view查看*/
     editType: {
       type: String,
@@ -410,15 +390,6 @@ export default {
         },
     },
     mounted(){
-        //按钮类型text,primary...
-        this.type = this.btntype;
-        //按钮文本内容
-        this.text = this.btntext;
-        //弹出框标题
-        // this.title = this.btntitle;
-
-        // console.log('btntitle',this.text)
-        // this.getMoreInformation()
     },
     methods:{
         regionChange(d) {
@@ -479,6 +450,7 @@ export default {
             })
         },
         close(done) {
+            this.$refs.xinzengform.resetFields();
             this.$emit('update:dialogFormVisible_add', false);
             this.$emit('getData');
             if (typeof done === 'function') {

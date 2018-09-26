@@ -88,12 +88,13 @@
           <el-form :model="shengheform" ref="shengheform" :rules="shengheformRules">
             <el-row>
               <el-col :span="12">
-                <el-form-item label="会员账号" :label-width="formLabelWidth" >
-                  <el-input v-model="shengheform.account" disabled auto-complete="off"></el-input>
+                <el-form-item label="会员账号" :label-width="formLabelWidth" prop="account">
+                  <!-- <el-input v-model="shengheform.account" disabled auto-complete="off"></el-input> -->
+                    <span class="onlyShow">{{shengheform.account}}</span>
                 </el-form-item>
               </el-col>
               <el-col :span="12">
-                <el-form-item label="会员手机号码" :label-width="formLabelWidth">
+                <el-form-item label="会员手机号码" :label-width="formLabelWidth" prop="mobile">
                   <el-input v-model="shengheform.mobile" auto-complete="off"></el-input>
                 </el-form-item>
               </el-col>
@@ -101,24 +102,24 @@
 
             <el-row>
               <el-col :span="12">
-                <el-form-item label="注册人姓名" :label-width="formLabelWidth" prop="linkman">
-                  <el-input v-model="shengheform.contactsName" auto-complete="off" disabled></el-input>
+                <el-form-item label="注册人姓名" :label-width="formLabelWidth" prop="contactsName">
+                  <el-input v-model="shengheform.contactsName" auto-complete="off"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="12">
-                <el-form-item label="经营年限" :label-width="formLabelWidth">
+                <el-form-item label="经营年限" :label-width="formLabelWidth" prop="businessLife">
                   <el-input v-model="shengheform.businessLife" :maxlength="20"></el-input>
                 </el-form-item>
               </el-col>
             </el-row>
             <el-row>
               <el-col :span="12">
-                <el-form-item label="公司名称" :label-width="formLabelWidth" prop="xsaddress">
-                  <el-input v-model="shengheform.companyName" auto-complete="off" disabled></el-input>
+                <el-form-item label="公司名称" :label-width="formLabelWidth" prop="companyName">
+                  <el-input v-model="shengheform.companyName" auto-complete="off"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="12">
-                  <el-form-item label="所在地" :label-width="formLabelWidth" prop="address">
+                  <el-form-item label="所在地" :label-width="formLabelWidth" prop="belongCityName">
                     <el-input v-model="shengheform.belongCityName"  disabled></el-input>
                 </el-form-item>
               </el-col>
@@ -126,36 +127,40 @@
             <el-row>
               <el-col :span="12">
                 <el-form-item label="注册来源" :label-width="formLabelWidth">
-                    <el-input v-model="shengheform.registerOriginName" disabled></el-input>
+                    <!-- <el-input v-model="shengheform.registerOriginName" disabled></el-input> -->
+                    <span class="onlyShow">{{shengheform.registerOriginName}}</span>
                 </el-form-item>
               </el-col>
               <el-col :span="12">
                 <el-form-item label="注册日期:" :label-width="formLabelWidth">
-                  <el-input v-model="shengheform.registerTime" disabled></el-input>
+                  <!-- <el-input v-model="shengheform.registerTime" disabled></el-input> -->
+                    <span class="onlyShow">{{shengheform.registerTime}}</span>
                 </el-form-item>
               </el-col>
             </el-row>
             <el-row>
               <el-col :span="12">
                 <el-form-item label="账户状态" :label-width="formLabelWidth">
-                  <el-input v-model="shengheform.accountStatusName" disabled></el-input>
+                  <!-- <el-input v-model="shengheform.accountStatusName" disabled></el-input> -->
+                    <span class="onlyShow">{{shengheform.accountStatusName}}</span>
                 </el-form-item>
               </el-col>
               <el-col :span="12">
                 <el-form-item label="认证状态" :label-width="formLabelWidth">
-                  <el-input v-model="shengheform.authStatusName" disabled></el-input>
+                  <!-- <el-input v-model="shengheform.authStatusName" disabled></el-input> -->
+                    <span class="onlyShow">{{shengheform.authStatusName}}</span>
                 </el-form-item>
               </el-col>
             </el-row>
 
             <el-row>
                 <el-col :span="12">
-                    <el-form-item label="法人/负责人 ：" :label-width="formLabelWidth">
+                    <el-form-item label="法人/负责人 ：" :label-width="formLabelWidth" prop="corporation">
                         <el-input :maxlength="20" v-model="shengheform.corporation"  ></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col :span="12">
-                    <el-form-item label="所属品牌 ：" :label-width="formLabelWidth">
+                    <el-form-item label="所属品牌 ：" :label-width="formLabelWidth"  prop="belongBrandCode">
                         <el-select v-model="shengheform.belongBrandCode" placeholder="请选择" >
                             <el-option
                             v-for="item in optionsBelongBrand"
@@ -169,14 +174,14 @@
             </el-row>
             <el-row>
                 <el-col :span="12">
-                    <el-form-item label="是否开通会员 ：" :label-width="formLabelWidth">
+                    <el-form-item label="是否开通会员 ：" :label-width="formLabelWidth" prop="isVip">
                         <el-radio-group v-model="shengheform.isVip" >
                             <el-radio  v-for="(obj,key) in optionsStatus" :label="obj.value" :key='key'>{{obj.name}}</el-radio>
                         </el-radio-group>
                     </el-form-item>
                 </el-col>
                 <el-col :span="12" >
-                    <el-form-item label="公司成立时间 ：" :label-width="formLabelWidth">
+                    <el-form-item label="公司成立时间 ：" :label-width="formLabelWidth" prop="foundTime">
                         <span class="onlyShow"  disabled>{{shengheform.foundTime ? shengheform.foundTime :'未填写'}}</span>
                         <!-- <el-date-picker
                             v-if="editType=='view'"
@@ -190,7 +195,7 @@
             </el-row>
              <el-row>
                 <el-col :span="12" class="moreLength">
-                    <el-form-item label="是否开通TMS ：" :label-width="formLabelWidth" >
+                    <el-form-item label="是否开通TMS ：" :label-width="formLabelWidth"  prop="isOpenTms">
                         <el-radio-group v-model="shengheform.isOpenTms" >
                             <el-radio  v-for="(obj,key) in optionsStatus" :label="obj.value" :key='key'>{{obj.name}}</el-radio>
                         </el-radio-group>
@@ -206,7 +211,7 @@
             </el-row>
              <el-row>        
                 <el-col :span="24" class="moreLength">
-                    <el-form-item label="服务类型 ：" :label-width="formLabelWidth">
+                    <el-form-item label="服务类型 ：" :label-width="formLabelWidth" prop="optionsServerArr">
                         <el-checkbox-group v-model="optionsServerArr" >
                                 <el-checkbox v-for="obj in optionsServer" :label="obj.code" :key="obj.id" >{{obj.name}}</el-checkbox>
                         </el-checkbox-group>
@@ -216,7 +221,7 @@
             
             <el-row>        
                 <el-col :span="24" class="moreLength">
-                    <el-form-item label="产品与服务 ：" :label-width="formLabelWidth">
+                    <el-form-item label="产品与服务 ：" :label-width="formLabelWidth" prop="optionsProductArr">
                         <el-checkbox-group v-model="optionsProductArr" >
                             <el-checkbox v-for="obj in optionsProductService" :label="obj.code" :key="obj.id" >{{obj.name}}</el-checkbox>
                         </el-checkbox-group>
@@ -225,7 +230,7 @@
             </el-row>
              <el-row>    
                 <el-col :span="24" class="moreLength">
-                    <el-form-item label="会员服务承诺 ：" :label-width="formLabelWidth" >
+                    <el-form-item label="会员服务承诺 ：" :label-width="formLabelWidth" prop="otherServiceCode">
                         <el-checkbox-group v-model="otherServiceCode" >
                             <el-checkbox v-for="obj in optionsLogisticsCompany" :label="obj.code" :key="obj.id" >{{obj.name}}</el-checkbox>
                         </el-checkbox-group>
@@ -237,33 +242,39 @@
                 <div class="data_pic_default">
                     <img  :src= 'defaultImg'/>
                 </div>
-                <div class="clearfix">
+                <div class="data_pic_img clearfix">
                     <div class="data_pic_yyzz data_pic_c">  
                         <img  class="picURL" :src="shengheform.businessLicenceFile ? shengheform.businessLicenceFile : defaultImg" @click="changeIMG"/>
                         <h2>营业执照</h2>
-                        <el-radio-group v-model="radio1">
-                            <el-radio label="上传合格">上传合格</el-radio><br />
-                            <el-radio label="不清晰">不清晰</el-radio><br />
-                            <el-radio label="内容不符">内容不符</el-radio>
-                        </el-radio-group>
+                        <el-form-item  prop="radio1">
+                            <el-radio-group v-model="radio1">
+                                <el-radio label="上传合格">上传合格</el-radio><br />
+                                <el-radio label="不清晰">不清晰</el-radio><br />
+                                <el-radio label="内容不符">内容不符</el-radio>
+                            </el-radio-group>
+                        </el-form-item>
                     </div>
                     <div class="data_pic_company data_pic_c">   
                         <img  class="picURL" :src="shengheform.companyFacadeFile ? shengheform.companyFacadeFile : defaultImg" @click="changeIMG"/>
                         <h2>公司或档口照片</h2>
-                        <el-radio-group v-model="radio2">
-                            <el-radio label="上传合格">上传合格</el-radio><br />
-                            <el-radio label="不清晰">不清晰</el-radio><br />
-                            <el-radio label="内容不符">内容不符</el-radio>
-                        </el-radio-group>
+                         <el-form-item  prop="radio2">
+                            <el-radio-group v-model="radio2">
+                                <el-radio label="上传合格">上传合格</el-radio><br />
+                                <el-radio label="不清晰">不清晰</el-radio><br />
+                                <el-radio label="内容不符">内容不符</el-radio>
+                            </el-radio-group>
+                        </el-form-item>
                     </div>
                     <div class="data_pic_callingcode data_pic_c">
                         <img  class="picURL" :src="shengheform.takeIdCardFile ? shengheform.takeIdCardFile : defaultImg" @click="changeIMG"/>
                         <h2>手持身份证</h2>
-                        <el-radio-group v-model="radio3">
-                            <el-radio label="上传合格">上传合格</el-radio><br />
-                            <el-radio label="不清晰">不清晰</el-radio><br />
-                            <el-radio label="内容不符">内容不符</el-radio>
-                        </el-radio-group>
+                         <el-form-item  prop="radio3">
+                            <el-radio-group v-model="radio3">
+                                <el-radio label="上传合格">上传合格</el-radio><br />
+                                <el-radio label="不清晰">不清晰</el-radio><br />
+                                <el-radio label="内容不符">内容不符</el-radio>
+                            </el-radio-group>
+                        </el-form-item>
                     </div>
                 </div>
             </div>
@@ -285,7 +296,7 @@ import Upload from '@/components/Upload/singleImage'
 import { eventBus } from '@/eventBus'
 import createdDialog from './createdDialog.vue'
 import GetCityList from '@/components/GetCityList'
-import { data_LogisticsCompanyList, data_ChangeLogisticsCompany } from '../../../api/users/logistics/LogisticsCompany.js'
+import { data_LogisticsCompanyList, data_ChangeLogisticsCompany } from '@/api/users/logistics/LogisticsCompany.js'
 import { data_LogisticsCompany, getDictionary } from '@/api/common.js'
 import Pager from '@/components/Pagination/index'
 
@@ -304,19 +315,36 @@ export default {
   Pager
 },
   computed: {
-  pictureValue() {
-		    return [{ name: '营业执照', result: this.radio1 }, { name: '公司或档口照片', result: this.radio2 }, { name: '手持身份证', result: this.radio3 }]
-}
+    pictureValue() {
+                return [{ name: '营业执照', result: this.radio1 }, { name: '公司或档口照片', result: this.radio2 }, { name: '手持身份证', result: this.radio3 }]
+    }
 },
-  data() {
-  const radioValidator = (rule, val, cb) => {
+    data() {
+        const radioValidator = (rule, val, cb) => {
             // console.log(val)
-  if (!this.radio1) {
-              cb(new Error('请选择图片质量'))
+            if (!this.radio1) {
+              cb(new Error('请选择营业执照图片质量'))
             } else{
               cb()
             }
-}
+        };
+        const radioValidator2 = (rule, val, cb) => {
+            // console.log(val)
+            if (!this.radio2) {
+              cb(new Error('请选择公司或档口照片图片质量'))
+            } else{
+              cb()
+            }
+        }
+        const radioValidator3 = (rule, val, cb) => {
+            // console.log(val)
+            if (!this.radio3) {
+              cb(new Error('请选择手持身份证图片质量'))
+            } else{
+              cb()
+            }
+        }
+
 return {
   btnsize: 'mini',
   dialogFormVisible_add: false,
@@ -325,10 +353,9 @@ return {
   templateRadio: '',
   defaultImg: '/static/test.jpg', // 默认第一张图片的url
   demoData: '企业货主', // 根据项目要求写死
-  selectDiaologFlag: true,
   options: [], // 货主类型列表
   tableData1: [], // 列表数据
-  totalCount: null, // 总数
+  totalCount: 0, // 总数
   page: 1,
   pagesize: 20,
   formAll: {
@@ -359,15 +386,15 @@ return {
   optionsServer: [], // 服务类型
   optionsServerArr: [], //
   otherServiceCode: [], // 选择增值服务
-  centerDialogVisible: false, // 提示语的弹窗控制
-  information: null, // 弹框显示的信息
   multipleSelection: {},
   shengheformRules: {
-              shipperType: { required: true, message: '请选择货主类型', trigger: 'change' },
-              radio1: { validator: radioValidator, trigger: 'change' },
-              radio2: { validator: radioValidator, trigger: 'change' },
-              radio3: { validator: radioValidator, trigger: 'change' }
-            },
+        companyName: { required: true, message: '请输入公司名称', trigger: 'change' },
+        businessLife: { required: true, message: '请输入经营年限', trigger: 'change' },
+        corporation:{required: true, message: '请输入法人/负责人', trigger: 'change'},
+        radio1: { required:true,validator: radioValidator, trigger: 'change' },
+        radio2: { required: true,validator: radioValidator2, trigger: 'change' },
+        radio3: { required: true,validator: radioValidator3, trigger: 'change' }
+    },
   radio1: null,
   radio2: null,
   radio3: null,
@@ -415,19 +442,19 @@ return {
             }
         }
     },
-  mounted() {
-      eventBus.$on('changeList', () => {
+    mounted() {
+        eventBus.$on('changeList', () => {
             // console.log('44444444444444444')
           this.firstblood()
         })
     },
-  methods: {
-      pushOrderSerial(row) {
+    methods: {
+        pushOrderSerial(row) {
           this.type = 'view'
             this.paramsView = row
             this.dialogFormVisible_add = true
         },
-      getCurrentRow(index, row) {
+        getCurrentRow(index, row) {
           this.shengheform = Object.assign({}, row)
             this.otherServiceCode = JSON.parse(this.shengheform.otherServiceCode)
             this.optionsServerArr = JSON.parse(this.shengheform.serviceType)
@@ -437,30 +464,30 @@ return {
             console.log('选中内容', row)
         },
            // 判断选中与否
-      getSelection(val) {
+        getSelection(val) {
           console.log('选中内容', val)
           this.selected = val
         },
-      handlePageChange(obj) {
+        handlePageChange(obj) {
           this.page = obj.pageNum
           this.pagesize = obj.pageSize
           this.firstblood()
         },
-      getValue(obj) {
-          return obj ? obj.value:''
+        getValue(obj) {
+            return obj ? obj.value:''
         },
-      changeIMG(event) {
+        changeIMG(event) {
             // console.log(event)
           this.defaultImg = event.target.src
         },
-      changeList() {
+        changeList() {
           eventBus.$emit('changeList')
         },
          // 点击选中当前行
-      clickDetails(row, event, column) {
+        clickDetails(row, event, column) {
           this.$refs.multipleTable.toggleRowSelection(row)
         },
-      handleEdit() {
+        handleEdit() {
           if (this.selected.length == 0) {
               return this.$message.info('请选择您要操作的用户')
             } else if (this.selected.length > 1) {
@@ -469,11 +496,11 @@ return {
                   type: 'info'
                 })
             }else {
-              this.shengheform = Object.assign({}, this.selected[0])
+                this.shengheform = Object.assign({}, this.selected[0])
                 this.otherServiceCode = JSON.parse(this.shengheform.otherServiceCode)
                 this.optionsServerArr = JSON.parse(this.shengheform.serviceType)
-              this.optionsProductArr = JSON.parse(this.shengheform.productServiceCode)
-              this.shengheform.isOpenTms = '0'
+                this.optionsProductArr = JSON.parse(this.shengheform.productServiceCode)
+                this.shengheform.isOpenTms = '0'
                 this.dialogFormVisible = true
                 this.defaultImg = this.shengheform.businessLicenceFile ? this.shengheform.businessLicenceFile : this.defaultImg
             }
@@ -482,26 +509,25 @@ return {
         },
 
         // 刷新页面
-      firstblood() {
-          data_LogisticsCompanyList(this.page, this.pagesize, this.formAll).then(res => {
-              console.log(res)
-              this.totalCount = res.data.totalCount
-                this.tableData1 = res.data.list
+        firstblood() {
+            data_LogisticsCompanyList(this.page, this.pagesize, this.formAll).then(res => {
+                console.log(res)
+                this.totalCount = res.data.totalCount;
+                this.tableData1 = res.data.list;
                 // this.inited = true
             })
         },
         // 点击查询按纽，按条件查询列表
-      getdata_search(event) {
-                // this.formAll.belongCity = this.$refs.area.selectedOptions.pop();
-          this.firstblood()
+         getdata_search(event) {
+            this.firstblood()
         },
          // 获取增值服务
-      getMoreInformation() {
-          data_LogisticsCompany().then(res => {
+        getMoreInformation() {
+             data_LogisticsCompany().then(res => {
               this.optionsLogisticsCompany = res.data
                 // console.log('this.options',this.optionsLogisticsCompany)
             })
-          Promise.all([getDictionary(this.belongBrand), getDictionary(this.productServiceCode), getDictionary(this.serviceType)]).then(resArr => {
+            Promise.all([getDictionary(this.belongBrand), getDictionary(this.productServiceCode), getDictionary(this.serviceType)]).then(resArr => {
               console.log('resAll', resArr)
               this.optionsBelongBrand = resArr[0].data
                 this.optionsProductService = resArr[1].data
@@ -569,9 +595,6 @@ return {
         },
         // 审核不通过
       handlerOut() {
-            // this.pictureValue.forEach((el,idx) => {
-                //     if(el.result == '上传合格'){
-                    //         this.pictureValue.splice(idx,1)
           this.$refs['shengheform'].validate((valid) => {
               if (valid) {
                   const item = this.shengheform.account
@@ -589,10 +612,9 @@ return {
                               message: '该用户未通过审核',
                               duration: 2000
                             })
-                          this.dialogFormVisible = false
-                            this.changeList()
-                            this.firstblood()
-                            this.templateRadio = ''
+                            this.handlerCancel();
+                            this.changeList();
+                            this.firstblood();
                         }).catch(err => {
                           this.$message({
                               type: 'info',
@@ -631,10 +653,9 @@ return {
                       this.$alert('操作成功', '提示', {
                           confirmButtonText: '确定',
                           callback: action => {
-                              this.dialogFormVisible = false
-                                this.changeList()
-                                this.firstblood()
-                                this.templateRadio = ''
+                                this.handlerCancel();
+                                this.changeList();
+                                this.firstblood();
                             }
                         })
                     }).catch(err => {
@@ -650,9 +671,13 @@ return {
                 }
             })
         },
-      handlerCancel() {
-          this.dialogFormVisible = false
-            this.templateRadio = ''
+        handlerCancel() {
+            this.dialogFormVisible = false;
+            this.radio1 = '';
+            this.radio2 = '';
+            this.radio3 = '';
+            this.$refs.shengheform.resetFields();
+
         }
     }
 }
@@ -673,9 +698,13 @@ return {
                     height: 100%;
                 }
             }
+            .data_pic_img{
+                display: flex;
+            }
             .data_pic_c{
-                float: left;
-                width: 32%;
+                flex: 1;
+                // float: left;
+                // width: 32%;
                 h2{
                     text-align: center;
                 }
@@ -693,9 +722,9 @@ return {
                     margin-bottom: 10px;
                 }
             }
-            .data_pic_yyzz,.data_pic_company{
-                margin-right: 2%;
-            }
+            // .data_pic_yyzz,.data_pic_company{
+            //     margin-right: 2%;
+            // }
         }
 
         .el-checkbox-group{

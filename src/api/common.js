@@ -1,5 +1,5 @@
 import fetch from '@/utils/fetch'
-const baseurl_two = "aflccommonservice-wtc"
+const baseurl_two = "aflccommonservice"
 const baseurl = "aflcsmservice"
 
 /**

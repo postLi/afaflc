@@ -7,7 +7,7 @@
                 :props="defaultProps"
                 default-expand-all
                 :highlight-current = "true"
-                @node-expand="handleNodeClick"
+                 @node-click="handleNodeClick"
                 >
                 </el-tree>
             </div>
@@ -202,6 +202,7 @@ import { aflcProvinceCode } from '@/api/common.js'
 import AreaPrice from './AreaPrice'
 import Pager from '@/components/Pagination/index'
 import searchInfo from '../component/searchInfo'
+import { objectMerge2, parseTime } from '@/utils/'
 
 import '@/styles/dialog.scss'
 import '@/styles/side.scss'
@@ -301,10 +302,10 @@ export default{
                         this.dialogAreaPrice = true;
                         break;
                     case 'revise':
-                        this.dialogFormVisible_change = true
-                        this.changeforms = this.checkedinformation[0];
-                        // this.isModify = true;
-                        // this.dialogAreaPrice = true;
+                        // this.dialogFormVisible_change = true
+                        this.reviseForm =objectMerge2({},this.checkedinformation[0]);
+                        this.isModify = true;
+                        this.dialogAreaPrice = true;
 
                         // if (this.checkedinformation[0].cityId) {
                         // this.changeforms.cityId = this.checkedinformation[0].cityId
@@ -361,9 +362,9 @@ export default{
             },
             // 查询和获取对应区域的数据
             getCommonFunction() {
-              const data = Object.assign({}, { cityId: this.cityId, provinceId: this.provinceId }, this.searchInfo)
+                const data = Object.assign({}, { cityId: this.cityId, provinceId: this.provinceId }, this.searchInfo)
                 // console.log(data);
-              data_GetCityInfo(this.page, this.pagesize, data).then(res => {
+                data_GetCityInfo(this.page, this.pagesize, data).then(res => {
                   console.log(res.data.list)
                     this.tableData = res.data.list;
                     this.dataTotal = res.data.totalCount;
@@ -374,10 +375,11 @@ export default{
                         item.areaPriceM = item.areaPrice + '元' + '' + '(' + item.areaKm + '公里)'
                         item.areaOutstripPriceM = item.areaOutstripPrice + '元/公里'
                     })
-                }).catch(res => {
-                  console.log(res)
-                  const information = res.text
-                    this.hint(information)
+                }).catch(err => {
+                    this.$message({
+                        type: 'info',
+                        message: '操作失败，原因：' + err.errorInfo ? err.errorInfo : err.text
+                    })
                 })
             },
             handleNodeClick(data, checked) {
@@ -391,10 +393,6 @@ export default{
                     this.provinceId = '' ;
                 }
                 this.getCommonFunction()
-            },
-             // 弹窗Tree节点
-            handleNodeClickMore(data, checked) {
-               
             },
             // 点击选中当前行
             clickDetails(row, event, column) {
@@ -423,243 +421,5 @@ export default{
         height:100%;    
         position: relative;
         margin-left:7px;
-        .addclassify{
-            .el-dialog{
-                position: relative;
-                width: 820px;
-                .el-dialog__headerbtn{
-                    z-index: 99;
-                }
-            }
-            .infoinner{
-                height:350px;
-                .slot_info{
-                    position:absolute;
-                    top:0;
-                    left:0;
-                    width:100%;
-                    border-bottom: 1px solid #d0d7e5;
-                    .newarea{
-                        float:left;
-                        width:50%;
-                        padding:0 0 0 33px;
-                        .slot_head{
-                            display: inline-block;
-                            text-align: center;
-                            width:100%;
-                            height: 40px;
-                            font-family: MicrosoftYaHei;
-                            font-size: 14px;
-                            font-weight: normal;
-                            font-stretch: normal;
-                            line-height: 40px;
-                            letter-spacing: 0px;
-                            color: #ffffff;
-                        }
-                        .area_server{
-                            padding-top:17px;
-                            padding-bottom: 14px;
-                            h4{
-                                span{
-                                    color:red;
-                                }
-                                font-family: MicrosoftYaHei;
-                                font-size: 12px;
-                                font-weight: normal;
-                                font-stretch: normal;
-                                line-height: 20px;
-                                letter-spacing: 0px;
-                                color: #666;
-                                margin-bottom: 13px;
-                            }
-                            .eltree_search{
-                                width: 250px;
-                                height: 256px;
-                                margin-bottom: 12px;
-                                overflow: auto;
-                                border: 1px solid #ccc;
-                                p{
-                                    margin:9px 0 0 33px;
-                                    font-size: 12px;
-                                    font-weight: normal;
-                                    font-stretch: normal;
-                                    line-height: 20px;
-                                    letter-spacing: 0px;
-                                    color: #333333;
-                                }
-                                .el-radio-group{
-                                    margin-left:34px;
-                                    font-size: 12px;
-                                    line-height: 20px;
-                                    color:#333;
-                                    .el-radio{
-                                        margin:6px 0 0 0;
-                                    }
-                                }
-                                .el_search{
-                                    width: 100%;
-                                    padding:6px 5px;
-                                    .el-input__inner{
-                                        height: 26px;
-                                        line-height: 26px;
-                                    }
-
-                                }
-                                .el-tree{
-                                    .el-checkbox{
-                                        margin-top:0;
-                                        .el-checkbox__inner{
-                                            width: 12px;
-                                            height: 12px;
-                                        }
-                                    }
-                                }
-                            }
-                            .chooseclassfy{
-                                width: 250px;
-                                .chose{
-                                    p{
-                                        margin-left: 10px; 
-                                        span{
-                                            color:red;
-                                        }
-                                    }
-                                    .el-select{
-                                        margin:5px 0;
-                                        padding-left: 80px;
-                                        .el-input{
-                                            width: 150px;
-                                            .el-input__inner{
-                                                padding: 5px;
-                                                height: 24px;
-                                                line-height: 24px;
-                                                font-size: 12px;
-                                                color:#3e9ff1;
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                            label{
-                                display: block;
-                                margin-top:12px;
-                                font-size: 12px;
-                                font-weight: normal;
-                                font-stretch: normal;
-                                line-height: 20px;
-                                letter-spacing: 0px;
-                                color: #666666;
-                                .control{
-                                    display: inline-block;
-                                    text-align: right;
-                                    width: 75px;
-                                }
-                                .el-input{
-                                    width: 96px;
-                                    height:24px;
-                                    margin:0 6px;
-                                    .el-input__inner{
-                                        display: inline-block;
-                                        width: 96px;
-                                        height: 24px;
-                                        font-size: 12px;
-                                        border-radius: 2px;
-                                        border: solid 1px #d4d4d4;
-                                        padding:8px;
-                                        color: #3e9ff1;
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    .area_left{
-                        .slot_head{
-                            border-right:1px solid #fff;
-                        }
-                        .area_left_server{
-                            border-right:1px solid #d0d7e5;
-                        }
-                    }
-
-                    .area_right{
-                        .area_right_server{
-                            .el-tree{
-                                overflow:auto;
-                            }
-                        }
-                    }
-                    
-                }
-            }
-            .el-dialog__footer{
-                padding:10px 20px;
-            }
-        }
-        .changeclassify{
-            .el-dialog{
-                width: 40%;
-            }
-            .el-dialog__body{
-                .changeInforMation{
-                    padding: 0 20px;
-                    .el-input{
-                        width: 110px;
-                        .el-input__inner{
-                            height: 24px;
-                            line-height: 24px;
-                            font-size: 12px;
-                            color: #3e9ff1;
-                        }
-                    }
-                    .nowCity{
-                        h4{
-                            display: inline-block;
-                            width: 111px;
-                            span{
-                                color: red;
-                            }
-                        }
-                    }
-                    .chose{
-                        display: inline-block;
-                        margin:10px 30px 10px 0; 
-                        p{
-                            display: inline-block;
-                            height: 24px;
-                            line-height: 24px;
-                            span{
-                                color: red;
-                            }
-                        }
-                        
-                    }
-                    .reference{
-                        border: 1px dashed #ccc;
-                        margin:10px; 
-                        padding: 10px;
-                        font-size: 12px;
-                        .referenceM{
-                            display: inline-block;
-                            padding: 5px; 
-                            margin-left: 65px;
-                        }
-                        .el-input {
-                            width: 90px;
-                        }
-                    }
-                    .nowChange{
-                        display: inline-block;
-                        margin-left: 80px;
-                        .el-input{
-                            width: 90px;
-                        }
-                    }
-                    .nowChangeInfo{
-                        margin-left: 32px;
-                    }
-                    
-                }
-            }
-        }
     }
 </style>

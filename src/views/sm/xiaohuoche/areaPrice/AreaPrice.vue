@@ -86,7 +86,6 @@
                                         node-key="code"
                                         ref = 'tree'
                                         :highlight-current = "true"
-                                        @node-expand="handleNodeClickMore"
                                         :filter-node-method="filterNode"
                                         >
                                         </el-tree>
@@ -125,49 +124,45 @@
 
             </el-form>
 
-            <el-form :inline="true" v-else :model="standForm"  ref="ruleForm"  label-position="left" size="mini">
+            <el-form :inline="true" v-else :model="reviseForm"  ref="ruleForm"  label-position="right">
                 <div class="changeInforMation">
-                    <div class="nowCity">
-                        <h4><span>* </span>当前城市</h4>
-                        <el-input
-                            v-model="changeforms.areaName"
-                            disabled
-                            clearable>
-                        </el-input>
-                    </div>
-                    <div class="chose">
-                        <p><span>* </span>当前服务分类 ：</p>
-                        <el-input
-                            v-model="changeforms.serviceName"
-                            :disabled="true">
-                        </el-input>
-                    </div>
-                        <div class="chose">
-                        <p><span>* </span>当前车辆类型 ：</p>
-                        <el-input
-                            v-model="changeforms.carTypeName"
-                            :disabled="true">
-                        </el-input>
-                    </div>
-                    <div class="chose">
-                        <p><span>* </span>车长 ：</p>
-                        <el-input
-                            v-model="changeforms.carTypeStyle"
-                            :disabled="true">
-                        </el-input>
-                    </div>
+                    <el-row>
+                        <el-col :span="12">
+                            <el-form-item class="nowCity" label="当前城市:" :label-width="formLabelWidth" prop="carType">
+                                <span class="onlyShow">{{reviseForm.areaName}}</span>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="12">
+                            <el-form-item class="nowCity" label="当前服务分类:" :label-width="formLabelWidth" prop="carType">
+                                <span class="onlyShow">{{reviseForm.serviceName}}</span>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+
+                    <el-row>
+                        <el-col :span="12">
+                            <el-form-item class="nowCity" label="当前车辆类型:" :label-width="formLabelWidth" prop="carType">
+                                <span class="onlyShow">{{reviseForm.carTypeName}}</span>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="12">
+                            <el-form-item class="nowCity" label="车长:" :label-width="formLabelWidth" prop="carType">
+                                <span class="onlyShow">{{reviseForm.carLength + '*' + reviseForm.carWidth + '*' + reviseForm.carHeight + 'M'}}</span>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
                     <div class="reference">
                         <div class="referenceM">
                                 <span class="control">标准起步价</span>
                                 <el-input
                                     disabled
-                                    v-model="changeforms.standardPrice"
+                                    v-model="reviseForm.standardPrice"
                                     clearable>
                                 </el-input>
                                 <span>元</span>
                                 <el-input
                                     disabled
-                                    v-model="changeforms.standardKm"
+                                    v-model="reviseForm.standardKm"
                                     clearable>
                                 </el-input>
                                 <span>公里</span>
@@ -176,7 +171,7 @@
                                 <span class="control">超里程费</span>         
                                 <el-input
                                     disabled
-                                    v-model="changeforms.outstripPrice"
+                                    v-model="reviseForm.outstripPrice"
                                     clearable>
                                 </el-input>
                                 <span>元 / 公里</span>
@@ -186,16 +181,14 @@
                         <span class="control">区域起步价</span>
                         <el-input
                             v-numberOnly
-                            placeholder="请输入内容"
-                            v-model="changeforms.areaPrice"
+                            v-model="reviseForm.areaPrice"
                             ref="newPrice"
                             clearable>
                         </el-input>
                         <span>元</span>
                         <el-input
                             v-numberOnly                                   
-                            placeholder="请输入内容"
-                            v-model="changeforms.areaKm"
+                            v-model="reviseForm.areaKm"
                             ref="newInfoKm"
                             clearable>
                         </el-input>
@@ -205,8 +198,7 @@
                         <span class="control">区域超里程费</span>         
                         <el-input
                             v-numberOnly                                    
-                            placeholder="请输入内容"
-                            v-model="changeforms.areaOutstripPrice"
+                            v-model="reviseForm.areaOutstripPrice"
                             ref="newMorePrice"
                             clearable>
                         </el-input>
@@ -252,6 +244,7 @@ export default {
     },
     data(){
         return {
+            formLabelWidth:'110px',
             cityTree:[],//省市区树形结构
             filterText: '',
             maxlengthNum:200,
@@ -273,20 +266,20 @@ export default {
                 areaKm:'',
                 areaPrice:'',
             },
-            changeforms: {
-                areaKm: '',
-                areaName: '',
-                areaOutstripPrice: '',
-                areaPid: '',
-                areaPrice: '',
-                carType: '',
-                cityId: '',
-                outstripPrice: '',
-                serivceCode: '',
-                standardKm: '',
-                standardPrice: '',
-                standardPriceId: ''
-            },
+            // reviseForm: {
+            //     areaKm: '',
+            //     areaName: '',
+            //     areaOutstripPrice: '',
+            //     areaPid: '',
+            //     areaPrice: '',
+            //     carType: '',
+            //     cityId: '',
+            //     outstripPrice: '',
+            //     serivceCode: '',
+            //     standardKm: '',
+            //     standardPrice: '',
+            //     standardPriceId: ''
+            // },
             defaultProps: {
                 label: 'name',
                 children: 'children'
@@ -352,11 +345,6 @@ export default {
             if (!value) return true
             return data.name.indexOf(value) !== -1
         },
-        // 弹窗Tree节点
-        handleNodeClickMore(data, checked) {
-            console.log(data)
-         
-        },
         // 根据车长显示标准定价
         choseVule(val) {
             this.optionsCarStyle.map((item) => {
@@ -372,7 +360,7 @@ export default {
             this.btnShow = true;
             let required = false;
             if(this.isModify){
-              
+                console.log(this.reviseForm)
             }else{
                 const getNodeId = this.$refs.tree.getCheckedNodes();
                 let cityArr =[];
@@ -572,6 +560,66 @@ export default {
                     
                 }
             }
+
+             .changeInforMation{
+                    padding: 0 20px;
+                    .el-input{
+                        width: 110px;
+                        .el-input__inner{
+                            height: 24px;
+                            line-height: 24px;
+                            font-size: 12px;
+                            color: #3e9ff1;
+                        }
+                    }
+                    .nowCity{
+                        h4{
+                            display: inline-block;
+                            width: 111px;
+                            span{
+                                color: red;
+                            }
+                        }
+                    }
+                    .chose{
+                        display: inline-block;
+                        margin:10px 30px 10px 0; 
+                        p{
+                            display: inline-block;
+                            height: 24px;
+                            line-height: 24px;
+                            span{
+                                color: red;
+                            }
+                        }
+                        
+                    }
+                    .reference{
+                        border: 1px dashed #ccc;
+                        margin:10px; 
+                        padding: 10px;
+                        font-size: 12px;
+                        .referenceM{
+                            display: inline-block;
+                            padding: 5px; 
+                            margin-left: 65px;
+                        }
+                        .el-input {
+                            width: 90px;
+                        }
+                    }
+                    .nowChange{
+                        display: inline-block;
+                        margin-left: 80px;
+                        .el-input{
+                            width: 90px;
+                        }
+                    }
+                    .nowChangeInfo{
+                        margin-left: 32px;
+                    }
+                    
+                }
             .el-dialog__footer{
                 padding:10px 20px;
             }
