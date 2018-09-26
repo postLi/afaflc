@@ -3,7 +3,7 @@
       <el-button :type="btntype" :value="value" :plain="plain" :icon="icon" @click="openDialog()">{{btntext}}</el-button>
       <div class="newcoupon1">
       <el-dialog  :visible="dialogFormVisible_add" :before-close="change" :title="btntitle">
-          <el-tabs v-model="autocheck" type="border-card"  >
+          <el-tabs v-model="autocheck" type="card"  >
         <!-- 活动配置 -->
             <el-tab-pane label="活动配置" name="first">
                 <div class="automationcheckTab">
@@ -201,6 +201,8 @@
                         <el-date-picker
                         v-model="grantTimeAll"
                         type="daterange"
+                        unlink-panels
+                        :picker-options="pickerOptions2"
                         range-separator="至"
                         start-placeholder="开始日期"
                         end-placeholder="结束日期"
@@ -222,8 +224,8 @@
                          </el-option>
                  </el-select>
                </el-form-item>  
-          <el-form-item>       
-          <el-button type="primary"  plain   @click="getData_query">查询</el-button> 
+          <el-form-item >       
+          <el-button type="primary"  plain   @click="getData_query" :size="btnsize">查询</el-button> 
           </el-form-item> 
                 </el-form>  
             </el-col>
@@ -269,6 +271,7 @@ import vregion from '@/components/vregion/Region'
 import { eventBus } from '@/eventBus'
 import GetCityList from '@/components/GetCityList'
 import Pager from '@/components/Pagination/index'
+import {pickerOptions2 } from '@/utils/index.js'
 export default {
   props:{
     templateItem:{
@@ -343,6 +346,10 @@ export default {
         },
   data(){
     return{
+        btnsize:'mini',
+         pickerOptions2: {
+         shortcuts: pickerOptions2
+          },  
         sizes:[10,50,100],
         pagesize:10,//初始化加载数量
         page:1,//初始化页码
@@ -516,9 +523,16 @@ export default {
 </script>
 <style lang="scss">
 .automationcheck{
+    .el-button{
+        margin-right:0px;
+        padding: 0px 15px 0px;
+    }
     .el-dialog{
         width: 80%!important;
         overflow:unset;
+    }
+    .el-tabs__header{
+        margin-top:10px;
     }
     .el-button{
         margin-right:0px;

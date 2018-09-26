@@ -43,11 +43,11 @@
           style="width: 100%"> 
           <el-table-column
             type="selection"
-            width="100">
+            width="60">
           </el-table-column>
           <el-table-column label="序号" 
           sortable
-            width="100">
+            width="80">
             <template slot-scope="scope">
               {{ (page - 1)*pagesize + scope.$index + 1 }}
             </template>
@@ -56,7 +56,7 @@
             prop="orderSerial"
             label="订单号"
             sortable
-            width="240">
+            width="280">
               <template  slot-scope="scope">
                 <h4 class="needMoreInfo" @click="pushOrderSerial(scope.row)">{{ scope.row.orderSerial}}</h4>
               </template>
@@ -65,7 +65,7 @@
             prop="areaName"
             label="所属区域"
             sortable
-            width="250">
+            width="280">
           </el-table-column>
           <el-table-column
             prop="shipper"
@@ -74,7 +74,7 @@
             width="250">
           </el-table-column>
           <el-table-column
-            prop="carType"
+            prop="useCarType"
             label="需求车型"
             sortable
             width="160">

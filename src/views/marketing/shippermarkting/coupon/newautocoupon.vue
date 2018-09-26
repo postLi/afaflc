@@ -24,6 +24,7 @@
             <el-form-item label="活动时效："  :label-width="formLabelWidth" prop="createTime">
                     <el-date-picker
                         is-range
+                        unlink-panels
                         :picker-options="pickerOptions2"
                         type="daterange"
                         align="right"

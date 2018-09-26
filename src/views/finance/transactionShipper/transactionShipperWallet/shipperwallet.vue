@@ -1,43 +1,43 @@
 <template>
-     <div class="Carwallet commoncss">
+     <div class="Shipperwallet commoncss">
       <el-button :type="btntype" :value="value" :plain="plain" :icon="icon" @click="openDialog()">{{btntext}}</el-button>
       <div class="newcoupon1">
       <el-dialog  :visible="dialogFormVisible_add" :before-close="change" :title="btntitle">
           <el-tabs v-model="autocheck" type="border-card"  >
         <!-- 钱包明细 -->
-            <el-tab-pane label="钱包明细" name="first">
+            <el-tab-pane label="交易明细" name="first">
         <div class="walletdetails">
        <el-form ref="formAllData">
           <el-row >
-            <el-col :span="6">
+            <el-col :span="5">
                <el-form-item  label="交易类型：" label-width="80px"> 
                     <el-input placeholder="" clearable></el-input>
                </el-form-item>  
             </el-col>
-            <el-col :span="6">
+            <el-col :span="5">
                <el-form-item  label="收支类型：" :label-width="formLabelWidth"> 
                     <el-input placeholder="" clearable></el-input>
                </el-form-item>  
             </el-col>
-            <el-col :span="6" >
+            <el-col :span="5" >
                <el-form-item  label="交易时间：" :label-width="formLabelWidth"> 
                     <el-input placeholder="" clearable></el-input>
                </el-form-item>  
             </el-col>
-            <el-col :span="6">
-               <el-form-item   label-width="50px"> 
+            <el-col :span="5">
+               <el-form-item   label-width="50px" > 
                    <el-button type="primary" :size="btnsize">搜 索</el-button>
                </el-form-item>  
             </el-col>                                    
           </el-row>
           <el-row >
-              <el-col :span="6">
+              <el-col :span="5">
                <el-form-item  label="收入金额：" label-width="80px"> 
                    360
                </el-form-item>  
                
               </el-col>
-              <el-col :span="6">
+              <el-col :span="5">
                <el-form-item  label="支出金额： " :label-width="formLabelWidth"> 
                    330
                </el-form-item>  
@@ -69,29 +69,29 @@
             </el-tab-pane>
 
         <!-- 提现记录 -->
-            <el-tab-pane label="提现记录"  name="second">
+            <el-tab-pane label="充值记录"  name="second">
            <div class="walletdetails">
        <el-form ref="formAllData">
           <el-row >
-            <el-col :span="6" >
+            <el-col :span="5" >
                <el-form-item  label="收款方式：" label-width="80px"> 
                     <el-input placeholder="" clearable></el-input>
                </el-form-item>  
             </el-col>
-            <el-col :span="6">
+            <el-col :span="5">
                <el-form-item   label-width="50px"> 
                    <el-button type="primary" :size="btnsize">搜 索</el-button>
                </el-form-item>  
             </el-col>                                    
           </el-row>
           <el-row >
-              <el-col :span="6">
+              <el-col :span="5">
                <el-form-item  label="提现金额：" label-width="80px"> 
                    360
                </el-form-item>  
                
               </el-col>
-              <el-col :span="6">
+              <el-col :span="5">
                <el-form-item  label="手续费： " :label-width="formLabelWidth"> 
                    330
                </el-form-item>  
@@ -117,7 +117,70 @@
             </el-table-column>                                                                                                 
             </el-table> 
              </div>
+            </el-tab-pane>     
+
+        <!-- 账户优惠卷 -->
+            <el-tab-pane label="账户优惠卷"  name="three">
+           <div class="walletdetails">
+       <el-form ref="formAllData">
+          <el-row >
+            <el-col :span="5" >
+               <el-form-item  label="优惠券名称：" label-width="80px"> 
+                    <el-input placeholder="" clearable></el-input>
+               </el-form-item>  
+            </el-col>
+            <el-col :span="5" >
+               <el-form-item  label="卷码状态：" label-width="80px"> 
+                    <el-input placeholder="" clearable></el-input>
+               </el-form-item>  
+            </el-col>
+            <el-col :span="5">
+               <el-form-item   label-width="50px"> 
+                   <el-button type="primary" :size="btnsize">搜 索</el-button>
+               </el-form-item>  
+            </el-col>                                    
+          </el-row>
+          <el-row >
+              <el-col :span="5">
+               <el-form-item  label="提现金额：" label-width="80px"> 
+                
+               </el-form-item>  
+               
+              </el-col>
+              <el-col :span="5">
+               <el-form-item  label="手续费： " :label-width="formLabelWidth"> 
+                   330
+               </el-form-item>  
+              </el-col>
+          </el-row>
+       </el-form>
+            <el-table style="width: 100%"  border height="80%">
+            <el-table-column  label="序号" width="80px" type="index">
+            </el-table-column>
+            <el-table-column  label="优惠券名称" prop="">
+            </el-table-column>
+            <el-table-column  label="优惠券类型" prop="">
+            </el-table-column> 
+            <el-table-column  label="金额/折扣" prop="">
+            </el-table-column>        
+            <el-table-column  label="优惠券码" prop="">
+            </el-table-column>       
+            <el-table-column  label="手机号码" prop="">
+            </el-table-column>     
+            <el-table-column  label="派发时间" prop="">
+            </el-table-column>
+            <el-table-column  label="过期时间" prop="">
+            </el-table-column>   
+            <el-table-column  label="券码状态" prop="">
+            </el-table-column>    
+            <el-table-column  label="订单号" prop="">
+            </el-table-column>                            
+            <el-table-column  label="订单优惠金额" prop="">
+            </el-table-column>         
+            </el-table> 
+             </div>
             </el-tab-pane>            
+
     </el-tabs>
       </el-dialog>
       </div>
@@ -192,10 +255,10 @@ export default {
     }
 </script>
 <style lang="scss">
-.Carwallet{
+.Shipperwallet{
     .walletdetails{
     .el-button{
-    padding: 7px 15px;
+
     }
     }
     .el-dialog{

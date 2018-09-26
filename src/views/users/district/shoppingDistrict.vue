@@ -277,7 +277,7 @@ export default {
                     this.selectId.push(this.selectRowData[0].id) 
                   data_Able_aflcTradeArea(this.selectId).then(res=>{
                      this.selectId.splice(0,1);
-                     if(this.selectRowData.usingStatus==1)
+                     if(this.selectRowData[0].usingStatus==1)
                      {
                          this.$message.warning('已停用');
                      }

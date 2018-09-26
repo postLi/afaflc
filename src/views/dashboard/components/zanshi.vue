@@ -505,7 +505,7 @@ export default {
           data: [7999, 7601, 9366, 21762],
           itemStyle: {
             normal: {
-              color: '#ff9800'
+              color: '#F56C6C'
             }
           }
         },
@@ -515,7 +515,7 @@ export default {
           data: [7999, 5325, 11246, 26393],
           itemStyle: {
             normal: {
-              color: '#03a9f4'
+              color: '#409EFF'
 
             }
           }
@@ -572,7 +572,7 @@ export default {
           data: [12234, 17601, 19366, 31762],
           itemStyle: {
             normal: {
-              color: '#ff9800'
+              color: '#F56C6C'
             }
           }
         },
@@ -582,7 +582,7 @@ export default {
           data: [5999, 15325, 21246, 36393],
           itemStyle: {
             normal: {
-              color: '#03a9f4'
+              color: '#409EFF'
 
             }
           }
@@ -661,26 +661,26 @@ export default {
         color:#333; /* 初始颜色 */
         cursor: pointer;
          box-sizing: border-box;
-        .el-range-editor.el-input__inner{
-          // margin-left:10px !important;
-          height:4%;
-          line-height: 30px;
-          // border:none;
-          // position:relative;
-          // position:absolute;
-        }
-        .el-date-editor .el-range__close-icon{
-          // margin-top:-2%;
-          position:absolute;
-          right:10%;
-          top:0%;
-        }
-        .el-date-editor .el-range__icon {
-          display:none;
-        }
-        .el-date-editor .el-range-separator{
-          line-height: 25px;
-        }
+        // .el-range-editor.el-input__inner{
+        //   // margin-left:10px !important;
+        //   height:4%;
+        //   line-height: 30px;
+        //   // border:none;
+        //   // position:relative;
+        //   // position:absolute;
+        // }
+        // .el-date-editor .el-range__close-icon{
+        //   // margin-top:-2%;
+        //   position:absolute;
+        //   right:10%;
+        //   top:0%;
+        // }
+        // .el-date-editor .el-range__icon {
+        //   display:none;
+        // }
+        // .el-date-editor .el-range-separator{
+        //   line-height: 25px;
+        // }
         .el-range-editor .el-range-input{
           margin-left:10px !important;
         }

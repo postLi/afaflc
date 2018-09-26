@@ -54,11 +54,11 @@
           style="width: 100%"> 
           <el-table-column
             type="selection"
-            width="100">
+            width="55">
           </el-table-column>
           <el-table-column label="序号" 
           sortable
-            width="100">
+            width="80">
             <template slot-scope="scope">
               {{ (page - 1)*pagesize + scope.$index + 1 }}
             </template>
@@ -67,7 +67,7 @@
             prop="orderSerial"
             label="订单号"
             sortable
-            width="240">
+            >
               <template  slot-scope="scope">
                 <h4 class="needMoreInfo" @click="pushOrderSerial(scope.row)">{{ scope.row.orderSerial}}</h4>
               </template>
@@ -76,19 +76,19 @@
             prop="areaName"
             label="所属区域"
             sortable
-            width="250">
+            >
           </el-table-column>
           <el-table-column
             prop="shipper"
             label="货主"
             sortable
-            width="200">
+            >
           </el-table-column>
           <el-table-column
             prop="driver"
             label="车主"
             sortable
-            width="250">
+            >
           </el-table-column>
           <el-table-column
             prop="carType"
@@ -100,7 +100,8 @@
             prop="totalAmount"
             label="订单金额"
             sortable
-            width="120">
+            width="120"
+            >
           </el-table-column>
           <el-table-column
             prop="commissionAmount"
@@ -112,7 +113,7 @@
             prop="commissionTime"
             label="交易时间"
             sortable
-            width="200">
+            width="160">
             <template  slot-scope="scope">
               <span class="orderSerial">
                 {{ scope.row.commissionTime | parseTime('{y}-{m}-{d} {h}:{i}:{s}')}}    

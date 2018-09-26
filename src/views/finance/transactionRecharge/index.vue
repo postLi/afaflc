@@ -1,5 +1,5 @@
 <template>
-    <div class="identicalStyle clearfix waitpayment" style="height:100%">
+    <div class="identicalStyle clearfix transactionRecharge" style="height:100%">
           <el-form :inline="true"  class="demo-ruleForm classify_searchinfo">
             <el-form-item label="电话号码：">
                   <el-input v-model="formAllData.mobile" placeholder="请输入内容" clearable></el-input>
@@ -29,7 +29,9 @@
             <el-form-item label="充值时间：">
                     <el-date-picker
                         is-range
+                        unlink-panels
                         type="daterange"
+                        :picker-options="pickerOptions2"
                         v-model="createTime"
                         range-separator="至"
                         start-placeholder="开始时间"
@@ -46,7 +48,7 @@
           </el-form-item>
           </el-form>
             <div class="classify_info">
-            <div class="info_news">    
+                <div class="info_news">  
            <el-table style="width: 100%" ref="multipleTable" stripe border height="100%" highlight-current-row :data="tableDataAll" @selection-change="getSelection" @row-click="clickDetails">
               <el-table-column
                             label="选择"
@@ -73,10 +75,11 @@
             <el-table-column  label="充值时间" prop="rechargeTime" sortable>
             </el-table-column>    
            </el-table>    
-            </div>                                                            
+                                                          
                       <!-- 页码 -->
         <div class="info_tab_footer">共计:{{ dataTotal }} <div class="show_pager"> <Pager :total="dataTotal" @change="handlePageChange"  :sizes="sizes"/></div> </div>  
             </div>
+         </div>  
     </div>
 </template>
 
@@ -84,17 +87,21 @@
 import '@/styles/dialog.scss'
 import Pager from '@/components/Pagination/index'
 import {data_aflcRechargeList} from '@/api/finance/transactionRecharge.js'
+import {parseTime,pickerOptions2} from '@/utils/'
 import {data_financeList,data_GetServerType,data_GetServerType2,data_GetServerType3} from '@/api/finance/financeServer.js'
  export default{
         data(){
             return{
+                pickerOptions2: {
+                shortcuts: pickerOptions2
+                    },
                btnsize:'mini',
                selectRowData: {},
-               sizes:[30,50,100],
+               sizes:[20,50,100],
                tableDataAll:[],
                totalCount:null,
                dataTotal:0,                
-               pagesize:30,//每页显示数
+               pagesize:20,//每页显示数
                page:1,//当前页     
                createTime:[],
                rechargeChannelList:[
@@ -176,82 +183,8 @@ import {data_financeList,data_GetServerType,data_GetServerType2,data_GetServerTy
 
 <style lang="scss">
 .transactionRecharge{
-        height:100%;    
-        position: relative;
-.finance_searchinfo{
-    position: absolute;
-    left: 0;
-    top: 0;
-    padding: 15px 16px;
-    height: 70px;
-    width: 100%;
-    line-height: 35px;
-    .el-input__inner{
-      height: 30px;
-      line-height: 30px;
+    .el-range-separator{
+        margin-top: -12px;
     }
-    .el-date-editor{
-        width: 280px;
-    }
-    .el-range-editor{
-        margin-left:0px;
-        margin-top:5px;
-        .el-range__icon{
-            line-height: 24px;
-        }
-        .el-range-separator{
-             line-height: 24px;
-             width:7%;
-        }
-         .el-range__close-icon{
-             line-height: 24px;
-         }
-         width: 280px;
-    }   
-    .el-button{
-      margin-right: 20px;
-      padding: 8px 20px!important;
-    }
-}
-.classify_info{
-    height: 94%;
-    padding: 70px 15px 0 15px;
-    .commoncss{
-      display: inline-block!important;
-    }
-    .btns_box{
-    margin-bottom: 10px;
-    }
-    .info_city{
-      height:89%
-    }
-    .cell{
-      color: #333;
-      font-size: 14px;
-      }    
-    .el-button{
-      margin-right: 20px;
-      padding: 8px 20px!important;
-    } 
-}
-.info1_tab_footer{
-    padding-left: 20px;
-    background: #eee;
-    height: 40px;
-    line-height: 40px;
-    box-shadow: 0 -2px 2px rgba(0, 0, 0, 0.1);
-    z-index: 10;
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    .show_pager{float: right}
-    .page-select{top:5px;
-    .el-input__inner{
-      height: 30px;
-      line-height: 30px; 
-    }
-    }
-}
 }
 </style>

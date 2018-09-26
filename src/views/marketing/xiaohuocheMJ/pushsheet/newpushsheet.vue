@@ -169,7 +169,7 @@
             </div>    
                     <div slot="footer" class="dialog-footer">
                         <el-button type="primary" @click="changeInfoSave" v-if="editType=='add'">保 存</el-button>
-                        <el-button type="primary" @click="updateInfoSave" v-else>保 存1</el-button>
+                        <el-button type="primary" @click="updateInfoSave" v-else>保 存</el-button>
                         <el-button @click="close()">取 消</el-button>
                     </div> 
             </el-dialog>
@@ -467,21 +467,25 @@ methods:{
             }
             },
         openDialog(){
-            if(this.params==null)
-            {
-            this.driverTemplateDialogFlag=true;
-            }
-            else{
-            if(this.editType == 'add')
-            {
-            this.driverTemplateDialogFlag=true;
-            }
-            if(!this.params.id&&this.editType == 'edit'){
-            this.$message.info('请选择您要修改的内容');
-            return
-            }
-            if(this.editType == 'edit'){
-                data_get_pushsheet_Id(this.params.id).then(res=>{
+      if (this.editType == 'edit') {
+        if(this.params.length == undefined && this.editType !== 'add'){
+               this.$message.warning('请选择您要操作的用户');
+               return false
+        }
+         else if(this.params.length == 0 && this.editType !== 'add'){
+               this.$message.warning('请选择您要操作的用户');
+               return false
+          }else if (this.params.length > 1 && this.editType !== 'add') {
+                this.$message({
+                    message: '每次只能操作单条数据~',
+                    type: 'warning'
+                })
+                this.$emit('getData') 
+                return false
+          }
+          else{
+                data_get_pushsheet_Id(this.params[0].id).then(res=>{
+                    console.log('fdfd',res);
                         let selectRowData = res.data.push;
                         let setting =res.data.settings
                         console.log('res.data.push',setting)
@@ -585,6 +589,9 @@ methods:{
 
             this.driverTemplateDialogFlag=true;
             }
+            }
+            else{
+            this.driverTemplateDialogFlag=true;
             }
         },
         changeList(){
@@ -712,21 +719,6 @@ methods:{
                 let Carst = ['AF01801','AF01802','AF01803','AF01804'];
                 let Cartype = ['zero','one'];
                 let CarActive = ['AF0010401','AF0020401','AF0020402','AF0020403','AF0020404','AF0020405']
-                // this.vestList.setting.map((subList,index) => {
-                //     Carst.map(i=>{
-                //         Cartype.map(j=>{
-                //             CarActive.map(k=>{
-                //             let reg= /^[0-5]\d*$/  //输入正整数正则
-                //             if(!reg.test(this.vestList.setting[index].sett[i][j][k]))
-                //             {
-                //                 this.$message.warning('推单单数范围在0-5之间')
-                                
-                //             }
-                //             })
-                //         })
-                //     })
-                // })
-               
                 let reg= /^[0-5]\d*$/  //输入正整数正则
                 for(var i=0;i<this.vestList.setting.length;i++){
 
@@ -843,7 +835,8 @@ methods:{
             else{
             this.$refs['vestList'].validate(valid=>{
             if(valid){
-            var forms= Object.assign({}, this.vestList)
+            var forms= Object.assign({}, this.vestList,{id:this.params[0].id})
+            console.log('delFlag',forms)
             forms.setting = JSON.stringify(forms.setting)
                 data_dpdata_pushsheet(forms).then(res=>{
                 console.log('res',res);
@@ -963,10 +956,12 @@ this.getMoreInformation();
 <style  lang="scss" scoped>
     .vestDialog{
         display: inline-block;
+        margin-right: 10px;
     }
     .el-button{
-            margin-right:20px;
-            padding:10px 20px;
+        margin-right:0px;
+        padding: 7px 15px 7px;
+        font-size:12px;
     }
     .commoncss .el-dialog .el-input {
     width: 250px;

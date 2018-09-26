@@ -107,7 +107,7 @@
         </el-form>
         <div slot="footer" class="dialog-footer">
           <el-button type="primary"  v-if="editType=='add'" @click="add_data" >确 定</el-button>
-          <el-button type="primary"  v-else @click="updata_data" >确 定1</el-button>
+          <el-button type="primary"  v-else @click="updata_data" >确 定</el-button>
           <el-button @click="close()" >取 消</el-button>
         </div>
       </el-dialog>

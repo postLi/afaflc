@@ -13,6 +13,8 @@
                         :fetch-suggestions="querySearch"
                         placeholder="请输入内容"
                         @select="handleSelect"
+                         @keyup.native = "handblur"
+                         :disabled="editType=='view'"
                         ></el-autocomplete>
 
                     <!-- <el-input v-model="formAll.partnerCompany" :disabled="editType=='view'"></el-input> -->
@@ -20,19 +22,19 @@
                 </el-col>
                  <el-col :span="12">
                     <el-form-item label="联系人 ：" :label-width="formLabelWidth" prop="partnerName">
-                    <el-input v-model="formAll.partnerName" :disabled="editType=='view'"></el-input>
+                    <el-input v-model="formAll.partnerName" :disabled="editType=='view'||inputdisabled"></el-input>
                     </el-form-item>
                 </el-col>
             </el-row>
             <el-row>
                 <el-col :span="12">
                     <el-form-item label="手机号码 ：" :label-width="formLabelWidth" prop="mobile">
-                    <el-input v-model="formAll.mobile" :disabled="editType=='view'"></el-input>
+                    <el-input v-model="formAll.mobile" :disabled="editType=='view'||inputdisabled"></el-input>
                     </el-form-item>
                 </el-col>
                  <el-col :span="12">
                     <el-form-item  label="所在地 ：" :label-width="formLabelWidth" v-if="!selectFlag"> 
-                            <el-input v-model="AreaName" @focus="changeSelect" :disabled="editType=='view'"></el-input>
+                            <el-input v-model="areaName" @focus="changeSelect" :disabled="editType=='view'||inputdisabled"></el-input>
                     </el-form-item>  
                     <el-form-item label="所在地 ：" :label-width="formLabelWidth" prop="areaName" v-else>
                    <el-cascader
@@ -49,12 +51,18 @@
                 <el-col :span="12">
                     <el-form-item label="签约时间 ：" :label-width="formLabelWidth" prop="signingDate">
                     <el-date-picker
-                    :disabled="editType=='view'"
                     v-model="formAll.signingDate"
                     type="date"
                     value-format="timestamp"
                     placeholder="请选择日期">
                     </el-date-picker>
+                    </el-form-item>
+                </el-col>
+                <el-col :span="12">
+                    <el-form-item label="是否开通28货运后台 ：" :label-width="formLabelWidth">
+                        <el-radio-group v-model="isVip" >
+                            <el-radio  v-for="(obj,key) in optionsStatus" :label="obj.value" :key='key'>{{obj.name}}</el-radio>
+                        </el-radio-group>
                     </el-form-item>
                 </el-col>
             </el-row>
@@ -287,13 +295,20 @@ export default {
         }
 
         return{
+        isVip:'0',
+        companyId:null,    
+        areaName:null,
+        areaCode:null,
+        companyNameObject:{
+        companyName:null,
+        },
+        inputdisabled:false,
         restaurants: [],
-        AreaName:null,    
         areaStatus:null,
         selectFlag:null,
         options:regionDataPlus,
         dialogFormVisible_add: false,
-        formLabelWidth:'120px',
+        formLabelWidth:'160px',
         inputKey:null,
         formAll:{
             partnerCompany:null,
@@ -323,6 +338,16 @@ export default {
             selectFlag:null,
             }]       
         },
+          optionsStatus: [
+              {
+                value: '1',
+                name: '是'
+              },
+              {
+                value: '0',
+                name: '否'
+              }
+            ],
          rulesForm:{
             partnerCompany:{trigger:'change',required:true,validator: partnerCompanyValidator},     
             mobile:{trigger:'change',required:true,validator: ownerPhoneValidator},
@@ -361,6 +386,7 @@ export default {
                 selectFlag:null,
                 }]   
                 this.areaStatus = null 
+                this.inputdisabled = false
                 this.$emit('getData') 
                 }
         },
@@ -383,11 +409,29 @@ export default {
         };
       },
       handleSelect(item) {
-        data_get_aflcPartner_findAuthCompany(1, 10, item.value).then(res=>{
-            console.log(res)
+          this.companyNameObject.companyName = item.value
+          this.inputdisabled = true
+        data_get_aflcPartner_findAuthCompany(1, 10, this.companyNameObject).then(res=>{
+            console.log('res',res)
+            this.formAll.partnerName = res.data[0].contactsName
+            this.formAll.mobile = res.data[0].mobile
+            this.areaCode = res.data[0].belongCity
+            this.formAll.province = res.data[0].provinceCode
+            this.formAll.city = res.data[0].cityCode
+            this.formAll.area = res.data[0].areaCode
+            this.areaName = res.data[0].belongCityName
+            this.companyId = res.data[0].id
         })
       },
-
+      handblur(i){
+     this.formAll.partnerName = null
+     this.formAll.mobile = null
+     this.formAll.areaName = []
+     this.areaName = null
+     this.inputdisabled = false
+     this.companyId = null
+     this.selectFlag=null
+      },
    // 省市状态表
      changeSelect(){
             if(this.editType=='add'){
@@ -481,7 +525,7 @@ export default {
              this.formAll.contractEndDate=res.data.contractEndDate
              this.formAll.aflcPartnerAreaList = res.data.aflcPartnerAreaList
              this.formAll.aflcPartnerFileList = res.data.aflcPartnerFileList
-             this.AreaName = res.data.belongCity
+             this.areaName = res.data.belongCity
         })
      this.dialogFormVisible_add = true;
     }
@@ -516,8 +560,13 @@ export default {
              this.formAll.contractEndDate=res.data.contractEndDate
              this.formAll.aflcPartnerAreaList = res.data.aflcPartnerAreaList
              this.formAll.aflcPartnerFileList = res.data.aflcPartnerFileList
-             this.AreaName = res.data.belongCity
-             console.log('2', this.formAll.contractStartDate)
+             this.areaName = res.data.belongCity
+             this.companyId = res.data.companyId
+             this.isVip = res.data.openAdminManage
+             if(res.data.companyId){
+                this.inputdisabled = true
+             }
+            console.log('dfdf',this.inputdisabled)
         })
         
          this.dialogFormVisible_add = true;
@@ -535,8 +584,13 @@ export default {
              companyName:null,
         }
         data_get_aflcPartner_findAuthCompany(1, 1000, FromData).then(res=>{
-            console.log(res)
-         this.restaurants = res.data
+         let restaurantsData = res.data;
+         restaurantsData.map(res=>{
+             this.restaurants.push({
+                 value:res.companyName})
+             console.log(this.restaurants)
+         })
+         
         })
         }, 
     changeList(){
@@ -610,18 +664,17 @@ export default {
             else{      
        this.$refs['formAll'].validate(valid=>{
         if(valid){
-            if(typeof(this.formAll.areaCode)!=='string')
-            {
+            if(!this.inputdisabled){
             if(this.formAll.area){
                this.areaStatus = this.formAll.areaCode[2]
             }
             else{
                this.areaStatus = this.formAll.areaCode[1]
+            }               
             }
+            else{
+               this.areaStatus = this.areaCode
             }
-           else{
-           this.areaStatus = this.formAll.areaCode
-          }
             let aflcPartnerAreaList = []
             let aflcPartnerFileList = []
             this.formAll.aflcPartnerAreaList.map((list,index)=>{
@@ -656,6 +709,8 @@ export default {
             })
         let forms=
             {
+            companyId:this.companyId,
+            openAdminManage: this.isVip,
             areaCode:this.areaStatus,
             province:this.formAll.province,
             city:this.formAll.city,

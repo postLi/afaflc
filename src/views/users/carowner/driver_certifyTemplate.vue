@@ -618,6 +618,7 @@ export default {
     .el-dialog{
        overflow: unset;
        max-height: none;
+       width: 60%;
        .certifyless{
          width:62px;
        }
