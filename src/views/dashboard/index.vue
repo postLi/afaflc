@@ -73,7 +73,7 @@ export default {
     .dashboard {
         &-container {
             // padding: 24px 20px;
-            background: #f2f2f2;
+            // background: #f2f2f2;
         }
         &-text {
             font-size: 30px;

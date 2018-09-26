@@ -43,11 +43,11 @@
           style="width: 100%"> 
           <el-table-column
             type="selection"
-            width="100">
+            width="60">
           </el-table-column>
           <el-table-column label="序号" 
           sortable
-            width="100">
+            width="80">
             <template slot-scope="scope">
               {{ (page - 1)*pagesize + scope.$index + 1 }}
             </template>
@@ -65,13 +65,13 @@
             prop="areaName"
             label="所属区域"
             sortable
-            width="250">
+            width="300">
           </el-table-column>
           <el-table-column
             prop="driver"
             label="车主"
             sortable
-            width="250">
+            width="280">
           </el-table-column>
           <el-table-column
             prop="carType"
