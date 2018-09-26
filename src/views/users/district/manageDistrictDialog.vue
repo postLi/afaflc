@@ -387,6 +387,10 @@ export default {
                 }]   
                 this.areaStatus = null 
                 this.inputdisabled = false
+                this.areaName =null,
+                this.areaCode =null,
+                this.companyId = null,
+                this.companyNameObject.companyName = null;
                 this.$emit('getData') 
                 }
         },
