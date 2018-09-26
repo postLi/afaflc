@@ -120,7 +120,6 @@ export default {
       selectRowData: {},
       selectId: [],
       sizes: [30, 50, 100],
-      information: '操作不正确',
       pagesize: 30, // 初始化加载数量
       page: 1, // 初始化页码
       totalCount: null,

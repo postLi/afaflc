@@ -47,15 +47,6 @@ export default {
     }
   },
   created() {
-    this.shipperName = sessionStorage.getItem('shipperName') || 'smoke'
-  },
-
-  beforeUpdate() {
-    sessionStorage.setItem('shipperName', this.shipperName)
-  },
-
-  beforeDestroy() {
-    sessionStorage.setItem('shipperName', 'SameCity')
   },
   methods: {
     handleClick(tab, event) {

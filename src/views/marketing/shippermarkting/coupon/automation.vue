@@ -37,6 +37,7 @@
             <el-form-item label="活动时间：">
                     <el-date-picker
                         is-range
+                        unlink-panels
                         :picker-options="pickerOptions2"
                         type="daterange"
                         align="right"

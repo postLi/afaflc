@@ -414,6 +414,7 @@ export default {
       handblur(i){
      this.formAll.partnerName = null
      this.formAll.mobile = null
+     this.formAll.areaName = []
      this.inputdisabled = false
      this.companyId = null
       },

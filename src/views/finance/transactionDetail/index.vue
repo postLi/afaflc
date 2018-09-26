@@ -1,5 +1,5 @@
 <template>
-    <div class="identicalStyle" style="height:100%">
+    <div class="identicalStyle transactionDetail" style="height:100%">
           <el-form :inline="true"  class="demo-ruleForm classify_searchinfo">
             <el-form-item label="订单流水号">
             <el-input v-model="data.orderSerial" placeholder="请输入内容" clearable></el-input>
@@ -59,7 +59,9 @@
                     <el-date-picker
                     v-model="payTime"
                         is-range
+                        unlink-panels
                         type="daterange"
+                        :picker-options="pickerOptions2"
                         range-separator="至"
                         start-placeholder="开始时间"
                         end-placeholder="结束时间"
@@ -70,12 +72,11 @@
                     >
                     </el-date-picker>
             </el-form-item>            
-                <el-form-item class="fr">     
+                <el-form-item >     
                   <el-button type="primary"  plain @click="getdata_search" :size="btnsize">查询</el-button>
                   <el-button type="primary"  plain @click="reset" :size="btnsize">重置</el-button>
                 </el-form-item>    
           </el-form>
-  
             <div class="classify_info">
                 <div class="info_news">
                     <el-table
@@ -84,89 +85,121 @@
                         stripe
                         border
                         align = "center"
-                        height="93%"
+                        height="100%"
                         @selection-change = "getinfomation"
                         @row-dblclick="moreinfo"
                         tooltip-effect="dark"
                         @row-click="clickDetails"
                         style="width: 100%"> 
-                    <el-table-column  label="序号" width="80px" type="index">
-                    </el-table-column>
+                        <el-table-column
+                           label="选择"
+                           type="selection"
+                           width="50">
+                        </el-table-column>
+                    <el-table-column label="序号" sortable  width="80">
+                            <template slot-scope="scope">
+                             {{ (page - 1)*pagesize + scope.$index + 1 }}
+                             </template>
+                        </el-table-column> 
                         <el-table-column
                             align = "center"
                             prop="orderSerial"
                             label="订单流水号"
                              show-overflow-tooltip
-                            width="180">
+                            width="180"
+                            sortable
+                            >
                         </el-table-column>
                         <el-table-column
                           align = "center"
                           prop="tradeSerial"
                           label="交易流水号"
                            show-overflow-tooltip
-                          width="180">
+                          width="180"
+                          sortable
+                          >
                         </el-table-column>
                         <el-table-column
                         align = "center"
                           prop="createTime"
                           label="创建时间"
-                          width="170">
+                          width="170"
+                          sortable
+                          >
                              
                         </el-table-column>
                         <el-table-column
                         align = "center"
                           prop="accountName"
                           label="用户账号 / 姓名"
-                          width="150">
+                          width="150"
+                          sortable
+                          >
                         </el-table-column>
                         <el-table-column
                         align = "center"
                           prop="accountTypeName"
                           label="账号类型"
-                          width="110">
+                          width="110"
+                          sortable
+                          >
                         </el-table-column>
                          <el-table-column
                         align = "center"
                           prop="payTotal"
                           width="110"
-                          label="交易金额">
+                          label="交易金额"
+                          sortable
+                          >
                         </el-table-column>
                          <el-table-column
                         align = "center"
                           prop="incomeExpendTypeName"
                           width="110"
-                          label="收支类型">
+                          label="收支类型"
+                          sortable
+                          >
                         </el-table-column>
                          <el-table-column
                         align = "center"
                           prop="payWayName"
                           width="110"
-                          label="交易方式">
+                          label="交易方式"
+                          sortable
+                          >
                         </el-table-column>
                         <el-table-column
                         align = "center"
                           prop="tradeTypeName"
                           label="交易类型"
-                          width="110">
+                          width="110"
+                          sortable
+                          >
                         </el-table-column>
                          <el-table-column
                         align = "center"
                           prop="orderTypeName"
                           width="110"
-                          label="服务分类">
+                          label="服务分类"
+                          sortable
+                          >
                         </el-table-column>
                          <el-table-column
                         align = "center"
                           prop="payTime"
                            show-overflow-tooltip
-                          label="付款时间">
+                          label="付款时间"
+                          sortable
+                          >
                         </el-table-column>
                         
                         <el-table-column
                         align = "center"
                           prop="totalAmount"
                           label="操作"
-                          width="80">
+                          width="80"
+                          sortable
+                          >
                           <template slot-scope="scope">
                               <el-button @click="handleClick(scope.row)" type="text" size="small">相关信息</el-button>
                               
@@ -174,18 +207,7 @@
                         </el-table-column>
                     </el-table>
                       <!-- 页码 -->
-                    <div class="Pagination ">
-                        <div class="block">
-                            <el-pagination
-                            @size-change="handleSizeChange"
-                            @current-change="handleCurrentChange"
-                            :current-page="currentPage4"
-                            :page-size="pagesize"
-                            layout="total, sizes, prev, pager, next, jumper"
-                            :total="dataTotal">
-                            </el-pagination>
-                        </div>
-                    </div>
+        <div class="info_tab_footer">共计:{{ dataTotal }} <div class="show_pager"> <Pager :total="dataTotal" @change="handlePageChange"  :sizes="sizes"/></div> </div> 
                 </div>
             </div>
     </div>
@@ -195,12 +217,16 @@
 import {data_financeList,data_GetServerType,data_GetServerType2,data_GetServerType3} from '@/api/finance/financeServer.js'
 import {data_GetCarStyle} from '@/api/server/areaPrice.js'
 import '@/styles/dialog.scss'
-import { parseTime,formatTime } from '@/utils/index.js'
+import Pager from '@/components/Pagination/index'
+import { parseTime,formatTime,pickerOptions2 } from '@/utils/index.js'
 
     export default{
         data(){
             return{
-                data:{
+                pickerOptions2: {
+                shortcuts: pickerOptions2
+                    },   
+                data:{                 
                   orderSerial:null,
                   tradeSerial:null,
                   tradeStatus:null,
@@ -215,6 +241,7 @@ import { parseTime,formatTime } from '@/utils/index.js'
                 },
                 btnsize:'mini',
                 payTime:null,
+                sizes: [20, 50, 100],
                 currentPage4:1,
                 page:1,
                 pagesize:20,
@@ -248,8 +275,7 @@ import { parseTime,formatTime } from '@/utils/index.js'
             }
         },
         components:{
-            
-
+            Pager
         },
         mounted(){
             this.load();
@@ -328,101 +354,27 @@ import { parseTime,formatTime } from '@/utils/index.js'
                     }  
                 })
             },
-            
+            // 每页显示数据量变更
+            handlePageChange(obj) {
+            this.page = obj.pageNum
+            this.pagesize = obj.pageSize
+            this.load()
+            },
+         
         }
     }
 </script>
 
 <style type="text/css" lang="scss">
-    .finance{
-        height:100%;    
-        position: relative;
-        margin-left:7px;
-        &>.classify_searchinfo{
-            position: absolute;
-            left:0;
-            top:0;
-            padding:15px 16px;
-            height:160px;
-            width:100%;
-            line-height: 35px;
-
-            label{
-                  width: 24%;
-                  color: #666;
-                  font-size: 14px;
-                  overflow: hidden;
-                  display: inline-block;
-                  text-align:center;
-                span{
-                      width: 100px;
-                      display: inline-block;
-                      text-align: right;
-                      float: left;
-                }
-                .el-button{
-                  span{
-                    width:auto;
-                  }
-                }
-                .el-input{
-                    width:calc(100% - 100px);
-                    display: inline-block;
-                    .el-input__inner{
-                        color:#3e9ff1;
-                        height:30px;
-                        line-height: 30px;
-                        width:100%;
-                    }
-                }
-                .el-select {
-                    display: inline-block;
-                    position: relative;
-                    width: calc(100% - 100px);
-                    display: inline-block;
-                    float: left;
-                    .el-input{
-                      width:100%;
-                    }
-                }
-                .el-date-editor--daterange.el-input__inner{
-                    width: calc(100% - 100px);
-                }
-                .el-date-editor{
-                    height: 30px;
-                    line-height: 30px;
-                    vertical-align: middle;
-                    .el-range-separator{
-                        width: 10%;
-                        margin-top:-10px; 
-                    }
-                    .el-input__icon{
-                        margin-top:-10px; 
-                    }
-                }
-            }
-            .el-button{
-               padding:8px 20px;
-            }
-        }
-        .classify_info{
-            
-            padding:170px 13px 18px;
-            height:100%;
-            .btns_box{
-                margin-bottom:10px;
-                .el-button{
-                    margin-right:20px;
-                    padding:10px 20px;
-                }
-            }
-            .info_news{
-                height:100%;
-            }
-            .Pagination{
-                margin-top:13px;
-                text-align:right;
-            }
+.transactionDetail{
+    .el-button--small{
+            padding: 4px 0px;
+    }
+    .el-date-editor--daterange{
+        width: 218px!important;
+        .el-range-input{
+            width: 50%
         }
     }
+}
 </style>

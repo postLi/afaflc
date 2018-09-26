@@ -1,7 +1,6 @@
 <template>
-  <div class="onesource clearfix">
-        <div class="onesource_searchinfo" >
-          <el-form :inline="true">
+    <div class="identicalStyle MjD" style="height:100%">
+          <el-form :inline="true"  class="demo-ruleForm classify_searchinfo">
             <el-form-item label="所在地：">
               <GetCityList v-model="formAll.areaCode" ref="area"></GetCityList>
           </el-form-item>
@@ -19,13 +18,12 @@
                 <el-form-item label="片区名称" >
                    <el-input @focus="()=>{showMap('vestdistrictName')}" v-model="formAll.districtName"></el-input>
                  </el-form-item>
-         <el-form-item>       
-         <el-button type="primary"  plain  @click="getdata_search()">查询</el-button> 
-         <el-button type="primary"  plain  @click="clearSearch">清空</el-button>
+         <el-form-item class="fr">       
+         <el-button type="primary"  plain  @click="getdata_search()" :size="btnsize">查询</el-button> 
+         <el-button type="primary"  plain  @click="clearSearch" :size="btnsize">清空</el-button>
          </el-form-item>
            </el-form> 
-  </div>
-  <div class="classify_onesourceinfo">
+  <div class="classify_info">
    <div class="btns_box">
   <!-- 马甲单新增 -->
   <div class="vestDialogBox">
@@ -105,7 +103,6 @@
                <div class="vestAera">
                    <h4>目的地</h4>
                    <div class="el_vestsearch">
-
                        <div class="vest_section"  v-for="(form,keys) in destinationAera" :key='keys'>
                          <div class="vest_tree" v-if="keys == 0" >
                              <el-input @focus="()=>{showMap('destinationaddAera')}" v-model="destinationaddAera"></el-input>
@@ -133,7 +130,7 @@
            </div>
                     <div slot="footer" class="dialog-footer">
                         <el-button type="primary" @click="changeInfoSave1" v-if='!creadFlag'>保 存</el-button>
-                        <el-button type="primary" @click="changeInfoSavaAdress" v-else>保 存1</el-button>
+                        <el-button type="primary" @click="changeInfoSavaAdress" v-else>保 存</el-button>
                         <el-button @click="close1()">取 消</el-button>
                     </div> 
 
@@ -152,7 +149,7 @@
              <el-row>
             <el-col :span="12">
           <el-form-item label="服务类型：" :label-width="formLabelWidth" v-if='openFlag==0'>
-            <el-input v-model="selectRowData.serivceCode" disabled></el-input>
+            <el-input v-model="selectRowData3.serivceCode" disabled></el-input>
            </el-form-item>
             <el-form-item label="服务类型：" :label-width="formLabelWidth" v-else>
          <el-select v-model="selectRowData3.serivceCode" clearable placeholder="请选择">
@@ -168,7 +165,7 @@
             </el-col>
             <el-col :span="12">
             <el-form-item label="片区名称：" :label-width="formLabelWidth" v-if='openFlag==0'>
-             <el-input v-model="selectRowData.districtName" disabled></el-input>
+             <el-input v-model="selectRowData3.districtName" disabled></el-input>
            </el-form-item>
            <el-form-item label="片区名称：" :label-width="formLabelWidth" v-else>
           <el-input @focus="()=>{showMap('selectdistrictName')}" v-model="selectRowData3.districtName"></el-input>
@@ -178,7 +175,7 @@
             <el-row>
             <el-col :span="12">
             <el-form-item label="中心地址：" :label-width="formLabelWidth" v-if='openFlag==0'>
-             <el-input v-model="selectRowData.districtAddress"  disabled></el-input>
+             <el-input v-model="selectRowData3.districtAddress"  disabled></el-input>
             </el-form-item>
              <el-form-item label="中心地址：" :label-width="formLabelWidth" v-else>
              <el-input @focus="()=>{showMap('selectdistrictAddress')}" v-model="selectRowData3.districtAddress"></el-input>
@@ -189,7 +186,7 @@
             
                  <span v-if="openFlag==0">
                       <el-form-item label="省市：" :label-width="formLabelWidth">
-                <el-input v-model="selectRowData.areaName" disabled></el-input>
+                <el-input v-model="selectRowData3.areaName" disabled></el-input>
                       </el-form-item>
                  </span>
                  <span v-else>
@@ -227,7 +224,7 @@
                  <el-row :span="24">
                 <el-form-item :label-width="formLabelWidth" >       
                     <el-button  type="primary"  plain icon="el-icon-news" @click="openDialog1()" class="view_btn">新增</el-button>
-                    <el-button  type="primary" plain icon="el-icon-delete" @click="handleDelete2">删除</el-button>
+                    <el-button  type="primary" plain icon="el-icon-delete" @click="handleDelete2" :size="btnsize">删除</el-button>
                 </el-form-item>
                  </el-row>
              </el-row>
@@ -272,35 +269,42 @@
 </div>
 
 
-    <el-button type="primary" plain icon="el-icon-bell"  @click="handleUseStates">启用/禁用</el-button>
      <div class="vestonceDialog commoncss">
-         <el-button  type="primary" value="value" plain icon="el-icon-edit" @click="openDialogView0()">修改</el-button>
+         <el-button  type="primary" value="value" plain icon="el-icon-edit" @click="openDialogView0()" :size="btnsize">修改</el-button>
      </div>
-    <el-button type="primary" plain icon="el-icon-delete" @click="handleDelete">删除</el-button>
+    <el-button type="primary" plain icon="el-icon-bell"  @click="handleUseStates" :size="btnsize">启用/禁用</el-button>
+    <el-button type="primary" plain icon="el-icon-delete" @click="handleDelete" :size="btnsize">删除</el-button>
    </div>
   
+    <div class="info_news">  
+    <el-table style="width: 100%"  ref="multipleTable" stripe border :data="tableDataTree" height="100%" highlight-current-row @selection-change="getSelection" @row-click="clickDetails">
+              <el-table-column
+                            label="选择"
+                            type="selection"
+                            width="50">
+              </el-table-column>
+           <el-table-column label="序号" sortable  width="80">
+                            <template slot-scope="scope">
+                             {{ (page - 1)*pagesize + scope.$index + 1 }}
+                            </template>
+            </el-table-column> 
+   <el-table-column  label="片区名称" prop="districtName" sortable>
+       
+   </el-table-column>
+   <el-table-column  label="省市" prop="areaName" sortable>
+       
+   </el-table-column>
 
-    <el-table style="width: 100%" stripe border :data="tableDataTree" height="87%" highlight-current-row @row-click="clickDetails">
-   <el-table-column  label="序号" width="80px" type="index">
+   <el-table-column  label="服务类型" prop="serivceCode" sortable>
        
    </el-table-column>
-   <el-table-column  label="片区名称" prop="districtName">
+   <el-table-column  label="片区中心" prop="districtAddress" sortable >
        
    </el-table-column>
-   <el-table-column  label="省市" prop="areaName">
+   <el-table-column  label="马甲单源数量" prop="orderNum" sortable>
        
    </el-table-column>
-
-   <el-table-column  label="服务类型" prop="serivceCode">
-       
-   </el-table-column>
-   <el-table-column  label="片区中心" prop="districtAddress" >
-       
-   </el-table-column>
-   <el-table-column  label="马甲单源数量" prop="orderNum">
-       
-   </el-table-column>
-   <el-table-column  label="状态" prop="usingStatus">
+   <el-table-column  label="状态" prop="usingStatus" sortable>
         <template  slot-scope="scope">
           {{ scope.row.usingStatus == 0 ? '启用' : '禁用' }}
          </template>
@@ -308,10 +312,8 @@
 
   </el-table> 
            <!-- 页码 -->
- <div class="info1_tab_footer">共计:{{ dataTotal }} <div class="show_pager"> <Pager :total="dataTotal" @change="handlePageChange"  :sizes="sizes"/></div> </div> 
+ <div class="info_tab_footer">共计:{{ dataTotal }} <div class="show_pager"> <Pager :total="dataTotal" @change="handlePageChange"  :sizes="sizes"/></div> </div> 
    </div>
-   <div>
-
    </div>
        <tmsmap @success="getInfo" pos="" name="" :popVisible.sync="popVisible" />
   </div>
@@ -369,6 +371,7 @@ export default {
             }
 
         return{
+        btnsize:'mini',
         creadFlag:false,   //详情修改新增状态
         selectFlag:false,
         openFlag:'',   //0详情,1修改
@@ -465,6 +468,7 @@ export default {
     watch:{
         driverTemplateDialogFlag:{
              handler: function(val, oldVal){
+            if (!val) {
              this.destinationaddAera='';
              this.pickaddAera='';
              this.pickAera=[{}];
@@ -472,9 +476,25 @@ export default {
                  if(this.$refs.area1){
                     this.$refs.area1.selectedOptions = [];
                 }
+            this.$refs.multipleTable.clearSelection();                
              }
-
+             }
+        },
+        driverTemplateDialogFlag2:{
+             handler: function(val, oldVal){
+            if (!val) {
+             this.destinationaddAera='';
+             this.pickaddAera='';
+             this.pickAera=[{}];
+             this.destinationAera=[{}];
+                 if(this.$refs.area1){
+                    this.$refs.area1.selectedOptions = [];
+                }
+            this.$refs.multipleTable.clearSelection();                
+             }
+             }
         }
+
     },
     methods:{
             // 省市状态表
@@ -562,7 +582,7 @@ export default {
         },
         openDialog1(){
          this.firstblood2()
-         this.vestAll = this.selectRowData;
+         this.vestAll = this.selectRowData[0];
          this.creadFlag = true;
          this.driverTemplateDialogFlag=true;
          this.driverTemplateDialogFlag2 = false;
@@ -585,12 +605,25 @@ export default {
         },
         // 详情控制
         openDialogView(){
-
-            if(!this.selectRowData.id){
-            this.$message.info('未选中内容');
-         }
+           if(this.selectRowData.length==undefined){
+              this.$message.warning('请选择您要操作的用户');
+               return
+           }
+          else if(this.selectRowData.length == 0){
+               this.$message.warning('请选择您要操作的用户');
+               return
+          }else if (this.selectRowData.length > 1) {
+                this.$message({
+                    message: '每次只能操作单条数据~',
+                    type: 'warning'
+                })
+               this.$refs.multipleTable.clearSelection();
+          }
          else{
-         this.formAll2.vestId = this.selectRowData.id
+         this.formAll2.vestId = this.selectRowData[0].id
+        data_get_aflcVestUnisource_Id(this.selectRowData[0].id).then(res=>{
+            this.selectRowData3 = res.data
+         })
          this.openFlag='0';
          this.firstblood2()
          this.driverTemplateDialogFlag2=true;
@@ -599,12 +632,23 @@ export default {
         // 修改控制
         openDialogView0(){
             this.formAll2.vestId = this.selectRowData.id
-            if(!this.selectRowData.id){
-            this.$message.info('未选中内容');
-         }
+           if(this.selectRowData.length==undefined){
+              this.$message.warning('请选择您要操作的用户');
+               return
+           }
+          else if(this.selectRowData.length == 0){
+               this.$message.warning('请选择您要操作的用户');
+               return
+          }else if (this.selectRowData.length > 1) {
+                this.$message({
+                    message: '每次只能操作单条数据~',
+                    type: 'warning'
+                })
+               this.$refs.multipleTable.clearSelection();
+          }
          else{
          this.openFlag='1';
-         data_get_aflcVestUnisource_Id(this.selectRowData.id).then(res=>{
+         data_get_aflcVestUnisource_Id(this.selectRowData[0].id).then(res=>{
             this.selectRowData3 = res.data
          })
          this.firstblood2()
@@ -660,7 +704,7 @@ export default {
         // 大表清空
             clearSearch(){
                 this.$refs.area.selectedOptions = [];
-                this.formAll2 = {
+                this.formAll = {
                     areaCode: null,
                     serivceCode:null,
                     districtName: null,
@@ -704,10 +748,16 @@ export default {
             },    
 
         //  大表选择行   
-         clickDetails(i){
-             console.log('id',i)
-                 this.selectRowData = i;
-            }, 
+            // 判断选中与否
+            getSelection(val){
+            console.log('选中内容',val)
+            this.selectRowData = val;
+           },
+            //点击选中当前行
+            clickDetails(row, event, column){
+            this.$refs.multipleTable.toggleRowSelection(row);
+            },
+            
         //  详情表选择行   
          clickDetails2(i){
                  this.selectRowData2 = i;
@@ -716,9 +766,21 @@ export default {
 
         //  大表删除行
             handleDelete(){
-             if(!this.selectRowData.id){
-                        this.$message.info('未选中任何删除内容');
-                }else{
+           if(this.selectRowData.length==undefined){
+              this.$message.warning('请选择您要操作的用户');
+               return
+           }
+          else if(this.selectRowData.length == 0){
+               this.$message.warning('请选择您要操作的用户');
+               return
+          }else if (this.selectRowData.length > 1) {
+                this.$message({
+                    message: '每次只能操作单条数据~',
+                    type: 'warning'
+                })
+               this.$refs.multipleTable.clearSelection();
+          }
+         else{
                 this.delDataInformation();
             }          
             },
@@ -737,7 +799,7 @@ export default {
                     cancelButtonText: '取消',
                     type: 'warning'
                 }).then(()=>{
-                    data_Del_onesource(this.selectRowData.id).then(res=>{
+                    data_Del_onesource(this.selectRowData[0].id).then(res=>{
                           this.$message.success('删除成功');
                         this.firstblood();       
                         this.selectRowData=''; 
@@ -766,12 +828,13 @@ export default {
                           this.$message.success('删除成功');
                         this.firstblood();       
                         this.firstblood2();       
-                        this.selectRowData2=''; 
+                        this.$refs.multipleTable.clearSelection();
                     }).catch(err => {
                         this.$message({
                             type: 'info',
                             message: '操作失败，原因：' + err.text ? err.text : err
                         })
+                        
                     })
                 }).catch(() => {
                     this.$message({
@@ -842,17 +905,27 @@ export default {
             },
         // 启用禁用
             handleUseStates(){
-                if(!this.selectRowData.id){
-                    //未选择任何修改内容的提示
-                        this.$message.info('未选中内容');
-                        return
-                }else{
-                    this.selectId.push(this.selectRowData.id)
+           if(this.selectRowData.length==undefined){
+              this.$message.warning('请选择您要操作的用户');
+               return
+           }
+          else if(this.selectRowData.length == 0){
+               this.$message.warning('请选择您要操作的用户');
+               return
+          }else if (this.selectRowData.length > 1) {
+                this.$message({
+                    message: '每次只能操作单条数据~',
+                    type: 'warning'
+                })
+               this.$refs.multipleTable.clearSelection();
+          }
+         else{
+                this.selectId.push(this.selectRowData[0].id)
                     
                  data_UseStates_onesource(this.selectId).then(res=>{
                      console.log('dsds',this.selectId)
                      this.selectId.splice(0,1);
-                     if(this.selectRowData.usingStatus==0)
+                     if(this.selectRowData[0].usingStatus==0)
                      {
                          this.$message.warning('已禁用');
                      }
@@ -860,9 +933,8 @@ export default {
                          this.$message.success('已启用');
                      }
                         this.firstblood();       
-                        this.selectRowData='';   
+                        this.$refs.multipleTable.clearSelection();
                     })
-                    console.log('this.selectId',this.selectId);
                 }
             },    
 
@@ -882,11 +954,12 @@ export default {
                 data_add_onesource_list(forms).then(res=>{
                 console.log('res',res);
                  this.driverTemplateDialogFlag=false;
-
+                    this.$message.success('新增成功');
                 this.firstblood()
                 }).catch(res=>{
                     console.log(res)
-                   this.$message.warning('片区名称已存在');
+                  this.driverTemplateDialogFlag=false;
+                   this.$message.warning(res.text);
                 });
                 }
                 })
@@ -898,8 +971,11 @@ export default {
             this.vestAdree.flcVestUnisourceAddressaList=this.totalAeraData;
             data_get_onesource_addDetailAddress(this.vestAdree).then(res=>{
                 console.log(res)
-                 this.$message.success('添加成功');
+                 this.$message.success('新增成功');
                  this.driverTemplateDialogFlag=false;
+            }).catch(res=>{
+                this.driverTemplateDialogFlag=false;
+                 this.$message.success('新增失败');
             })
         },
         // 修改保存
@@ -912,8 +988,11 @@ export default {
                 this.firstblood()
                 this.driverTemplateDialogFlag2 = false;
                 this.selectFlag=false
+                this.$message.success('修改成功');
                 }).catch(res=>{
-          console.log(res)
+                this.driverTemplateDialogFlag2 = false;
+                this.selectFlag=false                    
+                this.$message.success('修改失败');
         });
         },
             handlePageChange(obj) {
@@ -951,113 +1030,9 @@ export default {
 </script>
 
 <style lang="scss">
-.onesource{
-        height:100%;    
-        position: relative;
-        .el-tabs{
-            height: 100%;
-            .el-tabs__content{
-                height: 93%;
-                .el-tab-pane{
-                    height: 100%;
-                }
-            }
-        }
-        .onesource_searchinfo{
-            position: absolute;
-            left:0;
-            top:0;
-            padding:15px 16px;
-            height:70px;
-            width:100%;
-            line-height: 35px;
-            .el-form-item{
-                .el-form-item__content{
-                    .el-input{
-                        .el-input__inner{
-                            color:#3e9ff1;
-                            height:30px;
-                            line-height: 30px;
-                        }
-                    }
-                    .el-button{
-                        padding:8px 20px;
-                    }
-                }
-            }
-        }
-        .classify_onesourceinfo{
-            height:100%;
-            padding:70px 15px 0 15px;
-            .btns_box{
-                margin-bottom:10px;
-                .el-button{
-                    margin-right:20px;
-                    padding:10px 20px;
-                }
-            }
-            .info_news{
-                height:90%;
-            }
-            .el-pagination{
-                margin-top:13px;
-                text-align:right;
-            }
-        }
-        .carNewinfo,.freezeInfo,.blackInfo{
-            display: inline-block;
-            .el-dialog{
-                width: 780px;
-                .el-dialog__body{
-                    .el-form{
-                        .shipper_information{
-                            h2{ 
-                                margin:10px 20px;
-                                padding-bottom: 10px;
-                                border-bottom: 2px solid #ccc;
-                            }
-                        }
-                        .el-form-item{
-                            .el-form-item__content{
-                                .el-input{
-                                    width: 250px;
-                                }
-                                .lessWidth{
-                                    width: 80px;
-                                }
-                                &>.el-checkbox{
-                                    margin-left: 130px;
-                                }
-                            }
-                        }    
-                        .licensePicture{
-                            width: 300px;
-                            line-height: 20px;
-                        }
-                        .moreLength{
-                            .el-form-item__content{
-                                .el-input{
-                                    width: 637px;
-                                }
-                            }
-                        }
-                        .el-textarea{
-                            width: 637px;
-                            vertical-align: top;
-                            font-size: 12px;
-                            padding-top: 5px;
-                        }
-                      
-                    }
-                }
-            }
-        }
-    }
-   .el-table thead {
-    color: #333;
-}
 .vestonceDialog{
         display: inline-block;
+        margin-right: 10px;
     }
     .el-dialog{border-radius: 10px 10px 0px 0px;}
     .commoncss .el-dialog .el-input {
@@ -1138,6 +1113,7 @@ export default {
     }
         .vestDialog{
         display: inline-block;
+        margin-right:10px;
         .el-dialog{
             width: 780px;
                   }
@@ -1147,11 +1123,6 @@ export default {
         .addvestbtn{
             margin-left:30px;
         }
-    
-    .el-button{
-            margin-right:20px;
-            padding:10px 20px;
-    }
     .commoncss .el-dialog .el-input {
     width: 250px;
     }
@@ -1222,17 +1193,25 @@ export default {
     }
     .adressstart 
     {
-        .el-input{width:110px}
+        .el-input{width:180px!important}
     } 
     .adressend {
-        .el-input{width:110px}
+        .el-input{width:180px!important}
        .el-form-item__label{
           text-align: left;
         }
     }
+    .view_btn{
+        margin-left:50px;
+    }
     }
     .vestDialogBox {
-        display: inline;
+        display: inline-block;
+        .el-button {
+        margin-right:0px;
+        padding: 7px 15px 7px;
+        font-size:12px;
+        }
         .el-dialog{
                 width: 980px;
         }
@@ -1248,6 +1227,7 @@ export default {
             margin:0px auto;
         }
         .el-pagination{
+            text-align: right;
             margin-bottom: 13px;
              }
           .el-pagination__sizes .el-input{
@@ -1272,30 +1252,4 @@ export default {
     .show_pager{float: right}
     .page-select{top:5px}
 }
-</style>
-<style  lang="scss" scoped>
-
-.vestDialog .el-dialog {
-    width:880px!important;
-    .chooseCityList .el-cascader .el-input {
-    width: 250px;
-}
-    .adressstart 
-    {
-        .el-input{width:180px}
-    } 
-    .adressend {
-        .el-input{width:180px}
-    } 
-}
-.commoncss .el-dialog .el-input {
-    width: 250px;
-}
-    .el-button{
-            margin-right:20px;
-            padding:10px 20px;
-    }
-    .view_btn{
-        margin-left:50px;
-    }
 </style>
