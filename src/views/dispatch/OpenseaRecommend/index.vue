@@ -63,33 +63,10 @@
                       </el-table>
                 </div>
 
-
                 <!-- 新增数据 -->
-                <addClassfy :dialogFormVisible.sync = "dialogFormVisible" :formtitle = "formtitle" @renovate="Onrenovate" @ifError="hint" ></addClassfy>
+                <addClassfy :dialogFormVisible.sync = "dialogFormVisible" :formtitle = "formtitle" @renovate="Onrenovate" ></addClassfy>
                 <!-- 修改数据 -->
-                <changeclassify :dialogFormVisibleChange.sync = "dialogFormVisibleChange" :formtitle = "formtitle_change" @ifError="hint" @renovate="Onrenovate" :changeforms = 'changeforms'></changeclassify>
-
-                <!-- 新增分类提示不可为空 -->
-                <div class="cue">
-                    <el-dialog
-                    :visible.sync="centerDialogVisible"
-                    center>
-                    <span>{{information}}</span>
-                    </el-dialog>
-                </div>
-                <!-- 删除信息提示 -->
-                <div class="delData">
-                    <el-dialog
-                    title="提示"
-                    :visible.sync="delDialogVisible">
-                    <span class="delwarn"></span>
-                    <span class="delinfo">确认删除信息吗 ?</span>
-                    <span slot="footer" class="dialog-footer">
-                        <el-button type="primary" @click="delDataInformation">确 定</el-button>
-                        <el-button @click="delDialogVisible = false" type="info" plain>取 消</el-button>
-                    </span>
-                    </el-dialog>
-                </div>
+                <changeclassify :dialogFormVisibleChange.sync = "dialogFormVisibleChange" :formtitle = "formtitle_change" @renovate="Onrenovate" :changeforms = 'changeforms'></changeclassify>
             </div>
             <div class="info_tab_footer">共计:{{ totalCount }} <div class="show_pager"> <Pager :total="totalCount" @change="handlePageChange" /></div> </div>
     </div>

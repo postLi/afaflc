@@ -54,6 +54,10 @@ export function GetCarStyle(serviceTypeCode,cartypeCode) {
     })
   }
 
+    // 获取货主类型
+export function DicShippertype() {
+  return fetch.get('/' + baseurl_two + '/sysDict/getSysDictByCodeGet/AF00101')
+    }
 /**
  * 获取图片上传的policy
  * callback

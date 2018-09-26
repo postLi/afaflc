@@ -15,7 +15,7 @@ export default {
     { path: '/common/systemSetup', icon: 'xitongshezhi', hidden: true, name: '公司管理', component: _import('common/systemSetup/index'), meta: { title: '公司管理', stitle: '公司', noCache: true }},
     { path: '/common/groupManage', icon: 'zuzhijiagou', hidden: false, name: '组织机构', component: _import('common/groupManage/index'), meta: { title: '组织机构', stitle: '机构', noCache: true }
     },
-    { path: '/common/permissionManage', icon: 'quanxianguanli', hidden: false, name: '权限管理', component: _import('common/permissionManage/index'), meta: { title: '权限管理', stitle: '权限', noCache: true }},
+    { path: '/common/permissionManage', icon: 'quanxianguanli', hidden: false, name: '角色管理', component: _import('common/permissionManage/index'), meta: { title: '角色管理', stitle: '角色', noCache: true }},
     {
       path: '/common/employeeManage',
       icon: 'yuangongguanli',

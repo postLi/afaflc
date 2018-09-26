@@ -3,12 +3,11 @@
         <div class="columnsContainer">
             <div class="side_left">
                 <el-tree
-                :data="areadata"
-                :props="props"
-                :load="loadNode"
-                lazy
+                :data="cityTree"
+                :props="defaultProps"
+                default-expand-all
                 :highlight-current = "true"
-                @node-click="handleNodeClick"
+                 @node-click="handleNodeClick"
                 >
                 </el-tree>
             </div>
@@ -17,10 +16,15 @@
 
                 <div class="side_right_bottom clearfix">
                     <div class="btns_box">
-                        <el-button type="primary" :size="btnsize" plain icon="el-icon-circle-plus" @click="addClassfy">新增</el-button>
+                        <!-- <el-button type="primary" :size="btnsize" plain icon="el-icon-circle-plus" @click="addClassfy">新增</el-button>
                         <el-button type="primary" :size="btnsize" plain icon="el-icon-edit" @click="handleEdit">修改</el-button>
                         <el-button type="primary" :size="btnsize" plain icon="el-icon-delete" @click="handleDelete">删除</el-button>
-                        <el-button type="primary" :size="btnsize" plain icon="el-icon-bell" @click="handleUseStates">启用/禁用</el-button>
+                        <el-button type="primary" :size="btnsize" plain icon="el-icon-bell" @click="handleUseStates">启用/禁用</el-button> -->
+
+                        <el-button type="primary" :size="btnsize" plain icon="el-icon-circle-plus" @click="handleClick('add')">新增</el-button>
+                        <el-button type="primary" :size="btnsize" plain icon="el-icon-edit" @click="handleClick('revise')">修改</el-button>
+                        <el-button type="primary" :size="btnsize" plain icon="el-icon-delete" @click="handleClick('delet')">删除</el-button>
+                        <el-button type="primary" :size="btnsize" plain icon="el-icon-bell" @click="handleClick('status')">启用/禁用</el-button>
                     </div>
                     <div class="info_news">
                         <el-table
@@ -31,7 +35,6 @@
                             height="100%"
                             @row-click="clickDetails"
                             @selection-change = "getinfomation"
-                            @row-dblclick="moreinfo"
                             tooltip-effect="dark"
                             style="width: 100%"> 
                             <el-table-column
@@ -261,50 +264,34 @@
                         </div>
                         </el-dialog>
                     </div>
-    
-                    <!-- 新增分类提示不可为空 -->
-                    <div class="cue">
-                        <el-dialog
-                        :visible.sync="centerDialogVisible"
-                        center>
-                        <span>{{information}}</span>
-                        </el-dialog>
-                    </div>
-
-                    <!-- 删除信息提示 -->
-                    <div class="delData">
-                        <el-dialog
-                        title="提示"
-                        :visible.sync="delDialogVisible">
-                        <span class="delwarn"></span>
-                        <span class="delinfo">确认删除信息吗 ?</span>
-                        <span slot="footer" class="dialog-footer">
-                            <el-button type="primary" @click="delDataInformation">确 定</el-button>
-                            <el-button @click="delDialogVisible = false" type="info" plain>取 消</el-button>
-                        </span>
-                        </el-dialog>
-                    </div>
                 </div>
             </div>
         </div>
+         <WaitPrice :dialogWaitPrice.sync="dialogWaitPrice" :reviseForm = 'reviseForm' :formtitle = 'formtitle' :isModify = "isModify"   @close = "shuaxin"/>
     </div>
 </template>
 
 <script type="text/javascript">
 
 import { data_Area, data_CarList, data_ServerClassList, data_GetCityList, data_GetBeginInfo, data_GetCityInfo, data_ChangeStatus, data_DeletInfo, data_NewOrChange } from '@/api/server/serverWaitinfo.js'
+
+import { aflcProvinceCode } from '@/api/common.js'
 import '@/styles/dialog.scss'
-import { REGEX } from '@/utils/validate'
 import Pager from '@/components/Pagination/index'
 import searchInfo from '../component/searchInfo'
-
+import { objectMerge2, parseTime } from '@/utils/'
+import WaitPrice from './WaitPrice'
 export default{
       data() {
           return {
+                loading:false,
+                isModify:false,
+                dialogWaitPrice:false,
                 sizes: [20, 50, 100],
                 btnsize: 'mini',
+                reviseForm:{},
+                cityTree:[],
                 canclose: false,
-                cacheData: {},
                 catchData: {},
                 areadata: [], // 树结构数据
                 newAreaData: [], // 新增界面树结构数据
@@ -322,10 +309,10 @@ export default{
                     serivceCode: '',
                     usingStatus: ''
                 },
-                props: {
+                defaultProps: {
                     label: 'name',
                     children: 'children'
-                    },
+                },
                 propsAdd: {
                     label: 'name',
                     children: 'children'
@@ -365,7 +352,7 @@ export default{
                 page: 1,
                 pagesize: 20,
                 remarkinfo: '例：免费0.25小时，每15分钟加收5元，不足15分钟按15分钟计价',
-                formtitle: '新增分类信息',
+                formtitle: '',
                 currentPage4: 1,
                 dialogFormVisible: false,
                 dialogFormVisible_change: false,
@@ -382,7 +369,8 @@ export default{
         },
         components: {
           Pager,
-          searchInfo
+          searchInfo,
+          WaitPrice
         },
         mounted() {
             // ...初始化获取数据
@@ -395,6 +383,9 @@ export default{
             }
         },
         methods: {
+            shuaxin(){
+                this.getCommonFunction();
+            },
             getSearchParam(obj) {
               console.log(obj)
               this.searchInfo = Object.assign(this.searchInfo, obj)
@@ -433,13 +424,86 @@ export default{
                     
                 })
             },
+            handleClick(type){
+                if (this.checkedinformation.length == 0 && type != 'add') {
+                    // 未选择任何修改内容的提示
+                   return this.$message({
+                        message: '请选择要操作的数据~',
+                        type: 'warning'
+                    })
+                } else if (this.checkedinformation.length > 1  && type == 'revise') {
+                    return this.$message({
+                        message: '不可同时修改多条数据~',
+                        type: 'warning'
+                    })
+                }
+                switch(type){
+                    case 'add':
+                        this.isModify = false;
+                        this.dialogWaitPrice = true;
+                        // this.dialogFormVisible = true
+
+                        break;
+                    case 'revise':
+                        // this.dialogFormVisible_change = true
+                        this.reviseForm =objectMerge2({},this.checkedinformation[0]);
+                        this.isModify = true;
+                        // this.dialogWaitPrice = true;
+                        this.dialogFormVisible_change = true;
+                        break;
+                    case 'delet':
+                        const delID = []
+                        this.checkedinformation.map((item) => {
+                            return delID.push(item.waitPid)
+                        })
+                        let config = delID.length>1 ?  delID.length + '条' : this.checkedinformation[0].areaName+'这条';
+                        this.$confirm('确定要删除'+config+'数据吗？', '提示', {
+                            confirmButtonText: '确定',
+                            cancelButtonText: '取消',
+                            type: 'warning'
+                        }).then( ()=>{
+                            data_DeletInfo(delID).then(res => {
+                                this.$message({
+                                    type: 'success',
+                                    message: '删除成功'
+                                })
+                                this.getCommonFunction();
+                            }).catch(err=>{
+                                this.$message({
+                                    type: 'info',
+                                    message: '删除失败，原因：' + err.errorInfo ? err.errorInfo : err.text
+                                })
+                            })
+                        }).catch(() => {
+                            this.$message({
+                                type: 'info',
+                                message: '已取消'
+                            })
+                        })
+                        break;
+                    case 'status':
+                        const statusID = []
+                        this.checkedinformation.map((item) => {
+                            return statusID.push(item.waitPid)
+                        })
+                        data_ChangeStatus(statusID).then(res=>{
+                            this.getCommonFunction();
+                        }).catch(err=>{
+                            this.$message({
+                                type: 'info',
+                                message: '操作失败，原因：' + err.errorInfo ? err.errorInfo : err.text
+                            })
+                        })
+                        break;
+                }
+            },
             // 刷新页面
             firstblood() {
-              this.show = true
-                data_Area().then(res => {
-                  this.areadata = res.data.list
-                    this.provinceId = this.areadata[0].code 
-                    this.getCommonFunction()
+                aflcProvinceCode().then(res => {
+                    console.log('aflcProvinceCode',res)
+                    this.cityTree = res.data;
+                    this.provinceId = this.cityTree[0].code; 
+                    this.getCommonFunction();
                 })
             },
             // 查询和获取对应区域的数据
@@ -453,36 +517,17 @@ export default{
                     this.show = false
                 })
             },
-            //
-          handleNodeClick(data, checked) {
-                // console.log(data,checked);
-              data_GetCityList(data.code).then(res => {
-                  this.citylist = res.data.list
-                    this.cacheData[data.code] = res.data.list
-                })
-
-              if (checked.level === 1) {
-                  this.provinceId = data.code
-                    this.cityId = null 
+            handleNodeClick(data, checked) {
+              console.log(data)
+                if (checked.level === 1) {
+                    this.provinceId = data.code;
+                    this.cityId = '' ;
                 }
-
-              if (checked.level === 2) {
-                  this.cityId = data.code
-                    this.provinceId = null 
+                if (checked.level === 2) {
+                    this.cityId = data.code;
+                    this.provinceId = '' ;
                 }
-
-              this.getCommonFunction()
-                
-
-            },
-          loadNode(node, resolve) {
-              if (node.level === 0) {
-                // 不会触发事件
-                }else {
-                  setTimeout(() => {
-                      resolve(this.cacheData[node.data.code] || [])
-                    }, 500)
-                }
+                this.getCommonFunction()
             },
             // 弹窗Tree节点
           handleNodeClickMore(data, checked) {
@@ -518,11 +563,6 @@ export default{
               if (!value) return true
                 return data.name.indexOf(value) !== -1
             },
-            // shuangji
-          moreinfo(row, event) {
-                // console.log(row, event)
-              console.log(this.$store)
-            },
             // 点击选中当前行
           clickDetails(row, event, column) {
               this.$refs.multipleTable.toggleRowSelection(row)
@@ -553,7 +593,7 @@ export default{
                   this.hint(information)
                 }else {
                   console.log(this.checkedinformation)
-                  this.dialogFormVisible_change = true
+                    this.dialogFormVisible_change = true
                     this.changeforms = this.checkedinformation[0]
                     if (this.checkedinformation[0].cityId) {
                       this.changeforms.cityId = this.checkedinformation[0].cityId
@@ -562,70 +602,9 @@ export default{
                     }
                 }
             },
-            // 禁用/启用
-          handleUseStates() {
-              if (this.checkedinformation.length === 0) {
-                    // 未选择任何修改内容的提示
-                  const information = '未选中任何更改状态内容';
-                  this.hint(information)
-                }else {
-                  console.log(this.checkedinformation)
-
-                  const statusID = []
-                    this.checkedinformation.map((item) => {
-                      return statusID.push(item.waitPid)
-                    })
-
-                  data_ChangeStatus(statusID).then(res => {
-                        // console.log(res)
-                        // this.firstblood();
-                      this.getCommonFunction()
-
-                    })
-                }
-            },
-            // 是否删除
-          handleDelete() {
-              if (this.checkedinformation.length === 0) {
-                    // 未选择任何修改内容的提示
-                  const information = '未选中任何删除内容';
-                  this.hint(information)
-                }else {
-                  console.log(this.checkedinformation)
-                  const delID = []
-                    this.checkedinformation.map((item) => {
-                      return delID.push(item.waitPid)
-                    })
-                  this.delID = delID
-                    this.delDialogVisible = true
-                    console.log(this.delID)
-                }
-            },
-            // 确认删除
-          delDataInformation() {
-              this.delDialogVisible = false
-                data_DeletInfo(this.delID).then(res => {
-                  console.log(res)
-                  this.getCommonFunction()
-                })
-            },
-          handleUse(index, row) {
-              console.log(index, row)
-            },
-          handleSizeChange(val) {
-              console.log(`每页 ${val} 条`)
-                this.pagesize = val 
-                this.firstblood()
-            },
-          handleCurrentChange(val) {
-              console.log(`当前页: ${val}`)
-                this.page = val
-                this.firstblood()
-            },
             // 新增
           addClassfy() {
               this.dialogFormVisible = true
-                this.inited = true
               this.newAreaData = this.areadata
             },
             // 保存信息
@@ -702,16 +681,7 @@ export default{
             },
             // 验证数据值
           valuerules(event) {
-              console.log(this.canclose)
-              if (!event.target.value || this.canclose) {
-                  return
-                } else{
-                  if (!REGEX.ONLY_NUMBER.test(event.target.value)) {
-                      const information = '请输入数字类型内容';
-                      this.hint(information)
-                        event.target.focus()
-                    }
-                }
+             
             },
           hint(val) {
               this.information = val

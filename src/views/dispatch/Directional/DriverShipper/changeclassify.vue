@@ -3,7 +3,7 @@
     <!-- 新增分类信息 -->
         <div class="shipperOfdispatch commoncss">
             <el-dialog :title='formtitle' :close-on-click-modal="true"  :visible="dialogFormVisibleChange" @close="close">
-                <div class="bindLeft fl bind">
+                <div class="bindLeft  bind">
                         <div class="chooseShipper chooseCommon">
                             <p><span>* </span>当前货主账号 ：</p>
                             <div class="nowData">
@@ -22,7 +22,7 @@
                             </el-date-picker>
                         </div>
                     </div>
-                    <div class="bindright fr bind">
+                    <div class="bindright  bind">
                         <div class="chooseShipper chooseCommon">
                             <p><span>* </span>当前车主账号 ：</p>
                             <div class="nowData">

@@ -5,7 +5,7 @@
                 <el-input v-model="belongCityName" placeholder="请选择"></el-input>
             </vregion>
         </el-form-item>
-        <el-form-item label="认证状态：" v-if="showType == 'All'">
+        <el-form-item label="认证状态" v-if="showType == 'All'">
             <el-select v-model="searchInfo.shipperStatus" clearable placeholder="请选择">
                 <el-option
                 v-for="item in optionsStatus"
@@ -16,7 +16,7 @@
                 </el-option>
             </el-select>
         </el-form-item>
-        <el-form-item label="账户状态：">
+        <el-form-item label="账户状态">
             <el-select v-model="searchInfo.accountStatus" clearable placeholder="请选择">
                 <el-option
                 v-for="item in optionsAuidSataus"
@@ -30,7 +30,7 @@
         <el-form-item label="公司名称:" v-if="showType != 'unauthorized'">
             <el-input v-model.trim="searchInfo.companyName"></el-input>
         </el-form-item>
-        <el-form-item label="手机号：">
+        <el-form-item label="手机号">
             <el-input v-model.trim="searchInfo.mobile" v-numberOnly></el-input>
         </el-form-item>
         <el-form-item class="btnChoose fr"  style="margin-left:0;">

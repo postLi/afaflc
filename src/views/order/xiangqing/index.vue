@@ -11,15 +11,16 @@
                     <pushList :isvisible="orderTabName === 'pushOrderList'"></pushList>
                 </el-tab-pane>
 
+            <!-- 抢单记录 -->
+                <el-tab-pane label="抢单记录" name="robbingList">
+                    <robbingList :isvisible="orderTabName === 'robbingList'"></robbingList>
+                </el-tab-pane>
+
             <!-- 订单跟踪 -->
                 <el-tab-pane label="订单跟踪" name="orderTracking">
                     <orderTracking :isvisible="orderTabName === 'orderTracking'"></orderTracking>
                 </el-tab-pane>
 
-            <!-- 抢单记录 -->
-                <el-tab-pane label="抢单记录" name="robbingList">
-                    <robbingList :isvisible="orderTabName === 'robbingList'"></robbingList>
-                </el-tab-pane>
                 
             <!-- 行驶轨迹 -->
                 <el-tab-pane label="行驶轨迹" name="driveTrail">
@@ -150,14 +151,14 @@ export default {
             padding-top: 12px;
         }
 
-        .el-tab-pane{
-            .el-table th .cell {
-                white-space: initial;
-                overflow: hidden;
-                min-height: 30px;
-                line-height: 30px;
-            }
-        }
+        // .el-tab-pane{
+        //     .el-table th .cell {
+        //         white-space: initial;
+        //         overflow: hidden;
+        //         min-height: 30px;
+        //         line-height: 30px;
+        //     }
+        // }
 
         .collapseInfo{
             border: 1px solid #e2e2e2;
@@ -170,7 +171,7 @@ export default {
                 font-size: 16px;
                 line-height: 20px;
                 padding: 19px 0 10px 0;
-                border-bottom: 1px solid #e2e2e2; 
+                // border-bottom: 1px solid #e2e2e2; 
             }
             .essentialInformation{
                 font-size: 14px;
@@ -193,7 +194,7 @@ export default {
                         text-align: center;
                     }
                     span + span{
-                        font-weight: bold;
+                        // font-weight: bold;
                         
                     }
                     .fontRed{

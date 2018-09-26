@@ -3,8 +3,7 @@
     <!-- 新增分类信息 -->
         <div class="shipperOfdispatch plantform commoncss">
             <el-dialog :title='formtitle' :close-on-click-modal="true"  :visible="dialogFormVisibleChange" @close="close">
-                <div class="clearfix">
-                    <div class="bindLeft fl bind">
+                    <div class="bindLeft bind">
                         <div class="chooseShipper chooseCommon">
                             <p><span>* </span>当前货主账号 ：</p>
                             <div class="nowData">
@@ -23,7 +22,7 @@
                             </el-date-picker>
                         </div>
                     </div>
-                    <div class="bindright fr bind">
+                    <div class="bindright bind">
                         <div class="chooseShipper chooseCommon">
                             <p><span>* </span>当前车主账号 ：</p>
                             <div class="nowData">
@@ -43,7 +42,6 @@
                         </div>
                     </div>
                     
-                </div>
                 <div slot="footer" class="dialog-footer">
                     <el-button type="primary" @click="changeInfoSave">保 存</el-button>
                     <el-button @click="closeChangeInfo">取 消</el-button>
@@ -180,6 +178,10 @@ export default {
             margin-bottom: 0;
             overflow: hidden;
             margin: 0 20px;
+            display: flex;
+        }
+        & .bind{
+            flex: 1;
         }
         .nowData{
             display: inline-block;

@@ -204,7 +204,7 @@ import {data_get_shipper_list,data_get_shipper_change} from '@/api/users/shipper
 import Pager from '@/components/Pagination/index'
 import vregion from '@/components/vregion/Region'
 import { objectMerge2, parseTime } from '@/utils/'
-import { getDictionary } from '@/api/common.js'
+import { DicShippertype } from '@/api/common.js'
 
 export default {
 	props: {
@@ -303,7 +303,7 @@ export default {
         },
          //获取货主类型
         getMoreInformation(){
-            getDictionary(this.shipperType).then(res=>{
+            DicShippertype().then(res=>{
                 // console.log('货主类型',res)
                 this.optionsShipperType = res.data;
             })

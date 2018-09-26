@@ -1,139 +1,145 @@
 <template>
     <div class="commoncss areaPrice">
         <el-dialog :title="formtitle" :close-on-click-modal="false" :visible="dialogAreaPrice" @close="close" v-loading="loading">
-            <el-form :inline="true" v-if="!isModify" :model="standForm"  ref="ruleForm"  label-position="left" size="mini">
-                  <div class="infoinner clearfix">
-                        <div class="slot_info clearfix">
-                            <div class="newarea area_left">
-                                <span class="slot_head">新增区域定价</span>
-                                <div class="area_left_server area_server">
-                                    <h4><span>* </span> 选择标准服务类型</h4>
-                                    <div class="eltree_search chooseclassfy">
-                                         <el-form-item class="chose" label="选择服务分类:" prop="serivceCode">
-                                            <el-select v-model="standForm.serivceCode" clearable placeholder="请选择" @change="choseStyle">
-                                                <el-option
-                                                    v-for="item in optionsService"
-                                                    :key="item.id"
-                                                    :label="item.name"
-                                                    :value="item.code"
-                                                    :disabled="item.disabled">
-                                                </el-option>
-                                            </el-select>
-                                        </el-form-item>
-                                        <el-form-item class="chose" label="选择车辆类型:" prop="carType">
-                                            <el-select v-model="standForm.carType" clearable placeholder="请选择" @change="choseStyle">
-                                                <el-option
-                                                    v-for="item in optionsCar"
-                                                    :key="item.id"
-                                                    :label="item.name"
-                                                    :value="item.code"
-                                                    :disabled="item.disabled">
-                                                </el-option>
-                                            </el-select>
-                                        </el-form-item>
-                                        <el-form-item class="chose" label="车长:" prop="standardPriceId">
-                                           <el-select v-model="standForm.standardPriceId" clearable placeholder="请选择"   @change="choseVule">
-                                                <el-option
-                                                    v-for="item in optionsCarStyle"
-                                                    :key="item.id"
-                                                    :label="item.carStyle"
-                                                    :value="item.standardPid"
-                                                    :disabled="item.disabled">
-                                                </el-option>
-                                            </el-select>
-                                        </el-form-item>
-                                    </div>
-                                    <label>
-                                        <span class="control">标准起步价</span>
-                                        <el-input
-                                            disabled
-                                            v-model="standForm.standardPrice"
-                                            clearable>
-                                        </el-input>
-                                        <span>元</span>
-                                        <el-input
-                                            disabled
-                                            v-model="standForm.standardKm"
-                                            clearable>
-                                        </el-input>
-                                        <span>公里</span>
-                                    </label>
-                                    <label>
-                                        <span class="control">超里程费</span>         
-                                        <el-input
-                                            disabled
-                                            v-model="standForm.outstripPrice"
-                                            clearable>
-                                        </el-input>
-                                        <span>元 / 公里</span>
-                                    </label>       
+            <el-form :inline="true" v-if="!isModify" :model="standForm" :rules="newrules"  ref="ruleForm"  label-position="left" size="mini">
+                <div class="infoinner clearfix">
+                    <div class="slot_info clearfix">
+                        <div class="newarea area_left">
+                            <span class="slot_head">新增区域定价</span>
+                            <div class="area_left_server area_server">
+                                <h4><span>* </span> 选择标准服务类型</h4>
+                                <div class="eltree_search chooseclassfy">
+                                    <el-form-item class="chose" label="选择服务分类：" prop="serivceCode">
+                                        <el-select v-model="standForm.serivceCode" clearable placeholder="请选择" @change="choseStyle">
+                                            <el-option
+                                                v-for="item in optionsService"
+                                                :key="item.id"
+                                                :label="item.name"
+                                                :value="item.code"
+                                                :disabled="item.disabled">
+                                            </el-option>
+                                        </el-select>
+                                    </el-form-item>
+                                    <el-form-item class="chose" label="选择车辆类型：" prop="carType">
+                                        <el-select v-model="standForm.carType" clearable placeholder="请选择" @change="choseStyle">
+                                            <el-option
+                                                v-for="item in optionsCar"
+                                                :key="item.id"
+                                                :label="item.name"
+                                                :value="item.code"
+                                                :disabled="item.disabled">
+                                            </el-option>
+                                        </el-select>
+                                    </el-form-item>
+                                    <el-form-item class="chose" label="车长：" prop="standardPriceId">
+                                        <el-select v-model="standForm.standardPriceId" clearable placeholder="请选择"   @change="choseVule">
+                                            <el-option
+                                                v-for="item in optionsCarStyle"
+                                                :key="item.id"
+                                                :label="item.carStyle"
+                                                :value="item.standardPid"
+                                                :disabled="item.disabled">
+                                            </el-option>
+                                        </el-select>
+                                    </el-form-item>
                                 </div>
+                                <label>
+                                    <span class="control">标准起步价：</span>
+                                    <el-input
+                                        disabled
+                                        v-model="standForm.standardPrice"
+                                        clearable>
+                                    </el-input>
+                                    <span>元</span>
+                                    <el-input
+                                        disabled
+                                        v-model="standForm.standardKm"
+                                        clearable>
+                                    </el-input>
+                                    <span>公里</span>
+                                </label>
+                                <label>
+                                    <span class="control">超里程费：</span>         
+                                    <el-input
+                                        disabled
+                                        v-model="standForm.outstripPrice"
+                                        clearable>
+                                    </el-input>
+                                    <span>元 / 公里</span>
+                                </label>       
                             </div>
-                            <div class="newarea area_right">
-                                <span class="slot_head">设置区域价</span>
-                                <div class="area_right_server area_server">
-                                    <h4><span>* </span> 选择省市</h4>
-                                    <div class="eltree_search">
-                                        <el-input
-                                        class="el_search"
-                                        placeholder=""
-                                        suffix-icon="el-icon-search"
-                                        v-model="filterText">
-                                        </el-input>
-                                        <el-tree
-                                        show-checkbox
-                                        :data="cityTree" :props="defaultProps"
-                                        node-key="code"
-                                        ref = 'tree'
-                                        :highlight-current = "true"
-                                        :filter-node-method="filterNode"
-                                        >
-                                        </el-tree>
-                                    </div>
-                                    <label>
-                                        <span style="color:red;">* </span><span class="control">区域起步价</span>
+                        </div>
+                        <div class="newarea area_right">
+                            <span class="slot_head">设置区域价</span>
+                            <div class="area_right_server area_server">
+                                <h4><span>* </span> 选择省市</h4>
+                                <div class="eltree_search">
+                                    <el-input
+                                    class="el_search"
+                                    placeholder=""
+                                    suffix-icon="el-icon-search"
+                                    v-model="filterText">
+                                    </el-input>
+                                    <el-tree
+                                    show-checkbox
+                                    :data="cityTree"
+                                    :props="defaultProps"
+                                    node-key="code"
+                                    ref = 'tree'
+                                    :highlight-current = "true"
+                                    :filter-node-method="filterNode"
+                                    >
+                                    </el-tree>
+                                </div>
+                                <label>
+                                    <span style="color:red;">* </span><span class="control">区域起步价：</span>
+                                    <el-form-item class="itemArea" prop="areaPrice">
                                         <el-input
                                             v-numberOnly
                                             placeholder="请输入内容"
                                             v-model="standForm.areaPrice"
                                             clearable>
                                         </el-input>
-                                        <span>元</span>
+                                    </el-form-item>
+                                    <span>元</span>
+                                    <el-form-item class="itemArea" prop="areaKm">
                                         <el-input
                                             placeholder="请输入内容"
                                             v-numberOnly
                                             v-model="standForm.areaKm"
                                             clearable>
                                         </el-input>
-                                        <span>公里</span>
-                                    </label>
-                                    <label>
-                                        <span style="color:red;">* </span><span class="control">区域超里程费</span>         
+                                    </el-form-item>
+                                    <span>公里</span>
+                                </label>
+                                <label>
+                                    <span style="color:red;">* </span><span class="control">区域超里程费：</span>  
+                                    <el-form-item class="itemArea" prop="areaOutstripPrice">
                                         <el-input
                                             v-numberOnly
                                             placeholder="请输入内容"
                                             v-model="standForm.areaOutstripPrice"
                                             clearable>
                                         </el-input>
-                                        <span>元 / 公里</span>
-                                    </label>       
-                                </div>
+                                    </el-form-item>
+                                    <span>元 / 公里</span>
+                                </label>       
                             </div>
                         </div>
                     </div>
-
+                </div>
             </el-form>
 
-            <el-form :inline="true" v-else :model="reviseForm"  ref="ruleForm"  label-position="right">
+            <el-form  :inline="true" v-else :model="reviseForm" :rules="reviserules"  ref="ruleForm"  label-position="right">
                 <div class="changeInforMation">
                     <el-row>
                         <el-col :span="12">
-                            <el-form-item class="nowCity" label="当前城市:" :label-width="formLabelWidth" prop="carType">
+                            <el-form-item class="nowCity" label="当前城市：" :label-width="formLabelWidth" prop="carType">
                                 <span class="onlyShow">{{reviseForm.areaName}}</span>
                             </el-form-item>
                         </el-col>
                         <el-col :span="12">
-                            <el-form-item class="nowCity" label="当前服务分类:" :label-width="formLabelWidth" prop="carType">
+                            <el-form-item class="nowCity" label="当前服务分类：" :label-width="formLabelWidth" prop="carType">
                                 <span class="onlyShow">{{reviseForm.serviceName}}</span>
                             </el-form-item>
                         </el-col>
@@ -141,19 +147,19 @@
 
                     <el-row>
                         <el-col :span="12">
-                            <el-form-item class="nowCity" label="当前车辆类型:" :label-width="formLabelWidth" prop="carType">
+                            <el-form-item class="nowCity" label="当前车辆类型：" :label-width="formLabelWidth" prop="carType">
                                 <span class="onlyShow">{{reviseForm.carTypeName}}</span>
                             </el-form-item>
                         </el-col>
                         <el-col :span="12">
-                            <el-form-item class="nowCity" label="车长:" :label-width="formLabelWidth" prop="carType">
+                            <el-form-item class="nowCity" label="车长：" :label-width="formLabelWidth" prop="carType">
                                 <span class="onlyShow">{{reviseForm.carLength + '*' + reviseForm.carWidth + '*' + reviseForm.carHeight + 'M'}}</span>
                             </el-form-item>
                         </el-col>
                     </el-row>
                     <div class="reference">
                         <div class="referenceM">
-                                <span class="control">标准起步价</span>
+                                <span class="control">标准起步价：</span>
                                 <el-input
                                     disabled
                                     v-model="reviseForm.standardPrice"
@@ -168,7 +174,7 @@
                                 <span>公里</span>
                             </div>
                             <div class="referenceM">
-                                <span class="control">超里程费</span>         
+                                <span class="control">超里程费：</span>         
                                 <el-input
                                     disabled
                                     v-model="reviseForm.outstripPrice"
@@ -178,30 +184,36 @@
                             </div>       
                     </div>
                     <div class="nowChange">
-                        <span class="control">区域起步价</span>
-                        <el-input
-                            v-numberOnly
-                            v-model="reviseForm.areaPrice"
-                            ref="newPrice"
-                            clearable>
-                        </el-input>
+                        <span class="control">区域起步价：</span>
+                        <el-form-item prop="areaPrice">
+                            <el-input
+                                v-numberOnly
+                                v-model="reviseForm.areaPrice"
+                                ref="newPrice"
+                                clearable>
+                            </el-input>
+                        </el-form-item>
                         <span>元</span>
-                        <el-input
-                            v-numberOnly                                   
-                            v-model="reviseForm.areaKm"
-                            ref="newInfoKm"
-                            clearable>
-                        </el-input>
+                        <el-form-item prop="areaKm">
+                            <el-input
+                                v-numberOnly                                   
+                                v-model="reviseForm.areaKm"
+                                ref="newInfoKm"
+                                clearable>
+                            </el-input>
+                        </el-form-item>
                         <span>公里</span>
                     </div>
                     <div class="nowChange nowChangeInfo">
-                        <span class="control">区域超里程费</span>         
-                        <el-input
-                            v-numberOnly                                    
-                            v-model="reviseForm.areaOutstripPrice"
-                            ref="newMorePrice"
-                            clearable>
-                        </el-input>
+                        <span class="control">区域超里程费：</span>    
+                         <el-form-item prop="areaOutstripPrice">
+                            <el-input
+                                v-numberOnly                                    
+                                v-model="reviseForm.areaOutstripPrice"
+                                ref="newMorePrice"
+                                clearable>
+                            </el-input>
+                        </el-form-item>     
                         <span>元 / 公里</span>
                     </div>       
                 </div>
@@ -221,7 +233,7 @@ import { DicServiceType,DicCartype,GetCarStyle,aflcProvinceCode } from '@/api/co
 import { objectMerge2, parseTime } from '@/utils/'
 import { data_NewOrChange, data_OnlyChange } from '@/api/server/areaPrice.js'
 export default {
-    name:'AddDictionary',
+    name:'AreaPrice',
     props:{
         dialogAreaPrice:{
             type:Boolean,
@@ -266,24 +278,41 @@ export default {
                 areaKm:'',
                 areaPrice:'',
             },
-            // reviseForm: {
-            //     areaKm: '',
-            //     areaName: '',
-            //     areaOutstripPrice: '',
-            //     areaPid: '',
-            //     areaPrice: '',
-            //     carType: '',
-            //     cityId: '',
-            //     outstripPrice: '',
-            //     serivceCode: '',
-            //     standardKm: '',
-            //     standardPrice: '',
-            //     standardPriceId: ''
-            // },
             defaultProps: {
                 label: 'name',
                 children: 'children'
             },
+            newrules: {
+                serivceCode: [
+                    { required: true, message:"请选择服务类型", trigger: 'blur' },
+                ],
+                carType:[
+                    { required: true, message:"请选择车辆类型", trigger: 'blur' },
+                ],
+                standardPriceId:[
+                    { required: true, message:"请选择车长规格", trigger: 'blur' },
+                ],
+                areaPrice:[
+                    {required:true,message:"请输入区域起步价",trigger:'blur'},
+                ],
+                areaKm:[
+                    {required:true,message:"请输入区域起步公里",trigger:'blur'},
+                ],
+                areaOutstripPrice:[
+                    {required:true,message:"请输入区域超里程费",trigger:'blur'},
+                ]
+            },
+            reviserules:{
+                areaPrice:[
+                    {required:true,message:"请输入区域起步价",trigger:'blur'},
+                ],
+                areaKm:[
+                    {required:true,message:"请输入区域起步公里",trigger:'blur'},
+                ],
+                areaOutstripPrice:[
+                    {required:true,message:"请输入区域超里程费",trigger:'blur'},
+                ]
+            }
         }
     },
     watch:{
@@ -292,8 +321,6 @@ export default {
                 console.log('this.isModify',this.isModify)
                 if(newVal && !this.isModify){
                     this.init()
-                }else{
-                    console.log('test',this.reviseForm)
                 }
             },  
             deep:true
@@ -308,7 +335,7 @@ export default {
     methods:{
         init(){
             Promise.all([DicServiceType(),DicCartype(),aflcProvinceCode()]).then(resArr => {
-                console.log('resArr:',resArr)
+                // console.log('resArr:',resArr)
                 this.optionsService = resArr[0].data;
                 this.optionsCar = resArr[1].data;
                 this.cityTree = resArr[2].data;
@@ -354,33 +381,68 @@ export default {
                     this.standForm.outstripPrice = item.outstripPrice
                 }
             })
-            console.log(this.optionsCarStyle)
+            // console.log(this.optionsCarStyle)
         },
         submitForm() {
-            this.btnShow = true;
-            let required = false;
-            if(this.isModify){
-                console.log(this.reviseForm)
+            if(!this.isModify){
+                this.$refs.ruleForm.validate((valid) => {
+                    let getNodeId = this.$refs.tree.getCheckedNodes();
+                    let ifCity =  getNodeId.length>0 ?  true : false;
+                    if (valid && ifCity) {
+                        this.btnShow = true;
+                        let cityArr =[];
+                        getNodeId.forEach(el =>{
+                            cityArr.push(el.code);
+                        })
+                        let forms = objectMerge2({},this.standForm,{cityId:cityArr.join(',')})
+                        data_NewOrChange(forms).then(res =>{
+                             this.close();
+                         }).catch(err => {
+                             this.$message({
+                                 type: 'info',
+                                 message: '操作失败，原因：' + err.errorInfo ? err.errorInfo : err.text
+                             })
+                            this.btnShow = false;
+                         })
+                    } else if(!ifCity){
+                        return this.$message({
+                            type: 'warning',
+                            message: '请选择省市'
+                        });
+                    }
+                    else {
+                        return this.$message({
+                            type: 'warning',
+                            message: '请填写完整数据'
+                        });
+                    }
+                 });
             }else{
-                const getNodeId = this.$refs.tree.getCheckedNodes();
-                let cityArr =[];
-                getNodeId.forEach(el =>{
-                    cityArr.push(el.code);
-                })
-                // let cityId = this.$refs.tree.getCheckedNodes().join(',');
-                let form = objectMerge2({},this.standForm,{cityId:cityArr.join(',')})
-                console.log(form)
-                data_NewOrChange(form).then(res=>{
-                    this.close()
-                }).catch(err => {
-                    this.$message({
-                        type: 'info',
-                        message: '删除失败，原因：' + err.errorInfo ? err.errorInfo : err.text
-                    })
-                })
+                this.$refs.ruleForm.validate((valid) => {
+                    if (valid ) {
+                        this.btnShow = true;
+                        let forms =  objectMerge2({},this.reviseForm);
+                        data_OnlyChange(forms).then(res =>{
+                             this.close();
+                         }).catch(err => {
+                             this.$message({
+                                 type: 'info',
+                                 message: '操作失败，原因：' + err.errorInfo ? err.errorInfo : err.text
+                             })
+                            this.btnShow = false;
+                         })
+                    } 
+                    else {
+                        return this.$message({
+                            type: 'warning',
+                            message: '请填写完整数据'
+                        });
+                    }
+                 });
             }
         },  
         close(){
+            this.$refs.ruleForm.resetFields();
             this.$emit('update:dialogAreaPrice', false);
             this.$emit('close');
             this.btnShow = false; 
@@ -396,13 +458,12 @@ export default {
     .areaPrice{
             .el-dialog{
                 position: relative;
-                width: 820px;
+                width: 910px;
                 .el-dialog__headerbtn{
                     z-index: 99;
                 }
-            }
             .infoinner{
-                height:350px;
+                height:390px;
                 .slot_info{
                     position:absolute;
                     top:0;
@@ -412,7 +473,7 @@ export default {
                     .newarea{
                         float:left;
                         width:50%;
-                        padding:0 0 0 33px;
+                        padding:0 0 0 50px;
                         .slot_head{
                             display: inline-block;
                             text-align: center;
@@ -428,7 +489,7 @@ export default {
                         }
                         .area_server{
                             padding-top:17px;
-                            padding-bottom: 14px;
+                            padding-bottom: 20px;
                             h4{
                                 span{
                                     color:red;
@@ -511,7 +572,7 @@ export default {
                             }
                             label{
                                 display: block;
-                                margin-top:12px;
+                                margin-top:20px;
                                 font-size: 12px;
                                 font-weight: normal;
                                 font-stretch: normal;
@@ -520,19 +581,25 @@ export default {
                                 color: #666666;
                                 .control{
                                     display: inline-block;
-                                    text-align: right;
-                                    width: 75px;
+                                    text-align: left;
+                                    width: 85px;
+                                }
+                                .itemArea{
+                                    margin-bottom: 0;
+                                    margin-right: 0;
+                                    vertical-align: middle;
                                 }
                                 .el-input{
                                     width: 96px;
-                                    height:24px;
+                                    height:30px;
                                     margin:0 6px;
                                     .el-input__inner{
                                         display: inline-block;
                                         width: 96px;
-                                        height: 24px;
                                         font-size: 12px;
                                         border-radius: 2px;
+                                        height: 24px;
+                                        line-height: 24px;
                                         border: solid 1px #d4d4d4;
                                         padding:8px;
                                         color: #3e9ff1;
@@ -561,65 +628,72 @@ export default {
                 }
             }
 
-             .changeInforMation{
-                    padding: 0 20px;
-                    .el-input{
-                        width: 110px;
-                        .el-input__inner{
-                            height: 24px;
-                            line-height: 24px;
-                            font-size: 12px;
-                            color: #3e9ff1;
-                        }
-                    }
-                    .nowCity{
-                        h4{
-                            display: inline-block;
-                            width: 111px;
-                            span{
-                                color: red;
-                            }
-                        }
-                    }
-                    .chose{
-                        display: inline-block;
-                        margin:10px 30px 10px 0; 
-                        p{
-                            display: inline-block;
-                            height: 24px;
-                            line-height: 24px;
-                            span{
-                                color: red;
-                            }
-                        }
-                        
-                    }
-                    .reference{
-                        border: 1px dashed #ccc;
-                        margin:10px; 
-                        padding: 10px;
+            .changeInforMation{
+                padding: 0 20px 30px;
+                border-bottom: 1px solid #d0d7e5;
+                .el-input{
+                    width: 110px;
+                    .el-input__inner{
+                        height: 24px;
+                        line-height: 24px;
                         font-size: 12px;
-                        .referenceM{
-                            display: inline-block;
-                            padding: 5px; 
-                            margin-left: 65px;
-                        }
-                        .el-input {
-                            width: 90px;
-                        }
+                        color: #3e9ff1;
                     }
-                    .nowChange{
+                }
+                .nowCity{
+                    h4{
                         display: inline-block;
-                        margin-left: 80px;
-                        .el-input{
-                            width: 90px;
+                        width: 111px;
+                        span{
+                            color: red;
                         }
                     }
-                    .nowChangeInfo{
-                        margin-left: 32px;
+                }
+                .chose{
+                    display: inline-block;
+                    margin:10px 30px 10px 0; 
+                    p{
+                        display: inline-block;
+                        height: 24px;
+                        line-height: 24px;
+                        span{
+                            color: red;
+                        }
                     }
                     
                 }
+                .reference{
+                    border: 1px dashed #ccc;
+                    margin:10px; 
+                    padding: 10px;
+                    font-size: 12px;
+                    .referenceM{
+                        display: inline-block;
+                        padding: 5px; 
+                        margin-left: 50px;
+                    }
+                    .el-input {
+                        width: 120px;
+                    }
+                }
+                .nowChange{
+                    display: inline-block;
+                    margin-left: 60px;
+                    .el-input{
+                        width: 120px;
+                    }
+                    .el-form-item {
+                        margin-right: 0;
+                        margin-bottom: 0;
+                        vertical-align: middle;
+                    }
+                }
+                .nowChangeInfo{
+                    margin-left: 32px;
+                }
+                    
+            }
+            }
             .el-dialog__footer{
                 padding:10px 20px;
             }

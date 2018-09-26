@@ -4,7 +4,7 @@
             <div class="shipperOfdispatch commoncss">
                 <el-dialog :title='formtitle' :close-on-click-modal="true"  :visible="dialogFormVisible" @close="close">
                     
-                    <div class="bindLeft fl bind">
+                    <div class="bindLeft  bind">
                         <div class="chooseBindTime">
                             <p><span>* </span>绑定开始时间 ：</p>
                             <el-date-picker
@@ -25,7 +25,7 @@
                             </div>  
                         </div>
                     </div>
-                    <div class="bindright fr bind">
+                    <div class="bindright  bind">
                         <div class="chooseBindTime">
                             <p><span>* </span>绑定结束时间 ：</p>
                             <el-date-picker
@@ -304,6 +304,7 @@ export default {
             margin-bottom: 0; 
             overflow: hidden;
             margin: 0 20px;
+            display: flex;
         }
         p{
             display: inline-block;
@@ -317,6 +318,7 @@ export default {
             }
         }
        .bind{
+           flex:1;
            .el-date-editor{
                width: 200px;
                .el-input__inner{
@@ -369,9 +371,6 @@ export default {
                     }
                 }
             }
-       }
-        .bindright{
-            margin-right: 40px;
        }
     }
 </style>

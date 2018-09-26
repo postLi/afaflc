@@ -21,6 +21,7 @@
                             :picker-options="pickerOptions2"
                             range-separator="-"
                             start-placeholder="开始日期"
+                            unlink-panels
                             end-placeholder="结束日期"
                             align="right"
                             :default-time="['00:00:00', '23:59:59']"

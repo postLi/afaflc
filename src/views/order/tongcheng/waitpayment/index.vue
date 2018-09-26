@@ -22,6 +22,7 @@
                             range-separator="-"
                             start-placeholder="开始日期"
                             end-placeholder="结束日期"
+                            unlink-panels
                             align="right"
                             :default-time="['00:00:00', '23:59:59']"
                             value-format="timestamp">

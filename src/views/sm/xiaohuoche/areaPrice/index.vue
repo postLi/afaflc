@@ -1,5 +1,5 @@
 <template>
-    <div class="TwoColumns serviceArea clearfix">
+    <div class="TwoColumns serviceArea clearfix" v-loading ="loading">
         <div class="columnsContainer">
             <div class="side_left">
                  <el-tree
@@ -57,24 +57,36 @@
                             label="车辆类型">
                             </el-table-column>
                             <el-table-column
-                            prop="standardPriceM"
+                            prop="standardPrice"
                             sortable
                             label="标准起步价">
+                                <template slot-scope="scope">
+                                    {{scope.row.standardPrice + '吨,' + ' ' + scope.row.standardKm + '方'}}
+                                </template>
                             </el-table-column>
                             <el-table-column
-                            prop="outstripPriceM"
+                            prop="outstripPrice"
                             sortable
-                            label="标准超里程费   ">
+                            label="标准超里程费">
+                                <template slot-scope="scope">
+                                    {{scope.row.outstripPrice + '元/公里'}}
+                                </template>
                             </el-table-column>
                             <el-table-column
-                            prop="areaPriceM"
+                            prop="areaPrice"
                             sortable
                             label="区域起步价">
+                                <template slot-scope="scope">
+                                    {{scope.row.areaPrice + '元' + '' + '(' + scope.row.areaKm + '公里)'}}
+                                </template>
                             </el-table-column>
                             <el-table-column
-                            prop="areaOutstripPriceM"
+                            prop="areaOutstripPrice"
                             sortable
                             label="区域超里程费">
+                                <template slot-scope="scope">
+                                    {{scope.row.areaOutstripPrice + '元/公里'}}
+                                </template>
                             </el-table-column>
                             <el-table-column
                             prop="usingStatus"
@@ -91,104 +103,6 @@
 
                 <!-- 页码 -->
                 <div class="info_tab_footer">共计:{{ dataTotal }} <div class="show_pager"> <Pager :total="dataTotal" @change="handlePageChange"  :sizes="sizes"/></div> </div>    
-
-                    <!-- 修改分类信息 -->
-                    <div class="changeclassify commoncss">
-                        <el-dialog title='修改分类信息'  :visible.sync="dialogFormVisible_change">
-                            <div class="changeInforMation">
-                                <div class="nowCity">
-                                    <h4><span>* </span>当前城市</h4>
-                                    <el-input
-                                        v-model="changeforms.areaName"
-                                        disabled
-                                        clearable>
-                                    </el-input>
-                                </div>
-                                <div class="chose">
-                                    <p><span>* </span>当前服务分类 ：</p>
-                                    <el-input
-                                        v-model="changeforms.serviceName"
-                                        :disabled="true">
-                                    </el-input>
-                                </div>
-                                    <div class="chose">
-                                    <p><span>* </span>当前车辆类型 ：</p>
-                                    <el-input
-                                        v-model="changeforms.carTypeName"
-                                        :disabled="true">
-                                    </el-input>
-                                </div>
-                                <div class="chose">
-                                    <p><span>* </span>车长 ：</p>
-                                    <el-input
-                                    
-                                        v-model="changeforms.carTypeStyle"
-                                        :disabled="true">
-                                    </el-input>
-                                </div>
-                                <div class="reference">
-                                    <div class="referenceM">
-                                            <span class="control">标准起步价</span>
-                                            <el-input
-                                                disabled
-                                                v-model="changeforms.standardPrice"
-                                                clearable>
-                                            </el-input>
-                                            <span>元</span>
-                                            <el-input
-                                                disabled
-                                                v-model="changeforms.standardKm"
-                                                clearable>
-                                            </el-input>
-                                            <span>公里</span>
-                                        </div>
-                                        <div class="referenceM">
-                                            <span class="control">超里程费</span>         
-                                            <el-input
-                                                disabled
-                                                v-model="changeforms.outstripPrice"
-                                                clearable>
-                                            </el-input>
-                                            <span>元 / 公里</span>
-                                        </div>       
-                                </div>
-                                <div class="nowChange">
-                                    <span class="control">区域起步价</span>
-                                    <el-input
-                                        v-numberOnly
-                                        placeholder="请输入内容"
-                                        v-model="changeforms.areaPrice"
-                                        ref="newPrice"
-                                        clearable>
-                                    </el-input>
-                                    <span>元</span>
-                                    <el-input
-                                        v-numberOnly                                   
-                                        placeholder="请输入内容"
-                                        v-model="changeforms.areaKm"
-                                        ref="newInfoKm"
-                                        clearable>
-                                    </el-input>
-                                    <span>公里</span>
-                                </div>
-                                <div class="nowChange nowChangeInfo">
-                                    <span class="control">区域超里程费</span>         
-                                    <el-input
-                                        v-numberOnly                                    
-                                        placeholder="请输入内容"
-                                        v-model="changeforms.areaOutstripPrice"
-                                        ref="newMorePrice"
-                                        clearable>
-                                    </el-input>
-                                    <span>元 / 公里</span>
-                                </div>       
-                            </div>
-                            <div slot="footer" class="dialog-footer">
-                                <el-button type="primary" @click="changeInfoSave">保 存</el-button>
-                                <el-button  @click="dialogFormVisible_change = false">取 消</el-button>
-                            </div>
-                        </el-dialog>
-                    </div>
             </div>
             <AreaPrice :dialogAreaPrice.sync="dialogAreaPrice" :reviseForm = 'reviseForm' :formtitle = 'formtitle' :isModify = "isModify"   @close = "shuaxin"/>
         </div>
@@ -197,7 +111,7 @@
 
 <script type="text/javascript">
 
-import { data_GetCityList, data_GetCityInfo, data_CarList, data_ServerClassList, data_ChangeStatus, data_Delete, data_GetCarStyle, data_NewOrChange, data_OnlyChange } from '@/api/server/areaPrice.js'
+import {  data_GetCityInfo, data_ChangeStatus, data_Delete } from '@/api/server/areaPrice.js'
 import { aflcProvinceCode } from '@/api/common.js'
 import AreaPrice from './AreaPrice'
 import Pager from '@/components/Pagination/index'
@@ -210,6 +124,7 @@ import '@/styles/side.scss'
 export default{
       data() {
           return {
+                loading:false,
               cityTree:[],
               dialogAreaPrice:false,
               isModify:false,
@@ -225,22 +140,7 @@ export default{
                 },
               page: 1,
               pagesize: 20,
-              dialogFormVisible_change: false,
               dataTotal: 0,
-              changeforms: {
-                  areaKm: '',
-                  areaName: '',
-                  areaOutstripPrice: '',
-                  areaPid: '',
-                  areaPrice: '',
-                  carType: '',
-                  cityId: '',
-                  outstripPrice: '',
-                  serivceCode: '',
-                  standardKm: '',
-                  standardPrice: '',
-                  standardPriceId: ''
-                },
               checkedinformation: [],
               tableData: [],
               defaultProps: {
@@ -297,22 +197,15 @@ export default{
                 }
                 switch(type){
                     case 'add':
-                        // this.dialogFormVisible = true;
                         this.isModify = false;
                         this.dialogAreaPrice = true;
+                        this.formtitle = '';
                         break;
                     case 'revise':
-                        // this.dialogFormVisible_change = true
                         this.reviseForm =objectMerge2({},this.checkedinformation[0]);
                         this.isModify = true;
                         this.dialogAreaPrice = true;
-
-                        // if (this.checkedinformation[0].cityId) {
-                        // this.changeforms.cityId = this.checkedinformation[0].cityId
-                        // }else {
-                        // this.changeforms.cityId = this.checkedinformation[0].provinceId
-                        // }
-                        // this.changeforms.carTypeStyle = this.checkedinformation[0].carLength + '*' + this.checkedinformation[0].carWidth + '*' + this.checkedinformation[0].carHeight + 'M'
+                        this.formtitle = '修改区域定价';
                         break;
                     case 'delet':
                         const delID = []
@@ -362,24 +255,20 @@ export default{
             },
             // 查询和获取对应区域的数据
             getCommonFunction() {
+                this.loading = true;
                 const data = Object.assign({}, { cityId: this.cityId, provinceId: this.provinceId }, this.searchInfo)
                 // console.log(data);
                 data_GetCityInfo(this.page, this.pagesize, data).then(res => {
                   console.log(res.data.list)
                     this.tableData = res.data.list;
                     this.dataTotal = res.data.totalCount;
-                     this.tableData.map((item) => {
-                        item.capacityTonM = item.capacityTon + '吨,' + ' ' + item.capacitySquare + '方'
-                        item.standardPriceM = item.standardPrice + '元 ' + ' ' + '(' + item.standardKm + '公里)'
-                        item.outstripPriceM = item.outstripPrice + '元/公里'
-                        item.areaPriceM = item.areaPrice + '元' + '' + '(' + item.areaKm + '公里)'
-                        item.areaOutstripPriceM = item.areaOutstripPrice + '元/公里'
-                    })
+                    this.loading = false;
                 }).catch(err => {
                     this.$message({
                         type: 'info',
                         message: '操作失败，原因：' + err.errorInfo ? err.errorInfo : err.text
                     })
+                    this.loading = false;
                 })
             },
             handleNodeClick(data, checked) {
@@ -401,16 +290,6 @@ export default{
             // 判断是否选中
             getinfomation(selection) {
               this.checkedinformation = selection
-            },
-            // 修改保存
-            changeInfoSave() {
-                data_OnlyChange(this.changeforms).then(res => {
-                    console.log(res)
-                    this.dialogFormVisible_change = false
-                    this.getCommonFunction()
-                }).catch(err=>{
-                    this.$message.error('操作失败，失败原因：',err.errorInfo)
-                })
             },
         }
     }

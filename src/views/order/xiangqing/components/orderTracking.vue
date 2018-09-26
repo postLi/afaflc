@@ -10,11 +10,26 @@
         </div>
         <div class="orderTrackInfo orderTrackStyle" v-for="(item,key) in listInformation" :key="key">
             <p :class="{current: key == 0 ,cancel:key ==  (listInformation.length-1)}"><i></i><span>{{item.createTime | parseTime}}</span></p>
-            <p>{{item.remark}}</p>
-            <p>{{item.address}}</p>
-            <p>{{item.remark}}</p>  
-            <p>{{item.runException}}</p>
-            <p>{{item.loadAndUnloadException}}</p>
+            <el-tooltip placement="top" effect="light">
+                <div slot="content">{{item.remark}}</div>
+                <p>{{item.remark}}</p>
+            </el-tooltip>
+            <el-tooltip placement="top" effect="light">
+                <div slot="content">{{item.address}}</div>
+                <p>{{item.address}}</p>
+            </el-tooltip>
+            <el-tooltip placement="top" effect="light">
+                <div slot="content">{{item.runException}}</div>
+                <p>{{item.runException}}</p>
+            </el-tooltip>
+            <el-tooltip placement="top" effect="light">
+                <div slot="content">{{item.runException}}</div>
+                <p>{{item.runException}}</p>
+            </el-tooltip>
+            <el-tooltip placement="top" effect="light">
+                <div slot="content">{{item.loadAndUnloadException}}</div>
+                <p>{{item.loadAndUnloadException}}</p>
+            </el-tooltip>
         </div>
     </div>
 </template>
@@ -74,10 +89,12 @@ export default {
     .ordertrack{
         padding: 10px 20px;
         .orderTrackStyle{
-           
             p,h2{
                 width: 15%;
                 margin: 0 1%;
+                white-space:nowrap;
+                text-overflow:ellipsis;
+                overflow:hidden;
             }
             p:last-child,h2:last-child{
                 width: 200px;
@@ -94,6 +111,7 @@ export default {
                 font-size: 14px;
                 color: #333;
                 line-height: 24px;
+
             }
             
             h2:first-child{
