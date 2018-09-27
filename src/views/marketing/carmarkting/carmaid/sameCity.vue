@@ -80,17 +80,17 @@
                     {{scope.row.province+scope.row.city+scope.row.area}}
                 </template>
             </el-table-column>
-            <el-table-column  label="车辆类型" prop="carType" sortable>
+            <el-table-column  label="车辆类型" prop="carType" sortable :show-overflow-tooltip="true">
             </el-table-column>
-            <el-table-column  label="车主抽佣等级" prop="commissionGrade" sortable>
+            <el-table-column  label="车主抽佣等级" prop="commissionGrade" sortable :show-overflow-tooltip="true">
             </el-table-column>
-            <el-table-column  label="开始抽佣单数" prop="startNum" sortable>
+            <el-table-column  label="开始抽佣单数" prop="startNum" sortable :show-overflow-tooltip="true">
             </el-table-column>
-            <el-table-column  label="结束抽佣单数" prop="endNum" sortable>
+            <el-table-column  label="结束抽佣单数" prop="endNum" sortable :show-overflow-tooltip="true">
             </el-table-column>       
-            <el-table-column  label="每单抽佣（%）" prop="commissionPer" sortable>
+            <el-table-column  label="每单抽佣（%）" prop="commissionPer" sortable :show-overflow-tooltip="true">
             </el-table-column>                                                       
-            <el-table-column  label="最低抽佣(元)" prop="commissionLowest" sortable>
+            <el-table-column  label="最低抽佣(元)" prop="commissionLowest" sortable :show-overflow-tooltip="true">
             </el-table-column>
             <el-table-column  label="启用状态" sortable>
             <template  slot-scope="scope">
@@ -115,7 +115,7 @@ import { parseTime } from '@/utils/'
 export default {
   data() {
     return {
-      btnsize:'mini',
+      btnsize: 'mini',
       options: regionDataPlus,
       selectRowData: {},
       selectId: [],
@@ -216,13 +216,13 @@ export default {
     },
 
      // 判断选中与否
-    getSelection(val){
-     console.log('选中内容',val)
-     this.selectRowData = val;
-   },
-    //点击选中当前行
-    clickDetails(row, event, column){
-      this.$refs.multipleTable.toggleRowSelection(row);
+    getSelection(val) {
+      console.log('选中内容', val)
+      this.selectRowData = val
+    },
+    // 点击选中当前行
+    clickDetails(row, event, column) {
+      this.$refs.multipleTable.toggleRowSelection(row)
     },
         // 每页显示数据量变更
     handlePageChange(obj) {
@@ -232,18 +232,18 @@ export default {
     },
         // 选择删除
     delete_data() {
-          if(this.selectRowData.length == 0){
-               this.$message.warning('请选择您要操作的用户');
-               return
-          }else if (this.selectRowData.length > 1) {
-                this.$message({
-                    message: '每次只能操作单条数据~',
-                    type: 'warning'
-                })
-               this.$refs.multipleTable.clearSelection();
-          }else {
-        this.delDataInformation()
-      }
+      if (this.selectRowData.length == 0) {
+        this.$message.warning('请选择您要操作的用户')
+        return
+      } else if (this.selectRowData.length > 1) {
+            this.$message({
+              message: '每次只能操作单条数据~',
+              type: 'warning'
+            })
+            this.$refs.multipleTable.clearSelection()
+          } else {
+            this.delDataInformation()
+          }
     },
        // 确认删除
     delDataInformation() {
@@ -255,18 +255,18 @@ export default {
         data_Del_Marketingsame(this.selectRowData[0].id).then(res => {
           this.$message.success('删除成功')
           this.firstblood()
-          this.$refs.multipleTable.clearSelection();
+          this.$refs.multipleTable.clearSelection()
         }).catch(err => {
           this.firstblood()
-          this.$refs.multipleTable.clearSelection();
+          this.$refs.multipleTable.clearSelection()
           this.$message({
             type: 'info',
             message: '操作失败，原因：' + err.text ? err.text : err
           })
         })
       }).catch(() => {
-          this.firstblood()
-          this.$refs.multipleTable.clearSelection();
+        this.firstblood()
+        this.$refs.multipleTable.clearSelection()
         this.$message({
           type: 'info',
           message: '已取消'
@@ -275,35 +275,34 @@ export default {
     },
       // 启用禁用
     handleUseStates() {
-          if(this.selectRowData.length == 0){
-               this.$message.warning('请选择您要操作的用户');
-               return
-          }else if (this.selectRowData.length > 1) {
-                this.$message({
-                    message: '每次只能操作单条数据~',
-                    type: 'warning'
-                })
-               this.$refs.multipleTable.clearSelection();
-          }
-        else {
-        this.selectId.push(this.selectRowData[0].id)
+      if (this.selectRowData.length == 0) {
+        this.$message.warning('请选择您要操作的用户')
+        return
+      } else if (this.selectRowData.length > 1) {
+            this.$message({
+              message: '每次只能操作单条数据~',
+              type: 'warning'
+            })
+            this.$refs.multipleTable.clearSelection()
+          } else {
+            this.selectId.push(this.selectRowData[0].id)
 
-        data_Able_Marketingsame(this.selectId).then(res => {
-          this.selectId.splice(0, 1)
-          if (this.selectRowData[0].usingStatus == 1) {
+            data_Able_Marketingsame(this.selectId).then(res => {
+              this.selectId.splice(0, 1)
+              if (this.selectRowData[0].usingStatus == 1) {
             this.$message.warning('已禁用')
           } else {
             this.$message.success('已启用')
           }
-          this.firstblood();
-          this.$refs.multipleTable.clearSelection();
-        })
-      }
-    },
-        getDataList(){
-            this.firstblood()
-            this.$refs.multipleTable.clearSelection();
+              this.firstblood()
+              this.$refs.multipleTable.clearSelection()
+            })
           }
+    },
+    getDataList() {
+      this.firstblood()
+      this.$refs.multipleTable.clearSelection()
+    }
   },
 
   mounted() {

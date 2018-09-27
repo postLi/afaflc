@@ -1,18 +1,18 @@
 import fetch from '@/utils/fetch'
-const baseurl_two = "aflccommonservice"
-const baseurl = "aflcsmservice"
+const baseurl_two = 'aflccommonservice'
+const baseurl = 'aflcsmservice'
 
 /**
  * 获取城市数据
  */
 export function getCityInfo(code) {
-    code = code || ''
-    return fetch.get('/aflccommonservice/common/aflcCommonPCA/v1/findAflcCommonPCAByCode?code=' + code).then(res => {
-      res.code = code
-      return res
-    })
-  }
-  
+  code = code || ''
+  return fetch.get('/aflccommonservice/common/aflcCommonPCA/v1/findAflcCommonPCAByCode?code=' + code).then(res => {
+    res.code = code
+    return res
+  })
+}
+
 // 通过数据字典查询
 /**
  * @export
@@ -20,44 +20,46 @@ export function getCityInfo(code) {
  * @returns
  */
 export function getDictionary(code) {
-    return fetch({
-      url: '/' + baseurl_two + '/sysDict/getSysDictByCodeGet/' + code,
-      method: 'get'
-    })
-  }
-
-
+  return fetch({
+    url: '/' + baseurl_two + '/sysDict/getSysDictByCodeGet/' + code,
+    method: 'get'
+  })
+}
+// 处理状态
+export function DicDelStatusType() {
+  return fetch.get('/' + baseurl_two + '/sysDict/getSysDictByCodeGet/AF048')
+}
   //  数据字典获取移入黑名单原因列表
 export function DicBlackType() {
-    return fetch.get('/' + baseurl_two + '/sysDict/getSysDictByCodeGet/AF02004')
-  }
+  return fetch.get('/' + baseurl_two + '/sysDict/getSysDictByCodeGet/AF02004')
+}
 
   // 获取冻结原因字典
 export function DicfreezeType() {
-    return fetch.get('/' + baseurl_two + '/sysDict/getSysDictByCodeGet/AF02003')
-  }
+  return fetch.get('/' + baseurl_two + '/sysDict/getSysDictByCodeGet/AF02003')
+}
 
   // 获取服务分类
-  export function DicServiceType() {
-    return fetch.get('/' + baseurl_two + '/sysDict/getSysDictByCodeGet/AF017')
-  }
+export function DicServiceType() {
+  return fetch.get('/' + baseurl_two + '/sysDict/getSysDictByCodeGet/AF017')
+}
     // 获取车辆类型
 export function DicCartype() {
-    return fetch.get('/' + baseurl_two + '/sysDict/getSysDictByCodeGet/AF018')
-    }
+  return fetch.get('/' + baseurl_two + '/sysDict/getSysDictByCodeGet/AF018')
+}
 
-//根据服务分类和车辆类型选择车长
-export function GetCarStyle(serviceTypeCode,cartypeCode) {
-    return fetch({
-      url: '/'+baseurl+'/sm/aflcStandardPrice/v1/getPriceByServiceAndCarType/'+serviceTypeCode+'/'+cartypeCode,
-      method: 'get'
-    })
-  }
+// 根据服务分类和车辆类型选择车长
+export function GetCarStyle(serviceTypeCode, cartypeCode) {
+  return fetch({
+    url: '/' + baseurl + '/sm/aflcStandardPrice/v1/getPriceByServiceAndCarType/' + serviceTypeCode + '/' + cartypeCode,
+    method: 'get'
+  })
+}
 
     // 获取货主类型
 export function DicShippertype() {
   return fetch.get('/' + baseurl_two + '/sysDict/getSysDictByCodeGet/AF00101')
-    }
+}
 /**
  * 获取图片上传的policy
  * callback
@@ -72,7 +74,6 @@ export function DicShippertype() {
  */
 let UPLOADPOLICYDATA // 用来缓存上传policy
 export function getUploadPolicy() {
-
   // 后期可添加是否过期的验证
   if (UPLOADPOLICYDATA) {
     return new Promise((resolve) => {
@@ -102,58 +103,55 @@ export function getSelectType(type = '', orgid) {
   })
 }
 
-
-//获取车辆规格 加宽  加长等
+// 获取车辆规格 加宽  加长等
 export function data_GetCarType() {
-    return fetch({
-      url: '/'+baseurl_two+'/sysDict/getSysDictByCodeGet/AF009',
-      method: 'get'
-    })
-  }
-
-  // 获取省级数据
-export function data_getProvinceList(){
-  return fetch.get('/'+baseurl+'/sm/aflcDistrict/v1/getProvinceList') 
+  return fetch({
+    url: '/' + baseurl_two + '/sysDict/getSysDictByCodeGet/AF009',
+    method: 'get'
+  })
 }
 
+  // 获取省级数据
+export function data_getProvinceList() {
+  return fetch.get('/' + baseurl + '/sm/aflcDistrict/v1/getProvinceList')
+}
 
 // 获取省级对应的城市列表
 export function data_GetCityList(code) {
   return fetch({
-    url: '/'+baseurl+'/sm/aflcDistrict/v1/lists',
+    url: '/' + baseurl + '/sm/aflcDistrict/v1/lists',
     method: 'post',
     data: {
-      "code": code
+      'code': code
     }
   })
 }
 
-//获取车辆类型列表
-export function data_CarList(){
-  return fetch.get('/'+baseurl+'/sm/aflcSysDict/v1/getCarTypeList') 
+// 获取车辆类型列表
+export function data_CarList() {
+  return fetch.get('/' + baseurl + '/sm/aflcSysDict/v1/getCarTypeList')
 }
 
-//获取服务分类子分类
-export function data_ServerClassList(){
-  return fetch.get('/'+baseurl+'/sm/aflcSysDict/v1/getServiceClassList') 
+// 获取服务分类子分类
+export function data_ServerClassList() {
+  return fetch.get('/' + baseurl + '/sm/aflcSysDict/v1/getServiceClassList')
 }
 
-//获取会员服务承诺
+// 获取会员服务承诺
 export function data_LogisticsCompany() {
-    return fetch({
-      url: '/'+baseurl_two+'/sysDict/getSysDictByCodeGet/AF025',
-      method: 'get'
-    })
-  }
+  return fetch({
+    url: '/' + baseurl_two + '/sysDict/getSysDictByCodeGet/AF025',
+    method: 'get'
+  })
+}
 
+  // 获取三级业务城市树表
+export function aflcAreaCode() {
+  return fetch.get('/' + baseurl_two + '/common/aflcCityTree/v1/treaCode')
+}
 
-  //获取三级业务城市树表
-  export function aflcAreaCode(){
-      return fetch.get('/'+ baseurl_two+'/common/aflcCityTree/v1/treaCode')
-  }
-
-  //获取二级业务城市树表
-  export function aflcProvinceCode(){
-    return fetch.get('/'+ baseurl_two+'/common/aflcCityTree/v1/provinceCode')
+  // 获取二级业务城市树表
+export function aflcProvinceCode() {
+  return fetch.get('/' + baseurl_two + '/common/aflcCityTree/v1/provinceCode')
 }
 

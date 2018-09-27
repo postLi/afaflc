@@ -245,97 +245,97 @@ export default{
   methods: {
     exportExcel() {
                 /* generate workbook object from table */
-              var wb = XLSX.utils.table_to_book(document.querySelector('#out-table'))
+      var wb = XLSX.utils.table_to_book(document.querySelector('#out-table'))
                             /* get binary string as output */
-              var wbout = XLSX.write(wb, { bookType: 'xlsx', bookSST: true, type: 'array' })
-              console.log(wb)
-              console.log(wbout)
-              try {
-                  FileSaver.saveAs(new Blob([wbout], { type: 'application/octet-stream' }), 'sheetjs.xlsx')
-                } catch (e) { if (typeof console !== 'undefined') console.log(e, wbout) }
-              return wbout
-            },
+      var wbout = XLSX.write(wb, { bookType: 'xlsx', bookSST: true, type: 'array' })
+      console.log(wb)
+      console.log(wbout)
+      try {
+                FileSaver.saveAs(new Blob([wbout], { type: 'application/octet-stream' }), 'sheetjs.xlsx')
+              } catch (e) { if (typeof console !== 'undefined') console.log(e, wbout) }
+      return wbout
+    },
     regionChange(d) {
-              console.log('data:', d)
-              this.searchInfo.belongCityName = (!d.province && !d.city && !d.area && !d.town) ? '' : `${this.getValue(d.province)}${this.getValue(d.city)}${this.getValue(d.area)}${this.getValue(d.town)}`.trim()
-                if (d.area) {
+      console.log('data:', d)
+      this.searchInfo.belongCityName = (!d.province && !d.city && !d.area && !d.town) ? '' : `${this.getValue(d.province)}${this.getValue(d.city)}${this.getValue(d.area)}${this.getValue(d.town)}`.trim()
+      if (d.area) {
                   this.searchInfo.belongCity = d.area.code
                 } else if (d.city) {
                   this.searchInfo.belongCity = d.city.code
-                }                else {
+                } else {
                   this.searchInfo.belongCity = d.province.code
                 }
-            },
+    },
     getValue(obj) {
-               return obj ? obj.value : ''
-            },
+      return obj ? obj.value : ''
+    },
     handlePageChange(obj) {
-              this.page = obj.pageNum
-                this.pagesize = obj.pageSize
-                this.firstblood()
-            },
+      this.page = obj.pageNum
+      this.pagesize = obj.pageSize
+      this.firstblood()
+    },
             // 刷新页面
     firstblood() {
-              this.loading = true
+      this.loading = true
 
-                orderStatusList(this.page, this.pagesize, this.searchInfo).then(res => {
+      orderStatusList(this.page, this.pagesize, this.searchInfo).then(res => {
                   console.log('待付款', res)
                   this.tableData = res.data.list
                   this.dataTotal = res.data.totalCount
 
                   this.tableData.forEach(item => {
-                      item.aflcOrderAddresses.sort(function(a, b) {
-                          return a.viaOrder - b.viaOrder
-                        })
-                    })
+                    item.aflcOrderAddresses.sort(function(a, b) {
+                        return a.viaOrder - b.viaOrder
+                      })
+                  })
                   this.loading = false
                 })
-            },
+    },
 
             // 模糊查询 分类名称或者code
     handleSearch(type) {
-              switch (type) {
-                  case 'search':
-                    if (this.chooseTime) {
-                          this.searchInfo.startOrderDate = this.chooseTime[0]
-                          this.searchInfo.endOrderDate = this.chooseTime[1]
-                        } else {
-                          this.searchInfo.startOrderDate = ''
-                          this.searchInfo.endOrderDate = ''
-                        }
-                    this.firstblood()
-                    break
-                    case 'clear':
-                    this.searchInfo = {
-                          belongCity: '', // 区域
-                          shipperName: '', // 货主
-                          startOrderDate: '', // 下单起始时间
-                          endOrderDate: '', // 下单结束时间
-                          orderSerial: '', // 订单号
-                          parentOrderStatus: 'AF00801' // 订单状态待支付
-                        }
-                    this.chooseTime = ''
-                    this.firstblood()
-                    break
-                    case 'outExce':
-                    this.exportExcel()
-                    break
-                }
+      switch (type) {
+                case 'search':
+                  if (this.chooseTime) {
+                      this.searchInfo.startOrderDate = this.chooseTime[0]
+                      this.searchInfo.endOrderDate = this.chooseTime[1]
+                    } else {
+                      this.searchInfo.startOrderDate = ''
+                      this.searchInfo.endOrderDate = ''
+                    }
+                  this.firstblood()
+                  break
+                case 'clear':
+                  this.searchInfo = {
+                      belongCity: '', // 区域
+                      shipperName: '', // 货主
+                      startOrderDate: '', // 下单起始时间
+                      endOrderDate: '', // 下单结束时间
+                      orderSerial: '', // 订单号
+                      parentOrderStatus: 'AF00801' // 订单状态待支付
+                    }
+                  this.chooseTime = ''
+                  this.firstblood()
+                  break
+                case 'outExce':
+                  this.exportExcel()
+                  break
+              }
                 // 清除选中状态，避免影响下个操作
-              this.$refs.multipleTable.clearSelection()
-            },
+      this.$refs.multipleTable.clearSelection()
+    },
                         // 判断是否选中
     getinfomation(selection) {
-              this.checkedinformation = selection
-            },
+      this.checkedinformation = selection
+    },
                     // 点击选中当前行
     clickDetails(row, event, column) {
-              this.$refs.multipleTable.toggleRowSelection(row)
-            },
+      this.$refs.multipleTable.toggleRowSelection(row)
+    },
                     // 详情弹窗
     pushOrderSerial(item) {
-              this.$router.push({ name: '订单详情', query: { orderSerial: item.orderSerial }})
-            }
+      this.$router.push({ name: '订单详情', query: { orderSerial: item.orderSerial }})
+    }
   }
 }
 </script>
