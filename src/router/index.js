@@ -50,8 +50,12 @@ export const constantRouterMap = [
     },
     hidden: true,
     children: [{
-      path: '/dashboard', name: '首页', icon: 'shouye', component: _import('dashboard/index'),
-      meta: { title: '首页', noCache: true }
+      path: '/dashboard', 
+      name: '首页', 
+      icon: 'shouye', 
+      hidden:false,
+      component: _import('dashboard/index'),
+        meta: {  title: '运营控制台',noCache: false }
     }, {
       path: '/common/myinfo',
       icon: 'information',

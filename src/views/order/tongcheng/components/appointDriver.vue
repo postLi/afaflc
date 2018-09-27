@@ -29,18 +29,17 @@
                     </el-form>
                     <div class="pointInfo">
                         <div class="pointChoose">
-                            <el-button type="primary" class="el-icon-edit" plain  @click="pointXX">指派给选中车主</el-button>
+                            <el-button type="primary" :size="btnsize" class="el-icon-edit" plain  @click="pointXX">指派给选中车主</el-button>
                             <el-table
                             ref="multipleTable"
                             :data="tableData_point"
                             stripe
                             border
-                            align = "center"
                             @selection-change = "getinfomation"
                             tooltip-effect="dark"
                             @row-click="clickDetails"
                             style="width: 100%"> 
-                                <el-table-column label="选择" width="60" fixed>
+                                <el-table-column label="选择" width="55">
                                     <template slot-scope="scope">
                                         <el-radio class="textRadio" @change.native="getCurrentRow(scope.$index,scope.row)" :label="scope.$index" v-model="templateRadio">&nbsp;</el-radio>
                                     </template>
@@ -51,27 +50,24 @@
                                     </template>
                                 </el-table-column>  
                                 <el-table-column
-                                    align = "center"
+                                    :show-overflow-tooltip="true"
                                     prop="driverMobile"
                                     label="车主账号">
                                 </el-table-column>
                                 <el-table-column
-                                    align = "center"
+                                    :show-overflow-tooltip="true"
                                     prop="driverName"
                                     label="车主姓名">
                                 </el-table-column>
                                 <el-table-column
-                                align = "center"
                                 prop="carNumber"
                                 label="车牌号码">
                                 </el-table-column>
                                 <el-table-column
-                                align = "center"
                                 prop="carType"
                                 label="车型">
                                 </el-table-column>
                                 <el-table-column
-                                align = "center"
                                 prop="distance"
                                 label="距离提货地(KM)">
                                     <template slot-scope="scope">
@@ -79,12 +75,10 @@
                                     </template>
                                 </el-table-column>
                                 <el-table-column
-                                align = "center"
                                 prop="obtainGrade"
                                 label="中单等级">
                                 </el-table-column>
                                 <el-table-column
-                                align = "center"
                                 prop="isVipCar"
                                 label="是否特权车">
                                     <template slot-scope="scope">
@@ -92,27 +86,22 @@
                                     </template>
                                 </el-table-column>
                                  <el-table-column
-                                align = "center"
                                 prop="distance"
                                 label="是否货主收藏司机">
                                 </el-table-column>
                                 <el-table-column
-                                align = "center"
                                 prop="endTime"
                                 label="本日与该货主交易次数">
                                 </el-table-column>
                                 <el-table-column
-                                align = "center"
                                 prop="endTime"
                                 label="本月与该货主交易次数">
                                 </el-table-column>
                                 <el-table-column
-                                align = "center"
                                 prop="bindingSource"
                                 label="本月累计交易次数">
                                 </el-table-column>
                                 <el-table-column
-                                    align = "center"
                                 prop="usingStatus"
                                 label="本月交易成功订单量">
                                 </el-table-column>
@@ -279,7 +268,7 @@ export default {
         .el-dialog__body{
             position: relative;
             .pointInfo{
-                padding: 40px 10px 0 ;
+                padding: 0 10px;
                 .pointChoose{
                     .el-button{
                         span{

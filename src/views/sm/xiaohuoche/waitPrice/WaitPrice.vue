@@ -1,96 +1,161 @@
 <template>
     <div class="commoncss areaPrice">
         <el-dialog :title="formtitle" :close-on-click-modal="false" :visible="dialogWaitPrice" @close="close" v-loading="loading">
-            <el-form :inline="true" v-if="!isModify" :model="standForm" :rules="newrules"  ref="ruleForm"  label-position="left" size="mini">
-                <div class="newWait">
-                    <div class="threePass">
-                        <div class="chooseAera chooseCommon">
-                            <h4><span>* </span> 选择省市</h4>
-                            <div class="eltree_search lesscommon">
-                                <el-input
-                                class="el_search"
-                                placeholder=""
-                                suffix-icon="el-icon-search"
-                                v-model="filterText">
-                                </el-input>
-                                <el-tree
-                                    show-checkbox
-                                    :data="cityTree"
-                                    :props="defaultProps"
-                                    node-key="code"
-                                    ref = 'tree'
-                                    :highlight-current = "true"
-                                    :filter-node-method="filterNode"
-                                    >
-                                </el-tree>
-                            </div>
-                            <div class="infowrite">
-                                <!-- <p><span>* </span>免费</p> -->
-                                <el-form-item class="nowCity" label="免费：" prop="carType">
-                                    <el-input  
-                                        v-number-only:point
-                                        placeholder="请输入内容"
-                                        v-model="standForm.freeTime"
-                                        clearable>
-                                        <template slot="append">小时</template>
-                                    </el-input>
-                                </el-form-item>
-                            </div>
+            <el-form class="newWait" v-if="!isModify" :model="standForm" :label-width="formLabelWidth" :rules="newrules"  ref="ruleForm">
+                <div class="threePass">
+                    <div class="chooseAera chooseCommon">
+                        <h4><span>* </span> 选择省市</h4>
+                        <div class="eltree_search lesscommon">
+                            <el-input
+                            class="el_search"
+                            placeholder=""
+                            suffix-icon="el-icon-search"
+                            v-model="filterText">
+                            </el-input>
+                            <el-tree
+                                show-checkbox
+                                :data="cityTree"
+                                :props="defaultProps"
+                                node-key="code"
+                                ref = 'tree'
+                                :highlight-current = "true"
+                                :filter-node-method="filterNode"
+                                >
+                            </el-tree>
                         </div>
-                        <div class="chooseServer chooseCommon">
-                            <h4><span>* </span> 选择服务分类</h4>
-                            <div class="lesscommon">
-                                <el-checkbox-group v-model="serverCheckList">
-                                    <el-checkbox v-for="item in optionsService" :label="item.code" :key="item.id" >{{item.name}}</el-checkbox>
-                                </el-checkbox-group>
-                            </div>
-                            <div class="infowrite">
-                                <p><span>* </span>每间隔</p>
-                                <el-input  
-                                    v-number-only:point
-                                    placeholder="请输入内容"
-                                    v-model="standForm.intervalTime"
-                                    clearable>
-                                    <template slot="append">分钟</template>
-                                </el-input>
-                            </div>
-                        </div>
-                        <div class="chooseCar chooseCommon">
-                            <h4><span>* </span> 选择车辆类型</h4>
-                            <div class="lesscommon ">
-                                <el-checkbox-group v-model="carCheckList">
-                                    <el-checkbox v-for="item in optionsCar" :label="item.code" :key="item.id">{{item.name}}</el-checkbox>
-                                </el-checkbox-group>
-                            </div>
-                            <div class="infowrite">
-                                <p><span>* </span>超时费用</p>
-                                <el-input  
-                                    v-number-only:point
-                                    placeholder="请输入内容"
-                                    v-model="standForm.timeOutstripPrice"
-                                    clearable>
-                                    <template slot="append">元</template>
-                                </el-input>
-                            </div>
-                        </div>
+                        <el-form-item label="免费："   prop="freeTime">
+                            <el-input  
+                                v-number-only:point
+                                placeholder="请输入内容"
+                                v-model="standForm.freeTime"
+                                clearable>
+                                <template slot="append">小时</template>
+                            </el-input>
+                        </el-form-item>
                     </div>
-                    <div class="additional ">
-                        <p>{{remarkinfo}}</p>
-                        <p>费用说明</p>
+                    <div class="chooseServer chooseCommon">
+                        <h4><span>* </span> 选择服务分类</h4>
+                        <div class="lesscommon">
+                            <el-checkbox-group v-model="serverCheckList">
+                                <el-checkbox v-for="item in optionsService" :label="item.code" :key="item.id" >{{item.name}}</el-checkbox>
+                            </el-checkbox-group>
+                        </div>
+                        <el-form-item label="每间隔："  prop="intervalTime">
+                            <el-input  
+                                v-number-only:point
+                                placeholder="请输入内容"
+                                v-model="standForm.intervalTime"
+                                clearable>
+                                <template slot="append">分钟</template>
+                            </el-input>
+                        </el-form-item>
+                    </div>
+                    <div class="chooseCar chooseCommon">
+                        <h4><span>* </span> 选择车辆类型</h4>
+                        <div class="lesscommon ">
+                            <el-checkbox-group v-model="carCheckList">
+                                <el-checkbox v-for="item in optionsCar" :label="item.code" :key="item.id">{{item.name}}</el-checkbox>
+                            </el-checkbox-group>
+                        </div>
+                        <el-form-item label="超时费用：" label-width="90px" prop="timeOutstripPrice">
+                            <el-input  
+                                v-number-only:point
+                                placeholder="请输入内容"
+                                v-model="standForm.timeOutstripPrice"
+                                clearable>
+                                <template slot="append">元</template>
+                            </el-input>
+                        </el-form-item>
+                    </div>
+                </div>
+                <div class="additional ">
+                    <p>{{remarkinfo}}</p>
+                    <el-form-item label="费用说明：" class="textArea" prop="waitPriceDes">
                         <el-input
                             placeholder="少于500字符"
                             type="textarea"
-                            :rows="2"
-                            maxlength="500"
+                            :autosize="{ minRows: 4, maxRows: 10}"
                             clearable
+                            :maxlength="maxlengthNum"
                             v-model="standForm.waitPriceDes">
                         </el-input>
-                    </div>
+                        <p class="countNum">
+                             <span class="">{{standForm.waitPriceDes.length}}</span> <span>/ {{maxlengthNum}}</span> 
+                        </p>
+                    </el-form-item>
                 </div>
             </el-form>
 
-            <el-form  :inline="true" v-else :model="reviseForm" :rules="reviserules"  ref="ruleForm"  label-position="right">
-                
+            <el-form v-else :model="reviseForm" :rules="reviserules"  :label-width="formLabelWidth2" ref="ruleForm"  label-position="left">
+                <div class="changeWait">
+                    <el-row>
+                        <el-col :span="24">
+                            <el-form-item label="当前城市：" prop="carType">
+                                <span class="onlyShow">{{reviseForm.areaName}}</span>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                    <el-row>
+                        <el-col :span="12">
+                            <el-form-item label="当前服务分类：" prop="serviceName">
+                                <span class="onlyShow">{{reviseForm.serviceName}}</span>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="12">
+                            <el-form-item label="当前车辆类型：" prop="carTypeName">
+                                <span class="onlyShow">{{reviseForm.carTypeName}}</span>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                    <el-row class="infowrite">
+                        <el-col :span="8">
+                            <el-form-item label="免费：" prop="freeTime" label-width="80px">
+                                <el-input  
+                                    placeholder="请输入内容"
+                                    v-model="reviseForm.freeTime"
+                                    clearable>
+                                    <template slot="append">小时</template>
+                                </el-input>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="8">
+                            <el-form-item label="每间隔：" prop="intervalTime" label-width="80px">
+                                <el-input  
+                                    placeholder="请输入内容"
+                                    v-model="reviseForm.intervalTime"
+                                    clearable>
+                                    <template slot="append">分钟</template>
+                                </el-input>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="8">
+                            <el-form-item label="超时费用：" prop="timeOutstripPrice" label-width="90px">
+                                <el-input  
+                                    placeholder="请输入内容"
+                                    v-model="reviseForm.timeOutstripPrice"
+                                    clearable>
+                                    <template slot="append">元</template>
+                                </el-input>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                    <div class="additional ">
+                        <p>{{remarkinfo}}</p>
+                        <el-form-item label="超时费用：" class="textArea" prop="carType">
+                            <el-input
+                                placeholder="少于500字符"
+                                type="textarea"
+                                :autosize="{ minRows: 4, maxRows: 10}"
+                                clearable
+                                :maxlength="maxlengthNum"
+                                v-model="reviseForm.waitPriceDes">
+                            </el-input>
+                            <p class="countNum">
+                                <span class="">{{reviseForm.waitPriceDes.length}}</span> <span>/ {{maxlengthNum}}</span> 
+                            </p>
+                        </el-form-item>
+                    </div>
+                </div>
             </el-form>
 
             <div slot="footer" class="dialog-footer">
@@ -103,7 +168,7 @@
 
 <script>
 import { DicServiceType,DicCartype,aflcProvinceCode } from '@/api/common.js'
-
+import { data_NewOrChange } from '@/api/server/serverWaitinfo.js'
 import { objectMerge2, parseTime } from '@/utils/'
 export default {
     name:'WaitPrice',
@@ -118,7 +183,6 @@ export default {
         },
         formtitle:{
             type:String,
-
         },
         reviseForm:{
             type:Object
@@ -129,10 +193,12 @@ export default {
     },
     data(){
         return {
+            remarkinfo: '例：免费0.25小时，每15分钟加收5元，不足15分钟按15分钟计价',
             cityTree:[],//省市区树形结构
             filterText: '',
-            maxlengthNum:200,
-            formLabelWidth:'110px',
+            maxlengthNum:500,
+            formLabelWidth:'80px',
+            formLabelWidth2:'110px',
             loading:false,
             btnShow:false,
             optionsService: [],
@@ -153,34 +219,25 @@ export default {
                 children: 'children'
             },
             newrules: {
-                serivceCode: [
-                    { required: true, message:"请选择服务类型", trigger: 'blur' },
+                freeTime: [
+                    { required: true, message:"请输入免费时长", trigger: 'blur' },
                 ],
-                carType:[
-                    { required: true, message:"请选择车辆类型", trigger: 'blur' },
+                intervalTime:[
+                    { required: true, message:"请输入每间隔时长", trigger: 'blur' },
                 ],
-                standardPriceId:[
-                    { required: true, message:"请选择车长规格", trigger: 'blur' },
+                timeOutstripPrice:[
+                    { required: true, message:"请输入超时费用", trigger: 'blur' },
                 ],
-                areaPrice:[
-                    {required:true,message:"请输入区域起步价",trigger:'blur'},
-                ],
-                areaKm:[
-                    {required:true,message:"请输入区域起步公里",trigger:'blur'},
-                ],
-                areaOutstripPrice:[
-                    {required:true,message:"请输入区域超里程费",trigger:'blur'},
-                ]
             },
             reviserules:{
-                areaPrice:[
-                    {required:true,message:"请输入区域起步价",trigger:'blur'},
+                freeTime:[
+                    {required:true,message:"请输入免费时长",trigger:'blur'},
                 ],
-                areaKm:[
-                    {required:true,message:"请输入区域起步公里",trigger:'blur'},
+                intervalTime:[
+                    {required:true,message:"请输入每间隔时长",trigger:'blur'},
                 ],
-                areaOutstripPrice:[
-                    {required:true,message:"请输入区域超里程费",trigger:'blur'},
+                timeOutstripPrice:[
+                    {required:true,message:"请输入超时费用",trigger:'blur'},
                 ]
             }
         }
@@ -198,7 +255,7 @@ export default {
             deep:true
         },
         filterText(val) {
-            // this.$refs.tree.filter(val)
+            this.$refs.tree.filter(val)
         }
 
     },
@@ -218,63 +275,75 @@ export default {
             return data.name.indexOf(value) !== -1
         },
         submitForm() {
-            // if(!this.isModify){
-            //     this.$refs.ruleForm.validate((valid) => {
-            //         let getNodeId = this.$refs.tree.getCheckedNodes();
-            //         let ifCity =  getNodeId.length>0 ?  true : false;
-            //         if (valid && ifCity) {
-            //             this.btnShow = true;
-            //             let cityArr =[];
-            //             getNodeId.forEach(el =>{
-            //                 cityArr.push(el.code);
-            //             })
-            //             let forms = objectMerge2({},this.standForm,{cityId:cityArr.join(',')})
-            //             data_NewOrChange(forms).then(res =>{
-            //                  this.close();
-            //              }).catch(err => {
-            //                  this.$message({
-            //                      type: 'info',
-            //                      message: '操作失败，原因：' + err.errorInfo ? err.errorInfo : err.text
-            //                  })
-            //                 this.btnShow = false;
-
-            //              })
-            //         } else if(!ifCity){
-            //             return this.$message({
-            //                 type: 'warning',
-            //                 message: '请选择省市'
-            //             });
-            //         }
-            //         else {
-            //             return this.$message({
-            //                 type: 'warning',
-            //                 message: '请填写完整数据'
-            //             });
-            //         }
-            //      });
-            // }else{
-            //     this.$refs.ruleForm.validate((valid) => {
-            //         if (valid ) {
-            //             this.btnShow = true;
-            //             let forms =  objectMerge2({},this.reviseForm);
-            //             data_OnlyChange(forms).then(res =>{
-            //                  this.close();
-            //              }).catch(err => {
-            //                  this.$message({
-            //                      type: 'info',
-            //                      message: '操作失败，原因：' + err.errorInfo ? err.errorInfo : err.text
-            //                  })
-            //                 this.btnShow = false;
-            //              })
-            //         } 
-            //         else {
-            //             return this.$message({
-            //                 type: 'warning',
-            //                 message: '请填写完整数据'
-            //             });
-            //         }
-            //      });
-            // }
+            if(!this.isModify){
+                let getNodeId = this.$refs.tree.getCheckedNodes();
+                let ifCity =  getNodeId.length>0 ?  true : false;
+                if(!ifCity){
+                    return this.$message({
+                        type: 'warning',
+                        message: '请选择省市~'
+                    });
+                }else if(this.serverCheckList.length == 0){
+                    return this.$message({
+                        type: 'warning',
+                        message: '请选择服务分类~'
+                    });
+                }else if(this.carCheckList.length == 0){
+                    return this.$message({
+                        type: 'warning',
+                        message: '请选择车辆类型~'
+                    });
+                }else{
+                    this.$refs.ruleForm.validate((valid) => {
+                        let serviceCode = this.serverCheckList.join(',');
+                        let carCode = this.carCheckList.join(',');
+                        if (valid) {
+                            this.btnShow = true;
+                            let cityArr =[];
+                            getNodeId.forEach(el =>{
+                                cityArr.push(el.code);
+                            })
+                            let forms = objectMerge2({},this.standForm,{cityId:cityArr.join(',')},{serviceCode:serviceCode,carType:carCode})
+                            console.log(forms)
+                            data_NewOrChange(forms).then(res =>{
+                                 this.close();
+                             }).catch(err => {
+                                 this.$message({
+                                     type: 'info',
+                                     message: '操作失败，原因：' + err.errorInfo ? err.errorInfo : err.text
+                                 })
+                                this.btnShow = false;
+                             })
+                        }else {
+                            return this.$message({
+                                type: 'warning',
+                                message: '请填写完整数据'
+                            });
+                        }
+                    });
+                }
+            }else{
+                this.$refs.ruleForm.validate((valid) => {
+                    if (valid ) {
+                        this.btnShow = true;
+                        let forms =  objectMerge2({},this.reviseForm);
+                        data_NewOrChange(forms).then(res=>{
+                             this.close();
+                         }).catch(err => {
+                             this.$message({
+                                 type: 'info',
+                                 message: '操作失败，原因：' + err.errorInfo ? err.errorInfo : err.text
+                             })
+                            this.btnShow = false;
+                         })
+                    }else {
+                        return this.$message({
+                            type: 'warning',
+                            message: '请填写完整数据'
+                        });
+                    }
+                 });
+            }
         },  
         close(){
             this.$refs.ruleForm.resetFields();
@@ -338,45 +407,6 @@ export default {
                             line-height: 26px;
                         }
                     }
-                    .infowrite{
-                        // p{
-                        //     display: inline-block;
-                        //     width:60px;
-                        //     text-align: right;
-                        //     font-family: MicrosoftYaHei;
-                        //     font-size: 12px;
-                        //     font-weight: normal;
-                        //     font-stretch: normal;
-                        //     line-height: 20px;
-                        //     letter-spacing: 0px;
-                        //     color: #666;
-                        //     span{
-                        //         color:red;
-                        //     }
-                        // }
-                        // span{
-                        //     font-size:12px;
-                        //     line-height: 20px;
-                        //     color:#666;
-                        // }
-                        .el-input{
-                            margin:0 5px;
-                            width: 155px;
-                            .el-input__inner{
-                                height: 24px;
-                                line-height: 24px;
-                                padding:0 7px;
-                                font-family: MicrosoftYaHei;
-                                font-size: 12px;
-                                font-weight: normal;
-                                font-stretch: normal;
-                                line-height: 20px;
-                                letter-spacing: 0px;
-                                color: #3e9ff1;
-                            }
-                        }
-                    }
-                   
                 }
                 .chooseServer{
                     margin: 0 30px;
@@ -384,21 +414,14 @@ export default {
             }
             .additional{
                 p:first-child{
-                    padding:10px 0 10px 70px;
+                    padding:10px 0 10px 90px;
                     font-size: 12px;
                     line-height: 20px;
                     letter-spacing: 0px;
                     color: #999999;
                 }
-                p:nth-child(2){
-                    display: inline-block;
-                    width: 60px;
-                    text-align: right;
-                    margin-right: 5px;
-                }
                 .el-textarea{
                     vertical-align:middle; 
-                    width: 680px;
                     font-size: 12px;
                     line-height: 20px;
                     vertical-align: top;
@@ -406,7 +429,33 @@ export default {
                         color: #3e9ff1;
                     }
                 }
+            }
+        }
 
+        .changeWait{
+            padding:0 50px;
+            .infowrite{
+                padding: 0 0 0 20px;
+                .el-col-8{
+                    padding: 0 10px;
+                }
+            }
+            .additional {
+                p:first-child{
+                    padding:10px 0 10px 110px;
+                    font-size: 12px;
+                    line-height: 20px;
+                    letter-spacing: 0px;
+                    color: #999999;
+                }
+                .el-textarea{
+                    vertical-align:top; 
+                    font-size: 12px;
+                    line-height: 20px;
+                    .el-textarea__inner{
+                        color: #3e9ff1;
+                    }
+                }
             }
         }
     }

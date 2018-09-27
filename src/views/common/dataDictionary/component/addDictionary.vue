@@ -2,7 +2,7 @@
     <div class="commoncss addDictionary">
         <el-dialog :title="formtitle" :close-on-click-modal="false" :visible="dialogAddDic" @close="close" v-loading="loading">
             <el-form :inline="true"  ref="ruleForm"  label-position="right" size="mini">
-                <el-form-item label="上级分类" :label-width="formLabelWidth" required>
+                <el-form-item label="上级分类：" :label-width="formLabelWidth" required>
                     <el-select v-model="pidValue" placeholder="请选择" @change="currentValue" v-if="!isModify">
                         <el-option
                             v-for="item in optionsUptree"
@@ -14,16 +14,16 @@
                     <el-input v-model="reviseForm.pidNameVal" auto-complete="off" :disabled="true" v-else></el-input>
                 </el-form-item>
                 <div v-for="(form,idx) in AddDictionaryForm" :key="idx" class="moreInfo" v-if="!isModify"> 
-                    <el-form-item label="编码" label-width="80px" required>
+                    <el-form-item label="编码：" class="codeStyle" label-width="80px" required>
                         <el-input v-model="form.code" auto-complete="off" :disabled="true" ></el-input>
                     </el-form-item>
-                    <el-form-item label="分类名称" required>
+                    <el-form-item label="分类名称：" required>
                         <el-input v-model="form.name" auto-complete="off" placeholder="少于20字" maxlength="20" ></el-input>
                     </el-form-item>
-                    <el-form-item label="数据值" >
+                    <el-form-item label="数据值：" >
                         <el-input v-model="form.value" auto-complete="off" v-numberOnly maxlength="6" ></el-input>
                     </el-form-item>
-                    <el-form-item label="描述" class="textArea" label-width="80px">
+                    <el-form-item label="描述：" class="textArea" label-width="80px">
                         <el-input
                         type="textarea"
                         :maxlength="maxlengthNum"
@@ -298,6 +298,17 @@ export default {
             position: relative;
             margin: 0 60px;
             margin-bottom: 10px;
+            &>.el-form-item:nth-child(2n-1){
+                .el-form-item__content{
+                    width: 100px;
+                }
+            }
+            &>.el-form-item:nth-child(2){
+                .el-form-item__content{
+                    width: 348px;
+                }
+            }
+           
          }
         .el-dialog .el-dialog__body .addItem,.el-dialog .el-dialog__body .reduceItem{
              top: 0;

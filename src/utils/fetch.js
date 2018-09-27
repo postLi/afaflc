@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { Message, MessageBox } from 'element-ui'
 import store from '../store'
-import { getToken } from './auth'
+import { getToken, getUserInfo } from './auth'
 
 // 创建axios实例
 const service = axios.create({
@@ -20,7 +20,9 @@ service.interceptors.request.use(config => {
     if (!config.params) {
       config.params = {}
     }
-    config.params['access_token'] = getToken()
+    config.params['access_token'] = getToken();
+    config.headers.user_id = getUserInfo().id;
+
     // console.log(config.url, config.params)
   }
   if (config.url.indexOf('http://') !== -1) {

@@ -7,7 +7,7 @@
                         <div class="chooseShipper chooseCommon">
                             <p><span>* </span>当前货主账号 ：</p>
                             <div class="nowData">
-                                <el-input v-model="changeforms.carInfo" placeholder="请输入内容" disabled></el-input>
+                                <el-input v-model="changeforms.shipperInfo" placeholder="请输入内容" disabled></el-input>
                             </div>
                         </div>
                         <div class="chooseBindTime">
@@ -26,7 +26,7 @@
                         <div class="chooseShipper chooseCommon">
                             <p><span>* </span>当前车主账号 ：</p>
                             <div class="nowData">
-                                <el-input v-model="changeforms.shipperInfo" placeholder="请输入内容" disabled></el-input>
+                                <el-input v-model="changeforms.carInfo" placeholder="请输入内容" disabled></el-input>
                             </div>
                         </div>
                         <div class="chooseBindTime">

@@ -13,7 +13,7 @@
     :before-close="close">
         <div class="ifcancel">
             <p>
-                <span class="delwarn"></span>
+                <img class="delwarn" src="../../../../assets/icom/25xinxi.png" alt="">
                 <span class="delinfo">是否确认取消订单 ?</span>
             </p>
             <el-form :model="form" :rules="rules" ref="ruleForm" :label-width="formLabelWidth" label-position="right" size="mini">
@@ -83,9 +83,6 @@ import { cancelOrder } from '@/api/order/ordermange.js'
                     cancel: [
                         { required: true, message: '请选择取消原因', trigger: 'blur' },
                     ],
-                    cancelRemark:[
-                        {}
-                    ]
                 },
             }
         },
@@ -142,6 +139,16 @@ import { cancelOrder } from '@/api/order/ordermange.js'
 <style type="text/css" lang="scss" scoped>
     .cancel{
         .ifcancel{
+            p{
+                text-align: center;
+                margin-bottom: 20px;
+                font-size: 16px;
+                font-weight: bold;
+                .delwarn{
+                    vertical-align: middle;
+                    margin-right:20px; 
+                }
+            }
             .el-form{
                 padding: 0 20px;
                 .el-select {

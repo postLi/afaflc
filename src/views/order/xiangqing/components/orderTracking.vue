@@ -90,13 +90,10 @@ export default {
         padding: 10px 20px;
         .orderTrackStyle{
             p,h2{
-                width: 15%;
+                width: 19%;
                 margin: 0 1%;
-                white-space:nowrap;
-                text-overflow:ellipsis;
-                overflow:hidden;
             }
-            p:last-child,h2:last-child{
+            p:first-child,p:last-child,p:nth-child(5),h2:last-child,h2:nth-child(5),h2:first-child,{
                 width: 200px;
                 margin: 0;
             }
@@ -152,27 +149,13 @@ export default {
                     background: url("../../../../assets/jiantou2.png") no-repeat;
                     background-size:100% 100%;
                 }
-                // span:first-child{
-                //     display: inline-block;
-                //     width:0px;
-                //     height:0px;
-                //     background: none;
-                //     border-top:12px solid rgba(0,0,0,0);
-                //     border-right:19px solid  #3e9ff1;
-                //     border-bottom:12px solid rgba(0,0,0,0);
-                //     border-left:12px solid  rgba(0,0,0,0);
-                // }
-                // span:nth-child(2){
-                //     padding: 0 10px;
-                // }
-
                 &::before{
                     content: '';
                     position: absolute;
                     top: 22px;
                     left: 8px;
                     width: 2px;
-                    height: 22px;
+                    height: 40px;
                     background-color: #e2e2e2;
                 }
             }
@@ -186,6 +169,11 @@ export default {
         }
         .orderTrackInfo{
             margin: 15px 0;
+            p+p{
+                white-space:nowrap;
+                text-overflow:ellipsis;
+                overflow:hidden;
+            }
         }
     }
     

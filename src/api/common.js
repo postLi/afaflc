@@ -41,7 +41,7 @@ export function DicfreezeType() {
   export function DicServiceType() {
     return fetch.get('/' + baseurl_two + '/sysDict/getSysDictByCodeGet/AF017')
   }
-    // 获取车辆类型
+// 获取车辆类型
 export function DicCartype() {
     return fetch.get('/' + baseurl_two + '/sysDict/getSysDictByCodeGet/AF018')
     }
@@ -54,7 +54,7 @@ export function GetCarStyle(serviceTypeCode,cartypeCode) {
     })
   }
 
-    // 获取货主类型
+// 获取货主类型
 export function DicShippertype() {
   return fetch.get('/' + baseurl_two + '/sysDict/getSysDictByCodeGet/AF00101')
     }

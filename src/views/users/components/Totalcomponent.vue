@@ -45,6 +45,7 @@
                 <div class="btns_box">
                     <driver-newTemplate
                     btntext="新增"
+                    v-has:DRIVER_MANAGE_ADD
                     :plain="true"
                     type="primary" 
                     btntype="primary"
@@ -56,6 +57,7 @@
                     <freeze-change-template
                     btntext="冻结"
                     type="primary" 
+                    v-has:DRIVER_MANAGE_FREEZE
                     btntitle="冻结"
                     :plain="true"
                     editType='edit'
@@ -68,6 +70,7 @@
                     <freeze-change-template
                     btntext="冻结修改"
                     type="primary" 
+                    v-has:DRIVER_MANAGE_FREEZE_UPDATE
                     btntitle="冻结修改"
                     :plain="true"
                     editType='edit-two'
@@ -79,6 +82,7 @@
                     </freeze-change-template>
                     <freeze-change-template
                     btntext="解冻"
+                    v-has:DRIVER_MANAGE_UNFREEZE
                     type="primary" 
                     btntitle="解冻"
                     :plain="true"
@@ -91,6 +95,7 @@
                     </freeze-change-template>
                     <blacklist
                     btntext="移入黑名单"
+                    v-has:DRIVER_MANAGE_PUT_BLACK
                     type="primary" 
                     btntitle="移入黑名单"
                     :plain="true"
@@ -103,6 +108,7 @@
                     </blacklist>
                      <blacklist
                     btntext="移除黑名单"
+                    v-has:DRIVER_MANAGE_OUT_BLACK
                     type="primary" 
                     btntitle="移除黑名单"
                     :plain="true"

@@ -100,12 +100,11 @@
                         </el-table>
                     </div>
                 </div>
-
-                <!-- 页码 -->
-                <div class="info_tab_footer">共计:{{ dataTotal }} <div class="show_pager"> <Pager :total="dataTotal" @change="handlePageChange"  :sizes="sizes"/></div> </div>    
             </div>
-            <AreaPrice :dialogAreaPrice.sync="dialogAreaPrice" :reviseForm = 'reviseForm' :formtitle = 'formtitle' :isModify = "isModify"   @close = "shuaxin"/>
         </div>
+        <AreaPrice :dialogAreaPrice.sync="dialogAreaPrice" :reviseForm = 'reviseForm' :formtitle = 'formtitle' :isModify = "isModify"   @close = "shuaxin"/>
+        <!-- 页码 -->
+        <div class="info_tab_footer">共计:{{ dataTotal }} <div class="show_pager"> <Pager :total="dataTotal" @change="handlePageChange"  :sizes="sizes"/></div> </div>    
     </div>
 </template>
 
@@ -194,6 +193,8 @@ export default{
                         message: '不可同时修改多条数据~',
                         type: 'warning'
                     })
+                     // 清除选中状态，避免影响下个操作
+                    this.$refs.multipleTable.clearSelection();
                 }
                 switch(type){
                     case 'add':
@@ -252,6 +253,9 @@ export default{
                         })
                         break;
                 }
+
+                 // 清除选中状态，避免影响下个操作
+                this.$refs.multipleTable.clearSelection();
             },
             // 查询和获取对应区域的数据
             getCommonFunction() {
@@ -300,5 +304,6 @@ export default{
         height:100%;    
         position: relative;
         margin-left:7px;
+        padding-bottom: 40px;
     }
 </style>

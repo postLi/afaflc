@@ -28,8 +28,7 @@ function filterAsyncRouter(asyncRouterMap, roles) {
         }
         return false
     })
-
-    console.log('accessedRouters',accessedRouters)
+    // console.log('accessedRouters',accessedRouters)
     return accessedRouters
 }
 
@@ -66,9 +65,10 @@ const permission = {
         if (roles.length == 0) {
             accessedRouters = asyncRouterMap
         } else {
-            accessedRouters = filterAsyncRouter(asyncRouterMap, roles)
+            accessedRouters = filterAsyncRouter(asyncRouterMap, roles);
+            // console.log('accessedRoutersList', accessedRouters)
             accessedRouters.map(el => {
-              if (el.meta && el.meta.code === 'SYSTEM') {
+              if (el.meta) {
                 let flag = true
                 el.children.map(ee => {
                   if (ee.meta && ee.meta.code && flag) {
@@ -82,6 +82,7 @@ const permission = {
                 })
               }
             })
+            // console.log('accessedRouters:',accessedRouters)
         }
         commit('SET_ROUTERS', accessedRouters)
         resolve()

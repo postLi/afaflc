@@ -1,27 +1,21 @@
 <template>
 	<div class="carOwner tabsWrap">
 		<el-tabs v-model="CarActiveName" type="card" @tab-click="handleClick">
-			<el-tab-pane label="全部" name="first">
+			<el-tab-pane label="全部" name="first" v-if="$_has_permission('DRIVER_MANAGE_LIST_ALL')">
 				<Total :isvisible="CarActiveName === 'first'"></Total>   
 			</el-tab-pane>
-			<el-tab-pane label="未认证"  name="second">
+			<el-tab-pane label="未认证"  name="second" v-if="$_has_permission('DRIVER_MANAGE_LIST_UNVALIDAT')">
 				<Unauthorized :isvisible="CarActiveName === 'second'"></Unauthorized>
 			</el-tab-pane>
-			<el-tab-pane label="待认证" name="third">
+			<el-tab-pane label="待认证" name="third" v-if="$_has_permission('DRIVER_MANAGE_LIST_VALIDATING')">
                 <toBeCertified :isvisible="CarActiveName === 'third'"></toBeCertified>
 			</el-tab-pane>
-			<el-tab-pane label="已认证" name="fourth">
+			<el-tab-pane label="已认证" name="fourth" v-if="$_has_permission('DRIVER_MANAGE_LIST_VALIDATED')">
                 <authenticatedcomponent  :isvisible="CarActiveName === 'fourth'"></authenticatedcomponent>
 			</el-tab-pane>
-			<el-tab-pane label="认证不通过" name="fifth">
+			<el-tab-pane label="认证不通过" name="fifth" v-if="$_has_permission('DRIVER_MANAGE_LIST_VALIDATFAIL')">
                 <unPassCertification :isvisible="CarActiveName === 'fifth'"></unPassCertification>
 			</el-tab-pane>
-			<!-- <el-tab-pane label="冻结中">
-                <freezing></freezing>
-			</el-tab-pane>
-			<el-tab-pane label="黑名单">
-                <blackList></blackList>
-			</el-tab-pane> -->
 		</el-tabs>
 	</div>
 </template>
@@ -31,8 +25,7 @@
     import authEnticatedComponent from "../components/authEnticatedComponent.vue"
     import toBeCertified from "../components/toBeCertified.vue"
     import unPassCertification from "../components/unPassCertification.vue"
-    // import freezing from "../components/freezing.vue"
-    // import blackList from "../components/blackList.vue"
+
     export default {
         data(){
             return{
@@ -45,8 +38,6 @@
             authenticatedcomponent:authEnticatedComponent,
             toBeCertified:toBeCertified,
             unPassCertification:unPassCertification,
-            // freezing:freezing,
-            // blackList:blackList
         },
         watch:{
             CarActiveName(newVal,oldVal){

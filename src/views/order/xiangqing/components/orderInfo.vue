@@ -225,19 +225,25 @@
 
         <!--  客服备注 -->
         <div class="mark-collapse collapseInfo">
-            <h2> 客服备注</h2>
-            <div class="essentialInformation" v-if="listInformation.aflcOrderRemarks.length != 0">
+            <h2> 
+                客服备注
+                <el-button class="el-icon-circle-plus" @click="handlerClick"  type="primary" size="mini" plain>添加备注</el-button>
+            </h2>
+            <div class="essentialInformation" v-if="listInformation.aflcOrderRemarks.length != 0" v-for="item in listInformation.aflcOrderRemarks" :key="item.remarkId">
                 <p>
                     <span>客服：</span>
-                    <span>{{listInformation.aflcOrderRemarks.userName}}</span>
+                    <span>{{item.userName}}</span>
                  </p>
                 <p>
                     <span>备注时间：</span>
-                    <span>{{listInformation.aflcOrderRemarks.createTime | parseTime}}</span>
+                    <span>{{item.createTime | parseTime}}</span>
                 </p>
-                <p class="markInfo">
+                <p class="markInfo remakInfo">
                     <span>备注内容：</span>
-                    <span>{{listInformation.aflcOrderRemarks.remark}}</span>
+                    <el-tooltip placement="top-start" effect="light">
+                        <div slot="content">{{item.remark}}</div>
+                        <span>{{item.remark}}</span>    
+                    </el-tooltip>
                 </p>
             </div>
             <div class="essentialInformationNull" v-else>
@@ -245,6 +251,7 @@
                 <span>客服未备注!</span>
             </div>
         </div>
+        <remarkerInfo :dialogVisible.sync="dialogVisible" :orderSerial = "currentOrderSerial"   @close = "shuaxin"/>
     </div>
 </template>
 
@@ -252,12 +259,12 @@
 
 import { parseTime } from '@/utils/index.js'
 import { orderDetailsList } from '@/api/order/ordermange'
-
+import remarkerInfo from './remakInfo'
 
 export default {
     name: 'TCorderInfo',
     components:{
-
+        remarkerInfo,
     },
     props: {
         isvisible: {
@@ -270,6 +277,8 @@ export default {
         return {
             listInformation:[],
             loading:true,
+            dialogVisible:false,
+            currentOrderSerial:''
         };
     },
     watch:{
@@ -293,6 +302,7 @@ export default {
     methods: {
         init(){
             let orderSerial = this.$route.query.orderSerial;
+            this.loading = true;
             orderDetailsList(orderSerial).then(res => {
                 console.log('details',res)
                 this.listInformation = res.data;
@@ -300,15 +310,41 @@ export default {
                     return a.viaOrder - b.viaOrder;  
                 })
                 this.loading = false;
+            }).catch(err => {
+                this.$message({
+                    type: 'info',
+                    message: '删除失败，原因：' + err.errorInfo ? err.errorInfo : err.text
+                })
             })
         },
+        shuaxin(){
+            this.init();
+        },
+        handlerClick(){
+            this.currentOrderSerial = this.$route.query.orderSerial;
+            this.dialogVisible = true;
+        }
     },
-   
 }
 </script>
 
 <style rel="stylesheet/scss" lang="scss" scoped>
     .TCorderInfo{
-       
+        .mark-collapse{
+            h2{
+                position: relative;
+                .el-button{
+                    position: absolute;
+                    right: 0;
+                    bottom:8px;
+                }
+            }
+        }
+
+        .remakInfo{
+            white-space:nowrap;
+            text-overflow:ellipsis;
+            overflow:hidden;
+        }
     }
 </style>

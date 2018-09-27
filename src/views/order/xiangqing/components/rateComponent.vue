@@ -5,15 +5,20 @@
             <div class="essentialInformation">
                 <p>
                     <span>装货照片：</span>
-                    <img class="showPicture" :src="listInformation.loadingUrl ? listInformation.loadingUrl: defaultImg" v-showPicture :imgurl="listInformation.loadingUrl" alt="" >
+                    <el-tooltip class="item" effect="dark" content="点击图片查看原图" placement="top">
+                        <img class="showPicture" :src="listInformation.loadingUrl ? listInformation.loadingUrl: defaultImg" v-showPicture :imgurl="listInformation.loadingUrl" alt="" >
+                    </el-tooltip>
                 </p>
                 <p>
                     <span>回单照片：</span>
-                    <img v-for="(item,key) in listInformation.returnUrls" :key="key" :src="item ? item: defaultImg" v-showPicture :imgurl="item" alt="">
+                    <el-tooltip class="item" v-for="(item,key) in listInformation.returnUrls" :key="key" effect="dark" content="点击图片查看原图" placement="top">
+                        <img  :src="item ? item: defaultImg" v-showPicture :imgurl="item" alt="">
+                    </el-tooltip>
                 </p>
             </div>
         </div>
         <div class="rateInfo collapseInfo">
+                        <!-- <span v-if="evaluationType" class="evaluationType" v-for="el in evaluationType.split(',')"  :key="el">{{el}}</span> -->
             <h2>评价信息</h2>   
             <div class="essentialInformation" v-for="item in listInformation.aflcOrderEvaluations" :key="item.id">
                 <div v-if="item.type == 1">
@@ -34,7 +39,7 @@
                     </p>
                     <p>
                         <span>评价标签：</span>
-                        <span></span>
+                        <span v-if="item.evaluationType" class="evaluationType" v-for="el in item.evaluationType.split(',')"  :key="el">{{el}}</span>
                     </p>
                 </div>
                 <div v-else>
@@ -55,7 +60,7 @@
                     </p>
                     <p>
                         <span>评价标签：</span>
-                        <span class="evaluationMark" v-for="mark in evaluationTypeName" :key="mark">{{mark}}</span>
+                        <span v-if="item.evaluationType" class="evaluationType" v-for="el in item.evaluationType.split(',')"  :key="el">{{el}}</span>
                     </p>
                 </div>
             </div>
@@ -110,6 +115,7 @@ export default {
     },
     data() {
         return {
+            evaluationType: "服务态度好,认路准确活地图,准时送达,收费合理",
             defaultImg:'/static/test.jpg',//默认加载失败图片
             loading:true,
             ratePictures:{},//照片信息装货照片
@@ -164,7 +170,15 @@ export default {
                 p:nth-child(2){
                     width: 70%;
                 }
+
             }
+        }
+        .evaluationType{
+            padding: 5px 10px;
+            margin:0 5px ;
+            background: rgba(227, 233, 235, 0.479);
+            color: #3e9ff1;
+            box-shadow: 2px 2px 2px 2px rgba(0, 0, 0, 0.1);
         }
     }
     

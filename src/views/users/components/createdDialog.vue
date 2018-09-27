@@ -1,10 +1,10 @@
 <template>
      <div class="shippercreatDialog commoncss">
       <el-dialog :title="typetitle" :visible="dialogFormVisible_add" :before-close="close" :close-on-click-modal="false">
-        <el-form :model="xinzengform" ref="xinzengform" :rules="rulesForm">
+        <el-form :model="xinzengform" ref="xinzengform" :rules="rulesForm" :label-width="formLabelWidth">
           <el-row>
             <el-col :span="12">
-                <el-form-item label="货主类型 ：" prop="shipperType" :label-width="formLabelWidth" >
+                <el-form-item label="货主类型 ：" prop="shipperType" >
                     <span class="onlyShow" v-if="editType=='view'">{{xinzengform.shipperTypeName}}</span>
                     <el-select v-model="xinzengform.shipperType" placeholder="请选择" v-else>
                         <el-option
@@ -19,17 +19,17 @@
                 </el-form-item>
             </el-col>
             <el-col :span="12">
-                <el-form-item label="手机号码 ：" prop="mobile" :label-width="formLabelWidth"  v-if="editType=='add'">
+                <el-form-item label="手机号码 ：" prop="mobile"  v-if="editType=='add'">
                     <el-input v-model="xinzengform.mobile" auto-complete="off"   maxlength="11" ></el-input>
                 </el-form-item>
-                <el-form-item label="手机号码 ：" required :label-width="formLabelWidth"  v-else>
+                <el-form-item label="手机号码 ：" required  v-else>
                     <span class="onlyShow" >{{xinzengform.mobile}}</span>
                 </el-form-item>
             </el-col>
           </el-row>
           <el-row>
             <el-col :span="12">
-                <el-form-item label="所在地 ：" :label-width="formLabelWidth"  prop="belongCityName">
+                <el-form-item label="所在地 ："  prop="belongCityName">
                     <span class="onlyShow" v-if="editType=='view'">{{xinzengform.belongCityName}}</span>
                     <vregion :ui="true"  @values="regionChange" class="form-control" v-else>
                         <el-input v-model="xinzengform.belongCityName" placeholder="请选择" ></el-input>
@@ -37,7 +37,7 @@
                 </el-form-item>
             </el-col>
             <el-col :span="12">
-                <el-form-item label="联系人 ：" :label-width="formLabelWidth" prop="contacts">
+                <el-form-item label="联系人 ：" prop="contacts">
                     <span class="onlyShow" v-if="editType=='view'">{{xinzengform.contacts}}</span>
                     <el-input v-model="xinzengform.contacts" auto-complete="off"  v-else></el-input>
                 </el-form-item>
@@ -46,7 +46,7 @@
 
           <el-row>
             <el-col :span="24" class="moreLength">
-                <el-form-item label="详细地址 ：" :label-width="formLabelWidth" prop="address">
+                <el-form-item label="详细地址 ：" prop="address">
                     <span class="onlyShow" v-if="editType=='view'">{{xinzengform.address}}</span>
                     <el-input :maxlength="40" v-model="xinzengform.address" auto-complete="off"  v-else></el-input>
                 </el-form-item>
@@ -55,13 +55,13 @@
           <div v-if="companyFlag">
             <el-row>
                 <el-col :span="12">
-                    <el-form-item label="公司名称 ：" prop="companyName" :label-width="formLabelWidth">
+                    <el-form-item label="公司名称 ：" prop="companyName">
                         <span class="onlyShow" v-if="editType=='view'">{{xinzengform.companyName}}</span>
                         <el-input :maxlength="20" v-model="xinzengform.companyName"  v-else></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col :span="12">
-                    <el-form-item label="统一社会信用代码 ：" prop="creditCode" :label-width="formLabelWidth">
+                    <el-form-item label="统一社会信用代码 ：" prop="creditCode">
                         <span class="onlyShow" v-if="editType=='view'">{{xinzengform.creditCode}}</span>
                         <el-input :maxlength="20" v-model="xinzengform.creditCode"  v-else></el-input>
                     </el-form-item>

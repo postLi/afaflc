@@ -64,12 +64,11 @@
     background: lightpink;
   }
   
-  
   /*右侧栏*/
   .side_right {
     flex: 1;
     flex-wrap:wrap;
-    padding: 10px 10px 40px 10px !important;
+    padding: 10px 10px 0px 10px !important;
     height: 100%;
     overflow-x: hidden;
     flex-direction: column;

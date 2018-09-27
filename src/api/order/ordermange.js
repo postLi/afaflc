@@ -63,3 +63,13 @@ export function getOrderCarTrailList(page, pagesize, data) {
   })
 }
 
+
+//添加备注（web端客服备注）
+export function RemarkDriverInfo(data) {
+    return fetch({
+      url: '/' + baseurl + '/order/aflcOrder/v1/customServiceRemark',
+      method: 'post',
+      data: data
+    })
+  }
+
