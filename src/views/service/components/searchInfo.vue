@@ -52,93 +52,93 @@
 
 <script type="text/javascript">
 
-import { parseTime,pickerOptions2 } from '@/utils/index.js'
+import { parseTime, pickerOptions2 } from '@/utils/index.js'
 import { getDictionary } from '@/api/common.js'
 // import vregion from '@/components/vregion/Region'
 
-    export default{
-        props:{
-            serviceType:{
-                type: String,
-                required:true
-            }
-        },
-        components:{
-            // vregion
-        },
-        data(){
-            return{
-                btnsize:"mini",
-                chooseTime:[],
-                dataType:'AF041',
-                pickerOptions2:{
-                    shortcuts:pickerOptions2
-                },
-                searchInfo:{
-                    complainType:'',//类型
-                    workSerial:'',//工单号            
-                },
-                optionsCouseService:[
-                    {
-                        id:'3',
-                        name:'全部',
-                        code:'',
-                    }
-                ],
-                optionsPlantService:[
-                    {
-                        id:'0',
-                        name:'全部',
-                        code:'',
-                    },
-                    {
-                        id:'1',
-                        name:'投诉',
-                        code:'投诉',
-                    },
-                    {
-                        id:'2',
-                        name:'建议',
-                        code:'建议',
-                    }
-                ],
-
-            }
-        },
-        mounted(){
-            this.getInformation();
-
-            console.log(this.optionsCouseService)
-        },
-        methods: {
-            getInformation(){
-                if(this.serviceType !== 'plant'){
-                    getDictionary(this.dataType).then(res => {
-                        res.data.forEach(el => {
-                            this.optionsCouseService.push(el)
-                        })
-                    })
-                }
-            },
-            //模糊查询 分类名称或者code
-            handleSearch(type){
-                switch(type){
-                    case 'search':
-                        const searchObj = Object.assign({}, this.searchInfo);
-                        this.$emit('change', searchObj)
-                        break;
-                    case 'clear':
-                        this.searchInfo = {
-                            complainType:'',//类型
-                            workSerial:'',//工单号            
-                        };
-
-                        this.$emit('change', this.searchInfo);
-                        break;
-                }
-            },
-        }
+export default{
+  props: {
+    serviceType: {
+      type: String,
+      required: true
     }
+  },
+  components: {
+            // vregion
+  },
+  data() {
+    return {
+      btnsize: 'mini',
+      chooseTime: [],
+      dataType: 'AF041',
+      pickerOptions2: {
+        shortcuts: pickerOptions2
+      },
+      searchInfo: {
+        complainType: '', // 类型
+        workSerial: '' // 工单号
+      },
+      optionsCouseService: [
+        {
+          id: '3',
+          name: '全部',
+          code: ''
+        }
+      ],
+      optionsPlantService: [
+        {
+          id: '0',
+          name: '全部',
+          code: ''
+        },
+        {
+          id: '1',
+          name: '投诉',
+          code: '投诉'
+        },
+        {
+          id: '2',
+          name: '建议',
+          code: '建议'
+        }
+      ]
+
+    }
+  },
+  mounted() {
+    this.getInformation()
+
+    console.log(this.optionsCouseService)
+  },
+  methods: {
+    getInformation() {
+      if (this.serviceType !== 'plant') {
+        getDictionary(this.dataType).then(res => {
+          res.data.forEach(el => {
+            this.optionsCouseService.push(el)
+          })
+        })
+      }
+    },
+            // 模糊查询 分类名称或者code
+    handleSearch(type) {
+      switch (type) {
+        case 'search':
+          const searchObj = Object.assign({}, this.searchInfo)
+          this.$emit('change', searchObj)
+          break
+        case 'clear':
+          this.searchInfo = {
+            complainType: '', // 类型
+            workSerial: '' // 工单号
+          }
+
+          this.$emit('change', this.searchInfo)
+          break
+      }
+    }
+  }
+}
 </script>
 
 <style type="text/css" lang="scss" scoped>

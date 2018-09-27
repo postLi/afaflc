@@ -43,47 +43,50 @@
           style="width: 100%"> 
           <el-table-column
             type="selection"
-            width="60">
+            width="55">
           </el-table-column>
           <el-table-column label="序号" 
-          sortable
+            sortable
             width="80">
             <template slot-scope="scope">
               {{ (page - 1)*pagesize + scope.$index + 1 }}
             </template>
           </el-table-column>
           <el-table-column
+            :show-overflow-tooltip="true"
             prop="tradeSerial"
             label="订单号"
-            sortable
-            width="250">
+            sortable>
               <template  slot-scope="scope">
                 <h4 class="needMoreInfo" @click="pushOrderSerial(scope.row)">{{ scope.row.tradeSerial}}</h4>
               </template>
           </el-table-column>
           <el-table-column
+            :show-overflow-tooltip="true"
             prop="areaName"
             label="所属区域"
-            sortable
-            width="300">
+            sortable>
           </el-table-column>
           <el-table-column
+            :show-overflow-tooltip="true"
             prop="driver"
             label="车主"
             sortable
-            width="280">
+            >
           </el-table-column>
           <el-table-column
+            :show-overflow-tooltip="true"
             prop="carType"
             label="车型"
             sortable
-            width="200">
+            >
           </el-table-column>
           <el-table-column
+            :show-overflow-tooltip="true"
             prop="rewardTime"
             label="奖励日期"
             sortable
-            width="250">
+            >
             <template  slot-scope="scope">
               <span class="orderSerial">
                 {{ scope.row.rewardTime | parseTime('{y}-{m}-{d}')}}    
@@ -93,15 +96,17 @@
           </el-table-column>
           <el-table-column
             prop="orderNums"
+            :show-overflow-tooltip="true"
             label="累计完成单量"
             sortable
-            width="160">
+            width="120">
           </el-table-column>
           <el-table-column
             prop="rewardAmount"
+            :show-overflow-tooltip="true"
             label="达量奖励"
             sortable
-            width="160">
+            width="120">
           </el-table-column> 
         </el-table>
         <!-- 页码 -->
@@ -111,17 +116,17 @@
   </div>
 </template>
 <script type="text/javascript">
-import FileSaver from 'file-saver'
-import XLSX from 'xlsx'
+// import FileSaver from 'file-saver'
+// import XLSX from 'xlsx'
 import '@/styles/dialog.scss'
-import { orderStatusList } from '@/api/order/ordermange'
+// import { orderStatusList } from '@/api/order/ordermange'
 import { parseTime, pickerOptions2 } from '@/utils/index.js'
 import Pager from '@/components/Pagination/index'
 import vregion from '@/components/vregion/Region'
 import { postDriverOrderNumTransaction } from '@/api/marketing/carmarkting/operating'
-import GetCityList from '@/components/GetCityList'
-import { REGEX } from '@/utils/validate'
-import { getManageTypeInfo } from '@/api/company/groupManage'
+// import GetCityList from '@/components/GetCityList'
+// import { REGEX } from '@/utils/validate'
+// import { getManageTypeInfo } from '@/api/company/groupManage'
 export default{
   components: {
     Pager,

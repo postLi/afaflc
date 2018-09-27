@@ -64,6 +64,7 @@
             </template>
           </el-table-column>
           <el-table-column
+            :show-overflow-tooltip="true"
             prop="orderSerial"
             label="订单号"
             sortable
@@ -76,27 +77,32 @@
             prop="areaName"
             label="所属区域"
             sortable
+            :show-overflow-tooltip="true"
             >
           </el-table-column>
           <el-table-column
             prop="shipper"
             label="货主"
             sortable
+            :show-overflow-tooltip="true"
             >
           </el-table-column>
           <el-table-column
             prop="driver"
             label="车主"
             sortable
+            :show-overflow-tooltip="true"
             >
           </el-table-column>
           <el-table-column
             prop="carType"
+            :show-overflow-tooltip="true"
             label="车型"
             sortable
             width="140">
           </el-table-column>
           <el-table-column
+            :show-overflow-tooltip="true"
             prop="totalAmount"
             label="订单金额"
             sortable
@@ -104,16 +110,18 @@
             >
           </el-table-column>
           <el-table-column
+            :show-overflow-tooltip="true"
             prop="commissionAmount"
             label="佣金金额"
             sortable
             width="120">
           </el-table-column> 
           <el-table-column
+            :show-overflow-tooltip="true"
             prop="commissionTime"
             label="交易时间"
             sortable
-            width="160">
+            >
             <template  slot-scope="scope">
               <span class="orderSerial">
                 {{ scope.row.commissionTime | parseTime('{y}-{m}-{d} {h}:{i}:{s}')}}    
@@ -129,17 +137,11 @@
   </div>
 </template>
 <script type="text/javascript">
-import FileSaver from 'file-saver'
-import XLSX from 'xlsx'
 import '@/styles/dialog.scss'
-import { orderStatusList } from '@/api/order/ordermange'
 import { parseTime, pickerOptions2 } from '@/utils/index.js'
 import Pager from '@/components/Pagination/index'
 import vregion from '@/components/vregion/Region'
 import { postDriverCommissionTransaction, postCommissionTransactionExcel } from '@/api/marketing/carmarkting/operating'
-import GetCityList from '@/components/GetCityList'
-import { REGEX } from '@/utils/validate'
-import { getManageTypeInfo } from '@/api/company/groupManage'
 export default{
   components: {
     Pager,
