@@ -66,14 +66,14 @@
             <div class="main_left clearfix">
                 <div class="ul_left" id="main"></div>
                 <div class="ul_right">
-                    <div class="databox datablue">
-                      <span class="dataico"><icon-svg icon-class="caiwugl2_yingfu" /></span>
+                    <div class="databox datared">
+                      <span class="dataico"><icon-svg icon-class="caiwugl1_yingshou" /></span>
                       <span class="databox-value">{{thedata.amountReceivableFee}}元</span>
                       <span class="databox-label">现金流入</span>
                     </div>
                     <div class="databox-line"></div>
-                    <div class="databox datared">
-                      <span class="dataico"><icon-svg icon-class="caiwugl1_yingshou" /></span>
+                    <div class="databox datablue">
+                      <span class="dataico"><icon-svg icon-class="caiwugl2_yingfu" /></span>
                       <span class="databox-value">{{thedata.amountPayableFee}}元</span>
                       <span class="databox-label">现金流出</span>
                     </div>
