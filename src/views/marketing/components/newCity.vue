@@ -279,19 +279,16 @@ export default {
         if (!val) {
           this.$refs['formAll'].resetFields()
           this.areaStatus = null 
-          this.$emit('getData') 
+          this.$emit('getData')
+          this.changeList();
+        }
+        else{
+          this.getMoreInformation()
         }
       }
     }
   },
   mounted() {
-    // 按钮类型text,primary...
-    this.type = this.btntype
-    // 按钮文本内容
-    this.text = this.btntext
-    // 弹出框标题
-    this.title = this.btntitle
-    this.getMoreInformation()
   },
   methods: {
     handleChange(d) {
@@ -356,18 +353,13 @@ export default {
     close: function() {
       this.dialogFormVisible_add = false
     },
-            // 获取  服务和车辆 类型列表
+    // 获取  服务和车辆 类型列表
     getMoreInformation() {
       data_CarList().then(res => {
-                    // console.log(res.data)
-        res.data.map((item) => {
-          this.optionsCar.push(item)
-        })
+          this.optionsCar = res.data
       })
       data_MaidLevel().then(res => {
-        res.data.map((item) => {
-          this.MaidLevel.push(item)
-        })
+          this.MaidLevel = res.data
       }).catch(res => {
         console.log(res)
       })
@@ -398,14 +390,10 @@ export default {
               area: this.formAll.area,
               commissionLowest: this.formAll.commissionLowest
             }]
+           this.dialogFormVisible_add = false
           data_get_Marketingsame_create(formAllData).then(res => {
-            console.log('res', res)
-            this.dialogFormVisible_add = false
-            this.changeList()
             this.$message.success('新增成功')
           }).catch(res => {
-            console.log('res', res)
-            this.dialogFormVisible_add = false
             this.$message.error('新增失败')
           })
         }
@@ -417,11 +405,8 @@ export default {
       this.$refs['formAll'].validate(valid => {
         var forms = Object.assign({}, this.formAll)
         if (valid) {
-          data_get_Marketingsame_update(forms).then(res => {
-            console.log('res', res)
             this.dialogFormVisible_add = false
-            this.changeList()
-            this.$refs['formAll'].resetFields()
+          data_get_Marketingsame_update(forms).then(res => {
             this.$message.success('修改成功')
           }).catch(res => {
             console.log(res)

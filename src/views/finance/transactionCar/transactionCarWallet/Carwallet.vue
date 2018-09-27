@@ -195,7 +195,7 @@ export default {
 .Carwallet{
     .walletdetails{
     .el-button{
-    padding: 7px 15px;
+    padding: 7px 15px!important;
     }
     }
     .el-dialog{

@@ -132,15 +132,20 @@ export default {
         tableDataAll:[],
         dialogFormVisible_add: false,
         MaidLevelValueCar:'',
-        optionsCar:[{ code:null,name:'全部'}],
-        MaidLevel:[{ code:null,name:'全部'}],
+        optionsCar:[],
+        MaidLevel:[],
         }
   },
   watch:{
    dialogFormVisible_add:{
         handler: function(val, oldVal) {
+             if(!val){
             this.num= null;
             this.mobile = null;
+             }
+             else{
+            this.getMoreInformation();
+             }
         },
     },
   },
@@ -148,7 +153,6 @@ export default {
         vregion,
   },
   mounted(){
-    this.getMoreInformation();
   },
   methods:{
        openDialog:function(){
@@ -183,17 +187,10 @@ export default {
             //获取  服务和车辆 类型列表
             getMoreInformation(){
                 data_CarList().then(res=>{
-                    // console.log(res.data)
-                    res.data.map((item)=>{
-                        this.optionsCar.push(item);
-                    })
+                       this.optionsCar =res.data
                     })
                 data_MaidLevel().then(res=>{
-                      res.data.map((item)=>{
-                        this.MaidLevel.push(item);
-                    })
-                
-                      
+                        this.MaidLevel = res.data
                 }).catch(res=>{
                     console.log(res)
                 });    
@@ -275,10 +272,6 @@ export default {
             .el-switch{
                 display: inline-block!important;
             }
-        }
-        .v-dropdown-container{
-          top: 41px!important;
-          left: 0px!important;
         }
         .el-dialog__footer{
             padding: 20px 20px 20px;

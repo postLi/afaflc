@@ -276,19 +276,16 @@ export default {
             if(!val){
             this.$refs['formAll'].resetFields();
             this.$emit('getData');
+            this.changeList();
             this.areaStatus = null;
-            }            
+            }
+            else{
+            this.getMoreInformation();
+            }     
         },
     },
   },
   mounted(){
-    //按钮类型text,primary...
-    this.type = this.btntype;
-    //按钮文本内容
-    this.text = this.btntext;
-    //弹出框标题
-    this.title = this.btntitle;
-    this.getMoreInformation();
   },
   methods:{
         handleChange(d){
@@ -359,15 +356,10 @@ export default {
             //获取  服务和车辆 类型列表
     getMoreInformation(){
                 data_CarList().then(res=>{
-                    // console.log(res.data)
-                    res.data.map((item)=>{
-                        this.optionsCar.push(item);
-                    })
+                        this.optionsCar = res.data
                     })
                 data_MaidLevel().then(res=>{
-                      res.data.map((item)=>{
-                        this.MaidLevel.push(item);
-                    })
+                        this.MaidLevel = res.data
                 }).catch(res=>{
                     console.log(res)
                 });    
@@ -401,16 +393,10 @@ export default {
             city:this.formAll.city,
             area:this.formAll.area,
         }]
-
-        data_get_orderFromsame_create(forms).then(res=>{
-            console.log('res',res);
             this.dialogFormVisible_add = false;
-            this.changeList();
-            this.$refs['formAll'].resetFields();
+        data_get_orderFromsame_create(forms).then(res=>{
             this.$message.success('新增成功');
         }).catch(res=>{
-            console.log(res)
-            this.dialogFormVisible_add = false;    
             this.$message.error('新增失败');
        });
        }
@@ -422,14 +408,10 @@ export default {
        this.$refs['formAll'].validate(valid=>{
         var forms= Object.assign({}, this.formAll);
         if(valid){
+        this.dialogFormVisible_add = false;
         data_get_orderFromsame_update(forms).then(res=>{
-            console.log('res',res);
-            this.dialogFormVisible_add = false;
-            this.changeList();
-            this.$refs['formAll'].resetFields();
             this.$message.success('修改成功');
         }).catch(res=>{
-            console.log(res)
             this.$message.error('修改失败');
        });
        }

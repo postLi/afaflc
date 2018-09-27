@@ -285,7 +285,7 @@ export default {
     //    手机号校验
         const ownerPhoneValidator = (rule, val, cb) => {
             let phoneTest = /(^1[3|4|5|7|8]\d{9}$)|(^09\d{8}$)/
-            !val && cb(new Error('场主手机号码不能为空'))
+            !val && cb(new Error('手机号码不能为空'))
             if(!(phoneTest.test(val))){
                 cb(new Error('请输入正确的手机号码格式'))
             } 
@@ -381,8 +381,8 @@ export default {
                 selectFlag:null,
                 }]
                 this.formAll.aflcPartnerFileList=[{
-                saveAddress:null,    
-                fileName:null,    
+                saveAddress:null,
+                fileName:null,
                 selectFlag:null,
                 }]   
                 this.areaStatus = null 
@@ -393,11 +393,13 @@ export default {
                 this.companyNameObject.companyName = null;
                 this.$emit('getData') 
                 }
+                else{
+                this.getMoreInformation();
+                }
         },
     },
   },
   mounted(){
-    this.getMoreInformation();
   },
   methods:{
     //   区代公司名称
@@ -516,7 +518,6 @@ export default {
    openDialog:function(){
     if(this.editType=='view'){
         data_get_aflcPartner_Id(this.params.id).then(res=>{
-        console.log('1',res)
             this.formAll.partnerCompany=res.data.partnerCompany
              this.formAll.partnerName=res.data.partnerName
              this.formAll.mobile=res.data.mobile
@@ -529,7 +530,7 @@ export default {
              this.formAll.contractEndDate=res.data.contractEndDate
              this.formAll.aflcPartnerAreaList = res.data.aflcPartnerAreaList
              this.formAll.aflcPartnerFileList = res.data.aflcPartnerFileList
-             this.areaName = res.data.belongCity
+             this.areaName = res.data.belongCity;
         })
      this.dialogFormVisible_add = true;
     }
@@ -551,7 +552,6 @@ export default {
           }
     else{
         data_get_aflcPartner_Id(this.params[0].id).then(res=>{
-        console.log('2',res)
             this.formAll.partnerCompany=res.data.partnerCompany
              this.formAll.partnerName=res.data.partnerName
              this.formAll.mobile=res.data.mobile
@@ -567,10 +567,10 @@ export default {
              this.areaName = res.data.belongCity
              this.companyId = res.data.companyId
              this.isVip = res.data.openAdminManage
+             this.areaCode = res.data.areaCode
              if(res.data.companyId){
                 this.inputdisabled = true
              }
-            console.log('dfdf',this.inputdisabled)
         })
         
          this.dialogFormVisible_add = true;
@@ -669,6 +669,8 @@ export default {
        this.$refs['formAll'].validate(valid=>{
         if(valid){
             if(!this.inputdisabled){
+                console.log('1', this.areaCode)
+                 console.log('2', this.formAll.areaCode)
             if(this.formAll.area){
                this.areaStatus = this.formAll.areaCode[2]
             }
@@ -677,6 +679,9 @@ export default {
             }               
             }
             else{
+                console.log('1', this.areaCode)
+                 console.log('2', this.formAll.areaCode)
+
                this.areaStatus = this.areaCode
             }
             let aflcPartnerAreaList = []

@@ -1,7 +1,7 @@
 import fetch from '@/utils/fetch'
 
 const baseurl = "aflc-uc"
-// const baseurl = "aflcusercenterservice_wtc"
+// const baseurl = "aflcusercenterservice-wtc"
 
 
 //获取区代管理列表

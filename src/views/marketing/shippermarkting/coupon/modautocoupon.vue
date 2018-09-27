@@ -408,6 +408,9 @@ export default {
            ifvouchersuperposition:null,
            }]
             }
+         else{
+           this.getMoreInformation();
+            }
         },
     },
   },
@@ -468,34 +471,23 @@ export default {
     //获取  服务和车辆 类型列表
             getMoreInformation(){
                 data_CarList().then(res=>{
-                    // console.log(res.data)
-                    res.data.map((item)=>{
-                        this.optionsCar.push(item);
-                    })
+                        this.optionsCar = res.data
                     })
                 data_MaidLevel().then(res=>{
-                      res.data.map((item)=>{
-                        this.MaidLevel.push(item);
-                    })
+                        this.MaidLevel = res.data
                 }).catch(res=>{
                     console.log(res)
                 });    
                 data_ServerClassList().then(res=>{
-                      res.data.map((item)=>{
-                       this.serviceCardList.push(item);
-                    })     
+                       this.serviceCardList = res.data
                 }).catch(res=>{
                     console.log(res)
                 });            
                 data_couponActive().then((res)=>{
-                     res.data.map((item)=>{
-                       this.couponList.push(item);
-                    })   
+                       this.couponList = res.data
                 })
                  data_couponActiveTime().then((res)=>{
-                     res.data.map((item)=>{
-                       this.couponTimeList.push(item);
-                    })   
+                       this.couponTimeList = res.data
                 })
           },
     changeInput:function(i){
@@ -845,7 +837,7 @@ export default {
      }       
   },
   mounted(){
-      this.getMoreInformation();
+
   }
 }
 

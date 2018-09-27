@@ -1,6 +1,6 @@
 <template>
   <div class="blackInfo commoncss">
-    <el-button :type="type" :value="value" :plain="plain" :icon="icon" @click="openDialog()">{{text}}</el-button>
+    <el-button :type="btntype" :value="value" :plain="plain" :icon="icon" @click="openDialog()">{{btntext}}</el-button>
     <el-dialog :title="title" :visible.sync="freezeDialogFlag" :before-close="change()" :modal="false">
       <el-form :model="formFroze" ref="formFroze" :rules="formFrozeRules" :inline="true">
         <el-row>
@@ -249,13 +249,6 @@ export default {
     }
   },
   mounted(){
-    //按钮类型text,primary...
-    this.type = this.btntype;
-    //按钮文本内容
-    this.text = this.btntext;
-    //弹出框标题
-    this.title = this.btntitle;
-    this.getMoreInformation()
   },
     watch:{
         freezeDialogFlag:{
@@ -263,6 +256,9 @@ export default {
             if(!val){
                 this.$refs.formFroze.resetFields();
                 this.$emit('getData') 
+            }
+            else{
+                this.getMoreInformation()
             }
         }
         }
@@ -334,23 +330,15 @@ export default {
     getMoreInformation(){
       // 获取冻结原因下拉
       data_get_car_freezeType().then(res=>{
-       
-        res.data.map((item)=>{
-          this.optionsReason.push(item)
+          this.optionsReason =res.data
         })
-      })
       // 获取移入黑名单原因下拉
       data_get_car_BlackType().then(res=>{
-       
-        res.data.map((item)=>{
-          this.putBlackCauseoptions.push(item)
-        })
+          this.putBlackCauseoptions = res.data
       })
       // 中单等级的获取
       data_get_driver_obStatus().then(res =>{
-                res.data.map(item=>{
-                    this.optionsLevel.push(item)
-                })
+            this.optionsLevel = res.data
             }).catch(err =>{
                 console.log(err)
             })
@@ -363,9 +351,7 @@ export default {
         this.$refs['formFroze'].validate((valid)=>{
         if(valid){
           var forms= Object.assign({}, this.formFroze)
-          
           data_put_PutBlack(forms).then(res=>{
-         
             this.$message.success('移入黑名单成功')
             this.freezeDialogFlag = false;
             this.$emit('getData') 

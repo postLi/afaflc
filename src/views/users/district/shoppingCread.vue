@@ -172,7 +172,6 @@ export default {
     },
   },
   mounted(){
-    this.getMoreInformation();
   },
   methods:{
         handleChange(d){
@@ -206,9 +205,6 @@ export default {
    close:function(){
       this.dialogFormVisible_add = false;
        },
-    getMoreInformation(){
-    
-          }, 
     changeList(){
             eventBus.$emit('pushListtwo')
         },  

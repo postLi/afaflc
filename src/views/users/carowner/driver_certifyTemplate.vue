@@ -23,9 +23,9 @@
                     </el-form-item>
                 </el-col>
                 <el-col :span="12">
-                    <el-form-item label="所在区域：" :label-width="formLabelWidth" prop="belongCity">
+                    <el-form-item label="所在区域：" :label-width="formLabelWidth" prop="belongCityName">
                     <vregion :ui="true"  @values="regionChange" class="form-control">
-                        <el-input v-model="templateModel.belongCity" placeholder="请选择"></el-input>
+                        <el-input v-model="templateModel.belongCityName" placeholder="请选择"></el-input>
                     </vregion>
                     </el-form-item>
                 </el-col>
@@ -311,7 +311,7 @@ export default {
     //    选择所在地校验
         const belongCityNameValidator = (rule, val, cb) => {
              if(!val) {
-                    cb(new Error('请选择所在地'))
+                cb(new Error('请选择所在地'))
                 }
              else{
                 cb()
@@ -423,7 +423,7 @@ export default {
         carHeight:{validator:carHeightValidator, trigger:'change',required:true,},
         carSpec:{validator: carSpecValidator, trigger:'change',required:true,},
         carType:{validator: carTypeValidator, trigger:'change',required:true,},
-        belongCity:{validator: belongCityNameValidator, trigger:'change',required:true,},            
+        belongCityName:{validator: belongCityNameValidator, trigger:'change',required:true,},            
         obtainGrade:{validator:obtainGradeValidator, trigger:'change',required:true,},
         obtainGradeTime:{validator: obtainGradeTimeValidator, trigger:'change',required:true,},
         },        
@@ -438,7 +438,6 @@ export default {
             }
         },  
   mounted(){
-    this.getMoreInformation()
   },
     watch:{
         freezeDialogFlag:{
@@ -446,6 +445,9 @@ export default {
             if(!val){
                 this.$refs.templateModel.resetFields();
                 this.$emit('getData') 
+            }
+            else{
+                this.getMoreInformation()
             }
         }
         }
@@ -477,23 +479,16 @@ export default {
     getMoreInformation(){
     // 中单等级的获取
     data_get_driver_obStatus().then(res =>{
-        res.data.map(item=>{
-            this.optionsLevel.push(item)
-         })
+            this.optionsLevel = res.data
          })
      data_CarList().then(res=>{
-         res.data.map((item)=>{
-            this.optionscarType.push(item);
-         })
+            this.optionscarType = res.data
          })
      data_Get_carType().then(res=>{
-         res.data.map((item)=>{
-           this.optionscarSpec.push(item);
-         })
+           this.optionscarSpec = res.data
          })         
     },
      changeIMG(event){
-            // console.log(event)
             this.defaultImg1 = event.target.src;
             },    
     // 图片质量拼接传给后台
@@ -533,7 +528,6 @@ export default {
                 return
             }
         else{
-            console.log('2323',this.params)
         this.templateModel=this.params[0];
         this.templateModel.obtainGradeTime = parseTime(this.templateModel.obtainGradeTime,"{y}-{m}-{d}");
         this.freezeDialogFlag=true
@@ -588,7 +582,6 @@ export default {
 // 审核通过
     handlerPass(){
                 this.completeData()
-                var forms=Object.assign({},this.templateModel,{driverStatus:"AF0010404"},{authNoPassCause:JSON.stringify(this.pictureValue)})
                     if(this.completeData()==false)
                     {
                     return
