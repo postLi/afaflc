@@ -1,6 +1,6 @@
 <template>
   <div class="freezeInfo commoncss">
-    <el-button :type="type" :value="value" :plain="plain" :icon="icon" @click="openDialog()"><span :class="editType=='view'?'BtnInfo':''">{{text}}</span ></el-button>
+    <el-button :type="btntype" :value="value" :plain="plain" :icon="icon" @click="openDialog()"><span :class="editType=='view'?'BtnInfo':''">{{btntext}}</span ></el-button>
     <el-dialog :title="title" :visible.sync="freezeDialogFlag" :before-close="change()" :modal="false">
       <el-form :model="formFroze" ref="formFroze" :rules="formFrozeRules">
         <el-row>
@@ -274,13 +274,6 @@ export default {
     }
   },
   mounted(){
-    //按钮类型text,primary...
-    this.type = this.btntype;
-    //按钮文本内容
-    this.text = this.btntext;
-    //弹出框标题
-    this.title = this.btntitle;
-    this.getMoreInformation()
   },
     watch:{
         freezeDialogFlag:{
@@ -288,6 +281,9 @@ export default {
             if(!val){
                 this.$refs.formFroze.resetFields();
                 this.$emit('getData') 
+            }
+            else{
+                this.getMoreInformation()
             }
         }
         }
@@ -363,22 +359,15 @@ export default {
     getMoreInformation(){
       //获取车主类型
       data_Get_carType().then(res=>{
-        res.data.map((item)=>{
-        this.options.push(item)
-        })
+        this.options = res.data
       }),
       // 获取车主冻结原因下拉
       data_get_car_freezeType().then(res=>{
-       
-        res.data.map((item)=>{
-          this.optionsReason.push(item)
-        })
+          this.optionsReason = res.data
       })
             // 中单等级的获取
             data_get_driver_obStatus().then(res =>{
-                res.data.map(item=>{
-                    this.optionsLevel.push(item)
-                })
+                    this.optionsLevel = res.data
             }).catch(err =>{
                 console.log(err)
             })      

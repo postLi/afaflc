@@ -24,7 +24,7 @@
                     type="primary" 
                     btntype="primary"
                     icon="el-icon-edit"
-                    editType="valetAuth"
+                    editType="edit"
                     :templateItem="selectionData"
                     btntitle="车主管理"
                     @getData="getDataList"

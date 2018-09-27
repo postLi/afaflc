@@ -168,9 +168,6 @@ export default {
        vregion,
   },
   props:{
-    paramsView:{
-      type:Object,
-    },
     params:{
       type:[Object,String],
     },
@@ -350,7 +347,6 @@ export default {
         options:regionDataPlus,
         formLabelWidth:'150px',
         dialogFormVisible_add: false,
-        MaidLevelValueCar:'',
         optionsCar:[],
         serviceCardList:[],
         FormData:null,
@@ -427,6 +423,9 @@ export default {
             if(!val){
             this.$refs['formAll'].resetFields();
             }
+            else{
+             this.getMoreInformation();
+            }
         },
     },
   },
@@ -434,7 +433,6 @@ export default {
         vregion,
   },
   mounted(){
-    this.getMoreInformation();
   },
   methods:{
         handleChange(d){
@@ -521,22 +519,10 @@ export default {
             //获取  服务和车辆 类型列表
     getMoreInformation(){
                 data_CarList().then(res=>{
-                    // console.log(res.data)
-                    res.data.map((item)=>{
-                        this.optionsCar.push(item);
+                        this.optionsCar = res.data
                     })
-                    })
-                data_MaidLevel().then(res=>{
-                      res.data.map((item)=>{
-                        this.MaidLevel.push(item);
-                    })
-                }).catch(res=>{
-                    console.log(res)
-                });
                 data_ServerClassList().then(res=>{
-                      res.data.map((item)=>{
-                       this.serviceCardList.push(item);
-                    })     
+                       this.serviceCardList = res.data
                 }).catch(res=>{
                     console.log(res)
                 });         
@@ -621,7 +607,7 @@ export default {
             this.$message.success('新增成功');
         }).catch(res=>{
             console.log('res',res);
-            this.$message.error('新增失败,同一个地区奖励上限必须相同');
+           this.$message.error('新增失败');
        });
 
        }

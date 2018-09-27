@@ -16,8 +16,6 @@
                 <GetCityList ref="area" v-model="vestList.areaCode"  @focus="changeSelect" v-if="editType !=='add' && selectFlag"></GetCityList>
                  </span>
             </el-form-item>
-
-
             </el-col>
             <el-col :span="12">
             <el-form-item label="服务类型：" :label-width="formLabelWidth" prop="serivceCode"> 
@@ -488,7 +486,6 @@ methods:{
                     console.log('fdfd',res);
                         let selectRowData = res.data.push;
                         let setting =res.data.settings
-                        console.log('res.data.push',setting)
                         let sy=[]
                         for(var i = 0;i<setting.length;i++){
                             sy.push( {
@@ -696,11 +693,8 @@ methods:{
         },
         // 类型列表
         getMoreInformation(){
-               
                 data_ServerClassList().then(res=>{
-                     res.data.map((item)=>{
-                        this.serviceCardList.push(item);
-                    })
+                        this.serviceCardList = res.data
                 }).catch(res=>{
                     console.log(res)
                 });
@@ -755,7 +749,6 @@ methods:{
                         if(item.code == this.$refs.area.selectedOptions[1]){
                             this.vestList.areaCode = item.code;
                             this.vestList.areaName = item.name;
-                            console.log('item.name',item.name)
                         }
                     })
                 }else{
@@ -763,7 +756,6 @@ methods:{
                         if(item.code == this.$refs.area.selectedOptions[0]){
                             this.vestList.areaCode = item.code;
                             this.vestList.areaName = item.name;
-                            console.log('item.name',item.name)
                         }
                     })
                 }
@@ -857,12 +849,12 @@ watch:{
 driverTemplateDialogFlag:{
          handler: function(val, oldVal) {
            if(!val){
+                 this.$emit('getData') 
                 if(this.$refs.area){
                 this.$refs.area.selectedOptions = [];
                 this.$refs['vestList'].resetFields();
                 this.vestList.setting=[];
-                this.vestList.setting.push(
-{
+                this.vestList.setting.push({
                                  createTime:null,
                                  startTime:null,
                                  endTime:null,
@@ -943,13 +935,14 @@ driverTemplateDialogFlag:{
                             }                    
                 )
             }
-
+}
+else{
+    this.getMoreInformation();
 }
 }
 }
 },
 mounted(){
-this.getMoreInformation();
 }
 }
 </script>
@@ -1009,7 +1002,7 @@ this.getMoreInformation();
             color:red;
          }
         }
-            .VestreduceItem{
+        .VestreduceItem{
              width: 154px!important;
              height: 34px!important;
          }
@@ -1032,7 +1025,7 @@ this.getMoreInformation();
     display: inline-block;
     .commoncss{
     .el-dialog{
-   width:960px!important;
+       width:960px!important;
      }
     }
     .vestDialog .el-dialog {

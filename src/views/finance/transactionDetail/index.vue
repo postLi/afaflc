@@ -72,7 +72,7 @@
                     >
                     </el-date-picker>
             </el-form-item>            
-                <el-form-item >     
+                <el-form-item class="fr">     
                   <el-button type="primary"  plain @click="getdata_search" :size="btnsize">查询</el-button>
                   <el-button type="primary"  plain @click="reset" :size="btnsize">重置</el-button>
                 </el-form-item>    

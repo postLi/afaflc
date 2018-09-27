@@ -258,7 +258,7 @@ export default {
 .Shipperwallet{
     .walletdetails{
     .el-button{
-
+    padding: 7px 15px!important;
     }
     }
     .el-dialog{
@@ -284,7 +284,7 @@ export default {
         width: 7%
     }
     .el-dialog__body{
-    padding: 0px!important;
+    padding: 0px;
     }
 }
 </style>

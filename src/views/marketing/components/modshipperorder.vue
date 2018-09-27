@@ -163,7 +163,7 @@
     </div>
 </template>
 <script>
-import { data_Commission ,data_CarList,data_MaidLevel,data_ServerClassList} from '@/api/server/areaPrice.js'
+import { data_Commission ,data_CarList,data_ServerClassList} from '@/api/server/areaPrice.js'
 import { data_get_shipperOwnerFrom1_Id,data_get_shipperOwnerFrom_update,data_get_shipperOwnerFrom2_Id} from '@/api/marketing/shippermarkting/shipperOwner.js'
 import Upload from '@/components/Upload/singleImage'
 import vregion from '@/components/vregion/Region'
@@ -175,9 +175,6 @@ export default {
        vregion,
   },
   props:{
-    paramsView:{
-      type:Object,
-    },
     params:{
       type:[Object,String,Array],
     },
@@ -354,7 +351,6 @@ export default {
         areaName:null,
         formLabelWidth:'130px',
         dialogFormVisible_add: false,
-        MaidLevelValueCar:'',
         optionsCar:[],
         serviceCardList:[],
         FormData:null,
@@ -428,7 +424,12 @@ export default {
   watch:{
    dialogFormVisible_add:{
         handler: function(val, oldVal) {
-            this.$forceUpdate()
+            if(!val){
+            this.$refs['formAll'].resetFields();
+            }
+            else{
+            this.getMoreInformation();
+            }
         },
     },
   },
@@ -436,12 +437,6 @@ export default {
         vregion,
   },
   mounted(){
-    //按钮类型text,primary...
-    this.type = this.btntype;
-    //按钮文本内容
-    this.text = this.btntext;
-    //弹出框标题
-    this.title = this.btntitle;
     this.getMoreInformation();
   },
   methods:{
@@ -549,21 +544,11 @@ export default {
             //获取  服务和车辆 类型列表
     getMoreInformation(){
                 data_CarList().then(res=>{
-                    // console.log(res.data)
-                    res.data.map((item)=>{
-                        this.optionsCar.push(item);
+                        this.optionsCar = res.data
                     })
-                    })
-                data_MaidLevel().then(res=>{
-                      res.data.map((item)=>{
-                        this.MaidLevel.push(item);
-                    })
-                }).catch(res=>{
-                    console.log(res)
-                });
                 data_ServerClassList().then(res=>{
                       res.data.map((item)=>{
-                       this.serviceCardList.push(item);
+                       this.serviceCardList = res.data
                     })     
                 }).catch(res=>{
                     console.log(res)

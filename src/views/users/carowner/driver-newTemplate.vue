@@ -1,6 +1,6 @@
 <template> 
     <div class="carNewinfo commoncss">
-        <el-button :type="type" :value="value" :plain="plain" :icon="icon" @click="openDialog()"><span :class="editType=='view'?'BtnInfo':''">{{btntext}}</span ></el-button>
+        <el-button :type="btntype" :value="value" :plain="plain" :icon="icon" @click="openDialog()"><span :class="editType=='view'?'BtnInfo':''">{{btntext}}</span ></el-button>
         <el-dialog :title="title" :visible="driverTemplateDialogFlag" :before-close="change">
              <el-form
               ref="templateModel"
@@ -10,7 +10,7 @@
              >
               <el-row>
                   <el-col :span="12">
-                      <span v-if="editType=='view'">
+                      <span v-if="editType=='view'||editType=='edit'">
                     <el-form-item label="手机号：" :label-width="formLabelWidth" >
                        <el-input v-model.trim="templateModel.driverMobile" auto-complete="off" disabled></el-input>
                     </el-form-item>
@@ -234,6 +234,8 @@ import Upload from '@/components/Upload/singleImage'
 import GetCityList from '@/components/GetCityList'
 import { eventBus } from '@/eventBus'
 import vregion from '@/components/vregion/Region'
+
+import { getDictionary } from '@/api/common.js'
 export default {
     name:'template-create-view-change',
     props:{
@@ -317,12 +319,17 @@ export default {
                 cb(new Error('请输入正确的身份证'))
             }
             else {
+                if(this.editType=='edit'){
+                    cb()
+                }
+                else{
                 data_post_checkDriverCardid(val).then(res=>{
                  cb()
                 }).catch(err=>{
                     console.log(err)
                         cb(new Error('该身份证已经注册~'))
                 })
+                }
             }
         }
     //    车牌号信息校验
@@ -518,23 +525,16 @@ export default {
                 this.$refs.templateModel.resetFields();
                 this.templateModel.carSpec = null;
                 this.$emit('getData')
-                // if(this.editType == 'add'){
-                //     this.templateModel = {
-                //         registerOrigin:'AF0030103',
-                //     }
-                // }
+            }
+            else{
+            console.log('val',val)
+            this.getMoreInformation()
             }
         }
         }
         },
     mounted(){
-        //按钮类型text,primary...
-        this.type = this.btntype;
-        //按钮文本内容
-        this.text = this.btntext;
-        //弹出框标题
-        this.title = this.btntitle;
-        this.getMoreInformation()
+        
     },
     methods:{
         // 省市区选择
@@ -574,26 +574,19 @@ export default {
         // 获取对应的字典列表
         getMoreInformation(){
             data_CarList().then(res=>{
-                res.data.map((item)=>{
-                    this.options.push(item);
-                })
+                  this.options = res.data
             }).catch(err =>{
                 console.log(err)
             })
-
             //  获取车型列表
             data_Get_carType().then(res =>{
-                res.data.map(item=>{
-                    this.optionsType.push(item)
-                })
+                    this.optionsType=res.data
             }).catch(err =>{
                 console.log(err)
             })
             // 中单等级的获取
             data_get_driver_obStatus().then(res =>{
-                res.data.map(item=>{
-                    this.optionsLevel.push(item)
-                })
+                    this.optionsLevel=res.data
             }).catch(err =>{
                 console.log(err)
             })
@@ -619,8 +612,6 @@ export default {
                 this.$emit('getData') 
             }
             else{
-                    // var obj = JSON.parse(JSON.stringify(this.templateItem));
-                    // console.log('dds',this.templateItem)
                     this.templateModel = this.templateItem[0] ;
                     this.driverTemplateDialogFlag = true ;
                 }

@@ -2,12 +2,11 @@ import fetch from '@/utils/fetch'
 
 // const baseurl_two = "aflcsmservice"
 const baseurl = "aflcsmservice"
-const baseurl_one= "aflcsmservice"
 
 //获取达量同城列表
 export function data_get_orderFromsame_list(page,pagesize,data) {
     return fetch({
-      url: '/'+baseurl_one+'/sm/aflcDriverOrdernumReward/v1/list',
+      url: '/'+baseurl+'/sm/aflcDriverOrdernumReward/v1/list',
       method: 'post',
       data:{
         "currentPage": page,
@@ -19,13 +18,13 @@ export function data_get_orderFromsame_list(page,pagesize,data) {
 
 //达量同城列表新增
 export function data_get_orderFromsame_create(data) {
-    return fetch.post('/' + baseurl_one + '/sm/aflcDriverOrdernumReward/v1/add', data)
+    return fetch.post('/' + baseurl + '/sm/aflcDriverOrdernumReward/v1/add', data)
   }
 
  //id获取达量同城列表
 export function data_get_orderFromsame_Id(id) {
         return fetch({
-          url: '/'+baseurl_one+'/sm/aflcDriverOrdernumReward/v1/'+id,
+          url: '/'+baseurl+'/sm/aflcDriverOrdernumReward/v1/'+id,
           method: 'get',
         })
       }

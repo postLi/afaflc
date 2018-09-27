@@ -29,9 +29,9 @@
                           <el-option
                              v-for="item in serviceCardList"
                               :key="item.code"
-                             :label="item.name"
+                              :label="item.name"
                               :value="item.code"
-                               :disabled="item.disabled">
+                              :disabled="item.disabled">
                          </el-option>
                  </el-select>
                 </el-form-item>
@@ -168,9 +168,6 @@ export default {
     Upload,
   },
   props:{
-    paramsView:{
-      type:Object,
-    },
     params:{
       type:[Object,String],
     },
@@ -351,7 +348,6 @@ export default {
         options:regionDataPlus,            
         formLabelWidth:'150px',
         dialogFormVisible_add: false,
-        MaidLevelValueCar:'',
         optionsCar:[],
         serviceCardList:[],
         FormData:null,
@@ -427,13 +423,15 @@ export default {
             if(!val){
             this.$refs['formAll'].resetFields();
             }
+            else{
+            this.getMoreInformation();
+            }
         },
     },
   },
   components:{
   },
   mounted(){
-    this.getMoreInformation();
   },
   methods:{
         handleChange(d){
@@ -518,23 +516,10 @@ export default {
             //获取  服务和车辆 类型列表
     getMoreInformation(){
                 data_CarList().then(res=>{
-                    // console.log(res.data)
-                    res.data.map((item)=>{
-                        this.optionsCar.push(item);
-                    })
-                    })
-                data_MaidLevel().then(res=>{
-                      res.data.map((item)=>{
-                        this.MaidLevel.push(item);
-                    })
-                }).catch(res=>{
-                    console.log(res)
-                });
+                       this.optionsCar = res.data
+                })
                 data_ServerClassList().then(res=>{
-                      res.data.map((item)=>{
-                          console.log('a',item)
-                       this.serviceCardList.push(item);
-                    })     
+                       this.serviceCardList = res.data
                 }).catch(res=>{
                     console.log(res)
                 });         
@@ -620,7 +605,7 @@ export default {
             this.changeList();
             this.$message.success('新增成功');
         }).catch(res=>{
-            this.$message.error('新增失败,同一个地区奖励上限必须相同');
+            this.$message.error('新增失败');
        });
        }
        }
