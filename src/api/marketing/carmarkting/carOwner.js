@@ -13,7 +13,7 @@ export function data_get_ownerFromsame_list(page,pagesize,data) {
         "pageSize": pagesize,
         "vo": data
       }
-    })
+    })   
   }
 
 //车主奖励列表新增

@@ -52,7 +52,7 @@
 <script type="text/javascript">
 
 import {  data_GetCityInfo, data_ChangeStatus, data_Delete } from '@/api/server/areaPrice.js'
-import { aflcProvinceCode,data_get_aflcCityTree_list } from '@/api/common.js'
+// import { aflcProvinceCode,data_get_aflcCityTree_list } from '@/api/common.js'
 import Pager from '@/components/Pagination/index'
 import { parseTime } from '@/utils/'
 import '@/styles/dialog.scss'
@@ -110,19 +110,19 @@ export default{
             // 查询和获取对应区域的数据
             getCommonFunction() {
                 this.loading = true;
-                const data = Object.assign({}, { name:this.cityName })
-                data_get_aflcCityTree_list(this.page, this.pagesize, data).then(res => {
-                  console.log(res.data.list)
-                    this.tableData = res.data.list;
-                    this.dataTotal = res.data.totalCount;
-                    this.loading = false;
-                }).catch(err => {
-                    this.$message({
-                        type: 'info',
-                        message: '操作失败，原因：' + err.errorInfo ? err.errorInfo : err.text
-                    })
-                    this.loading = false;
-                })
+                // const data = Object.assign({}, { name:this.cityName })
+                // data_get_aflcCityTree_list(this.page, this.pagesize, data).then(res => {
+                //   console.log(res.data.list)
+                //     this.tableData = res.data.list;
+                //     this.dataTotal = res.data.totalCount;
+                //     this.loading = false;
+                // }).catch(err => {
+                //     this.$message({
+                //         type: 'info',
+                //         message: '操作失败，原因：' + err.errorInfo ? err.errorInfo : err.text
+                //     })
+                //     this.loading = false;
+                // })
             },
             handleNodeClick(data, checked) {
                 if (checked.level === 1) {
