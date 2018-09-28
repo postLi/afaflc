@@ -111,9 +111,6 @@
               <!-- <template slot-scope="scope">{{ scope.row.commissionTime | parseTime('{y}-{m}-{d} {h}:{i}:{s}')}}</template> -->
               </el-table-column>
               <el-table-column  label="订单状态" v-model="dataset.orderStatus" prop="orderStatus" sortable  width="120">
-                <!-- <template  slot-scope="scope">
-                  {{ scope.row.usingStatus == 1 ? '启用' : '停用' }}
-                </template> -->
               </el-table-column> 
               <el-table-column
               :show-overflow-tooltip="true"
