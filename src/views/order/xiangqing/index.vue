@@ -20,11 +20,20 @@
                 <el-tab-pane label="订单跟踪" name="orderTracking">
                     <orderTracking :isvisible="orderTabName === 'orderTracking'"></orderTracking>
                 </el-tab-pane>
-
                 
             <!-- 行驶轨迹 -->
                 <el-tab-pane label="行驶轨迹" name="driveTrail">
                     <driverTrail :isvisible="orderTabName === 'driveTrail'"></driverTrail>
+                </el-tab-pane>
+
+            <!-- 投诉 -->
+                <el-tab-pane label="投诉" name="complaint">
+                    <complaint :isvisible="orderTabName === 'complaint'"></complaint>
+                </el-tab-pane>
+
+            <!-- 物损理赔 -->
+                <el-tab-pane label="物损理赔" name="physicalDamage">
+                    <physicalDamage :isvisible="orderTabName === 'physicalDamage'"></physicalDamage>
                 </el-tab-pane>
 
             <!-- 回单回款评价 -->
@@ -42,8 +51,9 @@ import pushList from './components/pushOrderList'
 import orderTracking from './components/orderTracking'
 import robbingList from './components/robbingList'
 import driverTrail from './components/driveTrail'
+import complaint from './components/complaint'
 import rate from './components/rateComponent'
-
+import physicalDamage from './components/physicalDamage'
 export default {
     name: 'dingdanxiangqing',
     components:{
@@ -52,6 +62,8 @@ export default {
         orderTracking,
         robbingList,
         driverTrail,
+        complaint,
+        physicalDamage,
         rate
     },
     data() {
@@ -63,19 +75,6 @@ export default {
     　　
     },
     watch: {
-        '$route':{
-            handler(to,from) {
-                // console.log('```')
-                console.log(to,from)
-                // if(!to.query.orderSerial){
-                //     to.query.orderSerial = sessionStorage.getItem('orderSerial');
-                // }else{
-                //     sessionStorage.setItem('orderSerial', to.query.orderSerial);
-                // }
-            },
-            deep:true,
-            immediate: true
-        }
     },
     
     // created() {

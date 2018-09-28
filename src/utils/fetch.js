@@ -20,9 +20,13 @@ service.interceptors.request.use(config => {
     if (!config.params) {
       config.params = {}
     }
+    
+    if (getUserInfo() && getUserInfo().id) {
+        config.headers.user_id = getUserInfo().id;
+        
+    }
+    
     config.params['access_token'] = getToken();
-    config.headers.user_id = getUserInfo().id;
-
     // console.log(config.url, config.params)
   }
   if (config.url.indexOf('http://') !== -1) {

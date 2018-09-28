@@ -123,7 +123,7 @@ import '@/styles/side.scss'
 export default{
       data() {
           return {
-                loading:false,
+            loading:true,
               cityTree:[],
               dialogAreaPrice:false,
               isModify:false,
