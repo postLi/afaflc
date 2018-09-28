@@ -1,5 +1,5 @@
 <template>
-    <div class="commoncss areaPrice">
+    <div class="commoncss waitPrice">
         <el-dialog :title="formtitle" :close-on-click-modal="false" :visible="dialogWaitPrice" @close="close" v-loading="loading">
             <el-form class="newWait" v-if="!isModify" :model="standForm" :label-width="formLabelWidth" :rules="newrules"  ref="ruleForm">
                 <div class="threePass">

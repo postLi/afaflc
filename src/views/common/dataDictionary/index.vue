@@ -32,10 +32,10 @@
                 <!-- </transition> -->
                 <div class="side_right_bottom clearfix">
                     <div class="btns_box clearfix">
-                        <el-button type="primary" :size="btnsize" plain icon="el-icon-news" @click="handleClick('add')">新增</el-button>
-                        <el-button type="primary" :size="btnsize" plain icon="el-icon-edit" @click="handleClick('revise')">修改</el-button>
-                        <el-button type="primary" :size="btnsize" plain icon="el-icon-delete" @click="handleClick('delet')">删除</el-button>
-                        <el-button type="primary" :size="btnsize" plain icon="el-icon-edit" @click="handleClick('status')">启用/禁用</el-button>
+                        <el-button type="primary" :size="btnsize" plain icon="el-icon-news" @click="handleClick('add')" v-has:SYSTEM_DICT_ADD>新增</el-button>
+                        <el-button type="primary" :size="btnsize" plain icon="el-icon-edit" @click="handleClick('revise')" v-has:SYSTEM_DICT_UPDATE>修改</el-button>
+                        <el-button type="primary" :size="btnsize" plain icon="el-icon-delete" @click="handleClick('delet')" v-has:SYSTEM_DICT_DELETE>删除</el-button>
+                        <el-button type="primary" :size="btnsize" plain icon="el-icon-edit" @click="handleClick('status')" v-has:SYSTEM_DICT_USE>启用/禁用</el-button>
                     </div>
                     <p class="current"></p>
                     <div class="info_news">
@@ -46,6 +46,7 @@
                             border
                             height="100%"
                             @selection-change = "getinfomation"
+                            :default-sort = "{prop: 'name', order: 'descending'}"
                             @row-dblclick="moreinfo"
                             tooltip-effect="dark"
                             @row-click="clickDetails"
@@ -54,12 +55,19 @@
                                 type="selection"
                                 width="55">
                             </el-table-column>
+                            <el-table-column label="序号" width="80px">
+                                <template slot-scope="scope">
+                                    {{ (page - 1)*pagesize + scope.$index + 1 }}
+                                </template>
+                            </el-table-column>  
                             <el-table-column
                             prop="name"
+                            sortable
                             :show-overflow-tooltip="true"
                             label="分类名称">
                             </el-table-column>
                             <el-table-column
+                            sortable
                             prop="pidName"
                             label="上级分类">
                             <template  slot-scope="scope">
@@ -67,14 +75,17 @@
                                 </template>
                             </el-table-column>
                             <el-table-column
+                            sortable
                             prop="code"
                             label="编码">
                             </el-table-column>
                             <el-table-column
+                            sortable
                             prop="value"
                             label="数据值">
                             </el-table-column>
                             <el-table-column
+                            sortable
                             prop="status"
                             label="状态">
                                 <template  slot-scope="scope">
@@ -82,10 +93,12 @@
                                 </template>
                             </el-table-column>
                             <el-table-column
+                            sortable
                             prop="remark"
                             label="描述">
                             </el-table-column>
                             <el-table-column
+                            sortable
                             prop="isDefault"
                             label="是否初始值">
                                 <template  slot-scope="scope">
@@ -280,7 +293,7 @@ import DicDialog from './component/addDictionary'
                         break;
                 }
                 // 清除选中状态，避免影响下个操作
-                this.$refs.multipleTable.clearSelection()
+                this.$refs.multipleTable.clearSelection();
             },
             shuaxin(){
                 if(this.pid){

@@ -33,7 +33,12 @@
                         <el-table-column
                              type="selection"
                              width="55">
-                           </el-table-column>
+                        </el-table-column>
+                        <el-table-column label="序号" width="80px">
+                            <template slot-scope="scope">
+                                {{ (page - 1)*pagesize + scope.$index + 1 }}
+                            </template>
+                        </el-table-column>  
                         <el-table-column
                             sortable
                           prop="shipperInfo"

@@ -15,10 +15,6 @@ export function data_GetInformation(page,pagesize,data) {
     })
   }
 
-//获取服务分类子分类
-export function data_ServerClassList(){
-	return fetch.get('/'+baseurl+'/sm/aflcSysDict/v1/getServiceClassList') 
-}
 //新增数据
 export function data_AddForms(infoforms) {
     return fetch({

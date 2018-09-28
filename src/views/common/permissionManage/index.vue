@@ -16,11 +16,11 @@
         <div class="btns_box clearfix">
           <!--表格功能-->  
           <div class="btns_box_lrl clearfix">
-            <el-button type="primary" :size="btnsize" icon="el-icon-circle-plus" plain @click="doAction('addRole')" >新增角色</el-button>
-            <el-button type="primary" :size="btnsize" icon="el-icon-edit" @click="doAction('roleNot')" plain >修改</el-button>
-            <el-button type="danger" :size="btnsize" icon="el-icon-delete" @click="doAction('deletePeople')" plain >删除</el-button>
-            <el-button type="primary" :size="btnsize" icon="el-icon-edit" @click="doAction('reference')" plain >参照</el-button>
-            <el-button type="primary" :size="btnsize" icon="el-icon-edit" @click="doAction('relationPer')" plain >关联员工</el-button>
+            <el-button type="primary" :size="btnsize" icon="el-icon-circle-plus" plain @click="doAction('addRole')" v-has:SYSTEM_AUTH_MANEGE_ADD_ROLE>新增角色</el-button>
+            <el-button type="primary" :size="btnsize" icon="el-icon-edit" @click="doAction('roleNot')" plain v-has:SYSTEM_AUTH_MANEGE_UPDATE>修改</el-button>
+            <el-button type="danger" :size="btnsize" icon="el-icon-delete" @click="doAction('deletePeople')" plain v-has:SYSTEM_AUTH_MANEGE_DELETE>删除</el-button>
+            <el-button type="primary" :size="btnsize" icon="el-icon-edit" @click="doAction('reference')" plain v-has:SYSTEM_AUTH_MANEGE_REFER>参照</el-button>
+            <el-button type="primary" :size="btnsize" icon="el-icon-edit" @click="doAction('relationPer')" plain v-has:SYSTEM_AUTH_MANEGE_ASSOCIATION_MAINTAIN>关联员工</el-button>
 
           </div>
         </div>
@@ -31,36 +31,38 @@
             stripe
             border
             height="100%"
+            :default-sort = "{prop: 'roleName', order: 'descending'}"
             tooltip-effect="dark"
             @row-click="clickDetails"
             @selection-change="seleClick"
             style="width: 100%;">
             <el-table-column
-              fixed
               type="selection"
               width="55">
             </el-table-column>
             <el-table-column
-              fixed
               prop="id"
-              label="序号" width="50">
+              label="序号" width="80">
               <template slot-scope="scope">{{  scope.$index + 1 }}</template>
             </el-table-column>
             <el-table-column
-              fixed
+              sortable
               prop="roleName"
               label="角色名称">
             </el-table-column>
             <el-table-column
+              sortable
               prop="createrName"
               label="创建者">
             </el-table-column>
             <el-table-column
+              sortable
               label="创建时间"
               prop="createTime">
                  <template slot-scope="scope">{{  scope.row.createTime | parseTime}}</template>
             </el-table-column>
             <el-table-column
+              sortable
               prop="remark"
               label="备注">
             </el-table-column>

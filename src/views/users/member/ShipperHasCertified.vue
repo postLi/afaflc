@@ -17,7 +17,7 @@
             </el-form>
         <div class="classify_info">
 		    <div class="btns_box">
-                <el-button type="primary" :size="btnsize" plain @click="handleChange">修改</el-button>
+                <el-button type="primary" :size="btnsize" plain @click="handleChange" v-has:COMPANY_MANAGE_UPDATE>修改</el-button>
 		    </div>
             <div class="info_news">
                 <el-table
@@ -31,11 +31,6 @@
                     @selection-change="getSelection"    
                     :default-sort = "{prop: 'registerTime', order: 'descending'}"
                     style="width: 100%">
-                <!-- <el-table-column label="" width="60" fixed>
-                    <template slot-scope="scope">
-                        <el-radio class="textRadio" @change.native="getCurrentRow(scope.$index,scope.row)" :label="scope.$index" v-model="templateRadio">&nbsp;</el-radio>
-                    </template>
-                </el-table-column> -->
                  <el-table-column
                     fixed
                     sortable
@@ -47,7 +42,6 @@
                         {{ (page - 1)*pagesize + scope.$index + 1 }}
                     </template>
                 </el-table-column>   
-				            </el-table-column>  
 				<el-table-column label="手机号(会员账号)" prop="mobile" sortable width="180">
                     <template slot-scope="scope">
                         <h4 class="needMoreInfo" @click="pushOrderSerial(scope.row)">{{ scope.row.mobile}}</h4>

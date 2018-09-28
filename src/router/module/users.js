@@ -37,32 +37,24 @@ export default {
         hidden: false, 
         name: '商圈区代', 
         component: _import('users/district/index'), 
-        meta: { title: '商圈区代', stitle: '商圈',noCache: true ,code:'BUSINESS_AREA_MANAGE'},
+        meta: { title: '商圈区代', stitle: '商圈',noCache: true ,code:''},
         children:[
             {
                 path: '/users/district/shoppingDistrict', 
                 hidden: false, 
                 name: '商圈管理', 
                 component: _import('users/district/shoppingDistrict'), 
-                meta: { title: '商圈管理', stitle: '商圈',noCache: true },
+                meta: { title: '商圈管理', stitle: '商圈',noCache: true ,code:'BUSINESS_AREA_MANAGE_BUSINESS'},
             },
             {
                 path: '/users/district/manageDistrict', 
                 hidden: false, 
                 name: '区代管理', 
                 component: _import('users/district/manageDistrict'), 
-                meta: { title: '区代管理', stitle: '区代',noCache: true },
+                meta: { title: '区代管理', stitle: '区代',noCache: true,code:'BUSINESS_AREA_MANAGE_AREA' },
             },            
         ]
-    },
-    //   { 
-    //     path: '/users/partner', 
-    //     icon: 'hhrgl', 
-    //     hidden: false, 
-    //     name: '合伙人管理', 
-    //     component: _import('users/partner/index'), 
-    //     meta: { title: '合伙人管理', stitle: '合伙人',noCache: true }
-    // },      
+    },  
     { 
         path: '/users/shipperData', 
         icon: 'hzsjgl', 

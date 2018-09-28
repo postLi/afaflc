@@ -3,14 +3,14 @@
     <pop-right :title='popTitle' :isShow="popVisible" @close="closeMe" class='addEmployeerPop'>
       <template class='addEmployeerPop-content' slot="content">
 
-        <!-- 本网点是父级时显示 -->
+        <!-- 本机构是父级时显示 -->
         <el-form :model="form" :rules="rules" ref="ruleForm" class="demo-ruleForm" :inline="true" label-position="right"
                  size="mini" :key="formKey" v-if="companyId === form.id">
           <el-form-item label="公司名称" :label-width="formLabelWidth" prop="orgName">
             <el-input v-model="form.orgName" auto-complete="off" :disabled="companyId === form.id || form.status===31 "
                       :maxlength="15"></el-input>
           </el-form-item>
-          <el-form-item label="网点类型" :label-width="formLabelWidth">
+          <el-form-item label="机构类型" :label-width="formLabelWidth">
             <SelectType v-model="form.orgType" type="network_type" placeholder="请选择" class=""
                         :disabled="companyId === form.id || form.status===31"/>
           </el-form-item>
@@ -44,8 +44,6 @@
             <querySelect filterable show="select" @change="getCity" search="longAddr" valuekey="longAddr"
                          :disabled="companyId === form.id || form.status===31" type="city" v-model="form.city"
                          :remote="true" clearable/>
-
-
           </el-form-item>
           <el-form-item label="详细地址" :label-width="formLabelWidth">
             <el-input v-model="form.detailedAddr" auto-complete="off" :disabled="form.status===31"></el-input>
@@ -53,14 +51,14 @@
         </el-form>
         <el-form :model="form" :rules="rules" ref="ruleForm" class="demo-ruleForm" :inline="true" label-position="right"
                  size="mini"  :key="formKey" v-else>
-          <el-form-item label="网点名称" :label-width="formLabelWidth" prop="orgName">
+          <el-form-item label="机构名称" :label-width="formLabelWidth" prop="orgName">
             <el-input v-model="form.orgName" auto-complete="off" :disabled="form.status===31 "
                       :maxlength="15"></el-input>
           </el-form-item>
-          <el-form-item label="网点类型" :label-width="formLabelWidth">
+          <el-form-item label="机构类型" :label-width="formLabelWidth">
             <SelectType v-model="form.orgType" type="network_type" placeholder="请选择" class="" :disabled="isModify"/>
           </el-form-item>
-          <el-form-item label="网点状态" :label-width="formLabelWidth" disabled="disabled">
+          <el-form-item label="机构状态" :label-width="formLabelWidth" disabled="disabled">
             <el-select v-model="form.status" :disabled="isModify ? false : true">
               <!--<el-option v-for="item in netWorkStatus" :key="item.id" :label="item.dictName" :value="item.id"></el-option>-->
               <el-option label="有效" :value="32"></el-option>
@@ -68,7 +66,7 @@
             </el-select>
           </el-form-item>
 
-          <el-form-item label="上级网点" :label-width="formLabelWidth">
+          <el-form-item label="上级机构" :label-width="formLabelWidth">
             <SelectTree @change="canadd" v-model="form.parentId" :disabled="isModify || form.status===31"
                         :orgid="form.parentId || otherinfo.orgid"/>
           </el-form-item>
@@ -107,7 +105,7 @@
             <el-input v-model="form.detailedAddr" auto-complete="off" :disabled="form.status===31"
                       :maxlength="30"></el-input>
           </el-form-item>
-          <el-form-item label="网点代码" :label-width="formLabelWidth" prop="networkCode">
+          <el-form-item label="机构代码" :label-width="formLabelWidth" prop="networkCode">
             <el-input v-model="form.networkCode" auto-complete="off " :disabled="form.status===31" :maxlength="10"
                       clearable></el-input>
           </el-form-item>

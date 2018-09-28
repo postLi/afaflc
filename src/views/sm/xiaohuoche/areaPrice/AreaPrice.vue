@@ -561,8 +561,6 @@ export default {
                                             width: 150px;
                                             .el-input__inner{
                                                 padding: 5px;
-                                                height: 24px;
-                                                line-height: 24px;
                                                 font-size: 12px;
                                                 color:#3e9ff1;
                                             }
@@ -598,8 +596,6 @@ export default {
                                         width: 96px;
                                         font-size: 12px;
                                         border-radius: 2px;
-                                        height: 24px;
-                                        line-height: 24px;
                                         border: solid 1px #d4d4d4;
                                         padding:8px;
                                         color: #3e9ff1;
@@ -634,8 +630,6 @@ export default {
                 .el-input{
                     width: 110px;
                     .el-input__inner{
-                        height: 24px;
-                        line-height: 24px;
                         font-size: 12px;
                         color: #3e9ff1;
                     }

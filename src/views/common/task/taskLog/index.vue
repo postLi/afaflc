@@ -33,7 +33,7 @@
                    <el-input v-model="test" placeholder="请输入内容"></el-input>
                 </label>    
                 <el-button type="primary"  plain @click="getdata_search">查询</el-button>
-                <el-button type="primary"  plain @click="creatTask">新增任务</el-button>
+                <el-button type="primary"  plain @click="creatTask" v-has:SYSTEM_TASK_DISPATCH_LOG_ADD>新增任务</el-button>
             </div>
             <div class="classify_info">
                 <div class="info_news">

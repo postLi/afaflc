@@ -54,6 +54,7 @@
                         type="date"
                         placeholder="选择日期"
                         format="yyyy 年 MM 月 dd 日"
+                        :picker-options="pickerOptions"
                         value-format="timestamp">
                         </el-date-picker>
                         <span> 至 </span>
@@ -61,6 +62,7 @@
                         v-model="announce.endTime"
                         type="date"
                         placeholder="选择日期"
+                        :picker-options="pickerOptions"
                         format="yyyy 年 MM 月 dd 日"
                         value-format="timestamp">
                         </el-date-picker>
@@ -113,6 +115,11 @@ export default {
             }
         };
         return {
+            pickerOptions:{
+                disabledDate(time) {
+                    return time.getTime() < Date.now();
+                },
+            },
             releaseDriver:false,//发布到车主分组
             releaseShipper:false,//发布到货主分组
             isTop:false,//是否置顶
@@ -280,7 +287,7 @@ export default {
                     }).catch(err=>{
                         this.$message({
                             type: 'info',
-                            message: '操作失败，原因：' + res.errorInfo ? res.errorInfo : res.text
+                            message: '操作失败，原因：' + err.errorInfo ? err.errorInfo : err.text
                         })
                     })
                 }).catch(() => {

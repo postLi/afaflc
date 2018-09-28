@@ -40,11 +40,6 @@
                 :default-sort = "{prop: 'registerTime', order: 'descending'}"
 				tooltip-effect="dark"
 				style="width: 100%">
-                <!-- <el-table-column label="" width="60" fixed>
-                    <template slot-scope="scope">
-                        <el-radio class="textRadio" @change.native="getCurrentRow(scope.$index,scope.row)" :label="scope.$index" v-model="templateRadio">&nbsp;</el-radio>
-                    </template>
-                </el-table-column> -->
                  <el-table-column
                     fixed
                     sortable

@@ -4,23 +4,6 @@ const baseurl = "aflcsmservice"
 
 const baseurl_two = "aflccommonservice"
 
-// 获取区域树节点的数据
-
-export function data_Area(){
-    return fetch.get('/'+baseurl+'/sm/aflcDistrict/v1/getProvinceList') 
-}
-
-
-// 获取省级对应的城市列表
-export function data_GetCityList(code) {
-    return fetch({
-      url: '/'+baseurl+'/sm/aflcDistrict/v1/lists',
-      method: 'post',
-      data: {
-        "code": code
-      }
-    })
-  }
 
 //根据id获取服务区域定价  he  查询功能
 export function data_GetCityInfo(page,pagesize,data) {

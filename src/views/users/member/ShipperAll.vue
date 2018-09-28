@@ -39,11 +39,11 @@
           </el-form>
 		<div class="classify_info" >
 			<div class="btns_box">
-                <el-button type="primary" plain :size="btnsize" @click="handleClick('pushFreeze')">冻结</el-button>
-                <el-button type="primary" plain :size="btnsize" @click="handleClick('editFreeze')">冻结修改</el-button>
-                <el-button type="primary" plain :size="btnsize" @click="handleClick('pushBlack')">移入黑名单</el-button>
-                <el-button type="primary" plain :size="btnsize" @click="handleClick('removeBlack')">移除黑名单</el-button>
-                <el-button type="primary" plain :size="btnsize" @click="handleClick('removeFreeze')">解冻</el-button>
+                <el-button type="primary" plain :size="btnsize" @click="handleClick('pushFreeze')" v-has:COMPANY_MANAGE_FREEZE>冻结</el-button>
+                <el-button type="primary" plain :size="btnsize" @click="handleClick('editFreeze')" v-has:COMPANY_MANAGE_FREEZE_UPDATE>冻结修改</el-button>
+                <el-button type="primary" plain :size="btnsize" @click="handleClick('pushBlack')" v-has:COMPANY_MANAGE_PUT_BLACK>移入黑名单</el-button>
+                <el-button type="primary" plain :size="btnsize" @click="handleClick('removeBlack')" v-has:COMPANY_MANAGE_OUT_BLACK>移除黑名单</el-button>
+                <el-button type="primary" plain :size="btnsize" @click="handleClick('removeFreeze')" v-has:COMPANY_MANAGE_UNFREEZE>解冻</el-button>
 			</div>
 			<div class="info_news">
 				<el-table

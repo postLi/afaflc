@@ -18,7 +18,7 @@
           </el-form>
       	<div class="classify_info">
 		  <div class="btns_box">
-        	<el-button type="primary" :size="btnsize" plain icon="el-icon-check" @click="handleEdit">认证审核</el-button>
+        	<el-button type="primary" :size="btnsize" plain icon="el-icon-check" v-has:COMPANY_MANAGE_VALIDATED_AUTDIT @click="handleEdit">认证审核</el-button>
 		</div>
 		<div class="info_news">
 			<el-table 

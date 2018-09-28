@@ -60,6 +60,14 @@ export function GetCarStyle(serviceTypeCode, cartypeCode) {
 export function DicShippertype() {
   return fetch.get('/' + baseurl_two + '/sysDict/getSysDictByCodeGet/AF00101')
 }
+
+// 获取车辆规格 加宽  加长等
+export function DicCarType() {
+    return fetch({
+      url: '/' + baseurl_two + '/sysDict/getSysDictByCodeGet/AF009',
+      method: 'get'
+    })
+  }
 /**
  * 获取图片上传的policy
  * callback
@@ -103,13 +111,7 @@ export function getSelectType(type = '', orgid) {
   })
 }
 
-// 获取车辆规格 加宽  加长等
-export function data_GetCarType() {
-  return fetch({
-    url: '/' + baseurl_two + '/sysDict/getSysDictByCodeGet/AF009',
-    method: 'get'
-  })
-}
+
 
   // 获取省级数据
 export function data_getProvinceList() {

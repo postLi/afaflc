@@ -39,10 +39,14 @@
                             tooltip-effect="dark"
                             @row-click="clickDetails"
                             style="width: 100%"> 
-                                <el-table-column label="选择" width="55">
+                                <!-- <el-table-column label="选择" width="55">
                                     <template slot-scope="scope">
                                         <el-radio class="textRadio" @change.native="getCurrentRow(scope.$index,scope.row)" :label="scope.$index" v-model="templateRadio">&nbsp;</el-radio>
                                     </template>
+                                </el-table-column> -->
+                                <el-table-column
+                                    type="selection"
+                                    width="55">
                                 </el-table-column>
                                 <el-table-column label="序号"  width="80">
                                     <template slot-scope="scope">
@@ -161,7 +165,7 @@ export default {
             ],
             tableData_point:[],//车主列表
             selectRowData:{},
-            templateRadio:'',
+            checkedinformation:[],
         };
     },
      computed: {
@@ -192,16 +196,15 @@ export default {
         },
         //初始化选择项数据
         init(){
-
             this.searchInfo.orderSerial = this.orderSerial;
 
             getDictionary(this.carType).then(res => {
-                console.log('```````',res)
+                // console.log('```````',res)
                 this.optionsCarType = res.data;
             });
 
             nearDriverList(this.searchInfo).then(res => {
-                console.log('111111',res)
+                // console.log('111111',res)
                 this.dataTotal = res.data.length;
                 let pageStart =  (this.page - 1) * this.pagesize;
                 let pageEnd = this.page * this.pagesize;
@@ -214,7 +217,8 @@ export default {
         },
         //判断是否选中
         getinfomation(selection){
-
+            this.checkedinformation = selection;
+            this.selectRowData = Object.assign({},this.checkedinformation[0]);
         },
          //点击选中当前行
         clickDetails(row, event, column){
@@ -233,17 +237,28 @@ export default {
             }
         },
         pointXX(){
-            let pointData = Object.assign({},{orderSerial:this.orderSerial,driverId:this.selectRowData.driverId})
-            appointDriverList(pointData).then(res => {
-                console.log(res)
-                this.close()
-            }).catch(err => {
+            if(this.checkedinformation.length == 0){
                 this.$message({
-                    type: 'info',
-                    message: '操作失败，原因：' + err.text ? err.text : err.errinfo
+                    type: 'warning',
+                    message: '请选择要指派的司机~'
                 })
-            })
-            //  this.close()
+            }else if(this.checkedinformation.length > 1){
+                this.$message({
+                    type: 'warning',
+                    message: '不可同时指派给多个司机~'
+                })
+            }else{
+                let pointData = Object.assign({},{orderSerial:this.orderSerial,driverId:this.selectRowData.driverId})
+                appointDriverList(pointData).then(res => {
+                    console.log(res)
+                    this.close()
+                }).catch(err => {
+                    this.$message({
+                        type: 'info',
+                        message: '操作失败，原因：' + err.text ? err.text : err.errinfo
+                    })
+                })
+            }
         },
         close(){
             this.$emit('update:dialogFormVisible',false)

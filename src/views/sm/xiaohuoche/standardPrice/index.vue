@@ -1,12 +1,12 @@
 <template>
-    <div class="standarPrice identicalStyle clearfix">
+    <div class="standarPrice identicalStyle clearfix" v-loading="loading">
             <searchInfo @change="getSearchParam"></searchInfo>
             <div class="classify_info">
                 <div class="btns_box">
-                    <el-button type="primary" :size="btnsize" plain icon="el-icon-circle-plus" @click="addClassfy">新增</el-button>
-                    <el-button type="primary" :size="btnsize" plain icon="el-icon-edit" @click="handleEdit">修改</el-button>
-                    <el-button type="primary" :size="btnsize" plain icon="el-icon-delete" @click="handleDelete">删除</el-button>
-                    <el-button type="primary" :size="btnsize" plain icon="el-icon-bell" @click="handleUseStates">启用/禁用</el-button>
+                    <el-button type="primary" :size="btnsize" plain icon="el-icon-circle-plus" @click="handleClick('add')" v-has:SERVICE_SMALL_CAR_STANDARD_PRICE_ADD>新增</el-button>
+                    <el-button type="primary" :size="btnsize" plain icon="el-icon-edit" @click="handleClick('revise')" v-has:SERVICE_SMALL_CAR_STANDARD_PRICE_UPDATE>修改</el-button>
+                    <el-button type="primary" :size="btnsize" plain icon="el-icon-delete" @click="handleClick('delet')" v-has:SERVICE_SMALL_CAR_STANDARD_PRICE_DELETE>删除</el-button>
+                    <el-button type="primary" :size="btnsize" plain icon="el-icon-bell" @click="handleClick('status')" v-has:SERVICE_SMALL_CAR_STANDARD_PRICE_USE>启用/禁用</el-button>
                 </div>
                 <div class="info_news">
                     <el-table
@@ -14,6 +14,7 @@
                         :data="tableData"
                         stripe
                         border
+                        :default-sort = "{prop: 'serviceName', order: 'descending'}"
                         @selection-change = "getinfomation"
                         tooltip-effect="dark"
                         @row-click="clickDetails"
@@ -38,24 +39,36 @@
                           label="车辆规格">
                         </el-table-column>
                         <el-table-column
-                          prop="carTypeClass"
+                          prop="carLength"
                           sortable
                           label="车长">
+                            <template  slot-scope="scope"> 
+                                {{scope.row.carLength + '*' + scope.row.carWidth + '*' + scope.row.carHeight + 'M'}}
+                            </template>
                         </el-table-column>
                         <el-table-column
-                          prop="capacityTonM"
+                          prop="capacityTon"
                           sortable
                           label="负载量">
+                            <template  slot-scope="scope"> 
+                                {{scope.row.capacityTon + '吨,' + ' ' + scope.row.capacitySquare + '方'}}
+                            </template>
                         </el-table-column>
                         <el-table-column
-                          prop="standardPriceM"
+                          prop="standardPrice"
                           sortable
                           label="标准起步价">
+                            <template  slot-scope="scope"> 
+                                {{scope.row.standardPrice + '元 ' + ' ' + '(' + scope.row.standardKm + '公里)'}}
+                            </template>
                         </el-table-column>
                         <el-table-column
-                          prop="outstripPriceM"
+                          prop="outstripPrice"
                           sortable
                           label="标准超里程费">
+                            <template  slot-scope="scope"> 
+                                {{scope.row.outstripPrice + '元/公里'}}
+                            </template>
                         </el-table-column>
                         <el-table-column
                           prop="servicePic"
@@ -78,604 +91,165 @@
                     <!-- 页码 -->
                     <div class="info_tab_footer">共计:{{ dataTotal }} <div class="show_pager"> <Pager :total="dataTotal" @change="handlePageChange"  :sizes="sizes"/></div> </div>   
                     </div>
-                
-                <!-- 新增分类信息 -->
-                 <div class="addclassify commoncss">
-                    <el-dialog :title='formtitle'  :visible.sync="dialogFormVisible">
-                        <div class="chooseinfo">
-                            <div class="chooseinfo-item">
-                                <p><span>* </span>选择服务分类 ：</p>
-                                <el-radio-group v-model="forms.serivceCode" >
-                                    <el-radio  v-for="(obj,key) in optionsServiceM" :label="obj.code" :key='key'>{{obj.name}}</el-radio>
-                                </el-radio-group>
-                            </div>
-                            <div class="chooseinfo-item">
-                                <p><span>* </span>选择车辆类型 ：</p>
-                                <el-radio-group v-model="forms.carType">
-                                    <el-radio   v-for="(obj,key) in optionsCarM" :label="obj.code" :key='key'>{{obj.name}}</el-radio>
-                                </el-radio-group>
-                            </div>
-                            <div class="chooseinfo-item">
-                                <p>&nbsp;&nbsp;选择车辆规格 ：</p>
-                                <el-checkbox-group v-model="specList">
-                                    <el-checkbox v-for="obj in optionsCarTypeM" :label="obj.code" :key="obj.name" >{{obj.name}}</el-checkbox>
-                                </el-checkbox-group>
-                            </div>
-                        </div>
-                        <div class="completeinfo">
-                            <div class="detailinfo">
-                                <p><span>* </span>车长 ：</p>
-                                <el-input
-                                    placeholder="长"
-                                    v-number-only:point
-                                    maxlength="5"
-                                    ref="carLength"
-                                    v-model="forms.carLength"
-                                    clearable>
-                                </el-input>
-                                <el-input
-                                    placeholder="宽"
-                                    maxlength="5"
-                                    v-number-only:point
-                                    ref="carWidth"
-                                    v-model="forms.carWidth"
-                                    clearable>
-                                </el-input>
-                                <el-input
-                                    placeholder="高"
-                                    v-number-only:point
-                                    maxlength="5"
-                                    ref="carHeight"
-                                    v-model="forms.carHeight"
-                                    clearable>
-                                </el-input>
-                                <span class="node">米</span>
-                                <span class="remarks">(例如：长/宽/高 1.8*1.3*.1.2米)</span>
-                            </div>
-                        </div>
-
-                        <div class="completeinfo">
-                            <div class="detailinfo">
-                                <p><span>* </span>负载量 ：</p>
-                                <el-input
-                                    v-number-only:point
-                                    class="morewidth"
-                                    maxlength="5"
-                                    ref="capacityTon"
-                                    v-model="forms.capacityTon"
-                                    clearable>
-                                </el-input>
-                                <span class="dotted">吨</span>
-                                <el-input
-                                    v-number-only:point
-                                    class="morewidth"   
-                                    maxlength="5"
-                                    ref="capacitySquare"
-                                    v-model="forms.capacitySquare"
-                                    clearable>
-                                </el-input>
-                                <span>方</span>
-                            </div>
-                        </div>
-
-                        <div class="completeinfo">
-                            <div class="detailinfo">
-                                <p><span>* </span>标准起步价 ：</p>
-                                <el-input
-                                    v-number-only:point
-                                    class="morewidth"
-                                    maxlength="5"
-                                    ref="standardPrice"
-                                    v-model="forms.standardPrice"
-                                    clearable>
-                                </el-input>
-                                <span class="dotted">元</span>
-                                <el-input
-                                    v-number-only:point
-                                    class="morewidth"
-                                    maxlength="5"
-                                    ref="standardKm"
-                                    v-model="forms.standardKm"
-                                    clearable>
-                                </el-input>
-                                <span class="node">公里</span>
-                                <span class="remarks">(例如：16元/3公里)</span>
-                            </div>
-                        </div>
-                        <div class="completeinfo">
-                            <div class="detailinfo">
-                                <p><span>* </span>标准超里程费 ：</p>
-                                <el-input
-                                    v-number-only:point
-                                    class="morewidth"
-                                    maxlength="5"
-                                    ref="outstripPrice"
-                                    v-model="forms.outstripPrice"
-                                    clearable>
-                                </el-input>
-                                <span>元/公里</span>
-                            </div>
-                        </div>
-                        <div class="completeinfo">
-                            <div class="detailinfo">
-                                <p><span>* </span>上传服务图片 ：</p>
-                                <upload class="licensePicture" tip="（必须为jpg/png并且小于1M）" @ifError="hint" v-model="forms.servicePic" />
-                            </div>
-                        </div>
-                      <div slot="footer" class="dialog-footer">
-                        <el-button type="primary" @click="newInfoSave">保 存</el-button>
-                        <el-button @click="closeAddNewInfo">取 消</el-button>
-                      </div>
-                    </el-dialog>
-                </div>
-
-                <!-- 修改分类信息 -->
-                <div class="addclassify commoncss">
-                    <el-dialog title='修改分类信息'  :visible.sync="dialogFormVisible_change">
-                        <div class="chooseinfo">
-                            <div class="chooseinfo-item">
-                                <p><span>* </span>当前服务分类 ：</p>
-                                <el-input
-                                    v-model="changeforms.serviceName"
-                                    disabled
-                                    clearable>
-                                </el-input>
-                            </div>
-                            <div class="chooseinfo-item">
-                                <p><span>* </span>当前车辆类型 ：</p>
-                                 <el-input
-                                    v-model="changeforms.carTypeName"
-                                    disabled
-                                    clearable>
-                                </el-input>
-                            </div>
-                            <div class="chooseinfo-item">
-                                <p>&nbsp;&nbsp;当前车辆规格 ：</p>
-                                <el-input
-                                    v-model="changeforms.specName"
-                                    disabled
-                                    clearable>
-                                </el-input>
-                            </div>
-                        </div>
-                        <div class="completeinfo">
-                            <div class="detailinfo">
-                                <p><span>* </span>车长 ：</p>
-                                <el-input
-                                    v-number-only:point
-                                    placeholder="长"
-                                    v-model="changeforms.carLength"
-                                    clearable>
-                                </el-input>
-                                <el-input
-                                    v-number-only:point
-                                    placeholder="宽"
-                                    v-model="changeforms.carWidth"
-                                    clearable>
-                                </el-input>
-                                <el-input
-                                    v-number-only:point
-                                    placeholder="高"
-                                    v-model="changeforms.carHeight"
-                                    clearable>
-                                </el-input>
-                                <span class="node">米</span>
-                                <span class="remarks">(例如：长/宽/高 1.8*1.3*.1.2米)</span>
-                            </div>
-                        </div>
-
-                        <div class="completeinfo">
-                            <div class="detailinfo">
-                                <p><span>* </span>负载量 ：</p>
-                                <el-input
-                                    v-number-only:point
-                                    class="morewidth"
-                                    v-model="changeforms.capacityTon"
-                                    clearable>
-                                </el-input>
-                                <span class="dotted">吨</span>
-                                <el-input
-                                    v-number-only:point
-                                    class="morewidth"                                    
-                                    v-model="changeforms.capacitySquare"
-                                    clearable>
-                                </el-input>
-                                <span>方</span>
-                            </div>
-                        </div>
-
-                        <div class="completeinfo">
-                            <div class="detailinfo">
-                                <p><span>* </span>标准起步价 ：</p>
-                                <el-input
-                                    v-number-only:point
-                                    class="morewidth"
-                                    v-model="changeforms.standardPrice"
-                                    clearable>
-                                </el-input>
-                                <span class="dotted">元</span>
-                                <el-input
-                                    v-number-only:point
-                                    class="morewidth"
-                                    v-model="changeforms.standardKm"
-                                    clearable>
-                                </el-input>
-                                <span class="node">公里</span>
-                                <span class="remarks">(例如：16元/3公里)</span>
-                            </div>
-                        </div>
-                        <div class="completeinfo">
-                            <div class="detailinfo">
-                                <p><span>* </span>标准超里程费 ：</p>
-                                <el-input
-                                    v-number-only:point
-                                    class="morewidth"
-                                    v-model="changeforms.outstripPrice"
-                                    clearable>
-                                </el-input>
-                                <span>元/公里</span>
-                            </div>
-                        </div>
-                        <div class="completeinfo">
-                            <div class="detailinfo">
-                                <p><span>* </span>上传服务图片 ：</p>
-                                <upload class="licensePicture" tip="（必须为jpg/png并且小于5M）" v-model="changeforms.servicePic" />
-                            </div>
-                        </div>
-                        <div slot="footer" class="dialog-footer">
-                            <el-button type="primary" @click="changeInfoSave">保 存</el-button>
-                            <el-button @click="dialogFormVisible_change = false">取 消</el-button>
-                        </div>
-                    </el-dialog>
-                </div>
-
-                <!-- 新增分类提示不可为空 -->
-                <div class="cue">
-                    <el-dialog
-                    :visible.sync="centerDialogVisible"
-                    center>
-                    <span>{{information}}</span>
-                    </el-dialog>
-                </div>
-
-                <!-- 删除信息提示 -->
-                <div class="delData">
-                    <el-dialog
-                    title="提示"
-                    :visible.sync="delDialogVisible">
-                    <span class="delwarn"></span>
-                    <span class="delinfo">确认删除信息吗 ?</span>
-                    <span slot="footer" class="dialog-footer">
-                        <el-button type="primary" @click="delDataInformation">确 定</el-button>
-                        <el-button @click="delDialogVisible = false" type="info" plain>取 消</el-button>
-                    </span>
-                    </el-dialog>
-                </div>
             </div>
-            
-        <!-- <spinner v-show="show"></spinner>  -->
-        
+             <StandarPrice :dialogStandarPrice.sync="dialogStandarPrice" :reviseForm = 'reviseForm' :formtitle = 'formtitle' :isModify = "isModify"   @close = "shuaxin"/>
     </div>
 </template>
 
 <script type="text/javascript">
 
-import { data_GetInformation, data_CarList, data_ServerClassList, data_ChangeStatus, data_DeletInfo, data_AddForms, data_NewClassfy, data_changeClassfy } from '@/api/server/standardPrice.js'
-import { data_GetCarType } from '@/api/common.js'
-import Upload from '@/components/Upload/singleImage'
+import { data_GetInformation, data_ChangeStatus, data_DeletInfo, } from '@/api/server/standardPrice.js'
+import { DicCarType } from '@/api/common.js'
 import Pager from '@/components/Pagination/index'
-import '@/styles/dialog.scss'
 import searchInfo from '../component/searchInfo'
+import { objectMerge2, parseTime } from '@/utils/'
+import StandarPrice from './standarPrice'
+import '@/styles/dialog.scss'
 
 export default{
       data() {
           return {
-              sizes: [20, 50, 100],
-              btnsize: 'mini',
-              searchInfo: {
-                  carType: '',
-                  serivceCode: '',
-                  usingStatus: ''
-                },
-              forms: {
-                  serivceCode: null,
-                  carType: null,
-                  spec: null,
-                  carLength: null,
-                  carWidth: null,
-                  carHeight: null,
-                  capacityTon: null,
-                  capacitySquare: null,
-                  standardPrice: null,
-                  standardKm: null,
-                  outstripPrice: null,
-                  servicePic: ''
-                },
-              specList: [],
-              changeforms: {},
-              valueService: null,
-              optionsService: [
-                  {
-                    code: null,
-                    name: '全部'
-                  }
-                ],
-              optionsServiceM: null,
-              valueCarlist: null,
-              optionsCar: [
-                  {
-                    code: null,
-                    name: '全部'
-                  }
-                ],
-              optionsCarM: null,
-              optionsCarTypeM: null,
-              valueStatus: null,
-              value2: null,
-              pid: null,
-              pidname: null,
-              labelName: null,
-              page: 1,
-              pagesize: 20,
-              formtitle: '新增定价',
-              currentPage4: 1,
-              dialogFormVisible: false,
-              dialogFormVisible_change: false,
-              centerDialogVisible: false,
-              delDialogVisible: false,
-              nowcode: null,
-              dataTotal: 0,
-              information: '你想知道什么',
-              waitchange: {},
-              delID: [],
-              delIDTree: '',
-              checkedinformation: [],
-              formLabelWidth: '80px',
-              input_search: null,
-              tableData: [],
-              treeData: [],
-              defaultProps: {
-                  children: 'children',
-                  label: 'label'
-                },
-              carTypeRules: '请填写完整车长信息'
+                loading:true,
+                dialogStandarPrice:false,
+                reviseForm:{},
+                isModify:false,
+                sizes: [20, 50, 100],
+                btnsize: 'mini',
+                searchInfo: {
+                    carType: '',
+                    serivceCode: '',
+                    usingStatus: ''
+                    },
+                page: 1,
+                pagesize: 20,
+                formtitle: '',
+                dataTotal: 0,
+                checkedinformation: [],
+                tableData: [],
             }
         },
-      components: {
-          Upload,
-          Pager,
-          searchInfo
+        components: {
+            Pager,
+            searchInfo,
+            StandarPrice
         },
-      mounted() {
-          this.firstblood()
-            this.getMoreInformation()
-            // console.log(this.$store)
+        mounted() {
+            this.firstblood()
         },
-      methods: {
-          getSearchParam(obj) {
-              console.log(obj)
-              this.searchInfo = Object.assign(this.searchInfo, obj)
-                // this.loading = false
-              this.firstblood()
+        methods: {
+            shuaxin(){
+                this.firstblood();
+            },
+            getSearchParam(obj) {
+            //   console.log(obj);
+              this.searchInfo = Object.assign(this.searchInfo, obj);
+              this.firstblood();
             },
             // 获取翻页返回的数据
-          handlePageChange(obj) {
-              this.page = obj.pageNum
-                this.pagesize = obj.pageSize
-                this.firstblood()
-
+            handlePageChange(obj) {
+              this.page = obj.pageNum;
+                this.pagesize = obj.pageSize;
+                this.firstblood();
             },
-            // 获取  服务和车辆 类型列表
-          getMoreInformation() {
-              data_CarList().then(res => {
-                  console.log(res.data)
-                  res.data.map((item) => {
-                      this.optionsCar.push(item)
+            handleClick(type){
+                if (this.checkedinformation.length == 0 && type != 'add') {
+                    // 未选择任何修改内容的提示
+                   return this.$message({
+                        message: '请选择要操作的数据~',
+                        type: 'warning'
                     })
-                  this.optionsCarM = res.data
-                })
-                data_ServerClassList().then(res => {
-                  console.log(res.data)
-                  res.data.map((item) => {
-                       this.optionsService.push(item)
+                } else if (this.checkedinformation.length > 1  && type == 'revise') {
+                    return this.$message({
+                        message: '不可同时修改多条数据~',
+                        type: 'warning'
                     })
-                  this.optionsServiceM = res.data
-                    
-                })
-                data_GetCarType().then(res => {
-                  console.log(res.data)
-                  this.optionsCarTypeM = res.data
-                })
+                     // 清除选中状态，避免影响下个操作
+                    this.$refs.multipleTable.clearSelection();
+                }
+                switch(type){
+                    case 'add':
+                        this.isModify = false;
+                        this.dialogStandarPrice = true;
+                        this.formtitle = '新增标准定价';
+                        break;
+                    case 'revise':
+                        this.reviseForm =objectMerge2({},this.checkedinformation[0]);
+                        this.isModify = true;
+                        this.dialogStandarPrice = true;
+                        this.formtitle = '修改标准定价';
+                        break;
+                    case 'delet':
+                        const delID = []
+                        this.checkedinformation.map((item) => {
+                            return delID.push(item.standardPid)
+                        })
+                        let config = delID.length>1 ?  delID.length + '条' : this.checkedinformation[0].serviceName+this.checkedinformation[0].carTypeName+'这条';
+                        this.$confirm('确定要删除'+config+'数据吗？', '提示', {
+                            confirmButtonText: '确定',
+                            cancelButtonText: '取消',
+                            type: 'warning'
+                        }).then( ()=>{
+                            data_DeletInfo(delID).then(res => {
+                                this.$message({
+                                    type: 'success',
+                                    message: '删除成功'
+                                })
+                                this.firstblood();
+                            }).catch(err=>{
+                                this.$message({
+                                    type: 'info',
+                                    message: '删除失败，原因：' + err.errorInfo ? err.errorInfo : err.text
+                                })
+                            })
+                        }).catch(() => {
+                            this.$message({
+                                type: 'info',
+                                message: '已取消'
+                            })
+                        })
+                        break;
+                    case 'status':
+                        const statusID = []
+                        this.checkedinformation.map((item) => {
+                            return statusID.push(item.standardPid)
+                        })
+                        data_ChangeStatus(statusID).then(res=>{
+                            this.firstblood();
+                        }).catch(err=>{
+                            this.$message({
+                                type: 'info',
+                                message: '操作失败，原因：' + err.errorInfo ? err.errorInfo : err.text
+                            })
+                        })
+                        break;
+                }
+                 // 清除选中状态，避免影响下个操作
+                this.$refs.multipleTable.clearSelection();
             },
-
             // 点击选中当前行
-          clickDetails(row, event, column) {
-              this.$refs.multipleTable.toggleRowSelection(row)
-                this.waitchange = row
-                if (row.status == '启用') {
-                  this.dataStatus = false
-                }
-              if (row.status == '禁用') {
-                  this.dataStatus = true
-                }
-            },
-            // 新增关闭返回初始内容
-          closeAddNewInfo() {
-              this.dialogFormVisible = false
-                this.clearData()
+            clickDetails(row, event, column) {
+                this.$refs.multipleTable.toggleRowSelection(row)
             },
             // 判断是否选中
-          getinfomation(selection) {
-              this.checkedinformation = selection
-            },
-            // 修改
-          handleEdit() {
-              if (Object.keys(this.checkedinformation).length == 0) {
-                    // 未选择任何修改内容的提示
-                  const information = '未选中任何修改内容';
-                  this.hint(information)
-                } else if (this.checkedinformation.length > 1) {
-                  const information = '不可修改多个内容';
-                  this.hint(information)
-
-                } else{
-                  console.log(this.checkedinformation)
-                  this.dialogFormVisible_change = true
-                    this.changeforms = this.checkedinformation[0]
-                }
-            },
-            // 禁用/启用
-          handleUseStates() {
-              if (this.checkedinformation.length === 0) {
-                    // 未选择任何修改内容的提示
-                  const information = '未选中任何更改状态内容';
-                  this.hint(information)
-                } else{
-                  const statusID = []
-                    this.checkedinformation.map((item) => {
-                      return statusID.push(item.standardPid)
-                    })
-                  data_ChangeStatus(statusID).then(res => {
-                        // console.log(res)
-                      this.firstblood()
-                    })
-                }
-            },
-            // 是否删除
-          handleDelete() {
-              if (this.checkedinformation.length === 0) {
-                    // 未选择任何修改内容的提示
-                  const information = '未选中任何删除内容';
-                  this.hint(information)
-                } else{
-                  console.log(this.checkedinformation)
-                  const delID = []
-                    this.checkedinformation.map((item) => {
-                      return delID.push(item.standardPid)
-                    })
-                  this.delID = delID
-                    this.delDialogVisible = true
-                    console.log(this.delID)
-                }
-            },
-            // 确认删除
-          delDataInformation() {
-              this.delDialogVisible = false
-                data_DeletInfo(this.delID).then(res => {
-                  if (res.status == 200) {
-                      this.firstblood()
-                    }
-                }).catch(res => {
-                  const information = res.text
-                    this.hint(information)
-                })
+            getinfomation(selection) {
+                this.checkedinformation = selection;
+                console.log(selection)
             },
             // 刷新页面
-          firstblood() {
-              data_GetInformation(this.page, this.pagesize, this.searchInfo).then(res => {
-                  this.dataTotal = res.data.totalCount
-                    this.tableData = res.data.list
-                    this.tableData.map((item) => {
-                      item.carTypeClass = item.carLength + '*' + item.carWidth + '*' + item.carHeight + 'M'
-                        item.capacityTonM = item.capacityTon + '吨,' + ' ' + item.capacitySquare + '方'
-                        item.standardPriceM = item.standardPrice + '元 ' + ' ' + '(' + item.standardKm + '公里)'
-                        item.outstripPriceM = item.outstripPrice + '元/公里'
+            firstblood() {
+                this.loading = true;
+                data_GetInformation(this.page, this.pagesize, this.searchInfo).then(res => {
+                    this.dataTotal = res.data.totalCount;
+                    this.tableData = res.data.list;
+                    this.loading = false;
+                }).catch(err => {
+                    this.$message({
+                        type: 'info',
+                        message: '操作失败，原因：' + err.errorInfo ? err.errorInfo : err.text
                     })
+                    this.loading = false;
                 })
             },
-            // 新增分类信息
-          addClassfy() {
-              this.dialogFormVisible = true
-
-            },
-            // 保存信息
-          newInfoSave() {
-              this.forms.spec = this.specList.join(',')
-                if (!this.forms.serivceCode) {
-                  const information = '请选择服务类型';
-                  this.hint(information)
-                }                else if (!this.forms.carType) {
-                  const information = '请选择车辆类型';
-                  this.hint(information)
-                }
-              else if (!this.forms.carLength) {
-                  const information = '请填写完整车长信息';
-                  this.hint(information)
-                    this.$refs.carLength.focus()
-                }                else if (!this.forms.carWidth) {
-                  const information = '请填写完整车长信息';
-                  this.hint(information)
-                    this.$refs.carWidth.focus()
-                }                else if (!this.forms.carHeight) {
-                  const information = '请填写完整车长信息';
-                  this.hint(information)
-                    this.$refs.carHeight.focus()
-                }                else if (!this.forms.capacityTon) {
-                  const information = '请填写负载量';
-                  this.hint(information)
-                    this.$refs.capacityTon.focus()
-                }                 else if (!this.forms.capacitySquare) {
-                   const information = '请填写负载量';
-                   this.hint(information)
-                    this.$refs.capacitySquare.focus()
-                }                else if (!this.forms.standardPrice) {
-                  const information = '请填写标准起步价';
-                  this.hint(information)
-                    this.$refs.standardPrice.focus()
-                }                else if (!this.forms.standardKm) {
-                  const information = '请填写标准起步价';
-                  this.hint(information)
-                    this.$refs.standardKm.focus()
-                }                else if (!this.forms.outstripPrice) {
-                  const information = '请填写标准里程费';
-                  this.hint(information)
-                    this.$refs.outstripPrice.focus()
-                }                else if (!this.forms.servicePic) {
-                  const information = '请上传服务图片';
-                  this.hint(information)
-                }                else {(
-                    data_NewClassfy(this.forms).then(res=>{
-                        // console.log(res)
-                        this.firstblood();
-                        this.dialogFormVisible = false;
-                        this.clearData();
-                    })
-                )}
-            },
-
-            // 清空数据
-          clearData() {
-              this.forms = {
-                  serivceCode: null,
-                  carType: null,
-                  spec: null,
-                  carLength: null,
-                  carWidth: null,
-                  carHeight: null,
-                  capacityTon: null,
-                  capacitySquare: null,
-                  standardPrice: null,
-                  standardKm: null,
-                  outstripPrice: null,
-                  servicePic: ''
-                }
-            },
-            // 修改保存
-          changeInfoSave() {
-              console.log(this.changeform)
-              data_changeClassfy(this.changeforms).then(res => {
-                  this.firstblood()
-                    this.dialogFormVisible_change = false
-                })
-            },
-          hint(val) {
-              this.information = val
-                this.centerDialogVisible = true
-                let timer = setTimeout(() => {
-                  this.centerDialogVisible = false
-                    clearTimeout(timer)
-                }, 2000)
-            }
         }
     }
 </script>

@@ -3,9 +3,9 @@
             <searchInfo @change="getSearchParam"></searchInfo>
             <div class="classify_info">
                 <div class="btns_box">
-                    <el-button type="primary" class="el-icon-tickets" :size="btnsize" plain @click="handleSearch('publish')">发布公告</el-button>
+                    <el-button type="primary" class="el-icon-tickets" :size="btnsize" plain @click="handleSearch('publish')" v-has:SYSTEM_NOTICE_ADD>发布公告</el-button>
                 </div>
-                <div class="info_news" style="height:89%;">
+                <div class="info_news">
                     <el-table
                         ref="multipleTable"
                         :data="tableData"
@@ -16,16 +16,13 @@
                         @selection-change="getSelection"
                         height="100%"
                         tooltip-effect="dark"
-                        :default-sort = "{prop: 'id', order: 'ascending'}"
+                        :default-sort = "{prop: 'noticeLocation', order: 'ascending'}"
                         style="width: 100%">
                         <el-table-column
-                            fixed
-                            sortable
                             type="selection"
                             width="50">
                         </el-table-column>
                         <template v-for="column in tableColumn">
-                            
                             <el-table-column :key="column.id" :fixed="column.fixed" :align='column.alignName' sortable :label="column.label" :show-overflow-tooltip="column.overflow" :prop="column.prop" v-if="!column.slot" :width="column.width"></el-table-column>
                             <el-table-column :key="column.id" :fixed="column.fixed" :align='column.alignName' sortable :label="column.label" :show-overflow-tooltip="column.overflow" v-else :width="column.width || ''">
                             <template slot-scope="scope">
@@ -39,9 +36,11 @@
                                 <el-button
                                 :size="btnsize"
                                 :type="scope.row.isTop == 0 ? 'primary' : 'info'"
+                                v-has:SYSTEM_NOTICE_TOP
                                 @click="handleClick(scope.row,'ifTop')">{{scope.row.isTop == 0 ? '置顶' : '取消'}}</el-button>
                                 <el-button
                                 :size="btnsize"
+                                v-has:SYSTEM_NOTICE_UPDATE
                                 @click="handleClick(scope.row,'revise')">修改</el-button>
                             </template>
                         </el-table-column>

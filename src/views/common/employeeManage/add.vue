@@ -29,7 +29,7 @@
             <el-option label="女" value="1"></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="归属网点" :label-width="formLabelWidth" prop="orgid">
+        <el-form-item label="归属机构" :label-width="formLabelWidth" prop="orgid">
           <SelectTree filterable v-model="form.orgid" :orgid="otherinfo.orgid" />
         </el-form-item>
         <el-form-item label="权限角色" :label-width="formLabelWidth" prop="rolesId">
@@ -129,7 +129,7 @@ export default {
         position: '', // 职位
         jobNumber:"",//员工号
         sexFlag: '', // 性别
-        orgid: '', // 归属网点
+        orgid: '', // 归属机构
         rolesId: [], // 权限角色
         departmentId: '' // 归属部门
       },
@@ -241,7 +241,7 @@ export default {
       this.form.orgid = id
     },
     reset() {
-      // 缓存上一次选择的网点
+      // 缓存上一次选择的机构
       const orgid = this.form.orgid
     //   this.$refs['ruleForm'].resetFields()
       console.log('id', orgid, this.form.orgid)

@@ -31,9 +31,9 @@
                 <el-form-item label="公司名称" :label-width="formLabelWidth">
                   <el-input v-model="form.orgName" auto-complete="off" disabled></el-input>
                 </el-form-item>
-                <el-form-item label="网点类型" :label-width="formLabelWidth">
+                <el-form-item label="机构类型" :label-width="formLabelWidth">
                   <el-input :value='form.orgTypeName' disabled></el-input>
-                  <!--<el-input :value='form.orgType ===1 ? "营业网点" : "分拨中心"' disabled></el-input>-->
+                  <!--<el-input :value='form.orgType ===1 ? "营业机构" : "分拨中心"' disabled></el-input>-->
                 </el-form-item>
                 <el-form-item label="公司状态" :label-width="formLabelWidth" disabled="disabled">
                   <el-input :value='form.status ===32 ? "有效" : "无效"' disabled></el-input>
@@ -59,23 +59,21 @@
                 <el-form-item label="详情地址" :label-width="formLabelWidth">
                   <el-input v-model="form.detailedAddr" auto-complete="off" disabled></el-input>
                 </el-form-item>
-
-
               </el-form>
             </div>
           </el-collapse-item>
 
 
-          <el-collapse-item title="网点信息:" v-else>
+          <el-collapse-item title="机构信息:" v-else>
             <div class="side_right_top" :class="{currActive:form.status ===31}">
               <el-form :model="form" class="demo-ruleForm" :inline="true" label-position="right" size="mini">
-                <el-form-item label="网点名称" :label-width="formLabelWidth">
+                <el-form-item label="机构名称" :label-width="formLabelWidth">
                   <el-input v-model="form.orgName" auto-complete="off" disabled></el-input>
                 </el-form-item>
-                <el-form-item label="网点类型" :label-width="formLabelWidth">
+                <el-form-item label="机构类型" :label-width="formLabelWidth">
                   <el-input :value='form.orgTypeName' disabled></el-input>
                 </el-form-item>
-                <el-form-item label="网点状态" :label-width="formLabelWidth" disabled="disabled">
+                <el-form-item label="机构状态" :label-width="formLabelWidth" disabled="disabled">
                   <el-input :value='form.status ===32 ? "有效" : "无效"' disabled></el-input>
                 </el-form-item>
                 <el-form-item label="客服人员" :label-width="formLabelWidth">
@@ -84,7 +82,7 @@
                 <el-form-item label="客服电话" :label-width="formLabelWidth">
                   <el-input v-model="form.servicePhone" auto-complete="off" disabled></el-input>
                 </el-form-item>
-                <el-form-item label="上级网点" :label-width="formLabelWidth">
+                <el-form-item label="上级机构" :label-width="formLabelWidth">
                   <el-input :value="form.parentName || form.orgName" disabled></el-input>
                 </el-form-item>
                 <el-form-item label="经营类型" :label-width="formLabelWidth">
@@ -93,7 +91,7 @@
                 <el-form-item label="创建时间" :label-width="formLabelWidth">
                   <el-input :value=" form.createTime| parseTime('{y}/{m}/{d}')" disabled></el-input>
                 </el-form-item>
-                <el-form-item label="网点代码" :label-width="formLabelWidth">
+                <el-form-item label="机构代码" :label-width="formLabelWidth">
                   <el-input v-model="form.networkCode" auto-complete="off" disabled></el-input>
                 </el-form-item>
                 <el-form-item label="代收款限额" :label-width="formLabelWidth">
@@ -125,17 +123,17 @@
 
         <div class="side_right_bottom clearfix">
           <div class="btns_box_lrl clearfix">
-            <el-button type="primary" :size="btnsize" icon="el-icon-circle-plus" v-if="form.status ===32" plain @click="doAction('addPeople')" >              新增员工
+            <el-button type="primary" :size="btnsize" icon="el-icon-circle-plus" v-if="form.status ===32" plain @click="doAction('addPeople')" v-has:SYSTEM_ORG_ADD_EMP>              新增员工
             </el-button>
-            <el-button type="danger" :size="btnsize" icon="el-icon-delete" @click="doAction('deletePeople')" plain >
+            <el-button type="danger" :size="btnsize" icon="el-icon-delete" @click="doAction('deletePeople')" plain v-has:SYSTEM_ORG_DELETE_EMP>
               删除员工
             </el-button>
-            <el-button type="primary" :size="btnsize" icon="el-icon-edit" @click="doAction('modifyNot')" plain >修改网点
+            <el-button type="primary" :size="btnsize" icon="el-icon-edit" @click="doAction('modifyNot')" plain v-has:SYSTEM_ORG_UPDATE_NETWORK>修改机构
             </el-button>
-            <el-button v-if="form.status ===32" type="primary" :size="btnsize" icon="el-icon-circle-plus" @click="doAction('addNot')" plain >
-              新增网点
+            <el-button v-if="form.status ===32" type="primary" :size="btnsize" icon="el-icon-circle-plus" @click="doAction('addNot')" plain v-has:SYSTEM_ORG_ADD_NETWORK>
+              新增机构
             </el-button>
-            <el-button type="primary" :size="btnsize" icon="el-icon-edit" @click="doAction('depMain')" plain >部门维护
+            <el-button type="primary" :size="btnsize" icon="el-icon-edit" @click="doAction('depMain')" plain v-has:SYSTEM_ORG_DEPT_MAINTAIN>部门维护
             </el-button>
             <el-col class="org-name"><p>{{form.orgName}}</p></el-col>
           </div>
@@ -148,49 +146,53 @@
               border
               tooltip-effect="dark"
               height="100%"
+                :default-sort = "{prop: 'name', order: 'descending'}"
               @row-click="clickDetails"
               @selection-change="seleClick"
               style="width: 100%;">
               <el-table-column
-                fixed
                 type="selection"
                 width="55">
               </el-table-column>
               <el-table-column
-                fixed
-                prop="id"
-                width="60"
+                width="80"
                 label="序号">
                 <template slot-scope="scope">{{ ((pageNum - 1)*pageSize) + scope.$index + 1 }}</template>
               </el-table-column>
               <el-table-column
-                fixed
+                sortable
                 prop="name"
                 width="150"
                 label="姓名">
               </el-table-column>
               <el-table-column
                 prop="orgName"
+                sortable
                 width="230"
-                label="归属网点">
+                label="归属机构">
               </el-table-column>
               <el-table-column
                 prop="departmentName"
+                sortable
                 width="150"
                 label="归属部门">
               </el-table-column>
               <el-table-column
                 prop="position"
+                sortable
                 width="150"
                 label="职务">
               </el-table-column>
               <el-table-column
                 prop="username"
+                sortable
                 width="200"
                 label="登录账号">
               </el-table-column>
               <el-table-column
+                sortable
                 width="220"
+                prpo="rolesId"
                 label="权限角色">
                 <template slot-scope="scope">
                   <span v-if="scope.row.rolesId !== '0'">{{ scope.row.rolesName }}</span>
@@ -199,12 +201,15 @@
               </el-table-column>
               <el-table-column
                 label="性别"
+                sortable
+                prpo="sexFlag"
                 width="100">
                 <template slot-scope="scope">
                   {{ scope.row.sexFlag === "0" ? "男" : "女" }}
                 </template>
               </el-table-column>
               <el-table-column
+                sortable
                 prop="mobilephone"
                 label="联系手机"
               >
@@ -223,7 +228,7 @@
     </div>
     <div class="info_news_footer">
       <div class="checked_footer">
-        <el-checkbox v-model="checkedInput" value="checkbox" checked="checked">过滤失效网点</el-checkbox>
+        <el-checkbox v-model="checkedInput" value="checkbox" checked="checked">过滤失效机构</el-checkbox>
       </div>
       <div class="total_footer">共计:{{ total }}</div>
       <div class="show_pager">

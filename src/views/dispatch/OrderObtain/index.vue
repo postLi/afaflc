@@ -2,9 +2,9 @@
     <div class="orderObtain identicalStyle clearfix" v-loading="loading">
             <div class="classify_info">
                 <div class="btns_box">
-                    <el-button type="primary" plain icon="el-icon-circle-plus" :size="btnsize" @click="handleClick('new')">新增</el-button>
-                    <el-button type="primary" plain icon="el-icon-edit" :size="btnsize" @click="handleClick('revise')">修改</el-button>
-                    <el-button type="primary" plain icon="el-icon-delete" :size="btnsize" @click="handleClick('delet')">删除</el-button>
+                    <el-button type="primary" plain icon="el-icon-circle-plus" :size="btnsize" @click="handleClick('new')" v-has:DISPATCH_OBTAIN_ADD>新增</el-button>
+                    <el-button type="primary" plain icon="el-icon-edit" :size="btnsize" @click="handleClick('revise')" v-has:DISPATCH_OBTAIN_UPDATE>修改</el-button>
+                    <el-button type="primary" plain icon="el-icon-delete" :size="btnsize" @click="handleClick('delet')" v-has:DISPATCH_OBTAIN_DELETE>删除</el-button>
                 </div>
                 <div class="info_news">
                     <el-table
@@ -22,6 +22,11 @@
                             type="selection"
                             width="55">
                         </el-table-column>
+                        <el-table-column label="序号" width="80px">
+                                <template slot-scope="scope">
+                                    {{ (page - 1)*pagesize + scope.$index + 1 }}
+                                </template>
+                            </el-table-column>  
                         <el-table-column
                             sortable
                           prop="areaCodeName"

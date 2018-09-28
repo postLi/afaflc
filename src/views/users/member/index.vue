@@ -2,27 +2,27 @@
     <div class="member tabsWrap">
         <el-tabs v-model="memberName" type="card" @tab-click="handleClick" >
             <!-- 全部 -->
-                <el-tab-pane label="全部" name="first">
+                <el-tab-pane label="全部" name="first" v-if="$_has_permission('COMPANY_MANAGE_LIST_ALL')">
                     <ShipperAll :isvisible="memberName === 'first'"></ShipperAll>
                 </el-tab-pane>
 
             <!-- 未认证 -->
-                <el-tab-pane label="未认证" name="second">
+                <el-tab-pane label="未认证" name="second" v-if="$_has_permission('COMPANY_MANAGE_LIST_UNVALIDAT')">
                     <ShipperUnauthorized :isvisible="memberName === 'second'"></ShipperUnauthorized>
                 </el-tab-pane>
 
             <!-- 待认证 -->
-                <el-tab-pane label="待认证" name="third">
+                <el-tab-pane label="待认证" name="third" v-if="$_has_permission('COMPANY_MANAGE_LIST_VALIDATING')">
                     <ShipperCertified :isvisible="memberName === 'third'"></ShipperCertified>
                 </el-tab-pane>
                 
             <!-- 已认证部分 -->
-                <el-tab-pane label="已认证" name="fourth">
+                <el-tab-pane label="已认证" name="fourth" v-if="$_has_permission('COMPANY_MANAGE_LIST_VALIDATED')">
                     <ShipperHasCertified :isvisible="memberName === 'fourth'"></ShipperHasCertified>
                 </el-tab-pane>
 
             <!-- 认证不通过 -->
-                <el-tab-pane label="认证不通过" name="fifth">
+                <el-tab-pane label="认证不通过" name="fifth" v-if="$_has_permission('COMPANY_MANAGE_LIST_VALIDATFAIL')">
                     <ShipperDisqualification :isvisible="memberName === 'fifth'"></ShipperDisqualification>
                 </el-tab-pane>
         </el-tabs>

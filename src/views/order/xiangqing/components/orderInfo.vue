@@ -229,22 +229,24 @@
                 客服备注
                 <el-button class="el-icon-circle-plus" @click="handlerClick"  type="primary" size="mini" plain>添加备注</el-button>
             </h2>
-            <div class="essentialInformation" v-if="listInformation.aflcOrderRemarks.length != 0" v-for="item in listInformation.aflcOrderRemarks" :key="item.remarkId">
-                <p>
-                    <span>客服：</span>
-                    <span>{{item.userName}}</span>
-                 </p>
-                <p>
-                    <span>备注时间：</span>
-                    <span>{{item.createTime | parseTime}}</span>
-                </p>
-                <p class="markInfo remakInfo">
-                    <span>备注内容：</span>
-                    <el-tooltip placement="top-start" effect="light">
-                        <div slot="content">{{item.remark}}</div>
-                        <span>{{item.remark}}</span>    
-                    </el-tooltip>
-                </p>
+            <div v-if="listInformation.aflcOrderRemarks.length != 0">
+                <div class="essentialInformation"  v-for="item in listInformation.aflcOrderRemarks" :key="item.remarkId">
+                    <p>
+                        <span>客服：</span>
+                        <span>{{item.userName}}</span>
+                    </p>
+                    <p>
+                        <span>备注时间：</span>
+                        <span>{{item.createTime | parseTime}}</span>
+                    </p>
+                    <p class="markInfo remakInfo">
+                        <span>备注内容：</span>
+                        <el-tooltip placement="top-start" effect="light">
+                            <div slot="content">{{item.remark}}</div>
+                            <span>{{item.remark}}</span>    
+                        </el-tooltip>
+                    </p>
+                </div>
             </div>
             <div class="essentialInformationNull" v-else>
                 <img src="../../../../assets/icom/25xinxi.png" alt="">

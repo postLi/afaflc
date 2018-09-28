@@ -6,7 +6,7 @@
             :key="item.name"
             :label="item.label"
             :name="item.name">
-                <implementComponent :isvisible="orderTabName === item.name" :status = "item.type"></implementComponent>
+                <implementComponent v-if="$_has_permission(item.vHas)" :isvisible="orderTabName === item.name" :status = "item.type"></implementComponent>
             </el-tab-pane>
         </el-tabs>
     </div>
@@ -25,13 +25,13 @@
           return {
             orderTabName:'tihuo',
             visibleTabs:[
-                {label:"待提货",name:"tihuo",type:'AF0080601PT'},
-                {label:"待到车",name:"daoche",type:'AF0080602PT'},
-                {label:"待装货",name:"zhuanghuo",type:'AF0080603PT'},
-                {label:"完成装货",name:"wczhuanghuo",type:'AF0080604PT'},
-                {label:"运输中",name:"yunshu",type:'AF0080605PT'},
-                {label:"待卸货",name:"xiehuo",type:'AF0080606PT'},
-                {label:"完成卸货",name:"wcxiehuo",type:'AF0080607PT'},
+                {label:"待提货",name:"tihuo",type:'AF0080601PT',vHas:'ORDER_CITY_WIDE_ORDER_ING_WIAT_PICK_GOODS'},
+                {label:"待到车",name:"daoche",type:'AF0080602PT',vHas:'ORDER_CITY_WIDE_ORDER_ING_WIAT_CAR'},
+                {label:"待装货",name:"zhuanghuo",type:'AF0080603PT',vHas:'ORDER_CITY_WIDE_ORDER_ING_WIAT_LOAD_GOODS'},
+                {label:"完成装货",name:"wczhuanghuo",type:'AF0080604PT',vHas:'ORDER_CITY_WIDE_ORDER_ING_FINISH_LOAD_GOODS'},
+                {label:"运输中",name:"yunshu",type:'AF0080605PT',vHas:'ORDER_CITY_WIDE_ORDER_ING_TRANSPORT_ING'},
+                {label:"待卸货",name:"xiehuo",type:'AF0080606PT',vHas:'ORDER_CITY_WIDE_ORDER_ING_WIAT_UNLOAD_GOODS'},
+                {label:"完成卸货",name:"wcxiehuo",type:'AF0080607PT',vHas:'ORDER_CITY_WIDE_ORDER_ING_FINISH_UNLOAD_GOODS'},
             ]
           };
         },

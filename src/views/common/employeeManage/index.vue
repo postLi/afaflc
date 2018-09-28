@@ -3,10 +3,10 @@
     <SearchForm :orgid="otherinfo.orgid" @change="getSearchParam" :btnsize="btnsize" />
     <div class="staff_info">
       <div class="btns_box">
-        <el-button type="primary" :size="btnsize" icon="el-icon-circle-plus" plain @click="doAction('add')">新增员工</el-button>
-        <el-button type="primary" :size="btnsize" icon="el-icon-edit-outline" @click="doAction('auth')" plain >员工授权</el-button>
-        <el-button type="primary" :size="btnsize" icon="el-icon-edit" @click="doAction('modify')" plain >修改</el-button>
-        <el-button type="danger" :size="btnsize" icon="el-icon-delete" @click="doAction('delete')" plain >删除</el-button>
+        <el-button type="primary" :size="btnsize" icon="el-icon-circle-plus" plain @click="doAction('add')" v-has:SYSTEM_EMPLOYEE_MANAGE_ADD_EMP>新增员工</el-button>
+        <el-button type="primary" :size="btnsize" icon="el-icon-edit-outline" @click="doAction('auth')" plain v-has:SYSTEM_EMPLOYEE_MANAGE_EMP_AUTH>员工授权</el-button>
+        <el-button type="primary" :size="btnsize" icon="el-icon-edit" @click="doAction('modify')" plain v-has:SYSTEM_EMPLOYEE_MANAGE_UPDATE>修改</el-button>
+        <el-button type="danger" :size="btnsize" icon="el-icon-delete" @click="doAction('delete')" plain v-has:SYSTEM_EMPLOYEE_MANAGE_DELETE>删除</el-button>
         <!-- <el-button type="primary" :size="btnsize" icon="el-icon-setting" plain @click="setTable" class="table_setup">表格设置</el-button> -->
       </div>
       <div class="info_news">
@@ -100,8 +100,8 @@ export default {
       tableColumn: [{
         label: '序号',
         prop: 'id',
-        width: '60',
-        fixed: true,
+        width: '80',
+        fixed: false,
         slot: (scope) => {
           return ((this.searchForm.pageNum - 1) * this.searchForm.pageSize) + scope.$index + 1
         }
@@ -109,9 +109,9 @@ export default {
         label: '姓名',
         prop: 'name',
         width: '120',
-        fixed: true
+        fixed: false
       }, {
-        label: '归属网点',
+        label: '归属机构',
         prop: 'orgName',
         width: '120',
         fixed: false
