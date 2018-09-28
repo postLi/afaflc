@@ -147,7 +147,6 @@ export default {
   },
   mounted() {
     eventBus.$on('changeList', () => {
-    //   console.log('22222222222222222222')
         this.firstblood()
     })
   },

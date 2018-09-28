@@ -80,17 +80,17 @@
                     {{scope.row.province+scope.row.city+scope.row.area}}
                 </template>
             </el-table-column>
-            <el-table-column  label="车辆类型" prop="carType" sortable :show-overflow-tooltip="true">
+            <el-table-column  label="车辆类型" prop="carType" sortable>
             </el-table-column>
-            <el-table-column  label="车主抽佣等级" prop="commissionGrade" sortable :show-overflow-tooltip="true">
+            <el-table-column  label="车主抽佣等级" prop="commissionGrade" sortable>
             </el-table-column>
-            <el-table-column  label="开始抽佣单数" prop="startNum" sortable :show-overflow-tooltip="true">
+            <el-table-column  label="开始抽佣单数" prop="startNum" sortable>
             </el-table-column>
-            <el-table-column  label="结束抽佣单数" prop="endNum" sortable :show-overflow-tooltip="true">
+            <el-table-column  label="结束抽佣单数" prop="endNum" sortable>
             </el-table-column>       
-            <el-table-column  label="每单抽佣（%）" prop="commissionPer" sortable :show-overflow-tooltip="true">
+            <el-table-column  label="每单抽佣（%）" prop="commissionPer" sortable>
             </el-table-column>                                                       
-            <el-table-column  label="最低抽佣(元)" prop="commissionLowest" sortable :show-overflow-tooltip="true">
+            <el-table-column  label="最低抽佣(元)" prop="commissionLowest" sortable >
             </el-table-column>
             <el-table-column  label="启用状态" sortable>
             <template  slot-scope="scope">
@@ -119,8 +119,8 @@ export default {
       options: regionDataPlus,
       selectRowData: {},
       selectId: [],
-      sizes: [30, 50, 100],
-      pagesize: 30, // 初始化加载数量
+      sizes: [20, 50, 100],
+      pagesize: 20, // 初始化加载数量
       page: 1, // 初始化页码
       totalCount: null,
       dataTotal: 0,
@@ -166,7 +166,6 @@ export default {
             // 获取  服务和车辆 类型列表
     getMoreInformation() {
       data_CarList().then(res => {
-                    // console.log(res.data)
         res.data.map((item) => {
           this.optionsCar.push(item)
         })

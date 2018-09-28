@@ -111,5 +111,6 @@ export default {
         component: _import('common/announcement/index'),
         meta: { title: '发布公告', stitle: '公告', noCache: true , code: 'SYSTEM_NOTICE'}
       },
+
   ]
 }

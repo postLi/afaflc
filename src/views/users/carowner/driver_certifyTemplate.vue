@@ -2,7 +2,7 @@
   <div class="drivercertify commoncss">
     <el-button type="primary" :value="value" :plain="plain" :icon="icon" @click="openDialog()">{{btntext}}</el-button>
     <el-dialog :title="btntext" :visible.sync="freezeDialogFlag" :before-close="change()" :modal="false">
- <el-form :model="templateModel" ref="templateModel" :rules="rulesForm" inline>
+ <el-form :model="templateModel" ref="templateModel" :rules="rulesForm" inline modal-append-to-body>
              <el-row>
                 <el-col :span="12">
                     <el-form-item label="手机号：" :label-width="formLabelWidth" prop="driverMobile">
@@ -277,7 +277,7 @@ export default {
   data(){
        // 手机号校验
         const mobileValidator = (rule, val, cb) => {
-            let phoneTest = /(^1[3|4|5|7|8]\d{9}$)|(^09\d{8}$)/
+            let phoneTest = /(^1[3|4|5|7|8|9]\d{9}$)|(^09\d{8}$)/
             !val && cb(new Error('手机号码不能为空'))
             if(!(phoneTest.test(val))){
                 cb(new Error('请输入正确的手机号码格式'))
@@ -559,7 +559,6 @@ export default {
   // 审核不通过
     handlerOut(){
         this.completeData()
-                var forms=Object.assign({},this.templateModel,{driverStatus:"AF0010404"},{authNoPassCause:JSON.stringify(this.pictureValue)})
                     if(this.completeData()==false)
                     {
                     return
@@ -567,10 +566,10 @@ export default {
                     else{
                 this.$refs['templateModel'].validate((valid)=>{
                 if(valid){
+                    var forms=Object.assign({},this.templateModel,{driverStatus:"AF0010404"},{authNoPassCause:JSON.stringify(this.pictureValue)})
+                    this.freezeDialogFlag = false;
                     data_post_audit(forms).then(res=>{
-                        // console.log(res)
                         this.$message.success('审核不通过 提交')
-                        this.freezeDialogFlag = false;
                         this.changeList()
                     }).catch(err=>{
                         console.log(err)
@@ -590,10 +589,9 @@ export default {
                 this.$refs['templateModel'].validate((valid)=>{
                     if(valid){
                         var forms=Object.assign({},this.templateModel,{driverStatus:"AF0010403",authNoPassCause:JSON.stringify(this.pictureValue)})
+                        this.freezeDialogFlag = false;
                         data_post_audit(forms).then(res=>{
-                            // console.log(res)
                             this.$message.success('审核通过成功')
-                            this.freezeDialogFlag = false;
                             this.changeList()
                         }).catch(err=>{
                             console.log(err)

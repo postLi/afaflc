@@ -2,7 +2,7 @@
      <div class="newcouponBox commoncss">
       <el-button :type="btntype" :value="value" :plain="plain" :icon="icon" @click="openDialog()">{{btntext}}</el-button>
       <div class="newcoupon1">
-      <el-dialog  :visible="dialogFormVisible_add" :before-close="change" :title="btntitle">
+      <el-dialog  :visible="dialogFormVisible_add" :before-close="change" :title="btntitle" modal-append-to-body>
         <el-form :model="formAllData" ref="formAllData" :rules="rulesForm">
           <el-row v-if="editType=='one'">
             <el-col>
@@ -43,18 +43,19 @@
           </el-row>
           <el-row>
               <el-col :span="20">
-               <el-form-item  label="活动说明：" :label-width="formLabelWidth" prop="activityDes">
-                   <div class="textareaBox">
+               <el-form-item  label="活动说明：" :label-width="formLabelWidth" prop="activityDes" class="textArea" > 
                                 <el-input
                                     type="textarea"
                                     :rows="2"
-                                    placeholder="1-100间的字符"
+                                    placeholder="1-100间的字符" 
                                     maxlength="100"
                                     ref="infofocus"
                                     v-model="formAllData.activityDes"
                                     clearable>
                                 </el-input>
-                                </div>
+                              <p class="countNum">
+                             <span class="">{{formAllData.activityDes.length}}</span> <span>/ {{maxlengthNum}}</span> 
+                        </p>
                </el-form-item>                   
               </el-col>
           </el-row>
@@ -300,6 +301,7 @@ export default {
             }   
         }        
     return{
+        maxlengthNum:100,
         pickerOptions2: {
         shortcuts: pickerOptions2
             },
@@ -324,7 +326,7 @@ export default {
         formLabelWidth:'120px',
         formLabelWidth2:'80px',
         formAllData:{
-            activityDes:null,
+            activityDes:'',
             activityName:null,
             activityType:null,
             usingStatus:null,
@@ -370,28 +372,29 @@ export default {
         handler: function(val, oldVal) {
             if(!val){
             this.$refs['formAllData'].resetFields();
-          this.formAllData.aflcCouponList=[{
-           province:null,
-           city:null,
-           area:null,     
-           couponNum:null,
-           couponName:null,
-           couponType:null,
-           remissionDiscount:null,
-           timeType:null,
-           conditionDeduction:null,
-           startTime:null,
-           endTime:null,
-           overTime:null,
-           serivceCode:null,
-           carType:null,
-           areaCode:[],
-           areaName:[],
-           ifvouchersuperposition:null,
-           }]
+            this.$emit('getData');
+            this.formAllData.aflcCouponList=[{
+            province:null,
+            city:null,
+            area:null,     
+            couponNum:null,
+            couponName:null,
+            couponType:null,
+            remissionDiscount:null,
+            timeType:null,
+            conditionDeduction:null,
+            startTime:null,
+            endTime:null,
+            overTime:null,
+            serivceCode:null,
+            carType:null,
+            areaCode:[],
+            areaName:[],
+            ifvouchersuperposition:null,
+            }]
             }
-           else{
-                 this.getMoreInformation();
+            else{
+             this.getMoreInformation();
             }
         },
     },
@@ -690,16 +693,13 @@ export default {
                         area:this.formAllData.area,
                         aflcCouponList:aflcCouponList
                     }]
-              data_get_couponActive_create(forms).then((res)=>{
-              
-              this.$refs['formAllData'].resetFields();
-              eventBus.$emit('changeListtwo')
               this.dialogFormVisible_add = false;
+              data_get_couponActive_create(forms).then((res)=>{
+              eventBus.$emit('changeListtwo')
               this.$message.success('新增成功');
                 }).catch(res=>{
-                    console.log(res)
-                    this.dialogFormVisible_add = false;
-                    this.$message.error('新增失败')
+              eventBus.$emit('changeListtwo')
+              this.$message.error('新增失败')
             });
               }
          })
@@ -733,9 +733,6 @@ export default {
     .el-radio.is-bordered{
         height: 30px;
         padding: 7px 20px 0 10px;
-    }
-     .textareaBox {
-        width: 500px;
     }
     .el-input__icon{
         line-height: 24px;

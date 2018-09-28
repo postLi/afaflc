@@ -1,7 +1,7 @@
 <template> 
     <div class="carNewinfo commoncss">
         <el-button :type="btntype" :value="value" :plain="plain" :icon="icon" @click="openDialog()"><span :class="editType=='view'?'BtnInfo':''">{{btntext}}</span ></el-button>
-        <el-dialog :title="title" :visible="driverTemplateDialogFlag" :before-close="change">
+        <el-dialog :title="title" :visible="driverTemplateDialogFlag" :before-close="change" modal-append-to-body>
              <el-form
               ref="templateModel"
               :model="templateModel"
@@ -32,12 +32,12 @@
                   <el-col :span="12">
                       <span v-if="editType=='view'">
                     <el-form-item label="身份证号码："  :label-width="formLabelWidth">
-                        <el-input v-model.trim="templateModel.driverCardid" disabled></el-input>
+                        <el-input v-model.trim="templateModel.driverCardid" disabled ></el-input>
                     </el-form-item>
                     </span>
                     <span v-else>
-                     <el-form-item label="身份证号码："  :label-width="formLabelWidth" prop="driverCardid">
-                        <el-input v-model.trim="templateModel.driverCardid" ></el-input>
+                     <el-form-item label="身份证号码："  :label-width="formLabelWidth" prop="driverCardid" >
+                        <el-input v-model.trim="templateModel.driverCardid" :maxlength="18"></el-input>
                     </el-form-item>
                     </span>
                   </el-col>
@@ -285,7 +285,7 @@ export default {
     data() {
        // 手机号校验
         const mobileValidator = (rule, val, cb) => {
-            let phoneTest = /(^1[3|4|5|7|8]\d{9}$)|(^09\d{8}$)/
+            let phoneTest = /(^1[3|4|5|7|8|9]\d{9}$)|(^09\d{8}$)/
             !val && cb(new Error('手机号码不能为空'))
             if(!(phoneTest.test(val))){
                 cb(new Error('请输入正确的手机号码格式'))
@@ -524,10 +524,10 @@ export default {
                 this.selectFlag=false;
                 this.$refs.templateModel.resetFields();
                 this.templateModel.carSpec = null;
+                this.templateModel.belongCity = null;
                 this.$emit('getData')
             }
             else{
-            console.log('val',val)
             this.getMoreInformation()
             }
         }
@@ -542,12 +542,12 @@ export default {
                 console.log('data:',d)
                 this.templateModel.belongCityName = (!d.province&&!d.city&&!d.area&&!d.town) ? '': `${this.getValue(d.province)}${this.getValue(d.city)}${this.getValue(d.area)}${this.getValue(d.town)}`.trim();
                 if(d.area){
-                    this.templateModel.areaCode = d.area.code;
+                    this.templateModel.belongCity = d.area.code;
                 }else if(d.city){
-                    this.templateModel.areaCode = d.city.code;
+                    this.templateModel.belongCity = d.city.code;
                 }
                 else{
-                    this.templateModel.areaCode = d.province.code;
+                    this.templateModel.belongCity = d.province.code;
                 }
             },
              getValue(obj){
@@ -634,31 +634,26 @@ export default {
                 if(valid){
                     var forms= Object.assign({}, this.templateModel)
                     console.log('this.templateModel',forms)
+                     this.driverTemplateDialogFlag = false;
                     // 新增数据提交
                     if(this.editType === 'add'){
                         data_post_createDriver(forms).then(res=>{
-                            this.driverTemplateDialogFlag = false;
                             this.$message.success('新增成功')
                             this.changeList();
-                            this.$emit('getData')
                         }).catch(res=>{
                             this.$message.error('新增失败')
                         })
                     } else if(this.editType=== 'valetAuth') { 
                         data_post_driverAudit(forms).then(res=>{
-                            this.driverTemplateDialogFlag = false;
                             this.$message.success('代客认证成功')
                              this.changeList();
-                            this.$emit('getData')
                         }).catch(res=>{
                             this.$message.error('代客认证失败')
                         })
                     } else if(this.editType==='edit'){
                         data_put_changeDriver(forms).then(res=>{
-                            this.driverTemplateDialogFlag = false;
                             this.$message.success('修改成功')
                              this.changeList();
-                            this.$emit('getData')
                         }).catch(res=>{
                             this.$message.error('修改失败')
                         })
@@ -670,11 +665,11 @@ export default {
 }
 </script>
 <style  lang="scss">
-.BtnInfo{
-    font-weight: bold
-}
 .carNewinfo{
     display: inline-block;
+    .BtnInfo{
+    font-weight: bold
+    }
     .el-dialog{
         overflow: unset;
         max-height: inherit;

@@ -73,7 +73,7 @@
                              {{ (page - 1)*pagesize + scope.$index + 1 }}
                             </template>
             </el-table-column> 
-            <el-table-column  label="所属区域" prop="areaCode" show-overflow-tooltip  width="150px" sortable>
+            <el-table-column  label="所属区域" prop="areaCode" show-overflow-tooltip  width="250px" sortable>
                  <template slot-scope="scope">
                     {{scope.row.province+scope.row.city+scope.row.area}}
                 </template>
@@ -127,9 +127,9 @@ export default {
       options:regionDataPlus,
       selectRowData:{},
       selectId:[],
-      sizes:[30,50,100],
+      sizes:[20,50,100],
       information:'操作不正确',
-      pagesize:30,//每页显示数
+      pagesize:20,//每页显示数
       page:1,//当前页
       totalCount:null,
       dataTotal:null,

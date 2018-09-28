@@ -41,7 +41,6 @@
         },
         watch:{
             CarActiveName(newVal,oldVal){
-                // console.log('newVal,oldVal',newVal,oldVal)
                 if(newVal){
                     this.CarActiveName = newVal;
                 }else{

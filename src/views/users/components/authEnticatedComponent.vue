@@ -3,7 +3,7 @@
               <el-form :inline="true"  class="demo-ruleForm classify_searchinfo">
                 <el-form-item label="所在地：">
                     <vregion :ui="true"  @values="regionChange" class="form-control">
-                        <el-input v-model="formInline.belongCity" placeholder="请选择"></el-input>
+                        <el-input v-model="formInline.belongCityName" placeholder="请选择"></el-input>
                     </vregion>
                 </el-form-item>
                 <el-form-item label="车牌号：">
@@ -131,10 +131,10 @@
                 totalCount:null,//总记录数
                 formInline: {//查询条件
                     driverMobile:null,
-                    belongCity:null,
                     driverStatus:'AF0010403',
                     carNumber:null,
-                    areaCode:null,
+                    belongCity:null,
+                    belongCityName:null,
                 },
                 tableDataTree:[],//定义列表记录
                 optionsService:[//状态
@@ -162,14 +162,14 @@
         methods:{
             regionChange(d) {
                 console.log('data:',d)
-                this.formInline.belongCity = (!d.province&&!d.city&&!d.area&&!d.town) ? '': `${this.getValue(d.province)}${this.getValue(d.city)}${this.getValue(d.area)}${this.getValue(d.town)}`.trim();
+                this.formInline.belongCityName = (!d.province&&!d.city&&!d.area&&!d.town) ? '': `${this.getValue(d.province)}${this.getValue(d.city)}${this.getValue(d.area)}${this.getValue(d.town)}`.trim();
                 if(d.area){
-                    this.formInline.areaCode = d.area.code;
+                    this.formInline.belongCity = d.area.code;
                 }else if(d.city){
-                    this.formInline.areaCode = d.city.code;
+                    this.formInline.belongCity = d.city.code;
                 }
                 else{
-                    this.formInline.areaCode = d.province.code;
+                    this.formInline.belongCity = d.province.code;
                 }
             },
              getValue(obj){
@@ -183,10 +183,10 @@
             clearSearch(){
                 this.formInline={//查询条件
                     driverMobile:null,
-                    belongCity:null,
-                    areaCode:null,
                     driverStatus:'AF0010403',
-                    carNumber:null
+                    carNumber:null,
+                    belongCity:null,
+                    belongCityName:null,                    
                 }
             this.firstblood()    
             },

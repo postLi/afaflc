@@ -1,25 +1,39 @@
 <template>
-    <div :class="{'hideUploadBtn': filelist.length >= limit}">
+    <div class="box_container" :class="{'hideuploadbtn': (filelist.length >= limit) || disabled}">
       <el-upload
+        class="image-uploader"
         drag
-        v-if="uploadUrl" 
-        :data="upload" 
+        v-if="uploadUrl"
+        :data="upload"
         :action="uploadUrl"
-        :multiple="false" 
+        :multiple="false"
         list-type="picture-card"
-        :show-file-list="showFileList" 
+        :show-file-list="showFileList"
         :file-list="filelist"
         :limit="limit"
+        :disabled="disabled"
         :before-upload="beforeUpload"
         :on-preview="handlePictureCardPreview"
         :on-error="handleError"
         :on-exceed="onexceed"
         :on-success="handleImageScucess"
         :on-remove="handleRemove">
-        <i class="el-icon-plus"></i>
+
+        <!-- <i class="el-icon-upload"></i> -->
+        <!-- <el-button :size="size" type="primary" style="">点击上传</el-button> -->
+        <!-- <div class="el-upload__text clearfix"><span class="fl">将文件拖拽至此区域上传</span><em class="fl">点击上传</em></div> -->
+        <!-- <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过500kb</div> -->
+        <!-- <div class="el-upload__text" style="font-size:4px">将文本拖拽到此区域或,<em>点击上传</em></div> -->
+        <!-- <i class="el-icon-plus"></i> -->
+        <slot name="content">
+          <el-button :size="size" type="primary" class="button" :disabled="disabled">点击上传</el-button>
+          <div class="el-upload__text">将文件拖拽到此区域</div>
+          <div v-if="tip" class="upload__tip">{{ tip }}</div>
+
+        </slot>
       </el-upload>
-      <el-dialog lock-scroll custom-class="pop-show-img-wrapper" :visible.sync="dialogVisible">
-        <img  class="pop-show-img" :src="dialogImageUrl" alt="">
+      <el-dialog custom-class="singleimage2" :visible.sync="dialogVisible" :append-to-body="true">
+        <img width="100%" :src="dialogImageUrl" alt="">
       </el-dialog>
     </div>
 </template>
@@ -61,6 +75,15 @@ export default {
     disabled: {
       type: Boolean,
       default: false
+    },
+    // 隐藏文字
+    hidBut: {
+      type: Boolean,
+      default: false
+    },
+    showBut: {
+      type: Boolean
+      // default: false
     }
   },
   computed: {
@@ -103,10 +126,17 @@ export default {
         }
       },
       immediate: true
+    },
+    hidBut() {
+
+    },
+    disabled() {
+
     }
   },
   mounted() {
     this.init()
+    console.log(this.disabled)
   },
   methods: {
     init() {
@@ -197,21 +227,118 @@ export default {
 }
 </script>
 <style lang="scss">
-.hideUploadBtn{
-  div.el-upload.el-upload--picture-card{
-    display: none;
+.uploadlist{
+    display: inline-block;
+    width: auto !important;
+    height: auto;
+
+    .el-upload {
+        width: auto;
+
+        .el-button{
+            margin-top: 20px;
+        }
+    }
+}
+.hideuploadbtn{
+  .el-upload.el-upload--picture-card{
+    // display: none;
   }
 }
-.pop-show-img-wrapper{
- .el-dialog__body{
-   text-align: center;
-   display: flex;
-   align-items: center;
-   justify-content: center;
- } 
-}
-.pop-show-img{
-  max-width: 100%;
-  max-height: 100%;
-}
+</style>
+
+<style lang="scss">
+    @import "src/styles/mixin.scss";
+    .singleimage2{
+      margin-top: 10vh !important;
+      width: 40% !important;
+    }
+    .box_container {
+        width: 100%;
+        position: relative;
+        @include clearfix;
+        .el-upload-list--picture-card .el-upload-list__item{
+          width:200px;
+          height:180px;
+        }
+        .el-upload .el-upload-dragger{
+            width: 200px;
+            height:180px;
+        }
+        .image-uploader {
+            width: 100%;
+            height: 100%;
+        }
+        .image-preview {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            background-color:#fff;
+            top:0;
+            left:0;
+            .image-preview-wrapper {
+                position: relative;
+                width: 100%;
+                height: 100%;
+                img {
+                    width: 100%;
+                    height: 100%;
+                }
+            }
+            .image-preview-action {
+                position: absolute;
+                width: 100%;
+                height: 100%;
+                left: 0;
+                top: 0;
+                cursor: default;
+                text-align: center;
+                color: #fff;
+                opacity: 0;
+                font-size: 20px;
+                background-color: rgba(0, 0, 0, .5);
+                transition: opacity .3s;
+                cursor: pointer;
+                text-align: center;
+                line-height: 200px;
+                .el-icon-delete {
+                    font-size: 36px;
+                }
+            }
+            &:hover {
+                .image-preview-action {
+                    opacity: 1;
+                }
+            }
+        }
+        .el-button{
+            margin-top: 24px;
+            // float:left;
+        }
+        .el-upload__text{
+            margin-top: -41px;
+            margin-bottom: 5px;
+            font-size: 12px;
+            line-height:30px;
+        }
+        .upload__tip{
+            font-size:12px;
+            line-height:30px;
+            color:#999;
+        }
+        .upload__title{
+            font-size:13px;
+            color:#666;
+            margin-top:14px;
+        }
+        .el-upload--picture-card{
+          // line-height:43px;
+          width:0px;
+          height:0px;
+        }
+        // .upload__tip{
+        //   line-height:43px;
+        // }
+    }
+
 </style>

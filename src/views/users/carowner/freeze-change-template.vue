@@ -374,15 +374,13 @@ export default {
     },
     // 冻结提交数据
     onSubmit(){
-      this.changeList();
-
       this.$refs['formFroze'].validate((valid)=>{
         if(valid){
           var forms= Object.assign({}, this.formFroze)
+            this.freezeDialogFlag = false;
           data_put_freezeDriver(forms).then(res=>{
             this.$message.success('冻结修改成功')
-            this.freezeDialogFlag = false;
-            this.$emit('getData') 
+            this.changeList();
           }).catch(err=>{
             console.log(err)
           })
@@ -391,16 +389,13 @@ export default {
     },
     //冻结修改
     onSubmit2(){
-       this.changeList();
         this.$refs['formFroze'].validate((valid)=>{
         if(valid){
           var forms= Object.assign({}, this.formFroze)
-          
+          this.freezeDialogFlag = false;
           data_get_freezeDriverchange(forms).then(res=>{
-          
+            this.changeList();
             this.$message.success('冻结修改成功')
-            this.freezeDialogFlag = false;
-            this.$emit('getData') 
           }).catch(err=>{
             console.log(err)
           })
@@ -409,15 +404,13 @@ export default {
     },
     //解冻
     onSubmit3(){
-       this.changeList();
         this.$refs['formFroze'].validate((valid)=>{
         if(valid){
           var forms= Object.assign({}, this.formFroze)
-          
+                      this.freezeDialogFlag = false;
          data_unbind_freezeDriverchange(forms).then(res=>{
             this.$message.success('解冻修改成功')
-            this.freezeDialogFlag = false;
-            this.$emit('getData') 
+            this.changeList();
           }).catch(err=>{
             console.log(err)
           })

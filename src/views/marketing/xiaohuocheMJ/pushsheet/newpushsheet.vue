@@ -1,6 +1,5 @@
 <template>
-    <div class="vestDialogBox">
-    <div class="vestDialog commoncss">
+    <div class="vestDialogBox commoncss">
     <el-button  :type="btntype" :value="value" :plain="plain" :icon="icon" @click="openDialog()">{{btntext}}</el-button>
             <el-dialog :title="btntitle" :visible="driverTemplateDialogFlag" :before-close="change">
             <div class="vestOrder">
@@ -8,7 +7,7 @@
              <el-row>
             <el-col :span="12">
             <el-form-item label="省市：" :label-width="formLabelWidth" prop="areaCode" > 
-                <el-input v-model="vestList.areaName"  @focus="changeSelect" v-if="editType !=='add' && !selectFlag"></el-input>
+                <el-input v-model="vestList.areaName"  @focus="changeSelect" v-if="editType !=='add' && !selectFlag" class="selectInput"></el-input>
                  <span v-else-if="editType=='add'">
                 <GetCityList ref="area" v-model="vestList.areaCode"  @focus="changeSelect"></GetCityList>
                  </span>
@@ -158,12 +157,9 @@
              <td ><el-input  v-model="vestList.setting[keys].sett.AF01804.zero.AF0020403" class="Pushinput" type="number" min="0" max='5'></el-input> </td>
              <td ><el-input  v-model="vestList.setting[keys].sett.AF01804.zero.AF0020402" class="Pushinput" type="number" min="0" max='5'></el-input> </td>
              <td ><el-input  v-model="vestList.setting[keys].sett.AF01804.zero.AF0020401" class="Pushinput" type="number" min="0" max='5'></el-input> </td>   
-
-    
             </tr>
             </tbody>    
             </table>
-             
             </div>    
                     <div slot="footer" class="dialog-footer">
                         <el-button type="primary" @click="changeInfoSave" v-if="editType=='add'">保 存</el-button>
@@ -171,7 +167,6 @@
                         <el-button @click="close()">取 消</el-button>
                     </div> 
             </el-dialog>
-    </div>
     </div>
 </template>
 <script>
@@ -946,33 +941,43 @@ mounted(){
 }
 }
 </script>
-<style  lang="scss" scoped>
-    .vestDialog{
-        display: inline-block;
-        margin-right: 10px;
-    }
-    .el-button{
+<style  lang="scss">
+.vestDialogBox{
+    display: inline-block;
+    margin-right: 10px;    
+     .el-button {
         margin-right:0px;
         padding: 7px 15px 7px;
         font-size:12px;
-    }
-    .commoncss .el-dialog .el-input {
-    width: 250px;
-    }
+        }
+        .el-cascader{
+            .el-input{
+                width: 250px;
+            }
+        }
     .price_one{
-            width:105px!important;
+            width:105px;
             margin-right: 10px;
     }
     .price_two{
-            width:105px!important;
+            width:105px;
             margin-left: 10px;
-    }    
-    .vestOrder{
+    }
+    .el-date-editor{
+        line-height: 24px;
+    }
+   .vestOrder{
         width: 100%;
         padding-bottom: 10px;
         border-bottom: 2px dashed #ccc;
+        .selectInput{
+            .el-input__inner{
+            width: 250px;
+        }
+        }
+
     }
-    .table_box{
+  .table_box{
     margin-top: 10px;
     .ht_table{
         width: 934px;
@@ -1001,66 +1006,28 @@ mounted(){
          .Offline{
             color:red;
          }
+         .Pushinput{
+             .el-input{
+                border-radius:0px;
+                width: 100px;
+                height:35px;
+                border:none
+             }
+        }
         }
         .VestreduceItem{
-             width: 154px!important;
-             height: 34px!important;
+             width: 154px;
+             height: 34px;
          }
-         .el-date-editor .el-range-separator {
-            padding: 0 0px;
-            line-height: 25px;
-            width: 5%;
-            color: #303133;
-     }
-
-    }
+        .el-date-editor .el-range-separator {
+                padding: 0 0px;
+                line-height: 25px;
+                width: 5%;
+                color: #303133;
+        }
+        }
         .el-date-editor .el-range__icon {
         line-height: 24px;
     }
-
-</style>
-
-<style  lang="scss">
-.vestDialogBox {
-    display: inline-block;
-    .commoncss{
-    .el-dialog{
-       width:960px!important;
-     }
-    }
-    .vestDialog .el-dialog {
-
-.chooseCityList .el-cascader .el-input {
-    width: 250px;
 }
-}
-.commoncss .el-dialog .el-input {
-    width: 250px;
-}
-
-.commoncss .el-date-editor .el-range__icon {
-        line-height: 24px;
-}
-.commoncss .el-date-editor .el-range-separator {
-    padding: 0 0px;
-    line-height: 24px;
-}
-.commoncss .Pushinput{
-    width: 100px!important;
-    height:100%;
-
-}
-.commoncss .Pushinput .el-input__inner{
-    border-radius:0px;
-    width: 100px;
-    height:35px;
-    border:none
-}
-    .el-date-editor .el-range__close-icon
-    {
-        line-height: 24px;
-    }
-}
-
-
 </style>

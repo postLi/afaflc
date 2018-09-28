@@ -37,7 +37,7 @@
                           >
                         </el-option>
                     </el-select>
-            </el-form-item>                        
+            </el-form-item>
             <el-form-item label="服务分类" label-width='70px'>
                    <el-select v-model="data.orderType" clearable placeholder="请选择">
                         <el-option

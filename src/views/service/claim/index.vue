@@ -41,7 +41,7 @@
             <el-button type="info" @click="handleSearch('clear')" plain :size="btnsize">清空</el-button>
           </el-form-item>            
         </el-form>
-          	<div class="classify_info">
+          <div class="classify_info">
             		<div class="btns_box">
                 <!-- <newCity
                   btntext="新增"
@@ -67,73 +67,75 @@
                   >
                 </newCity> -->
                 <el-button type="primary" :size="btnsize" class="el-icon-circle-plus"  plain @click="doAction('reg')">物流登记</el-button>
-                <el-button type="primary" :size="btnsize" class="el-icon-tickets" @click="doAction('shouli')" plain>物流受理</el-button>
+                <el-button type="primary" :size="btnsize" class="el-icon-tickets" @click="doAction('shouli')" plain>确认受理</el-button>
                 <el-button type="primary" :size="btnsize" icon="el-icon-news" @click="doAction('genjin')" plain>记录物流跟进</el-button>
             		</div>
             <div class="info_news">    
-            <el-table ref="multipleTable" style="width: 100%" stripe border height="100%" @selection-change="getSelection" @row-click="clickDetails" highlight-current-row :data="dataset"  tooltip-effect="dark">
-              <el-table-column
-                label="选择"
-                type="selection"
-                width="50">
-              </el-table-column>
-              <el-table-column fixed label="序号" sortable  width="80">
-                <template slot-scope="scope">
-                {{ (page - 1)*pagesize + scope.$index + 1 }}
+              <el-table ref="multipleTable" style="width: 100%" stripe border height="100%" @selection-change="getSelection" @row-click="clickDetails" highlight-current-row :data="dataset"  tooltip-effect="dark">
+                <el-table-column
+                  label="选择"
+                  type="selection"
+                  width="50">
+                </el-table-column>
+                <el-table-column fixed label="序号" sortable  width="80">
+                  <template slot-scope="scope">
+                  {{ (page - 1)*pagesize + scope.$index + 1 }}
+                  </template>
+                </el-table-column> 
+                <el-table-column fixed label="订单号" v-model="dataset.orderSerial" prop="orderSerial" sortable :show-overflow-tooltip="true" width="300">
+                </el-table-column>
+                <el-table-column sortable prop="belongCity" v-model="dataset.belongCity" label="区域"  width="300">
+                </el-table-column>
+                <el-table-column  label="货主" v-model="dataset.shipper" prop="shipper" sortable :show-overflow-tooltip="true" width="200">
+                </el-table-column>
+                <el-table-column  label="车主" v-model="dataset.driver" prop="driver" sortable :show-overflow-tooltip="true"  width="200">
+                </el-table-column>
+                <el-table-column  label="处理状态" v-model="dataset.dealStatus" prop="dealStatus" sortable :show-overflow-tooltip="true" width="120">
+                </el-table-column>       
+                <el-table-column  label="物损类型" v-model="dataset.claimType" prop="claimType" sortable :show-overflow-tooltip="true" width="120">
+                </el-table-column>                                                       
+                <el-table-column  label="上报人" v-model="dataset.reporter" prop="reporter" sortable :show-overflow-tooltip="true"  width="300">
+                </el-table-column>
+                <el-table-column
+                :show-overflow-tooltip="true"
+                prop="createTime"
+                label="上报时间"
+                width="200"
+                sortable
+                >
+                <template  slot-scope="scope">
+                  <span class="orderSerial">
+                    {{ scope.row.createTime | parseTime('{y}-{m}-{d} {h}:{i}:{s}')}}    
+                  </span>
                 </template>
-              </el-table-column> 
-              <el-table-column fixed label="订单号" v-model="dataset.orderSerial" prop="orderSerial" sortable :show-overflow-tooltip="true" width="300">
-              </el-table-column>
-              <el-table-column sortable prop="belongCity" v-model="dataset.belongCity" label="区域"  width="300">
-              </el-table-column>
-              <el-table-column  label="货主" v-model="dataset.shipper" prop="shipper" sortable :show-overflow-tooltip="true" width="200">
-              </el-table-column>
-              <el-table-column  label="车主" v-model="dataset.driver" prop="driver" sortable :show-overflow-tooltip="true"  width="200">
-              </el-table-column>
-              <el-table-column  label="处理状态" v-model="dataset.dealStatus" prop="dealStatus" sortable :show-overflow-tooltip="true" width="120">
-              </el-table-column>       
-              <el-table-column  label="物损类型" v-model="dataset.claimType" prop="claimType" sortable :show-overflow-tooltip="true" width="120">
-              </el-table-column>                                                       
-              <el-table-column  label="上报人" v-model="dataset.reporter" prop="reporter" sortable :show-overflow-tooltip="true"  width="300">
-              </el-table-column>
-              <el-table-column
-              :show-overflow-tooltip="true"
-              prop="createTime"
-              label="上报时间"
-              width="200"
-              sortable
-              >
-              <template  slot-scope="scope">
-                <span class="orderSerial">
-                  {{ scope.row.createTime | parseTime('{y}-{m}-{d} {h}:{i}:{s}')}}    
-                </span>
-              </template>
-              <!-- <template slot-scope="scope">{{ scope.row.commissionTime | parseTime('{y}-{m}-{d} {h}:{i}:{s}')}}</template> -->
-              </el-table-column>
-              <el-table-column  label="订单状态" v-model="dataset.orderStatus" prop="orderStatus" sortable  width="120">
-              </el-table-column> 
-              <el-table-column
-              :show-overflow-tooltip="true"
-              prop="useCarTime"
-              label="用车时间"
-              width="120"
-              sortable
-              >
-              <template  slot-scope="scope">
-                <span class="orderSerial">
-                  {{ scope.row.useCarTime | parseTime('{y}-{m}-{d} {h}:{i}:{s}')}}    
-                </span>
-              </template>
-              <!-- <template slot-scope="scope">{{ scope.row.commissionTime | parseTime('{y}-{m}-{d} {h}:{i}:{s}')}}</template> -->
-              </el-table-column>
-              <el-table-column  label="提货地" v-model="dataset.startAddress" prop="startAddress" sortable :show-overflow-tooltip="true"  width="300">
-              </el-table-column>
-              <el-table-column  label="目的地" v-model="dataset.endAddress" prop="endAddress" sortable :show-overflow-tooltip="true"  width="300">
-              </el-table-column>   
-            </el-table> 
-        	</div> 
+                <!-- <template slot-scope="scope">{{ scope.row.commissionTime | parseTime('{y}-{m}-{d} {h}:{i}:{s}')}}</template> -->
+                </el-table-column>
+                <el-table-column  label="订单状态" v-model="dataset.orderStatus" prop="orderStatus" sortable  width="120">
+                </el-table-column> 
+                <el-table-column
+                :show-overflow-tooltip="true"
+                prop="useCarTime"
+                label="用车时间"
+                width="120"
+                sortable
+                >
+                <template  slot-scope="scope">
+                  <span class="orderSerial">
+                    {{ scope.row.useCarTime | parseTime('{y}-{m}-{d} {h}:{i}:{s}')}}    
+                  </span>
+                </template>
+                <!-- <template slot-scope="scope">{{ scope.row.commissionTime | parseTime('{y}-{m}-{d} {h}:{i}:{s}')}}</template> -->
+                </el-table-column>
+                <el-table-column  label="提货地" v-model="dataset.startAddress" prop="startAddress" sortable :show-overflow-tooltip="true"  width="300">
+                </el-table-column>
+                <el-table-column  label="目的地" v-model="dataset.endAddress" prop="endAddress" sortable :show-overflow-tooltip="true"  width="300">
+                </el-table-column>   
+              </el-table> 
+        	  </div> 
+          <!-- addReg -->
+          <addReg :centerDialogVisible="centerDialogVisible" @close="closeAddReg"></addReg>
          <!-- 页码 -->
-        <div class="info_tab_footer">共计:{{ dataTotal }} <div class="show_pager"> <Pager :total="dataTotal" @change="handlePageChange"  :sizes="sizes"/></div> </div> 
+          <div class="info_tab_footer">共计:{{ dataTotal }} <div class="show_pager"> <Pager :total="dataTotal" @change="handlePageChange"  :sizes="sizes"/></div> </div> 
         </div>
       </div>
 </template>
@@ -148,6 +150,7 @@ import Pager from '@/components/Pagination/index'
 import { parseTime } from '@/utils/'
 import vregion from '@/components/vregion/Region'
 import {DicDelStatusType} from '@/api/common'
+import addReg from './reg/index'
 export default {
   data() {
     return {
@@ -163,9 +166,8 @@ export default {
       dataTotal: 0,
       dataset: [],
       radio: 1,
+      centerDialogVisible:false,
       optionsdealStatus:[{ code: null, name: '全部' }],
-      // optionsCar: [{ code: null, name: '全部' }],
-      // MaidLevel: [{ code: null, name: '全部' }],
       optionsPlantService: [
         {
           id: '0',
@@ -184,18 +186,12 @@ export default {
         }
       ],
       formAllData: {
-        // belongCityName:'',
-        // areaCode: null,
-        // areaName: null,
-        // carType: null,
-        // commissionGrade: null
-        // belongCity:''
       }
-      
     }
   },
   components: {
     // newCity,
+    addReg,
     vregion,
     Pager
   },
@@ -230,9 +226,24 @@ export default {
     firstblood() {
       // this.loading = false
       postOrderGoodsclaimlist(this.page, this.pagesize,this.formAllData).then(res => {
+        this.dataTotal = res.data.totalCount
         this.dataset = res.data.list
         console.log(res)
       })
+    },
+    //点击打开弹窗
+    doAction(type){
+      switch(type){
+        case 'reg':
+          this.centerDialogVisible = true
+        break
+        case 'shouli':
+          // this.$router.push({ path: '../../order/xiangqing?orderSerial=AFTC201809281748189181483' })
+        break
+      }
+    },
+    closeAddReg(){
+      this.centerDialogVisible = false
     },
     getdelstatus(){
       DicDelStatusType().then(res => {

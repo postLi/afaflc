@@ -25,6 +25,10 @@ export function getDictionary(code) {
     method: 'get'
   })
 }
+// 货损类型
+export function DicClaimStatusType() {
+  return fetch.get('/' + baseurl_two + '/sysDict/getSysDictByCodeGet/AF021')
+}
 // 处理状态
 export function DicDelStatusType() {
   return fetch.get('/' + baseurl_two + '/sysDict/getSysDictByCodeGet/AF048')
@@ -40,9 +44,9 @@ export function DicfreezeType() {
 }
 
   // 获取服务分类
-  export function DicServiceType() {
-    return fetch.get('/' + baseurl_two + '/sysDict/getSysDictByCodeGet/AF017')
-  }
+export function DicServiceType() {
+  return fetch.get('/' + baseurl_two + '/sysDict/getSysDictByCodeGet/AF017')
+}
 // 获取车辆类型
 export function DicCartype() {
   return fetch.get('/' + baseurl_two + '/sysDict/getSysDictByCodeGet/AF018')

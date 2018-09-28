@@ -2,7 +2,7 @@
      <div class="newcouponBox commoncss">
       <el-button :type="btntype" :value="value" :plain="plain" :icon="icon" @click="openDialog()">{{btntext}}</el-button>
       <div class="newcoupon1">
-      <el-dialog  :visible="dialogFormVisible_add" :before-close="change" :title="btntitle">
+      <el-dialog  :visible="dialogFormVisible_add" :before-close="change" :title="btntitle" modal-append-to-body>
         <el-form :model="formAllData" ref="formAllData" :rules="rulesForm">
           <el-row v-if="editType=='one'">
             <el-col>
@@ -43,19 +43,20 @@
           </el-row>
           <el-row>
               <el-col :span="20">
-               <el-form-item  label="活动说明：" :label-width="formLabelWidth" prop="activityDes">
-                   <div class="textareaBox">
+               <el-form-item  label="活动说明：" :label-width="formLabelWidth" prop="activityDes" class="textArea" > 
                                 <el-input
                                     type="textarea"
                                     :rows="2"
-                                    placeholder="1-100间的字符"
+                                    placeholder="1-100间的字符" 
                                     maxlength="100"
                                     ref="infofocus"
                                     v-model="formAllData.activityDes"
                                     clearable>
                                 </el-input>
-                                </div>
-               </el-form-item>                   
+                              <p class="countNum">
+                             <span class="">{{formAllData.activityDes.length}}</span> <span>/ {{maxlengthNum}}</span> 
+                        </p>
+               </el-form-item>                    
               </el-col>
           </el-row>
           <el-row >
@@ -311,6 +312,7 @@ export default {
             }        
         }        
     return{
+        maxlengthNum:100,
         pickerOptions2: {
         shortcuts: pickerOptions2},        
         options:regionDataPlus,   
@@ -335,7 +337,7 @@ export default {
         formLabelWidth:'120px',
         formLabelWidth2:'80px',
         formAllData:{
-            activityDes:null,
+            activityDes:'',
             activityName:null,
             activityType:null,
             usingStatus:null,
@@ -720,7 +722,6 @@ export default {
                  }
     },
      add_data(){
-            console.log('this.formAllData.endTime') 
             this.completeData(); 
             if(this.completeData()==false)
             {
@@ -733,16 +734,12 @@ export default {
                 console.log('this.formAllData.areaCode',typeof(this.formAllData.areaCode))
                 if(!this.formAllData.area){
                    this.formAllData.areaCode = this.formAllData.areaCode.split(",").splice(0,2)
-                   console.log('111',this.formAllData.areaCode)
                    this.formAllData.areaCode = String(this.formAllData.areaCode)
                 }
                 else{
-                    
-                  this.formAllData.areaCode = this.formAllData.areaCode.split(",").splice(0,1).pop()
-                  console.log('222',this.formAllData.areaCode)
+                this.formAllData.areaCode = this.formAllData.areaCode.split(",").splice(0,1).pop()
                 this.formAllData.areaCode = String(this.formAllData.areaCode)
                 } 
-                    console.log('11111', this.formAllData.areaCode)
                 }
                 else{
                 if(this.formAllData.area){
@@ -813,13 +810,12 @@ export default {
                         area:this.formAllData.area,
                         aflcCouponList:aflcCouponList
                     }
-
-              data_get_couponActive_update(forms).then((res)=>{
               this.dialogFormVisible_add = false;
-              this.$refs['formAllData'].resetFields();
+              data_get_couponActive_update(forms).then((res)=>{
               eventBus.$emit('changeListtwo')
               this.$message.success('修改成功')
            }).catch(res=>{
+              eventBus.$emit('changeListtwo')
                     console.log('res',res.text)
                     if(res.text='已发放过优惠卷不能进行修改')
                     {
@@ -827,9 +823,7 @@ export default {
                     }
                     else{
                     this.$message.error('修改失败')
-                    }
-                    this.dialogFormVisible_add = false;
-                   
+                    }   
             });
               }
          })
@@ -840,7 +834,6 @@ export default {
 
   }
 }
-
 </script>
 <style lang="scss">
 </style>

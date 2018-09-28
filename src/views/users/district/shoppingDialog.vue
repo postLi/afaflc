@@ -1,6 +1,6 @@
 <template>
      <div class="shoppingDialog commoncss">
-      <el-button :type="btntype" :value="value" :plain="plain" :icon="icon" @click="openDialog()">{{btntext}}</el-button>
+      <el-button :type="btntype" :value="value" :plain="plain" :icon="icon" @click="openDialog()"><span :class="editType=='view'?'BtnInfo':''">{{btntext}}</span ></el-button>
       <div class="newshoppingDialog">
       <el-dialog  :visible="dialogFormVisible_add" :before-close="change" :title="btntitle">
         <el-form ref="formAll" :model="formAll" :rules="rulesForm" :inline="true">
@@ -296,14 +296,12 @@ export default {
             ownerPhone:this.formAll.ownerPhone,
             id:this.params[0].id,
         }
-        console.log('111',forms)
+           this.dialogFormVisible_add = false;
         data_get_aflcTradeArea_update(forms).then(res=>{
            this.changeList();
             this.$message.success('修改成功');
-            this.dialogFormVisible_add = false;
         }).catch(res=>{
             this.$message.error('修改失败')
-            this.dialogFormVisible_add = false;
         })
        }
        })
@@ -316,6 +314,9 @@ export default {
 <style lang="scss">
 .shoppingDialog{
      display: inline-block;
+    .BtnInfo{
+    font-weight: bold
+    }     
      .el-dialog{
          width: 1000px;
      }

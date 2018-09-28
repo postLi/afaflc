@@ -1,9 +1,9 @@
 <template>
      <div class="automationcheck commoncss">
-      <el-button :type="btntype" :value="value" :plain="plain" :icon="icon" @click="openDialog()">{{btntext}}</el-button>
+      <el-button :type="btntype" :value="value" :plain="plain" :icon="icon" @click="openDialog()"><span class="BtnInfo">{{btntext}}</span></el-button>
       <div class="newcoupon1">
-      <el-dialog  :visible="dialogFormVisible_add" :before-close="change" :title="btntitle">
-          <el-tabs v-model="autocheck" type="card"  >
+      <el-dialog  :visible="dialogFormVisible_add" :before-close="change" :title="btntitle" modal-append-to-body>
+          <el-tabs v-model="autocheck" type="card" >
         <!-- 活动配置 -->
             <el-tab-pane label="活动配置" name="first">
                 <div class="automationcheckTab">
@@ -183,7 +183,7 @@
           </el-row>
         </el-form>
         <div slot="footer" class="dialog-footer">
-          <el-button type="primary" @click="close">关 闭</el-button>
+          <el-button type="primary" @click="close" :size="btnsize" >关 闭</el-button>
         </div>
     </div>
             </el-tab-pane>
@@ -523,6 +523,9 @@ export default {
 </script>
 <style lang="scss">
 .automationcheck{
+    .BtnInfo{
+        font-weight: bold
+    }
     .el-button{
         margin-right:0px;
         padding: 0px 15px 0px;
@@ -542,7 +545,7 @@ export default {
         padding: 7px 20px 0 10px;
     }
      .textareaBox {
-        width:100%;
+        width:500px;
     }
     .el-input__inner{
         line-height: 30px;
@@ -555,21 +558,11 @@ export default {
         line-height: 24px;
         width: 7%
     }
-    .el-dialog__body{
-    padding: 0px!important;
-    }
     .automationcheckTab{
     padding-top:20px;
-    .el-dialog{
-        width: 1200px!important;
-        overflow:unset;
-    }
     .el-radio.is-bordered{
         height: 30px;
         padding: 7px 20px 0 10px;
-    }
-     .textareaBox {
-        width: 500px;
     }
     .el-radio-group{
             margin-left:0px;
@@ -698,11 +691,14 @@ export default {
         }
         .dialog-footer{
             padding:10px;
+            .el-button{
+                padding: 7px 15px;
+            }
         }
         .el-input__inner{
             height: 30px;
         }
-}
+        }
         .automationcheckTabTwo{
          padding-top: 20px;
          .tableDataAllBox{
@@ -737,6 +733,5 @@ export default {
             }
         }
         }
-
 }
 </style>
