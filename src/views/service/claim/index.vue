@@ -164,8 +164,6 @@ export default {
       dataset: [],
       radio: 1,
       optionsdealStatus:[{ code: null, name: '全部' }],
-      // optionsCar: [{ code: null, name: '全部' }],
-      // MaidLevel: [{ code: null, name: '全部' }],
       optionsPlantService: [
         {
           id: '0',
@@ -184,14 +182,7 @@ export default {
         }
       ],
       formAllData: {
-        // belongCityName:'',
-        // areaCode: null,
-        // areaName: null,
-        // carType: null,
-        // commissionGrade: null
-        // belongCity:''
       }
-      
     }
   },
   components: {
