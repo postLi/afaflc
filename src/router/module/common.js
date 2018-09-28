@@ -111,6 +111,14 @@ export default {
         component: _import('common/announcement/index'),
         meta: { title: '发布公告', stitle: '公告', noCache: true , code: 'SYSTEM_NOTICE'}
       },
+      {
+        path: '/common/businessCity',
+        icon: 'cheliangguanli',
+        hidden: true,
+        name: '业务城市',
+        component: _import('common/businessCity/index'),
+        meta: { title: '业务城市', stitle: '城市', noCache: true }
+      },
 
   ]
 }
