@@ -276,7 +276,6 @@ export default {
             if(!val){
             this.$refs['formAll'].resetFields();
             this.$emit('getData');
-            this.changeList();
             this.areaStatus = null;
             }
             else{
@@ -395,8 +394,10 @@ export default {
         }]
             this.dialogFormVisible_add = false;
         data_get_orderFromsame_create(forms).then(res=>{
+            this.changeList();
             this.$message.success('新增成功');
         }).catch(res=>{
+            this.changeList();
             this.$message.error('新增失败');
        });
        }
@@ -410,8 +411,10 @@ export default {
         if(valid){
         this.dialogFormVisible_add = false;
         data_get_orderFromsame_update(forms).then(res=>{
+            this.changeList();
             this.$message.success('修改成功');
         }).catch(res=>{
+            this.changeList();
             this.$message.error('修改失败');
        });
        }

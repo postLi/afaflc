@@ -1,8 +1,8 @@
 <template>
      <div class="shoppingDialog commoncss">
-      <el-button :type="btntype" :value="value" :plain="plain" :icon="icon" @click="openDialog()">{{btntext}}</el-button>
+      <el-button :type="btntype" :value="value" :plain="plain" :icon="icon" @click="openDialog()"><span :class="editType=='view'?'BtnInfo':''">{{btntext}}</span ></el-button>
       <div class="newmanageDistrict">
-      <el-dialog  :visible="dialogFormVisible_add" :before-close="change" :title="btntitle">
+      <el-dialog  :visible="dialogFormVisible_add" :before-close="change" :title="btntitle" modal-append-to-body>
         <el-form ref="formAll" :model="formAll" :rules="rulesForm" :inline="true">
             <el-row>
                 <el-col :span="12">
@@ -155,7 +155,7 @@
                  </div>
                  <div class="manageDistrict_tr">
                      <div class="manageDistrict_td table_w5">
-                    <span v-if="editType=='view'">
+                    <span v-if="editType=='view'" class="viewWidth">
                     <a :href="formAll.aflcPartnerFileList[keys].saveAddress" target="_blank">{{formAll.aflcPartnerFileList[keys].fileName}}</a>
                     </span>
                     <span  @click="selectUpload(keys)" v-else>
@@ -602,6 +602,9 @@ export default {
         },  
     // 合作区域新增
     addItem(){
+            if(this.editType=='view'){
+            return false
+            }else{        
            this.formAll.aflcPartnerAreaList.push({
             areaName: [],
             areaCode: [],
@@ -610,31 +613,44 @@ export default {
             area:null,
             contractStartDate:null,
             contractEndDate:null,
-           }) 
+            }) 
+            }
         },
 //    合作区域删除
     reduceItem(i){
+        if(this.editType=='view'){
+            return false
+        }else{
             if(this.formAll.aflcPartnerAreaList.length>1){
             this.formAll.aflcPartnerAreaList.splice(i,1);
             }
             else{
-                return
-    }
+            return false
+        }
+        }
    },   
     // 区域附件新增
     addItemFile(){
+            if(this.editType=='view'){
+            return false
+            }else{
            this.formAll.aflcPartnerFileList.push({
             fileName:null,       
            }) 
+           }
         },
 //    区域附件删除
     reduceItemFile(i){
+            if(this.editType=='view'){
+            return false
+            }else{
             if(this.formAll.aflcPartnerFileList.length>1){
             this.formAll.aflcPartnerFileList.splice(i,1);
             }
             else{
-                return
-    }
+            return false
+            }
+            }
    },     
    // 省市状态表
      changeSelect(){
@@ -669,8 +685,6 @@ export default {
        this.$refs['formAll'].validate(valid=>{
         if(valid){
             if(!this.inputdisabled){
-                console.log('1', this.areaCode)
-                 console.log('2', this.formAll.areaCode)
             if(this.formAll.area){
                this.areaStatus = this.formAll.areaCode[2]
             }
@@ -679,9 +693,6 @@ export default {
             }               
             }
             else{
-                console.log('1', this.areaCode)
-                 console.log('2', this.formAll.areaCode)
-
                this.areaStatus = this.areaCode
             }
             let aflcPartnerAreaList = []
@@ -761,6 +772,9 @@ export default {
 <style lang="scss">
 .shoppingDialog{
      display: inline-block;
+    .BtnInfo{
+    font-weight: bold
+    }     
      .el-dialog{
          width: 1000px;
      }     
@@ -815,6 +829,11 @@ export default {
             .el-input{
                 width:100%;
             }
+           }
+           .viewWidth{width: 100%;display: inline-block;
+                    a{
+                        color: #409EFF
+                    }
            }
            .table_w1{width: 30%}
            .table_w2{width: 30%}

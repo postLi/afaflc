@@ -176,8 +176,8 @@ export default {
                     this.dataTotal = res.data.totalCount
                     this.tableDataAll = res.data.list;
                     this.tableDataAll.forEach(item => {
-                        item.contractStartDate = parseTime(item.contractStartDate,"{y}-{m}-{d}");
-                        item.contractEndDate = parseTime(item.contractEndDate,"{y}-{m}-{d}");
+                        item.contractStartDate = parseTime(item.contractStartDate,"{y}-{m}-{d} {h}:{i}:{s}");
+                        item.contractEndDate = parseTime(item.contractEndDate,"{y}-{m}-{d} {h}:{i}:{s}");
                     })
         })
     },

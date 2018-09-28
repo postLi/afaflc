@@ -50,7 +50,7 @@
    </el-table-column>
    <el-table-column  label="状态" prop="usingStatus" sortable>
         <template  slot-scope="scope">
-          {{ scope.row.usingStatus == 0 ? '启用' : '禁用' }}
+          {{ scope.row.usingStatus == 1 ? '启用' : '禁用' }}
          </template>
    </el-table-column>
    <el-table-column  label="操作人"  prop="creater" sortable>
@@ -67,7 +67,6 @@
    <div>
    </div>
   </div>
-
 </template>
 
 <script>
@@ -211,7 +210,7 @@ export default {
                 }
                 else{
                  data_UseStates_pushsheet(this.selectRowData[0].id).then(res=>{
-                     if(this.selectRowData[0].usingStatus==0)
+                     if(this.selectRowData[0].usingStatus==1)
                      {
                          this.$message.warning('已禁用');
                      }

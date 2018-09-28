@@ -117,9 +117,9 @@ export default {
       options:regionDataPlus,        
       selectRowData:{},
       selectId:[],
-      sizes:[30,50,100],
+      sizes:[20,50,100],
       information:'操作不正确',
-      pagesize:30,//每页显示数
+      pagesize:20,//每页显示数
       page:1,//当前页
       totalCount:null,
       dataTotal:null,

@@ -93,6 +93,7 @@
                     editType="Give"
                     btntitle="优惠卷发放"
                     :params = 'selectRowData'
+                    @getData="getDataList"
                     >
               </couponGive>
              <couponGive
@@ -104,6 +105,7 @@
                     editType="Build"
                     btntitle="优惠卷生成"
                     :params = 'selectRowData'
+                    @getData="getDataList"
                     >
               </couponGive>
                 </span>
@@ -195,8 +197,8 @@ export default {
             createTime:null,
             tableDataAll:[],
             dataTotal:null,
-            sizes:[30,50,100],
-            pagesize:30,//每页显示数
+            sizes:[20,50,100],
+            pagesize:20,//每页显示数
             page:1,//当前页
             formAllData:{
             activityName:null,

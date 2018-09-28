@@ -422,6 +422,7 @@ export default {
         handler: function(val, oldVal) {
             if(!val){
             this.$refs['formAll'].resetFields();
+            this.$emit('getData');
             }
             else{
             this.getMoreInformation();
@@ -598,13 +599,12 @@ export default {
             serivceCode:this.formAll.serivceCode,
             aflcDriverOrderamountDetailList:this.FormData
         }]
-        console.log('forms',forms)
-        data_get_ownerFromsame_create(forms).then(res=>{
-            console.log('res',res);
             this.dialogFormVisible_add = false;
+        data_get_ownerFromsame_create(forms).then(res=>{
             this.changeList();
             this.$message.success('新增成功');
         }).catch(res=>{
+            this.changeList();
             this.$message.error('新增失败');
        });
        }

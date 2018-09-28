@@ -142,6 +142,7 @@ export default {
              if(!val){
             this.num= null;
             this.mobile = null;
+            this.$emit('getData');
              }
              else{
             this.getMoreInformation();
@@ -207,17 +208,9 @@ export default {
            else{
                 this.$message.success('生成成功');
                location.href = ('/api/aflcsmservice/sm/aflcCouponUse/v1/produceCoupon/?id='+this.params[0].id+'&num='+this.num+'&access_token=' + Cookies.get(TokenKey))
-               
                this.dialogFormVisible_add = false;
+               this.changeList();
         // exportWithIframe('/api/aflcsmservice/sm/aflcCouponUse/v1/produceCoupon/?id='+this.params.id+'&num='+this.num+'&access_token=' + Cookies.get(TokenKey))
-        //  data_get_produceCouponExcel(this.params.id,this.num).then(res=>{
-        //      this.dialogFormVisible_add = false;
-        //  }).catch(res=>{
-             
-        //      console.log(res)
-        //      this.dialogFormVisible_add = false;
-        //      this.$message.success('生成成功')
-        // })
         }        
        },
     
@@ -227,22 +220,24 @@ export default {
         console.log('inputFile',typeof(inputFile.files[0]));
         formdata.append('id',this.params[0].id);
         formdata.append('multipartFile',inputFile.files[0]);
+        this.dialogFormVisible_add = false;
         data_get_BatchDistribution(this.params[0].id,formdata).then(res=>{
+             this.changeList();
              this.$message.success('发放成功');
-             this.dialogFormVisible_add = false;
         }).catch(res=>{
-             this.dialogFormVisible_add = false;
+             this.changeList();
              this.$message.error(res.text)
         })
        },
        grantCoupon(){
            let mobile_Araay = this.mobile.split('\n')
+           this.dialogFormVisible_add = false;
           data_get_grantCoupon(this.params[0].id,mobile_Araay).then(res=>{
+              this.changeList();
               this.$message.success('发放成功');
-              this.dialogFormVisible_add = false;
          }).catch(res=>{
-              this.dialogFormVisible_add = false; 
-              this.$message.error(res.text)
+             this.changeList();
+             this.$message.error(res.text)
          })   
        },
   }

@@ -350,11 +350,11 @@ export default {
       this.changeList()
         this.$refs['formFroze'].validate((valid)=>{
         if(valid){
+          this.freezeDialogFlag = false;
           var forms= Object.assign({}, this.formFroze)
           data_put_PutBlack(forms).then(res=>{
             this.$message.success('移入黑名单成功')
-            this.freezeDialogFlag = false;
-            this.$emit('getData') 
+            this.changeList()
           }).catch(err=>{
             console.log(err)
           })  
@@ -366,12 +366,11 @@ export default {
         this.changeList()
         this.$refs['formFroze'].validate((valid)=>{
         if(valid){
+          this.freezeDialogFlag = false;
           var forms= Object.assign({}, this.formFroze)
-          
           data_put_OutBlack(forms).then(res=>{
             this.$message.success('移出黑名单成功')
-            this.freezeDialogFlag = false;
-            this.$emit('getData') 
+            this.changeList()
           }).catch(err=>{
             console.log(err)
           })

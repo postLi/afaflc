@@ -2,7 +2,7 @@
      <div class="shoppingDialog commoncss">
       <el-button :type="btntype" :value="value" :plain="plain" :icon="icon" @click="openDialog()">{{btntext}}</el-button>
       <div class="newmanageDistrict">
-      <el-dialog  :visible="dialogFormVisible_add" :before-close="change" :title="btntitle">
+      <el-dialog  :visible="dialogFormVisible_add" :before-close="change" :title="btntitle" >
         <el-form ref="formAll" :model="formAll" :rules="rulesForm" :inline="true">
             <el-row>
                 <el-col :span="12">
@@ -618,18 +618,14 @@ export default {
             aflcPartnerFileList:this.formAll.aflcPartnerFileList,
             aflcPartnerAreaList:aflcPartnerAreaList,
         }]
-        
+           this.dialogFormVisible_add = false;        
         data_get_aflcPartner_create(forms).then(res=>{
            this.$message.success('新增成功');
            this.changeList();
-           this.dialogFormVisible_add = false;
-           console.log(res);
 
         }).catch(res=>{
             this.$message.error('新增失败')
             this.changeList();
-            this.dialogFormVisible_add = false;
-           console.log(res);
         })
        }
        })

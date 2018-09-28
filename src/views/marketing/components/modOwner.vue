@@ -426,6 +426,7 @@ export default {
         handler: function(val, oldVal) {
             if(!val){
             this.$refs['formAll'].resetFields();
+            this.$emit('getData');
             }
             else{
             this.getMoreInformation();
@@ -653,13 +654,14 @@ export default {
        var forms= Object.assign({}, this.FormData,{areaCode:this.formAll.areaCode},{rewardMax:this.formAll.rewardMax},{carType:this.formAll.carType},{serivceCode:this.formAll.serivceCode},{id:this.params[0].id},{usingStatus:this.formAll.usingStatus});
        this.$refs['formAll'].validate(valid=>{
         if(valid){
+        this.dialogFormVisible_add = false;
         data_get_ownerFromsame_update(forms).then(res=>{
-            this.dialogFormVisible_add = false;
             this.changeList();
-            this.$refs['formAll'].resetFields();
+            
             this.$message.success('修改成功');
         }).catch(res=>{
             console.log(res)
+            this.changeList();
             this.$message.error('修改失败');
        });
        }

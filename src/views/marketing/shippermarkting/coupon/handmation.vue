@@ -191,8 +191,8 @@ export default {
             createTime:null,
             tableDataAll:[],
             dataTotal:null,
-            sizes:[30,50,100],
-            pagesize:30,//每页显示数
+            sizes:[20,50,100],
+            pagesize:20,//每页显示数
             page:1,//当前页
             formAllData:{
             activityName:null,
@@ -352,18 +352,20 @@ export default {
                     data_Del_couponActive(this.selectRowData[0].id).then(res=>{
                         this.$message.success('删除成功');
                         this.firstblood();       
-                        this.selectRowData=''; 
+                        this.$refs.multipleTable.clearSelection();
                     }).catch(err => {
                         this.$message({
                             type: 'info',
                             message: '操作失败，原因：' + err.text ? err.text : err
                         })
+                        this.$refs.multipleTable.clearSelection();
                     })
                 }).catch(() => {
                     this.$message({
                         type: 'info',
                         message: '已取消'
                     })
+                    this.$refs.multipleTable.clearSelection();
                 })   
             },
         // 启用禁用
@@ -383,7 +385,7 @@ export default {
                     
                   data_Able_couponActive(this.selectId).then(res=>{
                      this.selectId.splice(0,1);
-                     if(this.selectRowData.usingStatus==1)
+                     if(this.selectRowData[0].usingStatus==1)
                      {
                          this.$message.warning('已禁用');
                      }

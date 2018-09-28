@@ -231,16 +231,15 @@ export default {
             tradeOwner:this.formAll.tradeOwner,
             ownerPhone:this.formAll.ownerPhone,                  
         }
+        this.dialogFormVisible_add = false;
         data_get_aflcTradeArea_create(forms).then(res=>{
            this.$message.success('新增成功');
            this.changeList();
-           this.dialogFormVisible_add = false;
            console.log(res);
 
         }).catch(res=>{
             this.$message.error('新增失败')
             this.changeList();
-            this.dialogFormVisible_add = false;
            console.log(res);
         })
        }

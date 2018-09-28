@@ -34,7 +34,7 @@
                     <el-input v-model.trim="formInline.carNumber" clearable placeholder="请输入内容"></el-input>
                 </el-form-item>
                 <el-form-item label="手机号：">
-                    <el-input placeholder="请输入内容" v-model.trim="formInline.driverMobile" clearable v-numberOnly></el-input>
+                    <el-input placeholder="请输入内容" v-model.trim="formInline.driverMobile" clearable ></el-input>
                 </el-form-item>
                 <el-form-item class="fr">
                     <el-button type="primary" plain  @click="getdata_search"  :size="btnsize">查询</el-button>
@@ -229,7 +229,7 @@
                     driverStatus:'',
                     carNumber:'',
                     accountStatus:'',
-                    areaCode:null,
+                    belongCity:null,
                     belongCityName:null,
                 },
                 tableDataTree:[],//定义列表记录
@@ -287,12 +287,12 @@
                 console.log('data:',d)
                 this.formInline.belongCityName = (!d.province&&!d.city&&!d.area&&!d.town) ? '': `${this.getValue(d.province)}${this.getValue(d.city)}${this.getValue(d.area)}${this.getValue(d.town)}`.trim();
                 if(d.area){
-                    this.formInline.areaCode = d.area.code;
+                    this.formInline.belongCity = d.area.code;
                 }else if(d.city){
-                    this.formInline.areaCode = d.city.code;
+                    this.formInline.belongCity = d.city.code;
                 }
                 else{
-                    this.formInline.areaCode = d.province.code;
+                    this.formInline.belongCity = d.province.code;
                 }
             },
              getValue(obj){
@@ -306,7 +306,7 @@
             clearSearch(){
                 this.formInline={
                     driverMobile:null,
-                    areaCode:null,
+                    belongCity:null,
                     belongCityName:null,
                     driverStatus:null,
                     carNumber:null,

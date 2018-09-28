@@ -422,6 +422,7 @@ export default {
         handler: function(val, oldVal) {
             if(!val){
             this.$refs['formAll'].resetFields();
+            this.$emit('getData');
             }
             else{
              this.getMoreInformation();
@@ -600,14 +601,13 @@ export default {
             serivceCode:this.formAll.serivceCode,
             aflcShipperPreferentialtDetailList:this.FormData
         }]
+        this.dialogFormVisible_add = false;
         data_get_shipperOwnerFrom_create(forms).then(res=>{
-            console.log('res',res);
-            this.dialogFormVisible_add = false;
             this.changeList();
             this.$message.success('新增成功');
         }).catch(res=>{
-            console.log('res',res);
-           this.$message.error('新增失败');
+            this.changeList();
+            this.$message.error('新增失败');
        });
 
        }

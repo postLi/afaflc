@@ -18,7 +18,7 @@
                 <el-form-item label="片区名称" >
                    <el-input @focus="()=>{showMap('vestdistrictName')}" v-model="formAll.districtName"></el-input>
                  </el-form-item>
-         <el-form-item class="fr">       
+         <el-form-item class="fr">
          <el-button type="primary"  plain  @click="getdata_search()" :size="btnsize">查询</el-button> 
          <el-button type="primary"  plain  @click="clearSearch" :size="btnsize">清空</el-button>
          </el-form-item>
@@ -26,9 +26,8 @@
   <div class="classify_info">
    <div class="btns_box">
   <!-- 马甲单新增 -->
-  <div class="vestDialogBox">
- <div class="vestonceDialog commoncss">
-    <el-button  type="primary" value="value" plain icon="el-icon-news" @click="openDialog()">新增</el-button>
+  <div class="vestDialogBox commoncss">
+    <el-button  type="primary" value="value" plain icon="el-icon-circle-plus" @click="openDialog()">新增</el-button>
             <el-dialog title="马甲单源" :visible="driverTemplateDialogFlag" :before-close="change">
             <div class="vestOrder">
             <el-form :inline="true" :model="vestAll" ref="vestAll" :rules="rulesForm1">
@@ -136,49 +135,38 @@
 
             </el-dialog>
     </div>
-  </div>
 
 
 <!-- 详情修改 -->
-<div class="vestDialogBox">
-<div class="vestDialog commoncss">
+<div class="vestDialogBox commoncss">
         <el-button  type="primary"  value="value2" plain icon="el-icon-news" @click="openDialogView()">详情</el-button>
             <el-dialog title="马甲单源" :visible="driverTemplateDialogFlag2" :before-close="changeview">
             <div class="vestOrder">
             <el-form :inline="true">
              <el-row>
             <el-col :span="12">
-          <el-form-item label="服务类型：" :label-width="formLabelWidth" v-if='openFlag==0'>
-            <el-input v-model="selectRowData3.serivceCode" disabled></el-input>
-           </el-form-item>
-            <el-form-item label="服务类型：" :label-width="formLabelWidth" v-else>
-         <el-select v-model="selectRowData3.serivceCode" clearable placeholder="请选择">
+            <el-form-item label="服务类型：" :label-width="formLabelWidth">
+         <el-select v-model="selectRowData3.serivceCode" clearable placeholder="请选择" :disabled="openFlag==0">
                         <el-option
                          v-for="item in serviceCardList"
                         :key="item.id"
                         :label="item.name"
                         :value="item.code"
-                        :disabled="item.disabled">
+                        >
                         </el-option>
           </el-select>
            </el-form-item>
             </el-col>
             <el-col :span="12">
-            <el-form-item label="片区名称：" :label-width="formLabelWidth" v-if='openFlag==0'>
-             <el-input v-model="selectRowData3.districtName" disabled></el-input>
-           </el-form-item>
-           <el-form-item label="片区名称：" :label-width="formLabelWidth" v-else>
-          <el-input @focus="()=>{showMap('selectdistrictName')}" v-model="selectRowData3.districtName"></el-input>
+           <el-form-item label="片区名称：" :label-width="formLabelWidth">
+          <el-input @focus="()=>{showMap('selectdistrictName')}" v-model="selectRowData3.districtName" :disabled="openFlag==0"></el-input>
            </el-form-item>
             </el-col>
               </el-row>
             <el-row>
             <el-col :span="12">
-            <el-form-item label="中心地址：" :label-width="formLabelWidth" v-if='openFlag==0'>
-             <el-input v-model="selectRowData3.districtAddress"  disabled></el-input>
-            </el-form-item>
-             <el-form-item label="中心地址：" :label-width="formLabelWidth" v-else>
-             <el-input @focus="()=>{showMap('selectdistrictAddress')}" v-model="selectRowData3.districtAddress"></el-input>
+             <el-form-item label="中心地址：" :label-width="formLabelWidth">
+             <el-input @focus="()=>{showMap('selectdistrictAddress')}" v-model="selectRowData3.districtAddress" :disabled="openFlag==0"></el-input>
             </el-form-item>
             </el-col>
              <el-col :span="12">
@@ -203,17 +191,17 @@
            <div class="vestdetail">
             <el-form :inline="true">
              <el-row>
-            <el-col :span="8">
+            <el-col :span="9">
             <el-form-item label="提货地：" :label-width="formLabelWidth" class="adressstart">
            <el-input @focus="()=>{showMap('areaCode2')}" v-model="formAll2.startAddress"></el-input>
           </el-form-item>
             </el-col>
-            <el-col :span="8">
+            <el-col :span="9">
            <el-form-item label="目的地：" class="adressend">
             <el-input @focus="()=>{showMap('districtName2')}" v-model="formAll2.endAddress"></el-input>
                  </el-form-item>
             </el-col>
-            <el-col :span="8">
+            <el-col :span="6">
         <el-form-item :label-width="formLabelWidth">       
          <el-button type="primary"  plain  @click="getdata_search2()">查询</el-button> 
          <el-button type="primary"  plain  @click="clearSearch2">清空</el-button>
@@ -266,12 +254,7 @@
                     </div> 
             </el-dialog>
     </div>
-</div>
-
-
-     <div class="vestonceDialog commoncss">
-         <el-button  type="primary" value="value" plain icon="el-icon-edit" @click="openDialogView0()" :size="btnsize">修改</el-button>
-     </div>
+    <el-button  type="primary" value="value" plain icon="el-icon-edit" @click="openDialogView0()" :size="btnsize">修改</el-button>
     <el-button type="primary" plain icon="el-icon-bell"  @click="handleUseStates" :size="btnsize">启用/禁用</el-button>
     <el-button type="primary" plain icon="el-icon-delete" @click="handleDelete" :size="btnsize">删除</el-button>
    </div>
@@ -306,7 +289,7 @@
    </el-table-column>
    <el-table-column  label="状态" prop="usingStatus" sortable>
         <template  slot-scope="scope">
-          {{ scope.row.usingStatus == 0 ? '启用' : '禁用' }}
+          {{ scope.row.usingStatus == 1 ? '启用' : '禁用' }}
          </template>
    </el-table-column>              
 
@@ -925,7 +908,7 @@ export default {
                  data_UseStates_onesource(this.selectId).then(res=>{
                      console.log('dsds',this.selectId)
                      this.selectId.splice(0,1);
-                     if(this.selectRowData[0].usingStatus==0)
+                     if(this.selectRowData[0].usingStatus==1)
                      {
                          this.$message.warning('已禁用');
                      }
@@ -982,7 +965,6 @@ export default {
         changeInfoSave2(){
             this.completeData1()
             this.selectRowData3.flcVestUnisourceAddressaList=this.tableDataTree1;
-             console.log('this.selectRowData3',this.selectRowData3);
             data_get_onesource_update(this.selectRowData3).then(res=>{
             console.log(res)
                 this.firstblood()
@@ -1030,226 +1012,77 @@ export default {
 </script>
 
 <style lang="scss">
-.vestonceDialog{
-        display: inline-block;
-        margin-right: 10px;
-    }
-    .el-dialog{border-radius: 10px 10px 0px 0px;}
-    .commoncss .el-dialog .el-input {
-    width: 250px;
-    }
-    .el-dialog .el-dialog__header{
-            border-bottom: 1px solid #ccc;
-    text-align: center;
-    height: 40px;
-    padding: 10px 0;
-    color: #fff;
-    font-weight: bold;
-    background-color: #0b4b7c;
-    }
-    .price_one{
-            width:105px;
-            margin-right: 10px;
-    }
-    .price_two{
-            width:105px;
-            margin-left: 10px;
-    }    
-    .vestOrder{
-        width: 100%;
-        border-bottom: 2px dashed #ccc;
-    }
-    .vestAddress{
-        display: flex;
-        margin-top:10px;
-    .vestAera{
-        flex-basis: 230px;
-        margin-left:50px;
-        h4{
-            font-family: MicrosoftYaHei;
-            font-size: 12px;
-            font-weight: normal;
-            font-stretch: normal;
-            line-height: 20px;
-            letter-spacing: 0px;
-            color: #666;
-            margin-bottom: 5px;
-        }
-        .el_vestsearch{
-            width: 230px;
-            height: 356px;
-            margin-bottom: 12px;
-            overflow: auto;
-            border: 1px solid #d2d2d2;
-            overflow: auto;
-            .vest_rbut{
-                float: right;
-                margin:10px 5px 0px 10px;
-            }
-            .vest_section{
-                width: 100%;
-                float: left;
-                .vest_tree{
-                    display: flex;
-                    align-items: center;
-                    margin-top:10px;
-                 .el-input{
-                    flex:10;
-                    margin-left:10px;   
-                 }
-                .vest_tree_span{
-                    flex:10;
-                    margin-left:15px;
-                }
-                button{
-                    flex:1;
-                    margin-left:10px;
-                }
-                }
-
-            }
-        }
-    }
-    }
-        .vestDialog{
-        display: inline-block;
-        margin-right:10px;
-        .el-dialog{
-            width: 780px;
-                  }
-        .vestdetail{
-            margin-top:10px;
-        }
-        .addvestbtn{
-            margin-left:30px;
-        }
-    .commoncss .el-dialog .el-input {
-    width: 250px;
-    }
-    .price_one{
-            width:105px;
-            margin-right: 10px;
-    }
-    .price_two{
-            width:105px;
-            margin-left: 10px;
-    }    
-    .vestOrder{
-        width: 100%;
-        border-bottom: 2px dashed #ccc;
-    }
-    .vestAddress{
-        display: flex;
-        margin-top:10px;
-    .vestAera{
-        flex-basis: 230px;
-        margin-left:50px;
-        h4{
-            font-family: MicrosoftYaHei;
-            font-size: 12px;
-            font-weight: normal;
-            font-stretch: normal;
-            line-height: 20px;
-            letter-spacing: 0px;
-            color: #666;
-            margin-bottom: 5px;
-        }
-        .el_vestsearch{
-            width: 230px;
-            height: 356px;
-            margin-bottom: 12px;
-            overflow: auto;
-            border: 1px solid #d2d2d2;
-            overflow: auto;
-            .vest_rbut{
-                float: right;
-                margin:10px 5px 0px 10px;
-            }
-            .vest_section{
-                width: 100%;
-                float: left;
-                .vest_tree{
-                    display: flex;
-                    align-items: center;
-                    margin-top:10px;
-                 .el-input{
-                    flex:10;
-                    margin-left:10px;   
-                 }
-                .vest_tree_span{
-                    flex:10;
-                    margin-left:15px;
-                }
-                button{
-                    flex:1;
-                    margin-left:10px;
-                }
-                }
-
-            }
-        }
-    }
-
-    }
-    .adressstart 
-    {
-        .el-input{width:180px!important}
-    } 
-    .adressend {
-        .el-input{width:180px!important}
-       .el-form-item__label{
-          text-align: left;
-        }
-    }
-    .view_btn{
-        margin-left:50px;
-    }
-    }
-    .vestDialogBox {
-        display: inline-block;
-        .el-button {
+.vestDialogBox{
+    display: inline-block;
+    margin-right: 10px;   
+    .el-button {
         margin-right:0px;
         padding: 7px 15px 7px;
         font-size:12px;
         }
-        .el-dialog{
-                width: 980px;
-        }
-        .commoncss .el-dialog .el-dialog__body{
-                 padding: 5px 0px 0px 0px;
-        }
-        .chooseCityList .el-cascader .el-input
-        {
-            width:250px;
-        }
-        .el-tableTree1{
+    .view_btn{
+        margin-left:50px;
+    }    
+    .el-tableTree1{
             width: 90%;
             margin:0px auto;
         }
-        .el-pagination{
+    .el-pagination{
             text-align: right;
-            margin-bottom: 13px;
-             }
-          .el-pagination__sizes .el-input{
-                width: 100px!important;
+    }  
+    .el-input__inner{
+       height: 30px!important;
+   }
+   .vestAddress{
+        display: flex;
+        margin-top:10px;
+    .vestAera{
+        flex-basis: 230px;
+        margin-left:50px;
+        h4{
+            font-size: 12px;
+            font-weight: normal;
+            font-stretch: normal;
+            line-height: 20px;
+            letter-spacing: 0px;
+            color: #666;
+            margin-bottom: 5px;
+        }
+        .el_vestsearch{
+            width: 230px;
+            height: 356px;
+            margin-bottom: 12px;
+            overflow: auto;
+            border: 1px solid #d2d2d2;
+            overflow: auto;
+            .vest_rbut{
+                float: right;
+                margin:10px 5px 0px 10px;
             }
-           .el-pagination__jump .el-input{
-                width: 50px!important;
+            .vest_section{
+                width: 100%;
+                float: left;
+                .vest_tree{
+                    display: flex;
+                    align-items: center;
+                    margin-top:10px;
+                 .el-input{
+                    flex:10;
+                    margin-left:10px;   
+                 }
+                .vest_tree_span{
+                    flex:10;
+                    margin-left:15px;
+                }
+                button{
+                    flex:1;
+                    margin-left:10px;
+                }
+                }
+
             }
-}
-.info1_tab_footer{
-    padding-left: 20px;
-    background: #eee;
-    height: 40px;
-    line-height: 40px;
-    box-shadow: 0 -2px 2px rgba(0, 0, 0, 0.1);
-    position: relative;
-    z-index: 10;
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    .show_pager{float: right}
-    .page-select{top:5px}
+        }
+    }
+    }
 }
 </style>

@@ -1,6 +1,6 @@
 <template>
-  <div class="same_shipper clearfix">
-    <el-tabs v-model="shipperName" type="border-card"  @tab-click='tabClik'>
+  <div class="tabsWrap clearfix">
+    <el-tabs v-model="shipperName" type="card"  @tab-click='tabClik'>
         <!-- 全部提现 -->
             <el-tab-pane label="全部提现" name="first">
                 <cashAuditing></cashAuditing>
@@ -53,32 +53,4 @@ export default {
 }
 </script>
 <style lang="scss" >
-    @import "../../../../styles/tab.scss";
-    .completeinfo{
-      .detailinfo{
-        margin-left: 26px;
-        p{
-            width:160px;
-            height: 40px;
-            line-height: 40px;
-            text-align: left;
-            display: inline-block;
-            vertical-align: top;
-            span{
-                color:red;
-            }
-        }
-        .upload-demo{
-          display: inline-block ;
-        }
-      }
-    }
-    .same_shipper{
-        height:100%;    
-        position: relative;
-         .el-tabs__content{
-           padding:0px 0px;
-       }     
-        
-    }
 </style>
