@@ -1,7 +1,7 @@
 <template>
   <div class="freezeInfo commoncss">
     <el-button :type="btntype" :value="value" :plain="plain" :icon="icon" @click="openDialog()"><span :class="editType=='view'?'BtnInfo':''">{{btntext}}</span ></el-button>
-    <el-dialog :title="title" :visible.sync="freezeDialogFlag" :before-close="change()" :modal="false">
+    <el-dialog :title="btntext" :visible.sync="freezeDialogFlag" :before-close="change()" :modal="false">
       <el-form :model="formFroze" ref="formFroze" :rules="formFrozeRules">
         <el-row>
             <el-col :span="12">
@@ -69,6 +69,35 @@
             </el-form-item>
             </el-col>
           </el-row>
+
+              <el-row>       
+                  <el-col :span="12">
+                      <el-form-item label="车主抽佣等级：" :label-width="formLabelWidth">
+                            <el-select v-model="formFroze.rewardGrade" placeholder="请选择" disabled>
+                                <el-option
+                                    v-for="item in MaidLevelType"
+                                    :key="item.code"
+                                    :label="item.name"
+                                    :value="item.code">
+                                </el-option>
+                            </el-select>
+                        </el-form-item>
+                  </el-col>
+                  <el-col :span="12">
+                      <el-form-item label="车主奖励等级："  :label-width="formLabelWidth">
+                            <el-select v-model="formFroze.commisionLevel" placeholder="请选择" disabled>
+                                <el-option
+                                    v-for="item in carOwnerType"
+                                    :key="item.code"
+                                    :label="item.name"
+                                    :value="item.code"
+                                    >
+                                </el-option>
+                            </el-select>
+                        </el-form-item>
+                  </el-col>
+              </el-row>
+
           <el-row>
               <el-col :span="12">
                   <el-form-item label="车长(米)：" :label-width="formLabelWidth">
@@ -189,7 +218,7 @@
 import GetCityList from '@/components/GetCityList'
 import {parseTime} from '@/utils/'
 import { eventBus } from '@/eventBus'
-import  {data_put_freezeDriver,data_get_freezeDriverchange,data_unbind_freezeDriverchange,data_Get_carType,data_get_car_freezeType,data_get_driver_obStatus} from '@/api/users/carowner/total_carowner.js'
+import  {data_put_freezeDriver,data_get_freezeDriverchange,data_unbind_freezeDriverchange,data_Get_carType,data_get_car_freezeType,data_get_driver_obStatus,data_get_shipper_carmaid,data_get_shipper_carOwner} from '@/api/users/carowner/total_carowner.js'
 export default {
   name:'create-Change-ViewDialog',
   components:{
@@ -240,6 +269,8 @@ export default {
       midoptions:[],
       optionsLevel:[],
       options:[], 
+      MaidLevelType:[], //抽佣等级列表
+      carOwnerType:[],  //奖励等级列表
       formLabelWidth:'150px',
       freezeDialogFlag:false,
       formFroze: { // 冻结弹框表单
@@ -357,20 +388,33 @@ export default {
     },
 
     getMoreInformation(){
-      //获取车主类型
-      data_Get_carType().then(res=>{
-        this.options = res.data
-      }),
-      // 获取车主冻结原因下拉
-      data_get_car_freezeType().then(res=>{
-          this.optionsReason = res.data
-      })
-            // 中单等级的获取
+          //获取车主类型
+            data_Get_carType().then(res=>{
+              this.options = res.data
+            }),
+            // 获取车主冻结原因下拉
+            data_get_car_freezeType().then(res=>{
+                this.optionsReason = res.data
+            })
+         // 中单等级的获取
             data_get_driver_obStatus().then(res =>{
                     this.optionsLevel = res.data
             }).catch(err =>{
                 console.log(err)
-            })      
+            })    
+            // 抽佣等级
+            data_get_shipper_carmaid().then(res=>{
+                  this.MaidLevelType = res.data
+            }).catch(err =>{
+                console.log(err)
+            })
+            // 车主奖励等级
+            data_get_shipper_carOwner().then(res=>{
+                  this.carOwnerType = res.data
+            }).catch(err =>{
+                console.log(err)
+            })            
+            
     },
     // 冻结提交数据
     onSubmit(){

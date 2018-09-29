@@ -73,8 +73,8 @@
                     </el-date-picker>
             </el-form-item>            
                 <el-form-item class="fr">     
-                  <el-button type="primary"  plain @click="getdata_search" :size="btnsize">查询</el-button>
-                  <el-button type="primary"  plain @click="reset" :size="btnsize">重置</el-button>
+                  <el-button type="primary"  @click="getdata_search" :size="btnsize">搜索</el-button>
+                  <el-button type="info"  plain @click="reset" :size="btnsize">清空</el-button>
                 </el-form-item>    
           </el-form>
             <div class="classify_info">
@@ -83,6 +83,7 @@
                         ref="multipleTable"
                         :data="tableDataTree"
                         stripe
+                        highlight-current-row
                         border
                         align = "center"
                         height="100%"
@@ -321,7 +322,8 @@ import { parseTime,formatTime,pickerOptions2 } from '@/utils/index.js'
             },
              //点击选中当前行
            clickDetails(row, event, column){
-               
+               console.log(row)
+                this.$refs.multipleTable.toggleRowSelection(row);
            },
            //双击
             moreinfo(row, event){
@@ -338,7 +340,7 @@ import { parseTime,formatTime,pickerOptions2 } from '@/utils/index.js'
             },
             //判断是否选中
             getinfomation(selection){
-               
+              console.log('选中内容',selection)
             },
             cTime(i){
             this.data.tradeStartTime = i[0];

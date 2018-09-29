@@ -2,7 +2,7 @@
      <div class="newcouponBox commoncss">
       <el-button :type="btntype" :value="value" :plain="plain" :icon="icon" @click="openDialog()">{{btntext}}</el-button>
       <div class="newcoupon1">
-      <el-dialog  :visible="dialogFormVisible_add" :before-close="change" :title="btntitle" modal-append-to-body>
+      <el-dialog  :visible="dialogFormVisible_add" :before-close="change" :title="btntext" modal-append-to-body>
         <el-form :model="formAllData" ref="formAllData" :rules="rulesForm">
           <el-row v-if="editType=='one'">
             <el-col>
@@ -125,7 +125,7 @@
                  <span v-if="formAllData.aflcCouponList[keys].timeType =='AF046301'">/</span>
                      <span v-else>
                          <el-date-picker v-model="formAllData.aflcCouponList[keys].startTime"
-                                type="datetime"
+                                type="datetime" 
                                 value-format="timestamp"
                                 default-time="00:00:00"
                                 placeholder="选择日期">
@@ -320,6 +320,7 @@ export default {
           name:'能'
         }
         ],
+        areaStatus:null,
         couponList:[],
         couponTimeList:[],          
         dialogFormVisible_add:false,
@@ -373,6 +374,7 @@ export default {
             if(!val){
             this.$refs['formAllData'].resetFields();
             this.$emit('getData');
+            this.areaStatus = null;
             this.formAllData.aflcCouponList=[{
             province:null,
             city:null,
@@ -510,6 +512,7 @@ export default {
     }
    },
      cTime(i){
+         console.log(i)
                 this.formAllData.startTime = i[0]
                 this.formAllData.endTime = i[1]
      },
@@ -521,7 +524,6 @@ export default {
              let reg2=/^(\d|9)(\.\d)?$/  //输入0到9
              let reg3=/^(\d|10)(\.\d)?$/  //输入0到10
                 for(var i=0;i<this.formAllData.aflcCouponList.length;i++){
-                    console.log('333',this.formAllData.aflcCouponList[i].endTime)
                   if(!this.formAllData.aflcCouponList[i].couponNum){
                      this.$message.warning('派发数量都不能为空');
                      return false
@@ -626,7 +628,6 @@ export default {
                      return false
                     }
                  }
-                 
     },
      add_data(){
             console.log('this.formAllData.endTime',this.formAllData)     
@@ -641,25 +642,20 @@ export default {
                 if(this.editType=='two'){
                   this.formAllData.activityType = 'AF046101';
                 } 
-                else if(this.formAllData.area){
-                    this.formAllData.areaCode.splice(0,2)
+                if(this.formAllData.area){
+                 this.areaStatus = this.formAllData.areaCode[2]
                 }
                 else{
-                    this.formAllData.areaCode.splice(0,1)
-                    this.formAllData.areaCode.pop()
+                 this.areaStatus = this.formAllData.areaCode[1]
                 }
-                this.formAllData.areaCode =String(this.formAllData.areaCode)
                     let aflcCouponList = []
                     this.formAllData.aflcCouponList.map((list,index)=>{
                     if(list.area){
-                       list.areaCode.splice(0,2)
+                       this.formAllData.aflcCouponList[index].areaCode = this.formAllData.aflcCouponList[index].areaCode[2]
                     }
                     else{
-                      list.areaCode.splice(0,1)
-                      list.areaCode.pop()
+                       this.formAllData.aflcCouponList[index].areaCode = this.formAllData.aflcCouponList[index].areaCode[1]
                     }
-                      list.areaCode  = String(list.areaCode)
-                      console.log(list.areaCode)
                         aflcCouponList.push(
                             {
                                 province:list.province,
@@ -687,7 +683,7 @@ export default {
                         startTime:this.formAllData.startTime,
                         endTime:this.formAllData.endTime,
                         activityDes:this.formAllData.activityDes,
-                        areaCode:this.formAllData.areaCode,
+                        areaCode:this.areaStatus,
                         province:this.formAllData.province,
                         city:this.formAllData.city,
                         area:this.formAllData.area,

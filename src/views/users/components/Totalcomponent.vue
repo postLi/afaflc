@@ -37,8 +37,8 @@
                     <el-input placeholder="请输入内容" v-model.trim="formInline.driverMobile" clearable ></el-input>
                 </el-form-item>
                 <el-form-item class="fr">
-                    <el-button type="primary" plain  @click="getdata_search"  :size="btnsize">查询</el-button>
-                    <el-button type="info" plain  @click="clearSearch"  :size="btnsize">清空</el-button>
+                    <el-button type="primary" plain @click="getdata_search"  :size="btnsize" icon="el-icon-search">搜索</el-button>
+                    <el-button type="info" plain  @click="clearSearch"  :size="btnsize" icon="fontFamily aflc-icon-qingkong">清空</el-button>
                 </el-form-item>
             </el-form>
             <div class="classify_info">
@@ -62,9 +62,9 @@
                     :plain="true"
                     editType='edit'
                     btntype="primary"
-                    icon="el-icon-info"
+                    icon="fontFamily aflc-icon-dongjie1"
                     :params="selectRowData"
-                    @getData="getDataList"
+                    @getData="getDataList" 
                     >
                     </freeze-change-template>
                     <freeze-change-template
@@ -88,7 +88,7 @@
                     :plain="true"
                     editType='edit-three'
                     btntype="primary"
-                    icon="el-icon-edit"
+                    icon="fontFamily aflc-icon-jiedong1"
                     :params="selectRowData"
                     @getData="getDataList"
                     >
@@ -101,7 +101,7 @@
                     :plain="true"
                     editType='edit-four'
                     btntype="primary"
-                    icon="el-icon-edit"
+                    icon="fontFamily aflc-icon-heimingdan"
                     :params="selectRowData"
                     @getData="getDataList"
                     >
@@ -114,7 +114,7 @@
                     :plain="true"
                     editType='edit-five'
                     btntype="primary"
-                    icon="el-icon-warning"
+                    icon="fontFamily aflc-icon-yichuheimingdan"
                     :params="selectRowData"
                     @getData="getDataList"
                     >

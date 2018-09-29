@@ -19,14 +19,14 @@
                    <el-input @focus="()=>{showMap('vestdistrictName')}" v-model="formAll.districtName"></el-input>
                  </el-form-item>
          <el-form-item class="fr">
-         <el-button type="primary"  plain  @click="getdata_search()" :size="btnsize">查询</el-button> 
-         <el-button type="primary"  plain  @click="clearSearch" :size="btnsize">清空</el-button>
+         <el-button type="primary" plain @click="getdata_search()" :size="btnsize" icon="el-icon-search">搜索</el-button> 
+         <el-button type="info"  plain  @click="clearSearch" :size="btnsize" icon="fontFamily aflc-icon-qingkong">清空</el-button>
          </el-form-item>
            </el-form> 
   <div class="classify_info">
    <div class="btns_box">
   <!-- 马甲单新增 -->
-  <div class="vestDialogBox commoncss">
+  <div class="onceDialogBox commoncss">
     <el-button  type="primary" value="value" plain icon="el-icon-circle-plus" @click="openDialog()">新增</el-button>
             <el-dialog title="马甲单源" :visible="driverTemplateDialogFlag" :before-close="change">
             <div class="vestOrder">
@@ -138,7 +138,7 @@
 
 
 <!-- 详情修改 -->
-<div class="vestDialogBox commoncss">
+<div class="onceDialogBox commoncss">
         <el-button  type="primary"  value="value2" plain icon="el-icon-news" @click="openDialogView()">详情</el-button>
             <el-dialog title="马甲单源" :visible="driverTemplateDialogFlag2" :before-close="changeview">
             <div class="vestOrder">
@@ -203,8 +203,8 @@
             </el-col>
             <el-col :span="6">
         <el-form-item :label-width="formLabelWidth">       
-         <el-button type="primary"  plain  @click="getdata_search2()">查询</el-button> 
-         <el-button type="primary"  plain  @click="clearSearch2">清空</el-button>
+         <el-button type="primary"   @click="getdata_search2()">搜索</el-button> 
+         <el-button type="info"  plain  @click="clearSearch2">清空</el-button>
          </el-form-item>
             </el-col>
              </el-row>
@@ -212,7 +212,7 @@
                  <el-row :span="24">
                 <el-form-item :label-width="formLabelWidth" >       
                     <el-button  type="primary"  plain icon="el-icon-news" @click="openDialog1()" class="view_btn">新增</el-button>
-                    <el-button  type="primary" plain icon="el-icon-delete" @click="handleDelete2" :size="btnsize">删除</el-button>
+                    <el-button  type="danger" plain icon="el-icon-delete" @click="handleDelete2" :size="btnsize">删除</el-button>
                 </el-form-item>
                  </el-row>
              </el-row>
@@ -256,7 +256,7 @@
     </div>
     <el-button  type="primary" value="value" plain icon="el-icon-edit" @click="openDialogView0()" :size="btnsize">修改</el-button>
     <el-button type="primary" plain icon="el-icon-bell"  @click="handleUseStates" :size="btnsize">启用/禁用</el-button>
-    <el-button type="primary" plain icon="el-icon-delete" @click="handleDelete" :size="btnsize">删除</el-button>
+    <el-button type="danger" plain icon="el-icon-delete" @click="handleDelete" :size="btnsize">删除</el-button>
    </div>
   
     <div class="info_news">  
@@ -450,8 +450,9 @@ export default {
     },
     watch:{
         driverTemplateDialogFlag:{
-             handler: function(val, oldVal){
+            handler: function(val, oldVal){
             if (!val) {
+            this.$refs['vestAll'].resetFields();
              this.destinationaddAera='';
              this.pickaddAera='';
              this.pickAera=[{}];
@@ -1012,7 +1013,7 @@ export default {
 </script>
 
 <style lang="scss">
-.vestDialogBox{
+.onceDialogBox{
     display: inline-block;
     margin-right: 10px;   
     .el-button {

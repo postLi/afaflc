@@ -213,6 +213,7 @@ export default{
       postUserRewardShipperTransaction(this.page, this.pagesize, this.searchInfo).then(res => {
         if (res) {
           this.tableData = res.data.list
+          this.dataTotal = res.data.totalCount
           this.loading = false
           console.log(res)
         }

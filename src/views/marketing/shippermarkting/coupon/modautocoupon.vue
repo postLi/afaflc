@@ -331,6 +331,7 @@ export default {
         }
         ],
         selectFlag:false,
+        areaStatus:null,
         couponList:[],
         couponTimeList:[],          
         dialogFormVisible_add:false,
@@ -387,6 +388,7 @@ export default {
           if(!val){
           this.$refs['formAllData'].resetFields();
           this.$emit('getData') 
+          this.areaStatus = null;
           this.selectFlag=false;
           this.formAllData.aflcCouponList=[{
            province:null,
@@ -731,49 +733,29 @@ export default {
             this.$refs['formAllData'].validate(valid=>{
               if(valid){
                 if(typeof(this.formAllData.areaCode)=='string'){
-                console.log('this.formAllData.areaCode',typeof(this.formAllData.areaCode))
-                if(!this.formAllData.area){
-                   this.formAllData.areaCode = this.formAllData.areaCode.split(",").splice(0,2)
-                   this.formAllData.areaCode = String(this.formAllData.areaCode)
-                }
-                else{
-                this.formAllData.areaCode = this.formAllData.areaCode.split(",").splice(0,1).pop()
-                this.formAllData.areaCode = String(this.formAllData.areaCode)
-                } 
+                this.areaStatus = this.formAllData.areaCode
                 }
                 else{
                 if(this.formAllData.area){
-                    this.formAllData.areaCode.splice(0,2)
-                    this.formAllData.areaCode = String(this.formAllData.areaCode)
+                 this.areaStatus = this.formAllData.areaCode[2]
                 }
                 else{
-                    this.formAllData.areaCode.splice(0,1)
-                    this.formAllData.areaCode.pop()
-                    this.formAllData.areaCode = String(this.formAllData.areaCode)
-                }              
+                 this.areaStatus = this.formAllData.areaCode[1]
+                }        
                 }
 
                     let aflcCouponList = []
                     this.formAllData.aflcCouponList.map((list,index)=>{
                     if(typeof(list.areaCode)=='string'){
+                        list.areaCode = list.areaCode
+                    }
+                    else{
                     if(list.area){
-                      list.areaCode = this.formAllData.areaCode.split(",").splice(0,2)
-                    //   list.areaCode.splice(0,2)
+                       this.formAllData.aflcCouponList[index].areaCode = this.formAllData.aflcCouponList[index].areaCode[2]
                     }
                     else{
-                      list.areaCode = this.formAllData.areaCode.split(",").splice(0,1).pop()
-                    //   list.areaCode.splice(0,1)
-                    //   list.areaCode.pop()
-                    }
-                    }
-                    else{
-                     if(list.area){
-                      list.areaCode.splice(0,2)
-                    }
-                    else{
-                      list.areaCode.splice(0,1)
-                      list.areaCode.pop()
-                    }                  
+                       this.formAllData.aflcCouponList[index].areaCode = this.formAllData.aflcCouponList[index].areaCode[1]
+                    }               
                     }
                       list.areaCode  = String(list.areaCode)
                         aflcCouponList.push(
@@ -804,7 +786,7 @@ export default {
                         startTime:this.formAllData.startTime,
                         endTime:this.formAllData.endTime,
                         activityDes:this.formAllData.activityDes,
-                        areaCode:this.formAllData.areaCode,
+                        areaCode: this.areaStatus,
                         province:this.formAllData.province,
                         city:this.formAllData.city,
                         area:this.formAllData.area,

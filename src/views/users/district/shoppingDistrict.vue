@@ -16,8 +16,8 @@
                 <el-input v-model="formAllData.tradeOwner"></el-input>
             </el-form-item>
             <el-form-item class="fr"> 
-                <el-button type="primary" plain :size="btnsize"  @click="getdata_search">查询</el-button>
-                <el-button type="info" plain :size="btnsize" @click="clearSearch">清空</el-button>
+                <el-button type="primary" plain :size="btnsize"  @click="getdata_search" icon="el-icon-search">搜索</el-button>
+                <el-button type="info" plain :size="btnsize" @click="clearSearch" icon="fontFamily aflc-icon-qingkong">清空</el-button>
             </el-form-item>            
     </el-form>
 		<div class="classify_info" >
@@ -43,7 +43,7 @@
                     >
                     </shoppingDialog>
                 <el-button type="primary" plain :size="btnsize" @click="handleUseStates" icon="el-icon-bell">启用/停用</el-button>
-                <el-button type="primary" plain :size="btnsize" @click="delete_data" icon="el-icon-delete">删除</el-button>
+                <el-button type="danger" plain :size="btnsize" @click="delete_data" icon="el-icon-delete">删除</el-button>
 			</div>
             <div class="info_news">
             <el-table style="width: 100%" stripe border height="100%" :data="tableDataAll" ref="multipleTable"  @selection-change="getSelection" @row-click="clickDetails" highlight-current-row tooltip-effect="dark">

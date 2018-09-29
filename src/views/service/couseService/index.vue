@@ -18,15 +18,22 @@
                         tooltip-effect="dark"
                         @row-click="clickDetails"
                         style="width: 100%"> 
-                         <el-table-column label="序号"  width="80">
-                            <template slot-scope="scope">
-                                {{ (page - 1)*pagesize + scope.$index + 1 }}
-                            </template>
+                        <el-table-column
+                                        label="选择"
+                                        type="selection"
+                                        width="50">
+                        </el-table-column>
+                    <el-table-column label="序号" sortable  width="80">
+                                        <template slot-scope="scope">
+                                        {{ (page - 1)*pagesize + scope.$index + 1 }}
+                                        </template>
                         </el-table-column>  
                         <el-table-column
                             prop="orderSerial"
                             label="工单编号"
-                            width="300">
+                            width="300"
+                            sortable
+                            >
                                 <template  slot-scope="scope">
                                         <h4 class="needMoreInfo" @click="pushOrderSerial(scope.row)">{{ scope.row.workSerial}}</h4>
                                 </template>
@@ -34,47 +41,63 @@
                         <el-table-column
                             prop="complainTypeName"
                             label="提交类型"
-                            width="250">
+                            width="250"
+                            sortable
+                            >
                         </el-table-column>
                         <el-table-column
                             prop="orderSerial"
                             label="运单号"
-                            width="300">
+                            width="300"
+                            sortable
+                            >
                         </el-table-column>
                         <el-table-column
                             :show-overflow-tooltip="true"
                             prop="complainDes"
                             label="提交内容"
-                            width="300">
+                            width="300"
+                            sortable
+                            >
                         </el-table-column>
                         <el-table-column
                             prop="complainTime"
                             label="提交时间"
-                            width="250">
+                            width="250"
+                            sortable
+                            >
                         </el-table-column>
                          <el-table-column
                             prop="complainName"
                             label="提交人"
-                            width="150">
+                            width="150"
+                            sortable
+                            >
                         </el-table-column> 
                         <el-table-column
                             prop="complainStatusName"
                             label="处理状态"
-                            width="150">
+                            width="150"
+                            sortable
+                            >
                             <!-- <template  slot-scope="scope">
                                 <span :class="{reMark:scope.row.complainStatusName == '待处理',sussces:scope.row.complainStatusName == '已处理'}">{{ scope.row.complainStatusName}}</span>
                             </template> -->
                         </el-table-column>
                         <el-table-column
                             label="处理时间"
-                            width="250">
+                            width="250"
+                            sortable
+                            >
                             <template  slot-scope="scope">
                                {{scope.row.platformTime ? scope.row.platformTime : '无'}}
                             </template>
                         </el-table-column>
                         <el-table-column
                             label="处理人"
-                            width="150">
+                            width="150"
+                            sortable
+                            >
                             <template  slot-scope="scope">
                                {{scope.row.replyName ? scope.row.replyName : '无'}}
                             </template>
@@ -82,7 +105,9 @@
                         <el-table-column
                             :show-overflow-tooltip="true"
                             label="回复内容"
-                            width="350">
+                            width="350"
+                            sortable
+                            >
                             <template  slot-scope="scope">
                                 {{scope.row.reply ? scope.row.reply : '无'}}
                             </template>

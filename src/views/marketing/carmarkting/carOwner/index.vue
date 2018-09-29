@@ -32,7 +32,8 @@
                  </el-select>
             </el-form-item>          
             <el-form-item class="fr">       
-          <el-button type="primary"  plain @click="getData_query"  :size="btnsize">查询</el-button> 
+          <el-button type="primary" plain @click="getData_query"  :size="btnsize" icon="el-icon-search">搜索</el-button> 
+          <el-button type="info" plain @click="clearSearch"  :size="btnsize" icon="fontFamily aflc-icon-qingkong">清空</el-button>
           </el-form-item>
           </el-form>
           	<div class="classify_info">
@@ -58,8 +59,8 @@
                      @getData="getDataList"
                     :params="selectRowData">
                     </modOwner>
-                <el-button  type="primary" value="value" plain icon="el-icon-bell" @click="handleUseStates" :size="btnsize">启用/停用</el-button>
-                <el-button type="primary" plain icon="el-icon-delete" @click="delete_data" :size="btnsize">删除</el-button>
+                <el-button  type="primary" plain icon="el-icon-bell" @click="handleUseStates" :size="btnsize">启用/停用</el-button>
+                <el-button type="danger" plain icon="el-icon-delete" @click="delete_data" :size="btnsize">删除</el-button>
             	</div>
 
             <div class="info_news">    
@@ -225,6 +226,19 @@ export default {
          getData_query(){
           this.firstblood();
           },
+        // 清空
+        clearSearch(){
+        this.formAllData =  {
+            areaCode: null,
+            carType:null,
+            serivceCode:null,
+            province:null,
+            city:null,
+            area:null,
+            areaName:[]
+        }
+            this.firstblood()    
+        },
             // 判断选中与否
             getSelection(val){
             console.log('选中内容',val)

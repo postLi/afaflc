@@ -13,8 +13,8 @@
                 <el-input v-model="formAllData.partnerCompany"></el-input>
             </el-form-item>
             <el-form-item class="fr"> 
-                <el-button type="primary" plain :size="btnsize"  @click="getdata_search">查询</el-button>
-                <el-button type="info" plain :size="btnsize" @click="clearSearch">清空</el-button>
+                <el-button type="primary" plain :size="btnsize"  @click="getdata_search" icon="el-icon-search">搜索</el-button>
+                <el-button type="info" plain :size="btnsize" @click="clearSearch" icon="fontFamily aflc-icon-qingkong">清空</el-button>
             </el-form-item>            
     </el-form>
 		<div class="classify_info" >
@@ -39,7 +39,7 @@
                     :params="selectRowData"
                     > 
                     </manageDistrictDialog>
-                <el-button type="primary" plain :size="btnsize" @click="delete_data" icon="el-icon-delete">删除</el-button>
+                <el-button type="danger" plain :size="btnsize" @click="delete_data" icon="el-icon-delete">删除</el-button>
 			</div>
             <div class="info_news">
             <el-table style="width: 100%" stripe border height="100%"  :data="tableDataAll"  ref="multipleTable"  @selection-change="getSelection" @row-click="clickDetails" highlight-current-row>
@@ -172,12 +172,11 @@ export default {
                 }     
 
         data_get_aflcPartner_list(this.page,this.pagesize,FromData).then(res=>{
-            console.log('res',res)
                     this.dataTotal = res.data.totalCount
                     this.tableDataAll = res.data.list;
                     this.tableDataAll.forEach(item => {
-                        item.contractStartDate = parseTime(item.contractStartDate,"{y}-{m}-{d} {h}:{i}:{s}");
-                        item.contractEndDate = parseTime(item.contractEndDate,"{y}-{m}-{d} {h}:{i}:{s}");
+                        item.contractStartDate = parseTime(item.contractStartDate,"{y}-{m}-{d}");
+                        item.contractEndDate = parseTime(item.contractEndDate,"{y}-{m}-{d}");
                     })
         })
     },

@@ -7,10 +7,11 @@
                     </vregion>
             </el-form-item> 
             <el-form-item label="货主账号:">
-            <el-input placeholder="请输入内容" clearable v-model="formAllData.account"></el-input>
+            <el-input placeholder="请输入内容" clearable v-model="formAllData.accountId"></el-input>
             </el-form-item>             
             <el-form-item class="fr">       
-          <el-button type="primary"  :size="btnsize" @click="getData_query" plain>搜索</el-button> 
+          <el-button type="primary"  :size="btnsize" @click="getData_query">搜索</el-button> 
+          <el-button type="info"  plain @click="clearSearch" :size="btnsize">清空</el-button>
           </el-form-item>
           </el-form>                                         
           	<div class="classify_info">
@@ -79,10 +80,8 @@ export default {
       dataTotal:null,
       selectRowData:{},
       formAllData:{
-            account: null,
-            areaCode: null,
-            cityCode: null,
-            provinceCode: null,                
+            accountId: null,
+            areaCode: null,              
             }
      }
     },
@@ -125,6 +124,16 @@ export default {
     getData_query() {
       this.firstblood()
     },
+    // 清空查询
+     clearSearch(){
+            this.belongCityName = null,
+               this.formAllData = {
+                    accountId: null,
+                    areaCode: null,  
+               },
+         this.firstblood();
+        },
+
      // 判断选中与否
     getSelection(val){
      console.log('选中内容',val)

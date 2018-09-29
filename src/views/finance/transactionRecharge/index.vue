@@ -44,7 +44,8 @@
                     </el-date-picker>
             </el-form-item>                  
             <el-form-item class="fr">       
-          <el-button type="primary"  plain @click="seach_data" :size="btnsize">查询</el-button> 
+          <el-button type="primary"  @click="seach_data" :size="btnsize">搜索</el-button> 
+          <el-button type="info" plain :size="btnsize" @click="clearSearch">清空</el-button>
           </el-form-item>
           </el-form>
             <div class="classify_info">
@@ -75,7 +76,6 @@
             <el-table-column  label="充值时间" prop="rechargeTime" sortable>
             </el-table-column>    
            </el-table>    
-                                                          
                       <!-- 页码 -->
         <div class="info_tab_footer">共计:{{ dataTotal }} <div class="show_pager"> <Pager :total="dataTotal" @change="handlePageChange"  :sizes="sizes"/></div> </div>  
             </div>
@@ -165,8 +165,23 @@ import {data_financeList,data_GetServerType,data_GetServerType2,data_GetServerTy
             this.formAllData.startRechargeTime = i[0];
             this.formAllData.endRechargeTime = i[1];
         },
+        // 查询 
         seach_data(){
                 this.firstblood()
+        },
+        // 清空查询
+        clearSearch(){
+            this.createTime = null,
+               this.formAllData = {
+                   name:null,
+                   mobile:null,
+                   rechargeChannel:null,
+                   rechargeWay:null,
+                   rechargeTime:null,
+                   startRechargeTime:null,
+                   endRechargeTime:null,
+               },
+         this.firstblood();
         },
         // 判断选中与否
         getSelection(val){
