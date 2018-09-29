@@ -482,7 +482,7 @@ export default {
                 obtainGrade:null,
                 belongCityName:null,
                 obtainGradeTime:null, //中单等级有效时间
-                isVipCar:null, //特权车
+                isVipCar:'0', //特权车
                 carFile:null,
                 drivingLicenceFile:null,
                 drivingPermitFile:null,
@@ -526,6 +526,7 @@ export default {
                 this.templateModel.carSpec = null;
                 this.templateModel.belongCity = null;
                 this.$emit('getData')
+                this.templateModel.isVipCar = '0'
             }
             else{
             this.getMoreInformation()

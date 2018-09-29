@@ -1,7 +1,6 @@
 import fetch from '@/utils/fetch'
 
 const baseurl = "aflcsmservice"
-const baseurl_one= "aflcsmservice"
 const baseurl_two = "aflccommonservice"
 
 //获取优惠卷手动活动列表
