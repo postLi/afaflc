@@ -94,7 +94,7 @@ export default {
 
 
     mounted(){
-        // console.log('this.$route',this.$route)
+        console.log('我是小强',this.$route)
     },
     methods: {
         init(){

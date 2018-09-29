@@ -140,25 +140,20 @@
       </div>
 </template>
 <script>
-// import { data_Commission, data_CarList, data_MaidLevel } from '@/api/server/areaPrice.js'
-import {postOrderGoodsclaimlist} from '@/api/service/claim.js'
-// import { data_get_Marketingsame_list, data_Del_Marketingsame, data_Able_Marketingsame } from '@/api/marketing/carmarkting/carmarkting.js'
-import { regionDataPlus, CodeToText, TextToCode } from 'element-china-area-data'
-// import newCity from '../../components/newCity.vue'
-import { eventBus } from '@/eventBus'
+import { postOrderGoodsclaimlist } from '@/api/service/claim.js'
 import Pager from '@/components/Pagination/index'
 import { parseTime } from '@/utils/'
 import vregion from '@/components/vregion/Region'
-import {DicDelStatusType} from '@/api/common'
+import { DicDelStatusType } from '@/api/common'
 import addReg from './reg/index'
+import { orderDetailsList } from '@/api/order/ordermange'
 export default {
   data() {
     return {
       value: '',
       btnsize: 'mini',
-      options: regionDataPlus,
       selectRowData: {},
-      selectId: [],
+      selected: [],
       sizes: [30, 50, 100],
       pagesize: 30, // 初始化加载数量
       page: 1, // 初始化页码
@@ -166,23 +161,23 @@ export default {
       dataTotal: 0,
       dataset: [],
       radio: 1,
-      centerDialogVisible:false,
-      optionsdealStatus:[{ code: null, name: '全部' }],
+      centerDialogVisible: false,
+      optionsdealStatus: [{ code: null, name: '全部' }],
       optionsPlantService: [
         {
           id: '0',
           label: '待处理',
-          value:'待处理'
+          value: '待处理'
         },
         {
           id: '1',
           label: '处理中',
-          value:'处理中'
+          value: '处理中'
         },
         {
           id: '2',
           label: '已处理',
-          value:'已处理'
+          value: '已处理'
         }
       ],
       formAllData: {
@@ -196,12 +191,11 @@ export default {
     Pager
   },
   mounted() {
-    // this.searchCreatTime = this.defaultTime
     this.firstblood()
     this.getdelstatus()
   },
   methods: {
-    //搜索区域
+    // 搜索区域
     regionChange(d) {
       console.log('data:', d)
       this.formAllData.belongCityName = (!d.province && !d.city && !d.area && !d.town) ? '' : `${this.getValue(d.province)}${this.getValue(d.city)}${this.getValue(d.area)}${this.getValue(d.town)}`.trim()
@@ -213,39 +207,55 @@ export default {
         this.formAllData.belongCity = d.province.code
       }
     },
-    //查询条件
-    handleSearch(type){
-      switch(type){
+    // 查询条件
+    handleSearch(type) {
+      switch (type) {
         case 'search':
-        break
+          break
         case 'clear':
-        break
+          break
       }
     },
     // 请求接口刷新页面
     firstblood() {
       // this.loading = false
-      postOrderGoodsclaimlist(this.page, this.pagesize,this.formAllData).then(res => {
+      postOrderGoodsclaimlist(this.page, this.pagesize, this.formAllData).then(res => {
         this.dataTotal = res.data.totalCount
         this.dataset = res.data.list
         console.log(res)
       })
     },
-    //点击打开弹窗
-    doAction(type){
-      switch(type){
+    // 点击打开弹窗
+    doAction(type) {
+       if (!this.selected.length && type !== 'reg') {
+        this.$message({
+          message: '请选择要操作的项~',
+          type: 'warning'
+        })
+        return false
+      }
+      switch (type) {
         case 'reg':
           this.centerDialogVisible = true
-        break
+          break
         case 'shouli':
-          // this.$router.push({ path: '../../order/xiangqing?orderSerial=AFTC201809281748189181483' })
+          // orderSerial订单号
+          this.$router.push({ name: '订单详情', query: { orderSerial: this.selected[0].orderSerial }})
+          // orderDetailsList(this.selected[0].orderSerial).then(res => {
+          //     console.log(res)
+          //     // this.listInformation = res.data.aflcOrderFollowingFiles;
+          //     this.loading = false;
+          //   })
+          console.log(this.selected[0].orderSerial)
+          break
+        case 'clear':
         break
       }
     },
-    closeAddReg(){
+    closeAddReg() {
       this.centerDialogVisible = false
     },
-    getdelstatus(){
+    getdelstatus() {
       DicDelStatusType().then(res => {
         console.log(res.data)
         res.data.map((item) => {
@@ -253,62 +263,17 @@ export default {
         })
       })
     },
-    // 获取  服务和车辆 类型列表
-    // getMoreInformation() {
-    //   data_CarList().then(res => {
-    //                 // console.log(res.data)
-    //     res.data.map((item) => {
-    //       this.optionsCar.push(item)
-    //     })
-    //   })
-    //   data_MaidLevel().then(res => {
-    //     res.data.map((item) => {
-    //       this.MaidLevel.push(item)
-    //     })
-    //   }).catch(res => {
-    //     console.log(res)
-    //   })
-    // },
-          // 列表刷新页面
-    // firstblood() {
-    //   let FromData = {}
-    //   if (this.formAllData.area) {
-    //     FromData = {
-    //       area: this.formAllData.area,
-    //       city: null,
-    //       carType: this.formAllData.carType,
-    //       commissionGrade: this.formAllData.commissionGrade
-    //     }
-    //   } else if (this.formAllData.city) {
-    //     FromData = {
-    //       area: null,
-    //       city: this.formAllData.city,
-    //       carType: this.formAllData.carType,
-    //       commissionGrade: this.formAllData.commissionGrade
-    //     }
-    //   } else {
-    //     FromData = {
-    //       area: null,
-    //       city: this.formAllData.city,
-    //       carType: this.formAllData.carType,
-    //       commissionGrade: this.formAllData.commissionGrade
-    //     }
-    //   }
-    //   // data_get_Marketingsame_list(this.page, this.pagesize, FromData).then(res => {
-    //   //   console.log(res)
-    //   //   this.dataTotal = res.data.totalCount
-    //   //   this.dataset = res.data.list
-    //   // })
-    // },
          //  查询
     getData_query() {
       this.firstblood()
     },
-
      // 判断选中与否
-    getSelection(val) {
-      console.log('选中内容', val)
-      this.selectRowData = val
+    // getSelection(val) {
+    //   console.log('选中内容', val)
+    //   this.selectRowData = val
+    // },
+    getSelection(selected) {
+      this.selected = selected
     },
     // 点击选中当前行
     clickDetails(row, event, column) {
@@ -320,88 +285,11 @@ export default {
       this.pagesize = obj.pageSize
       this.firstblood()
     },
-        // 选择删除
-    delete_data() {
-      if (this.selectRowData.length == 0) {
-        this.$message.warning('请选择您要操作的用户')
-        return
-      } else if (this.selectRowData.length > 1) {
-            this.$message({
-              message: '每次只能操作单条数据~',
-              type: 'warning'
-            })
-            this.$refs.multipleTable.clearSelection()
-          } else {
-            this.delDataInformation()
-          }
-    },
-       // 确认删除
-    delDataInformation() {
-      this.$confirm('确定要删除吗？', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      }).then(() => {
-        data_Del_Marketingsame(this.selectRowData[0].id).then(res => {
-          this.$message.success('删除成功')
-          this.firstblood()
-          this.$refs.multipleTable.clearSelection()
-        }).catch(err => {
-          this.firstblood()
-          this.$refs.multipleTable.clearSelection()
-          this.$message({
-            type: 'info',
-            message: '操作失败，原因：' + err.text ? err.text : err
-          })
-        })
-      }).catch(() => {
-        this.firstblood()
-        this.$refs.multipleTable.clearSelection()
-        this.$message({
-          type: 'info',
-          message: '已取消'
-        })
-      })
-    },
-      // 启用禁用
-    handleUseStates() {
-      if (this.selectRowData.length == 0) {
-        this.$message.warning('请选择您要操作的用户')
-        return
-      } else if (this.selectRowData.length > 1) {
-            this.$message({
-              message: '每次只能操作单条数据~',
-              type: 'warning'
-            })
-            this.$refs.multipleTable.clearSelection()
-          } else {
-            this.selectId.push(this.selectRowData[0].id)
-
-            data_Able_Marketingsame(this.selectId).then(res => {
-              this.selectId.splice(0, 1)
-              if (this.selectRowData[0].usingStatus == 1) {
-            this.$message.warning('已禁用')
-          } else {
-            this.$message.success('已启用')
-          }
-              this.firstblood()
-              this.$refs.multipleTable.clearSelection()
-            })
-          }
-    },
     getDataList() {
       this.firstblood()
       this.$refs.multipleTable.clearSelection()
     }
-  },
-
-  // mounted() {
-  //   eventBus.$on('pushListtwo', () => {
-  //     this.firstblood()
-  //   })
-  //   this.getMoreInformation()
-  //   this.firstblood()
-  // }
+  }
 }
 </script>
 <style lang="scss">  
