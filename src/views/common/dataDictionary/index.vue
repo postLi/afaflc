@@ -25,8 +25,8 @@
                             </el-input>
                         </el-form-item>
                         <el-form-item class="btnChoose fr"  style="margin-left:0;">
-                            <el-button type="primary" :size="btnsize"  @click="handleSearch('search')">查询</el-button>
-                            <el-button type="info" :size="btnsize" plain @click="handleSearch('clear')">清空</el-button>
+                            <el-button type="primary" :size="btnsize" icon="el-icon-search" plain  @click="handleSearch('search')">搜索</el-button>
+                            <el-button type="info" :size="btnsize" icon="fontFamily aflc-icon-qingkong" plain @click="handleSearch('clear')">清空</el-button>
                         </el-form-item>
                     </el-form>
                 <!-- </transition> -->
@@ -35,7 +35,7 @@
                         <el-button type="primary" :size="btnsize" plain icon="el-icon-circle-plus" @click="handleClick('add')" v-has:SYSTEM_DICT_ADD>新增</el-button>
                         <el-button type="primary" :size="btnsize" plain icon="el-icon-edit" @click="handleClick('revise')" v-has:SYSTEM_DICT_UPDATE>修改</el-button>
                         <el-button type="danger" :size="btnsize" plain icon="el-icon-delete" @click="handleClick('delet')" v-has:SYSTEM_DICT_DELETE>删除</el-button>
-                        <el-button type="primary" :size="btnsize" plain icon="el-icon-edit" @click="handleClick('status')" v-has:SYSTEM_DICT_USE>启用/禁用</el-button>
+                        <el-button type="primary" :size="btnsize" plain icon="el-icon-bell" @click="handleClick('status')" v-has:SYSTEM_DICT_USE>启用/禁用</el-button>
                     </div>
                     <p class="current"></p>
                     <div class="info_news">

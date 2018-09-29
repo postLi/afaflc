@@ -406,7 +406,7 @@ export default {
       series: [
         {
           name: '小货车',
-          type: 'line',
+          type: 'bar',
           data: [30054, 46666, 33333, 45656, 32314, 46665, 48998],
           markPoint: {
             data: [
@@ -422,7 +422,7 @@ export default {
         },
         {
           name: '大货车',
-          type: 'line',
+          type: 'bar',
           data: [20323, 35465, 22345, 28945, 24545, 31456, 35456],
           markPoint: {
             data: [
@@ -438,8 +438,8 @@ export default {
         },
         {
           name: '零担',
-          type: 'line',
-          data: [14012, 16666, 11999, 14444, 11555, 21165, 17884, 21632],
+          type: 'bar',
+          data: [14012, 16666, 11999, 14444, 11555, 21165, 17884],
           markPoint: {
             data: [
               { type: 'max', name: '最大值' },
@@ -485,6 +485,7 @@ export default {
         left: '18%',
         right: '8%',
         top: '15%',
+        bottom:'20%',
         shadowColor: 'red',               // 阴影颜色
         shadowOffsetX: 0,                 // 阴影水平方向上的偏移距离
         shadowOffsetY: 0,                 // 阴影垂直方向上的偏移距离
@@ -552,6 +553,7 @@ export default {
         left: '18%',
         right: '8%',
         top: '15%',
+        bottom:'20%',
         shadowColor: 'red',               // 阴影颜色
         shadowOffsetX: 0,                 // 阴影水平方向上的偏移距离
         shadowOffsetY: 0,                 // 阴影垂直方向上的偏移距离

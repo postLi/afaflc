@@ -17,8 +17,8 @@
           </el-input>
       </el-form-item>
       <el-form-item class="carrier_searchinfo--btn">
-          <el-button type="primary" @click="onSubmit">搜索</el-button>
-          <el-button type="info" @click="clearForm" plain>重置</el-button>
+          <el-button type="primary" icon="el-icon-search" plain @click="onSubmit">搜索</el-button>
+          <el-button type="info" icon="fontFamily aflc-icon-qingkong" @click="clearForm" plain>重置</el-button>
       </el-form-item>
   </el-form>
 </template>

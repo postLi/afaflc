@@ -10,26 +10,26 @@
         </div>
         <div class="orderTrackInfo orderTrackStyle" v-for="(item,key) in listInformation" :key="key">
             <p :class="{current: key == 0 ,cancel:key ==  (listInformation.length-1)}"><i></i><span>{{item.createTime | parseTime}}</span></p>
-            <el-tooltip placement="top" effect="light">
-                <div slot="content">{{item.remark}}</div>
+            <!-- <el-tooltip placement="top" effect="light">
+                <div slot="content">{{item.remark}}</div> -->
                 <p>{{item.remark}}</p>
-            </el-tooltip>
+            <!-- </el-tooltip> -->
             <el-tooltip placement="top" effect="light">
                 <div slot="content">{{item.address}}</div>
                 <p>{{item.address}}</p>
             </el-tooltip>
             <el-tooltip placement="top" effect="light">
-                <div slot="content">{{item.runException}}</div>
-                <p>{{item.runException}}</p>
+                <div slot="content">{{item.remark}}</div>
+                <p>{{item.remark}}</p>
             </el-tooltip>
-            <el-tooltip placement="top" effect="light">
-                <div slot="content">{{item.runException}}</div>
+            <!-- <el-tooltip placement="top" effect="light">
+                <div slot="content">{{item.runException}}</div> -->
                 <p>{{item.runException}}</p>
-            </el-tooltip>
-            <el-tooltip placement="top" effect="light">
-                <div slot="content">{{item.loadAndUnloadException}}</div>
+            <!-- </el-tooltip> -->
+            <!-- <el-tooltip placement="top" effect="light">
+                <div slot="content">{{item.loadAndUnloadException}}</div> -->
                 <p>{{item.loadAndUnloadException}}</p>
-            </el-tooltip>
+            <!-- </el-tooltip> -->
         </div>
     </div>
 </template>
@@ -92,6 +92,7 @@ export default {
             p,h2{
                 width: 19%;
                 margin: 0 1%;
+                vertical-align: middle;
             }
             p:first-child,p:last-child,p:nth-child(5),h2:last-child,h2:nth-child(5),h2:first-child,{
                 width: 200px;
@@ -108,9 +109,7 @@ export default {
                 font-size: 14px;
                 color: #333;
                 line-height: 24px;
-
             }
-            
             h2:first-child{
                 padding-left:50px; 
             }
@@ -159,7 +158,6 @@ export default {
                     background-color: #e2e2e2;
                 }
             }
-
             .cancel{
                 &::before{
                     width: 0 !important;

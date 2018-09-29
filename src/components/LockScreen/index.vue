@@ -49,7 +49,8 @@ export default {
       this.$refs[formName].validate((valid) => {
         if (valid) {
           this.loading = true
-          this.form.username = this.username || getUsername()
+          this.form.username = this.username || getUsername();
+            this.form.username = this.form.username + '|' + 'aflc-7';
           this.$store.dispatch('Login', this.form).then(() => {
             this.loading = false
             this.$store.dispatch('UnLockScreen')

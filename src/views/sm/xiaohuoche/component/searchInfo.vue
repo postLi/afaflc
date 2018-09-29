@@ -34,8 +34,8 @@
             </el-select>
         </el-form-item>
         <el-form-item class="btnChoose fr"  style="margin-left:0;">
-            <el-button type="primary" :size="btnsize" @click="handleSearch('search')">搜索</el-button>
-            <el-button type="info" :size="btnsize" plain @click="handleSearch('clear')">清空</el-button>
+            <el-button type="primary" :size="btnsize" icon="el-icon-search" plain @click="handleSearch('search')">搜索</el-button>
+            <el-button type="info" :size="btnsize" icon="fontFamily aflc-icon-qingkong" plain @click="handleSearch('clear')">清空</el-button>
         </el-form-item>
     </el-form>
 </template>

@@ -8,8 +8,8 @@
                     <el-input v-model="data.driverName" placeholder="请输入内容" clearable></el-input>
                 </el-form-item>
                 <el-form-item class="btnChoose fr"  style="margin-left:0;">
-                    <el-button type="primary" :size="btnsize" @click="getdata_search">搜索</el-button>
-                    <el-button type="info" :size="btnsize" plain @click="reset">清空</el-button>
+                    <el-button type="primary" icon="el-icon-search" plain :size="btnsize" @click="getdata_search">搜索</el-button>
+                    <el-button type="info" icon="fontFamily aflc-icon-qingkong" :size="btnsize" plain @click="reset">清空</el-button>
                 </el-form-item>
             </el-form>
             <div class="classify_info">
@@ -214,10 +214,16 @@ import Pager from '@/components/Pagination/index'
                     this.tableDataTree = res.data.list;
                     this.totalCount = res.data.totalCount;
                     this.tableDataTree.forEach(item => {
-                        item.carInfo = item.driverPhone +'/'+item.driverName;
-                        item.shipperInfo = item.shipperPhone+ '/' +item.shipperName;
-                        item.startTime = parseTime(item.bindingStartDate,"{y}-{m}-{d}");
-                        item.endTime = parseTime(item.bindingEndDate,"{y}-{m}-{d}");
+                        item.carInfo = item.driverPhone +' / '+item.driverName;
+                        item.shipperInfo = item.shipperPhone+ ' / ' +item.shipperName;
+                        item.startTime = parseTime(item.bindingStartDate);
+                        item.endTime = parseTime(item.bindingEndDate);
+                    })
+                    this.loading = false;
+                }).catch(err => {
+                    this.$message({
+                        type: 'info',
+                        message: '操作失败，原因：' + err.errorInfo ? err.errorInfo : err.text
                     })
                     this.loading = false;
                 })

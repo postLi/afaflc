@@ -8,8 +8,8 @@
                     <el-input v-model="data.orgName" placeholder="请输入内容"></el-input>
                 </el-form-item>
                 <el-form-item class="btnChoose fr"  style="margin-left:0;">
-                    <el-button type="primary" :size="btnsize" @click="getdata_search">搜索</el-button>
-                    <el-button type="info" :size="btnsize" plain @click="reset">清空</el-button>
+                    <el-button type="primary" icon="el-icon-search" plain :size="btnsize" @click="getdata_search">搜索</el-button>
+                    <el-button type="info" icon="fontFamily aflc-icon-qingkong" :size="btnsize" plain @click="reset">清空</el-button>
                 </el-form-item>
             </el-form>
             <div class="classify_info">
@@ -214,6 +214,12 @@ import Pager from '@/components/Pagination/index'
                         item.shipperInfo = item.shipperPhone+ '/' +item.shipperName;
                     })
                     this.loading = false ;
+                }).catch(err => {
+                    this.$message({
+                        type: 'info',
+                        message: '操作失败，原因：' + err.errorInfo ? err.errorInfo : err.text
+                    })
+                    this.loading = false;
                 })
             },
             //模糊查询 分类名称或者code

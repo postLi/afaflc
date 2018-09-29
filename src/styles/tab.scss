@@ -96,8 +96,6 @@
 .staff_searchinfo{
     padding:0 0 10px;
     margin: 0 10px;
-    padding-right: 126px;
-    
     border-bottom:1px dashed #999;
     
     .el-input__inner{
@@ -126,16 +124,6 @@
     .el-range-editor.el-input__inner{
         padding: 3px 5px;
     }
-    .staff_searchinfo--btn{
-      width: 126px;
-      float: right;
-      margin-right: -126px;
-      margin-top: 9px;
-      text-align: right;
-      .el-button{
-          float: left;
-      }
-  }
 }
 
 

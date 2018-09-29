@@ -24,8 +24,8 @@
               </el-input>
             </el-form-item>
             <el-form-item class="fr">
-              <el-button type="primary" plain :size="btnsize" @click="getdata_search">查询</el-button>
-              <el-button type="info" plain  :size="btnsize" @click="clearSearch">清空</el-button>
+              <el-button type="primary" plain icon="el-icon-search" :size="btnsize" @click="getdata_search">查询</el-button>
+              <el-button type="info" plain  icon="fontFamily aflc-icon-qingkong" :size="btnsize" @click="clearSearch">清空</el-button>
             </el-form-item>
           </el-form>
 	  	<div class="classify_info">

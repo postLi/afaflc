@@ -20,10 +20,10 @@
                 clearable>
             </el-input>
         </el-form-item>
+        <el-form-item class="fr">
+            <el-button type="primary" icon="el-icon-search" plain @click="onSubmit">查询</el-button><el-button type="info" icon="fontFamily aflc-icon-qingkong" @click="clearForm('searchFormRef')" plain>清空</el-button>
+        </el-form-item>
       </div>
-      <el-form-item class="staff_searchinfo--btn fr">
-          <el-button type="primary" @click="onSubmit">查询</el-button><el-button type="info" @click="clearForm('searchFormRef')" plain>清空</el-button>
-      </el-form-item>
   </el-form>
 </template>
 

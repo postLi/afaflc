@@ -32,14 +32,11 @@
   .permManage-top .el-button--primary{
     margin: -1px 0 0 -45px;
     padding: 4px 14px;
-    background-color: transparent;
-    border-color: #3e9ff1;
-    color: #3e9ff1;
   }
   
-  .permManage-top .el-input__inner:focus{
+  /* .permManage-top .el-input__inner:focus{
     border-color: #0a84ff;
-  }
+  } */
   .permManage-top .el-input__suffix{
     right: 60px;
   }
@@ -70,12 +67,12 @@
     width:13px;
     height: 17px;
   }
-  .permManage .btns_box .el-button--primary{
+  /* .permManage .btns_box .el-button--primary{
     color:#3e9ff1;
     background: #fff;
     border-color: #3e9ff1;
     cursor: pointer;
-  }
+  } */
   .permManage .el-table {
     width: 100% !important;
   }

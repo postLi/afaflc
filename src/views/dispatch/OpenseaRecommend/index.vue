@@ -219,6 +219,12 @@ import Pager from '@/components/Pagination/index'
                         // item.secondPush = item.secondRecommendKm +'公里/'+item.secondRecommendTime+'秒';
                     })
                     this.loading = false;
+                }).catch(err => {
+                    this.$message({
+                        type: 'info',
+                        message: '操作失败，原因：' + err.errorInfo ? err.errorInfo : err.text
+                    })
+                    this.loading = false;
                 })
             },
         }

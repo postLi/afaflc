@@ -6,7 +6,7 @@
       @show="showChart"
       @hide="hideChart"
       :popper-options="{'preventOverflow.padding': 0}"
-      width="360" 
+      width="360"
       popper-class="popoveruser"
       trigger="hover">
       <el-row>
@@ -23,7 +23,7 @@
         </el-col>
         <el-col class="popover-btns" :span="24">
           <el-button-group>
-            <router-link to="/common/myinfo">
+            <router-link to="/company/myinfo">
                 <el-button type="primary" icon="el-icon-info">我的信息</el-button>
             </router-link>
             <el-button type="primary" @click="lockScreen" icon="el-icon-news">锁定屏幕</el-button>
@@ -42,14 +42,13 @@
 
 <script>
 import { mapGetters } from 'vuex'
-// import { eventBus } from '@/eventBus'
-
 export default {
   computed: {
     ...mapGetters([
       'avatar',
       'company',
       'otherinfo'
+
     ])
   },
   mounted() {
@@ -67,16 +66,16 @@ export default {
   methods: {
     showChart() {
       this.popperHide = false
-    //   this.eventBus.$emit('hideSupcanChart')
+      this.eventBus.$emit('hideSupcanChart')
     },
     hideChart() {
       this.popperHide = true
-    //   this.eventBus.$emit('showSupcanChart')
+      this.eventBus.$emit('showSupcanChart')
     },
     logout() {
       this.$store.dispatch('LogOut').then(() => {
         location.reload()  // 为了重新实例化vue-router对象 避免bug
-      }).catch((err) => {
+      }).catch((err)=>{
         location.reload()
       })
     },
@@ -112,31 +111,16 @@ export default {
 <style lang="scss">
 @import "src/styles/variate.scss";
   .navbar{
-    .page-top-nav{
-      height: 50px;
-      float: left;
-      width: 100% !important;
-    }
     .user-avatar {
         border-radius: 50%;
         vertical-align: middle;
       }
     .avatar-container {
-      // padding: 0 23px 0 30px;
-      // height: $topNavHeight;
-      // float: right;
-      // white-space: nowrap;
-      position: relative;
-
       padding: 0 23px 0 30px;
-    height: 50px;
-    /* float: right; */
-    white-space: nowrap;
-    /* position: relative; */
-    // background: blue;
-    /* position: absolute; */
-    right: 0; 
-    flex: 1;
+      height: $topNavHeight;
+      float: right;
+      white-space: nowrap;
+      position: relative;
 
       &::before{
         position: absolute;

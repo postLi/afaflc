@@ -33,8 +33,8 @@
                         </el-date-picker>
                     </el-form-item>
                     <el-form-item class="btnChoose fr"  style="margin-left:0;">
-                        <el-button type="primary" :size="btnsize" @click="handleSearch('search')">搜索</el-button>
-                        <el-button type="info" plain :size="btnsize" @click="handleSearch('clear')">清空</el-button>
+                        <el-button type="primary" icon="el-icon-search" plain :size="btnsize" @click="handleSearch('search')">搜索</el-button>
+                        <el-button type="info" icon="fontFamily aflc-icon-qingkong" plain :size="btnsize" @click="handleSearch('clear')">清空</el-button>
                     </el-form-item>
               </el-form>
             <div class="classify_info">
@@ -273,7 +273,6 @@ import vregion from '@/components/vregion/Region'
                 this.page = obj.pageNum;
                 this.pagesize = obj.pageSize;
                 this.firstblood();
-
             },
             //单选中当前数据
             handleCurrentTask(val){
@@ -294,9 +293,14 @@ import vregion from '@/components/vregion/Region'
                         })  
                     })
                     this.loading = false;
+                }).catch(err => {
+                    this.$message({
+                        type: 'info',
+                        message: '操作失败，原因：' + err.errorInfo ? err.errorInfo : err.text
+                    })
+                    this.loading = false;
                 })
             },
-           
             //模糊查询 分类名称或者code
             handleSearch(type){
                 // console.log(this.chooseTime)

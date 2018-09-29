@@ -4,11 +4,11 @@
 		<div class="classify_info">
 			<div class="btns_box">
                 <el-button type="primary" icon="el-icon-circle-plus" plain :size="btnsize" @click="handleClick('add')" v-has:SHIPPER_MANAGE_ADD>新增</el-button>
-                <el-button type="primary" icon="el-icon-info" plain :size="btnsize" @click="handleClick('pushFreeze')" v-has:SHIPPER_MANAGE_FREEZE>冻结</el-button>
+                <el-button type="primary" icon="fontFamily aflc-icon-dongjie1" plain :size="btnsize" @click="handleClick('pushFreeze')" v-has:SHIPPER_MANAGE_FREEZE>冻结</el-button>
                 <el-button type="primary" icon="el-icon-edit" plain :size="btnsize" @click="handleClick('editFreeze')" v-has:SHIPPER_MANAGE_FREEZE_UPDATE>冻结修改</el-button>
-                <el-button type="primary" icon="el-icon-edit" plain :size="btnsize" @click="handleClick('pushBlack')" v-has:SHIPPER_MANAGE_PUT_BLACK>移入黑名单</el-button>
-                <el-button type="primary" icon="el-icon-warning" plain :size="btnsize" @click="handleClick('removeBlack')" v-has:SHIPPER_MANAGE_OUT_BLACK>移除黑名单</el-button>
-                <el-button type="primary" icon="el-icon-edit" plain :size="btnsize" @click="handleClick('removeFreeze')" v-has:SHIPPER_MANAGE_UNFREEZE>解冻</el-button>
+                <el-button type="primary" icon="fontFamily aflc-icon-heimingdan" plain :size="btnsize" @click="handleClick('pushBlack')" v-has:SHIPPER_MANAGE_PUT_BLACK>移入黑名单</el-button>
+                <el-button type="primary" icon="fontFamily aflc-icon-yichuheimingdan" plain :size="btnsize" @click="handleClick('removeBlack')" v-has:SHIPPER_MANAGE_OUT_BLACK>移除黑名单</el-button>
+                <el-button type="primary" icon="fontFamily aflc-icon-jiedong1" plain :size="btnsize" @click="handleClick('removeFreeze')" v-has:SHIPPER_MANAGE_UNFREEZE>解冻</el-button>
 			</div>
 			<div class="info_news" >
 				<el-table

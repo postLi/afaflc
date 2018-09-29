@@ -123,16 +123,21 @@
   
 
   // 按钮样式
-.el-button--danger.is-plain{
-    color: #f56c6c;
-    background: #fff;
-    border-color: #f56c6c;
-  }
-  .el-button--primary.is-plain{
-    color: #3e9ff1;
-    background: #fff;
-    border-color: #3e9ff1;
-  }
+    .el-button--danger.is-plain{
+        color: #f56c6c;
+        background: #fff;
+        border-color: #f56c6c;
+    }
+    .el-button--primary.is-plain{
+        color: #0588c3;
+        background: #fff;
+        border-color: #b9ccd7;
+    }
+    .el-button--primary.is-plain:focus, .el-button--primary.is-plain:hover {
+        background: #0588c3;
+        border-color: #0588c3;
+        color: #fff;
+    }
   .el-button--success.is-plain{
     color:#67c23a;
     background:#fff;
@@ -158,3 +163,24 @@
   .el-table__fixed-body-wrapper,.el-table__fixed-header-wrapper,.el-table__fixed-footer-wrapper{
     pointer-events: all;
   }
+
+// .el-picker-panel{
+//     padding-bottom:46px; 
+//     .el-picker-panel__body-wrapper{
+//         position: relative;
+//         .el-picker-panel__sidebar{
+//             bottom: -46px;
+//             min-height: 46px;
+//             width: 100%;
+//             .el-picker-panel__shortcut{
+//                 display: inline-block;
+//                 max-width: 100%;
+//                 width: 200px;
+//             }
+//         }
+
+//         .el-picker-panel__body{
+//             margin-left: 0;
+//         }
+//     }
+// }

@@ -29,19 +29,19 @@ Vue.mixin({
     keepNumberAndPoint(event) {
       return keepNumberAndPoint.call(event.target, event)
     },
-    $_has_permission = function(value) {
-        let isExist = false
-        const buttonperms = getUserInfo()
-        console.log('buttonperms',buttonperms)
-        const ptree = buttonperms.permissionTrees
-        for (let i = 0; i < ptree.length; i++) {
-          if (ptree[i].code === value) {
-            isExist = true
-            break
-          }
-        }
-        return isExist
-      }
+    // $_has_permission(value) {
+    //     let isExist = false
+    //     const buttonperms = getUserInfo();
+    //     // console.log('buttonperms',buttonperms)
+    //     const ptree = buttonperms.permissionTrees
+    //     for (let i = 0; i < ptree.length; i++) {
+    //       if (ptree[i].code === value) {
+    //         isExist = true
+    //         break
+    //       }
+    //     }
+    //     return isExist
+    //   }
   }/* ,
 
   methods: {

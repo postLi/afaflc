@@ -11,8 +11,8 @@
                     <el-input v-model.trim="formAll.mobile"></el-input>
                 </el-form-item>
                 <el-form-item class="fr">
-                    <el-button type="primary" :size="btnsize" plain @click="getdata_search">查询</el-button>
-                    <el-button type="info" :size="btnsize" plain @click="clearSearch">清空</el-button>
+                    <el-button type="primary" icon="el-icon-search" :size="btnsize" plain @click="getdata_search">查询</el-button>
+                    <el-button type="info" icon="fontFamily aflc-icon-qingkong" :size="btnsize" plain @click="clearSearch">清空</el-button>
                 </el-form-item>
             </el-form>
         <div class="classify_info">

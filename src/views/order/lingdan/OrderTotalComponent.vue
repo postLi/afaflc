@@ -107,7 +107,7 @@
                         label="配送路径"
                         width="300  ">
                         <template  slot-scope="scope">
-                            <p class="aflcOrderAddresses" v-for="(obj,idx) in scope.row.aflcOrderAddresses" :key="obj.id">
+                            <p class="aflcOrderAddresses" v-for="(obj,idx) in scope.row.aflcOrderAddresses" :key="obj.id" >
                                 <span v-if="idx == 0">发货地：</span>
                                 <span v-else-if="idx == scope.row.aflcOrderAddresses.length-1">收货地：</span>
                                 <span v-else>途径地{{ scope.row.aflcOrderAddresses.length >3 ? idx : ''}}：</span>

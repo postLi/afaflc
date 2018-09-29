@@ -317,6 +317,7 @@ export default {
                     type: 'info',
                     message: '删除失败，原因：' + err.errorInfo ? err.errorInfo : err.text
                 })
+                this.loading = false;
             })
         },
         shuaxin(){

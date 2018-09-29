@@ -11,13 +11,13 @@
                     <el-input placeholder="请输入内容" v-model.trim="formInline.contacts" clearable></el-input>
                 </el-form-item>
                 <el-form-item class="fr">
-                    <el-button type="primary" :size="btnsize" plain @click="getdata_search">查询</el-button>
-                    <el-button type="info" :size="btnsize" plain @click="clearSearch">清空</el-button>
+                    <el-button type="primary" icon="el-icon-search" :size="btnsize" plain @click="getdata_search">查询</el-button>
+                    <el-button type="info" icon="fontFamily aflc-icon-qingkong" :size="btnsize" plain @click="clearSearch">清空</el-button>
                 </el-form-item>
             </el-form>
         <div class="classify_info">
 		    <div class="btns_box">
-                <el-button type="primary" :size="btnsize" plain @click="handleChange" v-has:COMPANY_MANAGE_UPDATE>修改</el-button>
+                <el-button type="primary" icon="el-icon-edit" :size="btnsize" plain @click="handleChange" v-has:COMPANY_MANAGE_UPDATE>修改</el-button>
 		    </div>
             <div class="info_news">
                 <el-table

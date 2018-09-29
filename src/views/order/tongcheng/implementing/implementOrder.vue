@@ -3,7 +3,7 @@
             <searchInfo @change="getSearchParam"></searchInfo>
             <div class="classify_info">
                 <div class="btns_box">
-                    <el-button type="primary" :size="btnsize" plain @click="handleSearch('cancel')">取消订单</el-button>
+                    <el-button type="danger" icon="el-icon-warning" :size="btnsize" plain @click="handleSearch('cancel')">取消订单</el-button>
                     <!-- <el-button type="primary" :size="btnsize" plain @click="handleSearch('export')">导出Exce</el-button> -->
                 </div>
                 <div class="info_news" style="height:89%;">
@@ -218,7 +218,6 @@ import cancelCompnent from '../components/cancel'
                 // 代表在wacth里声明了firstName这个方法之后立即先去执行handler方法
                 immediate: true
             },
-
         },
         created(){
 
@@ -235,7 +234,6 @@ import cancelCompnent from '../components/cancel'
                 this.page = obj.pageNum;
                 this.pagesize = obj.pageSize;
                 this.firstblood();
-
             },
             //刷新页面  
             firstblood(){
@@ -249,6 +247,12 @@ import cancelCompnent from '../components/cancel'
                         item.aflcOrderAddresses.sort(function(a,b){  
                             return a.viaOrder - b.viaOrder;  
                         })  
+                    })
+                    this.loading = false;
+                }).catch(err => {
+                    this.$message({
+                        type: 'info',
+                        message: '操作失败，原因：' + err.errorInfo ? err.errorInfo : err.text
                     })
                     this.loading = false;
                 })

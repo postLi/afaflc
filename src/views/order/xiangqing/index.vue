@@ -161,6 +161,7 @@ export default {
 
         .collapseInfo{
             border: 1px solid #e2e2e2;
+            box-shadow: 2px 2px 2px 2px rgba(0, 0, 0, 0.1);
             background: #ffffff;
             color: #333;
             padding: 0 24px;

@@ -6,8 +6,8 @@
         <el-form-item label="角色名称：">
           <el-input v-model="searchDate.roleName" placeholder="" clearable></el-input>
         </el-form-item>
-        <el-form-item>
-          <el-button type="primary" @click="onSubmit">查询</el-button>
+        <el-form-item class="">
+          <el-button type="primary" icon="el-icon-search" plain @click="onSubmit">查询</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -101,6 +101,7 @@
     },
     data() {
       return {
+          bthsize:'mini',
         searchDate: {
           roleName: '',
           id: ''

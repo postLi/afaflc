@@ -36,13 +36,13 @@
                         <div class="publishSet">
                             <div class="chooseTime publishStyle">
                                 <span>公布中单时间 ：</span>
-                                <el-input v-model="form.time" placeholder="请输入内容" maxlength="4" clearable ref="times" v-number-only:point></el-input>
+                                <el-input v-model="form.time" placeholder="请输入" maxlength="4" clearable ref="times" v-number-only:point></el-input>
                                 <span> / 秒</span>
                             </div>
                             <div class="chooseKM publishStyle">
                                 <span>公布中单距离 ：</span>
-                                <el-input v-model="form.km" placeholder="请输入内容" maxlength="4" v-number-only:point clearable></el-input>
-                                <span> / 公里</span>
+                                <el-input v-model="form.km" placeholder="请输入" maxlength="4" v-number-only:point clearable></el-input>
+                                <span>  / 公里</span>
                             </div>
                         </div>
                         <span  @click="addItem" class="addItem" v-if="keys == 0">

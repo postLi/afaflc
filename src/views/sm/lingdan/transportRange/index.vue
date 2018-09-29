@@ -11,8 +11,8 @@
                     </el-input>
                 </el-form-item>
                 <el-form-item class="btnChoose fr" style="margin-left:20px;">
-                    <el-button type="primary" :size="btnsize" @click="handleSearch">搜索</el-button>
-                    <el-button type="info" plain :size="btnsize" @click="clearSearch">清空</el-button>
+                    <el-button type="primary" icon="el-icon-search" plain :size="btnsize" @click="handleSearch">搜索</el-button>
+                    <el-button type="info" icon="fontFamily aflc-icon-qingkong" plain :size="btnsize" @click="clearSearch">清空</el-button>
                 </el-form-item>
             </div>
         </el-form>
@@ -36,18 +36,20 @@
                         </el-table-column>
                         <el-table-column
                             sortable
+                            :show-overflow-tooltip="true"
                             prop="startLocation"
                             label="出发地"
-                            width="180">
+                            width="200">
                             <template slot-scope="scope">
                                <span class="moreInfo" @click="handleInfo(scope.row)">{{scope.row.startLocation}}</span>
                             </template>
                         </el-table-column>
                         <el-table-column
                             sortable
+                            :show-overflow-tooltip="true"
                             prop="endLocation"
                             label="到达地"
-                            width="250">
+                            width="200">
                         </el-table-column>
                         <el-table-column
                             sortable
@@ -72,6 +74,7 @@
                         <el-table-column
                             sortable
                             prop="weightcargo"
+                            :show-overflow-tooltip="true"
                             label="重货价格" 
                             width="220">
                             <template slot-scope="scope">
@@ -88,6 +91,7 @@
                         <el-table-column
                             sortable
                             prop="lightcargo"
+                            :show-overflow-tooltip="true"
                             label="轻货价格"
                             width="220">
                             <template slot-scope="scope">
@@ -272,6 +276,16 @@ export default {
 
 <style type="text/css" lang="scss">
     .TransportRange{
-      
+        .info_news{
+            .el-table{
+                td{
+                    .cell{
+                        .cargo{
+                            display: inline;
+                        }
+                    }
+                }
+            }
+        }
     }
 </style>

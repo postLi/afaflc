@@ -33,17 +33,17 @@
                 <el-input v-model.trim="shipperAll.mobile"></el-input>
             </el-form-item>
             <el-form-item class="fr"> 
-                <el-button type="primary" plain :size="btnsize"  @click="getdata_search">查询</el-button>
-                <el-button type="info" plain :size="btnsize" @click="clearSearch">清空</el-button>
+                <el-button type="primary" icon="el-icon-search" plain :size="btnsize"  @click="getdata_search">查询</el-button>
+                <el-button type="info" plain icon="fontFamily aflc-icon-qingkong" :size="btnsize" @click="clearSearch">清空</el-button>
             </el-form-item>
           </el-form>
 		<div class="classify_info" >
 			<div class="btns_box">
-                <el-button type="primary" plain :size="btnsize" @click="handleClick('pushFreeze')" v-has:COMPANY_MANAGE_FREEZE>冻结</el-button>
-                <el-button type="primary" plain :size="btnsize" @click="handleClick('editFreeze')" v-has:COMPANY_MANAGE_FREEZE_UPDATE>冻结修改</el-button>
-                <el-button type="primary" plain :size="btnsize" @click="handleClick('pushBlack')" v-has:COMPANY_MANAGE_PUT_BLACK>移入黑名单</el-button>
-                <el-button type="primary" plain :size="btnsize" @click="handleClick('removeBlack')" v-has:COMPANY_MANAGE_OUT_BLACK>移除黑名单</el-button>
-                <el-button type="primary" plain :size="btnsize" @click="handleClick('removeFreeze')" v-has:COMPANY_MANAGE_UNFREEZE>解冻</el-button>
+                <el-button type="primary" plain icon="fontFamily aflc-icon-dongjie1" :size="btnsize" @click="handleClick('pushFreeze')" v-has:COMPANY_MANAGE_FREEZE>冻结</el-button>
+                <el-button type="primary" plain icon="el-icon-edit" :size="btnsize" @click="handleClick('editFreeze')" v-has:COMPANY_MANAGE_FREEZE_UPDATE>冻结修改</el-button>
+                <el-button type="primary" plain icon="fontFamily aflc-icon-heimingdan" :size="btnsize" @click="handleClick('pushBlack')" v-has:COMPANY_MANAGE_PUT_BLACK>移入黑名单</el-button>
+                <el-button type="primary" plain icon="fontFamily aflc-icon-yichuheimingdan" :size="btnsize" @click="handleClick('removeBlack')" v-has:COMPANY_MANAGE_OUT_BLACK>移除黑名单</el-button>
+                <el-button type="primary" plain icon="fontFamily aflc-icon-jiedong1" :size="btnsize" @click="handleClick('removeFreeze')" v-has:COMPANY_MANAGE_UNFREEZE>解冻</el-button>
 			</div>
 			<div class="info_news">
 				<el-table

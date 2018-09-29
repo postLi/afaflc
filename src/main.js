@@ -12,11 +12,12 @@ import store from './store'
 import '@/icons' // icon
 import './errorLog'// error
 import '@/permission' // permission
-
+import './assets/iconfont/iconfont.css'
 import * as filters from './filters'
 
 import './directive'
 
+import './mixins'
 // mock
 // import './mock/'
 

@@ -204,6 +204,12 @@ import Pager from '@/components/Pagination/index'
                     this.totalCount = res.data.totalCount;
                     this.tableDataTree = res.data.list;
                     this.loading = false;
+                }).catch(err => {
+                    this.$message({
+                        type: 'info',
+                        message: '操作失败，原因：' + err.errorInfo ? err.errorInfo : err.text
+                    })
+                    this.loading = false;
                 })
             },
            
