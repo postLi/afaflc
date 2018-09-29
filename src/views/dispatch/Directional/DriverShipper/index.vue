@@ -8,7 +8,7 @@
                     <el-input v-model="data.driverName" placeholder="请输入内容" clearable></el-input>
                 </el-form-item>
                 <el-form-item class="btnChoose fr"  style="margin-left:0;">
-                    <el-button type="primary" :size="btnsize" plain @click="getdata_search">搜索</el-button>
+                    <el-button type="primary" :size="btnsize" @click="getdata_search">搜索</el-button>
                     <el-button type="info" :size="btnsize" plain @click="reset">清空</el-button>
                 </el-form-item>
             </el-form>

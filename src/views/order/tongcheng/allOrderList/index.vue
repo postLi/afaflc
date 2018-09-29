@@ -34,7 +34,7 @@
                     </el-form-item>
                     <el-form-item class="btnChoose fr"  style="margin-left:0;">
                         <el-button type="primary" :size="btnsize" @click="handleSearch('search')">搜索</el-button>
-                        <el-button type="primary" :size="btnsize" @click="handleSearch('clear')">清空</el-button>
+                        <el-button type="info" plain :size="btnsize" @click="handleSearch('clear')">清空</el-button>
                     </el-form-item>
               </el-form>
             <div class="classify_info">

@@ -3,9 +3,9 @@
             <searchInfo @change="getSearchParam"></searchInfo>
             <div class="classify_info">
                 <div class="btns_box">
-                    <el-button type="primary" plain @click="handleSearch('appoint')" :size="btnsize" v-has:ORDER_CITY_WIDE_ORDER_WIAT_ASSIGN_ASSIGN_DRIVER>指派司机</el-button>
-                    <el-button type="primary" plain @click="handleSearch('search')" :size="btnsize" v-has:ORDER_CITY_WIDE_ORDER_WIAT_ASSIGN_PUSH_OPEN>推回公海</el-button>
-                    <el-button type="primary" plain @click="handleSearch('cancel')" :size="btnsize" v-has:ORDER_CITY_WIDE_ORDER_WIAT_ASSIGN_CANCLE>取消订单</el-button>
+                    <el-button type="primary" icon="el-icon-edit" plain @click="handleSearch('appoint')" :size="btnsize" v-has:ORDER_CITY_WIDE_ORDER_WIAT_ASSIGN_ASSIGN_DRIVER>指派司机</el-button>
+                    <!-- <el-button type="primary" plain @click="handleSearch('search')" :size="btnsize" v-has:ORDER_CITY_WIDE_ORDER_WIAT_ASSIGN_PUSH_OPEN>推回公海</el-button> -->
+                    <el-button type="danger" icon="el-icon-warning" plain @click="handleSearch('cancel')" :size="btnsize" v-has:ORDER_CITY_WIDE_ORDER_WIAT_ASSIGN_CANCLE>取消订单</el-button>
                     <!-- <el-button type="primary" plain @click="handleSearch('search')" :size="btnsize" v-has:ORDER_CITY_WIDE_ORDER_WIAT_ASSIGN_ADD>新增订单</el-button> -->
                     <!-- <el-button type="primary" plain @click="handleSearch('search')" :size="btnsize">导出Exce</el-button> -->
                 </div>

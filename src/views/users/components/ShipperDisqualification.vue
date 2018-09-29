@@ -1,5 +1,5 @@
 <template>
-    <div class="identicalStyle">
+    <div class="identicalStyle" v-loading="loading">
         <searchInfo @change="getSearchParam" :showType = 'tabType'></searchInfo>
         
         <div class="classify_info">
@@ -92,6 +92,7 @@ export default {
     },
     data(){
         return{
+            loading:true,
             dialogFormVisible_add: false,
             type: '',
             paramsView: {},
@@ -156,7 +157,6 @@ export default {
         getSearchParam(obj) {
             console.log(obj)
             this.searchInfo = objectMerge2({},obj,{shipperStatus:'AF0010404'})
-            this.loading = false;
             this.firstblood()
         },
         handlePageChange(obj) {
@@ -168,14 +168,22 @@ export default {
             this.firstblood();
         },
         //刷新页面
-        firstblood(){
-            data_get_shipper_list(this.page,this.pagesize,this.searchInfo).then(res=>{
-                this.totalCount = res.data.totalCount;
-                this.tableData1 = res.data.list;
-                // this.inited = true
+        firstblood() {
+            this.loading = true;
+            data_get_shipper_list(this.page, this.pagesize, this.searchInfo).then(res => {
+                // console.log('shipperAll',res)
+                this.totalCount = res.data.totalCount
+                this.tableData1 = res.data.list
+                // this.inited = false;
+                this.loading = false;
+            }).catch(err => {
+                this.$message({
+                    type: 'info',
+                    message: '操作失败，原因：' + err.errorInfo ? err.errorInfo : err.text
+                })
+                this.loading = false;
             })
-        }
-     
+        },
     }
 }
 </script>

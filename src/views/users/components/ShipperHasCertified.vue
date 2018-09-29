@@ -1,5 +1,5 @@
 <template>
-    <div class="identicalStyle">
+    <div class="identicalStyle" v-loading="loading">
         <searchInfo @change="getSearchParam" :showType = 'tabType'></searchInfo>
         
         <div class="classify_info">
@@ -107,6 +107,7 @@ export default {
     },
     data(){
         return {
+            loading:true,
             tabType:'hasCertified',
             btnsize: 'mini',
             dialogFormVisible_add: false,
@@ -155,7 +156,6 @@ export default {
         getSearchParam(obj) {
             console.log(obj)
             this.searchInfo = objectMerge2({},obj,{shipperStatus:'AF0010403'})
-            this.loading = false;
             this.firstblood()
         },
         //点击选中当前行
@@ -183,12 +183,23 @@ export default {
             }
         },
         //刷新页面
-        firstblood(){
-            data_get_shipper_list(this.page,this.pagesize,this.searchInfo).then(res=>{
-                this.totalCount = res.data.totalCount;
-                this.tableData3 = res.data.list;
+        firstblood() {
+            this.loading = true;
+            data_get_shipper_list(this.page, this.pagesize, this.searchInfo).then(res => {
+                // console.log('shipperAll',res)
+                this.totalCount = res.data.totalCount
+                this.tableData3 = res.data.list
+                // this.inited = false;
+                this.loading = false;
+            }).catch(err => {
+                this.$message({
+                    type: 'info',
+                    message: '操作失败，原因：' + err.errorInfo ? err.errorInfo : err.text
+                })
+                this.loading = false;
             })
         },
+
         getDataList(){
             this.firstblood()
         }

@@ -17,9 +17,9 @@
                 <el-input v-model="logisticsForm.mobile" maxlength="11">
                 </el-input>
             </el-form-item>
-            <el-form-item class="btnChoose fr" style="margin-left:0;">
+            <el-form-item class="btnChoose fr">
                 <el-button type="primary" :size="btnsize" @click="handleSearch">搜索</el-button>
-                <el-button type="primary" :size="btnsize" @click="clearSearch">重置</el-button>
+                <el-button type="info" plain :size="btnsize" @click="clearSearch">清空</el-button>
             </el-form-item>
         </el-form>
         <div class="classify_info">

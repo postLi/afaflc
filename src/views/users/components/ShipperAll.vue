@@ -263,7 +263,10 @@ export default {
                 // this.inited = false;
                 this.loading = false;
             }).catch(err => {
-                console.log(err)
+                this.$message({
+                    type: 'info',
+                    message: '操作失败，原因：' + err.errorInfo ? err.errorInfo : err.text
+                })
                 this.loading = false;
             })
         },

@@ -1,5 +1,5 @@
 <template>
-    <div class="identicalStyle">
+    <div class="identicalStyle" v-loading ="loading">
         <searchInfo @change="getSearchParam" :showType = 'tabType'></searchInfo>
         
 	  	<div class="classify_info">
@@ -99,6 +99,7 @@ export default {
     },
   data(){
     return{
+        loading:true,
         tabType:'unauthorized',
         btnsize: 'mini',
         dialogFormVisible_add: false,
@@ -167,7 +168,6 @@ export default {
         getSearchParam(obj) {
             console.log(obj)
             this.searchInfo = objectMerge2({},obj,{shipperStatus:'AF0010401'})
-            this.loading = false;
             this.firstblood()
         },
         handlePageChange(obj) {
@@ -211,10 +211,18 @@ export default {
         },
         //刷新页面
         firstblood(){
+            this.loading = true;
             data_get_shipper_list(this.page,this.pagesize,this.searchInfo).then(res=>{
                 // console.log('未认证',res)
                 this.totalCount = res.data.totalCount;
                 this.tableData4 = res.data.list;
+                this.loading = false;
+            }).catch(err => {
+                 this.$message({
+                    type: 'info',
+                    message: '操作失败，原因：' + err.errorInfo ? err.errorInfo : err.text
+                })
+                this.loading = false;
             })
         },
       
