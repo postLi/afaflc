@@ -145,7 +145,6 @@
         <div class="info_tab_footer">共计:{{ dataTotal }}
           <div class="show_pager"><Pager :total="dataTotal" @change="handlePageChange"  :sizes="sizes"/></div>
         </div> 
-        
       </div>
       <div slot="footer" class="dialog-footer">
         <el-button type="primary" @click="submitForm('ruleForm')">确 定</el-button>
