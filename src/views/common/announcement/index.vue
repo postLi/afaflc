@@ -20,7 +20,7 @@
                         style="width: 100%">
                         <el-table-column
                             type="selection"
-                            width="50">
+                            width="55">
                         </el-table-column>
                         <template v-for="column in tableColumn">
                             <el-table-column :key="column.id" :fixed="column.fixed" :align='column.alignName' sortable :label="column.label" :show-overflow-tooltip="column.overflow" :prop="column.prop" v-if="!column.slot" :width="column.width"></el-table-column>
@@ -117,7 +117,6 @@ import editor from '@/components/tinymac/index'
                     fixed: false,
                     overflow:true,
                     alignName:'center',
-
                 }, {
                     label: '有效期',
                     prop: 'endTime',
@@ -127,8 +126,8 @@ import editor from '@/components/tinymac/index'
                     alignName:'center',
 
                     slot: (scope) => {
-                        let startTime = parseTime(scope.row.startTime, '{y}-{m}-{d} {h}:{i}:{s}');
-                        let endTime = scope.row.endTime ? parseTime(scope.row.endTime, '{y}-{m}-{d} {h}:{i}:{s}') : '长期';
+                        let startTime = parseTime(scope.row.startTime, '{y}-{m}-{d}');
+                        let endTime = scope.row.endTime ? parseTime(scope.row.endTime, '{y}-{m}-{d}') : '长期';
                         return startTime + '<span class="youxiaoqi">至</span>' + endTime;
                     }
                 }, {

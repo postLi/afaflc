@@ -102,7 +102,7 @@
                             <template  slot-scope="scope">
                                 <!-- <el-button-group> -->
                                     <el-button type="primary" plain icon="el-icon-document" @click="handleClick(scope.row,'reply')">回复</el-button>
-                                    <el-button type="danger" plain icon="el-icon-delete" @click="handleClick(scope.row,'delet')">删除</el-button>
+                                    <el-button type="primary" plain icon="el-icon-delete" @click="handleClick(scope.row,'delet')">删除</el-button>
                                 <!-- </el-button-group> -->
                             </template>
                         </el-table-column>

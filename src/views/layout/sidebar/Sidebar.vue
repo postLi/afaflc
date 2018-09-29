@@ -78,7 +78,19 @@ export default {
         console.log('getCurrentPath:', index, path)
     },
     toggleSideBar() {
-      this.$store.dispatch('ToggleSideBar')
+      this.$store.dispatch('ToggleSideBar');
+    //   let ifOpen = document.getElementsByClassName('app-wrapper');
+    //   console.log('ifOpen:',ifOpen)
+    //   for(var i = 0;i <ifOpen.length;i++){
+    //     console.log(i)
+    //       if(ifOpen[i].getAttribute("class")=='hideSidebar'){
+    //         　　console.log('1212323');
+    //     　}else{
+    //         　　console.log('78979789789');
+
+    //     }
+
+    //     }
     },
     showSubnav () {
       this.$refs.sidebaritem.clearTimer()

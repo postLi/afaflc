@@ -3,7 +3,7 @@
              <div class="classify_searchinfo">
                 <el-button type="primary"  plain  icon="el-icon-circle-plus" @click="creatTask('add')" v-has:SYSTEM_TASK_EXECUTE_MANAGE_ADD_EXECUTE>新增执行器</el-button>
                 <el-button type="warning"  plain  icon="el-icon-edit" @click="creatTask('edit')" v-has:SYSTEM_TASK_EXECUTE_MANAGE_UPDATE_EXECUTE>编辑执行器</el-button>
-                <el-button type="danger"  plain  icon="el-icon-delete" @click="remove" v-has:SYSTEM_TASK_EXECUTE_MANAGE_DELETE_EXECUTE>删除执行器</el-button>
+                <el-button type="primary"  plain  icon="el-icon-delete" @click="remove" v-has:SYSTEM_TASK_EXECUTE_MANAGE_DELETE_EXECUTE>删除执行器</el-button>
             </div>
             <div class="classify_info">
                 <div class="info_news">

@@ -3,7 +3,7 @@
         max-height:80%;
         // overflow:auto;
         overflow-x: hidden;
-        border-radius: 10px 10px 0px 0px;
+        border-radius: 4px;
         .el-input__inner{
             height: 30px;
             line-height: 30px;
@@ -18,14 +18,12 @@
             padding:10px 0;
             color:#fff;
             font-weight:bold;
-            background-color: #0b4b7c;
+            background-color: #42485b;
             .el-dialog__title{
-                height: 13px;
-                font-size: 13px;
+                font-size: 16px;
                 font-weight: normal;
                 font-stretch: normal;
                 line-height: 20px;
-                letter-spacing: 0px;
                 color: #ffffff;
             }
             .el-dialog__headerbtn{
@@ -35,6 +33,7 @@
         }
         .el-dialog__body{
             padding: 20px 0;
+            // border:1px solid #ccc;
             .addItem{
                 display:inline-block;
                 height: 26px;
@@ -67,12 +66,14 @@
                 .el-form-item{
                     border:0 none;
                     position: relative;
+                    margin-bottom: 12px;
                     .el-form-item__label{
                         font-size:14px;
                         padding:1px 5px 0 0;
                     }
                     .el-form-item__content{
                         position: relative;
+                        line-height: 0px;
                         .el-input{
                             .el-input__inner{
                                 color:#3e9ff1;
@@ -126,6 +127,9 @@
         }
         .dialog-footer{
             text-align:center;
+            .el-button+.el-button {
+                margin-left: 10px;
+            }
         }
     }
     .el-dialog .el-dialog__body .el-form .el-row  .el-col .el-form-item__content .el-date-editor .el-input__inner{

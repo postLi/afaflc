@@ -25,8 +25,8 @@
             </el-form>
         </div>
         <div slot="footer" class="dialog-footer">
-            <el-button type="primary" icon="el-icon-success" @click="handleSearch('sure')">确认</el-button>
-            <el-button type="danger" icon="el-icon-error" @click="handleSearch('cancel')">取消</el-button>
+            <el-button type="primary" plain icon="el-icon-success" @click="handleSearch('sure')">确认</el-button>
+            <el-button type="primary" plain icon="el-icon-error" @click="handleSearch('cancel')">取消</el-button>
         </div>
     </el-dialog>
 </template>

@@ -1,6 +1,6 @@
 <template>
      <div class="shippercreatDialog commoncss">
-      <el-dialog :title="typetitle" :visible="dialogFormVisible_add" :before-close="close" :close-on-click-modal="false">
+      <el-dialog :title="typetitle" :visible="dialogFormVisible_add" :before-close="closeMe" :close-on-click-modal="false">
         <el-form :model="xinzengform" ref="xinzengform" :rules="rulesForm" :label-width="formLabelWidth">
           <el-row>
             <el-col :span="12">
@@ -101,7 +101,7 @@
         </el-form>
         <div slot="footer" class="dialog-footer">
             <el-button type="primary" @click.stop="onSubmit" v-show="editType!='view'"  :disabled="ifDisable">确 定</el-button>
-            <el-button @click="close" v-show="editType!='view'">取 消</el-button>
+            <el-button @click="closeMe" v-show="editType!='view'">取 消</el-button>
         </div>
       </el-dialog>
     </div>
@@ -278,14 +278,12 @@ export default {
         }
         this.$emit('update:dialogFormVisible_add', false);
     },
-    // closeMe(){
-    //     this.$refs.xinzengform.resetFields();
-    //     this.changeList();
-    //     if (typeof done === 'function') {
-    //         done()
-    //     }
-    //     this.$emit('update:dialogFormVisible_add', false);
-    // },
+    closeMe(done){
+        if (typeof done === 'function') {
+            done()
+        }
+        this.$emit('update:dialogFormVisible_add', false);
+    },
     //获取货主类型
     getMoreInformation(){
         getDictionary(this.shipperType).then(res=>{

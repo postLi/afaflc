@@ -6,7 +6,7 @@
         <el-button type="primary" :size="btnsize" icon="el-icon-circle-plus" plain @click="doAction('add')" v-has:SYSTEM_EMPLOYEE_MANAGE_ADD_EMP>新增员工</el-button>
         <el-button type="primary" :size="btnsize" icon="el-icon-edit-outline" @click="doAction('auth')" plain v-has:SYSTEM_EMPLOYEE_MANAGE_EMP_AUTH>员工授权</el-button>
         <el-button type="primary" :size="btnsize" icon="el-icon-edit" @click="doAction('modify')" plain v-has:SYSTEM_EMPLOYEE_MANAGE_UPDATE>修改</el-button>
-        <el-button type="danger" :size="btnsize" icon="el-icon-delete" @click="doAction('delete')" plain v-has:SYSTEM_EMPLOYEE_MANAGE_DELETE>删除</el-button>
+        <el-button type="primary" :size="btnsize" icon="el-icon-delete" @click="doAction('delete')" plain v-has:SYSTEM_EMPLOYEE_MANAGE_DELETE>删除</el-button>
         <!-- <el-button type="primary" :size="btnsize" icon="el-icon-setting" plain @click="setTable" class="table_setup">表格设置</el-button> -->
       </div>
       <div class="info_news">
@@ -108,32 +108,32 @@ export default {
       }, {
         label: '姓名',
         prop: 'name',
-        width: '120',
+        width: '150',
         fixed: false
       }, {
         label: '归属机构',
         prop: 'orgName',
-        width: '120',
+        width: '180',
         fixed: false
       }, {
         label: '归属部门',
         prop: 'departmentName',
-        width: '120',
+        width: '150',
         fixed: false
       }, {
         label: '职务',
         prop: 'position',
-        width: '120',
+        width: '150',
         fixed: false
       }, {
         label: '员工号',
         prop: 'jobNumber',
-        width: '120',
+        width: '150',
         fixed: false
       }, {
         label: '登录账号',
         prop: 'username',
-        width: '120',
+        width: '200',
         fixed: false
       }, {
         label: '权限角色',

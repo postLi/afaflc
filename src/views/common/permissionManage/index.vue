@@ -7,7 +7,7 @@
           <el-input v-model="searchDate.roleName" placeholder="" clearable></el-input>
         </el-form-item>
         <el-form-item class="">
-          <el-button type="primary" icon="el-icon-search" plain @click="onSubmit">查询</el-button>
+          <el-button type="primary" icon="el-icon-search" plain @click="onSubmit">搜索</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -18,7 +18,7 @@
           <div class="btns_box_lrl clearfix">
             <el-button type="primary" :size="btnsize" icon="el-icon-circle-plus" plain @click="doAction('addRole')" v-has:SYSTEM_AUTH_MANEGE_ADD_ROLE>新增角色</el-button>
             <el-button type="primary" :size="btnsize" icon="el-icon-edit" @click="doAction('roleNot')" plain v-has:SYSTEM_AUTH_MANEGE_UPDATE>修改</el-button>
-            <el-button type="danger" :size="btnsize" icon="el-icon-delete" @click="doAction('deletePeople')" plain v-has:SYSTEM_AUTH_MANEGE_DELETE>删除</el-button>
+            <el-button type="primary" :size="btnsize" icon="el-icon-delete" @click="doAction('deletePeople')" plain v-has:SYSTEM_AUTH_MANEGE_DELETE>删除</el-button>
             <el-button type="primary" :size="btnsize" icon="el-icon-edit" @click="doAction('reference')" plain v-has:SYSTEM_AUTH_MANEGE_REFER>参照</el-button>
             <el-button type="primary" :size="btnsize" icon="el-icon-edit" @click="doAction('relationPer')" plain v-has:SYSTEM_AUTH_MANEGE_ASSOCIATION_MAINTAIN>关联员工</el-button>
 

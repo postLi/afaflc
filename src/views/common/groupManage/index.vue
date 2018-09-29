@@ -125,7 +125,7 @@
           <div class="btns_box_lrl clearfix">
             <el-button type="primary" :size="btnsize" icon="el-icon-circle-plus" v-if="form.status ===32" plain @click="doAction('addPeople')" v-has:SYSTEM_ORG_ADD_EMP>              新增员工
             </el-button>
-            <el-button type="danger" :size="btnsize" icon="el-icon-delete" @click="doAction('deletePeople')" plain v-has:SYSTEM_ORG_DELETE_EMP>
+            <el-button type="primary" :size="btnsize" icon="el-icon-delete" @click="doAction('deletePeople')" plain v-has:SYSTEM_ORG_DELETE_EMP>
               删除员工
             </el-button>
             <el-button type="primary" :size="btnsize" icon="el-icon-edit" @click="doAction('modifyNot')" plain v-has:SYSTEM_ORG_UPDATE_NETWORK>修改机构

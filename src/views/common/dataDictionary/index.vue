@@ -34,10 +34,9 @@
                     <div class="btns_box clearfix">
                         <el-button type="primary" :size="btnsize" plain icon="el-icon-circle-plus" @click="handleClick('add')" v-has:SYSTEM_DICT_ADD>新增</el-button>
                         <el-button type="primary" :size="btnsize" plain icon="el-icon-edit" @click="handleClick('revise')" v-has:SYSTEM_DICT_UPDATE>修改</el-button>
-                        <el-button type="danger" :size="btnsize" plain icon="el-icon-delete" @click="handleClick('delet')" v-has:SYSTEM_DICT_DELETE>删除</el-button>
+                        <el-button type="primary" :size="btnsize" plain icon="el-icon-delete" @click="handleClick('delet')" v-has:SYSTEM_DICT_DELETE>删除</el-button>
                         <el-button type="primary" :size="btnsize" plain icon="el-icon-bell" @click="handleClick('status')" v-has:SYSTEM_DICT_USE>启用/禁用</el-button>
                     </div>
-                    <p class="current"></p>
                     <div class="info_news">
                         <el-table
                             ref="multipleTable"
@@ -106,15 +105,14 @@
                                 </template>
                             </el-table-column>
                         </el-table>
-
                     </div>
-                     <!-- 页码 -->
-                    <div class="info_tab_footer">共计:{{ dataTotal }} <div class="show_pager"> <Pager :total="dataTotal" @change="handlePageChange"  :sizes="sizes"/></div> </div> 
 
                     <DicDialog :dialogAddDic.sync="dialogVisible" :reviseForm = 'reviseForm' :pid="pid" :pidName="pidname" :formtitle = 'formtitle' :isModify = "isModify"   @close = "shuaxin"/>
                 </div>
             </div>
         </div>
+            <!-- 页码 -->
+        <div class="info_tab_footer">共计:{{ dataTotal }} <div class="show_pager"> <Pager :total="dataTotal" @change="handlePageChange"  :sizes="sizes"/></div> </div> 
     </div>
 </template>
 

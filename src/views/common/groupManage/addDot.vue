@@ -109,7 +109,7 @@
             <el-input v-model="form.networkCode" auto-complete="off " :disabled="form.status===31" :maxlength="10"
                       clearable></el-input>
           </el-form-item>
-          <el-form-item label="代收款限额" :label-width="formLabelWidth" prop="">
+          <!-- <el-form-item label="代收款限额" :label-width="formLabelWidth" prop="">
             <el-input v-model="form.collectionFee" auto-complete="off" :maxlength="9" :disabled="form.status===31"
                       v-number-only></el-input>
           </el-form-item>
@@ -124,13 +124,13 @@
           <el-form-item label="锁机额度" :label-width="formLabelWidth" prop="">
             <el-input v-model="form.lockMachineQuota" auto-complete="off" v-number-only :maxlength="9"
                       :disabled="form.status===31"></el-input>
-          </el-form-item>
-
+          </el-form-item> -->
+            <br>
           <div class="ad-add-dot" v-if="!isModify">
             <el-checkbox checked v-model="form.accountStatus">开通管理员账号</el-checkbox>
             <p> 密码：123456</p>
           </div>
-          <el-form-item v-if="form.accountStatus  && !isModify" :label-width="formLabelWidth" prop="accountName">
+          <el-form-item v-if="form.accountStatus  && !isModify" :label-width="formLabelWidth" prop="accountName" style="margin-bottom:0;">
 
             <el-tooltip class="item" effect="dark" placement="top" :enterable="false" :manual="true" :value="tooltip"
                         tabindex="-1">
@@ -153,12 +153,12 @@
             </el-form-item>
           </div>
         </el-form>
-        <div class="spanDiv" v-if="companyId !== form.id">
+        <!-- <div class="spanDiv" v-if="companyId !== form.id">
           <span>元</span>
           <span>元</span>
           <span v-if="isModify" class="span-hidden">元</span>
           <span v-if="!isModify" class="span-last">元</span>
-        </div>
+        </div> -->
       </template>
       <div slot="footer" class="dialog-footer">
         <el-button type="primary" @click="submitForm('ruleForm', true)">保存并添加</el-button>
@@ -269,7 +269,7 @@
       return {
         tooltip: false,
         formKey: '',
-        popTitle: '新增网点',
+        popTitle: '新增机构',
         // 多选框
         checked: true,
         loading: false,
@@ -454,9 +454,9 @@
               this.$message.success('保存成功')
               this.formKey = Math.random()
               this.reset()
-              if (!bool) {
+            //   if (!bool) {
                 this.closeMe()
-              }
+            //   }
               this.loading = false
             }).catch(err => {
               this.$message.error('错误：' + (err.text || err.errInfo || err.data || JSON.stringify(err)))

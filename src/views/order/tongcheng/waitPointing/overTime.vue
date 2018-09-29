@@ -4,7 +4,7 @@
             <div class="classify_info">
                 <div class="btns_box">
                     <el-button type="primary" icon="el-icon-edit" plain @click="handleSearch('appoint')" :size="btnsize">指派司机</el-button>
-                    <el-button type="danger" icon="el-icon-warning" plain @click="handleSearch('cancel')" :size="btnsize">取消订单</el-button>
+                    <el-button type="primary" icon="el-icon-warning" plain @click="handleSearch('cancel')" :size="btnsize">取消订单</el-button>
                     <!-- <el-button type="primary" icon="el-icon-edit" plain @click="handleSearch('search')" :size="btnsize">新增订单</el-button> -->
                     <!-- <el-button type="primary" plain @click="handleSearch('search')" :size="btnsize">导出Exce</el-button> -->
                 </div>

@@ -154,6 +154,10 @@
     border-color:#909399;
   }
 
+  .el-button+.el-button {
+    margin-left: 0px;
+}
+
 /**
 滚动条调整
 **/
