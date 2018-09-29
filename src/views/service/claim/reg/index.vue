@@ -98,9 +98,10 @@
           </el-table> 
         </div> 
         <div class="info_bottom">
-          <el-form class="demo-ruleForm classify_searchinfo" label-position="right">
-            <el-form-item label="上报人">
-              <el-select v-model="value" placeholder="请选择">
+          <!-- class="demo-ruleForm classify_searchinfo" -->
+          <el-form  label-position="right" class="demo-ruleForm classify_searchinfo">
+            <el-form-item label="上报人" >
+              <el-select v-model="value" placeholder="请选择" style="margin-left:13px;width:230px">
                 <el-option
                   v-for="item in options"
                   :key="item.value"
@@ -111,6 +112,7 @@
             </el-form-item>
             <el-form-item label="上报时间">
               <el-date-picker
+                style="width:200px"
                 type="daterange"
                 :picker-options="pickerOptions2"
                 range-separator="-"
@@ -121,7 +123,7 @@
               </el-date-picker>
             </el-form-item>
             <el-form-item label="物损类型">
-              <el-select v-model="formAllData.claimType" clearable placeholder="请选择处理状态" >
+              <el-select v-model="formAllData.claimType" clearable placeholder="请选择处理状态">
                 <el-option
                   v-for="item in optionsclaimType"
                   :key="item.code"
@@ -131,14 +133,16 @@
                 </el-option>
               </el-select>
             </el-form-item> 
-            <el-form-item class="discrabel" label="物损描述">
-              <el-input type="textarea" :maxlength="200"></el-input>
-            </el-form-item>
-            <!-- <el-form-item class="clearfix">
+            <el-form-item class="clearfix imgbox" label="上传图片">
               <div class="clearfix uploadcard">
                 <upload :title="'本地上传'" :showFileList="true" :limit="5" listtype="picture"/>
               </div>
-            </el-form-item> -->
+            </el-form-item>
+          
+            <el-form-item class="discrabel" label="物损描述">
+              <el-input type="textarea" :maxlength="200"></el-input>
+            </el-form-item>
+            
           </el-form>
         </div>
         <!-- 页码 -->
@@ -155,17 +159,17 @@
 </template>
 <script>
 import { parseTime, pickerOptions2 } from '@/utils/index.js'
-import {postOrderGoodsclaimlist} from '@/api/service/claim.js'
+import { postOrderGoodsclaimlist } from '@/api/service/claim.js'
 import Pager from '@/components/Pagination/index'
 import Upload from '@/components/Upload/singleImage2'
-import {DicClaimStatusType} from '@/api/common'
+import { DicClaimStatusType } from '@/api/common'
 export default {
   computed: {
-    isShow:{
-      get(){
-      return this.centerDialogVisible
-    },
-    set(){}
+    isShow: {
+      get() {
+        return this.centerDialogVisible
+      },
+      set() {}
     }
   },
   components: {
@@ -173,13 +177,13 @@ export default {
     Upload
   },
   props: {
-    centerDialogVisible:{
-      type:Boolean,
-      default:false
+    centerDialogVisible: {
+      type: Boolean,
+      default: false
     }
   },
-  data(){
-    return{
+  data() {
+    return {
       btnsize: 'mini',
       sizes: [30, 50, 100],
       dataset: [],
@@ -187,31 +191,30 @@ export default {
       pagesize: 30, // 初始化加载数量
       page: 1, // 初始化页码
       totalCount: null,
-      value:'',
-      optionsclaimType:[{ code: null, name: '全部' }],
+      value: '',
+      optionsclaimType: [{ code: null, name: '全部' }],
       options: [{
-          value: '选项1',
-          label: '货主'
-        }, {
-          value: '选项2',
-          label: '车主'
-        }],
-        value: '',
-      form:{
+        value: '选项1',
+        label: '货主'
+      }, {
+        value: '选项2',
+        label: '车主'
+      }],
+      form: {
 
       },
-      rules:{
+      rules: {
 
       },
       pickerOptions2: {
         shortcuts: pickerOptions2
       },
-      formAllData:{
+      formAllData: {
 
       }
     }
   },
-  mounted () {
+  mounted() {
     this.firstblood()
     this.getclaimstatus()
   },
@@ -219,7 +222,7 @@ export default {
     // 请求接口刷新页面
     firstblood() {
       // this.loading = false
-      postOrderGoodsclaimlist(this.page, this.pagesize,this.formAllData).then(res => {
+      postOrderGoodsclaimlist(this.page, this.pagesize, this.formAllData).then(res => {
         this.dataTotal = res.data.totalCount
         this.dataset = res.data.list
         console.log(res)
@@ -235,7 +238,7 @@ export default {
         done()
       }
     },
-    getclaimstatus(){
+    getclaimstatus() {
       DicClaimStatusType().then(res => {
         console.log(res.data)
         res.data.map((item) => {
@@ -260,10 +263,10 @@ export default {
     },
     submitForm(ruleForm) {
       this.$refs[ruleForm].validate((valid) => {
-        if(valid){
+        if (valid) {
           console.log('3')
           this.closeMe()
-        }else{
+        } else {
           return false
         }
       })
@@ -273,12 +276,31 @@ export default {
 </script>
 <style lang="scss">
 .wzlAddReg{
+  .classify_info{
+    padding-bottom:0 !important;
+  }
   .el-dialog{
     max-width: 100%;
     min-width: 70%;
+    margin-top: 6vh !important;
     .el-dialog__header{
       background:#0b4b7c;
       text-align: left;
+      height: 40px;
+      line-height: 40px;
+      // padding-left: 20px;
+      padding:0 20px;
+      .el-dialog__headerbtn {
+        position: absolute;
+        top: 13px;
+        right: 20px;
+        padding: 0;
+        background: 0 0;
+        border: none;
+        outline: 0;
+        cursor: pointer;
+        font-size: 16px;
+      }
       .el-dialog__headerbtn :hover{
         color:#fff !important;
         transform:scale(1.5)
@@ -289,15 +311,36 @@ export default {
     }
     .el-dialog__footer{
       padding-bottom: 6%;
+      .el-button{
+        padding: 8px 35px;
+      }
     }
     .info_bottom{
-      // background:blue;
       padding-top:2%;
       max-width:100%;
       min-width: 20%;
+      .imgbox{
+        height:183px;
+        line-height: 183px;
+      }
+      .discrabel{
+        height: 100px;
+        .el-form-item__content{
+          height: 100px;
+          .el-textarea__inner{
+            min-height:100px;
+          }
+        }
+      }
       .el-form-item__content {
         .el-input {
           width: 200px;
+          .el-input--suffix{
+            margin-left:13px !important;
+          }
+        }
+        .el-textarea{
+          width: 80% !important;
         }
       }
       .el-form-item {
