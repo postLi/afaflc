@@ -118,10 +118,15 @@ export default {
       checked: false,
       errInfo: false,
       // 模拟登陆信息
+    //   loginForm: {
+    //     accNum: '4',
+    //     username: 'admin',
+    //     password: '123456'
+    //   },
       loginForm: {
-        accNum: '4',
-        username: 'admin',
-        password: '123456'
+        accNum: '',
+        username: '',
+        password: ''
       },
       loginRules: {
         accNum: [{ required: true, trigger: 'blur' }],
