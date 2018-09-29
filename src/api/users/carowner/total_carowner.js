@@ -94,6 +94,17 @@ export function data_get_shipper_auid() {
   return fetch.get('/' + baseurl_two + '/sysDict/getSysDictByCodeGet/AF00105')
 }
 
+// 获取车主抽佣列表
+export function data_get_shipper_carmaid() {
+  return fetch.get('/' + baseurl_two + '/sysDict/getSysDictByCodeGet/AF00206')
+}
+
+// 获取车主奖励列表
+export function data_get_shipper_carOwner() {
+  return fetch.get('/' + baseurl_two + '/sysDict/getSysDictByCodeGet/AF00207')
+}
+
+
 // 根据身份证获取车主
 export function data_post_checkDriverCardid(data) {
   return fetch.get('/' + baseurl + '/usercenter/aflcDriver/v1/checkDriverCardid/' + data, data)

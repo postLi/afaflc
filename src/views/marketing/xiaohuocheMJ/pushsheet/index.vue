@@ -16,8 +16,8 @@
                     </el-select>
                  </el-form-item>
         <el-form-item class="fr">       
-         <el-button type="primary"  plain @click="getdata_search()" :size="btnsize">查询</el-button>
-         <el-button type="primary"  plain  @click="clearSearch" :size="btnsize"> 清空</el-button>
+         <el-button type="primary" plain @click="getdata_search()" :size="btnsize" icon="el-icon-search">搜索</el-button>
+         <el-button type="info"  plain  @click="clearSearch" :size="btnsize" icon="fontFamily aflc-icon-qingkong"> 清空</el-button>
          </el-form-item>
            </el-form> 
   <div class="classify_info">
@@ -25,7 +25,7 @@
     <newpushsheet  btntext="新增" :plain="true" type="primary" btntype="primary" icon="el-icon-circle-plus" editType="add" btntitle="新增货主"  @getData="getDataList"></newpushsheet>
     <uppushsheet  btntext="修改" :plain="true" type="primary" btntype="primary" icon="el-icon-edit" editType="edit" :params="selectRowData"  @getData="getDataList"></uppushsheet>
      <el-button type="primary" plain icon="el-icon-bell" @click="handleUseStates" :size="btnsize">启用/禁用</el-button>
-     <el-button type="primary" plain icon="el-icon-delete" @click="handleDelete" :size="btnsize">删除</el-button>
+     <el-button type="danger" plain icon="el-icon-delete" @click="handleDelete" :size="btnsize">删除</el-button>
    </div>
     <div class="info_news">  
     <el-table  ref="multipleTable" style="width: 100%" stripe border :data="tableDataTree" height="100%" @selection-change="getSelection" @row-click="clickDetails" highlight-current-row>

@@ -32,7 +32,8 @@
                  </el-select>
             </el-form-item>          
             <el-form-item class="fr">       
-          <el-button type="primary"  plain @click="getData_query" :size="btnsize">查询</el-button> 
+          <el-button type="primary" plain @click="getData_query" :size="btnsize" icon="el-icon-search">搜索</el-button> 
+           <el-button type="info" plain @click="clearSearch"  :size="btnsize" icon="fontFamily aflc-icon-qingkong">清空</el-button>
           </el-form-item>
           </el-form>
           	<div class="classify_info">
@@ -42,7 +43,7 @@
                     :plain="true"
                     type="primary" 
                     btntype="primary"
-                    icon="el-icon-news"
+                    icon="el-icon-circle-plus"
                     editType="add"
                     @getData="getDataList"
                     btntitle="创建">
@@ -52,14 +53,14 @@
                     :plain="true"
                     type="primary" 
                     btntype="primary"
-                    icon="el-icon-news"
+                    icon="el-icon-edit"
                     editType="edit"
                     @getData="getDataList"
                     btntitle="修改"
                     :params="selectRowData">
                     </newOrder>
-                <el-button  type="primary" value="value" plain icon="el-icon-bell" @click="handleUseStates" :size="btnsize">启用/停用</el-button>
-                <el-button type="primary" plain icon="el-icon-delete" @click="delete_data" :size="btnsize">删除</el-button>
+                <el-button  type="primary" plain icon="el-icon-bell" @click="handleUseStates" :size="btnsize">启用/停用</el-button>
+                <el-button type="danger" plain icon="el-icon-delete" @click="delete_data" :size="btnsize">删除</el-button>
             	</div>
             <div class="info_news">    
                <el-table style="width: 100%" ref="multipleTable" stripe border height="100%" @selection-change="getSelection" @row-click="clickDetails" highlight-current-row :data="tableDataAll"  >
@@ -226,6 +227,20 @@ export default {
          getData_query(){
           this.firstblood();
           },
+        // 清空
+        clearSearch(){
+        this.formAllData =  {
+            areaCode: null,
+            carType:null,
+            commissionGrade:null,
+            province:null,
+            city:null,
+            area:null,
+            areaName:[]
+        }
+            this.firstblood()    
+        },
+
         // 判断选中与否
         getSelection(val){
         console.log('选中内容',val)

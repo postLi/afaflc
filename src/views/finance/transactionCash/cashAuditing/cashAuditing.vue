@@ -33,8 +33,8 @@
                <el-input></el-input>
             </el-form-item>     
                 <el-form-item class='fr'> 
-                  <el-button type="primary"  plain :size="btnsize">查询</el-button>
-                  <el-button type="primary"  plain :size="btnsize">重置</el-button>
+                  <el-button type="primary"  :size="btnsize">搜索</el-button>
+                  <el-button type="primary"  plain :size="btnsize">清空</el-button>
                </el-form-item>     
             </el-form>
           	<div class="classify_info">

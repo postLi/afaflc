@@ -11,8 +11,8 @@
                     <el-input placeholder="请输入内容" v-model.trim="formInline.driverMobile" clearable></el-input>
                 </el-form-item>
                 <el-form-item class="fr"> 
-                    <el-button type="primary" plain @click="getdata_search" :size="btnsize">查询</el-button>
-                    <el-button type="info" plain @click="clearSearch" :size="btnsize">清空</el-button>
+                    <el-button type="primary" plain @click="getdata_search" :size="btnsize" icon="el-icon-search">搜索</el-button>
+                    <el-button type="info" plain @click="clearSearch" :size="btnsize"  icon="fontFamily aflc-icon-qingkong">清空</el-button>
                 </el-form-item>
             </el-form>
             </div>
@@ -23,10 +23,10 @@
                     :plain="true"
                     type="primary" 
                     btntype="primary"
-                    icon="el-icon-edit"
+                    icon="el-icon-document"
                     editType="edit"
                     :templateItem="selectionData"
-                    btntitle="车主管理"
+                    btntitle="代客认证"
                     @getData="getDataList"
                     :updataflag="true"
                     >

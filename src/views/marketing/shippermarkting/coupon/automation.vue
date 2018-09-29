@@ -53,7 +53,8 @@
                     </el-date-picker>
             </el-form-item>        
             <el-form-item class="fr">       
-          <el-button type="primary"  plain @click="getData_query" :size="btnsize">查询</el-button> 
+          <el-button type="primary" plain @click="getData_query" :size="btnsize" icon="el-icon-search">搜索</el-button> 
+          <el-button type="info" plain @click="clearSearch"  :size="btnsize" icon="fontFamily aflc-icon-qingkong">清空</el-button>
           </el-form-item>
           </el-form>
           	<div class="classify_info">
@@ -63,7 +64,7 @@
                     :plain="true"
                     type="primary" 
                     btntype="primary"
-                    icon="el-icon-news"
+                    icon="el-icon-circle-plus"
                     btntitle="创建"
                     :editType="types"
                     @getData="getDataList"
@@ -74,7 +75,7 @@
                     :plain="true"
                     type="primary" 
                     btntype="primary"
-                    icon="el-icon-news"
+                    icon="el-icon-edit"
                     btntitle="修改"
                     :editType="types"
                     :params = 'selectRowData'
@@ -82,7 +83,7 @@
                     >
               </modautocoupon>
                 <el-button  type="primary" value="value" plain icon="el-icon-bell" @click="handleUseStates"  v-if="types=='one'" :size="btnsize">启用/停用</el-button>
-                <el-button type="primary" plain icon="el-icon-delete" @click="delete_data" :size="btnsize">删除</el-button>
+                <el-button type="danger" plain icon="el-icon-delete" @click="delete_data" :size="btnsize">删除</el-button>
                 <span  v-if="types=='two'">
               <couponGive
                     btntext="发放"
@@ -321,7 +322,22 @@ export default {
          getData_query(){
           this.firstblood();
           },
-
+        // 清空
+        clearSearch(){
+        this.formAllData =  {
+            activityName:null,
+            activityType:null,
+            usingStatus:null,
+            startTime:null,
+            endTime:null,
+            areaCode: null,
+            province:null,
+            city:null,
+            area:null,
+            areaName:[]
+        }
+            this.firstblood()    
+        },
             // 判断选中与否
             getSelection(val){
             console.log('选中内容',val)

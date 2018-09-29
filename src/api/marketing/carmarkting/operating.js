@@ -4,7 +4,6 @@ import fetch from '@/utils/fetch'
 // const baseurl = 'aflcusercenterservice_wtc'
 const baseurl = 'aflcusercenterservice'
 const baseurl2 = 'aflcsmservice'
-const baseurl3 = 'aflcSmService_wtc'
 /**
  * 拥抽
  *

@@ -1,7 +1,7 @@
 <template> 
     <div class="carNewinfo commoncss">
         <el-button :type="btntype" :value="value" :plain="plain" :icon="icon" @click="openDialog()"><span :class="editType=='view'?'BtnInfo':''">{{btntext}}</span ></el-button>
-        <el-dialog :title="title" :visible="driverTemplateDialogFlag" :before-close="change" modal-append-to-body>
+        <el-dialog :title="btntitle" :visible="driverTemplateDialogFlag" :before-close="change" modal-append-to-body>
              <el-form
               ref="templateModel"
               :model="templateModel"
@@ -161,6 +161,34 @@
                   </el-col>
               </el-row>
 
+              <el-row>       
+                  <el-col :span="12">
+                      <el-form-item label="车主抽佣等级：" prop="rewardGrade" :label-width="formLabelWidth">
+                            <el-select v-model="templateModel.rewardGrade" placeholder="请选择" :disabled="editType=='view'">
+                                <el-option
+                                    v-for="item in MaidLevelType"
+                                    :key="item.code"
+                                    :label="item.name"
+                                    :value="item.code">
+                                </el-option>
+                            </el-select>
+                        </el-form-item>
+                  </el-col>
+                  <el-col :span="12">
+                      <el-form-item label="车主奖励等级：" prop="commisionLevel" :label-width="formLabelWidth">
+                            <el-select v-model="templateModel.commisionLevel" placeholder="请选择" :disabled="editType=='view'">
+                                <el-option
+                                    v-for="item in carOwnerType"
+                                    :key="item.code"
+                                    :label="item.name"
+                                    :value="item.code"
+                                    >
+                                </el-option>
+                            </el-select>
+                        </el-form-item>
+                  </el-col>
+              </el-row>
+
               <el-row>
                   <el-col :span="12">
                     <el-form-item :label-width="formLabelWidth" label="特权车：">
@@ -173,7 +201,9 @@
                   <el-col :span="24">
                     <el-form-item label="上传车辆45°照片：" :label-width="formLabelWidth" prop="carFile" class="b10" required>
                       <div class="upload" v-if="editType == 'view'">
-                      <img :src='templateModel.carFile ? templateModel.carFile : defaultImg' alt="" >
+                          <el-tooltip class="item" effect="dark" content="点击图片查看原图" placement="top">
+                      <img :src='templateModel.carFile ? templateModel.carFile : defaultImg' alt="" v-showPicture>
+                          </el-tooltip>
                       </div>
                       <upload class="licensePicture" tip="（必须为jpg/png并且小于5M）" v-model="templateModel.carFile" v-else/>
                     </el-form-item>
@@ -183,7 +213,9 @@
                   <el-col :span="24">
                     <el-form-item label="上传车辆行驶证片：" :label-width="formLabelWidth" prop="drivingPermitFile"  class="b10">
                     <div class="upload" v-if="editType == 'view'">
-                      <img :src='templateModel.drivingPermitFile ? templateModel.drivingPermitFile : defaultImg' alt="" >
+                        <el-tooltip class="item" effect="dark" content="点击图片查看原图" placement="top">
+                      <img :src='templateModel.drivingPermitFile ? templateModel.drivingPermitFile : defaultImg' alt="" v-showPicture>
+                        </el-tooltip>
                       </div>
                         <upload class="licensePicture" tip="（必须为jpg/png并且小于5M）" v-model="templateModel.drivingPermitFile" v-else/>
                     </el-form-item>
@@ -193,7 +225,9 @@
                   <el-col :span="24">
                     <el-form-item label="上传驾驶证照片：" :label-width="formLabelWidth" prop="drivingLicenceFile" class="b10">
                        <div class="upload" v-if="editType == 'view'">
-                      <img :src='templateModel.drivingLicenceFile ? templateModel.drivingLicenceFile : defaultImg' alt="" >
+                    <el-tooltip class="item" effect="dark" content="点击图片查看原图" placement="top">
+                      <img :src='templateModel.drivingLicenceFile ? templateModel.drivingLicenceFile : defaultImg' alt="" v-showPicture>
+                    </el-tooltip>
                       </div>
                        <upload class="licensePicture" tip="（必须为jpg/png并且小于5M）" v-model="templateModel.drivingLicenceFile" v-else/>
                     </el-form-item>
@@ -203,7 +237,9 @@
                   <el-col :span="24">
                     <el-form-item label="上传车主身份证照片：" :label-width="formLabelWidth" prop="idCardFile" class="b10">
                        <div class="upload" v-if="editType == 'view'">
-                      <img :src='templateModel.idCardFile ? templateModel.idCardFile : defaultImg' alt="" >
+                        <el-tooltip class="item" effect="dark" content="点击图片查看原图" placement="top">
+                      <img :src='templateModel.idCardFile ? templateModel.idCardFile : defaultImg' alt="" v-showPicture>
+                        </el-tooltip>
                       </div>
                         <upload class="licensePicture" tip="（必须为jpg/png并且小于5M）" v-model="templateModel.idCardFile" v-else/>
                     </el-form-item>
@@ -213,7 +249,9 @@
                   <el-col :span="24">
                     <el-form-item label="上传车主个人形象照：" :label-width="formLabelWidth" prop="takeIdCardFile" class="b10">
                      <div class="upload" v-if="editType == 'view'">
-                      <img :src='templateModel.takeIdCardFile ? templateModel.takeIdCardFile : defaultImg' alt="" >
+                         <el-tooltip class="item" effect="dark" content="点击图片查看原图" placement="top">
+                      <img :src='templateModel.takeIdCardFile ? templateModel.takeIdCardFile : defaultImg' alt="" v-showPicture>
+                         </el-tooltip>
                       </div>
                        <upload class="licensePicture" tip="（必须为jpg/png并且小于5M）" v-model="templateModel.takeIdCardFile" v-else/>
                     </el-form-item>
@@ -229,7 +267,7 @@
     </div>
 </template>
 <script>
-import  { data_post_createDriver,data_put_changeDriver,data_CarList,data_Get_carType,data_get_driver_obStatus,data_post_driverAudit,data_post_mobileGetDriver,data_post_checkDriverCardid} from '@/api/users/carowner/total_carowner.js'
+import  { data_post_createDriver,data_put_changeDriver,data_CarList,data_Get_carType,data_get_driver_obStatus,data_post_driverAudit,data_post_mobileGetDriver,data_post_checkDriverCardid,data_get_shipper_carmaid,data_get_shipper_carOwner} from '@/api/users/carowner/total_carowner.js'
 import Upload from '@/components/Upload/singleImage'
 import GetCityList from '@/components/GetCityList'
 import { eventBus } from '@/eventBus'
@@ -411,7 +449,26 @@ export default {
                 cb()
             }
         }
-        
+
+    //   抽佣等级校验
+        const rewardGradeValidator = (rule, val, cb) => {
+             if(!val){
+            cb(new Error('抽佣等级不能为空'))
+            }
+            else{
+                cb()
+            }
+        }      
+    //    车主奖励校验
+        const commisionLevelValidator = (rule, val, cb) => {
+            if(!val){
+            cb(new Error(' 车主奖励不能为空'))
+            }
+            else{
+                cb()
+            }
+        }
+
     // 上传车辆45°照片校验
         const carFileTimeValidator = (rule, val, cb) => {
             if(!val){
@@ -468,6 +525,8 @@ export default {
             optionsLevel:[],
             options:[], // 车型列表
             optionsType:[], // 车辆规列表
+            MaidLevelType:[], //抽佣等级列表
+            carOwnerType:[],  //奖励等级列表
             templateModel:{
                 carType:null,
                 driverMobile:null,
@@ -489,6 +548,11 @@ export default {
                 idCardFile:null,
                 takeIdCardFile:null,
                 driverId:null,
+                provinceCode:null,
+                cityCode:null,
+                areaCode:null,
+                rewardGrade:null,
+                commisionLevel:null,
             },
                 pickerOptions:{
                 disabledDate(time) {
@@ -514,6 +578,8 @@ export default {
             drivingLicenceFile:{validator: drivingLicenceFileValidator, trigger:'change',required:true,},
             idCardFile:{validator: idCardFileValidator, trigger:'change',required:true,},
             takeIdCardFile:{validator: takeIdCardFileValidator, trigger:'change',required:true,},
+            rewardGrade:{validator: rewardGradeValidator, trigger:'change',required:true,},
+            commisionLevel:{validator: commisionLevelValidator, trigger:'change',required:true,},
         },
         }
     },
@@ -525,6 +591,9 @@ export default {
                 this.$refs.templateModel.resetFields();
                 this.templateModel.carSpec = null;
                 this.templateModel.belongCity = null;
+                this.templateModel.provinceCode=null,
+                this.templateModel.cityCode=null,
+                this.templateModel.areaCode=null,
                 this.$emit('getData')
                 this.templateModel.isVipCar = '0'
             }
@@ -544,11 +613,21 @@ export default {
                 this.templateModel.belongCityName = (!d.province&&!d.city&&!d.area&&!d.town) ? '': `${this.getValue(d.province)}${this.getValue(d.city)}${this.getValue(d.area)}${this.getValue(d.town)}`.trim();
                 if(d.area){
                     this.templateModel.belongCity = d.area.code;
+                    this.templateModel.areaCode = d.area.name
+                    this.templateModel.cityCode= d.city.name
+                    this.templateModel.provinceCode=d.province.name                       
+
                 }else if(d.city){
-                    this.templateModel.belongCity = d.city.code;
+                    this.templateModel.belongCity = d.city.code
+                    this.templateModel.areaCode = null
+                    this.templateModel.cityCode= d.city.name
+                    this.templateModel.provinceCode=d.province.name                 
                 }
                 else{
-                    this.templateModel.belongCity = d.province.code;
+                    this.templateModel.areaCode = null
+                    this.templateModel.cityCode=null
+                    this.templateModel.provinceCode=d.province.name
+                    this.templateModel.belongCity = d.province.code
                 }
             },
              getValue(obj){
@@ -588,6 +667,18 @@ export default {
             // 中单等级的获取
             data_get_driver_obStatus().then(res =>{
                     this.optionsLevel=res.data
+            }).catch(err =>{
+                console.log(err)
+            })
+            // 抽佣等级
+            data_get_shipper_carmaid().then(res=>{
+                  this.MaidLevelType = res.data
+            }).catch(err =>{
+                console.log(err)
+            })
+            // 车主奖励等级
+            data_get_shipper_carOwner().then(res=>{
+                  this.carOwnerType = res.data
             }).catch(err =>{
                 console.log(err)
             })
@@ -678,7 +769,7 @@ export default {
 .b10{
     padding-bottom: 20px;
 } 
-.el-button{
+.el-button{   
     margin-right:0px;
     padding: 0px 15px 0px;
  }

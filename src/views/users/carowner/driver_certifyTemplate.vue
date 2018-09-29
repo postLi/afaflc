@@ -127,6 +127,34 @@
                   </el-col>
               </el-row>
 
+              <el-row>       
+                  <el-col :span="12">
+                      <el-form-item label="车主抽佣等级：" prop="rewardGrade" :label-width="formLabelWidth">
+                            <el-select v-model="templateModel.rewardGrade" placeholder="请选择" :disabled="editType=='view'">
+                                <el-option
+                                    v-for="item in MaidLevelType"
+                                    :key="item.code"
+                                    :label="item.name"
+                                    :value="item.code">
+                                </el-option>
+                            </el-select>
+                        </el-form-item>
+                  </el-col>
+                  <el-col :span="12">
+                      <el-form-item label="车主奖励等级：" prop="commisionLevel" :label-width="formLabelWidth">
+                            <el-select v-model="templateModel.commisionLevel" placeholder="请选择" :disabled="editType=='view'">
+                                <el-option
+                                    v-for="item in carOwnerType"
+                                    :key="item.code"
+                                    :label="item.name"
+                                    :value="item.code"
+                                    >
+                                </el-option>
+                            </el-select>
+                        </el-form-item>
+                  </el-col>
+              </el-row>
+
               <el-row>
                   <el-col :span="12">
                     <el-form-item :label-width="formLabelWidth" label="特权车：">
@@ -158,13 +186,11 @@
                 </el-form-item>
               </el-col>
             </el-row>
-                 <div class="data_pic_default">
-                    <img  :src= 'defaultImg1'/>
-                </div>
             <div class="data_pic">
                 <div class="data_pic_callingcode data_pic_c">
-                <div class="uploadImgBox"><img  class="picURL" :src="templateModel.carFile ? templateModel.carFile : defaultImg" @click="changeIMG"/></div>
-              
+                    <el-tooltip class="item" effect="dark" content="点击图片查看原图" placement="top">
+                <div class="uploadImgBox"><img  class="picURL" :src="templateModel.carFile ? templateModel.carFile : defaultImg" v-showPicture/></div>
+                    </el-tooltip>
                     <h2>车辆45°</h2>
                     <el-form-item prop="radio1">
                       <el-radio-group v-model="radio1" @change="pictureTypeChange">
@@ -175,7 +201,9 @@
                     </el-form-item> 
                 </div>
                 <div class="data_pic_callingcode data_pic_c">
-              <div class="uploadImgBox"><img  class="picURL" :src="templateModel.drivingPermitFile ? templateModel.drivingPermitFile : defaultImg" @click="changeIMG"/></div>
+                    <el-tooltip class="item" effect="dark" content="点击图片查看原图" placement="top">
+              <div class="uploadImgBox"><img  class="picURL" :src="templateModel.drivingPermitFile ? templateModel.drivingPermitFile : defaultImg" v-showPicture/></div>
+                    </el-tooltip>
                     <h2>行驾证</h2>
                     <el-form-item prop="radio2">
                       <el-radio-group v-model="radio2" @change="pictureTypeChange">
@@ -186,7 +214,9 @@
                     </el-form-item>
                 </div>
                 <div class="data_pic_callingcode data_pic_c">
-                 <div class="uploadImgBox"><img  class="picURL" :src="templateModel.drivingLicenceFile ? templateModel.drivingLicenceFile : defaultImg" @click="changeIMG"/></div>
+                    <el-tooltip class="item" effect="dark" content="点击图片查看原图" placement="top">
+                 <div class="uploadImgBox"><img  class="picURL" :src="templateModel.drivingLicenceFile ? templateModel.drivingLicenceFile : defaultImg" v-showPicture/></div>
+                    </el-tooltip>
                     <h2>驾驶证</h2>
                     <el-form-item prop="radio3">
                       <el-radio-group v-model="radio3" @change="pictureTypeChange">
@@ -197,8 +227,9 @@
                     </el-form-item>
                 </div>
                 <div class="data_pic_callingcode data_pic_c">
-                  <div class="uploadImgBox"><img  class="picURL" :src="templateModel.idCardFile ? templateModel.idCardFile : defaultImg" @click="changeIMG"/></div>
-
+                    <el-tooltip class="item" effect="dark" content="点击图片查看原图" placement="top">
+                  <div class="uploadImgBox"><img  class="picURL" :src="templateModel.idCardFile ? templateModel.idCardFile : defaultImg" v-showPicture/></div>
+                    </el-tooltip>
                     <h2>身份证</h2>
                     <el-form-item prop="radio3">
                       <el-radio-group v-model="radio4" @change="pictureTypeChange">
@@ -209,7 +240,9 @@
                     </el-form-item>
                 </div>
                 <div class="data_pic_callingcode data_pic_c">
-                  <div class="uploadImgBox"> <img  class="picURL" :src="templateModel.takeIdCardFile ? templateModel.takeIdCardFile : defaultImg" @click="changeIMG"/></div>
+                    <el-tooltip class="item" effect="dark" content="点击图片查看原图" placement="top">
+                  <div class="uploadImgBox"> <img  class="picURL" :src="templateModel.takeIdCardFile ? templateModel.takeIdCardFile : defaultImg" v-showPicture/></div>
+                    </el-tooltip>
                     <h2>手持身份证</h2>
                     <el-form-item prop="radio3">
                       <el-radio-group v-model="radio5" @change="pictureTypeChange">
@@ -223,14 +256,14 @@
           </el-form>
           <div slot="footer" class="dialog-footer">
             <el-button type="primary" plain @click="handlerPass">确认审核通过</el-button>
-            <el-button @click="handlerOut">审核不通过</el-button>
-            <el-button @click="freezeDialogFlag = false">取 消</el-button>
+            <el-button type="primary" plain @click="handlerOut">审核不通过</el-button>
+            <el-button type="info" plain @click="freezeDialogFlag = false">取 消</el-button>
           </div>
     </el-dialog>
   </div>
 </template>
 <script>
-import {data_post_checkDriverCardid,data_get_driver_obStatus,data_CarList,data_Get_carType,data_post_audit} from '../../../api/users/carowner/total_carowner.js'
+import {data_post_checkDriverCardid,data_get_driver_obStatus,data_CarList,data_Get_carType,data_post_audit,data_get_shipper_carmaid,data_get_shipper_carOwner} from '../../../api/users/carowner/total_carowner.js'
 import {parseTime} from '@/utils/'
 import { eventBus } from '@/eventBus'
 import Upload from '@/components/Upload/singleImage'
@@ -326,6 +359,25 @@ export default {
                 cb()
             }
         }
+    //   抽佣等级校验
+        const rewardGradeValidator = (rule, val, cb) => {
+             if(!val){
+            cb(new Error('抽佣等级不能为空'))
+            }
+            else{
+                cb()
+            }
+        }      
+    //    车主奖励校验
+        const commisionLevelValidator = (rule, val, cb) => {
+            if(!val){
+            cb(new Error(' 车主奖励不能为空'))
+            }
+            else{
+                cb()
+            }
+        }
+
 
     //    车型信息校验
         const carTypeValidator = (rule, val, cb) => {
@@ -400,14 +452,38 @@ export default {
         pickerOptions:{
         disabledDate(time) {
         return time.getTime() < Date.now();}},
-        defaultImg:'/static/test.jpg',//默认第一张图片的url
-        defaultImg1:'',//默认第一张图片的url        
+        defaultImg:'/static/test.jpg',//默认第一张图片的url   
         freezeDialogFlag:false,
-        templateModel:{},   // 认证审核表单
+        templateModel:{
+        driverMobile:null,
+        driverName:null,
+        driverCardid:null,
+        belongCityName:null,
+        carNumber:null,
+        carType:null,
+        carLength:null,
+        carWidth:null,
+        carHeight:null,
+        optionscarSpec:null,
+        optionsLevel:null,
+        obtainGradeTime:null,
+        isVipCar:'0',
+        authenticationTime:null,
+        registerOriginName:null,
+        carFile:null,
+        drivingPermitFile:null,
+        drivingLicenceFile:null,
+        idCardFile:null,
+        takeIdCardFile:null,
+        rewardGrade:null,
+        commisionLevel:null,
+        },   // 认证审核表单
         formLabelWidth:'150px',
         optionscarType:[],
         optionscarSpec:[],
         optionsLevel:[],
+        MaidLevelType:[], //抽佣等级列表
+        carOwnerType:[],  //奖励等级列表
         radio1:'',
         radio2:'',
         radio3:'',
@@ -426,6 +502,8 @@ export default {
         belongCityName:{validator: belongCityNameValidator, trigger:'change',required:true,},            
         obtainGrade:{validator:obtainGradeValidator, trigger:'change',required:true,},
         obtainGradeTime:{validator: obtainGradeTimeValidator, trigger:'change',required:true,},
+        rewardGrade:{validator: rewardGradeValidator, trigger:'change',required:true,},
+        commisionLevel:{validator: commisionLevelValidator, trigger:'change',required:true,},        
         },        
       }
   },
@@ -444,6 +522,9 @@ export default {
         handler: function(val, oldVal) {
             if(!val){
                 this.$refs.templateModel.resetFields();
+                this.templateModel.provinceCode=null,
+                this.templateModel.cityCode=null,
+                this.templateModel.areaCode=null,
                 this.$emit('getData') 
             }
             else{
@@ -453,44 +534,66 @@ export default {
         }
         },
   methods:{
+    //   区域选择
+    regionChange(d) {
+                console.log('data:',d)
+                this.templateModel.belongCityName = (!d.province&&!d.city&&!d.area&&!d.town) ? '': `${this.getValue(d.province)}${this.getValue(d.city)}${this.getValue(d.area)}${this.getValue(d.town)}`.trim();
+                if(d.area){
+                    this.templateModel.belongCity = d.area.code;
+                    this.templateModel.areaCode = d.area.name
+                    this.templateModel.cityCode= d.city.name
+                    this.templateModel.provinceCode=d.province.name                       
+
+                }else if(d.city){
+                    this.templateModel.belongCity = d.city.code
+                    this.templateModel.areaCode = null
+                    this.templateModel.cityCode= d.city.name
+                    this.templateModel.provinceCode=d.province.name                 
+                }
+                else{
+                    this.templateModel.areaCode = null
+                    this.templateModel.cityCode=null
+                    this.templateModel.provinceCode=d.province.name
+                    this.templateModel.belongCity = d.province.code
+                }
+            },
+     getValue(obj){
+                return obj ? obj.value:'';
+            },
+
      formatTime(da){
                 let time = (+new Date()) - da
                 return parseInt(time / 1000 / (3600*24))+ '天'+ parseInt(time/1000/(3600*24*60*60)*60*60)+ '小时'
             },
-    regionChange(d) {
-                console.log('data:',d)
-                this.templateModel.belongCity = (!d.province&&!d.city&&!d.area&&!d.town) ? '': `${this.getValue(d.province)}${this.getValue(d.city)}${this.getValue(d.area)}${this.getValue(d.town)}`.trim();
-                if(d.area){
-                    this.templateModel.areaCode = d.area.code;
-                }else if(d.city){
-                    this.templateModel.areaCode = d.city.code;
-                }
-                else{
-                    this.templateModel.areaCode = d.province.code;
-                }
-            },
-    getValue(obj){
-                return obj ? obj.value:'';
-            },
-
     change(){
       this.freezeDialogFlag!=this.freezeDialogFlag
     },
     getMoreInformation(){
-    // 中单等级的获取
-    data_get_driver_obStatus().then(res =>{
-            this.optionsLevel = res.data
-         })
-     data_CarList().then(res=>{
-            this.optionscarType = res.data
-         })
-     data_Get_carType().then(res=>{
-           this.optionscarSpec = res.data
-         })         
+           // 中单等级的获取
+            data_get_driver_obStatus().then(res =>{
+                    this.optionsLevel = res.data
+                })
+            data_CarList().then(res=>{
+                    this.optionscarType = res.data
+                })
+            data_Get_carType().then(res=>{
+                this.optionscarSpec = res.data
+                })         
+          // 抽佣等级
+            data_get_shipper_carmaid().then(res=>{
+                  this.MaidLevelType = res.data
+            }).catch(err =>{
+                console.log(err)
+            })
+            // 车主奖励等级
+            data_get_shipper_carOwner().then(res=>{
+                  this.carOwnerType = res.data
+            }).catch(err =>{
+                console.log(err)
+            })
+
+
     },
-     changeIMG(event){
-            this.defaultImg1 = event.target.src;
-            },    
     // 图片质量拼接传给后台
      pictureTypeChange(){
 
@@ -609,47 +712,47 @@ export default {
     .el-dialog{
        overflow: unset;
        max-height: none;
-       width: 60%;
+       width: 70%;
        .certifyless{
          width:62px;
        }
-.el-date-editor.el-input{
+.el-date-editor{
     width: 192px;
+    .el-input__inner{
+       padding-right: 0px!important;
+    }
 }
 .data_pic{
-   width: 100%;
+   width: 90%;
    margin:0px auto;
-   display: flex;
-   justify-content: space-around;
+   overflow: hidden;
 .data_pic_c{
-    flex-basis: 130px;
-    margin:0px 5px;    
+    float: left;
+    width: 18%;
+    margin-left:2%;
+    .uploadImgBox{
+    width: 100%;
+    height: 100%;
+    }
     h2{
     line-height: 40px;
-    text-align: center; }
+    text-align: center; 
+    }
     .el-radio-group{
-    margin:0px auto;}
+    width: 100%;
+    
+    .el-radio{
+    margin: 2px 0px;
+    }
+    }
     .picURL{
         width: 100%;
-        height: 100%;
+        height: 160px;
+        cursor: pointer;
     }
-}
-}
     }
-.data_pic_default
-{
-   margin:20px 0px;
-
-img{
-    width: 500px;
-    margin: 0px auto;
-    display: block
-}
-} 
-.uploadImgBox{
-    width: 150px;
-    height: 150px;
-}
+    }
+    }
 .lessWidth{
     width: 80px!important
 }

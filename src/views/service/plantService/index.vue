@@ -18,14 +18,19 @@
                         tooltip-effect="dark"
                         @row-click="clickDetails"
                         style="width: 100%"> 
-                        <el-table-column label="序号"  width="80">
-                            <template slot-scope="scope">
-                                {{ (page - 1)*pagesize + scope.$index + 1 }}
-                            </template>
-                        </el-table-column>  
+                        <el-table-column
+                                        label="选择"
+                                        type="selection"
+                                        width="50">
+                        </el-table-column>
+                    <el-table-column label="序号" sortable  width="80">
+                                        <template slot-scope="scope">
+                                        {{ (page - 1)*pagesize + scope.$index + 1 }}
+                                        </template>
+                        </el-table-column> 
                         <el-table-column
                             label="工单编号"
-                            width="230">
+                            width="230" sortable>
                                 <template  slot-scope="scope">
                                     <h4 class="needMoreInfo" @click="pushOrderSerial(scope.row)">{{ scope.row.workSerial}}</h4>
                                 </template>
@@ -33,48 +38,66 @@
                         <el-table-column
                             prop="complainTypeName"
                             label="提交类型"
-                            width="100">
+                            width="100"
+                            sortable
+                            >
                         </el-table-column>
                         <el-table-column
                             prop="orderSerial"
                             label="运单号"
-                            width="230">
+                            width="230"
+                            sortable
+                            >
                         </el-table-column>
                         <el-table-column
                             prop="title"
                             label="提交主题"
-                            width="100">
+                            width="100"
+                            sortable
+                            >
                         </el-table-column>
                         <el-table-column
                             :show-overflow-tooltip="true"
                             prop="complainDes"
                             label="提交内容"
-                            width="300">
+                            width="300"
+                            sortable
+                            >
                         </el-table-column>
                         <el-table-column
                             prop="complainTime"
                             label="提交时间"
-                            width="200">
+                            width="200"
+                            sortable
+                            >
                         </el-table-column>
                          <el-table-column
                             prop="complainName"
                             label="提交人"
-                            width="100">
+                            width="100"
+                            sortable
+                            >
                         </el-table-column> 
                         <el-table-column
                             prop="phone"
                             label="联系电话"
-                            width="150">
+                            width="150"
+                            sortable
+                            >
                         </el-table-column>
                          <el-table-column
                          prop="email"
                             label="电子邮箱"
-                            width="200">
+                            width="200"
+                            sortable
+                            >
                         </el-table-column>
                         <el-table-column
                             prop="complainStatusName"
                             label="处理状态"
-                            width="100">
+                            width="100"
+                            sortable
+                            >
                                 <!-- <template  slot-scope="scope">
                                     <span :class="{reMark:scope.row.complainStatusName == '待处理',sussces:scope.row.complainStatusName == '已处理'}">{{ scope.row.complainStatusName}}</span>
                                 </template> -->
@@ -82,23 +105,31 @@
                         <el-table-column
                             prop="platformTime"
                             label="处理时间"
-                            width="200">
+                            width="200"
+                            sortable
+                            >
                         </el-table-column>
                         <el-table-column
                         prop="replyName"
                             label="处理人"
-                            width="100">
+                            width="100"
+                            sortable
+                            >
                         </el-table-column>
                         <el-table-column
                             :show-overflow-tooltip="true"
                             label="回复内容"
-                            width="300">
+                            width="300"
+                            sortable
+                            >
                             <template  slot-scope="scope">
                                 {{scope.row.reply}}
                             </template>
                         </el-table-column><el-table-column
                             label="操作"
-                            width="220">
+                            width="220"
+                            sortable
+                            >
                             <template  slot-scope="scope">
                                 <!-- <el-button-group> -->
                                     <el-button type="primary" plain icon="el-icon-document" @click="handleClick(scope.row,'reply')">回复</el-button>

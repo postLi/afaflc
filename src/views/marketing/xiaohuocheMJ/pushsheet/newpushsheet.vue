@@ -62,7 +62,7 @@
             </el-col>
             <el-col :span="6">
            <el-form-item>       
-           <el-button type="primary" @click="addItem" plain  v-if="keys == 0" >继续添加推送时段</el-button>
+           <el-button type="primary" @click="addItem" plain  v-if="keys == 0" class='VestaddItem'>继续添加推送时段</el-button>
            <el-button type="danger" @click="reduceItem(keys)" plain class='VestreduceItem'  v-else>删除推送时段</el-button> 
            </el-form-item>
             </el-col>
@@ -1018,6 +1018,10 @@ mounted(){
         .VestreduceItem{
              width: 154px;
              height: 34px;
+         }
+         .VestaddItem{
+             width: 154px;
+             height: 34px;             
          }
         .el-date-editor .el-range-separator {
                 padding: 0 0px;
