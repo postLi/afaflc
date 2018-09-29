@@ -1,5 +1,5 @@
 <template>
-    <div style="height:100%;" class="identicalStyle">
+    <div style="height:100%;" class="identicalStyle" v-loading="loading">
         <searchInfo @change="getSearchParam" :showType = 'tabType'></searchInfo>
 		<div class="classify_info">
 			<div class="btns_box">
@@ -103,6 +103,7 @@ export default {
     },
     data() {
     return {
+        loading:true,
         tabType:'All',
         btnsize: 'mini',
         dialogFormVisible_add: false,
@@ -147,7 +148,7 @@ export default {
   },
   mounted() {
     eventBus.$on('changeList', () => {
-        this.firstblood()
+        this.firstblood();
     })
   },
   methods: {
@@ -163,7 +164,6 @@ export default {
         getSearchParam(obj) {
             console.log(obj)
             this.searchInfo = objectMerge2(this.searchInfo, obj)
-            this.loading = false;
             this.firstblood()
         },
         pushOrderSerial(row){
@@ -250,18 +250,21 @@ export default {
                         }
                         break;
                 }
-                this.clearTableSelection()
+                this.clearTableSelection();
             }
         },
         // 刷新页面
         firstblood() {
+            this.loading = true;
             data_get_shipper_list(this.page, this.pagesize, this.searchInfo).then(res => {
                 // console.log('shipperAll',res)
                 this.totalCount = res.data.totalCount
                 this.tableDataAll = res.data.list
                 // this.inited = false;
+                this.loading = false;
             }).catch(err => {
                 console.log(err)
+                this.loading = false;
             })
         },
         getDataList() {
