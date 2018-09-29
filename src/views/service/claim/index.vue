@@ -241,12 +241,6 @@ export default {
         case 'shouli':
           // orderSerial订单号
           this.$router.push({ name: '订单详情', query: { orderSerial: this.selected[0].orderSerial }})
-          // orderDetailsList(this.selected[0].orderSerial).then(res => {
-          //     console.log(res)
-          //     // this.listInformation = res.data.aflcOrderFollowingFiles;
-          //     this.loading = false;
-          //   })
-          console.log(this.selected[0].orderSerial)
           break
         case 'clear':
         break
