@@ -215,18 +215,18 @@ export default {
       this.firstblood()
     },
     // 清空
-     clearSearch(){
-      this.formAllData =  {
+    clearSearch() {
+       this.formAllData = {
         areaCode: null,
         carType: null,
         commissionGrade: null,
-        province:null,
-        city:null,
-        area:null,
-        areaName:[]
+        province: null,
+        city: null,
+        area: null,
+        areaName: []
       }
-         this.firstblood()    
-      },
+       this.firstblood()
+     },
      // 判断选中与否
     getSelection(val) {
       console.log('选中内容', val)
@@ -248,14 +248,14 @@ export default {
         this.$message.warning('请选择您要操作的用户')
         return
       } else if (this.selectRowData.length > 1) {
-            this.$message({
+        this.$message({
               message: '每次只能操作单条数据~',
               type: 'warning'
             })
-            this.$refs.multipleTable.clearSelection()
-          } else {
-            this.delDataInformation()
-          }
+        this.$refs.multipleTable.clearSelection()
+      } else {
+        this.delDataInformation()
+      }
     },
        // 确认删除
     delDataInformation() {
@@ -291,25 +291,25 @@ export default {
         this.$message.warning('请选择您要操作的用户')
         return
       } else if (this.selectRowData.length > 1) {
-            this.$message({
+        this.$message({
               message: '每次只能操作单条数据~',
               type: 'warning'
             })
-            this.$refs.multipleTable.clearSelection()
-          } else {
-            this.selectId.push(this.selectRowData[0].id)
+        this.$refs.multipleTable.clearSelection()
+      } else {
+        this.selectId.push(this.selectRowData[0].id)
 
-            data_Able_Marketingsame(this.selectId).then(res => {
+        data_Able_Marketingsame(this.selectId).then(res => {
               this.selectId.splice(0, 1)
               if (this.selectRowData[0].usingStatus == 1) {
-            this.$message.warning('已禁用')
-          } else {
-            this.$message.success('已启用')
-          }
+                this.$message.warning('已禁用')
+              } else {
+                this.$message.success('已启用')
+              }
               this.firstblood()
               this.$refs.multipleTable.clearSelection()
             })
-          }
+      }
     },
     getDataList() {
       this.firstblood()
