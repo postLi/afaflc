@@ -22,9 +22,7 @@
                 </li>
                 
               </ul>
-              <!-- <div class="getorglist">
-                <SelectTree></SelectTree>
-              </div> -->
+              
             </div>
             <el-row class="main_forthUl">
                 <ul>
