@@ -55,28 +55,26 @@ import complaint from './components/complaint'
 import rate from './components/rateComponent'
 import physicalDamage from './components/physicalDamage'
 export default {
-    name: 'dingdanxiangqing',
-    components:{
-        OrderInfo,
-        pushList,
-        orderTracking,
-        robbingList,
-        driverTrail,
-        complaint,
-        physicalDamage,
-        rate
-    },
-    data() {
-        return {
-            orderTabName:'orderInfo',
-        };
-    },
-    computed: {
-    　　
-    },
-    watch: {
-    },
-    
+  name: 'dingdanxiangqing',
+  components: {
+    OrderInfo,
+    pushList,
+    orderTracking,
+    robbingList,
+    driverTrail,
+    complaint,
+    physicalDamage,
+    rate
+  },
+  data() {
+    return {
+      orderTabName: 'orderInfo'
+    }
+  },
+  computed: {
+
+  },
+
     // created() {
     //     this.routeQuery = sessionStorage.getItem('orderSerial');
     //     console.log('created',this.routeQuery)
@@ -92,19 +90,20 @@ export default {
     //     console.log('beforeDestroy',this.routeQuery)
     // },
 
+  mounted() {
+    if (this.$route.query.currentTab) {
+      this.orderTabName = this.$route.query.currentTab
+    }
+  },
+  methods: {
+    init() {
+      this.routeQuery = this.$route.query.orderSerial || ''
+    },
+    handleClick(tab, event) {
+      this.orderTabName = tab.name
+    }
+  }
 
-    mounted(){
-        console.log('我是小强',this.$route)
-    },
-    methods: {
-        init(){
-            this.routeQuery = this.$route.query.orderSerial ||'';
-        },
-        handleClick(tab, event){
-            this.orderTabName = tab.name;
-        }
-    },
-   
 }
 </script>
 

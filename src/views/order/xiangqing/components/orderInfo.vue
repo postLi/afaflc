@@ -264,70 +264,70 @@ import { orderDetailsList } from '@/api/order/ordermange'
 import remarkerInfo from './remakInfo'
 
 export default {
-    name: 'TCorderInfo',
-    components:{
-        remarkerInfo,
-    },
-    props: {
-        isvisible: {
-            type: Boolean,
-            default: false
-        },
-       
-    },
-    data() {
-        return {
-            listInformation:[],
-            loading:true,
-            dialogVisible:false,
-            currentOrderSerial:''
-        };
-    },
-    watch:{
-        isvisible: {
-            handler(newVal, oldVal) {
-                if(newVal){
-                    this.init();
-                }
-            },
+  name: 'TCorderInfo',
+  components: {
+    remarkerInfo
+  },
+  props: {
+    isvisible: {
+        type: Boolean,
+        default: false
+      }
+
+  },
+  data() {
+    return {
+        listInformation: [],
+        loading: true,
+        dialogVisible: false,
+        currentOrderSerial: ''
+      }
+  },
+  watch: {
+    isvisible: {
+        handler(newVal, oldVal) {
+            if (newVal) {
+                this.init()
+              }
+          },
             // 代表在wacth里声明了firstName这个方法之后立即先去执行handler方法
-            immediate: true
-        },
-        $route(to,from){
-            console.log('to.path',to.path);
-        }
-        
-    },
-    mounted(){
+        immediate: true
+      },
+    $route(to, from) {
+        console.log('to.path', to.path)
+      }
+
+  },
+  mounted() {
         // console.log(this.$route)
-    },
-    methods: {
-        init(){
-            let orderSerial = this.$route.query.orderSerial;
-            this.loading = true;
-            orderDetailsList(orderSerial).then(res => {
-                console.log('details',res)
-                this.listInformation = res.data;
-                this.listInformation.aflcOrderAddresses.sort(function(a,b){  
-                    return a.viaOrder - b.viaOrder;  
+  },
+  methods: {
+    init() {
+        const orderSerial = this.$route.query.orderSerial
+        this.loading = true
+        orderDetailsList(orderSerial).then(res => {
+              console.log('details', res)
+              this.listInformation = res.data
+              this.listInformation.aflcOrderAddresses.sort(function(a, b) {
+                  return a.viaOrder - b.viaOrder
                 })
-                this.loading = false;
+              this.loading = false
             }).catch(err => {
-                this.$message({
-                    type: 'info',
-                    message: '删除失败，原因：' + err.errorInfo ? err.errorInfo : err.text
-                })
-                this.loading = false;
+              this.$message({
+                type: 'info',
+                message: '删除失败，原因：' + err.errorInfo ? err.errorInfo : err.text
+              })
+              this.loading = false
             })
-        },
-        shuaxin(){
-            this.init();
-        },
-        handlerClick(){
-            this.currentOrderSerial = this.$route.query.orderSerial;
-            this.dialogVisible = true;
-        }
-    },
+      },
+    shuaxin() {
+        this.init()
+      },
+    handlerClick() {
+        this.currentOrderSerial = this.$route.query.orderSerial
+        this.dialogVisible = true
+      }
+  }
 }
 </script>
 

@@ -30,8 +30,8 @@
           <el-input :maxlength="20" auto-complete="off" clearable></el-input>
         </el-form-item>
         <el-form-item class="btnChoose fr"  style="margin-left:0;">
-          <el-button type="primary" :size="btnsize" plain @click="handleSearch('search')">搜索</el-button>
-          <el-button type="info" :size="btnsize" plain @click="handleSearch('clear')">清空</el-button>
+          <el-button type="primary" :size="btnsize" plain @click="handleSearch('search')" icon="el-icon-search">搜索</el-button>
+          <el-button type="info" :size="btnsize" plain @click="handleSearch('clear')" icon="fontFamily aflc-icon-qingkong">清空</el-button>
         </el-form-item>
       </el-form>
       <div class="classify_info">
@@ -280,7 +280,7 @@ export default {
   }
   .el-dialog{
     max-width: 100%;
-    min-width: 70%;
+    min-width: 71%;
     margin-top: 6vh !important;
     .el-dialog__header{
       background:#0b4b7c;

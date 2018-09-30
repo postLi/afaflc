@@ -28,47 +28,24 @@
             </el-select>
           </el-form-item> 
           <el-form-item label="货主">
-            <el-input :maxlength="20" placeholder="账户/姓名" auto-complete="off" clearable></el-input>
+            <el-input v-model="formAllData.shipper" :maxlength="20" placeholder="账户/姓名" auto-complete="off" clearable></el-input>
           </el-form-item>
           <el-form-item label="车主">
-            <el-input :maxlength="20" placeholder="账户/姓名/车号牌" auto-complete="off" clearable></el-input>
+            <el-input v-model="formAllData.driver" :maxlength="20" placeholder="账户/姓名/车号牌" auto-complete="off" clearable></el-input>
           </el-form-item>
           <el-form-item label="订单号">
-            <el-input :maxlength="20" auto-complete="off" clearable></el-input>
+            <el-input v-model="formAllData.orderSerial" :maxlength="20" auto-complete="off" clearable></el-input>
           </el-form-item>
           <el-form-item class="btnChoose fr">
-            <el-button type="primary" @click="handleSearch('search')" :size="btnsize">搜索</el-button>
-            <el-button type="info" @click="handleSearch('clear')" plain :size="btnsize">清空</el-button>
+            <el-button type="primary" :size="btnsize" plain @click="handleSearch('search')" icon="el-icon-search">搜索</el-button>
+            <el-button type="info" :size="btnsize" plain @click="handleSearch('clear')" icon="fontFamily aflc-icon-qingkong">清空</el-button>
           </el-form-item>            
         </el-form>
           <div class="classify_info">
             		<div class="btns_box">
-                <!-- <newCity
-                  btntext="新增"
-                  :plain="true"
-                  type="primary" 
-                  btntype="primary"
-                  icon="el-icon-news"
-                  editType="add"
-                  btntitle="创建"
-                  @getData="getDataList"
-                  >
-                </newCity>
-                <newCity
-                  btntext="修改"
-                  :plain="true"
-                  type="primary" 
-                  btntype="primary"
-                  icon="el-icon-news"
-                  editType="edit"
-                  btntitle="修改"
-                  @getData="getDataList"
-                  :params="selectRowData"
-                  >
-                </newCity> -->
                 <el-button type="primary" :size="btnsize" class="el-icon-circle-plus"  plain @click="doAction('reg')">物流登记</el-button>
-                <el-button type="primary" :size="btnsize" class="el-icon-tickets" @click="doAction('shouli')" plain>确认受理</el-button>
-                <el-button type="primary" :size="btnsize" icon="el-icon-news" @click="doAction('genjin')" plain>记录物流跟进</el-button>
+                <!-- <el-button type="primary" :size="btnsize" class="el-icon-tickets" @click="doAction('shouli')" plain>确认受理</el-button> -->
+                <!-- <el-button type="primary" :size="btnsize" icon="el-icon-news" @click="doAction('genjin')" plain>记录物流跟进</el-button> -->
             		</div>
             <div class="info_news">    
               <el-table ref="multipleTable" style="width: 100%" stripe border height="100%" @selection-change="getSelection" @row-click="clickDetails" highlight-current-row :data="dataset"  tooltip-effect="dark">
@@ -82,19 +59,19 @@
                   {{ (page - 1)*pagesize + scope.$index + 1 }}
                   </template>
                 </el-table-column> 
-                <el-table-column fixed label="订单号" v-model="dataset.orderSerial" prop="orderSerial" sortable :show-overflow-tooltip="true" width="300">
+                <el-table-column fixed label="订单号" prop="orderSerial" sortable :show-overflow-tooltip="true" width="300">
                 </el-table-column>
-                <el-table-column sortable prop="belongCity" v-model="dataset.belongCity" label="区域"  width="300">
+                <el-table-column sortable prop="belongCity" label="区域"  width="300">
                 </el-table-column>
-                <el-table-column  label="货主" v-model="dataset.shipper" prop="shipper" sortable :show-overflow-tooltip="true" width="200">
+                <el-table-column  label="货主" prop="shipper" sortable :show-overflow-tooltip="true" width="200">
                 </el-table-column>
-                <el-table-column  label="车主" v-model="dataset.driver" prop="driver" sortable :show-overflow-tooltip="true"  width="200">
+                <el-table-column  label="车主" prop="driver" sortable :show-overflow-tooltip="true"  width="200">
                 </el-table-column>
-                <el-table-column  label="处理状态" v-model="dataset.dealStatus" prop="dealStatus" sortable :show-overflow-tooltip="true" width="120">
+                <el-table-column  label="处理状态" prop="dealStatus" sortable :show-overflow-tooltip="true" width="120">
                 </el-table-column>       
-                <el-table-column  label="物损类型" v-model="dataset.claimType" prop="claimType" sortable :show-overflow-tooltip="true" width="120">
+                <el-table-column  label="物损类型" prop="claimType" sortable :show-overflow-tooltip="true" width="120">
                 </el-table-column>                                                       
-                <el-table-column  label="上报人" v-model="dataset.reporter" prop="reporter" sortable :show-overflow-tooltip="true"  width="300">
+                <el-table-column  label="上报人" prop="reporter" sortable :show-overflow-tooltip="true"  width="300">
                 </el-table-column>
                 <el-table-column
                 :show-overflow-tooltip="true"
@@ -110,7 +87,7 @@
                 </template>
                 <!-- <template slot-scope="scope">{{ scope.row.commissionTime | parseTime('{y}-{m}-{d} {h}:{i}:{s}')}}</template> -->
                 </el-table-column>
-                <el-table-column  label="订单状态" v-model="dataset.orderStatus" prop="orderStatus" sortable  width="120">
+                <el-table-column  label="订单状态" prop="orderStatus" sortable  width="120">
                 </el-table-column> 
                 <el-table-column
                 :show-overflow-tooltip="true"
@@ -126,9 +103,9 @@
                 </template>
                 <!-- <template slot-scope="scope">{{ scope.row.commissionTime | parseTime('{y}-{m}-{d} {h}:{i}:{s}')}}</template> -->
                 </el-table-column>
-                <el-table-column  label="提货地" v-model="dataset.startAddress" prop="startAddress" sortable :show-overflow-tooltip="true"  width="300">
+                <el-table-column  label="提货地" prop="startAddress" sortable :show-overflow-tooltip="true"  width="300">
                 </el-table-column>
-                <el-table-column  label="目的地" v-model="dataset.endAddress" prop="endAddress" sortable :show-overflow-tooltip="true"  width="300">
+                <el-table-column  label="目的地" prop="endAddress" sortable :show-overflow-tooltip="true"  width="300">
                 </el-table-column>   
               </el-table> 
         	  </div> 
@@ -163,24 +140,31 @@ export default {
       radio: 1,
       centerDialogVisible: false,
       optionsdealStatus: [{ code: null, name: '全部' }],
-      optionsPlantService: [
-        {
-          id: '0',
-          label: '待处理',
-          value: '待处理'
-        },
-        {
-          id: '1',
-          label: '处理中',
-          value: '处理中'
-        },
-        {
-          id: '2',
-          label: '已处理',
-          value: '已处理'
-        }
-      ],
+      // optionsPlantService: [
+      //   {
+      //     id: '0',
+      //     label: '待处理',
+      //     value: '待处理'
+      //   },
+      //   {
+      //     id: '1',
+      //     label: '处理中',
+      //     value: '处理中'
+      //   },
+      //   {
+      //     id: '2',
+      //     label: '已处理',
+      //     value: '已处理'
+      //   }
+      // ],
       formAllData: {
+        belongCity: '', // 区域
+        belongCityName: '', // 区域
+        // AF04801
+        dealStatus: '',
+        shipper: '',
+        driver: '',
+        orderSerial: ''
       }
     }
   },
@@ -207,12 +191,25 @@ export default {
         this.formAllData.belongCity = d.province.code
       }
     },
+    getValue(obj) {
+      return obj ? obj.value : ''
+    },
     // 查询条件
     handleSearch(type) {
       switch (type) {
         case 'search':
+          this.firstblood()
           break
         case 'clear':
+          this.formAllData = {
+            belongCity: '',
+            belongCityName: '',
+            delStatus: '',
+            shipper: '',
+            driver: '',
+            orderSerial: ''
+          }
+          this.firstblood()
           break
       }
     },
@@ -227,7 +224,7 @@ export default {
     },
     // 点击打开弹窗
     doAction(type) {
-       if (!this.selected.length && type !== 'reg') {
+      if (!this.selected.length && type !== 'reg') {
         this.$message({
           message: '请选择要操作的项~',
           type: 'warning'
@@ -240,10 +237,13 @@ export default {
           break
         case 'shouli':
           // orderSerial订单号
-          this.$router.push({ name: '订单详情', query: { orderSerial: this.selected[0].orderSerial }})
+          // this.$router.push({ name: '订单详情', query: { orderSerial: this.selected[0].orderSerial, currentTab: 'physicalDamage' }})
+          break
+        case 'genjin':
+          // this.$router.push({ name: '订单详情', query: { orderSerial: this.selected[0].orderSerial, currentTab: 'physicalDamage' }})
           break
         case 'clear':
-        break
+          break
       }
     },
     closeAddReg() {
