@@ -1,6 +1,7 @@
 import fetch from '@/utils/fetch'
 
 const baseurl = 'aflcorderservice'
+const baseurlw = 'aflcorderservice-wtc' // wang
 /**
  * 物损理赔
  *  "belongCity": "string",
@@ -28,6 +29,56 @@ const baseurl = 'aflcorderservice'
 export function postOrderGoodsclaimlist(page, pagesize, data) {
   return fetch({
     url: '/' + baseurl + '/order/aflcOrderGoodsclaim/v1/list',
+    method: 'post',
+    data: {
+      'currentPage': page,
+      'pageSize': pagesize,
+      'vo': data
+    }
+  })
+}
+
+// /order/aflcOrderGoodsclaim/v1/GoodsclaimAll/{id} 拼接一个id 大列表
+// 根据订单号id获取订单物损理赔
+export function getGoodsclaimAll(id) {
+  return fetch({
+    url: '/' + baseurlw + '/order/aflcOrderGoodsclaim/v1/GoodsclaimAll/' + id,
+    method: 'get'
+  })
+}
+
+// /order/aflcOrderGoodsfollowup/v1/GoodsfollowupAll/{id} 下拉列表
+// 根据订单号id获取记录物损跟进
+export function getGoodsfollowupAll(id) {
+  return fetch({
+    url: '/' + baseurlw + '/order/aflcOrderGoodsfollowup/v1/GoodsfollowupAll/' + id,
+    method: 'get'
+  })
+}
+
+/**
+ * /order/aflcOrderGoodsclaim/v1/reportClaim 登记新增
+ *  "orderSerial": "string",
+ */
+export function getReportClaim(page, pagesize, data) {
+  return fetch({
+    url: '/' + baseurlw + '/order/aflcOrderGoodsclaim/v1/reportClaim',
+    method: 'get',
+    data: {
+      'currentPage': page,
+      'pageSize': pagesize,
+      'vo': data
+    }
+  })
+}
+
+/**
+ * 记录投诉跟进 /order/aflcOrderGoodsfollowup/v1/add新增记录物损跟进表
+ */
+
+export function postReportClaimAdd(page, pagesize, data) {
+  return fetch({
+    url: '/' + baseurlw + '/order/aflcOrderGoodsfollowup/v1/add',
     method: 'post',
     data: {
       'currentPage': page,
