@@ -227,7 +227,7 @@
         <div class="mark-collapse collapseInfo">
             <h2> 
                 客服备注
-                <el-button class="el-icon-circle-plus" @click="handlerClick"  type="primary" size="mini" plain>添加备注</el-button>
+                <el-button icon="el-icon-circle-plus" @click="handlerClick"  type="primary" size="mini" plain>添加备注</el-button>
             </h2>
             <div v-if="listInformation.aflcOrderRemarks.length != 0">
                 <div class="essentialInformation"  v-for="item in listInformation.aflcOrderRemarks" :key="item.remarkId">

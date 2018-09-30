@@ -93,8 +93,8 @@ import Pager from '@/components/Pagination/index'
                 loading:true,//遮罩层
                 page:1,//页码
                 pagesize:20,//每页显示数量
-                formtitle:'新增额外服务',
-                formtitle_change:'修改分类信息',
+                formtitle:'新增公海推单',
+                formtitle_change:'修改公海推单',
                 currentPage4: 1,//显示当前页面
                 dialogFormVisible: false,//新增弹窗
                 dialogFormVisibleChange:false,//修改弹窗
@@ -127,7 +127,6 @@ import Pager from '@/components/Pagination/index'
             //子组件调用父组件刷新页面  
             Onrenovate(){
                 this.firstblood();
-                this.dialogFormVisible = false;
             },
             //点击选中当前行
             clickDetails(row, event, column){

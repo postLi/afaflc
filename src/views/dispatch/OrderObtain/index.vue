@@ -92,8 +92,8 @@ import Pager from '@/components/Pagination/index'
                 loading:true,
                 page:1,//页码
                 pagesize:20,//每页显示数量
-                formtitle:'新增额外服务',
-                formtitle_change:'修改分类信息',
+                formtitle:'新增中单设置',
+                formtitle_change:'修改中单设置',
                 currentPage4: 1,//显示当前页面
                 dialogFormVisible: false,//新增弹窗
                 dialogFormVisibleChange:false,//修改弹窗

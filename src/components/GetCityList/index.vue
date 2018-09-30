@@ -1,9 +1,12 @@
+
 <template>
   <div class="chooseCityList">
         <el-cascader
         v-model="selectedOptions"
-        :options="areaData"
-        @active-item-change="handleItemMore"
+        :options="cityTree"
+        ref="cityTree"
+        change-on-select
+        @change="handleItemMore"
         :disabled="disabled"
         :props="props">
         </el-cascader>
@@ -11,64 +14,46 @@
 </template>
 <script>
 
-import { data_getProvinceList,data_GetCityList } from '@/api/common.js'
+import { aflcAreaCode } from '@/api/common.js'
 
 export default {
     name: 'getCityList',
     props: {
         disabled:{
-          type: Boolean
-        }
+            type: Boolean
+        },
+        value: [String, Array],
+
     },
     data() {
-      return {
-        selectedOptions: [],
-        areaList:null,
-        areaData:[],
-        props: {
-            label: 'name',
-            value: 'code',
-            children: 'children'
-        },
-      };
+        return {
+            selectedOptions: [],
+            areaList:null,
+            cityTree:[],
+            props: {
+                label: 'name',
+                value: 'code',
+                children: 'children'
+            },
+        };
     },
     methods: {
         handleItemMore(val){
-            data_GetCityList(val[0]).then(res=>{
-                if(res.errorInfo){
-                    this.areaData.forEach(item=>{
-                        if(item.code == val[0]){
-                            item.children = null;
-                        }
-                    })
-                }else{
-                    this.areaData.forEach(item=>{
-                        if(item.code == val[0]){
-                            setTimeout(function(){
-                                item.children = res.data.list;
-                            },500)
-                        }
-                    })
-                }
-            }).catch(res=>{
-            })
+            console.log(this.$refs.cityTree)
+            console.log(this.$refs.cityTree.currentLabels)
+            this.returnArr();
         },
-        getMoreInformation(){
-           data_getProvinceList().then(res=>{
-            //    console.log(res)
-            if(res.text == '请求成功' && res.data.list.length >0 ){
-                this.areaData = res.data.list.map(el => {
-                    el.children = []
-                    return el
-                });
-            }else{
-                this.areaData = null;
-            }
+        init(){
+            aflcAreaCode().then(res=>{
+                this.cityTree = res.data;
            })
         },
+        returnArr(){
+            this.$emit('returnStr', this.selectedOptions.join(','),)
+        }
     },
     mounted(){
-        this.getMoreInformation()
+        this.init()
     },
 }
 </script>
@@ -96,3 +81,5 @@ export default {
     }
     
 </style>
+
+

@@ -1,9 +1,7 @@
 <template>
-    <div>
-        
     <!-- 新增分类信息 -->
         <div class="dispatchPush commoncss">
-            <el-dialog :title='formtitle' :close-on-click-modal="true"  :visible="dialogFormVisibleChange" @close="close">
+            <el-dialog :title='formtitle' :close-on-click-modal="false"  :visible="dialogFormVisibleChange" @close="close">
                 <div class="chooseArea">
                     <p><span>* </span>所在地 ：</p>
                     <el-input v-model="changeforms.areaCodeName" disabled></el-input>
@@ -53,15 +51,13 @@
                 </div> 
             </el-dialog>
         </div>
-        <cue ref="cue"></cue>
-    </div>
-        
+        <!-- <cue ref="cue"></cue> -->
 </template>
 
 <script>
 import { data_CarList } from '@/api/common.js'
 import { data_ChangeData } from '@/api/dispatch/OpenseaRecommend.js'
-import cue from "../../../components/Message/cue";
+// import cue from "../../../components/Message/cue";
 
 
 export default {
@@ -98,7 +94,7 @@ export default {
       };
     },
     components:{
-        cue
+        // cue
     },
     watch:{
         dialogFormVisibleChange:function(){
@@ -190,9 +186,9 @@ export default {
             
         }
 
-        .el-input{
-            width: 170px;
-        }
+        // .el-input{
+        //     width: 170px;
+        // }
     }
     
 </style>
