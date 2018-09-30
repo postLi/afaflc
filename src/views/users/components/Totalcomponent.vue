@@ -150,7 +150,7 @@
                         >
                         <template slot-scope="scoped">
                             <driver-newTemplate
-                            :templateItem="scoped.row"
+                            :paramsView="scoped.row"
                                 :btntext="scoped.row.driverMobile"
                                 type="primary" 
                                 btntype="text"

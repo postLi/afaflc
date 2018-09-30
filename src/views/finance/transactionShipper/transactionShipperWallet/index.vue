@@ -10,8 +10,8 @@
             <el-input placeholder="请输入内容" clearable v-model="formAllData.accountId"></el-input>
             </el-form-item>             
             <el-form-item class="fr">       
-          <el-button type="primary"  :size="btnsize" @click="getData_query">搜索</el-button> 
-          <el-button type="info"  plain @click="clearSearch" :size="btnsize">清空</el-button>
+          <el-button type="primary" plain :size="btnsize" @click="getData_query" icon="el-icon-search">搜索</el-button> 
+          <el-button type="info"  plain @click="clearSearch" :size="btnsize" icon="fontFamily aflc-icon-qingkong">清空</el-button>
           </el-form-item>
           </el-form>                                         
           	<div class="classify_info">
@@ -26,14 +26,14 @@
                             <template slot-scope="scope">
                              {{ (page - 1)*pagesize + scope.$index + 1 }}
                             </template>
-            </el-table-column> 
+            </el-table-column>
             <el-table-column  label="所属区域" prop="areaCode">
             </el-table-column>
-            <el-table-column  label="货主账号" prop="accountId" >
+            <el-table-column  label="货主账号" prop="mobile" >
                 <template  slot-scope="scoped">
                     <shipperwallet
                     btntype="text"  
-                    :btntext="scoped.row.accountId"
+                    :btntext="scoped.row.mobile"
                     editType="add"
                     btntitle="详情"
                     :templateItem="scoped.row"
@@ -106,7 +106,6 @@ export default {
              getValue(obj){
                 return obj ? obj.value:'';
             },
-
     // 列表刷新页面  
     firstblood(){
      data_findShipperMywalletList(this.page,this.pagesize,this.formAllData).then(res => {

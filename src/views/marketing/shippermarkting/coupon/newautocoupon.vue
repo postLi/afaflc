@@ -304,7 +304,7 @@ export default {
         maxlengthNum:100,
         pickerOptions2: {
         shortcuts: pickerOptions2
-            },
+        },
         options:regionDataPlus,   
         inputKey:null,
         optionsCar:[],
@@ -710,7 +710,6 @@ export default {
 <style lang="scss">
 .newcouponBox{
         display: inline-block;
-        margin-right: 10px;
         .el-button {
         margin-right:0px;
         padding: 7px 15px 7px;
@@ -759,6 +758,7 @@ export default {
             display: flex;
         }
          .ht_table_tr1{
+             overflow: hidden;
             width: 100%;
             line-height: 31px;
             height: 32px;

@@ -44,8 +44,8 @@
                     </el-date-picker>
             </el-form-item>                  
             <el-form-item class="fr">       
-          <el-button type="primary"  @click="seach_data" :size="btnsize">搜索</el-button> 
-          <el-button type="info" plain :size="btnsize" @click="clearSearch">清空</el-button>
+          <el-button type="primary" plain @click="seach_data" :size="btnsize" icon="el-icon-search">搜索</el-button> 
+          <el-button type="info" plain :size="btnsize" @click="clearSearch"  icon="fontFamily aflc-icon-qingkong">清空</el-button>
           </el-form-item>
           </el-form>
             <div class="classify_info">

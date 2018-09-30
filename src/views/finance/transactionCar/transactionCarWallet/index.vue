@@ -10,8 +10,8 @@
             <el-input placeholder="请输入内容" clearable v-model="formAllData.accountId"></el-input>
             </el-form-item>             
             <el-form-item class="fr">
-          <el-button type="primary"  :size="btnsize" @click="getData_query">搜索</el-button> 
-          <el-button type="info"  plain @click="clearSearch" :size="btnsize">清空</el-button>
+          <el-button type="primary" plain :size="btnsize" @click="getData_query" icon="el-icon-search">搜索</el-button> 
+          <el-button type="info"  plain @click="clearSearch" :size="btnsize" icon="fontFamily aflc-icon-qingkong">清空</el-button>
           </el-form-item>
           </el-form>                                         
           	<div class="classify_info">
@@ -29,11 +29,11 @@
             </el-table-column> 
             <el-table-column  label="所属区域" prop="areaCode" sortable>
             </el-table-column>
-            <el-table-column  label="车主账号" prop="accountId" sortable >
+            <el-table-column  label="车主账号" prop="driverMobile" sortable >
                 <template  slot-scope="scoped">
                     <Carwallet
                     btntype="text"  
-                    :btntext="scoped.row.accountId"
+                    :btntext="scoped.row.driverMobile"
                     editType="add"
                     btntitle="详情"
                     :templateItem="scoped.row"

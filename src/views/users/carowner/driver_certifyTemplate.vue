@@ -1,7 +1,7 @@
 <template>
   <div class="drivercertify commoncss">
     <el-button type="primary" :value="value" :plain="plain" :icon="icon" @click="openDialog()">{{btntext}}</el-button>
-    <el-dialog :title="btntext" :visible.sync="freezeDialogFlag" :before-close="change()" :modal="false">
+    <el-dialog :title="btntext" :visible.sync="freezeDialogFlag" :before-close="change()">
  <el-form :model="templateModel" ref="templateModel" :rules="rulesForm" inline modal-append-to-body>
              <el-row>
                 <el-col :span="12">
@@ -19,7 +19,7 @@
             <el-row>
                 <el-col :span="12">
                     <el-form-item label="身份证号码：" :label-width="formLabelWidth" prop="driverCardid">
-                        <el-input v-model="templateModel.driverCardid"></el-input>
+                        <el-input v-model="templateModel.driverCardid" :maxlength="18"></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col :span="12">
@@ -127,10 +127,9 @@
                   </el-col>
               </el-row>
 
-              <el-row>       
                   <el-col :span="12">
-                      <el-form-item label="车主抽佣等级：" prop="rewardGrade" :label-width="formLabelWidth">
-                            <el-select v-model="templateModel.rewardGrade" placeholder="请选择" :disabled="editType=='view'">
+                      <el-form-item label="车主抽佣等级：" prop="commisionLevel" :label-width="formLabelWidth">
+                            <el-select v-model="templateModel.commisionLevel" placeholder="请选择" :disabled="editType=='view'">
                                 <el-option
                                     v-for="item in MaidLevelType"
                                     :key="item.code"
@@ -141,8 +140,8 @@
                         </el-form-item>
                   </el-col>
                   <el-col :span="12">
-                      <el-form-item label="车主奖励等级：" prop="commisionLevel" :label-width="formLabelWidth">
-                            <el-select v-model="templateModel.commisionLevel" placeholder="请选择" :disabled="editType=='view'">
+                      <el-form-item label="车主奖励等级：" prop="rewardgrade" :label-width="formLabelWidth">
+                            <el-select v-model="templateModel.rewardgrade" placeholder="请选择" :disabled="editType=='view'">
                                 <el-option
                                     v-for="item in carOwnerType"
                                     :key="item.code"
@@ -153,7 +152,6 @@
                             </el-select>
                         </el-form-item>
                   </el-col>
-              </el-row>
 
               <el-row>
                   <el-col :span="12">
@@ -177,7 +175,8 @@
               <el-col :span="12">
                 <el-form-item label="等待时长：" :label-width="formLabelWidth">
                   <!-- <el-input auto-complete="off"></el-input> -->
-                  {{templateModel.authenticationTime? formatTime((+new Date(templateModel.authenticationTime))) : '' }}
+                  <!-- {{templateModel.authenticationTime| parseTime}} -->
+                  {{templateModel.authenticationTime|remainData}}
                 </el-form-item>
               </el-col>
               <el-col :span="12">
@@ -560,11 +559,6 @@ export default {
      getValue(obj){
                 return obj ? obj.value:'';
             },
-
-     formatTime(da){
-                let time = (+new Date()) - da
-                return parseInt(time / 1000 / (3600*24))+ '天'+ parseInt(time/1000/(3600*24*60*60)*60*60)+ '小时'
-            },
     change(){
       this.freezeDialogFlag!=this.freezeDialogFlag
     },
@@ -705,6 +699,19 @@ export default {
 
     }   
     }, 
+    filters:{
+        remainData:(val=>{
+            if(!val){
+            return ''
+            }
+            else{
+            let timeData = new Date() - val
+            let timeD = timeData/1000 / 60 / 60 / 24
+            let timeH = (timeData/ 1000 / 60 / 60 % 24);
+           return  parseInt(timeD)+ '天'+ parseInt(timeH)+ '小时'
+           }
+        })
+    }
 }
 </script>
 <style lang="scss">

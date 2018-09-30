@@ -102,8 +102,6 @@
              </div>
             </el-col>
           </el-row>
-
-          
         </el-form>
         <div slot="footer" class="dialog-footer">
           <el-button type="primary"  v-if="editType=='add'" @click="add_data" >确 定</el-button>
@@ -425,13 +423,12 @@ export default {
 <style lang="scss" >
     .creatcity{ 
         display: inline-block;
-        margin-right: 10px;
         .el-button {
         margin-right:0px;
         padding: 7px 15px 7px;
         font-size:12px;
         }
-        .el-input__inner{
+        .el-input__inner,.el-form-item__content{
             line-height: 40px!important; 
             height: 40px !important; 
         }

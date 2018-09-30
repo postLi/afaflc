@@ -17,24 +17,32 @@
             <el-table style="width: 100%" stripe border height="77%" :data="tableDataAll" >
             <el-table-column  label="优惠券名称" prop="couponName">
             </el-table-column>
-            <el-table-column  label="派发数量" prop="couponNum">
+            <el-table-column  label="派发数量" prop="couponNum" width="80">
             </el-table-column>    
             <el-table-column  label="优惠券类型" prop="couponType">
             </el-table-column> 
-            <el-table-column  label="满减/折扣" prop="remissionDiscount">
+            <el-table-column  label="满减/折扣" prop="remissionDiscount" width="90">
             </el-table-column> 
-            <el-table-column  label="满减条件/最高抵扣" prop="conditionDeduction">
+            <el-table-column  label="满减条件/最高抵扣" prop="conditionDeduction" width="150">
             </el-table-column> 
-            <el-table-column  label="时效类型" prop="timeType">
+            <el-table-column  label="时效类型" prop="timeType" width="100">
             </el-table-column>       
-            <el-table-column  label="开始时间" prop="startTime">
+            <el-table-column  label="开始时间" prop="startTime" show-overflow-tooltip>
             </el-table-column>    
-            <el-table-column  label="过期时间" prop="endTime">
+            <el-table-column  label="过期时间" prop="endTime" show-overflow-tooltip>
             </el-table-column>        
-            <el-table-column  label="适用服务类型" prop="serivceCode">
+            <el-table-column  label="适用服务类型" prop="serivceCode" width="120">
             </el-table-column>  
             <el-table-column  label="适用车辆类型" prop="carType">
-            </el-table-column>                                                                                                        
+            </el-table-column>     
+            <el-table-column  label="所属区域" prop="areaName" show-overflow-tooltip>
+            </el-table-column>      
+            <el-table-column  label="能否与大户券叠加" prop="ifvouchersuperposition">
+            <template  slot-scope="scope">
+              {{ scope.row.ifvouchersuperposition == 1 ? '能' : '不能' }}
+            </template>
+            </el-table-column>                  
+
             </el-table> 
             </div>
             <div class="couponGive_fun"  v-if="editType=='Give'">
@@ -173,11 +181,14 @@ export default {
                return false
           }
            else{
+               
             data_get_couponActive3_Id(this.params[0].id).then(res=>{
             this.tableDataAll = res.data;
+                  console.log('111', res.data)
             })
             this.dialogFormVisible_add = true;
            }
+           
    },
    change:function(){
       this.dialogFormVisible_add = false;
@@ -217,7 +228,6 @@ export default {
        BatchDistribution(){
         let inputFile = this.$refs.inputer;
         var formdata = new FormData()
-        console.log('inputFile',typeof(inputFile.files[0]));
         formdata.append('id',this.params[0].id);
         formdata.append('multipartFile',inputFile.files[0]);
         this.dialogFormVisible_add = false;

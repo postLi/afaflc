@@ -620,7 +620,6 @@ export default {
 <style lang="scss" >
     .creatOrder{
         display: inline-block;
-        margin-right: 10px;
         .el-button {
         margin-right:0px;
         padding: 7px 15px 7px;

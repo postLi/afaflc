@@ -22,9 +22,7 @@
                 </li>
                 
               </ul>
-              <!-- <div class="getorglist">
-                <SelectTree></SelectTree>
-              </div> -->
+              
             </div>
             <el-row class="main_forthUl">
                 <ul>
@@ -449,7 +447,6 @@ export default {
       const volumeArr = [2.6, 5.9, 9.0, 26.4, 28.7, 70.7, 175.6, 182.2, 0, 0, 0, 0]
       this.initYearChart(myChart3, shipArr, weightArr, volumeArr)
     })
-
     // 为echarts对象加载数据
     // myChart.setOption(option)
     // myChart2.setOption(option2)

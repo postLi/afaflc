@@ -1,7 +1,7 @@
 <template>
   <div class="blackInfo commoncss">
     <el-button :type="btntype" :value="value" :plain="plain" :icon="icon" @click="openDialog()">{{btntext}}</el-button>
-    <el-dialog :title="btntext" :visible.sync="freezeDialogFlag" :before-close="change()" :modal="false">
+    <el-dialog :title="btntext" :visible.sync="freezeDialogFlag" :before-close="change()">
       <el-form :model="formFroze" ref="formFroze" :rules="formFrozeRules" :inline="true">
         <el-row>
             <el-col :span="12">
@@ -70,10 +70,9 @@
             </el-col>
           </el-row>
 
-              <el-row>       
                   <el-col :span="12">
-                      <el-form-item label="车主抽佣等级：" :label-width="formLabelWidth">
-                            <el-select v-model="formFroze.rewardGrade" placeholder="请选择" disabled>
+                      <el-form-item label="车主抽佣等级：" prop="commisionLevel" :label-width="formLabelWidth">
+                            <el-select v-model="formFroze.commisionLevel" placeholder="请选择" :disabled="editType=='view'">
                                 <el-option
                                     v-for="item in MaidLevelType"
                                     :key="item.code"
@@ -84,8 +83,8 @@
                         </el-form-item>
                   </el-col>
                   <el-col :span="12">
-                      <el-form-item label="车主奖励等级："  :label-width="formLabelWidth">
-                            <el-select v-model="formFroze.commisionLevel" placeholder="请选择" disabled>
+                      <el-form-item label="车主奖励等级：" prop="rewardgrade" :label-width="formLabelWidth">
+                            <el-select v-model="formFroze.rewardgrade" placeholder="请选择" :disabled="editType=='view'">
                                 <el-option
                                     v-for="item in carOwnerType"
                                     :key="item.code"
@@ -96,7 +95,6 @@
                             </el-select>
                         </el-form-item>
                   </el-col>
-              </el-row>
 
           <el-row>
               <el-col :span="12">
@@ -424,7 +422,6 @@ export default {
 </script>
 <style lang="scss">
 .blackInfo{
-  margin-left: 10px
 }
 </style>
 
