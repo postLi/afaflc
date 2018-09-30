@@ -34,7 +34,7 @@
                     </el-table-column>
                     <el-table-column
                         label="出发地"
-                        width="250">
+                        >
                         <template slot-scope="scope">
                             <span>{{scope.row.startProvinceCityArea}}</span>
                         </template>
@@ -42,7 +42,7 @@
                     <el-table-column
                         prop="endProvinceCityArea"
                         label="到达地"
-                        width="250">
+                        >
                     </el-table-column>
                     <el-table-column
                         prop="goodsName"
@@ -74,18 +74,18 @@
                         label="发布时间" 
                         width="180">
                     </el-table-column>
-                    <el-table-column
+                    <!-- <el-table-column
                         prop="address"
                         label="操作" 
                         >
                             <template slot-scope="scope">
-                                <!-- <el-button-group> -->
-                                    <el-button @click="handleEdit(scope.row)" type="primary" size="mini">修改</el-button>
-                                    <!-- <el-button @click="handleDelete(scope.row)" type="primary" size="mini">删除</el-button> -->
-                                    <el-button @click="handleStatus(scope.row)" :type="scope.row.isEnable == 0 ? 'primary' : 'info'" size="mini">{{scope.row.isEnable == 0 ? '启用' : '禁用'}}</el-button>
-                                <!-- </el-button-group> -->
+                                <el-button-group>
+                                    <el-button @click="handleEdit(scope.row)" type="primary" plain size="mini">修改</el-button>
+                                    <el-button @click="handleDelete(scope.row)" type="primary" size="mini">删除</el-button>
+                                    <el-button @click="handleStatus(scope.row)" plain :type="scope.row.isEnable == 0 ? 'primary' : 'info'" size="mini">{{scope.row.isEnable == 0 ? '启用' : '禁用'}}</el-button>
+                                </el-button-group>
                             </template>
-                    </el-table-column>
+                    </el-table-column> -->
                 </el-table>
             </div>
         </div>  
@@ -150,7 +150,6 @@ export default {
         },
         //搜索
         handleSearch(){
-
             this.firstblood()
         },
         //新增网点

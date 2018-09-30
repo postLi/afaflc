@@ -54,8 +54,6 @@
 </template>
 
 <script type="text/javascript">
-
-import '@/styles/dialog.scss'
 import { CommonNoticeList,updateNotice } from '@/api/company/announcement.js'
 import { parseTime } from '@/utils/index.js'
 import Pager from '@/components/Pagination/index'

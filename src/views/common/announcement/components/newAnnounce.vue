@@ -1,80 +1,76 @@
 <template>
-    <div>
-        <!-- 指派司机 -->
-        <div class="newAnnounce commoncss">
-            <el-dialog title='指派司机' :close-on-click-modal="false"   :visible="dialogFormVisible" @close="close">
-                <el-form :model="announce" :rules="rules" :label-position="labelPosition" ref="ruleForm" label-width="80px" class="demo-ruleForm">
-                    <el-form-item label="发布区域" prop="noticeLocation">
-                        <vregion :ui="true" :area="false" @values="regionChange" class="form-control">
-                            <el-input v-model="announce.noticeLocation" placeholder="请选择出发地" clearable></el-input>
-                        </vregion>
-                    </el-form-item>
-                    <el-form-item label="标题" prop="title">
-                        <el-input v-model="announce.title" maxlength="30" clearable >
-                        </el-input>
-                    </el-form-item>
-                    <el-form-item prop="titleLogo" label="标题图片" >
-                        <upload class="licensePicture" tip="（必须为jpg/png并且小于5M）" v-model="announce.titleLogo"  />
-                    </el-form-item>
-                    <el-form-item label="内容" class="editors" prop="noticeContent">
-                        <div>
-                            <editor
-                                class="editor"
-                                :value="announce.noticeContent"
-                                :setting="editorSetting"
-                                @show="editors"
-                                :url              = "Url"
-                                :max-size         = "MaxSize"
-                                :accept           = "Accept"
-                                :with-credentials = "withCredentials"
-                                @on-upload-fail         = "onEditorReady"
-                                @on-upload-success= "onEditorUploadComplete"></editor>
-                        </div>
-                    </el-form-item>
-                    <el-form-item label="链接" prop="noticeUrl">
-                        <el-input v-model="announce.noticeUrl"></el-input>
-                    </el-form-item>
-                    <el-form-item prop="release">
-                        <el-checkbox v-model="releaseDriver" >发布到车主端</el-checkbox>
-                        <el-checkbox v-model="releaseShipper" >发布到货主端</el-checkbox>
-                    </el-form-item>
-                     <el-form-item label="公告分组" prop="noticeGroupCode" v-if="releaseDriver">
-                        <el-select v-model="announce.noticeGroupCode" clearable placeholder="请选择">
-                            <el-option
-                            v-for="item in optionsGroupCode"
-                            :key="item.id"
-                            :label="item.name"
-                            :value="item.code">
-                            </el-option>
-                        </el-select>
-                    </el-form-item>
-                    <el-form-item label="有效期" prop="startTime">
-                       <el-date-picker
-                        v-model="announce.startTime"
-                        type="date"
-                        placeholder="选择日期"
-                        format="yyyy 年 MM 月 dd 日"
-                        :picker-options="pickerOptions"
-                        value-format="timestamp">
-                        </el-date-picker>
-                        <span> 至 </span>
-                        <el-date-picker
-                        v-model="announce.endTime"
-                        type="date"
-                        placeholder="选择日期"
-                        :picker-options="pickerOptions"
-                        format="yyyy 年 MM 月 dd 日"
-                        value-format="timestamp">
-                        </el-date-picker>
-                        <el-checkbox v-model="isTop" >置顶</el-checkbox>
-                    </el-form-item>
-                </el-form>
-                <div slot="footer" class="dialog-footer">
-                    <el-button type="primary" @click="submitForm('ruleForm')">{{operateType == 'publish' ? '立即发布' : '保存修改'}}</el-button>
-                    <el-button @click="close">重置</el-button>
-                </div> 
-            </el-dialog>
-        </div>
+    <div class="newAnnounce commoncss">
+        <el-dialog title='指派司机' :close-on-click-modal="false"   :visible="dialogFormVisible" @close="close">
+            <el-form :model="announce" :rules="rules" :label-position="labelPosition" ref="ruleForm" label-width="80px" class="demo-ruleForm">
+                <el-form-item label="发布区域" prop="noticeLocation">
+                    <vregion :ui="true" :area="false" @values="regionChange" class="form-control">
+                        <el-input v-model="announce.noticeLocation" placeholder="请选择出发地" clearable></el-input>
+                    </vregion>
+                </el-form-item>
+                <el-form-item label="标题" prop="title">
+                    <el-input v-model="announce.title" maxlength="30" clearable></el-input>
+                </el-form-item>
+                <el-form-item prop="titleLogo" label="标题图片" >
+                    <upload class="licensePicture" tip="（必须为jpg/png并且小于5M）" v-model="announce.titleLogo"  />
+                </el-form-item>
+                <el-form-item label="内容" class="editors" prop="noticeContent">
+                    <div>
+                        <editor
+                            class="editor"
+                            :value="announce.noticeContent"
+                            :setting="editorSetting"
+                            @show="editors"
+                            :url              = "Url"
+                            :max-size         = "MaxSize"
+                            :accept           = "Accept"
+                            :with-credentials = "withCredentials"
+                            @on-upload-fail         = "onEditorReady"
+                            @on-upload-success= "onEditorUploadComplete"></editor>
+                    </div>
+                </el-form-item>
+                <el-form-item label="链接" prop="noticeUrl">
+                    <el-input v-model="announce.noticeUrl"></el-input>
+                </el-form-item>
+                <el-form-item prop="release">
+                    <el-checkbox v-model="releaseDriver" >发布到车主端</el-checkbox>
+                    <el-checkbox v-model="releaseShipper" >发布到货主端</el-checkbox>
+                </el-form-item>
+                    <el-form-item label="公告分组" prop="noticeGroupCode" v-if="releaseDriver">
+                    <el-select v-model="announce.noticeGroupCode" clearable placeholder="请选择">
+                        <el-option
+                        v-for="item in optionsGroupCode"
+                        :key="item.id"
+                        :label="item.name"
+                        :value="item.code">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="有效期" prop="startTime">
+                    <el-date-picker
+                    v-model="announce.startTime"
+                    type="date"
+                    placeholder="选择日期"
+                    format="yyyy 年 MM 月 dd 日"
+                    :picker-options="pickerOptions"
+                    value-format="timestamp">
+                    </el-date-picker>
+                    <span> 至 </span>
+                    <el-date-picker
+                    v-model="announce.endTime"
+                    type="date"
+                    placeholder="选择日期"
+                    :picker-options="pickerOptions"
+                    format="yyyy 年 MM 月 dd 日"
+                    value-format="timestamp">
+                    </el-date-picker>
+                    <el-checkbox v-model="isTop" >置顶</el-checkbox>
+                </el-form-item>
+            </el-form>
+            <div slot="footer" class="dialog-footer">
+                <el-button type="primary" @click="submitForm('ruleForm')">{{operateType == 'publish' ? '立即发布' : '保存修改'}}</el-button>
+                <el-button @click="close">重置</el-button>
+            </div> 
+        </el-dialog>
     </div>
 </template>
 <script>
@@ -331,7 +327,6 @@ export default {
             .el-dialog__body{
                 position:relative;
                 .el-form-item{
-                    display: block;
                     margin-right: 30%;
                 }
                 .el-button{
@@ -355,7 +350,14 @@ export default {
                 padding:20px 10px 20px 50px;
                 border-bottom:0 none;
                 .el-form-item__content{
-                   
+                    .licensePicture{
+                        .el-upload__text{
+                            line-height:18px;
+                        }
+                        .upload__tip{
+                            line-height:16px;
+                        }
+                    }
                 }
             }
         }

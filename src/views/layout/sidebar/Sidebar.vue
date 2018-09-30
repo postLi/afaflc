@@ -67,7 +67,6 @@ export default {
   methods: {
     setLastPath(index) {
         console.log('setLastPath:', index)
-        
     },
     getCurrentPath(index, path) {
         if (this.lastindex) {
@@ -79,18 +78,13 @@ export default {
     },
     toggleSideBar() {
       this.$store.dispatch('ToggleSideBar');
-    //   let ifOpen = document.getElementsByClassName('app-wrapper');
-    //   console.log('ifOpen:',ifOpen)
-    //   for(var i = 0;i <ifOpen.length;i++){
-    //     console.log(i)
-    //       if(ifOpen[i].getAttribute("class")=='hideSidebar'){
-    //         　　console.log('1212323');
-    //     　}else{
-    //         　　console.log('78979789789');
-
-    //     }
-
-    //     }
+      let ifOpen = document.getElementsByClassName('app-wrapper');
+      let nologin = document.getElementsByClassName('nologin')[0];
+        if(ifOpen[0].className.match(/hideSidebar/)){
+            nologin.style.display = 'block';
+        }else{
+            nologin.style.display = 'none';
+        }
     },
     showSubnav () {
       this.$refs.sidebaritem.clearTimer()

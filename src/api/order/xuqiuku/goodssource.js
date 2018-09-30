@@ -1,10 +1,10 @@
 import fetch from '@/utils/fetch'
 
-const baseUrl = 'aflcorderservice'
+const baseUrl = 'aflc-order'
 //根据条件获取订单信息列表
 export function getGoodsSourceList(page,pagesize,data){
     return fetch({
-      url: '/'+baseUrl+'/order/fclOrder/v1/findOderCarrierList',
+      url: '/'+baseUrl+'/order/fclOrder/v1/findTotalOderCarrierList',
       method: 'post',
       data:{
         "currentPage": page,

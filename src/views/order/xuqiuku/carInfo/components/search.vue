@@ -1,5 +1,5 @@
 <template>
-  <el-form :inline="true" :size="btnsize" label-position="right" :rules="rules" :model="searchForm"  class="carrier_searchinfo clearfix">
+  <el-form :inline="true" :size="btnsize" label-position="right" :rules="rules" :model="searchForm"  class="classify_searchinfo clearfix">
       <el-form-item label="出发地：">
           <el-input
               placeholder=""
@@ -16,7 +16,7 @@
               clearable>
           </el-input>
       </el-form-item>
-      <el-form-item class="carrier_searchinfo--btn">
+      <el-form-item class="carrier_searchinfo--btn fr">
           <el-button type="primary" icon="el-icon-search" plain @click="onSubmit">搜索</el-button>
           <el-button type="info" icon="fontFamily aflc-icon-qingkong" @click="clearForm" plain>重置</el-button>
       </el-form-item>

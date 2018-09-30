@@ -68,7 +68,7 @@
                 </el-col>
             </el-row>
             <el-row>
-                <el-col :span="9"> 
+                <el-col :span="24"> 
                     <el-form-item label="上传营业执照照片 ：" prop="businessLicenceFile" label-width="210px">
                         <div class="upload">
                             <img :src='xinzengform.businessLicenceFile ? xinzengform.businessLicenceFile : defaultImg' v-showPicture :imgurl="xinzengform.businessLicenceFile" alt="" v-if="editType == 'view'">
@@ -78,7 +78,7 @@
                 </el-col>
             </el-row>
             <el-row>
-                <el-col :span="9">
+                <el-col :span="24">
                     <el-form-item label="上传公司或者档口照片 ："  label-width="210px" prop="companyFacadeFile">
                         <div class="upload">
                             <img :src='xinzengform.companyFacadeFile ? xinzengform.companyFacadeFile : defaultImg' v-showPicture :imgurl="xinzengform.companyFacadeFile" alt="" v-if="editType == 'view'">
@@ -88,7 +88,7 @@
                 </el-col>
             </el-row>
             <el-row>
-                <el-col :span="9">
+                <el-col :span="24">
                     <el-form-item label="上传发货人名片照片 ：" label-width="210px" prop="shipperCardFile" >
                         <div class="upload">
                             <img :src='xinzengform.shipperCardFile ? xinzengform.shipperCardFile : defaultImg' v-showPicture :imgurl="xinzengform.shipperCardFile" alt="" v-if="editType == 'view'">

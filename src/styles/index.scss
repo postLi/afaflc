@@ -3,6 +3,7 @@
 @import './mixin.scss';
 @import './commonstyle.scss';
 @import './tab.scss';
+// @import './dialog.scss';
 
 body {
   -moz-osx-font-smoothing: grayscale;
@@ -112,7 +113,6 @@ table{
 
  
 .el-table thead th, .el-table thead tr{
-  
   background-color: #eaf0ff;
 }
 .info_news .cell {

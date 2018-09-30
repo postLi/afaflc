@@ -1,6 +1,6 @@
 import fetch from '@/utils/fetch'
 
-const baseUrl = 'aflcusercenterservice'
+const baseUrl = 'aflc-uc'
 
 /**
  * 查询car信息
@@ -110,7 +110,7 @@ export function deleteCarInfo(id) {
 }
  */
 export function getCarList(data) {
-  return fetch.post('/aflcusercenterservice/usercenter/aflcCarInfo/v1/list', data).then(res => {
+  return fetch.post('/'+baseUrl+'/usercenter/aflcCarInfo/v1/totalList', data).then(res => {
     return res.data || { list: [], totalCount: 0 }
   })
 }
