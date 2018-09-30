@@ -58,7 +58,7 @@
                         <el-table-column label="车牌号" sortable>
                         <template slot-scope="scoped" >
                             <driver-newTemplate
-                            :templateItem="scoped.row"
+                            :paramsView="scoped.row"
                                 :btntext="scoped.row.driverMobile"
                                 type="primary" 
                                 btntype="text"
@@ -227,7 +227,7 @@
 
             //点击查询按纽，按条件查询列表
             getdata_search(event){
-              this. firstblood()
+              this.firstblood()
             },
             //获取车主状态列表
             getMoreInformation(){

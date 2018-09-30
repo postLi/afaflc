@@ -1,7 +1,6 @@
 <template>
      <div class="shoppingDialog commoncss">
       <el-button :type="btntype" :value="value" :plain="plain" :icon="icon" @click="openDialog()">{{btntext}}</el-button>
-      <div class="newshoppingDialog">
       <el-dialog  :visible="dialogFormVisible_add" :before-close="change" :title="btntitle">
         <el-form ref="formAll" :model="formAll" :rules="rulesForm" :inline="true">
             <el-row>
@@ -47,7 +46,6 @@
         </div>
       </el-dialog>
       </div>
-    </div>
 </template>
 <script>
 import {data_get_aflcTradeArea_create,data_get_aflcTradeArea_Id} from '@/api/users/district/shoppingDistrict.js'
@@ -259,8 +257,5 @@ export default {
     .el-button{
         padding: 7px 15px 7px;
         }
-    .newshoppingDialog{
-        display: inline-block;
-    }
 }
 </style>

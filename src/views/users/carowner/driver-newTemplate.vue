@@ -163,8 +163,8 @@
 
               <el-row>       
                   <el-col :span="12">
-                      <el-form-item label="车主抽佣等级：" prop="rewardGrade" :label-width="formLabelWidth">
-                            <el-select v-model="templateModel.rewardGrade" placeholder="请选择" :disabled="editType=='view'">
+                      <el-form-item label="车主抽佣等级：" prop="commisionLevel" :label-width="formLabelWidth">
+                            <el-select v-model="templateModel.commisionLevel" placeholder="请选择" :disabled="editType=='view'">
                                 <el-option
                                     v-for="item in MaidLevelType"
                                     :key="item.code"
@@ -175,8 +175,8 @@
                         </el-form-item>
                   </el-col>
                   <el-col :span="12">
-                      <el-form-item label="车主奖励等级：" prop="commisionLevel" :label-width="formLabelWidth">
-                            <el-select v-model="templateModel.commisionLevel" placeholder="请选择" :disabled="editType=='view'">
+                      <el-form-item label="车主奖励等级：" prop="rewardgrade" :label-width="formLabelWidth">
+                            <el-select v-model="templateModel.rewardgrade" placeholder="请选择" :disabled="editType=='view'">
                                 <el-option
                                     v-for="item in carOwnerType"
                                     :key="item.code"
@@ -277,7 +277,12 @@ import { getDictionary } from '@/api/common.js'
 export default {
     name:'template-create-view-change',
     props:{
-        templateItem: null,
+        templateItem: {
+            type:[Object,Array],
+        },
+        paramsView:{
+        type:Object,
+        },        
         value:{
             type: String,
             default:''
@@ -450,19 +455,19 @@ export default {
             }
         }
 
-    //   抽佣等级校验
+    //    车主奖励校验
         const rewardGradeValidator = (rule, val, cb) => {
              if(!val){
-            cb(new Error('抽佣等级不能为空'))
+            cb(new Error('车主奖励不能为空'))
             }
             else{
                 cb()
             }
         }      
-    //    车主奖励校验
+    //   抽佣等级校验    
         const commisionLevelValidator = (rule, val, cb) => {
             if(!val){
-            cb(new Error(' 车主奖励不能为空'))
+            cb(new Error('抽佣等级不能为空'))
             }
             else{
                 cb()
@@ -589,13 +594,11 @@ export default {
             if(!val){
                 this.selectFlag=false;
                 this.$refs.templateModel.resetFields();
-                this.templateModel.carSpec = null;
                 this.templateModel.belongCity = null;
                 this.templateModel.provinceCode=null,
                 this.templateModel.cityCode=null,
                 this.templateModel.areaCode=null,
                 this.$emit('getData')
-                this.templateModel.isVipCar = '0'
             }
             else{
             this.getMoreInformation()
@@ -660,6 +663,7 @@ export default {
             })
             //  获取车型列表
             data_Get_carType().then(res =>{
+                console.log('1',res)
                     this.optionsType=res.data
             }).catch(err =>{
                 console.log(err)
@@ -686,7 +690,16 @@ export default {
         },
 
         openDialog(){
+            if(this.editType == 'view'){
+                console.log('this.templateItem',this.paramsView)
+                 this.templateModel = this.paramsView
+                this.driverTemplateDialogFlag = true ;
+            }
+             else{
+                 console.log('fdfdf')
             if (this.editType === 'add') {
+                this.templateModel.carSpec = null;
+                this.templateModel.isVipCar = '0'
                 this.driverTemplateDialogFlag = true ;
             }else if(this.editType=== 'valetAuth'||this.editType==='edit'||this.editType==='view'){
             if(!this.templateItem && this.editType !== 'add'){
@@ -704,15 +717,11 @@ export default {
                 this.$emit('getData') 
             }
             else{
-                    this.templateModel = this.templateItem[0] ;
+                    this.templateModel = this.templateItem[0];
                     this.driverTemplateDialogFlag = true ;
                 }
             }
-            if(this.editType == 'view'){
-                console.log('this.templateItem',this.templateItem)
-                 this.templateModel = this.templateItem
-                this.driverTemplateDialogFlag = true ;
-        }
+            }
         },
 
         //弹框控制

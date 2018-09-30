@@ -16,7 +16,6 @@
                          @keyup.native = "handblur"
                          :disabled="editType=='view'"
                         ></el-autocomplete>
-
                     <!-- <el-input v-model="formAll.partnerCompany" :disabled="editType=='view'"></el-input> -->
                     </el-form-item>
                 </el-col>
@@ -243,7 +242,6 @@ export default {
                 cb()
             }        
         }
-
     //    选择区代公司名称校验
         const partnerNameValidator = (rule, val, cb) => {
             if(!val){
@@ -333,9 +331,9 @@ export default {
             selectFlag:null,
             }],
             aflcPartnerFileList:[{
-            saveAddress:null,    
-            fileName:null,    
-            selectFlag:null,
+            saveAddress:'',    
+            fileName:'',    
+            selectFlag:'',
             }]       
         },
           optionsStatus: [
@@ -381,9 +379,9 @@ export default {
                 selectFlag:null,
                 }]
                 this.formAll.aflcPartnerFileList=[{
-                saveAddress:null,
-                fileName:null,
-                selectFlag:null,
+                saveAddress:'',    
+                fileName:'',    
+                selectFlag:'',
                 }]   
                 this.areaStatus = null 
                 this.inputdisabled = false
@@ -531,9 +529,17 @@ export default {
              this.formAll.aflcPartnerAreaList = res.data.aflcPartnerAreaList
              this.formAll.aflcPartnerFileList = res.data.aflcPartnerFileList
              this.areaName = res.data.belongCity;
+             if(!this.formAll.aflcPartnerFileList.length){
+                this.formAll.aflcPartnerFileList=[{
+                saveAddress:'',    
+                fileName:'',    
+                selectFlag:'',
+                }]    
+             }
+
         })
-                    
      this.dialogFormVisible_add = true;
+     
     }
     else{
           if(!this.params.length){
@@ -571,6 +577,13 @@ export default {
              this.areaCode = res.data.areaCode
              if(res.data.companyId){
                 this.inputdisabled = true
+             }
+             if(!this.formAll.aflcPartnerFileList.length){
+                this.formAll.aflcPartnerFileList=[{
+                saveAddress:'',    
+                fileName:'',    
+                selectFlag:'',
+                }]    
              }
         })
          this.dialogFormVisible_add = true;
@@ -670,7 +683,19 @@ export default {
      if(!this.formAll.aflcPartnerAreaList[i].contractEndDate){
         this.$message.warning('合作区域截止日期都不能为空');
         return false
-      }            
+      }      
+     if(this.formAll.aflcPartnerAreaList[i].contractStartDate<this.formAll.contractStartDate){
+        this.$message.warning('合作区域开始日期必须大于合同开始日期');
+        return false
+     }
+     if(this.formAll.aflcPartnerAreaList[i].contractStartDate>this.formAll.contractEndDate){
+        this.$message.warning('合作区域开始日期必须小于合同结束日期');
+        return false
+     }
+     if(this.formAll.aflcPartnerAreaList[i].contractStartDate>this.formAll.aflcPartnerAreaList[i].contractEndDate){
+        this.$message.warning('合作区域结束日期必须大于合作区域开始日期');
+        return false
+     }          
    }
    },
 
@@ -769,82 +794,5 @@ export default {
 
 
 <style lang="scss">
-.shoppingDialog{
-     display: inline-block;
-    .BtnInfo{
-    font-weight: bold
-    }     
-     .el-dialog{
-         width: 1000px;
-     }     
-     .btns_box{
-    .el-button{
-        padding: 7px 15px 7px;
-        }
-    }
-    .newmanageDistrict{
-        display: inline-block;
-        .el-input{
-            width: 220px;
-        }
-        .manageDistrict_h2{
-            margin:10px 10px; 
-        }
-        .manageDistrict_table{
-            width: 80%;
-            border-top: 1px solid #d0d7e5;
-            border-left: 1px solid #d0d7e5;
-            margin-left:10%;
-            .Item_position{
-                position: relative;
-                .addItem{
-                    top: 7px;
-                    left:35%;
-                }                
-                .reduceItem{
-                    top: 7px;
-                    left:35%;
-                }
-            }
-            .manageDistrict_tr{
-             height: 40px;
-             line-height: 40px;
-             overflow: hidden;
-             border-bottom: 1px solid #d0d7e5;
-            }
-            .manageDistrict_th{
-            float: left;
-            display: inline-block;
-            background: #EAF0FF;
-            text-align: center;
-            border-right: 1px solid #d0d7e5;
-           }
-            .manageDistrict_td{
-            float: left;
-            display: inline-block;
-            text-align: center;
-            border-right: 1px solid #d0d7e5;   
-            box-sizing: border-box;
-            .el-input{
-                width:100%;
-            }
-           }
-           .viewWidth{width: 100%;display: inline-block;
-                    a{
-                        color: #409EFF
-                    }
-           }
-           .table_w1{width: 30%}
-           .table_w2{width: 30%}
-           .table_w3{width: 30%}
-           .table_w4{width: 10%;height: 40px;}
-           .table_w5{width: 90%}
-        }
-        .fileNameCss{
-            width: 100%;
-            height: 40px;
-            color: #3e9ff1;
-        }
-    }
-}
+
 </style>

@@ -64,7 +64,7 @@
                     btntype="text"           
                     :btntext="scope.row.carNumber"
                     editType="view"
-                    :templateItem="scope.row"
+                    :paramsView="scope.row"
                     btntitle="详情"
                     @getData="getDataList"
                     >

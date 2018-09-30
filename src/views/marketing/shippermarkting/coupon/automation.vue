@@ -478,6 +478,7 @@ export default {
 .Marketing{
   .el-cascader{
     margin-top:-10px;
+    width: 180px;
   }
 }
 </style>

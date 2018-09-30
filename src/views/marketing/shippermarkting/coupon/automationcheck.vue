@@ -225,7 +225,7 @@
                  </el-select>
                </el-form-item>  
           <el-form-item >       
-          <el-button type="primary"  plain   @click="getData_query" :size="btnsize">查询</el-button> 
+          <el-button type="primary" @click="getData_query" :size="btnsize">查询</el-button> 
           </el-form-item> 
                 </el-form>  
             </el-col>
@@ -700,6 +700,10 @@ export default {
         }
         }
         .automationcheckTabTwo{
+         .el-button{
+        margin-right:0px;
+        padding: 7px 15px;
+         }
          padding-top: 20px;
          .tableDataAllBox{
              padding-bottom: 50px;

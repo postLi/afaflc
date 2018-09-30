@@ -1,7 +1,6 @@
 <template>
      <div class="shoppingDialog commoncss">
       <el-button :type="btntype" :value="value" :plain="plain" :icon="icon" @click="openDialog()">{{btntext}}</el-button>
-      <div class="newmanageDistrict">
       <el-dialog  :visible="dialogFormVisible_add" :before-close="change" :title="btntitle" >
         <el-form ref="formAll" :model="formAll" :rules="rulesForm" :inline="true">
             <el-row>
@@ -165,7 +164,6 @@
           <el-button @click="close()">取 消</el-button>
         </div>
       </el-dialog>
-      </div>
     </div>
 </template>
 <script>
@@ -325,8 +323,8 @@ export default {
             contractEndDate:null,
             }],
             aflcPartnerFileList:[{
-            saveAddress:null,    
-            fileName:null,    
+                saveAddress:'',    
+                fileName:'',   
             }]       
         },
           optionsStatus: [
@@ -371,8 +369,8 @@ export default {
                 contractEndDate:null,
                 }]
                 this.formAll.aflcPartnerFileList=[{
-                saveAddress:null,    
-                fileName:null,    
+                saveAddress:'',    
+                fileName:'',    
                 }]   
                 this.areaStatus = null
                 this.areaName =null,
@@ -405,7 +403,6 @@ export default {
           this.companyNameObject.companyName = item.value
           this.inputdisabled = true
         data_get_aflcPartner_findAuthCompany(1, 10, this.companyNameObject).then(res=>{
-            console.log('res',res)
             this.formAll.partnerName = res.data[0].contactsName
             this.formAll.mobile = res.data[0].mobile
             this.areaCode = res.data[0].belongCity
@@ -565,6 +562,10 @@ export default {
         this.$message.warning('合作区域开始日期必须大于合同开始日期');
         return false
      }
+     if(this.formAll.aflcPartnerAreaList[i].contractStartDate>this.formAll.contractEndDate){
+        this.$message.warning('合作区域开始日期必须小于合同结束日期');
+        return false
+     }
      if(this.formAll.aflcPartnerAreaList[i].contractStartDate>this.formAll.aflcPartnerAreaList[i].contractEndDate){
         this.$message.warning('合作区域结束日期必须大于合作区域开始日期');
         return false
@@ -653,13 +654,12 @@ export default {
     .el-button{
         padding: 7px 15px 7px;
         }
-    .newmanageDistrict{
-        display: inline-block;
         .el-input{
             width: 220px;
         }
         .manageDistrict_h2{
             margin:10px 10px; 
+            text-align: left;
         }
         .manageDistrict_table{
             width: 80%;
@@ -700,12 +700,21 @@ export default {
                 width:100%;
             }
            }
+            .viewWidth{width: 100%;display: inline-block;
+                    a{
+                        color: #409EFF
+                    }
+           }
            .table_w1{width: 30%}
            .table_w2{width: 30%}
            .table_w3{width: 30%}
            .table_w4{width: 10%;height: 40px;}
            .table_w5{width: 90%}
         }
-    }
+            .fileNameCss{
+            width: 100%;
+            height: 40px;
+            color: #3e9ff1;
+        }
 }
 </style>

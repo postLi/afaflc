@@ -757,7 +757,6 @@ export default {
                        this.formAllData.aflcCouponList[index].areaCode = this.formAllData.aflcCouponList[index].areaCode[1]
                     }               
                     }
-                      list.areaCode  = String(list.areaCode)
                         aflcCouponList.push(
                             {
                                 province:list.province,

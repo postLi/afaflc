@@ -73,8 +73,8 @@
                     </el-date-picker>
             </el-form-item>            
                 <el-form-item class="fr">     
-                  <el-button type="primary"  @click="getdata_search" :size="btnsize">搜索</el-button>
-                  <el-button type="info"  plain @click="reset" :size="btnsize">清空</el-button>
+                  <el-button type="primary" plain @click="getdata_search" :size="btnsize" icon="el-icon-search">搜索</el-button>
+                  <el-button type="info"  plain @click="reset" :size="btnsize" icon="fontFamily aflc-icon-qingkong">清空</el-button>
                 </el-form-item>    
           </el-form>
             <div class="classify_info">
