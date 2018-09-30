@@ -201,7 +201,6 @@ export default {
         label: '车主'
       }],
       form: {
-
       },
       rules: {
 
