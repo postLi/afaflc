@@ -163,8 +163,8 @@ export default {
         },
         getSearchParam(obj) {
             console.log(obj)
-            this.searchInfo = objectMerge2(this.searchInfo, obj)
-            this.firstblood()
+            this.searchInfo = objectMerge2(this.searchInfo, obj);
+            this.firstblood();
         },
         pushOrderSerial(row){
             this.type = 'view';
@@ -174,9 +174,9 @@ export default {
             this.clearTableSelection();
         },
         handlePageChange(obj) {
-            this.page = obj.pageNum
-            this.pagesize = obj.pageSize
-            this.firstblood()
+            this.page = obj.pageNum;
+            this.pagesize = obj.pageSize;
+            this.firstblood();
         },
         changeList() {
             eventBus.$emit('changeList')

@@ -26,7 +26,7 @@
                 :show-overflow-tooltip="true"
                 >
                 <template slot-scope="scope">
-                    {{scope.row.driverName}} - {{scope.row.driverPhone}}
+                    <p class="ifGrap"><i v-if="scope.row.isGrab == 1"></i>{{scope.row.driverName}} - {{scope.row.driverPhone}}</p>
                 </template>
             </el-table-column>
             <el-table-column
@@ -173,10 +173,26 @@ export default {
 </script>
 
 <style rel="stylesheet/scss" lang="scss" scoped>
-    .ordertrack{
+    .robbingList{
         position: relative;
        
-
+        .el-table{
+            .cell{
+                .ifGrap{
+                    position: relative;
+                    padding-left: 20px;
+                    i{
+                        display: inline-block;
+                        position: absolute;
+                        top: 0;
+                        left: -8px;
+                        width: 24px;
+                        height: 24px;
+                        background: url('../../../../assets/icom/zdq.png') no-repeat center;
+                    }
+                }
+            }
+        }
     }
     
 </style>

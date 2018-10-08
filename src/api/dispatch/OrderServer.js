@@ -1,6 +1,6 @@
 import fetch from '@/utils/fetch'
 
-const baseurl = 'aflcorderservice'
+const baseurl = 'aflc-order'
 
 // 获取订单列表
 export function data_getList(page, pagesize, data) {

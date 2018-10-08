@@ -175,9 +175,9 @@ export default {
             margin-bottom: 20px;
             .el-input{
                 width: 200px;
-                .el-input__inner{
-                    text-align: center;
-                }
+                // .el-input__inner{
+                //     text-align: center;
+                // }
             }
         }
     }

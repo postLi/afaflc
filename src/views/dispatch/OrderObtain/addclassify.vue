@@ -2,7 +2,7 @@
     <div>
         <!-- 新增分类信息 -->
             <div class="orderObtain commoncss">
-                <el-dialog :title='formtitle' :close-on-click-modal="true"  :visible="dialogFormVisible" @close="close">
+                <el-dialog :title='formtitle' :close-on-click-modal="false"  :visible="dialogFormVisible" @close="close">
                     <div class="chooseArea">
                         <p><span>* </span>选择区域 ：</p>
                         <getCityList class="chooseItem" v-model="forms.areaCode" ref="area"></getCityList>
@@ -278,11 +278,11 @@ export default {
     .orderObtain{
         .el-dialog__wrapper{
             .el-dialog{
-                width: 700px;
+                width: 810px;
                 .el-dialog__body{
                     border-bottom:1px solid #ccc;   
                     margin-bottom: 0; 
-                    margin: 0 10px;
+                    margin: 0 25px;
                     p{
                         display: inline-block;
                         font-size: 12px;
@@ -298,7 +298,7 @@ export default {
                         .chooseItem{
                             display: inline-block;
                             .el-input{
-                                width: 150px;
+                                width: 200px;
                             }
                         }
                     }
@@ -308,10 +308,9 @@ export default {
                         margin-right: 70px;
                         .el-select{
                             .el-input{
-                                width: 150px;
+                                width: 200px;
                             }
                         }
-                        
                     }
                     .ifBang{
                         position: relative;
@@ -326,7 +325,7 @@ export default {
                             padding: 10px;
                             .publishStyle{
                                 display: inline-block;
-                                width: 45%;
+                                width: 47%;
                                 .el-input{
                                     width: 38%;
                                     .el-input__inner{
@@ -346,8 +345,8 @@ export default {
                             }
                         }
                         .addItem,.reduceItem{
-                            top: 35px;
-                            left: 94%;
+                            top: 30px;
+                            left: 96%;
                         }
                     }
                 }

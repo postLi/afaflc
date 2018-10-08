@@ -44,7 +44,7 @@
                         sortable
                         prop="pointName"
                         label="网点名称"
-                        width="180">
+                        width="250">
                             <template slot-scope="scope">
                             <span class="moreInfo" @click="handleInfo(scope.row)">{{scope.row.pointName}}</span>
                         </template>
@@ -75,9 +75,10 @@
                     <el-table-column
                         prop="pointFile"
                         label="网点图片"
-                        width="200">
+                        width="150">
                             <template  slot-scope="scope"> 
-                                <img v-showPicture :src="scope.row.pointFile ? scope.row.pointFile : defaultImg" />
+                                <!-- <img v-showPicture :src="scope.row.pointFile ? scope.row.pointFile : defaultImg" /> -->
+                                <el-button type="primary" plain  v-showPicture :imgurl="scope.row.pointFile ? scope.row.pointFile : defaultImg" :size="btnsize">点击预览</el-button>
                             </template>
                     </el-table-column>
                     <!-- <el-table-column 

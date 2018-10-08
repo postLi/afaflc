@@ -203,6 +203,12 @@ import editor from '@/components/tinymac/index'
                     this.dataTotal = res.data.totalCount;
                     this.tableData = res.data.list;
                     this.loading = false;
+                }).catch(err => {
+                    this.$message({
+                        type: 'info',
+                        message: '操作失败，原因：' + err.errorInfo ? err.errorInfo : err.text
+                    })
+                    this.loading = false;
                 })
             },
             shuaxin(){

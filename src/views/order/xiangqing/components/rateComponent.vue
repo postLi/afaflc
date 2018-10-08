@@ -21,7 +21,7 @@
                         <!-- <span v-if="evaluationType" class="evaluationType" v-for="el in evaluationType.split(',')"  :key="el">{{el}}</span> -->
             <h2>评价信息</h2>   
             <div class="essentialInformation" v-for="item in listInformation.aflcOrderEvaluations" :key="item.id">
-                <div v-if="item.type == 1">
+                <div v-if="item.type == 1" class="rateTabs">
                     <p>
                         <span>货主评价车主：</span>
                         <span>
@@ -39,10 +39,10 @@
                     </p>
                     <p>
                         <span>评价标签：</span>
-                        <span v-if="item.evaluationType" class="evaluationType" v-for="el in item.evaluationType.split(',')"  :key="el">{{el}}</span>
+                        <span v-if="item.evaluationType" class="evaluationType" v-for="el in item.evaluationTypeName"  :key="el">{{el}}</span>
                     </p>
                 </div>
-                <div v-else>
+                <div v-else class="rateTabs">
                     <p>
                         <span>车主评价货主：</span>
                         <span>
@@ -60,12 +60,9 @@
                     </p>
                     <p>
                         <span>评价标签：</span>
-                        <span v-if="item.evaluationType" class="evaluationType" v-for="el in item.evaluationType.split(',')"  :key="el">{{el}}</span>
+                        <span v-if="item.evaluationType" class="evaluationType" v-for="el in item.evaluationTypeName"  :key="el">{{el}}</span>
                     </p>
                 </div>
-            </div>
-             <div class="essentialInformation">
-               
             </div>
         </div>
         <div class="rateHuidan collapseInfo">
@@ -166,11 +163,13 @@ export default {
                     // margin-right: 10px;
                     cursor: pointer;
                 }
-                
                 p:nth-child(2){
                     width: 70%;
                 }
 
+            }
+            .rateInfo .essentialInformation .rateTabs p:last-child{
+                width: 40%;
             }
         }
         .evaluationType{

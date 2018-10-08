@@ -25,7 +25,7 @@ import { getRefreshToken } from '../utils/auth'
 export function login(username, password, orgid) {
     var grant_type = 'password'
     var scope = 'webApp'
-    console.log('login:', arguments, fetch.axios)
+    // console.log('login:', arguments, fetch.axios)
     const form = new FormData()
     form.append('username', username)
     form.append('password', password)
@@ -43,7 +43,7 @@ export function login(username, password, orgid) {
 
 export function getInfo(username, orgid) {
   return fetch.get('/aflccommonservice/system/user/v1/getCurrentUser').then(res=>{
-      console.log('getinfo:',res)
+    //   console.log('getinfo:',res)
       return res
   }).catch(err=>{
       console.log('getinfo err:',err)

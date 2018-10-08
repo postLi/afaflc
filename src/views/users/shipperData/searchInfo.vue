@@ -1,35 +1,34 @@
 <template>
     <el-form :inline="true" :model="searchInfo" ref="ruleForm" class="demo-ruleForm classify_searchinfo" >
-        <el-form-item  label="区域：" prop="pointName">
+        <el-form-item  label="货主姓名：" prop="pointName">
+             <el-input v-model="searchInfo.orderSerial" clearable>
+            </el-input>
+        </el-form-item>
+        <el-form-item label="注册账号：" prop="orderSerial">
+            <el-input v-model="searchInfo.orderSerial" clearable>
+            </el-input>
+        </el-form-item>
+        <el-form-item label="所属客服：" maxlength="18"  prop="shipperName">
+            <el-input v-model="searchInfo.driverName" clearable placeholder="账户/姓名/车牌号">
+            </el-input>
+        </el-form-item>
+        <el-form-item label="所属业务员：" maxlength="18"  prop="shipperName">
+            <el-input v-model="searchInfo.shipperName" clearable placeholder="账户/姓名">
+            </el-input>
+        </el-form-item>
+                <br>
+         <el-form-item label="所属片区：" prop="orderSerial">
             <vregion :ui="true" @values="regionChange" class="form-control">
                 <el-input v-model="searchInfo.belongCityName" placeholder="请选择出发地"></el-input>
             </vregion>
         </el-form-item>
-        <el-form-item label="订单号：" prop="orderSerial">
-            <el-input v-model="searchInfo.orderSerial" clearable>
-            </el-input>
-        </el-form-item>
-        <el-form-item label="货主：" maxlength="18"  prop="shipperName">
+        <el-form-item label="活跃状态：" maxlength="18"  prop="shipperName">
             <el-input v-model="searchInfo.shipperName" clearable placeholder="账户/姓名">
             </el-input>
         </el-form-item>
-        <el-form-item label="车主：" maxlength="18"  prop="shipperName">
-            <el-input v-model="searchInfo.driverName" clearable placeholder="账户/姓名/车牌号">
+        <el-form-item label="身份状态：" prop="mobile">
+           <el-input v-model="searchInfo.driverName" clearable placeholder="账户/姓名/车牌号">
             </el-input>
-        </el-form-item>
-        <el-form-item label="下单时间：" prop="mobile">
-            <el-date-picker
-                v-model="chooseTime"
-                type="daterange"
-                :picker-options="pickerOptions2"
-                range-separator="-"
-                unlink-panels
-                start-placeholder="开始日期"
-                end-placeholder="结束日期"
-                align="right"
-                :default-time="['00:00:00', '23:59:59']"
-                value-format="timestamp">
-            </el-date-picker>
         </el-form-item>
         <el-form-item class="btnChoose fr"  style="margin-left:0;">
             <el-button type="primary" icon="el-icon-search" plain :size="btnsize" @click="handleSearch('search')">搜索</el-button>
@@ -101,7 +100,6 @@ import vregion from '@/components/vregion/Region'
                         break;
                 }
                 this.$emit('change', searchObj)
-
             },
         }
     }

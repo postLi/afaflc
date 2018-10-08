@@ -23,6 +23,7 @@
                 <el-table
                 :data="tableData"
                 ref="multipleTable"
+                :default-sort = "{prop: 'startProvinceCityArea', order: 'ascending'}"
                 stripe
                 border
                 height="100%"
@@ -33,6 +34,8 @@
                         width="80">
                     </el-table-column>
                     <el-table-column
+                        sortable
+                        prop = "startProvinceCityArea"
                         label="出发地"
                         >
                         <template slot-scope="scope">
@@ -40,36 +43,43 @@
                         </template>
                     </el-table-column>
                     <el-table-column
+                        sortable
                         prop="endProvinceCityArea"
                         label="到达地"
                         >
                     </el-table-column>
                     <el-table-column
+                        sortable
                         prop="goodsName"
                         label="商品名称"
                         width="200">
                     </el-table-column>
                     <el-table-column
+                        sortable
                         prop="goodsNum"
                         label="货品总数量（件）"
                         width="150">
                     </el-table-column>
                     <el-table-column
+                        sortable
                         prop="goodsWeight"
                         label="预估总重量（公斤）" 
                         width="150">
                     </el-table-column>
                     <el-table-column
+                        sortable
                         prop="goodsVolume"
                         label="预估总体积（方）"
                         width="150">
                     </el-table-column>
                     <el-table-column
+                        sortable
                         prop="consignor"
                         label="发货人" 
                         width="180">
                     </el-table-column>
                     <el-table-column
+                        sortable
                         prop="time"
                         label="发布时间" 
                         width="180">

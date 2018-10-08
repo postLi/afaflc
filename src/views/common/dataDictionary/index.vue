@@ -344,6 +344,12 @@ import DicDialog from './component/addDictionary'
                         this.dataTotal= 0;
                     }
                     this.loading = false;
+                }).catch(err => {
+                    this.$message({
+                        type: 'info',
+                        message: '操作失败，原因：' + err.errorInfo ? err.errorInfo : err.text
+                    })
+                    this.loading = false;
                 })
             },
             //模糊查询 分类名称或者code

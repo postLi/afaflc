@@ -15,7 +15,7 @@
           @selection-change="getSelection"
           height="100%"
           tooltip-effect="dark"
-          :default-sort = "{prop: 'id', order: 'ascending'}"
+          :default-sort = "{prop: 'strartAddress', order: 'ascending'}"
           style="width: 100%">
           <el-table-column
             label="序号"
@@ -25,6 +25,8 @@
             </template>
           </el-table-column>
           <el-table-column
+            prop="strartAddress"
+            sortable
             label="出发地 -> 到达地">
             <template slot-scope="scope">
               <span class="vipline" v-if="scope.row.isCommonRoute === '1'"></span>
@@ -32,17 +34,20 @@
             </template>
           </el-table-column>
           <el-table-column
+            sortable
             prop="carNum"
             width="200"
             label="车牌号">
           </el-table-column>
           <el-table-column
+            sortable
             prop="carTypeName"
             width="150"
             label="车型">
           </el-table-column>
           
           <el-table-column
+            sortable
             prop="carSourceTypeName"
             width="120"
             label="150">
@@ -56,12 +61,15 @@
             </template>
           </el-table-column> -->
           <el-table-column
+            sortable
             prop="createrName"
             width="180"
             label="创建人"
             >
           </el-table-column>
           <el-table-column
+            sortable
+            prop="createTime"
             width="200"
             label="创建时间">
             <template slot-scope="scope">

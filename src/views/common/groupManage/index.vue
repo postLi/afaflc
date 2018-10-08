@@ -94,9 +94,9 @@
                 <el-form-item label="机构代码" :label-width="formLabelWidth">
                   <el-input v-model="form.networkCode" auto-complete="off" disabled></el-input>
                 </el-form-item>
-                <el-form-item label="代收款限额" :label-width="formLabelWidth">
+                <!-- <el-form-item label="代收款限额" :label-width="formLabelWidth">
                   <el-input v-model="form.collectionFee" auto-complete="off" disabled></el-input>
-                </el-form-item>
+                </el-form-item> -->
                 <el-form-item label="负责人" :label-width="formLabelWidth">
                   <el-input v-model="form.responsibleName" auto-complete="off" disabled></el-input>
                 </el-form-item>
@@ -106,13 +106,13 @@
                 <el-form-item label="所在城市" :label-width="formLabelWidth">
                   <el-input v-model="form.city" auto-complete="off" disabled></el-input>
                 </el-form-item>
-                <el-form-item label="锁机额度" :label-width="formLabelWidth">
+                <!-- <el-form-item label="锁机额度" :label-width="formLabelWidth">
                   <el-input v-model="form.lockMachineQuota" auto-complete="off" disabled></el-input>
                 </el-form-item>
 
                 <el-form-item label="预警额度" :label-width="formLabelWidth">
                   <el-input v-model="form.warningQuota" auto-complete="off" disabled></el-input>
-                </el-form-item>
+                </el-form-item> -->
 
 
               </el-form>

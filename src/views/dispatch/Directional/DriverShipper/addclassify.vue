@@ -18,7 +18,7 @@
                         <div class="chooseShipper chooseCommon">
                             <p><span>* </span>选择货主账号 ：</p>
                             <div class="chooseItem">
-                                <el-input v-model="filterOptionsShipper.search" placeholder="请输入内容" ref="filterOptionsShipper"></el-input>
+                                <el-input v-model="filterOptionsShipper.search"  size="mini" placeholder="请输入内容" ref="filterOptionsShipper"></el-input>
                                 <el-checkbox-group v-model="checkListShpper" >
                                     <el-checkbox v-for="obj in optionsShipper" :label="obj" :key="obj.shipperId" >{{obj.label}}</el-checkbox>
                                 </el-checkbox-group>
@@ -39,7 +39,7 @@
                         <div class="chooseShipper chooseCommon">
                             <p><span>* </span>选择车主账号 ：</p>
                             <div class="chooseItem">
-                                <el-input v-model="filterOptionsCar.search" placeholder="请输入内容" ref="filterOptionsCar"></el-input>
+                                <el-input v-model="filterOptionsCar.search"  size="mini" placeholder="请输入内容" ref="filterOptionsCar"></el-input>
                                 <el-checkbox-group v-model="checkListCar">
                                     <el-checkbox v-for="obj in optionsCar" :label="obj" :key="obj.driverId" >{{obj.label}}</el-checkbox>
                                 </el-checkbox-group>
@@ -321,17 +321,17 @@ export default {
            flex:1;
            .el-date-editor{
                width: 200px;
-               .el-input__inner{
-                   padding-left: 25px;
-                   text-indent:20px;
-               }
-               .el-input__prefix{
-                   left: 0px;
-                   top:1px;
-               }
-               .el-input__suffix{
-                   top: 1px;
-               }
+            //    .el-input__inner{
+            //        padding-left: 25px;
+            //        text-indent:20px;
+            //    }
+            //    .el-input__prefix{
+            //        left: 0px;
+            //        top:1px;
+            //    }
+            //    .el-input__suffix{
+            //        top: 1px;
+            //    }
            }
             .chooseCommon{
                 margin-top: 20px;

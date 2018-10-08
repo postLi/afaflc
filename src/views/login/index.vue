@@ -141,8 +141,8 @@ export default {
         console.log(valid)
         if (valid) {
           this.loading = true
-          const data = Object.assign({}, this.loginForm)
-          data.username = data.username + '|' + 'aflc-7'
+          const data = Object.assign({}, this.loginForm);
+          data.username = data.username + '|' + 'aflc-7';
           this.$store.dispatch('Login', data).then(() => {
             // if (!this.loginForm.accNum) {
             //   this.errInfo = true
@@ -166,7 +166,7 @@ export default {
               message: '您的账号或者密码有误~',
               type: 'warning'
             })
-            this.loading = false
+            this.loading = false;
           })
         } else {
           this.loginError = true

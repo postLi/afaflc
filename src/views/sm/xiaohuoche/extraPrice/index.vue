@@ -1,5 +1,5 @@
 <template>
-    <div class="serviceOrder identicalStyle clearfix">
+    <div class="serviceOrder identicalStyle clearfix" v-loading="loading">
             <el-form :inline="true" :model="searchInfo" ref="ruleForm" class="demo-ruleForm classify_searchinfo">
                     <el-form-item label="关键字查询：" prop="pointName">
                         <el-input
@@ -181,6 +181,7 @@ import { DicServiceType } from '@/api/common.js'
 export default{
     data() {
         return {
+            loading:true,
             dialogAddExtra:false,
             isModify:false,
             reviseForm:{},
@@ -364,10 +365,18 @@ export default{
             },
             // 刷新页面
             firstblood() {
-              data_GetInformation(this.page, this.pagesize, this.searchInfo).then(res => {
-                    this.dataTotal = res.data.totalCount
-                    this.tableData = res.data.list
+                this.loading = true;
+                data_GetInformation(this.page, this.pagesize, this.searchInfo).then(res => {
+                    this.dataTotal = res.data.totalCount;
+                    this.tableData = res.data.list;
+                    this.loading = false;
                     // console.log(this.tableData)
+                }).catch(err => {
+                    this.$message({
+                        type: 'info',
+                        message: '操作失败，原因：' + err.errorInfo ? err.errorInfo : err.text
+                    })
+                    this.loading = false;
                 })
             },
             // 保存信息
