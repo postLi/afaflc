@@ -38,6 +38,10 @@
                </el-form-item>     
             </el-form>
           	<div class="classify_info">
+          <div class="btns_box">
+            <el-button type="primary" plain icon="el-icon-tickets" :size="btnsize">查看</el-button>
+            <el-button type="primary" plain icon="el-icon-edit" :size="btnsize">编辑</el-button>
+          </div>
             <div class="info_news">    
             <el-table style="width: 100%" stripe border height="100%" ref="multipleTable" highlight-current-row  tooltip-effect="dark" :data="tableDataAll" @selection-change="getSelection" @row-click="clickDetails">
               <el-table-column
