@@ -51,8 +51,9 @@
                     <el-form-item label="签约时间 ：" :label-width="formLabelWidth" prop="signingDate">
                     <el-date-picker
                     v-model="formAll.signingDate"
-                    type="date"
+                    type="datetime"
                     value-format="timestamp"
+                    default-time="00:00:00"
                     placeholder="请选择日期">
                     </el-date-picker>
                     </el-form-item>
@@ -71,7 +72,8 @@
                     <el-date-picker
                     :disabled="editType=='view'"
                     v-model="formAll.contractStartDate"
-                    type="date"
+                    type="datetime"
+                    default-time="00:00:00"
                     value-format="timestamp"
                     placeholder="请选择日期">
                     </el-date-picker>
@@ -82,7 +84,8 @@
                     <el-date-picker
                     :disabled="editType=='view'"
                     v-model="formAll.contractEndDate"
-                    type="date"
+                    type="datetime"
+                    default-time="23:59:59"
                     value-format="timestamp"
                     placeholder="请选择日期">
                     </el-date-picker>                        
@@ -121,7 +124,7 @@
                     <el-date-picker
                     :disabled="editType=='view'"
                     v-model="formAll.aflcPartnerAreaList[keys].contractStartDate"
-                    type="date"
+                    type="datetime"
                     value-format="timestamp"
                     placeholder="请选择日期">
                     </el-date-picker>  
@@ -130,7 +133,7 @@
                  <el-date-picker
                     :disabled="editType=='view'"
                     v-model="formAll.aflcPartnerAreaList[keys].contractEndDate"
-                    type="date"
+                    type="datetime"
                     value-format="timestamp"
                     placeholder="请选择日期">
                     </el-date-picker>  

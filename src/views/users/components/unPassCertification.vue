@@ -30,6 +30,7 @@
                     :templateItem="selectionData"
                     btntitle="代客认证"
                     @getData="getDataList"
+                    v-has:DRIVER_MANAGE_VALET_VALIDATED
                     >
                     </driver-newTemplate>
                 </div>

@@ -39,8 +39,28 @@
             </el-form>
           	<div class="classify_info">
           <div class="btns_box">
-            <el-button type="primary" plain icon="el-icon-tickets" :size="btnsize">查看</el-button>
-            <el-button type="primary" plain icon="el-icon-edit" :size="btnsize">编辑</el-button>
+                   <cashAuditingDetail
+                    btntext="查看"
+                    :plain="true"
+                    btntype="primary"
+                    editType="edit"
+                    btntitle="查看"
+                    icon="el-icon-tickets"
+                    @getData="getDataList"
+                    :params="selectRowData"
+                    > 
+                    </cashAuditingDetail>
+                   <cashAuditingEdit
+                    btntext="编辑"
+                    :plain="true"
+                    btntype="primary"
+                    editType="edit"
+                    btntitle="编辑"
+                    icon="el-icon-edit"
+                    @getData="getDataList"
+                    :params="selectRowData"
+                    > 
+                    </cashAuditingEdit>
           </div>
             <div class="info_news">    
             <el-table style="width: 100%" stripe border height="100%" ref="multipleTable" highlight-current-row  tooltip-effect="dark" :data="tableDataAll" @selection-change="getSelection" @row-click="clickDetails">
@@ -79,15 +99,10 @@
             </el-table-column>    
             <el-table-column  label="处理时间" prop="updateTime">
             </el-table-column>                                                
-            <!-- <el-table-column  label="操作" prop="">
-            <template  slot-scope="scope">
-              {{ scope.row.usingStatus == 1 ? '启用' : '停用' }}
-            </template>
-            </el-table-column>           -->
             </el-table> 
         	</div> 
          <!-- 页码 -->
-    <div class="info_tab_footer">共计:{{ dataTotal }} <div class="show_pager"> <Pager :total="dataTotal" @change="handlePageChange"  :sizes="sizes"/></div> </div>  
+       <div class="info_tab_footer">共计:{{ dataTotal }} <div class="show_pager"> <Pager :total="dataTotal" @change="handlePageChange"  :sizes="sizes"/></div> </div>  
           </div>
       </div>
 </template>
@@ -97,6 +112,8 @@ import {data_aflcExtractCashList} from '@/api/finance/transactionCash.js'
 import { eventBus } from '@/eventBus'
 import Pager from '@/components/Pagination/index'
 import {parseTime} from '@/utils/'
+import cashAuditingEdit from "./cashAuditingEdit.vue";
+import cashAuditingDetail from './cashAuditingDetail.vue'
 export default {
   data(){
     return{
@@ -104,6 +121,7 @@ export default {
       btnsize:'mini',
       formAllData:{},
       tableDataAll:[],
+      selectRowData:{},
       dataTotal:null,    
       pagesize:20,//每页显示数
       page:1,//当前页      
@@ -111,14 +129,25 @@ export default {
      }
   },
     components:{
-    Pager
+    Pager,
+    cashAuditingDetail,
+    cashAuditingEdit
     },
     methods:{
+        handlePageChange(obj) {
+            this.page = obj.pageNum
+            this.pagesize = obj.pageSize
+            this.firstblood()
+        },     
       // 列表刷新页面  
     firstblood(){
      data_aflcExtractCashList(this.page,this.pagesize,this.formAllData).then(res => {
                     this.dataTotal = res.data.totalCount
                     this.tableDataAll = res.data.list;
+                    this.tableDataAll.forEach(item => {
+                        item.updateTime = parseTime(item.updateTime,"{y}-{m}-{d}");
+                        item.extractTime = parseTime(item.extractTime,"{y}-{m}-{d}");
+                    })
        })
        },   
      // 判断选中与否
@@ -129,7 +158,12 @@ export default {
     //点击选中当前行
     clickDetails(row, event, column){
       this.$refs.multipleTable.toggleRowSelection(row);
-    },       
+    },      
+    getDataList(){
+            this.firstblood()
+            this.$refs.multipleTable.clearSelection();
+            }           
+    
    },
   mounted(){
     this.firstblood()

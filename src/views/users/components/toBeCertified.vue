@@ -30,6 +30,7 @@
                     :params="selectionData"
                     editType="edit"
                     btntitle="认证审核"
+                    v-has:DRIVER_MANAGE_VALIDATED_AUTDIT
                     @getData="getDataList">
                     </driverCertifyTemplate>
                 </div>

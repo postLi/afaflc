@@ -52,8 +52,9 @@
                     <el-form-item label="签约时间 ：" :label-width="formLabelWidth" prop="signingDate">
                     <el-date-picker
                     v-model="formAll.signingDate"
-                    type="date"
+                    type="datetime"
                     value-format="timestamp"
+
                     placeholder="请选择日期">
                     </el-date-picker>
                     </el-form-item>
@@ -72,8 +73,9 @@
                     <el-form-item label="合同开始日期 ：" :label-width="formLabelWidth" prop="contractStartDate">
                     <el-date-picker
                     v-model="formAll.contractStartDate"
-                    type="date"
+                    type="datetime"
                     value-format="timestamp"
+                    default-time="00:00:00"
                     placeholder="请选择日期">
                     </el-date-picker>
                     </el-form-item>
@@ -82,8 +84,9 @@
                     <el-form-item label="合同结束日期 ：" :label-width="formLabelWidth" prop="contractEndDate">
                     <el-date-picker
                     v-model="formAll.contractEndDate"
-                    type="date"
+                    type="datetime"
                     value-format="timestamp"
+                    default-time="23:59:59"
                     placeholder="请选择日期">
                     </el-date-picker>                        
                     </el-form-item>
@@ -116,16 +119,18 @@
                      <div class="manageDistrict_td table_w2">
                     <el-date-picker
                     v-model="formAll.aflcPartnerAreaList[keys].contractStartDate"
-                    type="date"
+                    type="datetime"
                     value-format="timestamp"
+                    default-time="00:00:00"
                     placeholder="请选择日期">
                     </el-date-picker>  
                      </div>
                      <div class="manageDistrict_td table_w3">
                  <el-date-picker
                     v-model="formAll.aflcPartnerAreaList[keys].contractEndDate"
-                    type="date"
+                    type="datetime"
                     value-format="timestamp"
+                    default-time="23:59:59"
                     placeholder="请选择日期">
                     </el-date-picker>  
                      </div>
@@ -526,7 +531,7 @@ export default {
     // 区域附件新增
     addItemFile(){
            this.formAll.aflcPartnerFileList.push({
-            fileName:null,       
+            fileName:null,
            }) 
         },
 //    区域附件删除

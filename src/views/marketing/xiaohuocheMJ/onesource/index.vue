@@ -74,7 +74,7 @@
                  </span>
                  <span v-else>
             <el-form-item label="省市：" :label-width="formLabelWidth" prop="areaCode">
-                <GetCityList v-model="vestAll.areaCode" ref="area1"></GetCityList>
+                <GetCityList v-model="vestAll.areaCode" ref="area1" @returnStr="getStr"></GetCityList>
             </el-form-item>
                  </span>
             </el-col>
@@ -180,7 +180,7 @@
                  <span v-else>
                     <el-form-item label="省市：" :label-width="formLabelWidth" prop="areaCode">
                  <el-input v-model="selectRowData3.areaName"  @focus="changeSelect" v-if="openFlag !==0 && !selectFlag"></el-input>
-                <GetCityList ref="area2" v-model="selectRowData3.areaCode"  @focus="changeSelect" v-else></GetCityList>
+                <GetCityList ref="area2" v-model="selectRowData3.areaCode"  @focus="changeSelect" v-else @returnStr="getStr1"></GetCityList>
                     </el-form-item>
                  </span>
             </el-col>
@@ -481,6 +481,17 @@ export default {
 
     },
     methods:{
+            getStr(val,name){
+                console.log('this.cityarr',val,name)
+                this.vestAll.areaCode = val.split(',')[1];
+                this.vestAll.areaName = name.split(',')[1];
+            },
+            getStr1(val,name){
+                console.log('this.cityarr',val,name)
+                this.selectRowData3.areaCode = val.split(',')[1];
+                this.selectRowData3.areaName = name.split(',')[1];
+            },
+
             // 省市状态表
             changeSelect(){
             if(this.editType=='0'){
@@ -745,7 +756,6 @@ export default {
         //  详情表选择行   
          clickDetails2(i){
                  this.selectRowData2 = i;
-                 console.log('ddd11',i)
         }, 
 
         //  大表删除行
@@ -828,64 +838,9 @@ export default {
                 })   
             },            
         //完善数据
-        completeData(){
-            //获取城市name
-                if(!this.$refs.area1){
-                    return
-                } 
-                else if(this.$refs.area1.selectedOptions.length > 1){
-                    let province;
-                    this.$refs.area1.areaData.forEach((item) =>{
-                        if(item.code == this.$refs.area1.selectedOptions[0]){
-                            province = item
-                        }
-                    })
-                    province.children.forEach( item => {
-                        if(item.code == this.$refs.area1.selectedOptions[1]){
-                            this.vestAll.areaCode = item.code;
-                            this.vestAll.areaName = item.name;
-                            console.log('item.name',item.name)
-                        }
-                    })
-                }else{
-                    this.$refs.area1.areaData.forEach((item) =>{
-                        if(item.code == this.$refs.area1.selectedOptions[0]){
-                            this.vestAll.areaCode = item.code;
-                            this.vestAll.areaName = item.name;
-                            console.log('item.name',item.name)
-                        }
-                    })
-                }
+          completeData(){
             },
-
           completeData1(){
-            //获取城市name
-                if(!this.$refs.area2){
-                    return
-                } 
-                else if(this.$refs.area2.selectedOptions.length > 1){
-                    let province;
-                    this.$refs.area2.areaData.forEach((item) =>{
-                        if(item.code == this.$refs.area2.selectedOptions[0]){
-                            province = item
-                        }
-                    })
-                    province.children.forEach( item => {
-                        if(item.code == this.$refs.area2.selectedOptions[1]){
-                            this.selectRowData3.areaCode = item.code;
-                            this.selectRowData3.areaName = item.name;
-                            console.log('item.name',item.name)
-                        }
-                    })
-                }else{
-                    this.$refs.area2.areaData.forEach((item) =>{
-                        if(item.code == this.$refs.area2.selectedOptions[0]){
-                            this.selectRowData3.areaCode = item.code;
-                            this.selectRowData3.areaName = item.name;
-                            console.log('item.name',item.name)
-                        }
-                    })
-                }
             },
         // 启用禁用
             handleUseStates(){

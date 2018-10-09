@@ -26,6 +26,7 @@
                     icon="el-icon-circle-plus"
                     editType="add"
                     btntitle="创建"
+                    v-has:BUSINESS_AREA_MANAGE_AREA_ADD
                     >
                     </manageDistrictCread>
                    <manageDistrictDialog
@@ -37,9 +38,10 @@
                     icon="el-icon-edit"
                     @getData="getDataList"
                     :params="selectRowData"
+                    v-has:BUSINESS_AREA_MANAGE_AREA_UPDATE
                     > 
                     </manageDistrictDialog>
-                <el-button type="danger" plain :size="btnsize" @click="delete_data" icon="el-icon-delete">删除</el-button>
+                <el-button type="danger" plain :size="btnsize" @click="delete_data" icon="el-icon-delete" v-has:BUSINESS_AREA_MANAGE_AREA_DELETE>删除</el-button>
 			</div>
             <div class="info_news">
             <el-table style="width: 100%" stripe border height="100%"  :data="tableDataAll"  ref="multipleTable"  @selection-change="getSelection" @row-click="clickDetails" highlight-current-row>

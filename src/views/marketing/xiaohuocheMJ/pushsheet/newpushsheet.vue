@@ -9,10 +9,10 @@
             <el-form-item label="省市：" :label-width="formLabelWidth" prop="areaCode" > 
                 <el-input v-model="vestList.areaName"  @focus="changeSelect" v-if="editType !=='add' && !selectFlag" class="selectInput"></el-input>
                  <span v-else-if="editType=='add'">
-                <GetCityList ref="area" v-model="vestList.areaCode"  @focus="changeSelect"></GetCityList>
+                <GetCityList ref="area" v-model="vestList.areaCode"  @focus="changeSelect" @returnStr="getStr"></GetCityList>
                  </span>
                  <span v-else>
-                <GetCityList ref="area" v-model="vestList.areaCode"  @focus="changeSelect" v-if="editType !=='add' && selectFlag"></GetCityList>
+                <GetCityList ref="area" v-model="vestList.areaCode"  @focus="changeSelect" v-if="editType !=='add' && selectFlag" @returnStr="getStr"></GetCityList>
                  </span>
             </el-form-item>
             </el-col>
@@ -451,6 +451,11 @@ components:{
     GetCityList
 },
 methods:{
+            getStr(val,name){
+                console.log('this.cityarr',val,name)
+                this.vestList.areaCode = val.split(',')[1];
+                this.vestList.areaName = name.split(',')[1];
+            },
         // 省市状态表
             changeSelect(){
             if(this.editType==='add'){
@@ -478,7 +483,6 @@ methods:{
           }
           else{
                 data_get_pushsheet_Id(this.params[0].id).then(res=>{
-                    console.log('fdfd',res);
                         let selectRowData = res.data.push;
                         let setting =res.data.settings
                         let sy=[]
@@ -723,36 +727,9 @@ methods:{
                                 return false
                                 break;
                             }
-                            
                          }  
                          }
                     }
-                }
-
-            //获取城市name
-                if(!this.$refs.area){
-                    return
-                }  
-                else if(this.$refs.area.selectedOptions.length > 1){
-                    let province;
-                    this.$refs.area.areaData.forEach((item) =>{
-                        if(item.code == this.$refs.area.selectedOptions[0]){
-                            province = item
-                        }
-                    })
-                    province.children.forEach( item => {
-                        if(item.code == this.$refs.area.selectedOptions[1]){
-                            this.vestList.areaCode = item.code;
-                            this.vestList.areaName = item.name;
-                        }
-                    })
-                }else{
-                    this.$refs.area.areaData.forEach((item) =>{
-                        if(item.code == this.$refs.area.selectedOptions[0]){
-                            this.vestList.areaCode = item.code;
-                            this.vestList.areaName = item.name;
-                        }
-                    })
                 }
             },
             completeData2(){

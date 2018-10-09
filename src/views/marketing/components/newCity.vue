@@ -41,7 +41,7 @@
                    <el-cascader
                     size="large"
                     :options="options"
-                    v-model="formAll.areaName"
+                    v-model="formAll.areaNameStatus"
                     @change="handleChange"
                      >
                     </el-cascader>
