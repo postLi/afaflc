@@ -41,7 +41,7 @@
                       {{ node.label }}
                       </span>
                      <span v-else>
-                         {{data.status}}{{data.type}}
+                         <!-- {{data.status}}{{data.type}} -->
                       <img src="../../../assets/icom/btn.png" alt="">
                       {{ node.label }}
                       </span>

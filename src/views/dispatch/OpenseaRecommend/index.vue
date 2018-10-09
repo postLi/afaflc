@@ -10,9 +10,9 @@
                 <div class="info_news">
                     <el-table
                         ref="multipleTable"
-                        :data="tableDataTree"
+                        :data="tableData"
                         stripe
-                        :default-sort = "{prop: 'areaCodeName', order: 'descending'}"
+                        :default-sort = "{prop: 'areaCodeName', order: 'null'}"
                         height="100%"
                         border
                         @selection-change = "getinfomation"
@@ -45,8 +45,11 @@
                         </el-table-column>
                         <el-table-column
                             sortable
-                          prop="firstPush"
-                          label="推送距离/推送时间">
+                            prop="firstRecommendKm"
+                            label="推送距离/推送时间">
+                            <template slot-scope="scope">
+                                {{ scope.row.firstRecommendKm +'公里/'+scope.row.firstRecommendTime+'秒'}}
+                            </template>
                         </el-table-column>
                         <!-- <el-table-column
                           prop="secondPush"
@@ -69,9 +72,7 @@
                 </div>
 
                 <!-- 新增数据 -->
-                <addClassfy :dialogFormVisible.sync = "dialogFormVisible" :formtitle = "formtitle" @renovate="Onrenovate" ></addClassfy>
-                <!-- 修改数据 -->
-                <changeclassify :dialogFormVisibleChange.sync = "dialogFormVisibleChange" :formtitle = "formtitle_change" @renovate="Onrenovate" :changeforms = 'changeforms'></changeclassify>
+                <addClassfy :dialogFormVisible.sync = "dialogFormVisible" :isModify="isModify" :changeforms = 'changeforms' :formtitle = "formtitle" @renovate="Onrenovate" ></addClassfy>
             </div>
             <div class="info_tab_footer">共计:{{ totalCount }} <div class="show_pager"> <Pager :total="totalCount" @change="handlePageChange" /></div> </div>
     </div>
@@ -83,36 +84,28 @@ import { data_dispatchList,data_ChangeStatus,data_DeletInfo } from '@/api/dispat
 
 import '@/styles/dialog.scss'
 import addClassfy from './addclassify'
-import changeclassify from './changeclassify'
 import Pager from '@/components/Pagination/index'
 
     export default{
         data(){
             return{
                 btnsize:'mini',
+                isModify:false,
                 loading:true,//遮罩层
                 page:1,//页码
                 pagesize:20,//每页显示数量
-                formtitle:'新增公海推单',
-                formtitle_change:'修改公海推单',
-                currentPage4: 1,//显示当前页面
+                formtitle:'',
                 dialogFormVisible: false,//新增弹窗
-                dialogFormVisibleChange:false,//修改弹窗
-                centerDialogVisible:false,//提示弹窗
-                delDialogVisible:false,//删除提示弹窗
                 totalCount:0,//当前页面数据总数
-                data:{},//获取页面数据 后端要求传参{}
+                searchInfo:{},//获取页面数据 后端要求传参{}
                 changeforms:{},
-                information:'你想知道什么',
-                delID:[],
                 checkedinformation:[],
-                tableDataTree:[],
+                tableData:[],
             }
         },
         components:{
             Pager,
             addClassfy,
-            changeclassify
         },
         
         mounted(){
@@ -135,27 +128,32 @@ import Pager from '@/components/Pagination/index'
             //判断是否选中
             getinfomation(selection){
                 this.checkedinformation = selection;
+                console.log(selection)
             },
             handleClick(type){
                 if(Object.keys(this.checkedinformation).length == 0 && type != 'new'){
                     //未选择任何修改内容的提示
                     return this.$message({
                         type: 'warning',
-                        message: '请选择您要操作的内容~'
+                        message: '请选择您要操作的内容~',
                     })
                 }else if(this.checkedinformation.length >1 && type == 'revise'){
                     return this.$message({
                         type: 'warning',
-                        message: '不可同时操作多项内容~'
+                        message: '不可同时操作多项内容~',
                     })
                 }
                 else{
                     switch(type){
                         case 'new':
                             this.dialogFormVisible = true;
+                            this.isModify = false;
+                            this.formtitle = '新增公海推单';
                             break;
                         case 'revise':
-                            this.dialogFormVisibleChange = true; 
+                            this.dialogFormVisible = true;
+                            this.isModify = true;
+                            this.formtitle = '修改公海推单';
                             this.changeforms = Object.assign({},this.checkedinformation[0]) ;
                             break;
                         case 'delet':
@@ -163,7 +161,6 @@ import Pager from '@/components/Pagination/index'
                             this.checkedinformation.map((item)=>{
                                 return delID.push(item.id)
                             });
-                            let item = delID.length > 1 ? '这些' : '该条';
                             let config = delID.length>1 ?  delID.length + '条' : this.checkedinformation[0].areaCodeName+'这条';
 
                             this.$confirm('确定要删除'+ config +'设置吗？', '提示', {
@@ -209,14 +206,10 @@ import Pager from '@/components/Pagination/index'
             //刷新页面和初始化数据
             firstblood(){
                 this.loading = true;
-                data_dispatchList(this.page,this.pagesize,this.data).then(res=>{
+                data_dispatchList(this.page,this.pagesize,this.searchInfo).then(res=>{
                     // console.log(res)
                     this.totalCount = res.data.totalCount;
-                    this.tableDataTree = res.data.list;
-                    this.tableDataTree.map(item=>{
-                        item.firstPush = item.firstRecommendKm +'公里/'+item.firstRecommendTime+'秒';
-                        // item.secondPush = item.secondRecommendKm +'公里/'+item.secondRecommendTime+'秒';
-                    })
+                    this.tableData = res.data.list;
                     this.loading = false;
                 }).catch(err => {
                     this.$message({

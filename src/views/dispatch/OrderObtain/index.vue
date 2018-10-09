@@ -9,7 +9,7 @@
                 <div class="info_news">
                     <el-table
                         ref="multipleTable"
-                        :data="tableDataTree"
+                        :data="tableData"
                         stripe
                         height="100%"
                         border
@@ -68,9 +68,7 @@
                       </el-table>
                 </div>
                 <!-- 新增数据 -->
-                <addClassfy :dialogFormVisible.sync = "dialogFormVisible" :formtitle = "formtitle" @renovate="Onrenovate" ></addClassfy>
-                <!-- 修改数据 -->
-                <changeclassify :dialogFormVisibleChange.sync = "dialogFormVisibleChange" :formtitle = "formtitle_change" @renovate="Onrenovate" :changeforms = 'changeforms'></changeclassify>
+                <addClassfy :dialogFormVisible.sync = "dialogFormVisible" :isModify="isModify" :changeforms="changeforms" :formtitle = "formtitle" @renovate="Onrenovate" ></addClassfy>
             </div>
             <div class="info_tab_footer">共计:{{ totalCount }} <div class="show_pager"> <Pager :total="totalCount" @change="handlePageChange" /></div>
         </div>
@@ -82,38 +80,30 @@ import { data_dispatchList,data_DeletInfo } from '@/api/dispatch/OrderObtain.js'
 
 import '@/styles/dialog.scss'
 import addClassfy from './addclassify'
-import changeclassify from './changeclassify'
 import Pager from '@/components/Pagination/index'
 
     export default{
         data(){
             return{
                 btnsize:'mini',
+                isModify:false,
                 loading:true,
                 page:1,//页码
                 pagesize:20,//每页显示数量
-                formtitle:'新增中单设置',
-                formtitle_change:'修改中单设置',
+                formtitle:'',
                 currentPage4: 1,//显示当前页面
                 dialogFormVisible: false,//新增弹窗
-                dialogFormVisibleChange:false,//修改弹窗
-                centerDialogVisible:false,//提示弹窗
-                delDialogVisible:false,//删除提示弹窗
                 totalCount:0,//当前页面数据总数
-                data:{},//获取页面数据 后端要求传参{}
+                searchInfo:{},//获取页面数据 后端要求传参{}
                 changeforms:{},
-                information:'你想知道什么',
-                delID:[],
                 checkedinformation:[],
-                tableDataTree:[],
+                tableData:[],
             }
         },
         components:{
             Pager,
             addClassfy,
-            changeclassify,
         },
-        
         mounted(){
             this.firstblood()
         },  
@@ -122,9 +112,6 @@ import Pager from '@/components/Pagination/index'
                 this.page = obj.pageNum;
                 this.pagesize = obj.pageSize;
                 this.firstblood();
-            },
-             regionChange(data){
-                console.log(data);
             },
             //子组件调用父组件刷新页面  
             Onrenovate(){
@@ -156,9 +143,13 @@ import Pager from '@/components/Pagination/index'
                     switch(type){
                         case 'new':
                             this.dialogFormVisible = true;
+                            this.formtitle = '新增中单设置';
+                            this.isModify = false;
                             break;
                         case 'revise':
-                            this.dialogFormVisibleChange = true; 
+                            this.dialogFormVisible = true;
+                            this.formtitle = '修改中单设置';
+                            this.isModify = true;
                             this.changeforms = Object.assign({},this.checkedinformation[0]) 
                             break;
                         case 'delet':
@@ -199,10 +190,10 @@ import Pager from '@/components/Pagination/index'
             //刷新页面和初始化数据
             firstblood(){
                 this.loading = true;
-                data_dispatchList(this.page,this.pagesize,this.data).then(res=>{
+                data_dispatchList(this.page,this.pagesize,this.searchInfo).then(res=>{
                     // console.log('res:',res)
                     this.totalCount = res.data.totalCount;
-                    this.tableDataTree = res.data.list;
+                    this.tableData = res.data.list;
                     this.loading = false;
                 }).catch(err => {
                     this.$message({

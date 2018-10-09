@@ -3,11 +3,12 @@
     <div class="dispatchPush commoncss">
         <el-dialog :title='formtitle' :close-on-click-modal="false" v-el-drag-dialog :visible="dialogFormVisible" @close="close">
             <el-form   :model="standForm" :rules="newrules"  ref="ruleForm"  :label-width="formLabelWidth" label-position="right">
-                <el-form-item class="chose" label="所在地：" prop="areaCode">
-                    <getCityList class="chooseItem" @returnStr="getStr" v-model="standForm.areaCode" ref="area"></getCityList>
+                <el-form-item  label="所在地：" prop="areaCode">
+                    <getCityList class="chooseItem" @returnStr="getStr" v-model="standForm.areaCode" ref="area" v-if="!isModify"></getCityList>
+                    <el-input  v-model="standForm.areaCodeName" v-else disabled></el-input>
                 </el-form-item>
-                 <el-form-item class="chose" label="服务类型：" prop="serivceCode">
-                    <el-select v-model="standForm.serivceCode" clearable placeholder="请选择">
+                <el-form-item  label="服务类型：" prop="serivceCode">
+                    <el-select v-model="standForm.serivceCode" clearable placeholder="请选择" v-if="!isModify">
                         <el-option
                             v-for="item in optionsService"
                             :key="item.id"
@@ -16,9 +17,10 @@
                             :disabled="item.disabled">
                         </el-option>
                     </el-select>
+                    <el-input class="choosePush" v-model="standForm.serivceCodeName" v-else disabled></el-input>
                 </el-form-item>
-                <el-form-item class="chose" label="货主用车类型：" prop="shipperCarType">
-                    <el-select v-model="standForm.shipperCarType" clearable placeholder="请选择">
+                <el-form-item  label="货主用车类型：" prop="shipperCarType">
+                    <el-select v-model="standForm.shipperCarType" clearable placeholder="请选择" v-if="!isModify">
                         <el-option
                             v-for="item in optionsCarType"
                             :key="item.id"
@@ -27,6 +29,7 @@
                             :disabled="item.disabled">
                         </el-option>
                     </el-select>
+                    <el-input class="choosePush" v-model="standForm.shipperCarTypeName" v-else disabled></el-input>
                 </el-form-item>
                 <el-form-item class="firstPush choosePush" label="推送距离/时间：" prop="firstRecommendKm">
                     <el-input v-model="standForm.firstRecommendKm"  maxlength="4" v-numberOnly></el-input>
@@ -53,7 +56,7 @@
                 </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
-            <el-button type="primary" @click="submitForm('ruleForm')">保 存</el-button>
+            <el-button type="primary" @click="submitForm('ruleForm')">{{isModify? '保 存' : '确 定'}}</el-button>
             <el-button @click="close">取 消</el-button>
             </div> 
         </el-dialog>
@@ -64,7 +67,7 @@
 
 import getCityList from '@/components/GetCityList/index'
 import { data_CarList, data_ServerClassList } from '@/api/common.js'
-import { data_NewData } from '@/api/dispatch/OpenseaRecommend.js'
+import { data_NewData,data_ChangeData } from '@/api/dispatch/OpenseaRecommend.js'
 import { objectMerge2, parseTime } from '@/utils/'
 
 export default {
@@ -77,6 +80,13 @@ export default {
     formtitle: {
       type: String,
       required: true
+    },
+    changeforms:{
+        type: Object,
+    },
+    isModify:{
+        type:Boolean,
+        default:false
     }
   },
   components: {
@@ -132,10 +142,10 @@ export default {
                 { required: true, message:"请选择货主用车类型", trigger: 'change' },
             ],
             firstRecommendKm:[
-                {required:true,message:"请输入推送距离",trigger:'change'},
+                {required:true,message:"请输入推送距离",trigger:'blur'},
             ],
             firstRecommendTime:[
-                {required:true,message:"请输入推送时间",trigger:'change'},
+                {required:true,message:"请输入推送时间",trigger:'blur'},
             ],
             visualCarType:[
                 {required:true,validator: validateCar,trigger:'change'},
@@ -146,45 +156,80 @@ export default {
         },
     }
   },
-  watch: {
-
-  },
+    watch: {
+        dialogFormVisible:{
+            handler(newVal,oldVal){
+                console.log('dialogFormVisible',newVal,oldVal)
+                if(newVal){
+                    console.log('isModify',this.isModify)
+                    this.init()
+                }
+            },
+            deep:true
+        }
+    },
   mounted() {
-        this.init()
   },
   methods: {
     close(done) {
         this.$emit('update:dialogFormVisible', false);
-        this.$emit('renovate')
+        this.$refs.ruleForm.resetFields();
         this.clearForms();
-
+        this.$emit('renovate');
+        if(this.$refs.area){
+            this.$refs.area.selectedOptions = [];
+        }
     },
         // 初始化选择项数据
     init() {
-      return Promise.all([data_CarList(), data_ServerClassList()]).then(resArr => {
-        console.log(resArr)
-        this.optionsCarType = resArr[0].data
-        this.optionsService = resArr[1].data
-        this.optionsVisualCarType = resArr[0].data
-      }).catch(err => {
+        this.clearForms();
+        if(!this.isModify){
+            console.log(this.isModify,'13121233')
+            return Promise.all([data_CarList(), data_ServerClassList()]).then(resArr => {
+                console.log(resArr)
+                this.optionsCarType = resArr[0].data;
+                this.optionsService = resArr[1].data;
+                this.optionsVisualCarType = resArr[0].data;
+            }).catch(err => {
+                this.$message({
+                    type: 'warning',
+                    message: '操作失败，原因：' + err.errorInfo ? err.errorInfo : err.text
+                })
+            })
+        }else{
+            data_CarList().then(res=>{
+                this.optionsVisualCarType = res.data;
+            }).catch(err => {
+                this.$message({
+                    type: 'warning',
+                    message: '操作失败，原因：' + err.errorInfo ? err.errorInfo : err.text
+                })
+            });
+            this.standForm = objectMerge2({},this.changeforms);
+            this.visualCarType = this.standForm.visualCarType.split(',')
 
-      })
+        }
     },
     getStr(val,name){
         console.log('this.cityarr',val,name)
         this.standForm.areaCode = val;
         this.standForm.areaCodeName = name;
-
     },
     submitForm(formName) {
         this.$refs[formName].validate((valid) => {
             if (valid) {
                 this.complantName();
-                let form = objectMerge2({},this.standForm)
-                data_NewData(form).then(res => {
+                let form = objectMerge2({},this.standForm);
+                let executeFunction;
+                if(!this.isModify){
+                    executeFunction = data_NewData(form);
+                }else{
+                    executeFunction = data_ChangeData(form);
+                }
+                executeFunction.then(res => {
                     this.$message({
                         type: 'success',
-                        message: '数据新增成功'
+                        message: '操作成功'
                     })
                     this.close()
                 }).catch(err => {
@@ -194,7 +239,10 @@ export default {
                     })
                 })
             } else {
-                console.log('error submit!!');
+                this.$message({
+                    type: 'warning',
+                    message: '请填写完整数据'
+                })
                 return false;
             }
         });
@@ -203,18 +251,18 @@ export default {
         const visualCar = []
         this.optionsVisualCarType.forEach(item => {
             for (var i = 0; i < this.visualCarType.length; i++) {
-            if (item.code == this.visualCarType[i]) {
-                visualCar.push(item.name)
-            }
+                if (item.code == this.visualCarType[i]) {
+                    visualCar.push(item.name)
+                }
             }
         })
         this.standForm.visualCarTypeName = visualCar.join(',')
         this.standForm.visualCarType = this.visualCarType.join(',')
 
-        if (this.standForm.serivceCode) {
+        if (this.standForm.serivceCode && !this.isModify) {
             this.standForm.serivceCodeName = this.optionsService.find(item => item.code === this.standForm.serivceCode)['name']
         }
-        if (this.standForm.shipperCarType) {
+        if (this.standForm.shipperCarType && !this.isModify) {
             this.standForm.shipperCarTypeName = this.optionsCarType.find(item => item.code === this.standForm.shipperCarType)['name']
         }
     },
@@ -243,11 +291,14 @@ export default {
             border-bottom:1px solid #ccc;   
             margin-bottom: 0; 
             margin: 0 20px;
+            .el-input{
+                width: 250px;
+            }
         }
         .choosePush{
             display: inline-block;
             .el-input{
-                width: 192px;
+                width: 250px;
             }
             span{
                 font-size: 14px;

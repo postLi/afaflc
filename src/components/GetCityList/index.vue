@@ -39,22 +39,27 @@ export default {
     },
     methods: {
         handleItemMore(val){
-            console.log(this.$refs.cityTree)
-            console.log(this.$refs.cityTree.currentLabels)
-            this.returnArr();
+            // console.log(this.$refs.cityTree)
+            // console.log(this.$refs.cityTree.currentLabels)
+            console.log('val',val)
+            this.returnArr(val);
         },
         init(){
             aflcProvinceCode().then(res=>{
                 this.cityTree = res.data;
            })
         },
-        returnArr(){
-            this.$emit('returnStr', this.selectedOptions.join(','),this.$refs.cityTree.currentLabels.join(','))
-        }
+        returnArr(val){
+            this.$emit('returnStr',val.length > 0 ? val.join(',') : val,this.$refs.cityTree.currentLabels.join(','))
+        },
     },
     mounted(){
-        this.init()
+        this.init();
     },
+    beforeDestroy(){
+        this.selectedOptions = [];
+    },
+
 }
 </script>
 
