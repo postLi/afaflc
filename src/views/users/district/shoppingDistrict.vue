@@ -29,6 +29,7 @@
                     editType="add"
                     btntitle="创建"
                     icon="el-icon-circle-plus"
+                    v-has:BUSINESS_AREA_MANAGE_BUSINESS_ADD
                     > 
                     </shoppingCread>
                    <shoppingDialog
@@ -40,10 +41,11 @@
                     icon="el-icon-edit"
                     @getData="getDataList"
                     :params="selectRowData"
+                    v-has:BUSINESS_AREA_MANAGE_BUSINESS_UPDATE
                     >
                     </shoppingDialog>
-                <el-button type="primary" plain :size="btnsize" @click="handleUseStates" icon="el-icon-bell">启用/停用</el-button>
-                <el-button type="danger" plain :size="btnsize" @click="delete_data" icon="el-icon-delete">删除</el-button>
+                <el-button type="primary" plain :size="btnsize" @click="handleUseStates" icon="el-icon-bell" v-has:BUSINESS_AREA_MANAGE_BUSINESS_USE>启用/停用</el-button>
+                <el-button type="danger" plain :size="btnsize" @click="delete_data" icon="el-icon-delete" v-has:BUSINESS_AREA_MANAGE_BUSINESS_DELETE>删除</el-button>
 			</div>
             <div class="info_news">
             <el-table style="width: 100%" stripe border height="100%" :data="tableDataAll" ref="multipleTable"  @selection-change="getSelection" @row-click="clickDetails" highlight-current-row tooltip-effect="dark">

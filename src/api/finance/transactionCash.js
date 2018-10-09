@@ -1,6 +1,7 @@
 import fetch from '@/utils/fetch'
 
 const baseurl = 'aflc-uc'
+const baseurl_two = 'aflc-pay'
 
 // 获取提现记录表列表
 export function data_aflcExtractCashList(page, pagesize, data) {
@@ -14,3 +15,15 @@ export function data_aflcExtractCashList(page, pagesize, data) {
     }
   })
 }
+
+export function data_aflcExtractCashList_update(ids,data) {
+        
+  return fetch({
+           url: '/'+baseurl_two+'/pay/driver/common/v1/withdraw/'+ids,
+           method: 'post',
+           data:data
+         })
+       }
+ 
+
+

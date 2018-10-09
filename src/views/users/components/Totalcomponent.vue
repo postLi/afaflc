@@ -52,7 +52,8 @@
                     icon="el-icon-circle-plus"
                     editType="add"
                     btntitle="新增车主"
-                    @getData="getDataList">
+                    @getData="getDataList"
+                    >
                     </driver-newTemplate>
                     <freeze-change-template
                     btntext="冻结"
@@ -349,7 +350,6 @@
                 })
                 // 账户状态获取
                 data_get_shipper_auid().then(res=>{
-                    // console.log(res)
                     this.optionsAuidSataus = res.data;
                 })
             },
