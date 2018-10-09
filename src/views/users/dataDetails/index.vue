@@ -1,12 +1,14 @@
 <template>
-  <div class="detailsCompnent">
-    <el-tabs v-model="pointName" type="card" @tab-click="handleClick" >
-        <!-- 平台定向 -->
-            <el-tab-pane label="基本信息" name="plantOrigin">
-                <div class="imgbox">
+  <div class="detailsCompnent tabsWrap">
+    <el-tabs v-model="detailsName" type="card" @tab-click="handleClick" >
+        <!-- 基本信息 -->
+            <el-tab-pane label="基本信息" name="essential">
+                <!-- <div class="imgbox">
 
                     <img src="../../../assets/zanshi/jiben.png" alt="">
-                </div>
+                </div> -->
+
+                <essential :isvisible="detailsName === 'essential'" />
             </el-tab-pane>
 
         <!-- 超时无人人接单 -->
@@ -67,42 +69,43 @@
 
 
 <script type="text/javascript">
+import essential from './essential'
 
     export default {
-      name:'detailsCompnent',
-      components:{
-           
+        name:'detailsCompnent',
+        components:{
+           essential,
         },
         data() {
           return {
-            pointName:'plantOrigin',
+            detailsName:'essential',
           };
         },
         watch:{
-            pointName(newVal,oldVal){
+            detailsName(newVal,oldVal){
                 // console.log('newVal,oldVal',newVal,oldVal)
                 if(newVal){
-                    this.pointName = newVal;
+                    this.detailsName = newVal;
                 }else{
-                    this.pointName = oldVal;
+                    this.detailsName = oldVal;
                 }
             }
         },
         created() {
-            this.pointName = localStorage.getItem('pointName') || 'plantOrigin';
+            this.detailsName = sessionStorage.getItem('detailsName') || 'essential';
         },
 
         beforeUpdate () {
-            localStorage.setItem('pointName', this.pointName);
+            sessionStorage.setItem('detailsName', this.detailsName);
         },
 
         beforeDestroy () {
-            localStorage.setItem('pointName', 'plantOrigin');
+            sessionStorage.setItem('detailsName', 'essential');
         },
         methods: {
             handleClick(tab, event) {
                 // console.log(tab, event);
-                this.pointName = tab.name;
+                this.detailsName = tab.name;
             }
         }
     }
@@ -113,6 +116,7 @@
         height: 100%;
         .el-tab-pane{
             overflow: auto;
+            padding: 0 10px;
         }
         .imgbox{
             overflow: auto;

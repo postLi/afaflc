@@ -14,7 +14,7 @@
 </template>
 <script>
 
-import { aflcProvinceCode } from '@/api/common.js'
+import { aflcAreaCode } from '@/api/common.js'
 
 export default {
     name: 'getCityList',
@@ -23,7 +23,6 @@ export default {
             type: Boolean
         },
         value: [String, Array],
-
     },
     data() {
         return {
@@ -44,7 +43,7 @@ export default {
             this.returnArr();
         },
         init(){
-            aflcProvinceCode().then(res=>{
+            aflcAreaCode().then(res=>{
                 this.cityTree = res.data;
            })
         },

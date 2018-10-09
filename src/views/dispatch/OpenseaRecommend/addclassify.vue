@@ -170,9 +170,11 @@ export default {
 
       })
     },
-    getStr(val){
-        console.log('this.cityarr',val)
-        return this.standForm.areaCode = val;
+    getStr(val,name){
+        console.log('this.cityarr',val,name)
+        this.standForm.areaCode = val;
+        this.standForm.areaCodeName = name;
+
     },
     submitForm(formName) {
         this.$refs[formName].validate((valid) => {

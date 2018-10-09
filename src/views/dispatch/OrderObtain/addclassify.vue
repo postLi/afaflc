@@ -1,61 +1,59 @@
 <template>
-    <div>
-        <!-- 新增分类信息 -->
-            <div class="orderObtain commoncss">
-                <el-dialog :title='formtitle' :close-on-click-modal="false"  :visible="dialogFormVisible" @close="close">
-                    <div class="chooseArea">
-                        <p><span>* </span>选择区域 ：</p>
-                        <getCityList class="chooseItem" v-model="forms.areaCode" ref="area"></getCityList>
-                    </div>
-                    <div class="chooseServer chooseStyle">
-                        <p><span>* </span>选择服务类型 ：</p>
-                        <el-select v-model="forms.serivceCode" clearable placeholder="请选择">
-                            <el-option
-                                v-for="item in optionsService"
-                                :key="item.id"
-                                :label="item.name"
-                                :value="item.code"
-                                :disabled="item.disabled">
-                            </el-option>
-                        </el-select>
-                    </div>
-                    <div class="chooseCarType chooseStyle">
-                        <p><span>* </span>选择用车类型 ：</p>
-                        <el-select v-model="forms.carType" clearable placeholder="请选择">
-                            <el-option
-                                v-for="item in optionsCarType"
-                                :key="item.id"
-                                :label="item.name"
-                                :value="item.code"
-                                :disabled="item.disabled">
-                            </el-option>
-                        </el-select>
-                    </div>
-                    <div class="ifBang"  v-for="(form,keys) in ifMoreForms" :key='keys'>
-                        <p class="needMoreWidth"><span>* </span>第{{keys+1}}轮中单公布时间及距离</p>
-                        <div class="publishSet">
-                            <div class="chooseTime publishStyle">
-                                <span>公布中单时间 ：</span>
-                                <el-input v-model="form.time" placeholder="请输入" maxlength="4" clearable ref="times" v-number-only:point></el-input>
-                                <span> / 秒</span>
-                            </div>
-                            <div class="chooseKM publishStyle">
-                                <span>公布中单距离 ：</span>
-                                <el-input v-model="form.km" placeholder="请输入" maxlength="4" v-number-only:point clearable></el-input>
-                                <span>  / 公里</span>
-                            </div>
-                        </div>
-                        <span  @click="addItem" class="addItem" v-if="keys == 0">
-                        </span>
-                        <span  @click="reduceItem(keys)" class="reduceItem" v-else>
-                        </span>
-                    </div>
-                    <div slot="footer" class="dialog-footer">
-                        <el-button type="primary" @click="newInfoSave">保 存</el-button>
-                        <el-button @click="closeAddNewInfo">取 消</el-button>
-                    </div> 
-                </el-dialog>
+<!-- 新增分类信息 -->
+    <div class="orderObtain commoncss">
+        <el-dialog :title='formtitle' :close-on-click-modal="false"  :visible="dialogFormVisible" @close="close">
+            <div class="chooseArea">
+                <p><span>* </span>选择区域 ：</p>
+                <getCityList class="chooseItem" v-model="forms.areaCode" ref="area"></getCityList>
             </div>
+            <div class="chooseServer chooseStyle">
+                <p><span>* </span>选择服务类型 ：</p>
+                <el-select v-model="forms.serivceCode" clearable placeholder="请选择">
+                    <el-option
+                        v-for="item in optionsService"
+                        :key="item.id"
+                        :label="item.name"
+                        :value="item.code"
+                        :disabled="item.disabled">
+                    </el-option>
+                </el-select>
+            </div>
+            <div class="chooseCarType chooseStyle">
+                <p><span>* </span>选择用车类型 ：</p>
+                <el-select v-model="forms.carType" clearable placeholder="请选择">
+                    <el-option
+                        v-for="item in optionsCarType"
+                        :key="item.id"
+                        :label="item.name"
+                        :value="item.code"
+                        :disabled="item.disabled">
+                    </el-option>
+                </el-select>
+            </div>
+            <div class="ifBang"  v-for="(form,keys) in ifMoreForms" :key='keys'>
+                <p class="needMoreWidth"><span>* </span>第{{keys+1}}轮中单公布时间及距离</p>
+                <div class="publishSet">
+                    <div class="chooseTime publishStyle">
+                        <span>公布中单时间 ：</span>
+                        <el-input v-model="form.time" placeholder="请输入" maxlength="4" clearable ref="times" v-number-only:point></el-input>
+                        <span> / 秒</span>
+                    </div>
+                    <div class="chooseKM publishStyle">
+                        <span>公布中单距离 ：</span>
+                        <el-input v-model="form.km" placeholder="请输入" maxlength="4" v-number-only:point clearable></el-input>
+                        <span>  / 公里</span>
+                    </div>
+                </div>
+                <span  @click="addItem" class="addItem" v-if="keys == 0">
+                </span>
+                <span  @click="reduceItem(keys)" class="reduceItem" v-else>
+                </span>
+            </div>
+            <div slot="footer" class="dialog-footer">
+                <el-button type="primary" @click="newInfoSave">保 存</el-button>
+                <el-button @click="closeAddNewInfo">取 消</el-button>
+            </div> 
+        </el-dialog>
     </div>
 </template>
 
@@ -223,7 +221,6 @@ export default {
             console.log(idx)
             this.ifMoreForms.splice(idx,1);
         },
-
         //完善数据
         completeData(){
             //获取城市name

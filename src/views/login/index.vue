@@ -28,7 +28,7 @@
          </el-input>
         </el-form-item> -->
           <el-form-item prop="username">
-            <el-input name="username" type="text" @keyup.enter.native="handleLogin" v-model="loginForm.username" :maxlength="11" autoComplete="off" :placeholder="holder.username" @focus='username()' clearable>
+            <el-input name="username" type="text" @keyup.enter.native="handleLogin" v-model="loginForm.username" autoComplete="off" :placeholder="holder.username" @focus='username()' clearable>
               <template slot="prepend"><i class="icon_login " :class="[loginError? 'icon_login_user_error':'icon_login_user']"></i></template>
             </el-input>
           </el-form-item>

@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="changeOrderObtain commoncss">
-            <el-dialog :title='formtitle' :close-on-click-modal="true"  :visible="dialogFormVisibleChange" @close="close">
+            <el-dialog :title='formtitle' :close-on-click-modal="false"  :visible="dialogFormVisibleChange" @close="close">
                 <div class="chooseArea">
                     <p><span>* </span>当前区域 ：</p>
                     <el-input v-model="changeforms.areaCodeName" disabled></el-input>
@@ -128,11 +128,11 @@ export default {
     .changeOrderObtain{
         .el-dialog__wrapper{
             .el-dialog{
-                width: 700px;
+                width: 810px;
                 .el-dialog__body{
                     border-bottom:1px solid #ccc;   
                     margin-bottom: 0; 
-                    margin: 0 10px;
+                     margin: 0 25px;
                     .el-input{
                         width: 150px;
                     }
