@@ -168,7 +168,7 @@ import Pager from '@/components/Pagination/index'
                                 cancelButtonText: '取消',
                                 type: 'warning'
                             }).then( ()=>{
-                                data_DeletInfo(delID).then(res=>{
+                                data_DeletInfo(delID.join(',')).then(res=>{
                                     this.$message({
                                         type: 'success',
                                         message: '您选中的内容已被删除！',

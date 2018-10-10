@@ -37,7 +37,7 @@ export default {
         hidden: false, 
         name: '商圈区代', 
         component: _import('users/district/index'), 
-        meta: { title: '商圈区代', stitle: '商圈',noCache: true ,code:''},
+        meta: { title: '商圈区代', stitle: '商圈',noCache: true ,code:'BUSINESS_AREA_MANAGE'},
         children:[
             {
                 path: '/users/district/shoppingDistrict', 

@@ -1,7 +1,7 @@
 <template>
     <div class="commoncss addDictionary">
         <el-dialog :title="formtitle" :close-on-click-modal="false" :visible="dialogAddDic" @close="close" v-loading="loading">
-            <el-form :inline="true"  ref="ruleForm"  label-position="right" size="mini">
+            <el-form :inline="true"  ref="ruleForm"  label-position="right">
                 <el-form-item label="上级分类：" :label-width="formLabelWidth" required>
                     <el-select v-model="pidValue" placeholder="请选择" @change="currentValue" v-if="!isModify">
                         <el-option
@@ -296,7 +296,7 @@ export default {
             border:1px solid #e6e6e6;
             padding:16px 0;
             position: relative;
-            margin: 0 60px;
+            margin: 0 30px 0 0;
             margin-bottom: 10px;
             &>.el-form-item:nth-child(2n-1){
                 .el-form-item__content{

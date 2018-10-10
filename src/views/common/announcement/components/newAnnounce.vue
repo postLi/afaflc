@@ -1,6 +1,6 @@
 <template>
     <div class="newAnnounce commoncss">
-        <el-dialog title='指派司机' :close-on-click-modal="false"   :visible="dialogFormVisible" @close="close">
+        <el-dialog title='指派司机' :close-on-click-modal="false" top="5vh"  :visible="dialogFormVisible" @close="close">
             <el-form :model="announce" :rules="rules" :label-position="labelPosition" ref="ruleForm" label-width="80px" class="demo-ruleForm">
                 <el-form-item label="发布区域" prop="noticeLocation">
                     <vregion :ui="true" :area="false" @values="regionChange" class="form-control">
@@ -63,7 +63,7 @@
                     format="yyyy 年 MM 月 dd 日"
                     value-format="timestamp">
                     </el-date-picker>
-                    <el-checkbox v-model="isTop" >置顶</el-checkbox>
+                    <el-checkbox v-model="isTop" >置顶</el-checkbox> 
                 </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">

@@ -59,7 +59,6 @@ export default {
     beforeDestroy(){
         this.selectedOptions = [];
     },
-
 }
 </script>
 
@@ -67,9 +66,6 @@ export default {
 
     .chooseCityList{
         .el-cascader{   
-            .el-input{
-                width: 100%;
-            }
             .el-cascader__label{
                 top: 5px;
                 height: 30px;

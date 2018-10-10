@@ -306,5 +306,10 @@ export default {
                 margin: 0 5px;
             }
         }
+        .firstPush{
+             .el-input{
+                width: 100px;
+            }
+        }
     }
 </style>

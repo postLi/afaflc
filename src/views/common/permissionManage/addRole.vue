@@ -38,7 +38,7 @@
 
                       <img src="../../../assets/icom/link.png" alt="">
                       {{ node.label }}
-                      {{ node.label }}
+                      <!-- {{ node.label }} -->
                       </span>
                      <span v-else>
                          <!-- {{data.status}}{{data.type}} -->
