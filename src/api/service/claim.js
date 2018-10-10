@@ -76,14 +76,10 @@ export function getReportClaim(page, pagesize, data) {
  * 记录投诉跟进 /order/aflcOrderGoodsfollowup/v1/add新增记录物损跟进表
  */
 
-export function postReportClaimAdd(page, pagesize, data) {
+export function postReportClaimAdd(data) {
   return fetch({
     url: '/' + baseurlw + '/order/aflcOrderGoodsfollowup/v1/add',
     method: 'post',
-    data: {
-      'currentPage': page,
-      'pageSize': pagesize,
-      'vo': data
-    }
+    data: data
   })
 }

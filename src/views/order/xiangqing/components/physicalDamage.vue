@@ -22,12 +22,14 @@
                             </template> -->
                         </el-table-column>
                         <el-table-column
-                            prop="followupTime"
+                            prop=""
                             label="跟进时间"
                             width="180">
-                             <!-- <template slot-scope="scope">
-                                    {{scope.row.name}}
-                            </template> -->
+                            <template  slot-scope="scope">
+                              <span class="orderSerial">
+                                {{ scope.row.followupTime | parseTime('{y}-{m}-{d} {h}:{i}:{s}')}}    
+                              </span>
+                            </template>
                         </el-table-column>
                         <el-table-column
                             prop="goodsclaimDes"
@@ -50,18 +52,15 @@
                                     {{scope.row.address}}
                             </template> -->
                         </el-table-column>
-                         <el-table-column
+                        <!-- <el-table-column
                             prop=""
                             label="操作">
-                             <!-- <template slot-scope="scope">
-                                    {{scope.row.address}}
-                            </template> -->
                             <template slot-scope="scope">
                               <el-button
                               size="mini"
                               @click="handleEdit3(scope.$index, scope.row)">保存</el-button>
                           </template>
-                        </el-table-column>
+                        </el-table-column> -->
                     </el-table>
                 </template>
             </el-table-column>
@@ -94,9 +93,9 @@
                 :show-overflow-tooltip="true"
                 label="破损图片"
                 >
-                <el-tooltip class="item" effect="dark" content="点击图片查看原图" placement="top">
+                <!-- <el-tooltip class="item" effect="dark" content="点击图片查看原图" placement="top">
                   <img :src='claimPic1' alt="" v-showPicture>
-                </el-tooltip>
+                </el-tooltip> -->
                 <!-- <template slot-scope="scope">
                     {{scope.row.driverName}} - {{scope.row.driverPhone}}
                 </template> -->
@@ -114,24 +113,33 @@
             </el-table-column>
             <!-- 这里没有相应的字段 -->
             <el-table-column
-                prop="createTime"
+                prop=""
                 label="上报时间"
                 width="160">
+                <template  slot-scope="scope">
+                  <span class="orderSerial">
+                    {{ scope.row.createTime | parseTime('{y}-{m}-{d} {h}:{i}:{s}')}}    
+                  </span>
+                </template>
             </el-table-column>
             <el-table-column
                 label="操作"
                 width="300">
+                <!-- 待处理的时候显示确认受理，处理中显示记录投诉跟进，已处理两个按钮都不显示 -->
                  <template slot-scope="scope">
                     <el-button
+                    plain
+                    :type="scope.row.dealStatus === '处理中' ? 'warning': 'primary'"
+                    v-if="scope.row.dealStatus ==='待处理' || scope.row.dealStatus === '处理中'"
                     size="mini"
-                    @click="handleEdit1(scope.$index, scope.row)">记录投诉跟进</el-button>
-                   <el-button
+                    @click="handleEdit1(scope.$index, scope.row)">{{scope.row.dealStatus==='待处理' ? '确认受理': (scope.row.dealStatus === '处理中' ? '记录投诉跟进': '')}}</el-button>
+                   <!-- <el-button
                     size="mini"
-                    @click="handleEdit2(scope.$index, scope.row)">物损登记</el-button>
+                    @click="handleEdit1(scope.$index, scope.row)">确认受理</el-button> -->
                 </template>
             </el-table-column>
         </el-table>
-        <add :centerDialogVisible="centerDialogVisible" @close="closeAdd"></add>
+        <add :rowid="rowid" :centerDialogVisible="centerDialogVisible" @close="closeAdd"></add>
         <!-- <div class="info_tab_footer">共计:{{ totalCount }} <div class="show_pager"> <Pager :total="totalCount" @change="handlePageChange" :sizes="sizes"/></div> </div>     -->
     </div>
 </template>
@@ -165,7 +173,9 @@ export default {
       // tableData: null,
       expands: [],
       tableData: [],
-      tableData1: []
+      tableData1: [],
+      rowid: '',
+      buttonText:''
       // formAllData: {
       //   orderSerial: ''
       // },
@@ -266,7 +276,6 @@ export default {
         if (newVal) {
                     // this.init();
           this.firstblood()
-          this.getListSmall()
         }
       },
             // 代表在wacth里声明了firstName这个方法之后立即先去执行handler方法
@@ -275,8 +284,8 @@ export default {
   },
   mounted() {
     // console.log(this.tableData)
-    this.firstblood()
-    this.getListSmall()
+    // this.firstblood()
+    // this.getListSmall()
   },
   methods: {
     init() {
@@ -298,12 +307,23 @@ export default {
       getGoodsclaimAll(orderSerial).then(res => {
         // this.dataTotal = res.data.totalCount
         this.tableData = res.data
+        if(res.data.dealStatus === '待处理'){
+          console.log('待处理')
+          this.buttonText = '待处理'
+        }else if(res.data.dealStatus === '处理中'){
+          console.log('处理中')
+          this.buttonText = '处理中'
+        }else if(res.data.dealStatus === '已处理'){
+          console.log('已处理')
+          this.buttonText = '已处理'
+        }
         // console.log(res.data)
       })
     },
     getListSmall() {
-      const orderSerial = this.$route.query.orderSerial
-      getGoodsfollowupAll(orderSerial).then(res => {
+      // const orderSerial = this.$route.query.orderSerial
+      console.log(this.rowid)
+      getGoodsfollowupAll(this.rowid).then(res => {
         // console.log(res.data)
         this.tableData1 = res.data
       })
@@ -313,8 +333,13 @@ export default {
       this.pagesize = obj.pageSize
       this.init()
     },
-    handleEdit1() {
+    handleEdit1(index, row) {
+      if (row.dealStatus === '待处理') {
+      this.firstblood()
+      }else {
       this.centerDialogVisible = true
+      }
+      console.log(index, row)
     },
     handleEdit2() {
 
@@ -326,13 +351,15 @@ export default {
       this.centerDialogVisible = false
     },
     rowClick(row, event, column) {
+      // console.log(event)
+      this.getListSmall()
+      this.rowid = row.id
       Array.prototype.remove = function(val) {
         const index = this.indexOf(val)
         if (index > -1) {
           this.splice(index, 1)
         }
       }
-
       if (this.expands.indexOf(row.id) < 0) {
         this.expands.push(row.id)
       } else {

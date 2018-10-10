@@ -9,7 +9,7 @@
       :close-on-click-modal="false" 
       :before-close="closeMe">
       <el-form :model="form" :rules="rules"  ref="ruleForm" :inline="true"  label-position="right">
-        <el-form-item label="跟进时间">
+        <!-- <el-form-item label="跟进时间">
           <el-date-picker
             class="picklist"
             v-model="searchCreatTime"
@@ -21,16 +21,29 @@
             align="right"
             value-format="timestamp">
           </el-date-picker>
-        </el-form-item>
+        </el-form-item> -->
+        <!-- <el-form-item label="跟进时间">
+          <el-date-picker
+            v-model="searchCreatTime"
+            align="right"
+            type="date"
+            :picker-options="pickOption2"
+            placeholder="选择日期"
+            value-format="timestamp">
+          </el-date-picker>
+        </el-form-item> -->
         <el-form-item label="跟进人">
-          <el-input v-model="formAllData.followName" :maxlength="20" placeholder="账户/姓名" auto-complete="off" clearable></el-input>
+          <el-input v-model="formAllData.followName" :maxlength="20" placeholder="请输入跟进人" auto-complete="off" clearable></el-input>
+        </el-form-item>
+        <el-form-item prop="code" >
+          <input checked="checked" v-model="formAllData.code" type="checkbox"/>已受理
         </el-form-item>
         <el-form-item class="goodsclaimDes" label="投诉跟进">
-          <el-input type="textarea" :maxlength="200" style="width:100%"></el-input>
+          <el-input v-model="formAllData.goodsclaimDes" type="textarea" :maxlength="200" style="width:100%" placeholder="投诉跟进最多输入200个字符"></el-input>
         </el-form-item>
         <el-form-item class="clearfix imgbox" label="上传附件">
           <div class="clearfix uploadcard">
-            <upload :title="'本地上传'" v-model="formAllData.fileAddress" :showFileList="true" :limit="4" listtype="picture" @fileInfo="getFileInfo" />
+            <upload :title="'本地上传'" @filelist="getFileList" v-model="formAllData.fileAddress" :showFileList="true" :limit="4" listtype="picture" @fileInfo="getFileInfo" />
           </div>
         </el-form-item>
         <!-- <el-form-item class="clearfix imgbox" label="上传附件">
@@ -59,6 +72,8 @@ import { postOrderGoodsclaimlist } from '@/api/service/claim.js'
 import Pager from '@/components/Pagination/index'
 import Upload from '@/components/Upload/multImage'
 import { DicClaimStatusType } from '@/api/common'
+import { postReportClaimAdd } from '@/api/service/claim.js'
+import { objectMerge2 } from '@/utils/index'
 export default {
   computed: {
     isShow: {
@@ -76,6 +91,9 @@ export default {
     centerDialogVisible: {
       type: Boolean,
       default: false
+    },
+    rowid: {
+      type: [Number, String]
     }
   },
   data() {
@@ -88,7 +106,8 @@ export default {
       page: 1, // 初始化页码
       totalCount: null,
       value: '',
-      searchCreatTime: [],
+      searchCreatTime: +new Date(),
+      pickOption2: '',
       optionsclaimType: [{ code: null, name: '全部' }],
       options: [{
         value: '选项1',
@@ -98,16 +117,29 @@ export default {
         label: '车主'
       }],
       form: {
+
       },
       rules: {
 
       },
-      pickerOptions2: {
-        shortcuts: pickerOptions2
-      },
       formAllData: {
-        fileAddress: '',
-        followName: ''
+        // goodsclaimId:'',
+        code:0,
+        fileAddress: '', // 附件地址
+        followName: '', // 跟进人
+        // followupTime: '', // 跟进时间
+        fileName: '',// 附件名称
+        goodsclaimDes:''//投诉跟进描述
+      }
+    }
+  },
+  watch: {
+    isShow:{
+      handler(newVal){
+        if(newVal){
+          this.$set(this.formAllData, 'id', this.rowid)    
+          // console.log(this.formAllData.id)   
+        }
       }
     }
   },
@@ -158,10 +190,21 @@ export default {
     clickDetails(row, event, column) {
       this.$refs.multipleTable.toggleRowSelection(row)
     },
-    getFileInfo (obj) {
+    getFileInfo(obj) {
       console.log('pageUpFile:', obj, obj.name)
     },
-    handleChange () {},
+    getFileList (list) {
+      let address = []
+      let name = []
+      list.forEach((e, index) => {
+        address.push(e.url)
+        name.push(e.name)
+      })
+      this.formAllData.fileAddress = address.join(',')
+      this.formAllData.fileName = name.join(',')
+      console.log('getFileList',  this.formAllData)
+    },
+    handleChange() {},
     uploadHandleFile(_this) {
       const file = _this.file
       console.log('downfile :', file)
@@ -186,7 +229,12 @@ export default {
     submitForm(ruleForm) {
       this.$refs[ruleForm].validate((valid) => {
         if (valid) {
-          console.log('3')
+          // this.formAllData.followupTime = parseTime(this.searchCreatTime, '{y}-{m}-{d} {h}:{i}:{s}')
+          this.$set(this.formAllData, 'goodsclaimId', this.rowid)
+          const data = objectMerge2({}, this.formAllData)
+          postReportClaimAdd(data).then(res => {
+            console.log(res)
+          })
           this.closeMe()
         } else {
           return false
