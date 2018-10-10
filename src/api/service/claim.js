@@ -55,7 +55,16 @@ export function getGoodsfollowupAll(id) {
     method: 'get'
   })
 }
-
+/**
+ * /order/aflcOrderGoodsclaim/v1/updateDealStatus/{id}
+更新订单物损理赔处理状态
+ */
+export function getUpdateDealStatus(id) {
+  return fetch({
+    url: '/' + baseurlw + '/order/aflcOrderGoodsclaim/v1/updateDealStatus/' + id,
+    method: 'get'
+  })
+}
 /**
  * /order/aflcOrderGoodsclaim/v1/reportClaim 登记新增
  *  "orderSerial": "string",

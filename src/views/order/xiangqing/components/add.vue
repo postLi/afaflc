@@ -36,7 +36,7 @@
           <el-input v-model="formAllData.followName" :maxlength="20" placeholder="请输入跟进人" auto-complete="off" clearable></el-input>
         </el-form-item>
         <el-form-item prop="code" >
-          <input checked="checked" v-model="formAllData.code" type="checkbox"/>已受理
+          <el-checkbox v-model="formAllData.code">是否处理完毕</el-checkbox>
         </el-form-item>
         <el-form-item class="goodsclaimDes" label="投诉跟进">
           <el-input v-model="formAllData.goodsclaimDes" type="textarea" :maxlength="200" style="width:100%" placeholder="投诉跟进最多输入200个字符"></el-input>
@@ -108,6 +108,7 @@ export default {
       value: '',
       searchCreatTime: +new Date(),
       pickOption2: '',
+      checked:false,
       optionsclaimType: [{ code: null, name: '全部' }],
       options: [{
         value: '选项1',
@@ -124,7 +125,7 @@ export default {
       },
       formAllData: {
         // goodsclaimId:'',
-        code:0,
+        code:false,
         fileAddress: '', // 附件地址
         followName: '', // 跟进人
         // followupTime: '', // 跟进时间
@@ -230,6 +231,11 @@ export default {
       this.$refs[ruleForm].validate((valid) => {
         if (valid) {
           // this.formAllData.followupTime = parseTime(this.searchCreatTime, '{y}-{m}-{d} {h}:{i}:{s}')
+          if(this.formAllData.code === true){
+            this.formAllData.code = 1
+          }else{
+            this.formAllData.code = 0
+          }
           this.$set(this.formAllData, 'goodsclaimId', this.rowid)
           const data = objectMerge2({}, this.formAllData)
           postReportClaimAdd(data).then(res => {
