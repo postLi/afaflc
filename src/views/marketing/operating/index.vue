@@ -8,7 +8,7 @@
             </el-tab-pane>
 
         <!-- 优惠卷 -->
-            <el-tab-pane label="优惠卷" name="coupon">
+            <el-tab-pane label="优惠券" name="coupon">
                 <coupon :isvisible="operaName === 'coupon'"></coupon>
             </el-tab-pane>
 

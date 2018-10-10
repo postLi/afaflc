@@ -1,7 +1,7 @@
 import fetch from '@/utils/fetch'
 
 // const baseurl = 'aflcorderservice'
-// const baseurl = 'aflcusercenterservice_wtc'
+const baseurlw = 'aflcusercenterservice-wtc'
 const baseurl = 'aflcusercenterservice'
 const baseurl2 = 'aflcsmservice'
 /**
@@ -16,7 +16,7 @@ const baseurl2 = 'aflcsmservice'
 
 export function postDriverCommissionTransaction(page, pagesize, data) {
   return fetch({
-    url: '/' + baseurl + '/usercenter/aflcDriverCommissionDetail/v1/driverCommissionTransaction',
+    url: '/' + baseurlw + '/usercenter/aflcDriverCommissionDetail/v1/driverCommissionTransaction',
     method: 'post',
     data: {
       'currentPage': page,

@@ -168,9 +168,9 @@ export default{
       // defaultTime:[parseTime(+new Date() - 60 * 24 * 60 * 60 * 1000, '{y}-{m}-{d}'), parseTime(new Date(), '{y}-{m}-{d}')],
       areaName: '',
       searchInfo: {
-        startTime: '', // 下单起始时间
-        endTime: '', // 下单结束时间
-        areaCodeList: []//
+        startTime: null, // 下单起始时间
+        endTime: null, // 下单结束时间
+        areaCodeList: null//
       },
       pickerOptions2: {
         shortcuts: pickerOptions2
@@ -237,44 +237,69 @@ export default{
       this.searchInfo.areaCodeList = []
       this.areaCodeList1 = []
     },
+    // regionChange(d) {
+    //   // console.log('11111', d, typeof this.searchInfo.areaCodeList)
+    //   this.areaName = (!d.province && !d.city && !d.area && !d.town) ? '' : `${this.getValue(d.province)}${this.getValue(d.city)}${this.getValue(d.area)}${this.getValue(d.town)}`.trim()
+    //   if (d.area) {
+    //     // this.searchInfo.areaCodeList = d.area.code
+    //     // this.areaCodeList.push(d.area.code)
+    //     // this.searchInfo.argetManageTypeInfoaCodeList)
+    //     // console.log('2222', typeof this.searchInfo.areaCodeList, d.area.code)
+
+    //     this.searchInfo.areaCodeList.push(d.area.code)
+    //     this.searchInfo.areaCodeList = this.searchInfo.areaCodeList.filter(e => {
+    //       return e !== d.city.code
+    //     })
+    //     console.log('------searchInfo---', this.searchInfo.areaCodeList)
+    //     // this.areaCodeList1[d.area.code] = this.areaName
+    //     // let arr = []
+    //     // let code = []
+    //     // for (const item in this.areaCodeList1) {
+    //     //   arr.push(this.areaCodeList1[item])
+    //     //   code.push(item)
+    //     // }
+    //     // this.searchInfo.areaCodeList = Object.assign(code)
+    //     // // console.log('areaCodeList1',this.areaCodeList1)
+    //     // this.areaName = arr.join(',')
+    //     // console.log('areaName', this.areaName)
+    //     // arr = []
+    //     // code = []
+    //   } else if (d.city) {
+    //     // this.areaCodeList1.push(d.city.code)
+    //     this.searchInfo.areaCodeList.push(d.city.code)
+    //     this.searchInfo.areaCodeList = this.searchInfo.areaCodeList.filter(e => {
+    //       return e !== d.province.code
+    //     })
+    //   } else if (d.province) {
+    //     this.searchInfo.areaCodeList = this.searchInfo.areaCodeList.filter(e => {
+    //       return e !== d.province.code
+    //     })
+    //     this.searchInfo.areaCodeList.push(d.province.code)
+    //   } else {
+    //     this.clearName()
+    //   }
+    // },
     regionChange(d) {
-      // console.log('11111', d, typeof this.searchInfo.areaCodeList)
       this.areaName = (!d.province && !d.city && !d.area && !d.town) ? '' : `${this.getValue(d.province)}${this.getValue(d.city)}${this.getValue(d.area)}${this.getValue(d.town)}`.trim()
       if (d.area) {
-        // this.searchInfo.areaCodeList = d.area.code
-        // this.areaCodeList.push(d.area.code)
-        // this.searchInfo.argetManageTypeInfoaCodeList)
-        // console.log('2222', typeof this.searchInfo.areaCodeList, d.area.code)
-
-        this.searchInfo.areaCodeList.push(d.area.code)
-        this.searchInfo.areaCodeList = this.searchInfo.areaCodeList.filter(e => {
+        this.areaCodeList1.push(d.area.code)
+        this.areaCodeList1 = this.areaCodeList1.filter(e => {
           return e !== d.city.code
         })
-        console.log('------searchInfo---', this.searchInfo.areaCodeList)
-        // this.areaCodeList1[d.area.code] = this.areaName
-        // let arr = []
-        // let code = []
-        // for (const item in this.areaCodeList1) {
-        //   arr.push(this.areaCodeList1[item])
-        //   code.push(item)
-        // }
-        // this.searchInfo.areaCodeList = Object.assign(code)
-        // // console.log('areaCodeList1',this.areaCodeList1)
-        // this.areaName = arr.join(',')
-        // console.log('areaName', this.areaName)
-        // arr = []
-        // code = []
+        this.searchInfo.areaCodeList = Object.assign([], this.areaCodeList1)
+        // console.log('------searchInfo---', this.areaCodeList1)
       } else if (d.city) {
-        // this.areaCodeList1.push(d.city.code)
-        this.searchInfo.areaCodeList.push(d.city.code)
-        this.searchInfo.areaCodeList = this.searchInfo.areaCodeList.filter(e => {
+        this.areaCodeList1.push(d.city.code)
+        this.areaCodeList1 = this.areaCodeList1.filter(e => {
           return e !== d.province.code
         })
+        this.searchInfo.areaCodeList = Object.assign([], this.areaCodeList1)
       } else if (d.province) {
-        this.searchInfo.areaCodeList = this.searchInfo.areaCodeList.filter(e => {
+        this.areaCodeList1 = this.areaCodeList1.filter(e => {
           return e !== d.province.code
         })
-        this.searchInfo.areaCodeList.push(d.province.code)
+        this.areaCodeList1.push(d.province.code)
+        this.searchInfo.areaCodeList = Object.assign([], this.areaCodeList1)
       } else {
         this.clearName()
       }
@@ -289,12 +314,13 @@ export default{
     },
     // 刷新页面
     firstblood() {
-      // this.loading = false
+      this.loading = false
       postDriverCommissionTransaction(this.page, this.pagesize, this.searchInfo).then(res => {
         if (res) {
           this.tableData = res.data.list
           this.dataTotal = res.data.totalCount
           this.loading = false
+          console.log(res)
         }
       })
     },
@@ -304,11 +330,11 @@ export default{
       switch (type) {
         case 'search':
           if (this.searchCreatTime) {
-            this.searchInfo.startTime = this.searchCreatTime ? parseTime(this.searchCreatTime[0], '{y}-{m}-{d} ') + '00:00:00' : ''
-            this.searchInfo.endTime = this.searchCreatTime ? parseTime(this.searchCreatTime[1], '{y}-{m}-{d} ') + '23:59:59' : ''
+            this.searchInfo.startTime = this.searchCreatTime ? parseTime(this.searchCreatTime[0], '{y}-{m}-{d}') + '00:00:00' : null
+            this.searchInfo.endTime = this.searchCreatTime ? parseTime(this.searchCreatTime[1], '{y}-{m}-{d}') + '23:59:59' : null
           } else {
-            this.searchInfo.startTime = ''
-            this.searchInfo.endTime = ''
+            this.searchInfo.startTime = null
+            this.searchInfo.endTime = null
           }
           this.firstblood()
           break
