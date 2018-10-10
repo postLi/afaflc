@@ -1,6 +1,6 @@
 <template>
      <div class="shippercreatDialog commoncss">
-      <el-dialog :title="typetitle" :visible="dialogFormVisible_add" :before-close="closeMe" :close-on-click-modal="false">
+      <el-dialog :title="typetitle" :visible="dialogFormVisible_add" :before-close="closeMe" v-dialogDrag :close-on-click-modal="false">
         <el-form :model="xinzengform" ref="xinzengform" :rules="rulesForm" :label-width="formLabelWidth">
           <el-row>
             <el-col :span="12">

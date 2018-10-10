@@ -95,8 +95,8 @@
         .shippercreatDialog,.freezeDialog,.shipperBlackDialog,.shippercertifed{
             display: inline-block;
             .el-dialog{
-                width: 810px;
-                min-height: 400px;
+                width: 1200px;
+                min-height: 720px;
                 position: relative;
                 .el-dialog__body{
                     .el-form{
@@ -109,15 +109,15 @@
                         }
                         .el-form-item{
                             .el-form-item__content{
-                                .el-input{
-                                    width: 250px;
-                                }
+                                // .el-input{
+                                //     width: 250px;
+                                // }
                             }
                         }
                         .moreLength{
                             .el-form-item__content{
                                 .el-input{
-                                    width: 655px;
+                                    width: 800px;
                                 }
                             }
                         }
@@ -127,12 +127,12 @@
                             font-size: 12px;
                             padding-top: 5px;
                         }
-                        .v-region{
-                            .v-dropdown-container{
-                                height: 300px !important;
-                                overflow: auto;
-                            }
-                        }
+                        // .v-region{
+                        //     .v-dropdown-container{
+                        //         height: 300px !important;
+                        //         overflow: auto;
+                        //     }
+                        // }
                     }
                 }
             }

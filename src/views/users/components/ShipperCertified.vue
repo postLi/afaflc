@@ -64,7 +64,7 @@
        <!--认证审核部分 -->
     <div class="shippercertifed commoncss">
         <el-dialog title="认证审核" :visible.sync="RZdialogFormVisible" v-if="Object.keys(shengheform).length != 0">
-          <el-form :model="shengheform" ref="shengheform" :rules="shengheformRules" label-position="left">
+          <el-form :model="shengheform" ref="shengheform" :rules="shengheformRules" label-position="right">
             <el-row>
               <el-col :span="12">
                 <el-form-item label="手机号码：" required :label-width="formLabelWidth"  prop="mobile">
@@ -466,7 +466,6 @@ export default {
     .shippercertifed{
         width: 100%;
         .el-dialog__wrapper .el-dialog {
-            width: 910px;
             .el-dialog__body{
                 padding: 20px;
                 .el-row{
