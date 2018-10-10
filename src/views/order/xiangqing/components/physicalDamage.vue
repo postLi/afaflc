@@ -143,6 +143,7 @@ import { parseTime } from '@/utils/index.js'
 import { orderDetailsList } from '@/api/order/ordermange'
 import { getGoodsclaimAll, getGoodsfollowupAll } from '@/api/service/claim.js'
 import add from './add'
+
 export default {
   name: 'pushOrderList',
   components: {
