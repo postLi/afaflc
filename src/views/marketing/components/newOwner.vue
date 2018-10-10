@@ -627,7 +627,7 @@ export default {
         }
         .newMarketingOrder{
             .el-dialog{
-                width: 1000px!important;
+                width: 1100px!important;
                 max-height: 100%;
             }
             .swith{

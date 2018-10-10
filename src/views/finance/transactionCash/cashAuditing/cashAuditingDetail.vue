@@ -2,7 +2,73 @@
      <div class="cashAuditingDetail commoncss">
       <el-button :type="btntype" :value="value" :plain="plain" :icon="icon" @click="openDialog()"><span :class="editType=='view'?'BtnInfo':''">{{btntext}}</span ></el-button>
       <el-dialog  :visible="dialogFormVisible_add" :before-close="change" :title="btntitle">
-
+        <el-form ref="formAll" :inline="true">
+            <el-row>
+                <el-col :span="12">
+                    <el-form-item label="用户姓名 ：" :label-width="formLabelWidth" >
+                    <span>{{formData.name}}</span>
+                    </el-form-item>
+                </el-col>
+                <el-col :span="12">
+                    <el-form-item label="电话号码 ：" :label-width="formLabelWidth" >
+                    <span>{{formData.mobile}}</span>
+                    </el-form-item>
+                </el-col>
+            </el-row>
+            <el-row>
+                <el-col :span="12">
+                    <el-form-item label="提现金额 ：" :label-width="formLabelWidth" >
+                    <span>{{formData.extractSum}}</span>
+                    </el-form-item>
+                </el-col>
+                <el-col :span="12">
+                    <el-form-item label="申请时间 ：" :label-width="formLabelWidth" >
+                    <span>{{formData.extractTime}}</span>
+                    </el-form-item>
+                </el-col>
+            </el-row>
+            <el-row>
+                <el-col :span="12">
+                    <el-form-item label="收款方式 ：" :label-width="formLabelWidth" >
+                    <span>{{formData.extractWay}}</span>
+                    </el-form-item>
+                </el-col>
+                <el-col :span="12">
+                    <el-form-item label="收款账号 ：" :label-width="formLabelWidth" >
+                    <span>{{formData.extractAccount}}</span>
+                    </el-form-item>
+                </el-col>
+            </el-row>   
+            <el-row>
+                <el-col :span="12">
+                    <el-form-item label="处理结果 ：" :label-width="formLabelWidth" >
+                    <span>{{formData.extractAccount}}</span>
+                    </el-form-item>
+                </el-col>
+                <el-col :span="12">
+                    <el-form-item label="审核时间 ：" :label-width="formLabelWidth" >
+                     <span>{{formData.extractTime}}</span>
+                    </el-form-item>
+                </el-col>
+            </el-row>  
+            <el-row>
+                <el-col :span="12">
+                    <el-form-item label="提现结果 ：" :label-width="formLabelWidth" >
+                    <span>{{formData.auditOpinion}}</span>
+                    </el-form-item>
+                </el-col>
+            </el-row>
+            <el-row>
+                <el-col :span="24">
+                    <el-form-item label="备注信息 ：" :label-width="formLabelWidth" >
+                    <span>{{formData.extractDes}}</span>
+                    </el-form-item>
+                </el-col>
+            </el-row>    
+        </el-form>
+        <div slot="footer" class="dialog-footer">
+          <el-button @click="close()" type="primary">关 闭</el-button>
+        </div>
       </el-dialog> 
       </div>
 </template>
@@ -51,17 +117,12 @@ export default {
         dialogFormVisible_add: false,
         formLabelWidth:'120px',
         formData:{},
-        formAll:{
-          auditOpinion:'1',
-          remark:null,
-        },
         }
   },
   watch:{
    dialogFormVisible_add:{
         handler: function(val, oldVal) {
             if(!val){
-                 this.$refs['formAll'].resetFields();
                  this.$emit('getData') 
             }
         },
@@ -96,23 +157,7 @@ export default {
    },
    close:function(){
       this.dialogFormVisible_add = false;
-       },
-    changeList(){
-            eventBus.$emit('pushListtwo')
-        },      
-    edit_data(){
-       this.$refs['formAll'].validate(valid=>{
-        if(valid){
-        this.dialogFormVisible_add = false;
-        data_aflcExtractCashList_update(this.params[0].extractSerial,this.formAll).then(res=>{
-           this.changeList();
-            this.$message.success('修改成功');
-        }).catch(res=>{
-            this.$message.error('修改失败')
-        })
-       }
-       })
-    }
+       }, 
    },
 }
 </script>

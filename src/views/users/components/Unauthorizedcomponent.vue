@@ -24,7 +24,7 @@
                     type="primary" 
                     btntype="primary"
                     icon="el-icon-document"
-                    editType="edit"
+                    editType="valetAuth"
                     :templateItem="selectionData"
                     btntitle="代客认证"
                     @getData="getDataList"
@@ -39,13 +39,14 @@
                         :data="tableDataTree"
                         stripe
                         border
+                        height="100%"
                         highlight-current-row
                         current-row-key
+                        tooltip-effect="dark"
                         @selection-change="getSelection" 
                         @row-click="clickDetails"
-                        tooltip-effect="dark"
                         style="width: 100%">
-                        <el-table-column
+                         <el-table-column
                             label="选择"
                             type="selection"
                             width="50">
@@ -60,6 +61,29 @@
                         label="手机号"
                         sortable
                         >
+                        <template slot-scope="scoped">
+                            <driver-newTemplate
+                            :paramsView="scoped.row"
+                                :btntext="scoped.row.driverMobile"
+                                type="primary" 
+                                btntype="text"
+                                editType="view"
+                                btntitle="车主详情">
+                                </driver-newTemplate>
+                        </template>
+                        </el-table-column>
+                        <el-table-column
+                        prop="carNumber"
+                        label="车牌号"
+                        sortable
+                        >
+                        </el-table-column>
+                        <el-table-column
+                        prop="driverName"
+                        label="车主"
+                        width="200"
+                        sortable
+                        >
                         </el-table-column>
                         <el-table-column
                         prop="registerOriginName"
@@ -67,28 +91,28 @@
                         sortable
                         >
                         </el-table-column>
+                        <el-table-column prop="accountStatusName" label="账户状态" sortable>
+                      <template slot-scope="scope">
+                        <span :class="{freezeName: scope.row.accountStatusName == '冻结中' ,blackName: scope.row.accountStatusName == '黑名单',normalName :scope.row.accountStatusName == '正常'}">{{scope.row.accountStatusName}}</span>
+                      </template>
+                        </el-table-column>
                         <el-table-column
                         prop="belongCityName"
-                        label="所在地"
-                        sortable
-                        >
+                        label="所在地" sortable>
                         </el-table-column>
                         <el-table-column
                         prop="driverStatusName"
-                        label="状态"
-                        sortable
-                        >
+                        label="状态" sortable>
                         </el-table-column>
                         <el-table-column
-                        prop="registerTime"
-                        label="注册日期"
-                        sortable
-                        >
-                        <template  slot-scope="scope">
-                            <span v-if="scope.row.registerTime">{{ scope.row.registerTime | parseTime}}</span>
-                        </template>
+                        prop="createTime"
+                        label="注册日期" sortable>
+                     <template  slot-scope="scope">
+                        <span v-if="scope.row.createTime">{{ scope.row.createTime | parseTime}}</span>
+                    </template>
                         </el-table-column>
                     </el-table>
+                        
 <div class="info_tab_footer">共计:{{ totalCount }} <div class="show_pager"> <Pager :total="totalCount" @change="handlePageChange" /></div> </div>   
                 </div>
             </div>

@@ -436,7 +436,7 @@ export default {
         }
         .newMarketingOrder{
             .el-dialog{
-                width: 1000px!important;
+                width: 1100px!important;
                 overflow: unset;
             }
             .swith{

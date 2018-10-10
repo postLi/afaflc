@@ -1,7 +1,7 @@
 <template>
   <div class="drivercertify commoncss">
     <el-button type="primary" :value="value" :plain="plain" :icon="icon" @click="openDialog()">{{btntext}}</el-button>
-    <el-dialog :title="btntext" :visible.sync="freezeDialogFlag" :before-close="change()">
+    <el-dialog :title="btntext" :visible.sync="freezeDialogFlag" :before-close="change()" v-dialogDrag top=5vh>
  <el-form :model="templateModel" ref="templateModel" :rules="rulesForm" inline modal-append-to-body>
              <el-row>
                 <el-col :span="12">
@@ -60,7 +60,7 @@
                             v-model="templateModel.carLength"
                             clearable
                             ref="lengths"
-                            :maxlength="10"
+                            :maxlength="5"
                             >
                         </el-input>
                     </el-form-item>
@@ -71,7 +71,7 @@
                             v-model="templateModel.carWidth"
                             clearable
                             ref="widths"
-                            :maxlength="10"
+                            :maxlength="5"
                             >
                         </el-input>
                     </el-form-item>
@@ -82,7 +82,7 @@
                             v-model="templateModel.carHeight"
                             clearable
                             ref="heights"
-                            :maxlength="10"
+                            :maxlength="5"
                             >
                         </el-input>
                     </el-form-item>
@@ -126,10 +126,10 @@
                     </el-form-item>
                   </el-col>
               </el-row>
-
+                  <el-row>
                   <el-col :span="12">
                       <el-form-item label="车主抽佣等级：" prop="commisionLevel" :label-width="formLabelWidth">
-                            <el-select v-model="templateModel.commisionLevel" placeholder="请选择" :disabled="editType=='view'">
+                            <el-select v-model="templateModel.commisionLevel" placeholder="请选择">
                                 <el-option
                                     v-for="item in MaidLevelType"
                                     :key="item.code"
@@ -141,7 +141,7 @@
                   </el-col>
                   <el-col :span="12">
                       <el-form-item label="车主奖励等级：" prop="rewardgrade" :label-width="formLabelWidth">
-                            <el-select v-model="templateModel.rewardgrade" placeholder="请选择" :disabled="editType=='view'">
+                            <el-select v-model="templateModel.rewardgrade" placeholder="请选择">
                                 <el-option
                                     v-for="item in carOwnerType"
                                     :key="item.code"
@@ -152,7 +152,7 @@
                             </el-select>
                         </el-form-item>
                   </el-col>
-
+            </el-row>
               <el-row>
                   <el-col :span="12">
                     <el-form-item :label-width="formLabelWidth" label="特权车：">
@@ -212,6 +212,8 @@
                       </el-radio-group>
                     </el-form-item>
                 </div>
+                </div>
+                <div class="data_pic">
                 <div class="data_pic_callingcode data_pic_c">
                     <el-tooltip class="item" effect="dark" content="点击图片查看原图" placement="top">
                  <div class="uploadImgBox"><img  class="picURL" :src="templateModel.drivingLicenceFile ? templateModel.drivingLicenceFile : defaultImg" v-showPicture/></div>
@@ -238,6 +240,8 @@
                       </el-radio-group>
                     </el-form-item>
                 </div>
+                 </div>
+                <div class="data_pic">
                 <div class="data_pic_callingcode data_pic_c">
                     <el-tooltip class="item" effect="dark" content="点击图片查看原图" placement="top">
                   <div class="uploadImgBox"> <img  class="picURL" :src="templateModel.takeIdCardFile ? templateModel.takeIdCardFile : defaultImg" v-showPicture/></div>
@@ -332,7 +336,7 @@ export default {
     //    身份证信息校验
         const driverCardidValidator = (rule, val, cb) => {
             !val && cb(new Error('身份证不能为空'))
-             let IdTest = /(^\d{18}$)/
+             let IdTest = /^[1-9]\d{5}(18|19|([23]\d))\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\d{3}[0-9Xx]$/
             if(!(IdTest.test(val))){
                 cb(new Error('请输入正确的身份证'))
             }
@@ -376,7 +380,15 @@ export default {
                 cb()
             }
         }
-
+    //   车主奖励等级校验    
+        const rewardgradeValidator = (rule, val, cb) => {
+            if(!val){
+            cb(new Error('车主奖励等级不能为空'))
+            }
+            else{
+                cb()
+            }
+        }
 
     //    车型信息校验
         const carTypeValidator = (rule, val, cb) => {
@@ -389,9 +401,9 @@ export default {
         }
     //    车长信息校验
         const carLengthValidator = (rule, val, cb) => {
-            let reg=/^\d+(\.\d{0,2})?$/
+            let reg=/^([1-9]|1[1-2]|2[0-9])(\.\d{1,2})?$/
             if(!reg.test(val)){
-            cb(new Error('请输入数据'))
+            cb(new Error('请输入数值为30以内的值，最多保留2位小数'))
             }
             else{
                 cb()
@@ -399,9 +411,9 @@ export default {
         }
     //    车宽信息校验
         const carWidthValidator = (rule, val, cb) => {
-            let reg=/^\d+(\.\d{0,2})?$/
+            let reg=/^([1-9]|1[1-2]|2[0-9])(\.\d{1,2})?$/
             if(!reg.test(val)){
-            cb(new Error('请输入数据'))
+            cb(new Error('请输入数值为30以内的值，最多保留2位小数'))
             }
             else{
                 cb()
@@ -410,9 +422,9 @@ export default {
         }
     //    车高信息校验
         const carHeightValidator = (rule, val, cb) => {
-            let reg=/^\d+(\.\d{0,2})?$/
+            let reg=/^([1-9]|1[1-2]|2[0-9])(\.\d{1,2})?$/
             if(!reg.test(val)){
-            cb(new Error('请输入数据'))
+            cb(new Error('请输入数值为30以内的值，最多保留2位小数'))
             }
             else{
                 cb()
@@ -503,6 +515,7 @@ export default {
         obtainGradeTime:{validator: obtainGradeTimeValidator, trigger:'change',required:true,},
         rewardGrade:{validator: rewardGradeValidator, trigger:'change',required:true,},
         commisionLevel:{validator: commisionLevelValidator, trigger:'change',required:true,},        
+        rewardgrade:{validator: rewardgradeValidator, trigger:'change',required:true,},
         },        
       }
   },
@@ -594,7 +607,6 @@ export default {
             },            
     isVip(val){
             if(this.templateModel.isVipCar == '1'){
-
                 this.templateModel.isVipCar = '1'
                  console.log(this.templateModel.isVipCar)
             }
@@ -718,8 +730,8 @@ export default {
 .drivercertify{
     .el-dialog{
        overflow: unset;
+       width: 1200px;
        max-height: none;
-       width: 70%;
        .certifyless{
          width:62px;
        }
@@ -730,13 +742,15 @@ export default {
     }
 }
 .data_pic{
-   width: 90%;
-   margin:0px auto;
+    margin: 0 15px;
    overflow: hidden;
 .data_pic_c{
     float: left;
-    width: 18%;
-    margin-left:2%;
+    width: 49%;
+    margin-right:2%;
+    &:nth-of-type(2n) {
+    margin-right:0px;
+    }
     .uploadImgBox{
     width: 100%;
     height: 100%;
@@ -747,14 +761,14 @@ export default {
     }
     .el-radio-group{
     width: 100%;
-    
+    margin-left: 220px;
     .el-radio{
     margin: 2px 0px;
     }
     }
     .picURL{
         width: 100%;
-        height: 160px;
+        height: 340px;
         cursor: pointer;
     }
     }

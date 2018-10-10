@@ -1,7 +1,7 @@
 <template>
   <div class="freezeInfo commoncss">
     <el-button :type="btntype" :value="value" :plain="plain" :icon="icon" @click="openDialog()"><span :class="editType=='view'?'BtnInfo':''">{{btntext}}</span ></el-button>
-    <el-dialog :title="btntext" :visible.sync="freezeDialogFlag" :before-close="change()">
+    <el-dialog :title="btntext" :visible.sync="freezeDialogFlag" :before-close="change()" top=5vh v-dialogDrag>
       <el-form :model="formFroze" ref="formFroze" :rules="formFrozeRules">
         <el-row>
             <el-col :span="12">
@@ -15,7 +15,6 @@
               </el-form-item>
             </el-col>
           </el-row>
-          
           <el-row>
             <el-col :span="12">
               <el-form-item label="身份证号码：" :label-width="formLabelWidth">
@@ -49,7 +48,6 @@
                                     :key="item.code"
                                     :label="item.name"
                                     :value="item.code"
-                                    
                                     >
                                 </el-option>
                     </el-select>

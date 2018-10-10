@@ -11,7 +11,7 @@
                 </el-col>
                 <el-col :span="12">
                     <el-form-item label="电话号码 ：" :label-width="formLabelWidth" >
-                    <span>{{formData.name}}</span>
+                    <span>{{formData.mobile}}</span>
                     </el-form-item>
                 </el-col>
             </el-row>
