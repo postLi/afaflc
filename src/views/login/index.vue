@@ -138,11 +138,12 @@ export default {
   methods: {
     handleLogin() {
       this.$refs.loginForm.validate(valid => {
-        console.log(valid)
+        // console.log(valid)
         if (valid) {
           this.loading = true
           const data = Object.assign({}, this.loginForm);
           data.username = data.username + '|' + 'aflc-7';
+            data.password = this.$md5(data.password);
           this.$store.dispatch('Login', data).then(() => {
             // if (!this.loginForm.accNum) {
             //   this.errInfo = true

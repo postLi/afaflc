@@ -444,7 +444,7 @@ export default{
         .addclassify,.changeclassify{
             .el-dialog{
                 position: relative;
-                width: 760px;
+                width: 820px;
                 .el-dialog__body{
                     margin:0 20px;
                     margin-bottom: 20px;

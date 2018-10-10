@@ -76,7 +76,7 @@ export default {
         init(){
             orderDetailsList(this.$route.query.orderSerial).then(res => {
                 console.log('details',res)
-                this.listInformation = res.data.aflcOrderFollowingFiles;
+                this.listInformation = res.data.aflcOrderFollowingFiles.reverse();
                 this.loading = false;
             })
         },

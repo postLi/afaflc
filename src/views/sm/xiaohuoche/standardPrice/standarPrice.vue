@@ -309,7 +309,7 @@ export default {
     .standarPrice{
         .el-dialog{
             position: relative;
-            width: 760px;
+            width: 810px;
             .el-dialog__body{
                 margin:0 40px;
                 padding-bottom: 0;

@@ -16,7 +16,8 @@ import './assets/iconfont/iconfont.css'
 import * as filters from './filters'
 
 import './directive'
-
+//引入MD5
+import md5 from 'js-md5';
 import './mixins'
 // mock
 // import './mock/'
@@ -25,7 +26,7 @@ import './mixins'
 Vue.use(ElementUI)
 //
 // Vue.use(vRegion);
-
+Vue.prototype.$md5 = md5;
 Vue.config.productionTip = false
 
 // register global utility filters.

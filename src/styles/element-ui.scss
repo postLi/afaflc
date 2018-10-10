@@ -13,6 +13,13 @@
         background-color: #ffffff;
         cursor: not-allowed;
     }
+
+    .el-textarea.is-disabled .el-textarea__inner {
+        background-color: #fff;
+        border-color: #e4e7ed;
+        color: #3e9ff1;
+        cursor: not-allowed;
+    }
   
   //暂时性解决diolag 问题 https://github.com/ElemeFE/element/issues/2461
   .el-dialog {
@@ -80,7 +87,7 @@
 
   //element ui upload
   .upload-container {
-    height: 116px;
+    height: 170px;
     .el-upload {
       width: 100%;
       height: 100%;

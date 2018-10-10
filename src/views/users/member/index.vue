@@ -133,7 +133,7 @@
         .wuliucreatDialog,.freezeDialog,.shipperBlackDialog,.shenghe{
             display: inline-block;
             .el-dialog{
-                width: 810px;
+                width: 1200px;
                 .el-dialog__body{
                     .el-form{
                         .shipper_information{
@@ -143,28 +143,8 @@
                                 border-bottom: 2px solid #ccc;
                             }
                         }
-                        .el-form-item{
-                            margin-left: 10px;
-                            margin-right: 10px;
-                            .el-form-item__content{
-                                .el-input{
-                                    width: 250px;
-                                }
-                            }
-                        }
-                        .moreLength{
-                            text-align: left;
-                            .el-form-item__content{
-                                .el-input{
-                                    width: 650px;
-                                }
-                                .el-radio-group{
-                                    margin-left: 0;
-                                }
-                            }
-                        }
                         .el-textarea{
-                            width: 650px;
+                            // width: 650px;
                             vertical-align: top;
                             font-size: 12px;
                             padding-top: 5px;

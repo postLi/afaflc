@@ -80,17 +80,17 @@
 			</el-table>
 		</div>
         <div class="info_tab_footer">共计:{{ totalCount }} <div class="show_pager"> <Pager :total="totalCount" @change="handlePageChange" /></div> </div>    
-	  </div>
+	</div>
 
-       <!--认证审核部分 -->
-    <div class="shenghe commoncss">
-        <el-dialog title="认证审核" :visible.sync="dialogFormVisible" :close-on-click-modal = "false">
+    <!--认证审核部分 -->
+    <div class="shenghedialog commoncss">
+        <el-dialog title="认证审核" :visible.sync="dialogFormVisible" top="5vh" :close-on-click-modal = "false">
           <el-form :model="shengheform" ref="shengheform" :rules="shengheformRules">
             <el-row>
               <el-col :span="12">
                 <el-form-item label="会员账号" :label-width="formLabelWidth" prop="account">
-                  <!-- <el-input v-model="shengheform.account" disabled auto-complete="off"></el-input> -->
-                    <span class="onlyShow">{{shengheform.account}}</span>
+                  <el-input v-model="shengheform.account" disabled auto-complete="off"></el-input>
+                    <!-- <span class="onlyShow">{{shengheform.account}}</span> -->
                 </el-form-item>
               </el-col>
               <el-col :span="12">
@@ -127,28 +127,28 @@
             <el-row>
               <el-col :span="12">
                 <el-form-item label="注册来源" :label-width="formLabelWidth">
-                    <!-- <el-input v-model="shengheform.registerOriginName" disabled></el-input> -->
-                    <span class="onlyShow">{{shengheform.registerOriginName}}</span>
+                    <el-input v-model="shengheform.registerOriginName" disabled></el-input>
+                    <!-- <span class="onlyShow">{{shengheform.registerOriginName}}</span> -->
                 </el-form-item>
               </el-col>
               <el-col :span="12">
                 <el-form-item label="注册日期:" :label-width="formLabelWidth">
-                  <!-- <el-input v-model="shengheform.registerTime" disabled></el-input> -->
-                    <span class="onlyShow">{{shengheform.registerTime}}</span>
+                  <el-input v-model="shengheform.registerTime" disabled></el-input>
+                    <!-- <span class="onlyShow">{{shengheform.registerTime}}</span> -->
                 </el-form-item>
               </el-col>
             </el-row>
             <el-row>
               <el-col :span="12">
                 <el-form-item label="账户状态" :label-width="formLabelWidth">
-                  <!-- <el-input v-model="shengheform.accountStatusName" disabled></el-input> -->
-                    <span class="onlyShow">{{shengheform.accountStatusName}}</span>
+                  <el-input v-model="shengheform.accountStatusName" disabled></el-input>
+                    <!-- <span class="onlyShow">{{shengheform.accountStatusName}}</span> -->
                 </el-form-item>
               </el-col>
               <el-col :span="12">
                 <el-form-item label="认证状态" :label-width="formLabelWidth">
-                  <!-- <el-input v-model="shengheform.authStatusName" disabled></el-input> -->
-                    <span class="onlyShow">{{shengheform.authStatusName}}</span>
+                  <el-input v-model="shengheform.authStatusName" disabled></el-input>
+                    <!-- <span class="onlyShow">{{shengheform.authStatusName}}</span> -->
                 </el-form-item>
               </el-col>
             </el-row>
@@ -182,7 +182,8 @@
                 </el-col>
                 <el-col :span="12" >
                     <el-form-item label="公司成立时间 ：" :label-width="formLabelWidth" prop="foundTime">
-                        <span class="onlyShow"  disabled>{{shengheform.foundTime ? shengheform.foundTime :'未填写'}}</span>
+                        <!-- <span class="onlyShow"  disabled>{{shengheform.foundTime ? shengheform.foundTime :'未填写'}}</span> -->
+                        <el-input  :value="shengheform.foundTime ? shengheform.foundTime :'未填写'"  disabled></el-input>
                         <!-- <el-date-picker
                             v-if="editType=='view'"
                             v-model="shengheform.foundTime"
@@ -213,7 +214,7 @@
                 <el-col :span="24" class="moreLength">
                     <el-form-item label="服务类型 ：" :label-width="formLabelWidth" prop="optionsServerArr">
                         <el-checkbox-group v-model="optionsServerArr" >
-                                <el-checkbox v-for="obj in optionsServer" :label="obj.code" :key="obj.id" >{{obj.name}}</el-checkbox>
+                            <el-checkbox v-for="obj in optionsServer" :label="obj.code" :key="obj.id" >{{obj.name}}</el-checkbox>
                         </el-checkbox-group>
                     </el-form-item>
                 </el-col>
@@ -239,14 +240,16 @@
             </el-row>
            
             <div class="data_pic">  
-                <div class="data_pic_default">
+                <!-- <div class="data_pic_default">
                     <img  :src= 'defaultImg'/>
-                </div>
+                </div> -->
                 <div class="data_pic_img clearfix">
                     <div class="data_pic_yyzz data_pic_c">  
-                        <img  class="picURL" :src="shengheform.businessLicenceFile ? shengheform.businessLicenceFile : defaultImg" @click="changeIMG"/>
+                        <el-tooltip class="item" effect="dark" content="点击图片查看原图" placement="top" >
+                            <img  class="picURL" :src="shengheform.businessLicenceFile ? shengheform.businessLicenceFile : defaultImg" @click="changeIMG"/>
+                        </el-tooltip>
                         <h2>营业执照</h2>
-                        <el-form-item  prop="radio1">
+                        <el-form-item  prop="radio1" label-width="0">
                             <el-radio-group v-model="radio1">
                                 <el-radio label="上传合格">上传合格</el-radio><br />
                                 <el-radio label="不清晰">不清晰</el-radio><br />
@@ -255,10 +258,12 @@
                         </el-form-item>
                     </div>
                     <div class="data_pic_company data_pic_c">   
-                        <img  class="picURL" :src="shengheform.companyFacadeFile ? shengheform.companyFacadeFile : defaultImg" @click="changeIMG"/>
+                        <el-tooltip class="item" effect="dark" content="点击图片查看原图" placement="top" >
+                            <img  class="picURL" :src="shengheform.companyFacadeFile ? shengheform.companyFacadeFile : defaultImg" @click="changeIMG"/>
+                        </el-tooltip>
                         <h2>公司或档口照片</h2>
-                         <el-form-item  prop="radio2">
-                            <el-radio-group v-model="radio2">
+                        <el-form-item  prop="radio2" label-width="0">
+                            <el-radio-group v-model="radio2" >
                                 <el-radio label="上传合格">上传合格</el-radio><br />
                                 <el-radio label="不清晰">不清晰</el-radio><br />
                                 <el-radio label="内容不符">内容不符</el-radio>
@@ -266,9 +271,11 @@
                         </el-form-item>
                     </div>
                     <div class="data_pic_callingcode data_pic_c">
-                        <img  class="picURL" :src="shengheform.takeIdCardFile ? shengheform.takeIdCardFile : defaultImg" @click="changeIMG"/>
+                        <el-tooltip class="item" effect="dark" content="点击图片查看原图" placement="top" >
+                            <img  class="picURL" :src="shengheform.takeIdCardFile ? shengheform.takeIdCardFile : defaultImg" @click="changeIMG"/>
+                        </el-tooltip>
                         <h2>手持身份证</h2>
-                         <el-form-item  prop="radio3">
+                         <el-form-item  prop="radio3" label-width="0">
                             <el-radio-group v-model="radio3">
                                 <el-radio label="上传合格">上传合格</el-radio><br />
                                 <el-radio label="不清晰">不清晰</el-radio><br />
@@ -683,8 +690,11 @@ return {
 }
 </script>
 <style lang="scss">
-    .shenghe{
+    .shenghedialog{
         width: 100%;
+        img{
+            cursor: pointer;
+        }
         .data_pic{
             margin: 0 20px;
             padding-bottom: 20px;
@@ -722,9 +732,6 @@ return {
                     margin-bottom: 10px;
                 }
             }
-            // .data_pic_yyzz,.data_pic_company{
-            //     margin-right: 2%;
-            // }
         }
 
         .el-checkbox-group{

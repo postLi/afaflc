@@ -79,7 +79,7 @@
       methods: {
         handleClick(tab, event) {
             // console.log(tab, event);
-          this.UseshipperName = tab.name
+          this.UseshipperName = tab.name;
         }
       }
     }
@@ -102,7 +102,7 @@
                     .el-form{
                         .shipper_information{
                             h2{ 
-                                margin:10px 20px;
+                                margin:10px 0;
                                 padding-bottom: 10px;
                                 border-bottom: 2px solid #ccc;
                             }
@@ -114,25 +114,17 @@
                                 // }
                             }
                         }
-                        .moreLength{
-                            .el-form-item__content{
-                                .el-input{
-                                    width: 800px;
-                                }
-                            }
-                        }
                         .el-textarea{
-                            width: 660px;
                             vertical-align: top;
                             font-size: 12px;
                             padding-top: 5px;
                         }
-                        // .v-region{
-                        //     .v-dropdown-container{
-                        //         height: 300px !important;
-                        //         overflow: auto;
-                        //     }
-                        // }
+                        .v-region{
+                            .v-dropdown-container{
+                                height: 450px !important;
+                                overflow: auto;
+                            }
+                        }
                     }
                 }
             }

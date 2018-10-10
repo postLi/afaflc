@@ -4,8 +4,7 @@
         <el-form :model="formBlack" ref="formBlack" :rules="formBlackRules">
             <div class="shipper_information">
                 <el-row>
-                    <el-col :span="24">
-                    <el-form-item label="移入原因:" :label-width="formLabelWidth" prop="putBlackCause">
+                    <el-form-item label="移入原因：" :label-width="formLabelWidth" prop="putBlackCause">
                         <el-input v-model="formBlack.putBlackCauseName" disabled v-if="editType != 'add'" ></el-input>
                         <el-select v-model="formBlack.putBlackCause" placeholder="请选择" v-else>
                             <el-option
@@ -16,19 +15,16 @@
                             </el-option>
                         </el-select>
                     </el-form-item>
-                    </el-col>
                 </el-row>
                 <el-row>
-                    <el-col :span="24">
-                    <el-form-item label="移入黑名单原因说明:" :label-width="formLabelWidth"  prop="putBlackCauseRemark">
-                        <el-input v-model="formBlack.putBlackCauseRemark" :rows="2" :disabled="editType != 'add'" placeholder="请输入内容" type="textarea"></el-input>
+                    <el-form-item label="移入原因说明：" :label-width="formLabelWidth"  prop="putBlackCauseRemark">
+                        <el-input v-model="formBlack.putBlackCauseRemark" :rows="5" :disabled="editType != 'add'" placeholder="请输入内容" type="textarea"></el-input>
                     </el-form-item>
-                    </el-col>
                 </el-row>
                 <div class="shipper_information" v-show="editType == 'edit'" prop="popBlackRemark">
 					<h2>移出黑名单信息</h2>
-					<el-form-item label="移出黑名单原因说明:" :label-width="formLabelWidth">
-					    <el-input v-model="formBlack.popBlackRemark" :maxlength="100" :rows="2" placeholder="请输入内容" type="textarea"></el-input>
+					<el-form-item label="移出原因说明：" :label-width="formLabelWidth">
+					    <el-input v-model="formBlack.popBlackRemark" :maxlength="100" :rows="5" placeholder="请输入内容" type="textarea"></el-input>
 					</el-form-item>
 				</div>
             </div>
@@ -49,7 +45,6 @@ import { eventBus } from '@/eventBus'
 export default {
     name:'shipper_blackList-diaolog',
     components:{
-        // GetCityList
     },
     props:{
         params:{
@@ -61,6 +56,10 @@ export default {
         BlackDialogFlag:{
             type:Boolean,
             required:true,
+        },
+        title:{
+            type:String,
+            required:true
         }
     },
     data(){
@@ -68,7 +67,6 @@ export default {
             optionsFormBlack:[],
             options:[],
             type:'primary',
-            title:'',
             text:'',
             formLabelWidth:'120px',
             formBlack:{},
@@ -184,9 +182,7 @@ export default {
 </script>
 <style lang="scss">
     .shipperBlackDialog{
-        .el-textarea{
-            width: 637px;
-        }
+      
     }
 </style>
 

@@ -5,13 +5,14 @@
         <el-row>
             <el-col :span="12">
               <el-form-item label="手机号码：" :label-width="formLabelWidth">
-                <span class="onlyShow">{{formFroze.mobile}}</span>
-
+                <!-- <span class="onlyShow">{{formFroze.mobile}}</span> -->
+                <el-input v-model="formFroze.mobile" disabled></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="12">
               <el-form-item label="公司名称：" :label-width="formLabelWidth">
-                <span class="onlyShow">{{formFroze.companyName}}</span>
+                <!-- <span class="onlyShow">{{formFroze.companyName}}</span> -->
+                <el-input v-model="formFroze.companyName" disabled></el-input>
               </el-form-item>
             </el-col>
           </el-row>
@@ -19,12 +20,14 @@
           <el-row>
             <el-col :span="12">
                 <el-form-item label="联系人：" :label-width="formLabelWidth">
-                    <span class="onlyShow">{{formFroze.contacts}}</span>
+                    <!-- <span class="onlyShow">{{formFroze.contacts}}</span> -->
+                    <el-input v-model="formFroze.contacts" disabled></el-input>
                 </el-form-item>
             </el-col>
             <el-col :span="12">
                 <el-form-item label="所在地：" :label-width="formLabelWidth">
-                    <span class="onlyShow">{{formFroze.belongCityName}}</span>
+                    <!-- <span class="onlyShow">{{formFroze.belongCityName}}</span> -->
+                    <el-input v-model="formFroze.belongCityName" disabled></el-input>
                 </el-form-item>
             </el-col>
           </el-row>
@@ -32,20 +35,23 @@
           <el-row>
             <el-col :span="24" class="moreLength">
                 <el-form-item label="详细地址：" :label-width="formLabelWidth">
-                    <span class="onlyShow">{{formFroze.address}}</span>
+                    <!-- <span class="onlyShow">{{formFroze.address}}</span> -->
+                    <el-input v-model="formFroze.address" disabled></el-input>
                 </el-form-item>
             </el-col>
           </el-row>
           <el-row>
             <el-col :span="12">
               	<el-form-item label="货主类型：" :label-width="formLabelWidth">
-                    <span class="onlyShow">{{formFroze.shipperTypeName}}</span>
+                    <!-- <span class="onlyShow">{{formFroze.shipperTypeName}}</span> -->
+                    <el-input v-model="formFroze.shipperTypeName" disabled></el-input>
                 </el-form-item>
             </el-col>
             <el-col :span="12">
-              <el-form-item label="注册来源：" :label-width="formLabelWidth">
-                <span class="onlyShow">{{formFroze.registerOriginName}}</span>
-              </el-form-item>
+                <el-form-item label="注册来源：" :label-width="formLabelWidth">
+                <!-- <span class="onlyShow">{{formFroze.registerOriginName}}</span> -->
+                    <el-input v-model="formFroze.registerOriginName" disabled></el-input>
+                </el-form-item>
             </el-col>
           </el-row>
           <div class="shipper_information">
@@ -92,7 +98,7 @@
           <el-row>
             <el-col :span="24">
               <el-form-item label="冻结说明：" :label-width="formLabelWidth">
-                <el-input type="textarea" :rows="2" :maxlength="100" v-model="formFroze.freezeCauseRemark " :disabled="editType == 'remove'" class="textArea"></el-input>
+                <el-input type="textarea" :rows="5" :maxlength="100" v-model="formFroze.freezeCauseRemark " :disabled="editType == 'remove'" class="textArea"></el-input>
               </el-form-item>
             </el-col>
           </el-row>

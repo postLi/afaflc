@@ -2,7 +2,7 @@
     <div class="commoncss areaPrice">
         <el-dialog :title="formtitle" :close-on-click-modal="false" :visible="dialogAreaPrice" @close="close" v-loading="loading">
             <el-form :inline="true" v-if="!isModify" :model="standForm" :rules="newrules"  ref="ruleForm"  label-position="left" size="mini">
-                <div class="infoinner clearfix">
+                <div class="infoinner">
                     <div class="slot_info clearfix">
                         <div class="newarea area_left">
                             <span class="slot_head">新增区域定价</span>
@@ -463,7 +463,7 @@ export default {
                     z-index: 99;
                 }
             .infoinner{
-                height:390px;
+                height:440px;
                 .slot_info{
                     position:absolute;
                     top:0;
@@ -504,8 +504,8 @@ export default {
                                 margin-bottom: 13px;
                             }
                             .eltree_search{
-                                width: 250px;
-                                height: 256px;
+                                width: 260px;
+                                height: 296px;
                                 margin-bottom: 12px;
                                 overflow: auto;
                                 border: 1px solid #ccc;
@@ -547,7 +547,7 @@ export default {
                                 }
                             }
                             .chooseclassfy{
-                                width: 250px;
+                                width: 260px;
                                 .chose{
                                     margin-bottom: 0;
                                     .el-form-item__label{
@@ -596,6 +596,8 @@ export default {
                                         width: 96px;
                                         font-size: 12px;
                                         border-radius: 2px;
+                                        height: 30px;
+                                        line-height: 30px;
                                         border: solid 1px #d4d4d4;
                                         padding:8px;
                                         color: #3e9ff1;

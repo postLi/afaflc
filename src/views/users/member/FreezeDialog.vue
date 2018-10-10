@@ -5,7 +5,8 @@
           <el-row>
             <el-col :span="24">
                 <el-form-item label="冻结原因：" prop="freezeCause" :label-width="formLabelWidth" >
-                    <span class="onlyShow" v-if="editType == 'remove'">{{formFroze.freezeCauseName}}</span>
+                    <!-- <span class="onlyShow" v-if="editType == 'remove'">{{formFroze.freezeCauseName}}</span> -->
+                    <el-input v-if="editType == 'remove'" v-model="formFroze.freezeCauseName" disabled></el-input>
                     <el-select v-model="formFroze.freezeCause" v-else placeholder="请选择" clearable>
                         <el-option
                         v-for="item in optionsReason"
@@ -20,7 +21,8 @@
           <el-row>
             <el-col :span="24">
               <el-form-item label="解冻日期：" :label-width="formLabelWidth" prop="unfreezeTime">
-                <span class="onlyShow" v-if="editType == 'remove'">{{formFroze.unfreezeTime | parseTime}}</span>
+                <!-- <span class="onlyShow" v-if="editType == 'remove'">{{formFroze.unfreezeTime | parseTime}}</span> -->
+                <el-input v-if="editType == 'remove'" :value="formFroze.unfreezeTime | parseTime" disabled></el-input>
                 <div v-else>
                     <el-date-picker
                     v-model="formFroze.unfreezeTime"
@@ -43,7 +45,7 @@
           <el-row>
             <el-col :span="24">
               <el-form-item label="冻结原因说明：" :label-width="formLabelWidth" prop="freezeCauseRemark">
-                <el-input type="textarea" :rows="2" :maxlength="100" v-model="formFroze.freezeCauseRemark " :disabled="editType == 'remove'" class="textArea"></el-input>
+                <el-input type="textarea" :rows="5" :maxlength="100" v-model="formFroze.freezeCauseRemark " :disabled="editType == 'remove'" class="textArea"></el-input>
               </el-form-item>
             </el-col>
           </el-row>
@@ -54,7 +56,7 @@
             <el-row>
                 <el-col :span="24">
                 <el-form-item label="解冻原因说明：" :label-width="formLabelWidth" prop="unfreezeRemark">
-                    <el-input type="textarea" :rows="2" :maxlength="100" v-model="formFroze.unfreezeRemark " class="textArea"></el-input>
+                    <el-input type="textarea" :rows="5" :maxlength="100" v-model="formFroze.unfreezeRemark " class="textArea"></el-input>
                 </el-form-item>
                 </el-col>
             </el-row>
@@ -82,26 +84,6 @@ export default {
     params:{
       type:Object,
     },
-    icon:{
-      type: String,
-      default: ''
-    },
-    btntype: {
-      type: String,
-      default: ''
-    },
-    btntitle: {
-      type: String,
-      default: ''
-    },
-    plain:{
-      type: Boolean,
-      default: false
-    },
-    btntext: {
-      type: String,
-      default: ''
-    },
     editType: {
       type: String,
       default: 'edit'
@@ -112,12 +94,15 @@ export default {
     freezeDialogFlag:{
         type:Boolean,
         required:true
+    },
+    title:{
+        type:String,
+        required:true
     }
   },
   data(){
     return{
       type:'primary',
-      title:'',
       text:'',
       optionsReason:[],
       formLabelWidth:'120px',

@@ -102,8 +102,8 @@
         <div class="info_tab_footer">共计:{{ totalCount }} <div class="show_pager"> <Pager :total="totalCount" @change="handlePageChange" /></div> </div>
 
         <createdDialog :paramsView="paramsView" :editType="type"  :dialogFormVisible_add.sync = "dialogFormVisible_add" @getData="getDataList"/>
-        <FreezeDialog :params="selectRowData" :editType="freezetype"  :freezeDialogFlag.sync = "freezeDialogFlag" @getData="getDataList"/>
-        <shipperBlackDialog :params="selectRowData" :editType="blacktype"  :BlackDialogFlag.sync = "BlackDialogFlag" @getData="getDataList"/>
+        <FreezeDialog :params="selectRowData" :editType="freezetype"  :title="freezeTitle" :freezeDialogFlag.sync = "freezeDialogFlag" @getData="getDataList"/>
+        <shipperBlackDialog :params="selectRowData" :title="blackTitle"  :editType="blacktype"  :BlackDialogFlag.sync = "BlackDialogFlag" @getData="getDataList"/>
     </div>
 
     
@@ -144,6 +144,8 @@ export default {
       freezetype: '',
       blacktype: '',
       type: '',
+      blackTitle:'',
+      freezeTitle:'',
       paramsView: {},
       templateRadio: '',
       optionsStatus: [
@@ -209,9 +211,9 @@ export default {
     pushOrderSerial(row) {
         this.type = 'view'
         this.paramsView = Object.assign({}, row)
-          this.dialogFormVisible_add = true
+        this.dialogFormVisible_add = true;
             // 清除选中状态，避免影响下个操作
-        this.$refs.multipleTable.clearSelection()
+        this.$refs.multipleTable.clearSelection();
       },
     getCurrentRow(index, row) {
         this.selectRowData = Object.assign({}, row)
@@ -304,7 +306,8 @@ export default {
                     if (this.selectRowData.accountStatusName == '冻结中' && this.freezetype == 'add') {
                           return this.$message.info('您选中的货主已被冻结，不需多次冻结！')
                         } else {
-                          this.freezeDialogFlag = true
+                          this.freezeDialogFlag = true;
+                          this.freezeTitle='冻结物流公司';
                         }
                     break
                   case 'editFreeze':
@@ -312,7 +315,8 @@ export default {
                     if (this.selectRowData.accountStatusName != '冻结中' && this.freezetype == 'edit') {
                           return this.$message.info('您选中的货主未被冻结，不可做此操作！')
                         } else {
-                          this.freezeDialogFlag = true
+                          this.freezeDialogFlag = true;
+                          this.freezeTitle='冻结修改';
                         }
                     break
                   case 'removeFreeze':
@@ -320,15 +324,17 @@ export default {
                     if (this.selectRowData.accountStatusName != '冻结中' && this.freezetype == 'remove') {
                           return this.$message.info('您选中的货主未被冻结，无需移除！')
                         } else {
-                          this.freezeDialogFlag = true
+                          this.freezeDialogFlag = true;
+                          this.freezeTitle='移出冻结';
                         }
-                    break
+                    break  
                   case 'pushBlack':
                     this.blacktype = 'add'
                     if (this.selectRowData.accountStatusName == '黑名单' && this.blacktype == 'add') {
                           return this.$message.info('您选中的货主已被移入黑名单，不需多次拉黑！')
                         } else {
-                          this.BlackDialogFlag = true
+                          this.BlackDialogFlag = true;
+                          this.blackTitle = '移入黑名单';
                         }
                     break
                   case 'removeBlack':
@@ -336,7 +342,8 @@ export default {
                     if (this.selectRowData.accountStatusName != '黑名单' && this.blacktype == 'edit') {
                           return this.$message.info('您选中的货主未被移入黑名单，不可做此操作！')
                         } else {
-                          this.BlackDialogFlag = true
+                          this.BlackDialogFlag = true;
+                          this.blackTitle = '移除黑名单';
                         }
                     break
                 }
@@ -353,9 +360,6 @@ export default {
             h2{ 
                 margin:10px 0 10px 20px;
             }
-        }
-        .el-textarea{
-            width: 637px;
         }
     }
 

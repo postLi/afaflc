@@ -307,7 +307,7 @@ export default {
     .orderObtain{
         .el-dialog__wrapper{
             .el-dialog{
-                width: 810px;
+                width: 820px;
                 .el-dialog__body{
                     border-bottom:1px solid #ccc;   
                     margin-bottom: 0; 

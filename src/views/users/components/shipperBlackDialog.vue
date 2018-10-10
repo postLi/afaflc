@@ -4,46 +4,54 @@
         <el-form :model="formBlack" ref="formBlack" :rules="formBlackRules">
             <el-row>
                 <el-col :span="12">
-                    <el-form-item label="手机号码" :label-width="formLabelWidth">
-                        <span class="onlyShow">{{formBlack.mobile}}</span>
+                    <el-form-item label="手机号码：" :label-width="formLabelWidth">
+                        <!-- <span class="onlyShow">{{formBlack.mobile}}</span> -->
+                        <el-input v-model="formBlack.mobile" disabled></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col :span="12">
-                    <el-form-item label="公司名称" :label-width="formLabelWidth">
-                        <span class="onlyShow">{{formBlack.companyName}}</span>
+                    <el-form-item label="公司名称：" :label-width="formLabelWidth">
+                        <!-- <span class="onlyShow">{{formBlack.companyName}}</span> -->
+                        <el-input v-model="formBlack.companyName" disabled></el-input>
                     </el-form-item>
                 </el-col>
                 </el-row>
                 
                 <el-row>
                 <el-col :span="12">
-                    <el-form-item label="联系人" :label-width="formLabelWidth">
-                        <span class="onlyShow">{{formBlack.contacts}}</span>
+                    <el-form-item label="联系人：" :label-width="formLabelWidth">
+                        <!-- <span class="onlyShow">{{formBlack.contacts}}</span> -->
+                        <el-input v-model="formBlack.contacts" disabled></el-input>
 
                     </el-form-item>
                 </el-col>
                 <el-col :span="12">
-                    <el-form-item label="所在地" :label-width="formLabelWidth">
-                        <span class="onlyShow">{{formBlack.belongCityName}}</span>
+                    <el-form-item label="所在地：" :label-width="formLabelWidth">
+                        <!-- <span class="onlyShow">{{formBlack.belongCityName}}</span> -->
+                        <el-input v-model="formBlack.belongCityName" disabled></el-input>
+
                     </el-form-item>
                 </el-col>
                 </el-row>
                  <el-row>
-                    <el-col :span="24" class="moreLength">
+                    <el-col :span="24">
                         <el-form-item label="详细地址：" :label-width="formLabelWidth">
-                            <span class="onlyShow">{{formBlack.address}}</span>
+                            <!-- <span class="onlyShow">{{formBlack.address}}</span> -->
+                            <el-input v-model="formBlack.address" disabled></el-input>
                         </el-form-item>
                     </el-col>
                 </el-row>
                 <el-row>
                     <el-col :span="12">
-                        <el-form-item label="货主类型" :label-width="formLabelWidth">
-                            <span class="onlyShow">{{formBlack.shipperTypeName}}</span>
+                        <el-form-item label="货主类型：" :label-width="formLabelWidth">
+                            <!-- <span class="onlyShow">{{formBlack.shipperTypeName}}</span> -->
+                            <el-input v-model="formBlack.shipperTypeName" disabled></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="12">
-                        <el-form-item label="注册来源" :label-width="formLabelWidth">
-                            <span class="onlyShow">{{formBlack.registerOriginName}}</span>
+                        <el-form-item label="注册来源：" :label-width="formLabelWidth">
+                            <!-- <span class="onlyShow">{{formBlack.registerOriginName}}</span> -->
+                            <el-input v-model="formBlack.registerOriginName" disabled></el-input>
                         </el-form-item>
                     </el-col>
                 </el-row>
@@ -51,7 +59,7 @@
                 <h2>移入黑名单信息</h2>
                 <el-row>
                     <el-col :span="24">
-                    <el-form-item label="移入原因:" :label-width="formLabelWidth" prop="putBlackCause">
+                    <el-form-item label="移入原因：" :label-width="formLabelWidth" prop="putBlackCause">
                         <span class="onlyShow" v-if="editType != 'add'">{{formBlack.putBlackCauseName}}</span>
                         <el-select v-model="formBlack.putBlackCause" placeholder="请选择" v-else>
                             <el-option
@@ -66,15 +74,15 @@
                 </el-row>
                 <el-row>
                     <el-col :span="24">
-                    <el-form-item label="移入原因说明:" :label-width="formLabelWidth">
-                        <el-input v-model="formBlack.putBlackCauseRemark" :rows="2" :disabled="editType != 'add'" placeholder="请输入内容" type="textarea"></el-input>
+                    <el-form-item label="移入原因说明：" :label-width="formLabelWidth">
+                        <el-input v-model="formBlack.putBlackCauseRemark" :rows="5" :disabled="editType != 'add'" placeholder="请输入内容" type="textarea"></el-input>
                     </el-form-item>
                     </el-col>
                 </el-row>
                 <div class="shipper_information" v-show="editType == 'edit'">
 					<h2>移出黑名单信息</h2>
-					<el-form-item label="移出原因说明:" :label-width="formLabelWidth">
-					    <el-input v-model="formBlack.popBlackRemark" :maxlength="100" :rows="2" placeholder="请输入内容" type="textarea"></el-input>
+					<el-form-item label="移出原因说明：" :label-width="formLabelWidth">
+					    <el-input v-model="formBlack.popBlackRemark" :maxlength="100" :rows="5" placeholder="请输入内容" type="textarea"></el-input>
 					</el-form-item>
 				</div>
             </div>
@@ -229,9 +237,6 @@ export default {
 </script>
 <style lang="scss">
     .shipperBlackDialog{
-        .el-textarea{
-            width: 637px;
-        }
     }
 </style>
 
