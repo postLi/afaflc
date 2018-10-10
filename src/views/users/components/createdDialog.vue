@@ -178,8 +178,8 @@ export default {
             businessLicenceFile:'',//上传营业执照照片
             companyFacadeFile:'',//上传公司或者档口照片
             shipperCardFile:'',//上传发货人名片照片
-            registerOrigin:'AF0030103',
-            registerOriginName:'WEB',
+            registerOrigin:'AF0030107',
+            registerOriginName:'云平台',
             isDirectional: '0',
             provinceCode:'',
             cityCode:'',
@@ -244,8 +244,8 @@ export default {
         eventBus.$emit('changeList')
     },
     openDialog(){
-        console.log(this.editType)
-        console.log('this.xinzengform',this.xinzengform)
+        // console.log(this.editType)
+        // console.log('this.xinzengform',this.xinzengform)
         if(this.editType  == 'add'){
             this.xinzengform ={
                 shipperType:'AF0010101',//货主类型code
@@ -260,8 +260,8 @@ export default {
                 businessLicenceFile:'',//上传营业执照照片
                 companyFacadeFile:'',//上传公司或者档口照片
                 shipperCardFile:'',//上传发货人名片照片
-                registerOrigin:'AF0030103',
-                registerOriginName:'WEB',
+                registerOrigin:'AF0030107',
+                registerOriginName:'云平台',
                 isDirectional: '0',
             }
         }else {
