@@ -434,7 +434,7 @@ export default {
         }
     .newMarketingCity{
         .el-dialog{
-            width: 955px!important;
+            width:1050px!important;
         }
         .swith{
             margin:0px 0px 10px 10px;

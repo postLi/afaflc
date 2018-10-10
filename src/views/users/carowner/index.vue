@@ -81,6 +81,9 @@
                 }
             }
         }
+        .el-cascader{
+            margin-top:-5px;
+        }
         .classify_info{
             height:100%;
             .btns_box{
@@ -101,7 +104,8 @@
         .carNewinfo,.freezeInfo,.blackInfo{
             display: inline-block;
             .el-dialog{
-                width:850px;
+                width:1200px;
+                border-radius: 4px;
                 .el-dialog__body{
                     .el-form{
                         .shipper_information{

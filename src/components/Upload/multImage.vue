@@ -130,6 +130,8 @@ export default {
             console.log('sjdfisidfj', el)
             return obj
           })
+          this.$emit('filelist', this.filelist)
+          console.log(this.filelist, '==================')
         }
       },
       immediate: true
@@ -194,7 +196,7 @@ export default {
 
       this.$emit('input', this.showFileList ? this.filelist.map(el => {
         console.log('mapel:', el)
-        return el.url
+        return el.url 
       }).join(',') : val)
     },
     handleImageScucess(xml) {
@@ -270,7 +272,7 @@ export default {
          
       // }
       }else {
-this.dialogVisible = true 
+        this.dialogVisible = true 
       }
     }
   }

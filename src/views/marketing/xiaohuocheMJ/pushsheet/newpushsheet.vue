@@ -920,7 +920,10 @@ mounted(){
 </script>
 <style  lang="scss">
 .vestDialogBox{
-    display: inline-block;  
+    display: inline-block; 
+    .el-dialog{
+        width: 1050px!important;
+    } 
      .el-button {
         margin-right:0px;
         padding: 7px 15px 7px;

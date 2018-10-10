@@ -2,9 +2,7 @@
     <div style="height:100%;" class="identicalStyle">
             <el-form :inline="true"  class="demo-ruleForm classify_searchinfo">
                 <el-form-item label="所在地：">
-                    <vregion :ui="true"  @values="regionChange" class="form-control">
-                        <el-input v-model="formInline.belongCityName" placeholder="请选择"></el-input>
-                    </vregion>
+                <GetCityList ref="area" v-model="formInline.belongCityName"  @returnStr="getStr"></GetCityList>
                 </el-form-item>
                 <el-form-item label="认证状态：">
                     <el-select v-model="formInline.driverStatus" placeholder="请选择" clearable>
@@ -210,7 +208,7 @@
     import {data_get_driver_list,data_get_driver_status,data_get_shipper_auid} from '../../../api/users/carowner/total_carowner.js'
     import DriverNewTemplate from '../carowner/driver-newTemplate'
     import { parseTime,formatTime } from '@/utils/index.js'
-    import vregion from '@/components/vregion/Region'
+    import GetCityList from '@/components/GetCityList/city'
     import { eventBus } from '@/eventBus'
     import Pager from '@/components/Pagination/index'
     import FreezeChangeTemplate from '../carowner/freeze-change-template'
@@ -251,7 +249,7 @@
             }
         },
         components:{
-            vregion,
+            GetCityList,
             DriverNewTemplate,
             FreezeChangeTemplate,
             Pager,
@@ -284,20 +282,11 @@
         },
  
         methods:{
-            regionChange(d) {
-                console.log('data:',d)
-                this.formInline.belongCityName = (!d.province&&!d.city&&!d.area&&!d.town) ? '': `${this.getValue(d.province)}${this.getValue(d.city)}${this.getValue(d.area)}${this.getValue(d.town)}`.trim();
-                if(d.area){
-                    this.formInline.belongCity = d.area.code;
-                }else if(d.city){
-                    this.formInline.belongCity = d.city.code;
-                }
-                else{
-                    this.formInline.belongCity = d.province.code;
-                }
-            },
-             getValue(obj){
-                return obj ? obj.value:'';
+            
+            getStr(val,name){
+                console.log('this.cityarr',val,name)
+                this.formInline.belongCity = val.split(',')[2];
+                this.formInline.belongCityName = name.split(',')[2];
             },
             handlePageChange(obj) {
                 this.page = obj.pageNum

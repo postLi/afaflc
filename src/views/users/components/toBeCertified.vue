@@ -60,7 +60,7 @@
                         <template slot-scope="scoped" >
                             <driver-newTemplate
                             :paramsView="scoped.row"
-                                :btntext="scoped.row.driverMobile"
+                                :btntext="scoped.row.carNumber"
                                 type="primary" 
                                 btntype="text"
                                 editType="view"

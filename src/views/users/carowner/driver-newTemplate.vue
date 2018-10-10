@@ -1,7 +1,7 @@
 <template> 
     <div class="carNewinfo commoncss">
-        <el-button :type="btntype" :value="value" :plain="plain" :icon="icon" @click="openDialog()"><span :class="editType=='view'?'BtnInfo':''">{{btntext}}</span ></el-button>
-        <el-dialog :title="btntitle" :visible="driverTemplateDialogFlag" :before-close="change" modal-append-to-body>
+        <el-button :type="btntype" :value="value" :plain="plain" :icon="icon" @click="openDialog()" ><span :class="editType=='view'?'BtnInfo':''">{{btntext}}</span ></el-button>
+        <el-dialog :title="btntitle" :visible="driverTemplateDialogFlag" top=5vh :before-close="change" modal-append-to-body v-dialogDrag>
              <el-form
               ref="templateModel"
               :model="templateModel"
@@ -27,7 +27,6 @@
                     </el-form-item>
                   </el-col>
               </el-row>
-
               <el-row>
                   <el-col :span="12">
                       <span v-if="editType=='view'">
@@ -70,7 +69,6 @@
                             clearable
                             ref="lengths"
                             :maxlength="5"
-                            v-numberOnly
                             :disabled="editType=='view'"
                             >
                         </el-input>
@@ -81,7 +79,6 @@
                             placeholder="宽"
                             v-model="templateModel.carWidth"
                             clearable
-                            v-numberOnly
                             ref="widths"
                             :maxlength="5"
                             :disabled="editType=='view'"
@@ -94,7 +91,6 @@
                             placeholder="高"
                             v-model="templateModel.carHeight"
                             clearable
-                            v-numberOnly
                             ref="heights"
                             :maxlength="5"
                             :disabled="editType=='view'"
@@ -198,7 +194,7 @@
               </el-row>
             
               <el-row>
-                  <el-col :span="24">
+                  <el-col :span="12">
                     <el-form-item label="上传车辆45°照片：" :label-width="formLabelWidth" prop="carFile" class="b10" required>
                       <div class="upload" v-if="editType == 'view'">
                           <el-tooltip class="item" effect="dark" content="点击图片查看原图" placement="top">
@@ -208,9 +204,7 @@
                       <upload class="licensePicture" tip="（必须为jpg/png并且小于5M）" v-model="templateModel.carFile" v-else/>
                     </el-form-item>
                   </el-col>
-              </el-row>
-              <el-row>
-                  <el-col :span="24">
+                  <el-col :span="12">
                     <el-form-item label="上传车辆行驶证片：" :label-width="formLabelWidth" prop="drivingPermitFile"  class="b10">
                     <div class="upload" v-if="editType == 'view'">
                         <el-tooltip class="item" effect="dark" content="点击图片查看原图" placement="top">
@@ -222,7 +216,7 @@
                   </el-col>
               </el-row>
               <el-row>
-                  <el-col :span="24">
+                  <el-col :span="12">
                     <el-form-item label="上传驾驶证照片：" :label-width="formLabelWidth" prop="drivingLicenceFile" class="b10">
                        <div class="upload" v-if="editType == 'view'">
                     <el-tooltip class="item" effect="dark" content="点击图片查看原图" placement="top">
@@ -232,9 +226,7 @@
                        <upload class="licensePicture" tip="（必须为jpg/png并且小于5M）" v-model="templateModel.drivingLicenceFile" v-else/>
                     </el-form-item>
                   </el-col>
-              </el-row>
-              <el-row>
-                  <el-col :span="24">
+                  <el-col :span="12">
                     <el-form-item label="上传车主身份证照片：" :label-width="formLabelWidth" prop="idCardFile" class="b10">
                        <div class="upload" v-if="editType == 'view'">
                         <el-tooltip class="item" effect="dark" content="点击图片查看原图" placement="top">
@@ -246,7 +238,7 @@
                   </el-col>
               </el-row>
               <el-row>
-                  <el-col :span="24">
+                  <el-col :span="12">
                     <el-form-item label="上传车主个人形象照：" :label-width="formLabelWidth" prop="takeIdCardFile" class="b10">
                      <div class="upload" v-if="editType == 'view'">
                          <el-tooltip class="item" effect="dark" content="点击图片查看原图" placement="top">
@@ -357,7 +349,7 @@ export default {
     //    身份证信息校验
         const driverCardidValidator = (rule, val, cb) => {
             !val && cb(new Error('身份证不能为空'))
-             let IdTest = /(^\d{18}$)/
+             let IdTest = /^[1-9]\d{5}(18|19|([23]\d))\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\d{3}[0-9Xx]$/
             if(!(IdTest.test(val))){
                 cb(new Error('请输入正确的身份证'))
             }
@@ -396,20 +388,19 @@ export default {
         }
     //    车长信息校验
         const carLengthValidator = (rule, val, cb) => {
-            let reg=/^\d+(\.\d{0,2})?$/
+            let reg=/^([1-9]|1[1-2]|2[0-9])(\.\d{1,2})?$/
             if(!reg.test(val)){
-            cb(new Error('请输入数据'))
+            cb(new Error('请输入数值为30以内的值，最多保留2位小数'))
             }
             else{
                 cb()
-              
             }
         }
     //    车宽信息校验
         const carWidthValidator = (rule, val, cb) => {
-            let reg=/^\d+(\.\d{0,2})?$/
+            let reg=/^([1-9]|1[1-2]|2[0-9])(\.\d{1,2})?$/
             if(!reg.test(val)){
-            cb(new Error('请输入数据'))
+            cb(new Error('请输入数值为30以内的值，最多保留2位小数'))
             }
             else{
                 cb()
@@ -417,9 +408,9 @@ export default {
         }
     //    车高信息校验
         const carHeightValidator = (rule, val, cb) => {
-            let reg=/^\d+(\.\d{0,2})?$/
+            let reg=/^([1-9]|1[1-2]|2[0-9])(\.\d{1,2})?$/
             if(!reg.test(val)){
-            cb(new Error('请输入数据'))
+            cb(new Error('请输入数值为30以内的值，最多保留2位小数'))
             }
             else{
                 cb()
@@ -473,6 +464,16 @@ export default {
                 cb()
             }
         }
+    //   车主奖励等级校验    
+        const rewardgradeValidator = (rule, val, cb) => {
+            if(!val){
+            cb(new Error('车主奖励等级不能为空'))
+            }
+            else{
+                cb()
+            }
+        }
+
 
     // 上传车辆45°照片校验
         const carFileTimeValidator = (rule, val, cb) => {
@@ -585,6 +586,7 @@ export default {
             takeIdCardFile:{validator: takeIdCardFileValidator, trigger:'change',required:true,},
             rewardGrade:{validator: rewardGradeValidator, trigger:'change',required:true,},
             commisionLevel:{validator: commisionLevelValidator, trigger:'change',required:true,},
+            rewardgrade:{validator: rewardgradeValidator, trigger:'change',required:true,},
         },
         }
     },
@@ -775,32 +777,36 @@ export default {
         overflow: unset;
         max-height: inherit;
     }
-.b10{
-    padding-bottom: 20px;
-} 
-.el-button{   
-    margin-right:0px;
-    padding: 0px 15px 0px;
- }
-.carOwner .el-checkbox{
-    margin-left:0px!important;
-}
-.el-col-12{
-    text-align: left;
-}
-.el-col-24{
-    text-align: left;
-}
-.upload{
-            width: 300px;
-            line-height: 20px;
-            img{
-                display: block;
-                width: 100%;
-                height: 100%;
+    .b10{
+        padding-bottom: 20px;
+    } 
+    .el-button{   
+        margin-right:0px;
+        padding: 0px 15px 0px;
+    }
+    .carOwner .el-checkbox{
+        margin-left:0px!important;
+    }
+    .el-col-12{
+        text-align: left;
+    }
+    .el-col-24{
+        text-align: left;
+    }
+    .upload{
+                width: 300px;
+                line-height: 20px;
+                img{
+                    display: block;
+                    width: 100%;
+                    height: 250px;
+                }
             }
-        }
-        }
+    .el-form-item__error 
+    {
+        z-index: 10
+    }
+    }
 </style>
 
 

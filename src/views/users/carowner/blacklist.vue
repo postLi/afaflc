@@ -1,7 +1,7 @@
 <template>
   <div class="blackInfo commoncss">
     <el-button :type="btntype" :value="value" :plain="plain" :icon="icon" @click="openDialog()">{{btntext}}</el-button>
-    <el-dialog :title="btntext" :visible.sync="freezeDialogFlag" :before-close="change()">
+    <el-dialog :title="btntext" :visible.sync="freezeDialogFlag" :before-close="change()" top=5vh v-dialogDrag>
       <el-form :model="formFroze" ref="formFroze" :rules="formFrozeRules" :inline="true">
         <el-row>
             <el-col :span="12">

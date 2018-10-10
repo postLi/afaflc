@@ -754,19 +754,17 @@ export default {
         .ht_table_tr{
             width: 100%;
             overflow: hidden;
-            line-height: 32px;
+            line-height: 42px;
             display: flex;
         }
          .ht_table_tr1{
              overflow: hidden;
             width: 100%;
-            line-height: 31px;
-            height: 32px;
+            line-height: 41px;
+            height: 42px;
             display: flex;
         }
         .ht_table_th1{
-
-            padding: 5px 5px;
             width: 35px;
             height: 45px;
             line-height: 45px;
@@ -821,7 +819,7 @@ export default {
             border-right:1px solid #d0d7e5;
             position: relative;
             text-align: center;
-            height: 32px;
+            height: 42px;
             .reduceItem{
                  top:5px;
                  left:25px;  

@@ -2,7 +2,7 @@
      <div class="shoppingDialog commoncss">
       <el-button :type="btntype" :value="value" :plain="plain" :icon="icon" @click="openDialog()"><span :class="editType=='view'?'BtnInfo':''">{{btntext}}</span ></el-button>
       <div class="newmanageDistrict">
-      <el-dialog  :visible="dialogFormVisible_add" :before-close="change" :title="btntitle" modal-append-to-body>
+      <el-dialog  :visible="dialogFormVisible_add" :before-close="change" :title="btntitle" modal-append-to-body top=5vh v-dialogDrag>
         <el-form ref="formAll" :model="formAll" :rules="rulesForm" :inline="true">
             <el-row>
                 <el-col :span="12">
