@@ -312,7 +312,7 @@ export default {
                     border-bottom:1px solid #ccc;   
                     margin-bottom: 0; 
                     margin: 0 25px;
-                     .el-input{
+                    .el-input{
                         width: 250px;
                     }
                     .ifBang{

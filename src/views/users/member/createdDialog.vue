@@ -14,22 +14,22 @@
                 </el-col>
                 <el-col :span="12">
                     <el-form-item label="注册人姓名：" :label-width="formLabelWidth">
-                        <span class="onlyShow" v-if="editType=='view'" disabled>{{xinzengform.contactsName}}</span>
-                        <el-input v-model="xinzengform.contactsName" auto-complete="off" v-else></el-input>
+                        <!-- <span class="onlyShow" v-if="editType=='view'" disabled>{{xinzengform.contactsName}}</span> -->
+                        <el-input v-model="xinzengform.contactsName" auto-complete="off" :disabled="editType=='view'"></el-input>
                     </el-form-item>
                 </el-col>
             </el-row>
             <el-row>
                 <el-col :span="12">
                     <el-form-item label="公司名称：" :label-width="formLabelWidth">
-                        <span class="onlyShow" v-if="editType=='view'" disabled>{{xinzengform.companyName}}</span>
+                        <!-- <span class="onlyShow" v-if="editType=='view'" disabled>{{xinzengform.companyName}}</span> -->
 
-                        <el-input :maxlength="20" v-model="xinzengform.companyName"  v-else></el-input>
+                        <el-input :maxlength="20" v-model="xinzengform.companyName"  :disabled="editType=='view'"></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col :span="12">
                     <el-form-item label="所在地："  v-if = "editType=='view'" :label-width="formLabelWidth">
-                        <span class="onlyShow" v-if="editType=='view'" disabled>{{xinzengform.belongCityName}}</span>
+                        <el-input v-model="xinzengform.belongCityName"  disabled></el-input>
                     </el-form-item>
                     <el-form-item label="所在地："  props = "belongCity"  :label-width="formLabelWidth" v-else required>
                         <vregion :ui="true" @values="regionChange" class="form-control">
@@ -41,41 +41,43 @@
             <el-row>
                 <el-col :span="12">
                     <el-form-item label="注册来源：" :label-width="formLabelWidth">
-                        <span class="onlyShow"  disabled>{{xinzengform.registerOriginName}}</span>
-
+                        <!-- <span class="onlyShow"  disabled>{{xinzengform.registerOriginName}}</span> -->
+                        <el-input v-model="xinzengform.registerOriginName"  disabled></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col :span="12">
                     <el-form-item label="注册日期：" :label-width="formLabelWidth">
-                        <span class="onlyShow"  disabled>{{xinzengform.registerTime}}</span>
-
+                        <!-- <span class="onlyShow"  disabled>{{xinzengform.registerTime}}</span> -->
+                        <el-input v-model="xinzengform.registerTime"  disabled></el-input>
                     </el-form-item>
                 </el-col>
             </el-row>
             <el-row>
                 <el-col :span="12">
                     <el-form-item label="账户状态：" :label-width="formLabelWidth">
-                        <span class="onlyShow"  disabled>{{xinzengform.accountStatusName}}</span>
-                        
+                        <!-- <span class="onlyShow"  disabled>{{xinzengform.accountStatusName}}</span> -->
+                        <el-input v-model="xinzengform.accountStatusName"  disabled></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col :span="12">
                     <el-form-item label="认证状态：" :label-width="formLabelWidth">
-                        <span class="onlyShow"  disabled>{{xinzengform.authStatusName}}</span>
-
+                        <!-- <span class="onlyShow"  disabled>{{xinzengform.authStatusName}}</span> -->
+                        <el-input v-model="xinzengform.authStatusName"  disabled></el-input>
                     </el-form-item>
                 </el-col>
             </el-row>
             <el-row>
                 <el-col :span="12">
                     <el-form-item label="法人/负责人：" :label-width="formLabelWidth">
-                        <span class="onlyShow" v-if="editType=='view'" disabled>{{xinzengform.corporation}}</span>
-                        <el-input :maxlength="20" v-model="xinzengform.corporation"  v-else></el-input>
+                        <!-- <span class="onlyShow" v-if="editType=='view'" disabled>{{xinzengform.corporation}}</span> -->
+                        <el-input :maxlength="20" v-model="xinzengform.corporation"  :disabled="editType=='view'"></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col :span="12">
                     <el-form-item label="所属品牌：" :label-width="formLabelWidth">
-                        <span class="onlyShow" v-if="editType=='view'" disabled>{{xinzengform.belongBrand}}</span>
+                        <!-- <span class="onlyShow" v-if="editType=='view'" disabled>{{xinzengform.belongBrand}}</span> -->
+                        <el-input  v-model="xinzengform.belongBrand"  disabled v-if="editType=='view'"></el-input>
+
                         <el-select v-model="xinzengform.belongBrandCode" placeholder="请选择" v-else>
                             <el-option
                             v-for="item in optionsBelongBrand"
@@ -90,7 +92,8 @@
             <el-row>
                 <el-col :span="12">
                     <el-form-item label="是否开通会员：" :label-width="formLabelWidth">
-                        <span class="onlyShow" v-if="editType=='view'" disabled>{{xinzengform.isVip == 1 ? '是' : '否'}}</span>
+                        <!-- <span class="onlyShow" v-if="editType=='view'" disabled>{{xinzengform.isVip == 1 ? '是' : '否'}}</span> -->
+                        <el-input  :value="xinzengform.isVip == 1 ? '是' : '否'"  disabled v-if="editType=='view'"></el-input>
                         <el-radio-group v-model="xinzengform.isVip" v-else>
                             <el-radio  v-for="(obj,key) in optionsStatus" :label="obj.value" :key='key'>{{obj.name}}</el-radio>
                         </el-radio-group>
@@ -98,7 +101,9 @@
                 </el-col>
                 <el-col :span="12" >
                     <el-form-item label="公司成立时间：" :label-width="formLabelWidth">
-                        <span class="onlyShow"  disabled>{{xinzengform.foundTime ? xinzengform.foundTime :'未填写'}}</span>
+                        <!-- <span class="onlyShow"  disabled>{{xinzengform.foundTime ? xinzengform.foundTime :'未填写'}}</span> -->
+                        <el-input  :value="xinzengform.foundTime ? xinzengform.foundTime :'未填写'"  disabled></el-input>
+
                         <!-- <el-date-picker
                             v-elsev-if="editType=='view'"
                             v-model="xinzengform.foundTime"
@@ -138,7 +143,8 @@
             <el-row>
                 <el-col :span="12">
                     <el-form-item label="是否开通TMS：" :label-width="formLabelWidth">
-                        <span class="onlyShow" v-if="editType=='view'" disabled>{{xinzengform.isOpenTms == 1 ? '是' : '否'}}</span>
+                        <!-- <span class="onlyShow" v-if="editType=='view'" disabled>{{xinzengform.isOpenTms == 1 ? '是' : '否'}}</span> -->
+                        <el-input  :value="xinzengform.isOpenTms == 1 ? '是' : '否'"  disabled v-if="editType=='view'"></el-input>
                         <el-radio-group v-model="xinzengform.isOpenTms" v-else>
                             <el-radio  v-for="(obj,key) in optionsStatus" :label="obj.value" :key='key'>{{obj.name}}</el-radio>
                         </el-radio-group>
@@ -146,7 +152,8 @@
                 </el-col>
                 <el-col :span="12">
                     <el-form-item label="保证金：" :label-width="formLabelWidth">
-                        <span class="onlyShow" v-if="editType=='view'" disabled>{{xinzengform.collateral ? xinzengform.collateral :'无'}}</span>
+                        <!-- <span class="onlyShow" v-if="editType=='view'" disabled>{{xinzengform.collateral ? xinzengform.collateral :'无'}}</span> -->
+                        <el-input  :value="xinzengform.collateral ? xinzengform.collateral :'无'"  disabled v-if="editType=='view'"></el-input>
                         <el-input placeholder="请输入" v-model="xinzengform.collateral" :maxlength="20" v-numberOnly v-else>
                             <template slot="append">元</template>
                         </el-input>

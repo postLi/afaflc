@@ -35,7 +35,7 @@ export function login(username, password, orgid) {
         method: 'post',
         headers: {
             'Content-Type': 'multipart/form-data',
-            'authorization': 'Basic d2ViQXBwOndlYkFwcA=='
+            'Authorization': 'Basic d2ViQXBwOndlYkFwcA=='
         },
         data: form
     })
