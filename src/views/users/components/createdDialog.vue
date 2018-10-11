@@ -74,7 +74,7 @@
                 <el-col :span="8"> 
                     <el-form-item label="上传营业执照照片："  label-width="180px">
                     </el-form-item>
-                    <el-form-item  prop="businessLicenceFile" label-width="50px">
+                    <el-form-item  prop="businessLicenceFile" label-width="20px">
                         <div class="upload">
                         <el-tooltip class="item" effect="dark" content="点击图片查看原图" placement="top" v-if="editType == 'view'">
                             <img :src='xinzengform.businessLicenceFile ? xinzengform.businessLicenceFile : defaultImg' v-showPicture :imgurl="xinzengform.businessLicenceFile" alt="" >
@@ -86,7 +86,7 @@
                  <el-col :span="8">
                     <el-form-item label="上传公司或者档口照片："   required label-width="180px">
                     </el-form-item>
-                    <el-form-item  label-width="50px" prop="companyFacadeFile">
+                    <el-form-item  label-width="20px" prop="companyFacadeFile">
                         <div class="upload">
                             <el-tooltip class="item" effect="dark" content="点击图片查看原图" placement="top" v-if="editType == 'view'">
                                 <img :src='xinzengform.companyFacadeFile ? xinzengform.companyFacadeFile : defaultImg' v-showPicture :imgurl="xinzengform.companyFacadeFile" alt="">
@@ -98,7 +98,7 @@
                 <el-col :span="8">
                     <el-form-item label="上传发货人名片照片："  required label-width="180px">
                     </el-form-item>
-                     <el-form-item  prop="shipperCardFile" label-width="50px">
+                     <el-form-item  prop="shipperCardFile" label-width="20px">
                         <div class="upload">
                             <el-tooltip class="item" effect="dark" content="点击图片查看原图" placement="top" v-if="editType == 'view'">
                                 <img :src='xinzengform.shipperCardFile ? xinzengform.shipperCardFile : defaultImg' v-showPicture :imgurl="xinzengform.shipperCardFile" alt="" >

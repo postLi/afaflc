@@ -188,6 +188,9 @@ export default {
                     span{
                         color:#333;
                         display: inline-block;
+                        overflow: hidden;
+                        white-space: nowrap;
+                        text-overflow:ellipsis;
                     }
                     span:first-child{
                         text-align: center;

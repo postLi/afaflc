@@ -95,7 +95,7 @@
         .shippercreatDialog,.freezeDialog,.shipperBlackDialog,.shippercertifed{
             display: inline-block;
             .el-dialog{
-                width: 1200px;
+                width: 1100px;
                 min-height: 720px;
                 position: relative;
                 .el-dialog__body{

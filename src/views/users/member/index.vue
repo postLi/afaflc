@@ -133,7 +133,7 @@
         .wuliucreatDialog,.freezeDialog,.shipperBlackDialog,.shenghe{
             display: inline-block;
             .el-dialog{
-                width: 1200px;
+                width: 1100px;
                 .el-dialog__body{
                     .el-form{
                         .shipper_information{

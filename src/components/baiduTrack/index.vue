@@ -22,11 +22,7 @@ export default {
     }
   },
   watch: {
-        // orderid(newVal) {
-        //   if (newVal !== '') {
-        //     this.init()
-        //   }
-        // }
+
   },
   mounted() {
     this.init()
@@ -95,7 +91,6 @@ export default {
         })
       }
     },
-
     init() {
       return Promise.all([this.loadMap()]).then(() => {
         this.initMap()

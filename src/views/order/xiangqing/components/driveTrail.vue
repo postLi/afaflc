@@ -38,7 +38,7 @@
 import Pager from '@/components/Pagination/index'
 import { parseTime } from '@/utils/index.js'
 import { getOrderCarTrailList } from '@/api/order/ordermange'
-import DriverTrack from '@/components/baiduTrack/index'
+import DriverTrack from '@/components/gaodeTrack/index'
 export default {
     name: 'trail',
     components:{
