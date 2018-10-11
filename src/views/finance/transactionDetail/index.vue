@@ -123,7 +123,7 @@
                         <el-table-column
                         align = "center"
                           prop="createTime"
-                          label="创建时间"
+                          label="交易时间"
                           width="170"
                           sortable
                           >
