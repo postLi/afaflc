@@ -114,16 +114,14 @@
                     </el-form-item>
                   </el-col>
                   <el-col :span="12">
-               <span v-if="editType=='view'">    
-              <el-form-item label="所在地 ："  :label-width="formLabelWidth" >
-                        <el-input v-model="templateModel.belongCityName" placeholder="请选择" disabled></el-input>
+               <span v-if="!selectFlag">    
+              <el-form-item label="所在地 ："  :label-width="formLabelWidth"  prop="belongCityName">
+                        <el-input v-model="templateModel.belongCityName" placeholder="请选择" :disabled="editType=='view'" @focus="changeSelect"></el-input>
               </el-form-item>
               </span>   
               <span v-else>   
-              <el-form-item label="所在地 ："  :label-width="formLabelWidth" prop="belongCityName">
-                    <vregion :ui="true"  @values="regionChange" class="form-control">
-                        <el-input v-model="templateModel.belongCityName" placeholder="请选择"></el-input>
-                    </vregion>
+              <el-form-item label="所在地 ："  :label-width="formLabelWidth" prop="belongCity">
+                <GetCityList ref="area" v-model="templateModel.belongCity"  @returnStr="getStr"></GetCityList>
               </el-form-item>
                </span>   
                   </el-col>
@@ -261,9 +259,8 @@
 <script>
 import  { data_post_createDriver,data_put_changeDriver,data_CarList,data_Get_carType,data_get_driver_obStatus,data_post_driverAudit,data_post_mobileGetDriver,data_post_checkDriverCardid,data_get_shipper_carmaid,data_get_shipper_carOwner} from '@/api/users/carowner/total_carowner.js'
 import Upload from '@/components/Upload/singleImage'
-import GetCityList from '@/components/GetCityList'
 import { eventBus } from '@/eventBus'
-import vregion from '@/components/vregion/Region'
+import GetCityList from '@/components/GetCityList/city'
 
 import { getDictionary } from '@/api/common.js'
 export default {
@@ -315,7 +312,7 @@ export default {
     },
     components:{
         Upload,
-        vregion
+        GetCityList
     },
     data() {
        // 手机号校验
@@ -523,8 +520,8 @@ export default {
             }
         }   
         return{
+            selectFlag:null,
             defaultImg:'/static/test.jpg',//默认第一张图片的url
-            selectFlag: false,
             type:'primary',
             title:null,
             text:null,
@@ -576,6 +573,7 @@ export default {
             carWidth:{validator: carWidthValidator, trigger:'change',required:true,},
             carHeight:{validator:carHeightValidator, trigger:'change',required:true,},
             carType:{validator: carTypeValidator, trigger:'change',required:true,},
+            belongCity:{validator: belongCityNameValidator, trigger:'change',required:true,},
             belongCityName:{validator: belongCityNameValidator, trigger:'change',required:true,},
             obtainGrade:{validator: obtainGradeValidator, trigger:'change',required:true,},
             obtainGradeTime:{validator: obtainGradeTimeValidator, trigger:'change',required:true,},
@@ -594,12 +592,12 @@ export default {
         driverTemplateDialogFlag:{
         handler: function(val, oldVal) {
             if(!val){
-                this.selectFlag=false;
-                this.$refs.templateModel.resetFields();
-                this.templateModel.belongCity = null;
-                this.templateModel.provinceCode=null,
-                this.templateModel.cityCode=null,
-                this.templateModel.areaCode=null,
+                this.selectFlag = null
+                this.$refs.templateModel.resetFields()
+                this.templateModel.belongCity = null
+                this.templateModel.provinceCode=null
+                this.templateModel.cityCode=null
+                this.templateModel.areaCode=null
                 this.$emit('getData')
             }
             else{
@@ -613,38 +611,21 @@ export default {
     },
     methods:{
         // 省市区选择
-            regionChange(d) {
-                console.log('data:',d)
-                this.templateModel.belongCityName = (!d.province&&!d.city&&!d.area&&!d.town) ? '': `${this.getValue(d.province)}${this.getValue(d.city)}${this.getValue(d.area)}${this.getValue(d.town)}`.trim();
-                if(d.area){
-                    this.templateModel.belongCity = d.area.code;
-                    this.templateModel.areaCode = d.area.name
-                    this.templateModel.cityCode= d.city.name
-                    this.templateModel.provinceCode=d.province.name                       
-
-                }else if(d.city){
-                    this.templateModel.belongCity = d.city.code
-                    this.templateModel.areaCode = null
-                    this.templateModel.cityCode= d.city.name
-                    this.templateModel.provinceCode=d.province.name                 
-                }
-                else{
-                    this.templateModel.areaCode = null
-                    this.templateModel.cityCode=null
-                    this.templateModel.provinceCode=d.province.name
-                    this.templateModel.belongCity = d.province.code
-                }
-            },
-             getValue(obj){
-                return obj ? obj.value:'';
-            },            
-        changeSelect(){
-            if(this.editType === 'add'){
-                this.selectFlag=false
-            } else{
-                this.selectFlag=true
-            }
-        },
+            getStr(val,name){
+                console.log('this.cityarr',val,name)
+                this.templateModel.belongCity = val.split(',')[2];
+                this.templateModel.provinceCode = name.split(',')[0];
+                this.templateModel.cityCode= name.split(',')[1];
+                this.templateModel.areaCode = name.split(',')[2];
+            },        
+        // 省市状态表
+            changeSelect(){
+                    if(this.editType=='add'){
+                        this.selectFlag=null
+                    } else{
+                        this.selectFlag='1'
+                    }
+                    },  
         changeList(){
             eventBus.$emit('changeListtwo')
         },
@@ -733,6 +714,7 @@ export default {
         },
          // 提交数据
         onSubmit(templateModel){
+            console.log('fdfdfdfdf',this.templateModel)
             this.$refs['templateModel'].validate(valid=>{
                 if(valid){
                     var forms= Object.assign({}, this.templateModel)

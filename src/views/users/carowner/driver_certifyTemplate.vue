@@ -23,11 +23,16 @@
                     </el-form-item>
                 </el-col>
                 <el-col :span="12">
-                    <el-form-item label="所在区域：" :label-width="formLabelWidth" prop="belongCityName">
-                    <vregion :ui="true"  @values="regionChange" class="form-control">
-                        <el-input v-model="templateModel.belongCityName" placeholder="请选择"></el-input>
-                    </vregion>
-                    </el-form-item>
+               <span v-if="!selectFlag">    
+              <el-form-item label="所在地 ："  :label-width="formLabelWidth"  prop="belongCityName">
+                        <el-input v-model="templateModel.belongCityName" placeholder="请选择" :disabled="editType=='view'" @focus="changeSelect"></el-input>
+              </el-form-item>
+              </span>   
+              <span v-else>   
+              <el-form-item label="所在地 ："  :label-width="formLabelWidth" prop="belongCity">
+                <GetCityList ref="area" v-model="templateModel.belongCity"  @returnStr="getStr"></GetCityList>
+              </el-form-item>
+               </span> 
                 </el-col>
             </el-row>
 
@@ -270,12 +275,12 @@ import {data_post_checkDriverCardid,data_get_driver_obStatus,data_CarList,data_G
 import {parseTime} from '@/utils/'
 import { eventBus } from '@/eventBus'
 import Upload from '@/components/Upload/singleImage'
-import vregion from '@/components/vregion/Region'
+import GetCityList from '@/components/GetCityList/city'
 export default {
   name:'create-Change-ViewDialog',
   components:{
     Upload,
-    vregion
+    GetCityList
   },
   props:{
     params:{
@@ -460,6 +465,7 @@ export default {
             }
         }   
     return{
+        selectFlag:null,
         pickerOptions:{
         disabledDate(time) {
         return time.getTime() < Date.now();}},
@@ -469,7 +475,7 @@ export default {
         driverMobile:null,
         driverName:null,
         driverCardid:null,
-        belongCityName:null,
+        belongCity:null,
         carNumber:null,
         carType:null,
         carLength:null,
@@ -510,7 +516,7 @@ export default {
         carHeight:{validator:carHeightValidator, trigger:'change',required:true,},
         carSpec:{validator: carSpecValidator, trigger:'change',required:true,},
         carType:{validator: carTypeValidator, trigger:'change',required:true,},
-        belongCityName:{validator: belongCityNameValidator, trigger:'change',required:true,},            
+        belongCity:{validator: belongCityNameValidator, trigger:'change',required:true,},            
         obtainGrade:{validator:obtainGradeValidator, trigger:'change',required:true,},
         obtainGradeTime:{validator: obtainGradeTimeValidator, trigger:'change',required:true,},
         rewardGrade:{validator: rewardGradeValidator, trigger:'change',required:true,},
@@ -520,7 +526,7 @@ export default {
       }
   },
   components:{
-   vregion
+   GetCityList
   },
   computed: {
             pictureValue () {
@@ -533,6 +539,7 @@ export default {
         freezeDialogFlag:{
         handler: function(val, oldVal) {
             if(!val){
+                this.selectFlag=null
                 this.$refs.templateModel.resetFields();
                 this.templateModel.provinceCode=null,
                 this.templateModel.cityCode=null,
@@ -546,32 +553,22 @@ export default {
         }
         },
   methods:{
-    //   区域选择
-    regionChange(d) {
-                console.log('data:',d)
-                this.templateModel.belongCityName = (!d.province&&!d.city&&!d.area&&!d.town) ? '': `${this.getValue(d.province)}${this.getValue(d.city)}${this.getValue(d.area)}${this.getValue(d.town)}`.trim();
-                if(d.area){
-                    this.templateModel.belongCity = d.area.code;
-                    this.templateModel.areaCode = d.area.name
-                    this.templateModel.cityCode= d.city.name
-                    this.templateModel.provinceCode=d.province.name                       
-
-                }else if(d.city){
-                    this.templateModel.belongCity = d.city.code
-                    this.templateModel.areaCode = null
-                    this.templateModel.cityCode= d.city.name
-                    this.templateModel.provinceCode=d.province.name                 
-                }
-                else{
-                    this.templateModel.areaCode = null
-                    this.templateModel.cityCode=null
-                    this.templateModel.provinceCode=d.province.name
-                    this.templateModel.belongCity = d.province.code
-                }
-            },
-     getValue(obj){
-                return obj ? obj.value:'';
-            },
+    // 省市区选择
+    getStr(val,name){
+                console.log('this.cityarr',val,name)
+                this.templateModel.belongCity = val.split(',')[2];
+                this.templateModel.provinceCode = name.split(',')[0];
+                this.templateModel.cityCode= name.split(',')[1];
+                this.templateModel.areaCode = name.split(',')[2];
+            },   
+        // 省市状态表
+     changeSelect(){
+                    if(this.editType=='add'){
+                        this.selectFlag=null
+                    } else{
+                        this.selectFlag='1'
+                    }
+                    },  
     change(){
       this.freezeDialogFlag!=this.freezeDialogFlag
     },
@@ -774,9 +771,13 @@ export default {
     }
     }
     }
-.lessWidth{
-    width: 80px!important
-}
+    .lessWidth{
+        width: 80px!important
+    }
+    .el-form-item__error 
+    {
+        z-index: 10
+    }
 }
 </style>
 

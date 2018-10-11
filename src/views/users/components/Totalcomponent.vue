@@ -282,7 +282,6 @@
         },
  
         methods:{
-            
             getStr(val,name){
                 console.log('this.cityarr',val,name)
                 this.formInline.belongCity = val.split(',')[2];

@@ -104,7 +104,7 @@
         .carNewinfo,.freezeInfo,.blackInfo{
             display: inline-block;
             .el-dialog{
-                width:1200px;
+                width:1100px;
                 border-radius: 4px;
                 .el-dialog__body{
                     .el-form{

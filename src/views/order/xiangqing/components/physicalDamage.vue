@@ -84,9 +84,12 @@
                 label="物损描述"
                 width="180"
                 >
-                <!-- <template slot-scope="scope">
-                    {{scope.row.driverName}} - {{scope.row.driverPhone}}
-                </template> -->
+            </el-table-column>
+            <el-table-column
+                prop="claimType"
+                label="物损类型"
+                width="180"
+                >
             </el-table-column>
             <el-table-column
                 prop="claimPic1"
@@ -140,14 +143,13 @@
             </el-table-column>
         </el-table>
         <el-button type="success" class="btnReg" size="mini" @click="handleEdit3">物损登记</el-button>
-        <add :rowid="rowid" :centerDialogVisible="centerDialogVisible" @close="closeAdd"></add>
-        <addReg :centerDialogVisibleReg="centerDialogVisibleReg" @close="closeAddReg"></addReg>
+        <add :rowid="rowid" :centerDialogVisible="centerDialogVisible" @close="closeAdd" @success="getSuccess"></add>
+        <addReg :centerDialogVisibleReg="centerDialogVisibleReg" @close="closeAddReg" @success="getSuccess"></addReg>
         <!-- <div class="info_tab_footer">共计:{{ totalCount }} <div class="show_pager"> <Pager :total="totalCount" @change="handlePageChange" :sizes="sizes"/></div> </div>     -->
     </div>
 </template>
 
 <script>
-
 import Pager from '@/components/Pagination/index'
 import { parseTime } from '@/utils/index.js'
 import { orderDetailsList } from '@/api/order/ordermange'
@@ -180,6 +182,7 @@ export default {
       tableData: [],
       tableData1: [],
       rowid: '',
+      belongCity:'',
       buttonText: ''
       // formAllData: {
       //   orderSerial: ''
@@ -280,6 +283,7 @@ export default {
       handler(newVal, oldVal) {
         if (newVal) {
                     // this.init();
+          console.log(this.$route.query.orderSerial)
           this.firstblood()
         }
       },
@@ -305,6 +309,10 @@ export default {
             // let pageEnd = this.page * this.pagesize;
             // this.tableData = this.pushOrderData.slice(pageStart,pageEnd)
     },
+    getSuccess(){
+      this.firstblood()
+      this.getListSmall()
+    },
     firstblood() {
       // this.loading = false
       const orderSerial = this.$route.query.orderSerial
@@ -312,6 +320,7 @@ export default {
       getGoodsclaimAll(orderSerial).then(res => {
         // this.dataTotal = res.data.totalCount
         this.tableData = res.data
+        // console.log(res.data)
       })
     },
     getListSmall() {
@@ -331,6 +340,10 @@ export default {
       if (row.dealStatus === '待处理') {
         getUpdateDealStatus(this.rowid).then(res => {
           // console.log(res)
+          this.$message({
+            message: '受理成功~',
+            type: 'success'
+          })
           this.firstblood()
         })
       } else {

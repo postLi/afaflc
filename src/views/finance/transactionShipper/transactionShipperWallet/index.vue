@@ -64,7 +64,7 @@
 <script>
 import { data_Commission ,data_CarList,data_MaidLevel} from '@/api/server/areaPrice.js'
 import Pager from '@/components/Pagination/index'
-import { data_findShipperMywalletList } from '@/api/finance/transactionShipper'
+import { data_findShipperMywalletList,} from '@/api/finance/transactionShipper'
 import vregion from '@/components/vregion/Region'
 import {parseTime} from '@/utils/'
 import shipperwallet from './shipperwallet'
@@ -158,6 +158,21 @@ export default {
                     font-weight: bold
                 }
         }
+    }
+    .info_tab_footer1{
+    padding-left: 20px;
+    text-align: left;
+    background: #eee;
+    height: 40px;
+    line-height: 40px;
+    box-shadow: 0 -2px 2px rgba(0, 0, 0, 0.1);
+    position: relative;
+    z-index: 10;
+    width: 100%;
+    margin-top:10px;
+    .el-input--suffix{
+        margin-top:5px!important;
+    }
     }
 }
 </style>
