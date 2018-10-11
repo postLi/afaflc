@@ -139,7 +139,7 @@
                 </template>
             </el-table-column>
         </el-table>
-        <el-button size="mini" @click="handleEdit3(scope.$index, scope.row)">物损登记</el-button>
+        <el-button type="success" class="btnReg" size="mini" @click="handleEdit3(scope.$index, scope.row)">物损登记</el-button>
         <add :rowid="rowid" :centerDialogVisible="centerDialogVisible" @close="closeAdd"></add>
         <!-- <div class="info_tab_footer">共计:{{ totalCount }} <div class="show_pager"> <Pager :total="totalCount" @change="handlePageChange" :sizes="sizes"/></div> </div>     -->
     </div>
@@ -366,16 +366,22 @@ export default {
 </script>
 
 <style rel="stylesheet/scss" lang="scss">
-    .physicalDamage{
-        .el-table{
-            .el-table__expanded-cell{
-                .el-table__header-wrapper{
-                    th{
-                        background-color: #fff;
-                    }
+  .physicalDamage{
+    .el-table{
+        .el-table__expanded-cell{
+            .el-table__header-wrapper{
+                th{
+                    background-color: #fff;
                 }
             }
         }
     }
+    .btnReg{
+      margin-top:20px;
+      float: right;
+      padding:10px 20px;
+      font-size: 16px;
+    }
+  }
     
 </style>
