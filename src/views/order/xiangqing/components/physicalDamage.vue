@@ -150,7 +150,7 @@
 import Pager from '@/components/Pagination/index'
 import { parseTime } from '@/utils/index.js'
 import { orderDetailsList } from '@/api/order/ordermange'
-import { getGoodsclaimAll, getGoodsfollowupAll,getUpdateDealStatus } from '@/api/service/claim.js'
+import { getGoodsclaimAll, getGoodsfollowupAll, getUpdateDealStatus } from '@/api/service/claim.js'
 import add from './add'
 export default {
   name: 'pushOrderList',
@@ -176,7 +176,7 @@ export default {
       tableData: [],
       tableData1: [],
       rowid: '',
-      buttonText:''
+      buttonText: ''
       // formAllData: {
       //   orderSerial: ''
       // },
@@ -325,12 +325,12 @@ export default {
     },
     handleEdit1(index, row) {
       if (row.dealStatus === '待处理') {
-        getUpdateDealStatus(this.rowid).then(res=>{
+        getUpdateDealStatus(this.rowid).then(res => {
           // console.log(res)
           this.firstblood()
         })
-      }else {
-      this.centerDialogVisible = true
+      } else {
+        this.centerDialogVisible = true
       }
       console.log(index, row)
     },
