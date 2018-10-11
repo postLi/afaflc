@@ -139,7 +139,7 @@
                 </template>
             </el-table-column>
         </el-table>
-        <el-button size="mini" @click="handleEdit3(scope.$index, scope.row)">物损登记</el-button>
+        <el-button type="success" class="btnReg" size="mini" @click="handleEdit3(scope.$index, scope.row)">物损登记</el-button>
         <add :rowid="rowid" :centerDialogVisible="centerDialogVisible" @close="closeAdd"></add>
         <!-- <div class="info_tab_footer">共计:{{ totalCount }} <div class="show_pager"> <Pager :total="totalCount" @change="handlePageChange" :sizes="sizes"/></div> </div>     -->
     </div>
@@ -150,7 +150,7 @@
 import Pager from '@/components/Pagination/index'
 import { parseTime } from '@/utils/index.js'
 import { orderDetailsList } from '@/api/order/ordermange'
-import { getGoodsclaimAll, getGoodsfollowupAll,getUpdateDealStatus } from '@/api/service/claim.js'
+import { getGoodsclaimAll, getGoodsfollowupAll, getUpdateDealStatus } from '@/api/service/claim.js'
 import add from './add'
 export default {
   name: 'pushOrderList',
@@ -176,7 +176,7 @@ export default {
       tableData: [],
       tableData1: [],
       rowid: '',
-      buttonText:''
+      buttonText: ''
       // formAllData: {
       //   orderSerial: ''
       // },
@@ -325,12 +325,12 @@ export default {
     },
     handleEdit1(index, row) {
       if (row.dealStatus === '待处理') {
-        getUpdateDealStatus(this.rowid).then(res=>{
+        getUpdateDealStatus(this.rowid).then(res => {
           // console.log(res)
           this.firstblood()
         })
-      }else {
-      this.centerDialogVisible = true
+      } else {
+        this.centerDialogVisible = true
       }
       console.log(index, row)
     },
@@ -366,16 +366,22 @@ export default {
 </script>
 
 <style rel="stylesheet/scss" lang="scss">
-    .physicalDamage{
-        .el-table{
-            .el-table__expanded-cell{
-                .el-table__header-wrapper{
-                    th{
-                        background-color: #fff;
-                    }
+  .physicalDamage{
+    .el-table{
+        .el-table__expanded-cell{
+            .el-table__header-wrapper{
+                th{
+                    background-color: #fff;
                 }
             }
         }
     }
+    .btnReg{
+      margin-top:20px;
+      float: right;
+      padding:10px 20px;
+      font-size: 16px;
+    }
+  }
     
 </style>

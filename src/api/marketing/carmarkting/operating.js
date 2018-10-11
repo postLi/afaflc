@@ -1,9 +1,10 @@
 import fetch from '@/utils/fetch'
 
 // const baseurl = 'aflcorderservice'
+// const baseurlw = 'aflcusercenterservice'
 const baseurlw = 'aflcusercenterservice-wtc'
 const baseurl = 'aflcusercenterservice'
-const baseurl2 = 'aflcsmservice'
+const baseurl2 = 'aflcsmservice-wtc'
 /**
  * 拥抽
  *
@@ -16,7 +17,7 @@ const baseurl2 = 'aflcsmservice'
 
 export function postDriverCommissionTransaction(page, pagesize, data) {
   return fetch({
-    url: '/' + baseurl + '/usercenter/aflcDriverCommissionDetail/v1/driverCommissionTransaction',
+    url: '/' + baseurlw + '/usercenter/aflcDriverCommissionDetail/v1/driverCommissionTransaction',
     method: 'post',
     data: {
       'currentPage': page,
@@ -48,7 +49,7 @@ export function postDriverCommissionTransaction(page, pagesize, data) {
  */
 export function postUserRewardDriverTransaction(page, pagesize, data) {
   return fetch({
-    url: '/' + baseurl + '/usercenter/aflcUserReward/v1/userRewardDriverTransaction',
+    url: '/' + baseurlw + '/usercenter/aflcUserReward/v1/userRewardDriverTransaction',
     method: 'post',
     data: {
       'currentPage': page,
@@ -62,7 +63,7 @@ export function postUserRewardDriverTransaction(page, pagesize, data) {
  */
 export function postUserRewardShipperTransaction(page, pagesize, data) {
   return fetch({
-    url: '/' + baseurl + '/usercenter/aflcUserReward/v1/userRewardShipperTransaction',
+    url: '/' + baseurlw + '/usercenter/aflcUserReward/v1/userRewardShipperTransaction',
     method: 'post',
     data: {
       'currentPage': page,
@@ -90,7 +91,7 @@ export function postCouponTransaction(page, pagesize, data) {
  */
 export function postDriverOrderNumTransaction(page, pagesize, data) {
   return fetch({
-    url: '/' + baseurl + '/usercenter/aflcDriverOrdernumDetail/v1/driverOrderNumTransaction',
+    url: '/' + baseurlw + '/usercenter/aflcDriverOrdernumDetail/v1/driverOrderNumTransaction',
     method: 'post',
     data: {
       'currentPage': page,
