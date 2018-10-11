@@ -32,7 +32,7 @@
             value-format="timestamp">
           </el-date-picker>
         </el-form-item> -->
-        <el-form-item label="跟进人" style="margin-left:15px;">
+        <el-form-item label="跟进人" prop="followName" style="margin-left:15px;">
           <el-input v-model="formAllData.followName" :maxlength="20" placeholder="请输入跟进人" auto-complete="off" clearable></el-input>
         </el-form-item>
         <el-form-item prop="code" >
@@ -121,7 +121,9 @@ export default {
 
       },
       rules: {
-
+        followName:[
+          { required: true, message: '请输入' }
+        ],
       },
       formAllData: {
         // goodsclaimId:'',
@@ -139,6 +141,7 @@ export default {
       handler(newVal) {
         if (newVal) {
           this.$set(this.formAllData, 'id', this.rowid)
+          this.formAllData = {}
           // console.log(this.formAllData.id)
         }
       }
@@ -239,9 +242,19 @@ export default {
           this.$set(this.formAllData, 'goodsclaimId', this.rowid)
           const data = objectMerge2({}, this.formAllData)
           postReportClaimAdd(data).then(res => {
-            console.log(res)
+            this.$message({
+              message: '保存成功~',
+              type: 'success'
+            })
+            this.closeMe()
+            this.$emit('success')
+          }).catch(err => {
+            this.$message({
+              type: 'error',
+              message: err.errorInfo || err.text || '未知错误，请重试~'
+            })
+            this.loading = false
           })
-          this.closeMe()
         } else {
           return false
         }

@@ -1,5 +1,5 @@
 <template>
-  <div  class="wzlAddReg">
+  <div  class="wzlReg">
     <el-dialog
       title="物损登记"
       :visible.sync="isShow"
@@ -8,9 +8,10 @@
       @close="closeMe"
       :close-on-click-modal="false" 
       :before-close="closeMe">
-      <el-form :model="form" :rules="rules"  ref="ruleForm" :inline="true"  label-position="right">
+      <el-form :model="formAllData" :rules="rules"  ref="ruleForm" :inline="true"  label-position="right">
         <el-form-item label="登记时间">
           <el-date-picker
+            disabled="disabled"
             v-model="searchCreatTime"
             align="right"
             type="date"
@@ -19,10 +20,20 @@
             value-format="timestamp">
           </el-date-picker>
         </el-form-item>
-        <el-form-item label="上报人">
-          <el-input v-model="formAllData.reporter" :maxlength="20" placeholder="请输入跟进人" auto-complete="off" clearable></el-input>
+        <!-- <el-form-item label="上报人" prop="reporter">
+          <el-input v-model="formAllData.reporter" :maxlength="20" placeholder="请输入上报人" auto-complete="off" clearable></el-input>
+        </el-form-item> -->
+        <el-form-item label="上报人类型" prop="reporterType">
+          <el-select v-model="formAllData.reporterType" placeholder="请选择" @change="changeCode">
+            <el-option
+              v-for="item in options"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value">
+            </el-option>
+          </el-select>
         </el-form-item>
-        <el-form-item label="物损类型">
+        <el-form-item label="物损类型" prop="claimType">
           <el-select v-model="formAllData.claimType" clearable placeholder="请选择物损类型">
             <el-option
               v-for="item in optionsclaimType"
@@ -33,10 +44,10 @@
             </el-option>
           </el-select>
         </el-form-item> 
-        <el-form-item class="goodsclaimDes" label="物损描述">
+        <el-form-item class="goodsclaimDes" label="物损描述" prop="claimDes">
           <el-input v-model="formAllData.claimDes" type="textarea" :maxlength="200" style="width:100%" placeholder="物损描述最多输入200个字符"></el-input>
         </el-form-item>
-        <el-form-item class="clearfix imgbox" label="物损图片">
+        <el-form-item class="clearfix imgbox" label="物损图片" prop="claimPic1">
             <div class="clearfix uploadcard">
               <upload v-model="formAllData.claimPic1" :title="'本地上传'" :showFileList="true" :limit="4" listtype="picture"/>
             </div>
@@ -54,7 +65,7 @@ import { parseTime, pickerOptions2 } from '@/utils/index.js'
 import Pager from '@/components/Pagination/index'
 import Upload from '@/components/Upload/multImage'
 import { DicClaimStatusType } from '@/api/common'
-import { getReportClaim } from '@/api/service/claim.js'
+import { postReportClaim } from '@/api/service/claim.js'
 import { objectMerge2 } from '@/utils/index'
 export default {
   computed: {
@@ -74,7 +85,7 @@ export default {
       type: Boolean,
       default: false
     },
-    rowid: {
+    belongCity: {
       type: [Number, String]
     }
   },
@@ -91,23 +102,36 @@ export default {
       searchCreatTime: +new Date(),
       pickOption2: '',
       checked: false,
-      optionsclaimType: [{ code: null, name: '全部' }],
+      optionsclaimType: [],
       options: [{
-        value: '选项1',
+        value: 0,
         label: '货主'
       }, {
-        value: '选项2',
+        value: 1,
         label: '车主'
       }],
       form: {
 
       },
       rules: {
-
+        reporterType:[
+          { required: true, message: '请输入上报人' }
+        ],
+        claimDes: [
+          { required: true, message: '请输入物损描述' }
+        ],
+        claimType:[
+          {required:true,message:'请选择物损类型'}
+        ],
+        claimPic1:[
+          {required:true,message:'至少上传一张图片'}
+        ]
       },
       formAllData: {
+        reporterType:'',
+        orderSerial:'',//订单号
         createTime: '', // 登记时间
-        reporter: '', // 上报人
+        // reporter: '', // 上报人
         claimType: '', // 物损类型
         claimDes: '', // 物损描述
         claimPic1: '' // 物损图片
@@ -118,8 +142,12 @@ export default {
     isShow: {
       handler(newVal) {
         if (newVal) {
-          this.$set(this.formAllData, 'id', this.rowid)
-          // console.log(this.formAllData.id)
+          
+          // console.log(this.formAllData.orderSerial)
+          // this.$set(this.formAllData, 'orderSerial',orderSerial)
+          this.formAllData= {}
+          // this.formAllData.orderSerial = this.$route.query.orderSerial
+          // console.log(this.formAllData)
         }
       }
     }
@@ -137,6 +165,11 @@ export default {
       if (typeof done === 'function') {
         done()
       }
+    },
+    changeCode (obj) {
+      
+      this.formAllData.reporterType = obj
+      console.log('sdfsdfs', obj, this.formAllData)
     },
     getclaimstatus() {
       DicClaimStatusType().then(res => {
@@ -196,12 +229,23 @@ export default {
         if (valid) {
           this.formAllData.createTime = parseTime(this.searchCreatTime, '{y}-{m}-{d} {h}:{i}:{s}')
           // this.$set(this.formAllData, 'goodsclaimId', this.rowid)
-          // const data = objectMerge2({}, this.formAllData)
-          console.log(this.formAllData)
-          getReportClaim(this.formAllData).then(res => {
-            console.log(res)
+          this.formAllData.orderSerial = this.$route.query.orderSerial
+          const data = objectMerge2({}, this.formAllData)
+          console.log(data)
+          postReportClaim(data).then(res => {
+            this.$message({
+              message: '保存成功~',
+              type: 'success'
+            })
+            this.closeMe()
+            this.$emit('success')
+          }).catch(err => {
+            this.$message({
+              type: 'error',
+              message: err.errorInfo || err.text || '未知错误，请重试~'
+            })
+            this.loading = false
           })
-          this.closeMe()
         } else {
           return false
         }
@@ -211,7 +255,7 @@ export default {
 }
 </script>
 <style lang="scss">
-.wzlAddReg{
+.wzlReg{
   .classify_info{
     padding-bottom:0 !important;
   }
@@ -264,9 +308,9 @@ export default {
         width:80%;
       }
     }
-    // .uploadcard{
-    //   width:500px;
-    // }
+    .uploadcard{
+      width:500px;
+    }
     .el-upload-list--picture .el-upload-list__item{
       width:48%;
       float:left;

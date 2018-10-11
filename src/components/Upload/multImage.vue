@@ -314,8 +314,8 @@ export default {
           height:180px;
         }
         .el-upload .el-upload-dragger{
-            width: 244px;
-            height:102px;
+            width: 230px;
+            height:100px;
         }
         .image-uploader {
             width: 100%;
