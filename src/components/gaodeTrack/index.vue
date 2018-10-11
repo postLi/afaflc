@@ -21,7 +21,11 @@ import { loadJs } from '@/utils/'
 export default {
   name: 'driverTrack',
   props: {
-    orderid: [String, Number]
+    orderid: [String, Number],
+    trackInfo:{
+        type:Array,
+        default:[]
+    }
   },
   data() {
     return {
@@ -31,7 +35,16 @@ export default {
     }
   },
   watch: {
-
+      trackInfo:{
+          handler(newValue, oldValue){
+            //   console.log('newValuenewValuenewValue',newValue)
+              if(newValue){
+                  this.init();
+              }else{
+                  this.exit()
+              }
+          }
+      }
   },
   mounted() {
       this.init()
@@ -44,47 +57,79 @@ export default {
     exit() {
       if (this.map && this.map.destroy) {
         this.map.destroy()
-        console.log('destroy,destroy',this.map)
-
+        // console.log('destroy,destroy',this.map)
       }
     },
     initMap() {
+        this.lineArr = [];
+        this.marker = [];
         const _this = this;
         const AMap = window.AMap;
         if (AMap) {
             // 地图加载
-            _this.map = new AMap.Map('track', {
+            this.map = new AMap.Map('track', {
                 resizeEnable: true, //是否监控地图容器尺寸变化
-                zoom: 11, //初始地图级别
+                zoom: 15, //初始地图级别
             })
             // this.logMapinfo();
         } else {
             console.error('=========加载地图失败=======')
         }
-        console.log('map,map',this.map)
         
-        const map = this.map;
+        const map = _this.map;
+
+        // 创建一个 Icon
+        var startIcon = new AMap.Icon({
+            // 图标尺寸
+            size: new AMap.Size(25, 34),
+            // 图标的取图地址
+            image: '//a.amap.com/jsapi_demos/static/demo-center/icons/dir-marker.png',
+            // 图标所用图片大小
+            imageSize: new AMap.Size(135, 40),
+            // 图标取图偏移量
+            imageOffset: new AMap.Pixel(-9, -3)
+        });
+
+        // 将 icon 传入 marker
+        var startMarker = new AMap.Marker({
+            position: new AMap.LngLat(this.trackInfo[0].longitude,this.trackInfo[0].latitude),
+            icon: startIcon,
+            offset: new AMap.Pixel(-13, -30)
+        });
+
+
+        // 创建一个 icon
+        var endIcon = new AMap.Icon({
+            size: new AMap.Size(25, 34),
+            image: '//a.amap.com/jsapi_demos/static/demo-center/icons/dir-marker.png',
+            imageSize: new AMap.Size(135, 40),
+            imageOffset: new AMap.Pixel(-95, -3)
+        });
+
+        // 将 icon 传入 marker
+        var endMarker = new AMap.Marker({
+            position: new AMap.LngLat(this.trackInfo[this.trackInfo.length-1].longitude,this.trackInfo[this.trackInfo.length-1].latitude),
+            icon: endIcon,
+            offset: new AMap.Pixel(-13, -30)
+        });
+
+        // 将 markers 添加到地图
+        map.add([startMarker, endMarker]);
+
         this.marker = new AMap.Marker({
-            map: map,
-            position: [116.397428, 39.90923],
+            map: this.map,
+            // position: [116.397428, 39.90923],
+            position: [this.trackInfo[0].longitude,this.trackInfo[0].latitude],
             icon: "https://webapi.amap.com/images/car.png",
             offset: new AMap.Pixel(-26, -13),
             autoRotation: true
         });
-        console.log('ifcome')
-        var lngX = 116.397428, latY = 39.90923;
-        this.lineArr.push(new AMap.LngLat(lngX, latY));
+        console.log(map,_this.map)
+        // this.map.setZoom(13)
 
-        for (var i = 1; i < 4; i++) {
-            lngX = lngX + Math.random() * 0.05;
-
-            if (i % 2) {
-                latY = latY + Math.random() * 0.0001;
-            } else {
-                latY = latY + Math.random() * 0.06;
-            }
-            this.lineArr.push(new AMap.LngLat(lngX, latY));
-        }
+        this.trackInfo.forEach(el => {
+            this.lineArr.push(new AMap.LngLat(el.longitude, el.latitude))
+        })
 
         // 绘制轨迹
         var polyline = new AMap.Polyline({
@@ -109,7 +154,8 @@ export default {
         });
         map.setFitView();
     },
-     startAnimation () {
+    startAnimation () {
+        console.log('123223')
         this.marker.moveAlong(this.lineArr, 2E3);
     },
 
@@ -125,7 +171,6 @@ export default {
         this.marker.stopMove();
     },
     loadMap() {
-    //   console.log('111', window.AMap, window.initialize)
       if (window.AMap) {
         return Promise.resolve('')
       } else {

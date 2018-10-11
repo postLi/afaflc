@@ -23,19 +23,49 @@ service.interceptors.request.use(config => {
     
     if (getUserInfo() && getUserInfo().id) {
         config.headers.user_id = getUserInfo().id;
-        
     }
     
     config.params['access_token'] = getToken();
     // console.log(config.url, config.params)
   }
-  if (config.url.indexOf('http://') !== -1) {
 
-  } else {
-    // 统一加上/api 前缀，方便后台转发接口
-    config.url = '/api' + config.url
+  console.log('process.env.NODE_ENV',process.env.NODE_ENV)
+if (config.url.indexOf('http://') === -1) {
+    console.log('http://',process.env.NODE_ENV)
+
+    // 如果是生产环境，强制访问157
+    if (process.env.NODE_ENV === 'production') {
+      // 这个值也要转为设定的值
+      window.tms_testapiurl = 'api'
+      localStorage.tms_testapiurl = 'api'
+      config.url = '/api' + config.url
+    } else {
+      /**
+       * 测试环境修改这里，不要修改上面那句代码
+       */
+      // 统一加上/api 前缀，方便后台转发接口
+        console.log(' window.tms_testapiurl', window.tms_testapiurl)
+      window.tms_testapiurl = localStorage.tms_testapiurl || 'api'
+
+      if (window.tms_testapiurl) {
+        config.url = '/' + window.tms_testapiurl + config.url
+      } else {
+        config.url = '/api' + config.url
+        // config.url = '/localapi' + config.url
+        // config.url = '/wukunzhi' + config.url
+        // config.url = '/huangyuwen' + config.url
+        // config.url = '/dingfei' + config.url
+        // config.url = '/ceshi' + config.url
+        // config.url = '/chenrongtao' + config.url
+        // config.url = '/home' + config.url
+        // config.url = '/fangjian' + config.url
+        // config.url = '/aliyun' + config.url
+        // config.url = '/lingzhiying' + config.url
+        // config.url = '/79service' + config.url
+      }
+    }
   }
-  
+
   return config
 }, error => {
   // Do something with request error

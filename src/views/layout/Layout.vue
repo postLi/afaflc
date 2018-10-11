@@ -7,13 +7,15 @@
       <sidebar></sidebar>
     </div>
     <div class="main-container">
-      <TagsView></TagsView>
+      <TagsView></TagsView> 
       <div class="main-container-wrap">
           <!-- <app-main></app-main> -->
           <app-main :key="theRefreshKey"></app-main>
       </div>
     </div>
     <LockScreen></LockScreen>
+    <setApiUrl />
+
   </div>
 </template>
 
@@ -21,6 +23,7 @@
 <script>
 import LockScreen from '@/components/LockScreen/index'
 import { Navbar, Sidebar, AppMain, TagsView } from '@/views/layout'
+import setApiUrl from '@/components/changeApiUrl/index'
 
 export default {
   name: 'layout',
@@ -29,7 +32,8 @@ export default {
     Sidebar,
     AppMain,
     TagsView,
-    LockScreen
+    LockScreen,
+    setApiUrl
     },
     data () {
         return {

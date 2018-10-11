@@ -2,7 +2,7 @@
     <div class="trail clearfix" v-loading = "loading">
         <div class="trailData fl">
             <el-table
-                :data="listInformation"
+                :data="tableData"
                 border
                 style="width: 100%">
                 <el-table-column label="序号"  width="80">
@@ -11,6 +11,7 @@
                     </template>
                 </el-table-column>  
                 <el-table-column
+                    :show-overflow-tooltip="true"
                     prop="address"
                     label="定位地址"
                     >
@@ -25,10 +26,10 @@
                     </template>
                 </el-table-column>
             </el-table>
-            <!-- <div class="info_tab_footer">共计:{{ totalCount }} <div class="show_pager"> <Pager :total="totalCount" @change="handlePageChange" :sizes="sizes"/></div> </div>     -->
+            <div class="info_tab_footer">共计:{{ totalCount }} <div class="show_pager"> <Pager :total="totalCount" @change="handlePageChange" :sizes="sizes"/></div> </div>    
         </div>
         <div class="tarilMap fr">
-            <DriverTrack></DriverTrack>
+            <DriverTrack :trackInfo="listInformation"></DriverTrack>
         </div>
     </div>
 </template>
@@ -54,13 +55,14 @@ export default {
     data() {
         return {
             page:1,
-            pagesize:20,
+            pagesize:10000,
+            Page:1,
+            Pagesize:22,
             loading:true,
             totalCount:0,
-            page:1,
-            pagesize:20,
             sizes:[20,30,50],
             listInformation:[],
+            tableData:[],
         };
     },
     watch:{
@@ -85,16 +87,19 @@ export default {
                 console.log('details',res)
                 this.listInformation = res.data.list;
                 this.loading = false;
+                this.nowTable();
             })
-            // this.totalCount = this.driverTrailData.length;
-            // let pageStart =  (this.page - 1) * this.pagesize;
-            // let pageEnd = this.page * this.pagesize;
-            // this.tableData = this.driverTrailData.slice(pageStart,pageEnd)
+        },
+        nowTable(){
+            this.totalCount = this.listInformation.length;
+            let pageStart =  (this.Page - 1) * this.Pagesize;
+            let pageEnd = this.Page * this.Pagesize;
+            this.tableData = this.listInformation.slice(pageStart,pageEnd);
         },
         handlePageChange(obj) {
-            this.page = obj.pageNum;
-            this.pagesize = obj.pageSize;
-            this.init();
+            this.Page = obj.pageNum;
+            this.Pagesize = obj.pageSize;
+            this.nowTable();
         },
     },
    
@@ -107,9 +112,17 @@ export default {
         .trailData{
             width: 35%;
             height: 100%;
+            display: flex;
+            flex-direction:column;
+            padding-bottom: 40px;
+            position: relative;
+            .el-table{
+                flex: 1;
+            }
+
         }
         .tarilMap{
-            width: 63%;
+            width: 64%;
             height: 100%;
         }
     }
