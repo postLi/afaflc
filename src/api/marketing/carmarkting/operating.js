@@ -16,7 +16,7 @@ const baseurl2 = 'aflcsmservice'
 
 export function postDriverCommissionTransaction(page, pagesize, data) {
   return fetch({
-    url: '/' + baseurlw + '/usercenter/aflcDriverCommissionDetail/v1/driverCommissionTransaction',
+    url: '/' + baseurl + '/usercenter/aflcDriverCommissionDetail/v1/driverCommissionTransaction',
     method: 'post',
     data: {
       'currentPage': page,
@@ -31,18 +31,18 @@ export function postDriverCommissionTransaction(page, pagesize, data) {
  * @param {*} pagesize
  * @param {*} data
  */
-export function postCommissionTransactionExcel(page, pagesize, data) {
-  return fetch({
-    responseType: 'blob',
-    url: '/' + baseurl + '/usercenter/aflcDriverCommissionDetail/v1/commissionTransactionExcel',
-    method: 'post',
-    data: {
-      'currentPage': page,
-      'pageSize': pagesize,
-      'vo': data
-    }
-  })
-}
+// export function postCommissionTransactionExcel(page, pagesize, data) {
+//   return fetch({
+//     responseType: 'blob',
+//     url: '/' + baseurl + '/usercenter/aflcDriverCommissionDetail/v1/commissionTransactionExcel',
+//     method: 'post',
+//     data: {
+//       'currentPage': page,
+//       'pageSize': pagesize,
+//       'vo': data
+//     }
+//   })
+// }
 /**
  * 奖励金
  */

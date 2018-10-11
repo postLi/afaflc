@@ -139,6 +139,7 @@
                 </template>
             </el-table-column>
         </el-table>
+        <el-button size="mini" @click="handleEdit3(scope.$index, scope.row)">物损登记</el-button>
         <add :rowid="rowid" :centerDialogVisible="centerDialogVisible" @close="closeAdd"></add>
         <!-- <div class="info_tab_footer">共计:{{ totalCount }} <div class="show_pager"> <Pager :total="totalCount" @change="handlePageChange" :sizes="sizes"/></div> </div>     -->
     </div>
@@ -149,7 +150,7 @@
 import Pager from '@/components/Pagination/index'
 import { parseTime } from '@/utils/index.js'
 import { orderDetailsList } from '@/api/order/ordermange'
-import { getGoodsclaimAll, getGoodsfollowupAll } from '@/api/service/claim.js'
+import { getGoodsclaimAll, getGoodsfollowupAll,getUpdateDealStatus } from '@/api/service/claim.js'
 import add from './add'
 export default {
   name: 'pushOrderList',
@@ -307,17 +308,6 @@ export default {
       getGoodsclaimAll(orderSerial).then(res => {
         // this.dataTotal = res.data.totalCount
         this.tableData = res.data
-        if(res.data.dealStatus === '待处理'){
-          console.log('待处理')
-          this.buttonText = '待处理'
-        }else if(res.data.dealStatus === '处理中'){
-          console.log('处理中')
-          this.buttonText = '处理中'
-        }else if(res.data.dealStatus === '已处理'){
-          console.log('已处理')
-          this.buttonText = '已处理'
-        }
-        // console.log(res.data)
       })
     },
     getListSmall() {
@@ -335,7 +325,10 @@ export default {
     },
     handleEdit1(index, row) {
       if (row.dealStatus === '待处理') {
-      this.firstblood()
+        getUpdateDealStatus(this.rowid).then(res=>{
+          // console.log(res)
+          this.firstblood()
+        })
       }else {
       this.centerDialogVisible = true
       }
