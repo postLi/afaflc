@@ -8,7 +8,7 @@
       @close="closeMe"
       :close-on-click-modal="false" 
       :before-close="closeMe">
-      <el-form :model="form" :rules="rules"  ref="ruleForm" :inline="true"  label-position="right">
+      <el-form :model="formAllData" :rules="rules"  ref="ruleForm" :inline="true"  label-position="right">
         <!-- <el-form-item label="跟进时间">
           <el-date-picker
             class="picklist"
@@ -32,7 +32,7 @@
             value-format="timestamp">
           </el-date-picker>
         </el-form-item> -->
-        <el-form-item label="跟进人">
+        <el-form-item label="跟进人" style="margin-left:15px;">
           <el-input v-model="formAllData.followName" :maxlength="20" placeholder="请输入跟进人" auto-complete="off" clearable></el-input>
         </el-form-item>
         <el-form-item prop="code" >
@@ -68,7 +68,7 @@
 </template>
 <script>
 import { parseTime, pickerOptions2 } from '@/utils/index.js'
-import { postOrderGoodsclaimlist } from '@/api/service/claim.js'
+// import { postOrderGoodsclaimlist } from '@/api/service/claim.js'
 import Pager from '@/components/Pagination/index'
 import Upload from '@/components/Upload/multImage'
 import { DicClaimStatusType } from '@/api/common'
@@ -108,7 +108,7 @@ export default {
       value: '',
       searchCreatTime: +new Date(),
       pickOption2: '',
-      checked:false,
+      checked: false,
       optionsclaimType: [{ code: null, name: '全部' }],
       options: [{
         value: '选项1',
@@ -125,39 +125,39 @@ export default {
       },
       formAllData: {
         // goodsclaimId:'',
-        code:false,
+        code: false,
         fileAddress: '', // 附件地址
         followName: '', // 跟进人
         // followupTime: '', // 跟进时间
-        fileName: '',// 附件名称
-        goodsclaimDes:''//投诉跟进描述
+        fileName: '', // 附件名称
+        goodsclaimDes: ''// 投诉跟进描述
       }
     }
   },
   watch: {
-    isShow:{
-      handler(newVal){
-        if(newVal){
-          this.$set(this.formAllData, 'id', this.rowid)    
-          // console.log(this.formAllData.id)   
+    isShow: {
+      handler(newVal) {
+        if (newVal) {
+          this.$set(this.formAllData, 'id', this.rowid)
+          // console.log(this.formAllData.id)
         }
       }
     }
   },
   mounted() {
-    this.firstblood()
+    // this.firstblood()
     this.getclaimstatus()
   },
   methods: {
     // 请求接口刷新页面
-    firstblood() {
-      // this.loading = false
-      postOrderGoodsclaimlist(this.page, this.pagesize, this.formAllData).then(res => {
-        this.dataTotal = res.data.totalCount
-        this.dataset = res.data.list
-        console.log(res)
-      })
-    },
+    // firstblood() {
+    //   // this.loading = false
+    //   postOrderGoodsclaimlist(this.page, this.pagesize, this.formAllData).then(res => {
+    //     this.dataTotal = res.data.totalCount
+    //     this.dataset = res.data.list
+    //     console.log(res)
+    //   })
+    // },
     reset() {
       this.$refs['ruleForm'].resetFields()
     },
@@ -177,11 +177,11 @@ export default {
       })
     },
     // 每页显示数据量变更
-    handlePageChange(obj) {
-      this.page = obj.pageNum
-      this.pagesize = obj.pageSize
-      this.firstblood()
-    },
+    // handlePageChange(obj) {
+    //   this.page = obj.pageNum
+    //   this.pagesize = obj.pageSize
+    //   this.firstblood()
+    // },
      // 判断选中与否
     getSelection(val) {
       console.log('选中内容', val)
@@ -194,16 +194,16 @@ export default {
     getFileInfo(obj) {
       console.log('pageUpFile:', obj, obj.name)
     },
-    getFileList (list) {
-      let address = []
-      let name = []
+    getFileList(list) {
+      const address = []
+      const name = []
       list.forEach((e, index) => {
         address.push(e.url)
         name.push(e.name)
       })
       this.formAllData.fileAddress = address.join(',')
       this.formAllData.fileName = name.join(',')
-      console.log('getFileList',  this.formAllData)
+      console.log('getFileList', this.formAllData)
     },
     handleChange() {},
     uploadHandleFile(_this) {
@@ -231,9 +231,9 @@ export default {
       this.$refs[ruleForm].validate((valid) => {
         if (valid) {
           // this.formAllData.followupTime = parseTime(this.searchCreatTime, '{y}-{m}-{d} {h}:{i}:{s}')
-          if(this.formAllData.code === true){
+          if (this.formAllData.code === true) {
             this.formAllData.code = 1
-          }else{
+          } else {
             this.formAllData.code = 0
           }
           this.$set(this.formAllData, 'goodsclaimId', this.rowid)

@@ -135,7 +135,7 @@
             </el-form-item> 
             <el-form-item class="clearfix imgbox" label="上传图片">
               <div class="clearfix uploadcard">
-                <upload :title="'本地上传'" :showFileList="true" :limit="5" listtype="picture"/>
+                <upload :title="'本地上传'" :showFileList="true" :limit="4" listtype="picture"/>
               </div>
             </el-form-item>
           

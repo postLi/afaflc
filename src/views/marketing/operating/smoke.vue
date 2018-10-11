@@ -29,6 +29,9 @@
           value-format="timestamp">
       </el-date-picker>
       </el-form-item>
+      <el-form-item label="订单号" prop="orderSerial">
+        <el-input v-model="searchInfo.orderSerial" clearable placeholder="请输入要查询的订单号"></el-input>
+      </el-form-item>
       <el-form-item class="btnChoose fr"  style="margin-left:0;">
         <el-button type="primary" :size="btnsize" plain @click="handleSearch('search')" icon="el-icon-search">搜索</el-button>
         <el-button type="info" :size="btnsize" plain @click="handleSearch('clear')" icon="fontFamily aflc-icon-qingkong">清空</el-button>
@@ -141,7 +144,7 @@ import '@/styles/dialog.scss'
 import { parseTime, pickerOptions2 } from '@/utils/index.js'
 import Pager from '@/components/Pagination/index'
 import vregion from '@/components/vregion/Region'
-import { postDriverCommissionTransaction, postCommissionTransactionExcel } from '@/api/marketing/carmarkting/operating'
+import { postDriverCommissionTransaction } from '@/api/marketing/carmarkting/operating'
 export default{
   components: {
     Pager,
@@ -159,15 +162,16 @@ export default{
       btnsize: 'mini',
       timeOutWaitPay: null,
       loading: true, // 加载
-      sizes: [30, 50, 100],
+      sizes: [20, 50, 100],
       pagesize: 20, // 初始化加载数量
       page: 1, // 初始化页码
       dataTotal: 0,
       isEport: false,
       searchCreatTime: [],
-      // defaultTime:[parseTime(+new Date() - 60 * 24 * 60 * 60 * 1000, '{y}-{m}-{d}'), parseTime(new Date(), '{y}-{m}-{d}')],
+      // searchCreatTime:[parseTime(+new Date() - 60 * 24 * 60 * 60 * 1000, '{y}-{m}-{d}'), parseTime(new Date(), '{y}-{m}-{d}')],
       areaName: '',
       searchInfo: {
+        orderSerial: null,
         startTime: null, // 下单起始时间
         endTime: null, // 下单结束时间
         areaCodeList: null//
@@ -205,33 +209,33 @@ export default{
     // clearInterval(this.timeOutWaitPay)
   },
   methods: {
-    exportExcel() {
-      this.isEport = true
-      if (this.areaName === '' || this.areaName === null || this.areaName === undefined || this.searchCreatTime === '' || this.searchCreatTime === null || this.searchCreatTime === undefined) {
-        // console.log(6666)
-        // this.$refs.ruleForm.validateField('areaName')
-        // this.$refs.ruleForm.validateField('searchCreatTime')
-        this.$message.warning('搜索条件不能为空')
-      } else {
-        console.log(7777)
-        postCommissionTransactionExcel(this.page, this.pagesize, this.searchInfo).then(res => {
-          const blob = new Blob([res], {
-            type: 'application/octet-stream'
-          })
-          if (window.navigator.msSaveOrOpenBlob) {
-            navigator.msSaveBlob(blob)
-          } else {
-            const elink = document.createElement('a')
-            elink.download = '报表.xls'
-            elink.style.display = 'none'
-            elink.href = URL.createObjectURL(blob)
-            document.body.appendChild(elink)
-            elink.click()
-            document.body.removeChild(elink)
-          }
-        })
-      }
-    },
+    // exportExcel() {
+    //   this.isEport = true
+    //   if (this.areaName === '' || this.areaName === null || this.areaName === undefined || this.searchCreatTime === '' || this.searchCreatTime === null || this.searchCreatTime === undefined) {
+    //     // console.log(6666)
+    //     // this.$refs.ruleForm.validateField('areaName')
+    //     // this.$refs.ruleForm.validateField('searchCreatTime')
+    //     this.$message.warning('搜索条件不能为空')
+    //   } else {
+    //     console.log(7777)
+    //     postCommissionTransactionExcel(this.page, this.pagesize, this.searchInfo).then(res => {
+    //       const blob = new Blob([res], {
+    //         type: 'application/octet-stream'
+    //       })
+    //       if (window.navigator.msSaveOrOpenBlob) {
+    //         navigator.msSaveBlob(blob)
+    //       } else {
+    //         const elink = document.createElement('a')
+    //         elink.download = '报表.xls'
+    //         elink.style.display = 'none'
+    //         elink.href = URL.createObjectURL(blob)
+    //         document.body.appendChild(elink)
+    //         elink.click()
+    //         document.body.removeChild(elink)
+    //       }
+    //     })
+    //   }
+    // },
     clearName() {
       this.areaName = ''
       this.searchInfo.areaCodeList = []
@@ -340,6 +344,7 @@ export default{
           break
         case 'clear':
           this.searchInfo = {
+            orderSerial: '',
             startTime: '', // 下单起始时间
             endTime: '', // 下单结束时间
             areaCodeList: []
@@ -347,14 +352,14 @@ export default{
           this.searchCreatTime = ''
           this.firstblood()
         case 'outExce':
-          if (this.searchCreatTime) {
-            this.searchInfo.startTime = this.searchCreatTime ? parseTime(this.searchCreatTime[0], '{y}-{m}-{d} ') + '00:00:00' : ''
-            this.searchInfo.endTime = this.searchCreatTime ? parseTime(this.searchCreatTime[1], '{y}-{m}-{d} ') + '23:59:59' : ''
-          } else {
-            this.searchInfo.startTime = ''
-            this.searchInfo.endTime = ''
-          }
-          this.exportExcel()
+          // if (this.searchCreatTime) {
+          //   this.searchInfo.startTime = this.searchCreatTime ? parseTime(this.searchCreatTime[0], '{y}-{m}-{d} ') + '00:00:00' : ''
+          //   this.searchInfo.endTime = this.searchCreatTime ? parseTime(this.searchCreatTime[1], '{y}-{m}-{d} ') + '23:59:59' : ''
+          // } else {
+          //   this.searchInfo.startTime = ''
+          //   this.searchInfo.endTime = ''
+          // }
+          // this.exportExcel()
           break
       }
       // 清除选中状态，避免影响下个操作
