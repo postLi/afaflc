@@ -254,7 +254,6 @@ export default{
             this.searchInfo.startTime = ''
             this.searchInfo.endTime = ''
           }
-          this.exportExcel()
           break
       }
       // 清除选中状态，避免影响下个操作
