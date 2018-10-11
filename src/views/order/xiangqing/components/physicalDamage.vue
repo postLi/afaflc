@@ -139,8 +139,9 @@
                 </template>
             </el-table-column>
         </el-table>
-        <el-button type="success" class="btnReg" size="mini" @click="handleEdit3(scope.$index, scope.row)">物损登记</el-button>
+        <el-button type="success" class="btnReg" size="mini" @click="handleEdit3">物损登记</el-button>
         <add :rowid="rowid" :centerDialogVisible="centerDialogVisible" @close="closeAdd"></add>
+        <addReg :centerDialogVisibleReg="centerDialogVisibleReg" @close="closeAddReg"></addReg>
         <!-- <div class="info_tab_footer">共计:{{ totalCount }} <div class="show_pager"> <Pager :total="totalCount" @change="handlePageChange" :sizes="sizes"/></div> </div>     -->
     </div>
 </template>
@@ -152,11 +153,13 @@ import { parseTime } from '@/utils/index.js'
 import { orderDetailsList } from '@/api/order/ordermange'
 import { getGoodsclaimAll, getGoodsfollowupAll, getUpdateDealStatus } from '@/api/service/claim.js'
 import add from './add'
+import addReg from './addReg'
 export default {
   name: 'pushOrderList',
   components: {
     Pager,
-    add
+    add,
+    addReg
   },
   props: {
     isvisible: {
@@ -167,6 +170,7 @@ export default {
   data() {
     return {
       centerDialogVisible: false,
+      centerDialogVisibleReg: false,
       totalCount: 0,
       page: 1,
       pagesize: 20,
@@ -338,10 +342,13 @@ export default {
 
     },
     handleEdit3() {
-
+      this.centerDialogVisibleReg = true
     },
     closeAdd() {
       this.centerDialogVisible = false
+    },
+    closeAddReg() {
+      this.centerDialogVisibleReg = false
     },
     rowClick(row, event, column) {
       // console.log(event)

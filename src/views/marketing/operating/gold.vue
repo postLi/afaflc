@@ -18,6 +18,9 @@
           value-format="timestamp">
       </el-date-picker>
       </el-form-item>
+      <el-form-item label="订单号" prop="orderSerial">
+        <el-input v-model="searchInfo.orderSerial" clearable placeholder="请输入要查询的订单号"></el-input>
+      </el-form-item>
       <el-form-item class="btnChoose fr"  style="margin-left:0;">
         <el-button type="primary" :size="btnsize" plain @click="handleSearch('search')" icon="el-icon-search">搜索</el-button>
         <el-button type="info" :size="btnsize" plain @click="handleSearch('clear')" icon="fontFamily aflc-icon-qingkong">清空</el-button>
@@ -140,7 +143,7 @@ export default{
       btnsize: 'mini',
       timeOutWaitPay: null,
       loading: true, // 加载
-      sizes: [30, 50, 100],
+      sizes: [20, 50, 100],
       pagesize: 20, // 初始化加载数量
       page: 1, // 初始化页码
       dataTotal: 0,
@@ -149,6 +152,7 @@ export default{
       // defaultTime:[parseTime(+new Date() - 60 * 24 * 60 * 60 * 1000, '{y}-{m}-{d}'), parseTime(new Date(), '{y}-{m}-{d}')],
       areaName: '',
       searchInfo: {
+        orderSerial: null,
         startTime: null, // 下单起始时间
         endTime: null, // 下单结束时间
         areaCodeList: null//
@@ -235,6 +239,7 @@ export default{
           break
         case 'clear':
           this.searchInfo = {
+            orderSerial: '',
             startTime: '', // 下单起始时间
             endTime: '', // 下单结束时间
             areaCodeList: []

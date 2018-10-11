@@ -69,15 +69,11 @@ export function getUpdateDealStatus(id) {
  * /order/aflcOrderGoodsclaim/v1/reportClaim 登记新增
  *  "orderSerial": "string",
  */
-export function getReportClaim(page, pagesize, data) {
+export function getReportClaim(data) {
   return fetch({
     url: '/' + baseurlw + '/order/aflcOrderGoodsclaim/v1/reportClaim',
     method: 'get',
-    data: {
-      'currentPage': page,
-      'pageSize': pagesize,
-      'vo': data
-    }
+    data: data
   })
 }
 
