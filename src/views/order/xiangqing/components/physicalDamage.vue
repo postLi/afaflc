@@ -86,7 +86,6 @@
                 prop="claimPic1"
                 :show-overflow-tooltip="true"
                 label="破损图片"
-                width="200"
                 >
                 <template slot-scope="scope">
                   <img :src='scope.row.claimPic1' alt="" v-showPicture>
