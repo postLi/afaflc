@@ -20,9 +20,6 @@
             value-format="timestamp">
           </el-date-picker>
         </el-form-item>
-        <!-- <el-form-item label="上报人" prop="reporter">
-          <el-input v-model="formAllData.reporter" :maxlength="20" placeholder="请输入上报人" auto-complete="off" clearable></el-input>
-        </el-form-item> -->
         <el-form-item label="上报人类型" prop="reporterType">
           <el-select v-model="formAllData.reporterType" placeholder="请选择" @change="changeCode">
             <el-option
@@ -33,6 +30,7 @@
             </el-option>
           </el-select>
         </el-form-item>
+        
         <el-form-item label="物损类型" prop="claimType">
           <el-select v-model="formAllData.claimType" clearable placeholder="请选择物损类型">
             <el-option
@@ -114,22 +112,22 @@ export default {
 
       },
       rules: {
-        reporterType:[
+        reporterType: [
           { required: true, message: '请输入上报人' }
         ],
         claimDes: [
           { required: true, message: '请输入物损描述' }
         ],
-        claimType:[
-          {required:true,message:'请选择物损类型'}
+        claimType: [
+          { required: true, message: '请选择物损类型' }
         ],
-        claimPic1:[
-          {required:true,message:'至少上传一张图片'}
+        claimPic1: [
+          { required: true, message: '至少上传一张图片' }
         ]
       },
       formAllData: {
-        reporterType:'',
-        orderSerial:'',//订单号
+        reporterType: '',
+        orderSerial: '', // 订单号
         createTime: '', // 登记时间
         // reporter: '', // 上报人
         claimType: '', // 物损类型
@@ -142,10 +140,9 @@ export default {
     isShow: {
       handler(newVal) {
         if (newVal) {
-          
           // console.log(this.formAllData.orderSerial)
           // this.$set(this.formAllData, 'orderSerial',orderSerial)
-          this.formAllData= {}
+          this.formAllData = {}
           // this.formAllData.orderSerial = this.$route.query.orderSerial
           // console.log(this.formAllData)
         }
@@ -166,8 +163,7 @@ export default {
         done()
       }
     },
-    changeCode (obj) {
-      
+    changeCode(obj) {
       this.formAllData.reporterType = obj
       console.log('sdfsdfs', obj, this.formAllData)
     },

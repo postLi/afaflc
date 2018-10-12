@@ -121,9 +121,9 @@ export default {
 
       },
       rules: {
-        followName:[
+        followName: [
           { required: true, message: '请输入' }
-        ],
+        ]
       },
       formAllData: {
         // goodsclaimId:'',
@@ -198,14 +198,17 @@ export default {
       console.log('pageUpFile:', obj, obj.name)
     },
     getFileList(list) {
+      console.log(list, 'list==================')
+
       const address = []
       const name = []
       list.forEach((e, index) => {
         address.push(e.url)
         name.push(e.name)
       })
-      this.formAllData.fileAddress = address.join(',')
-      this.formAllData.fileName = name.join(',')
+      this.$set(this.formAllData, 'fileAddress', address.join(','))
+      this.$set(this.formAllData, 'fileName', name.join(','))
+      // this.formAllData.fileName = name.join(',')
       console.log('getFileList', this.formAllData)
     },
     handleChange() {},
@@ -240,6 +243,7 @@ export default {
             this.formAllData.code = 0
           }
           this.$set(this.formAllData, 'goodsclaimId', this.rowid)
+          console.log(this.formAllData)
           const data = objectMerge2({}, this.formAllData)
           postReportClaimAdd(data).then(res => {
             this.$message({
