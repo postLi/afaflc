@@ -27,32 +27,25 @@
                              {{ (page - 1)*pagesize + scope.$index + 1 }}
                             </template>
             </el-table-column>
-            <el-table-column  label="所属区域" prop="areaCode">
+            <el-table-column  label="所属区域" prop="areaCode" sortable>
             </el-table-column>
-            <el-table-column  label="货主账号" prop="mobile" >
+            <el-table-column  label="货主账号" prop="mobile" sortable>
                 <template  slot-scope="scoped">
-                    <shipperwallet
-                    btntype="text"  
-                    :btntext="scoped.row.mobile"
-                    editType="add"
-                    btntitle="详情"
-                    :templateItem="scoped.row"
-                   >
-                    </shipperwallet>    
+                    <h4 class="needMoreInfo" @click="pushOrderSerial(scoped.row)">{{ scoped.row.mobile}}</h4>
                 </template>
             </el-table-column>
-            <el-table-column  label="可用余额" prop="balance">
+            <el-table-column  label="可用余额" prop="balance" sortable>
             </el-table-column>
-            <el-table-column  label="充值赠送余额" prop="availableBalance">
+            <el-table-column  label="充值赠送余额" prop="availableBalance" sortable>
             </el-table-column>
-            <el-table-column  label="在线交易奖励金（已奖励 / 额度）">
+            <el-table-column  label="在线交易奖励金（已奖励 / 额度）" sortable>
             <template  slot-scope="scoped">
              {{scoped.gainAwardReward}}/{{scoped.awardRewardMax}}
             </template>
             </el-table-column> 
-            <el-table-column  label="优惠券数" prop="couponCount" >
+            <el-table-column  label="优惠券数" prop="couponCount" sortable>
             </el-table-column>                    
-            <el-table-column  label="优惠券金额" prop="couponAmount" >
+            <el-table-column  label="优惠券金额" prop="couponAmount" sortable>
             </el-table-column>                                                  
             </el-table> 
         	</div> 
@@ -142,7 +135,11 @@ export default {
     clickDetails(row, event, column){
       this.$refs.multipleTable.toggleRowSelection(row);
     },       
+    //详情弹窗
+            pushOrderSerial(item){
+                this.$router.push({name: '货主账户详情',query:{ accountId:item.accountId }});
 
+            }
    },
     mounted(){
        this.firstblood();      
@@ -158,21 +155,6 @@ export default {
                     font-weight: bold
                 }
         }
-    }
-    .info_tab_footer1{
-    padding-left: 20px;
-    text-align: left;
-    background: #eee;
-    height: 40px;
-    line-height: 40px;
-    box-shadow: 0 -2px 2px rgba(0, 0, 0, 0.1);
-    position: relative;
-    z-index: 10;
-    width: 100%;
-    margin-top:10px;
-    .el-input--suffix{
-        margin-top:5px!important;
-    }
     }
 }
 </style>

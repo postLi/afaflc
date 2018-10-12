@@ -31,14 +31,7 @@
             </el-table-column>
             <el-table-column  label="车主账号" prop="driverMobile" sortable >
                 <template  slot-scope="scoped">
-                    <Carwallet
-                    btntype="text"  
-                    :btntext="scoped.row.driverMobile"
-                    editType="add"
-                    btntitle="详情"
-                    :templateItem="scoped.row"
-                   >
-                    </Carwallet>    
+                    <h4 class="needMoreInfo" @click="pushOrderSerial(scoped.row)">{{ scoped.row.driverMobile}}</h4>
                 </template>
             </el-table-column>
             <el-table-column  label="可提现余额" prop="availableAmount" sortable>
@@ -144,6 +137,12 @@ export default {
     clickDetails(row, event, column){
       this.$refs.multipleTable.toggleRowSelection(row);
     },
+    //详情弹窗
+            pushOrderSerial(item){
+                this.$router.push({name: '车主账户详情',query:{ accountId:item.accountId }});
+
+            }
+
    },
     mounted(){
        this.firstblood();      
@@ -160,6 +159,7 @@ export default {
                 }
         }
     }
+
 }
 </style>
 

@@ -219,7 +219,6 @@ export default {
         })
         return
       }
-
       const data = new FormData()
       data.append('uploadfile', file)
       data.append('excelSign', this.info)
