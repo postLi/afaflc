@@ -113,7 +113,7 @@
                         </el-select>
                     </el-form-item>
                   </el-col>
-                  <el-col :span="12">
+                <el-col :span="12">
                <span v-if="!selectFlag">    
               <el-form-item label="所在地 ："  :label-width="formLabelWidth"  prop="belongCityName">
                         <el-input v-model="templateModel.belongCityName" placeholder="请选择" :disabled="editType=='view'" @focus="changeSelect"></el-input>
@@ -123,8 +123,8 @@
               <el-form-item label="所在地 ："  :label-width="formLabelWidth" prop="belongCity">
                 <GetCityList ref="area" v-model="templateModel.belongCity"  @returnStr="getStr"></GetCityList>
               </el-form-item>
-               </span>   
-                  </el-col>
+               </span> 
+                </el-col>
               </el-row>
               
               <el-row>
@@ -619,13 +619,13 @@ export default {
                 this.templateModel.areaCode = name.split(',')[2];
             },        
         // 省市状态表
-            changeSelect(){
+     changeSelect(){
                     if(this.editType=='add'){
                         this.selectFlag=null
                     } else{
                         this.selectFlag='1'
                     }
-                    },  
+                    },   
         changeList(){
             eventBus.$emit('changeListtwo')
         },
@@ -679,10 +679,10 @@ export default {
                 this.driverTemplateDialogFlag = true ;
             }
              else{
-                 console.log('fdfdf')
             if (this.editType === 'add') {
                 this.templateModel.carSpec = null;
                 this.templateModel.isVipCar = '0'
+                this.selectFlag='1'
                 this.driverTemplateDialogFlag = true ;
             }else if(this.editType=== 'valetAuth'||this.editType==='edit'||this.editType==='view'){
             if(!this.templateItem && this.editType !== 'add'){

@@ -1,16 +1,11 @@
 <template>
-     <div class="Shipperwallet commoncss">
-      <el-button :type="btntype" :value="value" :plain="plain" :icon="icon" @click="openDialog()">{{btntext}}</el-button>
-      <div class="newcoupon1">
-      <el-dialog  :visible="dialogFormVisible_add" :before-close="change" :title="btntitle">
-          <el-tabs v-model="autocheck" type="border-card" >
+	<div class="Shipperwallet tabsWrap">
+          <el-tabs v-model="autocheck" type="card">
         <!-- 钱包明细 -->
             <el-tab-pane label="交易明细" name="first">
-        <div class="walletdetails">
-       <el-form ref="formAllData">
-          <el-row >
-            <el-col :span="5">
-               <el-form-item  label="交易类型：" label-width="80px"> 
+        <div style="height:100%;" class="identicalStyle">
+       <el-form :inline="true"  class="demo-ruleForm classify_searchinfo">
+               <el-form-item  label="交易类型："> 
                    <el-select v-model="formAllData.tradeType" clearable placeholder="请选择">
                         <el-option
                           v-for="item in optionsAccountType2"
@@ -21,17 +16,13 @@
                         </el-option>
                     </el-select>
                </el-form-item>  
-            </el-col>
-            <el-col :span="5">
-               <el-form-item  label="收支类型：" :label-width="formLabelWidth"> 
+               <el-form-item  label="收支类型："> 
                    <el-select v-model="formAllData.incomeExpendType" clearable placeholder="请选择">
                           <el-option label="收入" value="1"></el-option>
                           <el-option label="支出" value="0"></el-option>
                     </el-select>
                </el-form-item>  
-            </el-col>
-            <el-col :span="5" >
-                   <el-form-item label="交易时间" :label-width="formLabelWidth">
+                   <el-form-item label="交易时间">
                     <el-date-picker
                     v-model="payTime"
                         is-range
@@ -48,15 +39,13 @@
                     >
                     </el-date-picker>
                </el-form-item>  
-            </el-col>
-            <el-col :span="5">
                 <el-form-item class="fr">
                     <el-button type="primary" plain @click="getdata_search"  :size="btnsize" icon="el-icon-search">搜索</el-button>
                     <el-button type="info" plain  @click="clearSearch"  :size="btnsize" icon="fontFamily aflc-icon-qingkong">清空</el-button>
                 </el-form-item>
-            </el-col>                                    
-          </el-row>
        </el-form>
+         <div class="classify_info">
+            <div class="info_news">
             <el-table style="width: 100%"  border height="100%"  ref="multipleTable" :data="tableDataAll">
               <el-table-column
                             label="选择"
@@ -68,34 +57,34 @@
                              {{ (page - 1)*pagesize + scope.$index + 1 }}
                             </template>
             </el-table-column>
-            <el-table-column  label="订单流水号" prop="orderSerial">
+            <el-table-column  label="订单流水号" prop="orderSerial" sortable>
             </el-table-column>
-            <el-table-column  label="交易流水号" prop="tradeSerial">
+            <el-table-column  label="交易流水号" prop="tradeSerial" sortable>
             </el-table-column> 
-            <el-table-column  label="货主账号" prop="accountName">
+            <el-table-column  label="货主账号" prop="accountName" sortable>
             </el-table-column>        
-            <el-table-column  label="服务分类" prop="orderTypeName">
+            <el-table-column  label="服务分类" prop="orderTypeName" sortable>
             </el-table-column>       
-            <el-table-column  label="交易类型" prop="tradeTypeName">
+            <el-table-column  label="交易类型" prop="tradeTypeName" sortable>
             </el-table-column>     
-            <el-table-column  label="收支类型" prop="incomeExpendTypeName">
+            <el-table-column  label="收支类型" prop="incomeExpendTypeName" sortable>
             </el-table-column>
-            <el-table-column  label="交易金额" prop="payTotal">
+            <el-table-column  label="交易金额" prop="payTotal" sortable>
             </el-table-column>     
-            <el-table-column  label="交易时间" prop="createTime">
+            <el-table-column  label="交易时间" prop="createTime" sortable>
             </el-table-column>                                                                                               
             </el-table> 
-             <div class="info_tab_footer1">共计:{{ dataTotal}} <div class="show_pager"> <Pager :total="dataTotal" @change="handlePageChange"  :sizes="sizes"/></div> </div> 
-        </div>
+             </div>
+             <div class="info_tab_footer">共计:{{ dataTotal}} <div class="show_pager"> <Pager :total="dataTotal" @change="handlePageChange"  :sizes="sizes"/></div> </div> 
+            </div>
+            </div>
             </el-tab-pane>
 
         <!-- 提现记录 -->
             <el-tab-pane label="充值记录"  name="second">
-           <div class="walletdetails">
-       <el-form ref="formAllData">
-          <el-row >
-            <el-col :span="7" >
-               <el-form-item  label="收款方式：" label-width="80px"> 
+        <div style="height:100%;" class="identicalStyle">
+       <el-form :inline="true"  class="demo-ruleForm classify_searchinfo">
+               <el-form-item  label="收款方式："> 
                     <el-date-picker
                         is-range
                         unlink-panels
@@ -112,9 +101,7 @@
                         >
                     </el-date-picker>
                </el-form-item>  
-            </el-col>
-             <el-col :span="5" >
-            <el-form-item label="充值渠道：" label-width="80px">
+            <el-form-item label="充值渠道：">
                   <el-select v-model="formAllData2.rechargeChannel" clearable placeholder="请选择" >
                           <el-option
                               v-for="item in rechargeChannelList"
@@ -125,9 +112,7 @@
                          </el-option>
                  </el-select>               
             </el-form-item>
-             </el-col>
-              <el-col :span="5" >
-            <el-form-item label="充值方式：" label-width="80px">
+            <el-form-item label="充值方式：">
                   <el-select v-model="formAllData2.rechargeWay" clearable placeholder="请选择" >
                           <el-option
                               v-for="item in rechargeWayList"
@@ -138,15 +123,13 @@
                          </el-option>
                  </el-select>                  
             </el-form-item>
-            </el-col>
-                 <el-col :span="5" >
                 <el-form-item class="fr">
                     <el-button type="primary" plain @click="getdata_search2"  :size="btnsize" icon="el-icon-search">搜索</el-button>
                     <el-button type="info" plain  @click="clearSearch2"  :size="btnsize" icon="fontFamily aflc-icon-qingkong">清空</el-button>
                 </el-form-item>
-                 </el-col>
-          </el-row>
        </el-form>
+         <div class="classify_info">
+            <div class="info_news">
             <el-table style="width: 100%"  border height="100%" stripe ref="multipleTable2" :data="tableDataAll2">
               <el-table-column
                             label="选择"
@@ -158,35 +141,33 @@
                              {{ (page2 - 1)*pagesize2 + scope.$index + 1 }}
                             </template>
             </el-table-column>
-            <el-table-column  label="流水号" prop="rechargeSerial">
+            <el-table-column  label="流水号" prop="rechargeSerial" sortable>
             </el-table-column>
-            <el-table-column  label="充值时间" prop="rechargeTime">
+            <el-table-column  label="充值时间" prop="rechargeTime" sortable>
             </el-table-column>             
-            <el-table-column  label="充值金额" prop="enterSum">
+            <el-table-column  label="充值金额" prop="enterSum" sortable>
             </el-table-column>        
-            <el-table-column  label="充值赠送" prop="giveSum">
+            <el-table-column  label="充值赠送" prop="giveSum" sortable>
             </el-table-column>       
-            <el-table-column  label="充值渠道" prop="rechargeChannelName">
+            <el-table-column  label="充值渠道" prop="rechargeChannelName" sortable>
             </el-table-column>     
-            <el-table-column  label="充值方式" prop="rechargeWayName">
+            <el-table-column  label="充值方式" prop="rechargeWayName" sortable>
             </el-table-column>                                                                                               
             </el-table> 
-             <div class="info_tab_footer1">共计:{{ dataTotal2 }} <div class="show_pager"> <Pager :total="dataTotal2" @change="handlePageChange2"  :sizes="sizes"/></div> </div> 
+            </div>
+             <div class="info_tab_footer">共计:{{ dataTotal2 }} <div class="show_pager"> <Pager :total="dataTotal2" @change="handlePageChange2"  :sizes="sizes"/></div> </div> 
+             </div>
              </div>
             </el-tab-pane>     
 
         <!-- 账户优惠卷 -->
         <el-tab-pane label="账户优惠卷"  name="three">
-           <div class="walletdetails">
-       <el-form ref="formAllData">
-          <el-row >
-            <el-col :span="5" >
-               <el-form-item  label="优惠券名称：" label-width="80px"> 
+        <div style="height:100%;" class="identicalStyle">
+       <el-form :inline="true"  class="demo-ruleForm classify_searchinfo">
+               <el-form-item  label="优惠券名称："> 
                     <el-input v-model="formAllData3.couponName" clearable></el-input>
                </el-form-item>  
-            </el-col>
-            <el-col :span="5" >
-               <el-form-item  label="卷码状态：" label-width="80px"> 
+               <el-form-item  label="卷码状态："> 
                         <el-select v-model="formAllData3.couponStatus" placeholder="请选择" >
                             <el-option
                                 v-for="item in couponStatusList"
@@ -196,15 +177,13 @@
                             </el-option>
                         </el-select>
                </el-form-item>  
-            </el-col>
-            <el-col :span="5">
                 <el-form-item class="fr">
                     <el-button type="primary" plain @click="getdata_search3"  :size="btnsize" icon="el-icon-search">搜索</el-button>
                     <el-button type="info" plain  @click="clearSearch3"  :size="btnsize" icon="fontFamily aflc-icon-qingkong">清空</el-button>
                 </el-form-item>
-            </el-col>                                    
-          </el-row>
        </el-form>
+         <div class="classify_info">
+            <div class="info_news">
             <el-table style="width: 100%"  border height="100%" stripe ref="multipleTable2" :data="tableDataAll3">
               <el-table-column
                             label="选择"
@@ -216,34 +195,34 @@
                              {{ (page3 - 1)*pagesize3 + scope.$index + 1 }}
                             </template>
             </el-table-column>
-            <el-table-column  label="优惠券名称" prop="couponName" show-overflow-tooltip>
+            <el-table-column  label="优惠券名称" prop="couponName" show-overflow-tooltip sortable>
             </el-table-column>
-            <el-table-column  label="优惠券类型" prop="couponTypeName">
+            <el-table-column  label="优惠券类型" prop="couponTypeName" sortable>
             </el-table-column> 
-            <el-table-column  label="金额/折扣" prop="remissionDiscount">
+            <el-table-column  label="金额/折扣" prop="remissionDiscount" sortable>
             </el-table-column>        
-            <el-table-column  label="优惠券码" prop="couponNum">
+            <el-table-column  label="优惠券码" prop="couponNum" sortable>
             </el-table-column>       
-            <el-table-column  label="手机号码" prop="mobile">
+            <el-table-column  label="手机号码" prop="mobile" sortable>
             </el-table-column>     
-            <el-table-column  label="派发时间" prop="grantTime" show-overflow-tooltip>
+            <el-table-column  label="派发时间" prop="grantTime" show-overflow-tooltip sortable>
             </el-table-column>
-            <el-table-column  label="过期时间" prop="endTime" show-overflow-tooltip>
+            <el-table-column  label="过期时间" prop="endTime" show-overflow-tooltip sortable>
             </el-table-column>   
-            <el-table-column  label="券码状态" prop="couponStatusName">
+            <el-table-column  label="券码状态" prop="couponStatusName" sortable>
             </el-table-column>    
-            <el-table-column  label="订单号" prop="orderSerial" show-overflow-tooltip>
+            <el-table-column  label="订单号" prop="orderSerial" show-overflow-tooltip sortable>
             </el-table-column>                            
-            <el-table-column  label="订单优惠金额" prop="orderDiscountAmount">
+            <el-table-column  label="订单优惠金额" prop="orderDiscountAmount" sortable>
             </el-table-column>         
             </el-table>
-              <div class="info_tab_footer1">共计:{{ dataTotal3 }} <div class="show_pager"> <Pager :total="dataTotal3" @change="handlePageChange3"  :sizes="sizes"/></div> </div> 
+            </div>
+              <div class="info_tab_footer">共计:{{ dataTotal3 }} <div class="show_pager"> <Pager :total="dataTotal3" @change="handlePageChange3"  :sizes="sizes"/></div> </div> 
+             </div>
              </div>
             </el-tab-pane>            
     </el-tabs>
-      </el-dialog>
       </div>
-    </div>
 </template>
 <script>
 import { data_Commission ,data_CarList,data_MaidLevel,data_ServerClassList} from '@/api/server/areaPrice.js'
@@ -373,21 +352,6 @@ export default {
        }
  },
   methods:{
-   change:function(){
-         this.dialogFormVisible_add = false;
-   },
-   close:function(){
-    eventBus.$emit('changeDia')
-   },
-   openDialog(){
-       this.dialogFormVisible_add = true;
-     this.formAllData3.userId = this.templateItem.accountId
-     this.formAllData2.accountId = this.templateItem.accountId
-     this.formAllData.userId = this.templateItem.accountId
-     this.firstblood()
-     this.firstblood2()
-     this.firstblood3()
-   },
     // 钱包明细
     firstblood(){
      data_aflcOrderPaymentList(this.page,this.pagesize,this.formAllData).then(res => {
@@ -490,51 +454,19 @@ export default {
         },
    },
    mounted(){
+     this.formAllData3.userId = this.$route.query.accountId
+     this.formAllData2.accountId = this.$route.query.accountId
+     this.formAllData.userId = this.$route.query.accountId
+     this.firstblood()
+     this.firstblood2()
+     this.firstblood3()
     }
     }
 </script>
 <style lang="scss">
 .Shipperwallet{
-    height: 100%;
-    .walletdetails{
-        height: 100%;
-    .el-button{
-    padding: 7px 15px!important;
-    }
-    }
-     .el-input__inner{
-         height: 30px!important;
-         line-height: 30px!important;
-     }
-    .el-dialog{
-        width: 80%!important;
-    }
-    .el-radio.is-bordered{
-        height: 30px;
-        padding: 7px 20px 0 10px;
-    }
-     .textareaBox {
-        width:100%;
-    }
-    .el-input__inner{
-        line-height: 30px;
-        height: 30px;
-    }
-    .el-range__icon{
-      line-height: 24px;
-    }
-    .el-date-editor .el-range-separator{
-        line-height: 24px;
-        width: 7%
-    }
-    .el-dialog__body{
-    padding: 0px;
-    }
-    td{
-        background: #fff!important;
-    }
-    .el-date-editor--daterange{
-        width: 300px!important
+    .classify_info{
+    padding-bottom: 0px;
     }
 }
 </style>
