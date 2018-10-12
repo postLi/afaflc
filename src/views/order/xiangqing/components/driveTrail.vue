@@ -7,7 +7,7 @@
                 style="width: 100%">
                 <el-table-column label="序号"  width="80">
                     <template slot-scope="scope">
-                        {{ (page - 1)*pagesize + scope.$index + 1 }}
+                        {{ (Page - 1)*Pagesize + scope.$index + 1 }}
                     </template>
                 </el-table-column>  
                 <el-table-column
@@ -60,7 +60,7 @@ export default {
             Pagesize:22,
             loading:true,
             totalCount:0,
-            sizes:[20,30,50],
+            sizes:[22,30,50],
             listInformation:[],
             tableData:[],
         };

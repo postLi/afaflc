@@ -15,9 +15,9 @@ export default {
     {
         path: '/order/tongcheng', 
         icon: 'tcdd', 
-        name: '同城订单',
+        name: '小货车',
         component: _import('order/index'), 
-        meta: { role: ['admin'], title: '同城订单',stitle: '同城',  noCache: true, code: 'ORDER_CITY_WIDE_ORDER' },
+        meta: { role: ['admin'], title: '小货车',stitle: '小货车',  noCache: true, code: 'ORDER_CITY_WIDE_ORDER' },
         children: [
             {
                 path: '/order/tongcheng/waitPointing',
@@ -66,9 +66,9 @@ export default {
     {
         path: '/order/lingdan', 
         icon: 'lddingdan', 
-        name: '零担订单', 
+        name: '发物流', 
         component: _import('order/lingdan/index'), 
-        meta: { role: ['admin'], title: '零担订单',stitle: '零担',  noCache: true , code: 'ORDER_LTL_ORDER'}
+        meta: { role: ['admin'], title: '发物流',stitle: '发物流',  noCache: true , code: 'ORDER_LTL_ORDER'}
       },
     {
         path: '/order/dahuoche', 

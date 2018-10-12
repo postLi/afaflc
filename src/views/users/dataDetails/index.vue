@@ -4,7 +4,6 @@
         <!-- 基本信息 -->
             <el-tab-pane label="基本信息" name="essential">
                 <!-- <div class="imgbox">
-
                     <img src="../../../assets/zanshi/jiben.png" alt="">
                 </div> -->
 
@@ -13,10 +12,11 @@
 
         <!-- 超时无人人接单 -->
             <el-tab-pane label="权限配置" name="overTime">
-                <div class="imgbox">
+                <!-- <div class="imgbox">
 
                 <img src="../../../assets/zanshi/hzqy.png" alt="">
-                </div>
+                </div> -->
+                <authorityConfigure :isvisible="detailsName === 'authority'" />
             </el-tab-pane>
 
         <!-- 公海无司机 -->
@@ -70,11 +70,13 @@
 
 <script type="text/javascript">
 import essential from './essential'
+import authorityConfigure from './authorityConfigure'
 
     export default {
         name:'detailsCompnent',
         components:{
            essential,
+           authorityConfigure,
         },
         data() {
           return {
@@ -116,10 +118,86 @@ import essential from './essential'
         height: 100%;
         .el-tab-pane{
             overflow: auto;
-            padding: 0 10px;
+            // padding: 0 10px;
+            background: #f2f2f2;
+           
         }
         .imgbox{
             overflow: auto;
         }
     }
+</style>
+
+<style type="text/css" lang="scss">
+
+    .detailsCompnent{
+        .detailsArrange{
+            .collapseInfo{
+                background: #ffffff;
+                margin-top: 18px;
+                padding: 0 20px;
+                h2{
+                    border-bottom: solid 2px #e0e0e0;
+                    line-height: 25px;
+                    font-size: 18px;
+                    padding: 36px 0 18px 0;
+                    color: #333333;
+                    font-weight: normal;
+                    font-stretch: normal;
+                }
+                .essentialInformation{
+                    padding:  20px 0 40px 0;
+                    .basicInfo{
+                        border-top: 1px solid #e6e6e6;
+                        border-left: 1px solid #e6e6e6;
+                        .el-col{
+                            font-size: 14px;
+                            line-height: 20px;
+                            padding: 12px 10px;
+                            border-right: 1px solid #e6e6e6;
+                            border-bottom: 1px solid #e6e6e6;
+                            &:nth-child(odd){
+                                background: #fafafa;
+                                font-weight: bold;
+                                text-align: right;
+                            }
+                            &:nth-child(even){
+                                text-align: left;
+                            }
+                        }
+                    }
+                }
+                .essentialInformation_img{
+                    padding: 0 20px;
+                    img{
+                        cursor: pointer;
+                        max-height:378px;
+                        max-width:638px;
+                    }
+                    h6{
+                        font-size:14px;
+                        color:#333;
+                        line-height:20px;
+                        margin-bottom:5px;
+                        font-weight:normal;
+                    }
+                    &>.basicInfo_img{
+                        padding-bottom:40px;
+                    }
+                }
+                .essentialInformation_table{
+                    position:relative;
+                    padding:24px 0; 
+                    .el-table thead th, .el-table thead tr {
+                        background-color: #fafafa;
+                    }
+                    .el-pagination{
+                        text-align:right;
+                        padding-top:10px;
+                    }
+                }
+            }
+        }
+    }
+
 </style>

@@ -16,19 +16,49 @@
                         @selection-change="getSelection"
                         height="100%"
                         tooltip-effect="dark"
-                        :default-sort = "{prop: 'noticeLocation', order: 'ascending'}"
+                        :default-sort = "{prop: 'isTop', order: 'null'}"
                         style="width: 100%">
                         <el-table-column
                             type="selection"
                             width="55">
                         </el-table-column>
+                        <el-table-column label="序号" width="80px">
+                            <template slot-scope="scope">
+                                {{ (page - 1)*pagesize + scope.$index + 1 }}
+                            </template>
+                        </el-table-column>  
+                        <!-- <el-table-column
+                            prop="noticeLocation"
+                            sortable
+                            :show-overflow-tooltip="true"
+                            label="区域"
+                            width="200">
+                        </el-table-column>
+                        <el-table-column
+                            prop="title"
+                            sortable
+                            :show-overflow-tooltip="true"
+                            label="标题"
+                            width="400">
+                        </el-table-column>
+                          <el-table-column
+                            prop="startTime"
+                            sortable
+                            :show-overflow-tooltip="true"
+                            label="有效期"
+                            width="400">
+                                <template slot-scope="scope">
+                                    <p v-if="scope.row.endTime">{{scope.row.startTime | parseTime('{y}-{m}-{d}')}}<span class="youxiaoqi">至</span>{{scope.row.endTime | parseTime('{y}-{m}-{d}')}}</p>
+                                    <p v-else>{{scope.row.startTime | parseTime('{y}-{m}-{d}')}}<span class="youxiaoqi">至</span> 长期</p>
+                                </template>
+                        </el-table-column> -->
                         <template v-for="column in tableColumn">
                             <el-table-column :key="column.id" :fixed="column.fixed" :align='column.alignName' sortable :label="column.label" :show-overflow-tooltip="column.overflow" :prop="column.prop" v-if="!column.slot" :width="column.width"></el-table-column>
                             <el-table-column :key="column.id" :fixed="column.fixed" :align='column.alignName' sortable :label="column.label" :show-overflow-tooltip="column.overflow" v-else :width="column.width || ''">
-                            <template slot-scope="scope">
-                                <span class="clickitem" v-if="column.click" v-html="column.slot(scope)" @click.stop="column.click(scope)"></span>
-                                <span v-else v-html="column.slot(scope)"></span>
-                            </template>
+                                <template slot-scope="scope">
+                                    <span class="clickitem" v-if="column.click" v-html="column.slot(scope)" @click.stop="column.click(scope)"></span>
+                                    <span v-else v-html="column.slot(scope)"></span>
+                                </template>
                             </el-table-column>
                         </template>
                         <el-table-column label="操作">
@@ -48,7 +78,7 @@
                 </div>
             </div>
             <div class="info_tab_footer">共计:{{ dataTotal }} <div class="show_pager"> <Pager :total="dataTotal" @change="handlePageChange"  :sizes="sizes"/></div> </div>  
-            <announcement :dialogFormVisible.sync = "dialogFormVisible"  :announceForm="announceForm" :operateType="operateType" @close = "shuaxin" />
+            <announcement :dialogFormVisible.sync = "dialogFormVisible" :Atitle="Atitle" :announceForm="announceForm" :operateType="operateType" @close = "shuaxin" />
 
     </div>
 </template>
@@ -73,6 +103,7 @@ import editor from '@/components/tinymac/index'
         data(){
             return{
                 btnsize:'mini',
+                Atitle:'',
                 operateType:'',//操作类型：新增，修改
                 announceForm:{},//传递的对象
                 dialogFormVisible:false,
@@ -91,16 +122,6 @@ import editor from '@/components/tinymac/index'
                 },
                 tableData:[],
                 tableColumn: [{
-                    label: '序号',
-                    prop: 'id',
-                    width: '80',
-                    fixed: true,
-                    overflow:false,
-                    alignName:'center',
-                    slot: (scope) => {
-                    return ((this.page - 1) * this.pagesize) + scope.$index + 1;
-                    }
-                }, {
                     label: '区域',
                     prop: 'noticeLocation',
                     width: '200',
@@ -122,7 +143,6 @@ import editor from '@/components/tinymac/index'
                     fixed: false,
                     overflow:true,
                     alignName:'center',
-
                     slot: (scope) => {
                         let startTime = parseTime(scope.row.startTime, '{y}-{m}-{d}');
                         let endTime = scope.row.endTime ? parseTime(scope.row.endTime, '{y}-{m}-{d}') : '长期';
@@ -147,16 +167,6 @@ import editor from '@/components/tinymac/index'
                         return parseTime(scope.row.createTime, '{y}-{m}-{d} {h}:{i}:{s}')
                     }
                 },
-                //  {
-                //     label: '操作',
-                //     fixed: false,
-                //     // click:true,
-                //     slot: (scope) => {
-                //         // <el-button type="text" size="small">编辑</el-button>;
-                     
-                //         return  '<el-button @click="handleClick(scope.row)" type="text" size="small">查看</el-button>';
-                //     }
-                // }
                 ]
             }
         },
@@ -230,6 +240,7 @@ import editor from '@/components/tinymac/index'
                         this.announceForm = Object.assign({},row);
                         this.operateType   = type ;
                         this.dialogFormVisible = true;
+                        this.Atitle = '修改公告';
                         break;
                 }
                   // 清除选中状态，避免影响下个操作
@@ -249,6 +260,7 @@ import editor from '@/components/tinymac/index'
                     case 'publish':
                         this.operateType   = type ;
                         this.dialogFormVisible = true;
+                        this.Atitle = '发布公告';
                         break;
                 }
                 // 清除选中状态，避免影响下个操作

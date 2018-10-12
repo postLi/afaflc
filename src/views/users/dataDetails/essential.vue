@@ -1,10 +1,11 @@
 <template>
-    <div class="detailsInfo" v-loading="loading">
+    <div class="detailsInfo detailsArrange" v-loading="loading">
         <!-- 基本信息 -->
         <div class="detailsInfo-collapse collapseInfo">
             <h2>概要信息</h2>
             <div class="essentialInformation">
-                <el-row>
+                <el-row class="basicInfo" :span='24'>
+                    <!-- 第一行 -->
                     <el-col :span="3">注册日期：</el-col>
                     <el-col :span="3">1</el-col>
                     <el-col :span="3">注册渠道：</el-col>
@@ -13,7 +14,151 @@
                     <el-col :span="3">1</el-col>
                     <el-col :span="3">最近登录时间：</el-col>
                     <el-col :span="3">1</el-col>
+                    <!-- 第二行 -->
+                    <el-col :span="3">用户姓名：</el-col>
+                    <el-col :span="3">1</el-col>
+                    <el-col :span="3">手机号码：</el-col>
+                    <el-col :span="3">1</el-col>
+                    <el-col :span="3">年龄：</el-col>
+                    <el-col :span="3">1</el-col>
+                    <el-col :span="3">性别：</el-col>
+                    <el-col :span="3">1</el-col>
+                    <!-- 第三行 -->
+                    <el-col :span="3">身份证号码：</el-col>
+                    <el-col :span="3">1</el-col>
+                    <el-col :span="3">生日：</el-col>
+                    <el-col :span="3">1</el-col>
+                    <el-col :span="3">居住地：</el-col>
+                    <el-col :span="9">1</el-col>
+                    <!-- 第四行 -->
+                    <el-col :span="3">微信号：</el-col>
+                    <el-col :span="3">1</el-col>
+                    <el-col :span="3">支付宝：</el-col>
+                    <el-col :span="3">1</el-col>
+                    <el-col :span="3">账号启用状态：</el-col>
+                    <el-col :span="9">1</el-col>
                 </el-row>
+            </div>
+        </div>
+        <!-- 资质信息 -->
+        <div class="zizhiInfo-collapse collapseInfo">
+            <h2>资质信息</h2>
+            <div class="essentialInformation">
+                <el-row class="basicInfo" :span='24'>
+                    <!-- 第一行 -->
+                    <el-col :span="3">车主审核通过：</el-col>
+                    <el-col :span="3">1</el-col>  
+                    <el-col :span="3">身份状态：</el-col>
+                    <el-col :span="3">1</el-col>
+                    <el-col :span="3">车主审核通过时间：</el-col>
+                    <el-col :span="3">1</el-col>
+                    <el-col :span="3">驾驶证号码 ：</el-col>
+                    <el-col :span="3">1</el-col>
+                    <!-- 第二行 -->
+                    <el-col :span="3">驾驶证有效期：</el-col>
+                    <el-col :span="3">1</el-col>
+                    <el-col :span="3">驾驶证是否过期：</el-col>
+                    <el-col :span="3">1</el-col>
+                    <el-col :span="3">发证所在地：</el-col>
+                    <el-col :span="9">1</el-col> 
+
+                    <!-- 第三行 -->
+                    <el-col :span="3">车牌号：</el-col>
+                    <el-col :span="3">1</el-col>
+                    <el-col :span="3">车型：</el-col>
+                    <el-col :span="3">1</el-col>
+                    <el-col :span="3">车架号：</el-col>                                        
+                    <el-col :span="3">1</el-col>
+                    <el-col :span="3">交强险到期时间：</el-col>
+                    <el-col :span="3">1</el-col>
+                    <!-- 第四行 -->
+                    <el-col :span="3">车辆规格：</el-col>
+                    <el-col :span="3">1</el-col>
+                    <el-col :span="3">车长：</el-col>
+                    <el-col :span="3">1</el-col>
+                    <el-col :span="3">商业险到期时间：</el-col>
+                    <el-col :span="9">1</el-col>
+                    <!-- 第五行 -->
+                    <el-col :span="3">是否有商业险：</el-col>
+                    <el-col :span="3">1</el-col>
+                    <el-col :span="3">保险公司名称：</el-col>
+                    <el-col :span="3">1</el-col>
+                    <el-col :span="3">年检到期时间：</el-col>
+                    <el-col :span="9">1</el-col>
+                </el-row>
+            </div>
+            <div class="essentialInformation_img">
+                <el-row class="basicInfo_img" :span='24'>
+                    <el-col :span="12">
+                        <h6>上传车辆45°照片：</h6>
+                        <el-tooltip class="item" effect="dark" content="点击图片查看原图" placement="top">
+                            <img :src='defaultImg45' alt="" v-showPicture :imgurl="defaultImg45">
+                        </el-tooltip>   
+                    </el-col>
+                    <el-col :span="12">
+                        <h6>上传车辆行驶照片：</h6>
+                        <el-tooltip class="item" effect="dark" content="点击图片查看原图" placement="top">
+                            <img :src='defaultImgCarCard' alt="" v-showPicture :imgurl="defaultImgCarCard">
+                        </el-tooltip>   
+                    </el-col>
+                </el-row>
+                <el-row class="basicInfo_img" :span='24'>
+                    <el-col :span="12">
+                        <h6>上传营驾驶证照片：</h6>
+                        <el-tooltip class="item" effect="dark" content="点击图片查看原图" placement="top">
+                            <img :src='defaultImgDriverCard' alt="" v-showPicture :imgurl="defaultImgDriverCard">
+                        </el-tooltip>   
+                    </el-col>
+                    <el-col :span="12">
+                        <h6>上传车主身份照片：</h6>
+                        <el-tooltip class="item" effect="dark" content="点击图片查看原图" placement="top">
+                            <img :src='defaultImgIdCard' alt="" v-showPicture :imgurl="defaultImgIdCard">
+                        </el-tooltip>   
+                    </el-col>
+                </el-row>
+                <el-row class="basicInfo_img" :span='24'>
+                    <el-col :span="12">
+                        <h6>上传车主个人形象照片：</h6>
+                        <el-tooltip class="item" effect="dark" content="点击图片查看原图" placement="top">
+                            <img :src='defaultImgGeRen' alt="" v-showPicture :imgurl="defaultImgGeRen">
+                        </el-tooltip>   
+                    </el-col>
+                </el-row>
+            </div>
+        </div>
+        <!-- 修改日志 -->
+        <div class="logInfo-collapse collapseInfo">
+            <h2>修改日志</h2>
+            <div class="essentialInformation_table">
+                <el-table
+                    :data="tableData"
+                    border
+                    style="width: 100%">
+                    <el-table-column
+                    prop="date"
+                    label="日期"
+                    width="180">
+                    </el-table-column>
+                    <el-table-column
+                    prop="name"
+                    label="姓名"
+                    width="180">
+                    </el-table-column>
+                    <el-table-column
+                    prop="address"
+                    label="地址">
+                    </el-table-column>
+                </el-table>
+                <el-pagination
+                    background
+                    @size-change="handleSizeChange"
+                    @current-change="handleCurrentChange"
+                    :current-page="currentPage4"
+                    :page-sizes="size"
+                    layout="total, sizes, prev, pager, next, jumper"
+                    :total="totalCount">
+                </el-pagination>
+                <!-- <div class="info_tab_footer">共计:{{ totalCount }} <div class="show_pager"> <Pager :total="totalCount" @change="handlePageChange" /></div> </div> -->
             </div>
         </div>
     </div>
@@ -22,10 +167,12 @@
 <script>
 
 import { parseTime } from '@/utils/index.js'
+// import Pager from '@/components/Pagination/index'
 
 export default {
   name: 'detailsInfo',
   components: {
+    //   Pager
   },
   props: {
     isvisible: {
@@ -33,57 +180,86 @@ export default {
         default: false
       }
 
-  },
+  }, 
   data() {
     return {
+        size:[20,30,50],
+        defaultImg:'/static/test.jpg',//默认第一张图片的url
+        defaultImg45:'/static/45du.png',
+        defaultImgCarCard:'/static/carcard.png',
+        defaultImgDriverCard:'/static/drivercard.png',
+        defaultImgIdCard:'/static/idcard.png',
+        defaultImgGeRen:'/static/geren.png',
         listInformation: [],
+        page:1,
+        pagesize:20,
+        totalCount:100,
         loading: false,
         dialogVisible: false,
-        currentOrderSerial: ''
+        currentOrderSerial: '',
+           tableData: [{
+          date: '2016-05-02',
+          name: '王小虎',
+          address: '上海市普陀区金沙江路 1518 弄'
+        }, {
+          date: '2016-05-04',
+          name: '王小虎',
+          address: '上海市普陀区金沙江路 1517 弄'
+        }, {
+          date: '2016-05-01',
+          name: '王小虎',
+          address: '上海市普陀区金沙江路 1519 弄'
+        }, {
+          date: '2016-05-03',
+          name: '王小虎',
+          address: '上海市普陀区金沙江路 1516 弄'
+        }]
       }
   },
-  watch: {
-    isvisible: {
-        handler(newVal, oldVal) {
-            if (newVal) {
-                this.init()
-              }
-          },
+    watch: {
+        isvisible: {
+            handler(newVal, oldVal) {
+                if (newVal) {
+                    this.init()
+                }
+            },
             // 代表在wacth里声明了firstName这个方法之后立即先去执行handler方法
-        immediate: true
-      },
-  },
-  mounted() {
+            immediate: true
+        },
+    },
+     mounted() {
         // console.log(this.$route)
-  },
-  methods: {
-    init() {
-       
-      },
-    shuaxin() {
-        this.init()
-      },
-    handlerClick() {
-        this.currentOrderSerial = this.$route.query.orderSerial
-        this.dialogVisible = true
-      }
-  }
+    },
+    methods: {
+        init() {
+        
+        },
+        shuaxin() {
+            this.init()
+        },
+        handlerClick() {
+            this.currentOrderSerial = this.$route.query.orderSerial
+            this.dialogVisible = true
+        },
+        // handlePageChange(obj) {
+        //     this.page = obj.pageNum
+        //     this.pagesize = obj.pageSize
+        //     this.init();
+        // },
+        handleSizeChange(val) {
+            console.log(`每页 ${val} 条`);
+        },
+        handleCurrentChange(val) {
+            console.log(`当前页: ${val}`);
+        }
+    }
 }
 </script>
 
 <style rel="stylesheet/scss" lang="scss" scoped>
     .detailsInfo{
         .collapseInfo{
-            h2{
-                border-bottom: solid 2px #e0e0e0;
-                line-height: 25px;
-                font-size: 18px;
-                padding: 18px 0;
-                color: #333333;
-                font-weight: normal;
-	            font-stretch: normal;
-            }
-            .essentialInformation{
+            .essentialInformation_img{
 
             }
         }

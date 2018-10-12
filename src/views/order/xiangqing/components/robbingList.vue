@@ -61,7 +61,7 @@
             </el-table-column>
              <el-table-column
                 prop="driverDistance"
-                label="距离提货地(KM)"
+                label="距离提货地(M)"
                 width="100">
             </el-table-column>
             <el-table-column
