@@ -9,39 +9,16 @@
       :close-on-click-modal="false" 
       :before-close="closeMe">
       <el-form :model="formAllData" :rules="rules"  ref="ruleForm" :inline="true"  label-position="right">
-        <!-- <el-form-item label="跟进时间">
-          <el-date-picker
-            class="picklist"
-            v-model="searchCreatTime"
-            type="daterange"
-            :picker-options="pickerOptions2"
-            range-separator="-"
-            start-placeholder="开始日期"
-            end-placeholder="结束日期"
-            align="right"
-            value-format="timestamp">
-          </el-date-picker>
-        </el-form-item> -->
-        <!-- <el-form-item label="跟进时间">
-          <el-date-picker
-            v-model="searchCreatTime"
-            align="right"
-            type="date"
-            :picker-options="pickOption2"
-            placeholder="选择日期"
-            value-format="timestamp">
-          </el-date-picker>
-        </el-form-item> -->
         <el-form-item label="跟进人" prop="followName" style="margin-left:15px;">
           <el-input v-model="formAllData.followName" :maxlength="20" placeholder="请输入跟进人" auto-complete="off" clearable></el-input>
         </el-form-item>
         <el-form-item prop="code" >
           <el-checkbox v-model="formAllData.code">是否处理完毕</el-checkbox>
         </el-form-item>
-        <el-form-item class="goodsclaimDes" label="投诉跟进">
+        <el-form-item class="goodsclaimDes" label="投诉跟进" prop="goodsclaimDes">
           <el-input v-model="formAllData.goodsclaimDes" type="textarea" :maxlength="200" style="width:100%" placeholder="投诉跟进最多输入200个字符"></el-input>
         </el-form-item>
-        <el-form-item class="clearfix imgbox" label="上传附件">
+        <el-form-item class="clearfix imgbox" label="上传附件" prop="fileAddress">
           <div class="clearfix uploadcard">
             <upload :title="'本地上传'" @filelist="getFileList" v-model="formAllData.fileAddress" :showFileList="true" :limit="4" listtype="picture" @fileInfo="getFileInfo" />
           </div>
@@ -122,7 +99,13 @@ export default {
       },
       rules: {
         followName: [
-          { required: true, message: '请输入' }
+          { required: true, message: '请输入跟进人' }
+        ],
+        goodsclaimDes:[
+          { required: true, message: '投诉跟进内容最多可输入200个字符' }
+        ],
+        fileAddress:[
+          { required: true, message: '至少上传一张图片' }
         ]
       },
       formAllData: {
