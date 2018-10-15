@@ -139,7 +139,6 @@ import { getDictionary } from '@/api/common.js'
                     case 'clear':
                         this.searchInfo = {
                             belongCity: '',
-                            belongCityName:'',
                             shipperStatus: '',
                             accountStatus: '',
                             companyName: '',
@@ -148,6 +147,7 @@ import { getDictionary } from '@/api/common.js'
                             cityCode:'',
                             areaCode:""
                         }
+                        this.belongCityName = '',
                         searchObj = Object.assign({}, this.searchInfo);
                         break;
                 }

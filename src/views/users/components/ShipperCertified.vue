@@ -297,13 +297,14 @@ export default {
             this.shengheform.belongCityName = (!d.province&&!d.city&&!d.area&&!d.town) ? '': `${this.getValue(d.province)}${this.getValue(d.city)}${this.getValue(d.area)}${this.getValue(d.town)}`.trim();
             if(d.area){
                 this.shengheform.areaCode = d.area.code;
+                this.shengheform.belongCity = d.area.name;
             }else if(d.city){
                 this.shengheform.belongCity = d.city.code;
-                this.shengheform.cityCode = d.city.code;
+                this.shengheform.cityCode = d.city.name;
             }
             else{
                 this.shengheform.belongCity = d.province.code;
-                this.shengheform.provinceCode = d.province.code;
+                this.shengheform.provinceCode = d.province.name;
             }
         },
         getValue(obj){

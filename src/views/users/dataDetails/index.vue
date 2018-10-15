@@ -10,43 +10,49 @@
                 <essential :isvisible="detailsName === 'essential'" />
             </el-tab-pane>
 
-        <!-- 超时无人人接单 -->
+        <!-- 权限配置 -->
             <el-tab-pane label="权限配置" name="overTime">
                 <!-- <div class="imgbox">
 
-                <img src="../../../assets/zanshi/hzqy.png" alt="">
+                    <img src="../../../assets/zanshi/hzqy.png" alt="">
                 </div> -->
                 <authorityConfigure :isvisible="detailsName === 'authority'" />
             </el-tab-pane>
 
-        <!-- 公海无司机 -->
+        <!-- 行为轨迹 -->
             <el-tab-pane label="行为轨迹" name="noDriver">
-                <div class="imgbox">
+                <!-- <div class="imgbox">
 
                 <img src="../../../assets/zanshi/hzxwgj.png" alt="">
-                </div>
+                </div> -->
+
+                <actionTrail :isvisible="detailsName === 'actionTrail'" />
 
             </el-tab-pane>
             
-        <!-- 车主改派 -->
+        <!-- 订单信息 -->
             <el-tab-pane label="订单信息" name="assignCar">
-                <div class="imgbox">
+                <!-- <div class="imgbox">
 
                 <img src="../../../assets/zanshi/hzdd.png" alt="">
-                </div>
+                </div> -->
+
+                <orderInfo :isvisible="detailsName === 'orderInfo'" />
 
             </el-tab-pane>
 
-        <!-- 中单后联系货主超时 -->
+        <!-- 业务关系 -->
             <el-tab-pane label="业务关系" name="passOverTime">
                 <div class="imgbox">
 
                 <img src="../../../assets/zanshi/hzyw.png" alt="">
                 </div>
 
+                <!-- <orderInfo :isvisible="detailsName === 'orderInfo'" /> -->
+
             </el-tab-pane>
 
-             <!-- 中单后联系货主超时 -->
+             <!-- 财务情况 -->
             <el-tab-pane label="财务情况" name="hzcw">
                 <div class="imgbox">
 
@@ -55,7 +61,7 @@
 
             </el-tab-pane>
 
-             <!-- 中单后联系货主超时 -->
+             <!-- 其他信息 -->
             <el-tab-pane label="其他信息" name="hzqt">
                 <div class="imgbox">
 
@@ -71,12 +77,16 @@
 <script type="text/javascript">
 import essential from './essential'
 import authorityConfigure from './authorityConfigure'
+import actionTrail from './actionTrail'
+import orderInfo from './orderInfo'
 
     export default {
         name:'detailsCompnent',
         components:{
            essential,
            authorityConfigure,
+           actionTrail,
+           orderInfo
         },
         data() {
           return {
@@ -142,7 +152,7 @@ import authorityConfigure from './authorityConfigure'
                     font-size: 18px;
                     padding: 36px 0 18px 0;
                     color: #333333;
-                    font-weight: normal;
+                    font-weight: bold;
                     font-stretch: normal;
                 }
                 .essentialInformation{
@@ -187,13 +197,27 @@ import authorityConfigure from './authorityConfigure'
                 }
                 .essentialInformation_table{
                     position:relative;
-                    padding:24px 0; 
+                    padding:24px 0 40px 0; 
                     .el-table thead th, .el-table thead tr {
                         background-color: #fafafa;
                     }
                     .el-pagination{
                         text-align:right;
                         padding-top:10px;
+                    }
+                }
+                .classfyTitle{
+                    overflow: hidden;
+                     li{
+                        float: left;
+                        font-size: 14px;
+                        line-height: 20px;
+                        color: #666;
+                        margin-right: 30px;
+                        cursor: pointer;
+                    }
+                    .currentClick{
+                        color: #1890ff;
                     }
                 }
             }

@@ -40,9 +40,12 @@
                 </el-form-item>
             </el-col>
             <el-col :span="12">
-                <el-form-item label="联系人：" prop="contacts">
+                <el-form-item label="联系人：" prop="contacts" v-if="editType=='identification' || editType=='edit'">
                     <!-- <span class="onlyShow" v-if="editType=='view'">{{xinzengform.contacts}}</span> -->
-                    <el-input v-model="xinzengform.contacts" auto-complete="off"  :disabled="editType=='view'"></el-input>
+                    <el-input v-model="xinzengform.contacts" auto-complete="off" maxlength="20"></el-input>
+                </el-form-item>
+                <el-form-item label="联系人：" prop="contacts" v-else>
+                    <el-input v-model="xinzengform.contacts" auto-complete="off"  maxlength="20" :disabled="editType=='view'"></el-input>
                 </el-form-item>
             </el-col>
           </el-row>
@@ -175,7 +178,6 @@ export default {
         ifDisable:false,
         options:[],
         formLabelWidth:'160px',
-        companyFlag:false,
         xinzengform:{
             shipperType:'AF0010101',//货主类型code
             shipperTypeName:'',//货主类型名称
@@ -201,24 +203,15 @@ export default {
             companyName:[
                 {required: true, message:'请输入公司名称', trigger:'change'},
             ],
+            contacts:{required: true, message:'请输入联系人', trigger:'change'},
             mobile:{required:true,validator: mobileValidator, trigger:'blur'},
-            belongCityName:{required:true, message:'请选择所属地区', trigger:'blur'},
+            belongCityName:{required:true, message:'请选择所属地区', trigger:'change'},
             companyFacadeFile:{required:true, message:'请上传公司或者档口照片', trigger:'blur'},
             shipperCardFile:{required:true, message:'请上传发货人名片照片', trigger:'blur'}
         },
     }
   },
   watch:{
-    'xinzengform.shipperType': {
-        handler: function(val, oldVal) {
-            if(val != 'AF0010101'){
-                this.companyFlag = true;
-            }else{
-                this.companyFlag = false;
-            }
-        },
-        deep:true
-    },
     dialogFormVisible_add:{
         handler: function(val, oldVal) {
             this.openDialog();
@@ -235,15 +228,15 @@ export default {
         console.log('data:',d)
         this.xinzengform.belongCityName = (!d.province&&!d.city&&!d.area&&!d.town) ? '': `${this.getValue(d.province)}${this.getValue(d.city)}${this.getValue(d.area)}${this.getValue(d.town)}`.trim();
         if(d.area){
-            this.xinzengform.areaCode = d.area.code;
+            this.xinzengform.areaCode = d.area.name;
+            this.xinzengform.belongCity = d.area.code;
         }else if(d.city){
             this.xinzengform.belongCity = d.city.code;
-            this.xinzengform.cityCode = d.city.code;
+            this.xinzengform.cityCode = d.city.name;
         }
         else{
             this.xinzengform.belongCity = d.province.code;
-            this.xinzengform.provinceCode = d.province.code;
-
+            this.xinzengform.provinceCode = d.province.name;
         }
     },
     getValue(obj){
@@ -254,7 +247,7 @@ export default {
         eventBus.$emit('changeList')
     },
     openDialog(){
-        // console.log(this.editType)
+        console.log(this.editType)
         // console.log('this.xinzengform',this.xinzengform)
         if(this.editType  == 'add'){
             this.xinzengform ={

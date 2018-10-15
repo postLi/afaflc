@@ -172,14 +172,29 @@ export default {
             this.pagesize = obj.pageSize
             this.firstblood()
         },
+        clearTableSelection(){
+            //清除选中状态，避免影响下个操作
+            this.$refs.multipleTable.clearSelection();
+        },
         handleClick(type){
-            switch(type){
-                case 'edit' :
-                    this.type = "edit";
-                    this.typetitle = "修改货主";
-                    this.paramsView = objectMerge2({},this.selected[0]);
-                    this.dialogFormVisible_add = true;
-                    break;
+            if(this.selected.length == 0 && type != 'add'){
+                return this.$message.warning('请选择您要操作的用户');
+            }else if (this.selected.length > 1 && type != 'add') {
+                this.$message({
+                    message: '每次只能操作单条数据~',
+                    type: 'warning'
+                })
+                this.clearTableSelection();
+            }else{
+                switch(type){
+                    case 'edit' :
+                        this.type = "edit";
+                        this.typetitle = "修改货主";
+                        this.paramsView = objectMerge2({},this.selected[0]);
+                        this.dialogFormVisible_add = true;
+                        break;
+                }
+                this.clearTableSelection();
             }
         },
         //刷新页面

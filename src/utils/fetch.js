@@ -29,9 +29,8 @@ service.interceptors.request.use(config => {
     // console.log(config.url, config.params)
   }
 
-  console.log('process.env.NODE_ENV',process.env.NODE_ENV)
+//   console.log('process.env.NODE_ENV',process.env.NODE_ENV)
 if (config.url.indexOf('http://') === -1) {
-    console.log('http://',process.env.NODE_ENV)
 
     // 如果是生产环境，强制访问157
     if (process.env.NODE_ENV === 'production') {
@@ -44,7 +43,7 @@ if (config.url.indexOf('http://') === -1) {
        * 测试环境修改这里，不要修改上面那句代码
        */
       // 统一加上/api 前缀，方便后台转发接口
-        console.log(' window.tms_testapiurl', window.tms_testapiurl)
+        // console.log(' window.tms_testapiurl', window.tms_testapiurl)
       window.tms_testapiurl = localStorage.tms_testapiurl || 'api'
 
       if (window.tms_testapiurl) {

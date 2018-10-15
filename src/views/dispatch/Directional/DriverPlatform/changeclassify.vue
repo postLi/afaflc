@@ -5,7 +5,7 @@
             <el-dialog :title='formtitle' :close-on-click-modal="true"  :visible="dialogFormVisibleChange" @close="close">
                     <div class="bindLeft bind">
                         <div class="chooseShipper chooseCommon">
-                            <p><span>* </span>当前货主账号 ：</p>
+                            <p><span>* </span>当前运营人员：</p>
                             <div class="nowData">
                                 <el-input v-model="changeforms.platInfo" placeholder="请输入内容" disabled></el-input>
                             </div>
@@ -24,7 +24,7 @@
                     </div>
                     <div class="bindright bind">
                         <div class="chooseShipper chooseCommon">
-                            <p><span>* </span>当前车主账号 ：</p>
+                            <p><span>* </span>当前货主账号 ：</p>
                             <div class="nowData">
                                 <el-input v-model="changeforms.shipperInfo" placeholder="请输入内容" disabled></el-input>
                             </div>
@@ -179,6 +179,17 @@ export default {
             overflow: hidden;
             margin: 0 20px;
             display: flex;
+            p{
+                display: inline-block;
+                font-size: 12px;
+                line-height: 20px;
+                color: #666666;
+                width: 100px;
+                text-align: right;
+                span{
+                    color: red;
+                }
+            }
         }
         & .bind{
             flex: 1;
@@ -188,9 +199,6 @@ export default {
             margin-bottom: 20px;
             .el-input{
                 width: 200px;
-                // .el-input__inner{
-                //     text-align: center;
-                // }
             }
         }
     }

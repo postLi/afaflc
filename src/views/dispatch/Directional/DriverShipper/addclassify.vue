@@ -9,9 +9,8 @@
                             <p><span>* </span>绑定开始时间 ：</p>
                             <el-date-picker
                             v-model="forms.bindingStartDate"
-                            type="date"
+                            type="datetime"
                             placeholder="选择日期"
-                            format="yyyy-MM-dd"
                             value-format="timestamp">
                             </el-date-picker>
                         </div>
@@ -30,9 +29,9 @@
                             <p><span>* </span>绑定结束时间 ：</p>
                             <el-date-picker
                             v-model="forms.bindingEndDate"
-                            type="date"
+                            type="datetime"
                             placeholder="选择日期"
-                            format="yyyy-MM-dd"
+                            default-time="23:59:59"
                             value-format="timestamp">
                             </el-date-picker>
                         </div>
@@ -171,7 +170,7 @@ export default {
                     this.$refs.filterOptionsCar.focus();
                 }else{
                     this.optionsCar.map(el=>{
-                        el.label =  el.driverName +'/'+el.driverMobile;
+                        el.label =  (el.driverName ? el.driverName : el.driverMobile) + '/' + el.driverMobile;
                     })
                 }
             })
@@ -188,7 +187,7 @@ export default {
                     this.$refs.filterOptionsShipper.focus();
                 }else{
                     this.optionsShipper.map(el=>{
-                        el.label =  el.contacts +'/'+el.mobile;
+                        el.label =  (el.contacts ? el.contacts : el.mobile) + '/' + el.mobile;
                     })
                 }
 
@@ -207,7 +206,7 @@ export default {
             let shipperPhone = [];
             this.checkListShpper.forEach( el => {
                 shipperId.push(el.shipperId)
-                shipperName.push(el.contacts)
+                shipperName.push(el.contacts ? el.contacts : el.mobile)
                 shipperPhone.push(el.mobile)
             })
             this.forms.shipperId =  shipperId.join(',');
@@ -220,7 +219,7 @@ export default {
             let driverMobile = [];
             this.checkListCar.forEach( el => {
                 driverId.push(el.driverId)
-                driverName.push(el.driverName)
+                driverName.push(el.driverName ? el.driverName : el.driverMobile)
                 driverMobile.push(el.driverMobile)
             })
             
@@ -321,17 +320,6 @@ export default {
            flex:1;
            .el-date-editor{
                width: 200px;
-            //    .el-input__inner{
-            //        padding-left: 25px;
-            //        text-indent:20px;
-            //    }
-            //    .el-input__prefix{
-            //        left: 0px;
-            //        top:1px;
-            //    }
-            //    .el-input__suffix{
-            //        top: 1px;
-            //    }
            }
             .chooseCommon{
                 margin-top: 20px;

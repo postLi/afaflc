@@ -313,17 +313,6 @@ export default {
            flex: 1;
            .el-date-editor{
                width: 200px;
-            //    .el-input__inner{
-            //        padding-left: 25px;
-            //        text-indent:20px;
-            //    }
-            //    .el-input__prefix{
-            //        left: 0px;
-            //        top:1px;
-            //    }
-            //    .el-input__suffix{
-            //        top: 1px;
-            //    }
            }
             .chooseCommon{
                 margin-top: 20px;

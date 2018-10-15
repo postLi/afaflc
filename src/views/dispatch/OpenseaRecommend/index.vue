@@ -30,8 +30,11 @@
                         </el-table-column>  
                         <el-table-column
                             sortable
-                          prop="areaCodeName"
-                          label="地区">
+                            prop="areaCodeName"
+                            label="地区">
+                            <template slot-scope="scope">
+                                {{ scope.row}}
+                            </template>
                         </el-table-column>
                         <el-table-column
                             sortable
@@ -210,6 +213,7 @@ import Pager from '@/components/Pagination/index'
                     // console.log(res)
                     this.totalCount = res.data.totalCount;
                     this.tableData = res.data.list;
+                    
                     this.loading = false;
                 }).catch(err => {
                     this.$message({

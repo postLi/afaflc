@@ -136,24 +136,23 @@
                     style="width: 100%">
                     <el-table-column
                     prop="date"
-                    label="日期"
+                    label="操作模块"
                     width="180">
                     </el-table-column>
                     <el-table-column
                     prop="name"
-                    label="姓名"
+                    label="操作人"
                     width="180">
                     </el-table-column>
                     <el-table-column
                     prop="address"
-                    label="地址">
+                    label="操作时间">
                     </el-table-column>
                 </el-table>
                 <el-pagination
                     background
                     @size-change="handleSizeChange"
                     @current-change="handleCurrentChange"
-                    :current-page="currentPage4"
                     :page-sizes="size"
                     layout="total, sizes, prev, pager, next, jumper"
                     :total="totalCount">

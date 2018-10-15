@@ -14,10 +14,9 @@
                             <p><span>* </span>绑定开始时间 ：</p>
                             <el-date-picker
                             v-model="changeforms.bindingStartDate"
-                            type="date"
+                            type="datetime"
                             placeholder="选择日期"
                             :clearable = "false"
-                            format="yyyy 年 MM 月 dd 日"
                             value-format="timestamp">
                             </el-date-picker>
                         </div>
@@ -33,10 +32,10 @@
                             <p><span>* </span>绑定结束时间 ：</p>
                             <el-date-picker
                             v-model="changeforms.bindingEndDate"
-                            type="date"
+                            type="datetime"
                             placeholder="选择日期"
                             :clearable = "false"
-                            format="yyyy 年 MM 月 dd 日"
+                            default-time="23:59:59"
                             value-format="timestamp">
                             </el-date-picker>
                         </div>
@@ -149,8 +148,8 @@ export default {
             }
             else{
                 data_ChangeData(this.changeforms).then(res=>{
-                    this.$emit('renovate')
                     this.close()
+                    this.$emit('renovate')
                 }).catch(err =>{
                     this.$message({
                         type: 'warning',
@@ -164,7 +163,6 @@ export default {
             this.close();
         },
     },
-   
 }
 </script>
 
@@ -175,9 +173,6 @@ export default {
             margin-bottom: 20px;
             .el-input{
                 width: 200px;
-                // .el-input__inner{
-                //     text-align: center;
-                // }
             }
         }
     }

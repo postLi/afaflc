@@ -163,15 +163,14 @@ import Pager from '@/components/Pagination/index'
                                 cancelButtonText: '取消',
                                 type: 'warning'
                             }).then( ()=>{
-                                data_DeletInfo(delID).then(res=>{
+                                data_DeletInfo(delID.join(',')).then(res=>{
                                 // console.log(res)
-                                this.$message({
-                                    type: 'success',
-                                    message: '您选中的中单设置已被删除！',
-                                    duration:2000
-                                })
-                                this.close();
-                                this.changeList();
+                                    this.$message({
+                                        type: 'success',
+                                        message: '您选中的中单设置已被删除！',
+                                        duration:2000
+                                    })
+                                    this.firstblood();
                                 }).catch(err => {
                                     this.$message.error('操作失败，失败原因：',err.errorInfo)
                                 })

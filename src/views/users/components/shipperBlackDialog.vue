@@ -75,14 +75,14 @@
                 <el-row>
                     <el-col :span="24">
                     <el-form-item label="移入原因说明：" :label-width="formLabelWidth">
-                        <el-input v-model="formBlack.putBlackCauseRemark" :rows="5" :disabled="editType != 'add'" placeholder="请输入内容" type="textarea"></el-input>
+                        <el-input v-model="formBlack.putBlackCauseRemark" :rows="5" maxlength="100" :disabled="editType != 'add'" placeholder="请输入内容" type="textarea"></el-input>
                     </el-form-item>
                     </el-col>
                 </el-row>
                 <div class="shipper_information" v-show="editType == 'edit'">
 					<h2>移出黑名单信息</h2>
 					<el-form-item label="移出原因说明：" :label-width="formLabelWidth">
-					    <el-input v-model="formBlack.popBlackRemark" :maxlength="100" :rows="5" placeholder="请输入内容" type="textarea"></el-input>
+					    <el-input v-model="formBlack.popBlackRemark" maxlength="100" :rows="5" placeholder="请输入内容" type="textarea"></el-input>
 					</el-form-item>
 				</div>
             </div>

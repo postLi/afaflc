@@ -1,7 +1,7 @@
 <template>
-    <div class="detailsInfo detailsArrange" v-loading="loading">
+    <div class="authority detailsArrange" v-loading="loading">
         <!-- 基础权益 -->
-        <div class="detailsInfo-collapse collapseInfo">
+        <div class="authorityBasic-collapse collapseInfo">
             <h2>基础权益</h2>
             <div class="essentialInformation">
                 <el-row class="basicInfo" :span='24'>
@@ -12,8 +12,7 @@
                     <el-col :span="4">1</el-col>
                     <el-col :span="4">发单数量限制：</el-col>
                     <el-col :span="4">1</el-col>
-                    <!-- <el-col :span="3">最近登录时间：</el-col>
-                    <el-col :span="3">1</el-col> -->
+
                     <!-- 第二行 -->
                     <el-col :span="4">月结权益：</el-col>
                     <el-col :span="4">1</el-col>
@@ -21,8 +20,7 @@
                     <el-col :span="4">1</el-col>
                     <el-col :span="4">拦截结束时间：</el-col>
                     <el-col :span="4">1</el-col>
-                    <!-- <el-col :span="3">性别：</el-col>
-                    <el-col :span="3">1</el-col> -->
+
                     <!-- 第三行 -->
                     <el-col :span="4">推单拦截：</el-col>
                     <el-col :span="4">1</el-col>
@@ -34,7 +32,7 @@
             </div>
         </div>
         <!-- 绑定车主 -->
-        <div class="zizhiInfo-collapse collapseInfo">
+        <div class="bindCar-collapse collapseInfo">
             <h2>绑定车主</h2>
             <div class="essentialInformation_table">
                 <el-table
@@ -43,17 +41,21 @@
                     style="width: 100%">
                     <el-table-column
                     prop="date"
-                    label="日期"
+                    label="车主账号"
                     width="180">
                     </el-table-column>
                     <el-table-column
                     prop="name"
-                    label="姓名"
+                    label="绑定开始时间"
                     width="180">
                     </el-table-column>
                     <el-table-column
                     prop="address"
-                    label="地址">
+                    label="绑定结束时间">
+                    </el-table-column>
+                    <el-table-column
+                    prop="address"
+                    label="状态">
                     </el-table-column>
                 </el-table>
                 <!-- <div class="info_tab_footer">共计:{{ totalCount }} <div class="show_pager"> <Pager :total="totalCount" @change="handlePageChange" /></div> </div> -->
@@ -61,7 +63,6 @@
                     background
                     @size-change="handleSizeChange"
                     @current-change="handleCurrentChange"
-                    :current-page="currentPage4"
                     :page-sizes="size"
                     layout="total, sizes, prev, pager, next, jumper"
                     :total="totalCount">
@@ -69,10 +70,42 @@
             </div>
         </div>
         <!-- 营销权益 -->
-        <div class="logInfo-collapse collapseInfo">
+        <div class="legalInfo-collapse collapseInfo">
             <h2>营销权益</h2>
-            <div class="essentialInformation_table">
-
+            <div class="authority_legal">
+                <ul>
+                    <li>货主优惠等级：<span>皇冠</span></li>
+                    <li>剩余优惠金：<span>153</span></li>
+                    <li>优惠券：<span>允许使用</span></li>
+                    <li>优惠金：<span>允许使用</span></li>
+                </ul>
+            </div>
+            <div class="essentialInformation_table_title">
+                <ul>
+                   <li v-for="(item,index) in serviceType" :key="item.name" :class="{currentClick:item.iscur}" @click="setCur(index)">{{item.name}}</li>
+                </ul>
+            </div>
+            <div class="essentialInformation_table" style="padding-top:1px;">
+                <el-table
+                    :data="tableData"
+                    border
+                    style="width: 100%">
+                    <el-table-column
+                    prop="date"
+                    label="车辆类型"
+                    width="180">
+                    </el-table-column>
+                    <el-table-column
+                    prop="name"
+                    label="订单金额范围"
+                    >
+                    </el-table-column>
+                    <el-table-column
+                    prop="address"
+                    width="180"
+                    label="一天限量">
+                    </el-table-column>
+                </el-table>
             </div>
         </div>
     </div>
@@ -82,9 +115,10 @@
 
 import { parseTime } from '@/utils/index.js'
 import Pager from '@/components/Pagination/index'
+import { closest } from '@/utils/index'
 
 export default {
-  name: 'detailsInfo',
+  name: 'authority',
   components: {
       Pager
   },
@@ -105,6 +139,11 @@ export default {
         defaultImgIdCard:'/static/idcard.png',
         defaultImgGeRen:'/static/geren.png',
         listInformation: [],
+        serviceType:[
+            {name:'小货车',iscur:true},
+            {name:'发物流',iscur:false},
+            {name:'大货车',iscur:false},
+        ],
         page:1,
         pagesize:20,
         totalCount:100,
@@ -165,17 +204,56 @@ export default {
         },
         handleCurrentChange(val) {
             console.log(`当前页: ${val}`);
+        },
+        setCur(index){
+            console.log(index)
+            this.serviceType.forEach((el,idx)=>{
+                console.log(idx)
+                idx == index ? el.iscur = true : el.iscur = false;
+            })
         }
     }
 }
 </script>
 
 <style rel="stylesheet/scss" lang="scss" scoped>
-    .detailsInfo{
+    .authority{
         .collapseInfo{
-            .essentialInformation_img{
-
+            .authority_legal{
+                ul{
+                    overflow: hidden;
+                    padding: 20px 0;
+                    li{
+                        float: left;
+                        color: #333;
+                        line-height: 20px;
+                        margin-right: 47px;
+                        span{
+                            color: #1890ff;
+                        }
+                    }
+                }
             }
+            .essentialInformation_table_title{
+                ul{
+                    overflow: hidden;
+                    li{
+                        float: left;
+                        font-size: 16px;
+                        line-height: 44px;
+                        background: #d9d9d9;
+                        color: #ffffff;
+                        width: 120px;
+                        text-align: center;
+                        margin-right: 1px;
+                        cursor: pointer;
+                    }
+                    .currentClick{
+                        background: #1890ff;
+                    }
+                }
+            }
+           
         }
     }
 </style>

@@ -117,8 +117,8 @@ import Pager from '@/components/Pagination/index'
                 changeforms:{},
                 page:1,
                 pagesize:20,
-                formtitle:'新增绑定车主',
-                formtitle_change:'修改绑定车主',
+                formtitle:'新增平台专属',
+                formtitle_change:'修改平台专属',
                 currentPage4:1,
                 dialogFormVisible: false,//新增弹窗
                 dialogFormVisibleChange:false,//修改弹窗

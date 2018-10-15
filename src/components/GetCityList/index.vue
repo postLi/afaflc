@@ -50,7 +50,7 @@ export default {
            })
         },
         returnArr(val){
-            this.$emit('returnStr',val.length > 0 ? val.join(',') : val,this.$refs.cityTree.currentLabels.join(','))
+            this.$emit('returnStr',val.length > 0 ? val.join(',') : val,this.$refs.cityTree.currentLabels.join(' - '))
         },
     },
     mounted(){

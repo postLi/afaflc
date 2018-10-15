@@ -253,9 +253,11 @@ export default {
         if (valid) {
           this.loading = true
           // this.$set(this.form, 'orgid', this.otherinfo.orgid)
-          const data = Object.assign({}, this.form)
-          let promiseObj
-          data.rolesId = data.rolesId.join(',')
+          const data = Object.assign({}, this.form);
+          let promiseObj;
+          data.rolesId = data.rolesId.join(',');
+            data.password = this.$md5(data.password);
+
           // 判断操作，调用对应的函数
           if (this.isModify) {
             data.id = this.userInfo.id

@@ -60,6 +60,7 @@
                     type="date"
                     placeholder="选择日期"
                     :picker-options="pickerOptions"
+                    default-time="23:59:59"
                     format="yyyy 年 MM 月 dd 日"
                     value-format="timestamp">
                     </el-date-picker>
