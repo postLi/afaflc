@@ -398,7 +398,7 @@ export default {
     },    
     clearSearch(){
             this.formAllData={
-            userId: this.templateItem.accountId,
+            userId: this.$route.query.accountId,
             accountType:'AF00101',
             payWay:'AF0041801',
             tradeType:null,
@@ -419,7 +419,7 @@ export default {
             rechargeChannel:null,
             rechargeWay:null,
             rechargeTime:null,
-           accountId:this.templateItem.accountId
+            accountId:this.$route.query.accountId
             },
             this.firstblood2()
             },  
@@ -432,7 +432,7 @@ export default {
             this.formAllData3={
             couponName:null,
             couponStatus:null,
-            userId:this.templateItem.accountId
+            userId:this.$route.query.accountId
             },
             this.firstblood3()
             },  
@@ -454,6 +454,7 @@ export default {
         },
    },
    mounted(){
+     this.getMoreInformation();
      this.formAllData3.userId = this.$route.query.accountId
      this.formAllData2.accountId = this.$route.query.accountId
      this.formAllData.userId = this.$route.query.accountId

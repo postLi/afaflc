@@ -4,7 +4,7 @@
              <el-form-item label="用户姓名：">
                <el-input v-model="formAllData.name"></el-input>
             </el-form-item>     
-              <el-form-item label="电话号码：">
+              <el-form-item label="用户账号：">
                <el-input v-model="formAllData.mobile"></el-input>
             </el-form-item>     
                 <el-form-item label="申请时间：">

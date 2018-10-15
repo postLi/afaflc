@@ -200,6 +200,8 @@ export default {
       })
 
       function geocoder_CallBack(data, pos) {
+
+
         var haspx = !!pos.lat
 
         console.log('geocodeer:', data)

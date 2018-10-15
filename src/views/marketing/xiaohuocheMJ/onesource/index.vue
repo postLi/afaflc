@@ -434,12 +434,12 @@ export default {
             {
                   AeraData.push(
                       {
-                          startAddress:this.pickAera[i].pickAeratree,
+                          startAddressName:this.pickAera[i].pickAeratree,
                           startAddressCoordinate:this.pickAera[i].startAddressCoordinate,
-                          startAddressName:this.pickAera[i].startAddressName,
+                          startAddress:this.pickAera[i].startAddressName,
                           endAddressCoordinate:this.destinationAera[j].endAddressCoordinate,
-                          endAddressName:this.destinationAera[j].endAddressName,
-                          endAddress:this.destinationAera[j].destinationAeratree,
+                          endAddress:this.destinationAera[j].endAddressName,
+                          endAddressName:this.destinationAera[j].destinationAeratree,
                       }
                   )
 
@@ -478,7 +478,6 @@ export default {
              }
              }
         }
-
     },
     methods:{
             getStr(val,name){
@@ -531,6 +530,9 @@ export default {
         },
             getInfo(pos, name, info) {
                 console.log('in',info)
+                console.log('1',pos)
+                console.log('2',name)
+                console.log('3',info)
             switch (this.current) {
                 case 'districtName':
                 this.vestAll.districtName = info.formattedAddress;
@@ -547,14 +549,34 @@ export default {
                 this.formAll.districtName = info.formattedAddress;
                 break;
                 case 'pickaddAera':
-                this.pickaddAera = info.formattedAddress;
+                let startstreeArray = name.split('市');
+                let startstree = startstreeArray[startstreeArray.length-1]
                 this.startAddressCoordinate = pos
-                this.startAddressName = info.addressComponent.district
+                if(info.addressComponent.street){
+                  this.startAddressName= info.addressComponent.street + info.addressComponent.streetNumber
+                }
+                if(info.addressComponent.building){
+                  this.pickaddAera = info.addressComponent.building
+                }
+                else{
+                this.pickaddAera = startstree
+                this.startAddressName = startstree
+                }
                 break;
                 case 'destinationaddAera':
-                this.destinationaddAera = info.formattedAddress;
-                this.endAddressName = info.addressComponent.district
-                this.endAddressCoordinate = pos;
+                let endstreeArray = name.split('市');
+                let endstree = endstreeArray[endstreeArray.length-1]
+                this.endAddressCoordinate = pos
+                if(info.addressComponent.street){
+                  this.endAddressName= info.addressComponent.street + info.addressComponent.streetNumber
+                }
+                if(info.addressComponent.building){
+                  this.destinationaddAera = info.addressComponent.building
+                }
+                else{
+                this.destinationaddAera = endstree
+                this.endAddressName = endstree
+                }
                 break;
                 case 'areaCode2':
                 this.formAll2.startAddress = info.formattedAddress;
