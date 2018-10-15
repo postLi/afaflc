@@ -8,26 +8,28 @@
       @close="closeMe"
       :close-on-click-modal="false" 
       :before-close="closeMe">
-      <el-form :model="form" :rules="rules"  ref="ruleForm" class="demo-ruleForm classify_searchinfo" :inline="true"  label-position="right">
+      <el-form :model="formAllData" :rules="rules"  ref="ruleForm" class="demo-ruleForm classify_searchinfo" :inline="true"  label-position="right">
         <el-form-item label="交易时间">
           <el-date-picker
+            v-model="searchCreatTime"
+            :default-value="defaultTime"
             type="daterange"
-            :picker-options="pickerOptions2"
-            range-separator="-"
-            start-placeholder="开始日期"
-            end-placeholder="结束日期"
             align="right"
-            value-format="timestamp">
+            popper-class='searchCreatTime'
+            value-format="yyyy-MM-dd"
+            start-placeholder="开始日期"
+            :picker-options="pickerOptions2"
+            end-placeholder="结束日期">
           </el-date-picker>
         </el-form-item>
         <el-form-item label="货主">
-          <el-input :maxlength="20" placeholder="账户/姓名" auto-complete="off" clearable></el-input>
+          <el-input v-model="formAllData.shipperName" :maxlength="20" placeholder="账户/姓名" auto-complete="off" clearable></el-input>
         </el-form-item>
         <el-form-item label="车主">
-          <el-input :maxlength="20" placeholder="账户/姓名/车号牌" auto-complete="off" clearable></el-input>
+          <el-input v-model="formAllData.driverName" :maxlength="20" placeholder="账户/姓名/车号牌" auto-complete="off" clearable></el-input>
         </el-form-item>
         <el-form-item label="订单号">
-          <el-input :maxlength="20" auto-complete="off" clearable></el-input>
+          <el-input v-model="formAllData.orderSerial" :maxlength="20" auto-complete="off" clearable></el-input>
         </el-form-item>
         <el-form-item class="btnChoose fr"  style="margin-left:0;">
           <el-button type="primary" :size="btnsize" plain @click="handleSearch('search')" icon="el-icon-search">搜索</el-button>
@@ -35,8 +37,8 @@
         </el-form-item>
       </el-form>
       <div class="classify_info">
-        <div class="info_news">    
-          <el-table ref="multipleTable" style="width: 100%" stripe border height="100%" @selection-change="getSelection" @row-click="clickDetails" highlight-current-row :data="dataset"  tooltip-effect="dark">
+        <div class="info_news" style="min-height:700px">    
+          <el-table ref="multipleTable" style="width: 100%" stripe border height="100%" @row-click="clickDetails" @selection-change="getSelection" highlight-current-row :data="dataset"  tooltip-effect="dark">
             <el-table-column
               label="选择"
               type="selection"
@@ -47,83 +49,78 @@
               {{ (page - 1)*pagesize + scope.$index + 1 }}
               </template>
             </el-table-column> 
-            <el-table-column fixed label="订单号" v-model="dataset.orderSerial" prop="orderSerial" sortable :show-overflow-tooltip="true" width="200">
+            <!-- <el-table-column fixed label="订单号" prop="orderSerial" sortable :show-overflow-tooltip="true" width="300">
+            </el-table-column> -->
+            <el-table-column
+              :show-overflow-tooltip="true"
+              prop="orderSerial"
+              label="订单号"
+              sortable
+              width="300"
+              >
+              <template  slot-scope="scope">
+                <h4 class="needMoreInfo" @click="pushOrderSerial(scope.row)">{{ scope.row.orderSerial}}</h4>
+              </template>
             </el-table-column>
-            <el-table-column sortable prop="belongCity" v-model="dataset.belongCity" label="区域"  width="300">
+            <el-table-column 
+              sortable 
+              prop="belongCityName" 
+              label="所属区域"  
+              width="300">
             </el-table-column>
-            <el-table-column  label="货主" v-model="dataset.shipper" prop="shipper" sortable :show-overflow-tooltip="true" width="200">
+            <el-table-column  
+              label="货主"
+              sortable 
+              :show-overflow-tooltip="true" 
+              width="200">
+              <template slot-scope="scope">
+                {{scope.row.shipperPhone ? scope.row.shipperPhone : ''}}{{ scope.row.shipperName ? scope.row.shipperName : ''}}
+              </template>
             </el-table-column>
-            <el-table-column  label="车主" v-model="dataset.driver" prop="driver" sortable :show-overflow-tooltip="true"  width="200">
+            <el-table-column  
+              label="车主" 
+              sortable 
+              :show-overflow-tooltip="true"  
+              width="200">
+              <template slot-scope="scope">
+                {{scope.row.driverMobile ? scope.row.driverMobile : ''}}{{ scope.row.driverName ? scope.row.driverName : ''}}
+              </template>
             </el-table-column>
-            <el-table-column  label="处理状态" v-model="dataset.dealStatus" prop="dealStatus" sortable :show-overflow-tooltip="true" width="120">
-            </el-table-column>       
-            <el-table-column  label="物损类型" v-model="dataset.claimType" prop="claimType" sortable :show-overflow-tooltip="true" width="120">
-            </el-table-column>                                                       
-            <el-table-column  label="上报人" v-model="dataset.reporter" prop="reporter" sortable :show-overflow-tooltip="true"  width="300">
+            <el-table-column  
+              label="提货地" 
+              prop="startAddress" 
+              sortable 
+              :show-overflow-tooltip="true"  
+              width="300">
             </el-table-column>
+            <el-table-column  
+              label="目的地" 
+              prop="endAddress" 
+              sortable 
+              :show-overflow-tooltip="true"  
+              width="300">
+            </el-table-column>   
             <el-table-column
             :show-overflow-tooltip="true"
-            prop="createTime"
-            label="上报时间"
+            prop="useTime"
+            label="下单时间"
             width="200"
             sortable
             >
             <template  slot-scope="scope">
               <span class="orderSerial">
-                {{ scope.row.createTime | parseTime('{y}-{m}-{d} {h}:{i}:{s}')}}    
+                {{ scope.row.useTime | parseTime('{y}-{m}-{d} {h}:{i}:{s}')}}    
               </span>
             </template>
             <!-- <template slot-scope="scope">{{ scope.row.commissionTime | parseTime('{y}-{m}-{d} {h}:{i}:{s}')}}</template> -->
             </el-table-column>
-            <el-table-column  label="订单状态" v-model="dataset.orderStatus" prop="orderStatus" sortable  width="120">
-            </el-table-column> 
-            <el-table-column
-            :show-overflow-tooltip="true"
-            prop="useCarTime"
-            label="用车时间"
-            width="120"
-            sortable
-            >
-            <template  slot-scope="scope">
-              <span class="orderSerial">
-                {{ scope.row.useCarTime | parseTime('{y}-{m}-{d} {h}:{i}:{s}')}}    
-              </span>
-            </template>
-            <!-- <template slot-scope="scope">{{ scope.row.commissionTime | parseTime('{y}-{m}-{d} {h}:{i}:{s}')}}</template> -->
-            </el-table-column>
-            <el-table-column  label="提货地" v-model="dataset.startAddress" prop="startAddress" sortable :show-overflow-tooltip="true"  width="300">
-            </el-table-column>
-            <el-table-column  label="目的地" v-model="dataset.endAddress" prop="endAddress" sortable :show-overflow-tooltip="true"  width="300">
-            </el-table-column>   
           </el-table> 
         </div> 
         <div class="info_bottom">
           <!-- class="demo-ruleForm classify_searchinfo" -->
-          <el-form  label-position="right" class="demo-ruleForm classify_searchinfo">
-            <el-form-item label="上报人" >
-              <el-select v-model="value" placeholder="请选择" style="margin-left:13px;width:230px">
-                <el-option
-                  v-for="item in options"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value">
-                </el-option>
-              </el-select>
-            </el-form-item>
-            <el-form-item label="上报时间">
-              <el-date-picker
-                style="width:200px"
-                type="daterange"
-                :picker-options="pickerOptions2"
-                range-separator="-"
-                start-placeholder="开始日期"
-                end-placeholder="结束日期"
-                align="right"
-                value-format="timestamp">
-              </el-date-picker>
-            </el-form-item>
-            <el-form-item label="物损类型">
-              <el-select v-model="formAllData.claimType" clearable placeholder="请选择处理状态">
+          <el-form  label-position="right" :model="searchForm" :rules="rules"  ref="ruleForm" :inline="true">
+            <el-form-item label="物损类型" prop="claimType">
+              <el-select v-model="searchForm.claimType" clearable placeholder="请选择处理状态">
                 <el-option
                   v-for="item in optionsclaimType"
                   :key="item.code"
@@ -133,16 +130,35 @@
                 </el-option>
               </el-select>
             </el-form-item> 
-            <el-form-item class="clearfix imgbox" label="上传图片">
+            <el-form-item label="上报人类型" prop="reporterType">
+              <el-select v-model="searchForm.reporterType" placeholder="请选择" @change="changeCode">
+                <el-option
+                  v-for="item in options"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value">
+                </el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item label="上报时间" prop="createTime">
+              <el-date-picker
+                disabled="disabled"
+                v-model="searchCreatTime1"
+                align="right"
+                type="date"
+                :picker-options="pickOption2"
+                placeholder="选择日期"
+                value-format="timestamp">
+              </el-date-picker>
+            </el-form-item>
+            <el-form-item class="discrabel" label="物损描述" prop="claimDes">
+              <el-input v-model="searchForm.claimDes" type="textarea" :maxlength="200" style="width:100%" placeholder="物损描述最多输入200个字符"></el-input>
+            </el-form-item>
+            <el-form-item class="clearfix imgbox" label="上传图片" prop="claimPic1">
               <div class="clearfix uploadcard">
-                <upload :title="'本地上传'" :showFileList="true" :limit="4" listtype="picture"/>
+                <upload v-model="searchForm.claimPic1" :title="'本地上传'" :showFileList="true" :limit="4" listtype="picture"/>
               </div>
             </el-form-item>
-          
-            <el-form-item class="discrabel" label="物损描述">
-              <el-input type="textarea" :maxlength="200"></el-input>
-            </el-form-item>
-            
           </el-form>
         </div>
         <!-- 页码 -->
@@ -159,10 +175,11 @@
 </template>
 <script>
 import { parseTime, pickerOptions2 } from '@/utils/index.js'
-import { postOrderGoodsclaimlist } from '@/api/service/claim.js'
+import { postOrderManager ,postReportClaim} from '@/api/service/claim.js'
 import Pager from '@/components/Pagination/index'
 import Upload from '@/components/Upload/singleImage2'
 import { DicClaimStatusType } from '@/api/common'
+import { objectMerge2 } from '@/utils/index'
 export default {
   computed: {
     isShow: {
@@ -185,35 +202,74 @@ export default {
   data() {
     return {
       btnsize: 'mini',
-      sizes: [30, 50, 100],
+      sizes: [20, 50, 100],
       dataset: [],
       dataTotal: 0,
-      pagesize: 30, // 初始化加载数量
+      pagesize: 20, // 初始化加载数量
       page: 1, // 初始化页码
       totalCount: null,
       value: '',
-      optionsclaimType: [{ code: null, name: '全部' }],
+      pickOption2: '',
+      selected:[],
+      optionsclaimType: [],
       options: [{
-        value: '选项1',
+        value: 0,
         label: '货主'
       }, {
-        value: '选项2',
+        value: 1,
         label: '车主'
       }],
       form: {
       },
       rules: {
-
+        reporterType: [
+          { required: true, message: '请输入上报人' }
+        ],
+        claimDes: [
+          { required: true, message: '请输入物损描述' }
+        ],
+        claimType: [
+          { required: true, message: '请选择物损类型' }
+        ],
+        claimPic1: [
+          { required: true, message: '至少上传一张图片' }
+        ]
       },
       pickerOptions2: {
         shortcuts: pickerOptions2
       },
+      searchCreatTime1: +new Date(),
+      searchCreatTime:[],
+      defaultTime: [parseTime(+new Date() - 60 * 24 * 60 * 60 * 1000, '{y}-{m}-{d}'), parseTime(new Date(), '{y}-{m}-{d}')],
       formAllData: {
-
+        orderSerial:'',
+        startTime:'',
+        endTime:'',
+        shipperName:'',
+        driverName:'',
+      },
+      searchForm:{
+        createTime:'',
+        claimDes:'',
+        claimPic1:'',
+        reporterType:'',
+        claimType:'',
+        orderSerial:''
       }
     }
   },
+  watch: {
+    isShow: {
+      handler(newVal) {
+        if (newVal) {
+          this.searchForm = {}
+        }
+      },
+      immediate: true
+    },
+  },
   mounted() {
+    this.searchCreatTime = this.defaultTime
     this.firstblood()
     this.getclaimstatus()
   },
@@ -221,11 +277,36 @@ export default {
     // 请求接口刷新页面
     firstblood() {
       // this.loading = false
-      postOrderGoodsclaimlist(this.page, this.pagesize, this.formAllData).then(res => {
+      postOrderManager(this.page, this.pagesize, this.formAllData).then(res => {
         this.dataTotal = res.data.totalCount
         this.dataset = res.data.list
         console.log(res)
       })
+    },
+    // 查询条件
+    handleSearch(type) {
+      switch (type) {
+        case 'search':
+          if (this.searchCreatTime) {
+            this.formAllData.startTime = this.searchCreatTime ? parseTime(this.searchCreatTime[0], '{y}-{m}-{d}') + '00:00:00' : null
+            this.formAllData.endTime = this.searchCreatTime ? parseTime(this.searchCreatTime[1], '{y}-{m}-{d}') + '23:59:59' : null
+          } else {
+            this.formAllData.startTime = null
+            this.formAllData.endTime = null
+          }
+          this.firstblood()
+          break
+        case 'clear':
+          this.formAllData = {
+            orderSerial:'',
+            startTime:'',
+            endTime:'',
+            shipperName:'',
+            driverName:''
+          }
+          this.firstblood()
+          break
+      }
     },
     reset() {
       this.$refs['ruleForm'].resetFields()
@@ -251,30 +332,76 @@ export default {
       this.pagesize = obj.pageSize
       this.firstblood()
     },
-     // 判断选中与否
-    getSelection(val) {
-      console.log('选中内容', val)
-      this.selectRowData = val
+     //详情弹窗
+    pushOrderSerial(item){
+        // console.log(item)
+        // this.dialogFormVisible_details = true;
+        // this.DetailsOrderSerial = item.orderSerial;
+        this.$router.push({name: '订单详情',query:{ orderSerial:item.orderSerial }});
+    },
+    //查询上报人类型
+    changeCode(obj) {
+      this.searchForm.reporterType = obj
+      console.log('sdfsdfs', obj, this.searchForm)
+    },
+    getSelection(selected) {
+      this.selected = selected
+      console.log(this.selected.length,this.selected[0])
     },
     // 点击选中当前行
     clickDetails(row, event, column) {
       this.$refs.multipleTable.toggleRowSelection(row)
     },
     submitForm(ruleForm) {
-      this.$refs[ruleForm].validate((valid) => {
+      if (!this.selected.length) {
+        this.$message({
+          message: '请选择要操作的项~',
+          type: 'warning'
+        })
+      }else if(this.selected.length > 1){
+        this.$message({
+          message: '每次只能登记一条数据',
+          type: 'warning'
+        })
+        return false
+      }else{
+        this.$refs[ruleForm].validate((valid) => {
         if (valid) {
-          console.log('3')
-          this.closeMe()
-        } else {
-          return false
-        }
-      })
+          this.searchForm.createTime = parseTime(this.searchCreatTime1, '{y}-{m}-{d} {h}:{i}:{s}')
+          this.searchForm.orderSerial = this.selected[0].orderSerial
+          console.log(this.selected)
+          const data = objectMerge2({}, this.searchForm)
+          console.log(data)
+          postReportClaim(data).then(res => {
+            this.$message({
+              message: '保存成功~',
+              type: 'success'
+            })
+            this.closeMe()
+            this.$emit('success')
+          }).catch(err => {
+            this.$message({
+              type: 'error',
+              message: err.errorInfo || err.text || '未知错误，请重试~'
+            })
+            this.loading = false
+          })
+          } else {
+            return false
+          }
+        })
+      }
+      
     }
   }
 }
 </script>
 <style lang="scss">
 .wzlAddReg{
+  .el-dialog__wrapper{
+    overflow-y: hidden;
+    min-height: 700px;
+  }
   .classify_info{
     padding-bottom:0 !important;
   }
@@ -308,6 +435,10 @@ export default {
         color:#fff;
       }
     }
+    .el-dialog__body{
+      max-height: 700px;
+      overflow-y: scroll;
+    }
     .el-dialog__footer{
       padding-bottom: 6%;
       .el-button{
@@ -318,22 +449,30 @@ export default {
       padding-top:2%;
       max-width:100%;
       min-width: 20%;
+      .el-form-item{
+        width:408px;
+        float:left;
+      }
       .imgbox{
-        height:183px;
-        line-height: 183px;
+        // height:183px;
+        // line-height: 183px;
+        width: 100%;
+        min-height: 200px;
       }
       .discrabel{
-        height: 100px;
+        // height: 100px;
+        width:100%;
         .el-form-item__content{
-          height: 100px;
+          // height: 100px;
+          min-width: 62%;
           .el-textarea__inner{
-            min-height:100px;
+            // min-height:100px;
           }
         }
       }
       .el-form-item__content {
         .el-input {
-          width: 200px;
+          width: 217px;
           .el-input--suffix{
             margin-left:13px !important;
           }
@@ -344,7 +483,6 @@ export default {
       }
       .el-form-item {
         margin-right: 5px;
-        margin-bottom: 10px;
       }
     }
   }

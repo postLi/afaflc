@@ -6,8 +6,8 @@
           <el-input  v-model="areaName" placeholder="请选择省/市/区" clearable @clear="clearName"></el-input>
         </vregion>
       </el-form-item>
-      <el-form-item label="交易时间" prop="searchCreatTime">
-        <!-- <el-date-picker
+      <el-form-item label="交易时间">
+        <el-date-picker
           v-model="searchCreatTime"
           :default-value="defaultTime"
           type="daterange"
@@ -17,17 +17,7 @@
           start-placeholder="开始日期"
           :picker-options="pickerOptions2"
           end-placeholder="结束日期">
-        </el-date-picker> -->
-        <el-date-picker
-          v-model="searchCreatTime"
-          type="daterange"
-          :picker-options="pickerOptions2"
-          range-separator="-"
-          start-placeholder="开始日期"
-          end-placeholder="结束日期"
-          align="right"
-          value-format="timestamp">
-      </el-date-picker>
+        </el-date-picker>
       </el-form-item>
       <el-form-item label="订单号" prop="orderSerial">
         <el-input v-model="searchInfo.orderSerial" clearable placeholder="请输入要查询的订单号"></el-input>
@@ -132,6 +122,7 @@
             </template>
             <!-- <template slot-scope="scope">{{ scope.row.commissionTime | parseTime('{y}-{m}-{d} {h}:{i}:{s}')}}</template> -->
           </el-table-column>
+          
         </el-table>
         <!-- 页码 -->
         <div class="info_tab_footer">共计:{{ dataTotal }} <div class="show_pager"> <Pager :total="dataTotal" @change="handlePageChange"  :sizes="sizes"/></div> </div>    
@@ -167,8 +158,8 @@ export default{
       page: 1, // 初始化页码
       dataTotal: 0,
       isEport: false,
-      searchCreatTime: [],
-      // searchCreatTime:[parseTime(+new Date() - 60 * 24 * 60 * 60 * 1000, '{y}-{m}-{d}'), parseTime(new Date(), '{y}-{m}-{d}')],
+      searchCreatTime:[],
+      defaultTime: [parseTime(+new Date() - 60 * 24 * 60 * 60 * 1000, '{y}-{m}-{d}'), parseTime(new Date(), '{y}-{m}-{d}')],
       areaName: '',
       searchInfo: {
         orderSerial: null,
@@ -202,7 +193,7 @@ export default{
   created() {
   },
   mounted() {
-    // this.searchCreatTime = this.defaultTime
+    this.searchCreatTime = this.defaultTime
     this.firstblood()
   },
   beforeDestroy() {
@@ -318,7 +309,7 @@ export default{
     },
     // 刷新页面
     firstblood() {
-      this.loading = false
+      // this.loading = false
       postDriverCommissionTransaction(this.page, this.pagesize, this.searchInfo).then(res => {
         if (res) {
           this.tableData = res.data.list

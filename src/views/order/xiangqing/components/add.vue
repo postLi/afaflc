@@ -75,6 +75,7 @@ export default {
   },
   data() {
     return {
+      popTitle:'',
       btnsize: 'mini',
       sizes: [30, 50, 100],
       dataset: [],

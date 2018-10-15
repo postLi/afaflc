@@ -59,7 +59,18 @@
                   {{ (page - 1)*pagesize + scope.$index + 1 }}
                   </template>
                 </el-table-column> 
-                <el-table-column fixed label="订单号" prop="orderSerial" sortable :show-overflow-tooltip="true" width="300">
+                <!-- <el-table-column fixed label="订单号" prop="orderSerial" sortable :show-overflow-tooltip="true" width="300">
+                </el-table-column> -->
+                <el-table-column
+                  :show-overflow-tooltip="true"
+                  prop="orderSerial"
+                  label="订单号"
+                  sortable
+                  width="300"
+                  >
+                  <template  slot-scope="scope">
+                    <h4 class="needMoreInfo" @click="pushOrderSerial(scope.row)">{{ scope.row.orderSerial}}</h4>
+                  </template>
                 </el-table-column>
                 <el-table-column sortable prop="belongCity" label="区域"  width="300">
                 </el-table-column>
@@ -273,11 +284,14 @@ export default {
     clickDetails(row, event, column) {
       this.$refs.multipleTable.toggleRowSelection(row)
     },
-        // 每页显示数据量变更
+    // 每页显示数据量变更
     handlePageChange(obj) {
       this.page = obj.pageNum
       this.pagesize = obj.pageSize
       this.firstblood()
+    },
+    pushOrderSerial(item){
+      this.$router.push({name: '订单详情',query:{ orderSerial:item.orderSerial }});
     },
     getDataList() {
       this.firstblood()
