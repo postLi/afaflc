@@ -7,7 +7,7 @@
                     </vregion>
             </el-form-item> 
             <el-form-item label="货主账号:">
-            <el-input placeholder="请输入内容" clearable v-model="formAllData.accountId"></el-input>
+            <el-input placeholder="请输入内容" clearable v-model="formAllData.account"></el-input>
             </el-form-item>             
             <el-form-item class="fr">       
           <el-button type="primary" plain :size="btnsize" @click="getData_query" icon="el-icon-search">搜索</el-button> 
@@ -73,7 +73,7 @@ export default {
       dataTotal:null,
       selectRowData:{},
       formAllData:{
-            accountId: null,
+            account: null,
             areaCode: null,              
             }
      }
@@ -120,7 +120,7 @@ export default {
      clearSearch(){
             this.belongCityName = null,
                this.formAllData = {
-                    accountId: null,
+                    account: null,
                     areaCode: null,  
                },
          this.firstblood();

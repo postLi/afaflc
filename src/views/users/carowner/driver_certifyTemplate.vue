@@ -406,9 +406,13 @@ export default {
         }
     //    车长信息校验
         const carLengthValidator = (rule, val, cb) => {
-            let reg=/^([1-9]|1[1-2]|2[0-9])(\.\d{1,2})?$/
+            let reg=/^([1-9]|1[1-9]|2[0-9])(\.\d{1,3})?$/
+            let reg2 = /^[+-]?(0|([1-9]\d*))(\.\d+)?$/
+            if(!reg2.test(val)){
+            cb(new Error('输入车长须为数字'))
+            }
             if(!reg.test(val)){
-            cb(new Error('请输入数值为30以内的值，最多保留2位小数'))
+            cb(new Error('输入30以内数字'))
             }
             else{
                 cb()
@@ -416,26 +420,32 @@ export default {
         }
     //    车宽信息校验
         const carWidthValidator = (rule, val, cb) => {
-            let reg=/^([1-9]|1[1-2]|2[0-9])(\.\d{1,2})?$/
+            let reg=/^([1-9]|1[1-9]|2[0-9])(\.\d{1,3})?$/
+            let reg2 = /^[+-]?(0|([1-9]\d*))(\.\d+)?$/
+            if(!reg2.test(val)){
+            cb(new Error('输入车宽须为数字'))
+            }
             if(!reg.test(val)){
-            cb(new Error('请输入数值为30以内的值，最多保留2位小数'))
+            cb(new Error('输入30以内数字'))
             }
             else{
                 cb()
-              
             }
         }
     //    车高信息校验
         const carHeightValidator = (rule, val, cb) => {
-            let reg=/^([1-9]|1[1-2]|2[0-9])(\.\d{1,2})?$/
+            let reg=/^([1-9]|1[1-9]|2[0-9])(\.\d{1,3})?$/
+            let reg2 = /^[+-]?(0|([1-9]\d*))(\.\d+)?$/
+            if(!reg2.test(val)){
+            cb(new Error('输入车高须为数字'))
+            }
             if(!reg.test(val)){
-            cb(new Error('请输入数值为30以内的值，最多保留2位小数'))
+            cb(new Error('输入30以内数字'))
             }
             else{
                 cb()
-              
             }
-        }       
+        }            
     //    车辆规格校验  
         const carSpecValidator = (rule, val, cb) => {
              if(!val) {
@@ -672,6 +682,9 @@ export default {
                     else{
                 this.$refs['templateModel'].validate((valid)=>{
                 if(valid){
+                    this.templateModel.carLength=parseFloat(this.templateModel.carLength).toFixed(2)
+                    this.templateModel.carWidth=parseFloat(this.templateModel.carWidth).toFixed(2)
+                    this.templateModel.carHeight= parseFloat(this.templateModel.carHeight).toFixed(2)
                     var forms=Object.assign({},this.templateModel,{driverStatus:"AF0010404"},{authNoPassCause:JSON.stringify(this.pictureValue)})
                     this.freezeDialogFlag = false;
                     data_post_audit(forms).then(res=>{
@@ -694,6 +707,9 @@ export default {
                     else{
                 this.$refs['templateModel'].validate((valid)=>{
                     if(valid){
+                        this.templateModel.carLength=parseFloat(this.templateModel.carLength).toFixed(2)
+                        this.templateModel.carWidth=parseFloat(this.templateModel.carWidth).toFixed(2)
+                        this.templateModel.carHeight= parseFloat(this.templateModel.carHeight).toFixed(2)
                         var forms=Object.assign({},this.templateModel,{driverStatus:"AF0010403",authNoPassCause:JSON.stringify(this.pictureValue)})
                         this.freezeDialogFlag = false;
                         data_post_audit(forms).then(res=>{

@@ -241,14 +241,16 @@ export default {
        },
        grantCoupon(){
            let mobile_Araay = this.mobile.split('\n')
-           this.dialogFormVisible_add = false;
-          data_get_grantCoupon(this.params[0].id,mobile_Araay).then(res=>{
-              this.changeList();
-              this.$message.success('发放成功');
-         }).catch(res=>{
-             this.changeList();
-             this.$message.error(res.text)
-         })   
+           console.log('mobile_Araay');
+
+        //    this.dialogFormVisible_add = false;
+        //   data_get_grantCoupon(this.params[0].id,mobile_Araay).then(res=>{
+        //       this.changeList();
+        //       this.$message.success('发放成功');
+        //  }).catch(res=>{
+        //      this.changeList();
+        //      this.$message.error(res.text)
+        //  })   
        },
   }
 }

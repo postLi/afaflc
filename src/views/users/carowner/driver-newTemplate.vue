@@ -99,7 +99,6 @@
                     </el-form-item>
                   </el-col>
               </el-row>
-
               <el-row>
                   <el-col :span="12">
                     <el-form-item label="车辆规格：" :label-width="formLabelWidth">
@@ -385,9 +384,13 @@ export default {
         }
     //    车长信息校验
         const carLengthValidator = (rule, val, cb) => {
-            let reg=/^([1-9]|1[1-2]|2[0-9])(\.\d{1,2})?$/
+            let reg=/^([1-9]|1[1-9]|2[0-9])(\.\d{1,3})?$/
+            let reg2 = /^[+-]?(0|([1-9]\d*))(\.\d+)?$/
+            if(!reg2.test(val)){
+            cb(new Error('输入车长须为数字'))
+            }
             if(!reg.test(val)){
-            cb(new Error('请输入数值为30以内的值，最多保留2位小数'))
+            cb(new Error('输入30以内数字'))
             }
             else{
                 cb()
@@ -395,9 +398,13 @@ export default {
         }
     //    车宽信息校验
         const carWidthValidator = (rule, val, cb) => {
-            let reg=/^([1-9]|1[1-2]|2[0-9])(\.\d{1,2})?$/
+            let reg=/^([1-9]|1[1-9]|2[0-9])(\.\d{1,3})?$/
+            let reg2 = /^[+-]?(0|([1-9]\d*))(\.\d+)?$/
+            if(!reg2.test(val)){
+            cb(new Error('输入车宽须为数字'))
+            }
             if(!reg.test(val)){
-            cb(new Error('请输入数值为30以内的值，最多保留2位小数'))
+            cb(new Error('输入30以内数字'))
             }
             else{
                 cb()
@@ -405,13 +412,16 @@ export default {
         }
     //    车高信息校验
         const carHeightValidator = (rule, val, cb) => {
-            let reg=/^([1-9]|1[1-2]|2[0-9])(\.\d{1,2})?$/
+            let reg=/^([1-9]|1[1-9]|2[0-9])(\.\d{1,3})?$/
+            let reg2 = /^[+-]?(0|([1-9]\d*))(\.\d+)?$/
+            if(!reg2.test(val)){
+            cb(new Error('输入车高须为数字'))
+            }
             if(!reg.test(val)){
-            cb(new Error('请输入数值为30以内的值，最多保留2位小数'))
+            cb(new Error('输入30以内数字'))
             }
             else{
                 cb()
-              
             }
         }       
 
@@ -714,13 +724,15 @@ export default {
         },
          // 提交数据
         onSubmit(templateModel){
-            console.log('fdfdfdfdf',this.templateModel)
             this.$refs['templateModel'].validate(valid=>{
                 if(valid){
+                this.templateModel.carLength=parseFloat(this.templateModel.carLength).toFixed(2)
+                this.templateModel.carWidth=parseFloat(this.templateModel.carWidth).toFixed(2)
+                this.templateModel.carHeight= parseFloat(this.templateModel.carHeight).toFixed(2)
                     var forms= Object.assign({}, this.templateModel)
                     console.log('this.templateModel',forms)
                      this.driverTemplateDialogFlag = false;
-                    // 新增数据提交
+                    新增数据提交
                     if(this.editType === 'add'){
                         data_post_createDriver(forms).then(res=>{
                             this.$message.success('新增成功')

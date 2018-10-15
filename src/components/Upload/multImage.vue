@@ -122,7 +122,7 @@ export default {
           console.log('sjdfisidfj1111111111', arr)
           this.filelist = arr.map(el => {
             const obj = {}
-             let name = ''
+            let name = ''
             name = el.split('/')
             name = name[name.length - 1]
             obj.url = el
@@ -130,9 +130,9 @@ export default {
             console.log('sjdfisidfj', el)
             return obj
           })
-          this.$emit('filelist', this.filelist)
           console.log(this.filelist, '==================')
         }
+        this.$emit('filelist', this.filelist)
       },
       immediate: true
     },
@@ -146,7 +146,6 @@ export default {
   mounted() {
     this.init()
     console.log(this.disabled, this.filelist)
-
   },
   methods: {
     init() {
@@ -186,7 +185,7 @@ export default {
       return pwd
     },
     emitInput(val) {
-      console.log('val',val)
+      console.log('val', val)
       if (val) {
         this.filelist.push({
           url: val.url,
@@ -196,7 +195,7 @@ export default {
 
       this.$emit('input', this.showFileList ? this.filelist.map(el => {
         console.log('mapel:', el)
-        return el.url 
+        return el.url
       }).join(',') : val)
     },
     handleImageScucess(xml) {
@@ -209,8 +208,8 @@ export default {
         name = name[name.length - 1]
       }
 
-      console.log('xml',xml, name)
-      this.emitInput({url: url, name: name})
+      console.log('xml', xml, name)
+      this.emitInput({ url: url, name: name })
       // this.imageUrl = url
     },
     handleError(err) {
@@ -226,7 +225,7 @@ export default {
       const isLt5M = file.size / 1024 / 1024 < 5
       let type = file.name.match(/([^\.]+)$/)
       type = type ? '.' + type[1] : ''
-      
+
       // let textFileList = ''
       // if (file.type === 'text/plain') {
       //   this.textFileList = file.uid
@@ -243,7 +242,7 @@ export default {
             // 设置文件名
 
           // this.upload.key = this.dir + parseTime(new Date(), '{y}{m}{d}') + '/' + this.random_string() + type
-          this.upload.key = this.dir + parseTime(new Date(), '{y}{m}{d}') + '/' +  this.random_string()+'/'+ file.name
+          this.upload.key = this.dir + parseTime(new Date(), '{y}{m}{d}') + '/' + this.random_string() + '/' + file.name
           resolve(true)
         //  this.$nextTick(() => {
         //     this.$set(this.filelist[0], 'name', file.name)
@@ -257,7 +256,7 @@ export default {
     },
     handlePictureCardPreview(file) {
       this.dialogImageUrl = file.url
-      
+
       let fileType = ''
       fileType = file.url.split('/')
       fileType = fileType[fileType.length - 1].split('.')
@@ -267,12 +266,12 @@ export default {
         window.open(file.url)
       // let reader =  new FileReader()
       // reader.readAsText(file.url)
-      // reader.onload = function (e) { 
+      // reader.onload = function (e) {
       //    this.dialogTxt = e.target.result
-         
+
       // }
-      }else {
-        this.dialogVisible = true 
+      } else {
+        this.dialogVisible = true
       }
     }
   }

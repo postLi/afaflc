@@ -95,7 +95,7 @@
              <div  class="ht_table_tr1">
              <div class="ht_table_td1"><span  class="reduceItem" @click="reduceItem(keys)"> </span></div>
              <div class="ht_table_td table_th1"><el-input v-model="formAllData.aflcCouponList[keys].couponNum" maxlength='2'></el-input></div>
-             <div class="ht_table_td table_th2"><el-input v-model="formAllData.aflcCouponList[keys].couponName"></el-input></div> 
+             <div class="ht_table_td table_th2"><el-input v-model="formAllData.aflcCouponList[keys].couponName" maxlength="20"></el-input></div> 
              <div class="ht_table_td table_th3">
                      <el-select v-model="formAllData.aflcCouponList[keys].couponType" clearable placeholder="请选择" >
                          <el-option

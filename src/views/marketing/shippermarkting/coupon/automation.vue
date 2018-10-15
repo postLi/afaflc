@@ -2,7 +2,7 @@
     <div class="identicalStyle Marketing" style="height:100%">
           <el-form :inline="true" class="demo-ruleForm classify_searchinfo">
             <el-form-item label="活动名称：">
-               <el-input v-model="formAllData.activityName"></el-input>
+               <el-input v-model="formAllData.activityName" class="activeCss"></el-input>
             </el-form-item>     
             <el-form-item label="活动类型：">
                  <el-select v-model="formAllData.activityType" clearable placeholder="请选择" >
@@ -479,6 +479,9 @@ export default {
   .el-cascader{
     margin-top:-10px;
     width: 180px;
+  }
+  .activeCss{
+          width: 200px!important;
   }
 }
 </style>

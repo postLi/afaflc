@@ -307,7 +307,7 @@ export default {
     clearSearch(){
             this.payTime = null
             this.formAllData={
-            userId: this.templateItem.accountId,
+            userId: this.$route.query.accountId,
             accountType:'AF00101',
             payWay:'AF0041801',
             tradeType:null,
@@ -326,7 +326,7 @@ export default {
                 startExtractTime:null,
                 endExtractTime:null,
                 extractWay:null,
-                accountId:this.templateItem.accountId,
+                accountId:this.$route.query.accountId
             },
             this.firstblood2()
             },  

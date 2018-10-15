@@ -1,6 +1,7 @@
 <template>
     <div class="physicalDamage clearfix">
         <el-table
+            accordion
             :data="tableData"
             border
             row-key="id"
@@ -10,6 +11,7 @@
             <el-table-column type="expand">
                 <template slot-scope="props">
                     <el-table
+                    class="animated fadeInRight"
                         :data="tableData1"
                         border
                         style="width: 100%">
@@ -17,9 +19,6 @@
                             prop="followName"
                             label="跟进人"
                             width="180">
-                            <!-- <template slot-scope="scope">
-                                    {{scope.row.data}}
-                            </template> -->
                         </el-table-column>
                         <el-table-column
                             prop=""
@@ -34,23 +33,18 @@
                         <el-table-column
                             prop="goodsclaimDes"
                             label="物损跟进">
-                             <!-- <template slot-scope="scope">
-                                    {{scope.row.address}}
-                            </template> -->
                         </el-table-column>
                         <el-table-column
                             prop="name"
                             label="是否处理完毕">
-                             <!-- <template slot-scope="scope">
-                                    {{scope.row.address}}
-                            </template> -->
                         </el-table-column>
                          <el-table-column
-                            prop="fileName"
+                            prop="fileAddress"
                             label="附件">
-                             <!-- <template slot-scope="scope">
-                                    {{scope.row.address}}
-                            </template> -->
+                            <template slot-scope="scope">
+                                <img :src='item.url' alt="" v-showPicture v-for="item in scope.row.imgArr" :key="item.name" />
+                                <el-button type="text" v-for="txtitem in scope.row.txtArr" :key="txtitem.name" @click="openTxt(txtitem.url)">{{txtitem.name}}</el-button>
+                            </template>
                         </el-table-column>
                         <!-- <el-table-column
                             prop=""
@@ -75,9 +69,6 @@
                 label="处理状态"
                 width="150"
                 >
-                <!-- <template slot-scope="scope">
-                    {{scope.row.createTime | parseTime}}
-                </template> -->
             </el-table-column>
             <el-table-column
                 prop="claimDes"
@@ -96,9 +87,9 @@
                 :show-overflow-tooltip="true"
                 label="破损图片"
                 >
-                <!-- <el-tooltip class="item" effect="dark" content="点击图片查看原图" placement="top">
-                  <img :src='claimPic1' alt="" v-showPicture>
-                </el-tooltip> -->
+                <template slot-scope="scope">
+                  <img :src='scope.row.claimPic1' alt="" v-showPicture>
+                </template>
                 <!-- <template slot-scope="scope">
                     {{scope.row.driverName}} - {{scope.row.driverPhone}}
                 </template> -->
@@ -182,7 +173,7 @@ export default {
       tableData: [],
       tableData1: [],
       rowid: '',
-      belongCity:'',
+      belongCity: '',
       buttonText: ''
       // formAllData: {
       //   orderSerial: ''
@@ -309,9 +300,9 @@ export default {
             // let pageEnd = this.page * this.pagesize;
             // this.tableData = this.pushOrderData.slice(pageStart,pageEnd)
     },
-    getSuccess(){
+    getSuccess() {
       this.firstblood()
-      this.getListSmall()
+      // this.getListSmall()
     },
     firstblood() {
       // this.loading = false
@@ -329,6 +320,44 @@ export default {
       getGoodsfollowupAll(this.rowid).then(res => {
         // console.log(res.data)
         this.tableData1 = res.data
+        this.tableData1.forEach((e, index) => {
+          let arr = []
+          let imgArr = []
+          let txtArr = []
+          arr = e.fileAddress.split(',')
+          arr.forEach((el, elindex) => {
+             let name = el.lastIndexOf('/')
+             let nameExtension = ''
+             if (name > -1) {
+              nameExtension = el.substring(name+1)
+            }
+            console.log('nameExtension', nameExtension)
+            let i = nameExtension.lastIndexOf('.')
+            let extension = ''
+            if (i > -1) {
+              extension = nameExtension.substring(i+1)
+            }
+            console.log('extension', extension)
+            if (extension === 'txt') {
+              txtArr.push({
+                url: el,
+                name: nameExtension
+              })
+            }else {
+              imgArr.push({
+                url: el,
+                name: nameExtension
+              })
+            }
+          })
+          this.$set(e, 'txtArr', txtArr)
+          this.$set(e, 'imgArr', imgArr)
+          arr = []
+          imgArr = []
+          txtArr = []
+        })
+      console.log('tableData1----------', this.tableData1)
+        
       })
     },
     handlePageChange(obj) {
@@ -340,16 +369,15 @@ export default {
       if (row.dealStatus === '待处理') {
         getUpdateDealStatus(this.rowid).then(res => {
           // console.log(res)
+          this.firstblood()
           this.$message({
             message: '受理成功~',
             type: 'success'
           })
-          this.firstblood()
         })
       } else {
         this.centerDialogVisible = true
       }
-      console.log(index, row)
     },
     handleEdit2() {
 
@@ -363,21 +391,40 @@ export default {
     closeAddReg() {
       this.centerDialogVisibleReg = false
     },
+    openTxt (url) {
+      window.open(url)
+    },
     rowClick(row, event, column) {
-      // console.log(event)
-      this.getListSmall()
-      this.rowid = row.id
-      Array.prototype.remove = function(val) {
-        const index = this.indexOf(val)
-        if (index > -1) {
-          this.splice(index, 1)
-        }
+      if (row.id === this.rowid && this.expands.length > 0) {
+        this.expands = []
+      } else if (row.id !== this.rowid && this.expands.length > 0 || this.expands.length === 0) {
+        this.rowid = row.id
+        this.getListSmall()
+        this.$nextTick(() => {
+          this.expands = []
+          this.expands.push(row.id)
+        })
       }
-      if (this.expands.indexOf(row.id) < 0) {
-        this.expands.push(row.id)
-      } else {
-        this.expands.remove(row.id)
-      }
+      // else {
+      //   this.rowid = row.id
+      //   this.getListSmall()
+      //   console.log('expands', this.expands)
+      //   this.$nextTick(() => {
+      //     this.expands.push(row.id)
+      //   })
+      // }
+
+      // Array.prototype.remove = function(val) {
+      //   const index = this.indexOf(val)
+      //   if (index > -1) {
+      //     this.splice(index, 1)
+      //   }
+      // }
+      // if (this.expands.indexOf(row.id) < 0) {
+      //   this.expands.push(row.id)
+      // } else {
+      //   this.expands.remove(row.id)
+      // }
     }
 
   }
@@ -387,6 +434,12 @@ export default {
 
 <style rel="stylesheet/scss" lang="scss">
   .physicalDamage{
+    img{
+      display:block;
+      width:100px;
+      float:left;
+      margin-right:5px;
+    }
     .el-table{
         .el-table__expanded-cell{
             .el-table__header-wrapper{
@@ -403,5 +456,44 @@ export default {
       font-size: 16px;
     }
   }
-    
+    .animated {
+  -webkit-animation-duration: 0.5s;
+  animation-duration: 0.5s;
+  -webkit-animation-fill-mode: both;
+  animation-fill-mode: both;
+}
+
+@-webkit-keyframes fadeInRight {
+  from {
+    opacity: 0;
+    -webkit-transform: translate3d(100%, 0, 0);
+    transform: translate3d(100%, 0, 0);
+  }
+
+  to {
+    opacity: 1;
+    -webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes fadeInRight {
+  from {
+    opacity: 0;
+    -webkit-transform: translate3d(100%, 0, 0);
+    transform: translate3d(100%, 0, 0);
+  }
+
+  to {
+    opacity: 1;
+    -webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+.fadeInRight {
+  -webkit-animation-name: fadeInRight;
+  animation-name: fadeInRight;
+}
+
 </style>
