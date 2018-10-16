@@ -60,7 +60,7 @@
                     :params="selectRowData">
                     </newOrder>
                 <el-button  type="primary" plain icon="el-icon-bell" @click="handleUseStates" :size="btnsize">启用/停用</el-button>
-                <el-button type="danger" plain icon="el-icon-delete" @click="delete_data" :size="btnsize">删除</el-button>
+                <el-button type="primary" plain icon="el-icon-delete" @click="delete_data" :size="btnsize">删除</el-button>
             	</div>
             <div class="info_news">    
                <el-table style="width: 100%" ref="multipleTable" stripe border height="100%" @selection-change="getSelection" @row-click="clickDetails" highlight-current-row :data="tableDataAll"  >

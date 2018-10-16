@@ -241,16 +241,23 @@ export default {
        },
        grantCoupon(){
            let mobile_Araay = this.mobile.split('\n')
-           console.log('mobile_Araay');
-
-        //    this.dialogFormVisible_add = false;
-        //   data_get_grantCoupon(this.params[0].id,mobile_Araay).then(res=>{
-        //       this.changeList();
-        //       this.$message.success('发放成功');
-        //  }).catch(res=>{
-        //      this.changeList();
-        //      this.$message.error(res.text)
-        //  })   
+           console.log('mobile_Araay',mobile_Araay);
+           for(var i = 0;i<mobile_Araay.length;i++)
+           {
+            let phoneTest = /(^1[3|4|5|7|8|9]\d{9}$)|(^09\d{8}$)/
+            if(!(phoneTest.test(mobile_Araay[i].replace(/(^\s+)|(\s+$)/g, "")))){
+            this.$message.warning('第'+(i+1)+'行手机号输入有误');
+            return
+            }
+           }
+           this.dialogFormVisible_add = false;
+          data_get_grantCoupon(this.params[0].id,mobile_Araay).then(res=>{
+              this.changeList();
+              this.$message.success('发放成功');
+         }).catch(res=>{
+             this.changeList();
+             this.$message.error(res.text)
+         })   
        },
   }
 }

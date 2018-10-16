@@ -195,7 +195,7 @@
             <el-col :span="15">
                 <el-form :inline="true">
                <el-form-item  label="手机号码：" :label-width="formLabelWidth">
-                   <el-input v-model="searchData.mobile"></el-input>
+                   <el-input v-model="searchData.mobile" maxlength="11"></el-input>
                </el-form-item>
                  <el-form-item label="派发时间："  :label-width="formLabelWidth">
                         <el-date-picker
@@ -224,8 +224,11 @@
                          </el-option>
                  </el-select>
                </el-form-item>  
-          <el-form-item >       
-          <el-button type="primary" @click="getData_query" :size="btnsize">查询</el-button> 
+          <el-form-item >      
+            <el-form-item class="fr">
+                    <el-button type="primary" plain @click="getData_query"  :size="btnsize" icon="el-icon-search">搜索</el-button>
+                    <el-button type="info" plain  @click="clearSearch"  :size="btnsize" icon="fontFamily aflc-icon-qingkong">清空</el-button>
+            </el-form-item> 
           </el-form-item> 
                 </el-form>  
             </el-col>
@@ -440,10 +443,19 @@ export default {
         }        
     },
     getData_query(){
-        this.page = 1;
         this.firstblood();
-    },    
-    
+    }, 
+    // 清空搜索   
+   clearSearch(){
+       this.searchData={
+        mobile:'',
+        startTime:null,
+        endTime:null,
+        couponStatus:'',
+        activityId:this.templateItem.id,
+       }
+        this.firstblood();
+   },
    openDialog(){
        this.dialogFormVisible_add = true;
        this.searchData.activityId = this.templateItem.id;
@@ -704,6 +716,10 @@ export default {
         margin-right:0px;
         padding: 7px 15px;
          }
+         .el-input__inner{
+             height: 30px!important;
+             line-height: 30px!important;
+         }
          padding-top: 20px;
          .tableDataAllBox{
              padding-bottom: 50px;
@@ -735,6 +751,9 @@ export default {
             .el-input__icon {
              line-height: 24px;
             }
+        }
+        td{
+        background: #fff!important; 
         }
         }
 }

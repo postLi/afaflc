@@ -16,7 +16,7 @@
                     </el-select>
                  </el-form-item>
                 <el-form-item label="片区名称" >
-                   <el-input @focus="()=>{showMap('vestdistrictName')}" v-model="formAll.districtName"></el-input>
+                   <el-input  v-model="formAll.districtName"></el-input>
                  </el-form-item>
          <el-form-item class="fr">
          <el-button type="primary" plain @click="getdata_search()" :size="btnsize" icon="el-icon-search">搜索</el-button> 
@@ -53,7 +53,7 @@
             <el-input v-model="vestAll.districtName" disabled></el-input>
            </el-form-item>                
             <el-form-item label="片区名称：" :label-width="formLabelWidth" prop="districtName" v-else>
-            <el-input @focus="()=>{showMap('districtName')}" v-model="vestAll.districtName"></el-input>
+            <el-input v-model="vestAll.districtName"></el-input>
            </el-form-item>
             </el-col>
               </el-row>
@@ -222,10 +222,10 @@
         <el-table-column  label="序号" width="80px" type="index">
             
         </el-table-column>
-        <el-table-column  label="提货地"  prop="endAddress">
+        <el-table-column  label="提货地"  prop="endAddress" show-overflow-tooltip>
             
         </el-table-column>
-        <el-table-column  label="目的地" prop="startAddress">
+        <el-table-column  label="目的地" prop="startAddress" show-overflow-tooltip>
             
         </el-table-column>
         <el-table-column  label="里程（公里）" prop="distance">
@@ -256,7 +256,7 @@
     </div>
     <el-button  type="primary" value="value" plain icon="el-icon-edit" @click="openDialogView0()" :size="btnsize">修改</el-button>
     <el-button type="primary" plain icon="el-icon-bell"  @click="handleUseStates" :size="btnsize">启用/禁用</el-button>
-    <el-button type="danger" plain icon="el-icon-delete" @click="handleDelete" :size="btnsize">删除</el-button>
+    <el-button type="primary" plain icon="el-icon-delete" @click="handleDelete" :size="btnsize">删除</el-button>
    </div>
   
     <div class="info_news">  
@@ -271,7 +271,7 @@
                              {{ (page - 1)*pagesize + scope.$index + 1 }}
                             </template>
             </el-table-column> 
-   <el-table-column  label="片区名称" prop="districtName" sortable>
+   <el-table-column  label="片区名称" prop="districtName" sortable show-overflow-tooltip>
        
    </el-table-column>
    <el-table-column  label="省市" prop="areaName" sortable>
@@ -281,7 +281,7 @@
    <el-table-column  label="服务类型" prop="serivceCode" sortable>
        
    </el-table-column>
-   <el-table-column  label="片区中心" prop="districtAddress" sortable >
+   <el-table-column  label="片区中心" prop="districtAddress" sortable show-overflow-tooltip>
        
    </el-table-column>
    <el-table-column  label="马甲单源数量" prop="orderNum" sortable>
@@ -524,19 +524,13 @@ export default {
                     console.log(res)
                 });
             },
-        showMap(name) {
-            this.popVisible = true ;
-            this.current = name;
-        },
+            showMap(name) {
+                this.popVisible = true ;
+                this.current = name;
+            },
             getInfo(pos, name, info) {
                 console.log('in',info)
-                console.log('1',pos)
-                console.log('2',name)
-                console.log('3',info)
             switch (this.current) {
-                case 'districtName':
-                this.vestAll.districtName = info.formattedAddress;
-                break;
                 case 'districtAddress':
                 this.vestAll.districtAddress = info.formattedAddress;
                 let tude= pos.split(",");
@@ -545,13 +539,11 @@ export default {
                 this.vestAll.longitude = longitude;
                 this.vestAll.latitude = latitude;
                 break;
-                case 'vestdistrictName':
-                this.formAll.districtName = info.formattedAddress;
-                break;
                 case 'pickaddAera':
                 let startstreeArray = name.split('市');
                 let startstree = startstreeArray[startstreeArray.length-1]
-                this.startAddressCoordinate = pos
+                let posstartArray = pos.split(',');
+                this.startAddressCoordinate = posstartArray[1]+','+posstartArray[0]
                 if(info.addressComponent.street){
                   this.startAddressName= info.addressComponent.street + info.addressComponent.streetNumber
                 }
@@ -566,7 +558,8 @@ export default {
                 case 'destinationaddAera':
                 let endstreeArray = name.split('市');
                 let endstree = endstreeArray[endstreeArray.length-1]
-                this.endAddressCoordinate = pos
+                let posendArray = pos.split(',');
+                this.endAddressCoordinate = posendArray[1]+','+posendArray[0]
                 if(info.addressComponent.street){
                   this.endAddressName= info.addressComponent.street + info.addressComponent.streetNumber
                 }

@@ -57,11 +57,11 @@
                              {{ (page - 1)*pagesize + scope.$index + 1 }}
                             </template>
             </el-table-column>
-            <el-table-column  label="订单流水号" prop="orderSerial" sortable show-overflow-tooltip sortable>
+            <el-table-column  label="订单流水号" prop="orderSerial" sortable show-overflow-tooltip >
             </el-table-column>
-            <el-table-column  label="交易流水号" prop="tradeSerial" sortable show-overflow-tooltip sortable>
+            <el-table-column  label="交易流水号" prop="tradeSerial" sortable show-overflow-tooltip >
             </el-table-column> 
-            <el-table-column  label="货主账号" prop="accountName" sortable show-overflow-tooltip sortable>
+            <el-table-column  label="货主账号" prop="accountName" sortable show-overflow-tooltip >
             </el-table-column>        
             <el-table-column  label="服务分类" prop="orderTypeName" sortable>
             </el-table-column>       
@@ -146,7 +146,7 @@
             </el-table-column>     
             <el-table-column  label="收款方式" prop="extractWay" sortable>
             </el-table-column>
-            <el-table-column  label="收款账号" prop="extractAccount" sortable show-overflow-tooltip sortable>
+            <el-table-column  label="收款账号" prop="extractAccount" sortable show-overflow-tooltip >
             </el-table-column>                                                                                                 
             </el-table> 
             </div>
