@@ -10,9 +10,9 @@
                     <el-col :span="3">1</el-col>
                     <el-col :span="3">充值余额：</el-col>
                     <el-col :span="3">1</el-col>
-                    <el-col :span="3">赠送余额 ：</el-col>
+                    <el-col :span="3">赠送余额：</el-col>
                     <el-col :span="3">1</el-col>
-                    <el-col :span="3">优惠券金额 ：</el-col>
+                    <el-col :span="3">优惠券金额：</el-col>
                     <el-col :span="3">1</el-col>
 
                     <!-- 第二行 -->
@@ -20,7 +20,7 @@
                     <el-col :span="3">1</el-col>
                     <el-col :span="3">优惠券价值：</el-col>
                     <el-col :span="3">1</el-col>
-                    <el-col :span="3">优惠券抵扣金额   ：</el-col>
+                    <el-col :span="3">优惠券抵扣金额：</el-col>
                     <el-col :span="9">1</el-col>
                 </el-row>
             </div>

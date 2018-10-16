@@ -32,9 +32,6 @@
                             sortable
                             prop="areaCodeName"
                             label="地区">
-                            <template slot-scope="scope">
-                                {{ scope.row}}
-                            </template>
                         </el-table-column>
                         <el-table-column
                             sortable

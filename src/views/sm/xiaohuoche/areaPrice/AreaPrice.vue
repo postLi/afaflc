@@ -96,6 +96,7 @@
                                     <el-form-item class="itemArea" prop="areaPrice">
                                         <el-input
                                             v-numberOnly
+                                            maxlength="5"
                                             placeholder="请输入内容"
                                             v-model="standForm.areaPrice"
                                             clearable>
@@ -105,6 +106,7 @@
                                     <el-form-item class="itemArea" prop="areaKm">
                                         <el-input
                                             placeholder="请输入内容"
+                                            maxlength="5"
                                             v-numberOnly
                                             v-model="standForm.areaKm"
                                             clearable>
@@ -116,6 +118,7 @@
                                     <span style="color:red;">* </span><span class="control">区域超里程费：</span>  
                                     <el-form-item class="itemArea" prop="areaOutstripPrice">
                                         <el-input
+                                            maxlength="5"
                                             v-numberOnly
                                             placeholder="请输入内容"
                                             v-model="standForm.areaOutstripPrice"
@@ -396,7 +399,11 @@ export default {
                         })
                         let forms = objectMerge2({},this.standForm,{cityId:cityArr.join(',')})
                         data_NewOrChange(forms).then(res =>{
-                             this.close();
+                            this.$message({
+                                type: 'success',
+                                message: '新增成功' 
+                            })
+                            this.close();
                          }).catch(err => {
                              this.$message({
                                  type: 'info',

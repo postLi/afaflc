@@ -6,13 +6,13 @@
             <div class="essentialInformation">
                 <el-row class="basicInfo" :span='24'>
                     <!-- 第一行 -->
-                    <el-col :span="3">原始业务员：</el-col>
+                    <el-col :span="3">注册渠道：</el-col>
                     <el-col :span="3">1</el-col>
-                    <el-col :span="3">现属业务员：</el-col>
+                    <el-col :span="3">注册时间：</el-col>
                     <el-col :span="3">1</el-col>
-                    <el-col :span="3">所属业务组：</el-col>
+                    <el-col :span="3">所属片区：</el-col>
                     <el-col :span="3">1</el-col>
-                    <el-col :span="3">所属业务部门：</el-col>
+                    <el-col :span="3">组长名称：</el-col>
                     <el-col :span="3">1</el-col>
 
                     <!-- 第二行 -->
@@ -22,26 +22,22 @@
                     <el-col :span="3">1</el-col>
                     <el-col :span="3">客服所属业务组别：</el-col>
                     <el-col :span="3">1</el-col>
-                    <el-col :span="3">组长名称：</el-col>
+                    <el-col :span="3">所属商圈：</el-col>
                     <el-col :span="3">1</el-col>
 
                     <!-- 第三行 -->
-                    <el-col :span="3">用户所属省份：</el-col>
+                    <el-col :span="3">所属业务人员：</el-col>
                     <el-col :span="3">1</el-col>
-                    <el-col :span="3">用户所属城市：</el-col>
+                    <el-col :span="3">业务归属事件：</el-col>
                     <el-col :span="3">1</el-col>
-                    <el-col :span="3">常驻商圈：</el-col>
-                    <el-col :span="3">1</el-col>
-                    <el-col :span="3">常驻区域：</el-col>
-                    <el-col :span="3">1</el-col>
+                    <el-col :span="3">注册地：</el-col>
+                    <el-col :span="9">1</el-col>
 
                     <!-- 第四行 -->
-                    <el-col :span="3">绑定合伙人：</el-col>
+                    <el-col :span="3">业务所属组别：</el-col>
                     <el-col :span="3">1</el-col>
-                    <el-col :span="3">绑定物流公司：</el-col>
-                    <el-col :span="3">1</el-col>
-                    <el-col :span="3">绑定车队长：</el-col>
-                    <el-col :span="9">1</el-col>
+                    <el-col :span="3">组长名称：</el-col>
+                    <el-col :span="15">1</el-col>
                 </el-row>
             </div>
         </div>

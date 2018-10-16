@@ -299,7 +299,7 @@ export default {
                         h6{
                             margin-right: 80px;
                             font-size: 14px;
-                            line-height: 20px;
+                            line-height: 40px;
                         }
                     }
                 }

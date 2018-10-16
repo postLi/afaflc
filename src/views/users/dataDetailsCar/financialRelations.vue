@@ -6,28 +6,59 @@
             <div class="essentialInformation">
                 <el-row class="basicInfo" :span='24'>
                     <!-- 第一行 -->
-                    <el-col :span="3">累计充值：</el-col>
+                    <el-col :span="3">订单交易总额：</el-col>
                     <el-col :span="3">1</el-col>
-                    <el-col :span="3">充值余额：</el-col>
+                    <el-col :span="3">线上交易总额：</el-col>
                     <el-col :span="3">1</el-col>
-                    <el-col :span="3">赠送余额 ：</el-col>
+                    <el-col :span="3">线下交易总额：</el-col>
                     <el-col :span="3">1</el-col>
-                    <el-col :span="3">优惠券金额 ：</el-col>
+                    <el-col :span="3">平台补贴金额：</el-col>
                     <el-col :span="3">1</el-col>
 
                     <!-- 第二行 -->
-                    <el-col :span="3">优惠券张数：</el-col>
+                    <el-col :span="3">已提现金额：</el-col>
                     <el-col :span="3">1</el-col>
-                    <el-col :span="3">优惠券价值：</el-col>
+                    <el-col :span="3">钱包余额：</el-col>
                     <el-col :span="3">1</el-col>
-                    <el-col :span="3">优惠券抵扣金额   ：</el-col>
+                    <el-col :span="3">可提现金额：</el-col>
+                    <el-col :span="3">1</el-col>
+                    <el-col :span="3">冻结金额：</el-col>
+                    <el-col :span="3">1</el-col>
+ 
+                    <!-- 第二行 -->
+                    <el-col :span="3">保证金：</el-col>
+                    <el-col :span="3">1</el-col>
+                    <el-col :span="3">待支付理赔：</el-col>
+                    <el-col :span="3">1</el-col>
+                    <el-col :span="3">免费金额上限：</el-col>
                     <el-col :span="9">1</el-col>
                 </el-row>
             </div>
         </div>
-        <!-- 充值记录   -->
+        <!-- 提现金额 -->
         <div class="czjl-collapse collapseInfo">
-            <h2>充值记录  </h2>
+            <h2>提现金额  </h2>
+            <div class="authority_legal clearfix">
+                <ul class="lengandInfo fl">
+                    <li>提现金额：<span>135</span></li>
+                    <li>手续费：<span>150</span></li>
+                </ul>
+                <dir class="timeChoose fr">
+                    <span>提现时间：</span>
+                    <el-date-picker
+                        v-model="value7"
+                        type="daterange"
+                        align="right"
+                        unlink-panels
+                        range-separator="-"
+                        start-placeholder="开始日期"
+                        end-placeholder="结束日期"
+                        value-format="timestamp"
+                        :default-time="['00:00:00', '23:59:59']"
+                        :picker-options="pickerOptions2">
+                    </el-date-picker>
+                </dir>
+            </div>
             <div class="essentialInformation_table" >
                 <el-table
                     :data="tableData"
@@ -44,24 +75,28 @@
                     </el-table-column>
                     <el-table-column
                     prop="name"
-                    label="充值时间"
+                    label="提现金额"
                     >
                     </el-table-column>
                     <el-table-column
                     prop="address"
-                    label="充值金额">
+                    label="手续费">
                     </el-table-column>
                     <el-table-column
                     prop="address"
-                    label="充值赠送">
+                    label="提现方式">
                     </el-table-column>
                     <el-table-column
                     prop="address"
-                    label="充值渠道">
+                    label="钱包余额">
                     </el-table-column>
                     <el-table-column
                     prop="address"
-                    label="充值方式">
+                    label="提现状态">
+                    </el-table-column>
+                    <el-table-column
+                    prop="address"
+                    label="完成时间">
                     </el-table-column>
                 </el-table>
                 <el-pagination
@@ -75,9 +110,30 @@
             </div>
         </div>
 
-        <!-- 账户优惠券   -->
+        <!-- 交易记录   -->
         <div class="zhyhq-collapse collapseInfo">
-            <h2>账户优惠券  </h2>
+            <h2>交易记录  </h2>
+            <div class="authority_legal clearfix">
+                <ul class="lengandInfo fl">
+                    <li>钱包收入：<span>135</span></li>
+                    <li>支出：<span>150</span></li>
+                </ul>
+                <dir class="timeChoose fr">
+                    <span>交易时间：</span>
+                    <el-date-picker
+                        v-model="value7"
+                        type="daterange"
+                        align="right"
+                        unlink-panels
+                        range-separator="-"
+                        start-placeholder="开始日期"
+                        end-placeholder="结束日期"
+                        value-format="timestamp"
+                        :default-time="['00:00:00', '23:59:59']"
+                        :picker-options="pickerOptions2">
+                    </el-date-picker>
+                </dir>
+            </div>
             <div class="essentialInformation_table" >
                 <el-table
                     :data="tableData"
@@ -89,45 +145,25 @@
                     </el-table-column>
                     <el-table-column
                     prop="date"
-                    label="优惠券名称"
+                    label="流水号"
                     >
                     </el-table-column>
                     <el-table-column
                     prop="name"
-                    label="优惠券类型"
+                    label="交易时间"
                     >
                     </el-table-column>
                     <el-table-column
                     prop="address"
-                    label="金额/折扣">
+                    label="收支类型">
                     </el-table-column>
                     <el-table-column
                     prop="address"
-                    label="优惠券码">
+                    label="交易类型">
                     </el-table-column>
                     <el-table-column
                     prop="address"
-                    label="手机号码">
-                    </el-table-column>
-                    <el-table-column
-                    prop="address"
-                    label="派发时间">
-                    </el-table-column>
-                    <el-table-column
-                    prop="address"
-                    label="过期时间">
-                    </el-table-column>
-                    <el-table-column
-                    prop="address"
-                    label="券码状态">
-                    </el-table-column>
-                    <el-table-column
-                    prop="address"
-                    label="订单号">
-                    </el-table-column>
-                    <el-table-column
-                    prop="address"
-                    label="订单优惠金额">
+                    label="金额">
                     </el-table-column>
                 </el-table>
                 <el-pagination
@@ -160,12 +196,7 @@ export default {
   data() {
     return {
         size:[20,30,50],
-        defaultImg:'/static/test.jpg',//默认第一张图片的url
-        defaultImg45:'/static/45du.png',
-        defaultImgCarCard:'/static/carcard.png',
-        defaultImgDriverCard:'/static/drivercard.png',
-        defaultImgIdCard:'/static/idcard.png',
-        defaultImgGeRen:'/static/geren.png',
+        value7:[],
         listInformation: [],
         dataType:[
             {name:'全部',iscur:true},
@@ -195,7 +226,34 @@ export default {
           date: '2016-05-03',
           name: '王小虎',
           address: '上海市普陀区金沙江路 1516 弄'
-        }]
+        }],
+         pickerOptions2: {
+          shortcuts: [{
+            text: '最近一周',
+            onClick(picker) {
+              const end = new Date();
+              const start = new Date();
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
+              picker.$emit('pick', [start, end]);
+            }
+          }, {
+            text: '最近一个月',
+            onClick(picker) {
+              const end = new Date();
+              const start = new Date();
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
+              picker.$emit('pick', [start, end]);
+            }
+          }, {
+            text: '最近三个月',
+            onClick(picker) {
+              const end = new Date();
+              const start = new Date();
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
+              picker.$emit('pick', [start, end]);
+            }
+          }]
+        },
       }
   },
     watch: {
@@ -238,6 +296,9 @@ export default {
         .collapseInfo{
             .qd-collapse_title{
                 padding: 20px 0;
+            }
+            .timeChoose{
+                margin: 10px 0;
             }
         }
     }

@@ -56,6 +56,12 @@
             .essentialInformation_table{
                 position:relative;
                 padding:24px 0 40px 0; 
+                h6{
+                    font-size: 14px;
+                    line-height: 20px;
+                    color: #333;
+                    margin-bottom: 5px;
+                }
                 .el-table thead th, .el-table thead tr {
                     background-color: #fafafa;
                 }
@@ -69,7 +75,7 @@
                  li{
                     float: left;
                     font-size: 14px;
-                    line-height: 20px;
+                    line-height: 40px;
                     color: #666;
                     margin-right: 30px;
                     cursor: pointer;
@@ -80,11 +86,11 @@
             }
             .lengandInfo{
                 overflow: hidden;
-                padding: 20px 0;
+                padding: 10px 0;
                 li{
                     float: left;
                     color: #333;
-                    line-height: 20px;
+                    line-height:40px;
                     margin-right: 47px;
                     span{
                         color: #1890ff;

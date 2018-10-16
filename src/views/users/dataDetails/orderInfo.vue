@@ -13,20 +13,19 @@
                     <el-col :span="4">未成交订单：</el-col>
                     <el-col :span="4">1</el-col>
 
-
                     <!-- 第二行 -->
                     <el-col :span="4">线上支付订单：</el-col>
                     <el-col :span="4">1</el-col>
                     <el-col :span="4">线下支付订单：</el-col>
                     <el-col :span="4">1</el-col>
-                    <el-col :span="4">已成交订单：</el-col>
+                    <el-col :span="4">已取消订单：</el-col>
                     <el-col :span="4">1</el-col>
                 </el-row>
             </div>
         </div>
-        <!-- 抢单信息 -->
+        <!-- 交易订单 -->
         <div class="qd-collapse collapseInfo">
-            <h2>抢单信息</h2>
+            <h2>交易订单</h2>
             <div class="qd-collapse_title ">
                 <ul class="classfyTitle">
                    <li v-for="(item,index) in dataType" :key="item.name" :class="{currentClick:item.iscur}" @click="setCur(index)">{{item.name}}</li>
@@ -44,7 +43,7 @@
                     </el-table-column>
                     <el-table-column
                     prop="date"
-                    label="流水号"
+                    label="订单号"
                     width="180">
                     </el-table-column>
                     <el-table-column
@@ -87,6 +86,10 @@
                     <el-table-column
                     prop="address"
                     label="订单状态">
+                    </el-table-column>
+                    <el-table-column
+                    prop="address"
+                    label="完成时间">
                     </el-table-column>
                 </el-table>
                 <el-pagination
@@ -198,7 +201,7 @@ export default {
     .ordersInfo{
         .collapseInfo{
             .qd-collapse_title{
-                padding: 20px 0;
+                padding: 10px 0;
             }
         }
     }

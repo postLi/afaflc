@@ -294,13 +294,12 @@ export default {
             .el-input{
                 width: 250px;
             }
-            
             .el-form-item .el-form-item__content{
                 width: 250px;
             }
-            // .el-cascader{
-            //     width: 250px !important;
-            // }
+            .firstPush .el-form-item__content{
+                width: 100%;
+            }
         }
         .choosePush{
             display: inline-block;

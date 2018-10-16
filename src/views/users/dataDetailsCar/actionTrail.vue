@@ -1,107 +1,8 @@
 <template>
     <div class="actionTrail detailsArrange" v-loading="loading">
-        <!-- 辅助交易标签 -->
-        <div class="detailsInfo-collapse collapseInfo">
-            <h2>辅助交易标签</h2>
-            <div class="essentialInformation">
-                <el-row class="basicInfo" :span='24'>
-                    <!-- 第一行 -->
-                    <el-col :span="3">常发类型：</el-col>
-                    <el-col :span="3">1</el-col>
-                    <el-col :span="3">货源运输类型：</el-col>
-                    <el-col :span="3">1</el-col>
-                    <el-col :span="3">常用类型：</el-col>
-                    <el-col :span="3">1</el-col>
-                    <el-col :span="3">货源标准度 ：</el-col>
-                    <el-col :span="3">1</el-col>
- 
-                    <!-- 第二行 -->
-                    <el-col :span="3">所属省份：</el-col>
-                    <el-col :span="3">1</el-col>
-                    <el-col :span="3">用户所属城市：</el-col>
-                    <el-col :span="3">1</el-col>
-                    <el-col :span="3">所属商圈：</el-col>
-                    <el-col :span="3">1</el-col>
-                    <el-col :span="3">所属区域：</el-col>
-                    <el-col :span="3">1</el-col>
-
-                    <!-- 第三行 -->
-                    <el-col :span="3">活跃度：</el-col>
-                    <el-col :span="3">1</el-col>
-                    <el-col :span="3">主要下单时间：</el-col>
-                    <el-col :span="3">1</el-col>
-                    <el-col :span="3">货物出现历史：</el-col>
-                    <el-col :span="9">1</el-col>
-                </el-row>
-            </div>
-            <div class="essentialInformation_table">
-                <el-table
-                    :data="tableData"
-                    border
-                    style="width: 100%">
-                    <el-table-column
-                    prop="date"
-                    label="点击次数"
-                    width="180">
-                    </el-table-column>
-                    <el-table-column
-                    prop="name"
-                    label="3天内"
-                    width="180">
-                    </el-table-column>
-                    <el-table-column
-                    prop="name"
-                    label="7天内">
-                    </el-table-column>
-                    <el-table-column
-                    prop="name"
-                    label="10天内">
-                    </el-table-column>
-                    <el-table-column
-                    prop="name"
-                    label="30天内">
-                    </el-table-column>
-                    <el-table-column
-                    prop="name"
-                    label="90天内">
-                    </el-table-column>
-                </el-table>
-            </div>
-        </div>
-        <!-- 交易轨迹 -->
+        <!-- 交易行为 -->
         <div class="zizhiInfo-collapse collapseInfo">
-            <h2>交易轨迹</h2>
-            <div class="essentialInformation_table">
-                <el-table
-                    :data="tableData"
-                    border
-                    style="width: 100%">
-                    <el-table-column
-                    prop="date"
-                    label="付款方式"
-                    width="180">
-                    </el-table-column>
-                    <el-table-column
-                    prop="name"
-                    label="发单次数"
-                    width="180">
-                    </el-table-column>
-                    <el-table-column
-                    prop="address"
-                    label="交易次数 （转化率）">
-                    </el-table-column>
-                    <el-table-column
-                    prop="name"
-                    label="线上交易次数"
-                    width="180">
-                    </el-table-column>
-                    <el-table-column
-                    prop="name"
-                    label="线下交易次数"
-                    width="180">
-                    </el-table-column>
-                </el-table>
-            </div>
+            <h2>交易行为</h2>
             <div class="topFive">
                 <div class="topFive_route">
                     <div class="topFive_route_title clearfix">
@@ -175,6 +76,41 @@
                 </div>
             </div>
         </div>
+
+        <!-- 交易概况 -->
+        <div class="detailsInfo-collapse collapseInfo">
+            <h2>交易概况</h2>
+            <div class="essentialInformation_table">
+                <el-table
+                    :data="tableData"
+                    border
+                    style="width: 100%">
+                    <el-table-column
+                    prop="date"
+                    label="付款方式"
+                    width="180">
+                    </el-table-column>
+                    <el-table-column
+                    prop="name"
+                    label="抢单次数"
+                    width="180">
+                    </el-table-column>
+                    <el-table-column
+                    prop="name"
+                    label="中单次数（转化率）">
+                    </el-table-column>
+                    <el-table-column
+                    prop="name"
+                    label="线上交易次数">
+                    </el-table-column>
+                    <el-table-column
+                    prop="name"
+                    label="线下交易次数">
+                    </el-table-column>
+                </el-table>
+            </div>
+        </div>
+
         <!-- 事实轨迹 -->
         <div class="logInfo-collapse collapseInfo">
             <h2>事实轨迹</h2>
@@ -299,7 +235,7 @@ export default {
                         h6{
                             margin-right: 80px;
                             font-size: 14px;
-                            line-height: 20px;
+                            line-height: 40px;
                         }
                     }
                 }

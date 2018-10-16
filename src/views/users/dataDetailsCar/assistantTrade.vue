@@ -55,6 +55,7 @@
         <div class="phInfo-collapse collapseInfo">
             <h2>偏好信息</h2>
             <div class="essentialInformation_table">
+                <h6>订阅货主</h6>
                 <el-table
                     :data="tableData"
                     border
@@ -73,50 +74,61 @@
                     prop="address"
                     label="货主号码">
                     </el-table-column>
+                    <el-table-column
+                    prop="address"
+                    label="成功订单数">
+                    </el-table-column>
+                    <el-table-column
+                    prop="address"
+                    label="最近成功交易时间">
+                    </el-table-column>
                 </el-table>
-                <el-pagination
+                <!-- <el-pagination
                     background
                     @size-change="handleSizeChange"
                     @current-change="handleCurrentChange"
                     :page-sizes="size"
                     layout="total, sizes, prev, pager, next, jumper"
                     :total="totalCount">
-                </el-pagination>
-                <!-- <div class="info_tab_footer">共计:{{ totalCount }} <div class="show_pager"> <Pager :total="totalCount" @change="handlePageChange" /></div> </div> -->
+                </el-pagination> -->
             </div>
-        </div>
-        <!-- 修改日志 -->
-        <div class="logInfo-collapse collapseInfo">
-            <h2>修改日志</h2>
             <div class="essentialInformation_table">
+                <h6>被货主收藏</h6>
                 <el-table
                     :data="tableData"
                     border
                     style="width: 100%">
                     <el-table-column
                     prop="date"
-                    label="操作模块"
+                    label="序号"
                     width="180">
                     </el-table-column>
                     <el-table-column
                     prop="name"
-                    label="操作人"
+                    label="货主名称"
                     width="180">
                     </el-table-column>
                     <el-table-column
                     prop="address"
-                    label="操作时间">
+                    label="货主号码">
+                    </el-table-column>
+                    <el-table-column
+                    prop="address"
+                    label="成功订单数">
+                    </el-table-column>
+                    <el-table-column
+                    prop="address"
+                    label="最近成功交易时间">
                     </el-table-column>
                 </el-table>
-                <el-pagination
+                <!-- <el-pagination
                     background
                     @size-change="handleSizeChange"
                     @current-change="handleCurrentChange"
                     :page-sizes="size"
                     layout="total, sizes, prev, pager, next, jumper"
                     :total="totalCount">
-                </el-pagination>
-                <!-- <div class="info_tab_footer">共计:{{ totalCount }} <div class="show_pager"> <Pager :total="totalCount" @change="handlePageChange" /></div> </div> -->
+                </el-pagination> -->
             </div>
         </div>
     </div>

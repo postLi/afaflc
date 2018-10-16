@@ -16,7 +16,7 @@
                         <span class="onlyShow" v-else>{{standForm.carTypeName}}</span>
 
                     </el-form-item>
-                    <el-form-item class="chooseinfo-item" :label="isModify ? '当前车辆类型：':'选择车辆规格：'" >
+                    <el-form-item class="chooseinfo-item" :label="isModify ? '当前车辆规格：':'选择车辆规格：'" >
                         <el-checkbox-group v-model="specList">
                             <el-checkbox v-for="obj in optionsCarTypeM" :label="obj.code" :key="obj.name" >{{obj.name}}</el-checkbox>
                         </el-checkbox-group>
@@ -113,7 +113,7 @@
                 </div>
                 <div class="completeinfo">
                     <el-form-item label="上传服务图片："   prop="servicePic">
-                        <upload class="licensePicture" tip="（必须为jpg/png并且小于1M）" v-model="standForm.servicePic" />
+                        <upload class="licensePicture" tip="（必须为jpg/png并且小于5M）" v-model="standForm.servicePic" />
                     </el-form-item>
                 </div>
             </el-form>

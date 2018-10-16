@@ -12,7 +12,7 @@ export function isvalCompanyId(str) {
 }
 
 export function isvalidUsername(str) {
-  const usernameRegex = /^([0-9a-zA-Z\|\-]|[\u0391-\uFFE5]){2,}$/
+  const usernameRegex = /^([0-9a-zA-Z\|\-\_]|[\u0391-\uFFE5]){2,}$/
   return usernameRegex.test(str.trim())
 }
 

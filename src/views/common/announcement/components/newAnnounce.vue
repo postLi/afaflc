@@ -105,7 +105,6 @@ export default {
         vregion,
         editor,
         upload
-
     },
     data() {
         var checkRelease = (rule, value, callback) => {
@@ -118,7 +117,7 @@ export default {
         return {
             pickerOptions:{
                 disabledDate(time) {
-                    return time.getTime() < Date.now();
+                    return time.getTime() < (Date.now() - 1* 24 * 60 * 60 * 1000);
                 },
             },
             releaseDriver:false,//发布到车主分组
@@ -229,7 +228,7 @@ export default {
         },
     },
     mounted(){
-
+        console.log('Date.now()',Date.now())
     },
     methods: {
         regionChange(d) {
