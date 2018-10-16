@@ -130,7 +130,7 @@
                     :type="scope.row.dealStatus === '处理中' ? 'warning': 'primary'"
                     v-if="scope.row.dealStatus ==='待处理' || scope.row.dealStatus === '处理中'"
                     size="mini"
-                    @click="handleEdit1(scope.$index, scope.row)">{{scope.row.dealStatus==='待处理' ? '确认受理': (scope.row.dealStatus === '处理中' ? '记录投诉跟进': '')}}</el-button>
+                    @click="handleEdit1(scope.$index, scope.row)">{{scope.row.dealStatus==='待处理' ? '确认受理': (scope.row.dealStatus === '处理中' ? '记录物损跟进': '')}}</el-button>
                    <!-- <el-button
                     size="mini"
                     @click="handleEdit1(scope.$index, scope.row)">确认受理</el-button> -->
@@ -138,7 +138,7 @@
             </el-table-column>
         </el-table>
         <el-button type="success" class="btnReg" size="mini" @click="handleEdit3">物损登记</el-button>
-        <add :rv-modelsible="centerDialogVisible" @close="closeAdd" @success="getSuccess"></add>
+        <add :centerDialogVisible="centerDialogVisible" @close="closeAdd" @success="getSuccess"></add>
         <addReg :isMatreg="isMatreg" :centerDialogVisibleReg="centerDialogVisibleReg" @close="closeAddReg" @success="getSuccess"></addReg>
         <!-- <div class="info_tab_footer">共计:{{ totalCount }} <div class="show_pager"> <Pager :total="totalCount" @change="handlePageChange" :sizes="sizes"/></div> </div>     -->
     </div>
@@ -174,7 +174,7 @@ export default {
       sizes: [20, 30, 50],
       // tableData: null,
       expands: [],
-      isMatreg:false,
+      isMatreg: false,
       tableData: [],
       tableData1: [],
       rowid: '',
@@ -331,16 +331,16 @@ export default {
           let txtArr = []
           arr = e.fileAddress.split(',')
           arr.forEach((el, elindex) => {
-             let name = el.lastIndexOf('/')
-             let nameExtension = ''
-             if (name > -1) {
-              nameExtension = el.substring(name+1)
+            const name = el.lastIndexOf('/')
+            let nameExtension = ''
+            if (name > -1) {
+              nameExtension = el.substring(name + 1)
             }
             console.log('nameExtension', nameExtension)
-            let i = nameExtension.lastIndexOf('.')
+            const i = nameExtension.lastIndexOf('.')
             let extension = ''
             if (i > -1) {
-              extension = nameExtension.substring(i+1)
+              extension = nameExtension.substring(i + 1)
             }
             console.log('extension', extension)
             if (extension === 'txt') {
@@ -348,7 +348,7 @@ export default {
                 url: el,
                 name: nameExtension
               })
-            }else {
+            } else {
               imgArr.push({
                 url: el,
                 name: nameExtension
@@ -361,8 +361,7 @@ export default {
           imgArr = []
           txtArr = []
         })
-      console.log('tableData1----------', this.tableData1)
-        
+        console.log('tableData1----------', this.tableData1)
       })
     },
     handlePageChange(obj) {
@@ -382,6 +381,7 @@ export default {
         })
       } else {
         this.centerDialogVisible = true
+        console.log(this.centerDialogVisible)
       }
     },
     handleEdit2() {
@@ -398,7 +398,7 @@ export default {
     closeAddReg() {
       this.centerDialogVisibleReg = false
     },
-    openTxt (url) {
+    openTxt(url) {
       window.open(url)
     },
     rowClick(row, event, column) {
