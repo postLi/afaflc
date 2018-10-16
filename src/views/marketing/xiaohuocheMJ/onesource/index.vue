@@ -120,7 +120,7 @@
                    <div class="el_vestsearch">
                        <div class="vest_section" v-for="(value,keys) in totalAeraData" :key='keys'>
                          <div class="vest_tree">
-                             <span class="vest_tree_span">{{value.endAddress}}-{{value.startAddress}}</span>
+                             <span class="vest_tree_span">{{value.startAddress}}-{{value.endAddress}}</span>
                        </div>     
                        </div>                  
                    </div>
@@ -132,7 +132,6 @@
                         <el-button type="primary" @click="changeInfoSavaAdress" v-else>保 存</el-button>
                         <el-button @click="close1()">取 消</el-button>
                     </div> 
-
             </el-dialog>
     </div>
 
@@ -159,7 +158,7 @@
             </el-col>
             <el-col :span="12">
            <el-form-item label="片区名称：" :label-width="formLabelWidth">
-          <el-input @focus="()=>{showMap('selectdistrictName')}" v-model="selectRowData3.districtName" :disabled="openFlag==0"></el-input>
+          <el-input v-model="selectRowData3.districtName" :disabled="openFlag==0"></el-input>
            </el-form-item>
             </el-col>
               </el-row>
@@ -483,12 +482,12 @@ export default {
             getStr(val,name){
                 console.log('this.cityarr',val,name)
                 this.vestAll.areaCode = val.split(',')[1];
-                this.vestAll.areaName = name.split(',')[1];
+                this.vestAll.areaName = name.split('-')[1];
             },
             getStr1(val,name){
                 console.log('this.cityarr',val,name)
                 this.selectRowData3.areaCode = val.split(',')[1];
-                this.selectRowData3.areaName = name.split(',')[1];
+                this.selectRowData3.areaName = name.split('-')[1];
             },
 
             // 省市状态表
@@ -576,9 +575,6 @@ export default {
                 break;
                 case 'districtName2':
                 this.formAll2.endAddress = info.formattedAddress;
-                break;
-                case 'selectdistrictName':
-                this.selectRowData3.districtName = info.formattedAddress;
                 break;
                 case 'selectdistrictAddress':
                 this.selectRowData3.districtAddress = info.formattedAddress;

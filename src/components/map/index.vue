@@ -19,7 +19,6 @@
   <div class="addrname">当前选中的地址：{{this.thename}}<br>当前经纬度信息：{{this.thepos}}</div>
   <el-button type="primary" :disabled="noinfo" @click="submitForm">确 定</el-button>
   <el-button type="info" @click="close">取 消</el-button>
-  
 </div>
 </el-dialog>
 </template>
@@ -117,7 +116,9 @@ export default {
       const AMapUI = window.AMapUI
        // 地图加载
       _this.map = new AMap.Map('mapcontainer', {
-        resizeEnable: true
+        resizeEnable: true,
+        center: [113.14, 23.08],
+        zoom: 9
       })
       const map = this.map
     // 输入提示
