@@ -86,6 +86,7 @@
                 prop="claimPic1"
                 :show-overflow-tooltip="true"
                 label="破损图片"
+                width="300"
                 >
                 <template slot-scope="scope">
                   <img :src='scope.row.claimPic1' alt="" v-showPicture>
@@ -95,10 +96,13 @@
                 </template> -->
             </el-table-column>
             <el-table-column
-                prop="reporter"
+                prop=""
                 label="上报人"
                 width="200"
                 >
+                <template slot-scope="scope">
+                  {{scope.row.reporterPhone ? scope.row.reporterPhone : ''}}{{ scope.row.reporter ? scope.row.reporter : ''}}
+                </template>
             </el-table-column>
              <el-table-column
                 prop="reporterType"
@@ -134,8 +138,8 @@
             </el-table-column>
         </el-table>
         <el-button type="success" class="btnReg" size="mini" @click="handleEdit3">物损登记</el-button>
-        <add :rowid="rowid" :centerDialogVisible="centerDialogVisible" @close="closeAdd" @success="getSuccess"></add>
-        <addReg :centerDialogVisibleReg="centerDialogVisibleReg" @close="closeAddReg" @success="getSuccess"></addReg>
+        <add :rv-modelsible="centerDialogVisible" @close="closeAdd" @success="getSuccess"></add>
+        <addReg :isMatreg="isMatreg" :centerDialogVisibleReg="centerDialogVisibleReg" @close="closeAddReg" @success="getSuccess"></addReg>
         <!-- <div class="info_tab_footer">共计:{{ totalCount }} <div class="show_pager"> <Pager :total="totalCount" @change="handlePageChange" :sizes="sizes"/></div> </div>     -->
     </div>
 </template>
@@ -170,6 +174,7 @@ export default {
       sizes: [20, 30, 50],
       // tableData: null,
       expands: [],
+      isMatreg:false,
       tableData: [],
       tableData1: [],
       rowid: '',
@@ -384,6 +389,8 @@ export default {
     },
     handleEdit3() {
       this.centerDialogVisibleReg = true
+      this.isMatreg = true
+      // console.log(this.isMatreg)
     },
     closeAdd() {
       this.centerDialogVisible = false

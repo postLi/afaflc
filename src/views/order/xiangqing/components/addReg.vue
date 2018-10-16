@@ -1,7 +1,7 @@
 <template>
   <div  class="wzlReg">
     <el-dialog
-      title="物损登记"
+      :title='popTitle'
       :visible.sync="isShow"
       width="30%"
       center
@@ -30,7 +30,6 @@
             </el-option>
           </el-select>
         </el-form-item>
-        
         <el-form-item label="物损类型" prop="claimType">
           <el-select v-model="formAllData.claimType" clearable placeholder="请选择物损类型">
             <el-option
@@ -46,10 +45,10 @@
           <el-input v-model="formAllData.claimDes" type="textarea" :maxlength="200" style="width:100%" placeholder="物损描述最多输入200个字符"></el-input>
         </el-form-item>
         <el-form-item class="clearfix imgbox" label="物损图片" prop="claimPic1">
-            <div class="clearfix uploadcard">
-              <upload v-model="formAllData.claimPic1" :title="'本地上传'" :showFileList="true" :limit="4" listtype="picture"/>
-            </div>
-          </el-form-item>
+          <div class="clearfix uploadcard">
+            <upload v-model="formAllData.claimPic1" :title="'本地上传'" :showFileList="true" :limit="4" listtype="picture"/>
+          </div>
+        </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button type="primary" @click="submitForm('ruleForm')">确 定</el-button>
@@ -83,12 +82,21 @@ export default {
       type: Boolean,
       default: false
     },
+    isMatreg: {
+      type: Boolean,
+      default: false
+    },
+    isComreg: {
+      type: Boolean,
+      default: false
+    },
     belongCity: {
       type: [Number, String]
     }
   },
   data() {
     return {
+      popTitle: '',
       btnsize: 'mini',
       sizes: [30, 50, 100],
       dataset: [],
@@ -137,20 +145,41 @@ export default {
     }
   },
   watch: {
-    isShow: {
+    // isShow: {
+    //   handler(newVal) {
+    //     if (newVal) {
+    //       this.$set(this.formAllData, 'id', this.rowid)
+    //       this.formAllData = {}
+    //       console.log(this.formAllData.id)
+    //        console.log(this.isMatreg)
+    //     }
+    //   },
+    //   immediate: true
+    // },
+    isMatreg: {
       handler(newVal) {
-        if (newVal) {
-          // console.log(this.formAllData.orderSerial)
-          // this.$set(this.formAllData, 'orderSerial',orderSerial)
+        if (this.isMatreg) {
+          this.popTitle = '物损登记'
+          this.$set(this.formAllData, 'id', this.rowid)
           this.formAllData = {}
-          // this.formAllData.orderSerial = this.$route.query.orderSerial
-          // console.log(this.formAllData)
+          console.log(this.isMatreg)
         }
-      }
+      },
+      immediate: true
+    },
+    isComreg: {
+      handler(newVal) {
+        if (this.isComreg) {
+          this.popTitle = '投诉登记'
+          console.log(this.isComreg)
+        }
+      },
+      immediate: true
     }
   },
   mounted() {
     this.getclaimstatus()
+    // console.log(this.isMatreg)
   },
   methods: {
     reset() {
@@ -248,7 +277,6 @@ export default {
     }
   }
 }
-
 </script>
 <style lang="scss">
 .wzlReg{

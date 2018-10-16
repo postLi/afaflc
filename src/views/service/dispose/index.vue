@@ -59,7 +59,18 @@
                   {{ (page - 1)*pagesize + scope.$index + 1 }}
                   </template>
                 </el-table-column> 
-                <el-table-column fixed label="订单号" prop="orderSerial" sortable :show-overflow-tooltip="true" width="300">
+                <!-- <el-table-column fixed label="订单号" prop="orderSerial" sortable :show-overflow-tooltip="true" width="300">
+                </el-table-column> -->
+                <el-table-column
+                  :show-overflow-tooltip="true"
+                  prop="orderSerial"
+                  label="订单号"
+                  sortable
+                  width="300"
+                  >
+                  <template  slot-scope="scope">
+                    <h4 class="needMoreInfo" @click="pushOrderSerial(scope.row)">{{ scope.row.orderSerial}}</h4>
+                  </template>
                 </el-table-column>
                 <el-table-column sortable prop="provinceCityArea" label="区域"  width="300">
                 </el-table-column>
@@ -73,7 +84,14 @@
                   </template>
                 </el-table-column>
                 
-                <el-table-column  label="车主" prop="driverName" sortable :show-overflow-tooltip="true"  width="200">
+                <el-table-column  
+                  label="车主" 
+                  sortable 
+                  :show-overflow-tooltip="true"  
+                  width="200">
+                  <template slot-scope="scope">
+                  {{scope.row.driverName ? scope.row.driverName : ''}}{{ scope.row.driverMobile ? scope.row.driverMobile : ''}}
+                  </template>
                 </el-table-column>
                 <el-table-column  label="处理状态" prop="carTypeName" sortable :show-overflow-tooltip="true" width="120">
                 </el-table-column>       
@@ -147,7 +165,7 @@ export default {
       dataset: [],
       radio: 1,
       centerDialogVisible: false,
-      optionsdealStatus: [{ code: null, name: '全部' }],
+      optionsdealStatus: [],
       // optionsPlantService: [
       //   {
       //     id: '0',
@@ -286,6 +304,10 @@ export default {
     // 点击选中当前行
     clickDetails(row, event, column) {
       this.$refs.multipleTable.toggleRowSelection(row)
+    },
+     //详情弹窗
+    pushOrderSerial(item){
+      this.$router.push({name: '订单详情',query:{ orderSerial:item.orderSerial }});
     },
         // 每页显示数据量变更
     handlePageChange(obj) {

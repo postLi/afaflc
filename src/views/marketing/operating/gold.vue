@@ -6,17 +6,19 @@
           <el-input  v-model="areaName" placeholder="请选择省/市/区" clearable @clear="clearName"></el-input>
         </vregion>
       </el-form-item>
-      <el-form-item label="交易时间" prop="searchCreatTime">
+      <el-form-item label="交易时间">
         <el-date-picker
           v-model="searchCreatTime"
+          :default-value="defaultTime"
           type="daterange"
-          :picker-options="pickerOptions2"
-          range-separator="-"
-          start-placeholder="开始日期"
-          end-placeholder="结束日期"
           align="right"
-          value-format="timestamp">
-      </el-date-picker>
+          popper-class='searchCreatTime'
+          value-format="yyyy-MM-dd"
+          start-placeholder="开始日期"
+          :picker-options="pickerOptions2"
+          end-placeholder="结束日期">
+        </el-date-picker>
+      </el-form-item>
       </el-form-item>
       <el-form-item label="订单号" prop="orderSerial">
         <el-input v-model="searchInfo.orderSerial" clearable placeholder="请输入要查询的订单号"></el-input>
@@ -148,8 +150,8 @@ export default{
       page: 1, // 初始化页码
       dataTotal: 0,
       isEport: false,
-      searchCreatTime: [],
-      // defaultTime:[parseTime(+new Date() - 60 * 24 * 60 * 60 * 1000, '{y}-{m}-{d}'), parseTime(new Date(), '{y}-{m}-{d}')],
+      searchCreatTime:[],
+      defaultTime: [parseTime(+new Date() - 60 * 24 * 60 * 60 * 1000, '{y}-{m}-{d}'), parseTime(new Date(), '{y}-{m}-{d}')],
       areaName: '',
       searchInfo: {
         orderSerial: null,
@@ -168,6 +170,7 @@ export default{
 
   },
   mounted() {
+    this.searchCreatTime = this.defaultTime
     this.firstblood()
   },
   beforeDestroy() {

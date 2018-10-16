@@ -1,7 +1,7 @@
 import fetch from '@/utils/fetch'
 
 const baseurl = 'aflcorderservice'
-const baseurlw = 'aflcorderservice-wtc' // wang
+// const baseurl = 'aflcorderservice-wtc' // wang
 /**
  * 物损理赔
  *  "belongCity": "string",
@@ -37,12 +37,26 @@ export function postOrderGoodsclaimlist(page, pagesize, data) {
     }
   })
 }
-
+/**
+ * 理赔列表
+ * /order/aflcOrder/v1/orderManager
+ */
+export function postOrderManager(page, pagesize, data) {
+  return fetch({
+    url: '/' + baseurl + '/order/aflcOrder/v1/orderManager',
+    method: 'post',
+    data: {
+      'currentPage': page,
+      'pageSize': pagesize,
+      'vo': data
+    }
+  })
+}
 // /order/aflcOrderGoodsclaim/v1/GoodsclaimAll/{id} 拼接一个id 大列表
 // 根据订单号id获取订单物损理赔
 export function getGoodsclaimAll(id) {
   return fetch({
-    url: '/' + baseurlw + '/order/aflcOrderGoodsclaim/v1/GoodsclaimAll/' + id,
+    url: '/' + baseurl + '/order/aflcOrderGoodsclaim/v1/GoodsclaimAll/' + id,
     method: 'get'
   })
 }
@@ -51,7 +65,7 @@ export function getGoodsclaimAll(id) {
 // 根据订单号id获取记录物损跟进
 export function getGoodsfollowupAll(id) {
   return fetch({
-    url: '/' + baseurlw + '/order/aflcOrderGoodsfollowup/v1/GoodsfollowupAll/' + id,
+    url: '/' + baseurl + '/order/aflcOrderGoodsfollowup/v1/GoodsfollowupAll/' + id,
     method: 'get'
   })
 }
@@ -61,7 +75,7 @@ export function getGoodsfollowupAll(id) {
  */
 export function getUpdateDealStatus(id) {
   return fetch({
-    url: '/' + baseurlw + '/order/aflcOrderGoodsclaim/v1/updateDealStatus/' + id,
+    url: '/' + baseurl + '/order/aflcOrderGoodsclaim/v1/updateDealStatus/' + id,
     method: 'get'
   })
 }
@@ -71,7 +85,7 @@ export function getUpdateDealStatus(id) {
  */
 export function postReportClaim(data) {
   return fetch({
-    url: '/' + baseurlw + '/order/aflcOrderGoodsclaim/v1/reportClaim',
+    url: '/' + baseurl + '/order/aflcOrderGoodsclaim/v1/reportClaim',
     method: 'post',
     data: data
   })
@@ -83,7 +97,7 @@ export function postReportClaim(data) {
 
 export function postReportClaimAdd(data) {
   return fetch({
-    url: '/' + baseurlw + '/order/aflcOrderGoodsfollowup/v1/add',
+    url: '/' + baseurl + '/order/aflcOrderGoodsfollowup/v1/add',
     method: 'post',
     data: data
   })
