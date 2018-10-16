@@ -73,7 +73,7 @@
         <div class="legalInfo-collapse collapseInfo">
             <h2>营销权益</h2>
             <div class="authority_legal">
-                <ul>
+                <ul class="lengandInfo">
                     <li>货主优惠等级：<span>皇冠</span></li>
                     <li>剩余优惠金：<span>153</span></li>
                     <li>优惠券：<span>允许使用</span></li>
@@ -219,21 +219,6 @@ export default {
 <style rel="stylesheet/scss" lang="scss" scoped>
     .authority{
         .collapseInfo{
-            .authority_legal{
-                ul{
-                    overflow: hidden;
-                    padding: 20px 0;
-                    li{
-                        float: left;
-                        color: #333;
-                        line-height: 20px;
-                        margin-right: 47px;
-                        span{
-                            color: #1890ff;
-                        }
-                    }
-                }
-            }
             .essentialInformation_table_title{
                 ul{
                     overflow: hidden;

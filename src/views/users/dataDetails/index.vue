@@ -1,13 +1,13 @@
 <template>
   <div class="detailsCompnent tabsWrap">
-    <el-tabs v-model="detailsName" type="card" @tab-click="handleClick" >
+    <el-tabs v-model="HZdetailsName" type="card" @tab-click="handleClick" >
         <!-- 基本信息 -->
             <el-tab-pane label="基本信息" name="essential">
                 <!-- <div class="imgbox">
                     <img src="../../../assets/zanshi/jiben.png" alt="">
                 </div> -->
 
-                <essential :isvisible="detailsName === 'essential'" />
+                <essential :isvisible="HZdetailsName === 'essential'" />
             </el-tab-pane>
 
         <!-- 权限配置 -->
@@ -16,7 +16,7 @@
 
                     <img src="../../../assets/zanshi/hzqy.png" alt="">
                 </div> -->
-                <authorityConfigure :isvisible="detailsName === 'authority'" />
+                <authorityConfigure :isvisible="HZdetailsName === 'authority'" />
             </el-tab-pane>
 
         <!-- 行为轨迹 -->
@@ -26,7 +26,7 @@
                 <img src="../../../assets/zanshi/hzxwgj.png" alt="">
                 </div> -->
 
-                <actionTrail :isvisible="detailsName === 'actionTrail'" />
+                <actionTrail :isvisible="HZdetailsName === 'actionTrail'" />
 
             </el-tab-pane>
             
@@ -37,37 +37,41 @@
                 <img src="../../../assets/zanshi/hzdd.png" alt="">
                 </div> -->
 
-                <orderInfo :isvisible="detailsName === 'orderInfo'" />
+                <orderInfo :isvisible="HZdetailsName === 'orderInfo'" />
 
             </el-tab-pane>
 
         <!-- 业务关系 -->
             <el-tab-pane label="业务关系" name="passOverTime">
-                <div class="imgbox">
+                <!-- <div class="imgbox">
 
                 <img src="../../../assets/zanshi/hzyw.png" alt="">
-                </div>
+                </div> -->
 
-                <!-- <orderInfo :isvisible="detailsName === 'orderInfo'" /> -->
+                <businessRelation :isvisible="HZdetailsName === 'business'" />
 
             </el-tab-pane>
 
              <!-- 财务情况 -->
             <el-tab-pane label="财务情况" name="hzcw">
-                <div class="imgbox">
+                <!-- <div class="imgbox">
 
                 <img src="../../../assets/zanshi/hzcw.png" alt="">
-                </div>
+                </div> -->
+
+                <financialRelations :isvisible="HZdetailsName === 'financial'" />
 
             </el-tab-pane>
 
              <!-- 其他信息 -->
             <el-tab-pane label="其他信息" name="hzqt">
-                <div class="imgbox">
+                <!-- <div class="imgbox">
 
                 <img src="../../../assets/zanshi/hzqt.png" alt="">
-                </div>
+                </div> -->
 
+                <otherInfo :isvisible="HZdetailsName === 'otherInfo'" />
+                
             </el-tab-pane>
     </el-tabs>
   </div>
@@ -79,6 +83,9 @@ import essential from './essential'
 import authorityConfigure from './authorityConfigure'
 import actionTrail from './actionTrail'
 import orderInfo from './orderInfo'
+import businessRelation from './businessRelation'
+import financialRelations from './financialRelations'
+import otherInfo from './otherInfo'
 
     export default {
         name:'detailsCompnent',
@@ -86,38 +93,41 @@ import orderInfo from './orderInfo'
            essential,
            authorityConfigure,
            actionTrail,
-           orderInfo
+           orderInfo,
+           businessRelation,
+           financialRelations,
+           otherInfo
         },
         data() {
           return {
-            detailsName:'essential',
+            HZdetailsName:'essential',
           };
         },
         watch:{
-            detailsName(newVal,oldVal){
+            HZdetailsName(newVal,oldVal){
                 // console.log('newVal,oldVal',newVal,oldVal)
                 if(newVal){
-                    this.detailsName = newVal;
+                    this.HZdetailsName = newVal;
                 }else{
-                    this.detailsName = oldVal;
+                    this.HZdetailsName = oldVal;
                 }
             }
         },
         created() {
-            this.detailsName = sessionStorage.getItem('detailsName') || 'essential';
+            this.HZdetailsName = sessionStorage.getItem('HZdetailsName') || 'essential';
         },
 
         beforeUpdate () {
-            sessionStorage.setItem('detailsName', this.detailsName);
+            sessionStorage.setItem('HZdetailsName', this.HZdetailsName);
         },
 
         beforeDestroy () {
-            sessionStorage.setItem('detailsName', 'essential');
+            sessionStorage.setItem('HZdetailsName', 'essential');
         },
         methods: {
             handleClick(tab, event) {
                 // console.log(tab, event);
-                this.detailsName = tab.name;
+                this.HZdetailsName = tab.name;
             }
         }
     }
@@ -218,6 +228,19 @@ import orderInfo from './orderInfo'
                     }
                     .currentClick{
                         color: #1890ff;
+                    }
+                }
+                .lengandInfo{
+                    overflow: hidden;
+                    padding: 20px 0;
+                    li{
+                        float: left;
+                        color: #333;
+                        line-height: 20px;
+                        margin-right: 47px;
+                        span{
+                            color: #1890ff;
+                        }
                     }
                 }
             }
