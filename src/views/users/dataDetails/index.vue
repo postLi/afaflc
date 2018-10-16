@@ -11,7 +11,7 @@
             </el-tab-pane>
 
         <!-- 权限配置 -->
-            <el-tab-pane label="权限配置" name="overTime">
+            <el-tab-pane label="权限配置" name="authority">
                 <!-- <div class="imgbox">
 
                     <img src="../../../assets/zanshi/hzqy.png" alt="">
@@ -20,7 +20,7 @@
             </el-tab-pane>
 
         <!-- 行为轨迹 -->
-            <el-tab-pane label="行为轨迹" name="noDriver">
+            <el-tab-pane label="行为轨迹" name="actionTrail">
                 <!-- <div class="imgbox">
 
                 <img src="../../../assets/zanshi/hzxwgj.png" alt="">
@@ -31,7 +31,7 @@
             </el-tab-pane>
             
         <!-- 订单信息 -->
-            <el-tab-pane label="订单信息" name="assignCar">
+            <el-tab-pane label="订单信息" name="orderInfo">
                 <!-- <div class="imgbox">
 
                 <img src="../../../assets/zanshi/hzdd.png" alt="">
@@ -42,7 +42,7 @@
             </el-tab-pane>
 
         <!-- 业务关系 -->
-            <el-tab-pane label="业务关系" name="passOverTime">
+            <el-tab-pane label="业务关系" name="business">
                 <!-- <div class="imgbox">
 
                 <img src="../../../assets/zanshi/hzyw.png" alt="">
@@ -53,7 +53,7 @@
             </el-tab-pane>
 
              <!-- 财务情况 -->
-            <el-tab-pane label="财务情况" name="hzcw">
+            <el-tab-pane label="财务情况" name="financial">
                 <!-- <div class="imgbox">
 
                 <img src="../../../assets/zanshi/hzcw.png" alt="">
@@ -64,7 +64,7 @@
             </el-tab-pane>
 
              <!-- 其他信息 -->
-            <el-tab-pane label="其他信息" name="hzqt">
+            <el-tab-pane label="其他信息" name="otherInfo">
                 <!-- <div class="imgbox">
 
                 <img src="../../../assets/zanshi/hzqt.png" alt="">
@@ -79,6 +79,7 @@
 
 
 <script type="text/javascript">
+import '@/styles/detailsStyle.scss'
 import essential from './essential'
 import authorityConfigure from './authorityConfigure'
 import actionTrail from './actionTrail'
@@ -140,7 +141,6 @@ import otherInfo from './otherInfo'
             overflow: auto;
             // padding: 0 10px;
             background: #f2f2f2;
-           
         }
         .imgbox{
             overflow: auto;
@@ -148,103 +148,3 @@ import otherInfo from './otherInfo'
     }
 </style>
 
-<style type="text/css" lang="scss">
-
-    .detailsCompnent{
-        .detailsArrange{
-            .collapseInfo{
-                background: #ffffff;
-                margin-top: 18px;
-                padding: 0 20px;
-                h2{
-                    border-bottom: solid 2px #e0e0e0;
-                    line-height: 25px;
-                    font-size: 18px;
-                    padding: 36px 0 18px 0;
-                    color: #333333;
-                    font-weight: bold;
-                    font-stretch: normal;
-                }
-                .essentialInformation{
-                    padding:  20px 0 40px 0;
-                    .basicInfo{
-                        border-top: 1px solid #e6e6e6;
-                        border-left: 1px solid #e6e6e6;
-                        .el-col{
-                            font-size: 14px;
-                            line-height: 20px;
-                            padding: 12px 10px;
-                            border-right: 1px solid #e6e6e6;
-                            border-bottom: 1px solid #e6e6e6;
-                            &:nth-child(odd){
-                                background: #fafafa;
-                                font-weight: bold;
-                                text-align: right;
-                            }
-                            &:nth-child(even){
-                                text-align: left;
-                            }
-                        }
-                    }
-                }
-                .essentialInformation_img{
-                    padding: 0 20px;
-                    img{
-                        cursor: pointer;
-                        max-height:378px;
-                        max-width:638px;
-                    }
-                    h6{
-                        font-size:14px;
-                        color:#333;
-                        line-height:20px;
-                        margin-bottom:5px;
-                        font-weight:normal;
-                    }
-                    &>.basicInfo_img{
-                        padding-bottom:40px;
-                    }
-                }
-                .essentialInformation_table{
-                    position:relative;
-                    padding:24px 0 40px 0; 
-                    .el-table thead th, .el-table thead tr {
-                        background-color: #fafafa;
-                    }
-                    .el-pagination{
-                        text-align:right;
-                        padding-top:10px;
-                    }
-                }
-                .classfyTitle{
-                    overflow: hidden;
-                     li{
-                        float: left;
-                        font-size: 14px;
-                        line-height: 20px;
-                        color: #666;
-                        margin-right: 30px;
-                        cursor: pointer;
-                    }
-                    .currentClick{
-                        color: #1890ff;
-                    }
-                }
-                .lengandInfo{
-                    overflow: hidden;
-                    padding: 20px 0;
-                    li{
-                        float: left;
-                        color: #333;
-                        line-height: 20px;
-                        margin-right: 47px;
-                        span{
-                            color: #1890ff;
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-</style>

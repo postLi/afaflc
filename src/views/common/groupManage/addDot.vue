@@ -290,10 +290,10 @@
           responsibleName: '',
           city: '',
           serviceName: '',
-          parentName: '', // 上级网点
+          parentName: '', // 上级机构
           servicePhone: '',
           detailedAddr: '',
-          networkCode: '', // 网点代码
+          networkCode: '', // 机构代码
           collectionFee: '', // 代收款额度
           benchmark: '',
           warningQuota: '',
@@ -311,7 +311,7 @@
         },
         rules: {
           orgName: [
-            {required: true, message: '请输入网点名称'}
+            {required: true, message: '请输入机构名称'}
           ],
           servicePhone: [
             {required: true, pattern: REGEX.TELANDPHONE, message: '客服号码格式不正确'}
@@ -330,7 +330,7 @@
             {max: 10, message: '不可超过10个字符', trigger: 'blur'}
           ],
           networkCode: [
-            {required: true, message:'请输入网点代码'},
+            {required: true, message:'请输入机构代码'},
             {min: 2, message: '最少2个字符', trigger: 'blur'},
             {max: 10, message: '不可超过10个字符', trigger: 'blur'}
           ],
@@ -375,13 +375,13 @@
           this.form[i] = ''
         }
         if (this.isModify) {
-          this.popTitle = '修改网点'
+          this.popTitle = '修改机构'
           this.changeDate(this.dotInfo)
           this.form.id = this.dotInfo.id
           console.log('this.form.id',this.form.id)
           this.form.parentId = this.dotInfo.parentId || this.companyId
         } else {
-          this.popTitle = '新增网点'
+          this.popTitle = '新增机构'
           if (this.form.id) {
             delete this.form.id
           }

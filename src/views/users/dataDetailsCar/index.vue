@@ -1,70 +1,83 @@
 <template>
-  <div class="detailsCompnent">
-    <el-tabs v-model="pointName" type="card" @tab-click="handleClick" >
-        <!-- 平台定向 -->
-            <el-tab-pane label="基本信息" name="plantOrigin">
-                <div class="imgbox">
+  <div class="detailsCompnent tabsWrap">
+    <el-tabs v-model="CZdetailsName" type="card" @tab-click="handleClick" >
+        <!-- 基本信息 -->
+            <el-tab-pane label="基本信息" name="essential">
+                <!-- <div class="imgbox">
 
                     <img src="../../../assets/zanshi/jiben.png" alt="">
-                </div>
+                </div> -->
+                <essential :isvisible="CZdetailsName === 'essential'" />
+
             </el-tab-pane>
 
-        <!-- 超时无人人接单 -->
-            <el-tab-pane label="权限配置" name="overTime">
-                <div class="imgbox">
+        <!-- 权限配置 -->
+            <el-tab-pane label="权限配置" name="authority">
+                <!-- <div class="imgbox">
 
                 <img src="../../../assets/zanshi/quanyi.png" alt="">
-                </div>
+                </div> -->
+                <authorityConfigure :isvisible="CZdetailsName === 'authority'" />
+
             </el-tab-pane>
 
-        <!-- 公海无司机 -->
+        <!-- 辅助交易 -->
             <el-tab-pane label="辅助交易" name="noDriver">
-                <div class="imgbox">
+                <!-- <div class="imgbox">
 
                 <img src="../../../assets/zanshi/fuzhu.png" alt="">
-                </div>
+                </div> -->
+                <assistantTrade :isvisible="CZdetailsName === 'assistantTrade'" />
 
             </el-tab-pane>
             
-        <!-- 车主改派 -->
-            <el-tab-pane label="订单信息" name="assignCar">
-                <div class="imgbox">
+        <!-- 订单信息 -->
+            <el-tab-pane label="订单信息" name="orderInfo">
+                <!-- <div class="imgbox">
 
                 <img src="../../../assets/zanshi/dingdan.png" alt="">
-                </div>
+                </div> -->
+                <orderInfo :isvisible="CZdetailsName === 'orderInfo'" />
 
             </el-tab-pane>
-
-        <!-- 中单后联系货主超时 -->
-            <el-tab-pane label="交易轨迹" name="passOverTime">
-                <div class="imgbox">
+        
+        <!-- 交易轨迹 -->
+            <el-tab-pane label="交易轨迹" name="actionTrail">
+                <!-- <div class="imgbox">
 
                 <img src="../../../assets/zanshi/jiaoyi.png" alt="">
-                </div>
+                </div> -->
+                <actionTrail :isvisible="CZdetailsName === 'actionTrail'" />
 
             </el-tab-pane>
-         <!-- 中单后联系货主超时 -->
-            <el-tab-pane label="业务关系" name="czyw">
-                <div class="imgbox">
+
+         <!-- 业务关系 -->
+            <el-tab-pane label="业务关系" name="business">
+                <!-- <div class="imgbox">
 
                 <img src="../../../assets/zanshi/czyw.png" alt="">
-                </div>
+                </div> -->
+                <businessRelation :isvisible="CZdetailsName === 'business'" />
 
             </el-tab-pane>
-         <!-- 中单后联系货主超时 -->
-            <el-tab-pane label="财务信息" name="czcw">
-                <div class="imgbox">
+
+         <!-- 财务信息 -->
+            <el-tab-pane label="财务信息" name="financial">
+                <!-- <div class="imgbox">
 
                 <img src="../../../assets/zanshi/czcw.png" alt="">
-                </div>
+                </div> -->
+                <financialRelations :isvisible="CZdetailsName === 'financial'" />
 
             </el-tab-pane>
-         <!-- 中单后联系货主超时 -->
-            <el-tab-pane label="其他信息" name="czqt">
-                <div class="imgbox">
+
+         <!-- 其他信息 -->
+            <el-tab-pane label="其他信息" name="otherInfo">
+                <!-- <div class="imgbox">
 
                 <img src="../../../assets/zanshi/czqt.png" alt="">
-                </div>
+                </div> -->
+                <otherInfo :isvisible="CZdetailsName === 'otherInfo'" />
 
             </el-tab-pane>
     </el-tabs>
@@ -73,42 +86,57 @@
 
 
 <script type="text/javascript">
-
+import '@/styles/detailsStyle.scss'
+import essential from './essential'
+import authorityConfigure from './authorityConfigure'
+import assistantTrade from './assistantTrade'
+import actionTrail from './actionTrail'
+import orderInfo from './orderInfo'
+import businessRelation from './businessRelation'
+import financialRelations from './financialRelations'
+import otherInfo from './otherInfo'
     export default {
       name:'detailsCompnent',
       components:{
-           
+            essential,
+            authorityConfigure,
+            assistantTrade,
+            actionTrail,
+            orderInfo,
+            businessRelation,
+            financialRelations,
+            otherInfo
         },
         data() {
           return {
-            pointName:'plantOrigin',
+            CZdetailsName:'essential',
           };
         },
         watch:{
-            pointName(newVal,oldVal){
+            CZdetailsName(newVal,oldVal){
                 // console.log('newVal,oldVal',newVal,oldVal)
                 if(newVal){
-                    this.pointName = newVal;
+                    this.CZdetailsName = newVal;
                 }else{
-                    this.pointName = oldVal;
+                    this.CZdetailsName = oldVal;
                 }
             }
         },
         created() {
-            this.pointName = localStorage.getItem('pointName') || 'plantOrigin';
+            this.CZdetailsName = localStorage.getItem('CZdetailsName') || 'essential';
         },
 
         beforeUpdate () {
-            localStorage.setItem('pointName', this.pointName);
+            localStorage.setItem('CZdetailsName', this.CZdetailsName);
         },
 
         beforeDestroy () {
-            localStorage.setItem('pointName', 'plantOrigin');
+            localStorage.setItem('CZdetailsName', 'essential');
         },
         methods: {
             handleClick(tab, event) {
                 // console.log(tab, event);
-                this.pointName = tab.name;
+                this.CZdetailsName = tab.name;
             }
         }
     }
@@ -119,6 +147,7 @@
         height: 100%;
         .el-tab-pane{
             overflow: auto;
+            background: #f2f2f2;
         }
         .imgbox{
             overflow: auto;

@@ -1,112 +1,88 @@
 <template>
     <div class="detailsInfo detailsArrange" v-loading="loading">
-        <!-- 基本信息 -->
-        <div class="detailsInfo-collapse collapseInfo">
-            <h2>概要信息</h2>
+        <!-- 辅助信息 -->
+        <div class="fzInfo-collapse collapseInfo">
+            <h2>辅助信息</h2>
             <div class="essentialInformation">
                 <el-row class="basicInfo" :span='24'>
                     <!-- 第一行 -->
-                    <el-col :span="3">注册日期：</el-col>
-                    <el-col :span="3">1</el-col>
-                    <el-col :span="3">注册渠道：</el-col>
-                    <el-col :span="3">1</el-col>
-                    <el-col :span="3">已加入天数：</el-col>
-                    <el-col :span="3">1</el-col>
-                    <el-col :span="3">最近登录时间：</el-col>
-                    <el-col :span="3">1</el-col>
+                    <el-col :span="3">常驻地：</el-col>
+                    <el-col :span="21">1</el-col>
+
                     <!-- 第二行 -->
-                    <el-col :span="3">用户姓名：</el-col>
+                    <el-col :span="3">用户所属省份：</el-col>
                     <el-col :span="3">1</el-col>
-                    <el-col :span="3">手机号码：</el-col>
+                    <el-col :span="3">用户所属城市：</el-col>
                     <el-col :span="3">1</el-col>
-                    <el-col :span="3">年龄：</el-col>
+                    <el-col :span="3">常驻商圈：</el-col>
                     <el-col :span="3">1</el-col>
-                    <el-col :span="3">性别：</el-col>
+                    <el-col :span="3">常驻区域：</el-col>
                     <el-col :span="3">1</el-col>
+
                     <!-- 第三行 -->
-                    <el-col :span="3">身份证号码：</el-col>
+                    <el-col :span="3">进行中订单数量：</el-col>
                     <el-col :span="3">1</el-col>
-                    <el-col :span="3">生日：</el-col>
+                    <el-col :span="3">可接服务：</el-col>
                     <el-col :span="3">1</el-col>
-                    <el-col :span="3">居住地：</el-col>
-                    <el-col :span="9">1</el-col>
+                    <el-col :span="3">是否广告车：</el-col>
+                    <el-col :span="3">1</el-col>
+                    <el-col :span="3">是否开启接单：</el-col>
+                    <el-col :span="3">1</el-col>
+
                     <!-- 第四行 -->
-                    <el-col :span="3">微信号：</el-col>
+                    <el-col :span="3">每日订单目标：</el-col>
                     <el-col :span="3">1</el-col>
-                    <el-col :span="3">支付宝：</el-col>
+                    <el-col :span="3">每日收入目标：</el-col>
                     <el-col :span="3">1</el-col>
-                    <el-col :span="3">账号启用状态：</el-col>
-                    <el-col :span="9">1</el-col>
+                    <el-col :span="3">可接用车类型：</el-col>
+                    <el-col :span="3">1</el-col>
+                    <el-col :span="3">最近交易成功时间：</el-col>
+                    <el-col :span="3">1</el-col>
+  
+                    <!-- 第五行 -->
+                    <el-col :span="3">预约单限制数量：</el-col>
+                    <el-col :span="3">1</el-col>
+                    <el-col :span="3">预约单间隔限制：</el-col>
+                    <el-col :span="3">1</el-col>
+                    <el-col :span="3">已抢订单数：</el-col>
+                    <el-col :span="3">1</el-col>
+                    <el-col :span="3">已中订单数：</el-col>
+                    <el-col :span="3">1</el-col>
                 </el-row>
             </div>
         </div>
-        <!-- 资质信息 -->
-        <div class="zizhiInfo-collapse collapseInfo">
-            <h2>资质信息</h2>
-            <div class="essentialInformation">
-                <el-row class="basicInfo" :span='24'>
-                    <!-- 第一行 -->
-                    <el-col :span="3">货主审核通过：</el-col>
-                    <el-col :span="3">1</el-col>  
-                    <el-col :span="3">身份状态：</el-col>
-                    <el-col :span="3">1</el-col>
-                    <el-col :span="3">审核通过时间：</el-col>
-                    <el-col :span="9">1</el-col>
-
-                    <!-- 第二行 -->
-                    <el-col :span="3">企业名称：</el-col>
-                    <el-col :span="3">1</el-col>
-                    <el-col :span="3">统一社会信用代码：</el-col>
-                    <el-col :span="3">1</el-col>
-                    <el-col :span="3">企业地址：</el-col>
-                    <el-col :span="9">1</el-col> 
-
-                    <!-- 第三行 -->
-                    <el-col :span="3">所属商圈：</el-col>
-                    <el-col :span="3">1</el-col>
-                    <el-col :span="3">主营业务：</el-col>
-                    <el-col :span="3">1</el-col>
-                    <el-col :span="3">业务覆盖：</el-col>                                        
-                    <el-col :span="3">1</el-col>
-                    <el-col :span="3">常用车型：</el-col>
-                    <el-col :span="3">1</el-col>
-
-                    <!-- 第四行 -->
-                    <el-col :span="3">业务联系人：</el-col>
-                    <el-col :span="3">1</el-col>
-                    <el-col :span="3">联系电话：</el-col>
-                    <el-col :span="3">1</el-col>
-                </el-row>
-            </div>
-            <div class="essentialInformation_img">
-                <el-row class="basicInfo_img" :span='24'>
-                    <el-col :span="12">
-                        <h6>公司或档口门头照：</h6>
-                        <el-tooltip class="item" effect="dark" content="点击图片查看原图" placement="top">
-                            <img :src='defaultImg45' alt="" v-showPicture :imgurl="defaultImg45">
-                        </el-tooltip>   
-                    </el-col>
-                    <el-col :span="12">
-                        <h6>发货人名片：</h6>
-                        <el-tooltip class="item" effect="dark" content="点击图片查看原图" placement="top">
-                            <img :src='defaultImgCarCard' alt="" v-showPicture :imgurl="defaultImgCarCard">
-                        </el-tooltip>   
-                    </el-col>
-                </el-row>
-                <el-row class="basicInfo_img" :span='24'>
-                    <el-col :span="12">
-                        <h6>营业执照：</h6>
-                        <el-tooltip class="item" effect="dark" content="点击图片查看原图" placement="top">
-                            <img :src='defaultImgDriverCard' alt="" v-showPicture :imgurl="defaultImgDriverCard">
-                        </el-tooltip>   
-                    </el-col>
-                    <el-col :span="12">
-                        <h6>其他照片：</h6>
-                        <el-tooltip class="item" effect="dark" content="点击图片查看原图" placement="top">
-                            <img :src='defaultImgIdCard' alt="" v-showPicture :imgurl="defaultImgIdCard">
-                        </el-tooltip>   
-                    </el-col>
-                </el-row>
+        <!-- 偏好信息 -->
+        <div class="phInfo-collapse collapseInfo">
+            <h2>偏好信息</h2>
+            <div class="essentialInformation_table">
+                <el-table
+                    :data="tableData"
+                    border
+                    style="width: 100%">
+                    <el-table-column
+                    prop="date"
+                    label="序号"
+                    width="180">
+                    </el-table-column>
+                    <el-table-column
+                    prop="name"
+                    label="货主名称"
+                    width="180">
+                    </el-table-column>
+                    <el-table-column
+                    prop="address"
+                    label="货主号码">
+                    </el-table-column>
+                </el-table>
+                <el-pagination
+                    background
+                    @size-change="handleSizeChange"
+                    @current-change="handleCurrentChange"
+                    :page-sizes="size"
+                    layout="total, sizes, prev, pager, next, jumper"
+                    :total="totalCount">
+                </el-pagination>
+                <!-- <div class="info_tab_footer">共计:{{ totalCount }} <div class="show_pager"> <Pager :total="totalCount" @change="handlePageChange" /></div> </div> -->
             </div>
         </div>
         <!-- 修改日志 -->

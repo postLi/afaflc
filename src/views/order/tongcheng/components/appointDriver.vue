@@ -39,11 +39,6 @@
                             tooltip-effect="dark"
                             @row-click="clickDetails"
                             style="width: 100%"> 
-                                <!-- <el-table-column label="选择" width="55">
-                                    <template slot-scope="scope">
-                                        <el-radio class="textRadio" @change.native="getCurrentRow(scope.$index,scope.row)" :label="scope.$index" v-model="templateRadio">&nbsp;</el-radio>
-                                    </template>
-                                </el-table-column> -->
                                 <el-table-column
                                     type="selection"
                                     width="55">
@@ -73,7 +68,7 @@
                                 </el-table-column>
                                 <el-table-column
                                 prop="distance"
-                                label="距离提货地(KM)">
+                                label="距离提货地(M)">
                                     <template slot-scope="scope">
                                         <span class="pointStance">{{scope.row.distance}}</span>
                                     </template>
@@ -113,9 +108,6 @@
                         </div>
                         <div class="info_tab_footer">共计:{{ dataTotal }} <div class="show_pager"> <Pager :total="dataTotal" @change="handlePageChange"  :sizes="sizes"/></div> </div>    
                     </div>
-                    <!-- 页码 -->
-
-                    <!-- <detailsComponent v-if="Object.keys(listInformation).length != 0" :listInformation = "listInformation"></detailsComponent> -->
                 </el-dialog>
             </div>
     </div>
@@ -126,8 +118,6 @@
 import { getDictionary } from '@/api/common.js'
 import { appointDriverList,nearDriverList } from '@/api/order/ordermange.js'
 import Pager from '@/components/Pagination/index'
-
-// import detailsComponent from './details';
 
 export default {
     name: 'appointDriver',
@@ -168,10 +158,8 @@ export default {
             checkedinformation:[],
         };
     },
-     computed: {
-    　　newValue() {
-    　　　　return this.b.c
-    　　}
+    computed: {
+    　
     },
     watch:{
         dialogFormVisible(newValue,oldValue){
@@ -179,7 +167,6 @@ export default {
                 this.init()
             }
         }
-        
     },
     mounted(){
     },
@@ -248,7 +235,7 @@ export default {
                     message: '不可同时指派给多个司机~'
                 })
             }else{
-                let pointData = Object.assign({},{orderSerial:this.orderSerial,driverId:this.selectRowData.driverId})
+                let pointData = Object.assign({},{orderSerial:this.orderSerial,driverId:this.selectRowData.driverId,distance:this.selectRowData.distance})
                 appointDriverList(pointData).then(res => {
                     console.log(res)
                     this.close()

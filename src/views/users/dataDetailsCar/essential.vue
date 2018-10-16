@@ -46,48 +46,57 @@
             <div class="essentialInformation">
                 <el-row class="basicInfo" :span='24'>
                     <!-- 第一行 -->
-                    <el-col :span="3">货主审核通过：</el-col>
+                    <el-col :span="3">车主审核通过：</el-col>
                     <el-col :span="3">1</el-col>  
                     <el-col :span="3">身份状态：</el-col>
                     <el-col :span="3">1</el-col>
-                    <el-col :span="3">审核通过时间：</el-col>
-                    <el-col :span="9">1</el-col>
-
+                    <el-col :span="3">车主审核通过时间：</el-col>
+                    <el-col :span="3">1</el-col>
+                    <el-col :span="3">驾驶证号码 ：</el-col>
+                    <el-col :span="3">1</el-col>
                     <!-- 第二行 -->
-                    <el-col :span="3">企业名称：</el-col>
+                    <el-col :span="3">驾驶证有效期：</el-col>
                     <el-col :span="3">1</el-col>
-                    <el-col :span="3">统一社会信用代码：</el-col>
+                    <el-col :span="3">驾驶证是否过期：</el-col>
                     <el-col :span="3">1</el-col>
-                    <el-col :span="3">企业地址：</el-col>
+                    <el-col :span="3">发证所在地：</el-col>
                     <el-col :span="9">1</el-col> 
 
                     <!-- 第三行 -->
-                    <el-col :span="3">所属商圈：</el-col>
+                    <el-col :span="3">车牌号：</el-col>
                     <el-col :span="3">1</el-col>
-                    <el-col :span="3">主营业务：</el-col>
+                    <el-col :span="3">车型：</el-col>
                     <el-col :span="3">1</el-col>
-                    <el-col :span="3">业务覆盖：</el-col>                                        
+                    <el-col :span="3">车架号：</el-col>                                        
                     <el-col :span="3">1</el-col>
-                    <el-col :span="3">常用车型：</el-col>
+                    <el-col :span="3">交强险到期时间：</el-col>
                     <el-col :span="3">1</el-col>
-
                     <!-- 第四行 -->
-                    <el-col :span="3">业务联系人：</el-col>
+                    <el-col :span="3">车辆规格：</el-col>
                     <el-col :span="3">1</el-col>
-                    <el-col :span="3">联系电话：</el-col>
+                    <el-col :span="3">车长：</el-col>
                     <el-col :span="3">1</el-col>
+                    <el-col :span="3">商业险到期时间：</el-col>
+                    <el-col :span="9">1</el-col>
+                    <!-- 第五行 -->
+                    <el-col :span="3">是否有商业险：</el-col>
+                    <el-col :span="3">1</el-col>
+                    <el-col :span="3">保险公司名称：</el-col>
+                    <el-col :span="3">1</el-col>
+                    <el-col :span="3">年检到期时间：</el-col>
+                    <el-col :span="9">1</el-col>
                 </el-row>
             </div>
             <div class="essentialInformation_img">
                 <el-row class="basicInfo_img" :span='24'>
                     <el-col :span="12">
-                        <h6>公司或档口门头照：</h6>
+                        <h6>上传车辆45°照片：</h6>
                         <el-tooltip class="item" effect="dark" content="点击图片查看原图" placement="top">
                             <img :src='defaultImg45' alt="" v-showPicture :imgurl="defaultImg45">
                         </el-tooltip>   
                     </el-col>
                     <el-col :span="12">
-                        <h6>发货人名片：</h6>
+                        <h6>上传车辆行驶照片：</h6>
                         <el-tooltip class="item" effect="dark" content="点击图片查看原图" placement="top">
                             <img :src='defaultImgCarCard' alt="" v-showPicture :imgurl="defaultImgCarCard">
                         </el-tooltip>   
@@ -95,15 +104,23 @@
                 </el-row>
                 <el-row class="basicInfo_img" :span='24'>
                     <el-col :span="12">
-                        <h6>营业执照：</h6>
+                        <h6>上传营驾驶证照片：</h6>
                         <el-tooltip class="item" effect="dark" content="点击图片查看原图" placement="top">
                             <img :src='defaultImgDriverCard' alt="" v-showPicture :imgurl="defaultImgDriverCard">
                         </el-tooltip>   
                     </el-col>
                     <el-col :span="12">
-                        <h6>其他照片：</h6>
+                        <h6>上传车主身份照片：</h6>
                         <el-tooltip class="item" effect="dark" content="点击图片查看原图" placement="top">
                             <img :src='defaultImgIdCard' alt="" v-showPicture :imgurl="defaultImgIdCard">
+                        </el-tooltip>   
+                    </el-col>
+                </el-row>
+                <el-row class="basicInfo_img" :span='24'>
+                    <el-col :span="12">
+                        <h6>上传车主个人形象照片：</h6>
+                        <el-tooltip class="item" effect="dark" content="点击图片查看原图" placement="top">
+                            <img :src='defaultImgGeRen' alt="" v-showPicture :imgurl="defaultImgGeRen">
                         </el-tooltip>   
                     </el-col>
                 </el-row>
