@@ -1,5 +1,5 @@
 <template>
-  <div  class="wzlAddReg">
+  <div  class="wzldisReg">
     <el-dialog
       title="物损登记"
       :visible.sync="isShow"
@@ -119,7 +119,7 @@
         <div class="info_bottom">
           <!-- class="demo-ruleForm classify_searchinfo" -->
           <el-form  label-position="right" :model="searchForm" :rules="rules"  ref="ruleForm" :inline="true">
-            <el-form-item label="物损类型" prop="claimType">
+            <el-form-item label="投诉分类" prop="claimType">
               <el-select v-model="searchForm.claimType" clearable placeholder="请选择处理状态">
                 <el-option
                   v-for="item in optionsclaimType"
@@ -130,7 +130,7 @@
                 </el-option>
               </el-select>
             </el-form-item> 
-            <el-form-item label="上报人类型" prop="reporterType">
+            <el-form-item label="投诉人类型" prop="reporterType">
               <el-select v-model="searchForm.reporterType" placeholder="请选择" @change="changeCode">
                 <el-option
                   v-for="item in options"
@@ -140,7 +140,7 @@
                 </el-option>
               </el-select>
             </el-form-item>
-            <el-form-item label="上报时间" prop="createTime">
+            <el-form-item label="投诉时间" prop="createTime">
               <el-date-picker
                 disabled="disabled"
                 v-model="searchCreatTime1"
@@ -151,14 +151,14 @@
                 value-format="timestamp">
               </el-date-picker>
             </el-form-item>
-            <el-form-item class="discrabel" label="物损描述" prop="claimDes">
+            <el-form-item class="discrabel" label="投诉内容" prop="claimDes">
               <el-input v-model="searchForm.claimDes" type="textarea" :maxlength="200" style="width:100%" placeholder="物损描述最多输入200个字符"></el-input>
             </el-form-item>
-            <el-form-item class="clearfix imgbox" label="物损图片" prop="claimPic1">
+            <!-- <el-form-item class="clearfix imgbox" label="物损图片" prop="claimPic1">
               <div class="clearfix uploadcard">
                 <upload v-model="formAllData.claimPic1" :title="'本地上传'" :showFileList="true" :limit="4" listtype="picture"/>
               </div>
-            </el-form-item>
+            </el-form-item> -->
           </el-form>
         </div>
         <!-- 页码 -->
@@ -178,7 +178,7 @@ import { parseTime, pickerOptions2 } from '@/utils/index.js'
 import { postOrderManager, postReportClaim } from '@/api/service/claim.js'
 import Pager from '@/components/Pagination/index'
 import Upload from '@/components/Upload/multImage'
-import { DicClaimStatusType } from '@/api/common'
+import { DicComplainatusType } from '@/api/common'
 import { objectMerge2 } from '@/utils/index'
 export default {
   computed: {
@@ -319,7 +319,7 @@ export default {
       }
     },
     getclaimstatus() {
-      DicClaimStatusType().then(res => {
+      DicComplainatusType().then(res => {
         console.log(res.data)
         res.data.map((item) => {
           this.optionsclaimType.push(item)
@@ -381,9 +381,9 @@ export default {
               this.$emit('success')
             }).catch(err => {
               this.$message({
-              type: 'error',
-              message: err.errorInfo || err.text || '未知错误，请重试~'
-            })
+                type: 'error',
+                message: err.errorInfo || err.text || '未知错误，请重试~'
+              })
               this.loading = false
             })
           } else {
@@ -396,7 +396,7 @@ export default {
 }
 </script>
 <style lang="scss">
-.wzlAddReg{
+.wzldisReg{
   .el-dialog__wrapper{
     overflow-y: hidden;
     min-height: 700px;

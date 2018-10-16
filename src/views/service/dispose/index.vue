@@ -136,7 +136,7 @@
               </el-table> 
         	  </div> 
           <!-- addReg -->
-          <!-- <adddisReg :centerDialogVisible="centerDialogVisible" @close="closeAddReg"></adddisReg> -->
+          <addReg :centerDialogVisible="centerDialogVisible" @close="closeAddReg"></addReg>
          <!-- 页码 -->
           <div class="info_tab_footer">共计:{{ dataTotal }} <div class="show_pager"> <Pager :total="dataTotal" @change="handlePageChange"  :sizes="sizes"/></div> </div> 
         </div>
@@ -148,7 +148,7 @@ import Pager from '@/components/Pagination/index'
 import { parseTime } from '@/utils/'
 import vregion from '@/components/vregion/Region'
 import { DicDelStatusType } from '@/api/common'
-// import adddisReg from './disReg/index'
+import addReg from './reg/index'
 import { orderDetailsList } from '@/api/order/ordermange'
 export default {
   data() {
@@ -196,7 +196,7 @@ export default {
   },
   components: {
     // newCity,
-    // adddisReg,
+    addReg,
     vregion,
     Pager
   },
@@ -305,9 +305,9 @@ export default {
     clickDetails(row, event, column) {
       this.$refs.multipleTable.toggleRowSelection(row)
     },
-     //详情弹窗
-    pushOrderSerial(item){
-      this.$router.push({name: '订单详情',query:{ orderSerial:item.orderSerial }});
+     // 详情弹窗
+    pushOrderSerial(item) {
+      this.$router.push({ name: '订单详情', query: { orderSerial: item.orderSerial }})
     },
         // 每页显示数据量变更
     handlePageChange(obj) {

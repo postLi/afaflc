@@ -32,10 +32,13 @@
               </el-row>
             <el-row>
             <el-col :span="24">
-            <el-form-item label="价格上浮（倍）：" :label-width="formLabelWidth" prop="price"> 
+            <el-form-item label="价格上浮（倍）：" :label-width="formLabelWidth" prop="priceStart"> 
              <el-input auto-complete="off" class="price_one" v-model="vestList.priceStart" ref="priceStart"></el-input>至
+            </el-form-item>
+            <el-form-item prop="priceEnd"> 
              <el-input auto-complete="off" class="price_two" v-model="vestList.priceEnd" ref="priceEnd"></el-input>
             </el-form-item>
+
             </el-col>
             </el-row>
              </el-form>    
@@ -208,19 +211,35 @@ data(){
             }        
         }
 
-    //    选择价格上浮校验
-        const priceValidator = (rule, val, cb) => {
-            let reg= /^[0-9]+([.]{1}[0-9]+){0,1}$/
-            let priceStart = this.$refs.priceStart.value;
+    //    选择价格上浮开始校验
+        const priceStartValidator = (rule, val, cb) => {
+            let reg= /^([0|1])(\.\d{1,2})?$/
             let priceEnd =  this.$refs.priceEnd.value;
-            if(!reg.test(priceStart)||!reg.test(priceEnd)){
-            cb(new Error('请输入车长须数据,小数最多保留两位'))
+            if(!reg.test(val)){
+            cb(new Error('请输入车长须数据,范围值0~2之间，小数只保留两位'))
             }
             else{
                 cb()
               
             }
         }
+    //    选择价格上浮结束校验
+        const priceEndValidator = (rule, val, cb) => {
+            let reg= /^([0|1])(\.\d{1,2})?$/
+            let priceStart = this.$refs.priceStart.value;
+            if(!reg.test(val)){
+            cb(new Error('请输入车长须数据，范围值0~2之间,小数只保留两位'))
+            }
+            if(val<=priceStart){
+            cb(new Error('必须大于价格上浮开始的值'))
+            }
+            else{
+                cb()
+              
+            }
+        }
+
+
     return{
             selectFlag:false,
             driverTemplateDialogFlag: false,// 弹框控制的控制
@@ -408,7 +427,8 @@ data(){
             rulesForm:{
             areaCode:{trigger:'change',required:true,validator: belongCityNameValidator},
             serivceCode:{trigger:'change',required:true,validator:serivceCodeValidator},
-            price:{trigger:'change',required:true,validator:priceValidator},
+            priceStart:{trigger:'change',required:true,validator:priceStartValidator},
+            priceEnd:{trigger:'change',required:true,validator:priceEndValidator},
             createTime:[{value: '',trigger:'change',}],
             },
     }
@@ -454,7 +474,7 @@ methods:{
             getStr(val,name){
                 console.log('this.cityarr',val,name)
                 this.vestList.areaCode = val.split(',')[1];
-                this.vestList.areaName = name.split(',')[1];
+                this.vestList.areaName = name.split('-')[1];
             },
         // 省市状态表
             changeSelect(){

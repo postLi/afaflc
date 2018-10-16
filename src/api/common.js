@@ -25,6 +25,10 @@ export function getDictionary(code) {
     method: 'get'
   })
 }
+// 投诉分类
+export function DicComplainatusType() {
+  return fetch.get('/' + baseurl_two + '/sysDict/getSysDictByCodeGet/AF00424')
+}
 // 货损类型
 export function DicClaimStatusType() {
   return fetch.get('/' + baseurl_two + '/sysDict/getSysDictByCodeGet/AF021')
@@ -67,11 +71,11 @@ export function DicShippertype() {
 
 // 获取车辆规格 加宽  加长等
 export function DicCarType() {
-    return fetch({
+  return fetch({
       url: '/' + baseurl_two + '/sysDict/getSysDictByCodeGet/AF009',
       method: 'get'
     })
-  }
+}
 /**
  * 获取图片上传的policy
  * callback
@@ -114,8 +118,6 @@ export function getSelectType(type = '', orgid) {
     return res.data || []
   })
 }
-
-
 
   // 获取省级数据
 export function data_getProvinceList() {
