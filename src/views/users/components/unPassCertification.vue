@@ -2,9 +2,7 @@
     <div class="identicalStyle">
               <el-form :inline="true"  class="demo-ruleForm classify_searchinfo">
                 <el-form-item label="所在地：">
-                     <vregion :ui="true"  @values="regionChange" class="form-control">
-                        <el-input v-model="formInline.belongCityName" placeholder="请选择"></el-input>
-                    </vregion>
+                <GetCityList ref="area" v-model="formInline.belongCityName"  @returnStr="getStr"></GetCityList>
                 </el-form-item>
                 <el-form-item label="车牌号：">
                     <el-input placeholder="请输入内容" v-model.trim="formInline.carNumber" clearable></el-input>
@@ -23,7 +21,7 @@
                     <driver-newTemplate
                     btntext="代客认证"
                     :plain="true"
-                    type="primary" 
+                    type="primary"
                     btntype="primary"
                     icon="el-icon-check"
                     editType="valetAuth"
@@ -118,7 +116,7 @@
 </template>
 <script type="text/javascript">
     import {data_get_driver_list,data_get_driver_status} from '../../../api/users/carowner/total_carowner.js'
-    import vregion from '@/components/vregion/Region'
+    import GetCityList from '@/components/GetCityList/city'
     import { eventBus } from '@/eventBus'
     import { parseTime,formatTime } from '@/utils/index.js'
     import DriverNewTemplate from '../carowner/driver-newTemplate'
@@ -131,7 +129,7 @@
             }
         },
         components:{
-            vregion,
+            GetCityList,
             DriverNewTemplate,
             Pager
         },
@@ -157,9 +155,6 @@
                     }
                 ],
                 selectionData:null,
-                multipleSelection:[],
-                ifInformation:'选中一个才可以操作',
-                
             }
         },
         watch: {
@@ -190,20 +185,9 @@
         },
   
         methods:{
-            regionChange(d) {
-                console.log('data:',d)
-                this.formInline.belongCityName = (!d.province&&!d.city&&!d.area&&!d.town) ? '': `${this.getValue(d.province)}${this.getValue(d.city)}${this.getValue(d.area)}${this.getValue(d.town)}`.trim();
-                if(d.area){
-                    this.formInline.belongCity = d.area.code;
-                }else if(d.city){
-                    this.formInline.belongCity = d.city.code;
-                }
-                else{
-                    this.formInline.belongCity = d.province.code;
-                }
-            },
-             getValue(obj){
-                return obj ? obj.value:'';
+            getStr(val,name){
+                this.formInline.belongCity = val.split(',')[2];
+                this.formInline.belongCityName = name.split(',')[2];
             },
             clearSearch(){
                 this.formInline={//查询条件

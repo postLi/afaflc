@@ -12,17 +12,12 @@
                  <el-col :span="12">
                      <span v-if="!selectFlag">
                     <el-form-item label="所在区域 ：" :label-width="formLabelWidth">
-                    <el-input v-model="formAll.areaName1" @focus="changeSelect()" :disabled="editType=='view'"></el-input>
+                    <el-input v-model="formAll.areaName" placeholder="请选择" :disabled="editType=='view'" @focus="changeSelect"></el-input>
                     </el-form-item>
                      </span>
                      <span v-else>
                     <el-form-item label="所在区域 ：" :label-width="formLabelWidth" prop="areaName">
-                   <el-cascader
-                    size="large"
-                    :options="options"
-                    v-model="formAll.areaName"
-                    @change="handleChange">
-                    </el-cascader>
+                   <GetCityList ref="area" v-model="formAll.areaName"  @returnStr="getStr"></GetCityList>
                     </el-form-item>
                      </span>
                 </el-col>
@@ -56,10 +51,11 @@
 </template>
 <script>
 import {data_get_aflcTradeArea_update,data_get_aflcTradeArea_Id} from '@/api/users/district/shoppingDistrict.js'
-import { regionDataPlus, CodeToText, TextToCode } from 'element-china-area-data'
+import GetCityList from '@/components/GetCityList/city'
 import { eventBus } from '@/eventBus'
 export default {
   components:{
+      GetCityList
   },
   props:{
     params:{
@@ -142,14 +138,12 @@ export default {
 
         return{
         selectFlag:null,
-        options:regionDataPlus,
         dialogFormVisible_add: false,
         formLabelWidth:'120px',
         formAll:{
             tradeName:null,
-            areaName1:null,
-            areaName:[],
-            areaCode: [],
+            areaName:null,
+            areaCode: null,
             province:null,
             city:null,
             area:null,
@@ -181,28 +175,16 @@ export default {
   mounted(){
   },
   methods:{
-        handleChange(d){
-           console.log('d',d)
-           if(d.length<3){
-                this.$message.info('请选择具体的城市');
-                this.formAll.areaName = [];
-                this.formAll.areaCode = [];
-                this.formAll.province = null
-                this.formAll.city = null
-                this.formAll.area = null
-           }
-           else{
-                this.formAll.areaCode = d
-                this.formAll.province = CodeToText[d[0]]
-                this.formAll.city =  CodeToText[d[1]]
-                if(d[2]==''){
-                this.formAll.area = null
-                }
-                else{
-                this.formAll.area = CodeToText[d[2]]
-                }
-           }
-        },
+
+    getStr(val,name){
+                console.log('this.cityarr',val,name)
+                this.formAll.areaCode = val.split(',')[2];
+                this.formAll.areaName = name.split(',')[2];
+                this.formAll.province = name.split(',')[0];
+                this.formAll.city = name.split(',')[1];
+                this.formAll.area = name.split(',')[2];
+            },  
+
    openDialog:function(){
     if(this.editType=='view'){
         data_get_aflcTradeArea_Id(this.params.id).then(res=>{
@@ -213,7 +195,7 @@ export default {
            this.formAll.area = res.data.area
            this.formAll.tradeOwner = res.data.tradeOwner
            this.formAll.ownerPhone = res.data.ownerPhone
-           this.formAll.areaName1 = res.data.areaName
+           this.formAll.areaName = res.data.areaName
            this.formAll.areaCode = res.data.areaCode
         })
      this.dialogFormVisible_add = true;
@@ -243,7 +225,7 @@ export default {
            this.formAll.area = res.data.area
            this.formAll.tradeOwner = res.data.tradeOwner
            this.formAll.ownerPhone = res.data.ownerPhone
-           this.formAll.areaName1 = res.data.areaName
+           this.formAll.areaName = res.data.areaName
            this.formAll.areaCode = res.data.areaCode
         })
          this.dialogFormVisible_add = true;
@@ -271,20 +253,8 @@ export default {
     edit_data(){
        this.$refs['formAll'].validate(valid=>{
         if(valid){
-            if(typeof(this.formAll.areaCode)!=='string')
-            {
-            if(this.formAll.area){
-               this.areaStatus = this.formAll.areaCode[2]
-            }
-            else{
-               this.areaStatus = this.formAll.areaCode[1]
-            }
-            }
-      else{
-           this.areaStatus = this.formAll.areaCode
-          }
            let forms={
-            areaCode:this.areaStatus,
+            areaCode:this.formAll.areaCode,
             province:this.formAll.province,
             city:this.formAll.city,
             area:this.formAll.area,

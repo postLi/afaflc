@@ -36,13 +36,7 @@
                     </span>
                     <span v-else>
                     <el-form-item label="所在地 ：" :label-width="formLabelWidth" prop="areaName">
-                   <el-cascader
-                    size="large"
-                    :options="options"
-                    v-model="formAll.areaName"
-                    @change="handleChange"
-                    >
-                    </el-cascader>
+                    <GetCityList ref="area" v-model="formAll.areaName"  @returnStr="getStr"></GetCityList>
                     </el-form-item>
                     </span>
                 </el-col>
@@ -107,15 +101,9 @@
                      <div class="manageDistrict_th table_w4">操作</div>
                  </div>
                  <div class="manageDistrict_tr">
-                     <div class="manageDistrict_td table_w1"> 
-                    <el-cascader
-                    size="large"
-                    :options="options"
-                    v-model="formAll.aflcPartnerAreaList[keys].areaName"
-                    @change="handleChange1"
-                    @focus="changeInput(keys)"
-                    >
-                    </el-cascader></div>
+                     <div class="manageDistrict_td table_w1" @click="changeInput(keys)">
+                      <GetCityList ref="area" v-model="formAll.aflcPartnerAreaList[keys].areaName"  @returnStr="getStr1"></GetCityList>
+                      </div>
                      <div class="manageDistrict_td table_w2">
                     <el-date-picker
                     v-model="formAll.aflcPartnerAreaList[keys].contractStartDate"
@@ -173,7 +161,7 @@
 </template>
 <script>
 import {data_get_aflcPartner_create,data_get_aflcTradeArea_Id,data_get_aflcPartner_findAuthCompany} from '@/api/users/district/manageDistrict.js'
-import { regionDataPlus, CodeToText, TextToCode } from 'element-china-area-data'
+import GetCityList from '@/components/GetCityList/city'
 import { eventBus } from '@/eventBus'
 import Upload from '@/components/Upload/singlei'
 export default {
@@ -302,7 +290,6 @@ export default {
         isVip:'0',
         areaStatus:null,    
         selectFlag:null,
-        options:regionDataPlus,
         dialogFormVisible_add: false,
         formLabelWidth:'160px',
         inputKey:null,
@@ -310,8 +297,8 @@ export default {
             partnerCompany:null,
             partnerName:null,
             mobile:null,
-            areaName:[],
-            areaCode: [],
+            areaName:null,
+            areaCode: null,
             province:null,
             city:null,
             area:null,
@@ -319,8 +306,8 @@ export default {
             contractStartDate:null,
             contractEndDate:null,
             aflcPartnerAreaList:[{
-            areaName: [],
-            areaCode: [],
+            areaName: null,
+            areaCode: null,
             province:null,
             city:null,
             area:null,
@@ -354,7 +341,8 @@ export default {
         }
   },
   components:{
-      Upload
+      Upload,
+      GetCityList
   },
   watch:{
    dialogFormVisible_add:{
@@ -365,8 +353,8 @@ export default {
                  this.formAll.address = null;
                  this.selectFlag = null;
                 this.formAll.aflcPartnerAreaList=[{
-                areaName: [],
-                areaCode: [],
+                areaName: null,
+                areaCode: null,
                 province:null,
                 city:null,
                 area:null,
@@ -421,7 +409,7 @@ export default {
       handblur(i){
      this.formAll.partnerName = null
      this.formAll.mobile = null
-     this.formAll.areaName = []
+     this.formAll.areaName = null
      this.inputdisabled = false
      this.companyId = null
       },
@@ -435,50 +423,22 @@ export default {
       fileNmeChange(i){
       this.formAll.aflcPartnerFileList[this.selectIndex].fileName = i
       },
-        handleChange(d){
-           console.log('d',d)
-           if(d.length<3){
-                this.$message.info('请选择具体的城市');
-                this.formAll.areaName = [];
-                this.formAll.areaCode = [];
-                this.formAll.province = null
-                this.formAll.city = null
-                this.formAll.area = null
-           }
-           else{
-                this.formAll.areaCode = d
-                this.formAll.province = CodeToText[d[0]]
-                this.formAll.city =  CodeToText[d[1]]
-                if(d[2]==''){
-                this.formAll.area = null
-                }
-                else{
-                this.formAll.area = CodeToText[d[2]]
-                }
-           }
-        },
-         handleChange1(d){
-           console.log('d',d)
-           if(d.length<3){
-                this.$message.error('请选择具体的城市');
-                this.formAll.aflcPartnerAreaList[this.inputKey].areaName = [];
-                this.formAll.aflcPartnerAreaList[this.inputKey].areaCode = [];
-                this.formAll.aflcPartnerAreaList[this.inputKey].province = null
-                this.formAll.aflcPartnerAreaList[this.inputKey].city = null
-                this.formAll.aflcPartnerAreaList[this.inputKey].area = null
-           }
-           else{
-                this.formAll.aflcPartnerAreaList[this.inputKey].areaCode = d
-                this.formAll.aflcPartnerAreaList[this.inputKey].province = CodeToText[d[0]]
-                this.formAll.aflcPartnerAreaList[this.inputKey].city =  CodeToText[d[1]]
-                if(d[2]==''){
-                this.formAll.aflcPartnerAreaList[this.inputKey].area = null
-                }
-                else{
-                this.formAll.aflcPartnerAreaList[this.inputKey].area = CodeToText[d[2]]
-                }
-           }
-        },  
+    getStr(val,name){
+                console.log('this.cityarr',val,name)
+                this.formAll.areaCode = val.split(',')[2];
+                this.formAll.areaName = name.split(',')[2];
+                this.formAll.province = name.split(',')[0];
+                this.formAll.city = name.split(',')[1];
+                this.formAll.area = name.split(',')[2];
+            }, 
+    getStr1(val,name){
+                console.log('this.cityarr',val,name)
+                this.formAll.aflcPartnerAreaList[this.inputKey].areaCode = val.split(',')[2];
+                this.formAll.aflcPartnerAreaList[this.inputKey].areaName = name.split(',')[2];
+                this.formAll.aflcPartnerAreaList[this.inputKey].province = name.split(',')[0];
+                this.formAll.aflcPartnerAreaList[this.inputKey].city = name.split(',')[1];
+                this.formAll.aflcPartnerAreaList[this.inputKey].area = name.split(',')[2];
+            }, 
 
    openDialog:function(){
          this.dialogFormVisible_add = true;
@@ -510,8 +470,8 @@ export default {
     // 合作区域新增
     addItem(){
            this.formAll.aflcPartnerAreaList.push({
-            areaName: [],
-            areaCode: [],
+            areaName: null,
+            areaCode: null,
             province:null,
             city:null,
             area:null,
@@ -585,42 +545,13 @@ export default {
             }
             else{        
        this.$refs['formAll'].validate(valid=>{
+           console.log('fdfdf',this.formAll)
         if(valid){
-            if(!this.inputdisabled){
-            if(this.formAll.area){
-               this.areaStatus = this.formAll.areaCode[2]
-            }
-            else{
-               this.areaStatus = this.formAll.areaCode[1]
-            }               
-            }
-            else{
-               this.areaStatus = this.areaCode
-            }
-            let aflcPartnerAreaList = []
-            this.formAll.aflcPartnerAreaList.map((list,index)=>{
-                    if(list.area){
-                       this.formAll.aflcPartnerAreaList[index].areaCode = this.formAll.aflcPartnerAreaList[index].areaCode[2]
-                    }
-                    else{
-                       this.formAll.aflcPartnerAreaList[index].areaCode = this.formAll.aflcPartnerAreaList[index].areaCode[1]
-                    }
-                        aflcPartnerAreaList.push(
-                            {
-                                province:list.province,
-                                city:list.city,
-                                area:list.area,     
-                                areaCode:list.areaCode,          
-                                contractStartDate:list.contractStartDate,
-                                contractEndDate:list.contractEndDate,       
-                            }
-                        )
-            })
         let forms=[
             {
             companyId:this.companyId,
             openAdminManage: this.isVip,
-            areaCode:this.areaStatus,
+            areaCode:this.formAll.areaCode,
             province:this.formAll.province,
             city:this.formAll.city,
             area:this.formAll.area,
@@ -633,7 +564,7 @@ export default {
             contractStartDate:this.formAll.contractStartDate, 
             contractEndDate:this.formAll.contractEndDate,
             aflcPartnerFileList:this.formAll.aflcPartnerFileList,
-            aflcPartnerAreaList:aflcPartnerAreaList,
+            aflcPartnerAreaList:this.formAll.aflcPartnerAreaList,
         }]
            this.dialogFormVisible_add = false;        
         data_get_aflcPartner_create(forms).then(res=>{
@@ -721,5 +652,8 @@ export default {
             height: 40px;
             color: #3e9ff1;
         }
+}
+.info_news .shoppingDialog .el-button{
+        padding: 0px 15px 0px;
 }
 </style>

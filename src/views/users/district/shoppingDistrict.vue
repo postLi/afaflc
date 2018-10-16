@@ -2,12 +2,7 @@
     <div style="height:100%;"  class="identicalStyle District">
           <el-form :inline="true" class="classify_searchinfo">
             <el-form-item label="所在地：">
-                   <el-cascader
-                    size="large"
-                    :options="options"
-                    v-model="formAllData.areaName"
-                    @change="handleChange">
-                    </el-cascader>
+                <GetCityList ref="area" v-model="formAllData.areaName"  @returnStr="getStr"></GetCityList>
             </el-form-item>
             <el-form-item label="商圈名称：">
                 <el-input v-model="formAllData.tradeName"></el-input>
@@ -94,7 +89,7 @@
 
 <script>
 import {data_get_aflcTradeArea_list,data_Del_aflcTradeArea,data_Able_aflcTradeArea} from '@/api/users/district/shoppingDistrict.js'
-import { regionDataPlus, CodeToText, TextToCode } from 'element-china-area-data'
+import GetCityList from '@/components/GetCityList/city'
 import shoppingCread from './shoppingCread.vue'
 import shoppingDialog from './shoppingDialog.vue'
 import Pager from '@/components/Pagination/index'
@@ -103,7 +98,6 @@ export default {
     data(){
         return{
             templateRadio: '',
-            options:regionDataPlus,
             btnsize:'mini',
             selectRowData:{},
             page:1,
@@ -115,13 +109,16 @@ export default {
                 areaCode: null,
                 tradeName:null,
                 tradeOwner:null,
+                areaCode:null,
+                areaName:null,
             }
         }
     },
     components:{
     shoppingCread,
     shoppingDialog,
-    Pager
+    Pager,
+    GetCityList
     },
     mounted(){
         this.firstblood();
@@ -130,60 +127,15 @@ export default {
           })
     },
     methods:{
-        handleChange(d){
-           console.log('d',d)
-           if(d.length<3){
-                if(d.length==2){
-                this.$message.error('请选择具体的城市');
-                }
-                this.formAllData.areaCode = null;
-                this.formAllData.province = null,
-                this.formAllData.city = null,
-                this.formAllData.area = null,
-                this.formAllData.areaName = [];
-           }
-           else{
-                this.formAllData.areaCode = d
-                this.formAllData.province = CodeToText[d[0]]
-                this.formAllData.city =  CodeToText[d[1]]
-                if(d[2]==''){
-                this.formAllData.area = ''
-                }
-                else{
-                this.formAllData.area = CodeToText[d[2]]
-                }
-           }
-        },
+    getStr(val,name){
+                console.log('this.cityarr',val,name)
+                this.formAllData.areaCode = val.split(',')[2];
+                this.formAllData.areaName = name.split(',')[2];
+            },  
+
     // 列表刷新页面  
         firstblood(){
-                let FromData = {}
-                if(this.formAllData.area) {
-                    FromData = {
-                     area:this.formAllData.area,
-                     city:null,
-                     tradeName:this.formAllData.tradeName,
-                     tradeOwner:this.formAllData.tradeOwner,               
-                    }
-                }
-                else if(this.formAllData.city){
-                    FromData = {
-                     area:null,
-                     city:this.formAllData.city,
-                     tradeName:this.formAllData.tradeName,
-                     tradeOwner:this.formAllData.tradeOwner,                 
-                    }                    
-                }   
-                else{
-                    FromData = {
-                     area:null,
-                     city:null,
-                     tradeName:this.formAllData.tradeName,
-                     tradeOwner:this.formAllData.tradeOwner,
-                                      
-                    }  
-                }     
-
-        data_get_aflcTradeArea_list(this.page,this.pagesize,FromData).then(res=>{
+        data_get_aflcTradeArea_list(this.page,this.pagesize,this.formAllData).then(res=>{
             console.log('res',res)
                     this.dataTotal = res.data.totalCount
                     this.tableDataAll = res.data.list;

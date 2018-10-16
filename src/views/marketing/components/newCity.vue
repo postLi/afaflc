@@ -194,7 +194,7 @@ export default {
 
     //    开始抽佣单数校验
     const startNumValidator = (rule, val, cb) => {
-      var reg = /[^\d.]/g
+      var reg = /[^\d]/g
       if (!val) {
         cb(new Error('开始抽佣不能为空'))
       } else if (reg.test(val)) {
@@ -206,7 +206,7 @@ export default {
 
     //    结束抽佣单数校验
     const endNumValidator = (rule, val, cb) => {
-      var reg = /[^\d.]/g
+      var reg = /[^\d]/g
       if (!val) {
         cb(new Error(' 结束抽佣不能为空'))
       } else if (reg.test(val)) {
@@ -218,7 +218,7 @@ export default {
 
     //    每单抽佣比例校验
     const commissionPerValidator = (rule, val, cb) => {
-      var reg = /[^\d.]/g
+      var reg = /[^\d]/g
       if (!val) {
         cb(new Error('每单抽佣比例不能为空'))
       } else if (reg.test(val)) {
@@ -230,7 +230,7 @@ export default {
 
     //    至少抽佣金额校验
     const commissionLowestValidator = (rule, val, cb) => {
-      var reg = /[^\d.]/g
+      var reg = /[^\d]/g
       if (!val) {
         cb(new Error(' 至少抽佣金额不能为空'))
       } else if (reg.test(val)) {

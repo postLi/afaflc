@@ -2,15 +2,16 @@
     <div style="height:100%;"  class="identicalStyle District">
           <el-form :inline="true" class="classify_searchinfo">
             <el-form-item label="所在地：">
-                   <el-cascader
-                    size="large"
-                    :options="options"
-                    v-model="formAllData.areaName"
-                    @change="handleChange">
-                    </el-cascader>
+                <GetCityList ref="area" v-model="formAllData.areaName"  @returnStr="getStr"></GetCityList>
             </el-form-item>
             <el-form-item label="区代公司名称：">
-                <el-input v-model="formAllData.partnerCompany"></el-input>
+                        <el-autocomplete
+                        class="inline-input"
+                        v-model="formAllData.partnerCompany"
+                        :fetch-suggestions="querySearch"
+                        placeholder="请输入内容"
+                        @select="handleSelect"
+                        ></el-autocomplete>
             </el-form-item>
             <el-form-item class="fr"> 
                 <el-button type="primary" plain :size="btnsize"  @click="getdata_search" icon="el-icon-search">搜索</el-button>
@@ -86,8 +87,8 @@
 </template>
 
 <script>
-import {data_get_aflcPartner_list,data_Del_aflcPartner,data_Able_aflcPartner} from '@/api/users/district/manageDistrict.js'
-import { regionDataPlus, CodeToText, TextToCode } from 'element-china-area-data'
+import {data_get_aflcPartner_list,data_Del_aflcPartner,data_Able_aflcPartner,data_get_aflcPartner_findAuthCompany} from '@/api/users/district/manageDistrict.js'
+import GetCityList from '@/components/GetCityList/city'
 import manageDistrictCread from './manageDistrictCread.vue'
 import { parseTime,formatTime } from '@/utils/index.js'
 import manageDistrictDialog from './manageDistrictDialog.vue'
@@ -97,8 +98,8 @@ export default {
     data(){
         return{
             templateRadio: '',
-            options:regionDataPlus,
             btnsize:'mini',
+            restaurants:[],
             selectRowData:{},
             page:1,
             pagesize:20,
@@ -114,66 +115,46 @@ export default {
     components:{
     manageDistrictCread,
     manageDistrictDialog,
-    Pager
+    Pager,
+    GetCityList
     },
     mounted(){
         this.firstblood();
         eventBus.$on('pushListtwo', () => {
                 this.firstblood()
           })
+         let FromData = {companyName:null,}
+        data_get_aflcPartner_findAuthCompany(1, 1000, FromData).then(res=>{
+         let restaurantsData = res.data;
+         restaurantsData.map(res=>{
+             this.restaurants.push({
+                 value:res.companyName})
+             console.log(this.restaurants)
+         })
+         
+        })
+
     },
     methods:{
-        handleChange(d){
-           console.log('d',d)
-           if(d.length<3){
-                if(d.length==2){
-                this.$message.error('请选择具体的城市');
-                }
-                this.formAllData.areaCode = null;
-                this.formAllData.province = null,
-                this.formAllData.city = null,
-                this.formAllData.area = null,
-                this.formAllData.areaName = [];
-           }
-           else{
-                this.formAllData.areaCode = d
-                this.formAllData.province = CodeToText[d[0]]
-                this.formAllData.city =  CodeToText[d[1]]
-                if(d[2]==''){
-                this.formAllData.area = ''
-                }
-                else{
-                this.formAllData.area = CodeToText[d[2]]
-                }
-           }
-        },
+      getStr(val,name){
+                console.log('this.cityarr',val,name)
+                this.formAllData.areaCode = val.split(',')[2];
+            },  
+    //   区代公司名称
+      querySearch(queryString, cb) {
+        var restaurants = this.restaurants;
+        var results = queryString ? restaurants.filter(this.createFilter(queryString)) : restaurants;
+        // 调用 callback 返回建议列表的数据
+        cb(results);
+      },
+      createFilter(queryString) {
+        return (restaurant) => {
+          return (restaurant.value.indexOf(queryString) === 0);
+        };
+      },
     // 列表刷新页面  
         firstblood(){
-                let FromData = {}
-                if(this.formAllData.area) {
-                    FromData = {
-                     area:this.formAllData.area,
-                     city:null,
-                     partnerCompany:this.formAllData.partnerCompany,           
-                    }
-                }
-                else if(this.formAllData.city){
-                    FromData = {
-                     area:null,
-                     city:this.formAllData.city,
-                     partnerCompany:this.formAllData.partnerCompany,          
-                    }                    
-                }   
-                else{
-                    FromData = {
-                     area:null,
-                     city:null,
-                     partnerCompany:this.formAllData.partnerCompany,
-                                      
-                    }  
-                }     
-
-        data_get_aflcPartner_list(this.page,this.pagesize,FromData).then(res=>{
+        data_get_aflcPartner_list(this.page,this.pagesize,this.formAllData).then(res=>{
                     this.dataTotal = res.data.totalCount
                     this.tableDataAll = res.data.list;
                     this.tableDataAll.forEach(item => {
@@ -200,6 +181,10 @@ export default {
      console.log('选中内容',val)
      this.selectRowData = val;
    },
+      handleSelect(item) {
+          this.formAllData.partnerCompany = item.value
+      },
+
     //点击选中当前行
     clickDetails(row, event, column){
       this.$refs.multipleTable.toggleRowSelection(row);
