@@ -28,7 +28,7 @@ export function postListAppShipperComplain(page, pagesize, data) {
   "reporterType": "string"
 }
  */
-export function postReportClaim(data) {
+export function postReportComplain(data) {
   return fetch({
     url: '/' + baseurl + '/order/aflcOrderComplain/v1/reportComplain',
     method: 'post',
@@ -41,6 +41,26 @@ export function postReportClaim(data) {
 export function getListAppShipperComplainByOrderSerial(id) {
   return fetch({
     url: '/' + baseurl + '/order/aflcOrderComplain/v1/listAppShipperComplainByOrderSerial/' + id,
+    method: 'get'
+  })
+}
+/**
+ * 投诉跟进/order/aflcOrderGoodsfollowup/v1/addComplain
+ */
+export function postAddComplain(data) {
+  return fetch({
+    url: '/' + baseurl + '/order/aflcOrderGoodsfollowup/v1/addComplain',
+    method: 'post',
+    data: data
+  })
+}
+/**
+ * 改变受理状态/order/aflcOrderComplain/v1/updateDealStatus/{id}
+ *
+ */
+export function getUpdateDealStatus(id) {
+  return fetch({
+    url: '/' + baseurl + '/order/aflcOrderComplain/v1/updateDealStatus/' + id,
     method: 'get'
   })
 }
