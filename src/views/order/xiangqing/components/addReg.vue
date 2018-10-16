@@ -86,9 +86,9 @@ export default {
       type: Boolean,
       default: false
     },
-    isComreg:{
-      type:Boolean,
-      default:false
+    isComreg: {
+      type: Boolean,
+      default: false
     },
     belongCity: {
       type: [Number, String]
@@ -96,7 +96,7 @@ export default {
   },
   data() {
     return {
-      popTitle:'',
+      popTitle: '',
       btnsize: 'mini',
       sizes: [30, 50, 100],
       dataset: [],
@@ -156,10 +156,10 @@ export default {
     //   },
     //   immediate: true
     // },
-    isMatreg:{
-      handler(newVal){
-        if(this.isMatreg){
-          this.popTitle ="物损登记"
+    isMatreg: {
+      handler(newVal) {
+        if (this.isMatreg) {
+          this.popTitle = '物损登记'
           this.$set(this.formAllData, 'id', this.rowid)
           this.formAllData = {}
           console.log(this.isMatreg)
@@ -167,14 +167,14 @@ export default {
       },
       immediate: true
     },
-    isComreg:{
-      handler(newVal){
-        if(this.isComreg){
-          this.popTitle= "投诉登记"
+    isComreg: {
+      handler(newVal) {
+        if (this.isComreg) {
+          this.popTitle = '投诉登记'
           console.log(this.isComreg)
         }
       },
-      immediate:true
+      immediate: true
     }
   },
   mounted() {
@@ -277,7 +277,6 @@ export default {
     }
   }
 }
-
 </script>
 <style lang="scss">
 .wzlReg{
