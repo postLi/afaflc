@@ -156,7 +156,7 @@
             </el-form-item>
             <el-form-item class="clearfix imgbox" label="物损图片" prop="claimPic1">
               <div class="clearfix uploadcard">
-                <upload v-model="formAllData.claimPic1" :title="'本地上传'" :showFileList="true" :limit="4" listtype="picture"/>
+                <upload v-model="searchForm.claimPic1" :title="'本地上传'" :showFileList="true" :limit="4" listtype="picture"/>
               </div>
             </el-form-item>
           </el-form>
@@ -263,6 +263,7 @@ export default {
       handler(newVal) {
         if (newVal) {
           this.searchForm = {}
+          this.firstblood()
         }
       },
       immediate: true
@@ -381,9 +382,9 @@ export default {
               this.$emit('success')
             }).catch(err => {
               this.$message({
-              type: 'error',
-              message: err.errorInfo || err.text || '未知错误，请重试~'
-            })
+                type: 'error',
+                message: err.errorInfo || err.text || '未知错误，请重试~'
+              })
               this.loading = false
             })
           } else {

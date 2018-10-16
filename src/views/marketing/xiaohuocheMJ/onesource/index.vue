@@ -1,7 +1,7 @@
 <template>
     <div class="identicalStyle MjD" style="height:100%">
           <el-form :inline="true"  class="demo-ruleForm classify_searchinfo">
-            <el-form-item label="所在地：">
+            <el-form-item label="所属区域：">
               <GetCityList v-model="formAll.areaCode" ref="area"></GetCityList>
           </el-form-item>
            <el-form-item label="服务类型">
@@ -68,12 +68,12 @@
             </el-col>
              <el-col :span="12">
                 <span v-if="creadFlag">
-               <el-form-item label="省市：" :label-width="formLabelWidth">
+               <el-form-item label="所属区域：" :label-width="formLabelWidth">
                 <el-input v-model="vestAll.areaName" disabled></el-input>
                 </el-form-item>
                  </span>
                  <span v-else>
-            <el-form-item label="省市：" :label-width="formLabelWidth" prop="areaCode">
+            <el-form-item label="所属区域：" :label-width="formLabelWidth" prop="areaCode">
                 <GetCityList v-model="vestAll.areaCode" ref="area1" @returnStr="getStr"></GetCityList>
             </el-form-item>
                  </span>
@@ -169,15 +169,13 @@
             </el-form-item>
             </el-col>
              <el-col :span="12">
-
-            
                  <span v-if="openFlag==0">
-                      <el-form-item label="省市：" :label-width="formLabelWidth">
+                      <el-form-item label="所属区域：" :label-width="formLabelWidth">
                 <el-input v-model="selectRowData3.areaName" disabled></el-input>
                       </el-form-item>
                  </span>
                  <span v-else>
-                    <el-form-item label="省市：" :label-width="formLabelWidth" prop="areaCode">
+                    <el-form-item label="所属区域：" :label-width="formLabelWidth" prop="areaCode">
                  <el-input v-model="selectRowData3.areaName"  @focus="changeSelect" v-if="openFlag !==0 && !selectFlag"></el-input>
                 <GetCityList ref="area2" v-model="selectRowData3.areaCode"  @focus="changeSelect" v-else @returnStr="getStr1"></GetCityList>
                     </el-form-item>
@@ -221,10 +219,10 @@
         <el-table-column  label="序号" width="80px" type="index">
             
         </el-table-column>
-        <el-table-column  label="提货地"  prop="endAddress" show-overflow-tooltip>
+        <el-table-column  label="提货地"  prop="startAddress" show-overflow-tooltip>
             
         </el-table-column>
-        <el-table-column  label="目的地" prop="startAddress" show-overflow-tooltip>
+        <el-table-column  label="目的地" prop="endAddress" show-overflow-tooltip>
             
         </el-table-column>
         <el-table-column  label="里程（公里）" prop="distance">
@@ -273,7 +271,7 @@
    <el-table-column  label="片区名称" prop="districtName" sortable show-overflow-tooltip>
        
    </el-table-column>
-   <el-table-column  label="省市" prop="areaName" sortable>
+   <el-table-column  label="所属区域" prop="areaName" sortable>
        
    </el-table-column>
 
@@ -719,7 +717,6 @@ export default {
             },
          //详情表查询
             getdata_search2(){
-
              this.firstblood2();
             },
         // 详情表清空

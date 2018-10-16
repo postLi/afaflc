@@ -1,7 +1,7 @@
 <template>
     <div class="identicalStyle MjD" style="height:100%">
           <el-form :inline="true"  class="demo-ruleForm classify_searchinfo">
-            <el-form-item label="所在地：">
+            <el-form-item label="所属区域：">
               <GetCityList v-model="formAll.areaCode" ref="area"></GetCityList>
           </el-form-item>
            <el-form-item label="服务类型">
@@ -39,7 +39,7 @@
                              {{ (page - 1)*pagesize + scope.$index + 1 }}
                             </template>
             </el-table-column> 
-   <el-table-column  label="省市" prop="areaName" sortable>
+   <el-table-column  label="所属区域" prop="areaName" sortable>
    </el-table-column>
    <el-table-column  label="服务类型" prop="serivceCodeName" sortable>
    </el-table-column>

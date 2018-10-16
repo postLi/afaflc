@@ -1,7 +1,7 @@
 <template>
   <div  class="wzlAddgenjing">
     <el-dialog
-      title="记录物损跟进"
+      :title='popTitle'
       :visible.sync="isShow"
       width="30%"
       center
@@ -15,7 +15,7 @@
         <el-form-item prop="code" >
           <el-checkbox v-model="formAllData.code">是否处理完毕</el-checkbox>
         </el-form-item>
-        <el-form-item class="goodsclaimDes" label="投诉跟进" prop="goodsclaimDes">
+        <el-form-item class="goodsclaimDes" :label="isClaim?'物损跟进':'投诉跟进'" prop="goodsclaimDes">
           <el-input v-model="formAllData.goodsclaimDes" type="textarea" :maxlength="200" style="width:100%" placeholder="投诉跟进最多输入200个字符"></el-input>
         </el-form-item>
         <el-form-item class="clearfix imgbox" label="上传附件" prop="fileAddress">
@@ -50,6 +50,7 @@ import Pager from '@/components/Pagination/index'
 import Upload from '@/components/Upload/multImage'
 import { DicClaimStatusType } from '@/api/common'
 import { postReportClaimAdd } from '@/api/service/claim.js'
+import {postAddComplain} from '@/api/service/dispose.js'
 import { objectMerge2 } from '@/utils/index'
 export default {
   computed: {
@@ -71,11 +72,19 @@ export default {
     },
     rowid: {
       type: [Number, String]
+    },
+    isDispose:{
+      type:Boolean,
+      default:false
+    },
+    isClaim:{
+      type:Boolean,
+      default:false
     }
   },
   data() {
     return {
-      popTitle:'',
+      popTitle: '',
       btnsize: 'mini',
       sizes: [30, 50, 100],
       dataset: [],
@@ -102,15 +111,15 @@ export default {
         followName: [
           { required: true, message: '请输入跟进人' }
         ],
-        goodsclaimDes:[
+        goodsclaimDes: [
           { required: true, message: '投诉跟进内容最多可输入200个字符' }
         ],
-        fileAddress:[
+        fileAddress: [
           { required: true, message: '至少上传一张图片' }
         ]
       },
       formAllData: {
-        // goodsclaimId:'',
+        // goodsclaimId: '',
         code: false,
         fileAddress: '', // 附件地址
         followName: '', // 跟进人
@@ -121,12 +130,27 @@ export default {
     }
   },
   watch: {
-    isShow: {
-      handler(newVal) {
-        if (newVal) {
-          this.$set(this.formAllData, 'id', this.rowid)
-          this.formAllData = {}
-          // console.log(this.formAllData.id)
+    // isShow: {
+    //   handler(newVal) {
+    //     if (newVal) {
+    //       // this.$set(this.formAllData, 'goodsclaimId', this.rowid)
+    //       // this.formAllData.goodsclaimId = this.rowid
+    //       this.formAllData = {}
+    //       console.log(this.formAllData.goodsclaimId)
+    //     }
+    //   }
+    // }
+    isClaim:{
+      handler(newVal){
+        if(this.isClaim){
+          this.popTitle = '记录物损跟进'
+        }
+      }
+    },
+    isDispose:{
+      handler(newVal){
+        if(this.isDispose){
+          this.popTitle = '记录投诉跟进'
         }
       }
     }
@@ -227,9 +251,15 @@ export default {
             this.formAllData.code = 0
           }
           this.$set(this.formAllData, 'goodsclaimId', this.rowid)
-          console.log(this.formAllData)
           const data = objectMerge2({}, this.formAllData)
-          postReportClaimAdd(data).then(res => {
+          // console.log(this.formAllData)
+          let promiseObj
+          if(this.isClaim){
+            promiseObj = postReportClaimAdd(data)
+          }else if(this.isDispose){
+            promiseObj = postAddComplain(data)
+          }
+          promiseObj.then(res => {
             this.$message({
               message: '保存成功~',
               type: 'success'

@@ -38,7 +38,7 @@
                             prop="name"
                             label="是否处理完毕">
                         </el-table-column>
-                         <el-table-column
+                        <el-table-column
                             prop="fileAddress"
                             label="附件">
                             <template slot-scope="scope">
@@ -89,7 +89,8 @@
                 width="300"
                 >
                 <template slot-scope="scope">
-                  <img :src='scope.row.claimPic1' alt="" v-showPicture>
+                  <!-- <img :src='scope.row.claimPic1' alt="" v-showPicture> -->
+                  <img :src='item.url' alt="" v-showPicture v-for="item in scope.row.bigImgArr" :key="item.name" />
                 </template>
                 <!-- <template slot-scope="scope">
                     {{scope.row.driverName}} - {{scope.row.driverPhone}}
@@ -138,7 +139,7 @@
             </el-table-column>
         </el-table>
         <el-button type="success" class="btnReg" size="mini" @click="handleEdit3">物损登记</el-button>
-        <add :centerDialogVisible="centerDialogVisible" @close="closeAdd" @success="getSuccess"></add>
+        <add :rowid="rowid" :isClaim="isClaim" :centerDialogVisible="centerDialogVisible" @close="closeAdd" @success="getSuccess"></add>
         <addReg :isMatreg="isMatreg" :centerDialogVisibleReg="centerDialogVisibleReg" @close="closeAddReg" @success="getSuccess"></addReg>
         <!-- <div class="info_tab_footer">共计:{{ totalCount }} <div class="show_pager"> <Pager :total="totalCount" @change="handlePageChange" :sizes="sizes"/></div> </div>     -->
     </div>
@@ -175,6 +176,7 @@ export default {
       // tableData: null,
       expands: [],
       isMatreg: false,
+      isClaim:false,
       tableData: [],
       tableData1: [],
       rowid: '',
@@ -307,7 +309,7 @@ export default {
     },
     getSuccess() {
       this.firstblood()
-      // this.getListSmall()
+      this.getListSmall()
     },
     firstblood() {
       // this.loading = false
@@ -317,6 +319,18 @@ export default {
         // this.dataTotal = res.data.totalCount
         this.tableData = res.data
         // console.log(res.data)
+        this.tableData.forEach((e, index) => {
+          let arr = []
+          const bigImgArr = []
+          arr = e.claimPic1.split(',')
+          arr.forEach((el, index) => {
+            bigImgArr.push({
+              url: el
+            })
+          })
+          this.$set(e, 'bigImgArr', bigImgArr)
+        })
+        console.log('tableData----------', this.tableData)
       })
     },
     getListSmall() {
@@ -371,17 +385,19 @@ export default {
     },
     handleEdit1(index, row) {
       if (row.dealStatus === '待处理') {
-        getUpdateDealStatus(this.rowid).then(res => {
-          // console.log(res)
-          this.firstblood()
-          this.$message({
-            message: '受理成功~',
-            type: 'success'
-          })
+        getUpdateDealStatus(row.id).then(res => {
+          if (res) {
+            this.firstblood()
+            this.$message({
+              message: '受理成功~',
+              type: 'success'
+            })
+          }
         })
       } else {
         this.centerDialogVisible = true
-        console.log(this.centerDialogVisible)
+        this.isClaim = true
+        // console.log(this.centerDialogVisible)
       }
     },
     handleEdit2() {
@@ -394,6 +410,7 @@ export default {
     },
     closeAdd() {
       this.centerDialogVisible = false
+      this.isClaim = false
     },
     closeAddReg() {
       this.centerDialogVisibleReg = false
@@ -463,7 +480,7 @@ export default {
       font-size: 16px;
     }
   }
-    .animated {
+.animated {
   -webkit-animation-duration: 0.5s;
   animation-duration: 0.5s;
   -webkit-animation-fill-mode: both;

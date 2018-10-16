@@ -92,7 +92,7 @@ export function postReportClaim(data) {
 }
 
 /**
- * 记录投诉跟进 /order/aflcOrderGoodsfollowup/v1/add新增记录物损跟进表
+ * 记录物损跟进 /order/aflcOrderGoodsfollowup/v1/add新增记录物损跟进表
  */
 
 export function postReportClaimAdd(data) {

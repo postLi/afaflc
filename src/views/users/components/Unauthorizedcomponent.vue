@@ -3,9 +3,7 @@
          <div class="shipper_searchinfo">
             <el-form inline  class="demo-ruleForm classify_searchinfo">
                 <el-form-item label="所在地：">
-                    <vregion :ui="true"  @values="regionChange" class="form-control">
-                        <el-input v-model="formInline.belongCityName" placeholder="请选择"></el-input>
-                    </vregion>
+                <GetCityList ref="area" v-model="formInline.belongCityName"  @returnStr="getStr"></GetCityList>
                 </el-form-item>
                 <el-form-item label="手机号：">
                     <el-input placeholder="请输入内容" v-model.trim="formInline.driverMobile" clearable></el-input>
@@ -120,7 +118,7 @@
 </template>
 <script type="text/javascript">
     import {data_get_driver_list,data_get_driver_status} from '@/api/users/carowner/total_carowner.js'
-    import vregion from '@/components/vregion/Region'
+    import GetCityList from '@/components/GetCityList/city'
     import { eventBus } from '@/eventBus'
     import { parseTime,formatTime } from '@/utils/index.js'
     import Pager from '@/components/Pagination/index'
@@ -134,7 +132,7 @@
         },
         components:{
             DriverNewTemplate,
-            vregion,
+            GetCityList,
             Pager
         },
         data(){
@@ -175,21 +173,11 @@
         },
          
         methods:{
-            regionChange(d) {
-                console.log('data:',d)
-                this.formInline.belongCityName = (!d.province&&!d.city&&!d.area&&!d.town) ? '': `${this.getValue(d.province)}${this.getValue(d.city)}${this.getValue(d.area)}${this.getValue(d.town)}`.trim();
-                if(d.area){
-                    this.formInline.belongCity = d.area.code;
-                }else if(d.city){
-                    this.formInline.belongCity = d.city.code;
-                }
-                else{
-                    this.formInline.belongCity = d.province.code;
-                }
-            },
-            getValue(obj){
-                return obj ? obj.value:'';
-            },
+            getStr(val,name){
+                console.log('this.cityarr',val,name)
+                this.formInline.belongCity = val.split(',')[2];
+                this.formInline.belongCityName = name.split(',')[2];
+            },   
             clearSearch(){
                 this.formInline={//查询条件
                     driverMobile:null,

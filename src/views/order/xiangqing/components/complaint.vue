@@ -9,37 +9,43 @@
             style="width: 100%">
             <el-table-column type="expand">
                 <template slot-scope="props">
-                    <el-table
-                        :data="props.row.tableData1"
-                        border
-                        style="width: 100%">
-                        <el-table-column
-                            prop="date"
-                            label="跟进人"
-                            width="180">
-                        </el-table-column>
-                        <el-table-column
-                            prop="name"
-                            label="跟进时间"
-                            width="180">
-                        </el-table-column>
-                        <el-table-column
-                            prop="address"
-                            label="物损跟进">
-                        </el-table-column>
-                        <el-table-column
-                            prop="address"
-                            label="是否处理完毕">
-                        </el-table-column>
-                         <el-table-column
-                            prop="address"
-                            label="附件">
-                        </el-table-column>
-                         <el-table-column
-                            prop="address"
-                            label="操作">
-                        </el-table-column>
-                    </el-table>
+                  <el-table
+                    class="animated fadeInRight"
+                      :data="tableData1"
+                      border
+                      style="width: 100%">
+                      <el-table-column
+                          prop="followName"
+                          label="跟进人"
+                          width="180">
+                      </el-table-column>
+                      <el-table-column
+                          prop=""
+                          label="跟进时间"
+                          width="180">
+                          <template  slot-scope="scope">
+                            <span class="orderSerial">
+                              {{ scope.row.followupTime | parseTime('{y}-{m}-{d} {h}:{i}:{s}')}}    
+                            </span>
+                          </template>
+                      </el-table-column>
+                      <el-table-column
+                          prop="goodsclaimDes"
+                          label="投诉跟进">
+                      </el-table-column>
+                      <el-table-column
+                          prop="name"
+                          label="是否处理完毕">
+                      </el-table-column>
+                      <el-table-column
+                        prop="fileAddress"
+                        label="附件">
+                        <template slot-scope="scope">
+                            <img :src='item.url' alt="" v-showPicture v-for="item in scope.row.imgArr" :key="item.name" />
+                            <el-button type="text" v-for="txtitem in scope.row.txtArr" :key="txtitem.name" @click="openTxt(txtitem.url)">{{txtitem.name}}</el-button>
+                        </template>
+                      </el-table-column>
+                  </el-table>
                 </template>
             </el-table-column>
             <el-table-column
@@ -49,40 +55,44 @@
                 >
             </el-table-column>
              <el-table-column
-                prop="date"
+                prop="complainStatusName"
                 label="处理状态"
                 width="150"
                 >
             </el-table-column>
             <el-table-column
+                prop="complainTypeName"
                 label="投诉分类"
                 width="180"
                 >
             </el-table-column>
             <el-table-column
                 :show-overflow-tooltip="true"
-                prop="address"
+                prop="complainDes"
                 label="投诉内容"
                 >
             </el-table-column>
             <el-table-column
-                prop="driverDistance"
+                prop=""
                 label="投诉人"
                 width="200"
                 >
+                <template slot-scope="scope">
+                  {{scope.row.phone ? scope.row.phone  : ''}}{{ scope.row.complainName ? scope.row.complainName : ''}}
+                </template>
             </el-table-column>
              <el-table-column
-                prop="address"
+                prop="reporterType"
                 label="投诉人类型"
                 width="120">
             </el-table-column>
             <el-table-column
-                prop="address"
+                prop="complainTime"
                 label="投诉时间"
                 width="160">
                 <template  slot-scope="scope">
                   <span class="orderSerial">
-                    {{ scope.row.createTime | parseTime('{y}-{m}-{d} {h}:{i}:{s}')}}    
+                    {{ scope.row.complainTime | parseTime('{y}-{m}-{d} {h}:{i}:{s}')}}    
                   </span>
                 </template>
             </el-table-column>
@@ -92,10 +102,10 @@
                  <template slot-scope="scope">
                     <el-button
                     plain
-                    :type="scope.row.dealStatus === '处理中' ? 'warning': 'primary'"
-                    v-if="scope.row.dealStatus ==='待处理' || scope.row.dealStatus === '处理中'"
+                    :type="scope.row.complainStatusName === '处理中' ? 'warning': 'primary'"
+                    v-if="scope.row.complainStatusName ==='待处理' || scope.row.complainStatusName === '处理中'"
                     size="mini"
-                    @click="handleEdit1(scope.$index, scope.row)">{{scope.row.dealStatus==='待处理' ? '确认受理': (scope.row.dealStatus === '处理中' ? '记录投诉跟进': '')}}</el-button>
+                    @click="handleEdit1(scope.$index, scope.row)">{{scope.row.complainStatusName==='待处理' ? '确认受理': (scope.row.complainStatusName === '处理中' ? '记录投诉跟进': '')}}</el-button>
                 </template>
                  <!-- <template slot-scope="scope">
                     <el-button
@@ -106,6 +116,7 @@
             </el-table-column>
         </el-table>
         <el-button type="success" class="btnReg" size="mini" @click="handleEdit3">投诉登记</el-button>
+        <add :rowid="rowid" :isDispose="isDispose" :centerDialogVisible="centerDialogVisible" @close="closeAdd" @success="getSuccess"></add>
         <addcomReg :isComreg="isComreg" :centerDialogVisibleReg="centerDialogVisibleReg" @close="closecomReg" @success="getSuccess"></addcomReg>
     </div>
 </template>
@@ -114,7 +125,8 @@
 import Pager from '@/components/Pagination/index'
 import { parseTime } from '@/utils/index.js'
 import { orderDetailsList } from '@/api/order/ordermange'
-import { getGoodsclaimAll, getGoodsfollowupAll, getUpdateDealStatus } from '@/api/service/claim.js'
+import { getGoodsfollowupAll } from '@/api/service/claim.js'
+import { getListAppShipperComplainByOrderSerial ,getUpdateDealStatus} from '@/api/service/dispose.js'
 import add from './add'
 import addcomReg from './addReg'
 export default {
@@ -145,7 +157,8 @@ export default {
       rowid: '',
       belongCity: '',
       buttonText: '',
-      isComreg:false,
+      isComreg: false,
+      isDispose:false,
       // formAllData: {
       //   orderSerial: ''
       // },
@@ -255,8 +268,8 @@ export default {
   },
   mounted() {
     // console.log(this.tableData)
-    // this.firstblood()
-    // this.getListSmall()
+    this.firstblood()
+    this.getListSmall()
   },
   methods: {
     init() {
@@ -273,13 +286,13 @@ export default {
     },
     getSuccess() {
       this.firstblood()
-      // this.getListSmall()
+      this.getListSmall()
     },
     firstblood() {
       // this.loading = false
       const orderSerial = this.$route.query.orderSerial
       // console.log(this.$route.query.orderSerial)
-      getGoodsclaimAll(orderSerial).then(res => {
+      getListAppShipperComplainByOrderSerial(orderSerial).then(res => {
         // this.dataTotal = res.data.totalCount
         this.tableData = res.data
         // console.log(res.data)
@@ -289,7 +302,7 @@ export default {
       // const orderSerial = this.$route.query.orderSerial
       console.log(this.rowid)
       getGoodsfollowupAll(this.rowid).then(res => {
-        // console.log(res.data)
+        console.log(res.data)
         this.tableData1 = res.data
         this.tableData1.forEach((e, index) => {
           let arr = []
@@ -329,6 +342,7 @@ export default {
         })
         console.log('tableData1----------', this.tableData1)
       })
+      
     },
     handlePageChange(obj) {
       this.page = obj.pageNum
@@ -336,9 +350,9 @@ export default {
       this.init()
     },
     handleEdit1(index, row) {
-      if (row.dealStatus === '待处理') {
-        getUpdateDealStatus(this.rowid).then(res => {
-          // console.log(res)
+      if (row.complainStatusName === '待处理') {
+          console.log(row.id)
+        getUpdateDealStatus(row.id).then(res => {
           this.firstblood()
           this.$message({
             message: '受理成功~',
@@ -347,6 +361,7 @@ export default {
         })
       } else {
         this.centerDialogVisible = true
+        this.isDispose = true
       }
     },
     handleEdit2() {
@@ -357,6 +372,12 @@ export default {
       this.isComreg = true
     },
     closecomReg() {
+      this.centerDialogVisibleReg = false
+    },
+    closeAdd() {
+      this.centerDialogVisible = false
+    },
+    closeAddReg() {
       this.centerDialogVisibleReg = false
     },
     openTxt(url) {
@@ -424,7 +445,7 @@ export default {
       font-size: 16px;
     }
   }
-    .animated {
+.animated {
   -webkit-animation-duration: 0.5s;
   animation-duration: 0.5s;
   -webkit-animation-fill-mode: both;

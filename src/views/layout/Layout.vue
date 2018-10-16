@@ -14,7 +14,7 @@
       </div>
     </div>
     <LockScreen></LockScreen>
-    <!-- <setApiUrl /> -->
+    <setApiUrl />
 
   </div>
 </template>
@@ -34,22 +34,22 @@ export default {
     TagsView,
     LockScreen,
     setApiUrl
-    },
-    data () {
-        return {
-            theRefreshKey: ''
-        }
-    },
+  },
+  data() {
+    return {
+      theRefreshKey: ''
+    }
+  },
 
-    computed: {
-        sidebar() {
-        return this.$store.state.app.sidebar
-        }
-    },
-     methods: {
-      refreshKey(){
-          this.theRefreshKey = Math.random()
-      }
+  computed: {
+    sidebar() {
+      return this.$store.state.app.sidebar
+    }
+  },
+  methods: {
+    refreshKey() {
+      this.theRefreshKey = Math.random()
+    }
   }
 
 }

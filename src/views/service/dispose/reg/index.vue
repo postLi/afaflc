@@ -119,8 +119,8 @@
         <div class="info_bottom">
           <!-- class="demo-ruleForm classify_searchinfo" -->
           <el-form  label-position="right" :model="searchForm" :rules="rules"  ref="ruleForm" :inline="true">
-            <el-form-item label="投诉分类" prop="claimType">
-              <el-select v-model="searchForm.claimType" clearable placeholder="请选择处理状态">
+            <el-form-item label="投诉分类" prop="complainType">
+              <el-select v-model="searchForm.complainType" clearable placeholder="请选择处理状态">
                 <el-option
                   v-for="item in optionsclaimType"
                   :key="item.code"
@@ -140,7 +140,7 @@
                 </el-option>
               </el-select>
             </el-form-item>
-            <el-form-item label="投诉时间" prop="createTime">
+            <!-- <el-form-item label="投诉时间" prop="createTime">
               <el-date-picker
                 disabled="disabled"
                 v-model="searchCreatTime1"
@@ -150,9 +150,9 @@
                 placeholder="选择日期"
                 value-format="timestamp">
               </el-date-picker>
-            </el-form-item>
-            <el-form-item class="discrabel" label="投诉内容" prop="claimDes">
-              <el-input v-model="searchForm.claimDes" type="textarea" :maxlength="200" style="width:100%" placeholder="物损描述最多输入200个字符"></el-input>
+            </el-form-item> -->
+            <el-form-item class="discrabel" label="投诉内容" prop="complainDes">
+              <el-input v-model="searchForm.complainDes" type="textarea" :maxlength="200" style="width:100%" placeholder="物损描述最多输入200个字符"></el-input>
             </el-form-item>
             <!-- <el-form-item class="clearfix imgbox" label="物损图片" prop="claimPic1">
               <div class="clearfix uploadcard">
@@ -175,7 +175,8 @@
 </template>
 <script>
 import { parseTime, pickerOptions2 } from '@/utils/index.js'
-import { postOrderManager, postReportClaim } from '@/api/service/claim.js'
+import { postOrderManager } from '@/api/service/claim.js'
+import { postReportComplain } from '@/api/service/dispose.js'
 import Pager from '@/components/Pagination/index'
 import Upload from '@/components/Upload/multImage'
 import { DicComplainatusType } from '@/api/common'
@@ -225,10 +226,10 @@ export default {
         reporterType: [
           { required: true, message: '请输入上报人' }
         ],
-        claimDes: [
+        complainDes: [
           { required: true, message: '请输入物损描述' }
         ],
-        claimType: [
+        complainType: [
           { required: true, message: '请选择物损类型' }
         ],
         claimPic1: [
@@ -249,11 +250,11 @@ export default {
         driverName: ''
       },
       searchForm: {
-        createTime: '',
-        claimDes: '',
-        claimPic1: '',
+        // createTime: '',
+        complainDes: '',
+        // claimPic1: '',
         reporterType: '',
-        claimType: '',
+        complainType: '',
         orderSerial: ''
       }
     }
@@ -367,12 +368,12 @@ export default {
       } else {
         this.$refs[ruleForm].validate((valid) => {
           if (valid) {
-            this.searchForm.createTime = parseTime(this.searchCreatTime1, '{y}-{m}-{d} {h}:{i}:{s}')
+            // this.searchForm.createTime = parseTime(this.searchCreatTime1, '{y}-{m}-{d} {h}:{i}:{s}')
             this.searchForm.orderSerial = this.selected[0].orderSerial
             console.log(this.selected)
             const data = objectMerge2({}, this.searchForm)
             console.log(data)
-            postReportClaim(data).then(res => {
+            postReportComplain(data).then(res => {
               this.$message({
                 message: '保存成功~',
                 type: 'success'

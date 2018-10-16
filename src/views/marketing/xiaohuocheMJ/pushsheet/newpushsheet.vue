@@ -6,7 +6,7 @@
             <el-form :inline="true" :model="vestList" ref="vestList" :rules="rulesForm">
              <el-row>
             <el-col :span="12">
-            <el-form-item label="省市：" :label-width="formLabelWidth" prop="areaCode" > 
+            <el-form-item label="所属区域：" :label-width="formLabelWidth" prop="areaCode" > 
                 <el-input v-model="vestList.areaName"  @focus="changeSelect" v-if="editType !=='add' && !selectFlag" class="selectInput"></el-input>
                  <span v-else-if="editType=='add'">
                 <GetCityList ref="area" v-model="vestList.areaCode"  @focus="changeSelect" @returnStr="getStr"></GetCityList>
@@ -779,13 +779,10 @@ methods:{
             }
             else{
             this.$refs['vestList'].validate(valid=>{
-            var forms= Object.assign({}, this.vestList)
             if(valid){
             var forms= Object.assign({}, this.vestList)
             forms.setting = JSON.stringify(forms.setting)
-            console.log('forms',forms)
                   data_Add_pushsheet(forms).then(res=>{
-                console.log('res',res);
                 this.driverTemplateDialogFlag=false;
                 this.selectFlag=false;
                 for(var i=0;i<this.vestList.setting.length;i++){
@@ -798,8 +795,7 @@ methods:{
                 this.changeList();
                 this.$message.success('新增成功');
                 }).catch(res=>{
-                    this.$message.error('新增失败');
-                    console.log(res)
+                    this.$message.error(res.errorInfo);
                 });
                 }
                 })
@@ -820,17 +816,14 @@ methods:{
             this.$refs['vestList'].validate(valid=>{
             if(valid){
             var forms= Object.assign({}, this.vestList,{id:this.params[0].id})
-            console.log('delFlag',forms)
             forms.setting = JSON.stringify(forms.setting)
                 data_dpdata_pushsheet(forms).then(res=>{
-                console.log('res',res);
                 this.driverTemplateDialogFlag=false;
                 this.selectFlag=false;
                 this.changeList();
                 this.$message.success('修改成功');
                 }).catch(res=>{
-                    this.$message.error('修改失败');
-                    console.log(res)
+                    this.$message.error(res.errorInfo);
                 });
                 }
                 })

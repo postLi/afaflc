@@ -1,5 +1,5 @@
 <template>
-  <div  class="wzlReg">
+  <div  class="wzlReg" v-if="isMatreg">
     <el-dialog
       :title='popTitle'
       :visible.sync="isShow"
@@ -56,13 +56,71 @@
       </div>
     </el-dialog>
   </div>
+  <div  class="wzlReg" v-else-if="isComreg">
+    <el-dialog
+      :title='popTitle'
+      :visible.sync="isShow"
+      width="30%"
+      center
+      @close="closeMe"
+      :close-on-click-modal="false" 
+      :before-close="closeMe">
+      <el-form :model="formAlldicData" :rules="rules"  ref="ruleForm" :inline="true"  label-position="right">
+        <el-form-item label="登记时间">
+          <el-date-picker
+            disabled="disabled"
+            v-model="searchCreatTime"
+            align="right"
+            type="date"
+            :picker-options="pickOption2"
+            placeholder="选择日期"
+            value-format="timestamp">
+          </el-date-picker>
+        </el-form-item>
+        <el-form-item label="投诉人类型" prop="reporterType">
+          <el-select v-model="formAlldicData.reporterType" placeholder="请选择" @change="changeCode">
+            <el-option
+              v-for="item in options"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value">
+            </el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="投诉分类" prop="complainType">
+          <el-select v-model="formAlldicData.complainType" clearable placeholder="请选择物损类型">
+            <el-option
+              v-for="item in optionsComplainatusType"
+              :key="item.code"
+              :label="item.name"
+              :value="item.code"
+              :disabled="item.disabled">
+            </el-option>
+          </el-select>
+        </el-form-item> 
+        <el-form-item class="goodsclaimDes" label="投诉内容" prop="complainDes">
+          <el-input v-model="formAlldicData.complainDes" type="textarea" :maxlength="200" style="width:100%" placeholder="物损描述最多输入200个字符"></el-input>
+        </el-form-item>
+        <!-- <el-form-item class="clearfix imgbox" label="物损图片" prop="claimPic1">
+          <div class="clearfix uploadcard">
+            <upload v-model="formAllData.claimPic1" :title="'本地上传'" :showFileList="true" :limit="4" listtype="picture"/>
+          </div>
+        </el-form-item> -->
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="submitForm('ruleForm')">确 定</el-button>
+        <el-button @click="closeMe">取 消</el-button>
+      </div>
+    </el-dialog>
+  </div>
 </template>
 <script>
 import { parseTime, pickerOptions2 } from '@/utils/index.js'
 import Pager from '@/components/Pagination/index'
 import Upload from '@/components/Upload/multImage'
-import { DicClaimStatusType } from '@/api/common'
+import { DicClaimStatusType, DicComplainatusType } from '@/api/common'
 import { postReportClaim } from '@/api/service/claim.js'
+import { postReportComplain } from '@/api/service/dispose.js'
 import { objectMerge2 } from '@/utils/index'
 export default {
   computed: {
@@ -109,6 +167,7 @@ export default {
       pickOption2: '',
       checked: false,
       optionsclaimType: [],
+      optionsComplainatusType: [],
       options: [{
         value: 0,
         label: '货主'
@@ -121,7 +180,7 @@ export default {
       },
       rules: {
         reporterType: [
-          { required: true, message: '请输入上报人' }
+          { required: true, message: '请选择上报人类型' }
         ],
         claimDes: [
           { required: true, message: '请输入物损描述' }
@@ -131,6 +190,12 @@ export default {
         ],
         claimPic1: [
           { required: true, message: '至少上传一张图片' }
+        ],
+        complainDes: [
+          { required: true, message: '请输入投诉内容' }
+        ],
+        complainType: [
+          { required: true, message: '请选择投诉分类' }
         ]
       },
       formAllData: {
@@ -141,6 +206,14 @@ export default {
         claimType: '', // 物损类型
         claimDes: '', // 物损描述
         claimPic1: '' // 物损图片
+
+      },
+      formAlldicData: {
+        orderSerial:'',//订单号
+        complainType: '', // 投诉分类
+        reporterType: '', // 投诉人类型
+        complainDes: ''// 投诉内容
+
       }
     }
   },
@@ -160,7 +233,6 @@ export default {
       handler(newVal) {
         if (this.isMatreg) {
           this.popTitle = '物损登记'
-          this.$set(this.formAllData, 'id', this.rowid)
           this.formAllData = {}
           console.log(this.isMatreg)
         }
@@ -171,6 +243,7 @@ export default {
       handler(newVal) {
         if (this.isComreg) {
           this.popTitle = '投诉登记'
+          this.formAllData = {}
           console.log(this.isComreg)
         }
       },
@@ -179,6 +252,7 @@ export default {
   },
   mounted() {
     this.getclaimstatus()
+    this.getComplainatus()
     // console.log(this.isMatreg)
   },
   methods: {
@@ -201,6 +275,13 @@ export default {
         console.log(res.data)
         res.data.map((item) => {
           this.optionsclaimType.push(item)
+        })
+      })
+    },
+    getComplainatus() {
+      DicComplainatusType().then(res => {
+        res.data.map((item) => {
+          this.optionsComplainatusType.push(item)
         })
       })
     },
@@ -254,9 +335,18 @@ export default {
           this.formAllData.createTime = parseTime(this.searchCreatTime, '{y}-{m}-{d} {h}:{i}:{s}')
           // this.$set(this.formAllData, 'goodsclaimId', this.rowid)
           this.formAllData.orderSerial = this.$route.query.orderSerial
-          const data = objectMerge2({}, this.formAllData)
-          console.log(data)
-          postReportClaim(data).then(res => {
+          this.formAlldicData.orderSerial = this.$route.query.orderSerial
+          let data1 = objectMerge2({}, this.formAllData)
+          // this.$set(data1, 'address', data1.claimPic1)
+          const data2 = objectMerge2({}, this.formAlldicData)
+          // console.log(data)
+          let promiseObj
+          if(this.isMatreg){
+            promiseObj = postReportClaim(data1)
+          }else {
+            promiseObj = postReportComplain(data2)
+          }
+          promiseObj.then(res => {
             this.$message({
               message: '保存成功~',
               type: 'success'
@@ -269,6 +359,7 @@ export default {
               message: err.errorInfo || err.text || '未知错误，请重试~'
             })
             this.loading = false
+            // this.closeMe()
           })
         } else {
           return false

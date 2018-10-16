@@ -25,7 +25,6 @@
             <el-col :span="12">
               <el-form-item label="所在地：" :label-width="formLabelWidth">
               <el-input type="text" v-model="formFroze.belongCityName" disabled ></el-input>
-          
             </el-form-item>
             </el-col>
           </el-row>

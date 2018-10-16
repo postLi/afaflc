@@ -11,12 +11,7 @@
                 </el-col>
                  <el-col :span="12">
                     <el-form-item label="所在区域 ：" :label-width="formLabelWidth" prop="areaName">
-                   <el-cascader
-                    size="large"
-                    :options="options"
-                    v-model="formAll.areaName"
-                    @change="handleChange">
-                    </el-cascader>
+                    <GetCityList ref="area" v-model="formAll.areaName"  @returnStr="getStr"></GetCityList>
                     </el-form-item>
                 </el-col>
             </el-row>
@@ -49,11 +44,9 @@
 </template>
 <script>
 import {data_get_aflcTradeArea_create,data_get_aflcTradeArea_Id} from '@/api/users/district/shoppingDistrict.js'
-import { regionDataPlus, CodeToText, TextToCode } from 'element-china-area-data'
+import GetCityList from '@/components/GetCityList/city'
 import { eventBus } from '@/eventBus'
 export default {
-  components:{
-  },
   props:{
     params:{
       type:[Object,String,Array,Number],
@@ -135,7 +128,6 @@ export default {
 
         return{
         selectFlag:null,
-        options:regionDataPlus,
         dialogFormVisible_add: false,
         formLabelWidth:'120px',
         formAll:{
@@ -171,29 +163,21 @@ export default {
   },
   mounted(){
   },
+  computed:{
+    
+  },
+  components:{
+    GetCityList
+  },
   methods:{
-        handleChange(d){
-           console.log('d',d)
-           if(d.length<3){
-                this.$message.info('请选择具体的城市');
-                this.formAll.areaName = [];
-                this.formAll.areaCode = [];
-                this.formAll.province = null
-                this.formAll.city = null
-                this.formAll.area = null
-           }
-           else{
-                this.formAll.areaCode = d
-                this.formAll.province = CodeToText[d[0]]
-                this.formAll.city =  CodeToText[d[1]]
-                if(d[2]==''){
-                this.formAll.area = null
-                }
-                else{
-                this.formAll.area = CodeToText[d[2]]
-                }
-           }
-        },
+    getStr(val,name){
+                console.log('this.cityarr',val,name)
+                this.formAll.areaCode = val.split(',')[2];
+                this.formAll.areaName = name.split(',')[2];
+                this.formAll.province = name.split(',')[0];
+                this.formAll.city = name.split(',')[1];
+                this.formAll.area = name.split(',')[2];
+            },  
    openDialog:function(){
          this.dialogFormVisible_add = true;
    },
@@ -213,14 +197,8 @@ export default {
     add_data(){
        this.$refs['formAll'].validate(valid=>{
         if(valid){
-            if(this.formAll.area){
-               this.areaStatus = this.formAll.areaCode[2]
-            }
-            else{
-               this.areaStatus = this.formAll.areaCode[1]
-            }
         let forms={
-            areaCode:this.areaStatus,
+            areaCode:this.formAll.areaCode,
             province:this.formAll.province,
             city:this.formAll.city,
             area:this.formAll.area,
@@ -257,5 +235,9 @@ export default {
     .el-button{
         padding: 7px 15px 7px;
         }
+
+}
+.info_news .shoppingDialog .el-button{
+        padding: 0px 15px 0px;
 }
 </style>
