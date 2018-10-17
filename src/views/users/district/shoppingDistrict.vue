@@ -148,10 +148,7 @@ export default {
     // 清空查询
     clearSearch(){
                 this.formAllData.areaCode = null;
-                this.formAllData.province = null,
-                this.formAllData.city = null,
-                this.formAllData.area = null,
-                this.formAllData.areaName = [];
+                this.formAllData.areaName = null;
                 this.formAllData.tradeName=null,
                 this.formAllData.tradeOwner=null,
                 this.firstblood();

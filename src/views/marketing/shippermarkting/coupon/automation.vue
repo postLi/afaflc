@@ -147,10 +147,10 @@
             </el-table-column>
             <el-table-column  label="所属区域" prop="areaName" show-overflow-tooltip sortable>
             </el-table-column>
-            <el-table-column  label="已派发优惠券金额" prop="distribution" sortable>
+            <!-- <el-table-column  label="已派发优惠券金额" prop="distribution" sortable>
             </el-table-column>       
             <el-table-column  label="已使用优惠券金额" prop="alreadyuse" sortable>
-            </el-table-column>                                                       
+            </el-table-column>                                                        -->
             <el-table-column  label="开始时间" prop="startTime" sortable>
             </el-table-column>
             <el-table-column  label="结束时间" prop="endTime" sortable>
@@ -404,9 +404,9 @@ export default {
                     
                   data_Able_couponActive(this.selectId).then(res=>{
                      this.selectId.splice(0,1);
-                     if(this.selectRowData.usingStatus==1)
+                     if(this.selectRowData[0].usingStatus=='1')
                      {
-                         this.$message.warning('已禁用');
+                         this.$message.warning('已停用');
                      }
                      else{
                          this.$message.success('已启用');

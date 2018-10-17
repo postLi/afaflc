@@ -22,7 +22,7 @@
            </el-form> 
   <div class="classify_info">
    <div class="btns_box">
-    <newpushsheet  btntext="新增" :plain="true" type="primary" btntype="primary" icon="el-icon-circle-plus" editType="add" btntitle="新增货主"  @getData="getDataList"></newpushsheet>
+    <newpushsheet  btntext="新增" :plain="true" type="primary" btntype="primary" icon="el-icon-circle-plus" editType="add" btntitle="新增"  @getData="getDataList"></newpushsheet>
     <uppushsheet  btntext="修改" :plain="true" type="primary" btntype="primary" icon="el-icon-edit" editType="edit" :params="selectRowData"  @getData="getDataList"></uppushsheet>
      <el-button type="primary" plain icon="el-icon-bell" @click="handleUseStates" :size="btnsize">启用/禁用</el-button>
      <el-button type="primary" plain icon="el-icon-delete" @click="handleDelete" :size="btnsize">删除</el-button>

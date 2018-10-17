@@ -16,7 +16,7 @@
                     </el-select>
                  </el-form-item>
                 <el-form-item label="片区名称" >
-                   <el-input  v-model="formAll.districtName"></el-input>
+                   <el-input  v-model="formAll.districtName" :maxlength='50'></el-input>
                  </el-form-item>
          <el-form-item class="fr">
          <el-button type="primary" plain @click="getdata_search()" :size="btnsize" icon="el-icon-search">搜索</el-button> 
@@ -50,16 +50,16 @@
             </el-col>
             <el-col :span="12">
            <el-form-item label="片区名称：" :label-width="formLabelWidth" v-if='creadFlag'>
-            <el-input v-model="vestAll.districtName" disabled></el-input>
+            <el-input v-model="vestAll.districtName" disabled :maxlength='50'></el-input>
            </el-form-item>                
-            <el-form-item label="片区名称：" :label-width="formLabelWidth" prop="districtName" v-else>
-            <el-input v-model="vestAll.districtName"></el-input>
+            <el-form-item label="片区名称：" :label-width="formLabelWidth" prop="districtName"  v-else >
+            <el-input v-model="vestAll.districtName" :maxlength='50'></el-input>
            </el-form-item>
             </el-col>
               </el-row>
             <el-row>
             <el-col :span="12">
-            <el-form-item label="片区名称：" :label-width="formLabelWidth" v-if='creadFlag'>
+            <el-form-item label="中心地址：" :label-width="formLabelWidth" v-if='creadFlag'>
             <el-input v-model="vestAll.districtAddress" disabled></el-input>
            </el-form-item>      
             <el-form-item label="中心地址：" :label-width="formLabelWidth" prop="districtAddress" v-else>
@@ -158,7 +158,7 @@
             </el-col>
             <el-col :span="12">
            <el-form-item label="片区名称：" :label-width="formLabelWidth">
-          <el-input v-model="selectRowData3.districtName" :disabled="openFlag==0"></el-input>
+          <el-input v-model="selectRowData3.districtName" :maxlength='50' :disabled="openFlag==0" ></el-input>
            </el-form-item>
             </el-col>
               </el-row>
@@ -184,7 +184,6 @@
             </el-row>
              </el-form>    
              </div>
-             
            <div class="vestdetail">
             <el-form :inline="true">
              <el-row>
@@ -586,6 +585,7 @@ export default {
         },
         openDialog1(){
          this.firstblood2()
+         this.openFlag='0';
          this.vestAll = this.selectRowData[0];
          this.creadFlag = true;
          this.driverTemplateDialogFlag=true;
@@ -635,7 +635,6 @@ export default {
         },
         // 修改控制
         openDialogView0(){
-            this.formAll2.vestId = this.selectRowData.id
            if(this.selectRowData.length==undefined){
               this.$message.warning('请选择您要操作的用户');
                return
@@ -651,6 +650,7 @@ export default {
                this.$refs.multipleTable.clearSelection();
           }
          else{
+         this.formAll2.vestId = this.selectRowData[0].id
          this.openFlag='1';
          data_get_aflcVestUnisource_Id(this.selectRowData[0].id).then(res=>{
             this.selectRowData3 = res.data
@@ -1039,7 +1039,7 @@ export default {
                 }
                 button{
                     flex:1;
-                    margin-left:10px;
+                    margin:0px 10px;
                 }
                 }
 

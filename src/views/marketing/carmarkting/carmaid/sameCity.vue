@@ -2,12 +2,7 @@
     <div class="identicalStyle Marketing" style="height:100%">
           <el-form :inline="true"  class="demo-ruleForm classify_searchinfo">
             <el-form-item label="所属区域：">
-                   <el-cascader
-                    size="large"
-                    :options="options"
-                    v-model="formAllData.areaName"
-                    @change="handleChange">
-                    </el-cascader>
+              <GetCityList ref="area" v-model="formAllData.areaName"  @returnStr="getStr"></GetCityList>
             </el-form-item>
             <el-form-item label="车主抽佣等级：">
                  <el-select v-model="formAllData.commissionGrade" clearable placeholder="请选择" >
@@ -108,7 +103,7 @@
 <script>
 import { data_Commission, data_CarList, data_MaidLevel } from '@/api/server/areaPrice.js'
 import { data_get_Marketingsame_list, data_Del_Marketingsame, data_Able_Marketingsame } from '@/api/marketing/carmarkting/carmarkting.js'
-import { regionDataPlus, CodeToText, TextToCode } from 'element-china-area-data'
+import GetCityList from '@/components/GetCityList/city'
 import newCity from '../../components/newCity.vue'
 import { eventBus } from '@/eventBus'
 import Pager from '@/components/Pagination/index'
@@ -117,7 +112,6 @@ export default {
   data() {
     return {
       btnsize: 'mini',
-      options: regionDataPlus,
       selectRowData: {},
       selectId: [],
       sizes: [20, 50, 100],
@@ -139,32 +133,15 @@ export default {
   },
   components: {
     newCity,
-    Pager
+    Pager,
+    GetCityList
   },
   methods: {
-    handleChange(d) {
-      console.log('d', d)
-      if (d.length < 3) {
-        if (d.length == 2) {
-          this.$message.error('请选择具体的城市')
-        }
-        this.formAllData.areaCode = null
-        this.formAllData.province = null,
-                this.formAllData.city = null,
-                this.formAllData.area = null,
-                this.formAllData.areaName = []
-      } else {
-        this.formAllData.areaCode = d
-        this.formAllData.province = CodeToText[d[0]]
-        this.formAllData.city = CodeToText[d[1]]
-        if (d[2] == '') {
-          this.formAllData.area = ''
-        } else {
-          this.formAllData.area = CodeToText[d[2]]
-        }
-      }
-    },
-            // 获取  服务和车辆 类型列表
+      getStr(val,name){
+                console.log('this.cityarr',val,name)
+                this.formAllData.areaCode = val.split(',')[2];
+            },  
+    // 获取  服务和车辆 类型列表
     getMoreInformation() {
       data_CarList().then(res => {
         res.data.map((item) => {
@@ -179,38 +156,15 @@ export default {
         console.log(res)
       })
     },
-          // 列表刷新页面
+    // 列表刷新页面
     firstblood() {
-      let FromData = {}
-      if (this.formAllData.area) {
-        FromData = {
-          area: this.formAllData.area,
-          city: null,
-          carType: this.formAllData.carType,
-          commissionGrade: this.formAllData.commissionGrade
-        }
-      } else if (this.formAllData.city) {
-        FromData = {
-          area: null,
-          city: this.formAllData.city,
-          carType: this.formAllData.carType,
-          commissionGrade: this.formAllData.commissionGrade
-        }
-      } else {
-        FromData = {
-          area: null,
-          city: this.formAllData.city,
-          carType: this.formAllData.carType,
-          commissionGrade: this.formAllData.commissionGrade
-        }
-      }
-      data_get_Marketingsame_list(this.page, this.pagesize, FromData).then(res => {
+      data_get_Marketingsame_list(this.page, this.pagesize, this.formAllData).then(res => {
         console.log(res)
         this.dataTotal = res.data.totalCount
         this.tableDataAll = res.data.list
       })
     },
-         //  查询
+    //  查询
     getData_query() {
       this.firstblood()
     },
@@ -220,10 +174,7 @@ export default {
         areaCode: null,
         carType: null,
         commissionGrade: null,
-        province: null,
-        city: null,
-        area: null,
-        areaName: []
+        areaName: null
       }
        this.firstblood()
      },

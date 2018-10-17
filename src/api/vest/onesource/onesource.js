@@ -40,9 +40,6 @@ export function data_add_onesource_list(data) {
       })
     }
 
-
-
-
   //删除马甲单源地址推单
   export function data_Del_onesourceAddress(id) {
     return fetch({
@@ -68,7 +65,6 @@ export function data_get_aflcVestUnisource_Id(id) {
   return fetch.get('/' + baseurl_one+'/sm/aflcVestUnisource/v1/' + id)
 
 }
-
 
 //id获取马甲单源表
        export function data_get_onesource_Id(id) {

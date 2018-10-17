@@ -2,7 +2,7 @@
      <div class="creatcity commoncss">
       <el-button :type="btntype" :value="value" :plain="plain" :icon="icon" @click="openDialog()">{{btntext}}</el-button>
       <div class="newMarketingCity">
-      <el-dialog  :visible="dialogFormVisible_add" :before-close="change">
+      <el-dialog  :visible="dialogFormVisible_add" :before-close="change" :title="btntitle">
         <el-form :model="formAll" ref="formAll" :rules="rulesForm">
           <el-row v-if="editType=='edit'">
               <el-col>
@@ -38,13 +38,7 @@
              <tr>
              <td>
                  <el-form-item  prop="areaName" v-if="editType=='add'"> 
-                   <el-cascader
-                    size="large"
-                    :options="options"
-                    v-model="formAll.areaNameStatus"
-                    @change="handleChange"
-                     >
-                    </el-cascader>
+                 <GetCityList ref="area" v-model="formAll.areaName"  @returnStr="getStr"></GetCityList>
                  </el-form-item>
                 <el-form-item v-else> 
                     <el-input v-model="areaName" placeholder="" disabled ></el-input>   
@@ -88,7 +82,7 @@
                  </td>
              <td>
                  <el-form-item  prop="commissionPer"> 
-                 <el-input v-model="formAll.commissionPer" maxlength="4"></el-input>
+                 <el-input v-model="formAll.commissionPer" maxlength="3"></el-input>
                  </el-form-item>
                  </td>
              <td>
@@ -117,12 +111,13 @@ import { data_Commission, data_CarList, data_MaidLevel } from '@/api/server/area
 import { data_get_Marketingsame_create, data_get_Marketingsame_update, data_get_Marketingsame_Id } from '@/api/marketing/carmarkting/carmarkting.js'
 import Upload from '@/components/Upload/singleImage'
 import { eventBus } from '@/eventBus'
-import { regionDataPlus, CodeToText, TextToCode } from 'element-china-area-data'
+import GetCityList from '@/components/GetCityList/city'
 import { data_get_shipper_type, data_get_shipper_create, data_get_shipper_change, data_get_shipper_view } from '@/api/users/shipper/all_shipper.js'
 
 export default {
   components: {
-    Upload
+    Upload,
+    GetCityList
   },
   props: {
     paramsView: {
@@ -194,10 +189,10 @@ export default {
 
     //    开始抽佣单数校验
     const startNumValidator = (rule, val, cb) => {
-      var reg = /[^\d]/g
+      var reg = /^[0-9]*[1-9][0-9]*$/
       if (!val) {
         cb(new Error('开始抽佣不能为空'))
-      } else if (reg.test(val)) {
+      } else if (!reg.test(val)) {
         cb(new Error('请输入正整数'))
       } else {
         cb()
@@ -206,10 +201,10 @@ export default {
 
     //    结束抽佣单数校验
     const endNumValidator = (rule, val, cb) => {
-      var reg = /[^\d]/g
+      var reg = /^[0-9]*[1-9][0-9]*$/
       if (!val) {
         cb(new Error(' 结束抽佣不能为空'))
-      } else if (reg.test(val)) {
+      } else if (!reg.test(val)) {
         cb(new Error('请输入正整数'))
       } else {
         cb()
@@ -218,11 +213,11 @@ export default {
 
     //    每单抽佣比例校验
     const commissionPerValidator = (rule, val, cb) => {
-      var reg = /[^\d]/g
+      var reg = /^(1|([1-9]\d{0,1}))$/
       if (!val) {
         cb(new Error('每单抽佣比例不能为空'))
-      } else if (reg.test(val)) {
-        cb(new Error('请输入正整数'))
+      } else if (!reg.test(val)) {
+        cb(new Error('请输入1~99正整数'))
       } else {
         cb()
       }
@@ -230,10 +225,10 @@ export default {
 
     //    至少抽佣金额校验
     const commissionLowestValidator = (rule, val, cb) => {
-      var reg = /[^\d]/g
+      var reg = /^[0-9]*[1-9][0-9]*$/
       if (!val) {
         cb(new Error(' 至少抽佣金额不能为空'))
-      } else if (reg.test(val)) {
+      } else if (!reg.test(val)) {
         cb(new Error('请输入正整数'))
       } else {
         cb()
@@ -243,7 +238,6 @@ export default {
     return {
       areaStatus:null,
       btnsize: 'mini',
-      options: regionDataPlus,
       dialogFormVisible_add: false,
       MaidLevelValueCar: '',
       optionsCar: [],
@@ -288,26 +282,14 @@ export default {
   mounted() {
   },
   methods: {
-    handleChange(d) {
-      console.log('d', d)
-      if (d.length < 3) {
-        this.$message.info('请选择具体的城市')
-        this.formAll.areaName = []
-        this.formAll.areaCode = []
-        this.formAll.province = null
-        this.formAll.city = null
-        this.formAll.area = null
-      } else {
-        this.formAll.areaCode = d
-        this.formAll.province = CodeToText[d[0]]
-        this.formAll.city = CodeToText[d[1]]
-        if (d[2] == '') {
-          this.formAll.area = null
-        } else {
-          this.formAll.area = CodeToText[d[2]]
-        }
-      }
-    },
+    getStr(val,name){
+                console.log('this.cityarr',val,name)
+                this.formAll.areaCode = val.split(',')[2];
+                this.formAll.areaName = name.split(',')[2];
+                this.formAll.province = name.split(',')[0];
+                this.formAll.city = name.split(',')[1];
+                this.formAll.area = name.split(',')[2];
+            },  
     openDialog: function() {
       if (this.editType == 'edit') {
           if(this.params.length == 0 && this.editType !== 'add'){
@@ -368,15 +350,9 @@ export default {
     add_data() {
       this.$refs['formAll'].validate(valid => {
         if (valid) {
-            if(this.formAll.area){
-               this.areaStatus = this.formAll.areaCode[2]
-            }
-            else{
-               this.areaStatus = this.formAll.areaCode[1]
-            }
           const formAllData =
             [{
-              areaCode: this.areaStatus,
+              areaCode: this.formAll.areaCode,
               carType: this.formAll.carType,
               commissionGrade: this.formAll.commissionGrade,
               startNum: this.formAll.startNum,

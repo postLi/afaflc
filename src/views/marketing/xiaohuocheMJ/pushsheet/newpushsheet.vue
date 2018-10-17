@@ -213,22 +213,21 @@ data(){
 
     //    选择价格上浮开始校验
         const priceStartValidator = (rule, val, cb) => {
-            let reg= /^([0|1])(\.\d{1,2})?$/
+            let reg= /^([1])(\.\d{1,2})?$/
             let priceEnd =  this.$refs.priceEnd.value;
             if(!reg.test(val)){
-            cb(new Error('请输入车长须数据,范围值0~2之间，小数只保留两位'))
+            cb(new Error('请输入范围1~2之间的正数，小数只保留两位'))
             }
             else{
                 cb()
-              
             }
         }
     //    选择价格上浮结束校验
         const priceEndValidator = (rule, val, cb) => {
-            let reg= /^([0|1])(\.\d{1,2})?$/
+            let reg= /^([1])(\.\d{1,2})?$/
             let priceStart = this.$refs.priceStart.value;
             if(!reg.test(val)){
-            cb(new Error('请输入车长须数据，范围值0~2之间,小数只保留两位'))
+            cb(new Error('请输入范围1~2之间的正数,小数只保留两位'))
             }
             if(val<=priceStart){
             cb(new Error('必须大于价格上浮开始的值'))
@@ -238,8 +237,6 @@ data(){
               
             }
         }
-
-
     return{
             selectFlag:false,
             driverTemplateDialogFlag: false,// 弹框控制的控制
@@ -953,7 +950,7 @@ mounted(){
     }
     .price_two{
             width:105px;
-            margin-left: 10px;
+            margin-right: 30px;
     }
     .el-date-editor{
         line-height: 24px;

@@ -234,9 +234,11 @@ export default {
         data_get_BatchDistribution(this.params[0].id,formdata).then(res=>{
              this.changeList();
              this.$message.success('发放成功');
+             this.$forceUpdate()
         }).catch(res=>{
              this.changeList();
              this.$message.error(res.text)
+             this.$forceUpdate()
         })
        },
        grantCoupon(){
@@ -311,11 +313,11 @@ export default {
                margin-top:20px;
            }
        }
-    }
-    .creatcity{
-        .el-input__inner{
-            line-height: 40px!important; 
-            height: 40px !important; 
-        }
+       .couponBuild{
+           .el-input__inner{
+               height: 30px!important;
+               line-height: 30px!important;
+           }
+       }
     }
 </style>

@@ -557,10 +557,15 @@ export default {
                      return false
                    }
                   if(this.formAllData.aflcCouponList[i].timeType=='AF046301'){
-                      if(!this.formAllData.aflcCouponList[i].overTime){
+                     var overTimeReg= /[^\d]/g
+                     if(!this.formAllData.aflcCouponList[i].overTime){
                      this.$message.warning('派发过期时间不能为空');  
                      return false  
                       }
+                    else if(overTimeReg.test(this.formAllData.aflcCouponList[i].overTime)){
+                     this.$message.warning('过期时间必须为正整数');  
+                     return false 
+                    }   
                   }
                   if(this.formAllData.aflcCouponList[i].timeType=='AF046302'){
                       if(!this.formAllData.aflcCouponList[i].startTime){
