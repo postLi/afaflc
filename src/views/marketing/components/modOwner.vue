@@ -1,8 +1,8 @@
 <template>
      <div class="creatOrder commoncss">
-      <el-button :type="btntype" :value="value" :plain="plain" :icon="icon" @click="openDialog()">{{btntext}}</el-button>
+      <el-button :type="btntype" :value="value" :plain="plain" :icon="icon" @click="openDialog()"><span :class="editType=='view'?'BtnInfo':''">{{btntext}}</span ></el-button>
       <div class="newMarketingOrder">
-      <el-dialog  :visible="dialogFormVisible_add" :before-close="change">
+      <el-dialog  :visible="dialogFormVisible_add" :before-close="change" :title="btntitle">
         <el-form :model="formAll" ref="formAll" :rules="rulesForm" :inline="true">
           <el-row >
             <el-col :span="24">
@@ -17,7 +17,7 @@
             </tr>     
             <tr>
              <td><el-input v-model="areaName" disabled></el-input></td>
-             <td><el-input v-model="formAll.rewardMax" placeholder="请选择" maxlength='5'></el-input></td>   
+             <td><el-input v-model="formAll.rewardMax" placeholder="请选择" maxlength='5' :disabled="editType=='view'"></el-input></td>   
              <td>
                  <el-select v-model="formAll.serivceCode" clearable placeholder="请选择" disabled>
                           <el-option
@@ -50,6 +50,7 @@
             active-value="0"
             inactive-value="1"
             inactive-text="启用"
+            :disabled="editType=='view'"
             >
             </el-switch></td>           
             </tr>
@@ -67,97 +68,97 @@
              <th width="80"   rowspan="2">一天限量</th>
             </tr>
             <tr>
-              <td><el-form-item prop="reward1" size = '50'><el-input class="Order_input" v-model="formAll.reward1" ref='reward1' maxlength='5'></el-input></el-form-item>-<el-form-item prop="reward2"><el-input class="Order_input" v-model="formAll.reward2" ref='reward2'  maxlength='5' @change='inputChange(1)'></el-input></el-form-item></td> 
-              <td><el-form-item prop="reward3"><el-input class="Order_input" v-model="formAll.reward3" ref='reward3' maxlength='5' @change='inputChange(2)'></el-input></el-form-item>-<el-form-item prop="reward4"><el-input class="Order_input" v-model="formAll.reward4" ref='reward4'  maxlength='5' @change='inputChange(3)'></el-input></el-form-item></td> 
-              <td><el-form-item prop="reward5"><el-input class="Order_input" v-model="formAll.reward5" ref='reward5' maxlength='5' @change='inputChange(4)'></el-input></el-form-item>-<el-form-item prop="reward6"><el-input class="Order_input" v-model="formAll.reward6" ref='reward6'  maxlength='5' @change='inputChange(5)'></el-input></el-form-item></td> 
-              <td><el-form-item prop="reward7"><el-input class="Order_input" v-model="formAll.reward7" ref='reward7' maxlength='5' @change='inputChange(6)'></el-input></el-form-item>-<el-form-item prop="reward8"><el-input class="Order_input" v-model="formAll.reward8" ref='reward8'  maxlength='5' @change='inputChange(7)'></el-input></el-form-item></td> 
-              <td><el-form-item prop="reward9"><el-input class="Order_input" v-model="formAll.reward9" ref='reward9' maxlength='5' @change='inputChange(8)'></el-input></el-form-item>-<el-form-item prop="reward10"><el-input class="Order_input" v-model="formAll.reward10" ref='reward10'  maxlength='5' @change='inputChange(9)'></el-input></el-form-item></td> 
-              <td><el-form-item prop="reward11"><el-input class="Order_input" v-model="formAll.reward11" ref='reward11' maxlength='5' @change='inputChange(10)'></el-input></el-form-item>-<el-form-item prop="reward12"><el-input class="Order_input" v-model="formAll.reward12" ref='reward12'  maxlength='5' @change='inputChange(11)'></el-input></el-form-item></td> 
-              <td><el-form-item prop="reward13"><el-input class="Order_input" v-model="formAll.reward13" ref='reward13' maxlength='5' @change='inputChange(12)'></el-input></el-form-item>-<el-form-item prop="reward14"><el-input class="Order_input" v-model="formAll.reward14" ref='reward14'  maxlength='5' @change='inputChange(13)'></el-input></el-form-item></td> 
-              <td><el-form-item prop="reward15"><el-input class="Order_input" v-model="formAll.reward15" ref='reward15' maxlength='5' @change='inputChange(14)'></el-input></el-form-item>-<el-form-item prop="reward16"><el-input class="Order_input" v-model="formAll.reward16" ref='reward16'  maxlength='5'></el-input></el-form-item></td> 
+              <td><el-form-item prop="reward1" size = '50'><el-input class="Order_input" v-model="formAll.reward1" ref='reward1' maxlength='5' :disabled="editType=='view'"></el-input></el-form-item>-<el-form-item prop="reward2"><el-input class="Order_input" v-model="formAll.reward2" ref='reward2'  maxlength='5' @change='inputChange(1)' :disabled="editType=='view'"></el-input></el-form-item></td> 
+              <td><el-form-item prop="reward3"><el-input class="Order_input" v-model="formAll.reward3" ref='reward3' maxlength='5' @change='inputChange(2)' :disabled="editType=='view'"></el-input></el-form-item>-<el-form-item prop="reward4"><el-input class="Order_input" v-model="formAll.reward4" ref='reward4'  maxlength='5' @change='inputChange(3)' :disabled="editType=='view'"></el-input></el-form-item></td> 
+              <td><el-form-item prop="reward5"><el-input class="Order_input" v-model="formAll.reward5" ref='reward5' maxlength='5' @change='inputChange(4)' :disabled="editType=='view'"></el-input></el-form-item>-<el-form-item prop="reward6"><el-input class="Order_input" v-model="formAll.reward6" ref='reward6'  maxlength='5' @change='inputChange(5)' :disabled="editType=='view'"></el-input></el-form-item></td> 
+              <td><el-form-item prop="reward7"><el-input class="Order_input" v-model="formAll.reward7" ref='reward7' maxlength='5' @change='inputChange(6)' :disabled="editType=='view'"></el-input></el-form-item>-<el-form-item prop="reward8"><el-input class="Order_input" v-model="formAll.reward8" ref='reward8'  maxlength='5' @change='inputChange(7)' :disabled="editType=='view'"></el-input></el-form-item></td> 
+              <td><el-form-item prop="reward9"><el-input class="Order_input" v-model="formAll.reward9" ref='reward9' maxlength='5' @change='inputChange(8)' :disabled="editType=='view'"></el-input></el-form-item>-<el-form-item prop="reward10"><el-input class="Order_input" v-model="formAll.reward10" ref='reward10'  maxlength='5' @change='inputChange(9)' :disabled="editType=='view'"></el-input></el-form-item></td> 
+              <td><el-form-item prop="reward11"><el-input class="Order_input" v-model="formAll.reward11" ref='reward11' maxlength='5' @change='inputChange(10)' :disabled="editType=='view'"></el-input></el-form-item>-<el-form-item prop="reward12"><el-input class="Order_input" v-model="formAll.reward12" ref='reward12'  maxlength='5' @change='inputChange(11)' :disabled="editType=='view'"></el-input></el-form-item></td> 
+              <td><el-form-item prop="reward13"><el-input class="Order_input" v-model="formAll.reward13" ref='reward13' maxlength='5' @change='inputChange(12)' :disabled="editType=='view'"></el-input></el-form-item>-<el-form-item prop="reward14"><el-input class="Order_input" v-model="formAll.reward14" ref='reward14'  maxlength='5' @change='inputChange(13)' :disabled="editType=='view'"></el-input></el-form-item></td> 
+              <td><el-form-item prop="reward15"><el-input class="Order_input" v-model="formAll.reward15" ref='reward15' maxlength='5' @change='inputChange(14)' :disabled="editType=='view'"></el-input></el-form-item>-<el-form-item prop="reward16"><el-input class="Order_input" v-model="formAll.reward16" ref='reward16'  maxlength='5' :disabled="editType=='view'"></el-input></el-form-item></td> 
                  
             </tr>
             <tr>
               <td>未分类</td>
-              <td><el-form-item prop="data1" size = '50'><el-input v-model="formAll.data1" maxlength='3'></el-input></el-form-item></td>
-              <td><el-form-item prop="data2" size = '50'><el-input v-model="formAll.data2" maxlength='3'></el-input></el-form-item></td> 
-              <td><el-form-item prop="data3" size = '50'><el-input v-model="formAll.data3" maxlength='3'></el-input></el-form-item></td> 
-              <td><el-form-item prop="data4" size = '50'><el-input v-model="formAll.data4" maxlength='3'></el-input></el-form-item></td> 
-              <td><el-form-item prop="data5" size = '50'><el-input v-model="formAll.data5" maxlength='3'></el-input></el-form-item></td> 
-              <td><el-form-item prop="data6" size = '50'><el-input v-model="formAll.data6" maxlength='3'></el-input></el-form-item></td> 
-              <td><el-form-item prop="data7" size = '50'><el-input v-model="formAll.data7" maxlength='3'></el-input></el-form-item></td> 
-              <td><el-form-item prop="data8" size = '50'><el-input v-model="formAll.data8" maxlength='3'></el-input></el-form-item></td> 
+              <td><el-form-item prop="data1" size = '50'><el-input v-model="formAll.data1" maxlength='5'></el-input></el-form-item></td>
+              <td><el-form-item prop="data2" size = '50'><el-input v-model="formAll.data2" maxlength='5'></el-input></el-form-item></td> 
+              <td><el-form-item prop="data3" size = '50'><el-input v-model="formAll.data3" maxlength='5'></el-input></el-form-item></td> 
+              <td><el-form-item prop="data4" size = '50'><el-input v-model="formAll.data4" maxlength='5'></el-input></el-form-item></td> 
+              <td><el-form-item prop="data5" size = '50'><el-input v-model="formAll.data5" maxlength='5'></el-input></el-form-item></td> 
+              <td><el-form-item prop="data6" size = '50'><el-input v-model="formAll.data6" maxlength='5'></el-input></el-form-item></td> 
+              <td><el-form-item prop="data7" size = '50'><el-input v-model="formAll.data7" maxlength='5'></el-input></el-form-item></td> 
+              <td><el-form-item prop="data8" size = '50'><el-input v-model="formAll.data8" maxlength='5'></el-input></el-form-item></td> 
               <td><el-form-item prop="maxnum1" size = '50'><el-input v-model="formAll.maxnum1" maxlength='5'></el-input></el-form-item></td>   
             </tr>
              <tr>
               <td>普通</td>
-              <td><el-form-item prop="data9" size = '50'><el-input v-model="formAll.data9" maxlength='3'></el-input></el-form-item></td>
-              <td><el-form-item prop="data10" size = '50'><el-input v-model="formAll.data10" maxlength='3'></el-input></el-form-item></td>
-              <td><el-form-item prop="data11" size = '50'><el-input v-model="formAll.data11" maxlength='3'></el-input></el-form-item></td> 
-              <td><el-form-item prop="data12" size = '50'><el-input v-model="formAll.data12" maxlength='3'></el-input></el-form-item></td> 
-              <td><el-form-item prop="data13" size = '50'><el-input v-model="formAll.data13" maxlength='3'></el-input></el-form-item></td> 
-              <td><el-form-item prop="data14" size = '50'><el-input v-model="formAll.data14" maxlength='3'></el-input></el-form-item></td> 
-              <td><el-form-item prop="data15" size = '50'><el-input v-model="formAll.data15" maxlength='3'></el-input></el-form-item></td> 
-              <td><el-form-item prop="data16" size = '50'><el-input v-model="formAll.data16" maxlength='3'></el-input></el-form-item></td> 
+              <td><el-form-item prop="data9" size = '50'><el-input v-model="formAll.data9" maxlength='5'></el-input></el-form-item></td>
+              <td><el-form-item prop="data10" size = '50'><el-input v-model="formAll.data10" maxlength='5'></el-input></el-form-item></td>
+              <td><el-form-item prop="data11" size = '50'><el-input v-model="formAll.data11" maxlength='5'></el-input></el-form-item></td> 
+              <td><el-form-item prop="data12" size = '50'><el-input v-model="formAll.data12" maxlength='5'></el-input></el-form-item></td> 
+              <td><el-form-item prop="data13" size = '50'><el-input v-model="formAll.data13" maxlength='5'></el-input></el-form-item></td> 
+              <td><el-form-item prop="data14" size = '50'><el-input v-model="formAll.data14" maxlength='5'></el-input></el-form-item></td> 
+              <td><el-form-item prop="data15" size = '50'><el-input v-model="formAll.data15" maxlength='5'></el-input></el-form-item></td> 
+              <td><el-form-item prop="data16" size = '50'><el-input v-model="formAll.data16" maxlength='5'></el-input></el-form-item></td> 
               <td><el-form-item prop="maxnum2" size = '50'><el-input v-model="formAll.maxnum2" maxlength='5'></el-input></el-form-item></td> 
 
             </tr>
             <tr>
               <td>银牌</td>
-              <td><el-form-item prop="data17" size = '50'><el-input v-model="formAll.data17" maxlength='3'></el-input></el-form-item></td>
-              <td><el-form-item prop="data18" size = '50'><el-input v-model="formAll.data18" maxlength='3'></el-input></el-form-item></td>   
-              <td><el-form-item prop="data19" size = '50'><el-input v-model="formAll.data19" maxlength='3'></el-input></el-form-item></td>
-              <td><el-form-item prop="data20" size = '50'><el-input v-model="formAll.data20" maxlength='3'></el-input></el-form-item></td> 
-              <td><el-form-item prop="data21" size = '50'><el-input v-model="formAll.data21" maxlength='3'></el-input></el-form-item></td> 
-              <td><el-form-item prop="data22" size = '50'><el-input v-model="formAll.data22" maxlength='3'></el-input></el-form-item></td> 
-              <td><el-form-item prop="data23" size = '50'><el-input v-model="formAll.data23" maxlength='3'></el-input></el-form-item></td> 
-              <td><el-form-item prop="data24" size = '50'><el-input v-model="formAll.data24" maxlength='3'></el-input></el-form-item></td> 
+              <td><el-form-item prop="data17" size = '50'><el-input v-model="formAll.data17" maxlength='5'></el-input></el-form-item></td>
+              <td><el-form-item prop="data18" size = '50'><el-input v-model="formAll.data18" maxlength='5'></el-input></el-form-item></td>   
+              <td><el-form-item prop="data19" size = '50'><el-input v-model="formAll.data19" maxlength='5'></el-input></el-form-item></td>
+              <td><el-form-item prop="data20" size = '50'><el-input v-model="formAll.data20" maxlength='5'></el-input></el-form-item></td> 
+              <td><el-form-item prop="data21" size = '50'><el-input v-model="formAll.data21" maxlength='5'></el-input></el-form-item></td> 
+              <td><el-form-item prop="data22" size = '50'><el-input v-model="formAll.data22" maxlength='5'></el-input></el-form-item></td> 
+              <td><el-form-item prop="data23" size = '50'><el-input v-model="formAll.data23" maxlength='5'></el-input></el-form-item></td> 
+              <td><el-form-item prop="data24" size = '50'><el-input v-model="formAll.data24" maxlength='5'></el-input></el-form-item></td> 
               <td><el-form-item prop="maxnum3" size = '50'><el-input v-model="formAll.maxnum3" maxlength='5'></el-input></el-form-item></td>  
             </tr>
              <tr>
               <td>金牌</td>
-              <td><el-form-item prop="data25" size = '50'><el-input v-model="formAll.data25" maxlength='3'></el-input></el-form-item></td> 
-              <td><el-form-item prop="data26" size = '50'><el-input v-model="formAll.data26" maxlength='3'></el-input></el-form-item></td> 
-              <td><el-form-item prop="data27" size = '50'><el-input v-model="formAll.data27" maxlength='3'></el-input></el-form-item></td>                
-              <td><el-form-item prop="data28" size = '50'><el-input v-model="formAll.data28" maxlength='3'></el-input></el-form-item></td>
-              <td><el-form-item prop="data29" size = '50'><el-input v-model="formAll.data29" maxlength='3'></el-input></el-form-item></td> 
-              <td><el-form-item prop="data30" size = '50'><el-input v-model="formAll.data30" maxlength='3'></el-input></el-form-item></td> 
-              <td><el-form-item prop="data31" size = '50'><el-input v-model="formAll.data31" maxlength='3'></el-input></el-form-item></td> 
-              <td><el-form-item prop="data32" size = '50'><el-input v-model="formAll.data32" maxlength='3'></el-input></el-form-item></td> 
+              <td><el-form-item prop="data25" size = '50'><el-input v-model="formAll.data25" maxlength='5'></el-input></el-form-item></td> 
+              <td><el-form-item prop="data26" size = '50'><el-input v-model="formAll.data26" maxlength='5'></el-input></el-form-item></td> 
+              <td><el-form-item prop="data27" size = '50'><el-input v-model="formAll.data27" maxlength='5'></el-input></el-form-item></td>                
+              <td><el-form-item prop="data28" size = '50'><el-input v-model="formAll.data28" maxlength='5'></el-input></el-form-item></td>
+              <td><el-form-item prop="data29" size = '50'><el-input v-model="formAll.data29" maxlength='5'></el-input></el-form-item></td> 
+              <td><el-form-item prop="data30" size = '50'><el-input v-model="formAll.data30" maxlength='5'></el-input></el-form-item></td> 
+              <td><el-form-item prop="data31" size = '50'><el-input v-model="formAll.data31" maxlength='5'></el-input></el-form-item></td> 
+              <td><el-form-item prop="data32" size = '50'><el-input v-model="formAll.data32" maxlength='5'></el-input></el-form-item></td> 
               <td><el-form-item prop="maxnum4" size = '50'><el-input v-model="formAll.maxnum4" maxlength='5'></el-input></el-form-item></td>   
             </tr>
             <tr>
               <td>钻石</td>
-              <td><el-form-item prop="data33" size = '50'><el-input v-model="formAll.data33" maxlength='3'></el-input></el-form-item></td> 
-              <td><el-form-item prop="data34" size = '50'><el-input v-model="formAll.data34" maxlength='3'></el-input></el-form-item></td> 
-              <td><el-form-item prop="data35" size = '50'><el-input v-model="formAll.data35" maxlength='3'></el-input></el-form-item></td> 
-              <td><el-form-item prop="data36" size = '50'><el-input v-model="formAll.data36" maxlength='3'></el-input></el-form-item></td>
-              <td><el-form-item prop="data37" size = '50'><el-input v-model="formAll.data37" maxlength='3'></el-input></el-form-item></td>
-              <td><el-form-item prop="data38" size = '50'><el-input v-model="formAll.data38" maxlength='3'></el-input></el-form-item></td> 
-              <td><el-form-item prop="data39" size = '50'><el-input v-model="formAll.data39" maxlength='3'></el-input></el-form-item></td> 
-              <td><el-form-item prop="data40" size = '50'><el-input v-model="formAll.data40" maxlength='3'></el-input></el-form-item></td> 
+              <td><el-form-item prop="data33" size = '50'><el-input v-model="formAll.data33" maxlength='5'></el-input></el-form-item></td> 
+              <td><el-form-item prop="data34" size = '50'><el-input v-model="formAll.data34" maxlength='5'></el-input></el-form-item></td> 
+              <td><el-form-item prop="data35" size = '50'><el-input v-model="formAll.data35" maxlength='5'></el-input></el-form-item></td> 
+              <td><el-form-item prop="data36" size = '50'><el-input v-model="formAll.data36" maxlength='5'></el-input></el-form-item></td>
+              <td><el-form-item prop="data37" size = '50'><el-input v-model="formAll.data37" maxlength='5'></el-input></el-form-item></td>
+              <td><el-form-item prop="data38" size = '50'><el-input v-model="formAll.data38" maxlength='5'></el-input></el-form-item></td> 
+              <td><el-form-item prop="data39" size = '50'><el-input v-model="formAll.data39" maxlength='5'></el-input></el-form-item></td> 
+              <td><el-form-item prop="data40" size = '50'><el-input v-model="formAll.data40" maxlength='5'></el-input></el-form-item></td> 
               <td><el-form-item prop="maxnum5" size = '50'><el-input v-model="formAll.maxnum5" maxlength='5'></el-input></el-form-item></td>  
             </tr>
              <tr>
               <td>皇冠</td>
-              <td><el-form-item prop="data41" size = '50'><el-input v-model="formAll.data41" maxlength='3'></el-input></el-form-item></td> 
-              <td><el-form-item prop="data42" size = '50'><el-input v-model="formAll.data42" maxlength='3'></el-input></el-form-item></td> 
-              <td><el-form-item prop="data43" size = '50'><el-input v-model="formAll.data43" maxlength='3'></el-input></el-form-item></td>
-              <td><el-form-item prop="data44" size = '50'><el-input v-model="formAll.data44" maxlength='3'></el-input></el-form-item></td>  
-              <td><el-form-item prop="data45" size = '50'><el-input v-model="formAll.data45" maxlength='3'></el-input></el-form-item></td>   
-              <td><el-form-item prop="data46" size = '50'><el-input v-model="formAll.data46" maxlength='3'></el-input></el-form-item></td> 
-              <td><el-form-item prop="data47" size = '50'><el-input v-model="formAll.data47" maxlength='3'></el-input></el-form-item></td> 
-              <td><el-form-item prop="data48" size = '50'><el-input v-model="formAll.data48" maxlength='3'></el-input></el-form-item></td> 
+              <td><el-form-item prop="data41" size = '50'><el-input v-model="formAll.data41" maxlength='5'></el-input></el-form-item></td> 
+              <td><el-form-item prop="data42" size = '50'><el-input v-model="formAll.data42" maxlength='5'></el-input></el-form-item></td> 
+              <td><el-form-item prop="data43" size = '50'><el-input v-model="formAll.data43" maxlength='5'></el-input></el-form-item></td>
+              <td><el-form-item prop="data44" size = '50'><el-input v-model="formAll.data44" maxlength='5'></el-input></el-form-item></td>  
+              <td><el-form-item prop="data45" size = '50'><el-input v-model="formAll.data45" maxlength='5'></el-input></el-form-item></td>   
+              <td><el-form-item prop="data46" size = '50'><el-input v-model="formAll.data46" maxlength='5'></el-input></el-form-item></td> 
+              <td><el-form-item prop="data47" size = '50'><el-input v-model="formAll.data47" maxlength='5'></el-input></el-form-item></td> 
+              <td><el-form-item prop="data48" size = '50'><el-input v-model="formAll.data48" maxlength='5'></el-input></el-form-item></td> 
               <td><el-form-item prop="maxnum6" size = '50'><el-input v-model="formAll.maxnum6" maxlength='5'></el-input></el-form-item></td>   
-            </tr>                      
+            </tr>                 
             </tbody>
              </table>
             </el-col>
           </el-row>
         </el-form>
         <div slot="footer" class="dialog-footer">
-          <el-button type="primary" @click="updata_data" >确 定</el-button>
-          <el-button @click="close()" >取 消</el-button>
+          <el-button type="primary" @click="updata_data" v-if="editType!=='view'">确 定</el-button>
+          <el-button  type="primary" @click="close()" >取 消</el-button>
         </div>
       </el-dialog>
       </div>
@@ -167,18 +168,19 @@
 import { data_Commission ,data_CarList,data_ServerClassList} from '@/api/server/areaPrice.js'
 import { data_get_ownerFromsame1_Id,data_get_ownerFromsame_update,data_get_ownerFromsame2_Id} from '@/api/marketing/carmarkting/carOwner.js'
 import Upload from '@/components/Upload/singleImage'
-import vregion from '@/components/vregion/Region'
 import { eventBus } from '@/eventBus'
 import {data_get_shipper_type,data_get_shipper_create,data_get_shipper_change,data_get_shipper_view} from '@/api/users/shipper/all_shipper.js'
 export default {
   components:{
     Upload,
-    vregion,
   },
   props:{
     params:{
       type:[Object,String,Array],
     },
+    paramsView:{
+    type:Object,
+    },     
     value:{
       type: String,
       default:''
@@ -241,7 +243,7 @@ export default {
 
     //    区域奖励上限校验
         const rewardMaxValidator = (rule, val, cb) => {
-            var reg= /[^\d.]/g
+            var reg= /[^\d]/g
             if(!val){
             cb(new Error('区域奖励上限不能为空'))
             }
@@ -255,7 +257,7 @@ export default {
 
     //   参数校验
         const rewardValidator = (rule, val, cb) => {
-            var reg= /[^\d.]/g
+            var reg= /[^\d]/g
             if(!val){
                 cb()
             }
@@ -270,82 +272,82 @@ export default {
         }   
     //   参数校验1
         const rewardValidator1 = (rule, val, cb) => {
-            var reg= /[^\d.]/g
+            var reg= /[^\d]/g
             if(!val){cb()}
             else{if(reg.test(val)){cb(new Error('请输入正整数'))}
             else if(parseInt(val)>parseInt(this.$refs['reward2'].value)){cb(new Error('不能大于订单金额范围'))}else{cb()}}}   
     //   参数校验2
         const rewardValidator2 = (rule, val, cb) => {
-            var reg= /[^\d.]/g
+            var reg= /[^\d]/g
             if(!val){cb()}
             else{if(reg.test(val)){cb(new Error('请输入正整数'))}
             else if(parseInt(val)>parseInt(this.$refs['reward4'].value)){cb(new Error('不能大于订单金额范围'))}else{cb()}}}   
     //   参数校验3
         const rewardValidator3 = (rule, val, cb) => {
-            var reg= /[^\d.]/g
+            var reg= /[^\d]/g
             if(!val){cb()}
             else{if(reg.test(val)){cb(new Error('请输入正整数'))}
             else if(parseInt(val)>parseInt(this.$refs['reward6'].value)){cb(new Error('不能大于订单金额范围'))}else{cb()}}}   
     //   参数校验4
         const rewardValidator4 = (rule, val, cb) => {
-            var reg= /[^\d.]/g
+            var reg= /[^\d]/g
             if(!val){cb()}
             else{if(reg.test(val)){cb(new Error('请输入正整数'))}
             else if(parseInt(val)>parseInt(this.$refs['reward8'].value)){cb(new Error('不能大于订单金额范围'))}else{cb()}}}   
     //   参数校验5
         const rewardValidator5 = (rule, val, cb) => {
-            var reg= /[^\d.]/g
+            var reg= /[^\d]/g
             if(!val){cb()}
             else{if(reg.test(val)){cb(new Error('请输入正整数'))}
             else if(parseInt(val)>parseInt(this.$refs['reward10'].value)){cb(new Error('不能大于订单金额范围'))}else{cb()}}}   
     //   参数校验6
         const rewardValidator6 = (rule, val, cb) => {
-            var reg= /[^\d.]/g
+            var reg= /[^\d]/g
             if(!val){cb()}
             else{if(reg.test(val)){cb(new Error('请输入正整数'))}
             else if(parseInt(val)>parseInt(this.$refs['reward12'].value)){cb(new Error('不能大于订单金额范围'))}else{cb()}}}   
     //   参数校验7
         const rewardValidator7 = (rule, val, cb) => {
-            var reg= /[^\d.]/g
+            var reg= /[^\d]/g
             if(!val){cb()}
             else{if(reg.test(val)){cb(new Error('请输入正整数'))}
             else if(parseInt(val)>parseInt(this.$refs['reward14'].value)){cb(new Error('不能大于订单金额范围'))}else{cb()}}}   
     //   参数校验8
         const rewardValidator8 = (rule, val, cb) => {
-            var reg= /[^\d.]/g
+            var reg= /[^\d]/g
             if(!val){cb()}
             else{if(reg.test(val)){cb(new Error('请输入正整数'))}
             else if(parseInt(val)>parseInt(this.$refs['reward16'].value)){cb(new Error('不能大于订单金额范围'))}else{cb()}}}   
 
-        const reward2Validator = (rule, val, cb) => {if(!val){cb(new Error('数据不能为空'))}else if(/[^\d.]/g.test(val)){cb(new Error('请输入正整数'))}else if(parseInt(val)<=parseInt(this.$refs['reward1'].value)){
+        const reward2Validator = (rule, val, cb) => {if(!val){cb(new Error('数据不能为空'))}else if(/[^\d]/g.test(val)){cb(new Error('请输入正整数'))}else if(parseInt(val)<=parseInt(this.$refs['reward1'].value)){
             cb(new Error('必须大于前框值'))}else{cb()} }   
-        const reward3Validator = (rule, val, cb) => {if(!val){cb(new Error('数据不能为空'))}else if(/[^\d.]/g.test(val)){cb(new Error('请输入正整数'))}else if(parseInt(val)<=parseInt(this.$refs['reward2'].value)){
+        const reward3Validator = (rule, val, cb) => {if(!val){cb(new Error('数据不能为空'))}else if(/[^\d]/g.test(val)){cb(new Error('请输入正整数'))}else if(parseInt(val)<=parseInt(this.$refs['reward2'].value)){
             cb(new Error('必须大于前框值'))}else{cb()} }   
-        const reward4Validator = (rule, val, cb) => {if(!val){cb(new Error('数据不能为空'))}else if(/[^\d.]/g.test(val)){cb(new Error('请输入正整数'))}else if(parseInt(val)<=parseInt(this.$refs['reward3'].value)){
+        const reward4Validator = (rule, val, cb) => {if(!val){cb(new Error('数据不能为空'))}else if(/[^\d]/g.test(val)){cb(new Error('请输入正整数'))}else if(parseInt(val)<=parseInt(this.$refs['reward3'].value)){
             cb(new Error('必须大于前框值'))}else{cb()} }   
-        const reward5Validator = (rule, val, cb) => {if(!val){cb(new Error('数据不能为空'))}else if(/[^\d.]/g.test(val)){cb(new Error('请输入正整数'))}else if(parseInt(val)<=parseInt(this.$refs['reward4'].value)){
+        const reward5Validator = (rule, val, cb) => {if(!val){cb(new Error('数据不能为空'))}else if(/[^\d]/g.test(val)){cb(new Error('请输入正整数'))}else if(parseInt(val)<=parseInt(this.$refs['reward4'].value)){
             cb(new Error('必须大于前框值'))}else{cb()} }           
-        const reward6Validator = (rule, val, cb) => {if(!val){cb(new Error('数据不能为空'))}else if(/[^\d.]/g.test(val)){cb(new Error('请输入正整数'))}else if(parseInt(val)<=parseInt(this.$refs['reward5'].value)){
+        const reward6Validator = (rule, val, cb) => {if(!val){cb(new Error('数据不能为空'))}else if(/[^\d]/g.test(val)){cb(new Error('请输入正整数'))}else if(parseInt(val)<=parseInt(this.$refs['reward5'].value)){
             cb(new Error('必须大于前框值'))}else{cb()} }   
-        const reward7Validator = (rule, val, cb) => {if(!val){cb(new Error('数据不能为空'))}else if(/[^\d.]/g.test(val)){cb(new Error('请输入正整数'))}else if(parseInt(val)<=parseInt(this.$refs['reward6'].value)){
+        const reward7Validator = (rule, val, cb) => {if(!val){cb(new Error('数据不能为空'))}else if(/[^\d]/g.test(val)){cb(new Error('请输入正整数'))}else if(parseInt(val)<=parseInt(this.$refs['reward6'].value)){
             cb(new Error('必须大于前框值'))}else{cb()} }       
-        const reward8Validator = (rule, val, cb) => {if(!val){cb(new Error('数据不能为空'))}else if(/[^\d.]/g.test(val)){cb(new Error('请输入正整数'))}else if(parseInt(val)<=parseInt(this.$refs['reward7'].value)){
+        const reward8Validator = (rule, val, cb) => {if(!val){cb(new Error('数据不能为空'))}else if(/[^\d]/g.test(val)){cb(new Error('请输入正整数'))}else if(parseInt(val)<=parseInt(this.$refs['reward7'].value)){
             cb(new Error('必须大于前框值'))}else{cb()} }   
-        const reward9Validator = (rule, val, cb) => {if(!val){cb(new Error('数据不能为空'))}else if(/[^\d.]/g.test(val)){cb(new Error('请输入正整数'))}else if(parseInt(val)<=parseInt(this.$refs['reward8'].value)){
+        const reward9Validator = (rule, val, cb) => {if(!val){cb(new Error('数据不能为空'))}else if(/[^\d]/g.test(val)){cb(new Error('请输入正整数'))}else if(parseInt(val)<=parseInt(this.$refs['reward8'].value)){
             cb(new Error('必须大于前框值'))}else{cb()} }       
-        const reward10Validator = (rule, val, cb) => {if(!val){cb(new Error('数据不能为空'))}else if(/[^\d.]/g.test(val)){cb(new Error('请输入正整数'))}else if(parseInt(val)<=parseInt(this.$refs['reward9'].value)){
+        const reward10Validator = (rule, val, cb) => {if(!val){cb(new Error('数据不能为空'))}else if(/[^\d]/g.test(val)){cb(new Error('请输入正整数'))}else if(parseInt(val)<=parseInt(this.$refs['reward9'].value)){
             cb(new Error('必须大于前框值'))}else{cb()} }   
-        const reward11Validator = (rule, val, cb) => {if(!val){cb(new Error('数据不能为空'))}else if(/[^\d.]/g.test(val)){cb(new Error('请输入正整数'))}else if(parseInt(val)<=parseInt(this.$refs['reward10'].value)){
+        const reward11Validator = (rule, val, cb) => {if(!val){cb(new Error('数据不能为空'))}else if(/[^\d]/g.test(val)){cb(new Error('请输入正整数'))}else if(parseInt(val)<=parseInt(this.$refs['reward10'].value)){
             cb(new Error('必须大于前框值'))}else{cb()} }   
-        const reward12Validator = (rule, val, cb) => {if(!val){cb(new Error('数据不能为空'))}else if(/[^\d.]/g.test(val)){cb(new Error('请输入正整数'))}else if(parseInt(val)<=parseInt(this.$refs['reward11'].value)){
+        const reward12Validator = (rule, val, cb) => {if(!val){cb(new Error('数据不能为空'))}else if(/[^\d]/g.test(val)){cb(new Error('请输入正整数'))}else if(parseInt(val)<=parseInt(this.$refs['reward11'].value)){
             cb(new Error('必须大于前框值'))}else{cb()} }   
-        const reward13Validator = (rule, val, cb) => {if(!val){cb(new Error('数据不能为空'))}else if(/[^\d.]/g.test(val)){cb(new Error('请输入正整数'))}else if(parseInt(val)<=parseInt(this.$refs['reward12'].value)){
+        const reward13Validator = (rule, val, cb) => {if(!val){cb(new Error('数据不能为空'))}else if(/[^\d]/g.test(val)){cb(new Error('请输入正整数'))}else if(parseInt(val)<=parseInt(this.$refs['reward12'].value)){
             cb(new Error('必须大于前框值'))}else{cb()} }       
-        const reward14Validator = (rule, val, cb) => {if(!val){cb(new Error('数据不能为空'))}else if(/[^\d.]/g.test(val)){cb(new Error('请输入正整数'))}else if(parseInt(val)<=parseInt(this.$refs['reward13'].value)){
+        const reward14Validator = (rule, val, cb) => {if(!val){cb(new Error('数据不能为空'))}else if(/[^\d]/g.test(val)){cb(new Error('请输入正整数'))}else if(parseInt(val)<=parseInt(this.$refs['reward13'].value)){
             cb(new Error('必须大于前框值'))}else{cb()} }   
-        const reward15Validator = (rule, val, cb) => {if(!val){cb(new Error('数据不能为空'))}else if(/[^\d.]/g.test(val)){cb(new Error('请输入正整数'))}else if(parseInt(val)<=parseInt(this.$refs['reward14'].value)){
+        const reward15Validator = (rule, val, cb) => {if(!val){cb(new Error('数据不能为空'))}else if(/[^\d]/g.test(val)){cb(new Error('请输入正整数'))}else if(parseInt(val)<=parseInt(this.$refs['reward14'].value)){
             cb(new Error('必须大于前框值'))}else{cb()} }   
-        const reward16Validator = (rule, val, cb) => {if(!val){cb(new Error('数据不能为空'))}else if(/[^\d.]/g.test(val)){cb(new Error('请输入正整数'))}else if(parseInt(val)<=parseInt(this.$refs['reward15'].value)){
+        const reward16Validator = (rule, val, cb) => {if(!val){cb(new Error('数据不能为空'))}else if(/[^\d]/g.test(val)){cb(new Error('请输入正整数'))}else if(parseInt(val)<=parseInt(this.$refs['reward15'].value)){
             cb(new Error('必须大于前框值'))}else{cb()} }    
         return{
         areaName:null,
@@ -434,9 +436,7 @@ export default {
         },
     },
   },
-  components:{
-        vregion,
-  },
+
   mounted(){
   },
   methods:{
@@ -448,6 +448,12 @@ export default {
                 return obj ? obj.value:'';
             },
    openDialog:function(){
+        if(this.editType == 'view'){
+            this.update1(this.paramsView.id);
+            this.$forceUpdate()
+            this.dialogFormVisible_add = true;
+            }
+            else{
           if(this.params.length == 0 && this.editType !== 'add'){
                this.$message.warning('请选择您要操作的用户');
                return
@@ -470,23 +476,11 @@ export default {
             return
            }
            else{
-            this.update1();
+            this.update1(this.params[0].id);
             this.$forceUpdate()
             this.dialogFormVisible_add = true;
-            data_get_ownerFromsame1_Id(this.params[0].id).then(res=>{
-            if(res.data.area==null){
-            this.areaName =res.data.province+res.data.city
             }
-            else{
-            this.areaName =res.data.province+res.data.city+res.data.area
-            }
-            this.formAll.areaCode=res.data.areaCode
-            this.formAll.rewardMax=res.data.rewardMax
-            this.formAll.carType=res.data.carType
-            this.formAll.serivceCode=res.data.serivceCode
-            this.formAll.usingStatus=res.data.usingStatus
-           })
-            }
+           }
            }
    },
         inputChange(i){
@@ -555,8 +549,21 @@ export default {
                 });         
                 
           }, 
-          update1:function(){
-              data_get_ownerFromsame2_Id(this.params[0].id).then(res=>{
+          update1:function(Id){
+            data_get_ownerFromsame1_Id(Id).then(res=>{
+            if(res.data.area==null){
+            this.areaName =res.data.province+res.data.city
+            }
+            else{
+            this.areaName =res.data.province+res.data.city+res.data.area
+            }
+            this.formAll.areaCode=res.data.areaCode
+            this.formAll.rewardMax=res.data.rewardMax
+            this.formAll.carType=res.data.carType
+            this.formAll.serivceCode=res.data.serivceCode
+            this.formAll.usingStatus=res.data.usingStatus
+           })
+              data_get_ownerFromsame2_Id(Id).then(res=>{
             this.formAll.reward1 = res.data[0].startPrice;this.formAll.reward2 = res.data[0].endPrice;
             this.formAll.reward3 = res.data[1].startPrice;this.formAll.reward4 = res.data[1].endPrice;
             this.formAll.reward5 = res.data[2].startPrice;this.formAll.reward6 = res.data[2].endPrice;
@@ -672,4 +679,10 @@ export default {
 }
 </script>
 <style lang="scss" >
+.creatOrder {
+    td{background:#fff!important;}
+    .BtnInfo{
+    font-weight: bold
+    }
+}
 </style>

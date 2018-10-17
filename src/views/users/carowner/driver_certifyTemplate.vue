@@ -11,7 +11,7 @@
                 </el-col>
                 <el-col :span="12">
                     <el-form-item label="车主：" :label-width="formLabelWidth" prop="driverName">
-                        <el-input v-model="templateModel.driverName" ></el-input>
+                        <el-input v-model="templateModel.driverName" :maxlength="20"></el-input>
                     </el-form-item>
                 </el-col>
             </el-row>
@@ -39,7 +39,7 @@
             <el-row>
                 <el-col :span="12">
                     <el-form-item label="车牌号：" :label-width="formLabelWidth" prop="carNumber">
-                        <el-input v-model="templateModel.carNumber"></el-input>
+                        <el-input v-model="templateModel.carNumber" :maxlength="8"></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col :span="12">
@@ -467,8 +467,12 @@ export default {
 
       // 中单等级有效期校验 
         const obtainGradeTimeValidator = (rule,val,cb)=>{
+            let timestamp = (new Date()).getTime();
             if(!val){
-            cb(new Error('请填写中单等级有效期'))
+            cb(new Error('中单等级有效期不能为空'))
+            }
+            else if(val<timestamp){
+            cb(new Error('中单等级有效期不能早于当天'))
             }
             else{
                 cb()
@@ -526,7 +530,8 @@ export default {
         carHeight:{validator:carHeightValidator, trigger:'change',required:true,},
         carSpec:{validator: carSpecValidator, trigger:'change',required:true,},
         carType:{validator: carTypeValidator, trigger:'change',required:true,},
-        belongCity:{validator: belongCityNameValidator, trigger:'change',required:true,},            
+        belongCity:{validator: belongCityNameValidator, trigger:'change',required:true,},     
+        belongCityName:{validator: belongCityNameValidator, trigger:'change',required:true,},           
         obtainGrade:{validator:obtainGradeValidator, trigger:'change',required:true,},
         obtainGradeTime:{validator: obtainGradeTimeValidator, trigger:'change',required:true,},
         rewardGrade:{validator: rewardGradeValidator, trigger:'change',required:true,},
@@ -570,6 +575,7 @@ export default {
                 this.templateModel.provinceCode = name.split(',')[0];
                 this.templateModel.cityCode= name.split(',')[1];
                 this.templateModel.areaCode = name.split(',')[2];
+                this.templateModel.belongCityName = name.split(',')[0]+name.split(',')[1]+name.split(',')[2]
             },   
         // 省市状态表
      changeSelect(){
@@ -681,18 +687,25 @@ export default {
                     }
                     else{
                 this.$refs['templateModel'].validate((valid)=>{
+                console.log(this.radio1,this.radio2,this.radio3,this.radio4,this.radio5)
                 if(valid){
+                    if(this.radio1=='上传合格'&&this.radio2=='上传合格'&&this.radio3=='上传合格'&&this.radio4=='上传合格'&&this.radio5=='上传合格')
+                    {
+                     this.$message.error('图片审核中图片全部合格，不能进行审核不通过处理')
+                    }
+                    else{
                     this.templateModel.carLength=parseFloat(this.templateModel.carLength).toFixed(2)
                     this.templateModel.carWidth=parseFloat(this.templateModel.carWidth).toFixed(2)
                     this.templateModel.carHeight= parseFloat(this.templateModel.carHeight).toFixed(2)
                     var forms=Object.assign({},this.templateModel,{driverStatus:"AF0010404"},{authNoPassCause:JSON.stringify(this.pictureValue)})
                     this.freezeDialogFlag = false;
                     data_post_audit(forms).then(res=>{
-                        this.$message.success('审核不通过 提交')
+                        this.$message.success('审核不通过提交')
                         this.changeList()
                     }).catch(err=>{
                         console.log(err)
                     })
+                    }
                     }
                 })
                 }
@@ -707,6 +720,8 @@ export default {
                     else{
                 this.$refs['templateModel'].validate((valid)=>{
                     if(valid){
+                    if(this.radio1=='上传合格'&&this.radio2=='上传合格'&&this.radio3=='上传合格'&&this.radio4=='上传合格'&&this.radio5=='上传合格')
+                    {
                         this.templateModel.carLength=parseFloat(this.templateModel.carLength).toFixed(2)
                         this.templateModel.carWidth=parseFloat(this.templateModel.carWidth).toFixed(2)
                         this.templateModel.carHeight= parseFloat(this.templateModel.carHeight).toFixed(2)
@@ -718,6 +733,10 @@ export default {
                         }).catch(err=>{
                             console.log(err)
                         })
+                    }
+                    else{
+                         this.$message.error('图片审核中图片有不合格的，不能进行审核通过处理')
+                    }
                     }
                 })
                 }     

@@ -109,6 +109,7 @@ export default {
             formAllData:{
                 areaCode: null,
                 partnerCompany:null,
+                areaName:null,
             }
         }
     },
@@ -170,10 +171,7 @@ export default {
     // 清空查询
     clearSearch(){
                 this.formAllData.areaCode = null;
-                this.formAllData.province = null,
-                this.formAllData.city = null,
-                this.formAllData.area = null,
-                this.formAllData.areaName = [];
+                this.formAllData.areaName = null;
                 this.formAllData.partnerCompany=null,
                 this.firstblood();
     },

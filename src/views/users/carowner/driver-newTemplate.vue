@@ -10,14 +10,14 @@
              >
               <el-row>
                   <el-col :span="12">
-                      <span v-if="editType=='view'||editType=='edit'">
+                      <span v-if="editType=='view'||editType=='edit'||editType=='valetAuth'">
                     <el-form-item label="手机号：" :label-width="formLabelWidth" >
                        <el-input v-model.trim="templateModel.driverMobile" auto-complete="off" disabled></el-input>
                     </el-form-item>
                     </span>
                     <span v-else>
                     <el-form-item label="手机号：" prop="driverMobile" :label-width="formLabelWidth" >
-                       <el-input v-model.trim="templateModel.driverMobile" auto-complete="off"></el-input>
+                       <el-input v-model.trim="templateModel.driverMobile" auto-complete="off" :maxlength="11"></el-input>
                     </el-form-item>
                     </span>
                   </el-col>
@@ -320,10 +320,10 @@ export default {
             !val && cb(new Error('手机号码不能为空'))
             if(!(phoneTest.test(val))){
                 cb(new Error('请输入正确的手机号码格式'))
-            } 
-            else {
-                data_post_mobileGetDriver(val).then(res=>{
-                    console.log(res)
+            }
+            else{
+            if(this.editType=='add') {
+                 data_post_mobileGetDriver(val).then(res=>{
                         cb()
                 }).catch(err=>{
                   if(err){
@@ -331,6 +331,11 @@ export default {
                   }
                 })
             }
+            else{
+             cb()
+            }
+            }
+
         }
     //    车主信息校验
         const driverNameValidator = (rule, val, cb) => {
@@ -349,19 +354,19 @@ export default {
             if(!(IdTest.test(val))){
                 cb(new Error('请输入正确的身份证'))
             }
-            else {
-                if(this.editType=='edit'){
-                    cb()
-                }
-                else{
+            else{
+            if(this.editType=='add') {
                 data_post_checkDriverCardid(val).then(res=>{
                  cb()
                 }).catch(err=>{
                     console.log(err)
                         cb(new Error('该身份证已经注册~'))
                 })
-                }
             }
+            else{
+                 cb()
+            }
+        }
         }
     //    车牌号信息校验
         const carNumberValidator = (rule, val, cb) => {
@@ -445,8 +450,12 @@ export default {
         }      
     //    中单等级有效期校验
         const obtainGradeTimeValidator = (rule, val, cb) => {
+            let timestamp = (new Date()).getTime();
             if(!val){
             cb(new Error('中单等级有效期不能为空'))
+            }
+            else if(val<timestamp){
+            cb(new Error('中单等级有效期不能早于当天'))
             }
             else{
                 cb()
@@ -617,7 +626,6 @@ export default {
         }
         },
     mounted(){
-        
     },
     methods:{
         // 省市区选择
@@ -627,6 +635,7 @@ export default {
                 this.templateModel.provinceCode = name.split(',')[0];
                 this.templateModel.cityCode= name.split(',')[1];
                 this.templateModel.areaCode = name.split(',')[2];
+                 this.templateModel.belongCityName = name.split(',')[0]+name.split(',')[1]+name.split(',')[2]
             },        
         // 省市状态表
      changeSelect(){
@@ -732,7 +741,7 @@ export default {
                     var forms= Object.assign({}, this.templateModel)
                     console.log('this.templateModel',forms)
                      this.driverTemplateDialogFlag = false;
-                    新增数据提交
+                    // 新增数据提交
                     if(this.editType === 'add'){
                         data_post_createDriver(forms).then(res=>{
                             this.$message.success('新增成功')

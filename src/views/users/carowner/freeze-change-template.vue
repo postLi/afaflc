@@ -203,8 +203,8 @@
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button type="primary" @click="onSubmit" v-if=" editType == 'edit'">确 定</el-button>
-        <el-button type="primary" @click="onSubmit2" v-else-if=" editType == 'edit-two'">确定2</el-button>
-        <el-button type="primary" @click="onSubmit3" v-else-if=" editType == 'edit-three'">确定3</el-button>
+        <el-button type="primary" @click="onSubmit2" v-else-if=" editType == 'edit-two'">确定</el-button>
+        <el-button type="primary" @click="onSubmit3" v-else-if=" editType == 'edit-three'">确定</el-button>
         <el-button @click="freezeDialogFlag = false">取 消</el-button>
       </div>
     </el-dialog>

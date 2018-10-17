@@ -2,12 +2,7 @@
   <div  class="identicalStyle Marketing" style="height:100%;">
           <el-form :inline="true" class="demo-ruleForm classify_searchinfo">
             <el-form-item label="所属区域：">
-                   <el-cascader
-                    size="large"
-                    :options="options"
-                    v-model="formAllData.areaName"
-                    @change="handleChange">
-                    </el-cascader>
+            <GetCityList ref="area" v-model="formAllData.areaName"  @returnStr="getStr"></GetCityList>
             </el-form-item>
             <el-form-item label="服务类型：">
                  <el-select v-model="formAllData.serivceCode" clearable placeholder="请选择" >
@@ -85,6 +80,16 @@
             <el-table-column  label="服务分类" prop="serivceCode" sortable>
             </el-table-column>
             <el-table-column  label="车辆类型" prop="carType" sortable>
+            <template slot-scope="scope">
+                    <modOwner
+                    :btntext="scope.row.carType"
+                    type="primary" 
+                    btntype="text"
+                    editType="view"
+                    btntitle="详情"
+                    :paramsView="scope.row">
+                    </modOwner>
+            </template>
             </el-table-column>                          
             <el-table-column  label="启用状态" sortable>
             <template  slot-scope="scope">
@@ -105,7 +110,7 @@
 <script>
 import { data_Commission ,data_CarList,data_MaidLevel,data_ServerClassList} from '@/api/server/areaPrice.js'
 import { data_get_ownerFromsame_list,data_get_ownerFromsame2_Id,data_Able_ownerFromsame,data_Del_ownerFromsame} from '@/api/marketing/carmarkting/carOwner.js'
-import { regionDataPlus, CodeToText, TextToCode } from 'element-china-area-data'
+import GetCityList from '@/components/GetCityList/city'
 import newOwner from '../../components/newOwner.vue'
 import modOwner from '../../components/modOwner.vue'
 import { eventBus } from '@/eventBus'
@@ -114,8 +119,7 @@ import {parseTime} from '@/utils/'
 export default {
   data(){
     return{
-      btnsize:'mini',
-      options:regionDataPlus,        
+      btnsize:'mini',     
       selectRowData:{},
       selectId:[],
       sizes:[20,50,100],
@@ -140,33 +144,14 @@ export default {
     components:{
         newOwner,
         Pager,
-        modOwner
+        modOwner,
+        GetCityList
     },
     methods:{
-        handleChange(d){
-           console.log('d',d)
-           if(d.length<3){
-                if(d.length==2){
-                this.$message.error('请选择具体的城市');
-                }
-                this.formAllData.areaCode = null;
-                this.formAllData.province = null,
-                this.formAllData.city = null,
-                this.formAllData.area = null,
-                this.formAllData.areaName = [];
-           }
-           else{
-                this.formAllData.areaCode = d
-                this.formAllData.province = CodeToText[d[0]]
-                this.formAllData.city =  CodeToText[d[1]]
-                if(d[2]==''){
-                this.formAllData.area = ''
-                }
-                else{
-                this.formAllData.area = CodeToText[d[2]]
-                }
-           }
-        },
+      getStr(val,name){
+                console.log('this.cityarr',val,name)
+                this.formAllData.areaCode = val.split(',')[2];
+            },  
             //获取  服务和车辆 类型列表
             getMoreInformation(){
                 data_CarList().then(res=>{
@@ -192,32 +177,7 @@ export default {
           },
           // 列表刷新页面  
             firstblood(){
-                let FromData = {}
-                if(this.formAllData.area) {
-                    FromData = {
-                     area:this.formAllData.area,
-                     city:null,
-                     carType:this.formAllData.carType,
-                     serivceCode:this.formAllData.serivceCode,               
-                    }
-                }
-                else if(this.formAllData.city){
-                    FromData = {
-                     area:null,
-                     city:this.formAllData.city,
-                     carType:this.formAllData.carType,
-                     serivceCode:this.formAllData.serivceCode,               
-                    }                    
-                }
-                else{
-                    FromData = {
-                     area:null,
-                     city:null,
-                     carType:this.formAllData.carType,
-                     serivceCode:this.formAllData.serivceCode,               
-                    }  
-                }
-                data_get_ownerFromsame_list(this.page,this.pagesize,FromData).then(res => {
+                data_get_ownerFromsame_list(this.page,this.pagesize,this.formAllData).then(res => {
                     this.dataTotal = res.data.totalCount
                     this.tableDataAll = res.data.list;
                 })
@@ -232,10 +192,7 @@ export default {
             areaCode: null,
             carType:null,
             serivceCode:null,
-            province:null,
-            city:null,
-            area:null,
-            areaName:[]
+            areaName:null
         }
             this.firstblood()    
         },

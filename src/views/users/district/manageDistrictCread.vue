@@ -565,15 +565,20 @@ export default {
             contractEndDate:this.formAll.contractEndDate,
             aflcPartnerFileList:this.formAll.aflcPartnerFileList,
             aflcPartnerAreaList:this.formAll.aflcPartnerAreaList,
-        }]
-           this.dialogFormVisible_add = false;        
+        }] 
         data_get_aflcPartner_create(forms).then(res=>{
            this.$message.success('新增成功');
            this.changeList();
-
+           this.dialogFormVisible_add = false;       
         }).catch(res=>{
+            console.log('res',res.text)
+            if(res.text == '区代公司已存在'){
+                this.$message.error(res.text)
+            }else{
             this.$message.error('新增失败')
             this.changeList();
+            }
+
         })
        }
        })

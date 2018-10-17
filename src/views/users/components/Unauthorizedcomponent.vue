@@ -21,7 +21,7 @@
                     :plain="true"
                     type="primary" 
                     btntype="primary"
-                    icon="el-icon-document"
+                    icon="el-icon-check"
                     editType="valetAuth"
                     :templateItem="selectionData"
                     btntitle="代客认证"
@@ -41,7 +41,7 @@
                         highlight-current-row
                         current-row-key
                         tooltip-effect="dark"
-                        @selection-change="getSelection" 
+                        @selection-change="getSelection"
                         @row-click="clickDetails"
                         style="width: 100%">
                          <el-table-column
@@ -110,8 +110,7 @@
                     </template>
                         </el-table-column>
                     </el-table>
-                        
-<div class="info_tab_footer">共计:{{ totalCount }} <div class="show_pager"> <Pager :total="totalCount" @change="handlePageChange" /></div> </div>   
+    <div class="info_tab_footer">共计:{{ totalCount }} <div class="show_pager"> <Pager :total="totalCount" @change="handlePageChange" /></div> </div>   
                 </div>
             </div>
     </div>

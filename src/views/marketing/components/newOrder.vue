@@ -2,7 +2,7 @@
      <div class="ordercreatcity commoncss">
       <el-button :type="btntype" :value="value" :plain="plain" :icon="icon" @click="openDialog()">{{btntext}}</el-button>
       <div class="newMarketingOrder">
-      <el-dialog  :visible="dialogFormVisible_add" :before-close="change">
+      <el-dialog  :visible="dialogFormVisible_add" :before-close="change" :title="btntitle">
         <el-form :model="formAll" ref="formAll" :rules="rulesForm">
           <el-row v-if="editType=='edit'">
               <el-col>
@@ -41,13 +41,7 @@
              <tr>
              <td>
                  <el-form-item  prop="areaName" v-if="editType=='add'"> 
-                   <el-cascader
-                    size="large"
-                    :options="options"
-                    v-model="formAll.areaName"
-                    @change="handleChange"
-                     >
-                    </el-cascader>
+                <GetCityList ref="area" v-model="formAll.areaName"  @returnStr="getStr"></GetCityList>
                  </el-form-item>
                 <el-form-item v-else> 
                     <el-input v-model="areaName" placeholder="" disabled ></el-input>   
@@ -138,12 +132,13 @@
 import { data_Commission ,data_CarList,data_MaidLevel} from '@/api/server/areaPrice.js'
 import { data_get_orderFromsame_create,data_get_orderFromsame_update,data_get_orderFromsame_Id} from '@/api/marketing/carmarkting/orderFrom.js'
 import Upload from '@/components/Upload/singleImage'
-import { regionDataPlus, CodeToText, TextToCode } from 'element-china-area-data'
+import GetCityList from '@/components/GetCityList/city'
 import { eventBus } from '@/eventBus'
 import {data_get_shipper_type,data_get_shipper_create,data_get_shipper_change,data_get_shipper_view} from '@/api/users/shipper/all_shipper.js'
 export default {
   components:{
     Upload,
+    GetCityList
   },
   props:{
     paramsView:{
@@ -218,9 +213,9 @@ export default {
 
     //    开始抽佣单数校验
         const rewardValidator = (rule, val, cb) => {
-            var reg= /[^\d.]/g
+            var reg= /[^\d]/g
             if(!val){
-            cb(new Error('开始抽佣不能为空'))
+            cb(new Error('不能为空'))
             }
             else if(reg.test(val)){
             cb(new Error('请输入正整数'))
@@ -233,8 +228,7 @@ export default {
 
         return{
         areaStatus:null,
-        areaName:null,
-        options:regionDataPlus,      
+        areaName:null, 
         dialogFormVisible_add: false,
         MaidLevelValueCar:'',
         optionsCar:[],
@@ -285,28 +279,14 @@ export default {
   mounted(){
   },
   methods:{
-        handleChange(d){
-           console.log('d',d)
-           if(d.length<3){
-                this.$message.info('请选择具体的城市');
-                this.formAll.areaName = [];
-                this.formAll.areaCode = [];
-                this.formAll.province = null
-                this.formAll.city = null
-                this.formAll.area = null
-           }
-           else{
-                this.formAll.areaCode = d
-                this.formAll.province = CodeToText[d[0]]
-                this.formAll.city =  CodeToText[d[1]]
-                if(d[2]==''){
-                this.formAll.area = null
-                }
-                else{
-                this.formAll.area = CodeToText[d[2]]
-                }
-           }
-        },
+    getStr(val,name){
+                console.log('this.cityarr',val,name)
+                this.formAll.areaCode = val.split(',')[2];
+                this.formAll.areaName = name.split(',')[2];
+                this.formAll.province = name.split(',')[0];
+                this.formAll.city = name.split(',')[1];
+                this.formAll.area = name.split(',')[2];
+            }, 
    openDialog:function(){
        if(this.editType=='edit'){
           if(this.params.length == 0 && this.editType !== 'add'){
@@ -368,14 +348,8 @@ export default {
    add_data(){
        this.$refs['formAll'].validate(valid=>{
         if(valid){
-            if(this.formAll.area){
-               this.areaStatus = this.formAll.areaCode[2]
-            }
-            else{
-               this.areaStatus = this.formAll.areaCode[1]
-            }
         var forms=[{
-            areaCode:this.areaStatus,
+            areaCode:this.formAll.areaCode,
             carType:this.formAll.carType,
             commissionGrade:this.formAll.commissionGrade,
             reward1:this.formAll.reward1,
