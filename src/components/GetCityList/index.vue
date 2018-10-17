@@ -5,7 +5,6 @@
         v-model="selectedOptions"
         :options="cityTree"
         ref="cityTree"
-        change-on-select
         @change="handleItemMore"
         :disabled="disabled"
         :props="props">

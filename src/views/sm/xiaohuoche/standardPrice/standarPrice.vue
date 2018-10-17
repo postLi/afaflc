@@ -176,6 +176,7 @@ export default {
                 servicePic: ''
             },
             specList: [],
+            specListName:[],
             serverCheckList:[],//服务分类
             carCheckList:[],//车辆类型
             newrules: {
@@ -263,8 +264,16 @@ export default {
                 if (valid) {
                     this.btnShow = true;
                     let standarFunction;
+                    this.optionsCarTypeM.forEach(el => {
+                        this.specList.forEach(item => {
+                            if(el.code == item){
+                                this.specListName.push(el.name)
+                            }
+                        })
+                    })
                     let spec = this.specList.join(',');
-                    let forms = objectMerge2({},this.standForm,{spec:spec})
+                    let specName = this.specListName.join(',');
+                    let forms = objectMerge2({},this.standForm,{spec:spec,specName:specName});
                     console.log(forms)
                     if(!this.isModify){
                         standarFunction = data_NewClassfy(forms);
@@ -272,6 +281,10 @@ export default {
                         standarFunction = data_changeClassfy(forms);
                     }
                     standarFunction.then(res =>{
+                        this.$message({
+                            type: 'success',
+                            message: this.isModify ? '修改成功！' : '新增成功！'
+                        })
                         this.close()
                     }).catch(err => {
                         this.$message({
@@ -323,6 +336,7 @@ export default {
                     border:1px solid #d2d2d2;
                     margin-bottom: 20px;
                     padding-top: 20px;
+                    padding-right: 20px;
                     .chooseinfo-item{
                         // padding: 20px 10px;
                         .el-input{

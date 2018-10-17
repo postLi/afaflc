@@ -211,7 +211,6 @@ import { parseTime,pickerOptions2 } from '@/utils/index.js'
 import Pager from '@/components/Pagination/index'
 import vregion from '@/components/vregion/Region'
 
-
     export default{
         components:{
             Pager,

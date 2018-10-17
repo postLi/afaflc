@@ -88,17 +88,57 @@ export function DicCarType() {
         "expire": "1527005100"
     }
  */
-let UPLOADPOLICYDATA // 用来缓存上传policy
+//let UPLOADPOLICYDATA // 用来缓存上传policy
+// export function getUploadPolicy() {
+//   // 后期可添加是否过期的验证
+//   if (UPLOADPOLICYDATA) {
+//     return new Promise((resolve) => {
+//       resolve(UPLOADPOLICYDATA)
+//     })
+//   } else {
+//     return fetch.get('/api-common/common/oss/v1/policy').then(res => {
+//       UPLOADPOLICYDATA = res.data || ''
+//       return res.data || {}
+//     })
+//   }
+// }
+
+/**
+ * 获取图片上传的policy
+ * callback
+ *"data": {
+        "accessid": "LTAIFj5nQSIxEZ8H",
+        "policy": "eyJleHBpcmF0aW9uIjoiMjAxOC0wNS0yMlQxNjowNTowMC4yNThaIiwiY29uZGl0aW9ucyI6W1siY29udGVudC1sZW5ndGgtcmFuZ2UiLDAsMTA0ODU3NjAwMF0sWyJzdGFydHMtd2l0aCIsIiRrZXkiLCJ0bXMvIl1dfQ==",
+        "signature": "NJ8HhMX9ZpLfNy7ojaA95O0jFxY=",
+        "dir": "tms/",
+        "host": "http://aflc.oss-cn-shenzhen.aliyuncs.com",
+        "expire": "1527005100"
+    }
+ */
+window.UPLOADPOLICYDATA = '' // 用来缓存上传policy
+window.UPLOADPOLICYDATA_timer = '' // 加个定时器变量，防止没有引用的定时器被自动回收
+/* window.UPLOADPOLICYDATA = {
+  'accessid': 'LTAIFj5nQSIxEZ8H',
+  'policy': 'eyJleHBpcmF0aW9uIjoiMjAxOC0wOS0xNlQxOToyMDowMS4zMTJaIiwiY29uZGl0aW9ucyI6W1siY29udGVudC1sZW5ndGgtcmFuZ2UiLDAsMTA0ODU3NjAwMF0sWyJzdGFydHMtd2l0aCIsIiRrZXkiLCJ0bXMvIl1dfQ==',
+  'signature': 'A+ZRKPmw0mFXhNNdd5ycyoH6g9c=',
+  'dir': 'tms/',
+  'host': 'http://aflc.oss-cn-shenzhen.aliyuncs.com',
+  'expire': '1537125601'
+} */
 export function getUploadPolicy() {
   // 后期可添加是否过期的验证
-  if (UPLOADPOLICYDATA) {
+  if (window.UPLOADPOLICYDATA) {
     return new Promise((resolve) => {
-      resolve(UPLOADPOLICYDATA)
+      resolve(window.UPLOADPOLICYDATA)
     })
   } else {
     return fetch.get('/api-common/common/oss/v1/policy').then(res => {
-      UPLOADPOLICYDATA = res.data || ''
-      return res.data || {}
+      window.UPLOADPOLICYDATA = res.data || ''
+      // 定时清除旧数据
+      window.UPLOADPOLICYDATA_timer = setTimeout(() => {
+        window.UPLOADPOLICYDATA = ''
+      }, 1 * 60 * 1000)
+      return window.UPLOADPOLICYDATA
     })
   }
 }

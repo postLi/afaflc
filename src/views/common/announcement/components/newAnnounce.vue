@@ -58,6 +58,7 @@
                     <el-date-picker
                     v-model="announce.endTime"
                     type="date"
+                    @change="getTimeVal"
                     placeholder="选择日期"
                     :picker-options="pickerOptions"
                     default-time="23:59:59"
@@ -240,6 +241,9 @@ export default {
         getValue(obj){
             return obj ? obj.value:'';
         },
+        getTimeVal(val){
+            this.announce.endTime+= 1* 24 * 60 * 60 * 1000 - 1000
+        },
         //初始化选择项数据
         init(){
             getDictionary(this.noticeGroupCode).then(res => {
@@ -266,44 +270,48 @@ export default {
         },
         submitForm(formName) {
             this.$refs[formName].validate((valid) => {
-            if (valid) {
-                let announceform = Object.assign({},this.announce);
-                console.log('announceform',announceform);
-                let config = this.operateType == 'publish' ? '确定要将发布该条公告吗？' : '确定要修改该条公告吗？'
-                this.$confirm(config, '提示', {
-                    confirmButtonText: '确定',
-                    cancelButtonText: '取消',
-                    type: 'warning'
-                }).then(()=>{
-                    let noticeFuncton;
-                    if(this.operateType == 'publish'){
-                        noticeFuncton = newNotice(announceform);
-                    }else{
-                        noticeFuncton = updateNotice(announceform);
-                    }
-                    noticeFuncton.then(res => {
-                        console.log('发布',res)
-                        this.close()
-                    }).catch(err=>{
+                if (valid) {
+                    let announceform = Object.assign({},this.announce);
+                    // if(this.announce.endTime){
+                    //     this.announce.endTime += 1* 24 * 60 * 60 * 1000 - 1000;
+                    //     console.log('endTime',this.announce.endTime)
+                    // }
+                    console.log('announceform',announceform);
+                    let config = this.operateType == 'publish' ? '确定要将发布该条公告吗？' : '确定要修改该条公告吗？';
+                    this.$confirm(config, '提示', {
+                        confirmButtonText: '确定',
+                        cancelButtonText: '取消',
+                        type: 'warning'
+                    }).then(()=>{
+                        let noticeFuncton;
+                        if(this.operateType == 'publish'){
+                            noticeFuncton = newNotice(announceform);
+                        }else{
+                            noticeFuncton = updateNotice(announceform);
+                        }
+                        noticeFuncton.then(res => {
+                            console.log('发布',res)
+                            this.close()
+                        }).catch(err=>{
+                            this.$message({
+                                type: 'info',
+                                message: '操作失败，原因：' + err.errorInfo ? err.errorInfo : err.text
+                            })
+                        })
+                    }).catch(() => {
                         this.$message({
                             type: 'info',
-                            message: '操作失败，原因：' + err.errorInfo ? err.errorInfo : err.text
+                            message: '已取消'
                         })
                     })
-                }).catch(() => {
+                } else {
+                    // console.log('error submit!!');
                     this.$message({
                         type: 'info',
-                        message: '已取消'
+                        message: '操作失败，原因：未填写完整内容！' 
                     })
-                })
-            } else {
-                // console.log('error submit!!');
-                this.$message({
-                    type: 'info',
-                    message: '操作失败，原因：未填写完整内容！' 
-                })
-                return false;
-            }
+                    return false;
+                }
             });
         },
         resetForm(formName) {

@@ -182,6 +182,10 @@ export default {
                     vertical-align: top;
                     width: 24%;
                     font-size: 14px;
+                    overflow: hidden;
+                    white-space: nowrap;
+                    text-overflow: ellipsis;
+                    margin-right: 10px;
                     .spanDiv{
                         display: block;
                     }
@@ -191,6 +195,10 @@ export default {
                         overflow: hidden;
                         white-space: nowrap;
                         text-overflow:ellipsis;
+                        height: 30px;
+                        .el-rate__icon{
+                            line-height: 30px;
+                        }
                     }
                     span:first-child{
                         text-align: center;

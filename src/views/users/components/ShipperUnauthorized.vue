@@ -15,7 +15,6 @@
 				border
                 height="100%"
                 @selection-change="getSelection" 
-                :default-sort = "{prop: 'mobile', order: 'descending'}"
                 @row-click="clickDetails"
 				tooltip-effect="dark"
 				style="width: 100%">

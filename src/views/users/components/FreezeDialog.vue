@@ -277,7 +277,10 @@ export default {
                                 })
                                 this.close()
                             }).catch(err => {
-                                this.$message.error('操作失败，失败原因：',err.text)
+                                this.$message({
+                                    type: 'info',
+                                    message: '操作失败，原因：' + err.errorInfo ? err.errorInfo : err.text
+                                })
                             })
                         }).catch(() => {
                             this.$message({
@@ -303,7 +306,10 @@ export default {
                                 })
                                 this.close()
                             }).catch(err => {
-                                this.$message.error('操作失败，失败原因：',err.text)
+                                this.$message({
+                                    type: 'info',
+                                    message: '操作失败，原因：' + err.errorInfo ? err.errorInfo : err.text
+                                })
                             })
                         }).catch(() => {
                             this.$message({
@@ -323,7 +329,10 @@ export default {
                                 }
                             });
                         }).catch(err => {
-                            this.$message.error('操作失败，失败原因：',err.text)
+                             this.$message({
+                                type: 'info',
+                                message: '操作失败，原因：' + err.errorInfo ? err.errorInfo : err.text
+                            })
                         })
                 }
             }

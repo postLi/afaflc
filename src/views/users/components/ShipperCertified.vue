@@ -12,7 +12,6 @@
 			stripe
 			border
             height="100%"
-            :default-sort = "{prop: 'companyName', order: 'descending'}"
             @selection-change="getSelection" 
             @row-click="clickDetails"
 			tooltip-effect="dark"
@@ -177,7 +176,7 @@
                         <img  class="picURL" :src="shengheform.shipperCardFile ? shengheform.shipperCardFile : defaultImg" v-showPicture :imgurl="shengheform.shipperCardFile"/>
                     </el-tooltip>
                     <h2>发货人名片</h2>
-                    <el-form-item  prop="shipperCardFileNoPass">
+                    <el-form-item  prop="shipperCardFileNoPass" >
                         <el-radio-group v-model="shengheform.shipperCardFileNoPass">
                             <el-radio label="上传合格">上传合格</el-radio><br />
                             <el-radio label="不清晰">不清晰</el-radio><br />
@@ -261,15 +260,16 @@ export default {
                 companyName:[
                     {required: true, message: '请输入公司名称', trigger: 'change'}
                 ],
+                contacts:{required: true, message: '请输入联系人信息', trigger: 'change'},
+                shipperCardFileNoPass:[
+                    {required: true, message: '请选择发货人名片是否合格', trigger: 'change'}
+                ],
                 businessLicenceFileNoPass:[
                     {required: true, message: '请选择营业执照是否合格', trigger: 'change'}
                 ],
                 companyFacadeFileNoPass:[
                     {required: true, message: '请选择公司或档口照片是否合格', trigger: 'change'}
                 ],
-                shipperCardFileNoPass:[
-                    {required: true, message: '请选择发货人名片是否合格', trigger: 'change'}
-                ]
             },
             selected:[],//暂存数据
         }
@@ -398,40 +398,53 @@ export default {
         },
         // 审核不通过
         handlerOut(){
+            let ifQualified;
+            if(this.shengheform.shipperCardFileNoPass =="上传合格" && this.shengheform.companyFacadeFileNoPass == "上传合格" ){
+                ifQualified = true ;
+            }else{
+                ifQualified = false ;
+            }
             this.$refs['shengheform'].validate((valid)=>{
-                if(valid){
-                    let item =  this.shengheform.contacts;
-                    this.$confirm('确定要不通过'+ item +' 货主吗？', '提示', {
-                        confirmButtonText: '确定',
-                        cancelButtonText: '取消',
-                        type: 'warning'
-                    }).then(() => {
-                        var forms=objectMerge2({},this.shengheform,{currentShipperStatus:"AF0010402"},{shipperStatus:"AF0010404",shipperStatusName:'认证不通过'});
-                        
-                        data_get_shipper_change(forms).then(res=>{
-                            // console.log(res)
-                            this.$message({
-                                type: 'success',
-                                message: '该货主未通过审核',
-                                duration:2000
-                            })
-                            this.closeMe();
-                        }).catch(err=>{
-                            this.$message({
-                                type: 'info',
-                                message: '操作失败，原因：' + err.errorInfo ? err.errorInfo : err.text
-                            })
-                        })
-                    }).catch(() => {
+                if(valid ){
+                    if(ifQualified){
                         this.$message({
                             type: 'info',
-                            message: '已取消'
+                            message: '请确认用户提交认证图片信息，如都上传合格，则不能操作审核不通过，货主基本信息可根据上传图片进行修改!'
+                        });
+                    }else{
+                        let item =  this.shengheform.mobile;
+                        this.$confirm('确定要不通过'+ item +' 货主吗？', '提示', {
+                            confirmButtonText: '确定',
+                            cancelButtonText: '取消',
+                            type: 'warning'
+                        }).then(() => {
+                            var forms=objectMerge2({},this.shengheform,{currentShipperStatus:"AF0010402"},{shipperStatus:"AF0010404",shipperStatusName:'认证不通过'});
+                            
+                            data_get_shipper_change(forms).then(res=>{
+                                // console.log(res)
+                                this.$message({
+                                    type: 'success',
+                                    message: '该货主未通过审核',
+                                    duration:2000
+                                })
+                                this.closeMe();
+                            }).catch(err=>{
+                                this.$message({
+                                    type: 'info',
+                                    message: '操作失败，原因：' + err.errorInfo ? err.errorInfo : err.text
+                                })
+                            })
+                        }).catch(() => {
+                            this.$message({
+                                type: 'info',
+                                message: '已取消'
+                            })
                         })
-                    })
+                    }
                 } else {
-                    return  this.$message({
+                    this.$message({
                         type: 'info',
-                        message: '审核未满足通过要求，请填写完整数据'
+                        message: '审核未满足未通过要求，请填写完整数据!'
                     });
                 }
             })
@@ -439,13 +452,13 @@ export default {
 
         // 审核通过
         handlerPass(){
-            let ifQualified;
-            if(this.shengheform.shipperCardFileNoPass = this.shengheform.companyFacadeFileNoPass == "上传合格" ){
+            let ifQualified = true;
+            if(this.shengheform.shipperCardFileNoPass =="上传合格" && this.shengheform.companyFacadeFileNoPass == "上传合格" &&this.shengheform.businessLicenceFileNoPass =="上传合格"){
                 ifQualified = true ;
             }else{
                 ifQualified = false ;
             }
-            this.$refs['shengheform'].validate((valid)=>{
+            this.$refs.shengheform.validate((valid)=>{
                 if(valid && ifQualified){
                     var forms=objectMerge2({},this.shengheform,{currentShipperStatus:"AF0010402"},{shipperStatus:"AF0010403",shipperStatusName:'已认证'});
                     console.log('this.forms',forms)
@@ -466,7 +479,7 @@ export default {
                 }else{
                     return this.$message({
                         type: 'info',
-                        message: '审核未满足通过要求，请填写完整数据'
+                        message: '审核未满足通过要求，请填写完整数据!'
                     });
                 }
             })

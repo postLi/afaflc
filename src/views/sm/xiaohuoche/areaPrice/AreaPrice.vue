@@ -401,7 +401,7 @@ export default {
                         data_NewOrChange(forms).then(res =>{
                             this.$message({
                                 type: 'success',
-                                message: '新增成功' 
+                                message: '新增成功!' 
                             })
                             this.close();
                          }).catch(err => {
@@ -430,7 +430,11 @@ export default {
                         this.btnShow = true;
                         let forms =  objectMerge2({},this.reviseForm);
                         data_OnlyChange(forms).then(res =>{
-                             this.close();
+                            this.$message({
+                                type: 'success',
+                                message: '修改成功!' 
+                            })
+                            this.close();
                          }).catch(err => {
                              this.$message({
                                  type: 'info',

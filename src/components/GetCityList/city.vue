@@ -5,7 +5,6 @@
         v-model="selectedOptions"
         :options="cityTree"
         ref="cityTree"
-        change-on-select
         @change="handleItemMore"
         :disabled="disabled"
         :props="props">
@@ -48,7 +47,7 @@ export default {
            })
         },
         returnArr(){
-            this.$emit('returnStr', this.selectedOptions.join(','),this.$refs.cityTree.currentLabels.join(','))
+            this.$emit('returnStr', this.selectedOptions.join(','),this.$refs.cityTree.currentLabels.join('-'))
         }
     },
     mounted(){

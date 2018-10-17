@@ -148,7 +148,7 @@
                         </el-table-column>
                     </el-table>
                 </div>
-            </div>
+            </div>   
                 <!-- 页码 -->
             <div class="info_tab_footer">共计:{{ dataTotal }} <div class="show_pager"> <Pager :total="dataTotal" @change="handlePageChange"  :sizes="sizes"/></div> </div>    
 
@@ -278,7 +278,7 @@ export default{
                               message: '只能选择一个订单'
                             })
                         } else{
-                          this.appontOrderSerial = this.checkedinformation[0].orderSerial
+                            this.appontOrderSerial = this.checkedinformation[0].orderSerial
                             this.dialogFormVisible = true
                         }
                     break

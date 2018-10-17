@@ -228,6 +228,12 @@ $borderWidth: 6px;
       color: #0980e0;
       font-weight: bold;
     }
+    input[type="number"]{-moz-appearance:textfield;}
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button{
+        -webkit-appearance: none !important;
+        margin: 0; 
+    }
   }
   .page-num{
     padding: 5px;

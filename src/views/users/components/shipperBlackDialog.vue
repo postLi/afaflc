@@ -177,7 +177,7 @@ export default {
                 switch (this.editType){
                     case 'add' :
                         var forms= Object.assign({}, this.formBlack,{accountStatus:"AF0010503"})
-                        let item =  forms.contacts;
+                        let item =  forms.mobile;
                         this.$confirm('确定要将'+ item +' 货主移入黑名单吗？', '提示', {
                             confirmButtonText: '确定',
                             cancelButtonText: '取消',
@@ -203,7 +203,7 @@ export default {
                         break;
                     case 'edit' :
                         var forms= Object.assign({}, this.formBlack,{accountStatus:"AF0010501"})
-                        let itemMove =  forms.contacts;
+                        let itemMove =  forms.mobile;
                         this.$confirm('确定要将'+ itemMove +' 货主移出黑名单吗？', '提示', {
                             confirmButtonText: '确定',
                             cancelButtonText: '取消',

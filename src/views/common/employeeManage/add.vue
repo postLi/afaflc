@@ -243,37 +243,28 @@ export default {
     reset() {
       // 缓存上一次选择的机构
       const orgid = this.form.orgid
-    //   this.$refs['ruleForm'].resetFields()
+      this.$refs['ruleForm'].resetFields()
       console.log('id', orgid, this.form.orgid)
-
       this.form.orgid = orgid
     },
     submitForm(formName, bool) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          this.loading = true
-          // this.$set(this.form, 'orgid', this.otherinfo.orgid)
-          const data = Object.assign({}, this.form);
-          let promiseObj;
-          data.rolesId = data.rolesId.join(',');
-            data.password = this.$md5(data.password);
+            this.loading = true
+            const data = Object.assign({}, this.form)
+            let promiseObj;
+            data.rolesId = data.rolesId.join(',')
 
           // 判断操作，调用对应的函数
           if (this.isModify) {
             data.id = this.userInfo.id
             promiseObj = putEmployeer(data)
           } else {
+            data.password = this.$md5(data.password);
             promiseObj = postEmployeer(data)
           }
           promiseObj.then(res => {
             this.loading = false
-            /* this.$alert('保存成功', '提示', {
-              confirmButtonText: '确定',
-              callback: action => {
-                this.closeMe()
-                this.$emit('success')
-              }
-            }); */
             this.$message({
               type: 'success',
               message: '保存成功!'
@@ -294,7 +285,7 @@ export default {
       })
     },
     closeMe(done) {
-    //   this.$refs['ruleForm'].resetFields()
+      this.$refs['ruleForm'].resetFields()
       this.$emit('update:popVisible', false)
       if (typeof done === 'function') {
         done()

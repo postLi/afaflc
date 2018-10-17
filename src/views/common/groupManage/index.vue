@@ -146,7 +146,6 @@
               border
               tooltip-effect="dark"
               height="100%"
-                :default-sort = "{prop: 'name', order: 'descending'}"
               @row-click="clickDetails"
               @selection-change="seleClick"
               style="width: 100%;">

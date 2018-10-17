@@ -31,7 +31,6 @@
             stripe
             border
             height="100%"
-            :default-sort = "{prop: 'roleName', order: 'descending'}"
             tooltip-effect="dark"
             @row-click="clickDetails"
             @selection-change="seleClick"

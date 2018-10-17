@@ -16,7 +16,6 @@
                         @selection-change="getSelection"
                         height="100%"
                         tooltip-effect="dark"
-                        :default-sort = "{prop: 'isTop', order: 'null'}"
                         style="width: 100%">
                         <el-table-column
                             type="selection"
@@ -144,8 +143,8 @@ import editor from '@/components/tinymac/index'
                     overflow:true,
                     alignName:'center',
                     slot: (scope) => {
-                        let startTime = parseTime(scope.row.startTime, '{y}-{m}-{d}');
-                        let endTime = scope.row.endTime ? parseTime(scope.row.endTime, '{y}-{m}-{d}') : '长期';
+                        let startTime = parseTime(scope.row.startTime);
+                        let endTime = scope.row.endTime ? parseTime(scope.row.endTime) : '长期';
                         return startTime + '<span class="youxiaoqi">至</span>' + endTime;
                     }
                 }, {
@@ -229,11 +228,28 @@ import editor from '@/components/tinymac/index'
                 console.log(row,type);
                 switch(type){
                     case 'ifTop':
+                        // this.$confirm('确定要将'+ itemMove +' 货主解冻吗？', '提示', {
+                        //     confirmButtonText: '确定',
+                        //     cancelButtonText: '取消',
+                        //     type: 'warning'
+                        // }).then( ()=>{
+                            
+                        // }).catch(() => {
+                        //     this.$message({
+                        //         type: 'info',
+                        //         message: '已取消'
+                        //     })
+                        // })
                         let ifTop = row.isTop == '0' ? '1' : '0';
                         let rowData = Object.assign({},row,{isTop:ifTop})
                         updateNotice(rowData).then(res => {
                             console.log('iftop',res)
                             this.firstblood()
+                        }).catch(err => {
+                            this.$message({
+                                type: 'info',
+                                message: '操作失败，原因：' + err.errorInfo ? err.errorInfo : err.text
+                            })
                         })
                         break;
                     case 'revise':

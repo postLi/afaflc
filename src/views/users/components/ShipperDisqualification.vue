@@ -15,7 +15,6 @@
                     height="100%"
                     tooltip-effect="dark"
                     @selection-change="getSelection" 
-                    :default-sort = "{prop: 'companyName', order: 'descending'}"
                     @row-click="clickDetails"
                     style="width: 100%">
                     <el-table-column

@@ -14,7 +14,7 @@
                         :data="tableData"
                         stripe
                         border
-                        :default-sort = "{prop: 'serviceName', order: 'descending'}"
+                        :default-sort = "{prop: 'carTypeName', order: 'null'}"
                         @selection-change = "getinfomation"
                         tooltip-effect="dark"
                         @row-click="clickDetails"

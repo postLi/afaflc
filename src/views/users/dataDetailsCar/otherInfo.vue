@@ -3,7 +3,14 @@
         <!-- 积分概况 -->
         <div class="jfgk-collapse collapseInfo">
             <h2>积分概况</h2>
-            
+            <div class="authority_legal">
+                <ul class="lengandInfo">
+                    <li>积分等级：<span>皇冠</span></li>
+                    <li>累计积分：<span>3300</span></li>
+                    <li>剩余积分：<span>1500</span></li>
+                    <li>被扣积分：<span>0</span></li>
+                </ul>
+            </div>
             <div class="essentialInformation_table" style="padding-top:0;">
                 <el-table
                     :data="tableData"
@@ -41,8 +48,12 @@
         <!-- 评价记录   -->
         <div class="pjjl-collapse collapseInfo">
             <h2>评价记录</h2>
-            
-            <div class="essentialInformation_table" >
+            <div class="authority_legal">
+                <ul class="lengandInfo">
+                    <li>评价综合等级：<span>3.5</span></li>
+                </ul>
+            </div>
+            <div class="essentialInformation_table" style="padding-top:0;">
                 <el-table
                     :data="tableData"
                     border

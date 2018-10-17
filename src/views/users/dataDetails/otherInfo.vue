@@ -47,7 +47,7 @@
         </div>
         <!-- 评价记录   -->
         <div class="pjjl-collapse collapseInfo">
-            <h2>评价记录    </h2>
+            <h2>评价记录</h2>
             <div class="essentialInformation_table" >
                 <el-table
                     :data="tableData"

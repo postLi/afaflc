@@ -49,7 +49,6 @@
                         border
                         align = "center"
                         height="100%"
-                        :default-sort = "{prop: 'orderSerial', order: 'descending'}"
                         @selection-change = "getinfomation"
                         tooltip-effect="dark"
                         @row-click="clickDetails"
@@ -194,7 +193,6 @@
                 <div class="info_tab_footer">共计:{{ dataTotal }} <div class="show_pager"> <Pager :total="dataTotal" @change="handlePageChange"  :sizes="sizes"/></div> </div>    
             </div>
 
-            <Details :dialogFormVisible_details.sync = "dialogFormVisible_details" :orderSerial="DetailsOrderSerial" ></Details>
     </div>
 </template>
 
@@ -204,14 +202,12 @@ import '@/styles/dialog.scss'
 import { orderStatusList } from '@/api/order/ordermange'
 import { parseTime,pickerOptions2 } from '@/utils/index.js'
 import Pager from '@/components/Pagination/index'
-import Details from '../components/detailsInformations'
 import vregion from '@/components/vregion/Region'
 
 
     export default{
         components:{
             Pager,
-            Details,
             vregion
         },
         data(){
@@ -335,8 +331,6 @@ import vregion from '@/components/vregion/Region'
             //详情弹窗
             pushOrderSerial(item){
                 // console.log(item)
-                // this.dialogFormVisible_details = true;
-                // this.DetailsOrderSerial = item.orderSerial;
                 this.$router.push({name: '订单详情',query:{ orderSerial:item.orderSerial }});
 
             }

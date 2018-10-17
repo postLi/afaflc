@@ -39,7 +39,7 @@
                     </p>
                     <p>
                         <span>评价标签：</span>
-                        <span v-if="item.evaluationType" class="evaluationType" v-for="el in item.evaluationTypeName"  :key="el">{{el}}</span>
+                        <span v-if="item.evaluationType" class="evaluationType" v-for="(el,key) in item.evaluationTypeName"  :key="key">{{el}}</span>
                     </p>
                 </div>
                 <div v-else class="rateTabs">
@@ -56,7 +56,7 @@
                     </p>
                     <p>
                         <span>评价内容：</span>
-                        <span>{{item.evaluationDes}}</span>
+                        <span>{{item.evaluationDes}}123123123</span>
                     </p>
                     <p>
                         <span>评价标签：</span>
@@ -115,8 +115,6 @@ export default {
             evaluationType: "服务态度好,认路准确活地图,准时送达,收费合理",
             defaultImg:'/static/test.jpg',//默认加载失败图片
             loading:true,
-            ratePictures:{},//照片信息装货照片
-            ratePictures_huidan:{},//照片信息回单照片
             listInformation:{},
         };
     },
@@ -140,10 +138,17 @@ export default {
             orderDetailsList(this.$route.query.orderSerial).then(res => {
                 console.log('details',res)
                 this.listInformation = res.data;
-                this.loading = false;
                 this.listInformation.aflcOrderEvaluations.forEach(item => {
-                    item.evaluationTypeName = item.evaluationType == '' ? [] : item.evaluationType.split(",")
+                    item.evaluationTypeName = item.evaluationType ? [] : item.evaluationType.split(",");
+                    item.starLevel = Number(item.starLevel);
                 })
+                this.loading = false;
+            }).catch(err => {
+                this.$message({
+                    type: 'info',
+                    message: '操作失败，原因：' + err.errorInfo ? err.errorInfo : err.text
+                })
+                this.loading = false;
             })
         },
     },
@@ -160,25 +165,28 @@ export default {
                     width: 208px;
                     height: 118px;
                     margin-top: 10px;
-                    // margin-right: 10px;
                     cursor: pointer;
                 }
                 p:nth-child(2){
                     width: 70%;
                 }
-
             }
-            .rateInfo .essentialInformation .rateTabs p:last-child{
+        }
+        .rateInfo{
+            .essentialInformation .rateTabs p:nth-child(2){
+                width: 30%;
+            }
+            .essentialInformation .rateTabs p:last-child{
                 width: 40%;
             }
-        }
-        .evaluationType{
-            padding: 5px 10px;
-            margin:0 5px ;
-            background: rgba(227, 233, 235, 0.479);
-            color: #3e9ff1;
-            box-shadow: 2px 2px 2px 2px rgba(0, 0, 0, 0.1);
+            .essentialInformation .rateTabs p .evaluationType{
+                padding: 0px 10px;
+                margin:0 5px ;
+                background: rgba(227, 233, 235, 0.479);
+                color: #3e9ff1;
+                font-weight: bold;
+                box-shadow: 2px 2px 2px 2px rgba(0, 0, 0, 0.1);
+            }
         }
     }
-    
 </style>

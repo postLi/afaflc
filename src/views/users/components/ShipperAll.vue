@@ -17,7 +17,6 @@
 				stripe
 				border
                 height="100%"
-                :default-sort = "{prop: 'mobile', order: 'descending'}"
                 @selection-change="getSelection" 
                 @row-click="clickDetails"
 				tooltip-effect="dark"

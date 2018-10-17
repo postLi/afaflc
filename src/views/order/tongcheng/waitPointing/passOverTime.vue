@@ -152,7 +152,6 @@
                 <!-- 页码 -->
             <div class="info_tab_footer">共计:{{ dataTotal }} <div class="show_pager"> <Pager :total="dataTotal" @change="handlePageChange"  :sizes="sizes"/></div> </div>    
 
-            <!-- <Details :dialogFormVisible_details.sync = "dialogFormVisible_details" :orderSerial="DetailsOrderSerial" ></Details> -->
             <cancelCompnent :dialogVisible.sync="dialogVisible" :orderSerial = "currentOrderSerial"   @close = "shuaxin"/>
             <appointDriver :dialogFormVisible.sync = "dialogFormVisible" :orderSerial = "appontOrderSerial" @close = "shuaxin" ></appointDriver>
 
@@ -165,7 +164,6 @@
 import { orderStatusList } from '@/api/order/ordermange'
 import { parseTime, pickerOptions2 } from '@/utils/index.js'
 import Pager from '@/components/Pagination/index'
-// import Details from '../components/detailsInformations'
 import searchInfo from './components/searchInfo'
 import cancelCompnent from '../components/cancel'
 import appointDriver from '../components/appointDriver'
@@ -179,7 +177,6 @@ export default{
       },
   components: {
         Pager,
-            // Details,
         searchInfo,
         cancelCompnent,
         appointDriver
