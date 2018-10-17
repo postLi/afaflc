@@ -198,7 +198,7 @@ export default {
         this.formAllData.belongCity = d.area.code
       } else if (d.city) {
         this.formAllData.belongCity = d.city.code
-      } else {
+      } else if (d.province) {
         this.formAllData.belongCity = d.province.code
       }
     },
@@ -290,8 +290,8 @@ export default {
       this.pagesize = obj.pageSize
       this.firstblood()
     },
-    pushOrderSerial(item){
-      this.$router.push({name: '订单详情',query:{ orderSerial:item.orderSerial }});
+    pushOrderSerial(item) {
+      this.$router.push({ name: '订单详情', query: { orderSerial: item.orderSerial }})
     },
     getDataList() {
       this.firstblood()

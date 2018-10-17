@@ -213,7 +213,7 @@ export default {
         this.formAllData.belongCity = d.area.code
       } else if (d.city) {
         this.formAllData.belongCity = d.city.code
-      } else {
+      } else if (d.province) {
         this.formAllData.belongCity = d.province.code
       }
     },

@@ -157,7 +157,7 @@ export default{
       dataTotal: 0,
       isEport: false,
       searchCreatTime: [],
-      defaultTime:[parseTime(+new Date() - 60 * 24 * 60 * 60 * 1000, '{y}-{m}-{d}'), parseTime(new Date(), '{y}-{m}-{d}')],
+      defaultTime: [parseTime(+new Date() - 60 * 24 * 60 * 60 * 1000, '{y}-{m}-{d}'), parseTime(new Date(), '{y}-{m}-{d}')],
       areaName: '',
       searchInfo: {
         orderSerial: null,
@@ -238,8 +238,8 @@ export default{
       switch (type) {
         case 'search':
           if (this.searchCreatTime) {
-            this.searchInfo.startTime = this.searchCreatTime ? parseTime(this.searchCreatTime[0], '{y}-{m}-{d} ') + '00:00:00' : null
-            this.searchInfo.endTime = this.searchCreatTime ? parseTime(this.searchCreatTime[1], '{y}-{m}-{d} ') + '23:59:59' : null
+            this.searchInfo.startTime = this.searchCreatTime ? parseTime(this.searchCreatTime[0], '{y}-{m}-{d} ') + ' 00:00:00' : null
+            this.searchInfo.endTime = this.searchCreatTime ? parseTime(this.searchCreatTime[1], '{y}-{m}-{d} ') + ' 23:59:59' : null
           } else {
             this.searchInfo.startTime = null
             this.searchInfo.endTime = null
