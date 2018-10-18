@@ -29,7 +29,7 @@
                         type="daterange"
                         align="right"
                         v-model="formAllData.createTime"
-                        range-separator="至" 
+                        range-separator="-" 
                         start-placeholder="开始时间"
                         end-placeholder="结束时间"
                         placeholder="选择时间范围"
@@ -65,13 +65,7 @@
                     <el-input v-model="formAllData.areaName1" @focus="changeSelect"></el-input>
                </el-form-item>  
                <el-form-item  label="所属区域：" :label-width="formLabelWidth"  prop="areaName" v-else> 
-                   <el-cascader
-                    size="large"
-                    :options="options"
-                    v-model="formAllData.areaName"
-                    @change="handleChange"
-                     >
-                    </el-cascader>
+                     <GetCityList ref="area" v-model="formAllData.areaName"  @returnStr="getStr"></GetCityList>
                </el-form-item>  
             </el-col>
           </el-row>
@@ -175,15 +169,8 @@
                  <span  v-if="editType !=='add'&&!formAllData.aflcCouponList[keys].selectFlag">
                     <el-input v-model="formAllData.aflcCouponList[keys].areaName1" @focus="changeSelect1(keys)"></el-input>
                   </span>
-                  <span v-else>
-                   <el-cascader
-                    size="large"
-                    :options="options"
-                    v-model="formAllData.aflcCouponList[keys].areaName"
-                    @change="handleChange1"
-                    @focus="changeInput(keys)"
-                     >
-                    </el-cascader>
+                  <span v-else @click="changeInput(keys)">
+                    <GetCityList  v-model="formAllData.aflcCouponList[keys].areaName"  @returnStr="getStr1"></GetCityList>
                     </span>
               </div>
              <div class="ht_table_td table_th14">
@@ -216,12 +203,13 @@
 import { data_Commission ,data_CarList,data_MaidLevel,data_ServerClassList} from '@/api/server/areaPrice.js'
 import {data_get_couponActive_list,data_get_couponActive_create,data_couponActive,data_couponActiveTime,data_get_couponActive_Id,data_get_couponActive2_Id,data_get_couponActive_update,data_get_aflcCoupon_add} from '@/api/marketing/shippermarkting/couponActive.js'
 import Upload from '@/components/Upload/singleImage'
-import { regionDataPlus, CodeToText, TextToCode } from 'element-china-area-data'
+import GetCityList from '@/components/GetCityList/city'
 import { eventBus } from '@/eventBus'
 import {parseTime,pickerOptions2} from '@/utils/'
 export default {
   components:{
     Upload,
+    GetCityList
   },
   props:{
     paramsView:{
@@ -314,8 +302,7 @@ export default {
     return{
         maxlengthNum:100,
         pickerOptions2: {
-        shortcuts: pickerOptions2},        
-        options:regionDataPlus,   
+        shortcuts: pickerOptions2},
         inputKey:null,
         optionsCar:[],
         MaidLevel:[],
@@ -342,8 +329,8 @@ export default {
             activityName:null,
             activityType:null,
             usingStatus:null,
-            areaName:[],
-            areaCode: [],
+            areaName:null,
+            areaCode: null,
             areaName1:null,
             province:null,
             city:null,
@@ -363,8 +350,8 @@ export default {
             endTime:null,
             serivceCode:null,
             carType:null,
-            areaName:[],
-            areaCode:[],
+            areaName:null,
+            areaCode:null,
             selectFlag:null,
             areaName1:null,            
             province:null,
@@ -419,59 +406,28 @@ export default {
     },
   },
   methods:{
-        // 省市状态表
-            changeSelect(){
-                console.log('dd')
+     // 省市状态表
+    changeSelect(){
             if(this.editType==='add'){
                 this.selectFlag=false
             } else{
                 this.selectFlag=true
             }
             },
-        handleChange(d){
-           console.log('d',d)
-           if(d.length<3){
-                this.$message.info('请选择具体的城市');
-                this.formAllData.areaName = [];
-                this.formAllData.areaCode = [];
-                this.formAllData.province = null
-                this.formAllData.city = null
-                this.formAllData.area = null
-           }
-           else{
-                this.formAllData.areaCode = d
-                this.formAllData.province = CodeToText[d[0]]
-                this.formAllData.city =  CodeToText[d[1]]
-                if(d[2]==''){
-                this.formAllData.area = null
-                }
-                else{
-                this.formAllData.area = CodeToText[d[2]]
-                }
-           }
-        },
-         handleChange1(d){
-           console.log('d',d)
-           if(d.length<3){
-                this.$message.error('请选择具体的城市');
-                this.formAllData.aflcCouponList[this.inputKey].areaName = [];
-                this.formAllData.aflcCouponList[this.inputKey].areaCode = [];
-                this.formAllData.aflcCouponList[this.inputKey].province = null
-                this.formAllData.aflcCouponList[this.inputKey].city = null
-                this.formAllData.aflcCouponList[this.inputKey].area = null
-           }
-           else{
-                this.formAllData.aflcCouponList[this.inputKey].areaCode = d
-                this.formAllData.aflcCouponList[this.inputKey].province = CodeToText[d[0]]
-                this.formAllData.aflcCouponList[this.inputKey].city =  CodeToText[d[1]]
-                if(d[2]==''){
-                this.formAllData.aflcCouponList[this.inputKey].area = null
-                }
-                else{
-                this.formAllData.aflcCouponList[this.inputKey].area = CodeToText[d[2]]
-                }
-           }
-        },       
+    getStr(val){
+                this.formAll.areaCode= val.area.code
+                this.formAll.areaName = val.area.name
+                this.formAll.province = val.province.name
+                this.formAll.city = val.city.name
+                this.formAll.area = val.area.name
+            },  
+    getStr1(val){
+                this.formAllData.aflcCouponList[this.inputKey].areaCode= val.area.code
+                this.formAllData.aflcCouponList[this.inputKey].areaName = val.area.name
+                this.formAllData.aflcCouponList[this.inputKey].province = val.province.name
+                this.formAllData.aflcCouponList[this.inputKey].city = val.city.name
+                this.formAllData.aflcCouponList[this.inputKey].area = val.area.name
+            },   
     //获取  服务和车辆 类型列表
             getMoreInformation(){
                 data_CarList().then(res=>{
@@ -596,9 +552,9 @@ export default {
            overTime:null,
            serivceCode:null,
            carType:null,
-           areaCode:[],
+           areaCode:null,
            areaName1:null,
-           areaName:[],
+           areaName:null,
            selectFlag:null,
            ifvouchersuperposition:null,
            }) 
@@ -612,8 +568,8 @@ export default {
     }
    },
      cTime(i){
-                this.formAllData.startTime = i[0]
-                this.formAllData.endTime = i[1]
+            this.formAllData.startTime = i[0]
+            this.formAllData.endTime = i[1]
      },
     TimeType(i){
      console.log('this.formAllData.endTime',i)

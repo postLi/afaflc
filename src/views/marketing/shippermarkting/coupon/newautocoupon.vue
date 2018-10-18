@@ -29,7 +29,7 @@
                         type="daterange"
                         align="right"
                         v-model="formAllData.createTime"
-                        range-separator="至" 
+                        range-separator="-" 
                         start-placeholder="开始时间"
                         end-placeholder="结束时间"
                         placeholder="选择时间范围"
@@ -62,13 +62,7 @@
           <el-row >
             <el-col>
                <el-form-item  label="所属区域：" :label-width="formLabelWidth"  prop="areaName"> 
-                   <el-cascader
-                    size="large"
-                    :options="options"
-                    v-model="formAllData.areaName"
-                    @change="handleChange"
-                     >
-                    </el-cascader>
+                <GetCityList ref="area" v-model="formAllData.areaName"  @returnStr="getStr"></GetCityList>
                </el-form-item>  
             </el-col>
           </el-row>
@@ -83,19 +77,19 @@
              <div class="ht_table_th table_th3">优惠券类型</div>
              <div class="ht_table_th table_th4">满减/折扣</div>
              <div class="ht_table_th table_th5">满减条件/最高抵扣</div>
-             <div class="ht_table_th table_th8">支付方式</div>
+             <div class="ht_table_th table_th6">支付方式</div>
              <div class="ht_table_th table_th7">时效类型</div>
-             <div class="ht_table_th table_th9">开始时间</div>
-             <div class="ht_table_th table_th10">过期时间</div>
-             <div class="ht_table_th table_th11">适用服务类型</div>
-             <div class="ht_table_th table_th12">适用车辆类型</div>
-             <div class="ht_table_th table_th13">所属区域</div>
-             <div class="ht_table_th table_th14">能否与大户券叠加</div>
+             <div class="ht_table_th table_th8">开始时间</div>
+             <div class="ht_table_th table_th9">过期时间</div>
+             <div class="ht_table_th table_th10">适用服务类型</div>
+             <div class="ht_table_th table_th11">适用车辆类型</div>
+             <div class="ht_table_th table_th12">所属区域</div>
+             <div class="ht_table_th table_th13">能否与大户券叠加</div>
             </div>
              <div  class="ht_table_tr1">
              <div class="ht_table_td1"><span  class="reduceItem" @click="reduceItem(keys)"> </span></div>
-             <div class="ht_table_td table_th1"><el-input v-model="formAllData.aflcCouponList[keys].couponNum" maxlength='2'></el-input></div>
-             <div class="ht_table_td table_th2"><el-input v-model="formAllData.aflcCouponList[keys].couponName" maxlength="20"></el-input></div> 
+             <div class="ht_table_td table_th1"><el-input v-model="formAllData.aflcCouponList[keys].couponNum" maxlength='2' placeholder=" "></el-input></div>
+             <div class="ht_table_td table_th2"><el-input v-model="formAllData.aflcCouponList[keys].couponName" maxlength="20" placeholder=" "></el-input></div> 
              <div class="ht_table_td table_th3">
                      <el-select v-model="formAllData.aflcCouponList[keys].couponType" clearable placeholder="请选择" >
                          <el-option
@@ -107,9 +101,9 @@
                          </el-option>
                      </el-select>
              </div>
-             <div class="ht_table_td table_th4"><el-input v-model="formAllData.aflcCouponList[keys].remissionDiscount"></el-input></div> 
-             <div class="ht_table_td table_th5"><el-input v-model.number="formAllData.aflcCouponList[keys].conditionDeduction"></el-input></div>
-             <div class="ht_table_td table_th8">在线支付</div>
+             <div class="ht_table_td table_th4"><el-input v-model="formAllData.aflcCouponList[keys].remissionDiscount" placeholder=" "></el-input></div> 
+             <div class="ht_table_td table_th5"><el-input v-model.number="formAllData.aflcCouponList[keys].conditionDeduction" placeholder=" "></el-input></div>
+             <div class="ht_table_td table_th6">在线支付</div>
              <div class="ht_table_td table_th7">
                      <el-select v-model="formAllData.aflcCouponList[keys].timeType" clearable placeholder="请选择" @change='TimeType(keys)'>
                          <el-option
@@ -121,7 +115,7 @@
                          </el-option>
                      </el-select>
              </div>
-             <div class="ht_table_td table_th9">
+             <div class="ht_table_td table_th8">
                  <span v-if="formAllData.aflcCouponList[keys].timeType =='AF046301'">/</span>
                      <span v-else>
                          <el-date-picker v-model="formAllData.aflcCouponList[keys].startTime"
@@ -132,7 +126,7 @@
                          </el-date-picker>
                      </span>
                    </div> 
-             <div class="ht_table_td table_th10">
+             <div class="ht_table_td table_th9">
                      <span v-if="formAllData.aflcCouponList[keys].timeType =='AF046301'">
                          <el-input v-model="formAllData.aflcCouponList[keys].overTime" placeholder="过期天数" maxlength="3"></el-input>
                      </span>
@@ -147,7 +141,7 @@
                                 </el-date-picker>
                      </span>
               </div>
-             <div class="ht_table_td table_th11">
+             <div class="ht_table_td table_th10">
                  <el-select v-model="formAllData.aflcCouponList[keys].serivceCode" clearable placeholder="请选择" >
                           <el-option
                               v-for="item in serviceCardList"
@@ -158,7 +152,7 @@
                          </el-option>
                  </el-select>
             </div>
-             <div class="ht_table_td table_th12">
+             <div class="ht_table_td table_th11">
                     <el-select v-model="formAllData.aflcCouponList[keys].carType" clearable placeholder="请选择" >
                           <el-option
                              v-for="item in optionsCar"
@@ -169,17 +163,10 @@
                          </el-option>
                  </el-select>
                  </div>  
-             <div class="ht_table_td table_th13">
-                   <el-cascader
-                    size="large"
-                    :options="options"
-                    v-model="formAllData.aflcCouponList[keys].areaName"
-                    @change="handleChange1"
-                    @focus="changeInput(keys)"
-                     >
-                    </el-cascader>
+             <div class="ht_table_td table_th12" @click="changeInput(keys)">
+            <GetCityList  v-model="formAllData.aflcCouponList[keys].areaName"  @returnStr="getStr1"></GetCityList>
               </div>
-             <div class="ht_table_td table_th14">
+             <div class="ht_table_td table_th13">
                  <el-select v-model="formAllData.aflcCouponList[keys].ifvouchersuperposition" clearable placeholder="请选择" >
                           <el-option
                              v-for="item in vouchersuperposition"
@@ -209,12 +196,13 @@
 import { data_Commission ,data_CarList,data_MaidLevel,data_ServerClassList} from '@/api/server/areaPrice.js'
 import {data_get_couponActive_list,data_get_couponActive_create,data_couponActive,data_couponActiveTime} from '@/api/marketing/shippermarkting/couponActive.js'
 import Upload from '@/components/Upload/singleImage'
-import { regionDataPlus, CodeToText, TextToCode } from 'element-china-area-data'
+import GetCityList from '@/components/GetCityList/city'
 import { eventBus } from '@/eventBus'
 import {parseTime,pickerOptions2} from '@/utils/'
 export default {
   components:{
     Upload,
+    GetCityList
   },
   props:{
     paramsView:{
@@ -251,9 +239,6 @@ export default {
     editType: {
       type: String,
     }
-  },
-  components:{
-      
   },
   data(){
         const activityTypeValidator = (rule, val, cb) => {
@@ -305,7 +290,6 @@ export default {
         pickerOptions2: {
         shortcuts: pickerOptions2
         },
-        options:regionDataPlus,   
         inputKey:null,
         optionsCar:[],
         MaidLevel:[],
@@ -331,8 +315,8 @@ export default {
             activityName:null,
             activityType:null,
             usingStatus:null,
-            areaName:[],
-            areaCode: [],
+            areaName:null,
+            areaCode: null,
             province:null,
             city:null,
             area:null,
@@ -351,8 +335,8 @@ export default {
             endTime:null,
             serivceCode:null,
             carType:null,
-            areaName:[],
-            areaCode:[],            
+            areaName:null,
+            areaCode:null,            
             province:null,
             city:null,
             area:null,
@@ -390,8 +374,8 @@ export default {
             overTime:null,
             serivceCode:null,
             carType:null,
-            areaCode:[],
-            areaName:[],
+            areaCode:null,
+            areaName:null,
             ifvouchersuperposition:null,
             }]
             }
@@ -402,50 +386,20 @@ export default {
     },
   },
   methods:{
-        handleChange(d){
-           console.log('d',d)
-           if(d.length<3){
-                this.$message.info('请选择具体的城市');
-                this.formAllData.areaName = [];
-                this.formAllData.areaCode = [];
-                this.formAllData.province = null
-                this.formAllData.city = null
-                this.formAllData.area = null
-           }
-           else{
-                this.formAllData.areaCode = d
-                this.formAllData.province = CodeToText[d[0]]
-                this.formAllData.city =  CodeToText[d[1]]
-                if(d[2]==''){
-                this.formAllData.area = null
-                }
-                else{
-                this.formAllData.area = CodeToText[d[2]]
-                }
-           }
-        },
-         handleChange1(d){
-           console.log('d',d)
-           if(d.length<3){
-                this.$message.error('请选择具体的城市');
-                this.formAllData.aflcCouponList[this.inputKey].areaName = [];
-                this.formAllData.aflcCouponList[this.inputKey].areaCode = [];
-                this.formAllData.aflcCouponList[this.inputKey].province = null
-                this.formAllData.aflcCouponList[this.inputKey].city = null
-                this.formAllData.aflcCouponList[this.inputKey].area = null
-           }
-           else{
-                this.formAllData.aflcCouponList[this.inputKey].areaCode = d
-                this.formAllData.aflcCouponList[this.inputKey].province = CodeToText[d[0]]
-                this.formAllData.aflcCouponList[this.inputKey].city =  CodeToText[d[1]]
-                if(d[2]==''){
-                this.formAllData.aflcCouponList[this.inputKey].area = null
-                }
-                else{
-                this.formAllData.aflcCouponList[this.inputKey].area = CodeToText[d[2]]
-                }
-           }
-        },    
+    getStr(val){
+                this.formAll.areaCode= val.area.code
+                this.formAll.areaName = val.area.name
+                this.formAll.province = val.province.name
+                this.formAll.city = val.city.name
+                this.formAll.area = val.area.name
+            },  
+    getStr1(val){
+                this.formAllData.aflcCouponList[this.inputKey].areaCode= val.area.code
+                this.formAllData.aflcCouponList[this.inputKey].areaName = val.area.name
+                this.formAllData.aflcCouponList[this.inputKey].province = val.province.name
+                this.formAllData.aflcCouponList[this.inputKey].city = val.city.name
+                this.formAllData.aflcCouponList[this.inputKey].area = val.area.name
+            },               
     //获取  服务和车辆 类型列表
             getMoreInformation(){
                 data_CarList().then(res=>{
@@ -498,8 +452,8 @@ export default {
            overTime:null,
            serivceCode:null,
            carType:null,
-           areaCode:[],
-           areaName:[],
+           areaCode:null,
+           areaName:null,
            ifvouchersuperposition:null,
            }) 
         },
@@ -789,18 +743,18 @@ export default {
             border-right:1px solid #d0d7e5;
             border-bottom:1px solid #d0d7e5;
         }
-        .table_th1{width: 7%;}
-        .table_th2{width: 9%;}
-        .table_th3{width: 7%;}
+        .table_th1{width: 5%;}
+        .table_th2{width: 6%;}
+        .table_th3{width: 6%;}
         .table_th4{width: 6%;}
-        .table_th5{width: 12%;}
-        .table_th6{width: 4%;}
+        .table_th5{width: 10%;}
+        .table_th6{width: 6%;}
         .table_th7{width: 6%;}
-        .table_th8{width: 8%;}
-        .table_th9{width: 11%;}
-        .table_th10{width: 11%;}
-        .table_th11{width: 8%;}
-        .table_th12{width: 8%;}
+        .table_th8{width: 10%;}
+        .table_th9{width: 10%;}
+        .table_th10{width: 7%;}
+        .table_th11{width: 7%;}
+        .table_th12{width: 7%;}
         .table_th13{width: 9%}
         .table_th14{width: 11%}
         .ht_table_td1{

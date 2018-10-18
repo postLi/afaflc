@@ -155,7 +155,8 @@ export default {
         content: ''  // 使用默认信息窗体框样式，显示信息内容
       })
       var geocoder = new AMap.Geocoder({
-        radius: 1000 // 范围，默认：500
+        radius: 500 ,// 范围，默认：500
+        extensions: "all"
       })
         // infoWindow.open(map, map.getCenter())
       var contextMenu = new AMap.ContextMenu()
@@ -182,6 +183,8 @@ export default {
 
       function findInfo(pos) {
         geocoder.getAddress(pos, function(status, result) {
+          console.log('ppppppp',status)
+          console.log('bbbbbbb',result)
           if (status === 'complete' && result.info === 'OK') {
             geocoder_CallBack(result, pos)
           } else {
@@ -201,7 +204,7 @@ export default {
       })
 
       function geocoder_CallBack(data, pos) {
-
+       
 
         var haspx = !!pos.lat
 

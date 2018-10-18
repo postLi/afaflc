@@ -127,10 +127,8 @@ export default {
           })
     },
     methods:{
-    getStr(val,name){
-                console.log('this.cityarr',val,name)
-                this.formAllData.areaCode = val.split(',')[2];
-                this.formAllData.areaName = name.split(',')[2];
+    getStr(val){
+                this.formAllData.areaCode = val.area.code;
             },  
 
     // 列表刷新页面  

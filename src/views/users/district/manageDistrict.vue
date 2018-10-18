@@ -137,9 +137,9 @@ export default {
 
     },
     methods:{
-      getStr(val,name){
+      getStr(val){
                 console.log('this.cityarr',val,name)
-                this.formAllData.areaCode = val.split(',')[2];
+                this.formAllData.areaCode =val.area.code;
             },  
     //   区代公司名称
       querySearch(queryString, cb) {

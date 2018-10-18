@@ -176,13 +176,12 @@ export default {
   },
   methods:{
 
-    getStr(val,name){
-                console.log('this.cityarr',val,name)
-                this.formAll.areaCode = val.split(',')[2];
-                this.formAll.areaName = name.split(',')[2];
-                this.formAll.province = name.split(',')[0];
-                this.formAll.city = name.split(',')[1];
-                this.formAll.area = name.split(',')[2];
+    getStr(val){
+                this.formAll.areaCode = val.area.code
+                this.formAll.areaName = val.area.name
+                this.formAll.province = val.area.province
+                this.formAll.city = val.area.city
+                this.formAll.area = val.area.area
             },  
 
    openDialog:function(){

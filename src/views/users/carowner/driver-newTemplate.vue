@@ -17,7 +17,7 @@
                     </span>
                     <span v-else>
                     <el-form-item label="手机号：" prop="driverMobile" :label-width="formLabelWidth" >
-                       <el-input v-model.trim="templateModel.driverMobile" auto-complete="off" :maxlength="11"></el-input>
+                       <el-input v-model.trim="templateModel.driverMobile" auto-complete="off" :maxlength="11" v-numberOnly></el-input>
                     </el-form-item>
                     </span>
                   </el-col>
@@ -629,14 +629,13 @@ export default {
     },
     methods:{
         // 省市区选择
-            getStr(val,name){
-                console.log('this.cityarr',val,name)
-                this.templateModel.belongCity = val.split(',')[2];
-                this.templateModel.provinceCode = name.split(',')[0];
-                this.templateModel.cityCode= name.split(',')[1];
-                this.templateModel.areaCode = name.split(',')[2];
-                 this.templateModel.belongCityName = name.split(',')[0]+name.split(',')[1]+name.split(',')[2]
-            },        
+    getStr(val){
+                this.templateModel.belongCity= val.area.code
+                this.templateModel.belongCityName = val.province.name+val.city.name+val.area.name
+                this.templateModel.provinceCode = val.province.name
+                this.templateModel.cityCode = val.city.name
+                this.templateModel.areaCode = val.area.name
+            },       
         // 省市状态表
      changeSelect(){
                     if(this.editType=='add'){

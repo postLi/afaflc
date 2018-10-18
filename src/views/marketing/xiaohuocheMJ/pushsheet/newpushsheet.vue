@@ -88,78 +88,78 @@
             <tr>
              <th  rowspan="2">小面包</th>
              <td class="Online">在线</td>
-             <td ><el-input  v-model="vestList.setting[keys].sett.AF01801.one.AF0010401" class="Pushinput" type="number"  min="0" max='5'></el-input> </td>
-             <td ><el-input  v-model="vestList.setting[keys].sett.AF01801.one.AF0020405" class="Pushinput" type="number"  min="0" max='5'></el-input> </td>
-             <td ><el-input  v-model="vestList.setting[keys].sett.AF01801.one.AF0020404" class="Pushinput" type="number"  min="0" max='5'></el-input> </td>
-             <td ><el-input  v-model="vestList.setting[keys].sett.AF01801.one.AF0020403" class="Pushinput" type="number"  min="0" max='5'></el-input> </td>
-             <td ><el-input  v-model="vestList.setting[keys].sett.AF01801.one.AF0020402" class="Pushinput" type="number"  min="0" max='5'></el-input> </td>
-             <td ><el-input  v-model="vestList.setting[keys].sett.AF01801.one.AF0020401" class="Pushinput" type="number"  min="0" max='5'></el-input> </td>                                                                     
+             <td ><el-input  v-model="vestList.setting[keys].sett.AF01801.one.AF0010401" class="Pushinput"     maxlength="1" v-numberOnly></el-input> </td>
+             <td ><el-input  v-model="vestList.setting[keys].sett.AF01801.one.AF0020405" class="Pushinput"     maxlength="1" v-numberOnly></el-input> </td>
+             <td ><el-input  v-model="vestList.setting[keys].sett.AF01801.one.AF0020404" class="Pushinput"     maxlength="1" v-numberOnly></el-input> </td>
+             <td ><el-input  v-model="vestList.setting[keys].sett.AF01801.one.AF0020403" class="Pushinput"     maxlength="1" v-numberOnly></el-input> </td>
+             <td ><el-input  v-model="vestList.setting[keys].sett.AF01801.one.AF0020402" class="Pushinput"     maxlength="1" v-numberOnly></el-input> </td>
+             <td ><el-input  v-model="vestList.setting[keys].sett.AF01801.one.AF0020401" class="Pushinput"     maxlength="1" v-numberOnly></el-input> </td>                                                                     
             </tr>
              <tr>
              <td class="Offline">离线</td>
-             <td ><el-input  v-model="vestList.setting[keys].sett.AF01801.zero.AF0010401" class="Pushinput" type="number"  min="0" max='5'></el-input> </td>
-             <td ><el-input  v-model="vestList.setting[keys].sett.AF01801.zero.AF0020405" class="Pushinput" type="number"  min="0" max='5'></el-input> </td>
-             <td ><el-input  v-model="vestList.setting[keys].sett.AF01801.zero.AF0020404" class="Pushinput" type="number"  min="0" max='5'></el-input> </td>
-             <td ><el-input  v-model="vestList.setting[keys].sett.AF01801.zero.AF0020403" class="Pushinput" type="number"  min="0" max='5'></el-input> </td>
-             <td ><el-input  v-model="vestList.setting[keys].sett.AF01801.zero.AF0020402" class="Pushinput" type="number"  min="0" max='5'></el-input> </td>
-             <td ><el-input  v-model="vestList.setting[keys].sett.AF01801.zero.AF0020401" class="Pushinput" type="number"  min="0" max='5'></el-input> </td>               
+             <td ><el-input  v-model="vestList.setting[keys].sett.AF01801.zero.AF0010401" class="Pushinput"    maxlength="1" v-numberOnly></el-input> </td>
+             <td ><el-input  v-model="vestList.setting[keys].sett.AF01801.zero.AF0020405" class="Pushinput"    maxlength="1" v-numberOnly></el-input> </td>
+             <td ><el-input  v-model="vestList.setting[keys].sett.AF01801.zero.AF0020404" class="Pushinput"    maxlength="1" v-numberOnly></el-input> </td>
+             <td ><el-input  v-model="vestList.setting[keys].sett.AF01801.zero.AF0020403" class="Pushinput"    maxlength="1" v-numberOnly></el-input> </td>
+             <td ><el-input  v-model="vestList.setting[keys].sett.AF01801.zero.AF0020402" class="Pushinput"    maxlength="1" v-numberOnly></el-input> </td>
+             <td ><el-input  v-model="vestList.setting[keys].sett.AF01801.zero.AF0020401" class="Pushinput"    maxlength="1" v-numberOnly></el-input> </td>               
             </tr>
              <tr>
              <th  rowspan="2">金杯</th>
              <td class="Online">在线</td>
-             <td ><el-input  v-model="vestList.setting[keys].sett.AF01802.one.AF0010401" class="Pushinput" type="number"  min="0" max='5'></el-input> </td>
-             <td ><el-input  v-model="vestList.setting[keys].sett.AF01802.one.AF0020405" class="Pushinput" type="number"  min="0" max='5'></el-input> </td>
-             <td ><el-input  v-model="vestList.setting[keys].sett.AF01802.one.AF0020404" class="Pushinput" type="number"  min="0" max='5'></el-input> </td>
-             <td ><el-input  v-model="vestList.setting[keys].sett.AF01802.one.AF0020403" class="Pushinput" type="number"  min="0" max='5'></el-input> </td>
-             <td ><el-input  v-model="vestList.setting[keys].sett.AF01802.one.AF0020402" class="Pushinput" type="number"  min="0" max='5'></el-input> </td>
-             <td ><el-input  v-model="vestList.setting[keys].sett.AF01802.one.AF0020401" class="Pushinput" type="number"  min="0" max='5'></el-input> </td>             
+             <td ><el-input  v-model="vestList.setting[keys].sett.AF01802.one.AF0010401" class="Pushinput"    maxlength="1" v-numberOnly></el-input> </td>
+             <td ><el-input  v-model="vestList.setting[keys].sett.AF01802.one.AF0020405" class="Pushinput"    maxlength="1" v-numberOnly></el-input> </td>
+             <td ><el-input  v-model="vestList.setting[keys].sett.AF01802.one.AF0020404" class="Pushinput"    maxlength="1" v-numberOnly></el-input> </td>
+             <td ><el-input  v-model="vestList.setting[keys].sett.AF01802.one.AF0020403" class="Pushinput"    maxlength="1" v-numberOnly></el-input> </td>
+             <td ><el-input  v-model="vestList.setting[keys].sett.AF01802.one.AF0020402" class="Pushinput"    maxlength="1" v-numberOnly></el-input> </td>
+             <td ><el-input  v-model="vestList.setting[keys].sett.AF01802.one.AF0020401" class="Pushinput"    maxlength="1" v-numberOnly></el-input> </td>             
             </tr>
              <tr>
              <td class="Offline">离线</td>
-             <td ><el-input  v-model="vestList.setting[keys].sett.AF01802.zero.AF0010401" class="Pushinput" type="number"  min="0" max='5'></el-input> </td>
-             <td ><el-input  v-model="vestList.setting[keys].sett.AF01802.zero.AF0020405" class="Pushinput" type="number"  min="0" max='5'></el-input> </td>
-             <td ><el-input  v-model="vestList.setting[keys].sett.AF01802.zero.AF0020404" class="Pushinput" type="number"  min="0" max='5'></el-input> </td>
-             <td ><el-input  v-model="vestList.setting[keys].sett.AF01802.zero.AF0020403" class="Pushinput" type="number"  min="0" max='5'></el-input> </td>
-             <td ><el-input  v-model="vestList.setting[keys].sett.AF01802.zero.AF0020402" class="Pushinput" type="number"  min="0" max='5'></el-input> </td>
-             <td ><el-input  v-model="vestList.setting[keys].sett.AF01802.zero.AF0020401" class="Pushinput" type="number"  min="0" max='5'></el-input> </td>            
+             <td ><el-input  v-model="vestList.setting[keys].sett.AF01802.zero.AF0010401" class="Pushinput"    maxlength="1" v-numberOnly></el-input> </td>
+             <td ><el-input  v-model="vestList.setting[keys].sett.AF01802.zero.AF0020405" class="Pushinput"    maxlength="1" v-numberOnly></el-input> </td>
+             <td ><el-input  v-model="vestList.setting[keys].sett.AF01802.zero.AF0020404" class="Pushinput"    maxlength="1" v-numberOnly></el-input> </td>
+             <td ><el-input  v-model="vestList.setting[keys].sett.AF01802.zero.AF0020403" class="Pushinput"    maxlength="1" v-numberOnly></el-input> </td>
+             <td ><el-input  v-model="vestList.setting[keys].sett.AF01802.zero.AF0020402" class="Pushinput"    maxlength="1" v-numberOnly></el-input> </td>
+             <td ><el-input  v-model="vestList.setting[keys].sett.AF01802.zero.AF0020401" class="Pushinput"    maxlength="1" v-numberOnly></el-input> </td>            
             </tr>
              <tr>
              <th  rowspan="2">小货车</th>
              <td class="Online">在线</td>     
-             <td ><el-input  v-model="vestList.setting[keys].sett.AF01803.one.AF0010401" class="Pushinput" type="number"  min="0" max='5'></el-input> </td>
-             <td ><el-input  v-model="vestList.setting[keys].sett.AF01803.one.AF0020405" class="Pushinput" type="number"  min="0" max='5'></el-input> </td>
-             <td ><el-input  v-model="vestList.setting[keys].sett.AF01803.one.AF0020404" class="Pushinput" type="number"  min="0" max='5'></el-input> </td>
-             <td ><el-input  v-model="vestList.setting[keys].sett.AF01803.one.AF0020403" class="Pushinput" type="number"  min="0" max='5'></el-input> </td>
-             <td ><el-input  v-model="vestList.setting[keys].sett.AF01803.one.AF0020402" class="Pushinput" type="number"  min="0" max='5'></el-input> </td>
-             <td ><el-input  v-model="vestList.setting[keys].sett.AF01803.one.AF0020401" class="Pushinput" type="number"  min="0" max='5'></el-input> </td>                  
+             <td ><el-input  v-model="vestList.setting[keys].sett.AF01803.one.AF0010401" class="Pushinput"    maxlength="1" v-numberOnly></el-input> </td>
+             <td ><el-input  v-model="vestList.setting[keys].sett.AF01803.one.AF0020405" class="Pushinput"    maxlength="1" v-numberOnly></el-input> </td>
+             <td ><el-input  v-model="vestList.setting[keys].sett.AF01803.one.AF0020404" class="Pushinput"    maxlength="1" v-numberOnly></el-input> </td>
+             <td ><el-input  v-model="vestList.setting[keys].sett.AF01803.one.AF0020403" class="Pushinput"    maxlength="1" v-numberOnly></el-input> </td>
+             <td ><el-input  v-model="vestList.setting[keys].sett.AF01803.one.AF0020402" class="Pushinput"    maxlength="1" v-numberOnly></el-input> </td>
+             <td ><el-input  v-model="vestList.setting[keys].sett.AF01803.one.AF0020401" class="Pushinput"    maxlength="1" v-numberOnly></el-input> </td>                  
             </tr>
              <tr>
              <td class="Offline">离线</td>
-             <td ><el-input  v-model="vestList.setting[keys].sett.AF01803.zero.AF0010401" class="Pushinput" type="number"  min="0" max='5'></el-input> </td>
-             <td ><el-input  v-model="vestList.setting[keys].sett.AF01803.zero.AF0020405" class="Pushinput" type="number"  min="0" max='5'></el-input> </td>
-             <td ><el-input  v-model="vestList.setting[keys].sett.AF01803.zero.AF0020404" class="Pushinput" type="number"  min="0" max='5'></el-input> </td>
-             <td ><el-input  v-model="vestList.setting[keys].sett.AF01803.zero.AF0020403" class="Pushinput" type="number"  min="0" max='5'></el-input> </td>
-             <td ><el-input  v-model="vestList.setting[keys].sett.AF01803.zero.AF0020402" class="Pushinput" type="number"  min="0" max='5'></el-input> </td>
-             <td ><el-input  v-model="vestList.setting[keys].sett.AF01803.zero.AF0020401" class="Pushinput" type="number"  min="0" max='5'></el-input> </td>   
+             <td ><el-input  v-model="vestList.setting[keys].sett.AF01803.zero.AF0010401" class="Pushinput"    maxlength="1" v-numberOnly></el-input> </td>
+             <td ><el-input  v-model="vestList.setting[keys].sett.AF01803.zero.AF0020405" class="Pushinput"    maxlength="1" v-numberOnly></el-input> </td>
+             <td ><el-input  v-model="vestList.setting[keys].sett.AF01803.zero.AF0020404" class="Pushinput"    maxlength="1" v-numberOnly></el-input> </td>
+             <td ><el-input  v-model="vestList.setting[keys].sett.AF01803.zero.AF0020403" class="Pushinput"    maxlength="1" v-numberOnly></el-input> </td>
+             <td ><el-input  v-model="vestList.setting[keys].sett.AF01803.zero.AF0020402" class="Pushinput"    maxlength="1" v-numberOnly></el-input> </td>
+             <td ><el-input  v-model="vestList.setting[keys].sett.AF01803.zero.AF0020401" class="Pushinput"    maxlength="1" v-numberOnly></el-input> </td>   
             </tr>
             <tr>
              <th  rowspan="2">大货车</th>
              <td class="Online">在线</td>        
-             <td ><el-input  v-model="vestList.setting[keys].sett.AF01804.one.AF0010401" class="Pushinput" type="number" min="0" max='5'></el-input> </td>
-             <td ><el-input  v-model="vestList.setting[keys].sett.AF01804.one.AF0020405" class="Pushinput" type="number" min="0" max='5'></el-input> </td>
-             <td ><el-input  v-model="vestList.setting[keys].sett.AF01804.one.AF0020404" class="Pushinput" type="number" min="0" max='5'></el-input> </td>
-             <td ><el-input  v-model="vestList.setting[keys].sett.AF01804.one.AF0020403" class="Pushinput" type="number" min="0" max='5'></el-input> </td>
-             <td ><el-input  v-model="vestList.setting[keys].sett.AF01804.one.AF0020402" class="Pushinput" type="number" min="0" max='5'></el-input> </td>
-             <td ><el-input  v-model="vestList.setting[keys].sett.AF01804.one.AF0020401" class="Pushinput" type="number" min="0" max='5'></el-input> </td>              
+             <td ><el-input  v-model="vestList.setting[keys].sett.AF01804.one.AF0010401" class="Pushinput"   maxlength="1" v-numberOnly></el-input> </td>
+             <td ><el-input  v-model="vestList.setting[keys].sett.AF01804.one.AF0020405" class="Pushinput"   maxlength="1" v-numberOnly></el-input> </td>
+             <td ><el-input  v-model="vestList.setting[keys].sett.AF01804.one.AF0020404" class="Pushinput"   maxlength="1" v-numberOnly></el-input> </td>
+             <td ><el-input  v-model="vestList.setting[keys].sett.AF01804.one.AF0020403" class="Pushinput"   maxlength="1" v-numberOnly></el-input> </td>
+             <td ><el-input  v-model="vestList.setting[keys].sett.AF01804.one.AF0020402" class="Pushinput"   maxlength="1" v-numberOnly></el-input> </td>
+             <td ><el-input  v-model="vestList.setting[keys].sett.AF01804.one.AF0020401" class="Pushinput"   maxlength="1" v-numberOnly></el-input> </td>              
             </tr>
              <tr>
              <td class="Offline">离线</td>
-             <td ><el-input  v-model="vestList.setting[keys].sett.AF01804.zero.AF0010401" class="Pushinput" type="number" min="0" max='5'></el-input> </td>
-             <td ><el-input  v-model="vestList.setting[keys].sett.AF01804.zero.AF0020405" class="Pushinput" type="number" min="0" max='5'></el-input> </td>
-             <td ><el-input  v-model="vestList.setting[keys].sett.AF01804.zero.AF0020404" class="Pushinput" type="number" min="0" max='5'></el-input> </td>
-             <td ><el-input  v-model="vestList.setting[keys].sett.AF01804.zero.AF0020403" class="Pushinput" type="number" min="0" max='5'></el-input> </td>
-             <td ><el-input  v-model="vestList.setting[keys].sett.AF01804.zero.AF0020402" class="Pushinput" type="number" min="0" max='5'></el-input> </td>
-             <td ><el-input  v-model="vestList.setting[keys].sett.AF01804.zero.AF0020401" class="Pushinput" type="number" min="0" max='5'></el-input> </td>   
+             <td ><el-input  v-model="vestList.setting[keys].sett.AF01804.zero.AF0010401" class="Pushinput"   maxlength="1" v-numberOnly></el-input> </td>
+             <td ><el-input  v-model="vestList.setting[keys].sett.AF01804.zero.AF0020405" class="Pushinput"   maxlength="1" v-numberOnly></el-input> </td>
+             <td ><el-input  v-model="vestList.setting[keys].sett.AF01804.zero.AF0020404" class="Pushinput"   maxlength="1" v-numberOnly></el-input> </td>
+             <td ><el-input  v-model="vestList.setting[keys].sett.AF01804.zero.AF0020403" class="Pushinput"   maxlength="1" v-numberOnly></el-input> </td>
+             <td ><el-input  v-model="vestList.setting[keys].sett.AF01804.zero.AF0020402" class="Pushinput"   maxlength="1" v-numberOnly></el-input> </td>
+             <td ><el-input  v-model="vestList.setting[keys].sett.AF01804.zero.AF0020401" class="Pushinput"   maxlength="1" v-numberOnly></el-input> </td>   
             </tr>
             </tbody>    
             </table>
@@ -468,10 +468,9 @@ components:{
     GetCityList
 },
 methods:{
-            getStr(val,name){
-                console.log('this.cityarr',val,name)
-                this.vestList.areaCode = val.split(',')[1];
-                this.vestList.areaName = name.split('-')[1];
+            getStr(val){
+                this.vestList.areaCode = val.city.code
+                this.vestList.areaName = val.city.name
             },
         // 省市状态表
             changeSelect(){
@@ -740,7 +739,7 @@ methods:{
                          {
                             if(!reg.test(this.vestList.setting[i].sett[Carst[j]][Cartype[k]][CarActive[n]]))
                             {
-                                this.$message.warning('推单单数范围在0-5之间')
+                                this.$message.warning('推单单数范围必须在0-5之间的整数')
                                 return false
                                 break;
                             }
@@ -945,12 +944,13 @@ mounted(){
             }
         }
     .price_one{
-            width:105px;
-            margin-right: 10px;
+            width:110px;
+            margin-right: 7px;
     }
     .price_two{
-            width:105px;
-            margin-right: 30px;
+            width:110px;
+            margin-left: 5px;
+            margin-right: 20px;
     }
     .el-date-editor{
         line-height: 24px;
