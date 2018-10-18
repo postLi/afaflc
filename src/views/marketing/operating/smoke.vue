@@ -305,14 +305,33 @@ export default{
     //     this.clearName()
     //   }
     // },
+    // regionChange(d) {
+    //   console.log('data:', d)
+    //   this.formAllData.belongCityName = (!d.province && !d.city && !d.area && !d.town) ? '' : `${this.getValue(d.province)}${this.getValue(d.city)}${this.getValue(d.area)}${this.getValue(d.town)}`.trim()
+    //   if (d.area) {
+    //     this.formAllData.belongCity = d.area.code
+    //   } else if (d.city) {
+    //     this.formAllData.belongCity = d.city.code
+    //   } else if (d.province) {
+    //     this.formAllData.belongCity = d.province.code
+    //   }
+    // },
     getStr(val, name) {
       const arr = []
       arr.push(val.split(',')[2])
-      // this.searchInfo.areaCodeList = val.split(',')[2]
       this.searchInfo.areaCodeList = Object.assign([], arr)
       this.searchInfo.areaName = name.split(',')[2]
       console.log('this.cityarr', val, name, arr)
     },
+    // getStr(val, name) {
+    //   const arr = []
+    //   // var str = val.split(',')[val.split(',').length - 1]
+    //   arr.push(val.split(',')[val.split(',').length - 1])
+    //   // this.searchInfo.areaCodeList = val.split(',')[2]
+    //   this.searchInfo.areaCodeList = Object.assign([], arr)
+    //   this.searchInfo.areaName = name.split(',')[name.split(',').length - 1]
+    //   console.log('this.cityarr', val, name, arr, this.searchInfo.areaName)
+    // },
     getValue(obj) {
       return obj ? obj.value : ''
     },
