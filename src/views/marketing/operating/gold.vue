@@ -130,6 +130,7 @@ import '@/styles/dialog.scss'
 import { parseTime, pickerOptions2 } from '@/utils/index.js'
 import Pager from '@/components/Pagination/index'
 // import vregion from '@/components/vregion/Region'
+// import GetCityList from '@/components/GetCityList/area'
 import GetCityList from '@/components/GetCityList/city'
 import { postUserRewardShipperTransaction } from '@/api/marketing/carmarkting/operating'
 export default{
@@ -187,13 +188,22 @@ export default{
       this.searchInfo.areaCodeList = []
       this.areaCodeList1 = []
     },
-    getStr(val, name) {
-      const arr = []
-      arr.push(val.split(',')[2])
-      // this.searchInfo.areaCodeList = val.split(',')[2]
-      this.searchInfo.areaCodeList = Object.assign([], arr)
-      this.searchInfo.areaName = name.split(',')[2]
-      console.log('this.cityarr', val, name, arr)
+    // getStr(val, name) {
+    //   const arr = []
+    //   // var str = val.split(',')[val.split(',').length - 1]
+    //   arr.push(val.split(',')[val.split(',').length - 1])
+    //   this.searchInfo.areaCodeList = Object.assign([], arr)
+    //   this.searchInfo.areaName = name.split(',')[name.split(',').length - 1]
+    //   console.log('this.cityarr', val, name, arr, this.searchInfo.areaName)
+    // },
+    getStr(val) {
+      const arrCode = []
+      const arrName = []
+      arrCode.push(val.area.code)
+      arrName.push(val.area.name)
+      this.searchInfo.areaCodeList = Object.assign([], arrCode)
+      this.searchInfo.areaName = Object.assign([], arrName)
+      console.log('this.cityarr', val, val.area, val.area.code, val.area.name)
     },
     getValue(obj) {
       return obj ? obj.value : ''
