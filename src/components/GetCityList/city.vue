@@ -17,43 +17,43 @@
 import { aflcAreaCode } from '@/api/common.js'
 
 export default {
-    name: 'getCityList',
-    props: {
-        disabled:{
-            type: Boolean
-        },
-        value: [String, Array],
+  name: 'getCityList',
+  props: {
+    disabled: {
+      type: Boolean
     },
-    data() {
-        return {
-            selectedOptions: [],
-            areaList:null,
-            cityTree:[],
-            props: {
-                label: 'name',
-                value: 'code',
-                children: 'children'
-            },
-        };
+    value: [String, Array]
+  },
+  data() {
+    return {
+      selectedOptions: [],
+      areaList: null,
+      cityTree: [],
+      props: {
+        label: 'name',
+        value: 'code',
+        children: 'children'
+      }
+    }
+  },
+  methods: {
+    handleItemMore(val) {
+      console.log(this.$refs.cityTree)
+      console.log(this.$refs.cityTree.currentLabels)
+      this.returnArr()
     },
-    methods: {
-        handleItemMore(val){
-            console.log(this.$refs.cityTree)
-            console.log(this.$refs.cityTree.currentLabels)
-            this.returnArr();
-        },
-        init(){
-            aflcAreaCode().then(res=>{
-                this.cityTree = res.data;
-           })
-        },
-        returnArr(){
-            this.$emit('returnStr', this.selectedOptions.join(','),this.$refs.cityTree.currentLabels.join(','))
-        }
+    init() {
+      aflcAreaCode().then(res => {
+        this.cityTree = res.data
+      })
     },
-    mounted(){
-        this.init()
-    },
+    returnArr() {
+      this.$emit('returnStr', this.selectedOptions.join(','), this.$refs.cityTree.currentLabels.join(','))
+    }
+  },
+  mounted() {
+    this.init()
+  }
 }
 </script>
 
@@ -77,5 +77,4 @@ export default {
     }
     
 </style>
-
 
