@@ -39,15 +39,43 @@ export default {
         handleItemMore(val){
             console.log(this.$refs.cityTree)
             console.log(this.$refs.cityTree.currentLabels)
-            this.returnArr();
+             if(val[0]){
+                this.nowData.province = {
+                    code:val[0],
+                    key:val[0],
+                    name:this.$refs.cityTree.currentLabels[0],
+                    value:this.$refs.cityTree.currentLabels[0],
+                    parentCode:null,
+                }
+            }
+            if(val[1]){
+                this.nowData.city = {
+                    code:val[1],
+                    key:val[1],
+                    name:this.$refs.cityTree.currentLabels[1],
+                    value:this.$refs.cityTree.currentLabels[1],
+                    parentCode:val[0],
+                }
+            }
+            if(val[2]){
+                this.nowData.area = {
+                    code:val[2],
+                    key:val[2],
+                    name:this.$refs.cityTree.currentLabels[2],
+                    value:this.$refs.cityTree.currentLabels[2],
+                    parentCode:val[1],
+                }
+            }
+            // console.log('this.nowData',this.nowData)
+            this.returnArr(this.nowData);
         },
         init(){
             aflcAreaCode().then(res=>{
                 this.cityTree = res.data;
            })
         },
-        returnArr(){
-            this.$emit('returnStr', this.selectedOptions.join(','),this.$refs.cityTree.currentLabels.join('-'))
+        returnArr(val){
+            this.$emit('returnStr', val)
         }
     },
     mounted(){

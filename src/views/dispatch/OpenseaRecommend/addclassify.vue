@@ -210,11 +210,22 @@ export default {
 
         }
     },
-    getStr(val,name){
-        console.log('this.cityarr',val,name)
-        this.standForm.areaCode = val;
-        this.standForm.areaCodeName = name;
+    getStr(d){
+        console.log('data:',d)
+        
+        // this.standForm.areaCode = val;
+        // this.standForm.areaCodeName = name;
     },
+    regionChange(d) {
+            console.log('data:',d)
+            this.xinzengform.belongCityName = (!d.province&&!d.city&&!d.area&&!d.town) ? '': `${this.getValue(d.province)}${this.getValue(d.city)}${this.getValue(d.area)}${this.getValue(d.town)}`.trim();
+            this.xinzengform.provinceCode = d.province ? d.province.code : '';
+            this.xinzengform.cityCode = d.city ? d.city.code : '';
+            this.xinzengform.areaCode = d.area ? d.area.code : '';
+        },
+        getValue(obj){
+            return obj ? obj.value:'';
+        },
     submitForm(formName) {
         this.$refs[formName].validate((valid) => {
             if (valid) {

@@ -23,7 +23,6 @@
                     stripe
                     border
                     height="100%"
-                    :default-sort = "{prop: 'registerTime', order: 'descending'}"
                     @row-click="clickDetails"
                     tooltip-effect="dark"
                     style="width: 100%">

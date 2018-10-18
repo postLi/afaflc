@@ -8,7 +8,7 @@
                     <el-input placeholder="请输入内容" v-model.trim="formInline.companyName" clearable></el-input>
                 </el-form-item>
                 <el-form-item label="联系人姓名：">
-                    <el-input placeholder="请输入内容" v-model.trim="formInline.contacts" clearable></el-input>
+                    <el-input placeholder="请输入内容" v-model.trim="formInline.contactsName" clearable></el-input>
                 </el-form-item>
                 <el-form-item class="fr">
                     <el-button type="primary" icon="el-icon-search" :size="btnsize" plain @click="getdata_search">查询</el-button>
@@ -29,7 +29,6 @@
                     tooltip-effect="dark"
                     @row-click="clickDetails"
                     @selection-change="getSelection"    
-                    :default-sort = "{prop: 'registerTime', order: 'descending'}"
                     style="width: 100%">
                  <el-table-column
                     fixed
@@ -108,12 +107,12 @@ export default {
       page: 1,
       pagesize: 20,
       formInline: {
-          companyName: '',
-          belongCity: '',
-          mobile: '',
-          authStatus: 'AF0010403', // 已认证的状态码
-          isVest: '0'
-
+            companyName: '',
+            belongCity: '',
+            mobile: '',
+            authStatus: 'AF0010403', // 已认证的状态码
+            isVest: '0',
+            contactsName:'',
         },
       selectRowData: {},
       dialogFormVisible_add: false,
@@ -194,16 +193,15 @@ export default {
     getdata_search(event) {
       this.firstblood()
     },
-
         // 清空
     clearSearch() {
       this.formInline = {
-          companyName: '',
-          belongCity: '',
-          mobile: '',
-          authStatus: 'AF0010403', // 已认证的状态码
-          isVest: '0'
-
+            companyName: '',
+            belongCity: '',
+            mobile: '',
+            authStatus: 'AF0010403', // 已认证的状态码
+            isVest: '0',
+            contactsName:'',
         }
       this.firstblood()
     },

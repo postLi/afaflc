@@ -29,7 +29,6 @@
             height="100%"
             @row-click="clickDetails"
             @selection-change="getSelection"    
-            :default-sort = "{prop: 'registerTime', order: 'descending'}"
 			tooltip-effect="dark"
 			style="width: 100%">
             <!-- <el-table-column label="" width="60" fixed>
@@ -246,7 +245,7 @@
                 <div class="data_pic_img clearfix">
                     <div class="data_pic_yyzz data_pic_c">  
                         <el-tooltip class="item" effect="dark" content="点击图片查看原图" placement="top" >
-                            <img  class="picURL" :src="shengheform.businessLicenceFile ? shengheform.businessLicenceFile : defaultImg" @click="changeIMG"/>
+                            <img  class="picURL" :src="shengheform.businessLicenceFile ? shengheform.businessLicenceFile : defaultImg" v-showPicture :imgurl="shengheform.businessLicenceFile"/>
                         </el-tooltip>
                         <h2>营业执照</h2>
                         <el-form-item  prop="radio1" label-width="0">
@@ -259,7 +258,7 @@
                     </div>
                     <div class="data_pic_company data_pic_c">   
                         <el-tooltip class="item" effect="dark" content="点击图片查看原图" placement="top" >
-                            <img  class="picURL" :src="shengheform.companyFacadeFile ? shengheform.companyFacadeFile : defaultImg" @click="changeIMG"/>
+                            <img  class="picURL" :src="shengheform.companyFacadeFile ? shengheform.companyFacadeFile : defaultImg" v-showPicture :imgurl="shengheform.companyFacadeFile"/>
                         </el-tooltip>
                         <h2>公司或档口照片</h2>
                         <el-form-item  prop="radio2" label-width="0">
@@ -272,7 +271,7 @@
                     </div>
                     <div class="data_pic_callingcode data_pic_c">
                         <el-tooltip class="item" effect="dark" content="点击图片查看原图" placement="top" >
-                            <img  class="picURL" :src="shengheform.takeIdCardFile ? shengheform.takeIdCardFile : defaultImg" @click="changeIMG"/>
+                            <img  class="picURL" :src="shengheform.takeIdCardFile ? shengheform.takeIdCardFile : defaultImg" v-showPicture :imgurl="shengheform.takeIdCardFile"/>
                         </el-tooltip>
                         <h2>手持身份证</h2>
                          <el-form-item  prop="radio3" label-width="0">
@@ -323,7 +322,7 @@ export default {
 },
   computed: {
     pictureValue() {
-                return [{ name: '营业执照', result: this.radio1 }, { name: '公司或档口照片', result: this.radio2 }, { name: '手持身份证', result: this.radio3 }]
+        return [{ name: '营业执照', result: this.radio1 }, { name: '公司或档口照片', result: this.radio2 }, { name: '手持身份证', result: this.radio3 }]
     }
 },
     data() {
@@ -357,7 +356,6 @@ return {
   dialogFormVisible_add: false,
   type: '',
   paramsView: {},
-  templateRadio: '',
   defaultImg: '/static/test.jpg', // 默认第一张图片的url
   demoData: '企业货主', // 根据项目要求写死
   options: [], // 货主类型列表
@@ -461,16 +459,16 @@ return {
             this.paramsView = row
             this.dialogFormVisible_add = true
         },
-        getCurrentRow(index, row) {
-          this.shengheform = Object.assign({}, row)
-            this.otherServiceCode = JSON.parse(this.shengheform.otherServiceCode)
-            this.optionsServerArr = JSON.parse(this.shengheform.serviceType)
-          this.optionsProductArr = JSON.parse(this.shengheform.productServiceCode)
-          this.shengheform.isOpenTms = '0'
-            this.templateRadio = index
-            console.log('选中内容', row)
-        },
-           // 判断选中与否
+        // getCurrentRow(index, row) {
+        //     this.shengheform = Object.assign({}, row)
+        //     this.otherServiceCode = JSON.parse(this.shengheform.otherServiceCode)
+        //     this.optionsServerArr = JSON.parse(this.shengheform.serviceType)
+        //     this.optionsProductArr = JSON.parse(this.shengheform.productServiceCode)
+        //     this.shengheform.isOpenTms = '0'
+        //     this.templateRadio = index
+        //     console.log('选中内容', row)
+        // },
+        // 判断选中与否
         getSelection(val) {
           console.log('选中内容', val)
           this.selected = val
@@ -556,13 +554,12 @@ return {
           this.firstblood()
         },
       completeInfo() {
-          console.log()
-          if (this.shengheform.belongBrandCode) {
-              this.shengheform.belongBrand = this.optionsBelongBrand.find(item => item.code === this.shengheform.belongBrandCode)['name']
+            if (this.shengheform.belongBrandCode) {
+                this.shengheform.belongBrand = this.optionsBelongBrand.find(item => item.code === this.shengheform.belongBrandCode)['name']
             }
-          console.log(this.shengheform.belongBrandCode, this.shengheform.belongBrand)
+            // console.log(this.shengheform.belongBrandCode, this.shengheform.belongBrand)
 
-          const serviceTypeName = []
+            const serviceTypeName = []
             let productServiceName = []
             // let otherServiceName =  [];
 
@@ -591,7 +588,7 @@ return {
             // })
 
             // 服务类型
-          this.shengheform.serviceType = JSON.stringify(this.optionsServerArr)                         
+            this.shengheform.serviceType = JSON.stringify(this.optionsServerArr)                         
             this.shengheform.serviceTypeName = JSON.stringify(serviceTypeName)
             //产品与服务
             this.shengheform.productServiceCode = JSON.stringify(this.optionsProductArr)                         
@@ -601,31 +598,30 @@ return {
             // this.shengheform.otherService = JSON.stringify(otherServiceName);
         },
         // 审核不通过
-      handlerOut() {
+        handlerOut() {
           this.$refs['shengheform'].validate((valid) => {
               if (valid) {
-                  const item = this.shengheform.account
+                  const item = this.shengheform.mobile;
                     this.$confirm('确定要不通过' + item + '该用户吗？', '提示', {
                       confirmButtonText: '确定',
                       cancelButtonText: '取消',
                       type: 'warning'
                     }).then(() => {
-                      this.completeInfo()
+                        this.completeInfo()
                         var forms = Object.assign({}, this.shengheform, { authStatus: 'AF0010404', authStatusName: '认证不通过' }, { authNoPassCause: JSON.stringify(this.pictureValue) })
                         data_ChangeLogisticsCompany(forms).then(res => {
-                            // console.log(res)
-                          this.$message({
-                              type: 'success',
-                              message: '该用户未通过审核',
-                              duration: 2000
+                            this.$message({
+                                type: 'success',
+                                message: '该用户未通过审核',
+                                duration: 2000
                             })
                             this.handlerCancel();
                             this.changeList();
                             this.firstblood();
                         }).catch(err => {
-                          this.$message({
-                              type: 'info',
-                              message: '操作失败，原因：' + err.text ? err.text : err
+                            this.$message({
+                                type: 'info',
+                                message: '操作失败，原因：' + err.text ? err.text : err,
                             })
                         })
                     }).catch(() => {
@@ -633,7 +629,6 @@ return {
                           type: 'info',
                           message: '已取消'
                         })
-                      this.templateRadio = ''
                     })
                 } else {
                   this.$message.error('审核未通过需资料图片全部未合格！')
@@ -641,32 +636,30 @@ return {
                 }
             })
         },
-
         // 审核通过
-      handlerPass() {
-          let ifQualified = true
+        handlerPass() {
+            let ifQualified = true
             this.pictureValue.forEach((el, idx) => {
-              if (el.result != '上传合格') {
-                  ifQualified = false
+                if (el.result != '上传合格') {
+                    ifQualified = false
                 }
             })
-          this.$refs['shengheform'].validate((valid) => {
-              if (valid && ifQualified) {
-                  this.completeInfo()
+            this.$refs['shengheform'].validate((valid) => {
+                if (valid && ifQualified) {
+                    this.completeInfo()
                     var forms = Object.assign({}, this.shengheform, { authStatus: 'AF0010403', authStatusName: '已认证' }, { authNoPassCause: JSON.stringify(this.pictureValue) })
-                    console.log(forms)
-                  data_ChangeLogisticsCompany(forms).then(res => {
-                    // console.log(res)
-                      this.$alert('操作成功', '提示', {
-                          confirmButtonText: '确定',
-                          callback: action => {
+                    // console.log(forms)
+                    data_ChangeLogisticsCompany(forms).then(res => {
+                        this.$alert('操作成功', '提示', {
+                            confirmButtonText: '确定',
+                            callback: action => {
                                 this.handlerCancel();
                                 this.changeList();
                                 this.firstblood();
                             }
                         })
                     }).catch(err => {
-                      this.dialogFormVisible = true
+                        this.dialogFormVisible = true
                         this.$message({
                           type: 'info',
                           message: '删除失败，原因：' + err.text ? err.text : err

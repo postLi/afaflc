@@ -296,13 +296,13 @@ export default {
                     { required: true, message:"请选择车长规格", trigger: 'blur' },
                 ],
                 areaPrice:[
-                    {required:true,message:"请输入区域起步价",trigger:'blur'},
+                    {required:true,message:"请输入区域起步价",trigger:'change'},
                 ],
                 areaKm:[
-                    {required:true,message:"请输入区域起步公里",trigger:'blur'},
+                    {required:true,message:"请输入区域起步公里",trigger:'change'},
                 ],
                 areaOutstripPrice:[
-                    {required:true,message:"请输入区域超里程费",trigger:'blur'},
+                    {required:true,message:"请输入区域超里程费",trigger:'change'},
                 ]
             },
             reviserules:{

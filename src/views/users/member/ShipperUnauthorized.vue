@@ -37,7 +37,6 @@
 				border
                 @row-click="clickDetails"
                 height="100%"
-                :default-sort = "{prop: 'registerTime', order: 'descending'}"
 				tooltip-effect="dark"
 				style="width: 100%">
                  <el-table-column

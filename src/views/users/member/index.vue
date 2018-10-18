@@ -103,10 +103,10 @@
             .el-radio__input{
                 margin-left: 10px;
             }
-            td .cell {
-                white-space: initial;
-                overflow: hidden;
-            }
+            // td .cell {
+            //     white-space: initial;
+            //     overflow: hidden;
+            // }
             .otherServiceTD{
                 text-align: left;
               

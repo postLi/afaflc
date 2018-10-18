@@ -56,7 +56,10 @@
                     </p>
                     <p>
                         <span>评价内容：</span>
-                        <span>{{item.evaluationDes}}123123123</span>
+                        <el-tooltip placement="top" effect="light">
+                            <div slot="content">{{item.evaluationDes}}</div>
+                                <span>{{item.evaluationDes}}</span>
+                        </el-tooltip>
                     </p>
                     <p>
                         <span>评价标签：</span>

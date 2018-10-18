@@ -28,7 +28,7 @@
                     </el-form-item>
                 </el-col>
                 <el-col :span="12">
-                    <el-form-item label="所在地："  v-if = "editType=='view'" :label-width="formLabelWidth">
+                    <el-form-item label="所在地："  v-if = "editType=='view'" :label-width="formLabelWidth" required>
                         <el-input v-model="xinzengform.belongCityName"  disabled></el-input>
                     </el-form-item>
                     <el-form-item label="所在地："  props = "belongCity"  :label-width="formLabelWidth" v-else required>
@@ -234,12 +234,12 @@
                 <el-col :span="8">
                     <el-form-item label="上传发货人名片照片：" label-width="165px" prop="shipperCardFile" >
                     </el-form-item>
-                    <el-form-item  label-width="20px" prop="shipperCardFile" >
+                    <el-form-item  label-width="20px" prop="takeIdCardFile" >
                         <div class="upload">
                             <el-tooltip class="item" effect="dark" content="点击图片查看原图" placement="top" v-if="editType == 'view'">
-                                <img :src='xinzengform.shipperCardFile ? xinzengform.shipperCardFile : defaultImg' alt="" v-showPicture :imgurl="xinzengform.shipperCardFile">
+                                <img :src='xinzengform.takeIdCardFile ? xinzengform.takeIdCardFile : defaultImg' alt="" v-showPicture :imgurl="xinzengform.takeIdCardFile">
                             </el-tooltip>
-                            <upload class="licensePicture" tip="（必须为jpg/png并且小于5M）" v-else v-model="xinzengform.shipperCardFile" />
+                            <upload class="licensePicture" tip="（必须为jpg/png并且小于5M）" v-else v-model="xinzengform.takeIdCardFile" />
                         </div>
                     </el-form-item>
                 </el-col>
@@ -285,34 +285,6 @@ export default {
     },
   },
   data(){
-        const companyNameValidator = (rule, val, cb)=>{
-            // console.log(val)
-            if(!this.xinzengform.companyFacadeFile){
-                cb(new Error('请上传公司或者档口照片'))
-            }else{
-                cb()
-            }
-        }
-
-        const shipperCardFileValidator=(rule,val,cb) => {
-            if(!this.xinzengform.shipperCardFile){
-                cb(new Error('请上传发货人名片照片'))
-            } else {
-                cb()
-            }
-        }
-
-        const belongCityValidator = (rule, val, cb) => {
-            // if(this.$refs.area){
-                if(!this.$refs.area.selectedOptions[0]) {
-                    cb(new Error('请选择所在地'))
-                } else {
-                    cb()
-                }
-            // }else{
-                // return
-            // }
-        }
         return{
             ifVipTimes:[],
              pickerOptions: {
@@ -362,12 +334,12 @@ export default {
                     {required: true, message:'请选择货主类型', trigger:'change'},
                 ],
                 belongCity:[
-                    {required:true,validator:belongCityValidator, trigger:'change'},
+                    {required:true, message:'请选择所在地', trigger:'change'},
                 ],
-                companyFacadeFileRules:[
+                companyFacadeFile:[
                     {required:true,message:'请上传公司或者档口照片',trigger:'change'},
                 ],
-                shipperCardFileRules:[
+                takeIdCardFile:[
                     {required:true,message:'请上传发货人名片照片',trigger: 'change'}
                 ]
             },

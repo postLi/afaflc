@@ -49,7 +49,6 @@
 				<el-table
 				ref="multipleTable"
 				:data="tableDataAll"
-                :default-sort = "{prop: 'registerTime', order: 'descending'}"
 				stripe
 				border
                 height="100%"

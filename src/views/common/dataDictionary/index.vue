@@ -45,7 +45,6 @@
                             border
                             height="100%"
                             @selection-change = "getinfomation"
-                            :default-sort = "{prop: 'name', order: 'descending'}"
                             @row-dblclick="moreinfo"
                             tooltip-effect="dark"
                             @row-click="clickDetails"
