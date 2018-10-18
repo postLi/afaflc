@@ -27,12 +27,7 @@
                  </el-select>
             </el-form-item>  
             <el-form-item label="所属区域：">
-                   <el-cascader
-                    size="large"
-                    :options="options"
-                    v-model="formAllData.areaName"
-                    @change="handleChange">
-                    </el-cascader>
+            <GetCityList ref="area" v-model="formAllData.areaName"  @returnStr="getStr"></GetCityList>
             </el-form-item> 
             <el-form-item label="活动时间：">
                     <el-date-picker
@@ -168,10 +163,10 @@
 <script>
 import {data_CarList,data_MaidLevel,data_ServerClassList} from '@/api/server/areaPrice.js'
 import {data_get_couponActivehand_list,data_Del_couponActive,data_Able_couponActive,data_automationActive,data_couponActive,data_couponActiveTime,data_couponStatus} from '@/api/marketing/shippermarkting/couponActive.js'
-import { regionDataPlus, CodeToText, TextToCode } from 'element-china-area-data'
+import GetCityList from '@/components/GetCityList/city'
 import { eventBus } from '@/eventBus'
 import Pager from '@/components/Pagination/index'
-import {parseTime} from '@/utils/'
+import {parseTime,pickerOptions2} from '@/utils/'
 import newautocoupon from './newautocoupon'
 import automationcheck from './automationcheck'
 import modautocoupon from './modautocoupon'
@@ -185,8 +180,10 @@ export default {
     },
     data(){
         return{
+           pickerOptions2: {
+             shortcuts: pickerOptions2
+            },
             btnsize:'mini',
-            options:regionDataPlus,
             selectRowData:[],
             selectId:[],
             createTime:null,
@@ -223,79 +220,22 @@ export default {
         newautocoupon,
         automationcheck,
         modautocoupon,
-        couponGive
+        couponGive,
+        GetCityList
     },
     methods:{
              // 列表刷新页面  
             firstblood(){
-                let FromData = {}
-                if(this.formAllData.area) {
-                    FromData = {
-                     area:this.formAllData.area,
-                     city:null,
-                     activityName:this.formAllData.activityName,
-                     activityType:this.formAllData.activityType,  
-                     usingStatus:this.formAllData.usingStatus,
-                     activityType:this.formAllData.activityType, 
-                     startTime:this.formAllData.startTime, 
-                     endTime:this.formAllData.endTime,                              
-                    }
-                }
-                else if(this.formAllData.city){
-                    FromData = {
-                     area:null,
-                     city:this.formAllData.city,
-                     activityName:this.formAllData.activityName,
-                     activityType:this.formAllData.activityType,  
-                     usingStatus:this.formAllData.usingStatus,
-                     activityType:this.formAllData.activityType, 
-                     startTime:this.formAllData.startTime, 
-                     endTime:this.formAllData.endTime,          
-                    }                    
-                }
-                else{
-                    FromData = {
-                     area:null,
-                     city:this.formAllData.city,
-                     activityName:this.formAllData.activityName,
-                     activityType:this.formAllData.activityType,  
-                     usingStatus:this.formAllData.usingStatus,
-                     activityType:this.formAllData.activityType, 
-                     startTime:this.formAllData.startTime, 
-                     endTime:this.formAllData.endTime,           
-                    }  
-                }   
-
-                data_get_couponActivehand_list(this.page,this.pagesize,FromData).then(res => {
+                data_get_couponActivehand_list(this.page,this.pagesize,this.formAllData).then(res => {
                   console.log(res)
                     this.dataTotal = res.data.totalCount
                     this.tableDataAll = res.data.list;
                 })
             },
-            handleChange(d){
-            console.log('d',d)
-            if(d.length<3){
-                    if(d.length==2){
-                    this.$message.error('请选择具体的城市');
-                    }
-                    this.formAllData.areaCode = null;
-                    this.formAllData.province = null,
-                    this.formAllData.city = null,
-                    this.formAllData.area = null,
-                    this.formAllData.areaName = [];
-            }
-            else{
-                    this.formAllData.areaCode = d
-                    this.formAllData.province = CodeToText[d[0]]
-                    this.formAllData.city =  CodeToText[d[1]]
-                    if(d[2]==''){
-                    this.formAllData.area = ''
-                    }
-                    else{
-                    this.formAllData.area = CodeToText[d[2]]
-                    }
-            }
-            },
+            getStr(val){
+                console.log('this.cityarr',val,name)
+                this.formAllData.areaCode = val.area.name
+            }, 
             //每页显示数据量变更
             handlePageChange(obj) {
                 this.page = obj.pageNum
@@ -318,6 +258,7 @@ export default {
             },
             // 清空
             clearSearch(){
+            this.createTime = null;
             this.formAllData =  {
                 activityName:null,
                 activityType:null,
@@ -328,7 +269,7 @@ export default {
                 province:null,
                 city:null,
                 area:null,
-                areaName:[]
+                areaName:null,
             }
                 this.firstblood()    
             },

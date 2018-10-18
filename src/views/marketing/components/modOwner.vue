@@ -440,13 +440,6 @@ export default {
   mounted(){
   },
   methods:{
-     regionChange(d) {
-                console.log('data:',d)
-                this.formAll.areaCode = (!d.province&&!d.city&&!d.area&&!d.town) ? '': `${this.getValue(d.province)}${this.getValue(d.city)}${this.getValue(d.area)}${this.getValue(d.town)}`.trim();
-            },
-             getValue(obj){
-                return obj ? obj.value:'';
-            },
    openDialog:function(){
         if(this.editType == 'view'){
             this.update1(this.paramsView.id);

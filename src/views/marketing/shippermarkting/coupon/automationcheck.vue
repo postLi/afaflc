@@ -78,14 +78,14 @@
              <div class="ht_table_th table_th3">优惠券类型</div>
              <div class="ht_table_th table_th4">满减/折扣</div>
              <div class="ht_table_th table_th5">满减条件/最高抵扣</div>
-             <div class="ht_table_th table_th8">支付方式</div>
+             <div class="ht_table_th table_th6">支付方式</div>
              <div class="ht_table_th table_th7">时效类型</div>
-             <div class="ht_table_th table_th9">开始时间</div>
-             <div class="ht_table_th table_th10">过期时间</div>
-             <div class="ht_table_th table_th11">适用服务类型</div>
-             <div class="ht_table_th table_th12">适用车辆类型</div>
-             <div class="ht_table_th table_th13">所属区域</div>
-             <div class="ht_table_th table_th14">能否与大户券叠加</div>
+             <div class="ht_table_th table_th8">开始时间</div>
+             <div class="ht_table_th table_th9">过期时间</div>
+             <div class="ht_table_th table_th10">适用服务类型</div>
+             <div class="ht_table_th table_th11">适用车辆类型</div>
+             <div class="ht_table_th table_th12">所属区域</div>
+             <div class="ht_table_th table_th13">能否与大户券叠加</div>
             </div>
              <div  class="ht_table_tr1">
              <div class="ht_table_td1"></div>
@@ -104,7 +104,7 @@
              </div>
              <div class="ht_table_td table_th4"><el-input v-model="formAllData.aflcCouponList[keys].remissionDiscount" disabled></el-input></div> 
              <div class="ht_table_td table_th5"><el-input v-model.number="formAllData.aflcCouponList[keys].conditionDeduction" disabled></el-input></div>
-             <div class="ht_table_td table_th8"><el-input placeholder="在线支付" disabled></el-input></div>
+             <div class="ht_table_td table_th6"><el-input placeholder="在线支付" disabled></el-input></div>
              <div class="ht_table_td table_th7">
                       <el-select v-model="formAllData.aflcCouponList[keys].timeType" clearable placeholder="请选择" @change='TimeType(keys)' disabled>
                          <el-option
@@ -116,7 +116,7 @@
                          </el-option>
                      </el-select>
                  </div>     
-             <div class="ht_table_td table_th9">
+             <div class="ht_table_td table_th8">
                  <span v-if="formAllData.aflcCouponList[keys].timeType =='AF046301'">/</span>
                      <span v-else>
                          <el-date-picker v-model="formAllData.aflcCouponList[keys].startTime"
@@ -129,7 +129,7 @@
                          </el-date-picker>
                      </span>
                    </div> 
-             <div class="ht_table_td table_th10">
+             <div class="ht_table_td table_th9">
                      <span v-if="formAllData.aflcCouponList[keys].timeType =='AF046301'">
                          <el-input v-model="formAllData.aflcCouponList[keys].overTime" placeholder="过期天数" max="3" disabled></el-input>
                      </span>
@@ -145,7 +145,7 @@
                                 </el-date-picker>
                      </span>
                                 </div>
-             <div class="ht_table_td table_th11">
+             <div class="ht_table_td table_th10">
             <el-select v-model="formAllData.aflcCouponList[keys].serivceCode" clearable placeholder="" disabled>
                           <el-option
                               v-for="item in serviceCardList"
@@ -156,7 +156,7 @@
                          </el-option>
                  </el-select>
             </div>
-             <div class="ht_table_td table_th12">
+             <div class="ht_table_td table_th11">
                 <el-select v-model="formAllData.aflcCouponList[keys].carType" clearable placeholder="" disabled>
                           <el-option
                              v-for="item in optionsCar"
@@ -167,12 +167,12 @@
                          </el-option>
                  </el-select>
                  </div>  
-             <div class="ht_table_td table_th13">
+             <div class="ht_table_td table_th12">
                  <el-tooltip :content="formAllData.aflcCouponList[keys].areaName1" placement="top">
                 <el-input v-model="formAllData.aflcCouponList[keys].areaName1" placeholder="" disabled></el-input>
                  </el-tooltip>
               </div>
-             <div class="ht_table_td table_th14">
+             <div class="ht_table_td table_th13">
                   <el-input v-model="formAllData.aflcCouponList[keys].ifvouchersuperposition" placeholder="" disabled></el-input>
                  </div>                     
             </div>
@@ -636,15 +636,15 @@ export default {
             border-bottom:1px solid #d0d7e5;
         }
         .table_th1{width: 5%;}
-        .table_th2{width: 10%;}
+        .table_th2{width: 6%;}
         .table_th3{width: 6%;}
         .table_th4{width: 6%;}
         .table_th5{width: 10%;}
-        .table_th6{width: 4%;}
+        .table_th6{width: 6%;}
         .table_th7{width: 6%;}
-        .table_th8{width: 6%;}
-        .table_th9{width: 11%;}
-        .table_th10{width: 11%;}
+        .table_th8{width: 10%;}
+        .table_th9{width: 10%;}
+        .table_th10{width: 7%;}
         .table_th11{width: 7%;}
         .table_th12{width: 7%;}
         .table_th13{width: 9%}

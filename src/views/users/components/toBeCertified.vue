@@ -172,9 +172,8 @@
           })
         }, 
         methods:{
-            getStr(val,name){
-                this.formInline.belongCity = val.split(',')[2];
-                this.formInline.belongCityName = name.split(',')[2];
+            getStr(val){
+                this.formInline.belongCity = val.area.code;
             },
             handlePageChange(obj) {
                 this.page = obj.pageNum

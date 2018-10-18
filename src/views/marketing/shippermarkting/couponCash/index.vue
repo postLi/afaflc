@@ -147,9 +147,12 @@ export default {
         GetCityList
     },
     methods:{
-      getStr(val,name){
-                console.log('this.cityarr',val,name)
-                this.formAllData.areaCode = val.split(',')[2];
+            getStr(val){
+                this.formAllData.areaCode= val.area.code
+                this.formAllData.areaName = val.area.name
+                this.formAllData.province = val.province.name
+                this.formAllData.city = val.city.name
+                this.formAllData.area = val.area.name
             },  
             //获取  服务和车辆 类型列表
             getMoreInformation(){

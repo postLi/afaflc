@@ -137,10 +137,10 @@ export default {
     GetCityList
   },
   methods: {
-      getStr(val,name){
+      getStr(val){
                 console.log('this.cityarr',val,name)
-                this.formAllData.areaCode = val.split(',')[2];
-            },  
+                this.formAllData.areaCode = val.area.name
+            },
     // 获取  服务和车辆 类型列表
     getMoreInformation() {
       data_CarList().then(res => {

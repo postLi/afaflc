@@ -212,10 +212,10 @@ export default {
     //     this.formAllData.belongCity = d.province.code
     //   }
     // },
-    getStr(val, name) {
-      this.formAllData.belongCity = val.split(',')[2]
-      this.formAllData.belongCityName = name.split(',')[2]
-      console.log('this.cityarr', val, name)
+    getStr(val) {
+      this.formAllData.belongCity = val.area.code
+      this.formAllData.belongCityName = val.area.name
+      console.log('this.cityarr', val, val.area, val.area.code, val.area.name)
     },
     getValue(obj) {
       return obj ? obj.value : ''

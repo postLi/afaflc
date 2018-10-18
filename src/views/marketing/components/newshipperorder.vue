@@ -426,14 +426,13 @@ export default {
   mounted(){
   },
   methods:{
-    getStr(val,name){
-                console.log('this.cityarr',val,name)
-                this.formAll.areaCode = val.split(',')[2];
-                this.formAll.areaName = name.split(',')[2];
-                this.formAll.province = name.split(',')[0];
-                this.formAll.city = name.split(',')[1];
-                this.formAll.area = name.split(',')[2];
-            }, 
+    getStr(val){
+                this.formAll.areaCode= val.area.code
+                this.formAll.areaName = val.area.name
+                this.formAll.province = val.province.name
+                this.formAll.city = val.city.name
+                this.formAll.area = val.area.name
+            },  
    openDialog:function(){
         this.dialogFormVisible_add = true;
    },

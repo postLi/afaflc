@@ -6,7 +6,7 @@
              <el-row>
                 <el-col :span="12">
                     <el-form-item label="手机号：" :label-width="formLabelWidth" prop="driverMobile">
-                        <el-input v-model="templateModel.driverMobile" disabled></el-input>
+                        <el-input v-model="templateModel.driverMobile" disabled v-numberOnly></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col :span="12">
@@ -23,7 +23,7 @@
                     </el-form-item>
                 </el-col>
                 <el-col :span="12">
-               <span v-if="!selectFlag">    
+               <span v-if="!selectFlag">
               <el-form-item label="所在地 ："  :label-width="formLabelWidth"  prop="belongCityName">
                         <el-input v-model="templateModel.belongCityName" placeholder="请选择" :disabled="editType=='view'" @focus="changeSelect"></el-input>
               </el-form-item>
@@ -179,8 +179,6 @@
             <el-row>
               <el-col :span="12">
                 <el-form-item label="等待时长：" :label-width="formLabelWidth">
-                  <!-- <el-input auto-complete="off"></el-input> -->
-                  <!-- {{templateModel.authenticationTime| parseTime}} -->
                   {{templateModel.authenticationTime|remainData}}
                 </el-form-item>
               </el-col>
@@ -556,10 +554,15 @@ export default {
             if(!val){
                 this.selectFlag=null
                 this.$refs.templateModel.resetFields();
-                this.templateModel.provinceCode=null,
-                this.templateModel.cityCode=null,
-                this.templateModel.areaCode=null,
+                this.templateModel.provinceCode=null
+                this.templateModel.cityCode=null
+                this.templateModel.areaCode=null
                 this.$emit('getData') 
+                this.radio1 = null
+                this.radio2 = null
+                this.radio3 = null
+                this.radio4 = null
+                this.radio5 = null
             }
             else{
                 this.getMoreInformation()
@@ -568,21 +571,20 @@ export default {
         }
         },
   methods:{
-    // 省市区选择
-    getStr(val,name){
-                console.log('this.cityarr',val,name)
-                this.templateModel.belongCity = val.split(',')[2];
-                this.templateModel.provinceCode = name.split(',')[0];
-                this.templateModel.cityCode= name.split(',')[1];
-                this.templateModel.areaCode = name.split(',')[2];
-                this.templateModel.belongCityName = name.split(',')[0]+name.split(',')[1]+name.split(',')[2]
-            },   
+     // 省市区选择
+     getStr(val){
+                this.templateModel.belongCity= val.area.code
+                this.templateModel.belongCityName = val.province.name+val.city.name+val.area.name
+                this.templateModel.provinceCode = val.province.name
+                this.templateModel.cityCode = val.city.name
+                this.templateModel.areaCode = val.area.name
+            },     
         // 省市状态表
      changeSelect(){
                     if(this.editType=='add'){
-                        this.selectFlag=null
+                        this.selectFlag = null
                     } else{
-                        this.selectFlag='1'
+                        this.selectFlag = '1'
                     }
                     },  
     change(){
@@ -707,6 +709,9 @@ export default {
                     })
                     }
                     }
+                    else{
+                         this.$message.error('内容未填写完整')
+                    }
                 })
                 }
     },         
@@ -737,6 +742,9 @@ export default {
                     else{
                          this.$message.error('图片审核中图片有不合格的，不能进行审核通过处理')
                     }
+                    }
+                    else{
+                         this.$message.error('内容未填写完整')
                     }
                 })
                 }     

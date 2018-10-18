@@ -2,7 +2,7 @@
     <div class="identicalStyle MjD" style="height:100%">
           <el-form :inline="true"  class="demo-ruleForm classify_searchinfo">
             <el-form-item label="所属区域：">
-              <GetCityList v-model="formAll.areaCode" ref="area"></GetCityList>
+              <GetCityList v-model="formAll.areaCode" ref="area" @returnStr="getStr"></GetCityList>
           </el-form-item>
            <el-form-item label="服务类型">
                     <el-select v-model="formAll.serivceCode" clearable placeholder="请选择">
@@ -124,6 +124,9 @@ export default {
     this.getMoreInformation();
      },  
      methods:{
+            getStr(val){
+                this.formAll.areaCode = val.city.code
+            },
             //刷新页面  
             firstblood(){
                 data_get_pushsheet_list(this.page,this.pagesize,this.formAll).then(res => {

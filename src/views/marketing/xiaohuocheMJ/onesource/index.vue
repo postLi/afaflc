@@ -2,7 +2,7 @@
     <div class="identicalStyle MjD" style="height:100%">
           <el-form :inline="true"  class="demo-ruleForm classify_searchinfo">
             <el-form-item label="所属区域：">
-              <GetCityList v-model="formAll.areaCode" ref="area"></GetCityList>
+              <GetCityList v-model="formAll.areaCode" ref="area" @returnStr="getStr1"></GetCityList>
           </el-form-item>
            <el-form-item label="服务类型">
                     <el-select v-model="formAll.serivceCode" clearable placeholder="请选择">
@@ -74,7 +74,7 @@
                  </span>
                  <span v-else>
             <el-form-item label="所属区域：" :label-width="formLabelWidth" prop="areaCode">
-                <GetCityList v-model="vestAll.areaCode" ref="area1" @returnStr="getStr"></GetCityList>
+                <GetCityList v-model="vestAll.areaCode" ref="area1" @returnStr="getStr2"></GetCityList>
             </el-form-item>
                  </span>
             </el-col>
@@ -120,7 +120,7 @@
                    <div class="el_vestsearch">
                        <div class="vest_section" v-for="(value,keys) in totalAeraData" :key='keys'>
                          <div class="vest_tree">
-                             <span class="vest_tree_span">{{value.startAddress}}-{{value.endAddress}}</span>
+                             <span class="vest_tree_span">{{value.startAddressName}}-{{value.endAddressName}}</span>
                        </div>     
                        </div>                  
                    </div>
@@ -177,7 +177,7 @@
                  <span v-else>
                     <el-form-item label="所属区域：" :label-width="formLabelWidth" prop="areaCode">
                  <el-input v-model="selectRowData3.areaName"  @focus="changeSelect" v-if="openFlag !==0 && !selectFlag"></el-input>
-                <GetCityList ref="area2" v-model="selectRowData3.areaCode"  @focus="changeSelect" v-else @returnStr="getStr1"></GetCityList>
+                <GetCityList ref="area2" v-model="selectRowData3.areaCode"  @focus="changeSelect" v-else @returnStr="getStr3"></GetCityList>
                     </el-form-item>
                  </span>
             </el-col>
@@ -218,10 +218,10 @@
         <el-table-column  label="序号" width="80px" type="index">
             
         </el-table-column>
-        <el-table-column  label="提货地"  prop="startAddress" show-overflow-tooltip>
+        <el-table-column  label="提货地"  prop="startAddressName" show-overflow-tooltip>
             
         </el-table-column>
-        <el-table-column  label="目的地" prop="endAddress" show-overflow-tooltip>
+        <el-table-column  label="目的地" prop="endAddressName" show-overflow-tooltip>
             
         </el-table-column>
         <el-table-column  label="里程（公里）" prop="distance">
@@ -398,8 +398,6 @@ export default {
             districtName:null,
             districtAddress:null,
             areaCode:null,
-            startAddressCoordinate:null,
-            endAddressCoordinate:null,
             longitude:null,
             latitude:null,
             flcVestUnisourceAddressaList:[]
@@ -476,17 +474,18 @@ export default {
         }
     },
     methods:{
-            getStr(val,name){
-                console.log('this.cityarr',val,name)
-                this.vestAll.areaCode = val.split(',')[1];
-                this.vestAll.areaName = name.split('-')[1];
+            getStr1(val){
+                this.formAll.areaCode = val.city.code
+                this.formAll.areaName = val.city.name
             },
-            getStr1(val,name){
-                console.log('this.cityarr',val,name)
-                this.selectRowData3.areaCode = val.split(',')[1];
-                this.selectRowData3.areaName = name.split('-')[1];
+            getStr2(val){
+                this.vestAll.areaCode = val.city.code
+                this.vestAll.areaName = val.city.name
             },
-
+            getStr3(val){
+                this.selectRowData3.areaCode = val.city.code
+                this.selectRowData3.areaName = val.city.name
+            },
             // 省市状态表
             changeSelect(){
             if(this.editType=='0'){
@@ -536,35 +535,45 @@ export default {
                 this.vestAll.latitude = latitude;
                 break;
                 case 'pickaddAera':
-                let startstreeArray = name.split('市');
-                let startstree = startstreeArray[startstreeArray.length-1]
                 let posstartArray = pos.split(',');
                 this.startAddressCoordinate = posstartArray[1]+','+posstartArray[0]
                 if(info.addressComponent.street){
                   this.startAddressName= info.addressComponent.street + info.addressComponent.streetNumber
                 }
+                else{
+                  this.startAddressName = info.pois[0].address
+                }
                 if(info.addressComponent.building){
                   this.pickaddAera = info.addressComponent.building
                 }
                 else{
-                this.pickaddAera = startstree
-                this.startAddressName = startstree
+                  if(info.aois.length>0){
+                  this.pickaddAera = info.aois[0].name
+                  }
+                  else{
+                  this.pickaddAera = info.pois[0].name
+                  }        
                 }
                 break;
                 case 'destinationaddAera':
-                let endstreeArray = name.split('市');
-                let endstree = endstreeArray[endstreeArray.length-1]
                 let posendArray = pos.split(',');
                 this.endAddressCoordinate = posendArray[1]+','+posendArray[0]
                 if(info.addressComponent.street){
                   this.endAddressName= info.addressComponent.street + info.addressComponent.streetNumber
                 }
+                else{
+                  this.endAddressName = info.pois[0].address
+                }
                 if(info.addressComponent.building){
                   this.destinationaddAera = info.addressComponent.building
                 }
                 else{
-                this.destinationaddAera = endstree
-                this.endAddressName = endstree
+                  if(info.aois.length>0){
+                  this.destinationaddAera = info.aois[0].name
+                  }
+                  else{
+                  this.destinationaddAera = info.pois[0].name
+                  }    
                 }
                 break;
                 case 'areaCode2':
@@ -764,6 +773,7 @@ export default {
         //  详情表选择行   
          clickDetails2(i){
                  this.selectRowData2 = i;
+                 console.log(i)
         }, 
 
         //  大表删除行
@@ -976,7 +986,13 @@ export default {
 </script>
 
 <style lang="scss">
-.onceDialogBox{
+.MjD{
+    .classify_searchinfo{
+        .el-cascader{
+            margin-top:-10px;
+        }    
+    }
+    .onceDialogBox{
     display: inline-block;
     .el-button {
         margin-right:0px;
@@ -1047,5 +1063,6 @@ export default {
         }
     }
     }
+}
 }
 </style>

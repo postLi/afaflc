@@ -459,21 +459,19 @@ export default {
       fileNmeChange(i){
       this.formAll.aflcPartnerFileList[this.selectIndex].fileName = i
       },
-    getStr(val,name){
-                console.log('this.cityarr',val,name)
-                this.formAll.areaCode = val.split(',')[2];
-                this.formAll.areaName = name.split(',')[2];
-                this.formAll.province = name.split(',')[0];
-                this.formAll.city = name.split(',')[1];
-                this.formAll.area = name.split(',')[2];
+      getStr(val){
+                this.formAll.areaCode = val.area.code;
+                this.formAll.areaName = val.area.name;
+                this.formAll.province = val.province.name;
+                this.formAll.city = val.city.name;
+                this.formAll.area = val.area.name;
             }, 
-    getStr1(val,name){
-                console.log('this.cityarr',val,name)
-                this.formAll.aflcPartnerAreaList[this.inputKey].areaCode = val.split(',')[2];
-                this.formAll.aflcPartnerAreaList[this.inputKey].areaName = name.split(',')[2];
-                this.formAll.aflcPartnerAreaList[this.inputKey].province = name.split(',')[0];
-                this.formAll.aflcPartnerAreaList[this.inputKey].city = name.split(',')[1];
-                this.formAll.aflcPartnerAreaList[this.inputKey].area = name.split(',')[2];
+      getStr1(val){
+                this.formAll.aflcPartnerAreaList[this.inputKey].areaCode = val.area.code;
+                this.formAll.aflcPartnerAreaList[this.inputKey].areaName = val.area.name;
+                this.formAll.aflcPartnerAreaList[this.inputKey].province = val.province.name;
+                this.formAll.aflcPartnerAreaList[this.inputKey].city = val.city.name;
+                this.formAll.aflcPartnerAreaList[this.inputKey].area = val.area.name;
             }, 
 
    openDialog:function(){

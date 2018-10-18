@@ -8,7 +8,7 @@
                     <el-input placeholder="请输入内容" v-model.trim="formInline.carNumber" clearable></el-input>
                 </el-form-item>
                 <el-form-item label="手机号：">
-                    <el-input placeholder="请输入内容" v-model.trim="formInline.driverMobile" clearable></el-input>
+                    <el-input placeholder="请输入内容" v-model.trim="formInline.driverMobile" clearable v-numberOnly></el-input>
                 </el-form-item>
                 <el-form-item class="fr">
                     <el-button type="primary" plain @click="getdata_search" :size="btnsize" icon="el-icon-search">搜索</el-button>
@@ -159,10 +159,9 @@
         },
  
         methods:{
-            getStr(val,name){
+            getStr(val){
                 console.log('this.cityarr',val,name)
-                this.formInline.belongCity = val.split(',')[2];
-                this.formInline.belongCityName = name.split(',')[2];
+                this.formInline.belongCity = val.area.code;
             },   
             handlePageChange(obj) {
                 this.page = obj.pageNum
