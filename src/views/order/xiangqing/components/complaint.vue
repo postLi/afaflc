@@ -115,7 +115,7 @@
                 </template> -->
             </el-table-column>
         </el-table>
-        <el-button type="success" class="btnReg" size="mini" @click="handleEdit3">投诉登记</el-button>
+        <el-button type="success" class="btnReg" size="mini" @click="handleEdit3" id="bigBtn">投诉登记</el-button>
         <add :rowid="rowid" :isDispose="isDispose" :centerDialogVisible="centerDialogVisible" @close="closeAdd" @success="getSuccess"></add>
         <addcomReg :isComreg="isComreg" :centerDialogVisibleReg="centerDialogVisibleReg" @close="closecomReg" @success="getSuccess"></addcomReg>
     </div>
@@ -126,7 +126,7 @@ import Pager from '@/components/Pagination/index'
 import { parseTime } from '@/utils/index.js'
 import { orderDetailsList } from '@/api/order/ordermange'
 import { getGoodsfollowupAll } from '@/api/service/claim.js'
-import { getListAppShipperComplainByOrderSerial ,getUpdateDealStatus} from '@/api/service/dispose.js'
+import { getListAppShipperComplainByOrderSerial, getUpdateDealStatus } from '@/api/service/dispose.js'
 import add from './add'
 import addcomReg from './addReg'
 export default {
@@ -158,7 +158,7 @@ export default {
       belongCity: '',
       buttonText: '',
       isComreg: false,
-      isDispose:false,
+      isDispose: false
       // formAllData: {
       //   orderSerial: ''
       // },
@@ -270,6 +270,7 @@ export default {
     // console.log(this.tableData)
     this.firstblood()
     this.getListSmall()
+    // this.scrollFix()
   },
   methods: {
     init() {
@@ -297,6 +298,21 @@ export default {
         this.tableData = res.data
         // console.log(res.data)
       })
+    },
+    // 滚动条
+    scrollFix() {
+      window.onscroll = function() {
+        console.log(document.getElementsByClassName('el-tabs__content'), document.getElementById('bigBtn'))
+        const topscroll = document.body.scrollTop
+        const bigBtn = document.getElementById('bigBtn')
+        if (topscroll > 800) {
+          bigBtn.style.position = 'fixed'
+          bigBtn.style.right = '0'
+          bigBtn.style.zIndex = '9999'
+        } else {
+          bigBtn.style.position = 'static'
+        }
+      }
     },
     getListSmall() {
       // const orderSerial = this.$route.query.orderSerial
@@ -342,7 +358,6 @@ export default {
         })
         console.log('tableData1----------', this.tableData1)
       })
-      
     },
     handlePageChange(obj) {
       this.page = obj.pageNum
@@ -351,7 +366,7 @@ export default {
     },
     handleEdit1(index, row) {
       if (row.complainStatusName === '待处理') {
-          console.log(row.id)
+        console.log(row.id)
         getUpdateDealStatus(row.id).then(res => {
           this.firstblood()
           this.$message({

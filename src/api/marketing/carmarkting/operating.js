@@ -4,7 +4,8 @@ import fetch from '@/utils/fetch'
 // const baseurlw = 'aflcusercenterservice'
 // const baseurlw = 'aflcusercenterservice-wtc'
 const baseurl = 'aflcusercenterservice'
-const baseurl2 = 'aflcsmservice-wtc'
+// const baseurl2 = 'aflcsmservice-wtc'
+const baseurl2 = 'aflcsmservice'
 /**
  * 拥抽
  *
@@ -77,7 +78,7 @@ export function postUserRewardShipperTransaction(page, pagesize, data) {
  */
 export function postCouponTransaction(page, pagesize, data) {
   return fetch({
-    url: '/' + baseurl + '/sm/aflcCouponUse/v1/couponTransaction',
+    url: '/' + baseurl2 + '/sm/aflcCouponUse/v1/couponTransaction',
     method: 'post',
     data: {
       'currentPage': page,

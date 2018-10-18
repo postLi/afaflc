@@ -138,7 +138,7 @@
                 </template>
             </el-table-column>
         </el-table>
-        <el-button type="success" class="btnReg" size="mini" @click="handleEdit3">物损登记</el-button>
+        <el-button type="success" class="btnReg" size="mini" @click="handleEdit3" id="bigBtn">物损登记</el-button>
         <add :rowid="rowid" :isClaim="isClaim" :centerDialogVisible="centerDialogVisible" @close="closeAdd" @success="getSuccess"></add>
         <addReg :isMatreg="isMatreg" :centerDialogVisibleReg="centerDialogVisibleReg" @close="closeAddReg" @success="getSuccess"></addReg>
         <!-- <div class="info_tab_footer">共计:{{ totalCount }} <div class="show_pager"> <Pager :total="totalCount" @change="handlePageChange" :sizes="sizes"/></div> </div>     -->
@@ -176,7 +176,7 @@ export default {
       // tableData: null,
       expands: [],
       isMatreg: false,
-      isClaim:false,
+      isClaim: false,
       tableData: [],
       tableData1: [],
       rowid: '',
@@ -310,6 +310,7 @@ export default {
     getSuccess() {
       this.firstblood()
       this.getListSmall()
+      // this.scrollFix()
     },
     firstblood() {
       // this.loading = false
@@ -333,6 +334,19 @@ export default {
         console.log('tableData----------', this.tableData)
       })
     },
+    // scrollFix() {
+    //   window.onscroll = function() {
+    //     const topscroll = document.body.scrollTop
+    //     const bigBtn = document.getElementById('bigBtn')
+    //     if (topscroll > 800) {
+    //       bigBtn.style.position = 'fixed'
+    //       bigBtn.style.right = '0'
+    //       bigBtn.style.zIndex = '9999'
+    //     } else {
+    //       bigBtn.style.position = 'static'
+    //     }
+    //   }
+    // },
     getListSmall() {
       // const orderSerial = this.$route.query.orderSerial
       console.log(this.rowid)

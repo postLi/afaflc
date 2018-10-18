@@ -209,7 +209,7 @@ export default {
 
       },
       formAlldicData: {
-        orderSerial:'',//订单号
+        orderSerial: '', // 订单号
         complainType: '', // 投诉分类
         reporterType: '', // 投诉人类型
         complainDes: ''// 投诉内容
@@ -217,7 +217,7 @@ export default {
       }
     }
   },
-  
+
   watch: {
     // isShow: {
     //   handler(newVal) {
@@ -337,14 +337,14 @@ export default {
           // this.$set(this.formAllData, 'goodsclaimId', this.rowid)
           this.formAllData.orderSerial = this.$route.query.orderSerial
           this.formAlldicData.orderSerial = this.$route.query.orderSerial
-          let data1 = objectMerge2({}, this.formAllData)
+          const data1 = objectMerge2({}, this.formAllData)
           // this.$set(data1, 'address', data1.claimPic1)
           const data2 = objectMerge2({}, this.formAlldicData)
           // console.log(data)
           let promiseObj
-          if(this.isMatreg){
+          if (this.isMatreg) {
             promiseObj = postReportClaim(data1)
-          }else {
+          } else {
             promiseObj = postReportComplain(data2)
           }
           promiseObj.then(res => {

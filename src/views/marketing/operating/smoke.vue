@@ -1,10 +1,13 @@
 <template>
   <div class="identicalStyle clearfix waitpayment" v-loading="loading">
     <el-form :inline="true" :model="searchInfo" ref="ruleForm" class="demo-ruleForm classify_searchinfo">
-      <el-form-item label="所属区域" prop="areaName">
+      <!-- <el-form-item label="所属区域" prop="areaName">
         <vregion :ui="true"  @values="regionChange" class="form-control">
           <el-input  v-model="areaName" placeholder="请选择省/市/区" clearable @clear="clearName"></el-input>
         </vregion>
+      </el-form-item> -->
+      <el-form-item label="所属区域">
+        <GetCityList ref="area" v-model="searchInfo.areaName"  @returnStr="getStr"></GetCityList>
       </el-form-item>
       <el-form-item label="交易时间">
         <el-date-picker
@@ -125,7 +128,7 @@
           
         </el-table>
         <!-- 页码 -->
-        <div class="info_tab_footer">共计:{{ dataTotal }} <div class="show_pager"> <Pager :total="dataTotal" @change="handlePageChange"  :sizes="sizes"/></div> </div>    
+        <div class="info_tab_footer">共计:{{ dataTotal }}<div class="show_pager"> <Pager :total="dataTotal" @change="handlePageChange"  :sizes="sizes"/></div> </div>     
       </div>
     </div>
   </div>
@@ -134,12 +137,14 @@
 import '@/styles/dialog.scss'
 import { parseTime, pickerOptions2 } from '@/utils/index.js'
 import Pager from '@/components/Pagination/index'
-import vregion from '@/components/vregion/Region'
+// import vregion from '@/components/vregion/Region'
+import GetCityList from '@/components/GetCityList/city'
 import { postDriverCommissionTransaction } from '@/api/marketing/carmarkting/operating'
 export default{
   components: {
     Pager,
-    vregion
+    GetCityList
+    // vregion
   },
   props: {
     isvisible: {
@@ -158,14 +163,15 @@ export default{
       page: 1, // 初始化页码
       dataTotal: 0,
       isEport: false,
-      searchCreatTime:[],
+      searchCreatTime: [],
       defaultTime: [parseTime(+new Date() - 60 * 24 * 60 * 60 * 1000, '{y}-{m}-{d}'), parseTime(new Date(), '{y}-{m}-{d}')],
       areaName: '',
       searchInfo: {
+        areaName: null,
         orderSerial: null,
         startTime: null, // 下单起始时间
         endTime: null, // 下单结束时间
-        areaCodeList: null//
+        areaCodeList: null// 地区code
       },
       pickerOptions2: {
         shortcuts: pickerOptions2
@@ -274,30 +280,38 @@ export default{
     //     this.clearName()
     //   }
     // },
-    regionChange(d) {
-      this.areaName = (!d.province && !d.city && !d.area && !d.town) ? '' : `${this.getValue(d.province)}${this.getValue(d.city)}${this.getValue(d.area)}${this.getValue(d.town)}`.trim()
-      if (d.area) {
-        this.areaCodeList1.push(d.area.code)
-        this.areaCodeList1 = this.areaCodeList1.filter(e => {
-          return e !== d.city.code
-        })
-        this.searchInfo.areaCodeList = Object.assign([], this.areaCodeList1)
-        // console.log('------searchInfo---', this.areaCodeList1)
-      } else if (d.city) {
-        this.areaCodeList1.push(d.city.code)
-        this.areaCodeList1 = this.areaCodeList1.filter(e => {
-          return e !== d.province.code
-        })
-        this.searchInfo.areaCodeList = Object.assign([], this.areaCodeList1)
-      } else if (d.province) {
-        this.areaCodeList1 = this.areaCodeList1.filter(e => {
-          return e !== d.province.code
-        })
-        this.areaCodeList1.push(d.province.code)
-        this.searchInfo.areaCodeList = Object.assign([], this.areaCodeList1)
-      } else {
-        this.clearName()
-      }
+    // regionChange(d) {
+    //   this.areaName = (!d.province && !d.city && !d.area && !d.town) ? '' : `${this.getValue(d.province)}${this.getValue(d.city)}${this.getValue(d.area)}${this.getValue(d.town)}`.trim()
+    //   if (d.area) {
+    //     this.areaCodeList1.push(d.area.code)
+    //     this.areaCodeList1 = this.areaCodeList1.filter(e => {
+    //       return e !== d.city.code
+    //     })
+    //     this.searchInfo.areaCodeList = Object.assign([], this.areaCodeList1)
+    //     // console.log('------searchInfo---', this.areaCodeList1)
+    //   } else if (d.city) {
+    //     this.areaCodeList1.push(d.city.code)
+    //     this.areaCodeList1 = this.areaCodeList1.filter(e => {
+    //       return e !== d.province.code
+    //     })
+    //     this.searchInfo.areaCodeList = Object.assign([], this.areaCodeList1)
+    //   } else if (d.province) {
+    //     this.areaCodeList1 = this.areaCodeList1.filter(e => {
+    //       return e !== d.province.code
+    //     })
+    //     this.areaCodeList1.push(d.province.code)
+    //     this.searchInfo.areaCodeList = Object.assign([], this.areaCodeList1)
+    //   } else {
+    //     this.clearName()
+    //   }
+    // },
+    getStr(val, name) {
+      const arr = []
+      arr.push(val.split(',')[2])
+      // this.searchInfo.areaCodeList = val.split(',')[2]
+      this.searchInfo.areaCodeList = Object.assign([], arr)
+      this.searchInfo.areaName = name.split(',')[2]
+      console.log('this.cityarr', val, name, arr)
     },
     getValue(obj) {
       return obj ? obj.value : ''
@@ -325,8 +339,8 @@ export default{
       switch (type) {
         case 'search':
           if (this.searchCreatTime) {
-            this.searchInfo.startTime = this.searchCreatTime ? parseTime(this.searchCreatTime[0], '{y}-{m}-{d}') + '00:00:00' : null
-            this.searchInfo.endTime = this.searchCreatTime ? parseTime(this.searchCreatTime[1], '{y}-{m}-{d}') + '23:59:59' : null
+            this.searchInfo.startTime = this.searchCreatTime ? parseTime(this.searchCreatTime[0], '{y}-{m}-{d}') + ' 00:00:00' : null
+            this.searchInfo.endTime = this.searchCreatTime ? parseTime(this.searchCreatTime[1], '{y}-{m}-{d}') + ' 23:59:59' : null
           } else {
             this.searchInfo.startTime = null
             this.searchInfo.endTime = null
@@ -336,6 +350,7 @@ export default{
         case 'clear':
           this.searchInfo = {
             orderSerial: '',
+            areaName: '',
             startTime: '', // 下单起始时间
             endTime: '', // 下单结束时间
             areaCodeList: []

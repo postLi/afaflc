@@ -160,10 +160,13 @@ export default {
              * search region description first, if no result, then search region key
              * @param value
              */
+            // 搜索城市
         query(value) {
           let list = this.getList(this.levelIndex), tmp = []
           tmp = list.filter(val => val.value.toLowerCase().includes(value.toLowerCase()))
-          if (tmp.length === 0) tmp = list.filter(val => val.key.includes(value))
+          if (tmp.length === 0) {
+            tmp = list.filter(val => list.includes(value))
+          }
           this.list = tmp
         },
         nowProvince(value) {
@@ -172,29 +175,31 @@ export default {
           if (this.city) {
             this.fetchCity(value).then(res => {
                         // 如果不是当前选取的项，则不进行保存渲染
-              if (res.code !== this.nowProvince) {
-                return
-              }
-              const data = res.data
-              if (this.listArea.length) this.listArea.splice(0, this.listArea.length)
-              this.listCity = data
-
-              this.nowCity = ''
-              if (!this.haveCity) this.nowArea = ''
-
-              this.itemProvince = this.listProvince.find(val => val.key === value)
-
-              this.haveCity = !!this.listCity.length
-
-              this.$nextTick(() => {
-                if (!this.haveCity && this.area) this.changeCity()
-                else {
-                  this.initSelected(2)
+              if (res) {
+                if (res.code !== this.nowProvince) {
+                  return
                 }
+                const data = res.data
+                if (this.listArea.length) this.listArea.splice(0, this.listArea.length)
+                this.listCity = data
 
-                if (this.ui) this.levelIndex = this.haveCity ? 1 : 2
-              })
-              this.changeValues()
+                this.nowCity = ''
+                if (!this.haveCity) this.nowArea = ''
+
+                this.itemProvince = this.listProvince.find(val => val.key === value)
+
+                this.haveCity = !!this.listCity.length
+
+                this.$nextTick(() => {
+                  if (!this.haveCity && this.area) this.changeCity()
+                  else {
+                    this.initSelected(2)
+                  }
+
+                  if (this.ui) this.levelIndex = this.haveCity ? 1 : 2
+                })
+                this.changeValues()
+              }
             })
           }
         },
@@ -273,7 +278,6 @@ export default {
               const haveCity = this.haveCity
               this.fetchCity(thisCity).then(res => {
                 const data = res.data
-    
                 if (haveCity) {
                   if (this.nowCity !== res.code) {
                     return
@@ -297,6 +301,7 @@ export default {
             this.initSelected(3)
           }
         },
+        // 清空上面搜索框
         changeValues() {
           this.$nextTick(() => {
             this.$emit('values', {
@@ -422,6 +427,7 @@ export default {
           this.listArea = []
           this.listTown = []
           this.levelIndex = 0
+          this.query = ''
           this.$nextTick(() => {
             that.pauseWatch = false
             that.changeValues()

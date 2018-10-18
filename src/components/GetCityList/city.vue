@@ -16,12 +16,13 @@
 import { aflcAreaCode } from '@/api/common.js'
 
 export default {
-    name: 'getCityList',
+    name: 'getAreaList',
     props: {
         disabled:{
             type: Boolean
         },
         value: [String, Array],
+
     },
     data() {
         return {
@@ -33,13 +34,19 @@ export default {
                 value: 'code',
                 children: 'children'
             },
+            nowData:{
+                province:null,
+                city:null,
+                area:null,
+            }
         };
     },
     methods: {
         handleItemMore(val){
-            console.log(this.$refs.cityTree)
-            console.log(this.$refs.cityTree.currentLabels)
-             if(val[0]){
+            // console.log(this.$refs.cityTree)
+            // console.log(this.$refs.cityTree.currentLabels)
+            // console.log('val',val)
+            if(val[0]){
                 this.nowData.province = {
                     code:val[0],
                     key:val[0],
@@ -75,11 +82,15 @@ export default {
            })
         },
         returnArr(val){
-            this.$emit('returnStr', val)
-        }
+            // this.$emit('returnStr',val.length > 0 ? val.join(',') : val,this.$refs.cityTree.currentLabels.join('-'))
+            this.$emit('returnStr',val)
+        },
     },
     mounted(){
-        this.init()
+        this.init();
+    },
+    beforeDestroy(){
+        this.selectedOptions = [];
     },
 }
 </script>

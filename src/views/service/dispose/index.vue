@@ -1,21 +1,14 @@
 <template>
     <div class="identicalStyle Marketing" style="height:100%">
         <el-form :inline="true"  class="demo-ruleForm classify_searchinfo">
-          <el-form-item label="所属区域" prop="pointName">
+          <!-- <el-form-item label="所属区域" prop="pointName">
             <vregion :ui="true" @values="regionChange" class="form-control">
               <el-input v-model="formAllData.belongCityName" placeholder="请选择所属区域" clearable></el-input>
             </vregion>
-          </el-form-item>
-          <!-- <el-form-item label="处理状态" prop="">
-            <el-select clearable placeholder="请选择处理状态">
-              <el-option
-              v-for="item in optionsPlantService"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value">
-              </el-option>
-            </el-select>
           </el-form-item> -->
+          <el-form-item label="所属区域">
+            <GetCityList ref="area" v-model="formAllData.belongCityName"  @returnStr="getStr"></GetCityList>
+          </el-form-item>
           <el-form-item label="处理状态">
             <el-select v-model="formAllData.dealStatus" clearable placeholder="请选择处理状态" >
               <el-option
@@ -138,7 +131,7 @@
           <!-- addReg -->
           <addReg :centerDialogVisible="centerDialogVisible" @close="closeAddReg"></addReg>
          <!-- 页码 -->
-          <div class="info_tab_footer">共计:{{ dataTotal }} <div class="show_pager"> <Pager :total="dataTotal" @change="handlePageChange"  :sizes="sizes"/></div> </div> 
+          <div class="info_tab_footer">共计:{{ dataTotal }}<div class="show_pager"> <Pager :total="dataTotal" @change="handlePageChange"  :sizes="sizes"/></div> </div> 
         </div>
       </div>
 </template>
@@ -146,7 +139,8 @@
 import { postListAppShipperComplain } from '@/api/service/dispose.js'
 import Pager from '@/components/Pagination/index'
 import { parseTime } from '@/utils/'
-import vregion from '@/components/vregion/Region'
+// import vregion from '@/components/vregion/Region'
+import GetCityList from '@/components/GetCityList/city'
 import { DicDelStatusType } from '@/api/common'
 import addReg from './reg/index'
 import { orderDetailsList } from '@/api/order/ordermange'
@@ -197,7 +191,8 @@ export default {
   components: {
     // newCity,
     addReg,
-    vregion,
+    // vregion,
+    GetCityList,
     Pager
   },
   mounted() {
@@ -206,16 +201,21 @@ export default {
   },
   methods: {
     // 搜索区域
-    regionChange(d) {
-      console.log('data:', d)
-      this.formAllData.belongCityName = (!d.province && !d.city && !d.area && !d.town) ? '' : `${this.getValue(d.province)}${this.getValue(d.city)}${this.getValue(d.area)}${this.getValue(d.town)}`.trim()
-      if (d.area) {
-        this.formAllData.belongCity = d.area.code
-      } else if (d.city) {
-        this.formAllData.belongCity = d.city.code
-      } else {
-        this.formAllData.belongCity = d.province.code
-      }
+    // regionChange(d) {
+    //   console.log('data:', d)
+    //   this.formAllData.belongCityName = (!d.province && !d.city && !d.area && !d.town) ? '' : `${this.getValue(d.province)}${this.getValue(d.city)}${this.getValue(d.area)}${this.getValue(d.town)}`.trim()
+    //   if (d.area) {
+    //     this.formAllData.belongCity = d.area.code
+    //   } else if (d.city) {
+    //     this.formAllData.belongCity = d.city.code
+    //   } else if (d.province) {
+    //     this.formAllData.belongCity = d.province.code
+    //   }
+    // },
+    getStr(val, name) {
+      this.formAllData.belongCity = val.split(',')[2]
+      this.formAllData.belongCityName = name.split(',')[2]
+      console.log('this.cityarr', val, name)
     },
     getValue(obj) {
       return obj ? obj.value : ''
