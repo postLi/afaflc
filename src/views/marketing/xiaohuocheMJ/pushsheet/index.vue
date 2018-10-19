@@ -238,12 +238,10 @@ export default {
            
             // 查询
             getdata_search(){
-            this.formAll.areaCode = this.$refs.area.selectedOptions.pop();
              this.firstblood();
             },
             // 清空
             clearSearch(){
-                this.$refs.area.selectedOptions = [];
                 this.formAll = {
                     areaCode: null,
                     serivceCode:null,

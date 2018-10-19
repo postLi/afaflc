@@ -77,10 +77,22 @@ export default {
             },
             {
             path: '/marketing/xiaohuocheMJ/onesource',
-            hidden: false, name:
-                    '单源配置',
+            hidden: false, 
+            name: '单源配置',
             component: _import('marketing/xiaohuocheMJ/onesource/index'),
             meta: { title: '单源配置', stitle: '单源', noCache: true , code: 'MARKETING_SMALL_CAR_MJ_SOURCE_OPTION'}
+            },
+            {
+                path: '/marketing/xiaohuocheMJ/MjPushLogs',
+                hidden: false, name:'推送记录',
+                component: _import('marketing/xiaohuocheMJ/MjPushLogs/index'),
+                meta: { title: '推送记录', stitle: '记录', noCache: true }
+            },
+            {
+                path: '/marketing/xiaohuocheMJ/Logs',
+                hidden: true, name:'推送记录详情',
+                component: _import('marketing/xiaohuocheMJ/MjPushLogs/pushLogs'),
+                meta: { title: '推送记录详情', stitle: '详情', noCache: false }
             }
         ]
         },

@@ -183,8 +183,6 @@ export default {
 
       function findInfo(pos) {
         geocoder.getAddress(pos, function(status, result) {
-          console.log('ppppppp',status)
-          console.log('bbbbbbb',result)
           if (status === 'complete' && result.info === 'OK') {
             geocoder_CallBack(result, pos)
           } else {
