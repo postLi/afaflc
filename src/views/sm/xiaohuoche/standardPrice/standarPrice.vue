@@ -264,6 +264,7 @@ export default {
                 if (valid) {
                     this.btnShow = true;
                     let standarFunction;
+                    this.specListName = [];
                     this.optionsCarTypeM.forEach(el => {
                         this.specList.forEach(item => {
                             if(el.code == item){

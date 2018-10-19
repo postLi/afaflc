@@ -456,6 +456,9 @@ export default {
             this.$refs.ruleForm.resetFields();
             this.$emit('update:dialogAreaPrice', false);
             this.$emit('close');
+            for (const i in this.standForm) {
+                this.standForm[i] = ''
+            }
             this.btnShow = false; 
             if (typeof done === 'function') {
                 done()

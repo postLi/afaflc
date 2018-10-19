@@ -43,7 +43,7 @@ export default {
     },
     methods: {
         handleItemMore(val){
-            // console.log(this.$refs.cityTree)
+            console.log(this.$refs.cityTree)
             // console.log(this.$refs.cityTree.currentLabels)
             // console.log('val',val)
             if(val[0]){
@@ -85,6 +85,9 @@ export default {
             // this.$emit('returnStr',val.length > 0 ? val.join(',') : val,this.$refs.cityTree.currentLabels.join('-'))
             this.$emit('returnStr',val)
         },
+        clearData(){
+            this.selectedOptions = [];
+        }
     },
     mounted(){
         this.init();

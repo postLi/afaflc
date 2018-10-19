@@ -89,10 +89,10 @@
                                     ref="pricefocus"
                                     clearable>
                                 </el-input>
-                                <span> 元</span>
+                                <span> 元</span> 
                             </p>
                             <div class="nomore">
-                                <p>描述</p>
+                                <p><span>* </span>描述</p>
                                 <el-input
                                     type="textarea"
                                     :rows="3"
@@ -161,7 +161,7 @@
                             </div>
                         </div>
                         <div slot="footer" class="dialog-footer">
-                            <el-button type="primary" @click="changeInfoSave">保 存</el-button>
+                            <el-button type="primary" @click="changeInfoSave" :disabled="btnShow">保 存</el-button>
                             <el-button @click="dialogFormVisible_change = false">取 消</el-button>
                         </div>
                     </el-dialog>
@@ -190,6 +190,7 @@ export default{
             searchInfo: {
                 keywords: ''
             },
+            btnShow:false,
             formclassfy: [],
             classfyradio: '',
             page: 1,
@@ -406,10 +407,16 @@ export default{
                         item.serivceCode = this.classfyradio
                     })
                    
-                  if (isOK) {
-                      data_AddForms(this.forms).then(res => {
+                    if (isOK) {
+                        this.btnShow = true;
+                        data_AddForms(this.forms).then(res => {
                             // console.log(res)
-                          this.dialogFormVisible = false
+                            this.$message({
+                                type: 'success',
+                                message: '新增成功!' 
+                            })
+                            this.btnShow = false;
+                            this.dialogFormVisible = false
                             this.firstblood()
                             this.forms = [{
                               'extraDes': '',
@@ -417,6 +424,12 @@ export default{
                               'isFree': '0',
                               'extraPrice': 0
                             }]
+                        }).catch(err => {
+                            this.$message({
+                                type: 'info',
+                                message: '操作失败，原因：' + err.errorInfo ? err.errorInfo : err.text
+                            })
+                            this.btnShow = false;
                         })
                     }
                 }
@@ -428,11 +441,24 @@ export default{
                   this.changeform.extraPrice = 0
                 }
                 const arr = []
-                arr.push(this.changeform)
+                arr.push(this.changeform);
+                this.btnShow = true;
+
                 data_AddForms(arr).then(res => {
-                  console.log(res)
-                  this.dialogFormVisible_change = false   
+                    this.$message({
+                        type: 'success',
+                        message: '修改成功!' 
+                    })
+                    console.log(res)
+                    this.btnShow = false;
+                    this.dialogFormVisible_change = false   
                     this.firstblood()
+                }).catch(err => {
+                    this.$message({
+                        type: 'info',
+                        message: '操作失败，原因：' + err.errorInfo ? err.errorInfo : err.text
+                    })
+                    this.btnShow = false;
                 })
             },
         }

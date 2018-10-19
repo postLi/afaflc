@@ -85,6 +85,9 @@ export default {
             // this.$emit('returnStr',val.length > 0 ? val.join(',') : val,this.$refs.cityTree.currentLabels.join('-'))
             this.$emit('returnStr',val)
         },
+        clearData(){
+            this.selectedOptions = [];
+        }
     },
     mounted(){
         this.init();

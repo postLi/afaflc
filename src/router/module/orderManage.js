@@ -120,6 +120,7 @@ export default {
         path: '/order/guiji',
         icon: 'guijihf', 
         name: '车辆轨迹回放', 
+        hidden:true,
         component: _import('order/guiji/index'),
          meta: { role: ['admin'], title: '车辆轨迹回放',stitle: '轨迹',  noCache: false , code: 'ORDER_CAR_TRACK'}
     },

@@ -70,7 +70,14 @@ export const constantRouterMap = [
       name: '财务控制台',
       component: _import('report/index'),
       meta: { title: '财务控制台', noCache: true }
-    }]
+    }, {
+        path: '/html5',
+        icon: 'guijihf',
+        hidden: false,
+        name: '在途监控',
+        component: _import('html5/index'),
+        meta: { title: '在途监控', noCache: true }
+      }]
   }
 ]
 export default new Router({

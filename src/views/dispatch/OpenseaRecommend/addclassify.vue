@@ -179,6 +179,7 @@ export default {
         if(this.$refs.area){
             this.$refs.area.selectedOptions = [];
         }
+        this.$refs.area.clearData();
     },
         // 初始化选择项数据
     init() {
