@@ -27,6 +27,7 @@
                             <el-input  
                                 v-number-only:point
                                 placeholder="请输入内容"
+                                maxlength="5"
                                 v-model="standForm.freeTime"
                                 clearable>
                                 <template slot="append">小时</template>
@@ -43,6 +44,7 @@
                         <el-form-item label="每间隔："  prop="intervalTime">
                             <el-input  
                                 v-number-only:point
+                                maxlength="5"
                                 placeholder="请输入内容"
                                 v-model="standForm.intervalTime"
                                 clearable>
@@ -59,6 +61,7 @@
                         </div>
                         <el-form-item label="超时费用：" label-width="90px" prop="timeOutstripPrice">
                             <el-input  
+                                maxlength="5"
                                 v-number-only:point
                                 placeholder="请输入内容"
                                 v-model="standForm.timeOutstripPrice"

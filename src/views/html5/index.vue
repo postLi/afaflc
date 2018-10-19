@@ -354,13 +354,34 @@
       tempEle.innerHTML = "";
 
     //   this.checkLogin();
-      this.getOrder(null, true);
+    //   this.getOrder(null, true);
 
       // AMap.event.addListener(this.mp, "click", function (e) {
       //   console.log(e.lnglat);
       // });
     },
     methods: {
+        initMap(){
+
+        },
+        loadMap() {
+            if (window.AMap) {
+                return Promise.resolve('')
+            } else {
+                return new Promise((resolve, reject) => {
+                loadJs('https://webapi.amap.com/maps?v=1.4.10&key=f167f450303ea43b1c9ccc459156f867').then(() => {
+                    this.initMap()
+                }).catch(() => {
+                    reject()
+                })
+                })
+            }
+        },
+        init() {
+            return Promise.all([this.loadMap()]).then(() => {
+                this.initMap()
+            })
+        },
       checkLogin() {
         var v = this.$route.query.access_token;
         if (v != null && v != "")
