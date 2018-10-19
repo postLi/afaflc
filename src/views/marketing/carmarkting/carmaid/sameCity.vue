@@ -27,7 +27,7 @@
                  </el-select>
             </el-form-item>          
             <el-form-item class="fr">       
-          <el-button type="primary" plain @click="getData_query" :size="btnsize" icon="el-icon-search">搜索</el-button> 
+          <el-button type="primary" plain @click="getData_query" :size="btnsize" icon="el-icon-search">搜索</el-button>
           <el-button type="info" plain @click="clearSearch"  :size="btnsize" icon="fontFamily aflc-icon-qingkong">清空</el-button>
           </el-form-item>              
           </el-form>
@@ -42,6 +42,7 @@
                     editType="add"
                     btntitle="创建"
                     @getData="getDataList"
+                    v-has:MARKETING_DRIVER_MANAGE_COMMISSION_MANAGE_ADD
                    >
                     </newCity>
                    <newCity
@@ -54,10 +55,11 @@
                     btntitle="修改"
                     @getData="getDataList"
                     :params="selectRowData"
+                    v-has:MARKETING_DRIVER_MANAGE_COMMISSION_MANAGE_UPDATE
                    >
                     </newCity>
-                <el-button  type="primary" plain icon="el-icon-bell" @click="handleUseStates" :size="btnsize">启用/停用</el-button>
-                <el-button type="primary" plain icon="el-icon-delete" @click="delete_data" :size="btnsize">删除</el-button>
+                <el-button  type="primary" plain icon="el-icon-bell" @click="handleUseStates" :size="btnsize" v-has:MARKETING_DRIVER_MANAGE_COMMISSION_MANAGE_USE>启用/停用</el-button>
+                <el-button type="primary" plain icon="el-icon-delete" @click="delete_data" :size="btnsize" v-has:MARKETING_DRIVER_MANAGE_COMMISSION_MANAGE_DELETE>删除</el-button>
             		</div>
             <div class="info_news">    
             <el-table ref="multipleTable" style="width: 100%" stripe border height="100%" @selection-change="getSelection" @row-click="clickDetails" highlight-current-row :data="tableDataAll"  tooltip-effect="dark">

@@ -22,10 +22,10 @@
            </el-form> 
   <div class="classify_info">
    <div class="btns_box">
-    <newpushsheet  btntext="新增" :plain="true" type="primary" btntype="primary" icon="el-icon-circle-plus" editType="add" btntitle="新增"  @getData="getDataList"></newpushsheet>
-    <uppushsheet  btntext="修改" :plain="true" type="primary" btntype="primary" icon="el-icon-edit" editType="edit" :params="selectRowData"  @getData="getDataList"></uppushsheet>
-     <el-button type="primary" plain icon="el-icon-bell" @click="handleUseStates" :size="btnsize">启用/禁用</el-button>
-     <el-button type="primary" plain icon="el-icon-delete" @click="handleDelete" :size="btnsize">删除</el-button>
+    <newpushsheet  btntext="新增" :plain="true" type="primary" btntype="primary" icon="el-icon-circle-plus" editType="add" btntitle="新增"  @getData="getDataList" v-has:MARKETING_SMALL_CAR_MJ_PUSH_OPTION_ADD></newpushsheet>
+    <uppushsheet  btntext="修改" :plain="true" type="primary" btntype="primary" icon="el-icon-edit" editType="edit" :params="selectRowData"  @getData="getDataList" v-has:MARKETING_SMALL_CAR_MJ_PUSH_OPTION_UPDATE></uppushsheet>
+     <el-button type="primary" plain icon="el-icon-bell" @click="handleUseStates" :size="btnsize" v-has:MARKETING_SMALL_CAR_MJ_PUSH_OPTION_USE>启用/禁用</el-button>
+     <el-button type="primary" plain icon="el-icon-delete" @click="handleDelete" :size="btnsize" v-has:MARKETING_SMALL_CAR_MJ_PUSH_OPTION_DELETE>删除</el-button>
    </div>
     <div class="info_news">  
     <el-table  ref="multipleTable" style="width: 100%" stripe border :data="tableDataTree" height="100%" @selection-change="getSelection" @row-click="clickDetails" highlight-current-row>

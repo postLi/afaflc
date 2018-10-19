@@ -27,7 +27,7 @@
    <div class="btns_box">
   <!-- 马甲单新增 -->
   <div class="onceDialogBox commoncss">
-    <el-button  type="primary" value="value" plain icon="el-icon-circle-plus" @click="openDialog()">新增</el-button>
+    <el-button  type="primary" value="value" plain icon="el-icon-circle-plus" @click="openDialog()" v-has:MARKETING_SMALL_CAR_MJ_SOURCE_OPTION_ADD>新增</el-button>
             <el-dialog title="马甲单源" :visible="driverTemplateDialogFlag" :before-close="change">
             <div class="vestOrder">
             <el-form :inline="true" :model="vestAll" ref="vestAll" :rules="rulesForm1">
@@ -138,7 +138,7 @@
 
 <!-- 详情修改 -->
 <div class="onceDialogBox commoncss">
-        <el-button  type="primary"  value="value2" plain icon="el-icon-news" @click="openDialogView()">详情</el-button>
+        <el-button  type="primary"  value="value2" plain icon="el-icon-news" @click="openDialogView()" v-has:MARKETING_SMALL_CAR_MJ_SOURCE_OPTION_DETAIL>详情</el-button>
             <el-dialog title="马甲单源" :visible="driverTemplateDialogFlag2" :before-close="changeview">
             <div class="vestOrder">
             <el-form :inline="true">
@@ -250,9 +250,9 @@
                     </div> 
             </el-dialog>
     </div>
-    <el-button  type="primary" value="value" plain icon="el-icon-edit" @click="openDialogView0()" :size="btnsize">修改</el-button>
-    <el-button type="primary" plain icon="el-icon-bell"  @click="handleUseStates" :size="btnsize">启用/禁用</el-button>
-    <el-button type="primary" plain icon="el-icon-delete" @click="handleDelete" :size="btnsize">删除</el-button>
+    <el-button  type="primary" value="value" plain icon="el-icon-edit" @click="openDialogView0()" :size="btnsize" v-has:MARKETING_SMALL_CAR_MJ_SOURCE_OPTION_UPDATE>修改</el-button>
+    <el-button type="primary" plain icon="el-icon-bell"  @click="handleUseStates" :size="btnsize" v-has:MARKETING_SMALL_CAR_MJ_SOURCE_OPTION_USE>启用/禁用</el-button>
+    <el-button type="primary" plain icon="el-icon-delete" @click="handleDelete" :size="btnsize" v-has:MARKETING_SMALL_CAR_MJ_SOURCE_OPTION_DELETE>删除</el-button>
    </div>
   
     <div class="info_news">  
@@ -451,9 +451,6 @@ export default {
              this.pickaddAera='';
              this.pickAera=[{}];
              this.destinationAera=[{}];
-                 if(this.$refs.area1){
-                    this.$refs.area1.selectedOptions = [];
-                }
             this.$refs.multipleTable.clearSelection();                
              }
              }
@@ -465,9 +462,6 @@ export default {
              this.pickaddAera='';
              this.pickAera=[{}];
              this.destinationAera=[{}];
-                 if(this.$refs.area1){
-                    this.$refs.area1.selectedOptions = [];
-                }
             this.$refs.multipleTable.clearSelection();                
              }
              }
