@@ -13,7 +13,6 @@
                         stripe
                         height="100%"
                         border
-                        :default-sort = "{prop: 'areaCodeName', order: 'descending'}"
                         @selection-change = "getinfomation"
                         tooltip-effect="dark"
                         @row-click="clickDetails"

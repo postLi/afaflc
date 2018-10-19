@@ -175,10 +175,19 @@ export default {
                 this.$refs.area.selectedOptions = [];
             }
         },
-        getStr(val,name){
-            console.log('this.cityarr',val,name)
-            this.standForm.areaCode = val;
-            this.standForm.areaCodeName = name;
+        getStr(d){
+            console.log('data:',d)
+            // this.standForm.areaCode = val;
+            // this.standForm.areaCodeName = name;
+            this.standForm.areaCodeName = (!d.province&&!d.city&&!d.area) ? '': `${this.getValue(d.province)}${this.getValue(d.city)}${this.getValue(d.area)}`.trim();
+            if(d.city){
+                this.standForm.areaCode = d.city.code;
+            }else{
+                this.standForm.areaCode = d.province.code;
+            }
+        },
+        getValue(obj){
+            return obj ? obj.value:'';
         },
         //初始化选择项数据
         init(){

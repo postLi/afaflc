@@ -95,9 +95,9 @@
                                 <p>描述</p>
                                 <el-input
                                     type="textarea"
-                                    :rows="2"
-                                    placeholder="5-300间的字符"
-                                    maxlength="200"
+                                    :rows="3"
+                                    placeholder="请输入最少5个字符最多300个字符"
+                                    maxlength="300"
                                     ref="infofocus"
                                     v-model="form.extraDes"
                                     clearable>
@@ -152,8 +152,8 @@
                                 <el-input
                                     type="textarea"
                                     :rows="2"
-                                    placeholder="5-300间的字符"
-                                    maxlength="200"
+                                    placeholder="请输入最少5个字符最多300个字符"
+                                    maxlength="300"
                                     ref="infofocus"
                                     v-model="changeform.extraDes"
                                     clearable>

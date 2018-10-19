@@ -12,7 +12,6 @@
                         ref="multipleTable"
                         :data="tableData"
                         stripe
-                        :default-sort = "{prop: 'areaCodeName', order: 'null'}"
                         height="100%"
                         border
                         @selection-change = "getinfomation"
