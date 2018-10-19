@@ -383,13 +383,16 @@ export default{
             endTime: '', // 下单结束时间
             areaCodeList: []
           }
-          this.searchCreatTime = ''
-          this.$refs.area.returnArr({})
-          console.log(this.$refs.area, 66666)
+          // this.searchCreatTime = ''
+
           // this.$refs.area.nowData.province.name = ''
           // this.$refs.area.nowData.province.city = ''
           // this.$refs.area.nowData.province.area = ''
-          console.log(this.$refs.area.nowData)
+          // this.$refs.area.nowData.returnStr({})
+          // this.$refs.area.nowData = {}
+
+          this.$refs.area.clearData()
+          // console.log(this.$refs.area.nowData.area, this.$refs.area.nowData.area.value)
           this.firstblood()
         case 'outExce':
           // if (this.searchCreatTime) {
