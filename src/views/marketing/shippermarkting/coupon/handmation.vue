@@ -60,6 +60,7 @@
                     btntitle="创建"
                     :editType="types"
                     @getData="getDataList"
+                    v-has:MARKETING_SHIPPER_MANAGE_COUPON_ACTIVITY_ADD
                    >
               </newautocoupon>
               <modautocoupon
@@ -72,6 +73,7 @@
                     :editType="types"
                     :params = 'selectRowData'
                     @getData="getDataList"
+                    v-has:MARKETING_SHIPPER_MANAGE_COUPON_ACTIVITY_UPDATE
                     >
               </modautocoupon>
                 <span  v-if="types=='two'" class="sw">

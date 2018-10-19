@@ -63,6 +63,7 @@
                     btntitle="创建"
                     :editType="types"
                     @getData="getDataList"
+                    v-has:MARKETING_SHIPPER_MANAGE_COUPON_ACTIVITY_ADD
                    >
               </newautocoupon>
               <modautocoupon
@@ -75,10 +76,11 @@
                     :editType="types"
                     :params = 'selectRowData'
                     @getData="getDataList"
+                    v-has:MARKETING_SHIPPER_MANAGE_COUPON_ACTIVITY_UPDATE
                     >
               </modautocoupon>
-                <el-button  type="primary" value="value" plain icon="el-icon-bell" @click="handleUseStates"  v-if="types=='one'" :size="btnsize">启用/停用</el-button>
-                <el-button type="primary" plain icon="el-icon-delete" @click="delete_data" :size="btnsize">删除</el-button>
+                <el-button  type="primary" value="value" plain icon="el-icon-bell" @click="handleUseStates"  v-if="types=='one'" :size="btnsize" v-has:MARKETING_SHIPPER_MANAGE_COUPON_ACTIVITY_USE>启用/停用</el-button>
+                <el-button type="primary" plain icon="el-icon-delete" @click="delete_data" :size="btnsize" v-has:MARKETING_SHIPPER_MANAGE_COUPON_ACTIVITY_DELETE>删除</el-button>
                 <span  v-if="types=='two'">
               <couponGive
                     btntext="发放"

@@ -41,6 +41,7 @@
                     icon="el-icon-circle-plus"
                     editType="add"
                     @getData="getDataList"
+                    v-has:MARKETING_DRIVER_MANAGE_ORDER_NUM_REWARD_ADD
                     btntitle="创建">
                     </newOrder>
                    <newOrder
@@ -52,10 +53,11 @@
                     editType="edit"
                     @getData="getDataList"
                     btntitle="修改"
+                    v-has:MARKETING_DRIVER_MANAGE_ORDER_NUM_REWARD_UPDATE
                     :params="selectRowData">
                     </newOrder>
-                <el-button  type="primary" plain icon="el-icon-bell" @click="handleUseStates" :size="btnsize">启用/停用</el-button>
-                <el-button type="primary" plain icon="el-icon-delete" @click="delete_data" :size="btnsize">删除</el-button>
+                <el-button  type="primary" plain icon="el-icon-bell" @click="handleUseStates" :size="btnsize" v-has:MARKETING_DRIVER_MANAGE_ORDER_NUM_REWARD_USE>启用/停用</el-button>
+                <el-button type="primary" plain icon="el-icon-delete" @click="delete_data" :size="btnsize" v-has:MARKETING_DRIVER_MANAGE_ORDER_NUM_REWARD_DELETE>删除</el-button>
             	</div>
             <div class="info_news">    
                <el-table style="width: 100%" ref="multipleTable" stripe border height="100%" @selection-change="getSelection" @row-click="clickDetails" highlight-current-row :data="tableDataAll"  >

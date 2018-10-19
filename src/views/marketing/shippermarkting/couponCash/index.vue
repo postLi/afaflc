@@ -41,6 +41,7 @@
                     icon="el-icon-news"
                     editType="add"
                     @getData="getDataList"
+                    v-has:MARKETING_SHIPPER_MANAGE_PREFERENTIAL_ADD
                     btntitle="创建">
                     </newshipperorder>
                    <modshipperorder
@@ -52,10 +53,11 @@
                     editType="edit"
                     @getData="getDataList"
                     btntitle="修改"
+                    v-has:MARKETING_SHIPPER_MANAGE_PREFERENTIAL_UPDATE
                     :params="selectRowData">
                     </modshipperorder>
-                <el-button  type="primary" value="value" plain icon="el-icon-bell" @click="handleUseStates" :size="btnsize">启用/停用</el-button>
-                <el-button type="primary" plain icon="el-icon-delete" @click="delete_data" :size="btnsize">删除</el-button>
+                <el-button  type="primary" value="value" plain icon="el-icon-bell" @click="handleUseStates" :size="btnsize" v-has:MARKETING_SHIPPER_MANAGE_PREFERENTIAL_USE>启用/停用</el-button>
+                <el-button type="primary" plain icon="el-icon-delete" @click="delete_data" :size="btnsize" v-has:MARKETING_SHIPPER_MANAGE_PREFERENTIAL_DELETE>删除</el-button>
             	</div>
 
             <div class="info_news">    
