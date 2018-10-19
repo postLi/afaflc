@@ -50,7 +50,7 @@ import Pager from '@/components/Pagination/index'
 import Upload from '@/components/Upload/multImage'
 import { DicClaimStatusType } from '@/api/common'
 import { postReportClaimAdd } from '@/api/service/claim.js'
-import {postAddComplain} from '@/api/service/dispose.js'
+import { postAddComplain } from '@/api/service/dispose.js'
 import { objectMerge2 } from '@/utils/index'
 export default {
   computed: {
@@ -73,13 +73,13 @@ export default {
     rowid: {
       type: [Number, String]
     },
-    isDispose:{
-      type:Boolean,
-      default:false
+    isDispose: {
+      type: Boolean,
+      default: false
     },
-    isClaim:{
-      type:Boolean,
-      default:false
+    isClaim: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
@@ -140,16 +140,16 @@ export default {
     //     }
     //   }
     // }
-    isClaim:{
-      handler(newVal){
-        if(this.isClaim){
+    isClaim: {
+      handler(newVal) {
+        if (this.isClaim) {
           this.popTitle = '记录物损跟进'
         }
       }
     },
-    isDispose:{
-      handler(newVal){
-        if(this.isDispose){
+    isDispose: {
+      handler(newVal) {
+        if (this.isDispose) {
           this.popTitle = '记录投诉跟进'
         }
       }
@@ -254,9 +254,9 @@ export default {
           const data = objectMerge2({}, this.formAllData)
           // console.log(this.formAllData)
           let promiseObj
-          if(this.isClaim){
+          if (this.isClaim) {
             promiseObj = postReportClaimAdd(data)
-          }else if(this.isDispose){
+          } else if (this.isDispose) {
             promiseObj = postAddComplain(data)
           }
           promiseObj.then(res => {

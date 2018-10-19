@@ -376,6 +376,9 @@ export default {
   .classify_info{
     padding-bottom:0 !important;
   }
+  .el-message-box .showPictureWrapper .el-message-box--center{
+          overflow: hidden !important;
+        }
   .el-dialog{
     max-width: 100%;
     min-width: 35%;
