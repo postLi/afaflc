@@ -384,6 +384,10 @@ export default{
             areaCodeList: []
           }
           this.searchCreatTime = ''
+          // this.$refs.area.nowData.province.name = ''
+          // this.$refs.area.nowData.province.city = ''
+          // this.$refs.area.nowData.province.area = ''
+          console.log(this.$refs.area.nowData)
           this.firstblood()
         case 'outExce':
           // if (this.searchCreatTime) {
