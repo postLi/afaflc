@@ -312,6 +312,9 @@ export default {
           width:200px;
           height:180px;
         }
+        .el-message-box .showPictureWrapper .el-message-box--center{
+          overflow: hidden !important;
+        }
         .el-upload .el-upload-dragger{
             width: 230px;
             height:100px;
@@ -319,6 +322,13 @@ export default {
         .image-uploader {
             width: 100%;
             height: 100%;
+        }
+        .showPictureWrapper{
+          width:800px !important;
+              max-height: 0 !important;
+        }
+        .el-message-box{
+          width:800px;
         }
         .image-preview {
             width: 100%;

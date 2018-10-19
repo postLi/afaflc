@@ -1,146 +1,147 @@
 <template>
     <div class="physicalDamage clearfix">
-        <el-table
-            accordion
-            :data="tableData"
-            border
-            row-key="id"
-            :expand-row-keys="expands"
-            @row-click="rowClick"
-            style="width: 100%">
-            <el-table-column type="expand">
-                <template slot-scope="props">
-                    <el-table
-                    class="animated fadeInRight"
-                        :data="tableData1"
-                        border
-                        style="width: 100%">
-                        <el-table-column
-                            prop="followName"
-                            label="跟进人"
-                            width="180">
-                        </el-table-column>
-                        <el-table-column
-                            prop=""
-                            label="跟进时间"
-                            width="180">
-                            <template  slot-scope="scope">
-                              <span class="orderSerial">
-                                {{ scope.row.followupTime | parseTime('{y}-{m}-{d} {h}:{i}:{s}')}}    
-                              </span>
-                            </template>
-                        </el-table-column>
-                        <el-table-column
-                            prop="goodsclaimDes"
-                            label="物损跟进">
-                        </el-table-column>
-                        <el-table-column
-                            prop="name"
-                            label="是否处理完毕">
-                        </el-table-column>
-                        <el-table-column
-                            prop="fileAddress"
-                            label="附件">
-                            <template slot-scope="scope">
-                                <img :src='item.url' alt="" v-showPicture v-for="item in scope.row.imgArr" :key="item.name" />
-                                <el-button type="text" v-for="txtitem in scope.row.txtArr" :key="txtitem.name" @click="openTxt(txtitem.url)">{{txtitem.name}}</el-button>
-                            </template>
-                        </el-table-column>
-                        <!-- <el-table-column
-                            prop=""
-                            label="操作">
-                            <template slot-scope="scope">
-                              <el-button
-                              size="mini"
-                              @click="handleEdit3(scope.$index, scope.row)">保存</el-button>
+      <el-table
+          id="content"
+          accordion
+          :data="tableData"
+          border
+          row-key="id"
+          :expand-row-keys="expands"
+          @row-click="rowClick"
+          style="width: 100%">
+          <el-table-column type="expand">
+              <template slot-scope="props">
+                  <el-table
+                  class="animated fadeInRight"
+                      :data="tableData1"
+                      border
+                      style="width: 100%">
+                      <el-table-column
+                          prop="followName"
+                          label="跟进人"
+                          width="180">
+                      </el-table-column>
+                      <el-table-column
+                          prop=""
+                          label="跟进时间"
+                          width="180">
+                          <template  slot-scope="scope">
+                            <span class="orderSerial">
+                              {{ scope.row.followupTime | parseTime('{y}-{m}-{d} {h}:{i}:{s}')}}    
+                            </span>
                           </template>
-                        </el-table-column> -->
-                    </el-table>
-                </template>
-            </el-table-column>
+                      </el-table-column>
+                      <el-table-column
+                          prop="goodsclaimDes"
+                          label="物损跟进">
+                      </el-table-column>
+                      <el-table-column
+                          prop="name"
+                          label="是否处理完毕">
+                      </el-table-column>
+                      <el-table-column
+                          prop="fileAddress"
+                          label="附件">
+                          <template slot-scope="scope">
+                              <img :src='item.url' alt="" v-showPicture v-for="item in scope.row.imgArr" :key="item.name" />
+                              <el-button type="text" v-for="txtitem in scope.row.txtArr" :key="txtitem.name" @click="openTxt(txtitem.url)">{{txtitem.name}}</el-button>
+                          </template>
+                      </el-table-column>
+                      <!-- <el-table-column
+                          prop=""
+                          label="操作">
+                          <template slot-scope="scope">
+                            <el-button
+                            size="mini"
+                            @click="handleEdit3(scope.$index, scope.row)">保存</el-button>
+                        </template>
+                      </el-table-column> -->
+                  </el-table>
+              </template>
+          </el-table-column>
+          <el-table-column
+              type="index"
+              label="序号"
+              width="80"
+              >
+          </el-table-column>
             <el-table-column
-                type="index"
-                label="序号"
-                width="80"
-                >
-            </el-table-column>
-             <el-table-column
-                prop="dealStatus"
-                label="处理状态"
-                width="150"
-                >
-            </el-table-column>
+              prop="dealStatus"
+              label="处理状态"
+              width="150"
+              >
+          </el-table-column>
+          <el-table-column
+              prop="claimDes"
+              label="物损描述"
+              width="180"
+              >
+          </el-table-column>
+          <el-table-column
+              prop="claimType"
+              label="物损类型"
+              >
+          </el-table-column>
+          <el-table-column
+              prop="claimPic1"
+              :show-overflow-tooltip="true"
+              label="破损图片"
+              width="600"
+              >
+              <template slot-scope="scope">
+                <!-- <img :src='scope.row.claimPic1' alt="" v-showPicture> -->
+                <img :src='item.url' alt="" v-showPicture v-for="item in scope.row.bigImgArr" :key="item.name" />
+              </template>
+              <!-- <template slot-scope="scope">
+                  {{scope.row.driverName}} - {{scope.row.driverPhone}}
+              </template> -->
+          </el-table-column>
+          <el-table-column
+              prop=""
+              label="上报人"
+              >
+              <template slot-scope="scope">
+                {{scope.row.reporterPhone ? scope.row.reporterPhone : ''}}{{ scope.row.reporter ? scope.row.reporter : ''}}
+              </template>
+          </el-table-column>
             <el-table-column
-                prop="claimDes"
-                label="物损描述"
-                width="180"
-                >
-            </el-table-column>
-            <el-table-column
-                prop="claimType"
-                label="物损类型"
-                width="180"
-                >
-            </el-table-column>
-            <el-table-column
-                prop="claimPic1"
-                :show-overflow-tooltip="true"
-                label="破损图片"
-                width="300"
-                >
+              prop="reporterType"
+              label="上报人类型"
+              >
+          </el-table-column>
+          <!-- 这里没有相应的字段 -->
+          <el-table-column
+              prop=""
+              label="上报时间"
+              width="160"
+              >
+              <template  slot-scope="scope">
+                <span class="orderSerial">
+                  {{ scope.row.createTime | parseTime('{y}-{m}-{d} {h}:{i}:{s}')}}    
+                </span>
+              </template>
+          </el-table-column>
+          <el-table-column
+              label="操作"
+              >
+              <!-- 待处理的时候显示确认受理，处理中显示记录投诉跟进，已处理两个按钮都不显示 -->
                 <template slot-scope="scope">
-                  <!-- <img :src='scope.row.claimPic1' alt="" v-showPicture> -->
-                  <img :src='item.url' alt="" v-showPicture v-for="item in scope.row.bigImgArr" :key="item.name" />
-                </template>
-                <!-- <template slot-scope="scope">
-                    {{scope.row.driverName}} - {{scope.row.driverPhone}}
-                </template> -->
-            </el-table-column>
-            <el-table-column
-                prop=""
-                label="上报人"
-                width="200"
-                >
-                <template slot-scope="scope">
-                  {{scope.row.reporterPhone ? scope.row.reporterPhone : ''}}{{ scope.row.reporter ? scope.row.reporter : ''}}
-                </template>
-            </el-table-column>
-             <el-table-column
-                prop="reporterType"
-                label="上报人类型"
-                width="120">
-            </el-table-column>
-            <!-- 这里没有相应的字段 -->
-            <el-table-column
-                prop=""
-                label="上报时间"
-                width="160">
-                <template  slot-scope="scope">
-                  <span class="orderSerial">
-                    {{ scope.row.createTime | parseTime('{y}-{m}-{d} {h}:{i}:{s}')}}    
-                  </span>
-                </template>
-            </el-table-column>
-            <el-table-column
-                label="操作"
-                width="300">
-                <!-- 待处理的时候显示确认受理，处理中显示记录投诉跟进，已处理两个按钮都不显示 -->
-                 <template slot-scope="scope">
-                    <el-button
-                    plain
-                    :type="scope.row.dealStatus === '处理中' ? 'warning': 'primary'"
-                    v-if="scope.row.dealStatus ==='待处理' || scope.row.dealStatus === '处理中'"
-                    size="mini"
-                    @click="handleEdit1(scope.$index, scope.row)">{{scope.row.dealStatus==='待处理' ? '确认受理': (scope.row.dealStatus === '处理中' ? '记录物损跟进': '')}}</el-button>
-                   <!-- <el-button
-                    size="mini"
-                    @click="handleEdit1(scope.$index, scope.row)">确认受理</el-button> -->
-                </template>
-            </el-table-column>
-        </el-table>
-        <el-button type="success" class="btnReg" size="mini" @click="handleEdit3" id="bigBtn">物损登记</el-button>
-        <add :rowid="rowid" :isClaim="isClaim" :centerDialogVisible="centerDialogVisible" @close="closeAdd" @success="getSuccess"></add>
-        <addReg :isMatreg="isMatreg" :centerDialogVisibleReg="centerDialogVisibleReg" @close="closeAddReg" @success="getSuccess"></addReg>
+                  <el-button
+                  plain
+                  :type="scope.row.dealStatus === '处理中' ? 'warning': 'primary'"
+                  v-if="scope.row.dealStatus ==='待处理' || scope.row.dealStatus === '处理中'"
+                  size="mini"
+                  @click="handleEdit1(scope.$index, scope.row)">{{scope.row.dealStatus==='待处理' ? '确认受理': (scope.row.dealStatus === '处理中' ? '记录物损跟进': '')}}</el-button>
+                  <!-- <el-button
+                  size="mini"
+                  @click="handleEdit1(scope.$index, scope.row)">确认受理</el-button> -->
+              </template>
+          </el-table-column>
+      </el-table>
+      <!-- <el-button type="success" class="btnReg" size="mini" @click="handleEdit3">物损登记</el-button> -->
+      <el-button type="success" class="btnReg" size="mini" @click="handleEdit3" id="bigBtn">物损登记</el-button>
+      <add :rowid="rowid" :isClaim="isClaim" :centerDialogVisible="centerDialogVisible" @close="closeAdd" @success="getSuccess"></add>
+      <addReg :isMatreg="isMatreg" :centerDialogVisibleReg="centerDialogVisibleReg" @close="closeAddReg" @success="getSuccess"></addReg>
         <!-- <div class="info_tab_footer">共计:{{ totalCount }} <div class="show_pager"> <Pager :total="totalCount" @change="handlePageChange" :sizes="sizes"/></div> </div>     -->
     </div>
 </template>
@@ -283,6 +284,8 @@ export default {
                     // this.init();
           console.log(this.$route.query.orderSerial)
           this.firstblood()
+          this.getListSmall()
+          // this.scrollFix()
         }
       },
             // 代表在wacth里声明了firstName这个方法之后立即先去执行handler方法
@@ -293,6 +296,8 @@ export default {
     // console.log(this.tableData)
     // this.firstblood()
     // this.getListSmall()
+    // const content = document.getElementsByClassName('el-tabs__content')[0]
+    // console.log(content, content.scrollTop)
   },
   methods: {
     init() {
@@ -492,6 +497,13 @@ export default {
       float: right;
       padding:10px 20px;
       font-size: 16px;
+    }
+    #bigBtn{
+      position: fixed;
+      // display: none;
+      right: 30px;
+      bottom: 76px;
+      z-index: 100000;
     }
   }
 .animated {
