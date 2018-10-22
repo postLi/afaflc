@@ -354,7 +354,8 @@
     bottom: auto;
     min-width: 486px;
     max-width: 486px;
-
+    display: flex;
+    flex-direction: column;
   }
 
   .dep-maintain .addRelationPop-content {
@@ -372,37 +373,41 @@
 
   /*添加*/
   /*depmain-add*/
+  .depmain-add{
+      display: flex;
+      flex-direction: column;
+
+  }
   .add-fixed {
-    position: fixed;
     background: rgba(255, 255, 255, 1);
     top: 30px;
     input {
       border-color: #e4e7ed;
       width: 350px;
-      margin: 5px 20px 5px 10px;
+      margin: 0px 20px 0px 10px;
       color: #999;
-      padding: 8px 0 2px 10px;
       font-size: 14px;
-
     }
     .el-input{
       width: 340px;
       float: left;
     }
     .addSvg {
-      display: inline-block;
-      span.svgSpan {
-        /*cursor: pointer;*/
-
-        .lll-dot-true {
-          font-size: 20px;
-          margin: 10px 6px 1px 60px;
+        float: right;
+        span.svgSpan {
+            display: inline-block;
+            line-height: 30px;
+            /*cursor: pointer;*/
+            .lll-dot-true {
+                font-size: 20px;
+                // margin: 10px 6px 1px 60px;
+                margin-right: 10px;
+            }
+            .lll-dot-false {
+                font-size: 20px;
+                margin-right: 15px;
+            }
         }
-        .lll-dot-false {
-          font-size: 20px;
-          margin-right: 15px;
-        }
-      }
     }
   }
 
@@ -448,11 +453,12 @@
   }
 
   .depmain-add .depmain-list {
-    overflow: hidden;
-    ul {
-      li:nth-of-type(1) {
-        margin-top: 30px;
-      }
+        padding-top: 5px;
+        overflow: hidden;
+        ul {
+        li:nth-of-type(1) {
+            // margin-top: 30px;
+        }
     }
   }
 
