@@ -1,5 +1,5 @@
 <template>
-<div class="detailsCompnent">
+<div class="detailsCompnent MJDpushlogs">
     <div class="detailsInfo detailsArrange" v-loading="loading">
         <!-- 基本信息 -->
         <div class="detailsInfo-collapse collapseInfo">
@@ -50,6 +50,7 @@
                 <el-table
                     :data="tableData"
                     border
+                   height="50%"
                     style="width: 100%">
                     <el-table-column
                                     label="选择"
@@ -86,15 +87,8 @@
                     label="是否抢入">
                     </el-table-column>                    
                 </el-table>
-                <el-pagination
-                    background
-                    @size-change="handleSizeChange"
-                    @current-change="handleCurrentChange"
-                    :page-sizes="size"
-                    layout="total, sizes, prev, pager, next, jumper"
-                    :total="totalCount">
-                </el-pagination>
-                <!-- <div class="info_tab_footer">共计:{{ totalCount }} <div class="show_pager"> <Pager :total="totalCount" @change="handlePageChange" /></div> </div> -->
+      <!-- 页码 -->
+        <div class="info_tab_footer">共计:{{ dataTotal }} <div class="show_pager"> <Pager :total="dataTotal" @change="handlePageChange"  :sizes="sizes"/></div> </div> 
             </div>
         </div>
     </div>
@@ -104,12 +98,12 @@
 <script>
 
 import { parseTime } from '@/utils/index.js'
-// import Pager from '@/components/Pagination/index'
+import Pager from '@/components/Pagination/index'
 
 export default {
   name: 'detailsInfo',
   components: {
-    //   Pager
+      Pager
   },
   props: {
     isvisible: {
@@ -120,15 +114,15 @@ export default {
   }, 
   data() {
     return {
-        size:[20,30,50],
-        listInformation: [],
-        page:1,
-        pagesize:20,
-        totalCount:100,
+        sizes: [10, 50, 100],
+        pagesize:10,//每页显示数
+        page:1,//当前页
+        dataTotal:null,//总记录数
+        tableDataTree:[],//定义列表记录
         loading: false,
         dialogVisible: false,
         currentOrderSerial: '',
-           tableData: [{
+        tableData: [{
           date: '2016-05-02',
           name: '王小虎',
           address: '上海市普陀区金沙江路 1518 弄'
@@ -144,7 +138,37 @@ export default {
           date: '2016-05-03',
           name: '王小虎',
           address: '上海市普陀区金沙江路 1516 弄'
-        }]
+        },
+         {
+          date: '2016-05-03',
+          name: '王小虎',
+          address: '上海市普陀区金沙江路 1516 弄'
+        }, {
+          date: '2016-05-03',
+          name: '王小虎',
+          address: '上海市普陀区金沙江路 1516 弄'
+        },
+         {
+          date: '2016-05-03',
+          name: '王小虎',
+          address: '上海市普陀区金沙江路 1516 弄'
+        },
+         {
+          date: '2016-05-03',
+          name: '王小虎',
+          address: '上海市普陀区金沙江路 1516 弄'
+        },
+         {
+          date: '2016-05-03',
+          name: '王小虎',
+          address: '上海市普陀区金沙江路 1516 弄'
+        },
+        {
+          date: '2016-05-03',
+          name: '王小虎',
+          address: '上海市普陀区金沙江路 1516 弄'
+        },
+        ]
       }
   },
     watch: {
@@ -165,6 +189,13 @@ export default {
         init() {
         
         },
+        // 每页显示数据量变更
+        handlePageChange(obj) {
+            this.page = obj.pageNum
+            this.pagesize = obj.pageSize
+            this.firstblood()
+            },
+
         shuaxin() {
             this.init()
         },
@@ -188,11 +219,17 @@ export default {
 </script>
 
 <style rel="stylesheet/scss" lang="scss" scoped>
-    .detailsInfo{
-        .collapseInfo{
-            .essentialInformation_img{
+.MJDpushlogs{
+ .detailsArrange{
+    .collapseInfo h2{
+        padding: 18px 0 18px 0;
+ } 
+}
+.collapseInfo{
+ .essentialInformation {
+    padding: 20px 0 0 0;
+}
+}
+}
 
-            }
-        }
-    }
 </style>

@@ -246,6 +246,7 @@ export default {
                     areaCode: null,
                     serivceCode:null,
                 },
+                this.$refs.area.clearData();
                 this.firstblood();
             },
             // 每页显示数据量变更

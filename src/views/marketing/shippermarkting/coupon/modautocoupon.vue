@@ -170,7 +170,7 @@
                     <el-input v-model="formAllData.aflcCouponList[keys].areaName1" @focus="changeSelect1(keys)"></el-input>
                   </span>
                   <span v-else @click="changeInput(keys)">
-                    <GetCityList  v-model="formAllData.aflcCouponList[keys].areaName"  @returnStr="getStr1"></GetCityList>
+                    <GetCityList  v-model="formAllData.aflcCouponList[keys].areaName"  @returnStr="getStr1" ref="area1"></GetCityList>
                     </span>
               </div>
              <div class="ht_table_td table_th14">
@@ -398,6 +398,15 @@ export default {
            areaName1:null,
            ifvouchersuperposition:null,
            }]
+            if(this.$refs.area){
+            this.$refs.area.clearData();
+            }
+            if(this.$refs.area1){
+            for(var i=0;i<this.$refs.area1.length;i++)
+            {
+                this.$refs.area1[i].clearData();
+            }
+            }
             }
          else{
            this.getMoreInformation();
@@ -415,11 +424,11 @@ export default {
             }
             },
     getStr(val){
-                this.formAll.areaCode= val.area.code
-                this.formAll.areaName = val.area.name
-                this.formAll.province = val.province.name
-                this.formAll.city = val.city.name
-                this.formAll.area = val.area.name
+                this.formAllData.areaCode= val.area.code
+                this.formAllData.areaName = val.area.name
+                this.formAllData.province = val.province.name
+                this.formAllData.city = val.city.name
+                this.formAllData.area = val.area.name
             },  
     getStr1(val){
                 this.formAllData.aflcCouponList[this.inputKey].areaCode= val.area.code

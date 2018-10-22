@@ -67,14 +67,14 @@ export default {
      methods:{
             //刷新页面  
             firstblood(){
-                data_get_pushsheet_list(this.page,this.pagesize,this.formAll).then(res => {
-                    this.dataTotal = res.data.totalCount
-                    this.tableDataTree = res.data.list;
-                     this.tableDataTree.forEach(item => {
-                        item.createTime = parseTime(item.createTime,"{y}-{m}-{d}");
-                        item.updateTime = parseTime(item.updateTime,"{y}-{m}-{d}");
-                    })
-                })
+                // data_get_pushsheet_list(this.page,this.pagesize,this.formAll).then(res => {
+                //     this.dataTotal = res.data.totalCount
+                //     this.tableDataTree = res.data.list;
+                //      this.tableDataTree.forEach(item => {
+                //         item.createTime = parseTime(item.createTime,"{y}-{m}-{d}");
+                //         item.updateTime = parseTime(item.updateTime,"{y}-{m}-{d}");
+                //     })
+                // })
             },
             // 判断选中与否
             getSelection(val){

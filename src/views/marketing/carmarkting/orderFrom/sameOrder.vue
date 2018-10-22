@@ -189,6 +189,7 @@ export default {
             area:null,
             areaName:null
         }
+        this.$refs.area.clearData();
             this.firstblood()    
         },
 
