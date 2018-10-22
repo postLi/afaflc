@@ -49,10 +49,10 @@
           tooltip-effect="dark"
           @row-click="clickDetails"
           style="width: 100%"> 
-          <el-table-column
+          <!-- <el-table-column
             type="selection"
             width="55">
-          </el-table-column>
+          </el-table-column> -->
           <el-table-column label="序号" 
           sortable
             width="80">

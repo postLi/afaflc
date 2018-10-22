@@ -42,10 +42,10 @@
             		</div>
             <div class="info_news">    
               <el-table ref="multipleTable" style="width: 100%" stripe border height="100%" @selection-change="getSelection" @row-click="clickDetails" highlight-current-row :data="dataset"  tooltip-effect="dark">
-                <el-table-column
+                <!-- <el-table-column
                   label="选择"
                   type="selection"
-                  width="50">
+                  width="50"> -->
                 </el-table-column>
                 <el-table-column fixed label="序号" sortable  width="80">
                   <template slot-scope="scope">
@@ -59,7 +59,7 @@
                   prop="orderSerial"
                   label="订单号"
                   sortable
-                  width="300"
+                  width="250"
                   >
                   <template  slot-scope="scope">
                     <h4 class="needMoreInfo" @click="pushOrderSerial(scope.row)">{{ scope.row.orderSerial}}</h4>
@@ -71,9 +71,9 @@
                   label="货主"
                   sortable 
                   :show-overflow-tooltip="true" 
-                  width="200">
+                  width="250">
                   <template slot-scope="scope">
-                  {{scope.row.shipperName ? scope.row.shipperName : ''}}{{ scope.row.shipperMobile ? scope.row.shipperMobile : ''}}
+                  {{scope.row.shipperName ? scope.row.shipperName + '-' : ''}}{{ scope.row.shipperMobile ? scope.row.shipperMobile : ''}}
                   </template>
                 </el-table-column>
                 
@@ -81,9 +81,9 @@
                   label="车主" 
                   sortable 
                   :show-overflow-tooltip="true"  
-                  width="200">
+                  width="250">
                   <template slot-scope="scope">
-                  {{scope.row.driverName ? scope.row.driverName : ''}}{{ scope.row.driverMobile ? scope.row.driverMobile : ''}}
+                  {{scope.row.driverName ? scope.row.driverName + '-': ''}}{{ scope.row.driverMobile ? scope.row.driverMobile + '-': ''}}{{scope.row.carNumber ? scope.row.carNumber : ''}}
                   </template>
                 </el-table-column>
                 <el-table-column  label="处理状态" prop="carTypeName" sortable :show-overflow-tooltip="true" width="120">
@@ -112,7 +112,7 @@
                 :show-overflow-tooltip="true"
                 prop="useCarTime"
                 label="用车时间"
-                width="120"
+                width="200"
                 sortable
                 >
                 <template  slot-scope="scope">
@@ -140,7 +140,7 @@ import { postListAppShipperComplain } from '@/api/service/dispose.js'
 import Pager from '@/components/Pagination/index'
 import { parseTime } from '@/utils/'
 // import vregion from '@/components/vregion/Region'
-import GetCityList from '@/components/GetCityList/city'
+import GetCityList from '@/components/GetCityList/index'
 import { DicDelStatusType } from '@/api/common'
 import addReg from './reg/index'
 import { orderDetailsList } from '@/api/order/ordermange'
@@ -235,6 +235,7 @@ export default {
             driver: '',
             orderSerial: ''
           }
+          this.$refs.area.clearData()
           this.firstblood()
           break
       }

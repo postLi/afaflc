@@ -38,12 +38,15 @@ export function postOrderGoodsclaimlist(page, pagesize, data) {
   })
 }
 /**
- * 理赔列表
- * /order/aflcOrder/v1/orderManager
+ *
+ * @param {*} page
+ * @param {*} pagesize
+ * @param {*} data
+ * 登记列表
  */
-export function postOrderManager(page, pagesize, data) {
+export function postListClain(page, pagesize, data) {
   return fetch({
-    url: '/' + baseurl + '/order/aflcOrder/v1/orderManager',
+    url: '/' + baseurl + '/order/aflcOrder/v1/listClain',
     method: 'post',
     data: {
       'currentPage': page,
@@ -52,6 +55,7 @@ export function postOrderManager(page, pagesize, data) {
     }
   })
 }
+
 // /order/aflcOrderGoodsclaim/v1/GoodsclaimAll/{id} 拼接一个id 大列表
 // 根据订单号id获取订单物损理赔
 export function getGoodsclaimAll(id) {
