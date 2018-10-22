@@ -37,7 +37,7 @@
         </el-form-item>
       </el-form>
       <div class="classify_info">
-        <div class="info_news" style="min-height:700px">    
+        <div class="info_news">    
           <el-table ref="multipleTable" style="width: 100%" stripe border height="100%" @row-click="clickDetails" @selection-change="getSelection" highlight-current-row :data="dataset"  tooltip-effect="dark">
             <el-table-column
               label="选择"
@@ -56,7 +56,7 @@
               prop="orderSerial"
               label="订单号"
               sortable
-              width="300"
+              width="250"
               >
               <template  slot-scope="scope">
                 <h4 class="needMoreInfo" @click="pushOrderSerial(scope.row)">{{ scope.row.orderSerial}}</h4>
@@ -64,7 +64,7 @@
             </el-table-column>
             <el-table-column 
               sortable 
-              prop="belongCityName" 
+              prop="provinceCityArea" 
               label="所属区域"  
               width="300">
             </el-table-column>
@@ -72,18 +72,18 @@
               label="货主"
               sortable 
               :show-overflow-tooltip="true" 
-              width="200">
+              width="250">
               <template slot-scope="scope">
-                {{scope.row.shipperPhone ? scope.row.shipperPhone : ''}}{{ scope.row.shipperName ? scope.row.shipperName : ''}}
+                {{scope.row.shipperName ? scope.row.shipperName + '-' : ''}}{{ scope.row.shipperMobile ? scope.row.shipperMobile : ''}}
               </template>
             </el-table-column>
             <el-table-column  
               label="车主" 
               sortable 
               :show-overflow-tooltip="true"  
-              width="200">
+              width="250">
               <template slot-scope="scope">
-                {{scope.row.driverMobile ? scope.row.driverMobile : ''}}{{ scope.row.driverName ? scope.row.driverName : ''}}
+                {{scope.row.driverName ? scope.row.driverName + '-' : ''}}{{ scope.row.driverMobile ? scope.row.driverMobile + '-': ''}}{{scope.row.carNumber ? scope.row.carNumber : ''}}
               </template>
             </el-table-column>
             <el-table-column  
@@ -102,7 +102,7 @@
             </el-table-column>   
             <el-table-column
             :show-overflow-tooltip="true"
-            prop="useTime"
+            prop=""
             label="下单时间"
             width="200"
             sortable
@@ -173,7 +173,7 @@
 </template>
 <script>
 import { parseTime, pickerOptions2 } from '@/utils/index.js'
-import { postOrderManager } from '@/api/service/claim.js'
+import { postListClain } from '@/api/service/claim.js'
 import { postReportComplain } from '@/api/service/dispose.js'
 import Pager from '@/components/Pagination/index'
 import Upload from '@/components/Upload/multImage'
@@ -201,10 +201,10 @@ export default {
   data() {
     return {
       btnsize: 'mini',
-      sizes: [20, 50, 100],
+      sizes: [10, 50, 100],
       dataset: [],
       dataTotal: 0,
-      pagesize: 20, // 初始化加载数量
+      pagesize: 10, // 初始化加载数量
       page: 1, // 初始化页码
       totalCount: null,
       value: '',
@@ -276,7 +276,7 @@ export default {
     // 请求接口刷新页面
     firstblood() {
       // this.loading = false
-      postOrderManager(this.page, this.pagesize, this.formAllData).then(res => {
+      postListClain(this.page, this.pagesize, this.formAllData).then(res => {
         this.dataTotal = res.data.totalCount
         this.dataset = res.data.list
         console.log(res)
@@ -435,7 +435,7 @@ export default {
     }
     .el-dialog__body{
       max-height: 700px;
-      overflow-y: scroll;
+      // overflow-y: scroll;
     }
     .el-dialog__footer{
       padding-bottom: 6%;

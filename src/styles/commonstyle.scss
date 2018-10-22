@@ -57,6 +57,7 @@
         .info_news{
             flex: 1;
             .el-table{
+              min-height: 390px;
                 .freezeName{
                     color: #e6a23c;
                     font-weight: bold;

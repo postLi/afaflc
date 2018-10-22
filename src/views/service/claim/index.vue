@@ -52,11 +52,11 @@
             		</div>
             <div class="info_news">    
               <el-table ref="multipleTable" style="width: 100%" stripe border height="100%" @selection-change="getSelection" @row-click="clickDetails" highlight-current-row :data="dataset"  tooltip-effect="dark">
-                <el-table-column
+                <!-- <el-table-column
                   label="选择"
                   type="selection"
                   width="50">
-                </el-table-column>
+                </el-table-column> -->
                 <el-table-column fixed label="序号" sortable  width="80">
                   <template slot-scope="scope">
                   {{ (page - 1)*pagesize + scope.$index + 1 }}
@@ -69,7 +69,7 @@
                   prop="orderSerial"
                   label="订单号"
                   sortable
-                  width="300"
+                  width="250"
                   >
                   <template  slot-scope="scope">
                     <h4 class="needMoreInfo" @click="pushOrderSerial(scope.row)">{{ scope.row.orderSerial}}</h4>
@@ -77,15 +77,23 @@
                 </el-table-column>
                 <el-table-column sortable prop="belongCity" label="区域"  width="300">
                 </el-table-column>
-                <el-table-column  label="货主" prop="shipper" sortable :show-overflow-tooltip="true" width="200">
+                <el-table-column  label="货主" prop="shipper" sortable :show-overflow-tooltip="true" width="250">
                 </el-table-column>
-                <el-table-column  label="车主" prop="driver" sortable :show-overflow-tooltip="true"  width="200">
+                <el-table-column  label="车主" prop="driver" sortable :show-overflow-tooltip="true"  width="250">
                 </el-table-column>
                 <el-table-column  label="处理状态" prop="dealStatus" sortable :show-overflow-tooltip="true" width="120">
                 </el-table-column>       
                 <el-table-column  label="物损类型" prop="claimType" sortable :show-overflow-tooltip="true" width="120">
                 </el-table-column>                                                       
-                <el-table-column  label="上报人" prop="reporter" sortable :show-overflow-tooltip="true"  width="300">
+                <el-table-column  
+                  label="上报人" 
+                  prop="reporter" 
+                  sortable 
+                  :show-overflow-tooltip="true"  
+                  width="300">
+                  <template slot-scope="scope">
+                    {{scope.row.reporterPhone? scope.row.reporterPhone + '-' : ''}}{{scope.row.reporter ? scope.row.reporter : ''}}
+                  </template>
                 </el-table-column>
                 <el-table-column
                 :show-overflow-tooltip="true"
@@ -107,7 +115,7 @@
                 :show-overflow-tooltip="true"
                 prop="useCarTime"
                 label="用车时间"
-                width="120"
+                width="200"
                 sortable
                 >
                 <template  slot-scope="scope">
@@ -135,7 +143,7 @@ import { postOrderGoodsclaimlist } from '@/api/service/claim.js'
 import Pager from '@/components/Pagination/index'
 import { parseTime } from '@/utils/'
 // import vregion from '@/components/vregion/Region'
-import GetCityList from '@/components/GetCityList/city'
+import GetCityList from '@/components/GetCityList/index'
 import { DicDelStatusType } from '@/api/common'
 import addReg from './reg/index'
 import { orderDetailsList } from '@/api/order/ordermange'
@@ -146,8 +154,8 @@ export default {
       btnsize: 'mini',
       selectRowData: {},
       selected: [],
-      sizes: [30, 50, 100],
-      pagesize: 30, // 初始化加载数量
+      sizes: [20, 50, 100],
+      pagesize: 20, // 初始化加载数量
       page: 1, // 初始化页码
       totalCount: null,
       dataTotal: 0,
@@ -230,6 +238,7 @@ export default {
             driver: '',
             orderSerial: ''
           }
+          this.$refs.area.clearData()
           this.firstblood()
           break
       }
