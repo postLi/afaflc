@@ -27,6 +27,7 @@
                         stripe
                         border
                         @selection-change = "getinfomation"
+                        :default-sort = "{prop: 'serviceName', order: 'null'}"
                         tooltip-effect="dark"
                         @row-click="clickDetails"
                         style="width: 100%"> 
@@ -64,15 +65,16 @@
                 </div>
                 <!-- 新增分类信息 -->
                  <div class="addclassify commoncss">
-                    <el-dialog :title='formtitle'  :visible.sync="dialogFormVisible">
+                    <el-dialog :title='formtitle'  :visible.sync="dialogFormVisible" >
                         <div class="chooseinfo-item">
-                            <p><span>* </span>服务一级分类 ：</p>
-                            <el-radio-group v-model="classfyradio" >
+                            <p><span>* </span>当前服务分类：</p>
+                            <!-- <el-radio-group v-model="classfyradio" >
                                 <el-radio   v-for="(obj,key) in formclassfy" :label="obj.code" :key='key' >{{obj.name}}</el-radio>
-                            </el-radio-group>
+                            </el-radio-group> -->
+                            <el-input disabled v-model="classfyradio" />
                         </div>
                         <div class="extrainfo"  v-for="(form,keys) in forms" :key='keys'>
-                            <p><span>* </span>额外服务名称</p>
+                            <p><span>* </span>额外服务名称：</p>
                             <el-input
                                 placeholder="请输入内容"
                                 v-model="form.extraName"
@@ -91,7 +93,7 @@
                                 <span> 元</span> 
                             </p>
                             <div class="nomore">
-                                <p><span>* </span>描述</p>
+                                <p><span>* </span>描述：</p>
                                 <el-input
                                     type="textarea"
                                     :rows="3"
@@ -118,7 +120,7 @@
                 <div class="changeclassify commoncss">
                     <el-dialog title='修改分类信息'  :visible.sync="dialogFormVisible_change">
                         <div class="chooseinfo-item">
-                            <p><span>* </span>服务一级分类 ：</p>
+                            <p><span>* </span>当前服务分类：</p>
                             <el-input
                                 placeholder="请输入内容"
                                 v-model="changeform.serviceName"
@@ -150,7 +152,7 @@
                                 <p>描述</p>
                                 <el-input
                                     type="textarea"
-                                    :rows="2"
+                                    :rows="3"
                                     placeholder="请输入最少5个字符最多300个字符"
                                     maxlength="300"
                                     ref="infofocus"
@@ -222,8 +224,9 @@ export default{
                 console.log(newVal,oldVal)
                 if(newVal){
                     DicServiceType().then(res => {
-                        console.log('this.formclassfy',this.formclassfy)
-                        this.formclassfy = res.data;
+                        res.data.forEach(el => {
+                            el.code == 'AF01701' ?  this.classfyradio =  el.name : '小货车'
+                        })
                     })
 
                 }
@@ -381,57 +384,57 @@ export default{
             },
             // 保存信息
             newInfoSave() {
-              if (!this.classfyradio) {
-                    this.$message({
-                        type: 'warning',
-                        message: '请选择服务类型'
-                    })
-                }else {
-                    let isOK = true
-                    this.forms.map((item) => {
-                        if (item.isFree === '1' && item.extraPrice == 0) {
-                            isOK = false
-                            this.$message({
-                                type: 'warning',
-                                message: '请填写额外收费价格'
-                            })
-                        }
-                        if (!item.extraDes) {
-                            isOK = false
-                            this.$message({
-                                type: 'warning',
-                                message: '请填写额外服务描述'
-                            })
-                        }
-                        item.serivceCode = this.classfyradio
-                    })
-                   
-                    if (isOK) {
-                        this.btnShow = true;
-                        data_AddForms(this.forms).then(res => {
-                            // console.log(res)
-                            this.$message({
-                                type: 'success',
-                                message: '新增成功!' 
-                            })
-                            this.btnShow = false;
-                            this.dialogFormVisible = false
-                            this.firstblood()
-                            this.forms = [{
-                              'extraDes': '',
-                              'extraName': '',
-                              'isFree': '0',
-                              'extraPrice': 0
-                            }]
-                        }).catch(err => {
-                            this.$message({
-                                type: 'info',
-                                message: '操作失败，原因：' + err.errorInfo ? err.errorInfo : err.text
-                            })
-                            this.btnShow = false;
+            //   if (!this.classfyradio) {
+            //         this.$message({
+            //             type: 'warning',
+            //             message: '请选择服务类型'
+            //         })
+            //     }else {
+                let isOK = true
+                this.forms.map((item) => {
+                    if (item.isFree === '1' && item.extraPrice == 0) {
+                        isOK = false
+                        this.$message({
+                            type: 'warning',
+                            message: '请填写额外收费价格'
                         })
                     }
+                    if (!item.extraDes) {
+                        isOK = false
+                        this.$message({
+                            type: 'warning',
+                            message: '请填写额外服务描述'
+                        })
+                    }
+                    item.serivceCode = 'AF01701';
+                })
+                
+                if (isOK) {
+                    this.btnShow = true;
+                    data_AddForms(this.forms).then(res => {
+                        // console.log(res)
+                        this.$message({
+                            type: 'success',
+                            message: '新增成功!' 
+                        })
+                        this.btnShow = false;
+                        this.dialogFormVisible = false
+                        this.firstblood()
+                        this.forms = [{
+                            'extraDes': '',
+                            'extraName': '',
+                            'isFree': '0',
+                            'extraPrice': 0
+                        }]
+                    }).catch(err => {
+                        this.$message({
+                            type: 'info',
+                            message: '操作失败，原因：' + err.errorInfo ? err.errorInfo : err.text
+                        })
+                        this.btnShow = false;
+                    })
                 }
+                // }
             },
             // 修改保存
             changeInfoSave() {
@@ -473,6 +476,14 @@ export default{
                 .el-dialog__body{
                     margin:0 20px;
                     margin-bottom: 20px;
+                    .el-input__inner{
+                        color: #3e9ff1;
+                        line-height: 26px;
+                        font-size: 14px;
+                        padding: 2px 10px;
+                        height: 40px;
+                        line-height: 40px;
+                    }
                     .chooseinfo-item{
                         font-size: 12px;
                         line-height: 20px;
@@ -485,10 +496,6 @@ export default{
                         }
                         .el-input{
                             width: 250px;
-                            .el-input__inner{
-                                height: 24px;
-                                line-height:24px;
-                            }
                         }
                     }
                     .extrainfo{
@@ -498,7 +505,7 @@ export default{
                         position: relative;
                         margin-top:15px;
                         p{
-                            width: 100px;
+                            width: 110px;
                             text-align: right;
                             padding-right: 12px;
                             display: inline-block;
@@ -524,7 +531,6 @@ export default{
                             }
                         }
                         .el-input{
-                            height:22px;
                             width: 150px;
                         }
                         .el-textarea{
@@ -553,7 +559,7 @@ export default{
                         }
                         .addItem,.reduceItem{
                             top:0px;
-                            left: 101%;
+                            left: 104%;
                         }
                     }
                 }

@@ -20,28 +20,28 @@ export default {
       meta: { role: ['admin'], title: '小货车', stitle: '小货车', noCache: true , code: 'SERVICE_SMALL_CAR'},
       children: [
         {
-          path: '/sm/xiaohuoche/areaPrice',
-          name: '区域定价',
-          component: _import('sm/xiaohuoche/areaPrice/index'),
-          meta: { role: ['admin'], title: '区域定价', stitle: '区域', noCache: true, code: 'SERVICE_SMALL_CAR_AREA_PRICE' }
+            path: '/sm/xiaohuoche/standardPrice',
+            name: '标准服务及定价',
+            component: _import('sm/xiaohuoche/standardPrice/index'),
+            meta: { role: ['admin'], title: '标准服务及定价', stitle: '标准', noCache: true , code: 'SERVICE_SMALL_CAR_STANDARD_PRICE'}
         },
         {
-          path: '/sm/xiaohuoche/standardPrice',
-          name: '标准信息及定价',
-          component: _import('sm/xiaohuoche/standardPrice/index'),
-          meta: { role: ['admin'], title: '标准信息及定价', stitle: '标准', noCache: true , code: 'SERVICE_SMALL_CAR_STANDARD_PRICE'}
+            path: '/sm/xiaohuoche/areaPrice',
+            name: '区域服务及定价',
+            component: _import('sm/xiaohuoche/areaPrice/index'),
+            meta: { role: ['admin'], title: '区域服务及定价', stitle: '区域', noCache: true, code: 'SERVICE_SMALL_CAR_AREA_PRICE' }
         },
         {
-          path: '/sm/xiaohuoche/extraPrice',
-          name: '额外服务管理',
-          component: _import('sm/xiaohuoche/extraPrice/index'),
-          meta: { role: ['admin'], title: '额外服务管理', stitle: '额外', noCache: true , code: 'SERVICE_SMALL_CAR_OTHER_SERVICE'}
+            path: '/sm/xiaohuoche/extraPrice',
+            name: '额外服务管理',
+            component: _import('sm/xiaohuoche/extraPrice/index'),
+            meta: { role: ['admin'], title: '额外服务管理', stitle: '额外', noCache: true , code: 'SERVICE_SMALL_CAR_OTHER_SERVICE'}
         },
         {
-          path: '/sm/xiaohuoche/waitPrice',
-          name: '等候费用定价',
-          component: _import('sm/xiaohuoche/waitPrice/index'),
-          meta: { role: ['admin'], title: '等候费用定价', stitle: '等候', noCache: true , code: 'SERVICE_SMALL_CAR_WAIT_PRICE'}
+            path: '/sm/xiaohuoche/waitPrice',
+            name: '等候费用定价',
+            component: _import('sm/xiaohuoche/waitPrice/index'),
+            meta: { role: ['admin'], title: '等候费用定价', stitle: '等候', noCache: true , code: 'SERVICE_SMALL_CAR_WAIT_PRICE'}
         }
       ]
     },

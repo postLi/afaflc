@@ -328,8 +328,8 @@ export default{
     },
     getSearchParam(obj) {
       console.log(obj)
-      this.searchInfo = Object.assign(this.searchInfo, obj)
-      this.loading = false
+      this.searchInfo = Object.assign(this.searchInfo, obj);
+      this.firstblood();
     },
     shuaxin() {
       this.firstblood()

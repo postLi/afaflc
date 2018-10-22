@@ -27,7 +27,7 @@
                 </el-option>
             </el-select>
         </el-form-item>
-        <el-form-item label="公司名称:" v-if="showType != 'unauthorized'">
+        <el-form-item label="公司名称" v-if="showType != 'unauthorized'">
             <el-input v-model.trim="searchInfo.companyName"></el-input>
         </el-form-item>
         <el-form-item label="手机号">

@@ -1,6 +1,6 @@
 <template>
      <el-form :inline="true" :model="searchInfo" ref="ruleForm" class="demo-ruleForm classify_searchinfo">
-        <el-form-item label="服务分类" prop="pointName">
+        <!-- <el-form-item label="服务分类" prop="pointName">
             <el-select v-model="searchInfo.serivceCode" clearable placeholder="请选择">
                 <el-option
                     v-for="item in optionsServiceType"
@@ -10,7 +10,7 @@
                     :disabled="item.disabled">
                 </el-option>
             </el-select>
-        </el-form-item>
+        </el-form-item> -->
         <el-form-item label="车辆类型" prop="orderSerial">
             <el-select v-model="searchInfo.carType" clearable placeholder="请选择">
                 <el-option
@@ -92,14 +92,13 @@ import { getDictionary } from '@/api/common.js'
         methods: {
                 //获取  服务和车辆 类型列表
             init(){
-                Promise.all([getDictionary(this.cartype),getDictionary(this.servicetype)]).then( resArr => {
-                    console.log('111111',resArr)
+                Promise.all([getDictionary(this.cartype)]).then( resArr => {
                     resArr[0].data.map(item => {
                         this.optionsCarType.push(item)
                     })
-                    resArr[1].data.map(item => {
-                        this.optionsServiceType.push(item)
-                    })
+                    // resArr[1].data.map(item => {
+                    //     this.optionsServiceType.push(item)
+                    // })
                 })
             },
             //模糊查询 分类名称或者code

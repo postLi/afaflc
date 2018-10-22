@@ -9,16 +9,17 @@
                             <div class="area_left_server area_server">
                                 <h4><span>* </span> 选择标准服务类型</h4>
                                 <div class="eltree_search chooseclassfy">
-                                    <el-form-item class="chose" label="选择服务分类：" prop="serivceCode">
-                                        <el-select v-model="standForm.serivceCode" clearable placeholder="请选择" @change="choseStyle">
+                                    <el-form-item class="chose" label="当前服务分类：" >
+                                        <!-- <el-select v-model="standForm.serivceCode" clearable placeholder="请选择" @change="choseStyle">
                                             <el-option
                                                 v-for="item in optionsService"
                                                 :key="item.id"
                                                 :label="item.name"
                                                 :value="item.code"
-                                                :disabled="item.disabled">
+                                                :disabled="item.code != 'AF01701'">
                                             </el-option>
-                                        </el-select>
+                                        </el-select> -->
+                                        <el-input class="showName" v-model="standForm.serviceName" disabled></el-input>
                                     </el-form-item>
                                     <el-form-item class="chose" label="选择车辆类型：" prop="carType">
                                         <el-select v-model="standForm.carType" clearable placeholder="请选择" @change="choseStyle">
@@ -138,12 +139,14 @@
                     <el-row>
                         <el-col :span="12">
                             <el-form-item class="nowCity" label="当前城市：" :label-width="formLabelWidth" prop="carType">
-                                <span class="onlyShow">{{reviseForm.areaName}}</span>
+                                <!-- <span class="onlyShow">{{reviseForm.areaName}}</span> -->
+                                <el-input disabled v-model="reviseForm.areaName"></el-input>
                             </el-form-item>
                         </el-col>
                         <el-col :span="12">
                             <el-form-item class="nowCity" label="当前服务分类：" :label-width="formLabelWidth" prop="carType">
-                                <span class="onlyShow">{{reviseForm.serviceName}}</span>
+                                <!-- <span class="onlyShow">{{reviseForm.serviceName}}</span> -->
+                                <el-input disabled v-model="reviseForm.serviceName"></el-input>
                             </el-form-item>
                         </el-col>
                     </el-row>
@@ -151,12 +154,14 @@
                     <el-row>
                         <el-col :span="12">
                             <el-form-item class="nowCity" label="当前车辆类型：" :label-width="formLabelWidth" prop="carType">
-                                <span class="onlyShow">{{reviseForm.carTypeName}}</span>
+                                <!-- <span class="onlyShow">{{reviseForm.carTypeName}}</span> -->
+                                <el-input disabled v-model="reviseForm.carTypeName"></el-input>
                             </el-form-item>
                         </el-col>
                         <el-col :span="12">
                             <el-form-item class="nowCity" label="车长：" :label-width="formLabelWidth" prop="carType">
-                                <span class="onlyShow">{{reviseForm.carLength + '*' + reviseForm.carWidth + '*' + reviseForm.carHeight + 'M'}}</span>
+                                <!-- <span class="onlyShow">{{reviseForm.carLength + '*' + reviseForm.carWidth + '*' + reviseForm.carHeight + 'M'}}</span> -->
+                                <el-input disabled :value="reviseForm.carLength + '*' + reviseForm.carWidth + '*' + reviseForm.carHeight + 'M'"></el-input>
                             </el-form-item>
                         </el-col>
                     </el-row>
@@ -340,13 +345,16 @@ export default {
             Promise.all([DicServiceType(),DicCartype(),aflcProvinceCode()]).then(resArr => {
                 // console.log('resArr:',resArr)
                 this.optionsService = resArr[0].data;
+                resArr[0].data.forEach(el => {
+                    el.code == 'AF01701' ?  this.standForm.serviceName =  el.name : '小货车'
+                })
+                this.standForm.serivceCode = 'AF01701';
                 this.optionsCar = resArr[1].data;
                 this.cityTree = resArr[2].data;
             })
         },
         choseStyle(val) {
-            console.log(val)
-            if (this.standForm.serivceCode && this.standForm.carType){
+            if (this.standForm.carType){
                 GetCarStyle(this.standForm.serivceCode, this.standForm.carType).then(res => {
                     console.log('cartype',res)
                     if (res.data.length > 0) {
@@ -363,8 +371,11 @@ export default {
                             this.form[i] = ''
                         }
                     }
-                }).catch(res => {
-                    
+                }).catch(err => {
+                    this.$message({
+                        type: 'info',
+                        message: '操作失败，原因：' + err.errorInfo ? err.errorInfo : err.text
+                    })
                 })
             }else{
                
@@ -436,10 +447,10 @@ export default {
                             })
                             this.close();
                          }).catch(err => {
-                             this.$message({
+                            this.$message({
                                  type: 'info',
                                  message: '操作失败，原因：' + err.errorInfo ? err.errorInfo : err.text
-                             })
+                            })
                             this.btnShow = false;
                          })
                     } 
@@ -568,6 +579,13 @@ export default {
                                         margin-left: 10px; 
                                         text-align: left;
                                     }
+                                    .showName{
+                                        margin:5px 0;
+                                        padding-left: 80px;
+                                        .el-input__inner{
+                                            width: 150px;
+                                        }
+                                    }
                                     .el-select{
                                         margin:5px 0;
                                         padding-left: 80px;
@@ -644,7 +662,7 @@ export default {
                 padding: 0 20px 30px;
                 border-bottom: 1px solid #d0d7e5;
                 .el-input{
-                    width: 110px;
+                    width: 250px;
                     .el-input__inner{
                         font-size: 12px;
                         color: #3e9ff1;

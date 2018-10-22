@@ -3,20 +3,22 @@
         <el-dialog :title="formtitle" :close-on-click-modal="false" :visible="dialogStandarPrice" @close="close" v-loading="loading">
             <el-form  :model="standForm" :label-width="formLabelWidth" :rules="newrules"  ref="ruleForm">
                 <div class="chooseinfo">
-                    <el-form-item class="chooseinfo-item" :label="isModify ? '当前服务分类：' :'选择服务分类：'"   prop="serivceCode">
-                        <el-radio-group v-model="standForm.serivceCode" v-if="!isModify">
+                    <el-form-item class="chooseinfo-item" label="当前服务分类：">
+                        <!-- <el-radio-group v-model="standForm.serivceCode" v-if="!isModify">
                             <el-radio  v-for="(obj,key) in optionsService" :label="obj.code" :key='key'>{{obj.name}}</el-radio>
-                        </el-radio-group>
-                        <span class="onlyShow" v-else>{{standForm.serviceName}}</span>
+                        </el-radio-group> -->
+                        <el-input v-model="standForm.serviceName" disabled></el-input>
+                        <!-- <span class="onlyShow" >{{standForm.serviceName}}</span> -->
                     </el-form-item>
                     <el-form-item class="chooseinfo-item" :label="isModify ? '当前车辆类型：' : '选择车辆类型：'"   prop="carType">
                         <el-radio-group v-model="standForm.carType" v-if="!isModify">
                             <el-radio   v-for="(obj,key) in optionsCar" :label="obj.code" :key='key'>{{obj.name}}</el-radio>
                         </el-radio-group>   
-                        <span class="onlyShow" v-else>{{standForm.carTypeName}}</span>
+                        <!-- <span class="onlyShow" v-else>{{standForm.carTypeName}}</span> -->
+                        <el-input  v-else v-model="standForm.carTypeName" disabled></el-input>
 
                     </el-form-item>
-                    <el-form-item class="chooseinfo-item" :label="isModify ? '当前车辆规格：':'选择车辆规格：'" >
+                    <el-form-item class="chooseinfo-item" :label="isModify ? '当前车辆规格：':'可选车辆规则：'" >
                         <el-checkbox-group v-model="specList">
                             <el-checkbox v-for="obj in optionsCarTypeM" :label="obj.code" :key="obj.name" >{{obj.name}}</el-checkbox>
                         </el-checkbox-group>
@@ -163,6 +165,7 @@ export default {
             optionsCarTypeM:[],
             standForm:{
                 serivceCode: '',
+                serviceName:'',
                 carType: '',
                 spec: '',
                 carLength: '',
@@ -249,7 +252,11 @@ export default {
     methods:{
         init(){
             Promise.all([DicServiceType(),DicCartype(),DicCarType()]).then(resArr => {
-                this.optionsService = resArr[0].data;
+                // this.optionsService = resArr[0].data;
+                resArr[0].data.forEach(el => {
+                    el.code == 'AF01701' ?  this.standForm.serviceName =  el.name : '小货车'
+                    console.log(this.standForm.serviceName)
+                })
                 this.optionsCar = resArr[1].data;
                 this.optionsCarTypeM = resArr[2].data;
             }).catch(err => {
@@ -274,7 +281,7 @@ export default {
                     })
                     let spec = this.specList.join(',');
                     let specName = this.specListName.join(',');
-                    let forms = objectMerge2({},this.standForm,{spec:spec,specName:specName});
+                    let forms = objectMerge2({},this.standForm,{spec:spec,specName:specName,serivceCode:'AF01701'});
                     console.log(forms)
                     if(!this.isModify){
                         standarFunction = data_NewClassfy(forms);
@@ -342,6 +349,9 @@ export default {
                         // padding: 20px 10px;
                         .el-input{
                             width: 150px;
+                        }
+                        .is-disabled{
+                            width: 100%;
                         }
                         .el-radio-group{
                             display: inline-block;

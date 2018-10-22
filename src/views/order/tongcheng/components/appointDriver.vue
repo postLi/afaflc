@@ -23,8 +23,8 @@
                             {{searchInfo.if}}
                         </el-form-item>
                         <el-form-item class="btnChoose fr"  style="margin-left:0;">
-                            <el-button type="primary" :size="btnsize" plain @click="pointSearch('search')">搜索</el-button>
-                            <el-button type="info" :size="btnsize" plain @click="pointSearch('clear')">清空</el-button>
+                            <el-button type="primary" :size="btnsize" plain @click="pointSearch('search','point')">搜索</el-button>
+                            <el-button type="info" :size="btnsize" plain @click="pointSearch('clear','point')">清空</el-button>
                         </el-form-item>
                     </el-form>
                     <div class="pointInfo">
@@ -182,16 +182,16 @@ export default {
             this.init();
         },
         //初始化选择项数据
-        init(){
+        init(point){
             this.searchInfo.orderSerial = this.orderSerial;
-
-            getDictionary(this.carType).then(res => {
-                // console.log('```````',res)
-                this.optionsCarType = res.data;
-            });
+            
+            if(!point){
+                getDictionary(this.carType).then(res => {
+                    this.optionsCarType = res.data;
+                });
+            }
 
             nearDriverList(this.searchInfo).then(res => {
-                // console.log('111111',res)
                 this.dataTotal = res.data.length;
                 let pageStart =  (this.page - 1) * this.pagesize;
                 let pageEnd = this.page * this.pagesize;
@@ -211,10 +211,10 @@ export default {
         clickDetails(row, event, column){
             this.$refs.multipleTable.toggleRowSelection(row);
         },
-        pointSearch(type){
+        pointSearch(type,point){
             switch(type){
                 case 'search':
-                    this.init();
+                    this.init(point);
                     break;
                 case 'clear':
                     this.iftequan = false;

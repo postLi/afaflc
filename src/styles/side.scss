@@ -4,6 +4,10 @@
   }
   .columnsContainer{
     display: flex;
+    display:-webkit-box;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: -webkit-flex;
     flex-flow:row;
     position: relative;
     height: 100%;
@@ -75,12 +79,16 @@
   /*右侧栏*/
   .side_right {
     flex: 1;
-    flex-wrap:wrap;
+    // flex-wrap:wrap;
     padding: 10px 10px 0px 10px !important;
     height: 100%;
     overflow-x: hidden;
-    flex-direction: column;
     display: flex;
+    display:-webkit-box;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    flex-direction: column;
     position: relative;
   }
     .classify_searchinfo{

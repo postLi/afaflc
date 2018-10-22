@@ -25,7 +25,7 @@
                         </div>
                         <el-form-item label="免费："   prop="freeTime">
                             <el-input  
-                                v-number-only:point
+                                v-numberOnly
                                 placeholder="请输入内容"
                                 maxlength="5"
                                 v-model="standForm.freeTime"
@@ -38,12 +38,12 @@
                         <h4><span>* </span> 选择服务分类</h4>
                         <div class="lesscommon">
                             <el-checkbox-group v-model="serverCheckList">
-                                <el-checkbox v-for="item in optionsService" :label="item.code" :key="item.id" >{{item.name}}</el-checkbox>
+                                <el-checkbox v-for="item in optionsService" :label="item.code" :key="item.id" :disabled="item.code != 'AF01701'" >{{item.name}}</el-checkbox>
                             </el-checkbox-group>
                         </div>
                         <el-form-item label="每间隔："  prop="intervalTime">
                             <el-input  
-                                v-number-only:point
+                                v-numberOnly
                                 maxlength="5"
                                 placeholder="请输入内容"
                                 v-model="standForm.intervalTime"
@@ -62,7 +62,7 @@
                         <el-form-item label="超时费用：" label-width="90px" prop="timeOutstripPrice">
                             <el-input  
                                 maxlength="5"
-                                v-number-only:point
+                                v-numberOnly
                                 placeholder="请输入内容"
                                 v-model="standForm.timeOutstripPrice"
                                 clearable>
@@ -94,19 +94,22 @@
                     <el-row>
                         <el-col :span="24">
                             <el-form-item label="当前城市：" prop="carType">
-                                <span class="onlyShow">{{reviseForm.areaName}}</span>
+                                <!-- <span class="onlyShow">{{reviseForm.areaName}}</span> -->
+                                   <el-input  v-model="reviseForm.areaName" disabled></el-input>
                             </el-form-item>
                         </el-col>
                     </el-row>
-                    <el-row>
+                    <el-row :gutter="20">
                         <el-col :span="12">
                             <el-form-item label="当前服务分类：" prop="serviceName">
-                                <span class="onlyShow">{{reviseForm.serviceName}}</span>
+                                <!-- <span class="onlyShow">{{reviseForm.serviceName}}</span> -->
+                                   <el-input  v-model="reviseForm.serviceName" disabled></el-input>
                             </el-form-item>
                         </el-col>
                         <el-col :span="12">
                             <el-form-item label="当前车辆类型：" prop="carTypeName">
-                                <span class="onlyShow">{{reviseForm.carTypeName}}</span>
+                                <!-- <span class="onlyShow">{{reviseForm.carTypeName}}</span> -->
+                                   <el-input  v-model="reviseForm.carTypeName" disabled></el-input>
                             </el-form-item>
                         </el-col>
                     </el-row>
@@ -215,7 +218,7 @@ export default {
                 timeOutstripPrice:'',
                 cityId:''
             },
-            serverCheckList:[],//服务分类
+            serverCheckList:['AF01701'],//服务分类
             carCheckList:[],//车辆类型
             defaultProps: {
                 label: 'name',
@@ -298,7 +301,7 @@ export default {
                     });
                 }else{
                     this.$refs.ruleForm.validate((valid) => {
-                        let serviceCode = this.serverCheckList.join(',');
+                        // let serviceCode = this.serverCheckList.join(',');
                         let carCode = this.carCheckList.join(',');
                         if (valid) {
                             this.btnShow = true;
@@ -306,7 +309,7 @@ export default {
                             getNodeId.forEach(el =>{
                                 cityArr.push(el.code);
                             })
-                            let forms = objectMerge2({},this.standForm,{cityId:cityArr.join(',')},{serviceCode:serviceCode,carType:carCode})
+                            let forms = objectMerge2({},this.standForm,{cityId:cityArr.join(',')},{serviceCode:'AF01701',carType:carCode})
                             console.log(forms)
                             data_NewOrChange(forms).then(res =>{
                                  this.close();

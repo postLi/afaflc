@@ -79,21 +79,26 @@ import vregion from '@/components/vregion/Region'
             //模糊查询 分类名称或者code
             handleSearch(type){
                 // console.log(this.chooseTime)
+                let searchObj;
                 switch(type){
                     case 'search':
-                        const searchObj = Object.assign({}, this.searchInfo);
-                        this.$emit('change', searchObj)
+                        this.searchInfo.startOrderDate = this.chooseTime[0];
+                        this.searchInfo.endOrderDate = this.chooseTime[1];
+                        searchObj = Object.assign({}, this.searchInfo);
                         break;
                     case 'clear':
-                        this.searchInfo = {
+                        this.searchInfo  = {
                             belongCity:'',//区域
                             shipperName:'',//货主
                             startOrderDate:'',//下单起始时间
                             endOrderDate:'',//下单结束时间
                             orderSerial:'',//订单号
                         }
+                        this.chooseTime = [];
+                        searchObj = Object.assign({}, this.searchInfo);
                         break;
                 }
+                this.$emit('change', searchObj)
             },
         }
     }

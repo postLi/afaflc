@@ -14,7 +14,7 @@
       </div>
     </div>
     <LockScreen></LockScreen>
-    <!-- <setApiUrl /> -->
+    <setApiUrl />
 
   </div>
 </template>

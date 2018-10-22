@@ -61,7 +61,7 @@
                             sortable
                             label="标准起步价">
                                 <template slot-scope="scope">
-                                    {{scope.row.standardPrice + '吨,' + ' ' + scope.row.standardKm + '方'}}
+                                    {{scope.row.standardPrice + '元' + ' （' + scope.row.standardKm + '公里）'}}
                                 </template>
                             </el-table-column>
                             <el-table-column

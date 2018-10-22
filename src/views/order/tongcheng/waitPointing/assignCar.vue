@@ -1,6 +1,6 @@
 <template>
     <div class="identicalStyle clearfix plantOrigin" v-loading="loading">
-            <searchInfo></searchInfo>
+            <searchInfo @change="getSearchParam"></searchInfo>
             <div class="classify_info">
                 <div class="btns_box">
                     <el-button type="primary" icon="el-icon-edit" plain @click="handleSearch('appoint')" :size="btnsize">指派司机</el-button>
@@ -333,11 +333,15 @@ export default{
                 // this.dialogFormVisible_details = true;
                 // this.DetailsOrderSerial = item.orderSerial;
               this.$router.push({ name: '订单详情', query: { orderSerial: item.orderSerial }})
-
             },
           shuaxin() {
               this.firstblood()
-            }
+            },
+             getSearchParam(obj) {
+                console.log(obj)
+                this.searchInfo = Object.assign(this.searchInfo, obj);
+                this.firstblood();
+            },
         }
     }
 </script>
