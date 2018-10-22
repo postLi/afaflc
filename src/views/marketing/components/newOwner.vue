@@ -415,6 +415,9 @@ export default {
             if(!val){
             this.$refs['formAll'].resetFields();
             this.$emit('getData');
+            if(this.$refs.area){
+            this.$refs.area.clearData();
+            }
             }
             else{
             this.getMoreInformation();

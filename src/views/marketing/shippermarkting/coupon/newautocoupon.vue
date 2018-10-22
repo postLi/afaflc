@@ -164,7 +164,7 @@
                  </el-select>
                  </div>  
              <div class="ht_table_td table_th12" @click="changeInput(keys)">
-            <GetCityList  v-model="formAllData.aflcCouponList[keys].areaName"  @returnStr="getStr1"></GetCityList>
+            <GetCityList  v-model="formAllData.aflcCouponList[keys].areaName"  @returnStr="getStr1"  ref="area1" ></GetCityList>
               </div>
              <div class="ht_table_td table_th13">
                  <el-select v-model="formAllData.aflcCouponList[keys].ifvouchersuperposition" clearable placeholder="请选择" >
@@ -378,6 +378,11 @@ export default {
             areaName:null,
             ifvouchersuperposition:null,
             }]
+            this.$refs.area.clearData();
+            for(var i=0;i<this.$refs.area1.length;i++)
+            {
+                this.$refs.area1[i].clearData();
+            }
             }
             else{
              this.getMoreInformation();
@@ -387,11 +392,11 @@ export default {
   },
   methods:{
     getStr(val){
-                this.formAll.areaCode= val.area.code
-                this.formAll.areaName = val.area.name
-                this.formAll.province = val.province.name
-                this.formAll.city = val.city.name
-                this.formAll.area = val.area.name
+                this.formAllData.areaCode= val.area.code
+                this.formAllData.areaName = val.area.name
+                this.formAllData.province = val.province.name
+                this.formAllData.city = val.city.name
+                this.formAllData.area = val.area.name
             },  
     getStr1(val){
                 this.formAllData.aflcCouponList[this.inputKey].areaCode= val.area.code

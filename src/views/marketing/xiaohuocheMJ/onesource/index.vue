@@ -451,7 +451,10 @@ export default {
              this.pickaddAera='';
              this.pickAera=[{}];
              this.destinationAera=[{}];
-            this.$refs.multipleTable.clearSelection();                
+            this.$refs.multipleTable.clearSelection();  
+             if(this.$refs.area1){
+             this.$refs.area1.clearData()
+             }
              }
              }
         },
@@ -462,7 +465,10 @@ export default {
              this.pickaddAera='';
              this.pickAera=[{}];
              this.destinationAera=[{}];
-            this.$refs.multipleTable.clearSelection();                
+             this.$refs.multipleTable.clearSelection();     
+             if(this.$refs.area2){
+             this.$refs.area2.clearData()
+             }           
              }
              }
         }
@@ -716,6 +722,7 @@ export default {
                     serivceCode:null,
                     districtName: null,
                 },
+                 this.$refs.area.clearData();
                 this.firstblood();
             },
          //详情表查询

@@ -236,7 +236,8 @@ export default{
             endTime: '', // 下单结束时间
             areaCodeList: []
           }
-          this.searchCreatTime = ''
+          // this.searchCreatTime = ''
+          this.$refs.area.clearData()
           this.firstblood()
         case 'outExce':
           if (this.searchCreatTime) {

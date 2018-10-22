@@ -132,8 +132,8 @@ export default {
         formLabelWidth:'120px',
         formAll:{
             tradeName:null,
-            areaName:[],
-            areaCode: [],
+            areaName:null,
+            areaCode: null,
             province:null,
             city:null,
             area:null,
@@ -171,11 +171,12 @@ export default {
   },
   methods:{
     getStr(val){
-                this.formAll.areaCode = val.area.code
+        console.log('11',val)
+                this.formAll.areaCode= val.area.code
                 this.formAll.areaName = val.area.name
-                this.formAll.province = val.area.province
-                this.formAll.city = val.area.city
-                this.formAll.area = val.area.area
+                this.formAll.province = val.province.name
+                this.formAll.city = val.city.name
+                this.formAll.area = val.area.name
             },  
    openDialog:function(){
          this.dialogFormVisible_add = true;
@@ -196,8 +197,10 @@ export default {
     add_data(){
        this.$refs['formAll'].validate(valid=>{
         if(valid){
+            
         let forms={
             areaCode:this.formAll.areaCode,
+            areaName:this.formAll.areaName,
             province:this.formAll.province,
             city:this.formAll.city,
             area:this.formAll.area,
@@ -206,6 +209,7 @@ export default {
             tradeOwner:this.formAll.tradeOwner,
             ownerPhone:this.formAll.ownerPhone,                  
         }
+        console.log('ffd',forms)
         this.dialogFormVisible_add = false;
         data_get_aflcTradeArea_create(forms).then(res=>{
            this.$message.success('新增成功');

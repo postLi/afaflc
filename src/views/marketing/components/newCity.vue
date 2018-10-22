@@ -272,6 +272,9 @@ export default {
           this.$refs['formAll'].resetFields()
           this.areaStatus = null 
           this.$emit('getData')
+          if(this.$refs.area){
+          this.$refs.area.clearData();
+          }
         }
         else{
           this.getMoreInformation()
