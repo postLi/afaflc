@@ -150,7 +150,7 @@ export default {
                 })
             }
             else{
-
+                this.changeforms.bindingEndDate +=  1* 24 * 60 * 60 * 1000 - 1000;
                 aflcShipperPlatformUpdata(this.changeforms).then(res=>{
                     // console.log(res)
                     this.$emit('renovate')

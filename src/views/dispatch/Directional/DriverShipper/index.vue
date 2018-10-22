@@ -25,7 +25,6 @@
                         stripe
                         border
                         height="100%"
-                        :default-sort = "{prop: 'shipperInfo', order: 'descending'}"
                         @selection-change = "getinfomation"
                         tooltip-effect="dark"
                         @row-click="clickDetails"

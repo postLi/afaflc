@@ -26,7 +26,6 @@
                     ref="multipleTable"
                     stripe
                     border
-                    :default-sort = "{prop: 'startLocation', order: 'descending'}"
                     height="100%"
                     style="width: 100%">
                         <el-table-column

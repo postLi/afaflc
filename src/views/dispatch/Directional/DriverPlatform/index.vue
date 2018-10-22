@@ -24,7 +24,6 @@
                         :data="tableDataTree"
                         stripe
                         border
-                        :default-sort = "{prop: 'shipperInfo', order: 'descending'}"
                         height="100%"
                         @selection-change = "getinfomation"
                         tooltip-effect="dark"

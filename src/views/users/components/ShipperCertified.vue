@@ -500,7 +500,8 @@ export default {
                 margin-bottom: 15px;
                 img{
                     width: 100%;
-                    height: 100%;
+                    // height: 100%;
+                    height: 300px;
                 }
             }
             .data_pic_common{

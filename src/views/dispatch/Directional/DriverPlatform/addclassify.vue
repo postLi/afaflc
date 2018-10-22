@@ -241,6 +241,7 @@ export default {
                     })
             }
             else{
+                this.forms.bindingEndDate +=  1* 24 * 60 * 60 * 1000 - 1000;
                 data_NewData(this.forms).then(res=>{
                     console.log(res)
                     this.$alert('操作成功', '提示', {

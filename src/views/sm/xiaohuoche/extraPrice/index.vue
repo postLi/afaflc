@@ -25,7 +25,6 @@
                         ref="multipleTable"
                         :data="tableData"
                         stripe
-                        :default-sort = "{prop: 'serviceName', order: 'descending'}"
                         border
                         @selection-change = "getinfomation"
                         tooltip-effect="dark"
