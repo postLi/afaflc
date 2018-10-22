@@ -11,7 +11,7 @@
         <el-form-item label="登录账号" :label-width="formLabelWidth" prop="username">
           <el-tooltip class="item" effect="dark" placement="top" :enterable="false" :manual="true" :value="tooltip" tabindex="-1">
             <div slot="content">账号可以由字母、数字组成<br/>长度范围2~15个字符</div>
-            <el-input v-model.trim="form.username" auto-complete="off" @focus="tooltip = true" @blur="tooltip = false"></el-input>
+            <el-input v-model.trim="form.username" auto-complete="off" @focus="tooltip = true" @blur="tooltip = false"  :disabled="isModify"></el-input>
           </el-tooltip>
         </el-form-item>
         <el-form-item label="密码" :label-width="formLabelWidth" prop="password" v-if="!isModify">

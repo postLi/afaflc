@@ -19,14 +19,14 @@
                         @row-click="clickDetails"
                         style="width: 100%"> 
                         <el-table-column
-                                        label="选择"
-                                        type="selection"
-                                        width="50">
+                            label="选择"
+                            type="selection"
+                            width="50">
                         </el-table-column>
-                    <el-table-column label="序号" sortable  width="80">
-                                        <template slot-scope="scope">
-                                        {{ (page - 1)*pagesize + scope.$index + 1 }}
-                                        </template>
+                        <el-table-column label="序号" sortable  width="80">
+                            <template slot-scope="scope">
+                            {{ (page - 1)*pagesize + scope.$index + 1 }}
+                            </template>
                         </el-table-column>  
                         <el-table-column
                             prop="orderSerial"
@@ -35,7 +35,7 @@
                             sortable
                             >
                                 <template  slot-scope="scope">
-                                        <h4 class="needMoreInfo" @click="pushOrderSerial(scope.row)">{{ scope.row.workSerial}}</h4>
+                                    <h4 class="needMoreInfo" @click="pushOrderSerial(scope.row)">{{ scope.row.workSerial}}</h4>
                                 </template>
                         </el-table-column>
                         <el-table-column

@@ -118,7 +118,7 @@
         currentIndex: 0,
         checked1: true,
         popTitle: '部门',
-        loading: true,
+        loading: false,
         getMentInfo: [
           {dictName: '', id: ''}
         ],
@@ -354,8 +354,6 @@
     bottom: auto;
     min-width: 486px;
     max-width: 486px;
-    display: flex;
-    flex-direction: column;
   }
 
   .dep-maintain .addRelationPop-content {
@@ -368,7 +366,7 @@
   }
 
   .depmain-div {
-    margin: 10px 0 0 10px;
+    margin: 10px 10px 0 10px;
   }
 
   /*添加*/
@@ -376,7 +374,6 @@
   .depmain-add{
       display: flex;
       flex-direction: column;
-
   }
   .add-fixed {
     background: rgba(255, 255, 255, 1);
@@ -446,31 +443,31 @@
 
   }
 
-
-
   .depmain-add .el-input .el-input__inner {
     height: 30px;
+    line-height: 30px;
+
   }
 
   .depmain-add .depmain-list {
         padding-top: 5px;
         overflow: hidden;
-        ul {
-        li:nth-of-type(1) {
-            // margin-top: 30px;
-        }
-    }
+    //     ul {
+    //         li:nth-of-type(1) {
+    //         margin-top: 30px;
+    //     }
+    // }
   }
 
   /*edit*/
   .depmain-edit .el-input {
     width: 340px;
     float: left;
-
   }
 
   .depmain-edit .el-input .el-input__inner {
     height: 30px;
+    line-height: 30px;
     padding-left: 8px;
     //  border: 1px solid transparent;
   }
