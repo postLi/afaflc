@@ -2,7 +2,7 @@
      <div class="cashAuditingDetail commoncss">
       <el-button :type="btntype" :value="value" :plain="plain" :icon="icon" @click="openDialog()"><span :class="editType=='view'?'BtnInfo':''">{{btntext}}</span ></el-button>
       <el-dialog  :visible="dialogFormVisible_add" :before-close="change" :title="btntitle">
-        <el-form ref="formAll" :model="formAll" :inline="true">
+        <el-form ref="formAll" :model="formAll">
             <el-row>
                 <el-col :span="12">
                     <el-form-item label="用户姓名 ：" :label-width="formLabelWidth" >
@@ -135,25 +135,18 @@ export default {
   },
   methods:{
    openDialog:function(){
-          if(!this.params.length){
-               this.$message.warning('请选择您要操作的用户');
-               return
-          }
-          else if(this.params.length == 0 && this.editType !== 'add'){
-               this.$message.warning('请选择您要操作的用户');
-               return false
-          }else if (this.params.length > 1 && this.editType !== 'add') {
-                this.$message({
-                    message: '每次只能操作单条数据~',
-                    type: 'warning'
-                })
-                this.$emit('getData') 
-                return false
-          }
-          else{
              this.dialogFormVisible_add = true;
-             this.formData = this.params[0]
-          }
+             this.formData = this.params
+             if(this.params.auditOpinion=='审核通过')
+             {
+                this.formAll.auditOpinion = '1'
+             }
+             else if(this.params.auditOpinion=='审核不通过'){
+                this.formAll.auditOpinion = '2'
+             }
+            else{
+                this.formAll.auditOpinion = '0'
+            }
     },
    change:function(){
       this.dialogFormVisible_add = false;
@@ -169,10 +162,11 @@ export default {
         if(valid){
         this.dialogFormVisible_add = false;
         data_aflcExtractCashList_update(this.params[0].extractSerial,this.formAll).then(res=>{
-           this.changeList();
             this.$message.success('修改成功');
+            this.$emit('getData') 
         }).catch(res=>{
             this.$message.error('修改失败')
+            this.$emit('getData') 
         })
        }
        })
@@ -188,5 +182,8 @@ export default {
     .el-button{
         padding: 6px 15px 6px;
         }
+    .el-form-item__content{
+        text-align: left;
+    }        
 }
 </style>

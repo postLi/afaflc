@@ -110,6 +110,10 @@
                             width="180"
                             sortable
                             >
+                        <template  slot-scope="scope">
+                                    <h4 class="needMoreInfo" @click="pushOrderSerial(scope.row)">{{ scope.row.orderSerial}}</h4>
+                        </template>
+
                         </el-table-column>
                         <el-table-column
                           align = "center"
@@ -241,7 +245,7 @@ import { parseTime,formatTime,pickerOptions2 } from '@/utils/index.js'
                   incomeExpendType:null,
                 },
                 btnsize:'mini',
-                payTime:null,
+                payTime:[],
                 sizes: [20, 50, 100],
                 currentPage4:1,
                 page:1,
@@ -254,20 +258,20 @@ import { parseTime,formatTime,pickerOptions2 } from '@/utils/index.js'
                     {code:'AF01703',name:'城际'},                    
                 ],
                 optionsAccountType2: [
-                    {code:'AF01403',name:'订单多退'},
-                    {code:'AF01404',name:'理赔收入'},
-                    {code:'AF01407',name:'退运费'},
-                    {code:'AF01408',name:'运费收入'},
-                    {code:'AF01411',name:'支付运费'},
-                    {code:'AF01412',name:'支付理赔'},
+                    {code:'AF01403',name:'货主订单多退'},
+                    {code:'AF01404',name:'货主理赔收入'},
+                    {code:'AF01407',name:'货主退运费'},
+                    {code:'AF01408',name:'车主运费收入'},
+                    {code:'AF01503',name:'车主支付理赔'},
                     {code:'AF01414',name:'平台抽佣'},
-                    {code:'AF01501',name:'支付运费'},
-                    {code:'AF01503',name:'支付理赔'},
+                    {code:'AF01501',name:'货主支付运费'},
+                    {code:'AF01509',name:'平台支付理赔'},
                     {code:'AF01505',name:'优惠券'},
-                    {code:'AF01508',name:'运费收入'},
-                    {code:'AF01509',name:'理赔收入'},
-                    {code:'AF01510',name:'订单多退'},
-                    {code:'AF01511',name:'退运费'},
+                    {code:'AF01411',name:'平台支付运费'},
+                    {code:'AF01508',name:'平台运费收入'},
+                    {code:'AF01412',name:'平台理赔收入'},
+                    {code:'AF01510',name:'平台订单多退'},
+                    {code:'AF01511',name:'平台退运费'},
                     {code:'AF01515',name:'优惠金'},
                     {code:'AF01516',name:'奖励金'},                    
                     ],
@@ -317,7 +321,7 @@ import { parseTime,formatTime,pickerOptions2 } from '@/utils/index.js'
                   tradeStartTime:null,
                   tradeEndTime:null,
                 };
-                  this.payTime=null
+                  this.payTime=[]
                 this.load();
             },
              //点击选中当前行
@@ -362,7 +366,10 @@ import { parseTime,formatTime,pickerOptions2 } from '@/utils/index.js'
             this.pagesize = obj.pageSize
             this.load()
             },
-         
+     // 详情弹窗
+    pushOrderSerial(item) {
+      this.$router.push({ name: '订单详情', query: { orderSerial: item.orderSerial }})
+    }
         }
     }
 </script>

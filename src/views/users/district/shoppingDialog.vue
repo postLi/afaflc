@@ -2,7 +2,7 @@
      <div class="shoppingDialog commoncss">
       <el-button :type="btntype" :value="value" :plain="plain" :icon="icon" @click="openDialog()"><span :class="editType=='view'?'BtnInfo':''">{{btntext}}</span ></el-button>
       <el-dialog  :visible="dialogFormVisible_add" :before-close="change" :title="btntitle" top=5vh v-dialogDrag>
-        <el-form ref="formAll" :model="formAll" :rules="rulesForm" :inline="true">
+        <el-form ref="formAll" :model="formAll" :rules="rulesForm">
             <el-row>
                 <el-col :span="12">
                     <el-form-item label="商圈名称 ：" :label-width="formLabelWidth" prop="tradeName">
@@ -294,5 +294,9 @@ export default {
         padding: 7px 15px 7px;
         }
     }
+    .el-form-item__content{
+        text-align: left;
+    }        
+
 }
 </style>

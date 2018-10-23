@@ -2,7 +2,7 @@
     <div class="identicalStyle clearfix transactionRecharge" style="height:100%">
           <el-form :inline="true"  class="demo-ruleForm classify_searchinfo">
             <el-form-item label="电话号码：">
-                  <el-input v-model="formAllData.mobile" placeholder="请输入内容" clearable></el-input>
+                  <el-input v-model="formAllData.mobile" placeholder="请输入内容" clearable maxlength="11" class="Input"></el-input>
             </el-form-item>
             <el-form-item label="充值渠道：">
                   <el-select v-model="formAllData.rechargeChannel" clearable placeholder="请选择" >
@@ -42,7 +42,11 @@
                         @change='cTime'
                         >
                     </el-date-picker>
-            </el-form-item>                  
+            </el-form-item>    
+            <el-form-item label="流水号：">
+                  <el-input v-model="formAllData.rechargeSerial" placeholder="请输入内容" clearable class="Input"></el-input>
+            </el-form-item>
+
             <el-form-item class="fr">       
           <el-button type="primary" plain @click="seach_data" :size="btnsize" icon="el-icon-search">搜索</el-button> 
           <el-button type="info" plain :size="btnsize" @click="clearSearch"  icon="fontFamily aflc-icon-qingkong">清空</el-button>
@@ -63,7 +67,7 @@
             </el-table-column> 
             <el-table-column  label="用户账号" prop="mobile" sortable>
             </el-table-column>
-            <el-table-column  label="充值金额" prop="enterSum" sortable>
+            <el-table-column  label="充值金额" prop="rechargeSum" sortable>
             </el-table-column>            
             <el-table-column  label="充值赠送" prop="giveSum" sortable>
             </el-table-column>
@@ -138,6 +142,7 @@ import {data_financeList,data_GetServerType,data_GetServerType2,data_GetServerTy
                    rechargeChannel:null,
                    rechargeWay:null,
                    rechargeTime:null,
+                   rechargeSerial:null,
                },
             }
         },
@@ -180,6 +185,7 @@ import {data_financeList,data_GetServerType,data_GetServerType2,data_GetServerTy
                    rechargeTime:null,
                    startRechargeTime:null,
                    endRechargeTime:null,
+                   rechargeSerial:null,
                },
          this.firstblood();
         },
@@ -201,5 +207,6 @@ import {data_financeList,data_GetServerType,data_GetServerType2,data_GetServerTy
     .el-range-separator{
         margin-top: -12px;
     }
+    .Input{width: 180px!important}
 }
 </style>

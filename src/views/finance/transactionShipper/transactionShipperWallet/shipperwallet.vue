@@ -84,7 +84,7 @@
             <el-tab-pane label="充值记录"  name="second">
         <div style="height:100%;" class="identicalStyle">
        <el-form :inline="true"  class="demo-ruleForm classify_searchinfo">
-               <el-form-item  label="收款方式："> 
+               <el-form-item  label="充值时间："> 
                     <el-date-picker
                         is-range
                         unlink-panels
@@ -167,7 +167,7 @@
                <el-form-item  label="优惠券名称："> 
                     <el-input v-model="formAllData3.couponName" clearable></el-input>
                </el-form-item>  
-               <el-form-item  label="卷码状态："> 
+               <el-form-item  label="券码状态："> 
                         <el-select v-model="formAllData3.couponStatus" placeholder="请选择" >
                             <el-option
                                 v-for="item in couponStatusList"

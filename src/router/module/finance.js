@@ -90,7 +90,7 @@ export default {
             meta: { role: ['admin'], title: '车主账户详情',stitle: '详情',  noCache: false }
         },
         {
-            path: '/finance/transactionCar/transactionCarWallet/Carwallet', 
+            path: '/finance/transactionShipper/transactionShipperWallet/shipperwallet', 
             name: '货主账户详情',  
             hidden: true,
             component: _import('finance/transactionShipper/transactionShipperWallet/shipperwallet'), 
