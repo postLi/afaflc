@@ -188,6 +188,7 @@
                     belongCity:null,
                     belongCityName:null,
                 }
+             this.$refs.area.clearData()   
              this.firstblood()    
             },
 

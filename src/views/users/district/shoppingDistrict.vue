@@ -150,6 +150,8 @@ export default {
                 this.formAllData.tradeName=null,
                 this.formAllData.tradeOwner=null,
                 this.firstblood();
+                this.$refs.area.clearData();
+                
     },
     getSelection(val){
      console.log('选中内容',val)

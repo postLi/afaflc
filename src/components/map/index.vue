@@ -87,14 +87,9 @@ export default {
       if (this.popVisible) {
         this.thepos = this.pos
         this.thename = this.name
-        this.loadMap()
-      } else {
-      // 隐藏时，摧毁地图对象
-        this.exit()
-      }
-    },
-    loadMap() {
-      if (window.AMap) {
+        // this.loadMap()
+        this.$nextTick(()=>{
+        if (window.AMap) {
         this.initMap()
       } else {
         loadJs('https://webapi.amap.com/maps?v=1.4.8&key=73bdb8428fbfe511ed6c5f3328b5734b&plugin=AMap.Autocomplete,AMap.PlaceSearch,AMap.Geocoder').then(() => {
@@ -103,7 +98,23 @@ export default {
          // })
         })
       }
+        })
+      } else {
+      // 隐藏时，摧毁地图对象
+        this.exit()
+      }
     },
+    // loadMap() {
+    // if (window.AMap) {
+    //     this.initMap()
+    //   } else {
+    //     loadJs('https://webapi.amap.com/maps?v=1.4.8&key=73bdb8428fbfe511ed6c5f3328b5734b&plugin=AMap.Autocomplete,AMap.PlaceSearch,AMap.Geocoder').then(() => {
+    //      // loadJs('//webapi.amap.com/ui/1.0/main.js').then(() => {
+    //       this.initMap()
+    //      // })
+    //     })
+    //   }
+    // },
     close(done) {
       this.$emit('update:popVisible', false)
       if (typeof done === 'function') {

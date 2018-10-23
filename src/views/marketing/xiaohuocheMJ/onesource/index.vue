@@ -311,7 +311,7 @@ export default {
     data(){
         //    选择省市校验
             const belongCityNameValidator = (rule, val, cb) => {
-             if(!this.$refs.area1.selectedOptions[0]) {
+             if(!val) {
                     cb(new Error('请选择所在地'))
                 }
              else{

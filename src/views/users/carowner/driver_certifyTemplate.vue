@@ -232,21 +232,6 @@
                 </div>
                 <div class="data_pic_callingcode data_pic_c">
                     <el-tooltip class="item" effect="dark" content="点击图片查看原图" placement="top">
-                  <div class="uploadImgBox"><img  class="picURL" :src="templateModel.idCardFile ? templateModel.idCardFile : defaultImg" v-showPicture/></div>
-                    </el-tooltip>
-                    <h2>身份证</h2>
-                    <el-form-item prop="radio3">
-                      <el-radio-group v-model="radio4" @change="pictureTypeChange">
-                        <el-radio label="上传合格">上传合格</el-radio><br />
-                        <el-radio label="不清晰">不清晰</el-radio><br />
-                        <el-radio label="内容不符">内容不符</el-radio>
-                      </el-radio-group>
-                    </el-form-item>
-                </div>
-                 </div>
-                <div class="data_pic">
-                <div class="data_pic_callingcode data_pic_c">
-                    <el-tooltip class="item" effect="dark" content="点击图片查看原图" placement="top">
                   <div class="uploadImgBox"> <img  class="picURL" :src="templateModel.takeIdCardFile ? templateModel.takeIdCardFile : defaultImg" v-showPicture/></div>
                     </el-tooltip>
                     <h2>手持身份证</h2>
@@ -258,6 +243,35 @@
                       </el-radio-group>
                     </el-form-item>
                 </div>
+                 </div>
+                <div class="data_pic">
+                <div class="data_pic_callingcode data_pic_c">
+                    <el-tooltip class="item" effect="dark" content="点击图片查看原图" placement="top">
+                  <div class="uploadImgBox"><img  class="picURL" :src="templateModel.idCardFile ? templateModel.idCardFile : defaultImg" v-showPicture/></div>
+                    </el-tooltip>
+                    <h2>身份证正面</h2>
+                    <el-form-item prop="radio3">
+                      <el-radio-group v-model="radio4" @change="pictureTypeChange">
+                        <el-radio label="上传合格">上传合格</el-radio><br />
+                        <el-radio label="不清晰">不清晰</el-radio><br />
+                        <el-radio label="内容不符">内容不符</el-radio>
+                      </el-radio-group>
+                    </el-form-item>
+                </div>
+                <div class="data_pic_callingcode data_pic_c">
+                    <el-tooltip class="item" effect="dark" content="点击图片查看原图" placement="top">
+                  <div class="uploadImgBox"><img  class="picURL" :src="templateModel.idCardFileOpposite ? templateModel.idCardFileOpposite : defaultImg" v-showPicture/></div>
+                    </el-tooltip>
+                    <h2>身份证反面</h2>
+                    <el-form-item prop="radio3">
+                      <el-radio-group v-model="radio6" @change="pictureTypeChange">
+                        <el-radio label="上传合格">上传合格</el-radio><br />
+                        <el-radio label="不清晰">不清晰</el-radio><br />
+                        <el-radio label="内容不符">内容不符</el-radio>
+                      </el-radio-group>
+                    </el-form-item>
+                </div>
+
             </div>
           </el-form>
           <div slot="footer" class="dialog-footer">
@@ -517,7 +531,8 @@ export default {
         radio2:'',
         radio3:'',
         radio4:'',
-        radio5:'',        
+        radio5:'',   
+        radio6:'',     
         rulesForm:{
         driverMobile:{validator: mobileValidator, trigger:'change',required:true,},
         driverName:{validator: driverNameValidator, trigger:'change',required:true,},
@@ -543,7 +558,7 @@ export default {
   },
   computed: {
             pictureValue () {
-            return {'车辆45°':this.radio1 ,'行驾证': this.radio2,'驾驶证':this.radio3 , '身份证':this.radio4 ,'手持身份证':this.radio5}
+            return {'车辆45°':this.radio1 ,'行驾证': this.radio2,'驾驶证':this.radio3 , '手持身份证':this.radio5,'身份证正面':this.radio4,'身份证反面':this.radio6}
             }
         },  
   mounted(){
@@ -558,11 +573,16 @@ export default {
                 this.templateModel.cityCode=null
                 this.templateModel.areaCode=null
                 this.$emit('getData') 
-                this.radio1 = null
-                this.radio2 = null
-                this.radio3 = null
-                this.radio4 = null
-                this.radio5 = null
+                this.radio1 = ''
+                this.radio2 = ''
+                this.radio3 = ''
+                this.radio4 = ''
+                this.radio5 = ''
+                this.radio6 = ''
+                if(this.$refs.area)
+                {
+                this.$refs.area.clearData()
+                }
             }
             else{
                 this.getMoreInformation()
@@ -658,14 +678,18 @@ export default {
         }
       },
             completeData(){
-                  if(this.radio5==''){
-                      this.$message.info('请勾选手持身份证照片审核结果');
+                  if(this.radio6==''){
+                      this.$message.info('请勾选身份证反面照片审核结果');
                       return false
-                  }    
+                  }   
                   if(this.radio4==''){
                       this.$message.info('请勾选身份证照片审核结果');
                       return false
-                  }                 
+                  }         
+                  if(this.radio5==''){
+                      this.$message.info('请勾选手持身份证正面照片审核结果');
+                      return false
+                  }    
                   if(this.radio3==''){
                       this.$message.info('请勾选驾驶证照片审核结果');
                       return false
@@ -691,7 +715,7 @@ export default {
                 this.$refs['templateModel'].validate((valid)=>{
                 console.log(this.radio1,this.radio2,this.radio3,this.radio4,this.radio5)
                 if(valid){
-                    if(this.radio1=='上传合格'&&this.radio2=='上传合格'&&this.radio3=='上传合格'&&this.radio4=='上传合格'&&this.radio5=='上传合格')
+                    if(this.radio1=='上传合格'&&this.radio2=='上传合格'&&this.radio3=='上传合格'&&this.radio4=='上传合格'&&this.radio5=='上传合格'&&this.radio6=='上传合格')
                     {
                      this.$message.error('图片审核中图片全部合格，不能进行审核不通过处理')
                     }
@@ -725,7 +749,7 @@ export default {
                     else{
                 this.$refs['templateModel'].validate((valid)=>{
                     if(valid){
-                    if(this.radio1=='上传合格'&&this.radio2=='上传合格'&&this.radio3=='上传合格'&&this.radio4=='上传合格'&&this.radio5=='上传合格')
+                    if(this.radio1=='上传合格'&&this.radio2=='上传合格'&&this.radio3=='上传合格'&&this.radio4=='上传合格'&&this.radio5=='上传合格'&&this.radio6=='上传合格')
                     {
                         this.templateModel.carLength=parseFloat(this.templateModel.carLength).toFixed(2)
                         this.templateModel.carWidth=parseFloat(this.templateModel.carWidth).toFixed(2)

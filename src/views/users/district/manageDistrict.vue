@@ -174,6 +174,7 @@ export default {
                 this.formAllData.areaName = null;
                 this.formAllData.partnerCompany=null,
                 this.firstblood();
+                this.$refs.area.clearData();
     },
     getSelection(val){
      console.log('选中内容',val)

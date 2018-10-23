@@ -168,6 +168,9 @@ export default {
                  this.formAll.address = null;
                  this.selectFlag = null;
                  this.$emit('getData') 
+                 if(this.$refs.area){
+                     this.$refs.area.clearData();
+                 }
             }
         },
     },
@@ -175,13 +178,12 @@ export default {
   mounted(){
   },
   methods:{
-
     getStr(val){
-                this.formAll.areaCode = val.area.code
+                this.formAll.areaCode= val.area.code
                 this.formAll.areaName = val.area.name
-                this.formAll.province = val.area.province
-                this.formAll.city = val.area.city
-                this.formAll.area = val.area.area
+                this.formAll.province = val.province.name
+                this.formAll.city = val.city.name
+                this.formAll.area = val.area.name
             },  
 
    openDialog:function(){

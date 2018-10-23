@@ -381,6 +381,9 @@ export default {
                 this.companyId = null,
                 this.companyNameObject.companyName = null;
                 this.$emit('getData') 
+                 if(this.$refs.area){
+                this.$refs.area.clearData();
+                 }
                 }
                 else{
                 this.getMoreInformation();
@@ -558,6 +561,7 @@ export default {
       this.dialogFormVisible_add = false;
        },
     getMoreInformation(){
+        this.restaurants=[]
          let FromData = {
              companyName:null,
         }

@@ -102,7 +102,7 @@
                  </div>
                  <div class="manageDistrict_tr">
                      <div class="manageDistrict_td table_w1" @click="changeInput(keys)">
-                      <GetCityList ref="area" v-model="formAll.aflcPartnerAreaList[keys].areaName"  @returnStr="getStr1"></GetCityList>
+                      <GetCityList ref="area1" v-model="formAll.aflcPartnerAreaList[keys].areaName"  @returnStr="getStr1"></GetCityList>
                       </div>
                      <div class="manageDistrict_td table_w2">
                     <el-date-picker
@@ -370,6 +370,16 @@ export default {
                 this.areaCode =null,
                 this.companyId = null,
                 this.companyNameObject.companyName = null;
+                this.inputdisabled = false
+                 if(this.$refs.area){
+                     this.$refs.area.clearData();
+                 }
+                 if(this.$refs.area1){
+                  for(var i=0;i< this.$refs.area1.length;i++)
+                  {
+                    this.$refs.area1[i].clearData();
+                  }
+                 }
                 }
                 else{
                 this.getMoreInformation();
@@ -455,6 +465,7 @@ export default {
              companyName:null,
         }
         data_get_aflcPartner_findAuthCompany(1, 1000, FromData).then(res=>{
+            this.restaurants= []
          let restaurantsData = res.data;
          restaurantsData.map(res=>{
              this.restaurants.push({

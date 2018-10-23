@@ -300,6 +300,7 @@
                     carNumber:null,
                     accountStatus:null
                 }
+                this.$refs.area.clearData()
                 this.firstblood()
             },
             // 判断选中与否
