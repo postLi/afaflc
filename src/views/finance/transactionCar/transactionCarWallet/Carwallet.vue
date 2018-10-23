@@ -308,7 +308,7 @@ export default {
             this.payTime = null
             this.formAllData={
             userId: this.$route.query.accountId,
-            accountType:'AF00101',
+            accountType:'AF00102',
             payWay:'AF0041801',
             tradeType:null,
             incomeExpendType:null,

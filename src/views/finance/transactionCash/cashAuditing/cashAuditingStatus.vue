@@ -40,30 +40,6 @@
                </el-form-item>     
             </el-form>
           	<div class="classify_info">
-          <div class="btns_box">
-                   <cashAuditingDetail
-                    btntext="查看"
-                    :plain="true"
-                    btntype="primary"
-                    editType="edit"
-                    btntitle="查看"
-                    icon="el-icon-tickets"
-                    @getData="getDataList"
-                    :params="selectRowData"
-                    > 
-                    </cashAuditingDetail>
-                   <cashAuditingEdit
-                    btntext="编辑"
-                    :plain="true"
-                    btntype="primary"
-                    editType="edit"
-                    btntitle="编辑"
-                    icon="el-icon-edit"
-                    @getData="getDataList"
-                    :params="selectRowData"
-                    > 
-                    </cashAuditingEdit>
-          </div>
             <div class="info_news">    
             <el-table style="width: 100%" stripe border height="100%" ref="multipleTable" highlight-current-row  tooltip-effect="dark" :data="tableDataAll" @selection-change="getSelection" @row-click="clickDetails">
               <el-table-column
@@ -106,7 +82,35 @@
                </template>
             </el-table-column>    
             <el-table-column  label="处理时间" prop="auditTime">
-            </el-table-column>                                                
+            </el-table-column>     
+                        <el-table-column  label="操作" >
+            <template  slot-scope="scope">
+             <span v-if="scope.row.auditOpinion=='待处理'">
+                   <cashAuditingEdit
+                    btntext="编辑"
+                    :plain="true"
+                    btntype="primary"
+                    editType="edit"
+                    btntitle="编辑"
+                    @getData="getDataList"
+                    :params="scope.row"
+                    > 
+                    </cashAuditingEdit>
+                     </span>
+                   <span v-else>
+                   <cashAuditingDetail
+                    btntext="查看"
+                    :plain="true"
+                    btntype="primary"
+                    editType="edit"
+                    btntitle="查看"
+                    @getData="getDataList"
+                    :params="scope.row"
+                    > 
+                    </cashAuditingDetail>
+            </span>
+            </template>
+            </el-table-column>                                              
             </el-table> 
         	</div> 
          <!-- 页码 -->
