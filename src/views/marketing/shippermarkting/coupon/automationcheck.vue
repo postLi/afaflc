@@ -454,6 +454,7 @@ export default {
         couponStatus:'',
         activityId:this.templateItem.id,
        }
+       this.grantTimeAll = null;
         this.firstblood();
    },
    openDialog(){

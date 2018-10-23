@@ -176,6 +176,7 @@
                     belongCity:null,
                     belongCityName:null,                    
                 }
+            this.$refs.area.clearData()    
             this.firstblood()    
             },
             //点击选中当前行

@@ -157,6 +157,7 @@ export default {
                  this.$refs['formAll'].resetFields();
                  this.formAll.address = null;
                  this.selectFlag = null;
+                 this.$refs.area.clearData();
             }
         },
     },

@@ -224,18 +224,6 @@
                     </el-form-item>
                   </el-col>
                   <el-col :span="12">
-                    <el-form-item label="上传车主身份证照片：" :label-width="formLabelWidth" prop="idCardFile" class="b10">
-                       <div class="upload" v-if="editType == 'view'">
-                        <el-tooltip class="item" effect="dark" content="点击图片查看原图" placement="top">
-                      <img :src='templateModel.idCardFile ? templateModel.idCardFile : defaultImg' alt="" v-showPicture>
-                        </el-tooltip>
-                      </div>
-                        <upload class="licensePicture" tip="（必须为jpg/png并且小于5M）" v-model="templateModel.idCardFile" v-else/>
-                    </el-form-item>
-                  </el-col>
-              </el-row>
-              <el-row>
-                  <el-col :span="12">
                     <el-form-item label="上传车主个人形象照：" :label-width="formLabelWidth" prop="takeIdCardFile" class="b10">
                      <div class="upload" v-if="editType == 'view'">
                          <el-tooltip class="item" effect="dark" content="点击图片查看原图" placement="top">
@@ -245,6 +233,29 @@
                        <upload class="licensePicture" tip="（必须为jpg/png并且小于5M）" v-model="templateModel.takeIdCardFile" v-else/>
                     </el-form-item>
                   </el-col>
+              </el-row>
+              <el-row>
+                  <el-col :span="12">
+                    <el-form-item label="上传车主身份证正面照片：" :label-width="formLabelWidth" prop="idCardFile" class="b10">
+                       <div class="upload" v-if="editType == 'view'">
+                        <el-tooltip class="item" effect="dark" content="点击图片查看原图" placement="top">
+                      <img :src='templateModel.idCardFile ? templateModel.idCardFile : defaultImg' alt="" v-showPicture>
+                        </el-tooltip>
+                      </div>
+                        <upload class="licensePicture" tip="（必须为jpg/png并且小于5M）" v-model="templateModel.idCardFile" v-else/>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="12">
+                    <el-form-item label="上传车主身份证反面照片：" :label-width="formLabelWidth" prop="idCardFileOpposite" class="b10">
+                       <div class="upload" v-if="editType == 'view'">
+                        <el-tooltip class="item" effect="dark" content="点击图片查看原图" placement="top">
+                      <img :src='templateModel.idCardFileOpposite ? templateModel.idCardFileOpposite : defaultImg' alt="" v-showPicture>
+                        </el-tooltip>
+                      </div>
+                        <upload class="licensePicture" tip="（必须为jpg/png并且小于5M）" v-model="templateModel.idCardFileOpposite" v-else/>
+                    </el-form-item>
+                  </el-col>
+
               </el-row>
     
             </el-form>
@@ -519,20 +530,30 @@ export default {
                 cb()
             }
         }
-
-        // 上传车主身份证照片校验 
-        const idCardFileValidator = (rule,val,cb)=>{
+        // 上传车主个人形象照校验 
+        const takeIdCardFileValidator = (rule,val,cb)=>{
             if(!val){
-            cb(new Error('请上传车主身份证照片'))
+            cb(new Error('请上传车主个人形象照'))
             }
             else{
                 cb()
             }
         }   
-        // 上传车主个人形象照校验 
-        const takeIdCardFileValidator = (rule,val,cb)=>{
+
+        // 上传车主身份证正面照片校验 
+        const idCardFileValidator = (rule,val,cb)=>{
             if(!val){
-            cb(new Error('请上传车主个人形象照'))
+            cb(new Error('请上传车主身份证正面照片'))
+            }
+            else{
+                cb()
+            }
+        }   
+
+        // 上传车主身份证反面照片校验 
+        const idCardFileOppositeValidator = (rule,val,cb)=>{
+            if(!val){
+            cb(new Error('请上传车主身份证反面照片'))
             }
             else{
                 cb()
@@ -568,6 +589,7 @@ export default {
                 drivingLicenceFile:null,
                 drivingPermitFile:null,
                 idCardFile:null,
+                idCardFileOpposite:null,
                 takeIdCardFile:null,
                 driverId:null,
                 provinceCode:null,
@@ -581,7 +603,7 @@ export default {
                 return time.getTime() < Date.now();
                 }
             },
-            formLabelWidth:'155px',
+            formLabelWidth:'190px',
             driverTemplateDialogFlag: false,// 弹框控制的控制
             rulesForm:{
             driverMobile:{validator: mobileValidator, trigger:'change',required:true,},
@@ -600,6 +622,7 @@ export default {
             drivingPermitFile:{validator: drivingPermitFileValidator, trigger:'change',required:true,},
             drivingLicenceFile:{validator: drivingLicenceFileValidator, trigger:'change',required:true,},
             idCardFile:{validator: idCardFileValidator, trigger:'change',required:true,},
+            idCardFileOpposite:{validator: idCardFileOppositeValidator, trigger:'change',required:true,},
             takeIdCardFile:{validator: takeIdCardFileValidator, trigger:'change',required:true,},
             rewardGrade:{validator: rewardGradeValidator, trigger:'change',required:true,},
             commisionLevel:{validator: commisionLevelValidator, trigger:'change',required:true,},
@@ -618,6 +641,10 @@ export default {
                 this.templateModel.cityCode=null
                 this.templateModel.areaCode=null
                 this.$emit('getData')
+                if(this.$refs.area)
+                {
+                this.$refs.area.clearData()
+                }
             }
             else{
             this.getMoreInformation()
