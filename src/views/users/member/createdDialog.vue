@@ -207,7 +207,7 @@
 
             <el-row :span="24">
                 <el-col :span="8">
-                    <el-form-item label="上传营业执照照片：" label-width="165px" prop="businessLicenceFile">
+                    <el-form-item label="上传营业执照照片：" label-width="180px" prop="businessLicenceFile">
                     </el-form-item>
                     <el-form-item  label-width="20px" prop="businessLicenceFile">
                         <div class="upload">
@@ -219,7 +219,7 @@
                     </el-form-item>
                 </el-col>
                 <el-col :span="8">
-                    <el-form-item label="上传公司或者档口照片：" label-width="165px" prop="companyFacadeFile">
+                    <el-form-item label="上传公司或者档口照片：" label-width="180px" prop="companyFacadeFile">
                     </el-form-item>
                      <el-form-item  label-width="20px" prop="companyFacadeFile">
                         <div class="upload">
@@ -232,7 +232,7 @@
                     </el-form-item>
                 </el-col>
                 <el-col :span="8">
-                    <el-form-item label="上传发货人名片照片：" label-width="165px" prop="shipperCardFile" >
+                    <el-form-item label="上传发货人名片照片：" label-width="180px" prop="shipperCardFile" >
                     </el-form-item>
                     <el-form-item  label-width="20px" prop="takeIdCardFile" >
                         <div class="upload">

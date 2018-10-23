@@ -89,6 +89,7 @@ import vregion from '@/components/vregion/Region'
                     case 'clear':
                         this.searchInfo  = {
                             belongCity:'',//区域
+                            belongCityName:'',
                             shipperName:'',//货主
                             startOrderDate:'',//下单起始时间
                             endOrderDate:'',//下单结束时间

@@ -15,7 +15,6 @@
                         stripe
                         border
                         align = "center"
-                        :default-sort = "{prop: 'orderSerial', order: 'descending'}"
                         height="100%"
                         @selection-change = "getinfomation"
                         tooltip-effect="dark"
@@ -41,36 +40,42 @@
                         </el-table-column>
                         <el-table-column
                             prop="orderType"
+                            :show-overflow-tooltip="true"
                             sortable
                             label="服务分类"
                             width="110">
                         </el-table-column>
                         <el-table-column
                             prop="belongCity"
+                            :show-overflow-tooltip="true"
                             sortable
                             label="区域"
                             width="180">
                         </el-table-column>
                         <el-table-column
                             prop="shipperMobile"
+                            :show-overflow-tooltip="true"
                             sortable
                             label="货主账号"
                             width="120">
                         </el-table-column>
                         <el-table-column
                             prop="shipperName"
+                            :show-overflow-tooltip="true"
                             sortable
                             label="货主姓名"
                             width="120">
                         </el-table-column>
                         <el-table-column
                             prop="usedCarType"
+                            :show-overflow-tooltip="true"
                             sortable
                             label="所需车型"
                             width="120">
                         </el-table-column>
                         <el-table-column
                             prop="totalAmount"
+                            :show-overflow-tooltip="true"
                             sortable
                             label="运费总额（元）"
                             width="150">

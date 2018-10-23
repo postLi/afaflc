@@ -196,6 +196,11 @@ export default {
                 let pageStart =  (this.page - 1) * this.pagesize;
                 let pageEnd = this.page * this.pagesize;
                 this.tableData_point = res.data.slice(pageStart,pageEnd);
+            }).catch(err => {
+                this.$message({
+                    type: 'info',
+                    message: '操作失败，原因：' + (err.errorInfo ? err.errorInfo : err.text)
+                })
             })
 
         },

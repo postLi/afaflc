@@ -44,7 +44,6 @@
                         stripe
                         border
                         align = "center"
-                        :default-sort = "{prop: 'orderSerial', order: 'descending'}"
                         height="100%"
                         @selection-change = "getinfomation"
                         tooltip-effect="dark"
@@ -76,36 +75,42 @@
                         </el-table-column>
                         <el-table-column
                             sortable
+                            :show-overflow-tooltip="true"
                             prop="belongCity"
                             label="区域"
                             width="180">
                         </el-table-column>
                         <el-table-column
                             sortable
+                            :show-overflow-tooltip="true"
                             prop="shipperMobile"
                             label="货主账号"
                             width="120">
                         </el-table-column>
                         <el-table-column
                             sortable
+                            :show-overflow-tooltip="true"
                             prop="shipperName"
                             label="货主姓名"
                             width="120">
                         </el-table-column>
                         <el-table-column
                             sortable
+                            :show-overflow-tooltip="true"
                             prop="usedCarType"
                             label="所需车型"
                             width="120">
                         </el-table-column>
                          <el-table-column
                             sortable
+                            :show-overflow-tooltip="true"
                             prop="totalAmount"
                             label="运费总额（元）"
                             width="150">
                         </el-table-column> 
                         <el-table-column
                             sortable
+                            :show-overflow-tooltip="true"
                             prop="useCarTime"
                             label="用车时间"
                             width="160">
@@ -116,6 +121,7 @@
                                 </template>
                         </el-table-column>
                          <el-table-column
+                            :show-overflow-tooltip="true"
                             sortable
                             prop="orderClass"
                             label="订单类型"
@@ -126,6 +132,7 @@
                         </el-table-column>
                         <el-table-column
                             sortable
+                            :show-overflow-tooltip="true"
                             prop="payStatus"
                             label="付款状态"
                             width="120">
@@ -303,6 +310,7 @@ import vregion from '@/components/vregion/Region'
                     case 'clear':
                         this.searchInfo = {
                             belongCity:'',//区域
+                            belongCityName:'',
                             shipperName:'',//货主
                             startOrderDate:'',//下单起始时间
                             endOrderDate:'',//下单结束时间

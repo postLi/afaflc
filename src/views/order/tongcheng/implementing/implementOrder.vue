@@ -14,7 +14,6 @@
                         border
                         align = "center"
                         height="100%"
-                        :default-sort = "{prop: 'orderSerial', order: 'descending'}"
                         @selection-change = "getinfomation"
                         tooltip-effect="dark"
                         @row-click="clickDetails"
@@ -45,30 +44,35 @@
                         </el-table-column>
                         <el-table-column
                             sortable
+                            :show-overflow-tooltip="true"
                             prop="belongCity"
                             label="区域"
                             width="180">
                         </el-table-column>
                         <el-table-column
                             sortable
+                            :show-overflow-tooltip="true"
                             prop="shipperMobile"
                             label="货主账号"
                             width="120">
                         </el-table-column>
                         <el-table-column
                             sortable
+                            :show-overflow-tooltip="true"
                             prop="shipperName"
                             label="货主姓名"
                             width="120">
                         </el-table-column>
                         <el-table-column
                             sortable
+                            :show-overflow-tooltip="true"
                             prop="usedCarType"
                             label="所需车型"
                             width="120">
                         </el-table-column>
                          <el-table-column
                             sortable
+                            :show-overflow-tooltip="true"
                             prop="totalAmount"
                             label="运费总额（元）"
                             width="150">

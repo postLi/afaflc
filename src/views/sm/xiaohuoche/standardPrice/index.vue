@@ -5,7 +5,7 @@
                 <div class="btns_box">
                     <el-button type="primary" :size="btnsize" plain icon="el-icon-circle-plus" @click="handleClick('add')" v-has:SERVICE_SMALL_CAR_STANDARD_PRICE_ADD>新增</el-button>
                     <el-button type="primary" :size="btnsize" plain icon="el-icon-edit" @click="handleClick('revise')" v-has:SERVICE_SMALL_CAR_STANDARD_PRICE_UPDATE>修改</el-button>
-                    <el-button type="primary" :size="btnsize" plain icon="el-icon-delete" @click="handleClick('delet')" v-has:SERVICE_SMALL_CAR_STANDARD_PRICE_DELETE>删除</el-button>
+                    <!-- <el-button type="primary" :size="btnsize" plain icon="el-icon-delete" @click="handleClick('delet')" v-has:SERVICE_SMALL_CAR_STANDARD_PRICE_DELETE>删除</el-button> -->
                     <el-button type="primary" :size="btnsize" plain icon="el-icon-bell" @click="handleClick('status')" v-has:SERVICE_SMALL_CAR_STANDARD_PRICE_USE>启用/禁用</el-button>
                 </div>
                 <div class="info_news">

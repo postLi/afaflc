@@ -17,9 +17,9 @@
             </div>
         </el-form>
             <div class="classify_info">
-                <!-- <div class="btns_box">
-                    <el-button type="primary" @click="handleNew">发布专线</el-button>  
-                </div> -->
+                <div class="btns_box">
+                    <el-button type="primary" plain icon="el-icon-circle-plus" :size="btnsize" @click="handleNew">发布专线</el-button>  
+                </div>
                 <div class="info_news">
                     <el-table
                     :data="tableData"
@@ -229,7 +229,7 @@ export default {
     },
         // 新增网点
     handleNew() {
-      this.$router.push({ name: '发布物流专线' })
+      this.$router.push({ name: '发布专线' })
     },
         // 修改
     handleEdit(row) {

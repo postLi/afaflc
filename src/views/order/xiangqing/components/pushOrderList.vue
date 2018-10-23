@@ -3,6 +3,7 @@
         <el-table
             :data="tableData"
             border
+            height="100%"
             style="width: 100%">
             <el-table-column
                 type="index"
@@ -142,7 +143,7 @@ export default {
 
 <style rel="stylesheet/scss" lang="scss" scoped>
     .pushorder{
-        
+        height: 100%;
     }
     
 </style>

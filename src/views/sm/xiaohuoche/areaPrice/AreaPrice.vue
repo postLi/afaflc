@@ -26,8 +26,8 @@
                                             <el-option
                                                 v-for="item in optionsCar"
                                                 :key="item.id"
-                                                :label="item.name"
-                                                :value="item.code"
+                                                :label="item.carTypeName"
+                                                :value="item.carType"
                                                 :disabled="item.disabled">
                                             </el-option>
                                         </el-select>
@@ -238,6 +238,7 @@
 <script>
 
 import { DicServiceType,DicCartype,GetCarStyle,aflcProvinceCode } from '@/api/common.js'
+import { data_GetInformation} from '@/api/server/standardPrice.js'
 import { objectMerge2, parseTime } from '@/utils/'
 import { data_NewOrChange, data_OnlyChange } from '@/api/server/areaPrice.js'
 export default {
@@ -320,6 +321,11 @@ export default {
                 areaOutstripPrice:[
                     {required:true,message:"请输入区域超里程费",trigger:'blur'},
                 ]
+            },
+            data:{
+                "currentPage":1 ,
+                "pageSize": 1000000,
+                "vo": {}
             }
         }
     },
@@ -342,14 +348,14 @@ export default {
     },
     methods:{
         init(){
-            Promise.all([DicServiceType(),DicCartype(),aflcProvinceCode()]).then(resArr => {
+            Promise.all([DicServiceType(),data_GetInformation(1,100000,{}),aflcProvinceCode()]).then(resArr => {
                 // console.log('resArr:',resArr)
                 this.optionsService = resArr[0].data;
                 resArr[0].data.forEach(el => {
                     el.code == 'AF01701' ?  this.standForm.serviceName =  el.name : '小货车'
                 })
                 this.standForm.serivceCode = 'AF01701';
-                this.optionsCar = resArr[1].data;
+                this.optionsCar = resArr[1].data.list;
                 this.cityTree = resArr[2].data;
             })
         },
@@ -421,10 +427,10 @@ export default {
                             })
                             this.close();
                          }).catch(err => {
-                             this.$message({
-                                 type: 'info',
-                                 message: '操作失败，原因：' + err.errorInfo ? err.errorInfo : err.text
-                             })
+                            this.$message({
+                                type: 'info',
+                                message: '操作失败，原因：' + (err.errorInfo ? err.errorInfo : err.text)
+                            })
                             this.btnShow = false;
                          })
                     } else if(!ifCity){

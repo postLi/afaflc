@@ -32,7 +32,7 @@
                             label="工单编号"
                             width="230" sortable>
                                 <template  slot-scope="scope">
-                                    <h4 class="needMoreInfo" @click="pushOrderSerial(scope.row)">{{ scope.row.workSerial}}</h4>
+                                    {{ scope.row.workSerial}}
                                 </template>
                         </el-table-column>
                         <el-table-column
@@ -51,8 +51,9 @@
                         </el-table-column>
                         <el-table-column
                             prop="title"
+                            :show-overflow-tooltip="true"
                             label="提交主题"
-                            width="100"
+                            width="150"
                             sortable
                             >
                         </el-table-column>
@@ -67,14 +68,14 @@
                         <el-table-column
                             prop="complainTime"
                             label="提交时间"
-                            width="200"
+                            width="160"
                             sortable
                             >
                         </el-table-column>
                          <el-table-column
                             prop="complainName"
                             label="提交人"
-                            width="100"
+                            width="120"
                             sortable
                             >
                         </el-table-column> 
@@ -105,14 +106,14 @@
                         <el-table-column
                             prop="platformTime"
                             label="处理时间"
-                            width="200"
+                            width="160"
                             sortable
                             >
                         </el-table-column>
                         <el-table-column
                         prop="replyName"
                             label="处理人"
-                            width="100"
+                            width="120"
                             sortable
                             >
                         </el-table-column>
@@ -127,13 +128,13 @@
                             </template>
                         </el-table-column><el-table-column
                             label="操作"
-                            width="220"
+                            width="200"
                             sortable
                             >
                             <template  slot-scope="scope">
                                 <!-- <el-button-group> -->
-                                    <el-button type="primary" plain icon="el-icon-document" @click="handleClick(scope.row,'reply')">回复</el-button>
-                                    <el-button type="primary" plain icon="el-icon-delete" @click="handleClick(scope.row,'delet')">删除</el-button>
+                                    <el-button type="primary" plain icon="el-icon-document" :size="btnsize" @click="handleClick(scope.row,'reply')">回复</el-button>
+                                    <el-button type="primary" plain icon="el-icon-delete" :size="btnsize" @click="handleClick(scope.row,'delet')">删除</el-button>
                                 <!-- </el-button-group> -->
                             </template>
                         </el-table-column>
@@ -164,6 +165,7 @@ import Reply from './replyComponent'
         },
         data(){
             return{
+                btnsize:'mini',
                 currentRow:{},
                 serviceType:'plant',
                 loading: true,//加载

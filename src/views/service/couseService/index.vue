@@ -35,7 +35,7 @@
                             sortable
                             >
                                 <template  slot-scope="scope">
-                                    <h4 class="needMoreInfo" @click="pushOrderSerial(scope.row)">{{ scope.row.workSerial}}</h4>
+                                    {{ scope.row.workSerial}}
                                 </template>
                         </el-table-column>
                         <el-table-column

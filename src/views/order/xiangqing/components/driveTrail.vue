@@ -29,7 +29,7 @@
             <div class="info_tab_footer">共计:{{ totalCount }} <div class="show_pager"> <Pager :total="totalCount" @change="handlePageChange" :sizes="sizes"/></div> </div>    
         </div>
         <div class="tarilMap fr">
-            <DriverTrack :trackInfo="listInformation"></DriverTrack>
+            <DriverTrack :trackInfo="trackInfo"></DriverTrack>
         </div>
     </div>
 </template>
@@ -63,6 +63,7 @@ export default {
             sizes:[22,30,50],
             listInformation:[],
             tableData:[],
+            trackInfo:[],
         };
     },
     watch:{
@@ -86,6 +87,7 @@ export default {
             getOrderCarTrailList(this.page,this.pagesize,trailform).then(res => {
                 console.log('details',res)
                 this.listInformation = res.data.list;
+                this.trackInfo = res.data.list.reverse();
                 this.loading = false;
                 this.nowTable();
             })

@@ -1,6 +1,7 @@
 <template>
     <div class="identicalStyle clearfix waitpayment" v-loading="loading">
             <el-form :inline="true" :model="searchInfo" ref="ruleForm" class="demo-ruleForm classify_searchinfo">
+                {{searchInfo.belongCityName}}
                     <el-form-item label="区域" prop="pointName">
                         <vregion :ui="true" @values="regionChange" class="form-control">
                             <el-input v-model="searchInfo.belongCityName" placeholder="请选择出发地" clearable></el-input>
@@ -46,7 +47,6 @@
                         border
                         align = "center"
                         height="100%"
-                        :default-sort = "{prop: 'orderSerial', order: 'descending'}"
                         @selection-change = "getinfomation"
                         tooltip-effect="dark"
                         @row-click="clickDetails"
@@ -71,36 +71,42 @@
                         </el-table-column>
                         <el-table-column
                             prop="orderType"
+                            :show-overflow-tooltip="true"
                             sortable
                             label="服务分类"
                             width="110">
                         </el-table-column>
                         <el-table-column
                             sortable
+                            :show-overflow-tooltip="true"
                             prop="belongCity"
                             label="区域"
                             width="180">
                         </el-table-column>
                         <el-table-column
                             sortable
+                            :show-overflow-tooltip="true"
                             prop="shipperMobile"
                             label="货主账号"
                             width="120">
                         </el-table-column>
                         <el-table-column
                             sortable
+                            :show-overflow-tooltip="true"
                             prop="shipperName"
                             label="货主姓名"
                             width="120">
                         </el-table-column>
                         <el-table-column
                             sortable
+                            :show-overflow-tooltip="true"
                             prop="usedCarType"
                             label="所需车型"
                             width="120">
                         </el-table-column>
                          <el-table-column
                             sortable
+                            :show-overflow-tooltip="true"
                             prop="totalAmount"
                             label="运费总额（元）"
                             width="150">
@@ -118,6 +124,7 @@
                         </el-table-column>
                          <el-table-column
                             sortable
+                            :show-overflow-tooltip="true"
                             prop="orderClass"
                             label="订单类型"
                             width="120">
@@ -265,6 +272,8 @@ export default{
                 } else {
                   this.searchInfo.belongCity = d.province.code
                 }
+      console.log('this.searchInfo.belongCityName',this.searchInfo.belongCityName)
+
     },
     getValue(obj) {
       return obj ? obj.value : ''
@@ -314,6 +323,7 @@ export default{
                 case 'clear':
                   this.searchInfo = {
                       belongCity: '', // 区域
+                      belongCityName:'',
                       shipperName: '', // 货主
                       startOrderDate: '', // 下单起始时间
                       endOrderDate: '', // 下单结束时间
