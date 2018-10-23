@@ -47,7 +47,7 @@
                         <li>
                             <el-input v-model.number="form.startVolume" v-numberOnly placeholder="包含" maxlength="7" disabled></el-input>
                             <span>----</span>
-                            <el-input v-model.number="form.endVolume" :disabled="unable" v-numberOnly placeholder="不包含"  maxlength="7" @change="ifWrong(ligthPriceForms,keys)"></el-input>
+                            <el-input v-model.number="form.endVolume" :disabled="unable" v-numberOnly placeholder="包含，整数"  maxlength="7" @change="ifWrong(ligthPriceForms,keys)"></el-input>
                             立方
                         </li>
                         <li>
@@ -75,7 +75,7 @@
                         <li>
                             <el-input v-model.number="form.startVolume" v-numberOnly placeholder="包含" maxlength="7" disabled></el-input>
                             <span>----</span>
-                            <el-input v-model.number="form.endVolume" :disabled="unable" v-numberOnly placeholder="不包含" maxlength="7" @change="ifWrong(weigthPriceForms,keys)"></el-input>
+                            <el-input v-model.number="form.endVolume" :disabled="unable" v-numberOnly placeholder="包含，整数" maxlength="7" @change="ifWrong(weigthPriceForms,keys)"></el-input>
                             公斤
                         </li>
                         <li>
@@ -103,7 +103,7 @@
                         <li>
                             <el-input v-model.number="form.startVolume" v-numberOnly placeholder="包含" maxlength="7" disabled></el-input>
                             <span>----</span>
-                            <el-input v-model.number="form.endVolume" :disabled="unable" v-numberOnly placeholder="不包含" maxlength="7" @change="ifWrong(weigthPriceForms,keys)"></el-input>
+                            <el-input v-model.number="form.endVolume" :disabled="unable" v-numberOnly placeholder="包含，整数" maxlength="7" @change="ifWrong(weigthPriceForms,keys)"></el-input>
                             公斤
                         </li>
                         <li>
@@ -131,7 +131,7 @@
                         <li>
                             <el-input v-model.number="form.startVolume" v-numberOnly placeholder="包含" maxlength="7" disabled></el-input>
                             <span>----</span>
-                            <el-input v-model.number="form.endVolume" :disabled="unable" v-numberOnly placeholder="不包含" maxlength="7" @change="ifWrong(weigthPriceForms,keys)"></el-input>
+                            <el-input v-model.number="form.endVolume" :disabled="unable" v-numberOnly placeholder="包含，整数" maxlength="7" @change="ifWrong(weigthPriceForms,keys)"></el-input>
                             公斤
                         </li>
                         <li>
