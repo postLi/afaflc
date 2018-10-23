@@ -182,21 +182,21 @@ export default {
         reporterType: [
           { required: true, message: '请选择上报人类型' }
         ],
-        claimDes: [
-          { required: true, message: '请输入物损描述' }
-        ],
-        claimType: [
-          { required: true, message: '请选择物损类型' }
-        ],
+        // claimDes: [
+        //   { required: true, message: '请输入物损描述' }
+        // ],
+        // claimType: [
+        //   { required: true, message: '请选择物损类型' }
+        // ],
         claimPic1: [
           { required: true, message: '至少上传一张图片' }
         ],
-        complainDes: [
-          { required: true, message: '请输入投诉内容' }
-        ],
-        complainType: [
-          { required: true, message: '请选择投诉分类' }
-        ]
+        // complainDes: [
+        //   { required: true, message: '请输入投诉内容' }
+        // ],
+        // complainType: [
+        //   { required: true, message: '请选择投诉分类' }
+        // ]
       },
       formAllData: {
         reporterType: '',
@@ -233,7 +233,7 @@ export default {
       handler(newVal) {
         if (this.isMatreg) {
           this.popTitle = '物损登记'
-          this.formAllData = {}
+          // this.formAllData = {}
           console.log(this.isMatreg)
         }
       },
@@ -330,41 +330,53 @@ export default {
       data.append('excelSign', this.info)
     },
     submitForm(ruleForm) {
-      this.$refs[ruleForm].validate((valid) => {
-        if (valid) {
-          this.formAllData.createTime = parseTime(this.searchCreatTime, '{y}-{m}-{d} {h}:{i}:{s}')
-          // this.$set(this.formAllData, 'goodsclaimId', this.rowid)
-          this.formAllData.orderSerial = this.$route.query.orderSerial
-          this.formAlldicData.orderSerial = this.$route.query.orderSerial
-          const data1 = objectMerge2({}, this.formAllData)
-          // this.$set(data1, 'address', data1.claimPic1)
-          const data2 = objectMerge2({}, this.formAlldicData)
-          // console.log(data)
-          let promiseObj
-          if (this.isMatreg) {
-            promiseObj = postReportClaim(data1)
+      if(this.formAllData.claimType === '' && this.formAllData.claimDes === ''){
+        this.$message({
+          message:'物损类型及物损描述至少选填一项!',
+          type:'warning'
+        })
+      }else if(this.formAlldicData.complainType === '' && this.formAlldicData.complainDes === ''){
+        this.$message({
+          message:'投诉分类及投诉内容至少选填一项',
+          type:'warning'
+        })
+      }else {
+        this.$refs[ruleForm].validate((valid) => {
+          if (valid) {
+            this.formAllData.createTime = parseTime(this.searchCreatTime, '{y}-{m}-{d} {h}:{i}:{s}')
+            // this.$set(this.formAllData, 'goodsclaimId', this.rowid)
+            this.formAllData.orderSerial = this.$route.query.orderSerial
+            this.formAlldicData.orderSerial = this.$route.query.orderSerial
+            const data1 = objectMerge2({}, this.formAllData)
+            // this.$set(data1, 'address', data1.claimPic1)
+            const data2 = objectMerge2({}, this.formAlldicData)
+            // console.log(data)
+            let promiseObj
+            if (this.isMatreg) {
+              promiseObj = postReportClaim(data1)
+            } else {
+              promiseObj = postReportComplain(data2)
+            }
+            promiseObj.then(res => {
+              this.$message({
+                message: '保存成功~',
+                type: 'success'
+              })
+              this.closeMe()
+              this.$emit('success')
+            }).catch(err => {
+              this.$message({
+                type: 'error',
+                message: err.errorInfo || err.text || '未知错误，请重试~'
+              })
+              this.loading = false
+              // this.closeMe()
+            })
           } else {
-            promiseObj = postReportComplain(data2)
+            return false
           }
-          promiseObj.then(res => {
-            this.$message({
-              message: '保存成功~',
-              type: 'success'
-            })
-            this.closeMe()
-            this.$emit('success')
-          }).catch(err => {
-            this.$message({
-              type: 'error',
-              message: err.errorInfo || err.text || '未知错误，请重试~'
-            })
-            this.loading = false
-            // this.closeMe()
-          })
-        } else {
-          return false
-        }
-      })
+        })
+      }
     }
   }
 }

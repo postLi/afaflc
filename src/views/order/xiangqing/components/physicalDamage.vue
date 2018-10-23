@@ -41,6 +41,7 @@
                       </el-table-column>
                       <el-table-column
                           prop="fileAddress"
+                          width="450"
                           label="附件">
                           <template slot-scope="scope">
                               <img :src='item.url' alt="" v-showPicture v-for="item in scope.row.imgArr" :key="item.name" />
@@ -86,7 +87,7 @@
               prop="claimPic1"
               :show-overflow-tooltip="true"
               label="破损图片"
-              width="600"
+              width="450"
               >
               <template slot-scope="scope">
                 <!-- <img :src='scope.row.claimPic1' alt="" v-showPicture> -->

@@ -1,7 +1,7 @@
 <template>
   <div  class="wzldisReg">
     <el-dialog
-      title="物损登记"
+      title="投诉登记"
       :visible.sync="isShow"
       width="30%"
       center
@@ -224,12 +224,12 @@ export default {
         reporterType: [
           { required: true, message: '请输入上报人' }
         ],
-        complainDes: [
-          { required: true, message: '请输入物损描述' }
-        ],
-        complainType: [
-          { required: true, message: '请选择物损类型' }
-        ],
+        // complainDes: [
+        //   { required: true, message: '请输入物损描述' }
+        // ],
+        // complainType: [
+        //   { required: true, message: '请选择物损类型' }
+        // ],
         claimPic1: [
           { required: true, message: '至少上传一张图片' }
         ]
@@ -261,7 +261,8 @@ export default {
     isShow: {
       handler(newVal) {
         if (newVal) {
-          this.searchForm = {}
+          // this.searchForm = {}
+          this.firstblood()
         }
       },
       immediate: true
@@ -362,8 +363,14 @@ export default {
           message: '每次只能登记一条数据',
           type: 'warning'
         })
+        // return false
+      } else if(this.searchForm.complainType === '' && this.searchForm.complainDes === ''){
+        this.$message({
+          message:'投诉分类及投诉内容至少选填一项！',
+          type:'warning'
+        })
         return false
-      } else {
+      }else {
         this.$refs[ruleForm].validate((valid) => {
           if (valid) {
             // this.searchForm.createTime = parseTime(this.searchCreatTime1, '{y}-{m}-{d} {h}:{i}:{s}')

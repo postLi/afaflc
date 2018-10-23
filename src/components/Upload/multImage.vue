@@ -261,7 +261,7 @@ export default {
       fileType = file.url.split('/')
       fileType = fileType[fileType.length - 1].split('.')
       fileType = fileType[fileType.length - 1]
-      if (fileType === 'txt') {
+      if (fileType === 'txt'|| fileType === 'doc' || fileType === 'xls') {
         this.dialogTxt = true
         window.open(file.url)
       // let reader =  new FileReader()
