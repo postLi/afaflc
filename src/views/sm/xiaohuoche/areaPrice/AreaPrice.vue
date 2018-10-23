@@ -356,7 +356,7 @@ export default {
         choseStyle(val) {
             if (this.standForm.carType){
                 GetCarStyle(this.standForm.serivceCode, this.standForm.carType).then(res => {
-                    console.log('cartype',res)
+                    // console.log('cartype',res)
                     if (res.data.length > 0) {
                         this.standForm.standardPriceId = '';
                         this.standForm.standardPrice = '';
@@ -367,7 +367,7 @@ export default {
                             item.carStyle = item.carLength + '*' + item.carWidth + '*' + item.carHeight + 'M'
                         })
                     }else{
-                        for (const i in this.fostandFormrm) {
+                        for (const i in this.standForm) {
                             this.form[i] = ''
                         }
                     }
@@ -388,11 +388,16 @@ export default {
         },
         // 根据车长显示标准定价
         choseVule(val) {
+            console.log(val)
             this.optionsCarStyle.map((item) => {
                 if (item.standardPid == val) {
-                    this.standForm.standardPrice = item.standardPrice
-                    this.standForm.standardKm = item.standardKm
-                    this.standForm.outstripPrice = item.outstripPrice
+                    this.standForm.standardPrice = item.standardPrice;
+                    this.standForm.standardKm = item.standardKm;
+                    this.standForm.outstripPrice = item.outstripPrice;
+
+                    this.standForm.areaPrice = item.standardPrice;
+                    this.standForm.areaKm = item.standardKm;
+                    this.standForm.areaOutstripPrice = item.outstripPrice;
                 }
             })
             // console.log(this.optionsCarStyle)

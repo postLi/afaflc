@@ -18,7 +18,7 @@
                         <el-input  v-else v-model="standForm.carTypeName" disabled></el-input>
 
                     </el-form-item>
-                    <el-form-item class="chooseinfo-item" :label="isModify ? '当前车辆规格：':'可选车辆规则：'" >
+                    <el-form-item class="chooseinfo-item" :label="isModify ? '当前车辆规格：':'可选车辆规格：'" >
                         <el-checkbox-group v-model="specList">
                             <el-checkbox v-for="obj in optionsCarTypeM" :label="obj.code" :key="obj.name" >{{obj.name}}</el-checkbox>
                         </el-checkbox-group>
