@@ -114,6 +114,7 @@
                     v-model="formAll.aflcPartnerAreaList[keys].contractStartDate"
                     type="datetime"
                     value-format="timestamp"
+                    default-time="00:00:00"
                     placeholder="请选择日期">
                     </el-date-picker>  
                      </div>
@@ -123,6 +124,7 @@
                     v-model="formAll.aflcPartnerAreaList[keys].contractEndDate"
                     type="datetime"
                     value-format="timestamp"
+                    default-time="23:59:59"
                     placeholder="请选择日期">
                     </el-date-picker>  
                      </div>

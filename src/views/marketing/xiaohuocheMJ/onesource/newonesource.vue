@@ -3,10 +3,10 @@
        <el-button  :type="btntype" :value="value" :plain="plain" :icon="icon" @click="openDialog()">新增</el-button>
             <el-dialog title="马甲单源" :visible="driverTemplateDialogFlag" :before-close="change">
             <div class="vestOrder">
-            <el-form :inline="true" :model="vestAll" ref="vestAll" :rules="rulesForm1">
+            <el-form :inline="true" :model="vestAll" ref="vestAll" :rules="rulesForm1"  :title="btntitle">
              <el-row>
             <el-col :span="12">
-          <el-form-item label="服务类型" :label-width="formLabelWidth" prop="serivceCode">
+          <el-form-item label="服务类型：" :label-width="formLabelWidth" prop="serivceCode">
                     <el-select v-model="vestAll.serivceCode" clearable placeholder="请选择">
                         <el-option
                         v-for="item in serviceCardList"
@@ -20,7 +20,7 @@
             </el-col>
             <el-col :span="12">            
             <el-form-item label="片区名称：" :label-width="formLabelWidth" prop="districtName">
-            <el-input @focus="()=>{showMap('districtName')}" v-model="vestAll.districtName"></el-input>
+            <el-input v-model="vestAll.districtName" :maxlength='50' ></el-input>
            </el-form-item>
             </el-col>
               </el-row>
@@ -32,10 +32,8 @@
             </el-col>
              <el-col :span="12">
             <span >
-            <el-form-item label="省市：" :label-width="formLabelWidth" prop="areaName">
-                    <vregion :ui="true" @values="regionChange" class="form-control">
-                        <el-input v-model="vestAll.areaName" placeholder="请选择省/市/区/街道"></el-input>
-                    </vregion>
+            <el-form-item label="省市：" :label-width="formLabelWidth" prop="areaCode">
+                <GetCityList v-model="vestAll.areaCode" ref="area1" @returnStr="getStr2"></GetCityList>
             </el-form-item>
                  </span>
             </el-col>
@@ -81,7 +79,7 @@
                    <div class="el_vestsearch">
                        <div class="vest_section" v-for="(value,keys) in totalAeraData" :key='keys'>
                          <div class="vest_tree">
-                             <span class="vest_tree_span">{{value.endAddress}}-{{value.startAddress}}</span>
+                        <span class="vest_tree_span">{{value.startAddressName}}-{{value.endAddressName}}</span>
                        </div>     
                        </div>                  
                    </div>
@@ -99,11 +97,10 @@
 </template>
 <script>
 import { data_ServerClassList} from '@/api/server/areaPrice.js'
-import  { data_get_onesource_list,data_add_onesource_list,data_Del_onesource,data_UseStates_onesource,data_get_onesourceAddress_list,data_Del_onesourceAddress,data_get_onesource_Id,data_get_onesource_update} from '@/api/vest/onesource/onesource.js'
+import  {data_add_onesource_list} from '@/api/vest/onesource/onesource.js'
 import Upload from '@/components/Upload/singleImage'
 import GetCityList from '@/components/GetCityList'
 import { eventBus } from '@/eventBus'
-import vregion from '@/components/vregion/Region'
 import tmsmap from '@/components/map/index'
 export default {
 data(){
@@ -140,7 +137,7 @@ data(){
         //    片区名称校验
             const districtAddressValidator = (rule, val, cb) => {
                 if(!val){
-                cb(new Error('片区名称不能为空'))
+                cb(new Error('片区中心不能为空'))
                 }
                 else{
                     cb()
@@ -182,7 +179,14 @@ data(){
             serivceCode:{trigger:'change',required:true,validator:serivceCodeValidator},
             districtName:{trigger:'change',required:true,validator:districtNameValidator},
             districtAddress:{trigger:'change',required:true,validator:districtAddressValidator},
-            },    
+            },  
+            
+           rulesForm2:{
+            areaName:{trigger:'change',required:true,validator: belongCityNameValidator},
+            serivceCode:{trigger:'change',required:true,validator:serivceCodeValidator},
+            districtName:{trigger:'change',required:true,validator:districtNameValidator},
+            districtAddress:{trigger:'change',required:true,validator:districtAddressValidator},
+            },  
     }
 },
 props:{
@@ -218,7 +222,6 @@ props:{
 components:{
     GetCityList,
     tmsmap,
-    vregion
 },
     computed:{
      totalAeraData(){
@@ -228,34 +231,29 @@ components:{
             {
                   AeraData.push(
                       {
-                          startAddress:this.pickAera[i].pickAeratree,
-                          startAddressName:this.pickAera[i].startAddress,
+                          startAddressName:this.pickAera[i].pickAeratree,
                           startAddressCoordinate:this.pickAera[i].startAddressCoordinate,
-                          endAddress:this.destinationAera[j].endAddress,
+                          startAddress:this.pickAera[i].startAddressName,
                           endAddressCoordinate:this.destinationAera[j].endAddressCoordinate,
+                          endAddress:this.destinationAera[j].endAddressName,
                           endAddressName:this.destinationAera[j].destinationAeratree,
-
                       }
                   )
+
             }
         }
         return AeraData
      },
     },
 methods:{
-        // 省市区
-        regionChange(d) {
-                this.vestAll.areaCode = (!d.province&&!d.city&&!d.area&&!d.town) ? '': `${this.getValue(d.province)}${this.getValue(d.city)}${this.getValue(d.area)}${this.getValue(d.town)}`.trim();
-                this.vestAll.areaName = (!d.province&&!d.city&&!d.area&&!d.town) ? '': `${this.getValue(d.province)}${this.getValue(d.city)}${this.getValue(d.area)}${this.getValue(d.town)}`.trim();
-        },
-             getValue(obj){
-                return obj ? obj.value:'';
+     getStr2(val){
+                this.vestAll.areaCode = val.city.code
+                this.vestAll.areaName = val.city.name
         },
      // 类型列表
         getMoreInformation(){
                 data_ServerClassList().then(res=>{
                      res.data.map((item)=>{
-                         console.log('fd');
                         this.serviceCardList.push(item);
                     })
                 }).catch(res=>{
@@ -277,11 +275,10 @@ methods:{
             }
                 this.pickAera.push({
                     pickAeratree:this.pickaddAera,
-                    startAddress:this.startAddress,
                     startAddressCoordinate:this.startAddressCoordinate,
+                    startAddressName:this.startAddressName,
                 }); 
-            console.log(this.pickAera)
-            console.log('totalAeraData',this.totalAeraData)
+                this.pickaddAera = ''
         },
         // 提货地减少
         reduceItempick(i){
@@ -295,10 +292,10 @@ methods:{
             }
                 this.destinationAera.push({
                     destinationAeratree:this.destinationaddAera,
-                    endAddress:this.endAddress,
-                    endAddressCoordinate:this.endAddressCoordinate
+                    endAddressCoordinate:this.endAddressCoordinate,
+                    endAddressName:this.endAddressName
                 }); 
-                        console.log('totalAeraData',this.totalAeraData)
+          this.destinationaddAera =''
         },
         // 目的地减少
         reduceItemdestination(i){
@@ -311,9 +308,6 @@ methods:{
       getInfo(pos, name, info) {
         console.log('info',info.addressComponent)
             switch (this.current) {
-                case 'districtName':
-                this.vestAll.districtName = info.formattedAddress;
-                break;
                 case 'districtAddress':
                 this.vestAll.districtAddress = info.formattedAddress;
                 let tude= pos.split(",");
@@ -322,71 +316,64 @@ methods:{
                 this.vestAll.longitude = longitude;
                 this.vestAll.latitude = latitude;
                 break;
-                case 'vestdistrictName':
-                this.formAll.districtName = info.formattedAddress;
-                break;
                 case 'pickaddAera':
-                this.pickaddAera = info.addressComponent.province+info.addressComponent.township;
-                this.startAddress = info.formattedAddress
-                this.startAddressCoordinate = pos
-                  
+                let posstartArray = pos.split(',');
+                this.startAddressCoordinate = posstartArray[1]+','+posstartArray[0]
+                if(info.addressComponent.street){
+                  this.startAddressName= info.addressComponent.street + info.addressComponent.streetNumber
+                }
+                else{
+                  this.startAddressName = info.pois[0].address
+                }
+                if(info.addressComponent.building){
+                  this.pickaddAera = info.addressComponent.building
+                }
+                else{
+                  if(info.aois.length>0){
+                  this.pickaddAera = info.aois[0].name
+                  }
+                  else{
+                  this.pickaddAera = info.pois[0].name
+                  }        
+                }
                 break;
                 case 'destinationaddAera':
-                this.destinationaddAera = info.addressComponent.province+info.addressComponent.township;
-                this.endAddress = info.formattedAddress;
-                this.endAddressCoordinate = pos;
-                break;
-                case 'areaCode2':
-                this.formAll2.startAddress = info.formattedAddress;
-                break;
-                case 'districtName2':
-                this.formAll2.endAddress = info.formattedAddress;
-                break;
-                case 'selectdistrictName':
-                this.selectRowData.districtName = info.formattedAddress;
-                break;
-                case 'selectdistrictAddress':
-                this.selectRowData.districtAddress = info.formattedAddress;
+                let posendArray = pos.split(',');
+                this.endAddressCoordinate = posendArray[1]+','+posendArray[0]
+                if(info.addressComponent.street){
+                  this.endAddressName= info.addressComponent.street + info.addressComponent.streetNumber
+                }
+                else{
+                  this.endAddressName = info.pois[0].address
+                }
+                if(info.addressComponent.building){
+                  this.destinationaddAera = info.addressComponent.building
+                }
+                else{
+                  if(info.aois.length>0){
+                  this.destinationaddAera = info.aois[0].name
+                  }
+                  else{
+                  this.destinationaddAera = info.pois[0].name
+                  }    
+                }
                 break;
             }
         },  
         //弹框控制
         change() {
          this.driverTemplateDialogFlag = false;
-         this.openFlag='';
-         this.vestAll={
-            serivceCode:null,
-            districtName:null,
-            districtAddress:null,
-            areaCode:null,
-            longitude:null,
-            latitude:null,
-            areaName:null,
-            areaCode:null,
-            flcVestUnisourceAddressaList:[
-            ]
-            }
-            this.creadFlag = false;
         },
         // 关闭小表窗
         close1(){
         this.driverTemplateDialogFlag=false;
-        this.vestAll={
-            serivceCode:null,
-            districtName:null,
-            districtAddress:null,
-            areaCode:null,
-            latitude:null,
-            longitude:null,
-            flcVestUnisourceAddressaList:[
-            ]
-            }
         },
         //完善数据
         completeData(){
             },
       // 新增保存
         changeInfoSave1(){
+          this.completeData();
             this.vestAll.flcVestUnisourceAddressaList=this.totalAeraData;
             if(this.totalAeraData.length==0){
                 this.$message.warning('请输入至少一组提货地和目的地');
@@ -394,22 +381,54 @@ methods:{
             }
             else{
             this.$refs['vestAll'].validate(valid=>{
-            var forms= Object.assign({}, this.vestAll)
-              console.log(forms)
                 if(valid){
-                data_add_onesource_list(forms).then(res=>{
-                console.log('res',res);
-                 this.driverTemplateDialogFlag=false;
-                 this.$message.success('新增成功');
-                 this.$emit('getData')
-                })
+                this.driverTemplateDialogFlag=false;
+                data_add_onesource_list(this.vestAll).then(res=>{
+                    this.$message.success('新增成功');
+                }).catch(res=>{
+                   this.$message.warning(res.text);
+                });
                 }
                 })
             }
         },
 },
 watch:{
-
+   driverTemplateDialogFlag:{
+        handler: function(val, oldVal) {
+            if(!val){
+            this.vestAll={
+                serivceCode:null,
+                districtName:null,
+                districtAddress:null,
+                areaCode:null,
+                latitude:null,
+                longitude:null,
+                flcVestUnisourceAddressaList:[
+                ]
+                }
+                this.pickaddAera = ''
+                this.destinationaddAera =''
+                this.pickAera = [
+                    {
+                    pickAeratree:null,
+                    startAddressCoordinate:null,
+                    startAddressName:null,   
+                    }
+                ]
+                this.destinationAera = [
+                    {
+                    destinationAeratree:null,
+                    endAddressCoordinate:null,
+                    endAddressName:null
+                    }
+                ]
+                this.$refs.area1.clearData();
+                 this.$refs['vestAll'].resetFields()
+                this.$emit('getData') 
+            }
+        },
+    },
 },
 created(){
 if(this.openbtn){
@@ -421,37 +440,39 @@ this.getMoreInformation();
 }
 }
 </script>
-<style  lang="scss" scoped>
-    .vestonceDialog{
-        display: inline-block;
+
+
+<style  lang="scss">
+.vestonceDialog {
+    display: inline-block;
+    .el-dialog{
+        width: 980px;
     }
-    .el-button{
-            margin-right:20px;
-            padding:10px 20px;
-    }
-    .commoncss .el-dialog .el-input {
-    width: 250px;
-    }
-    .price_one{
-            width:105px!important;
-            margin-right: 10px;
-    }
-    .price_two{
-            width:105px!important;
-            margin-left: 10px;
+    .el-button {
+        margin-right:0px;
+        padding: 7px 15px 7px;
+        font-size:12px;
+        }
+    .view_btn{
+        margin-left:50px;
     }    
-    .vestOrder{
-        width: 100%;
-        border-bottom: 2px dashed #ccc;
-    }
-    .vestAddress{
+    .el-tableTree1{
+            width: 90%;
+            margin:0px auto;
+        }
+    .el-pagination{
+            text-align: right;
+    }  
+    .el-input__inner{
+       height: 30px!important;
+   }
+   .vestAddress{
         display: flex;
         margin-top:10px;
     .vestAera{
         flex-basis: 230px;
         margin-left:50px;
         h4{
-            font-family: MicrosoftYaHei;
             font-size: 12px;
             font-weight: normal;
             font-stretch: normal;
@@ -488,7 +509,7 @@ this.getMoreInformation();
                 }
                 button{
                     flex:1;
-                    margin-left:10px;
+                    margin:0px 10px;
                 }
                 }
 
@@ -496,20 +517,5 @@ this.getMoreInformation();
         }
     }
     }
-</style>
-
-<style  lang="scss">
-.vestonceDialog {
-    .el-dialog {
-        width: 880px;
-        overflow:unset!important;
-        .el-input{
-        width: 250px;
-        }
-.chooseCityList .el-cascader .el-input {
-    width: 250px;
 }
-}
-}
-
 </style>

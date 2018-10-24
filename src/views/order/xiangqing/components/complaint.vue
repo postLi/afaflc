@@ -40,6 +40,8 @@
                       <el-table-column
                         prop="fileAddress"
                         label="附件">
+                        <!-- <el-tooltip content="Top center" placement="top">
+                        </el-tooltip> -->
                         <template slot-scope="scope">
                             <img :src='item.url' alt="" v-showPicture v-for="item in scope.row.imgArr" :key="item.name" />
                             <el-button type="text" v-for="txtitem in scope.row.txtArr" :key="txtitem.name" @click="openTxt(txtitem.url)">{{txtitem.name}}</el-button>
@@ -78,7 +80,7 @@
                 width="200"
                 >
                 <template slot-scope="scope">
-                  {{scope.row.phone ? scope.row.phone  : ''}}{{ scope.row.complainName ? scope.row.complainName : ''}}
+                  {{scope.row.complainName ? scope.row.complainName + '-' : ''}}{{ scope.row.phone ? scope.row.phone : ''}}
                 </template>
             </el-table-column>
              <el-table-column

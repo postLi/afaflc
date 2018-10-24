@@ -5,7 +5,7 @@
      <el-button type="primary" plain icon="el-icon-news" @click="pushOrderSerial" :size="btnsize">查看推送详情</el-button>
    </div>
     <div class="info_news">  
-    <el-table  ref="multipleTable" style="width: 100%" stripe border height="100%" @selection-change="getSelection" @row-click="clickDetails" highlight-current-row>
+    <el-table  ref="multipleTable" style="width: 100%" stripe border height="100%" @selection-change="getSelection" @row-click="clickDetails" highlight-current-row :data="tableDataTree">
               <el-table-column
                             label="选择"
                             type="selection"
@@ -16,20 +16,20 @@
                              {{ (page - 1)*pagesize + scope.$index + 1 }}
                             </template>
             </el-table-column> 
-   <el-table-column  label="订单号"  sortable></el-table-column>
-   <el-table-column  label="推送时间"  sortable></el-table-column>
-   <el-table-column  label="服务类型"  sortable></el-table-column>
-   <el-table-column  label="区域"  sortable></el-table-column>
-   <el-table-column  label="推送片区"  sortable></el-table-column>
-   <el-table-column  label="推送车主认证状态"  sortable></el-table-column>
-   <el-table-column  label="推送车主活跃度"  sortable></el-table-column>
-   <el-table-column  label="推送车型"  sortable></el-table-column>
-   <el-table-column  label="推送车主在线状态"  sortable></el-table-column>
-   <el-table-column  label="出发地"  sortable></el-table-column>
-   <el-table-column  label="目的地"  sortable></el-table-column>
-   <el-table-column  label="里程"  sortable></el-table-column>
-   <el-table-column  label="订单价格"  sortable></el-table-column>
-   <el-table-column  label="推送车主数量"  sortable></el-table-column>                 
+   <el-table-column  label="订单号"  sortable prop="orderSerial"></el-table-column>
+   <el-table-column  label="推送时间"  sortable prop="createTime"></el-table-column>
+   <el-table-column  label="服务类型"  sortable prop="serivceCode"></el-table-column>
+   <el-table-column  label="区域"  sortable prop="areaName"></el-table-column>
+   <el-table-column  label="推送片区"  sortable prop="districtName"></el-table-column>
+   <el-table-column  label="推送车主认证状态"  sortable prop=""></el-table-column>
+   <el-table-column  label="推送车主活跃度"  sortable prop="liveness"></el-table-column>
+   <el-table-column  label="推送车型"  sortable prop="carType"></el-table-column>
+   <el-table-column  label="推送车主在线状态"  sortable prop="isLineName"></el-table-column>
+   <el-table-column  label="出发地"  sortable prop="startAddressName"></el-table-column>
+   <el-table-column  label="目的地"  sortable prop="endAddressName"></el-table-column>
+   <el-table-column  label="里程"  sortable prop=""></el-table-column>
+   <el-table-column  label="订单价格"  sortable prop=""></el-table-column>
+   <el-table-column  label="推送车主数量"  sortable prop="pushDriverCout"></el-table-column>                 
   </el-table> 
     </div>
       <!-- 页码 -->
@@ -43,6 +43,7 @@
 <script>
 import { data_ServerClassList} from '@/api/server/areaPrice.js'
 import { parseTime,formatTime } from '@/utils/index.js'
+import  { data_get_MjPushLogs_list} from '@/api/vest/MjPushLogs/MjPushLogs.js'
 import Pager from '@/components/Pagination/index'
 import { eventBus } from '@/eventBus'
 export default {
@@ -55,8 +56,9 @@ export default {
         page:1,//当前页
         dataTotal:null,//总记录数
         tableDataTree:[],//定义列表记录
+        formAll:{}
         }
-        formAll:[]
+
     },
     components:{
         Pager
@@ -67,14 +69,14 @@ export default {
      methods:{
             //刷新页面  
             firstblood(){
-                // data_get_pushsheet_list(this.page,this.pagesize,this.formAll).then(res => {
-                //     this.dataTotal = res.data.totalCount
-                //     this.tableDataTree = res.data.list;
-                //      this.tableDataTree.forEach(item => {
-                //         item.createTime = parseTime(item.createTime,"{y}-{m}-{d}");
-                //         item.updateTime = parseTime(item.updateTime,"{y}-{m}-{d}");
-                //     })
-                // })
+                data_get_MjPushLogs_list(this.page,this.pagesize,this.formAll).then(res => {
+                    this.dataTotal = res.data.totalCount
+                    this.tableDataTree = res.data.list;
+                    //  this.tableDataTree.forEach(item => {
+                    //     item.createTime = parseTime(item.createTime,"{y}-{m}-{d}");
+                    //     item.updateTime = parseTime(item.updateTime,"{y}-{m}-{d}");
+                    // })
+                })
             },
             // 判断选中与否
             getSelection(val){
@@ -86,24 +88,24 @@ export default {
             this.$refs.multipleTable.toggleRowSelection(row);
             },
             // 进入详情
-            pushOrderSerial(){
-            //     if(this.selectRowData.length==undefined){
-            //       this.$message.warning('请选择您要操作的用户');
-            //       return
-            //   }
-            //   else if(this.selectRowData.length == 0){
-            //       this.$message.warning('请选择您要操作的用户');
-            //       return
-            //   }else if (this.selectRowData.length > 1) {
-            //         this.$message({
-            //             message: '每次只能操作单条数据~',
-            //             type: 'warning'
-            //         })
-            //       this.$refs.multipleTable.clearSelection();
-            //   }
-            // else{
-              this.$router.push({name: '推送记录详情',query:{ Id:'1111' }});
-            // }
+            pushOrderSerial(item){
+                if(this.selectRowData.length==undefined){
+                  this.$message.warning('请选择您要操作的用户');
+                  return
+              }
+              else if(this.selectRowData.length == 0){
+                  this.$message.warning('请选择您要操作的用户');
+                  return
+              }else if (this.selectRowData.length > 1) {
+                    this.$message({
+                        message: '每次只能操作单条数据~',
+                        type: 'warning'
+                    })
+                  this.$refs.multipleTable.clearSelection();
+              }
+            else{
+              this.$router.push({name: '推送记录详情',query:{ orderSerial:this.selectRowData[0].orderSerial}});
+            }
             },
             // 查询
             getdata_search(){

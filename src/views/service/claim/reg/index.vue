@@ -119,6 +119,17 @@
         <div class="info_bottom">
           <!-- class="demo-ruleForm classify_searchinfo" -->
           <el-form  label-position="right" :model="searchForm" :rules="rules"  ref="ruleForm" :inline="true">
+            <el-form-item label="上报时间" prop="createTime">
+              <el-date-picker
+                disabled="disabled"
+                v-model="searchCreatTime1"
+                align="right"
+                type="date"
+                :picker-options="pickOption2"
+                placeholder="选择日期"
+                value-format="timestamp">
+              </el-date-picker>
+            </el-form-item>
             <el-form-item label="物损类型" prop="claimType">
               <el-select v-model="searchForm.claimType" clearable placeholder="请选择处理状态">
                 <el-option
@@ -140,17 +151,7 @@
                 </el-option>
               </el-select>
             </el-form-item>
-            <el-form-item label="上报时间" prop="createTime">
-              <el-date-picker
-                disabled="disabled"
-                v-model="searchCreatTime1"
-                align="right"
-                type="date"
-                :picker-options="pickOption2"
-                placeholder="选择日期"
-                value-format="timestamp">
-              </el-date-picker>
-            </el-form-item>
+            
             <el-form-item class="discrabel" label="物损描述" prop="claimDes">
               <el-input v-model="searchForm.claimDes" type="textarea" :maxlength="200" style="width:100%" placeholder="物损描述最多输入200个字符"></el-input>
             </el-form-item>
@@ -223,12 +224,12 @@ export default {
         reporterType: [
           { required: true, message: '请输入上报人' }
         ],
-        claimDes: [
-          { required: true, message: '请输入物损描述' }
-        ],
-        claimType: [
-          { required: true, message: '请选择物损类型' }
-        ],
+        // claimDes: [
+        //   { required: true, message: '请输入物损描述' }
+        // ],
+        // claimType: [
+        //   { required: true, message: '请选择物损类型' }
+        // ],
         claimPic1: [
           { required: true, message: '至少上传一张图片' }
         ]
@@ -260,7 +261,7 @@ export default {
     isShow: {
       handler(newVal) {
         if (newVal) {
-          this.searchForm = {}
+          // this.searchForm = {}
           this.firstblood()
         }
       },
@@ -311,6 +312,7 @@ export default {
       this.$refs['ruleForm'].resetFields()
     },
     closeMe(done) {
+      // this.searchForm = {}
       this.$emit('close')
       this.reset()
       if (typeof done === 'function') {
@@ -362,8 +364,14 @@ export default {
           message: '每次只能登记一条数据',
           type: 'warning'
         })
+        // return false
+      } else if(this.searchForm.claimType === '' && this.searchForm.claimDes === ''){
+        this.$message({
+          message: '物损类型及物损描述至少选填一项！',
+          type: 'warning'
+        })
         return false
-      } else {
+      }else {
         this.$refs[ruleForm].validate((valid) => {
           if (valid) {
             this.searchForm.createTime = parseTime(this.searchCreatTime1, '{y}-{m}-{d} {h}:{i}:{s}')
@@ -435,7 +443,7 @@ export default {
     }
     .el-dialog__body{
       max-height: 700px;
-      // overflow-y: scroll;
+      overflow-y: scroll;
     }
     .el-dialog__footer{
       padding-bottom: 6%;

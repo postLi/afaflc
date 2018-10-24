@@ -470,7 +470,6 @@ export default {
          restaurantsData.map(res=>{
              this.restaurants.push({
                  value:res.companyName})
-             console.log(this.restaurants)
          })
          
         })
@@ -556,7 +555,6 @@ export default {
             }
             else{        
        this.$refs['formAll'].validate(valid=>{
-           console.log('fdfdf',this.formAll)
         if(valid){
         let forms=[
             {

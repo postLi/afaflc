@@ -87,11 +87,11 @@
             <template  slot-scope="scope">
              <span v-if="scope.row.auditOpinion=='待处理'">
                    <cashAuditingEdit
-                    btntext="编辑"
+                    btntext="审核"
                     :plain="true"
                     btntype="primary"
                     editType="edit"
-                    btntitle="编辑"
+                    btntitle="审核"
                     @getData="getDataList"
                     :params="scope.row"
                     > 

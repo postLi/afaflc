@@ -1,8 +1,8 @@
 <template>
-    <div class="identicalStyle MjD" style="height:100%">
+    <div class="identicalStyle MjD_onesource" style="height:100%">
           <el-form :inline="true"  class="demo-ruleForm classify_searchinfo">
-            <el-form-item label="所属区域：">
-              <GetCityList v-model="formAll.areaCode" ref="area" @returnStr="getStr1"></GetCityList>
+            <el-form-item label="所在地：">
+              <GetCityList v-model="formAll.areaCode" ref="area"  @returnStr="getStr"></GetCityList>
           </el-form-item>
            <el-form-item label="服务类型">
                     <el-select v-model="formAll.serivceCode" clearable placeholder="请选择">
@@ -16,18 +16,19 @@
                     </el-select>
                  </el-form-item>
                 <el-form-item label="片区名称" >
-                   <el-input  v-model="formAll.districtName" :maxlength='50'></el-input>
+                   <el-input v-model="formAll.districtName"></el-input>
                  </el-form-item>
          <el-form-item class="fr">
-         <el-button type="primary" plain @click="getdata_search()" :size="btnsize" icon="el-icon-search">搜索</el-button> 
-         <el-button type="info"  plain  @click="clearSearch" :size="btnsize" icon="fontFamily aflc-icon-qingkong">清空</el-button>
+         <el-button type="primary"  plain  @click="getdata_search()" :size="btnsize">查询</el-button> 
+         <el-button type="primary"  plain  @click="clearSearch" :size="btnsize">清空</el-button>
          </el-form-item>
            </el-form> 
   <div class="classify_info">
    <div class="btns_box">
   <!-- 马甲单新增 -->
-  <div class="onceDialogBox commoncss">
-    <el-button  type="primary" value="value" plain icon="el-icon-circle-plus" @click="openDialog()" v-has:MARKETING_SMALL_CAR_MJ_SOURCE_OPTION_ADD>新增</el-button>
+  <div class="vestDialogBox commoncss ">
+ <div class="vestonceDialog">
+    <el-button  type="primary" value="value" plain icon="el-icon-news" @click="openDialog()">新增</el-button>
             <el-dialog title="马甲单源" :visible="driverTemplateDialogFlag" :before-close="change">
             <div class="vestOrder">
             <el-form :inline="true" :model="vestAll" ref="vestAll" :rules="rulesForm1">
@@ -50,10 +51,10 @@
             </el-col>
             <el-col :span="12">
            <el-form-item label="片区名称：" :label-width="formLabelWidth" v-if='creadFlag'>
-            <el-input v-model="vestAll.districtName" disabled :maxlength='50'></el-input>
+            <el-input v-model="vestAll.districtName" :maxlength='50' disabled></el-input>
            </el-form-item>                
-            <el-form-item label="片区名称：" :label-width="formLabelWidth" prop="districtName"  v-else >
-            <el-input v-model="vestAll.districtName" :maxlength='50'></el-input>
+            <el-form-item label="片区名称：" :label-width="formLabelWidth" prop="districtName" v-else>
+            <el-input  v-model="vestAll.districtName"></el-input>
            </el-form-item>
             </el-col>
               </el-row>
@@ -68,13 +69,13 @@
             </el-col>
              <el-col :span="12">
                 <span v-if="creadFlag">
-               <el-form-item label="所属区域：" :label-width="formLabelWidth">
+               <el-form-item label="省市：" :label-width="formLabelWidth">
                 <el-input v-model="vestAll.areaName" disabled></el-input>
                 </el-form-item>
                  </span>
                  <span v-else>
-            <el-form-item label="所属区域：" :label-width="formLabelWidth" prop="areaCode">
-                <GetCityList v-model="vestAll.areaCode" ref="area1" @returnStr="getStr2"></GetCityList>
+            <el-form-item label="省市：" :label-width="formLabelWidth" prop="areaName">
+                <GetCityList v-model="vestAll.areaName" ref="area1"  @returnStr="getStr1"></GetCityList>
             </el-form-item>
                  </span>
             </el-col>
@@ -132,83 +133,105 @@
                         <el-button type="primary" @click="changeInfoSavaAdress" v-else>保 存</el-button>
                         <el-button @click="close1()">取 消</el-button>
                     </div> 
+
             </el-dialog>
     </div>
+  </div>
 
 
 <!-- 详情修改 -->
-<div class="onceDialogBox commoncss">
-        <el-button  type="primary"  value="value2" plain icon="el-icon-news" @click="openDialogView()" v-has:MARKETING_SMALL_CAR_MJ_SOURCE_OPTION_DETAIL>详情</el-button>
+<div class="vestDialogBox commoncss ">
+<div class="vestDialog">
             <el-dialog title="马甲单源" :visible="driverTemplateDialogFlag2" :before-close="changeview">
             <div class="vestOrder">
             <el-form :inline="true">
              <el-row>
             <el-col :span="12">
-            <el-form-item label="服务类型：" :label-width="formLabelWidth">
-         <el-select v-model="selectRowData3.serivceCode" clearable placeholder="请选择" :disabled="openFlag==0">
+          <el-form-item label="服务类型：" :label-width="formLabelWidth" v-if='openFlag==0'>
+         <el-select v-model="selectRowData3.serivceCode" clearable placeholder="请选择" disabled>
                         <el-option
                          v-for="item in serviceCardList"
                         :key="item.id"
                         :label="item.name"
                         :value="item.code"
-                        >
+                        :disabled="item.disabled">
+                        </el-option>
+          </el-select >
+           </el-form-item>
+            <el-form-item label="服务类型：" :label-width="formLabelWidth" v-else>
+         <el-select v-model="selectRowData3.serivceCode" clearable placeholder="请选择">
+                        <el-option
+                         v-for="item in serviceCardList"
+                        :key="item.id"
+                        :label="item.name"
+                        :value="item.code"
+                        :disabled="item.disabled">
                         </el-option>
           </el-select>
            </el-form-item>
             </el-col>
             <el-col :span="12">
-           <el-form-item label="片区名称：" :label-width="formLabelWidth">
-          <el-input v-model="selectRowData3.districtName" :maxlength='50' :disabled="openFlag==0" ></el-input>
+            <el-form-item label="片区名称：" :label-width="formLabelWidth" v-if='openFlag==0'>
+             <el-input v-model="selectRowData3.districtName" disabled></el-input>
+           </el-form-item>
+           <el-form-item label="片区名称：" :label-width="formLabelWidth" v-else>
+          <el-input v-model="selectRowData3.districtName"></el-input>
            </el-form-item>
             </el-col>
               </el-row>
             <el-row>
             <el-col :span="12">
-             <el-form-item label="中心地址：" :label-width="formLabelWidth">
-             <el-input @focus="()=>{showMap('selectdistrictAddress')}" v-model="selectRowData3.districtAddress" :disabled="openFlag==0"></el-input>
+            <el-form-item label="中心地址：" :label-width="formLabelWidth" v-if='openFlag==0'>
+             <el-input v-model="selectRowData3.districtAddress"  disabled></el-input>
+            </el-form-item>
+             <el-form-item label="中心地址：" :label-width="formLabelWidth" v-else>
+             <el-input @focus="()=>{showMap('selectdistrictAddress')}" v-model="selectRowData3.districtAddress"></el-input>
             </el-form-item>
             </el-col>
              <el-col :span="12">
+
+            
                  <span v-if="openFlag==0">
-                      <el-form-item label="所属区域：" :label-width="formLabelWidth">
+                      <el-form-item label="省市：" :label-width="formLabelWidth">
                 <el-input v-model="selectRowData3.areaName" disabled></el-input>
                       </el-form-item>
                  </span>
                  <span v-else>
-                    <el-form-item label="所属区域：" :label-width="formLabelWidth" prop="areaCode">
-                 <el-input v-model="selectRowData3.areaName"  @focus="changeSelect" v-if="openFlag !==0 && !selectFlag"></el-input>
-                <GetCityList ref="area2" v-model="selectRowData3.areaCode"  @focus="changeSelect" v-else @returnStr="getStr3"></GetCityList>
+                    <el-form-item label="省市：" :label-width="formLabelWidth" prop="areaCode">
+                 <el-input v-model="selectRowData3.areaName"  @focus="changeSelect" v-if="openFlag !==0 && !selectFlag" ></el-input>
+                <GetCityList ref="area2" v-model="selectRowData3.areaCode"  @focus="changeSelect"  @returnStr="getStr2" v-else></GetCityList>
                     </el-form-item>
                  </span>
             </el-col>
             </el-row>
              </el-form>    
              </div>
+             
            <div class="vestdetail">
             <el-form :inline="true">
              <el-row>
-            <el-col :span="9">
+            <el-col :span="8">
             <el-form-item label="提货地：" :label-width="formLabelWidth" class="adressstart">
            <el-input @focus="()=>{showMap('areaCode2')}" v-model="formAll2.startAddress"></el-input>
           </el-form-item>
             </el-col>
-            <el-col :span="9">
+            <el-col :span="8">
            <el-form-item label="目的地：" class="adressend">
             <el-input @focus="()=>{showMap('districtName2')}" v-model="formAll2.endAddress"></el-input>
                  </el-form-item>
             </el-col>
-            <el-col :span="6">
+            <el-col :span="8">
         <el-form-item :label-width="formLabelWidth">       
-         <el-button type="primary"   @click="getdata_search2()">搜索</el-button> 
-         <el-button type="info"  plain  @click="clearSearch2">清空</el-button>
+         <el-button type="primary"  plain  @click="getdata_search2()">查询</el-button> 
+         <el-button type="primary"  plain  @click="clearSearch2">清空</el-button>
          </el-form-item>
             </el-col>
              </el-row>
              <el-row>
-                 <el-row :span="24">
+                 <el-row :span="24" v-if="openFlag==1">
                 <el-form-item :label-width="formLabelWidth" >       
                     <el-button  type="primary"  plain icon="el-icon-news" @click="openDialog1()" class="view_btn">新增</el-button>
-                    <el-button  type="danger" plain icon="el-icon-delete" @click="handleDelete2" :size="btnsize">删除</el-button>
+                    <el-button  type="primary" plain icon="el-icon-delete" @click="handleDelete2" :size="btnsize">删除</el-button>
                 </el-form-item>
                  </el-row>
              </el-row>
@@ -218,10 +241,10 @@
         <el-table-column  label="序号" width="80px" type="index">
             
         </el-table-column>
-        <el-table-column  label="提货地"  prop="startAddressName" show-overflow-tooltip>
+        <el-table-column  label="提货地"  prop="endAddress">
             
         </el-table-column>
-        <el-table-column  label="目的地" prop="endAddressName" show-overflow-tooltip>
+        <el-table-column  label="目的地" prop="startAddress">
             
         </el-table-column>
         <el-table-column  label="里程（公里）" prop="distance">
@@ -234,7 +257,7 @@
                 @size-change='handleSizeChange1'
                 @current-change="handleCurrentChange1"
                 :current-page="page1"
-                :page-sizes="[4, 10, 20, 30]"
+                :page-sizes="[10, 10, 20, 30]"
                 :page-size="pagesize1"
                 layout="total, sizes, prev, pager, next, jumper"
                 :total="dataTotal1"
@@ -244,15 +267,20 @@
             </div>
             </div>
            </div>
-                    <div slot="footer" class="dialog-footer" v-if="openFlag==1" >
-                        <el-button type="primary" @click="changeInfoSave2" >保 存</el-button>
+                    <div slot="footer" class="dialog-footer" v-if="openFlag==1">
+                        <el-button type="primary" @click="changeInfoSave2">保 存</el-button>
                         <el-button @click="close2()">取 消</el-button>
-                    </div> 
+                    </div>
             </el-dialog>
     </div>
-    <el-button  type="primary" value="value" plain icon="el-icon-edit" @click="openDialogView0()" :size="btnsize" v-has:MARKETING_SMALL_CAR_MJ_SOURCE_OPTION_UPDATE>修改</el-button>
-    <el-button type="primary" plain icon="el-icon-bell"  @click="handleUseStates" :size="btnsize" v-has:MARKETING_SMALL_CAR_MJ_SOURCE_OPTION_USE>启用/禁用</el-button>
-    <el-button type="primary" plain icon="el-icon-delete" @click="handleDelete" :size="btnsize" v-has:MARKETING_SMALL_CAR_MJ_SOURCE_OPTION_DELETE>删除</el-button>
+</div>
+
+
+     <div class="vestonceDialog">
+         <el-button  type="primary" value="value" plain icon="el-icon-edit" @click="openDialogView0()" :size="btnsize">修改</el-button>
+     </div>
+    <el-button type="primary" plain icon="el-icon-bell"  @click="handleUseStates" :size="btnsize">启用/禁用</el-button>
+    <el-button type="primary" plain icon="el-icon-delete" @click="handleDelete" :size="btnsize">删除</el-button>
    </div>
   
     <div class="info_news">  
@@ -267,17 +295,19 @@
                              {{ (page - 1)*pagesize + scope.$index + 1 }}
                             </template>
             </el-table-column> 
-   <el-table-column  label="片区名称" prop="districtName" sortable show-overflow-tooltip>
-       
+   <el-table-column  label="片区名称" prop="districtName" sortable>
+         <template  slot-scope="scope">
+         <span class="BtnInfo" @click="openDialogView(scope.row)">{{scope.row.districtName}}</span >
+         </template>
    </el-table-column>
-   <el-table-column  label="所属区域" prop="areaName" sortable>
+   <el-table-column  label="省市" prop="areaName" sortable>
        
    </el-table-column>
 
    <el-table-column  label="服务类型" prop="serivceCode" sortable>
        
    </el-table-column>
-   <el-table-column  label="片区中心" prop="districtAddress" sortable show-overflow-tooltip>
+   <el-table-column  label="片区中心" prop="districtAddress" sortable >
        
    </el-table-column>
    <el-table-column  label="马甲单源数量" prop="orderNum" sortable>
@@ -285,7 +315,7 @@
    </el-table-column>
    <el-table-column  label="状态" prop="usingStatus" sortable>
         <template  slot-scope="scope">
-          {{ scope.row.usingStatus == 1 ? '启用' : '禁用' }}
+          {{ scope.row.usingStatus == 0 ? '启用' : '禁用' }}
          </template>
    </el-table-column>              
 
@@ -369,7 +399,7 @@ export default {
         page:1,//大表当前页
         dataTotal:null,//大表总记录数
         tableDataTree:[],//大表定义列表记录
-        pagesize1:4,//详情表每页显示数
+        pagesize1:10,//详情表每页显示数
         page1:1,//详情表当前页
         dataTotal1:null,//详情表总记录数
         tableDataTree1:[],//详情表定义列表记录
@@ -398,6 +428,8 @@ export default {
             districtName:null,
             districtAddress:null,
             areaCode:null,
+            startAddressCoordinate:null,
+            endAddressCoordinate:null,
             longitude:null,
             latitude:null,
             flcVestUnisourceAddressaList:[]
@@ -407,7 +439,7 @@ export default {
             flcVestUnisourceAddressaList:[]
         }, 
         rulesForm1:{
-            areaCode:{trigger:'change',required:true,validator: belongCityNameValidator},
+            areaName:{trigger:'change',required:true,validator: belongCityNameValidator},
             serivceCode:{trigger:'change',required:true,validator:serivceCodeValidator},
             districtName:{trigger:'change',required:true,validator:districtNameValidator},
             districtAddress:{trigger:'change',required:true,validator:districtAddressValidator},
@@ -443,49 +475,70 @@ export default {
      },
     },
     watch:{
-        driverTemplateDialogFlag:{
-            handler: function(val, oldVal){
-            if (!val) {
-            this.$refs['vestAll'].resetFields();
-             this.destinationaddAera='';
-             this.pickaddAera='';
-             this.pickAera=[{}];
-             this.destinationAera=[{}];
-            this.$refs.multipleTable.clearSelection();  
-             if(this.$refs.area1){
-             this.$refs.area1.clearData()
-             }
-             }
-             }
+   driverTemplateDialogFlag:{
+        handler: function(val, oldVal) {
+            if(!val){
+            this.creadFlag=false
+            this.vestAll={
+                serivceCode:null,
+                districtName:null,
+                districtAddress:null,
+                areaCode:null,
+                latitude:null,
+                longitude:null,
+                flcVestUnisourceAddressaList:[
+                ]
+                }
+                this.pickaddAera = ''
+                this.destinationaddAera =''
+                this.pickAera = [
+                    {
+                    pickAeratree:null,
+                    startAddressCoordinate:null,
+                    startAddressName:null,   
+                    }
+                ]
+                this.destinationAera = [
+                    {
+                    destinationAeratree:null,
+                    endAddressCoordinate:null,
+                    endAddressName:null
+                    }
+                ]
+                this.$refs.area1.clearData();
+                this.$refs['vestAll'].resetFields()
+                this.$refs.multipleTable.clearSelection();
+                this.firstblood();
+            }
+        },
         },
         driverTemplateDialogFlag2:{
-             handler: function(val, oldVal){
-            if (!val) {
-             this.destinationaddAera='';
-             this.pickaddAera='';
-             this.pickAera=[{}];
-             this.destinationAera=[{}];
-             this.$refs.multipleTable.clearSelection();     
-             if(this.$refs.area2){
-             this.$refs.area2.clearData()
-             }           
-             }
-             }
-        }
+                handler: function(val, oldVal) {
+                    if(!val){
+                        this.selectFlag=false
+                        this.$emit('getData') 
+                        this.$refs.multipleTable.clearSelection();
+                    }
+                }
+        },
     },
     methods:{
-            getStr1(val){
+      // 省市
+       getStr(val){
                 this.formAll.areaCode = val.city.code
                 this.formAll.areaName = val.city.name
-            },
-            getStr2(val){
+        },
+      // 省市
+       getStr1(val){
                 this.vestAll.areaCode = val.city.code
                 this.vestAll.areaName = val.city.name
-            },
-            getStr3(val){
+        },
+
+       getStr2(val){
                 this.selectRowData3.areaCode = val.city.code
                 this.selectRowData3.areaName = val.city.name
-            },
+         },
+
             // 省市状态表
             changeSelect(){
             if(this.editType=='0'){
@@ -519,13 +572,16 @@ export default {
                     console.log(res)
                 });
             },
-            showMap(name) {
-                this.popVisible = true ;
-                this.current = name;
-            },
+        showMap(name) {
+            this.popVisible = true ;
+            this.current = name;
+        },
             getInfo(pos, name, info) {
                 console.log('in',info)
             switch (this.current) {
+                case 'districtName':
+                this.vestAll.districtName = info.formattedAddress;
+                break;
                 case 'districtAddress':
                 this.vestAll.districtAddress = info.formattedAddress;
                 let tude= pos.split(",");
@@ -533,6 +589,9 @@ export default {
                 let latitude=tude[1]
                 this.vestAll.longitude = longitude;
                 this.vestAll.latitude = latitude;
+                break;
+                case 'vestdistrictName':
+                this.formAll.districtName = info.formattedAddress;
                 break;
                 case 'pickaddAera':
                 let posstartArray = pos.split(',');
@@ -582,6 +641,9 @@ export default {
                 case 'districtName2':
                 this.formAll2.endAddress = info.formattedAddress;
                 break;
+                case 'selectdistrictName':
+                this.selectRowData3.districtName = info.formattedAddress;
+                break;
                 case 'selectdistrictAddress':
                 this.selectRowData3.districtAddress = info.formattedAddress;
                 break;
@@ -594,7 +656,6 @@ export default {
         },
         openDialog1(){
          this.firstblood2()
-         this.openFlag='0';
          this.vestAll = this.selectRowData[0];
          this.creadFlag = true;
          this.driverTemplateDialogFlag=true;
@@ -603,7 +664,7 @@ export default {
         //弹框控制
         change() {
          this.driverTemplateDialogFlag = false;
-         this.openFlag='';
+         this.openFlag='1';
          this.vestAll={
             serivceCode:null,
             districtName:null,
@@ -617,33 +678,18 @@ export default {
             this.creadFlag = false;
         },
         // 详情控制
-        openDialogView(){
-           if(this.selectRowData.length==undefined){
-              this.$message.warning('请选择您要操作的用户');
-               return
-           }
-          else if(this.selectRowData.length == 0){
-               this.$message.warning('请选择您要操作的用户');
-               return
-          }else if (this.selectRowData.length > 1) {
-                this.$message({
-                    message: '每次只能操作单条数据~',
-                    type: 'warning'
-                })
-               this.$refs.multipleTable.clearSelection();
-          }
-         else{
-         this.formAll2.vestId = this.selectRowData[0].id
-        data_get_aflcVestUnisource_Id(this.selectRowData[0].id).then(res=>{
+        openDialogView(val){
+         this.formAll2.vestId =val.id
+        data_get_aflcVestUnisource_Id(val.id).then(res=>{
             this.selectRowData3 = res.data
          })
          this.openFlag='0';
          this.firstblood2()
          this.driverTemplateDialogFlag2=true;
-         }
         },
         // 修改控制
         openDialogView0(){
+            console.log(this.selectRowData)
            if(this.selectRowData.length==undefined){
               this.$message.warning('请选择您要操作的用户');
                return
@@ -659,8 +705,8 @@ export default {
                this.$refs.multipleTable.clearSelection();
           }
          else{
-         this.formAll2.vestId = this.selectRowData[0].id
          this.openFlag='1';
+         this.formAll2.vestId = this.selectRowData[0].id
          data_get_aflcVestUnisource_Id(this.selectRowData[0].id).then(res=>{
             this.selectRowData3 = res.data
          })
@@ -680,13 +726,37 @@ export default {
             {
                 return
             }
-                this.pickAera.push({
-                    pickAeratree:this.pickaddAera,
-                    startAddressCoordinate:this.startAddressCoordinate,
-                    startAddressName:this.startAddressName,
-                }); 
-                this.pickaddAera = ''
-            console.log(this.pickAera)
+                if(this.pickAera.length<=1){
+                        this.pickAera.push({
+                        pickAeratree:this.pickaddAera,
+                        startAddressCoordinate:this.startAddressCoordinate,
+                        startAddressName:this.startAddressName,
+                    }); 
+                    this.pickaddAera=''
+                }else{
+                for(var i = 1;i<this.pickAera.length;i++){
+                    for(var j = 0;j<this.destinationAera.length;j++)
+                    {
+                    if(this.pickaddAera==this.pickAera[i].pickAeratree||this.pickaddAera==this.destinationAera[j].destinationAeratree)
+                    {
+                        this.$message.warning('在提货地和目的地中已经存在相同的地点~');
+                        break
+                    }
+                    else{
+                        if(i==this.pickAera.length-1&&j==this.destinationAera.length-1){
+                        this.pickAera.push({
+                        pickAeratree:this.pickaddAera,
+                        startAddressCoordinate:this.startAddressCoordinate,
+                        startAddressName:this.startAddressName,
+                        });
+                        this.pickaddAera=''
+                        return         
+                        break
+                        }
+                    }
+                    }
+                }
+                }
         },
         // 提货地减少
         reduceItempick(i){
@@ -694,16 +764,42 @@ export default {
         },
         // 目的地增加
         adddestinationAera(){
-            if(this.destinationaddAera=='')
-            {
-                return
-            }
-            this.destinationAera.push({
-                    destinationAeratree:this.destinationaddAera,
-                    endAddressCoordinate:this.endAddressCoordinate,
-                    endAddressName:this.endAddressName
-            }); 
-            this.destinationaddAera =''
+            console.log(' this.destinationAera', this.destinationAera)
+                if(this.destinationaddAera=='')
+                {
+                    return
+                }
+                if(this.destinationAera.length<=1){
+                this.destinationAera.push({
+                        destinationAeratree:this.destinationaddAera,
+                        endAddressCoordinate:this.endAddressCoordinate,
+                        endAddressName:this.endAddressName
+                }); 
+                this.destinationaddAera=''
+                }else{
+                for(var i = 1;i<this.destinationAera.length;i++){
+                    for(var j = 0;j<this.pickAera.length;j++)
+                    {
+                    if(this.destinationaddAera==this.destinationAera[i].destinationAeratree||this.destinationaddAera==this.pickAera[j].pickAeratree)
+                    {
+                        this.$message.warning('在提货地和目的地中已经存在相同的地点~');
+                        break
+                    }
+                    else{
+                        if(i==this.destinationAera.length-1&&j==this.pickAera.length-1){
+                        this.destinationAera.push({
+                                destinationAeratree:this.destinationaddAera,
+                                endAddressCoordinate:this.endAddressCoordinate,
+                                endAddressName:this.endAddressName
+                        }); 
+                        this.destinationaddAera=''
+                        return         
+                        break
+                        }
+                    }
+                    }
+                }
+                }
         },
         // 目的地减少
         reduceItemdestination(i){
@@ -722,11 +818,11 @@ export default {
                     serivceCode:null,
                     districtName: null,
                 },
-                 this.$refs.area.clearData();
                 this.firstblood();
             },
          //详情表查询
             getdata_search2(){
+
              this.firstblood2();
             },
         // 详情表清空
@@ -774,7 +870,6 @@ export default {
         //  详情表选择行   
          clickDetails2(i){
                  this.selectRowData2 = i;
-                 console.log(i)
         }, 
 
         //  大表删除行
@@ -857,9 +952,28 @@ export default {
                 })   
             },            
         //完善数据
-          completeData(){
+        completeData(){
             },
+
           completeData1(){
+          this.completeData();
+            this.vestAll.flcVestUnisourceAddressaList=this.totalAeraData;
+            if(this.totalAeraData.length==0){
+                this.$message.warning('请输入至少一组提货地和目的地');
+                return;
+            }
+            else{
+            this.$refs['vestAll'].validate(valid=>{
+                if(valid){
+                this.driverTemplateDialogFlag=false;
+                data_add_onesource_list(this.vestAll).then(res=>{
+                    this.$message.success('新增成功');
+                }).catch(res=>{
+                   this.$message.warning(res.text);
+                });
+                }
+                })
+            }
             },
         // 启用禁用
             handleUseStates(){
@@ -883,7 +997,7 @@ export default {
                  data_UseStates_onesource(this.selectId).then(res=>{
                      console.log('dsds',this.selectId)
                      this.selectId.splice(0,1);
-                     if(this.selectRowData[0].usingStatus==1)
+                     if(this.selectRowData[0].usingStatus==0)
                      {
                          this.$message.warning('已禁用');
                      }
@@ -931,17 +1045,17 @@ export default {
                 console.log(res)
                  this.$message.success('新增成功');
                  this.driverTemplateDialogFlag=false;
+                 this.firstblood();
             }).catch(res=>{
                 this.driverTemplateDialogFlag=false;
                  this.$message.success('新增失败');
+                 this.firstblood();
             })
         },
         // 修改保存
         changeInfoSave2(){
-            this.completeData1()
             this.selectRowData3.flcVestUnisourceAddressaList=this.tableDataTree1;
             data_get_onesource_update(this.selectRowData3).then(res=>{
-            console.log(res)
                 this.firstblood()
                 this.driverTemplateDialogFlag2 = false;
                 this.selectFlag=false
@@ -987,39 +1101,53 @@ export default {
 </script>
 
 <style lang="scss">
-.MjD{
-    .classify_searchinfo{
-        .el-cascader{
-            margin-top:-10px;
-        }    
+.MjD_onesource{
+    .BtnInfo{
+    font-weight: bold;
+    font-size: 14px;
+    color: #3e9ff1;
+    cursor: pointer;
+    }   
+.vestonceDialog{
+        display: inline-block;
     }
-    .onceDialogBox{
-    display: inline-block;
-    .el-button {
-        margin-right:0px;
-        padding: 7px 15px 7px;
-        font-size:12px;
-        }
-    .view_btn{
-        margin-left:50px;
+    .el-dialog{border-radius: 10px 10px 0px 0px;}
+    .el-input {
+    width: 250px;
+    }
+    .el-dialog .el-dialog__header{
+            border-bottom: 1px solid #ccc;
+    text-align: center;
+    height: 40px;
+    padding: 10px 0;
+    color: #fff;
+    font-weight: bold;
+    background-color: #0b4b7c;
+    }
+    .price_one{
+            width:105px;
+            margin-right: 10px;
+    }
+    .price_two{
+            width:105px;
+            margin-left: 10px;
     }    
-    .el-tableTree1{
-            width: 90%;
-            margin:0px auto;
-        }
-    .el-pagination{
-            text-align: right;
-    }  
-    .el-input__inner{
-       height: 30px!important;
-   }
-   .vestAddress{
+    .vestOrder{
+        width: 100%;
+        border-bottom: 2px dashed #ccc;
+    }
+    .vestAddress{
         display: flex;
         margin-top:10px;
+        .el-input__inner{
+            height: 30px;
+            line-height: 30px;
+        }
     .vestAera{
         flex-basis: 230px;
-        margin-left:50px;
+        margin-left:70px;
         h4{
+            font-family: MicrosoftYaHei;
             font-size: 12px;
             font-weight: normal;
             font-stretch: normal;
@@ -1056,7 +1184,8 @@ export default {
                 }
                 button{
                     flex:1;
-                    margin:0px 10px;
+                    margin-left:10px;
+                    margin-right: 10px;
                 }
                 }
 
@@ -1064,6 +1193,153 @@ export default {
         }
     }
     }
+    }
+        .vestDialog{
+        display: inline-block;
+        .el-dialog{
+            width: 780px;
+                  }
+        .vestdetail{
+            margin-top:10px;
+            .el-input__inner{height: 30px!important;line-height: 30px!important;}
+        }
+        .addvestbtn{
+            margin-left:30px;
+        }
+    .el-dialog .el-input {
+    width: 250px;
+    }
+    .price_one{
+            width:105px;
+            margin-right: 10px;
+    }
+    .price_two{
+            width:105px;
+            margin-left: 10px;
+    }    
+    .vestOrder{
+        width: 100%;
+        border-bottom: 2px dashed #ccc;
+    }
+    .vestAddress{
+        display: flex;
+        margin-top:10px;
+        .el-input__inner{
+            height: 30px;
+            line-height: 30px;
+        }
+    .vestAera{
+        flex-basis: 230px;
+        margin-left:70px;
+        h4{
+            font-family: MicrosoftYaHei;
+            font-size: 12px;
+            font-weight: normal;
+            font-stretch: normal;
+            line-height: 20px;
+            letter-spacing: 0px;
+            color: #666;
+            margin-bottom: 5px;
+        }
+        .el_vestsearch{
+            width: 230px;
+            height: 356px;
+            margin-bottom: 12px;
+            overflow: auto;
+            border: 1px solid #d2d2d2;
+            overflow: auto;
+            .vest_rbut{
+                float: right;
+                margin:10px 5px 0px 10px;
+            }
+            .vest_section{
+                width: 100%;
+                float: left;
+                .vest_tree{
+                    display: flex;
+                    align-items: center;
+                    margin-top:10px;
+                 .el-input{
+                    flex:10;
+                    margin-left:10px;   
+                 }
+                .vest_tree_span{
+                    flex:10;
+                    margin-left:15px;
+                }
+                button{
+                    flex:1;
+                    margin-left:10px;
+                    margin-right: 10px;
+                }
+                }
+
+            }
+        }
+    }
+
+    }
+    .adressstart 
+    {
+        .el-input{width:180px!important}
+    } 
+    .adressend {
+        .el-input{width:180px!important}
+       .el-form-item__label{
+          text-align: left;
+        }
+    }
+    .view_btn{
+        margin-left:50px;
+    }
+    }
+    .vestDialogBox {
+        display: inline-block;
+        .el-button {
+        margin-right:0px;
+        padding: 7px 15px 7px;
+        font-size:12px;
+        }
+        .el-dialog{
+                width: 980px!important;
+        }
+        .el-dialog .el-dialog__body{
+                 padding: 5px 0px 0px 0px;
+        }
+        .chooseCityList .el-cascader .el-input
+        {
+            width:250px;
+        }
+        .el-tableTree1{
+            width: 90%;
+            margin:0px auto;
+        }
+        .el-pagination{
+            text-align: right;
+            margin-bottom: 13px;
+            margin-top:20px;
+             }
+          .el-pagination__sizes .el-input{
+                width: 100px!important;
+            }
+           .el-pagination__jump .el-input{
+                width: 50px!important;
+            }
+
 }
+.info1_tab_footer{
+    padding-left: 20px;
+    background: #eee;
+    height: 40px;
+    line-height: 40px;
+    box-shadow: 0 -2px 2px rgba(0, 0, 0, 0.1);
+    position: relative;
+    z-index: 10;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    .show_pager{float: right}
+    .page-select{top:5px}
 }
 </style>
