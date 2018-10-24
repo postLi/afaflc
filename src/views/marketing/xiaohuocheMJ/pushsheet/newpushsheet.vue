@@ -213,9 +213,12 @@ data(){
 
     //    选择价格上浮开始校验
         const priceStartValidator = (rule, val, cb) => {
-            let reg= /^([1])(\.\d{1,2})?$/
+            let reg= /^([1]|[2])(\.\d{1,2})?$/
             let priceEnd =  this.$refs.priceEnd.value;
             if(!reg.test(val)){
+            cb(new Error('请输入范围1~2之间的正数，小数只保留两位'))
+            }
+            else if(val>2){
             cb(new Error('请输入范围1~2之间的正数，小数只保留两位'))
             }
             else{
@@ -224,10 +227,13 @@ data(){
         }
     //    选择价格上浮结束校验
         const priceEndValidator = (rule, val, cb) => {
-            let reg= /^([1])(\.\d{1,2})?$/
+            let reg= /^([1]|[2])(\.\d{1,2})?$/
             let priceStart = this.$refs.priceStart.value;
             if(!reg.test(val)){
             cb(new Error('请输入范围1~2之间的正数,小数只保留两位'))
+            }
+            else if(val>2){
+            cb(new Error('请输入范围1~2之间的正数，小数只保留两位'))
             }
             if(val<=priceStart){
             cb(new Error('必须大于价格上浮开始的值'))
@@ -973,7 +979,7 @@ mounted(){
   .table_box{
     margin-top: 10px;
     .ht_table{
-        width: 934px;
+        width: 950px;
         margin:0px 10px;
         color: #333;
         border-left:1px solid #d0d7e5;

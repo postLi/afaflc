@@ -16,3 +16,16 @@ export function data_get_MjPushLogs_list(page,pagesize,data) {
       }
     })
   }
+
+  //获取马甲推单司机列表
+export function data_get_RecordList_list(page,pagesize,data) {
+  return fetch({
+    url: '/'+baseurl_one+'/order/aflcOrder/v1/findVestOrderDriverPushRecordList',
+    method: 'post',
+    data:{
+      "currentPage": page,
+      "pageSize": pagesize,
+      "vo": data
+    }
+  })
+}

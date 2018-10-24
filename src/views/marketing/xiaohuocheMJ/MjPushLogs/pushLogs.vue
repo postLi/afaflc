@@ -1,6 +1,6 @@
 <template>
-<div class="detailsCompnent MJDpushlogs">
-    <div class="detailsInfo detailsArrange" v-loading="loading">
+<div class="detailsCompnent MJDpushlogs" style="height:100%">
+    <div class="detailsInfo detailsArrange" v-loading="loading" style="height:100%">
         <!-- 基本信息 -->
         <div class="detailsInfo-collapse collapseInfo">
             <h2>马甲单推送详情</h2>
@@ -44,13 +44,13 @@
         </div>
 
         <!-- 修改日志 -->
-        <div class="logInfo-collapse collapseInfo">
+        <div class="logInfo-collapse collapseInfo" style="height:50%">
             <h2>推送车辆</h2>
-            <div class="essentialInformation_table">
+            <div class="essentialInformation_table" style="height:100%">
                 <el-table
-                    :data="tableData"
+                    :data="tableDataTree"
                     border
-                   height="50%"
+                   height="100%"
                     style="width: 100%">
                     <el-table-column
                                     label="选择"
@@ -63,12 +63,10 @@
                                     </template>
                     </el-table-column>
                             <el-table-column
-                    prop="name"
                     label="用户"
                     width="180">
                     </el-table-column>
                     <el-table-column
-                    prop="address"
                     label="车辆信息">
                     </el-table-column>
                     <el-table-column
@@ -99,7 +97,7 @@
 
 import { parseTime } from '@/utils/index.js'
 import Pager from '@/components/Pagination/index'
-
+import  { data_get_MjPushLogs_list,data_get_RecordList_list} from '@/api/vest/MjPushLogs/MjPushLogs.js'
 export default {
   name: 'detailsInfo',
   components: {
@@ -122,53 +120,9 @@ export default {
         loading: false,
         dialogVisible: false,
         currentOrderSerial: '',
-        tableData: [{
-          date: '2016-05-02',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1518 弄'
-        }, {
-          date: '2016-05-04',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1517 弄'
-        }, {
-          date: '2016-05-01',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1519 弄'
-        }, {
-          date: '2016-05-03',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1516 弄'
-        },
-         {
-          date: '2016-05-03',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1516 弄'
-        }, {
-          date: '2016-05-03',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1516 弄'
-        },
-         {
-          date: '2016-05-03',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1516 弄'
-        },
-         {
-          date: '2016-05-03',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1516 弄'
-        },
-         {
-          date: '2016-05-03',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1516 弄'
-        },
-        {
-          date: '2016-05-03',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1516 弄'
-        },
-        ]
+        formAll:{
+        orderSerial:null,
+        },    
       }
   },
     watch: {
@@ -183,37 +137,29 @@ export default {
         },
     },
      mounted() {
-        // console.log(this.$route)
+      this.formAll.orderSerial = this.$route.query.orderSerial
+      this.firstblood();
+      this.firstblood2();
     },
     methods: {
-        init() {
-        
-        },
-        // 每页显示数据量变更
-        handlePageChange(obj) {
+            //刷新页面  
+            firstblood(){
+                data_get_MjPushLogs_list(1,1,this.formAll).then(res => {
+                })
+            },
+            //刷新页面  
+            firstblood2(){
+                data_get_RecordList_list(this.page,this.pagesize,this.formAll).then(res => {
+                    this.dataTotal = res.data.totalCount
+                    this.tableDataTree = res.data.list;
+                })
+            },
+    // 每页显示数据量变更
+    handlePageChange(obj) {
             this.page = obj.pageNum
             this.pagesize = obj.pageSize
             this.firstblood()
             },
-
-        shuaxin() {
-            this.init()
-        },
-        handlerClick() {
-            this.currentOrderSerial = this.$route.query.orderSerial
-            this.dialogVisible = true
-        },
-        // handlePageChange(obj) {
-        //     this.page = obj.pageNum
-        //     this.pagesize = obj.pageSize
-        //     this.init();
-        // },
-        handleSizeChange(val) {
-            console.log(`每页 ${val} 条`);
-        },
-        handleCurrentChange(val) {
-            console.log(`当前页: ${val}`);
-        }
     }
 }
 </script>

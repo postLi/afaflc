@@ -161,7 +161,7 @@ export default {
        this.$refs['formAll'].validate(valid=>{
         if(valid){
         this.dialogFormVisible_add = false;
-        data_aflcExtractCashList_update(this.params[0].extractSerial,this.formAll).then(res=>{
+        data_aflcExtractCashList_update(this.params.extractSerial,this.formAll).then(res=>{
             this.$message.success('修改成功');
             this.$emit('getData') 
         }).catch(res=>{
