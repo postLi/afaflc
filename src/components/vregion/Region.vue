@@ -287,7 +287,7 @@ export default {
                     return
                   }
                 }
-                            // 返回了数据才进行渲染
+                // 返回了数据才进行渲染
                 this.listArea = data
                 console.log('333333333:', this.haveCity, this.nowProvince, this.nowCity, haveCity, res.code, data)
                 if (data.length) {
@@ -440,8 +440,9 @@ export default {
               resolve(res)
               return res
             }).catch(err => {
-                        // 如果后台没有返回数据，则隐藏
+                // 如果后台没有返回数据，则隐藏
               resolve({ code, data: [] })
+              this.showDropdown(false);
             })
           })
         },
@@ -494,15 +495,17 @@ export default {
                 text-align: left;
                 color: #24292e;
                 font-size: 16px;
+                line-height: 20px;
                 white-space: nowrap;
                 font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
-                .rg-header-selected{
+                span,.rg-header-selected{
                     white-space: nowrap;
                     text-overflow: ellipsis;
                     -o-text-overflow: ellipsis;
                     overflow: hidden;
                     font-size: 14px;
                     max-width: 310px;
+                    line-height: 20px;
                 }
             }
             button{
@@ -611,6 +614,8 @@ export default {
                     border-radius: 2px;
                     margin-right: 5px;
                     color: #666666;
+                    line-height: 20px;
+                    height: 26px;
                     &:hover{
                         border: 1px solid #DDDDDD;
                         box-shadow: 0 1px 8px rgba(0,0,0,0.2);
@@ -619,7 +624,7 @@ export default {
                         color: black;
                         background-color: #F6F6F6;
                     }
-                    &.active { border: 1px solid #666666;background-color: #DDDDDD; }
+                    &.active { border: 1px solid #ccc;background-color: #f2f2f2; }
                 }
                 & > li {
                     /*height: auto;

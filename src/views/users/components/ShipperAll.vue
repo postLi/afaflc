@@ -155,7 +155,7 @@ export default {
         clickDetails(row, event, column){
             this.$refs.multipleTable.toggleRowSelection(row);
         },
-         // 判断选中与否
+        // 判断选中与否
         getSelection(val){
             console.log('选中内容',val)
             this.selected = val;

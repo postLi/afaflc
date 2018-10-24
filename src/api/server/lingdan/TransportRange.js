@@ -1,6 +1,6 @@
 import fetch from '@/utils/fetch'
 
-const baseUrl = 'aflcusercenterservice'
+const baseUrl = 'aflcusercenterservice-lyc'
 
 //根据条件获取专线列表
 export function getTransportRangeList(page,pagesize,data){
@@ -12,6 +12,15 @@ export function getTransportRangeList(page,pagesize,data){
         "pageSize": pagesize,
         "vo": data
       }
+    })
+  }
+
+  //根据条件获取专线列表
+export function createWebTransport(data){
+    return fetch({
+      url: '/'+baseUrl+'/usercenter/aflcTransportRange/v1/createWebAflcTransportRange',
+      method: 'post',
+      data:data
     })
   }
 

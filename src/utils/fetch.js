@@ -22,7 +22,11 @@ service.interceptors.request.use(config => {
     }
 
     if (getUserInfo() && getUserInfo().id) {
-      config.headers.user_id = getUserInfo().id
+        config.headers.user_id = getUserInfo().id
+    }
+
+    if (getUserInfo() && getUserInfo().userToken) {
+        config.headers.user_token  = getUserInfo().userToken
     }
 
     config.params['access_token'] = getToken()

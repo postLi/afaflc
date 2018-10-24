@@ -5,7 +5,7 @@
             <h2>基本信息</h2>
             <el-row :gutter="20">
                 <el-col :span="10">
-                    <el-form-item label="出发地：" prop="startLocation">
+                    <el-form-item label="出发地：" prop="startLocation" class="location_line">
                         <el-input v-model="ruleForm.startLocation" v-if="unable" :disabled="unable"></el-input>
                         <vregion :ui="true" @values="regionChangeStart" :ifAera = 'true' class="form-control" @testCity="ifProvice('startLocation')" v-else>
                             <el-input v-model="ruleForm.startLocation" placeholder="请选择出发地" ></el-input>
@@ -13,7 +13,7 @@
                     </el-form-item>
                 </el-col>
                 <el-col :span="10">
-                    <el-form-item label="到达地：" prop="endLocation">
+                    <el-form-item label="到达地：" prop="endLocation" class="location_line">
                         <el-input v-model="ruleForm.endLocation" v-if="unable" :disabled="unable"></el-input>
                         <vregion :ui="true" @values="regionChangeEnd" :ifAera = 'true' class="form-control"  @testCity="ifProvice('endLocation')" v-else>
                             <el-input v-model="ruleForm.endLocation"  placeholder="请选择到达地"></el-input>
@@ -25,7 +25,7 @@
         <div class=" priceTime rangeCommon">
             <h2>价格时效</h2>
             <el-form-item label="运输时效：" prop="transportAging">
-                <el-input v-model="ruleForm.transportAging" :disabled="unable" @keyup.native='handlerChoose' >
+                <el-input v-model="ruleForm.transportAging" :disabled="unable" maxlength="3" @keyup.native='handlerChoose' >
                      <template slot="append">小时</template>
                 </el-input>
                 <!-- <el-radio-group v-model="ruleForm.transportAgingUnit" :disabled="unable">
@@ -35,8 +35,17 @@
                 </el-radio-group>
                 <span class="supplement">(多天填写如：2-5，其它只能填写阿拉伯数字)</span> -->
             </el-form-item>
+            
+            <el-form-item label="发车频率：" prop="departureHzData">
+                <el-input placeholder="请输入" v-numberOnly v-model="ruleForm.departureHzData" maxlength="3" :disabled="unable">
+                    <template slot="append">天</template>
+                </el-input>
+                <el-input placeholder="请输入" v-numberOnly v-model="ruleForm.departureHzTime" maxlength="3" :disabled="unable">
+                    <template slot="append">次</template>
+                </el-input>
+            </el-form-item>
 
-            <el-form-item label="轻货价格：" class="jieti">
+            <el-form-item label="轻货价格：" class="jieti" prop="ligthPriceForms">
                 <p>(阶梯价格最大值不填，代表无穷大，例如：10-，代表10立方以上)</p>
                 <div class="goodsPriceChoose">
                     <p>
@@ -48,11 +57,9 @@
                             <el-input v-model.number="form.startVolume" v-numberOnly placeholder="包含" maxlength="7" disabled></el-input>
                             <span>----</span>
                             <el-input v-model.number="form.endVolume" :disabled="unable" v-numberOnly placeholder="包含，整数"  maxlength="7" @change="ifWrong(ligthPriceForms,keys)"></el-input>
-                            立方
                         </li>
                         <li>
                             <el-input v-model="form.primeryPrice" :disabled="unable" v-number-only:point maxlength="7"></el-input>
-                                元/立方
                         </li>
                         <li class="buttons">
                             <span  @click="addItem('light',keys,form)" class="addItem" v-if="keys == ligthPriceForms.length-1 && keys != 4">
@@ -64,56 +71,52 @@
                 </div>
             </el-form-item>
 
-            <el-form-item label="重泡货（轻货）：" prop="weigthPriceForms" class="jieti">
-                <p>(阶梯价格最大值不填，代表无穷大，例如：500-，代表500公斤以上)</p>
+            <el-form-item label="重泡货（轻货）：" prop="ligthPriceDottedForms" class="jieti">
+                <p>(阶梯价格最大值不填，代表无穷大，例如：10-，代表10立方以上)</p>
                 <div class="goodsPriceChoose">
                     <p>
                         <span>运量（m3）</span>
                         <span>推荐价格（元 / m3） <strong>(必填)</strong></span>
                     </p>
-                    <ul v-for="(form,keys) in weigthPriceForms" :key="keys">
+                    <ul v-for="(form,keys) in ligthPriceDottedForms" :key="keys">
                         <li>
                             <el-input v-model.number="form.startVolume" v-numberOnly placeholder="包含" maxlength="7" disabled></el-input>
                             <span>----</span>
-                            <el-input v-model.number="form.endVolume" :disabled="unable" v-numberOnly placeholder="包含，整数" maxlength="7" @change="ifWrong(weigthPriceForms,keys)"></el-input>
-                            公斤
+                            <el-input v-model.number="form.endVolume" :disabled="unable" v-numberOnly placeholder="包含，整数" maxlength="7" @change="ifWrong(ligthPriceDottedForms,keys)"></el-input>
                         </li>
                         <li>
                             <el-input v-model="form.primeryPrice" :disabled="unable" v-number-only:point maxlength="7"></el-input>
-                            元/公斤
                         </li>
                         <li class="buttons">
-                            <span  @click="addItem('weight',keys,form)" class="addItem" v-if="keys == weigthPriceForms.length-1 && keys != 4">
+                            <span  @click="addItem('lightDotted',keys,form)" class="addItem" v-if="keys == ligthPriceDottedForms.length-1 && keys != 4">
                             </span>
-                            <span  @click="reduceItem(keys,'weight')" class="reduceItem" v-if="keys == weigthPriceForms.length-1 && weigthPriceForms.length !=1 " >
+                            <span  @click="reduceItem(keys,'lightDotted')" class="reduceItem" v-if="keys == ligthPriceDottedForms.length-1 && ligthPriceDottedForms.length !=1 " >
                             </span>
                         </li>
                     </ul>
                 </div>
             </el-form-item>
 
-            <el-form-item label="重泡货（重货）：" prop="weigthPriceForms" class="jieti">
+            <el-form-item label="重泡货（重货）：" prop="weigthPriceDottedForms" class="jieti">
                 <p>(阶梯价格最大值不填，代表无穷大，例如：500-，代表500公斤以上)</p>
                 <div class="goodsPriceChoose">
                     <p>
-                        <span>运量（m3）</span>
-                        <span>推荐价格（元 / m3） <strong>(必填)</strong></span>
+                        <span>运量（kg）</span>
+                        <span>推荐价格（元 / kg） <strong>(必填)</strong></span>
                     </p>
-                    <ul v-for="(form,keys) in weigthPriceForms" :key="keys">
+                    <ul v-for="(form,keys) in weigthPriceDottedForms" :key="keys">
                         <li>
                             <el-input v-model.number="form.startVolume" v-numberOnly placeholder="包含" maxlength="7" disabled></el-input>
                             <span>----</span>
-                            <el-input v-model.number="form.endVolume" :disabled="unable" v-numberOnly placeholder="包含，整数" maxlength="7" @change="ifWrong(weigthPriceForms,keys)"></el-input>
-                            公斤
+                            <el-input v-model.number="form.endVolume" :disabled="unable" v-numberOnly placeholder="包含，整数" maxlength="7" @change="ifWrong(weigthPriceDottedForms,keys)"></el-input>
                         </li>
                         <li>
                             <el-input v-model="form.primeryPrice" :disabled="unable" v-number-only:point maxlength="7"></el-input>
-                            元/公斤
                         </li>
                         <li class="buttons">
-                            <span  @click="addItem('weight',keys,form)" class="addItem" v-if="keys == weigthPriceForms.length-1 && keys != 4">
+                            <span  @click="addItem('weightDotted',keys,form)" class="addItem" v-if="keys == weigthPriceDottedForms.length-1 && keys != 4">
                             </span>
-                            <span  @click="reduceItem(keys,'weight')" class="reduceItem" v-if="keys == weigthPriceForms.length-1 && weigthPriceForms.length !=1 " >
+                            <span  @click="reduceItem(keys,'weightDotted')" class="reduceItem" v-if="keys == weigthPriceDottedForms.length-1 && weigthPriceDottedForms.length !=1 " >
                             </span>
                         </li>
                     </ul>
@@ -124,19 +127,17 @@
                 <p>(阶梯价格最大值不填，代表无穷大，例如：500-，代表500公斤以上)</p>
                 <div class="goodsPriceChoose">
                     <p>
-                        <span>运量（m3）</span>
-                        <span>推荐价格（元 / m3） <strong>(必填)</strong></span>
+                        <span>运量（kg）</span>
+                        <span>推荐价格（元 / kg） <strong>(必填)</strong></span>
                     </p>
                     <ul v-for="(form,keys) in weigthPriceForms" :key="keys">
                         <li>
                             <el-input v-model.number="form.startVolume" v-numberOnly placeholder="包含" maxlength="7" disabled></el-input>
                             <span>----</span>
                             <el-input v-model.number="form.endVolume" :disabled="unable" v-numberOnly placeholder="包含，整数" maxlength="7" @change="ifWrong(weigthPriceForms,keys)"></el-input>
-                            公斤
                         </li>
                         <li>
                             <el-input v-model="form.primeryPrice" :disabled="unable" v-number-only:point maxlength="7"></el-input>
-                            元/公斤
                         </li>
                         <li class="buttons">
                             <span  @click="addItem('weight',keys,form)" class="addItem" v-if="keys == weigthPriceForms.length-1 && keys != 4">
@@ -162,15 +163,15 @@
                     :maxlength="maxlength" 
                     placeholder="请填写备注30-2000个字。提供原创说明有助于提升线路效果。">
                 </el-input>
-                <span>{{ruleForm.transportRemark.length}} / {{maxlength}}</span>
+                <span><i>{{ruleForm.transportRemark.length}}</i>/{{maxlength}}</span>
                 <p class="supplement">请对您的线路进行补充说明，尽量使用市场上或物流行业内的常用词。</p>
             </el-form-item>
 
         </div>
-        <el-form-item class="fromfooter" v-show="ifShowRangeType != 2">
+        <el-form-item class="fromfooter">
             <el-button type="primary" @click="resetForm('ruleForm')">重置</el-button>
-            <el-button type="primary" @click="submitForm('ruleForm')" v-if="ifShowRangeType == '1'">修改</el-button>
-            <el-button type="primary" @click="submitForm('ruleForm')" v-else>立即发布</el-button>
+            <el-button type="primary" @click="submitForm('ruleForm')">{{ifShowRangeType == '1' ? '修改' : '立即发布'}}</el-button>
+            <!-- <el-button type="primary" @click="submitForm('ruleForm')" v-else>立即发布</el-button> -->
         </el-form-item>
     </el-form>
 
@@ -178,7 +179,7 @@
 </template>
 <script>
 import { getDictionary } from '@/api/common.js'
-// import { newTransportRangeList,TransportRangeInfo,changeTransportRange } from '@/api/carrier/TransportRange.js'
+import { createWebTransport } from '@/api/server/lingdan/TransportRange.js'
 import { getUserInfo } from '@/utils/auth.js'
 import { REGEX } from '@/utils/validate.js'
 // import upload from '@/components/Upload/singleImage2'
@@ -242,53 +243,60 @@ export default {
             })
         };
         return {
-            rangeLogo:[],
+            // rangeLogo:[],
             unable:false,
-            btnText: '请选择',
-            current:'',
             popVisible:false,
             ifShowRangeType:'0',
-            dedicated:'AF033',
-            depart:'AF026',
+            // dedicated:'AF033',
+            // depart:'AF026',
             totalNumber:0,//當前字數
-            maxlength:2000,
+            maxlength:120,
             ruleForm: {
                 startLocation:'',//出发地
+                startLocationCode:'',
                 startProvince:'',
                 startCity:'',
                 startArea:'',
-                startLocationContacts:'',//出发地联系人
-                startLocationContactsMobile:'',//出发地联系人电话
+                //startLocationContacts:'',//出发地联系人
+                //startLocationContactsMobile:'',//出发地联系人电话
                 endLocation:'',//到达地
+                endLocationCode:'',
                 endProvince:'',
                 endCity:'',
                 endArea:'',
-                endLocationContacts:'',//到达地联系人
-                endLocationContactsMobile:'',//到达地联系人电话
+                //endLocationContacts:'',//到达地联系人
+                //endLocationContactsMobile:'',//到达地联系人电话
                 transportAging:'',//运输时效
-                transportAgingUnit:'天',//运输时效单位
+                // transportAgingUnit:'小时',//运输时效单位
                 departureHzData:'',//发车频率天数
                 departureHzTime:'',//发车频率车次
                 rangePrices:[],
                 lowerPrice:'',//最低一票价
-                rangeType:'AF03301',
-                rangeTypeName:'普通线路',
-                departureTimeCode:'',//发车时间code
-                departureTime:'',//发车时间
+                //rangeType:'AF03301',
+                //rangeTypeName:'普通线路',
+                //departureTimeCode:'',//发车时间code
+                //departureTime:'',//发车时间
                 transportRemark:'',//线路说明
-                publishName:'',
-                publishId:'',
-                rangeLogo:'',//专线图片
+                // publishName:'',
+                // publishId:'',
+                //rangeLogo:'',//专线图片
             },
-            rangeTypeClassfy:[],//专线类型选项
-            departClassfy:[],//发车时间选项
+            //rangeTypeClassfy:[],//专线类型选项
+            //departClassfy:[],//发车时间选项
             ligthPriceForms:[
                 {
                     startVolume:'0',
                     endVolume:'',
                     primeryPrice:'',//标准价
-                    discountPrice:'',//折后价
                     type:'0'
+                } 
+            ],
+            ligthPriceDottedForms:[
+                {
+                    startVolume:'0',
+                    endVolume:'',
+                    primeryPrice:'',//标准价
+                    type:'2'
                 } 
             ],
             weigthPriceForms:[
@@ -300,6 +308,15 @@ export default {
                     type:'1'
                 }
             ],
+            weigthPriceDottedForms:[
+                {
+                    startVolume:'0',
+                    endVolume:'',
+                    primeryPrice:'',//标准价
+                    discountPrice:'',//折后价
+                    type:'3'
+                }
+            ],
             rules: {
                 startLocation:[
                     { required: true, message: '请输入出发地', trigger: 'change' },
@@ -307,24 +324,24 @@ export default {
                 endLocation: [
                     { required: true, message: '请输入到达地', trigger: 'change' },
                 ],
-                startLocationContacts: [
-                    { required: true, message: '请输入出发地联系人信息', trigger: 'blur' }
-                ],
-                endLocationContacts: [
-                    { required: true, message: '请输入到达地联系人信息', trigger: 'blur' }
-                ],
-                startLocationContactsMobile: [
-                    { required: true, validator: checkStartLocationContactsMobile, trigger: 'change' }
-                ],
-                endLocationContactsMobile: [
-                    { required: true, validator: checkEndLocationContactsMobile, trigger: 'change' }
-                ],
-                rangeType: [
-                    { required: true, message: '请选择专线类型', trigger: 'change' }
-                ],
-                transportRemark:[
-                    { min: 30, max: 2000, message: '专线说明请在30-2000字', trigger: 'blur' }
-                ],
+                // startLocationContacts: [
+                //     { required: true, message: '请输入出发地联系人信息', trigger: 'blur' }
+                // ],
+                // endLocationContacts: [
+                //     { required: true, message: '请输入到达地联系人信息', trigger: 'blur' }
+                // ],
+                // startLocationContactsMobile: [
+                //     { required: true, validator: checkStartLocationContactsMobile, trigger: 'change' }
+                // ],
+                // endLocationContactsMobile: [
+                //     { required: true, validator: checkEndLocationContactsMobile, trigger: 'change' }
+                // ],
+                // rangeType: [
+                //     { required: true, message: '请选择专线类型', trigger: 'change' }
+                // ],
+                // transportRemark:[
+                //     { min: 30, max: 2000, message: '专线说明请在30-2000字', trigger: 'blur' }
+                // ],
                 weigthPriceForms:[
                     { required:true,validator: checkWeigthPriceForms, trigger: 'blur'},
                 ],
@@ -374,6 +391,13 @@ export default {
             this.ruleForm.startProvince = d.province ? d.province.name : '';
             this.ruleForm.startCity = d.city ? d.city.name : '';
             this.ruleForm.startArea = d.area ? d.area.name : '';
+            if(d.area){
+                this.ruleForm.startLocationCode = d.area.code;
+            }else if(d.city){
+                this.ruleForm.startLocationCode = d.city.code;
+            }else{
+                this.ruleForm.startLocationCode = d.province.code;
+            }
         },
         regionChangeEnd(d) {
             // console.log('data:',d)
@@ -388,6 +412,13 @@ export default {
             this.ruleForm.endProvince = d.province ? d.province.name : '';
             this.ruleForm.endCity = d.city ? d.city.name : '';
             this.ruleForm.endArea = d.area ? d.area.name : '';
+            if(d.area){
+                this.ruleForm.endLocationCode = d.area.code;
+            }else if(d.city){
+                this.ruleForm.endLocationCode = d.city.code;
+            }else{
+                this.ruleForm.endLocationCode = d.province.code;
+            }
         },
         ifProvice(type){
             console.log('ifProvice',type)
@@ -414,8 +445,8 @@ export default {
                 console.log('```',dataObj)
                 TransportRangeInfo(dataObj.id).then(res=>{
                     this.ruleForm = res.data;
-                    this.rangeLogo = this.ruleForm.rangeLogo.split(",");
-                    console.log('this.rangeLogo',this.rangeLogo)
+                    // this.rangeLogo = this.ruleForm.rangeLogo.split(",");
+                    // console.log('this.rangeLogo',this.rangeLogo)
                 })
                 if(this.ifShowRangeType == 2){
                     this.unable = true;
@@ -424,69 +455,110 @@ export default {
         },
         //判断和限制
         handlerChoose(){
-            let type = this.ruleForm.transportAgingUnit;
+            // let type = this.ruleForm.transportAgingUnit;
             let transportAging = this.ruleForm.transportAging;
-            if(type != '多天'){
-                transportAging = transportAging.replace(/[^\d.]/g,""); //清除"数字"和"."以外的字符
-                transportAging = transportAging.replace(/^\./g,""); //验证第一个字符是数字
-                transportAging = transportAging.replace(/\.{2,}/g,"."); //只保留第一个, 清除多余的
-                transportAging = transportAging.replace(".","$#$").replace(/\./g,"").replace("$#$",".");
-                transportAging = transportAging.replace(/^(\-)*(\d+)\.(\d).*$/,'$1$2.$3'); //只能输入一位小数
-                this.ruleForm.transportAging = transportAging ; 
-            }else{
+            // if(type != '多天'){
+            //     transportAging = transportAging.replace(/[^\d.]/g,""); //清除"数字"和"."以外的字符
+            //     transportAging = transportAging.replace(/^\./g,""); //验证第一个字符是数字
+            //     transportAging = transportAging.replace(/\.{2,}/g,"."); //只保留第一个, 清除多余的
+            //     transportAging = transportAging.replace(".","$#$").replace(/\./g,"").replace("$#$",".");
+            //     transportAging = transportAging.replace(/^(\-)*(\d+)\.(\d).*$/,'$1$2.$3'); //只能输入一位小数
+            //     this.ruleForm.transportAging = transportAging ; 
+            // }else{
                 transportAging = transportAging.replace(/[^0-9\-]+/g,"");
                 this.ruleForm.transportAging = transportAging ; 
-            }
+            // }
         },
         getInformations(){
-            Promise.all([ getDictionary(this.dedicated), getDictionary(this.depart)]).then(resArr => {
-                this.rangeTypeClassfy = resArr[0].data;
-                this.departClassfy = resArr[1].data;
-            })
-            let userInfo = getUserInfo();
-            this.ruleForm.publishName = userInfo.companyName;
-            this.ruleForm.publishId = userInfo.id;
+            // Promise.all([ getDictionary(this.dedicated), getDictionary(this.depart)]).then(resArr => {
+            //     this.rangeTypeClassfy = resArr[0].data;
+            //     this.departClassfy = resArr[1].data;
+            // })
+            // let userInfo = getUserInfo();
+            // this.ruleForm.publishName = userInfo.companyName;
+            // this.ruleForm.publishId = userInfo.id;
         },
         //添加子节点新增
         addItem(type,idx,item){
-            // console.log(type)
+            console.log(type)
             switch(type){
                 case 'weight':
                 // console.log(item.primeryPrice)
-                    // if(idx == 0 && item.endVolume == ''){
-                    //     return this.$message({
-                    //         type: 'info',
-                    //         message: '请补充重货运量' 
-                    //     })
-                    // }
-                    // else if(item.primeryPrice == ''){
-                    //     return this.$message({
-                    //         type: 'info',
-                    //         message: '请补充重货推荐价格（元 / m3）' 
-                    //     })
-                    // }else{
+                    if(idx == 0 && item.endVolume == ''){
+                        return this.$message({
+                            type: 'info',
+                            message: '请补充重货运量' 
+                        })
+                    }
+                    else if(item.primeryPrice == ''){
+                        return this.$message({
+                            type: 'info',
+                            message: '请补充重货推荐价格（元 / m3）' 
+                        })
+                    }else{
                         this.weigthPriceForms.push({
                             startVolume:this.weigthPriceForms[idx].endVolume,
                             endVolume:'',
                             primeryPrice:'',//标准价
-                            discountPrice:'',//折后价
                             type:'1'
                         }); 
-                    // }
+                    }
+                    break;
+                case 'weightDotted':
+                    if(idx == 0 && item.endVolume == ''){
+                        return this.$message({
+                            type: 'info',
+                            message: '请补充重泡货（重货）运量' 
+                        })
+                    }
+                    else if(item.primeryPrice == ''){
+                        return this.$message({
+                            type: 'info',
+                            message: '请补充重泡货（重货）推荐价格（元 / m3）' 
+                        })
+                    }else{
+                        this.weigthPriceDottedForms.push({
+                            startVolume:this.weigthPriceDottedForms[idx].endVolume,
+                            endVolume:'',
+                            primeryPrice:'',//标准价
+                            type:'3'
+                        }); 
+                    }
+                    break;
+                case 'lightDotted':
+                    if(idx == 0 && item.endVolume == ''){
+                        return this.$message({
+                            type: 'info',
+                            message: '请补充重泡货（轻货）运量' 
+                        })
+                    }
+                    else if(item.primeryPrice == ''){
+                        return this.$message({
+                            type: 'info',
+                            message: '请补充重泡货（轻货）推荐价格（元 / m3）' 
+                        })
+                    }else{
+                        this.ligthPriceDottedForms.push({
+                            startVolume:this.ligthPriceDottedForms[idx].endVolume,
+                            endVolume:'',
+                            primeryPrice:'',//标准价
+                            type:'2'
+                        }); 
+                    }
                     break;
                 case 'light':
-                    // if(idx == 0 && item.endVolume == ''){
-                    //     return this.$message({
-                    //         type: 'info',
-                    //         message: '请补充轻货运量' 
-                    //     })
-                    // }
-                    // else if(item.primeryPrice == ''){
-                    //     return this.$message({
-                    //         type: 'info',
-                    //         message: '请补充轻货原报价' 
-                    //     })
-                    // }else{
+                    if(idx == 0 && item.endVolume == ''){
+                        return this.$message({
+                            type: 'info',
+                            message: '请补充轻货运量' 
+                        })
+                    }
+                    else if(item.primeryPrice == ''){
+                        return this.$message({
+                            type: 'info',
+                            message: '请补充轻货推荐价格' 
+                        })
+                    }else{
                         this.ligthPriceForms.push({
                             startVolume:this.ligthPriceForms[idx].endVolume,
                             endVolume:'',
@@ -494,7 +566,7 @@ export default {
                             discountPrice:'',//折后价
                             type:'0'
                         }); 
-                    // }
+                    }
                     break;
             }
         },
@@ -508,6 +580,12 @@ export default {
                 case 'light':
                     this.ligthPriceForms.splice(idx,1);
                     break;
+                case 'lightDotted':
+                    this.ligthPriceDottedForms.splice(idx,1);
+                    break;
+                case 'weightDotted':
+                    this.weigthPriceDottedForms.splice(idx,1);
+                    break;
             }
         },  
         completeName(){
@@ -520,61 +598,70 @@ export default {
             this.weigthPriceForms.forEach(item => {
                 this.ruleForm.rangePrices.push(item) 
             })
-            
-            if(this.ruleForm.rangeType){
-                this.ruleForm.rangeTypeName = this.rangeTypeClassfy.find(item => item.code == this.ruleForm.rangeType)['name'];
-            }
 
-            if(this.ruleForm.departureTimeCode){
-                this.ruleForm.departureTime = this.departClassfy.find(item => item.code == this.ruleForm.departureTimeCode)['name'];
-            }
+            this.ligthPriceDottedForms.forEach(item => {
+                this.ruleForm.rangePrices.push(item) 
+            })
+
+            this.weigthPriceDottedForms.forEach(item => {
+                this.ruleForm.rangePrices.push(item) 
+            })
+            
+            // if(this.ruleForm.rangeType){
+            //     this.ruleForm.rangeTypeName = this.rangeTypeClassfy.find(item => item.code == this.ruleForm.rangeType)['name'];
+            // }
+
+            // if(this.ruleForm.departureTimeCode){
+            //     this.ruleForm.departureTime = this.departClassfy.find(item => item.code == this.ruleForm.departureTimeCode)['name'];
+            // }
         },
         //提交按钮
         submitForm(formName) {
-            console.log(this.ruleForm)
+            // console.log(this.ruleForm)
             let ifNull = true;
             let messageInfo;
 
-            this.ligthPriceForms.forEach(item => {
-                if(item.primeryPrice == ''){
-                    messageInfo= '请补充轻货原报价' 
-                    ifNull = false;
-                }
-            })
-            this.weigthPriceForms.forEach(item => {
-                if(item.primeryPrice == ''){
-                    messageInfo= '请补充重货原报价' 
-                    ifNull = false;
-                }
-            })
+            // this.ligthPriceForms.forEach(item => {
+            //     if(item.primeryPrice == ''){
+            //         messageInfo= '请补充轻货推荐价格' 
+            //         ifNull = false;
+            //     }
+            // })
+            // this.weigthPriceForms.forEach(item => {
+            //     if(item.primeryPrice == ''){
+            //         messageInfo= '请补充重货推荐价格' 
+            //         ifNull = false;
+            //     }
+            // })
 
             if(ifNull){
                 
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
                         this.completeName();
+                        console.log(this.ruleForm)
                         let commitFunction;
-                        if(this. ifShowRangeType == '1'){
-                            commitFunction = changeTransportRange(this.ruleForm);
-                        }else{
-                            commitFunction = newTransportRangeList(this.ruleForm)
-                        }
+                        // if(this.ifShowRangeType == '1'){
+                        //     commitFunction = changeTransportRange(this.ruleForm);
+                        // }else{
+                            commitFunction = createWebTransport(this.ruleForm)
+                        // }
                         commitFunction.then(res => {
                             console.log('res',res)
-                            if(res.status == 200){
-                                this.$alert('操作成功', '提示', {
-                                    confirmButtonText: '确定',
-                                    callback: action => {
-                                        this.$router.push({name:'管理物流专线'})
-                                    }
-                                });
+                            // if(res.status == 200){
+                            //     this.$alert('操作成功', '提示', {
+                            //         confirmButtonText: '确定',
+                            //         callback: action => {
+                            //             this.$router.push({name:'管理物流专线'})
+                            //         }
+                            //     });
                                 
-                            }else{
-                                this.$message({
-                                    type: 'info',
-                                    message: '操作失败，原因：' + res.errorInfo ? res.errorInfo : res.text
-                                })
-                            }
+                            // }else{
+                            //     this.$message({
+                            //         type: 'info',
+                            //         message: '操作失败，原因：' + res.errorInfo ? res.errorInfo : res.text
+                            //     })
+                            // }
                         }).catch(err=>{
                             this.$message({
                                 type: 'info',
@@ -629,7 +716,7 @@ export default {
             overflow: hidden;
             >.searchInformation{
                 .el-form-item{
-                    margin-bottom: 20px;
+                    margin-bottom: 40px;
                     .el-form-item__content{
                         .v-region{
                             width: 100%;
@@ -637,7 +724,7 @@ export default {
                                 width: 100%;
                             }
                             .v-dropdown-container{
-                                top: 35px !important;
+                                top: 40px !important;
                                 left: 0px !important;
                             }
                         }
@@ -659,6 +746,11 @@ export default {
                     font-weight: bold;
                     font-stretch: normal;
                     margin-bottom: 20px;
+                }
+                .location_line{
+                    .el-form-item__content{
+                        line-height: 28px;
+                    }
                 }
             }
             .priceTime{
@@ -736,7 +828,7 @@ export default {
                                 overflow: hidden;
                                 li{
                                     .el-input{
-                                        width: 160px;
+                                        width: 174px;
                                     }
                                     float: left;
                                 }
@@ -800,7 +892,17 @@ export default {
                             padding-bottom: 20px;
                         }
                         span{
-                            bottom: 22px;
+                            font-size: 12px;
+                            color: #999;
+                            position: absolute;
+                            right: 10px;
+                            bottom: 40px;
+                            line-height: 20px;
+                            i{
+                                color: red;
+                                font-style: normal;
+                                margin-right: 5px;
+                            }
                         }
                     }
                 }
