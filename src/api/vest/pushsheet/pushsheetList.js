@@ -1,6 +1,6 @@
 import fetch from '@/utils/fetch'
 
-const baseurl = "aflcsmservice-lyc"
+const baseurl = "aflcsmservice"
 
 
 //获取马甲推单列表
