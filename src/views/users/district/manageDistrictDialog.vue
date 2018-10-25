@@ -412,7 +412,6 @@ export default {
           this.companyNameObject.companyName = item.value
           this.inputdisabled = true
         data_get_aflcPartner_findAuthCompany(1, 10, this.companyNameObject).then(res=>{
-            console.log('res',res)
             this.formAll.partnerName = res.data[0].contactsName
             this.formAll.mobile = res.data[0].mobile
             this.areaCode = res.data[0].belongCity

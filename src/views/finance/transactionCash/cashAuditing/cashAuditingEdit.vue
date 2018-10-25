@@ -116,7 +116,7 @@ export default {
         formLabelWidth:'120px',
         formData:{},
         formAll:{
-          auditOpinion:'1',
+          auditOpinion:null,
           remark:null,
         },
         }
@@ -152,7 +152,7 @@ export default {
           }
           else if(this.params[0].auditOpinion!=='待处理'){
                  this.$message({
-                    message: '数据已经处理过了~',
+                    message: '这条流水号已经处理过了,无需再审核~',
                     type: 'warning'
                 })
                 this.$emit('getData') 
@@ -168,9 +168,9 @@ export default {
              else if(this.formData.auditOpinion=='审核不通过'){
                 this.formAll.auditOpinion = '2'
              }
-            else{
-                this.formAll.auditOpinion = '0'
-            }
+             else{
+                 this.formAll.auditOpinion = null
+             }
           }
     },
    change:function(){
@@ -185,6 +185,10 @@ export default {
     edit_data(){
        this.$refs['formAll'].validate(valid=>{
         if(valid){
+        if(!this.formAll.auditOpinion){
+           this.$message.warning('处理结果必须填写')
+        }
+        else{
         this.dialogFormVisible_add = false;
         data_aflcExtractCashList_update(this.params[0].extractSerial,this.formAll).then(res=>{
             this.$message.success('修改成功');
@@ -192,7 +196,9 @@ export default {
         }).catch(res=>{
             this.$message.error('修改失败')
             this.$emit('getData') 
-        })
+        })      
+        }
+
        }
        })
     }

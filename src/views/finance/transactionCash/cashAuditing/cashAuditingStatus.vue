@@ -47,21 +47,12 @@
                     :plain="true"
                     btntype="primary"
                     editType="edit"
+                    icon="el-icon-check"
                     btntitle="审核"
                     @getData="getDataList"
                     :params="selectRowData"
                     > 
                     </cashAuditingEdit>
-                   <cashAuditingDetail
-                    btntext="查看"
-                    :plain="true"
-                    btntype="primary"
-                    editType="edit"
-                    btntitle="查看"
-                    @getData="getDataList"
-                    :params="selectRowData"
-                    > 
-                    </cashAuditingDetail>
             </div>
 
             <el-table style="width: 100%" stripe border height="100%" ref="multipleTable" highlight-current-row  tooltip-effect="dark" :data="tableDataAll" @selection-change="getSelection" @row-click="clickDetails">
@@ -75,7 +66,19 @@
                              {{ (page - 1)*pagesize + scope.$index + 1 }}
                             </template>
             </el-table-column>
-            <el-table-column  label="流水号" prop="extractSerial" show-overflow-tooltip>
+            <el-table-column  label="流水号" prop="extractSerial" width="280">
+            <template  slot-scope="scope">
+                   <cashAuditingDetail
+                    :btntext="scope.row.extractSerial"
+                    type="primary" 
+                    btntype="text"
+                    editType="view"
+                    btntitle="查看"
+                    @getData="getDataList"
+                    :params="scope.row"
+                    > 
+                    </cashAuditingDetail>
+            </template>
             </el-table-column>
             <el-table-column  label="申请时间" prop="extractTime">
             </el-table-column>

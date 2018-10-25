@@ -1,5 +1,5 @@
 <template>
-    <div style="height:100%;"  class="identicalStyle District">
+    <div style="height:100%;"  class="identicalStyle District" v-loading="loading">
           <el-form :inline="true" class="classify_searchinfo">
             <el-form-item label="所在地：">
                 <GetCityList ref="area" v-model="formAllData.areaName"  @returnStr="getStr"></GetCityList>
@@ -97,6 +97,7 @@ import { eventBus } from '@/eventBus'
 export default {
     data(){
         return{
+            loading:true,
             templateRadio: '',
             btnsize:'mini',
             selectRowData:{},
@@ -133,10 +134,11 @@ export default {
 
     // 列表刷新页面  
         firstblood(){
+            this.loading =true
         data_get_aflcTradeArea_list(this.page,this.pagesize,this.formAllData).then(res=>{
-            console.log('res',res)
                     this.dataTotal = res.data.totalCount
                     this.tableDataAll = res.data.list;
+                    this.loading = false
         })
     },
     // 查询

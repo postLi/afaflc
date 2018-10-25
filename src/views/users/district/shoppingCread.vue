@@ -172,7 +172,6 @@ export default {
   },
   methods:{
     getStr(val){
-        console.log('11',val)
                 this.formAll.areaCode= val.area.code
                 this.formAll.areaName = val.area.name
                 this.formAll.province = val.province.name
@@ -210,7 +209,6 @@ export default {
             tradeOwner:this.formAll.tradeOwner,
             ownerPhone:this.formAll.ownerPhone,                  
         }
-        console.log('ffd',forms)
         this.dialogFormVisible_add = false;
         data_get_aflcTradeArea_create(forms).then(res=>{
            this.$message.success('新增成功');

@@ -1,5 +1,5 @@
 <template>
-    <div style="height:100%;" class="identicalStyle">
+    <div style="height:100%;" class="identicalStyle" v-loading="loading">
             <el-form :inline="true"  class="demo-ruleForm classify_searchinfo">
                 <el-form-item label="所在地：">
                 <GetCityList ref="area" v-model="formInline.belongCityName"  @returnStr="getStr"></GetCityList>
@@ -184,7 +184,11 @@
                         </el-table-column>
                         <el-table-column
                         prop="belongCityName"
-                        label="所在地" sortable>
+                        label="所在地" sortable show-overflow-tooltip>
+                        </el-table-column>
+                        <el-table-column
+                        prop="dataSourcesType"
+                        label="是否马甲车主" sortable>
                         </el-table-column>
                         <el-table-column
                         prop="driverStatusName"
@@ -218,6 +222,7 @@
     export default {
         data(){
             return{
+                loading:true,
                 btnsize:'mini',
                 optionsAuidSataus:[],// 账户状态列表
                 page:1,//当前页
@@ -315,9 +320,11 @@
 
             //刷新页面
             firstblood(){
+                this.loading = true;
                 data_get_driver_list(this.page,this.pagesize,this.formInline).then(res=>{
                     this.totalCount = res.data.totalCount;
                     this.tableDataTree = res.data.list;
+                    this.loading = false;
                     // this.tableDataTree.forEach(item => {
                     //     item.createTime = parseTime(item.createTime,"{y}-{m}-{d}");
                     // })

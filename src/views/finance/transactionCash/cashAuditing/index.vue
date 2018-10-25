@@ -3,12 +3,12 @@
     <el-tabs v-model="shipperName" type="card"  @tab-click='tabClik'>
         <!-- 全部提现 -->
             <el-tab-pane label="全部提现" name="first">
-                <cashAuditing></cashAuditing>
+                <cashAuditing ref="cashAuditing1"></cashAuditing>
             </el-tab-pane>
 
         <!-- 待处理/审核中 -->
             <el-tab-pane :label='labelTab' name="second" ref="second">
-                <cashAuditingStatus></cashAuditingStatus>
+                <cashAuditingStatus ref="cashAuditing2"></cashAuditingStatus>
             </el-tab-pane>
     </el-tabs>
   </div>
@@ -42,8 +42,11 @@ export default {
       this.shipperName = tab.name;
        },
      tabClik(i){
+        this.$refs.cashAuditing1.getDataList()
+        this.$refs.cashAuditing2.getDataList()
+         
         if(i.name=='second'){
-          this.labelTab = '审核中'
+        this.labelTab = '审核中'
         }
         else{
         this.labelTab = '处理中'

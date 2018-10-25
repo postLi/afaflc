@@ -1,5 +1,5 @@
 <template>
-    <div class="identicalStyle Mypushlogs" style="height:100%">
+    <div class="identicalStyle Mypushlogs" style="height:100%" v-loading="loading">
           <el-form :inline="true"  class="demo-ruleForm classify_searchinfo">
                 <el-form-item label="订单号" >
                    <el-input v-model="formAll.orderSerial"></el-input>
@@ -30,13 +30,13 @@
    <span class="BtnInfo" @click="pushOrderSerial(scope.row)">{{scope.row.orderSerial}}</span >
    </template>
    </el-table-column>
-   <el-table-column  label="推送时间"  sortable prop="createTime" width="150"></el-table-column>
-   <el-table-column  label="服务类型"  sortable prop="serivceCode" width="150"></el-table-column>
+   <el-table-column  label="推送时间"  sortable prop="createTime" width="170"></el-table-column>
+   <el-table-column  label="服务类型"  sortable prop="serivceCodeName" width="150"></el-table-column>
    <el-table-column  label="区域"  sortable prop="areaName" width="150"></el-table-column>
    <el-table-column  label="推送片区"  sortable prop="districtName" width="150"></el-table-column>
    <el-table-column  label="推送车主认证状态"  sortable prop="authStateName" width="150"></el-table-column>
-   <el-table-column  label="推送车主活跃度"  sortable prop="liveness" width="150"></el-table-column>
-   <el-table-column  label="推送车型"  sortable prop="carType" width="150"></el-table-column>
+   <el-table-column  label="推送车主活跃度"  sortable prop="livenessName" width="150"></el-table-column>
+   <el-table-column  label="推送车型"  sortable prop="carTypeName" width="150"></el-table-column>
    <el-table-column  label="推送车主在线状态"  sortable prop="isLineName" width="150"></el-table-column>
    <el-table-column  label="出发地"  sortable prop="startAddressName" width="150"></el-table-column>
    <el-table-column  label="目的地"  sortable prop="endAddressName" width="150"></el-table-column>
@@ -62,6 +62,7 @@ import { eventBus } from '@/eventBus'
 export default {
     data(){
         return{
+        loading:true,    
         btnsize:'mini',
         selectRowData:{},
         sizes: [20, 50, 100],
@@ -85,9 +86,11 @@ export default {
      methods:{
             //刷新页面  
             firstblood(){
+                this.loading = true
                 data_get_MjPushLogs_list(this.page,this.pagesize,this.formAll).then(res => {
                     this.dataTotal = res.data.totalCount
                     this.tableDataTree = res.data.list;
+                    this.loading = false
                     //  this.tableDataTree.forEach(item => {
                     //     item.createTime = parseTime(item.createTime,"{y}-{m}-{d}");
                     //     item.updateTime = parseTime(item.updateTime,"{y}-{m}-{d}");

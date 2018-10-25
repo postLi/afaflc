@@ -1,5 +1,5 @@
 <template>
-    <div class="identicalStyle">
+    <div class="identicalStyle" v-loading="loading">
               <el-form :inline="true"  class="demo-ruleForm classify_searchinfo">
                 <el-form-item label="所在地：">
                 <GetCityList ref="area" v-model="formInline.belongCityName"  @returnStr="getStr"></GetCityList>
@@ -124,6 +124,7 @@
         },
         data(){
             return{
+                loading:true,
                 btnsize:'mini',
                 page:1,//当前页
                 pagesize:20,//每页显示数
@@ -190,9 +191,11 @@
             },
             //刷新页面
             firstblood(){
+                this.loading = true;
                 data_get_driver_list(this.page,this.pagesize,this.formInline).then(res=>{
                     this.totalCount = res.data.totalCount;
                     this.tableDataTree = res.data.list;
+                    this.loading = false;
                 })
             },
             //点击查询按纽，按条件查询列表
