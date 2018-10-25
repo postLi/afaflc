@@ -66,11 +66,11 @@
                             label="运输时效"
                             width="150">
                              <template slot-scope="scope">
-                                <span v-if="scope.row.transportAging">{{scope.row.transportAging}} {{scope.row.transportAgingUnit}}</span>
+                                <span v-if="scope.row.transportAging">{{scope.row.transportAging}} 小时</span>
                                 <span v-else>暂未填写</span>
                             </template>
                         </el-table-column>
-                        <el-table-column
+                        <!-- <el-table-column
                             sortable
                             prop="departureHzData"
                             label="发车频率"
@@ -79,7 +79,7 @@
                                <span v-if="scope.row.departureHzData">{{scope.row.departureHzData}}天/{{scope.row.departureHzTime}}次</span> 
                                <span v-else>暂未填写</span>
                             </template>
-                        </el-table-column>
+                        </el-table-column> -->
                         <el-table-column
                             sortable
                             prop="weightcargo"
@@ -154,19 +154,28 @@
                             label="最低一票价格(元)" 
                             width="180">
                         </el-table-column>
-                        <el-table-column
+                        <!-- <el-table-column
                             sortable
                             prop="publishName"
                             label="创建人" 
                             width="180">
-                        </el-table-column>
+                        </el-table-column> -->
                         <el-table-column
                             sortable
                             prop="createTime"
                             label="创建时间" 
-                            width="220">
+                            width="160">
+                             <template slot-scope="scope">
+                                 {{scope.row.createTime | parseTime}}
+                            </template>
                         </el-table-column>
                         <el-table-column
+                            sortable
+                            prop="rangeStatusName"
+                            label="状态" 
+                            width="120">
+                        </el-table-column>
+                        <!-- <el-table-column
                             sortable
                             prop="rangeTypeName"
                             label="专线类型" 
@@ -174,7 +183,7 @@
                             <template slot-scope="scope">
                                <span class="rangeTypeName">{{scope.row.rangeTypeName}}</span> 
                             </template>
-                        </el-table-column>
+                        </el-table-column> -->
                         <!-- <el-table-column
                             prop="address"
                             label="操作"
@@ -198,6 +207,7 @@
 <script>
 
 import { getTransportRangeList, TransportRangeStatus, deleteTransportRange } from '@/api/server/lingdan/TransportRange.js'
+
 import { parseTime } from '@/utils/index.js'
 import Pager from '@/components/Pagination/index'
 

@@ -37,13 +37,12 @@
                 </template>
             </el-table-column>
             <el-table-column
-                prop="date"
+                prop=""
                 label="操作人"
                 width="200"
                 :show-overflow-tooltip="true"
                 >
                 <template slot-scope="scope">
-                    {{scope.row.createTime | parseTime}}
                 </template>
             </el-table-column>
             <el-table-column
@@ -56,7 +55,7 @@
                 </template> -->
             </el-table-column>
             <el-table-column
-                prop="address"
+                prop=""
                 label="操作内容"
                 :show-overflow-tooltip="true"
                 width="300">
