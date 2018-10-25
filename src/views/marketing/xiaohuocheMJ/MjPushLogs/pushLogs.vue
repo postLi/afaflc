@@ -8,43 +8,43 @@
                 <el-row class="basicInfo" :span='24'>
                     <!-- 第一行 -->
                     <el-col :span="4">推单时间</el-col>
-                    <el-col :span="4">1</el-col>
+                    <el-col :span="4">{{MJlogsData.createTime}}</el-col>
                     <el-col :span="4">服务类型</el-col>
-                    <el-col :span="4">1</el-col>
+                    <el-col :span="4">{{MJlogsData.serivceCode}}</el-col>
                     <el-col :span="4">区域</el-col>
-                    <el-col :span="4">1</el-col>
+                    <el-col :span="4">{{MJlogsData.areaName}}</el-col>
                     <!-- 第二行 -->
                     <el-col :span="4">推送片区</el-col>
-                    <el-col :span="4">1</el-col>
+                    <el-col :span="4">{{MJlogsData.districtName}}</el-col>
                     <el-col :span="4">推送车主认证状态</el-col>
-                    <el-col :span="4">1</el-col>
+                    <el-col :span="4">{{MJlogsData.authStateName}}</el-col>
                     <el-col :span="4">推送车主活跃度</el-col>
-                    <el-col :span="4">1</el-col>
+                    <el-col :span="4">{{MJlogsData.liveness}}</el-col>
                     <!-- 第三行 -->
                     <el-col :span="4">推送车型</el-col>
-                    <el-col :span="4">1</el-col>
+                    <el-col :span="4">{{MJlogsData.carType}}</el-col>
                     <el-col :span="4">推送车主在线状态</el-col>
-                    <el-col :span="4">1</el-col>
+                    <el-col :span="4">{{MJlogsData.isLineName}}</el-col>
                     <el-col :span="4">出发地</el-col>
-                    <el-col :span="4">1</el-col>
+                    <el-col :span="4">{{MJlogsData.startAddressName}}</el-col>
                     <!-- 第四行 -->
                     <el-col :span="4">目的地</el-col>
-                    <el-col :span="4">1</el-col>
+                    <el-col :span="4">{{MJlogsData.endAddressName}}</el-col>
                     <el-col :span="4">里程</el-col>
-                    <el-col :span="4">1</el-col>
+                    <el-col :span="4">{{MJlogsData.mileage}}</el-col>
                     <el-col :span="4">订单价格</el-col>
-                    <el-col :span="4">1</el-col>
+                    <el-col :span="4">{{MJlogsData.totalAmount}}</el-col>
                     <!-- 第四行 -->
                     <el-col :span="4">推送车主数量</el-col>
-                    <el-col :span="4">1</el-col>
+                    <el-col :span="4">{{MJlogsData.pushDriverCout}}</el-col>
                     <el-col :span="4">抢单车主数量</el-col>
-                    <el-col :span="4">1</el-col>
+                    <el-col :span="4">{{MJlogsData.grobDriverCount}}</el-col>
                 </el-row>
             </div>
         </div>
 
         <!-- 修改日志 -->
-        <div class="logInfo-collapse collapseInfo" style="height:50%">
+        <div class="logInfo-collapse collapseInfo" style="height:52%">
             <h2>推送车辆</h2>
             <div class="essentialInformation_table" style="height:100%">
                 <el-table
@@ -62,27 +62,27 @@
                                     {{ (page - 1)*pagesize + scope.$index + 1 }}
                                     </template>
                     </el-table-column>
-                            <el-table-column
+                    <el-table-column
                     label="用户"
-                    width="180">
+                    width="180" prop="driverName">
                     </el-table-column>
                     <el-table-column
-                    label="车辆信息">
+                    label="车辆信息" prop="carType">
                     </el-table-column>
                     <el-table-column
-                    label="距离提货地(KM)">
+                    label="距离提货地(KM)" prop="driverDistance">
                     </el-table-column>
                     <el-table-column
-                    label="当前地址">
+                    label="当前地址" prop="driverAddress">
                     </el-table-column>                    
                     <el-table-column
-                    label="用户认证状态">
+                    label="用户认证状态" prop="driverStatus">
                     </el-table-column>
                     <el-table-column
-                    label="用户账户状态">
+                    label="用户账户状态" prop="accountStatus">
                     </el-table-column>
                     <el-table-column
-                    label="是否抢入">
+                    label="是否抢入" prop="isGrab">
                     </el-table-column>                    
                 </el-table>
       <!-- 页码 -->
@@ -122,29 +122,39 @@ export default {
         currentOrderSerial: '',
         formAll:{
         orderSerial:null,
-        },    
+        },
+        MJlogsData:{
+            createTime:null,
+            serivceCode:null,
+            areaName:null,
+            districtName:null,
+            authStateName:null,
+            liveness:null,
+            carType:null,
+            isLineName:null,
+            startAddressName:null,
+            endAddressName:null,
+            mileage:null,
+            totalAmount:null,
+            pushDriverCout:null,
+            grobDriverCount:null
+        },
       }
   },
     watch: {
-        isvisible: {
-            handler(newVal, oldVal) {
-                if (newVal) {
-                    this.init()
-                }
-            },
-            // 代表在wacth里声明了firstName这个方法之后立即先去执行handler方法
-            immediate: true
-        },
     },
      mounted() {
       this.formAll.orderSerial = this.$route.query.orderSerial
       this.firstblood();
       this.firstblood2();
+      this.loading =false
     },
     methods: {
             //刷新页面  
             firstblood(){
-                data_get_MjPushLogs_list(1,1,this.formAll).then(res => {
+                data_get_MjPushLogs_list(1,10,this.formAll).then(res => {
+                    this.MJlogsData=res.data.list[0];
+                    console.log('22222',res.data.list)
                 })
             },
             //刷新页面  
@@ -158,7 +168,7 @@ export default {
     handlePageChange(obj) {
             this.page = obj.pageNum
             this.pagesize = obj.pageSize
-            this.firstblood()
+            this.firstblood2()
             },
     }
 }
@@ -176,6 +186,7 @@ export default {
     padding: 20px 0 0 0;
 }
 }
+    .el-col{height: 45px;}
 }
 
 </style>

@@ -132,8 +132,25 @@ export default {
   },
   methods:{
    openDialog:function(){
-             this.dialogFormVisible_add = true;
-             this.formData = this.params
+        if(this.params.length == undefined && this.editType !== 'add'){
+               this.$message.warning('请选择您要操作的用户');
+               return false
+        }
+         else if(this.params.length == 0 && this.editType !== 'add'){
+               this.$message.warning('请选择您要操作的用户');
+               return false
+          }else if (this.params.length > 1 && this.editType !== 'add') {
+                this.$message({
+                    message: '每次只能操作单条数据~',
+                    type: 'warning'
+                })
+                this.$emit('getData') 
+                return false
+          }
+          else{
+            this.dialogFormVisible_add = true;
+             this.formData = this.params[0]
+          }
     },
    change:function(){
       this.dialogFormVisible_add = false;

@@ -507,6 +507,7 @@ methods:{
                 data_get_pushsheet_Id(this.params[0].id).then(res=>{
                         let selectRowData = res.data.push;
                         let setting =res.data.settings
+                        console.log('111',setting)
                         let sy=[]
                         for(var i = 0;i<setting.length;i++){
                             sy.push( {

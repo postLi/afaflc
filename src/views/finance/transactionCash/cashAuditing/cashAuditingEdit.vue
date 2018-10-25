@@ -135,18 +135,43 @@ export default {
   },
   methods:{
    openDialog:function(){
-             this.dialogFormVisible_add = true;
-             this.formData = this.params
-             if(this.params.auditOpinion=='审核通过')
+        if(this.params.length == undefined && this.editType !== 'add'){
+               this.$message.warning('请选择您要操作的用户');
+               return false
+        }
+         else if(this.params.length == 0 && this.editType !== 'add'){
+               this.$message.warning('请选择您要操作的用户');
+               return false
+          }else if (this.params.length > 1 && this.editType !== 'add') {
+                this.$message({
+                    message: '每次只能操作单条数据~',
+                    type: 'warning'
+                })
+                this.$emit('getData') 
+                return false
+          }
+          else if(this.params[0].auditOpinion!=='待处理'){
+                 this.$message({
+                    message: '数据已经处理过了~',
+                    type: 'warning'
+                })
+                this.$emit('getData') 
+                return false
+          }
+          else{
+            this.dialogFormVisible_add = true;
+             this.formData = this.params[0]
+             if(this.formData.auditOpinion=='审核通过')
              {
                 this.formAll.auditOpinion = '1'
              }
-             else if(this.params.auditOpinion=='审核不通过'){
+             else if(this.formData.auditOpinion=='审核不通过'){
                 this.formAll.auditOpinion = '2'
              }
             else{
                 this.formAll.auditOpinion = '0'
             }
+          }
     },
    change:function(){
       this.dialogFormVisible_add = false;
@@ -161,7 +186,7 @@ export default {
        this.$refs['formAll'].validate(valid=>{
         if(valid){
         this.dialogFormVisible_add = false;
-        data_aflcExtractCashList_update(this.params.extractSerial,this.formAll).then(res=>{
+        data_aflcExtractCashList_update(this.params[0].extractSerial,this.formAll).then(res=>{
             this.$message.success('修改成功');
             this.$emit('getData') 
         }).catch(res=>{

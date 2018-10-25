@@ -241,10 +241,10 @@
         <el-table-column  label="序号" width="80px" type="index">
             
         </el-table-column>
-        <el-table-column  label="提货地"  prop="endAddress">
+        <el-table-column  label="提货地"  prop="startAddressName">
             
         </el-table-column>
-        <el-table-column  label="目的地" prop="startAddress">
+        <el-table-column  label="目的地" prop="endAddressName">
             
         </el-table-column>
         <el-table-column  label="里程（公里）" prop="distance">
@@ -1102,6 +1102,9 @@ export default {
 
 <style lang="scss">
 .MjD_onesource{
+    .el-cascader{
+        margin-top: -10px;
+    }
     .BtnInfo{
     font-weight: bold;
     font-size: 14px;
