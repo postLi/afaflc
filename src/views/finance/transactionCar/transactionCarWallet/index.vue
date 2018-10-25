@@ -1,11 +1,9 @@
 <template>
-    <div class="identicalStyle transactionCar" style="height:100%">
+    <div class="identicalStyle transactionCar" style="height:100%" v-loading="loading">
           <el-form :inline="true"  class="demo-ruleForm classify_searchinfo">
-            <el-form-item label="所属区域:">
-                    <vregion :ui="true"  @values="regionChange" class="form-control">
-                        <el-input v-model="belongCityName" placeholder="请选择"></el-input>
-                    </vregion>
-            </el-form-item> 
+            <el-form-item label="所属区域：">
+              <GetCityList v-model="formAllData.areaCode" ref="area" @returnStr="getStr"></GetCityList>
+          </el-form-item>
             <el-form-item label="车主账号:">
             <el-input placeholder="请输入内容" clearable v-model="formAllData.account"></el-input>
             </el-form-item>             
@@ -59,11 +57,12 @@ import { eventBus } from '@/eventBus'
 import Pager from '@/components/Pagination/index'
 import { data_findDriverMywalletList } from '@/api/finance/transactionCar'
 import {parseTime} from '@/utils/'
-import vregion from '@/components/vregion/Region'
+import GetCityList from '@/components/GetCityList'
 import Carwallet from './Carwallet'
 export default {
   data(){
     return{
+      loading:true,  
       belongCityName:null,
       selectRowData: {},
       btnsize:'mini',
@@ -82,30 +81,20 @@ export default {
     components:{
         Carwallet,
         Pager,
-        vregion
+        GetCityList
     },
     methods:{
-            regionChange(d) {
-                console.log('data:',d)
-                this.belongCityName = (!d.province&&!d.city&&!d.area&&!d.town) ? '': `${this.getValue(d.province)}${this.getValue(d.city)}${this.getValue(d.area)}${this.getValue(d.town)}`.trim();
-                if(d.area){
-                    this.formAllData.areaCode = d.area.code;
-                }else if(d.city){
-                    this.formAllData.areaCode = d.city.code;
-                }
-                else{
-                    this.formAllData.areaCode = d.province.code;
-                }
-            },
-             getValue(obj){
-                return obj ? obj.value:'';
+    getStr(val){
+                this.formAllData.areaCode = val.city.code
             },
 
     // 列表刷新页面  
     firstblood(){
+        this.loading = true
      data_findDriverMywalletList(this.page,this.pagesize,this.formAllData).then(res => {
                     this.dataTotal = res.data.totalCount
                     this.tableDataAll = res.data.list;
+                    this.loading = false
        })
        },  
     // 每页显示数据量变更
@@ -126,6 +115,7 @@ export default {
                     areaCode: null,  
                },
          this.firstblood();
+         this.$refs.area.clearData();
         },
 
      // 判断选中与否

@@ -1,5 +1,5 @@
 <template>
-  <div  class="identicalStyle Marketing" style="height:100%;">
+  <div  class="identicalStyle Marketing" style="height:100%;" v-loading="loading">
           <el-form :inline="true" class="demo-ruleForm classify_searchinfo">
             <el-form-item label="所属区域：">
             <GetCityList ref="area" v-model="formAllData.areaName"  @returnStr="getStr"></GetCityList>
@@ -121,6 +121,7 @@ import {parseTime} from '@/utils/'
 export default {
   data(){
     return{
+      loading:true,  
       btnsize:'mini',     
       selectRowData:{},
       selectId:[],
@@ -179,9 +180,11 @@ export default {
           },
           // 列表刷新页面  
             firstblood(){
+                this.loading = true
                 data_get_ownerFromsame_list(this.page,this.pagesize,this.formAllData).then(res => {
                     this.dataTotal = res.data.totalCount
                     this.tableDataAll = res.data.list;
+                    this.loading = false
                 })
             },
          //  查询

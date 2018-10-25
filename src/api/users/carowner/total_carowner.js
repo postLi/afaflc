@@ -66,7 +66,7 @@ export function data_put_OutBlack(data) {
 
 // 修改车主
 export function data_put_changeDriver(data) {
-  return fetch.put('/' + baseurl + '/usercenter/aflcDriver/v1/update', data)
+  return fetch.post('/' + baseurl + '/usercenter/aflcDriver/v1/update', data)
 }
 
 // 代客认证

@@ -1,5 +1,5 @@
 <template>
-    <div class="identicalStyle MjD_onesource" style="height:100%">
+    <div class="identicalStyle MjD_onesource" style="height:100%" v-loading="loading">
           <el-form :inline="true"  class="demo-ruleForm classify_searchinfo">
             <el-form-item label="所在地：">
               <GetCityList v-model="formAll.areaCode" ref="area"  @returnStr="getStr"></GetCityList>
@@ -28,7 +28,7 @@
   <!-- 马甲单新增 -->
   <div class="vestDialogBox commoncss ">
  <div class="vestonceDialog">
-    <el-button  type="primary" value="value" plain icon="el-icon-news" @click="openDialog()">新增</el-button>
+    <el-button  type="primary" value="value" plain icon="el-icon-news" @click="openDialog()" v-has:MARKETING_SMALL_CAR_MJ_SOURCE_OPTION_ADD>新增</el-button>
             <el-dialog title="马甲单源" :visible="driverTemplateDialogFlag" :before-close="change">
             <div class="vestOrder">
             <el-form :inline="true" :model="vestAll" ref="vestAll" :rules="rulesForm1">
@@ -267,7 +267,7 @@
             </div>
             </div>
            </div>
-                    <div slot="footer" class="dialog-footer" v-if="openFlag==1">
+              <div slot="footer" class="dialog-footer" v-if="openFlag==1">
                         <el-button type="primary" @click="changeInfoSave2">保 存</el-button>
                         <el-button @click="close2()">取 消</el-button>
                     </div>
@@ -275,12 +275,11 @@
     </div>
 </div>
 
-
      <div class="vestonceDialog">
-         <el-button  type="primary" value="value" plain icon="el-icon-edit" @click="openDialogView0()" :size="btnsize">修改</el-button>
+         <el-button  type="primary" value="value" plain icon="el-icon-edit" @click="openDialogView0()" :size="btnsize"  v-has:MARKETING_SMALL_CAR_MJ_SOURCE_OPTION_UPDATE>修改</el-button>
      </div>
-    <el-button type="primary" plain icon="el-icon-bell"  @click="handleUseStates" :size="btnsize">启用/禁用</el-button>
-    <el-button type="primary" plain icon="el-icon-delete" @click="handleDelete" :size="btnsize">删除</el-button>
+    <el-button type="primary" plain icon="el-icon-bell"  @click="handleUseStates" :size="btnsize" v-has:MARKETING_SMALL_CAR_MJ_SOURCE_OPTION_USE>启用/禁用</el-button>
+    <el-button type="primary" plain icon="el-icon-delete" @click="handleDelete" :size="btnsize" v-has:MARKETING_SMALL_CAR_MJ_SOURCE_OPTION_DELETE>删除</el-button>
    </div>
   
     <div class="info_news">  
@@ -380,6 +379,7 @@ export default {
             }
 
         return{
+        loading:true,    
         btnsize:'mini',
         creadFlag:false,   //详情修改新增状态
         selectFlag:false,
@@ -549,10 +549,11 @@ export default {
             },
            //刷新页面  
             firstblood(){
+                this.loading = true
                 data_get_onesource_list(this.page,this.pagesize,this.formAll).then(res => {
                     this.dataTotal = res.data.totalCount
                     this.tableDataTree = res.data.list;
-                    console.log(this.tableDataTree)
+                    this.loading = false
                 })
             },
             // 详情列表
@@ -1200,9 +1201,10 @@ export default {
         .vestDialog{
         display: inline-block;
         .el-dialog{
-            width: 780px;
+            width: 980px;
                   }
         .vestdetail{
+            width: 100%;
             margin-top:10px;
             .el-input__inner{height: 30px!important;line-height: 30px!important;}
         }

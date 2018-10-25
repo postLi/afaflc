@@ -1,5 +1,5 @@
 <template>
-    <div class="identicalStyle " style="height:100%">
+    <div class="identicalStyle " style="height:100%"  v-loading="loading">
           <el-form :inline="true" class="demo-ruleForm classify_searchinfo">
              <el-form-item label="用户姓名：">
                <el-input v-model="formAllData.name"></el-input>
@@ -86,20 +86,11 @@
                     btntype="primary"
                     editType="edit"
                     btntitle="审核"
+                    icon="el-icon-check"
                     @getData="getDataList"
                     :params="selectRowData"
                     > 
                     </cashAuditingEdit>
-                   <cashAuditingDetail
-                    btntext="查看"
-                    :plain="true"
-                    btntype="primary"
-                    editType="edit"
-                    btntitle="查看"
-                    @getData="getDataList"
-                    :params="selectRowData"
-                    > 
-                    </cashAuditingDetail>
             </div>
             <el-table style="width: 100%" stripe border height="100%" ref="multipleTable" highlight-current-row  tooltip-effect="dark" :data="tableDataAll" @selection-change="getSelection" @row-click="clickDetails">
               <el-table-column
@@ -112,7 +103,20 @@
                              {{ (page - 1)*pagesize + scope.$index + 1 }}
                             </template>
             </el-table-column>
-            <el-table-column  label="流水号" prop="extractSerial" show-overflow-tooltip>
+            <el-table-column  label="流水号" prop="extractSerial" width="280">
+            <template  slot-scope="scope">
+                   <cashAuditingDetail
+                    :btntext="scope.row.extractSerial"
+                    type="primary" 
+                    btntype="text"
+                    editType="view"
+                    btntitle="查看"
+                    @getData="getDataList"
+                    :params="scope.row"
+                    > 
+                    </cashAuditingDetail>
+            </template>
+
             </el-table-column>
             <el-table-column  label="申请时间" prop="extractTime">
             </el-table-column>
@@ -162,6 +166,7 @@ import {pickerOptions2 } from '@/utils/index.js'
 export default {
   data(){
     return{
+      loading:true,  
       pickerOptions2: {
          shortcuts: pickerOptions2
           },  
@@ -240,6 +245,7 @@ export default {
     },    
       // 列表刷新页面  
     firstblood(){
+     this.loading = true   
      data_aflcExtractCashList(this.page,this.pagesize,this.formAllData).then(res => {
                     this.dataTotal = res.data.totalCount
                     this.tableDataAll = res.data.list;
@@ -247,6 +253,7 @@ export default {
                         item.auditTime = parseTime(item.auditTime,"{y}-{m}-{d} {h}:{i}:{s}");
                         item.extractTime = parseTime(item.extractTime,"{y}-{m}-{d} {h}:{i}:{s}");
                     })
+                    this.loading = false
        })
        },   
      // 判断选中与否

@@ -1,5 +1,5 @@
 <template>
-<div class="detailsCompnent MJDpushlogs" style="height:100%">
+<div class="detailsCompnent MJDpushlogs" style="height:100%" v-loading="loading">
     <div class="detailsInfo detailsArrange" v-loading="loading" style="height:100%">
         <!-- 基本信息 -->
         <div class="detailsInfo-collapse collapseInfo">
@@ -10,7 +10,7 @@
                     <el-col :span="4">推单时间</el-col>
                     <el-col :span="4">{{MJlogsData.createTime}}</el-col>
                     <el-col :span="4">服务类型</el-col>
-                    <el-col :span="4">{{MJlogsData.serivceCode}}</el-col>
+                    <el-col :span="4">{{MJlogsData.serivceCodeName}}</el-col>
                     <el-col :span="4">区域</el-col>
                     <el-col :span="4">{{MJlogsData.areaName}}</el-col>
                     <!-- 第二行 -->
@@ -19,10 +19,10 @@
                     <el-col :span="4">推送车主认证状态</el-col>
                     <el-col :span="4">{{MJlogsData.authStateName}}</el-col>
                     <el-col :span="4">推送车主活跃度</el-col>
-                    <el-col :span="4">{{MJlogsData.liveness}}</el-col>
+                    <el-col :span="4">{{MJlogsData.livenessName}}</el-col>
                     <!-- 第三行 -->
                     <el-col :span="4">推送车型</el-col>
-                    <el-col :span="4">{{MJlogsData.carType}}</el-col>
+                    <el-col :span="4">{{MJlogsData.carTypeName}}</el-col>
                     <el-col :span="4">推送车主在线状态</el-col>
                     <el-col :span="4">{{MJlogsData.isLineName}}</el-col>
                     <el-col :span="4">出发地</el-col>
@@ -67,22 +67,22 @@
                     width="180" prop="driverName">
                     </el-table-column>
                     <el-table-column
-                    label="车辆信息" prop="carType">
+                    label="车辆信息" prop="carTypeName">
                     </el-table-column>
                     <el-table-column
-                    label="距离提货地(KM)" prop="driverDistance">
+                    label="距离提货地(KM)" prop="driverDistance" show-overflow-tooltip>
                     </el-table-column>
                     <el-table-column
                     label="当前地址" prop="driverAddress">
                     </el-table-column>                    
                     <el-table-column
-                    label="用户认证状态" prop="driverStatus">
+                    label="用户认证状态" prop="driverStatusName">
                     </el-table-column>
                     <el-table-column
-                    label="用户账户状态" prop="accountStatus">
+                    label="用户账户状态" prop="accountStatusName">
                     </el-table-column>
                     <el-table-column
-                    label="是否抢入" prop="isGrab">
+                    label="是否抢入" prop="isGrabName">
                     </el-table-column>                    
                 </el-table>
       <!-- 页码 -->
@@ -112,6 +112,7 @@ export default {
   }, 
   data() {
     return {
+        loading:true,
         sizes: [10, 50, 100],
         pagesize:10,//每页显示数
         page:1,//当前页
@@ -154,7 +155,7 @@ export default {
             firstblood(){
                 data_get_MjPushLogs_list(1,10,this.formAll).then(res => {
                     this.MJlogsData=res.data.list[0];
-                    console.log('22222',res.data.list)
+                    this.loading = false
                 })
             },
             //刷新页面  

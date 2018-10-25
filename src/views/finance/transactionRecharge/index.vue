@@ -1,5 +1,5 @@
 <template>
-    <div class="identicalStyle clearfix transactionRecharge" style="height:100%">
+    <div class="identicalStyle clearfix transactionRecharge" style="height:100%" v-loading="loading">
           <el-form :inline="true"  class="demo-ruleForm classify_searchinfo">
             <el-form-item label="电话号码：">
                   <el-input v-model="formAllData.mobile" placeholder="请输入内容" clearable maxlength="11" class="Input"></el-input>
@@ -96,7 +96,8 @@ import {data_financeList,data_GetServerType,data_GetServerType2,data_GetServerTy
  export default{
         data(){
             return{
-                pickerOptions2: {
+               loading:true,
+               pickerOptions2: {
                 shortcuts: pickerOptions2
                     },
                btnsize:'mini',
@@ -155,9 +156,11 @@ import {data_financeList,data_GetServerType,data_GetServerType2,data_GetServerTy
         methods: {
           // 列表刷新页面  
             firstblood(){
+                this.loading = true
                 data_aflcRechargeList(this.page,this.pagesize,this.formAllData).then(res => {
-                    this.dataTotal = res.data.totalCount
+                    this.dataTotal = res.data.totalCount;
                     this.tableDataAll = res.data.list;
+                    this.loading = false
                 })
             }, 
         //每页显示数据量变更

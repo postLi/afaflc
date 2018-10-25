@@ -1,5 +1,5 @@
 <template>
-    <div class="identicalStyle MjD" style="height:100%">
+    <div class="identicalStyle MjD" style="height:100%" v-loading="loading">
           <el-form :inline="true"  class="demo-ruleForm classify_searchinfo">
             <el-form-item label="所属区域：">
               <GetCityList v-model="formAll.areaCode" ref="area" @returnStr="getStr"></GetCityList>
@@ -81,6 +81,7 @@ import { eventBus } from '@/eventBus'
 export default {
     data(){
         return{
+        loading:true,    
         btnsize:'mini',
         delDialogVisible:false,          //删除控制弹框
         centerDialogVisible:false,
@@ -129,6 +130,7 @@ export default {
             },
             //刷新页面  
             firstblood(){
+                this.loading = true
                 data_get_pushsheet_list(this.page,this.pagesize,this.formAll).then(res => {
                     this.dataTotal = res.data.totalCount
                     this.tableDataTree = res.data.list;
@@ -136,6 +138,7 @@ export default {
                         item.createTime = parseTime(item.createTime,"{y}-{m}-{d}");
                         item.updateTime = parseTime(item.updateTime,"{y}-{m}-{d}");
                     })
+                    this.loading = false
                 })
             },
             // 判断选中与否

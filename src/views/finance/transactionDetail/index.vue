@@ -1,5 +1,5 @@
 <template>
-    <div class="identicalStyle transactionDetail" style="height:100%">
+    <div class="identicalStyle transactionDetail" style="height:100%"  v-loading="loading">
           <el-form :inline="true"  class="demo-ruleForm classify_searchinfo">
             <el-form-item label="订单流水号">
             <el-input v-model="data.orderSerial" placeholder="请输入内容" clearable></el-input>
@@ -107,11 +107,11 @@
                             prop="orderSerial"
                             label="订单流水号"
                              show-overflow-tooltip
-                            width="180"
+                            width="230"
                             sortable
                             >
                         <template  slot-scope="scope">
-                                    <h4 class="needMoreInfo" @click="pushOrderSerial(scope.row)">{{ scope.row.orderSerial}}</h4>
+                          <h4 class="needMoreInfo" @click="pushOrderSerial(scope.row)">{{ scope.row.orderSerial}}</h4>
                         </template>
 
                         </el-table-column>
@@ -137,7 +137,7 @@
                         align = "center"
                           prop="accountName"
                           label="用户账号 / 姓名"
-                          width="150"
+                          width="120"
                           sortable
                           >
                         </el-table-column>
@@ -228,6 +228,7 @@ import { parseTime,formatTime,pickerOptions2 } from '@/utils/index.js'
     export default{
         data(){
             return{
+                loading:true,
                 pickerOptions2: {
                 shortcuts: pickerOptions2
                     },   
@@ -352,12 +353,14 @@ import { parseTime,formatTime,pickerOptions2 } from '@/utils/index.js'
             },
             //刷新页面  
             load(){                   
+                this.loading = true
                 data_financeList(this.page,this.pagesize,this.data).then(res=>{              
                     this.tableDataTree = res.data.list;
                     this.dataTotal = res.data.totalCount;
                      for(var i = 0;i<this.tableDataTree.length;i++){
                         this.tableDataTree[i].payTime = parseTime(this.tableDataTree[i].payTime,"{y}-{m}-{d} {h}:{i}:{s}");
                     }  
+                    this.loading = false
                 })
             },
             // 每页显示数据量变更

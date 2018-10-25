@@ -21,10 +21,10 @@
             </el-select>
           </el-form-item> 
           <el-form-item label="货主">
-            <el-input v-model="formAllData.shipper" :maxlength="20" placeholder="账户/姓名" auto-complete="off" clearable></el-input>
+            <el-input v-model="formAllData.shipperName" :maxlength="20" placeholder="账户/姓名" auto-complete="off" clearable></el-input>
           </el-form-item>
           <el-form-item label="车主">
-            <el-input v-model="formAllData.driver" :maxlength="20" placeholder="账户/姓名/车号牌" auto-complete="off" clearable></el-input>
+            <el-input v-model="formAllData.driverName" :maxlength="20" placeholder="账户/姓名/车号牌" auto-complete="off" clearable></el-input>
           </el-form-item>
           <el-form-item label="订单号">
             <el-input v-model="formAllData.orderSerial" :maxlength="20" auto-complete="off" clearable></el-input>
@@ -182,8 +182,8 @@ export default {
         belongCityName: '', // 区域
         // AF04801
         dealStatus: '',
-        shipper: '',
-        driver: '',
+        shipperName: '',
+        driverName: '',
         orderSerial: ''
       }
     }
@@ -231,8 +231,8 @@ export default {
             belongCity: '',
             belongCityName: '',
             delStatus: '',
-            shipper: '',
-            driver: '',
+            shipperName: '',
+            driverName: '',
             orderSerial: ''
           }
           this.$refs.area.clearData()

@@ -33,7 +33,7 @@ export default {
             children:[
                 {
                     path: '/finance/transactionCash/cashSet', 
-                    hidden: false, 
+                    hidden: true, 
                     name: '提现配置', 
                     component: _import('finance/transactionCash/cashSet/index'), 
                     meta: { title: '提现配置', stitle: '配置',noCache: true , code: 'FINANCE_WITHDRAW_MANAGE_WITHDRAW_OPTION'},
@@ -52,7 +52,7 @@ export default {
             path: '/finance/transactionChinaDoor', 
             icon: 'pingtaiZH', 
             name: '平台账户概况',
-            hidden: false, 
+            hidden: true, 
             component: _import('finance/transactionChinaDoor/chinaDoor'), 
             meta: { role: ['admin'], title: '平台账户概况', stitle:'平台', noCache: true , code: 'FINANCE_PLATFORM_SURVEY'},
             children:[

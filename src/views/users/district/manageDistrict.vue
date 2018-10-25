@@ -1,5 +1,5 @@
 <template>
-    <div style="height:100%;"  class="identicalStyle District">
+    <div style="height:100%;"  class="identicalStyle District" v-loading="loading">
           <el-form :inline="true" class="classify_searchinfo">
             <el-form-item label="所在地：">
                 <GetCityList ref="area" v-model="formAllData.areaName"  @returnStr="getStr"></GetCityList>
@@ -97,6 +97,7 @@ import { eventBus } from '@/eventBus'
 export default {
     data(){
         return{
+            loading:true,
             templateRadio: '',
             btnsize:'mini',
             restaurants:[],
@@ -132,13 +133,11 @@ export default {
                  value:res.companyName})
              console.log(this.restaurants)
          })
-         
         })
 
     },
     methods:{
       getStr(val){
-                console.log('this.cityarr',val,name)
                 this.formAllData.areaCode =val.area.code;
             },  
     //   区代公司名称
@@ -155,6 +154,7 @@ export default {
       },
     // 列表刷新页面  
         firstblood(){
+            this.loading = true
         data_get_aflcPartner_list(this.page,this.pagesize,this.formAllData).then(res=>{
                     this.dataTotal = res.data.totalCount
                     this.tableDataAll = res.data.list;
@@ -162,6 +162,7 @@ export default {
                         item.contractStartDate = parseTime(item.contractStartDate,"{y}-{m}-{d}");
                         item.contractEndDate = parseTime(item.contractEndDate,"{y}-{m}-{d}");
                     })
+                    this.loading =false
         })
     },
     // 查询

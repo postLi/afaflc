@@ -1,5 +1,5 @@
 <template>
-    <div class="identicalStyle Marketing" style="height:100%">
+    <div class="identicalStyle Marketing" style="height:100%" v-loading="loading">
           <el-form :inline="true" class="demo-ruleForm classify_searchinfo">
             <el-form-item label="活动名称：">
                <el-input v-model="formAllData.activityName" class="activeCss"></el-input>
@@ -182,6 +182,7 @@ export default {
     },
     data(){
         return{
+            loading:true,
            pickerOptions2: {
              shortcuts: pickerOptions2
             },
@@ -228,10 +229,12 @@ export default {
     methods:{
              // 列表刷新页面  
             firstblood(){
+                this.loading = true
                 data_get_couponActivehand_list(this.page,this.pagesize,this.formAllData).then(res => {
                   console.log(res)
                     this.dataTotal = res.data.totalCount
                     this.tableDataAll = res.data.list;
+                    this.loading = false
                 })
             },
             getStr(val){

@@ -1,5 +1,5 @@
 <template>
-    <div class="identicalStyle">
+    <div class="identicalStyle" v-loading="loading">
         <div class="shipper_searchinfo">
             <el-form inline  class="demo-ruleForm classify_searchinfo">
             <el-form-item label="所在地：">
@@ -105,6 +105,7 @@
         },
         data(){
             return{
+                loading:true,
                 pickerOptions:{
                 disabledDate(time) {
                 return time.getTime() < Date.now();
@@ -195,12 +196,11 @@
 
             //刷新页面
             firstblood(){
+                this.loading = true
                 data_get_driver_list(this.page,this.pagesize,this.formInline).then(res=>{
                     this.totalCount = res.data.totalCount;
                     this.tableDataTree = res.data.list;
-                    // this.tableDataTree.forEach(item => {
-                    //     item.authenticationTime = parseTime(item.authenticationTime,"{y}-{m}-{d}");
-                    // })
+                this.loading = false
                 })
             },
             //点击选中当前行
