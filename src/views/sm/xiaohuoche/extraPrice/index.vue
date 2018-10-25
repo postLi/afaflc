@@ -294,7 +294,11 @@ export default{
                     case 'clear' :
                         this.searchInfo = {
                           keywords: ''
-                        },
+                        }
+                        if(this.page!= 1){
+                            this.page = 1;
+                            this.$refs.pager.inputval = this.page;
+                        }
                         this.firstblood();
                         break;
                 }

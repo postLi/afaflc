@@ -15,7 +15,7 @@ export function orderStatusList(page, pagesize, data) {
   })
 }
 
-// 根据id获取订单详细信息
+// 根据流水号获取订单详细信息
 export function orderDetailsList(orderSerial) {
   return fetch({
     url: '/' + baseurl + '/order/aflcOrder/v1/getOrderDetail/' + orderSerial,

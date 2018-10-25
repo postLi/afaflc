@@ -141,9 +141,13 @@ export default{
             shuaxin(){
                 this.firstblood();
             },
-            getSearchParam(obj) {
+            getSearchParam(obj,status) {
             //   console.log(obj);
               this.searchInfo = Object.assign(this.searchInfo, obj);
+              if(status && this.page!= 1){
+                    this.page = 1;
+                    this.$refs.pager.inputval = this.page;
+                }
               this.firstblood();
             },
             // 获取翻页返回的数据

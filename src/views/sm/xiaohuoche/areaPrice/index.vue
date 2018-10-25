@@ -162,9 +162,13 @@ export default{
             shuaxin(){
                 this.getCommonFunction();
             },
-            getSearchParam(obj) {
-              console.log(obj)
-              this.searchInfo = Object.assign(this.searchInfo, obj)
+            getSearchParam(obj,status) {
+              console.log(obj,status)
+              this.searchInfo = Object.assign(this.searchInfo, obj);
+                if(status && this.page!= 1){
+                    this.page = 1;
+                    this.$refs.pager.inputval = this.page;
+                }
               this.getCommonFunction()
             },
             handlePageChange(obj) {

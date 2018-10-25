@@ -3,11 +3,11 @@
         <el-form :inline="true" :model="logisticsForm" ref="ruleForm" class="demo-ruleForm classify_searchinfo">
             <div class="searchInformation information">
                 <el-form-item label="出发地：" prop="startLocation">
-                    <el-input v-model="logisticsForm.startLocation">
+                    <el-input v-model="logisticsForm.startLocation" clearable>
                     </el-input>
                 </el-form-item>
                 <el-form-item label="到达地：" prop="endLocation">
-                    <el-input v-model="logisticsForm.endLocation">
+                    <el-input v-model="logisticsForm.endLocation" clearable>
                     </el-input>
                 </el-form-item>
                 <el-form-item class="btnChoose fr" style="margin-left:20px;">
@@ -287,8 +287,10 @@ export default {
     },
     clearSearch() {
       this.$refs.ruleForm.resetFields();
-      this.page = 1;
-      this.$refs.pager.inputval = this.page;
+      if(this.page!= 1){
+          this.page = 1;
+          this.$refs.pager.inputval = this.page;
+      }
       this.firstblood()
     },
         // 搜索

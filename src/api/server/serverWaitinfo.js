@@ -1,6 +1,6 @@
 import fetch from '@/utils/fetch'
 
-const baseurl = "aflcsmservice-wtc"
+const baseurl = "aflcsmservice"
 
 //根据id获取服务区域定价  he  查询功能(初始化)
 export function data_GetCityInfo(page,pagesize,data) {

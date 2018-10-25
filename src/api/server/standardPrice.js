@@ -1,6 +1,6 @@
 import fetch from '@/utils/fetch'
 
-const baseurl = "aflcsmservice-wtc"
+const baseurl = "aflcsmservice"
 
 //获取标准服务费用列表
 export function data_GetInformation(page,pagesize,data) {

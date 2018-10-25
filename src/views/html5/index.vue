@@ -236,10 +236,11 @@
 </template>
 
 <script>
-  import {postApi, getApi} from '@/api/common.js';
+    import {postApi, getApi} from '@/api/common.js';
 //   import localStorage from '@/utils/localStorage';
 //   import VueJsCookie from 'vue-js-cookie';
-
+    import { getOrderMonitorCount,getOrderMonitorList,querySysDictUrl } from '@/api/index.js'
+    import { orderDetailsList } from '@/api/order/ordermange.js'
   export default {
     name: "orderMonitor",
     data() {
@@ -286,10 +287,10 @@
         maxNum: 999,
         carList: [],
         processState: {displayAllMarkers: false},
-        queryCountUrl: "/aflc-order/aflcMyOrderApi/getOrderMonitorCount",
-        queryListUrl: "/aflc-order/aflcMyOrderApi/getOrderMonitorList",
-        queryDetailUrl: "/aflc-order/aflcMyOrderApi/myOrderDetail?orderSerial=",
-        querySysDictUrl: "/aflc-common/aflcCommonSysDistApi/findAflcCommonSysDictByCodes/"
+        // queryCountUrl: "/aflc-order/aflcMyOrderApi/getOrderMonitorCount",
+        // queryListUrl: "/aflc-order/aflcMyOrderApi/getOrderMonitorList",
+        // queryDetailUrl: "/aflc-order/aflcMyOrderApi/myOrderDetail?orderSerial=",
+        // querySysDictUrl: "/aflc-common/aflcCommonSysDistApi/findAflcCommonSysDictByCodes/"
       }
     },
     mounted() {
@@ -354,7 +355,7 @@
       tempEle.innerHTML = "";
 
     //   this.checkLogin();
-    //   this.getOrder(null, true);
+      this.getOrder(null, true);
 
       // AMap.event.addListener(this.mp, "click", function (e) {
       //   console.log(e.lnglat);
@@ -462,7 +463,8 @@
           this.truckDriving.clear();
       },
       getOrder(orderStatus, updateFlag, searchFlag) {
-        postApi(this.queryCountUrl, {}).then((res) => {
+        // postApi(this.queryCountUrl, {}).then((res) => {
+            getOrderMonitorCount({}).then((res) => {
           if (res === null || res.data === null)
             return;
           var v = res.data.af00806HZ;
@@ -519,7 +521,8 @@
           if (t != null)
             vo.keywordQuery = t;
         }
-        postApi(this.queryListUrl, {
+        getOrderMonitorList({
+        // postApi(this.queryListUrl, {
           currentPage: this.currentPage,
           pageSize: this.pageSize,
           vo: vo
@@ -783,7 +786,8 @@
           var carInfo = this.carList[idx];
           if (carInfo == null)
             return;
-          postApi(this.queryDetailUrl + orderId).then((res) => {
+        //   postApi(this.queryDetailUrl + orderId).then((res) => {
+        orderDetailsList(orderId).then((res) => {
             var lnglat = null;
             var trails = null;
             try {
@@ -1259,7 +1263,9 @@
           }
           if (q == null)
             return;
-          getApi(this.querySysDictUrl + q).then((res) => {
+        //   getApi(this.querySysDictUrl + q).then((res) => {
+            console.log('qqqqq',q)
+            querySysDictUrl(q).then((res) => {
             if (res == null || res.data == null) {
               this.$message({
                 message: "获取订单状态数据出错. ",

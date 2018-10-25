@@ -7,15 +7,15 @@
                 <el-col :span="10">
                     <el-form-item label="出发地：" prop="startLocation" class="location_line">
                         <el-input v-model="ruleForm.startLocation" v-if="unable" :disabled="unable"></el-input>
-                        <vregion :ui="true" @values="regionChangeStart" :ifAera = 'true' class="form-control" @testCity="ifProvice('startLocation')" v-else>
-                            <el-input v-model="ruleForm.startLocation" placeholder="请选择出发地" ></el-input>
+                        <vregion :ui="true" @values="regionChangeStart"  class="form-control" v-else>
+                            <el-input v-model="ruleForm.startLocation" @blur="isProvice" placeholder="请选择出发地" ></el-input>
                         </vregion>
                     </el-form-item>
                 </el-col>
                 <el-col :span="10">
                     <el-form-item label="到达地：" prop="endLocation" class="location_line">
                         <el-input v-model="ruleForm.endLocation" v-if="unable" :disabled="unable"></el-input>
-                        <vregion :ui="true" @values="regionChangeEnd" :ifAera = 'true' class="form-control"  @testCity="ifProvice('endLocation')" v-else>
+                        <vregion :ui="true" @values="regionChangeEnd" class="form-control"  v-else>
                             <el-input v-model="ruleForm.endLocation"  placeholder="请选择到达地"></el-input>
                         </vregion>
                     </el-form-item>
@@ -242,6 +242,17 @@ export default {
                 }
             })
         };
+
+        var checkStartLocation = (rule,value,callback) => {
+            console.log('this.ruleForm.startCity',this.ruleForm.startProvince)
+            if (value == '') {
+                callback(new Error('请输入出发地'));
+            } else if(this.ruleForm.startCity == '' && this.ruleForm.startProvince !=  '北京市' && this.ruleForm.startProvince !=  '天津市' && this.ruleForm.startProvince !=  '重庆市' && this.ruleForm.startProvince !=  '上海市' ){
+                callback(new Error('至少选择到市级范围'));
+            }else{
+                callback();
+            }
+        };
         return {
             // rangeLogo:[],
             unable:false,
@@ -319,7 +330,7 @@ export default {
             ],
             rules: {
                 startLocation:[
-                    { required: true, message: '请输入出发地', trigger: 'change' },
+                    { required: true, validator: checkStartLocation, trigger: 'change' },
                 ],
                 endLocation: [
                     { required: true, message: '请输入到达地', trigger: 'change' },
@@ -420,17 +431,24 @@ export default {
                 this.ruleForm.endLocationCode = d.province.code;
             }
         },
+        isProvice(){
+            // if(this.ruleForm.startCity){
+            //     return 
+            // }else{
+            //     this.ifProvice();
+            // }
+        },
         ifProvice(type){
             console.log('ifProvice',type)
             this.$message({
                 type: 'info',
                 message: '至少选择到市级范围'
             })
-            if(type == 'startLocation'){
+            // if(type == 'startLocation'){
                 return this.ruleForm.startLocation = '';
-            }else{
-                return this.ruleForm.endLocation = '';
-            }
+            // }else{
+                // return this.ruleForm.endLocation = '';
+            // }
         },
         getValue(obj){
             return obj ? obj.value:'';

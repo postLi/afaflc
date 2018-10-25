@@ -1,4 +1,6 @@
 import fetch from '@/utils/fetch'
+
+const baseurl = 'aflcorderservice'
 /**
  * 请求的参数
  * {
@@ -30,3 +32,36 @@ export function getConsoleData(data) {
 export function getConsoleChartData() {
   return fetch.get('/api-system/system/tmshomefinance/v1/findCapacityorgid')
 }
+
+
+/**
+ * ====== 在途监控 =======
+ */
+
+// 获取订单在线监控状态数量
+export function getOrderMonitorCount(data) {
+    return fetch({
+      url: '/' + baseurl + '/order/aflcOrder/v1/getOrderMonitorCount',
+      method: 'post',
+      data:data
+    })
+  }
+
+// 获取在线监控列表
+export function getOrderMonitorList(data) {
+    return fetch({
+      url: '/' + baseurl + '/order/aflcOrder/v1/getOrderMonitorList',
+      method: 'post',
+      data:data
+    })
+  }
+
+  querySysDictUrl
+
+// 通过code获取那么
+export function querySysDictUrl(code) {
+    return fetch({
+      url: '/aflc-common/aflcCommonSysDistApi/findAflcCommonSysDictByCodes/'+code,
+      method: 'get',
+    })
+  }
