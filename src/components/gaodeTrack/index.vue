@@ -135,7 +135,7 @@ export default {
         var polyline = new AMap.Polyline({
             map: map,
             path: this.lineArr,
-            strokeColor: "#00A",  //线颜色
+            strokeColor: "#28F",  //线颜色
             // strokeOpacity: 1,     //线透明度
             strokeWeight: 3,      //线宽
             // strokeStyle: "solid"  //线样式
@@ -144,7 +144,7 @@ export default {
         var passedPolyline = new AMap.Polyline({
             map: map,
             // path: lineArr,
-            strokeColor: "#F00",  //线颜色
+            strokeColor: "#AF5",  //线颜色
             // strokeOpacity: 1,     //线透明度
             strokeWeight: 3,      //线宽
             // strokeStyle: "solid"  //线样式

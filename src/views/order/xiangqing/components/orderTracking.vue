@@ -37,31 +37,24 @@
                 </template>
             </el-table-column>
             <el-table-column
-                prop=""
+                prop="userName"
                 label="操作人"
                 width="200"
                 :show-overflow-tooltip="true"
                 >
-                <template slot-scope="scope">
-                </template>
             </el-table-column>
             <el-table-column
+                prop="userTypeName"
                 label="用户类型"
                 width="200"
                 :show-overflow-tooltip="true"
                 >
-                <!-- <template slot-scope="scope">
-                    <p class="ifGrap"><i v-if="scope.row.isGrab == 1"></i>{{scope.row.driverName}} - {{scope.row.driverPhone}}</p>
-                </template> -->
             </el-table-column>
             <el-table-column
-                prop=""
+                prop="operation"
                 label="操作内容"
                 :show-overflow-tooltip="true"
                 width="300">
-                <!-- <template slot-scope="scope">
-                    {{scope.row.driverName}} - {{scope.row.driverPhone}}
-                </template> -->
             </el-table-column>
             <el-table-column
                 :show-overflow-tooltip="true"
@@ -121,6 +114,22 @@ export default {
                 console.log('details',res)
                 this.listInformation = res.data.aflcOrderFollowingFiles.reverse();
                 this.loading = false;
+                this.listInformation.forEach(el => {
+                    switch(el.userType){
+                        case '0':
+                            el.userTypeName = '货主';
+                            break;
+                        case '1':
+                            el.userTypeName = '车主';
+                            break;
+                        case '2':
+                            el.userTypeName = '后台管理人员';
+                            break;
+                        case '3':
+                            el.userTypeName = '车主（特权车主）';
+                            break;
+                    }
+                })
             })
         },
     },

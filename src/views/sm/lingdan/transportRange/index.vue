@@ -348,11 +348,15 @@ export default {
                     break;
                 case 'status':
                         TransportRangeStatus(row.id).then(res => {
+                            this.$message({
+                                type: 'success',
+                                message: '更改状态成功！'
+                            })
                             this.firstblood()
                         }).catch(err => {
                             this.$message({
-                            type: 'warning',
-                            message: '操作失败，原因：' + err.errorInfo ? err.errorInfo : err.text
+                                type: 'warning',
+                                message: '操作失败，原因：' + err.errorInfo ? err.errorInfo : err.text
                             })
                         })
                     break;

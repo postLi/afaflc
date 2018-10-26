@@ -36,8 +36,6 @@
                         :show-overflow-tooltip="true" sortable
                         label="手机号码">
                     </el-table-column>
-                    <el-table-column prop="contacts" sortable label="短信验证码">
-                    </el-table-column>
                     <el-table-column prop="registerOriginName" sortable label="注册渠道">
                     </el-table-column>
                     <el-table-column prop="createTime" :show-overflow-tooltip="true" sortable  label="注册时间">
@@ -59,20 +57,22 @@
                     </el-table-column>  
                     <el-table-column prop="shipperTypeName" sortable label="活跃状态">
                     </el-table-column>
-                    <el-table-column  label="身份状态" sortable prop="registerTime">
-                        <template  slot-scope="scope">
-                            <span v-if="scope.row.registerTime">{{ scope.row.registerTime | parseTime}}</span>
-                        </template>
+                    <el-table-column  label="身份状态" sortable prop="shipperTypeName">
                     </el-table-column>
                     <el-table-column prop="shipperTypeName" sortable label="审核状态">
                     </el-table-column>
                     <el-table-column prop="shipperTypeName" sortable label="审核操作人">
                     </el-table-column>
-                    <el-table-column prop="belongCity" sortable label="所属片区">
-                        <template slot-scope="scope">
-                            {{scope.row.belongCityName ? scope.row.belongCityName:scope.row.belongCity}}
+                    <el-table-column prop="belongArea" sortable label="所属片区">
+                    </el-table-column>
+                    <el-table-column prop="updateTime" 
+                        :show-overflow-tooltip="true" sortable
+                         label="最后修改时间">
+                         <template  slot-scope="scope">
+                            <span v-if="scope.row.updateTime">{{ scope.row.updateTime | parseTime}}</span>
                         </template>
                     </el-table-column>
+                    
 				</el-table>
 			</div>
         </div>

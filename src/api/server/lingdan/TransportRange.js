@@ -1,6 +1,6 @@
 import fetch from '@/utils/fetch'
 
-const baseUrl = 'aflcusercenterservice-lyc'
+const baseUrl = 'aflcusercenterservice'
 
 //根据条件获取专线列表
 // export function getTransportRangeList(page,pagesize,data){

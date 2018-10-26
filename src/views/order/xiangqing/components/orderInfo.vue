@@ -175,9 +175,19 @@
             </div>
             <div class="essentialInformation">
                 <p>
-                    <span>平台奖励车主：</span>
+                    <span>在线交易奖励金：</span>
                     <span v-if="listInformation.aflcOrderExpenses.reward">￥{{listInformation.aflcOrderExpenses.reward}}</span>
                     <span class="noneNun" v-else>无</span>
+                </p>
+                <p>
+                    <span>在线交易优惠金：</span>
+                    <!-- <span v-if="listInformation.aflcOrderExpenses.reward">￥{{listInformation.aflcOrderExpenses.reward}}</span> -->
+                    <!-- <span class="noneNun" v-else>无</span> -->
+                </p>
+                <p>
+                    <span>平台抽佣：</span>
+                    <!-- <span v-if="listInformation.aflcOrderExpenses.reward">￥{{listInformation.aflcOrderExpenses.reward}}</span> -->
+                    <!-- <span class="noneNun" v-else>无</span> -->
                 </p>
             </div>
         </div>

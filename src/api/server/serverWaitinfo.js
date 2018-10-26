@@ -15,8 +15,6 @@ export function data_GetCityInfo(page,pagesize,data) {
     })
   }
 
-
-
 //更改状态
 export function data_ChangeStatus(id) {
   return fetch({

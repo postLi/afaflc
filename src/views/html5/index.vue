@@ -29,7 +29,7 @@
       </div>
       <div class="orderSearchResult" v-show="showOrderSearchResult">
         <el-badge :value="orderNumAll">
-          <div ref="ttt" class="title allOrder"
+          <div ref="ttt" class="orderSearch_title allOrder"
                :style="{color:('全部服务中' === orderStatus)?'#f56c6c':'black', 'border-bottom':('全部服务中' === orderStatus)?'2px solid rgb(245, 108, 108':'2px solid #fff'}"
                @click="clickOrder('全部服务中',true)">
             全部服务中
@@ -93,7 +93,7 @@
           </div>
         </div>
         <div style="max-height: 375px;overflow: auto;margin-top: 12px">
-          <div class="table" style="width: 370px">
+          <div class="table">
             <div class="row">
               <div class="cellHeader" style="width: 40px">
                 序号
@@ -150,7 +150,7 @@
     </div>
     <div id="infoWindow">
       <div class="customInfoWindow">
-        <div class="title">
+        <div class="customInfoWindow_title ">
           <div id="infoWindowTitle"></div>
           <div class="el-icon-close" onclick="closeInfoWindow()"></div>
         </div>
@@ -256,7 +256,7 @@
       return {
         showOrderSearchResult: true,
         showOrderSearchResultIcon: "收起",
-        showOrderSearchResultStyle: "right: 400px",
+        showOrderSearchResultStyle: "right: 415px",
         filterText: null,
         mp: null,
         points: null,
@@ -295,6 +295,7 @@
         currentPage: 1,
         maxNum: 999,
         carList: [],
+        trailsList:[],
         processState: {displayAllMarkers: false},
         // queryCountUrl: "/aflc-order/aflcMyOrderApi/getOrderMonitorCount",
         // queryListUrl: "/aflc-order/aflcMyOrderApi/getOrderMonitorList",
@@ -599,6 +600,13 @@
           return;
         }
 
+        ele = document.getElementById("infoWindowOrderSerial");
+        if (!ele) {
+          setTimeout("getOrderDetail2()", 100);
+          return;
+        }
+        
+
         ele = document.getElementById("infoWindowCarType");
         if (!ele) {
           setTimeout("getOrderDetail2()", 100);
@@ -659,7 +667,7 @@
           return;
         }
 
-        console.log('this.orderdetail',this.orderdetail)
+        // console.log('this.orderdetail',this.orderdetail)
         var res = this.orderdetail;
         if (res == null || res.data == null)
           res = {data: {}};
@@ -680,6 +688,12 @@
           v = "";
         carInfo.driverMobile = v;
         document.getElementById("infoWindowMobile").innerText = v;
+
+        v = res.data.orderSerial;
+        if (v == null)
+          v = "";
+        document.getElementById("infoWindowOrderSerial").innerText = v;
+
 
         v = res.data.aflcDriverStatus.useCarTime;
         if (v)
@@ -779,7 +793,7 @@
           }
         }
         var status = res.data.orderStatus;
-        console.log('status',status)
+        // console.log('status',status)
         if (status != null) {
           if (status != carInfo.status) {
             carInfo.status = status;
@@ -809,77 +823,78 @@
           var carInfo = this.carList[idx];
           if (carInfo == null)
             return;
+            var page = 1;
+            var pagesize = 10000;
+            var trailform = Object.assign({},{orderSerial:orderId});
+
+            Promise.all([orderDetailsList(orderId),getOrderCarTrailList(page,pagesize,trailform)]).then(resArr => {
+                // console.log('resArr',resArr)
+            // })
+
         //   postApi(this.queryDetailUrl + orderId).then((res) => {
-        orderDetailsList(orderId).then((res) => {
+        // orderDetailsList(orderId).then((res) => {
+            console.log('未获取到该订单的数据，请稍后再试',resArr)
             var lnglat = null;
             var trails = null;
             try {
-              if (res.data == null) {
+              if (resArr[0].data == null) {
                 this.$message({
                   message: "未获取到该订单的数据，请稍后再试. ",
                   type: 'warning'
                 });
                 return;
               }
-              trails = res.data.aflcOrderCarTrails;
-              var trail = null;
-              if (trails != null && trails.length > 0)
-                trail = trails[0];
-              if (trail != null && trail.longitude != null && trail.latitude != null)
-                lnglat = [trail.longitude, trail.latitude];
+                trails = resArr[1].data.list;
+                this.trailsList = trails;
+                console.log('12312123',trails)
+                //   var trail = null;
+                if (trails != null && trails.length > 0)
+                    trail = trails[0];
+                if (trail != null && trail.longitude != null && trail.latitude != null)
+                    lnglat = [trail.longitude, trail.latitude];
 
-              if (lnglat == null) {
-                this.$message({
-                  message: "未获取到该订单的位置数据，请稍后再试. ",
-                  type: 'warning'
-                });
-                marker.setMap(null);
-                marker.setPosition(null);
-                var pixel = new AMap.Pixel(100, 200);
-                lnglat = this.mp.containerToLngLat(pixel);
-                this.infoWindow2.open(this.mp, lnglat);
-              } else {
-                var carUrl = this.grayCarUrl;
-                try {
-                  var time = trail.coordinateTime;
-                  var curTime = res.data.currentTime;
-                  if (time != null && curTime != null) {
-                    if ((curTime - time) < this.lostTime)
-                      carUrl = this.carUrl;
-                  }
-                } catch (e) {
+                if (lnglat == null) {
+                    this.$message({
+                    message: "未获取到该订单的位置数据，请稍后再试. ",
+                    type: 'warning'
+                    });
+                    marker.setMap(null);
+                    marker.setPosition(null);
+                    var pixel = new AMap.Pixel(100, 200);
+                    lnglat = this.mp.containerToLngLat(pixel);
+                    this.infoWindow2.open(this.mp, lnglat);
+                } else {
+                    var carUrl = this.grayCarUrl;
+                    try {
+                    var time = trail.coordinateTime;
+                    var curTime = resArr[0].data.currentTime;
+                    if (time != null && curTime != null) {
+                        if ((curTime - time) < this.lostTime)
+                        carUrl = this.carUrl;
+                    }
+                    } catch (e) {
+                    }
+                    marker.setIcon(carUrl);
+                    marker.setPosition(lnglat);
+                    marker.setMap(this.mp);
+                    this.markerPoint = marker;
+                    this.infoWindow2.open(this.mp, lnglat);
                 }
-                marker.setIcon(carUrl);
-                marker.setPosition(lnglat);
-                marker.setMap(this.mp);
-                this.markerPoint = marker;
-                this.infoWindow2.open(this.mp, lnglat);
-              }
             } catch (e) {
             }
 
-            this.orderdetail = res;
+            this.orderdetail = resArr[0];
             this.translateAddr();
             this.getOrderDetail2();
             this.translateCode();
 
             if (trails != null && (trails.length) > 0) {
               var pois = [];
-
-              // var point = null;
-              // for (var i = trails.length-1; i >=0; --i) {
-              //   if (trails[i] == null || trails[i].longitude == null || trails[i].latitude == null)
-              //     continue;
-              //   point = new AMap.LngLat(trails[i].longitude, trails[i].latitude);
-              //   pois.push(point);
-              // }
-
               for (var i = trails.length - 1; i >= 0; --i) {
                 if (trails[i] == null || trails[i].longitude == null || trails[i].latitude == null)
                   continue;
                 pois.push({lnglat: [trails[i].longitude, trails[i].latitude]});
               }
-
               this.track = pois;
             }
           });
@@ -942,7 +957,6 @@
         this.$message.error("无法获取服务器端数据. ");
       },
       clickOrder2(idx) {
-          console.log(idx)
         try {
           this.markerIdx = idx;
           var marker = this.points[idx];
@@ -959,7 +973,7 @@
         if (!this.showOrderSearchResult) {
           this.showOrderSearchResult = true;
           this.showOrderSearchResultIcon = "收起";
-          this.showOrderSearchResultStyle = "right:400px";
+          this.showOrderSearchResultStyle = "right:415px";
         }
         if (ordStatus != null)
           this.orderStatus = ordStatus;
@@ -1003,7 +1017,7 @@
         } else {
           this.showOrderSearchResult = true;
           this.showOrderSearchResultIcon = "收起";
-          this.showOrderSearchResultStyle = "right:400px";
+          this.showOrderSearchResultStyle = "right:415px";
         }
       },
       displayAllMarkers() {
@@ -1197,6 +1211,11 @@
           ele.innerText = v;
         }
 
+        ele = document.getElementById("infoWindowOrderSerial");
+        if (ele) {
+          ele.innerText = "";
+        }
+
         ele = document.getElementById("infoWindowOrderTime");
         if (ele) {
           ele.innerText = "";
@@ -1288,7 +1307,7 @@
         //   if (q == null)
         //     return;
         //   getApi(this.querySysDictUrl + q).then((res) => {
-            console.log('qqqqq',this.orderdetail.data)
+            // console.log('qqqqq',this.orderdetail.data)
             // querySysDictUrl(q).then((res) => {
             // if (res == null || res.data == null) {
             //   this.$message({
@@ -1342,35 +1361,23 @@
           return;
         }
         var t = this.orderdetail;
-        var page = 1;
-        var pagesize = 10000;
-        var trailform = Object.assign({},{orderSerial:t.orderSerial});
+        t.data.aflcOrderCarTrails = this.trailsList
         var formatDate = this.formatDate;
         this.geocoder.getAddress(pos, function (status, result) {
           if (status === "complete" && result.regeocode) {
             var address = result.regeocode.formattedAddress;
             try {
               if (t != null && t.data != null) {
-                  getOrderCarTrailList(page,pagesize,trailform).then(res => {
-                        t = res.data;
-                        if (t != null && t.length > 0) {
-                            t = t[t.length - 1];
-                        } else
-                            t = null;
-                        if (t != null)
-                            t = t.coordinateTime;
-                        if (t != null)
-                            t = formatDate(t);
-                  })
-                // t = t.data.aflcOrderCarTrails;
-                // if (t != null && t.length > 0) {
-                //     t = t[t.length - 1];
-                // } else
-                //     t = null;
-                // if (t != null)
-                //     t = t.coordinateTime;
-                // if (t != null)
-                //     t = formatDate(t);
+                t = t.data.aflcOrderCarTrails;
+                console.log('ttt',t)
+                if (t != null && t.length > 0) {
+                    t = t[t.length - 1];
+                } else
+                    t = null;
+                if (t != null)
+                    t = t.coordinateTime;
+                if (t != null)
+                    t = formatDate(t);
               } else
                 t = null;
             } catch (e) {
@@ -1380,6 +1387,7 @@
               address = address + "&nbsp;&nbsp;" + t;
 
             mapAddr.innerHTML = address;
+            console.log('addressaddressaddress',address,t)
           }
         });
       },
@@ -1406,6 +1414,7 @@
         checkTrack();
       },
       showTrack2(orderId) {
+          console.log('truckDriving',this.truckDriving,this.track)
         var truckDriving = this.truckDriving;
         if (truckDriving == null) {
           this.truckDriving = new AMap.TruckDriving({
@@ -1543,7 +1552,12 @@
       margin-right:0px;
         float: right;
   }
-  .ctl2 .el-button:focus, .ctl2 .el-button:hover {
+
+  
+    .carPager2>.el-pagination .el-pager .number{
+        margin:0px
+    }
+  .ctl2 .el-button:focus, .ctl2 .el-button:hover  {
     color: #409EFF;
     border-color: #409EFF;
     background-color: unset;
@@ -1557,7 +1571,7 @@
     box-shadow: 0 2px 4px 0 rgba(153, 153, 153, 0.5);
   }
 
-  .customInfoWindow .title {
+  .customInfoWindow .customInfoWindow_title {
     width: 329px;
     height: 38px;
     line-height: 38px;
@@ -1753,7 +1767,7 @@
     margin-top: 12px;
   }
 
-  .orderSearch .title {
+  .orderSearch .orderSearch_title {
     float: left;
     font-size: 14px;
     font-weight: bold;
@@ -1770,14 +1784,14 @@
     height: 580px;
     background-color: white;
     box-shadow: 0 2px 4px 0 rgba(153, 153, 153, 0.5);
-
+    transition:all 3s linear;
   }
 
   .orderSearch {
     position: absolute;
     right: 12px;
     top: 20px;
-    width: 396px;
+    width: 410px;
   }
 
   .orderSearch .showOrderSearchResult {
