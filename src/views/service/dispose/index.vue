@@ -129,7 +129,7 @@
               </el-table> 
         	  </div> 
           <!-- addReg -->
-          <addReg :centerDialogVisible="centerDialogVisible" @close="closeAddReg"></addReg>
+          <addReg :centerDialogVisible="centerDialogVisible" @close="closeAddReg" @success="getsuccess"></addReg>
          <!-- 页码 -->
           <div class="info_tab_footer">共计:{{ dataTotal }}<div class="show_pager"> <Pager :total="dataTotal" @change="handlePageChange"  :sizes="sizes"/></div> </div> 
         </div>
@@ -239,6 +239,9 @@ export default {
           this.firstblood()
           break
       }
+    },
+    getsuccess() {
+      this.firstblood()
     },
     // 请求接口刷新页面
     firstblood() {

@@ -30,7 +30,7 @@
       <div class="orderSearchResult" v-show="showOrderSearchResult">
         <el-badge :value="orderNumAll">
           <div ref="ttt" class="title allOrder"
-               :style="{color:('全部服务中' === orderStatus)?'red':'black', 'text-decoration':('全部服务中' === orderStatus)?'underline':'none'}"
+               :style="{color:('全部服务中' === orderStatus)?'#f56c6c':'black', 'border-bottom':('全部服务中' === orderStatus)?'2px solid rgb(245, 108, 108':'2px solid #fff'}"
                @click="clickOrder('全部服务中',true)">
             全部服务中
           </div>
@@ -39,19 +39,19 @@
           <div class="row">
             <div class="cell3" @click="clickOrder('司机已接单',true)">
               <el-badge :value="orderNumJiedan" :max="maxNum"
-                        :style="{color:('司机已接单' === orderStatus)?'red':'black', 'text-decoration':('司机已接单' === orderStatus)?'underline':'none'}">
+                        :style="{color:('司机已接单' === orderStatus)?'#f56c6c':'black', 'border-bottom':('司机已接单' === orderStatus)?'2px solid rgb(245, 108, 108':'2px solid #fff'}">
                 司机已接单
               </el-badge>
             </div>
-            <div class="cell" @click="clickOrder('司机赶往提货地',true)">
+            <div class="cell cell3" @click="clickOrder('司机赶往提货地',true)">
               <el-badge :value="orderNumGanwangtwd" :max="maxNum"
-                        :style="{color:('司机赶往提货地' === orderStatus)?'red':'black', 'text-decoration':('司机赶往提货地' === orderStatus)?'underline':'none'}">
+                        :style="{color:('司机赶往提货地' === orderStatus)?'#f56c6c':'black', 'border-bottom':('司机赶往提货地' === orderStatus)?'2px solid rgb(245, 108, 108':'2px solid #fff'}">
                 司机赶往提货地
               </el-badge>
             </div>
-            <div class="cell" @click="clickOrder('司机已到提货地',true)">
+            <div class="cell cell3" @click="clickOrder('司机已到提货地',true)">
               <el-badge :value="orderNumYidaotwd" :max="maxNum"
-                        :style="{color:('司机已到提货地' === orderStatus)?'red':'black', 'text-decoration':('司机已到提货地' === orderStatus)?'underline':'none'}">
+                        :style="{color:('司机已到提货地' === orderStatus)?'#f56c6c':'black', 'border-bottom':('司机已到提货地' === orderStatus)?'2px solid rgb(245, 108, 108':'2px solid #fff'}">
                 司机已到提货地
               </el-badge>
             </div>
@@ -59,44 +59,44 @@
           <div class="row">
             <div class="cell3" @click="clickOrder('司机已装货',true)">
               <el-badge :value="orderNumYizhuanghuo" :max="maxNum"
-                        :style="{color:('司机已装货' === orderStatus)?'red':'black', 'text-decoration':('司机已装货' === orderStatus)?'underline':'none'}">
+                        :style="{color:('司机已装货' === orderStatus)?'#f56c6c':'black', 'border-bottom':('司机已装货' === orderStatus)?'2px solid rgb(245, 108, 108':'2px solid #fff'}">
                 司机已装货
               </el-badge>
             </div>
-            <div class="cell" @click="clickOrder('运输中',true)">
+            <div class="cell cell3" @click="clickOrder('运输中',true)">
               <el-badge :value="orderNumYunshuzhong" :max="maxNum"
-                        :style="{color:('运输中' === orderStatus)?'red':'black', 'text-decoration':('运输中' === orderStatus)?'underline':'none'}">
+                        :style="{color:('运输中' === orderStatus)?'#f56c6c':'black', 'border-bottom':('运输中' === orderStatus)?'2px solid rgb(245, 108, 108':'2px solid #fff'}">
                 运输中
               </el-badge>
             </div>
-            <div class="cell" @click="clickOrder('司机已到目的地',true)">
+            <div class="cell cell3" @click="clickOrder('司机已到目的地',true)">
               <el-badge :value="orderNumYidaomdd" :max="maxNum"
-                        :style="{color:('司机已到目的地' === orderStatus)?'red':'black', 'text-decoration':('司机已到目的地' === orderStatus)?'underline':'none'}">
+                        :style="{color:('司机已到目的地' === orderStatus)?'#f56c6c':'black', 'border-bottom':('司机已到目的地' === orderStatus)?'2px solid rgb(245, 108, 108':'2px solid #fff'}">
                 司机已到目的地
               </el-badge>
             </div>
           </div>
           <div class="row">
-            <div class="cell" @click="clickOrder('司机已卸货',true)">
+            <div class="cell cell3" @click="clickOrder('司机已卸货',true)">
               <el-badge
-                :style="{color:('司机已卸货' === orderStatus)?'red':'black', 'text-decoration':('司机已卸货' === orderStatus)?'underline':'none'}"
+                :style="{color:('司机已卸货' === orderStatus)?'#f56c6c':'black', 'border-bottom':('司机已卸货' === orderStatus)?'2px solid rgb(245, 108, 108':'2px solid #fff'}"
                 :value="orderNumYixiehuo" :max="maxNum">
                 司机已卸货
               </el-badge>
             </div>
-            <div class="cell" @click="clickOrder('司机改派',true)">
+            <div class="cell cell3" @click="clickOrder('司机改派',true)">
               <el-badge :value="orderNumGaipai" :max="maxNum"
-                        :style="{color:('司机改派' === orderStatus)?'red':'black', 'text-decoration':('司机改派' === orderStatus)?'underline':'none'}">
+                        :style="{color:('司机改派' === orderStatus)?'#f56c6c':'black', 'border-bottom':('司机改派' === orderStatus)?'2px solid rgb(245, 108, 108':'2px solid #fff'}">
                 司机改派
               </el-badge>
             </div>
           </div>
         </div>
-        <div style="max-height: 280px;overflow: auto;margin-top: 12px">
-          <div class="table" style="width: 360px">
+        <div style="max-height: 375px;overflow: auto;margin-top: 12px">
+          <div class="table" style="width: 370px">
             <div class="row">
-              <div class="cellHeader">
-                订单号
+              <div class="cellHeader" style="width: 40px">
+                序号
               </div>
               <div class="cellHeader">
                 车牌号
@@ -111,8 +111,10 @@
             <div :class="{'row':true, 'rowclick':true,'rowFocus':(markerIdx===index)}" v-for="(item,index) in carList"
                  :key="item.orderSerial"
                  @click="clickOrder2(index)">
-              <div class="cell4">
-                {{item.orderSerial}}
+              <div class="cell4" style="width: 40px">
+                <!-- {{item.orderSerial}} -->
+                {{ (currentPage - 1)*pageSize + index + 1 }}
+
               </div>
               <div class="cell2">
                 {{item.carNumber}}
@@ -127,18 +129,19 @@
           </div>
         </div>
         <div class="carPager">
-          <div>
+          <!-- <div>
             <el-pagination
               background
               layout="prev, pager, next"
-              :pager-count="4" @current-change="currentPageChange" :current-page.sync="currentPage"
+               @current-change="currentPageChange" :current-page.sync="currentPage"
               :total="totalCount" :page-size="pageSize" @size-change="pageSizeChange">
             </el-pagination>
-          </div>
+          </div> -->
           <div class="carPager2">
             <el-pagination
               background
-              layout="total, sizes, jumper" @current-change="currentPageChange" :current-page.sync="currentPage"
+              prev-tex
+              layout="prev, pager, next,total, sizes" :pager-count="5"  @current-change="currentPageChange" :current-page.sync="currentPage"
               :total="totalCount" :page-size="pageSize" @size-change="pageSizeChange">
             </el-pagination>
           </div>
@@ -181,6 +184,10 @@
           </div>
           <p class="bar" style="margin-top: 20px">订单信息</p>
           <table class="table2">
+            <tr>
+              <td class="label">订单号</td>
+              <td colspan="3" id="infoWindowOrderSerial"></td>
+            </tr>
             <tr>
               <td class="label">用车时间</td>
               <td colspan="3" id="infoWindowOrderTime"></td>
@@ -239,6 +246,8 @@
     import {postApi, getApi} from '@/api/common.js';
 //   import localStorage from '@/utils/localStorage';
 //   import VueJsCookie from 'vue-js-cookie';
+    import { getOrderCarTrailList } from '@/api/order/ordermange'
+
     import { getOrderMonitorCount,getOrderMonitorList,querySysDictUrl } from '@/api/index.js'
     import { orderDetailsList } from '@/api/order/ordermange.js'
   export default {
@@ -247,11 +256,11 @@
       return {
         showOrderSearchResult: true,
         showOrderSearchResultIcon: "收起",
-        showOrderSearchResultStyle: "right: 396px",
+        showOrderSearchResultStyle: "right: 400px",
         filterText: null,
         mp: null,
         points: null,
-        markerOffset: new AMap.Pixel(-28, -68),
+        markerOffset: new AMap.Pixel(-60, -93),
         satelliteVisible: false,
         satelliteLayer: null,
         trafficVisible: false,
@@ -649,35 +658,39 @@
           setTimeout("getOrderDetail2()", 100);
           return;
         }
+
+        console.log('this.orderdetail',this.orderdetail)
         var res = this.orderdetail;
         if (res == null || res.data == null)
           res = {data: {}};
-        var v = res.data.carNumber;
+        var v = res.data.aflcDriverStatus.carNumber;
         if (v == null)
           v = "";
         carInfo.carNumber = v;
         document.getElementById("infoWindowCarNo").innerText = v;
 
-        v = res.data.driverName;
+        v = res.data.aflcDriverStatus.driverName;
         if (v == null)
           v = "";
         carInfo.driverName = v;
         document.getElementById("infoWindowDriverName").innerText = v;
 
-        v = res.data.driverMobile;
+        v = res.data.aflcDriverStatus.driverMobile;
         if (v == null)
           v = "";
         carInfo.driverMobile = v;
         document.getElementById("infoWindowMobile").innerText = v;
 
-        v = res.data.useCarTime;
+        v = res.data.aflcDriverStatus.useCarTime;
         if (v)
           v = this.formatDate(v);
         if (v == null)
           v = "";
         document.getElementById("infoWindowOrderTime").innerText = v;
 
-        v = res.data.carTypeName;
+        // v = res.data.aflcDriverStatus.carTypeName;
+        v = res.data.aflcDriverStatus.carType;
+
         if (v == null)
           v = "";
         document.getElementById("infoWindowCarType").innerText = v;
@@ -693,12 +706,14 @@
           v = "";
         document.getElementById("infoWindowOrderExtraServ").innerText = v;
 
-        v = res.data.sendWord;
+        // v = res.data.sendWord;
+        v = res.data.remark;
         if (v == null)
           v = "";
         document.getElementById("infoWindowOrderMemo").innerText = v;
 
-        v = res.data.orderPrice;
+        // v = res.data.orderPrice;
+        v = res.data.totalAmount;
         if (v == null)
           v = "";
         else if (v != "" && !isNaN(v)) {
@@ -707,18 +722,21 @@
         document.getElementById("infoWindowOrderPrice").innerText = v;
 
         v = res.data.payStatus;
-        if (v != null)
-          v = this.statusCode2Text(v);
-        if (v == null)
-          v = res.data.payStatus;
-        if (v == null)
-          v = "";
+        // if (v != null)
+        //   v = this.statusCode2Text(v);
+        // if (v == null)
+        //   v = res.data.payStatus;
+        // if (v == null)
+        //   v = "";
         document.getElementById("infoWindowOrderPayState").innerText = v;
 
         document.getElementById("infoWindowOrderStartAddr").innerText = "";
         document.getElementById("infoWindowOrderPassAddr").innerText = "";
         document.getElementById("infoWindowOrderTargetAddr").innerText = "";
-        v = res.data.addresses;
+        v = res.data.aflcOrderAddresses.sort(function(a, b){
+                return a.viaOrder - b.viaOrder
+            });
+
         if (v == null || v.length < 1)
           ;
         else {
@@ -746,6 +764,9 @@
             }
             if (str != null)
               document.getElementById("infoWindowOrderPassAddr").innerHTML = str;
+            else
+              document.getElementById("infoWindowOrderPassAddr").innerHTML = '暂无';
+
           }
 
           if (v.length > 1) {
@@ -758,11 +779,13 @@
           }
         }
         var status = res.data.orderStatus;
+        console.log('status',status)
         if (status != null) {
           if (status != carInfo.status) {
             carInfo.status = status;
             carInfo.statusText = null;
-            var text = this.statusCode2Text(status);
+            // var text = this.statusCode2Text(status);
+            var text = status;
             if (text != null) {
               carInfo.statusText = text;
             } else
@@ -919,6 +942,7 @@
         this.$message.error("无法获取服务器端数据. ");
       },
       clickOrder2(idx) {
+          console.log(idx)
         try {
           this.markerIdx = idx;
           var marker = this.points[idx];
@@ -935,7 +959,7 @@
         if (!this.showOrderSearchResult) {
           this.showOrderSearchResult = true;
           this.showOrderSearchResultIcon = "收起";
-          this.showOrderSearchResultStyle = "right:396px";
+          this.showOrderSearchResultStyle = "right:400px";
         }
         if (ordStatus != null)
           this.orderStatus = ordStatus;
@@ -979,7 +1003,7 @@
         } else {
           this.showOrderSearchResult = true;
           this.showOrderSearchResultIcon = "收起";
-          this.showOrderSearchResultStyle = "right:396px";
+          this.showOrderSearchResultStyle = "right:400px";
         }
       },
       displayAllMarkers() {
@@ -1236,70 +1260,70 @@
         this.getOrderDetail(carInfo.orderSerial, markerPoint);
       },
       translateCode() {
-        if (this.orderdetail == null || this.orderdetail.data == null)
-          return;
+        // if (this.orderdetail == null || this.orderdetail.data == null)
+        //   return;
 
-        var ele = document.getElementById("infoWindowTitle");
-        if (ele == null) {
-          setTimeout("translateCode()", 1000);
-          return;
-        }
+        // var ele = document.getElementById("infoWindowTitle");
+        // if (ele == null) {
+        //   setTimeout("translateCode()", 1000);
+        //   return;
+        // }
 
-        ele = document.getElementById("infoWindowOrderPayState");
-        if (ele == null) {
-          setTimeout("translateCode()", 1000);
-          return;
-        }
+        // ele = document.getElementById("infoWindowOrderPayState");
+        // if (ele == null) {
+        //   setTimeout("translateCode()", 1000);
+        //   return;
+        // }
 
-        try {
-          var q = null;
-          if (this.orderdetail.data.orderStatus != null)
-            q = this.orderdetail.data.orderStatus;
-          if (this.orderdetail.data.payStatus != null) {
-            if (q == null)
-              q = this.orderdetail.data.payStatus;
-            else
-              q = q + "," + this.orderdetail.data.payStatus;
-          }
-          if (q == null)
-            return;
+        // try {
+        //   var q = null;
+        //   if (this.orderdetail.data.orderStatus != null)
+        //     q = this.orderdetail.data.orderStatus;
+        //   if (this.orderdetail.data.payStatus != null) {
+        //     if (q == null)
+        //       q = this.orderdetail.data.payStatus;
+        //     else
+        //       q = q + "," + this.orderdetail.data.payStatus;
+        //   }
+        //   if (q == null)
+        //     return;
         //   getApi(this.querySysDictUrl + q).then((res) => {
-            console.log('qqqqq',q)
-            querySysDictUrl(q).then((res) => {
-            if (res == null || res.data == null) {
-              this.$message({
-                message: "获取订单状态数据出错. ",
-                type: 'warning'
-              });
-              return;
-            }
+            console.log('qqqqq',this.orderdetail.data)
+            // querySysDictUrl(q).then((res) => {
+            // if (res == null || res.data == null) {
+            //   this.$message({
+            //     message: "获取订单状态数据出错. ",
+            //     type: 'warning'
+            //   });
+            //   return;
+            // }
 
-            var s = this.orderdetail.data.orderStatus;
-            if (s != null) {
-              s = res.data[s];
-              if (s == null)
-                s = "";
-              else
-                s = s.name;
-              if (s == null)
-                s = "";
+            var s = this.orderdetail.data.orderStatus ? this.orderdetail.data.orderStatus : '';
+            // if (s != null) {
+            //   s = res.data[s];
+            //   if (s == null)
+            //     s = "";
+            //   else
+            //     s = s.name;
+            //   if (s == null)
+            //     s = "";
               document.getElementById("infoWindowTitle").innerText = s;
-            }
+            // }
 
-            s = this.orderdetail.data.payStatus;
-            if (s != null) {
-              s = res.data[s];
-              if (s == null)
-                s = "";
-              else
-                s = s.name;
-              if (s == null)
-                s = "";
+            s = this.orderdetail.data.payStatus ? this.orderdetail.data.payStatus :'';
+            // if (s != null) {
+            //   s = res.data[s];
+            //   if (s == null)
+            //     s = "";
+            //   else
+            //     s = s.name;
+            //   if (s == null)
+            //     s = "";
               document.getElementById("infoWindowOrderPayState").innerText = s;
-            }
-          });
-        } catch (e) {
-        }
+            // }
+        //   });
+        // } catch (e) {
+        // }
       },
       translateAddr() {
         var mapAddr = document.getElementById("mapAddr");
@@ -1318,21 +1342,35 @@
           return;
         }
         var t = this.orderdetail;
+        var page = 1;
+        var pagesize = 10000;
+        var trailform = Object.assign({},{orderSerial:t.orderSerial});
         var formatDate = this.formatDate;
         this.geocoder.getAddress(pos, function (status, result) {
           if (status === "complete" && result.regeocode) {
             var address = result.regeocode.formattedAddress;
             try {
               if (t != null && t.data != null) {
-                t = t.data.aflcOrderCarTrails;
-                if (t != null && t.length > 0) {
-                  t = t[t.length - 1];
-                } else
-                  t = null;
-                if (t != null)
-                  t = t.coordinateTime;
-                if (t != null)
-                  t = formatDate(t);
+                  getOrderCarTrailList(page,pagesize,trailform).then(res => {
+                        t = res.data;
+                        if (t != null && t.length > 0) {
+                            t = t[t.length - 1];
+                        } else
+                            t = null;
+                        if (t != null)
+                            t = t.coordinateTime;
+                        if (t != null)
+                            t = formatDate(t);
+                  })
+                // t = t.data.aflcOrderCarTrails;
+                // if (t != null && t.length > 0) {
+                //     t = t[t.length - 1];
+                // } else
+                //     t = null;
+                // if (t != null)
+                //     t = t.coordinateTime;
+                // if (t != null)
+                //     t = formatDate(t);
               } else
                 t = null;
             } catch (e) {
@@ -1485,6 +1523,31 @@
   .btn3 .el-checkbox__inner {
     border: 1px solid #409EFF;
   }
+
+  .carNum {
+    color: blue;
+    text-align: center;
+    width: 120px;
+    height: 21px;
+    overflow: hidden;
+  }
+
+  .carIcon {
+    text-align: center;
+  }
+  
+  .carPager2>.el-pagination .btn-prev{
+      margin-left:0px
+  }
+  .carPager2>.el-pagination .el-pagination__sizes{
+      margin-right:0px;
+        float: right;
+  }
+  .ctl2 .el-button:focus, .ctl2 .el-button:hover {
+    color: #409EFF;
+    border-color: #409EFF;
+    background-color: unset;
+  }
 </style>
 
 <style scoped>
@@ -1513,13 +1576,14 @@
 
   .customInfoWindow .body {
     width: 100%;
-    max-height: 500px;
+    max-height: 580px;
     overflow: auto;
-    padding: 12px 12px 16px 12px;
+    padding: 10px 12px 16px 12px;
   }
 
   .customInfoWindow .body .bar {
     font-size: 14px;
+    line-height:20px;
     width: 100%;
     background-color: white;
     color: black;
@@ -1600,10 +1664,12 @@
     position: absolute;
     bottom: 12px;
     font-size: 12px;
+    width:96%;
   }
 
-  .carPager2 {
-    padding-left: 4px;
+  .carPager2,.carPager2 .el-pagination,.carPager2 .el-pagination .btn-prev{
+    padding-left: 0px;
+    margin-left:0px;
   }
 
   .allOrder {
@@ -1641,10 +1707,18 @@
     text-align: center;
   }
 
-  .orderSearchResult .table .cellHeader {
+  .orderSearchResult .table .cellHeader,.orderSearchResult .table .cell4 {
     display: table-cell;
     border: 1px solid #dbdbdb;
     text-align: center;
+    padding:8px 0;
+    font-size:12px;
+    line-height:17px;
+    color: #333333;
+  }
+
+  .orderSearchResult .table .cellHeader:first-child{
+      width:30px;
   }
 
   .orderSearchResult .table .cell2 {
@@ -1659,8 +1733,10 @@
 
   .orderSearchResult .table .cell3 {
     display: table-cell;
-    padding-bottom: 12px;
+    padding:6px 0;
+    line-height:18px;
     text-align: center;
+    color:#1890ff;
   }
 
   .orderSearchResult .table .cell4 {
@@ -1681,6 +1757,8 @@
     float: left;
     font-size: 14px;
     font-weight: bold;
+    font-family: PingFang SC;
+    line-height:20px;
     font-stretch: normal;
     letter-spacing: 0;
     color: #333333;
@@ -1689,9 +1767,10 @@
   .orderSearchResult {
     margin-top: 12px;
     padding: 12px;
-    height: 500px;
+    height: 580px;
     background-color: white;
     box-shadow: 0 2px 4px 0 rgba(153, 153, 153, 0.5);
+
   }
 
   .orderSearch {
@@ -1704,13 +1783,17 @@
   .orderSearch .showOrderSearchResult {
     position: absolute;
     right: 396px;
-    top: 200px;
-    background-color: white;
+    top: 210px;
+    background-color: #409EFF;
     padding: 10px 2px;
-    font-size: 14px;
+    font-size: 12px;
     cursor: pointer;
-    width: 20px;
+    width: 24px;
     text-align: center;
+    padding:10px 5px;
+    font-weight:bold;
+    border-radius:5% 5%;
+    color: #fff;
   }
 
   .topLayer {
@@ -1741,7 +1824,7 @@
     display: inline-block;
     padding: 10px;
     left: 40px;
-    top: 12px;
+    top: 10px;
   }
 
   .btn2 {
@@ -1750,7 +1833,8 @@
 
   .btn3 {
     color: #409EFF;
-    border: 1px solid #409EFF;
+    border: 1px solid #409EFF !important;
+    padding: 9px 10px 5px 10px !important;
   }
 
   .btn4 {

@@ -3,9 +3,21 @@ import fetch from '@/utils/fetch'
 const baseUrl = 'aflcusercenterservice-lyc'
 
 //根据条件获取专线列表
+// export function getTransportRangeList(page,pagesize,data){
+//     return fetch({
+//       url: '/'+baseUrl+'/usercenter/aflcTransportRange/v1/getAflcTransportRangeList',
+//       method: 'post',
+//       data:{
+//         "currentPage": page,
+//         "pageSize": pagesize,
+//         "vo": data
+//       }
+//     })
+//   }
+//WEB端专线列表
 export function getTransportRangeList(page,pagesize,data){
     return fetch({
-      url: '/'+baseUrl+'/usercenter/aflcTransportRange/v1/getAflcTransportRangeList',
+      url: '/'+baseUrl+'/usercenter/aflcTransportRange/v1/listWebAflcTransportRange',
       method: 'post',
       data:{
         "currentPage": page,
@@ -14,6 +26,7 @@ export function getTransportRangeList(page,pagesize,data){
       }
     })
   }
+
 
   //根据条件获取专线列表
 export function createWebTransport(data){
