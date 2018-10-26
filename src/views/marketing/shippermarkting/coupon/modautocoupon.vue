@@ -697,31 +697,9 @@ export default {
             else{
             this.$refs['formAllData'].validate(valid=>{
               if(valid){
-                if(typeof(this.formAllData.areaCode)=='string'){
-                this.areaStatus = this.formAllData.areaCode
-                }
-                else{
-                if(this.formAllData.area){
-                 this.areaStatus = this.formAllData.areaCode[2]
-                }
-                else{
-                 this.areaStatus = this.formAllData.areaCode[1]
-                }        
-                }
 
                     let aflcCouponList = []
                     this.formAllData.aflcCouponList.map((list,index)=>{
-                    if(typeof(list.areaCode)=='string'){
-                        list.areaCode = list.areaCode
-                    }
-                    else{
-                    if(list.area){
-                       this.formAllData.aflcCouponList[index].areaCode = this.formAllData.aflcCouponList[index].areaCode[2]
-                    }
-                    else{
-                       this.formAllData.aflcCouponList[index].areaCode = this.formAllData.aflcCouponList[index].areaCode[1]
-                    }               
-                    }
                         aflcCouponList.push(
                             {
                                 province:list.province,
@@ -750,7 +728,7 @@ export default {
                         startTime:this.formAllData.startTime,
                         endTime:this.formAllData.endTime,
                         activityDes:this.formAllData.activityDes,
-                        areaCode: this.areaStatus,
+                        areaCode: this.formAllData.areaCode,
                         province:this.formAllData.province,
                         city:this.formAllData.city,
                         area:this.formAllData.area,

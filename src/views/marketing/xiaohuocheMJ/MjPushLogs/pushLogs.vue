@@ -1,6 +1,6 @@
 <template>
 <div class="detailsCompnent MJDpushlogs" style="height:100%" v-loading="loading">
-    <div class="detailsInfo detailsArrange" v-loading="loading" style="height:100%">
+    <div class="detailsInfo detailsArrange" style="height:100%">
         <!-- 基本信息 -->
         <div class="detailsInfo-collapse collapseInfo">
             <h2>马甲单推送详情</h2>
@@ -52,11 +52,6 @@
                     border
                    height="100%"
                     style="width: 100%">
-                    <el-table-column
-                                    label="选择"
-                                    type="selection"
-                                    width="50">
-                    </el-table-column>
                 <el-table-column label="序号" sortable  width="80">
                                     <template slot-scope="scope">
                                     {{ (page - 1)*pagesize + scope.$index + 1 }}
@@ -65,12 +60,16 @@
                     <el-table-column
                     label="用户"
                     width="180" prop="driverName">
+                    <template slot-scope="scope">
+                        <span v-if="!scope.row.driverName">{{scope.row.driverMobile}}</span>
+                        <span v-else>{{scope.row.driverName}}-{{scope.row.driverMobile}}</span>
+                    </template>
                     </el-table-column>
                     <el-table-column
                     label="车辆信息" prop="carTypeName">
                     </el-table-column>
                     <el-table-column
-                    label="距离提货地(KM)" prop="driverDistance" show-overflow-tooltip>
+                    label="距离提货地(M)" prop="driverDistance" show-overflow-tooltip>
                     </el-table-column>
                     <el-table-column
                     label="当前地址" prop="driverAddress">
@@ -118,7 +117,6 @@ export default {
         page:1,//当前页
         dataTotal:null,//总记录数
         tableDataTree:[],//定义列表记录
-        loading: false,
         dialogVisible: false,
         currentOrderSerial: '',
         formAll:{
@@ -148,13 +146,13 @@ export default {
       this.formAll.orderSerial = this.$route.query.orderSerial
       this.firstblood();
       this.firstblood2();
-      this.loading =false
     },
     methods: {
             //刷新页面  
             firstblood(){
+                this.loading = true
                 data_get_MjPushLogs_list(1,10,this.formAll).then(res => {
-                    this.MJlogsData=res.data.list[0];
+                    this.MJlogsData=res.data.list[0]
                     this.loading = false
                 })
             },

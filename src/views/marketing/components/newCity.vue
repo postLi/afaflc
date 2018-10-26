@@ -345,9 +345,6 @@ export default {
         console.log(res)
       })
     },
-    changeList() {
-      eventBus.$emit('pushListtwo')
-    },
     // 同城新增
     add_data() {
       this.$refs['formAll'].validate(valid => {
@@ -367,10 +364,8 @@ export default {
             }]
            this.dialogFormVisible_add = false
           data_get_Marketingsame_create(formAllData).then(res => {
-            this.changeList();
             this.$message.success('新增成功')
           }).catch(res => {
-            this.changeList();
             this.$message.error('新增失败')
           })
         }
@@ -384,11 +379,9 @@ export default {
         if (valid) {
             this.dialogFormVisible_add = false
           data_get_Marketingsame_update(forms).then(res => {
-            this.changeList();
             this.$message.success('修改成功')
           }).catch(res => {
             console.log(res)
-            this.changeList();
             this.$message.error('修改失败')
           })
         }

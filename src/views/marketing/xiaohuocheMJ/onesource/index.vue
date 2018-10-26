@@ -15,7 +15,7 @@
                         </el-option>
                     </el-select>
                  </el-form-item>
-                <el-form-item label="片区名称" >
+                <el-form-item label="片区名称">
                    <el-input v-model="formAll.districtName"></el-input>
                  </el-form-item>
          <el-form-item class="fr">
@@ -212,12 +212,12 @@
              <el-row>
             <el-col :span="8">
             <el-form-item label="提货地：" :label-width="formLabelWidth" class="adressstart">
-           <el-input @focus="()=>{showMap('areaCode2')}" v-model="formAll2.startAddress"></el-input>
+           <el-input  v-model="formAll2.startAddress"></el-input>
           </el-form-item>
             </el-col>
             <el-col :span="8">
            <el-form-item label="目的地：" class="adressend">
-            <el-input @focus="()=>{showMap('districtName2')}" v-model="formAll2.endAddress"></el-input>
+            <el-input  v-model="formAll2.endAddress"></el-input>
                  </el-form-item>
             </el-col>
             <el-col :span="8">
@@ -251,20 +251,9 @@
             
         </el-table-column>          
         </el-table> 
-            <div class="Pagination ">
-                <div class="block">
-                <el-pagination 
-                @size-change='handleSizeChange1'
-                @current-change="handleCurrentChange1"
-                :current-page="page1"
-                :page-sizes="[10, 10, 20, 30]"
-                :page-size="pagesize1"
-                layout="total, sizes, prev, pager, next, jumper"
-                :total="dataTotal1"
-                >
-                </el-pagination>
-                </div>
-            </div>
+          <!-- 页码 -->
+ <div class="info_tab_footer">共计:{{ dataTotal1 }} <div class="show_pager"> <Pager :total="dataTotal1" @change="handlePageChange1"  :sizes="sizes1" ref="pager1"/></div> </div> 
+
             </div>
            </div>
               <div slot="footer" class="dialog-footer" v-if="openFlag==1">
@@ -320,7 +309,7 @@
 
   </el-table> 
            <!-- 页码 -->
- <div class="info_tab_footer">共计:{{ dataTotal }} <div class="show_pager"> <Pager :total="dataTotal" @change="handlePageChange"  :sizes="sizes"/></div> </div> 
+ <div class="info_tab_footer">共计:{{ dataTotal }} <div class="show_pager"> <Pager :total="dataTotal" @change="handlePageChange"  :sizes="sizes" ref="pager"/></div> </div> 
    </div>
    </div>
        <tmsmap @success="getInfo" pos="" name="" :popVisible.sync="popVisible" />
@@ -395,6 +384,7 @@ export default {
         driverTemplateDialogFlag2: false,
         formLabelWidth:'120px',
         sizes:[20,50,100],
+        sizes1:[10,30,50],
         pagesize:20,//大表每页显示数
         page:1,//大表当前页
         dataTotal:null,//大表总记录数
@@ -636,12 +626,6 @@ export default {
                   }    
                 }
                 break;
-                case 'areaCode2':
-                this.formAll2.startAddress = info.formattedAddress;
-                break;
-                case 'districtName2':
-                this.formAll2.endAddress = info.formattedAddress;
-                break;
                 case 'selectdistrictName':
                 this.selectRowData3.districtName = info.formattedAddress;
                 break;
@@ -813,23 +797,32 @@ export default {
             },
         // 大表清空
             clearSearch(){
-                this.$refs.area.selectedOptions = [];
                 this.formAll = {
                     areaCode: null,
                     serivceCode:null,
                     districtName: null,
-                },
+                }
+                if(this.page!= 1){
+                    this.page = 1;
+                    this.$refs.pager.inputval = this.page;
+                    this.$refs.pager.pageNum = this.page;
+                }
+                this.$refs.area.clearData();
                 this.firstblood();
             },
          //详情表查询
             getdata_search2(){
-
              this.firstblood2();
             },
         // 详情表清空
             clearSearch2(){
                 this.formAll2.endAddress=null
                 this.formAll2.startAddress=null
+                if(this.page1!= 1){
+                    this.page1 = 1;
+                    this.$refs.pager1.inputval = this.page;
+                    this.$refs.pager1.pageNum = this.page;
+                }
                 this.firstblood2();
             },
 
@@ -996,7 +989,6 @@ export default {
                 this.selectId.push(this.selectRowData[0].id)
                     
                  data_UseStates_onesource(this.selectId).then(res=>{
-                     console.log('dsds',this.selectId)
                      this.selectId.splice(0,1);
                      if(this.selectRowData[0].usingStatus==0)
                      {
@@ -1070,7 +1062,14 @@ export default {
             handlePageChange(obj) {
                 this.page = obj.pageNum
                 this.pagesize = obj.pageSize
+                this.firstblood()
             },
+            handlePageChange1(obj) {
+                this.page1 = obj.pageNum
+                this.pagesize1 = obj.pageSize
+                this.firstblood2()
+            },
+
         // 关闭小表窗
         close1(){
         this.creadFlag = false;
@@ -1112,15 +1111,21 @@ export default {
     color: #3e9ff1;
     cursor: pointer;
     }   
+    .show_pager{
+        .el-input{
+            width: 80px;
+        }
+    }
 .vestonceDialog{
         display: inline-block;
+
     }
     .el-dialog{border-radius: 10px 10px 0px 0px;}
     .el-input {
     width: 250px;
     }
     .el-dialog .el-dialog__header{
-            border-bottom: 1px solid #ccc;
+    border-bottom: 1px solid #ccc;
     text-align: center;
     height: 40px;
     padding: 10px 0;
@@ -1318,6 +1323,18 @@ export default {
         .el-tableTree1{
             width: 90%;
             margin:0px auto;
+            .info_tab_footer{
+                position: relative;
+                .el-input{
+                    width: 80px;
+                }
+                .el-input__inner{
+                   margin-top: 5px;
+                }
+                .el-input__icon{
+                    margin-top:3px
+                }
+            }
         }
         .el-pagination{
             text-align: right;
@@ -1331,20 +1348,5 @@ export default {
                 width: 50px!important;
             }
 
-}
-.info1_tab_footer{
-    padding-left: 20px;
-    background: #eee;
-    height: 40px;
-    line-height: 40px;
-    box-shadow: 0 -2px 2px rgba(0, 0, 0, 0.1);
-    position: relative;
-    z-index: 10;
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    .show_pager{float: right}
-    .page-select{top:5px}
 }
 </style>

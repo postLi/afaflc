@@ -212,7 +212,7 @@
                         </el-table-column>
                     </el-table>
                       <!-- 页码 -->
-        <div class="info_tab_footer">共计:{{ dataTotal }} <div class="show_pager"> <Pager :total="dataTotal" @change="handlePageChange"  :sizes="sizes"/></div> </div> 
+        <div class="info_tab_footer">共计:{{ dataTotal }} <div class="show_pager"> <Pager :total="dataTotal" @change="handlePageChange"  :sizes="sizes" ref="pager"/></div> </div> 
                 </div>
             </div>
     </div>
@@ -322,7 +322,12 @@ import { parseTime,formatTime,pickerOptions2 } from '@/utils/index.js'
                   tradeStartTime:null,
                   tradeEndTime:null,
                 };
-                  this.payTime=[]
+                if(this.page!= 1){
+                    this.page = 1;
+                    this.$refs.pager.inputval = this.page;
+                    this.$refs.pager.pageNum = this.page;
+                }
+                this.payTime=[]
                 this.load();
             },
              //点击选中当前行
@@ -332,8 +337,7 @@ import { parseTime,formatTime,pickerOptions2 } from '@/utils/index.js'
            },
            //双击
             moreinfo(row, event){
-              
-               
+        
             },
             //获取信息列表
             getMoreInformation(){    
