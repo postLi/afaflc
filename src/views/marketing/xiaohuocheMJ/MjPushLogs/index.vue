@@ -7,6 +7,44 @@
                   <el-form-item label="出发地" >
                    <el-input v-model="formAll.startAddressName"></el-input>
                  </el-form-item>
+                  <el-form-item label="推送车主活跃度：">
+                    <el-select v-model="formAll.liveness" placeholder="请选择" clearable>
+                        <el-option
+                            v-for="item in activeTypeList"
+                            :key="item.code"
+                            :label="item.name"
+                            :value="item.code"
+                            :disabled="item.disabled"
+                            >
+                        </el-option>
+                    </el-select>
+                </el-form-item>
+                  <el-form-item label="推送车型：">
+                    <el-select v-model="formAll.carType" placeholder="请选择" clearable>
+                        <el-option
+                            v-for="item in pushTypeList"
+                            :key="item.code"
+                            :label="item.name"
+                            :value="item.code"
+                            :disabled="item.disabled"
+                            >
+                        </el-option>
+                    </el-select>
+                </el-form-item>
+                  <el-form-item label="车主在线状态：">
+                    <el-select v-model="formAll.isLine" placeholder="请选择" clearable>
+                        <el-option
+                            v-for="item in isLineList"
+                            :key="item.code"
+                            :label="item.name"
+                            :value="item.code"
+                            :disabled="item.disabled"
+                            >
+                        </el-option>
+                    </el-select>
+                </el-form-item>                
+
+
          <el-form-item class="fr">
          <el-button type="primary"  plain  @click="getdata_search()" :size="btnsize">查询</el-button> 
          <el-button type="primary"  plain  @click="clearSearch" :size="btnsize">清空</el-button>
@@ -15,11 +53,6 @@
   <div class="classify_info">
     <div class="info_news">  
     <el-table  ref="multipleTable" style="width: 100%" stripe border height="100%" @selection-change="getSelection" @row-click="clickDetails" highlight-current-row :data="tableDataTree">
-              <el-table-column
-                            label="选择"
-                            type="selection"
-                            width="50">
-              </el-table-column>
            <el-table-column label="序号" sortable  width="80">
                             <template slot-scope="scope">
                              {{ (page - 1)*pagesize + scope.$index + 1 }}
@@ -46,7 +79,7 @@
   </el-table> 
     </div>
       <!-- 页码 -->
-        <div class="info_tab_footer">共计:{{ dataTotal }} <div class="show_pager"> <Pager :total="dataTotal" @change="handlePageChange"  :sizes="sizes"/></div> </div> 
+        <div class="info_tab_footer">共计:{{ dataTotal }} <div class="show_pager"> <Pager :total="dataTotal" @change="handlePageChange"  :sizes="sizes" ref="pager"/></div> </div> 
    </div>
    <div>
    </div>
@@ -56,7 +89,7 @@
 <script>
 import { data_ServerClassList} from '@/api/server/areaPrice.js'
 import { parseTime,formatTime } from '@/utils/index.js'
-import  { data_get_MjPushLogs_list} from '@/api/vest/MjPushLogs/MjPushLogs.js'
+import  { data_get_MjPushLogs_list,data_get_car_activeType,data_get_car_pushType} from '@/api/vest/MjPushLogs/MjPushLogs.js'
 import Pager from '@/components/Pagination/index'
 import { eventBus } from '@/eventBus'
 export default {
@@ -73,7 +106,22 @@ export default {
         formAll:{
             orderSerial:null,
             startAddressName:null,
-        }
+            liveness:null,
+            carType:null,
+            isLine:null,
+        },
+        activeTypeList:[],
+        pushTypeList:[],
+        isLineList:[
+            {
+                code:'0',
+                name:'离线',
+            },
+            {
+                code:'1',
+                name:'在线',
+            }
+        ]
         }
 
     },
@@ -82,8 +130,21 @@ export default {
     },
     mounted(){
     this.firstblood();
+    this.getMoreInformation();
      },  
      methods:{
+            //获取车主活跃度列表
+            getMoreInformation(){
+                data_get_car_activeType().then(res=>{
+                    res.data.map((item)=>{
+                    this.activeTypeList=res.data;
+                    })
+                })
+                // 车主推送车辆
+                data_get_car_pushType().then(res=>{
+                    this.pushTypeList = res.data;
+                })
+            },
             //刷新页面  
             firstblood(){
                 this.loading = true
@@ -91,10 +152,6 @@ export default {
                     this.dataTotal = res.data.totalCount
                     this.tableDataTree = res.data.list;
                     this.loading = false
-                    //  this.tableDataTree.forEach(item => {
-                    //     item.createTime = parseTime(item.createTime,"{y}-{m}-{d}");
-                    //     item.updateTime = parseTime(item.updateTime,"{y}-{m}-{d}");
-                    // })
                 })
             },
             // 判断选中与否
@@ -119,7 +176,15 @@ export default {
                 this.formAll = {
                     orderSerial:null,
                     startAddressName:null,
-                },
+                    liveness:null,
+                    carType:null,
+                    isLine:null,
+                }
+                if(this.page!= 1){
+                    this.page = 1;
+                    this.$refs.pager.inputval = this.page;
+                    this.$refs.pager.pageNum = this.page;
+                }
                 this.firstblood();
             },
             // 每页显示数据量变更

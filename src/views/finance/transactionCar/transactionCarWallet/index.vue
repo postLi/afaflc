@@ -46,7 +46,7 @@
             </el-table> 
         	</div> 
          <!-- 页码 -->
-                 <div class="info_tab_footer">共计:{{ dataTotal }} <div class="show_pager"> <Pager :total="dataTotal" @change="handlePageChange"  :sizes="sizes"/></div> </div> 
+                 <div class="info_tab_footer">共计:{{ dataTotal }} <div class="show_pager"> <Pager :total="dataTotal" @change="handlePageChange"  :sizes="sizes" ref="pager"/></div> </div> 
           </div>
       </div>
 </template>
@@ -113,7 +113,12 @@ export default {
                this.formAllData = {
                     account: null,
                     areaCode: null,  
-               },
+               }
+                if(this.page!= 1){
+                    this.page = 1;
+                    this.$refs.pager.inputval = this.page;
+                    this.$refs.pager.pageNum = this.page;
+                }
          this.firstblood();
          this.$refs.area.clearData();
         },
@@ -130,9 +135,7 @@ export default {
     //详情弹窗
             pushOrderSerial(item){
                 this.$router.push({name: '车主账户详情',query:{ accountId:item.accountId }});
-
             }
-
    },
     mounted(){
        this.firstblood();      
@@ -149,7 +152,9 @@ export default {
                 }
         }
     }
-
+    .el-cascader{
+        margin-top: -10px;
+    }
 }
 </style>
 

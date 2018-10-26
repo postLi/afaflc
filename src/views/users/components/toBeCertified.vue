@@ -77,7 +77,7 @@
                         </el-table-column>
                         <el-table-column  prop="waitTime"  label="等待时长" sortable></el-table-column>
                     </el-table>
-<div class="info_tab_footer">共计:{{ totalCount }} <div class="show_pager"> <Pager :total="totalCount" @change="handlePageChange" /></div> </div>                         
+<div class="info_tab_footer">共计:{{ totalCount }} <div class="show_pager"> <Pager :total="totalCount" @change="handlePageChange" ref="pager"/></div> </div>                         
                 </div>
             </div>
     </div>
@@ -188,6 +188,11 @@
                     carNumber:null,
                     belongCity:null,
                     belongCityName:null,
+                }
+                if(this.page!= 1){
+                    this.page = 1;
+                    this.$refs.pager.inputval = this.page;
+                    this.$refs.pager.pageNum = this.page;
                 }
              this.$refs.area.clearData()   
              this.firstblood()    

@@ -156,7 +156,7 @@
             </el-table-column>          
             </el-table> 
                 <!-- 页码 -->
-        <div class="info_tab_footer">共计:{{ dataTotal }} <div class="show_pager"> <Pager :total="dataTotal" @change="handlePageChange"  :sizes="sizes"/></div> </div>
+        <div class="info_tab_footer">共计:{{ dataTotal }} <div class="show_pager"> <Pager :total="dataTotal" @change="handlePageChange"  :sizes="sizes" ref="pager"/></div> </div>
         	</div> 
           </div>
   </div>
@@ -275,6 +275,11 @@ export default {
                 city:null,
                 area:null,
                 areaName:null,
+            }
+            if(this.page!= 1){
+                this.page = 1;
+                this.$refs.pager.inputval = this.page;
+                this.$refs.pager.pageNum = this.page;
             }
             this.$refs.area.clearData();
                 this.firstblood()    

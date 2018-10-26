@@ -26,7 +26,7 @@
                          </el-option>
                  </el-select>
             </el-form-item>          
-            <el-form-item class="fr">       
+            <el-form-item class="fr">
           <el-button type="primary" plain @click="getData_query" :size="btnsize" icon="el-icon-search">搜索</el-button> 
            <el-button type="info" plain @click="clearSearch"  :size="btnsize" icon="fontFamily aflc-icon-qingkong">清空</el-button>
           </el-form-item>
@@ -105,7 +105,7 @@
             </el-table-column>          
             </el-table> 
                 <!-- 页码 -->
-       <div class="info_tab_footer">共计:{{ dataTotal }} <div class="show_pager"> <Pager :total="dataTotal" @change="handlePageChange"  :sizes="sizes"/></div> </div>  
+       <div class="info_tab_footer">共计:{{ dataTotal }} <div class="show_pager"> <Pager :total="dataTotal" @change="handlePageChange"  :sizes="sizes" ref="pager"/></div> </div>  
         	</div> 
           </div>
       </div>
@@ -192,6 +192,11 @@ export default {
             area:null,
             areaName:null
         }
+       if(this.page!= 1){
+        this.page = 1;
+        this.$refs.pager.inputval = this.page;
+        this.$refs.pager.pageNum = this.page;
+      }
         this.$refs.area.clearData();
             this.firstblood()    
         },
@@ -286,9 +291,6 @@ export default {
     }
    },
   mounted(){
-     eventBus.$on('pushListtwo', () => {
-       this.firstblood()
-        })
     this.getMoreInformation();
     this.firstblood();
     },

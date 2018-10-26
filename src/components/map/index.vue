@@ -5,14 +5,15 @@
     <table>
         <tr>
             <td>
-                <label>请输入关键字：</label>
+                <label>鼠标右键添加地址</label>
+                <!-- <label>请输入关键字：</label> -->
             </td>
         </tr>
-        <tr>
+        <!-- <tr>
             <td>
                 <input id="tipinput"/>
             </td>
-        </tr>
+        </tr> -->
     </table>
 </div>
 <div class="aflcmap-pop-footer" slot="footer">
@@ -71,6 +72,7 @@ export default {
     }
   },
   methods: {
+    
     exit() {
       if (this.map && this.map.destroy) {
         this.map.destroy()
@@ -128,8 +130,8 @@ export default {
        // 地图加载
       _this.map = new AMap.Map('mapcontainer', {
         resizeEnable: true,
-        center: [113.14, 23.08],
-        zoom: 9
+        center: [113.257416,23.149586],
+        zoom:11
       })
       const map = this.map
     // 输入提示
@@ -340,10 +342,10 @@ export default {
 	font-size: 14px;
 }
 #myPageTop label {
-  margin: 0 20px 10px 0;
   display: inline-block;
-	color: #666666;
-	font-weight: normal;
+	color: red;
+  font-size: 20px;
+	font-weight: bold;
 }
 #myPageTop input {
   width: 250px;

@@ -392,6 +392,7 @@ export default {
   },
   methods:{
     getStr(val){
+        console.log('fddf',val)
                 this.formAllData.areaCode= val.area.code
                 this.formAllData.areaName = val.area.name
                 this.formAllData.province = val.province.name
@@ -585,7 +586,7 @@ export default {
                    {
                        this.$message.warning('折扣卷输入数字，输入的范围值为 0<x<10，精确到小数点后一位');
                         return false
-                   }      
+                   }
                    }
                     if(!reg.test(this.formAllData.aflcCouponList[i].conditionDeduction)&&this.formAllData.aflcCouponList[i].conditionDeduction!==null){
                      this.$message.warning('满减条件/最高抵扣仅能输入正整数');
@@ -606,20 +607,8 @@ export default {
                 if(this.editType=='two'){
                   this.formAllData.activityType = 'AF046101';
                 } 
-                if(this.formAllData.area){
-                 this.areaStatus = this.formAllData.areaCode[2]
-                }
-                else{
-                 this.areaStatus = this.formAllData.areaCode[1]
-                }
                     let aflcCouponList = []
                     this.formAllData.aflcCouponList.map((list,index)=>{
-                    if(list.area){
-                       this.formAllData.aflcCouponList[index].areaCode = this.formAllData.aflcCouponList[index].areaCode[2]
-                    }
-                    else{
-                       this.formAllData.aflcCouponList[index].areaCode = this.formAllData.aflcCouponList[index].areaCode[1]
-                    }
                         aflcCouponList.push(
                             {
                                 province:list.province,
@@ -647,7 +636,7 @@ export default {
                         startTime:this.formAllData.startTime,
                         endTime:this.formAllData.endTime,
                         activityDes:this.formAllData.activityDes,
-                        areaCode:this.areaStatus,
+                        areaCode:this.formAllData.areaCode,
                         province:this.formAllData.province,
                         city:this.formAllData.city,
                         area:this.formAllData.area,

@@ -1,8 +1,6 @@
 import fetch from '@/utils/fetch'
-
-// const baseurl_two = "aflcsmservice"
-const baseurl = "aflcsmservice"
 const baseurl_one= "aflcorderservice"
+const baseurl_two = 'aflccommonservice'
 
 //获取马甲推单记录列表
 export function data_get_MjPushLogs_list(page,pagesize,data) {
@@ -29,3 +27,14 @@ export function data_get_RecordList_list(page,pagesize,data) {
     }
   })
 }
+
+// 获取车主活跃度字典
+export function data_get_car_activeType() {
+  return fetch.get('/' + baseurl_two + '/sysDict/getSysDictByCodeGet/AF00204')
+}
+
+// 获取车主推送车辆字典
+export function data_get_car_pushType() {
+  return fetch.get('/' + baseurl_two + '/sysDict/getSysDictByCodeGet/AF018')
+}
+
