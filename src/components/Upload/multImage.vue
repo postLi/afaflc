@@ -70,7 +70,7 @@ export default {
     listtype: {
       type: String,
       default: 'picture',
-      enum: ['text', 'picture', 'picture-card']
+      enum: ['text', 'picture', 'picture-card', 'application']
     },
     disabled: {
       type: Boolean,
@@ -175,11 +175,11 @@ export default {
     },
     // 设置随机的文件名
     random_string(len) {
-      　　len = len || 32
-      　　var chars = 'ABCDEFGHJKMNPQRSTWXYZabcdefhijkmnprstwxyz2345678'
-      　　var maxPos = chars.length
-      　　var pwd = ''
-      　　for (var i = 0; i < len; i++) {
+      len = len || 32
+      　var chars = 'ABCDEFGHJKMNPQRSTWXYZabcdefhijkmnprstwxyz2345678'
+      　var maxPos = chars.length
+      　var pwd = ''
+      　for (var i = 0; i < len; i++) {
         pwd += chars.charAt(Math.floor(Math.random() * maxPos))
       }
       return pwd
@@ -221,7 +221,7 @@ export default {
       console.log('upfile:', this.fileInfo, file)
       this.$emit('fileInfo', this.fileInfo)
       const _self = this
-      const isJPG = /(image|text)\/\w+/.test(file.type) && /(jpe?g|png|plain)/i.test(file.type)
+      const isJPG = /(image|text|application)\/\w+/.test(file.type) && /(jpe?g|png|plain|msword|vnd.ms-excel)/i.test(file.type)
       const isLt5M = file.size / 1024 / 1024 < 5
       let type = file.name.match(/([^\.]+)$/)
       type = type ? '.' + type[1] : ''
@@ -261,7 +261,7 @@ export default {
       fileType = file.url.split('/')
       fileType = fileType[fileType.length - 1].split('.')
       fileType = fileType[fileType.length - 1]
-      if (fileType === 'txt'|| fileType === 'doc' || fileType === 'xls') {
+      if (fileType === 'txt' || fileType === 'doc' || fileType === 'xls') {
         this.dialogTxt = true
         window.open(file.url)
       // let reader =  new FileReader()
