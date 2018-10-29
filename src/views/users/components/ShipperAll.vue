@@ -69,7 +69,7 @@
 			</div>
 		</div>
 
-        <div class="info_tab_footer">共计:{{ totalCount }} <div class="show_pager"> <Pager :total="totalCount" @change="handlePageChange" /></div> </div>    
+        <div class="info_tab_footer">共计:{{ totalCount }} <div class="show_pager"> <Pager :total="totalCount" @change="handlePageChange" ref="pager"/></div> </div>    
         <createdDialog :paramsView="paramsView" :editType="type"  :typetitle="typetitle" :dialogFormVisible_add.sync = "dialogFormVisible_add" @getData="getDataList"/>
         <FreezeDialog :paramsView="selectRowData" :editType="freezetype" :freezetitle="freezetitle"  :freezeDialogFlag.sync = "freezeDialogFlag" @getData="getDataList"/>
         <shipperBlackDialog :paramsView="selectRowData" :editType="blacktype" :blacktitle="blacktitle" :BlackDialogFlag.sync = "BlackDialogFlag" @getData="getDataList"/>
@@ -163,6 +163,10 @@ export default {
         getSearchParam(obj) {
             console.log(obj)
             this.searchInfo = objectMerge2(this.searchInfo, obj);
+            if(this.page!= 1){
+                this.page = 1;
+                this.$refs.pager.inputval = this.page;
+            }
             this.firstblood();
         },
         pushOrderSerial(row){

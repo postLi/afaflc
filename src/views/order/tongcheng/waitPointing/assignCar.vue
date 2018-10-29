@@ -154,7 +154,7 @@
                 </div>
             </div>   
                 <!-- 页码 -->
-            <div class="info_tab_footer">共计:{{ dataTotal }} <div class="show_pager"> <Pager :total="dataTotal" @change="handlePageChange"  :sizes="sizes"/></div> </div>    
+            <div class="info_tab_footer">共计:{{ dataTotal }} <div class="show_pager"> <Pager :total="dataTotal" @change="handlePageChange"  :sizes="sizes"  ref="pager"/></div> </div>    
 
             <!-- <Details :dialogFormVisible_details.sync = "dialogFormVisible_details" :orderSerial="DetailsOrderSerial" ></Details> -->
             <cancelCompnent :dialogVisible.sync="dialogVisible" :orderSerial = "currentOrderSerial"   @close = "shuaxin"/>
@@ -344,6 +344,10 @@ export default{
              getSearchParam(obj) {
                 console.log(obj)
                 this.searchInfo = Object.assign(this.searchInfo, obj);
+                if(this.page!= 1){
+                    this.page = 1;
+                    this.$refs.pager.inputval = this.page;
+                }
                 this.firstblood();
             },
         }

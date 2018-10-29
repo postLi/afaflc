@@ -416,10 +416,13 @@ export default {
                     if (valid && ifCity) {
                         this.btnShow = true;
                         let cityArr =[];
+                        let provinceId = getNodeId[0].code;
+                        getNodeId = getNodeId.slice(1);
                         getNodeId.forEach(el =>{
                             cityArr.push(el.code);
                         })
-                        let forms = objectMerge2({},this.standForm,{cityId:cityArr.join(',')})
+                        let forms = objectMerge2({},this.standForm,{cityId:cityArr.join(','),provinceId:provinceId})
+                        // console.log(forms)
                         data_NewOrChange(forms).then(res =>{
                             this.$message({
                                 type: 'success',

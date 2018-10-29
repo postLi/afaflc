@@ -185,7 +185,7 @@
                         </el-table-column>
                     </el-table>
                       <!-- 页码 -->
-                    <div class="info_tab_footer">共计:{{ dataTotal }} <div class="show_pager"> <Pager :total="dataTotal" @change="handlePageChange"  :sizes="sizes"/></div> </div>    
+                    <div class="info_tab_footer">共计:{{ dataTotal }} <div class="show_pager"> <Pager :total="dataTotal" @change="handlePageChange"  :sizes="sizes" ref="pager"/></div> </div>    
                 </div>
             </div>
     </div>
@@ -318,8 +318,12 @@ export default{
                       this.searchInfo.startOrderDate = ''
                       this.searchInfo.endOrderDate = ''
                     }
-                  this.firstblood()
-                  break
+                    if(this.page!= 1){
+                        this.page = 1;
+                        this.$refs.pager.inputval = this.page;
+                    }
+                  this.firstblood();
+                  break;
                 case 'clear':
                   this.searchInfo = {
                       belongCity: '', // 区域
@@ -330,12 +334,16 @@ export default{
                       orderSerial: '', // 订单号
                       parentOrderStatus: 'AF00801' // 订单状态待支付
                     }
-                  this.chooseTime = ''
-                  this.firstblood()
-                  break
+                  this.chooseTime = '';
+                   if(this.page!= 1){
+                        this.page = 1;
+                        this.$refs.pager.inputval = this.page;
+                    }
+                  this.firstblood();
+                  break;
                 case 'outExce':
-                  this.exportExcel()
-                  break
+                  this.exportExcel();
+                  break;
               }
                 // 清除选中状态，避免影响下个操作
       this.$refs.multipleTable.clearSelection()

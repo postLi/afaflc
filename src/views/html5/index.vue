@@ -141,7 +141,7 @@
             <el-pagination
               background
               prev-tex
-              layout="prev, pager, next,total, sizes" :pager-count="5"  @current-change="currentPageChange" :current-page.sync="currentPage"
+              layout="prev, pager, next, sizes" :pager-count="5"  @current-change="currentPageChange" :current-page.sync="currentPage"
               :total="totalCount" :page-size="pageSize" @size-change="pageSizeChange">
             </el-pagination>
           </div>
@@ -846,7 +846,7 @@
               }
                 trails = resArr[1].data.list;
                 this.trailsList = trails;
-                console.log('12312123',trails)
+                console.log('12312123',this)
                 //   var trail = null;
                 if (trails != null && trails.length > 0)
                     trail = trails[0];
@@ -1552,10 +1552,13 @@
       margin-right:0px;
         float: right;
   }
-
   
     .carPager2>.el-pagination .el-pager .number{
-        margin:0px
+        margin:0px;
+    }
+
+    .carPager2>.el-pagination.is-background .btn-next, .carPager2>.el-pagination.is-background .btn-prev, .carPager2>.el-pagination.is-background .el-pager li {
+        margin: 0;
     }
   .ctl2 .el-button:focus, .ctl2 .el-button:hover  {
     color: #409EFF;
@@ -1686,6 +1689,9 @@
     margin-left:0px;
   }
 
+    /* .el-pagination.is-background .el-pager li {
+        margin: 0;
+    } */
   .allOrder {
     float: none;
     margin-bottom: 12px;

@@ -215,7 +215,7 @@ export default {
                     width: 200px;
                 }
                 .morewidth{
-                    width: 48.4%;
+                    width: 48.8%;
                 }
                 .lesswidth{
                     width: 521px;

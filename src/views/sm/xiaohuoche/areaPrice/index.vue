@@ -104,7 +104,7 @@
         </div>
         <AreaPrice :dialogAreaPrice.sync="dialogAreaPrice" :reviseForm = 'reviseForm' :formtitle = 'formtitle' :isModify = "isModify"   @close = "shuaxin"/>
         <!-- 页码 -->
-        <div class="info_tab_footer">共计:{{ dataTotal }} <div class="show_pager"> <Pager :total="dataTotal" @change="handlePageChange"  :sizes="sizes"/></div> </div>    
+        <div class="info_tab_footer">共计:{{ dataTotal }} <div class="show_pager"> <Pager :total="dataTotal" @change="handlePageChange"  ref="pager"/></div> </div>    
     </div>
 </template>
 
@@ -130,7 +130,6 @@ export default{
               formtitle:'',
               reviseForm:{},
               btnsize: 'mini',
-              sizes: [20, 50, 100],
               provinceId: '', // 省级列表
               searchInfo: {
                   valueService: '', // 服务分类
@@ -162,14 +161,14 @@ export default{
             shuaxin(){
                 this.getCommonFunction();
             },
-            getSearchParam(obj,status) {
-              console.log(obj,status)
+            getSearchParam(obj) {
+              console.log(obj)
               this.searchInfo = Object.assign(this.searchInfo, obj);
-                if(status && this.page!= 1){
+                if(this.page!= 1){
                     this.page = 1;
                     this.$refs.pager.inputval = this.page;
                 }
-              this.getCommonFunction()
+              this.getCommonFunction();
             },
             handlePageChange(obj) {
               this.page = obj.pageNum

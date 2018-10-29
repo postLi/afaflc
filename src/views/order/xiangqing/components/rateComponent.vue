@@ -142,8 +142,10 @@ export default {
                 console.log('details',res)
                 this.listInformation = res.data;
                 this.listInformation.aflcOrderEvaluations.forEach(item => {
-                    item.evaluationTypeName = item.evaluationType ? [] : item.evaluationType.split(",");
+                    console.log(item.evaluationType )
+                    item.evaluationTypeName = item.evaluationType ? item.evaluationType.split(",") : [];
                     item.starLevel = Number(item.starLevel);
+                    console.log(item.evaluationTypeName)
                 })
                 this.loading = false;
             }).catch(err => {

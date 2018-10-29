@@ -96,43 +96,60 @@
             <h2>投诉记录  </h2>
             <div class="essentialInformation_table" >
                 <el-table
-                    :data="tableData"
+                    :data="complainData"
                     border
                     style="width: 100%">
+                    <el-table-column label="序号"  width="80">
+                        <template slot-scope="scope">
+                            {{ (complainObj.currentPage - 1) * complainObj.pageSize + scope.$index + 1 }}
+                        </template>
+                    </el-table-column>  
                     <el-table-column
-                    prop="date"
-                    label="序号">
-                    </el-table-column>
-                    <el-table-column
-                    prop="date"
+                    width="160"
+                    prop="complainTime"
                     label="投诉时间"
                     >
                     </el-table-column>
                     <el-table-column
-                    prop="name"
+                    width="250"
+                    prop="complainTypeName"
                     label="投诉类型"
                     >
                     </el-table-column>
                     <el-table-column
-                    prop="address"
+                    width="250"
+                    prop="orderSerial"
                     label="订单编号">
                     </el-table-column>
                     <el-table-column
-                    prop="address"
+                    :show-overflow-tooltip="true"
+                    prop="complainDes"
                     label="投诉描诉">
                     </el-table-column>
-                    <el-table-column
-                    prop="address"
+                    <!-- <el-table-column
+                    prop=""
+                    width="120"
                     label="跟进状态">
-                    </el-table-column>
+                    </el-table-column> -->
                     <el-table-column
-                    prop="address"
+                    width="120"
+                    prop="complainStatusName"
                     label="处理状态 ">
                     </el-table-column>
-                    <el-table-column
+                    <!-- <el-table-column
                     prop="address"
                     label="客服跟进结果">
                     </el-table-column>
+                    <el-table-column
+                    width="160"
+                    prop="address"
+                    label="处理时间">
+                    </el-table-column> -->
+                    <!-- <el-table-column
+                    width="120"
+                    prop="address"
+                    label="跟进人">
+                    </el-table-column> -->
                 </el-table>
                 <el-pagination
                     background
@@ -140,7 +157,7 @@
                     @current-change="handleCurrentChange"
                     :page-sizes="size"
                     layout="total, sizes, prev, pager, next, jumper"
-                    :total="totalCount">
+                    :total="complainTotalCount">
                 </el-pagination>
             </div>
         </div>
@@ -162,10 +179,11 @@
                     :data="tableData"
                     border
                     style="width: 100%">
-                    <el-table-column
-                    prop="date"
-                    label="序号">
-                    </el-table-column>
+                    <el-table-column label="序号"  width="80">
+                        <template slot-scope="scope">
+                            {{ (page - 1)*pagesize + scope.$index + 1 }}
+                        </template>
+                    </el-table-column>  
                     <el-table-column
                     prop="date"
                     label="注册时间"
@@ -209,6 +227,7 @@
 <script>
 
 import { parseTime } from '@/utils/index.js'
+import { aflcOrderComplain } from '@/api/users/shipperDetails/index.js'
 
 export default {
   name: 'ordersInfo',
@@ -223,12 +242,6 @@ export default {
   data() {
     return {
         size:[20,30,50],
-        defaultImg:'/static/test.jpg',//默认第一张图片的url
-        defaultImg45:'/static/45du.png',
-        defaultImgCarCard:'/static/carcard.png',
-        defaultImgDriverCard:'/static/drivercard.png',
-        defaultImgIdCard:'/static/idcard.png',
-        defaultImgGeRen:'/static/geren.png',
         listInformation: [],
         dataType:[
             {name:'全部',iscur:true},
@@ -236,9 +249,18 @@ export default {
             {name:'近30天',iscur:false},
             {name:'近90天',iscur:false},
         ],
+        complainObj:{
+            "currentPage": 1,
+            "pageSize": 10,
+            "vo":{
+                complainId:'',
+            }
+        },
+        complainData:[],
         page:1,
         pagesize:20,
         totalCount:100,
+        complainTotalCount:0,
         loading: false,
         dialogVisible: false,
         currentOrderSerial: '',
@@ -277,7 +299,14 @@ export default {
     },
     methods: {
         init() {
-        
+            this.complainObj.vo.complainId = this.$route.query.userId;
+            this.Complain();
+        },
+        Complain(){
+            aflcOrderComplain(this.complainObj).then(res => {
+                this.complainData = res.data.list;
+                this.complainTotalCount = res.data.totalCount;
+            })
         },
         handleSizeChange(val) {
             console.log(`每页 ${val} 条`);

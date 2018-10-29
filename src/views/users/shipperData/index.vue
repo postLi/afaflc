@@ -43,25 +43,26 @@
                             <span v-if="scope.row.createTime">{{ scope.row.createTime | parseTime}}</span>
                         </template>
                     </el-table-column>
-                    <el-table-column prop="accountStatusName" :show-overflow-tooltip="true" sortable label="最后登录时间" width="120">
-                        <template slot-scope="scope">
+                    <el-table-column prop="" :show-overflow-tooltip="true" sortable label="最后登录时间" width="120">
+                        <!-- <template slot-scope="scope">
                             <span :class="{freezeName: scope.row.accountStatusName == '冻结中' ,blackName: scope.row.accountStatusName == '黑名单',normalName :scope.row.accountStatusName == '正常'}">{{scope.row.accountStatusName}}</span>
-                        </template>
+                        </template> -->
                     </el-table-column>
-                    <el-table-column prop="belongCity" 
+                    <el-table-column 
+                        prop="" 
                         :show-overflow-tooltip="true" sortable
                         label="启用状态">
-                        <template slot-scope="scope">
+                        <!-- <template slot-scope="scope">
                             {{scope.row.belongCityName ? scope.row.belongCityName:scope.row.belongCity}}
-                        </template>
+                        </template> -->
                     </el-table-column>  
-                    <el-table-column prop="shipperTypeName" sortable label="活跃状态">
+                    <el-table-column prop="" sortable label="活跃状态">
                     </el-table-column>
-                    <el-table-column  label="身份状态" sortable prop="shipperTypeName">
+                    <el-table-column  label="身份状态" sortable prop="">
                     </el-table-column>
-                    <el-table-column prop="shipperTypeName" sortable label="审核状态">
+                    <el-table-column prop="" sortable label="审核状态">
                     </el-table-column>
-                    <el-table-column prop="shipperTypeName" sortable label="审核操作人">
+                    <el-table-column prop="" sortable label="审核操作人">
                     </el-table-column>
                     <el-table-column prop="belongArea" sortable label="所属片区">
                     </el-table-column>
@@ -139,13 +140,12 @@ import { data_get_shipper_list} from '@/api/users/shipper/all_shipper.js'
                 console.log('选中内容',val)
                 this.selected = val;
             },
-            pushOrderSerial(){
-                this.$router.push({name: '货主详情'});
-
+            pushOrderSerial(item){
+                this.$router.push({name: '货主详情',query:{ userId:item.shipperId }});
             },
             handlerJump(){
                 console.log('123')
-                this.$router.push({name: '货主详情'});
+                this.$router.push({name: '货主详情',query:{ userId:item.shipperId }});
             },
             getSearchParam(obj) {
                 console.log(obj)

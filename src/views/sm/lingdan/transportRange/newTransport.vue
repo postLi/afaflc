@@ -215,11 +215,41 @@ export default {
 
         var checkWeigthPriceForms = (rule,value,callback) => {
             if(this.weigthPriceForms[0].endVolume == ''){
-                callback(new Error('请补充重货价格区间'));
+                callback(new Error('请补充重货运量范围'));
             }else{
                 this.weigthPriceForms.forEach(el => {
                     if(el.primeryPrice === ''){
-                        callback(new Error('请补充重货价格区间'));
+                        callback(new Error('请补充重货推荐价格'));
+                    }
+                    else{
+                        callback();
+                    }
+                })
+            }
+        };
+
+        var checkWeigthPriceDottedForms = (rule,value,callback) => {
+            if(this.weigthPriceDottedForms[0].endVolume == ''){
+                callback(new Error('请补充重泡货（重货）运量范围'));
+            }else{
+                this.weigthPriceDottedForms.forEach(el => {
+                    if(el.primeryPrice === ''){
+                        callback(new Error('请补充重泡货（重货）推荐价格'));
+                    }
+                    else{
+                        callback();
+                    }
+                })
+            }
+        };
+
+        var checkLigthPriceDottedForms = (rule,value,callback) => {
+            if(this.ligthPriceDottedForms[0].endVolume == ''){
+                callback(new Error('请补充重泡货（轻货）运量范围'));
+            }else{
+                this.ligthPriceDottedForms.forEach(el => {
+                    if(el.primeryPrice === ''){
+                        callback(new Error('请补充重泡货（轻货）推荐价格'));
                     }
                     else{
                         callback();
@@ -229,18 +259,18 @@ export default {
         };
 
         var checkLightPriceForms = (rule,value,callback) => {
-            this.ligthPriceForms.forEach(el => {
-                if(el.endVolume === ''){
-                    callback(new Error('请补充轻货运量'));
-                    
-                }else if(el.primeryPrice === ''){
-                    console.log('123')
-                    callback(new Error('请补充轻货价格区间'));
-                }
-                else{
-                    callback();
-                }
-            })
+            if(this.ligthPriceForms[0].endVolume == ''){
+                callback(new Error('请补充轻货运量范围'));
+            }else{
+                this.ligthPriceForms.forEach(el => {
+                    if(el.primeryPrice === ''){
+                        callback(new Error('请补充轻货推荐价格'));
+                    }
+                    else{
+                        callback();
+                    }
+                })
+            }
         };
 
         var checkStartLocation = (rule,value,callback) => {
@@ -248,6 +278,17 @@ export default {
             if (value == '') {
                 callback(new Error('请输入出发地'));
             } else if(this.ruleForm.startCity == '' && this.ruleForm.startProvince !=  '北京市' && this.ruleForm.startProvince !=  '天津市' && this.ruleForm.startProvince !=  '重庆市' && this.ruleForm.startProvince !=  '上海市' ){
+                callback(new Error('至少选择到市级范围'));
+            }else{
+                callback();
+            }
+        };
+
+        var checkEndLocation = (rule,value,callback) => {
+            console.log('this.ruleForm.startCity',this.ruleForm.endCity)
+            if (value == '') {
+                callback(new Error('请输入到达地'));
+            } else if(this.ruleForm.endCity == '' && this.ruleForm.endProvince !=  '北京市' && this.ruleForm.endProvince !=  '天津市' && this.ruleForm.endProvince !=  '重庆市' && this.ruleForm.endProvince !=  '上海市' ){
                 callback(new Error('至少选择到市级范围'));
             }else{
                 callback();
@@ -333,7 +374,7 @@ export default {
                     { required: true, validator: checkStartLocation, trigger: 'change' },
                 ],
                 endLocation: [
-                    { required: true, message: '请输入到达地', trigger: 'change' },
+                    { required: true, validator: checkEndLocation, trigger: 'change' },
                 ],
                 // startLocationContacts: [
                 //     { required: true, message: '请输入出发地联系人信息', trigger: 'blur' }
@@ -356,12 +397,18 @@ export default {
                 weigthPriceForms:[
                     { required:true,validator: checkWeigthPriceForms, trigger: 'blur'},
                 ],
+                weigthPriceDottedForms:[
+                    { required:true,validator: checkWeigthPriceDottedForms, trigger: 'blur'},
+                ],
+                ligthPriceDottedForms:[
+                    { required:true,validator: checkLigthPriceDottedForms, trigger: 'blur'},
+                ],
                 ligthPriceForms:[
                     { required:true,validator: checkLightPriceForms, trigger: 'blur'},
                 ],
                 primeryPrice:[
                     {required:true,message: '请填写价格', trigger: 'blur' },
-                ]
+                ],
             }
         }
     },
@@ -444,11 +491,11 @@ export default {
                 type: 'info',
                 message: '至少选择到市级范围'
             })
-            // if(type == 'startLocation'){
+            if(type == 'startLocation'){
                 return this.ruleForm.startLocation = '';
-            // }else{
-                // return this.ruleForm.endLocation = '';
-            // }
+            }else{
+                return this.ruleForm.endLocation = '';
+            }
         },
         getValue(obj){
             return obj ? obj.value:'';
@@ -670,7 +717,7 @@ export default {
                             //     this.$alert('操作成功', '提示', {
                             //         confirmButtonText: '确定',
                             //         callback: action => {
-                            //             this.$router.push({name:'管理物流专线'})
+                                        this.$router.push({name:'物流专线'})
                             //         }
                             //     });
                                 

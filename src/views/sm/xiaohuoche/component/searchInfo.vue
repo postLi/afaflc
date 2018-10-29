@@ -117,7 +117,7 @@ import { getDictionary } from '@/api/common.js'
                             usingStatus:'',
                         }
                         searchObj = Object.assign({}, this.searchInfo);
-                        this.$emit('change', searchObj,true)
+                        this.$emit('change', searchObj)
                         break;
                 }
             },

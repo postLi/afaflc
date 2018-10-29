@@ -193,7 +193,7 @@
           </div>
         </el-dialog>
      </div> 
-        <div class="info_tab_footer">共计:{{ totalCount }} <div class="show_pager"> <Pager :total="totalCount" @change="handlePageChange" /></div> </div>    
+        <div class="info_tab_footer">共计:{{ totalCount }} <div class="show_pager"> <Pager :total="totalCount" @change="handlePageChange" ref="pager"/></div> </div>    
         <createdDialog :paramsView="paramsView" :typetitle="typetitle" :editType="type"  :dialogFormVisible_add.sync = "dialogFormVisible_add"/>
     </div>
 </template>
@@ -328,7 +328,11 @@ export default {
         },
         getSearchParam(obj) {
             console.log(obj)
-            this.searchInfo = objectMerge2({},obj,{shipperStatus:'AF0010402'})
+            this.searchInfo = objectMerge2({},obj,{shipperStatus:'AF0010402'});
+            if(this.page!= 1){
+                this.page = 1;
+                this.$refs.pager.inputval = this.page;
+            }
             this.firstblood();
         },
         handlePageChange(obj) {

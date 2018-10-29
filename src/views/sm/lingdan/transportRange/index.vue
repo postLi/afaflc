@@ -305,6 +305,10 @@ export default {
     },
         // 搜索
     handleSearch() {
+        if(this.page!= 1){
+            this.page = 1;
+            this.$refs.pager.inputval = this.page;
+        }
         this.firstblood()
     },
     handleClick(type){

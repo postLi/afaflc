@@ -137,8 +137,9 @@ export default {
     },  
     methods: {
         handlePageChange(obj) {
-            this.page = obj.pageNum
-            this.pagesize = obj.pageSize
+            this.page = obj.pageNum;
+            this.pagesize = obj.pageSize;
+            this.firstblood();
         },
         firstblood(){
             this.loading = true;

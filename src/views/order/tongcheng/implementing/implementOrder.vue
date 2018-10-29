@@ -152,7 +152,7 @@
                 </div>
             </div>
                 <!-- 页码 -->
-            <div class="info_tab_footer">共计:{{ dataTotal }} <div class="show_pager"> <Pager :total="dataTotal" @change="handlePageChange"  :sizes="sizes"/></div> </div>    
+            <div class="info_tab_footer">共计:{{ dataTotal }} <div class="show_pager"> <Pager :total="dataTotal" @change="handlePageChange"  :sizes="sizes" ref="pager"/></div> </div>    
 
             <cancelCompnent :dialogVisible.sync="dialogVisible" :orderSerial = "currentOrderSerial"   @close = "shuaxin"/>
     </div>
@@ -303,6 +303,10 @@ import cancelCompnent from '../components/cancel'
                 console.log(obj)
                 this.searchInfo = Object.assign(this.searchInfo, obj)
                 this.loading = false;
+                if(this.page!= 1){
+                    this.page = 1;
+                    this.$refs.pager.inputval = this.page;
+                }
                 this.firstblood()
             },
             shuaxin(){

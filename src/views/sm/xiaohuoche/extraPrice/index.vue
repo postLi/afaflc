@@ -62,7 +62,7 @@
                       </el-table>
                 </div>
                 <!-- 页码 -->
-                <div class="info_tab_footer">共计:{{ dataTotal }} <div class="show_pager"> <Pager :total="dataTotal" @change="handlePageChange"  /></div> </div>   
+                <div class="info_tab_footer">共计:{{ dataTotal }} <div class="show_pager"> <Pager :total="dataTotal" @change="handlePageChange"  ref="pager"/></div> </div>   
                 </div>
                 <!-- 新增分类信息 -->
                  <div class="addclassify commoncss">

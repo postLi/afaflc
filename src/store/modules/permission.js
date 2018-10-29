@@ -94,7 +94,10 @@ const permission = {
         const subRouter = currentRouters.find(route => {
           return route.name === data
         })
-        commit('SET_SIDEBAR_ROUTERS', subRouter.children || [])
+        // console.log('permisiton',currentRouters,subRouter,data)
+        if(subRouter){
+            commit('SET_SIDEBAR_ROUTERS', subRouter.children || [])
+        }
         resolve()
       })
     }

@@ -59,7 +59,7 @@ export default {
           meta: { title: '物流专线', stitle: '专线', noCache: true , code: 'SERVICE_LTL_TRANSPORT_RANGE'}
         },
         { path: '/sm/lingdan/newTransportRange',
-          hidden: false,
+          hidden: true,
           name: '发布专线',
           component: _import('sm/lingdan/transportRange/newTransport'),
           meta: { title: '发布专线', stitle: '专线', noCache: true , code: ''}
