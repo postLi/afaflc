@@ -82,7 +82,7 @@
             </el-table> 
         </div>
 		</div>
-         <div class="info_tab_footer">共计:{{ dataTotal }} <div class="show_pager"> <Pager :total="dataTotal" @change="handlePageChange" /></div> </div>
+         <div class="info_tab_footer">共计:{{ dataTotal }} <div class="show_pager"> <Pager :total="dataTotal" @change="handlePageChange" ref="pager"/></div> </div>
     </div>
 </template>
 
@@ -126,12 +126,11 @@ export default {
                 this.firstblood()
           })
          let FromData = {companyName:null,}
-        data_get_aflcPartner_findAuthCompany(1, 1000, FromData).then(res=>{
+        data_get_aflcPartner_findAuthCompany(1, 10000, FromData).then(res=>{
          let restaurantsData = res.data;
          restaurantsData.map(res=>{
              this.restaurants.push({
                  value:res.companyName})
-             console.log(this.restaurants)
          })
         })
 
@@ -167,6 +166,9 @@ export default {
     },
     // 查询
     getdata_search(){
+        this.page = 1;
+        this.$refs.pager.inputval = this.page;
+        this.$refs.pager.pageNum = this.page;
         this.firstblood();
     },
     // 清空查询
@@ -174,6 +176,9 @@ export default {
                 this.formAllData.areaCode = null;
                 this.formAllData.areaName = null;
                 this.formAllData.partnerCompany=null,
+                this.page = 1;
+                this.$refs.pager.inputval = this.page;
+                this.$refs.pager.pageNum = this.page;
                 this.firstblood();
                 this.$refs.area.clearData();
     },

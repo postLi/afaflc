@@ -231,6 +231,9 @@
             },
             //点击查询按纽，按条件查询列表
             getdata_search(event){
+            this.page = 1;
+            this.$refs.pager.inputval = this.page;
+            this.$refs.pager.pageNum = this.page;
             this.firstblood()
             },
 

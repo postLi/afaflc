@@ -220,7 +220,7 @@ export default {
                 this.$message.success('生成成功');
                location.href = ('/api/aflcsmservice/sm/aflcCouponUse/v1/produceCoupon/?id='+this.params[0].id+'&num='+this.num+'&access_token=' + Cookies.get(TokenKey))
                this.dialogFormVisible_add = false;
-               this.changeList();
+               this.$emit('getData');
         // exportWithIframe('/api/aflcsmservice/sm/aflcCouponUse/v1/produceCoupon/?id='+this.params.id+'&num='+this.num+'&access_token=' + Cookies.get(TokenKey))
         }        
        },
@@ -232,11 +232,11 @@ export default {
         formdata.append('multipartFile',inputFile.files[0]);
         this.dialogFormVisible_add = false;
         data_get_BatchDistribution(this.params[0].id,formdata).then(res=>{
-             this.changeList();
+             this.$emit('getData');
              this.$message.success('发放成功');
              this.$forceUpdate()
         }).catch(res=>{
-             this.changeList();
+             this.$emit('getData');
              this.$message.error(res.text)
              this.$forceUpdate()
         })
@@ -254,10 +254,10 @@ export default {
            }
            this.dialogFormVisible_add = false;
           data_get_grantCoupon(this.params[0].id,mobile_Araay).then(res=>{
-              this.changeList();
+              this.$emit('getData');
               this.$message.success('发放成功');
          }).catch(res=>{
-             this.changeList();
+             this.$emit('getData');
              this.$message.error(res.text)
          })   
        },

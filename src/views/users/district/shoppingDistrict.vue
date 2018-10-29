@@ -83,7 +83,7 @@
             </el-table> 
         </div>
 		</div>
-         <div class="info_tab_footer">共计:{{ dataTotal }} <div class="show_pager"> <Pager :total="dataTotal" @change="handlePageChange" /></div> </div>
+         <div class="info_tab_footer">共计:{{ dataTotal }} <div class="show_pager"> <Pager :total="dataTotal" @change="handlePageChange" ref="pager"/></div> </div>
     </div>
 </template>
 
@@ -133,8 +133,8 @@ export default {
             },  
 
     // 列表刷新页面  
-        firstblood(){
-            this.loading =true
+    firstblood(){
+        this.loading =true
         data_get_aflcTradeArea_list(this.page,this.pagesize,this.formAllData).then(res=>{
                     this.dataTotal = res.data.totalCount
                     this.tableDataAll = res.data.list;
@@ -143,6 +143,9 @@ export default {
     },
     // 查询
     getdata_search(){
+        this.page = 1;
+        this.$refs.pager.inputval = this.page;
+        this.$refs.pager.pageNum = this.page;
         this.firstblood();
     },
     // 清空查询
@@ -151,6 +154,9 @@ export default {
                 this.formAllData.areaName = null;
                 this.formAllData.tradeName=null,
                 this.formAllData.tradeOwner=null,
+                this.page = 1;
+                this.$refs.pager.inputval = this.page;
+                this.$refs.pager.pageNum = this.page;
                 this.firstblood();
                 this.$refs.area.clearData();
                 

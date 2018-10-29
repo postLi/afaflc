@@ -46,8 +46,8 @@
 
 
          <el-form-item class="fr">
-         <el-button type="primary"  plain  @click="getdata_search()" :size="btnsize">查询</el-button> 
-         <el-button type="primary"  plain  @click="clearSearch" :size="btnsize">清空</el-button>
+         <el-button type="primary"  plain  @click="getdata_search()" :size="btnsize" icon="el-icon-search">查询</el-button> 
+         <el-button type="primary"  plain  @click="clearSearch" :size="btnsize" icon="fontFamily aflc-icon-qingkong">清空</el-button>
          </el-form-item>
            </el-form> 
   <div class="classify_info">
@@ -71,8 +71,8 @@
    <el-table-column  label="推送车主活跃度"  sortable prop="livenessName" width="150"></el-table-column>
    <el-table-column  label="推送车型"  sortable prop="carTypeName" width="150"></el-table-column>
    <el-table-column  label="推送车主在线状态"  sortable prop="isLineName" width="150"></el-table-column>
-   <el-table-column  label="出发地"  sortable prop="startAddressName" width="150"></el-table-column>
-   <el-table-column  label="目的地"  sortable prop="endAddressName" width="150"></el-table-column>
+   <el-table-column  label="出发地"  sortable prop="startAddressName" width="200" show-overflow-tooltip></el-table-column>
+   <el-table-column  label="目的地"  sortable prop="endAddressName" width="200" show-overflow-tooltip></el-table-column>
    <el-table-column  label="里程"  sortable prop="mileage" width="150"></el-table-column>
    <el-table-column  label="订单价格"  sortable prop="totalAmount" width="150"></el-table-column>
    <el-table-column  label="推送车主数量"  sortable prop="pushDriverCout" width="150"></el-table-column>                 
@@ -169,7 +169,10 @@ export default {
             },
             // 查询
             getdata_search(){
-             this.firstblood();
+            this.page = 1;
+            this.$refs.pager.inputval = this.page;
+            this.$refs.pager.pageNum = this.page;
+            this.firstblood();
             },
             // 清空
             clearSearch(){

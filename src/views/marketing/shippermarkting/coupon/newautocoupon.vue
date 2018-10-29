@@ -644,10 +644,10 @@ export default {
                     }]
               this.dialogFormVisible_add = false;
               data_get_couponActive_create(forms).then((res)=>{
-              eventBus.$emit('changeListtwo')
+              this.$emit('getData');
               this.$message.success('新增成功');
                 }).catch(res=>{
-              eventBus.$emit('changeListtwo')
+              this.$emit('getData');
               this.$message.error('新增失败')
             });
               }

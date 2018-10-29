@@ -205,7 +205,10 @@
             },
             //点击查询按纽，按条件查询列表
             getdata_search(event){
-             this.firstblood()
+                this.page = 1;
+                this.$refs.pager.inputval = this.page;
+                this.$refs.pager.pageNum = this.page;
+                this.firstblood()
             },
             //获取车主状态列表
             getMoreInformation(){

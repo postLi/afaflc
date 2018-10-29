@@ -88,7 +88,6 @@
                         align = "center"
                         height="100%"
                         @selection-change = "getinfomation"
-                        @row-dblclick="moreinfo"
                         tooltip-effect="dark"
                         @row-click="clickDetails"
                         style="width: 100%"> 
@@ -288,21 +287,12 @@ import { parseTime,formatTime,pickerOptions2 } from '@/utils/index.js'
             this.getMoreInformation();
         },  
         methods: {
-          //翻页
-           handleSizeChange(val){
-
-                this.pagesize = val ;
-                this.load();
-           },
-           //跳转当前页
-           handleCurrentChange(val){
-
-                this.page = val;
-                this.load();
-           },
             //点击查询
             getdata_search(event){
-               this.load()
+            this.page = 1;
+            this.$refs.pager.inputval = this.page;
+            this.$refs.pager.pageNum = this.page;
+            this.load()
             },
             
            //重置
@@ -335,10 +325,6 @@ import { parseTime,formatTime,pickerOptions2 } from '@/utils/index.js'
                console.log(row)
                 this.$refs.multipleTable.toggleRowSelection(row);
            },
-           //双击
-            moreinfo(row, event){
-        
-            },
             //获取信息列表
             getMoreInformation(){    
             },

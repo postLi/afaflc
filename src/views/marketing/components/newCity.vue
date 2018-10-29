@@ -271,7 +271,6 @@ export default {
         if (!val) {
           this.$refs['formAll'].resetFields()
           this.areaStatus = null 
-          this.$emit('getData')
           if(this.$refs.area){
           this.$refs.area.clearData();
           }
@@ -328,6 +327,9 @@ export default {
         this.dialogFormVisible_add = true
       }
     },
+    changeList(){
+            eventBus.$emit('pushListtwo')
+        },  
     change: function() {
       this.dialogFormVisible_add = false
     },
@@ -365,8 +367,10 @@ export default {
            this.dialogFormVisible_add = false
           data_get_Marketingsame_create(formAllData).then(res => {
             this.$message.success('新增成功')
+            this.$emit('getData');
           }).catch(res => {
             this.$message.error('新增失败')
+            this.$emit('getData');
           })
         }
       }
@@ -380,9 +384,11 @@ export default {
             this.dialogFormVisible_add = false
           data_get_Marketingsame_update(forms).then(res => {
             this.$message.success('修改成功')
+            this.$emit('getData');
           }).catch(res => {
             console.log(res)
             this.$message.error('修改失败')
+            this.$emit('getData');
           })
         }
       }

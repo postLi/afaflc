@@ -415,7 +415,6 @@ export default {
         handler: function(val, oldVal) {
             if(!val){
             this.$refs['formAll'].resetFields();
-            this.$emit('getData');
             if(this.$refs.area){
             this.$refs.area.clearData();
             }
@@ -575,10 +574,10 @@ export default {
         }]
         this.dialogFormVisible_add = false;
         data_get_shipperOwnerFrom_create(forms).then(res=>{
-            this.changeList();
+            this.$emit('getData');
             this.$message.success('新增成功');
         }).catch(res=>{
-            this.changeList();
+            this.$emit('getData');
             this.$message.error('新增失败');
        });
 

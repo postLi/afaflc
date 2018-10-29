@@ -19,8 +19,8 @@
                    <el-input v-model="formAll.districtName"></el-input>
                  </el-form-item>
          <el-form-item class="fr">
-         <el-button type="primary"  plain  @click="getdata_search()" :size="btnsize">查询</el-button> 
-         <el-button type="primary"  plain  @click="clearSearch" :size="btnsize">清空</el-button>
+         <el-button type="primary"  plain  @click="getdata_search()" :size="btnsize" icon="el-icon-search">查询</el-button> 
+         <el-button type="primary"  plain  @click="clearSearch" :size="btnsize" icon="fontFamily aflc-icon-qingkong">清空</el-button>
          </el-form-item>
            </el-form> 
   <div class="classify_info">
@@ -212,12 +212,12 @@
              <el-row>
             <el-col :span="8">
             <el-form-item label="提货地：" :label-width="formLabelWidth" class="adressstart">
-           <el-input  v-model="formAll2.startAddress"></el-input>
+           <el-input  v-model="formAll2.startAddressName"></el-input>
           </el-form-item>
             </el-col>
             <el-col :span="8">
            <el-form-item label="目的地：" class="adressend">
-            <el-input  v-model="formAll2.endAddress"></el-input>
+            <el-input  v-model="formAll2.endAddressName"></el-input>
                  </el-form-item>
             </el-col>
             <el-col :span="8">
@@ -409,8 +409,8 @@ export default {
             districtName: null,
             },
         formAll2:{
-            endAddress: null,
-            startAddress:null,
+            endAddressName: null,
+            startAddressName:null,
             vestId:null
             },    
         vestAll:{
@@ -569,6 +569,7 @@ export default {
         },
             getInfo(pos, name, info) {
                 console.log('in',info)
+                console.log('pos',pos)
             switch (this.current) {
                 case 'districtName':
                 this.vestAll.districtName = info.formattedAddress;
@@ -586,35 +587,37 @@ export default {
                 break;
                 case 'pickaddAera':
                 let posstartArray = pos.split(',');
-                this.startAddressCoordinate = posstartArray[1]+','+posstartArray[0]
                 if(info.addressComponent.street){
+                  this.startAddressCoordinate = posstartArray[1]+','+posstartArray[0]
                   this.startAddressName= info.addressComponent.street + info.addressComponent.streetNumber
+                  if(info.addressComponent.building){
+                  this.pickaddAera = info.addressComponent.building
+                }
+                else if(info.aois.length>0){
+                  this.pickaddAera = info.aois[0].name
+                }
+                else{
+                  let startAddress = info.formattedAddresssplit('市')
+                  this.pickaddAera = startAddress[startAddress.length-1]
+                }
+                console.log('1')
+                console.log('data1',this.startAddressCoordinate,this.startAddressName,this.pickaddAera)
                 }
                 else{
                   this.startAddressName = info.pois[0].address
-                }
-                if(info.addressComponent.building){
-                  this.pickaddAera = info.addressComponent.building
-                }
-                else{
-                  if(info.aois.length>0){
-                  this.pickaddAera = info.aois[0].name
-                  }
-                  else{
-                  this.pickaddAera = info.pois[0].name
-                  }        
+                  this.pickaddAera = info.pois[0].name    
+                  this.startAddressCoordinate = info.pois[0].location.N+info.pois[0].location.O
+
+                console.log('21')
+                console.log('data2',this.startAddressCoordinate,this.startAddressName,this.pickaddAera)
                 }
                 break;
                 case 'destinationaddAera':
                 let posendArray = pos.split(',');
-                this.endAddressCoordinate = posendArray[1]+','+posendArray[0]
                 if(info.addressComponent.street){
+                  this.endAddressCoordinate = posendArray[1]+','+posendArray[0]
                   this.endAddressName= info.addressComponent.street + info.addressComponent.streetNumber
-                }
-                else{
-                  this.endAddressName = info.pois[0].address
-                }
-                if(info.addressComponent.building){
+                 if(info.addressComponent.building){
                   this.destinationaddAera = info.addressComponent.building
                 }
                 else{
@@ -622,8 +625,15 @@ export default {
                   this.destinationaddAera = info.aois[0].name
                   }
                   else{
+                  let endAddress = info.formattedAddresssplit('市')
+                  this.destinationaddAera = endAddress[endAddress.length-1]                      
+                  }
+                }
+                }
+                else{
+                  this.endAddressName = info.pois[0].address
                   this.destinationaddAera = info.pois[0].name
-                  }    
+                  this.endAddressCoordinate = info.pois[0].location.N+info.pois[0].location.O
                 }
                 break;
                 case 'selectdistrictName':
@@ -725,6 +735,7 @@ export default {
                     if(this.pickaddAera==this.pickAera[i].pickAeratree||this.pickaddAera==this.destinationAera[j].destinationAeratree)
                     {
                         this.$message.warning('在提货地和目的地中已经存在相同的地点~');
+                        return
                         break
                     }
                     else{
@@ -742,6 +753,7 @@ export default {
                     }
                 }
                 }
+                console.log('data',this.totalAeraData)
         },
         // 提货地减少
         reduceItempick(i){
@@ -768,6 +780,7 @@ export default {
                     if(this.destinationaddAera==this.destinationAera[i].destinationAeratree||this.destinationaddAera==this.pickAera[j].pickAeratree)
                     {
                         this.$message.warning('在提货地和目的地中已经存在相同的地点~');
+                        return
                         break
                     }
                     else{
@@ -776,7 +789,7 @@ export default {
                                 destinationAeratree:this.destinationaddAera,
                                 endAddressCoordinate:this.endAddressCoordinate,
                                 endAddressName:this.endAddressName
-                        }); 
+                        });
                         this.destinationaddAera=''
                         return         
                         break
@@ -788,15 +801,17 @@ export default {
         },
         // 目的地减少
         reduceItemdestination(i){
-          this.destinationAera.splice(i,1);
+            this.destinationAera.splice(i,1);
         },
          //大表查询
-            getdata_search(){
-            this.formAll.areaCode = this.$refs.area.selectedOptions.pop();
-             this.firstblood();
+        getdata_search(){
+            this.page = 1;
+            this.$refs.pager.inputval = this.page;
+            this.$refs.pager.pageNum = this.page;
+            this.firstblood();
             },
         // 大表清空
-            clearSearch(){
+        clearSearch(){
                 this.formAll = {
                     areaCode: null,
                     serivceCode:null,
@@ -811,13 +826,13 @@ export default {
                 this.firstblood();
             },
          //详情表查询
-            getdata_search2(){
+        getdata_search2(){
              this.firstblood2();
             },
         // 详情表清空
-            clearSearch2(){
-                this.formAll2.endAddress=null
-                this.formAll2.startAddress=null
+        clearSearch2(){
+                this.formAll2.endAddressName=null
+                this.formAll2.startAddressName=null
                 if(this.page1!= 1){
                     this.page1 = 1;
                     this.$refs.pager1.inputval = this.page;

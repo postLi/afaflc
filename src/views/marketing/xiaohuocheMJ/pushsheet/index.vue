@@ -241,6 +241,9 @@ export default {
            
             // 查询
             getdata_search(){
+             this.page = 1;
+             this.$refs.pager.inputval = this.page;
+             this.$refs.pager.pageNum = this.page;
              this.firstblood();
             },
             // 清空

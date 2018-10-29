@@ -175,7 +175,10 @@ import {data_financeList,data_GetServerType,data_GetServerType2,data_GetServerTy
         },
         // 查询 
         seach_data(){
-                this.firstblood()
+            this.page = 1;
+            this.$refs.pager.inputval = this.page;
+            this.$refs.pager.pageNum = this.page;
+            this.firstblood()
         },
         // 清空查询
         clearSearch(){
