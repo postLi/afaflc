@@ -267,7 +267,10 @@ export default {
     },      
    //  搜索
     getdata_search(){
-                this.firstblood()
+      this.page = 1;
+      this.$refs.pager.inputval = this.page;
+      this.$refs.pager.pageNum = this.page;
+      this.firstblood()
     },
     // 清空
      clearSearch(){

@@ -102,12 +102,15 @@ export default {
     },       
      //  查询
     getData_query() {
+      this.page = 1;
+      this.$refs.pager.inputval = this.page;
+      this.$refs.pager.pageNum = this.page;
       this.firstblood()
     },
     // 清空查询
      clearSearch(){
-            this.belongCityName = null,
-               this.formAllData = {
+        this.belongCityName = null,
+                this.formAllData = {
                     account: null,
                     areaCode: null,  
                }

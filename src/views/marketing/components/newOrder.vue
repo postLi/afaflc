@@ -267,7 +267,6 @@ export default {
         handler: function(val, oldVal) {
             if(!val){
             this.$refs['formAll'].resetFields();
-            this.$emit('getData');
             this.areaStatus = null;
        if(this.$refs.area){
           this.$refs.area.clearData();
@@ -345,7 +344,7 @@ export default {
           }, 
     changeList(){
             eventBus.$emit('pushListtwo')
-        },   
+        },  
     // 同城新增    
    add_data(){
        this.$refs['formAll'].validate(valid=>{
@@ -368,11 +367,11 @@ export default {
         }]
             this.dialogFormVisible_add = false;
         data_get_orderFromsame_create(forms).then(res=>{
-            this.changeList();
             this.$message.success('新增成功');
+            this.$emit('getData');
         }).catch(res=>{
-            this.changeList();
             this.$message.error('新增失败');
+            this.$emit('getData');
        });
        }
        }
@@ -385,11 +384,11 @@ export default {
         if(valid){
         this.dialogFormVisible_add = false;
         data_get_orderFromsame_update(forms).then(res=>{
-            this.changeList();
             this.$message.success('修改成功');
+            this.$emit('getData');
         }).catch(res=>{
-            this.changeList();
             this.$message.error('修改失败');
+            this.$emit('getData');
        });
        }
        }

@@ -736,10 +736,10 @@ export default {
                     }
               this.dialogFormVisible_add = false;
               data_get_couponActive_update(forms).then((res)=>{
-              eventBus.$emit('changeListtwo')
+              this.$emit('getData');
               this.$message.success('修改成功')
            }).catch(res=>{
-              eventBus.$emit('changeListtwo')
+              this.$emit('getData');
                     console.log('res',res.text)
                     if(res.text='已发放过优惠卷不能进行修改')
                     {

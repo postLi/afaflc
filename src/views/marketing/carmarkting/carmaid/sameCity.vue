@@ -280,6 +280,9 @@ export default {
   },
 
   mounted() {
+     eventBus.$on('pushListtwo', () => {
+                this.firstblood()
+    })
     this.getMoreInformation()
     this.firstblood()
   }

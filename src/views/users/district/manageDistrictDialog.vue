@@ -566,7 +566,7 @@ export default {
          let FromData = {
              companyName:null,
         }
-        data_get_aflcPartner_findAuthCompany(1, 1000, FromData).then(res=>{
+        data_get_aflcPartner_findAuthCompany(1, 10000, FromData).then(res=>{
          let restaurantsData = res.data;
          restaurantsData.map(res=>{
              this.restaurants.push({

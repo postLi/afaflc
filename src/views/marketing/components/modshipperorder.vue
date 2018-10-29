@@ -79,83 +79,83 @@
                  </tr>
             <tr>
               <td>未分类</td>
-              <td><el-form-item prop="data1" size = '50'><el-input v-model="formAll.data1" maxlength='5'></el-input></el-form-item></td>
-              <td><el-form-item prop="data2" size = '50'><el-input v-model="formAll.data2" maxlength='5'></el-input></el-form-item></td> 
-              <td><el-form-item prop="data3" size = '50'><el-input v-model="formAll.data3" maxlength='5'></el-input></el-form-item></td> 
-              <td><el-form-item prop="data4" size = '50'><el-input v-model="formAll.data4" maxlength='5'></el-input></el-form-item></td> 
-              <td><el-form-item prop="data5" size = '50'><el-input v-model="formAll.data5" maxlength='5'></el-input></el-form-item></td> 
-              <td><el-form-item prop="data6" size = '50'><el-input v-model="formAll.data6" maxlength='5'></el-input></el-form-item></td> 
-              <td><el-form-item prop="data7" size = '50'><el-input v-model="formAll.data7" maxlength='5'></el-input></el-form-item></td> 
-              <td><el-form-item prop="data8" size = '50'><el-input v-model="formAll.data8" maxlength='5'></el-input></el-form-item></td> 
-              <td><el-form-item prop="maxnum1" size = '50'><el-input v-model="formAll.maxnum1" maxlength='5'></el-input></el-form-item></td>   
+              <td><el-form-item prop="data1" size = '50'><el-input v-model="formAll.data1" maxlength='5' :disabled="editType=='view'"></el-input></el-form-item></td>
+              <td><el-form-item prop="data2" size = '50'><el-input v-model="formAll.data2" maxlength='5' :disabled="editType=='view'"></el-input></el-form-item></td> 
+              <td><el-form-item prop="data3" size = '50'><el-input v-model="formAll.data3" maxlength='5' :disabled="editType=='view'"></el-input></el-form-item></td> 
+              <td><el-form-item prop="data4" size = '50'><el-input v-model="formAll.data4" maxlength='5' :disabled="editType=='view'"></el-input></el-form-item></td> 
+              <td><el-form-item prop="data5" size = '50'><el-input v-model="formAll.data5" maxlength='5' :disabled="editType=='view'"></el-input></el-form-item></td> 
+              <td><el-form-item prop="data6" size = '50'><el-input v-model="formAll.data6" maxlength='5' :disabled="editType=='view'"></el-input></el-form-item></td> 
+              <td><el-form-item prop="data7" size = '50'><el-input v-model="formAll.data7" maxlength='5' :disabled="editType=='view'"></el-input></el-form-item></td> 
+              <td><el-form-item prop="data8" size = '50'><el-input v-model="formAll.data8" maxlength='5' :disabled="editType=='view'"></el-input></el-form-item></td> 
+              <td><el-form-item prop="maxnum1" size = '50'><el-input v-model="formAll.maxnum1" maxlength='5' :disabled="editType=='view'"></el-input></el-form-item></td>   
             </tr>
              <tr>
               <td>普通</td>
-              <td><el-form-item prop="data9" size = '50'><el-input v-model="formAll.data9" maxlength='5'></el-input></el-form-item></td>
-              <td><el-form-item prop="data10" size = '50'><el-input v-model="formAll.data10" maxlength='5'></el-input></el-form-item></td>
-              <td><el-form-item prop="data11" size = '50'><el-input v-model="formAll.data11" maxlength='5'></el-input></el-form-item></td> 
-              <td><el-form-item prop="data12" size = '50'><el-input v-model="formAll.data12" maxlength='5'></el-input></el-form-item></td> 
-              <td><el-form-item prop="data13" size = '50'><el-input v-model="formAll.data13" maxlength='5'></el-input></el-form-item></td> 
-              <td><el-form-item prop="data14" size = '50'><el-input v-model="formAll.data14" maxlength='5'></el-input></el-form-item></td> 
-              <td><el-form-item prop="data15" size = '50'><el-input v-model="formAll.data15" maxlength='5'></el-input></el-form-item></td> 
-              <td><el-form-item prop="data16" size = '50'><el-input v-model="formAll.data16" maxlength='5'></el-input></el-form-item></td> 
-              <td><el-form-item prop="maxnum2" size = '50'><el-input v-model="formAll.maxnum2" maxlength='5'></el-input></el-form-item></td> 
+              <td><el-form-item prop="data9" size = '50'><el-input v-model="formAll.data9" maxlength='5' :disabled="editType=='view'"></el-input></el-form-item></td>
+              <td><el-form-item prop="data10" size = '50'><el-input v-model="formAll.data10" maxlength='5' :disabled="editType=='view'"></el-input></el-form-item></td>
+              <td><el-form-item prop="data11" size = '50'><el-input v-model="formAll.data11" maxlength='5' :disabled="editType=='view'"></el-input></el-form-item></td> 
+              <td><el-form-item prop="data12" size = '50'><el-input v-model="formAll.data12" maxlength='5' :disabled="editType=='view'"></el-input></el-form-item></td> 
+              <td><el-form-item prop="data13" size = '50'><el-input v-model="formAll.data13" maxlength='5' :disabled="editType=='view'"></el-input></el-form-item></td> 
+              <td><el-form-item prop="data14" size = '50'><el-input v-model="formAll.data14" maxlength='5' :disabled="editType=='view'"></el-input></el-form-item></td> 
+              <td><el-form-item prop="data15" size = '50'><el-input v-model="formAll.data15" maxlength='5' :disabled="editType=='view'"></el-input></el-form-item></td> 
+              <td><el-form-item prop="data16" size = '50'><el-input v-model="formAll.data16" maxlength='5' :disabled="editType=='view'"></el-input></el-form-item></td> 
+              <td><el-form-item prop="maxnum2" size = '50'><el-input v-model="formAll.maxnum2" maxlength='5' :disabled="editType=='view'"></el-input></el-form-item></td> 
 
             </tr>
             <tr>
               <td>银牌</td>
-              <td><el-form-item prop="data17" size = '50'><el-input v-model="formAll.data17" maxlength='5'></el-input></el-form-item></td>
-              <td><el-form-item prop="data18" size = '50'><el-input v-model="formAll.data18" maxlength='5'></el-input></el-form-item></td>   
-              <td><el-form-item prop="data19" size = '50'><el-input v-model="formAll.data19" maxlength='5'></el-input></el-form-item></td>
-              <td><el-form-item prop="data20" size = '50'><el-input v-model="formAll.data20" maxlength='5'></el-input></el-form-item></td> 
-              <td><el-form-item prop="data21" size = '50'><el-input v-model="formAll.data21" maxlength='5'></el-input></el-form-item></td> 
-              <td><el-form-item prop="data22" size = '50'><el-input v-model="formAll.data22" maxlength='5'></el-input></el-form-item></td> 
-              <td><el-form-item prop="data23" size = '50'><el-input v-model="formAll.data23" maxlength='5'></el-input></el-form-item></td> 
-              <td><el-form-item prop="data24" size = '50'><el-input v-model="formAll.data24" maxlength='5'></el-input></el-form-item></td> 
-              <td><el-form-item prop="maxnum3" size = '50'><el-input v-model="formAll.maxnum3" maxlength='5'></el-input></el-form-item></td>  
+              <td><el-form-item prop="data17" size = '50'><el-input v-model="formAll.data17" maxlength='5' :disabled="editType=='view'"></el-input></el-form-item></td>
+              <td><el-form-item prop="data18" size = '50'><el-input v-model="formAll.data18" maxlength='5' :disabled="editType=='view'"></el-input></el-form-item></td>   
+              <td><el-form-item prop="data19" size = '50'><el-input v-model="formAll.data19" maxlength='5' :disabled="editType=='view'"></el-input></el-form-item></td>
+              <td><el-form-item prop="data20" size = '50'><el-input v-model="formAll.data20" maxlength='5' :disabled="editType=='view'"></el-input></el-form-item></td> 
+              <td><el-form-item prop="data21" size = '50'><el-input v-model="formAll.data21" maxlength='5' :disabled="editType=='view'"></el-input></el-form-item></td> 
+              <td><el-form-item prop="data22" size = '50'><el-input v-model="formAll.data22" maxlength='5' :disabled="editType=='view'"></el-input></el-form-item></td> 
+              <td><el-form-item prop="data23" size = '50'><el-input v-model="formAll.data23" maxlength='5' :disabled="editType=='view'"></el-input></el-form-item></td> 
+              <td><el-form-item prop="data24" size = '50'><el-input v-model="formAll.data24" maxlength='5' :disabled="editType=='view'"></el-input></el-form-item></td> 
+              <td><el-form-item prop="maxnum3" size = '50'><el-input v-model="formAll.maxnum3" maxlength='5' :disabled="editType=='view'"></el-input></el-form-item></td>  
             </tr>
              <tr>
               <td>金牌</td>
-              <td><el-form-item prop="data25" size = '50'><el-input v-model="formAll.data25" maxlength='5'></el-input></el-form-item></td> 
-              <td><el-form-item prop="data26" size = '50'><el-input v-model="formAll.data26" maxlength='5'></el-input></el-form-item></td> 
-              <td><el-form-item prop="data27" size = '50'><el-input v-model="formAll.data27" maxlength='5'></el-input></el-form-item></td>                
-              <td><el-form-item prop="data28" size = '50'><el-input v-model="formAll.data28" maxlength='5'></el-input></el-form-item></td>
-              <td><el-form-item prop="data29" size = '50'><el-input v-model="formAll.data29" maxlength='5'></el-input></el-form-item></td> 
-              <td><el-form-item prop="data30" size = '50'><el-input v-model="formAll.data30" maxlength='5'></el-input></el-form-item></td> 
-              <td><el-form-item prop="data31" size = '50'><el-input v-model="formAll.data31" maxlength='5'></el-input></el-form-item></td> 
-              <td><el-form-item prop="data32" size = '50'><el-input v-model="formAll.data32" maxlength='5'></el-input></el-form-item></td> 
-              <td><el-form-item prop="maxnum4" size = '50'><el-input v-model="formAll.maxnum4" maxlength='5'></el-input></el-form-item></td>   
+              <td><el-form-item prop="data25" size = '50'><el-input v-model="formAll.data25" maxlength='5' :disabled="editType=='view'"></el-input></el-form-item></td> 
+              <td><el-form-item prop="data26" size = '50'><el-input v-model="formAll.data26" maxlength='5' :disabled="editType=='view'"></el-input></el-form-item></td> 
+              <td><el-form-item prop="data27" size = '50'><el-input v-model="formAll.data27" maxlength='5' :disabled="editType=='view'"></el-input></el-form-item></td>                
+              <td><el-form-item prop="data28" size = '50'><el-input v-model="formAll.data28" maxlength='5' :disabled="editType=='view'"></el-input></el-form-item></td>
+              <td><el-form-item prop="data29" size = '50'><el-input v-model="formAll.data29" maxlength='5' :disabled="editType=='view'"></el-input></el-form-item></td> 
+              <td><el-form-item prop="data30" size = '50'><el-input v-model="formAll.data30" maxlength='5' :disabled="editType=='view'"></el-input></el-form-item></td> 
+              <td><el-form-item prop="data31" size = '50'><el-input v-model="formAll.data31" maxlength='5' :disabled="editType=='view'"></el-input></el-form-item></td> 
+              <td><el-form-item prop="data32" size = '50'><el-input v-model="formAll.data32" maxlength='5' :disabled="editType=='view'"></el-input></el-form-item></td> 
+              <td><el-form-item prop="maxnum4" size = '50'><el-input v-model="formAll.maxnum4" maxlength='5' :disabled="editType=='view'"></el-input></el-form-item></td>   
             </tr>
             <tr>
               <td>钻石</td>
-              <td><el-form-item prop="data33" size = '50'><el-input v-model="formAll.data33" maxlength='5'></el-input></el-form-item></td> 
-              <td><el-form-item prop="data34" size = '50'><el-input v-model="formAll.data34" maxlength='5'></el-input></el-form-item></td> 
-              <td><el-form-item prop="data35" size = '50'><el-input v-model="formAll.data35" maxlength='5'></el-input></el-form-item></td> 
-              <td><el-form-item prop="data36" size = '50'><el-input v-model="formAll.data36" maxlength='5'></el-input></el-form-item></td>
-              <td><el-form-item prop="data37" size = '50'><el-input v-model="formAll.data37" maxlength='5'></el-input></el-form-item></td>
-              <td><el-form-item prop="data38" size = '50'><el-input v-model="formAll.data38" maxlength='5'></el-input></el-form-item></td> 
-              <td><el-form-item prop="data39" size = '50'><el-input v-model="formAll.data39" maxlength='5'></el-input></el-form-item></td> 
-              <td><el-form-item prop="data40" size = '50'><el-input v-model="formAll.data40" maxlength='5'></el-input></el-form-item></td> 
-              <td><el-form-item prop="maxnum5" size = '50'><el-input v-model="formAll.maxnum5" maxlength='5'></el-input></el-form-item></td>  
+              <td><el-form-item prop="data33" size = '50'><el-input v-model="formAll.data33" maxlength='5' :disabled="editType=='view'"></el-input></el-form-item></td> 
+              <td><el-form-item prop="data34" size = '50'><el-input v-model="formAll.data34" maxlength='5' :disabled="editType=='view'"></el-input></el-form-item></td> 
+              <td><el-form-item prop="data35" size = '50'><el-input v-model="formAll.data35" maxlength='5' :disabled="editType=='view'"></el-input></el-form-item></td> 
+              <td><el-form-item prop="data36" size = '50'><el-input v-model="formAll.data36" maxlength='5' :disabled="editType=='view'"></el-input></el-form-item></td>
+              <td><el-form-item prop="data37" size = '50'><el-input v-model="formAll.data37" maxlength='5' :disabled="editType=='view'"></el-input></el-form-item></td>
+              <td><el-form-item prop="data38" size = '50'><el-input v-model="formAll.data38" maxlength='5' :disabled="editType=='view'"></el-input></el-form-item></td> 
+              <td><el-form-item prop="data39" size = '50'><el-input v-model="formAll.data39" maxlength='5' :disabled="editType=='view'"></el-input></el-form-item></td> 
+              <td><el-form-item prop="data40" size = '50'><el-input v-model="formAll.data40" maxlength='5' :disabled="editType=='view'"></el-input></el-form-item></td> 
+              <td><el-form-item prop="maxnum5" size = '50'><el-input v-model="formAll.maxnum5" maxlength='5' :disabled="editType=='view'"></el-input></el-form-item></td>  
             </tr>
              <tr>
               <td>皇冠</td>
-              <td><el-form-item prop="data41" size = '50'><el-input v-model="formAll.data41" maxlength='5'></el-input></el-form-item></td> 
-              <td><el-form-item prop="data42" size = '50'><el-input v-model="formAll.data42" maxlength='5'></el-input></el-form-item></td> 
-              <td><el-form-item prop="data43" size = '50'><el-input v-model="formAll.data43" maxlength='5'></el-input></el-form-item></td>
-              <td><el-form-item prop="data44" size = '50'><el-input v-model="formAll.data44" maxlength='5'></el-input></el-form-item></td>  
-              <td><el-form-item prop="data45" size = '50'><el-input v-model="formAll.data45" maxlength='5'></el-input></el-form-item></td>   
-              <td><el-form-item prop="data46" size = '50'><el-input v-model="formAll.data46" maxlength='5'></el-input></el-form-item></td> 
-              <td><el-form-item prop="data47" size = '50'><el-input v-model="formAll.data47" maxlength='5'></el-input></el-form-item></td> 
-              <td><el-form-item prop="data48" size = '50'><el-input v-model="formAll.data48" maxlength='5'></el-input></el-form-item></td> 
-              <td><el-form-item prop="maxnum6" size = '50'><el-input v-model="formAll.maxnum6" maxlength='5'></el-input></el-form-item></td>   
+              <td><el-form-item prop="data41" size = '50'><el-input v-model="formAll.data41" maxlength='5' :disabled="editType=='view'"></el-input></el-form-item></td> 
+              <td><el-form-item prop="data42" size = '50'><el-input v-model="formAll.data42" maxlength='5' :disabled="editType=='view'"></el-input></el-form-item></td> 
+              <td><el-form-item prop="data43" size = '50'><el-input v-model="formAll.data43" maxlength='5' :disabled="editType=='view'"></el-input></el-form-item></td>
+              <td><el-form-item prop="data44" size = '50'><el-input v-model="formAll.data44" maxlength='5' :disabled="editType=='view'"></el-input></el-form-item></td>  
+              <td><el-form-item prop="data45" size = '50'><el-input v-model="formAll.data45" maxlength='5' :disabled="editType=='view'"></el-input></el-form-item></td>   
+              <td><el-form-item prop="data46" size = '50'><el-input v-model="formAll.data46" maxlength='5' :disabled="editType=='view'"></el-input></el-form-item></td> 
+              <td><el-form-item prop="data47" size = '50'><el-input v-model="formAll.data47" maxlength='5' :disabled="editType=='view'"></el-input></el-form-item></td> 
+              <td><el-form-item prop="data48" size = '50'><el-input v-model="formAll.data48" maxlength='5' :disabled="editType=='view'"></el-input></el-form-item></td> 
+              <td><el-form-item prop="maxnum6" size = '50'><el-input v-model="formAll.maxnum6" maxlength='5' :disabled="editType=='view'"></el-input></el-form-item></td>   
             </tr>                      
             </tbody>
              </table>
             </el-col>
           </el-row>
         </el-form>
-        <div slot="footer" class="dialog-footer">
+        <div slot="footer" class="dialog-footer" v-if="editType!=='view'">
           <el-button type="primary"  @click="updata_data" >确 定</el-button>
           <el-button @click="close()" >取 消</el-button>
         </div>
@@ -428,7 +428,6 @@ export default {
         handler: function(val, oldVal) {
             if(!val){
             this.$refs['formAll'].resetFields();
-            this.$emit('getData');
             }
             else{
             this.getMoreInformation();
@@ -655,10 +654,10 @@ export default {
         if(valid){
         this.dialogFormVisible_add = false;
         data_get_shipperOwnerFrom_update(forms).then(res=>{
-            this.changeList();
+            this.$emit('getData');
             this.$message.success('修改成功');
         }).catch(res=>{
-            this.changeList();
+            this.$emit('getData');
             this.$message.error('修改失败');
        });
        }

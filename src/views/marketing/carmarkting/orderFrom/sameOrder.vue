@@ -179,6 +179,9 @@ export default {
             },
          //  查询
          getData_query(){
+          this.page = 1;
+          this.$refs.pager.inputval = this.page;
+          this.$refs.pager.pageNum = this.page;             
           this.firstblood();
           },
         // 清空
@@ -291,6 +294,9 @@ export default {
     }
    },
   mounted(){
+     eventBus.$on('pushListtwo', () => {
+                this.firstblood()
+    })
     this.getMoreInformation();
     this.firstblood();
     },
