@@ -3,7 +3,7 @@ import fetch from '@/utils/fetch'
 const baseurl = 'aflc-order' //订单
 const baseurl_tow = 'aflcsmservice' //服务
 const baseurl_three = 'aflcusercenterservice' //用户
-const baseurl_four = 'aflcorderservice-wtc' //订单
+const baseurl_four = 'aflcorderservice' //订单
 
 
 //其他信息--根据条件获取订单投诉建议表列表

@@ -75,7 +75,7 @@ export default {
     {
         path: '/common/task',
         icon: 'rwdd',
-        hidden: false,
+        hidden: true,
         name: '任务调度',
         component: _import('common/index'),
         meta: { title: '任务调度', stitle: '任务', noCache: true , code: 'SYSTEM_TASK'},
