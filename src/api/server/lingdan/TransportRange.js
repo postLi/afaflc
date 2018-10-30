@@ -55,6 +55,15 @@ export function updateWebAflcTransportRange(data){
   }
 
   
+//WEB端删除专线
+export function deleteWebAflcTransportRange(data){
+    return fetch({
+      url: '/'+baseUrl+'/usercenter/aflcTransportRange/v1/deleteBatch',
+      method: 'DELETE',
+      data:data
+    })
+  }
+
 
 
 

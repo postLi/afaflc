@@ -206,7 +206,7 @@
 
 <script>
 
-import { getTransportRangeList, TransportRangeStatus, deleteTransportRange } from '@/api/server/lingdan/TransportRange.js'
+import { getTransportRangeList, TransportRangeStatus, deleteTransportRange,deleteWebAflcTransportRange } from '@/api/server/lingdan/TransportRange.js'
 
 import { parseTime } from '@/utils/index.js'
 import Pager from '@/components/Pagination/index'
@@ -313,7 +313,7 @@ export default {
     handleClick(type){
         if(this.selected.length == 0 && type != 'new'){
             return this.$message.warning('请选择您要操作的专线');
-        }else if (this.selected.length > 1 && type != 'new') {
+        }else if (this.selected.length > 1 && type != 'new' && type != 'delet') {
             this.$message({
                 message: '为防止您操作出错，限制只能操作一条专线~',
                 type: 'warning'
@@ -329,13 +329,22 @@ export default {
                     this.$router.push({ name: '发布专线', params: { rangeId: row.id, ifrevise: '1' }})
                     break;
                 case 'delet':
-                        this.$confirm('确定要删除 ' + row.startLocation + '-' + row.endLocation + ' 该条专线吗？', '提示', {
+                        let ids = [];
+                        this.selected.forEach(el => {
+                            ids.push(el.id);
+                        })
+                        let item = ids.length > 1 ? ids.length + '条' : row.startLocation + '-' + row.endLocation + '该条'
+                        this.$confirm('确定要删除 '+item+'专线吗？', '提示', {
                             confirmButtonText: '确定',
                             cancelButtonText: '取消',
                             type: 'warning'
                         }).then(() => {
-                            deleteTransportRange(row.id).then(res => {
-                            this.firstblood()
+                            deleteWebAflcTransportRange(ids).then(res => {
+                                this.$message({
+                                    message: '删除成功~',
+                                    type: 'success'
+                                })
+                                this.firstblood();
                             }).catch(err => {
                             this.$message({
                                 type: 'warning',
