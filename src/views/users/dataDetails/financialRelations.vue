@@ -19,7 +19,7 @@
                     <el-col :span="3">优惠券张数：</el-col>
                     <el-col :span="3">{{financial.couponNum}}</el-col>
                     <el-col :span="3">优惠券抵扣金额：</el-col>
-                    <el-col :span="3">{{financial.orderDiscountAmountSum}}</el-col>
+                    <el-col :span="3">{{financial.orderDiscountAmountSum ? financial.orderDiscountAmountSum : '0'}}</el-col>
                 </el-row>
             </div>
         </div>
@@ -68,7 +68,6 @@
                 </el-table>
                 <el-pagination
                     background
-                    @size-change="handleSizeChange"
                     @current-change="handleCurrentChangeRecharge"
                     layout="total, prev, pager, next, jumper"
                     :total="rechargeTotalCount">

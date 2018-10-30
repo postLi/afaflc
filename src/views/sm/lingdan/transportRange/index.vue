@@ -219,7 +219,6 @@ export default {
     return {
       btnsize: 'mini',
       loading: true,
-      defaultImg: '/static/default.png', // 默认加载失败图片
       totalCount: 0,
       page: 1,
       pagesize: 20,
@@ -240,8 +239,8 @@ export default {
   methods: {
     firstblood() {
       getTransportRangeList(this.page, this.pagesize, this.logisticsForm).then(res => {
-        this.tableData = res.data.list
-        this.totalCount = res.data.totalCount
+        this.tableData = res.data.list;
+        this.totalCount = res.data.totalCount;
         this.tableData.forEach(el => {
           el.weightcargo = []
           el.lightcargo = []
@@ -327,7 +326,7 @@ export default {
                     this.$router.push({ name: '发布专线' })
                     break;
                 case 'revise':
-                    this.$router.push({ name: '发布物流专线', query: { data: row, ifrevise: '1' }})
+                    this.$router.push({ name: '发布专线', params: { rangeId: row.id, ifrevise: '1' }})
                     break;
                 case 'delet':
                         this.$confirm('确定要删除 ' + row.startLocation + '-' + row.endLocation + ' 该条专线吗？', '提示', {
@@ -374,7 +373,7 @@ export default {
     },
         // 查看详情
     handleInfo(row) {
-      this.$router.push({ name: '发布物流专线', query: { data: row, ifrevise: '2' }})
+      this.$router.push({ name: '发布专线', params: { rangeId: row.id, ifrevise: '2' }})
     },
         // 新增专线
     handleNew() {

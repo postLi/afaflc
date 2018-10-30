@@ -5,14 +5,14 @@
             <div class="essentialInformation">
                 <p>
                     <span>装货照片：</span>
-                    <el-tooltip class="item" effect="dark" content="点击图片查看原图" placement="top">
-                        <img class="showPicture" :src="listInformation.loadingUrl ? listInformation.loadingUrl: defaultImg" v-showPicture :imgurl="listInformation.loadingUrl" alt="" >
+                    <el-tooltip class="item" effect="dark" content="双击图片查看原图" placement="top" v-viewer>
+                        <img class="showPicture" :src="listInformation.loadingUrl ? listInformation.loadingUrl: defaultImg" alt="" >
                     </el-tooltip>
                 </p>
                 <p>
                     <span>回单照片：</span>
-                    <el-tooltip class="item" v-for="(item,key) in listInformation.returnUrls" :key="key" effect="dark" content="点击图片查看原图" placement="top">
-                        <img  :src="item ? item: defaultImg" v-showPicture :imgurl="item" alt="">
+                    <el-tooltip class="item" v-for="(item,key) in listInformation.returnUrls" :key="key" effect="dark" content="双击图片查看原图" placement="top" v-viewer>
+                        <img  :src="item ? item: defaultImg" alt="">
                     </el-tooltip>
                 </p>
             </div>

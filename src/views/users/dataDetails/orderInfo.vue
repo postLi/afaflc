@@ -7,19 +7,19 @@
                 <el-row class="basicInfo" :span='24'>
                     <!-- 第一行 -->
                     <el-col :span="4">发布订单：</el-col>
-                    <el-col :span="4">1</el-col>
+                    <el-col :span="4">{{orderState.puliclishOrder}}</el-col>
                     <el-col :span="4">成交订单：</el-col>
-                    <el-col :span="4">1</el-col>
+                    <el-col :span="4">{{orderState.dealOrder}}</el-col>
                     <el-col :span="4">未成交订单：</el-col>
-                    <el-col :span="4">1</el-col>
+                    <el-col :span="4">{{orderState.nonTradedOrder}}</el-col>
 
                     <!-- 第二行 -->
                     <el-col :span="4">线上支付订单：</el-col>
-                    <el-col :span="4">1</el-col>
+                    <el-col :span="4">{{orderState.onlinePayOrder}}</el-col>
                     <el-col :span="4">线下支付订单：</el-col>
-                    <el-col :span="4">1</el-col>
+                    <el-col :span="4">{{orderState.offlinePayOrder}}</el-col>
                     <el-col :span="4">已取消订单：</el-col>
-                    <el-col :span="4">1</el-col>
+                    <el-col :span="4">{{orderState.cancelOrder}}</el-col>
                 </el-row>
             </div>
         </div>
@@ -109,6 +109,7 @@
 
 import { parseTime } from '@/utils/index.js'
 // import Pager from '@/components/Pagination/index'
+import { aflcOrderState } from '@/api/users/shipperDetails/index.js'
 
 export default {
   name: 'ordersInfo',
@@ -124,12 +125,7 @@ export default {
   data() {
     return {
         size:[20,30,50],
-        defaultImg:'/static/test.jpg',//默认第一张图片的url
-        defaultImg45:'/static/45du.png',
-        defaultImgCarCard:'/static/carcard.png',
-        defaultImgDriverCard:'/static/drivercard.png',
-        defaultImgIdCard:'/static/idcard.png',
-        defaultImgGeRen:'/static/geren.png',
+        orderState:{},
         listInformation: [],
         dataType:[
             {name:'全部',iscur:true},
@@ -178,7 +174,13 @@ export default {
     },
     methods: {
         init() {
-        
+            let userId = this.$route.query.userId;
+            this.OrderState(userId);
+        },
+        OrderState(userId){
+            aflcOrderState(userId).then(res => {
+                this.orderState = res.data;
+            })
         },
         handleSizeChange(val) {
             console.log(`每页 ${val} 条`);

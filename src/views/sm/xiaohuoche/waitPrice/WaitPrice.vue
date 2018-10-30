@@ -30,7 +30,7 @@
                                 maxlength="5"
                                 v-model="standForm.freeTime"
                                 clearable>
-                                <template slot="append">小时</template>
+                                <template slot="append">分钟</template>
                             </el-input>
                         </el-form-item>
                     </div>
@@ -120,7 +120,7 @@
                                     placeholder="请输入内容"
                                     v-model="reviseForm.freeTime"
                                     clearable>
-                                    <template slot="append">小时</template>
+                                    <template slot="append">分钟</template>
                                 </el-input>
                             </el-form-item>
                         </el-col>

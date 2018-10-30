@@ -27,8 +27,16 @@ export function getTransportRangeList(page,pagesize,data){
     })
   }
 
+  //WEB端获取专线
+export function getWebAflcTransportRange(id){
+    return fetch({
+      url: '/'+baseUrl+'/usercenter/aflcTransportRange/v1/getWebAflcTransportRange/'+id,
+      method: 'get',
+    })
+  }
 
-  //根据条件获取专线列表
+
+  //WEB端创建专线
 export function createWebTransport(data){
     return fetch({
       url: '/'+baseUrl+'/usercenter/aflcTransportRange/v1/createWebAflcTransportRange',
@@ -37,10 +45,10 @@ export function createWebTransport(data){
     })
   }
 
-//根据条件获取专线列表
-export function newTransportRangeList(data){
+//WEB端修改专线
+export function updateWebAflcTransportRange(data){
     return fetch({
-      url: '/'+baseUrl+'/usercenter/aflcTransportRange/v1/add',
+      url: '/'+baseUrl+'/usercenter/aflcTransportRange/v1/updateWebAflcTransportRange',
       method: 'post',
       data:data
     })
@@ -48,13 +56,7 @@ export function newTransportRangeList(data){
 
   
 
-//根据Id获取物流专线
-export function TransportRangeInfo(id){
-    return fetch({
-      url: '/'+baseUrl+'/usercenter/aflcTransportRange/v1/findMemberAflcTransportRange/'+id,
-      method: 'get',
-    })
-  }
+
 
 
 //根据id修改物流专线

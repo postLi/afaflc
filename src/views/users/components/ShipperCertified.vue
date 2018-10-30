@@ -141,13 +141,13 @@
               </el-col>
             </el-row>
  
-            <div class="data_pic clearfix">  
+            <div class="data_pic clearfix" v-viewer>  
                 <!-- <div class="data_pic_default">
                     <img  :src= 'defaultImage ? defaultImage : defaultImg'/>
                 </div> -->
                 <div class="data_pic_yyzz data_pic_common">  
-                    <el-tooltip class="item" effect="dark" content="点击图片查看原图" placement="top">
-                        <img  class="picURL" :src="shengheform.businessLicenceFile ? shengheform.businessLicenceFile : defaultImg"  v-showPicture :imgurl="shengheform.businessLicenceFile"/>
+                    <el-tooltip class="item" effect="dark" content="双击图片查看原图" placement="top">
+                        <img  class="picURL" :src="shengheform.businessLicenceFile ? shengheform.businessLicenceFile : defaultImg"/>
                     </el-tooltip>
                     <h2>营业执照</h2>
                     <el-form-item  prop="businessLicenceFileNoPass">
@@ -159,8 +159,8 @@
                     </el-form-item>
                 </div>
                 <div class="data_pic_company data_pic_common">   
-                    <el-tooltip class="item" effect="dark" content="点击图片查看原图" placement="top">
-                        <img  class="picURL" :src="shengheform.companyFacadeFile ? shengheform.companyFacadeFile : defaultImg" v-showPicture :imgurl="shengheform.companyFacadeFile"/>
+                    <el-tooltip class="item" effect="dark" content="双击图片查看原图" placement="top">
+                        <img  class="picURL" :src="shengheform.companyFacadeFile ? shengheform.companyFacadeFile : defaultImg"/>
                     </el-tooltip>
                     <h2>公司或档口照片</h2>
                     <el-form-item  prop="companyFacadeFileNoPass">
@@ -172,8 +172,8 @@
                     </el-form-item>
                 </div>
                 <div class="data_pic_callingcode data_pic_common">
-                    <el-tooltip class="item" effect="dark" content="点击图片查看原图" placement="top">
-                        <img  class="picURL" :src="shengheform.shipperCardFile ? shengheform.shipperCardFile : defaultImg" v-showPicture :imgurl="shengheform.shipperCardFile"/>
+                    <el-tooltip class="item" effect="dark" content="双击图片查看原图" placement="top">
+                        <img  class="picURL" :src="shengheform.shipperCardFile ? shengheform.shipperCardFile : defaultImg"/>
                     </el-tooltip>
                     <h2>发货人名片</h2>
                     <el-form-item  prop="shipperCardFileNoPass" >

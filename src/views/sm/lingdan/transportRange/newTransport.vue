@@ -61,7 +61,7 @@
                         <li>
                             <el-input v-model="form.primeryPrice" :disabled="unable" v-number-only:point maxlength="7"></el-input>
                         </li>
-                        <li class="buttons">
+                        <li class="buttons" v-show="ifShowRangeType != '2'">
                             <span  @click="addItem('light',keys,form)" class="addItem" v-if="keys == ligthPriceForms.length-1 && keys != 4">
                             </span>
                             <span  @click="reduceItem(keys,'light')" class="reduceItem" v-if="keys == ligthPriceForms.length-1 && ligthPriceForms.length !=1">
@@ -87,7 +87,7 @@
                         <li>
                             <el-input v-model="form.primeryPrice" :disabled="unable" v-number-only:point maxlength="7"></el-input>
                         </li>
-                        <li class="buttons">
+                        <li class="buttons" v-show="ifShowRangeType != '2'">
                             <span  @click="addItem('lightDotted',keys,form)" class="addItem" v-if="keys == ligthPriceDottedForms.length-1 && keys != 4">
                             </span>
                             <span  @click="reduceItem(keys,'lightDotted')" class="reduceItem" v-if="keys == ligthPriceDottedForms.length-1 && ligthPriceDottedForms.length !=1 " >
@@ -113,7 +113,7 @@
                         <li>
                             <el-input v-model="form.primeryPrice" :disabled="unable" v-number-only:point maxlength="7"></el-input>
                         </li>
-                        <li class="buttons">
+                        <li class="buttons" v-show="ifShowRangeType != '2'">
                             <span  @click="addItem('weightDotted',keys,form)" class="addItem" v-if="keys == weigthPriceDottedForms.length-1 && keys != 4">
                             </span>
                             <span  @click="reduceItem(keys,'weightDotted')" class="reduceItem" v-if="keys == weigthPriceDottedForms.length-1 && weigthPriceDottedForms.length !=1 " >
@@ -139,7 +139,7 @@
                         <li>
                             <el-input v-model="form.primeryPrice" :disabled="unable" v-number-only:point maxlength="7"></el-input>
                         </li>
-                        <li class="buttons">
+                        <li class="buttons" v-show="ifShowRangeType != '2'">
                             <span  @click="addItem('weight',keys,form)" class="addItem" v-if="keys == weigthPriceForms.length-1 && keys != 4">
                             </span>
                             <span  @click="reduceItem(keys,'weight')" class="reduceItem" v-if="keys == weigthPriceForms.length-1 && weigthPriceForms.length !=1 " >
@@ -163,15 +163,14 @@
                     :maxlength="maxlength" 
                     placeholder="请填写备注30-2000个字。提供原创说明有助于提升线路效果。">
                 </el-input>
-                <span><i>{{ruleForm.transportRemark.length}}</i>/{{maxlength}}</span>
+                <span v-show="ifShowRangeType != '2'"><i>{{ruleForm.transportRemark.length}}</i>/{{maxlength}}</span>
                 <p class="supplement">请对您的线路进行补充说明，尽量使用市场上或物流行业内的常用词。</p>
             </el-form-item>
 
         </div>
-        <el-form-item class="fromfooter">
+        <el-form-item class="fromfooter" v-show="ifShowRangeType != '2'">
             <el-button type="primary" @click="resetForm('ruleForm')">重置</el-button>
             <el-button type="primary" @click="submitForm('ruleForm')">{{ifShowRangeType == '1' ? '修改' : '立即发布'}}</el-button>
-            <!-- <el-button type="primary" @click="submitForm('ruleForm')" v-else>立即发布</el-button> -->
         </el-form-item>
     </el-form>
 
@@ -179,7 +178,7 @@
 </template>
 <script>
 import { getDictionary } from '@/api/common.js'
-import { createWebTransport } from '@/api/server/lingdan/TransportRange.js'
+import { createWebTransport,getWebAflcTransportRange,updateWebAflcTransportRange } from '@/api/server/lingdan/TransportRange.js'
 import { getUserInfo } from '@/utils/auth.js'
 import { REGEX } from '@/utils/validate.js'
 // import upload from '@/components/Upload/singleImage2'
@@ -417,7 +416,7 @@ export default {
     },
     mounted(){
         // this.getInformations();
-        // this.getParams();
+        this.getParams();
     },
     methods:{
         ifWrong(item,idx){
@@ -501,17 +500,47 @@ export default {
             return obj ? obj.value:'';
         },
         getParams(){
-            if(this.$route.query.data){
-                this.ifShowRangeType = this.$route.query.ifrevise;//1是修改，2是详情
-                
-                let dataObj = this.$route.query.data;//接收数据
-                this.ligthPriceForms = dataObj.lightcargo;
-                this.weigthPriceForms = dataObj.weightcargo;
-                console.log('```',dataObj)
-                TransportRangeInfo(dataObj.id).then(res=>{
+            if(this.$route.params.rangeId){
+                this.ifShowRangeType = this.$route.params.ifrevise;//1是修改，2是详情
+                let rangeId = this.$route.params.rangeId;//接收数据
+                console.log('```',rangeId,this.ifShowRangeType)
+                getWebAflcTransportRange(rangeId).then(res=>{
                     this.ruleForm = res.data;
-                    // this.rangeLogo = this.ruleForm.rangeLogo.split(",");
-                    // console.log('this.rangeLogo',this.rangeLogo)
+                    this.ligthPriceForms = [];
+                    this.weigthPriceForms = [];
+                    this.ligthPriceDottedForms = [];
+                    this.weigthPriceDottedForms = [];
+
+                    this.ruleForm.rangePrices.forEach(item => {
+                        switch (item.type) {
+                            case '0':
+                                this.ligthPriceForms.push(item)
+                                break
+                            case '1':
+                                this.weigthPriceForms.push(item)
+                                break
+                            case '2':
+                                this.ligthPriceDottedForms.push(item)
+                                break
+                            case '3':
+                                this.weigthPriceDottedForms.push(item)
+                                break
+                        }
+                    })
+                    this.ligthPriceForms.sort(function(a, b) {
+                        return a.startVolume - b.startVolume
+                    })
+                    this.weigthPriceForms.sort(function(a, b) {
+                        return a.startVolume - b.startVolume
+                    })
+                    this.ligthPriceDottedForms.sort(function(a, b) {
+                        return a.startVolume - b.startVolume
+                    })
+                    this.weigthPriceDottedForms.sort(function(a, b) {
+                        return a.startVolume - b.startVolume
+                    })
+
+                    console.log()
                 })
                 if(this.ifShowRangeType == 2){
                     this.unable = true;
@@ -706,27 +735,26 @@ export default {
                         this.completeName();
                         console.log(this.ruleForm)
                         let commitFunction;
-                        // if(this.ifShowRangeType == '1'){
-                        //     commitFunction = changeTransportRange(this.ruleForm);
-                        // }else{
+                        if(this.ifShowRangeType == '1'){
+                            commitFunction = updateWebAflcTransportRange(this.ruleForm);
+                        }else{
                             commitFunction = createWebTransport(this.ruleForm)
-                        // }
+                        }
                         commitFunction.then(res => {
-                            console.log('res',res)
-                            // if(res.status == 200){
-                            //     this.$alert('操作成功', '提示', {
-                            //         confirmButtonText: '确定',
-                            //         callback: action => {
+                            console.log('res',res) 
+                            if(res.status == 200){
+                                this.$alert('操作成功', '提示', {
+                                    confirmButtonText: '确定',
+                                    callback: action => {
                                         this.$router.push({name:'物流专线'})
-                            //         }
-                            //     });
-                                
-                            // }else{
-                            //     this.$message({
-                            //         type: 'info',
-                            //         message: '操作失败，原因：' + res.errorInfo ? res.errorInfo : res.text
-                            //     })
-                            // }
+                                    }
+                                });
+                            }else{
+                                this.$message({
+                                    type: 'info',
+                                    message: '操作失败，原因：' + res.errorInfo ? res.errorInfo : res.text
+                                })
+                            }
                         }).catch(err=>{
                             this.$message({
                                 type: 'info',
@@ -757,7 +785,6 @@ export default {
                     startVolume:'0',
                     endVolume:'',
                     primeryPrice:'',//标准价
-                    discountPrice:'',//折后价
                     type:'0'
                 } 
             ];
@@ -766,10 +793,26 @@ export default {
                     startVolume:'0',
                     endVolume:'',
                     primeryPrice:'',//标准价
-                    discountPrice:'',//折后价
                     type:'1'
                 }
             ];
+            this.ligthPriceDottedForms=[
+                {
+                    startVolume:'0',
+                    endVolume:'',
+                    primeryPrice:'',//标准价
+                    type:'2'
+                }
+            ];
+            this.weigthPriceDottedForms=[
+                {
+                    startVolume:'0',
+                    endVolume:'',
+                    primeryPrice:'',//标准价
+                    type:'3'
+                }
+            ];
+
         }
     }
 }

@@ -3,6 +3,7 @@ import fetch from '@/utils/fetch'
 const baseurl = 'aflc-order' //订单
 const baseurl_tow = 'aflcsmservice' //服务
 const baseurl_three = 'aflcusercenterservice' //用户
+const baseurl_four = 'aflcorderservice-wtc' //订单
 
 
 //其他信息--根据条件获取订单投诉建议表列表
@@ -36,6 +37,15 @@ export function aflcRechargeList(data) {
 export function aflcFinancialState(userId) {
     return fetch({
       url: '/' + baseurl_three + '/usercenter/aflcShipper/v1/findAflcFinancialStatement/'+ userId,
+      method: 'get',
+    })
+  }
+
+
+//订单信息-信息概要-根据id获取货主信息管理
+export function aflcOrderState(userId) {
+    return fetch({
+      url: '/' + baseurl_four + '/order/aflcOrder/v1/orderInfo/'+ userId,
       method: 'get',
     })
   }
