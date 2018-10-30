@@ -471,7 +471,6 @@ export default {
              this.restaurants.push({
                  value:res.companyName})
          })
-         
         })
         }, 
     changeList(){

@@ -27,6 +27,7 @@
                     icon="el-icon-circle-plus"
                     editType="add"
                     btntitle="创建"
+                    @getData="getDataList"
                     v-has:BUSINESS_AREA_MANAGE_AREA_ADD
                     >
                     </manageDistrictCread>
@@ -40,7 +41,7 @@
                     @getData="getDataList"
                     :params="selectRowData"
                     v-has:BUSINESS_AREA_MANAGE_AREA_UPDATE
-                    > 
+                    >
                     </manageDistrictDialog>
                 <el-button type="primary" plain :size="btnsize" @click="delete_data" icon="el-icon-delete" v-has:BUSINESS_AREA_MANAGE_AREA_DELETE>删除</el-button>
 			</div>
@@ -248,8 +249,6 @@ export default {
             this.$refs.multipleTable.clearSelection();
             }       
     }
-    
-
 
 }
 </script>

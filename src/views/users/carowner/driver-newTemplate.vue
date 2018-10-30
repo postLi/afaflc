@@ -178,7 +178,7 @@
                                     >
                                 </el-option>
                             </el-select>
-                        </el-form-item>
+                        </el-form-item> 
                   </el-col>
               </el-row>
 
@@ -193,9 +193,9 @@
               <el-row>
                   <el-col :span="12">
                     <el-form-item label="上传车辆45°照片：" :label-width="formLabelWidth" prop="carFile" class="b10" required>
-                      <div class="upload" v-if="editType == 'view'">
-                          <el-tooltip class="item" effect="dark" content="点击图片查看原图" placement="top">
-                      <img :src='templateModel.carFile ? templateModel.carFile : defaultImg' alt="" v-showPicture>
+                      <div class="upload" v-if="editType == 'view'" v-viewer>
+                          <el-tooltip class="item" effect="dark" content="双击图片查看原图" placement="top">
+                      <img :src='templateModel.carFile ? templateModel.carFile : defaultImg' alt="" >
                           </el-tooltip>
                       </div>
                       <upload class="licensePicture" tip="（必须为jpg/png并且小于5M）" v-model="templateModel.carFile" v-else/>
@@ -203,9 +203,9 @@
                   </el-col>
                   <el-col :span="12">
                     <el-form-item label="上传车辆行驶证片：" :label-width="formLabelWidth" prop="drivingPermitFile"  class="b10">
-                    <div class="upload" v-if="editType == 'view'">
-                        <el-tooltip class="item" effect="dark" content="点击图片查看原图" placement="top">
-                      <img :src='templateModel.drivingPermitFile ? templateModel.drivingPermitFile : defaultImg' alt="" v-showPicture>
+                    <div class="upload" v-if="editType == 'view'" v-viewer>
+                        <el-tooltip class="item" effect="dark" content="双击图片查看原图" placement="top">
+                      <img :src='templateModel.drivingPermitFile ? templateModel.drivingPermitFile : defaultImg' alt="" >
                         </el-tooltip>
                       </div>
                         <upload class="licensePicture" tip="（必须为jpg/png并且小于5M）" v-model="templateModel.drivingPermitFile" v-else/>
@@ -215,9 +215,9 @@
               <el-row>
                   <el-col :span="12">
                     <el-form-item label="上传驾驶证照片：" :label-width="formLabelWidth" prop="drivingLicenceFile" class="b10">
-                       <div class="upload" v-if="editType == 'view'">
-                    <el-tooltip class="item" effect="dark" content="点击图片查看原图" placement="top">
-                      <img :src='templateModel.drivingLicenceFile ? templateModel.drivingLicenceFile : defaultImg' alt="" v-showPicture>
+                       <div class="upload" v-if="editType == 'view'" v-viewer>
+                    <el-tooltip class="item" effect="dark" content="双击图片查看原图" placement="top">
+                      <img :src='templateModel.drivingLicenceFile ? templateModel.drivingLicenceFile : defaultImg' alt="" >
                     </el-tooltip>
                       </div>
                        <upload class="licensePicture" tip="（必须为jpg/png并且小于5M）" v-model="templateModel.drivingLicenceFile" v-else/>
@@ -225,9 +225,9 @@
                   </el-col>
                   <el-col :span="12">
                     <el-form-item label="上传车主个人形象照：" :label-width="formLabelWidth" prop="takeIdCardFile" class="b10">
-                     <div class="upload" v-if="editType == 'view'">
-                         <el-tooltip class="item" effect="dark" content="点击图片查看原图" placement="top">
-                      <img :src='templateModel.takeIdCardFile ? templateModel.takeIdCardFile : defaultImg' alt="" v-showPicture>
+                     <div class="upload" v-if="editType == 'view'" v-viewer>
+                         <el-tooltip class="item" effect="dark" content="双击图片查看原图" placement="top">
+                      <img :src='templateModel.takeIdCardFile ? templateModel.takeIdCardFile : defaultImg' alt="" >
                          </el-tooltip>
                       </div>
                        <upload class="licensePicture" tip="（必须为jpg/png并且小于5M）" v-model="templateModel.takeIdCardFile" v-else/>
@@ -237,25 +237,24 @@
               <el-row>
                   <el-col :span="12">
                     <el-form-item label="上传车主身份证正面照片：" :label-width="formLabelWidth" prop="idCardFile" class="b10">
-                       <div class="upload" v-if="editType == 'view'">
-                        <el-tooltip class="item" effect="dark" content="点击图片查看原图" placement="top">
-                      <img :src='templateModel.idCardFile ? templateModel.idCardFile : defaultImg' alt="" v-showPicture>
+                       <div class="upload" v-if="editType == 'view'" v-viewer>
+                        <el-tooltip class="item" effect="dark" content="双击图片查看原图" placement="top">
+                      <img :src='templateModel.idCardFile ? templateModel.idCardFile : defaultImg' alt="" >
                         </el-tooltip>
                       </div>
                         <upload class="licensePicture" tip="（必须为jpg/png并且小于5M）" v-model="templateModel.idCardFile" v-else/>
                     </el-form-item>
                   </el-col>
-                  <el-col :span="12">
+                  <!-- <el-col :span="12">
                     <el-form-item label="上传车主身份证反面照片：" :label-width="formLabelWidth" prop="idCardFileOpposite" class="b10">
-                       <div class="upload" v-if="editType == 'view'">
-                        <el-tooltip class="item" effect="dark" content="点击图片查看原图" placement="top">
-                      <img :src='templateModel.idCardFileOpposite ? templateModel.idCardFileOpposite : defaultImg' alt="" v-showPicture>
+                       <div class="upload" v-if="editType == 'view'" v-viewer>
+                        <el-tooltip class="item" effect="dark" content="双击图片查看原图" placement="top">
+                      <img :src='templateModel.idCardFileOpposite ? templateModel.idCardFileOpposite : defaultImg' alt="" >
                         </el-tooltip>
                       </div>
                         <upload class="licensePicture" tip="（必须为jpg/png并且小于5M）" v-model="templateModel.idCardFileOpposite" v-else/>
                     </el-form-item>
-                  </el-col>
-
+                  </el-col> -->
               </el-row>
     
             </el-form>
@@ -551,14 +550,14 @@ export default {
         }   
 
         // 上传车主身份证反面照片校验 
-        const idCardFileOppositeValidator = (rule,val,cb)=>{
-            if(!val){
-            cb(new Error('请上传车主身份证反面照片'))
-            }
-            else{
-                cb()
-            }
-        }   
+        // const idCardFileOppositeValidator = (rule,val,cb)=>{
+        //     if(!val){
+        //     cb(new Error('请上传车主身份证反面照片'))
+        //     }
+        //     else{
+        //         cb()
+        //     }
+        // }   
         return{
             selectFlag:null,
             defaultImg:'/static/test.jpg',//默认第一张图片的url
@@ -589,7 +588,7 @@ export default {
                 drivingLicenceFile:null,
                 drivingPermitFile:null,
                 idCardFile:null,
-                idCardFileOpposite:null,
+                // idCardFileOpposite:null,
                 takeIdCardFile:null,
                 driverId:null,
                 provinceCode:null,
@@ -622,7 +621,7 @@ export default {
             drivingPermitFile:{validator: drivingPermitFileValidator, trigger:'change',required:true,},
             drivingLicenceFile:{validator: drivingLicenceFileValidator, trigger:'change',required:true,},
             idCardFile:{validator: idCardFileValidator, trigger:'change',required:true,},
-            idCardFileOpposite:{validator: idCardFileOppositeValidator, trigger:'change',required:true,},
+            // idCardFileOpposite:{validator: idCardFileOppositeValidator, trigger:'change',required:true,},
             takeIdCardFile:{validator: takeIdCardFileValidator, trigger:'change',required:true,},
             rewardGrade:{validator: rewardGradeValidator, trigger:'change',required:true,},
             commisionLevel:{validator: commisionLevelValidator, trigger:'change',required:true,},
@@ -640,7 +639,6 @@ export default {
                 this.templateModel.provinceCode=null
                 this.templateModel.cityCode=null
                 this.templateModel.areaCode=null
-                this.$emit('getData')
                 if(this.$refs.area)
                 {
                 this.$refs.area.clearData()
@@ -671,9 +669,6 @@ export default {
                         this.selectFlag='1'
                     }
                     },   
-        changeList(){
-            eventBus.$emit('changeListtwo')
-        },
         isVip(val){
             if(this.templateModel.isVipCar == '1'){
                 this.templateModel.isVipCar = '1'
@@ -771,21 +766,21 @@ export default {
                     if(this.editType === 'add'){
                         data_post_createDriver(forms).then(res=>{
                             this.$message.success('新增成功')
-                            this.changeList();
+                            this.$emit('getData')
                         }).catch(res=>{
                             this.$message.error('新增失败')
                         })
-                    } else if(this.editType=== 'valetAuth') { 
+                    } else if(this.editType=== 'valetAuth') {
                         data_post_driverAudit(forms).then(res=>{
                             this.$message.success('代客认证成功')
-                             this.changeList();
+                            this.$emit('getData')
                         }).catch(res=>{
                             this.$message.error('代客认证失败')
                         })
                     } else if(this.editType==='edit'){
                         data_put_changeDriver(forms).then(res=>{
                             this.$message.success('修改成功')
-                             this.changeList();
+                            this.$emit('getData')
                         }).catch(res=>{
                             this.$message.error('修改失败')
                         })

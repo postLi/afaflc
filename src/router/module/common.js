@@ -114,10 +114,10 @@ export default {
       {
         path: '/common/businessCity',
         icon: 'cheliangguanli',
-        hidden: true,
-        name: '业务城市',
+        hidden: false,
+        name: '开放城市',
         component: _import('common/businessCity/index'),
-        meta: { title: '业务城市', stitle: '城市', noCache: true }
+        meta: { title: '开放城市', stitle: '城市', noCache: true }
       },
 
   ]
