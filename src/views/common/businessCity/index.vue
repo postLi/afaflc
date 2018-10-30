@@ -1,13 +1,18 @@
 <template>
-    <div class="TwoColumns serviceArea clearfix" v-loading ="loading">
+    <div class="TwoColumns businessCity clearfix">
         <div class="columnsContainer">
             <div class="side_left">
                  <el-tree
+                 ref="treeForm"
+                 show-checkbox
                 :data="cityTree"
+                check-strictly
+                 node-key="code"
                 :props="defaultProps"
-                default-expand-all
+                :default-expand-all='treestatus'
                 :highlight-current = "true"
-                 @node-click="handleNodeClick"
+                @node-click="nodeClick"
+                @check-change="handleClick" 
                 >
                 </el-tree>
             </div>
@@ -37,8 +42,18 @@
                             <el-table-column
                             sortable
                             prop="name"
-                            label="区域">
+                            label="城市">
                             </el-table-column>
+                            <el-table-column
+                            sortable
+                            prop="name"
+                            label="城市Code">
+                            </el-table-column>
+                            <el-table-column
+                            sortable
+                            prop="name"
+                            label="创建时间">
+                            </el-table-column>                            
                         </el-table>
                     </div>
                 </div>
@@ -50,9 +65,8 @@
 </template>
 
 <script type="text/javascript">
-
-import {  data_GetCityInfo, data_ChangeStatus, data_Delete } from '@/api/server/areaPrice.js'
-// import { aflcProvinceCode,data_get_aflcCityTree_list } from '@/api/common.js'
+import { data_getProvinceList,data_GetCityList } from '@/api/common.js'
+import { data_CityList,data_AddCity } from '@/api/company/businessCity.js'
 import Pager from '@/components/Pagination/index'
 import { parseTime } from '@/utils/'
 import '@/styles/dialog.scss'
@@ -61,12 +75,8 @@ import '@/styles/side.scss'
 export default{
       data() {
           return {
-            loading:true,
+              treestatus:false,
               cityTree:[],
-              dialogAreaPrice:false,
-              isModify:false,
-              formtitle:'',
-              reviseForm:{},
               btnsize: 'mini',
               sizes: [20, 50, 100],
               cityName: '', // 省级列表
@@ -87,52 +97,77 @@ export default{
 
       mounted() {
             this.firstblood()
+            this.getMoreInformation()
         },
-    
+      updated(){
+            this.cityTree.forEach(item=>{
+                if(item.name=='北京市'){
+                    item.children = [{
+                        name:'北京城区',
+                        code:'110100',
+                        parentCode:'110100'
+                    }]
+                }
+                if(item.name=='天津市'){
+                    item.children = [{
+                        name:'天津城区',
+                        code:'120100',
+                        parentCode:'120100'
+                    }]
+                }
+                if(item.name=='上海市'){
+                    item.children = [{
+                        name:'上海城区',
+                        code:'310100',
+                        parentCode:'310100'
+                    }]
+                }
+                if(item.name=='重庆市'){
+                    item.children = [{
+                        name:'重庆城区',
+                        code:'500100',
+                        parentCode:'500100'
+                    }]
+                }
+                else{
+                data_GetCityList(item.code).then(res=>{
+                     item.children = res.data.list;
+                })
+                }
+     
+            })
+        
+           console.log('this.cityTree',this.cityTree)
+       },
       methods: {
-            shuaxin(){
-                this.getCommonFunction();
-            },
-            handlePageChange(obj) {
-              this.page = obj.pageNum
-                this.pagesize = obj.pageSize
-                this.getCommonFunction()
-            },
             // 刷新页面
             firstblood() {
-                aflcProvinceCode().then(res => {
-                    console.log('aflcProvinceCode',res)
-                    this.cityTree = res.data;
-                    this.cityName = this.cityTree[0].name; 
-                    this.getCommonFunction();
-                })
             },
-            // 查询和获取对应区域的数据
-            getCommonFunction() {
-                this.loading = true;
-                // const data = Object.assign({}, { name:this.cityName })
-                // data_get_aflcCityTree_list(this.page, this.pagesize, data).then(res => {
-                //   console.log(res.data.list)
-                //     this.tableData = res.data.list;
-                //     this.dataTotal = res.data.totalCount;
-                //     this.loading = false;
-                // }).catch(err => {
-                //     this.$message({
-                //         type: 'info',
-                //         message: '操作失败，原因：' + err.errorInfo ? err.errorInfo : err.text
-                //     })
-                //     this.loading = false;
-                // })
+            getMoreInformation(){
+           data_getProvinceList().then(res=>{
+            if(res.text == '请求成功' && res.data.list.length >0 ){
+                this.cityTree = res.data.list.map(el => {
+                    el.children = []
+                    return el
+                });
+            }else{
+                this.cityTree = null;
+            }
+            })
+
             },
-            handleNodeClick(data, checked) {
-                if (checked.level === 1) {
-                    this.cityName = data.name;
-                }
-                if (checked.level === 2) {
-                    this.cityName =  data.name ;
-                }
-                this.getCommonFunction()
+            handleClick(data, checked, node){
+                 if(checked == true){
+                     this.checkedId = data.id;
+                     this.$refs.treeForm.setCheckedNodes([data]);
+                 }
             },
+            nodeClick(data,checked,node){
+                this.checkedId = data.id
+                this.$refs.treeForm.setCheckedNodes([data]);
+                
+            },
+
             // 点击选中当前行
             clickDetails(row, event, column) {
               this.$refs.multipleTable.toggleRowSelection(row)
@@ -141,15 +176,34 @@ export default{
             getinfomation(selection) {
               this.checkedinformation = selection
             },
+            // 每页显示数据量变更
+            handlePageChange(obj) {
+            this.page = obj.pageNum
+            this.pagesize = obj.pageSize
+            this.firstblood()
+            },
         }
     }
 </script>
 
 <style type="text/css" lang="scss">
-    .serviceArea{
+    .businessCity{
         height:100%;    
         position: relative;
         margin-left:7px;
         padding-bottom: 40px;
+        .side_left{
+        height: 90%
+        }
+        .el-tree-node__content{
+        .el-checkbox{
+            display: none;
+        }
+        }
+        .el-tree-node__children{
+            .el-checkbox{
+                display: block
+            }
+        }
     }
 </style>

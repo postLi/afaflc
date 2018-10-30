@@ -188,9 +188,9 @@
               </el-col>
             </el-row>
             <div class="data_pic">
-                <div class="data_pic_callingcode data_pic_c">
-                    <el-tooltip class="item" effect="dark" content="点击图片查看原图" placement="top">
-                <div class="uploadImgBox"><img  class="picURL" :src="templateModel.carFile ? templateModel.carFile : defaultImg" v-showPicture/></div>
+                <div class="data_pic_callingcode data_pic_c" v-viewer>
+                    <el-tooltip class="item" effect="dark" content="双击图片查看原图" placement="top">
+                <div class="uploadImgBox"><img  class="picURL" :src="templateModel.carFile ? templateModel.carFile : defaultImg" /></div>
                     </el-tooltip>
                     <h2>车辆45°</h2>
                     <el-form-item prop="radio1">
@@ -201,9 +201,9 @@
                       </el-radio-group>
                     </el-form-item> 
                 </div>
-                <div class="data_pic_callingcode data_pic_c">
-                    <el-tooltip class="item" effect="dark" content="点击图片查看原图" placement="top">
-              <div class="uploadImgBox"><img  class="picURL" :src="templateModel.drivingPermitFile ? templateModel.drivingPermitFile : defaultImg" v-showPicture/></div>
+                <div class="data_pic_callingcode data_pic_c" v-viewer>
+                    <el-tooltip class="item" effect="dark" content="双击图片查看原图" placement="top">
+              <div class="uploadImgBox"><img  class="picURL" :src="templateModel.drivingPermitFile ? templateModel.drivingPermitFile : defaultImg" /></div>
                     </el-tooltip>
                     <h2>行驾证</h2>
                     <el-form-item prop="radio2">
@@ -216,9 +216,9 @@
                 </div>
                 </div>
                 <div class="data_pic">
-                <div class="data_pic_callingcode data_pic_c">
-                    <el-tooltip class="item" effect="dark" content="点击图片查看原图" placement="top">
-                 <div class="uploadImgBox"><img  class="picURL" :src="templateModel.drivingLicenceFile ? templateModel.drivingLicenceFile : defaultImg" v-showPicture/></div>
+                <div class="data_pic_callingcode data_pic_c" v-viewer>
+                    <el-tooltip class="item" effect="dark" content="双击图片查看原图" placement="top">
+                 <div class="uploadImgBox"><img  class="picURL" :src="templateModel.drivingLicenceFile ? templateModel.drivingLicenceFile : defaultImg" /></div>
                     </el-tooltip>
                     <h2>驾驶证</h2>
                     <el-form-item prop="radio3">
@@ -229,9 +229,9 @@
                       </el-radio-group>
                     </el-form-item>
                 </div>
-                <div class="data_pic_callingcode data_pic_c">
-                    <el-tooltip class="item" effect="dark" content="点击图片查看原图" placement="top">
-                  <div class="uploadImgBox"> <img  class="picURL" :src="templateModel.takeIdCardFile ? templateModel.takeIdCardFile : defaultImg" v-showPicture/></div>
+                <div class="data_pic_callingcode data_pic_c" v-viewer>
+                    <el-tooltip class="item" effect="dark" content="双击图片查看原图" placement="top">
+                  <div class="uploadImgBox"> <img  class="picURL" :src="templateModel.takeIdCardFile ? templateModel.takeIdCardFile : defaultImg" /></div>
                     </el-tooltip>
                     <h2>手持身份证</h2>
                     <el-form-item prop="radio3">
@@ -244,9 +244,9 @@
                 </div>
                  </div>
                 <div class="data_pic">
-                <div class="data_pic_callingcode data_pic_c">
-                    <el-tooltip class="item" effect="dark" content="点击图片查看原图" placement="top">
-                  <div class="uploadImgBox"><img  class="picURL" :src="templateModel.idCardFile ? templateModel.idCardFile : defaultImg" v-showPicture/></div>
+                <div class="data_pic_callingcode data_pic_c" v-viewer>
+                    <el-tooltip class="item" effect="dark" content="双击图片查看原图" placement="top">
+                  <div class="uploadImgBox"><img  class="picURL" :src="templateModel.idCardFile ? templateModel.idCardFile : defaultImg" /></div>
                     </el-tooltip>
                     <h2>身份证正面</h2>
                     <el-form-item prop="radio3">
@@ -257,9 +257,9 @@
                       </el-radio-group>
                     </el-form-item>
                 </div>
-                <div class="data_pic_callingcode data_pic_c">
-                    <el-tooltip class="item" effect="dark" content="点击图片查看原图" placement="top">
-                  <div class="uploadImgBox"><img  class="picURL" :src="templateModel.idCardFileOpposite ? templateModel.idCardFileOpposite : defaultImg" v-showPicture/></div>
+                <!-- <div class="data_pic_callingcode data_pic_c" v-viewer>
+                    <el-tooltip class="item" effect="dark" content="双击图片查看原图" placement="top">
+                  <div class="uploadImgBox"><img  class="picURL" :src="templateModel.idCardFileOpposite ? templateModel.idCardFileOpposite : defaultImg" /></div>
                     </el-tooltip>
                     <h2>身份证反面</h2>
                     <el-form-item prop="radio3">
@@ -269,7 +269,7 @@
                         <el-radio label="内容不符">内容不符</el-radio>
                       </el-radio-group>
                     </el-form-item>
-                </div>
+                </div> -->
 
             </div>
           </el-form>
@@ -557,7 +557,8 @@ export default {
   },
   computed: {
             pictureValue () {
-            return {'车辆45°':this.radio1 ,'行驾证': this.radio2,'驾驶证':this.radio3 , '手持身份证':this.radio5,'身份证正面':this.radio4,'身份证反面':this.radio6}
+            return {'车辆45°':this.radio1 ,'行驾证': this.radio2,'驾驶证':this.radio3 , '手持身份证':this.radio5,'身份证正面':this.radio4}
+            // return {'车辆45°':this.radio1 ,'行驾证': this.radio2,'驾驶证':this.radio3 , '手持身份证':this.radio5,'身份证正面':this.radio4,'身份证反面':this.radio6}
             }
         },  
   mounted(){
@@ -571,7 +572,6 @@ export default {
                 this.templateModel.provinceCode=null
                 this.templateModel.cityCode=null
                 this.templateModel.areaCode=null
-                this.$emit('getData') 
                 this.radio1 = ''
                 this.radio2 = ''
                 this.radio3 = ''
@@ -677,10 +677,10 @@ export default {
         }
       },
             completeData(){
-                  if(this.radio6==''){
-                      this.$message.info('请勾选身份证反面照片审核结果');
-                      return false
-                  }   
+                //   if(this.radio6==''){
+                //       this.$message.info('请勾选身份证反面照片审核结果');
+                //       return false
+                //   }   
                   if(this.radio4==''){
                       this.$message.info('请勾选身份证照片审核结果');
                       return false
@@ -714,10 +714,15 @@ export default {
                 this.$refs['templateModel'].validate((valid)=>{
                 console.log(this.radio1,this.radio2,this.radio3,this.radio4,this.radio5)
                 if(valid){
-                    if(this.radio1=='上传合格'&&this.radio2=='上传合格'&&this.radio3=='上传合格'&&this.radio4=='上传合格'&&this.radio5=='上传合格'&&this.radio6=='上传合格')
+                    if(this.radio1=='上传合格'&&this.radio2=='上传合格'&&this.radio3=='上传合格'&&this.radio4=='上传合格'&&this.radio5=='上传合格')
                     {
                      this.$message.error('图片审核中图片全部合格，不能进行审核不通过处理')
                     }
+
+                    // if(this.radio1=='上传合格'&&this.radio2=='上传合格'&&this.radio3=='上传合格'&&this.radio4=='上传合格'&&this.radio5=='上传合格'&&this.radio6=='上传合格')
+                    // {
+                    //  this.$message.error('图片审核中图片全部合格，不能进行审核不通过处理')
+                    // }
                     else{
                     this.templateModel.carLength=parseFloat(this.templateModel.carLength).toFixed(2)
                     this.templateModel.carWidth=parseFloat(this.templateModel.carWidth).toFixed(2)
@@ -726,7 +731,7 @@ export default {
                     this.freezeDialogFlag = false;
                     data_post_audit(forms).then(res=>{
                         this.$message.success('审核不通过提交')
-                        this.changeList()
+                        this.$emit('getData') 
                     }).catch(err=>{
                         console.log(err)
                     })
@@ -748,8 +753,12 @@ export default {
                     else{
                 this.$refs['templateModel'].validate((valid)=>{
                     if(valid){
-                    if(this.radio1=='上传合格'&&this.radio2=='上传合格'&&this.radio3=='上传合格'&&this.radio4=='上传合格'&&this.radio5=='上传合格'&&this.radio6=='上传合格')
+                    // if(this.radio1=='上传合格'&&this.radio2=='上传合格'&&this.radio3=='上传合格'&&this.radio4=='上传合格'&&this.radio5=='上传合格'&&this.radio6=='上传合格')
+                    // {
+
+                    if(this.radio1=='上传合格'&&this.radio2=='上传合格'&&this.radio3=='上传合格'&&this.radio4=='上传合格'&&this.radio5=='上传合格')
                     {
+
                         this.templateModel.carLength=parseFloat(this.templateModel.carLength).toFixed(2)
                         this.templateModel.carWidth=parseFloat(this.templateModel.carWidth).toFixed(2)
                         this.templateModel.carHeight= parseFloat(this.templateModel.carHeight).toFixed(2)
@@ -757,7 +766,7 @@ export default {
                         this.freezeDialogFlag = false;
                         data_post_audit(forms).then(res=>{
                             this.$message.success('审核通过成功')
-                            this.changeList()
+                            this.$emit('getData') 
                         }).catch(err=>{
                             console.log(err)
                         })
