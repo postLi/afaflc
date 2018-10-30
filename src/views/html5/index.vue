@@ -1371,7 +1371,8 @@
                 t = t.data.aflcOrderCarTrails;
                 console.log('ttt',t)
                 if (t != null && t.length > 0) {
-                    t = t[t.length - 1];
+                    // t = t[t.length - 1];
+                    t = t[0];
                 } else
                     t = null;
                 if (t != null)

@@ -83,7 +83,7 @@
                             v-model="standForm.waitPriceDes">
                         </el-input>
                         <p class="countNum">
-                             <span class="">{{standForm.waitPriceDes.length}}</span> <span>/ {{maxlengthNum}}</span> 
+                             <span class="">{{standForm.waitPriceDes ? standForm.waitPriceDes.length : 0}}</span> <span>/ {{maxlengthNum}}</span> 
                         </p>
                     </el-form-item>
                 </div>
@@ -157,7 +157,7 @@
                                 v-model="reviseForm.waitPriceDes">
                             </el-input>
                             <p class="countNum">
-                                <span class="">{{reviseForm.waitPriceDes.length}}</span> <span>/ {{maxlengthNum}}</span> 
+                                <span class="">{{reviseForm.waitPriceDes ? reviseForm.waitPriceDes.length : 0}}</span> <span>/ {{maxlengthNum}}</span> 
                             </p>
                         </el-form-item>
                     </div>

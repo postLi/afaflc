@@ -3,15 +3,6 @@ import axios from 'axios'
 const baseurl_two = 'aflc-common'
 const baseurl = 'aflcsmservice'
 
-
-let timeout = 1000 * 15;
-let timeOut = {timeout};
-// 通用接口
-export const postApi = (url,params) => { return axios.post(url, params,timeOut).then(res => res); };
-export const putApi = (url,params) => { return axios.put(url, params,timeOut).then(res => res); };
-export const deleteApi = url => { return axios.delete(url,timeOut).then(res => res); };
-export const getApi = url => { return axios.get(url,timeOut).then(res => res); };
-
 /**
  * 获取城市数据
  */

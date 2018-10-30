@@ -4,7 +4,7 @@ const _import = require('../_import_' + process.env.NODE_ENV)
 export default {
   path: '/sm',
   component: Layout,
-  redirect: '/sm/xiaohuoche/areaPrice',
+  redirect: '/sm/xiaohuoche/standardPrice',
   icon: 'yunyingguanli',
   name: '服务管理',
   noDropdown: true,

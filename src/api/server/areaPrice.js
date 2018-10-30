@@ -1,8 +1,8 @@
 import fetch from '@/utils/fetch'
 
-const baseurl = "aflcsmservice-wtc"
+const baseurl = "aflcsmservice"
 
-const baseurl_two = "aflccommonservice-wtc"
+const baseurl_two = "aflccommonservice"
 
 
 //根据id获取服务区域定价  he  查询功能

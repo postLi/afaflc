@@ -236,6 +236,12 @@ export default{
                     this.cityTree = res.data;
                     this.provinceId = this.cityTree[0].code; 
                     this.getCommonFunction();
+                }).catch(err =>{
+                    this.$message({
+                        type: 'info',
+                        message: '操作失败，原因：' + err.errorInfo ? err.errorInfo : err.text
+                    })
+                    this.loading = false;
                 })
             },
             // 查询和获取对应区域的数据

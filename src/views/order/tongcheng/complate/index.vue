@@ -100,7 +100,7 @@
                             prop="driverMobile"
                             width="250">
                             <template slot-scope="scope">
-                                <p>{{scope.row.aflcDriverStatus.driverMobile}}<span v-if="scope.row.aflcDriverStatus.driverName">-</span>{{scope.row.aflcDriverStatus.driverName}}<span v-if="scope.row.aflcDriverStatus.carNumber">-</span>{{scope.row.aflcDriverStatus.carNumber}}</p>    
+                                {{scope.row.aflcDriverStatus.driverMobile}}{{scope.row.aflcDriverStatus.driverName ? '-' + scope.row.aflcDriverStatus.driverName : ''}}{{scope.row.aflcDriverStatus.carNumber ? "-" + scope.row.aflcDriverStatus.carNumber : ''}}
                             </template>
                         </el-table-column>
                         <el-table-column

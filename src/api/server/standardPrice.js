@@ -15,7 +15,6 @@ export function data_GetInformation(page,pagesize,data) {
     })
   }
 
-
 //获取车辆类型列表
 export function data_CarList(){
     return fetch.get('/'+baseurl+'/sm/aflcSysDict/v1/getCarTypeList') 
