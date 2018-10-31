@@ -2,7 +2,9 @@
     <div class="identicalStyle" v-loading="loading">
               <el-form :inline="true"  class="demo-ruleForm classify_searchinfo">
                 <el-form-item label="所在地：">
-                <GetCityList ref="area" v-model="formInline.belongCityName"  @returnStr="getStr"></GetCityList>
+                <vregion :ui="true"  @values="regionChange" class="form-control">
+                    <el-input v-model="belongCityName" placeholder="请选择"></el-input>
+                </vregion>
                 </el-form-item>
                 <el-form-item label="车牌号：">
                     <el-input placeholder="请输入内容" v-model.trim="formInline.carNumber" clearable></el-input>
@@ -116,7 +118,7 @@
 </template>
 <script type="text/javascript">
     import {data_get_driver_list,data_get_driver_status} from '../../../api/users/carowner/total_carowner.js'
-    import GetCityList from '@/components/GetCityList/city'
+    import vregion from '@/components/vregion/Region'
     import { eventBus } from '@/eventBus'
     import { parseTime,formatTime } from '@/utils/index.js'
     import DriverNewTemplate from '../carowner/driver-newTemplate'
@@ -129,7 +131,7 @@
             }
         },
         components:{
-            GetCityList,
+            vregion,
             DriverNewTemplate,
             Pager
         },
@@ -146,8 +148,8 @@
                     carNumber:null,
                     belongCity:null,
                     belongCityName:null,
-
                 },
+                belongCityName:null,
                 tableDataTree:[],//定义列表记录
                 optionsService:[//状态
                      {
@@ -186,8 +188,20 @@
         },
   
         methods:{
-            getStr(val){
-                this.formInline.belongCity = val.area.code;
+            regionChange(d) {
+                console.log('data:',d)
+                this.belongCityName = (!d.province&&!d.city&&!d.area&&!d.town) ? '': `${this.getValue(d.province)}${this.getValue(d.city)}${this.getValue(d.area)}${this.getValue(d.town)}`.trim();
+                if(d.area){
+                    this.formInline.areaCode = d.area.name;
+                }else if(d.city){
+                    this.formInline.cityCode = d.city.name;
+                }
+                else{
+                    this.formInline.provinceCode = d.province.name;
+                }
+            },
+             getValue(obj){
+                return obj ? obj.value:'';
             },
             clearSearch(){
                 this.formInline={//查询条件
@@ -197,12 +211,10 @@
                     belongCity:null,
                     belongCityName:null,
                 }
+                this.belongCityName=null
                 if(this.page!= 1){
                     this.page = 1;
-                    this.$refs.pager.inputval = this.page;
-                    this.$refs.pager.pageNum = this.page;
                 }
-             this.$refs.area.clearData()   
              this.firstblood()    
             },
             handlePageChange(obj) {
@@ -232,8 +244,6 @@
             //点击查询按纽，按条件查询列表
             getdata_search(event){
             this.page = 1;
-            this.$refs.pager.inputval = this.page;
-            this.$refs.pager.pageNum = this.page;
             this.firstblood()
             },
 

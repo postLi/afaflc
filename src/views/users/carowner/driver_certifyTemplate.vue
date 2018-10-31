@@ -22,16 +22,11 @@
                     </el-form-item>
                 </el-col>
                 <el-col :span="12">
-               <span v-if="!selectFlag">
-              <el-form-item label="所在地 ："  :label-width="formLabelWidth"  prop="belongCityName">
-                        <el-input v-model="templateModel.belongCityName" placeholder="请选择" :disabled="editType=='view'" @focus="changeSelect"></el-input>
+              <el-form-item label="所在地 ："  :label-width="formLabelWidth" prop="belongCityName">
+                    <vregion :ui="true"  @values="regionChange" class="form-control" >
+                        <el-input v-model="templateModel.belongCityName" placeholder="请选择" ></el-input>
+                    </vregion>
               </el-form-item>
-              </span>   
-              <span v-else>   
-              <el-form-item label="所在地 ："  :label-width="formLabelWidth" prop="belongCity">
-                <GetCityList ref="area" v-model="templateModel.belongCity"  @returnStr="getStr"></GetCityList>
-              </el-form-item>
-               </span> 
                 </el-col>
             </el-row>
 
@@ -356,9 +351,14 @@ export default {
             if(!(IdTest.test(val))){
                 cb(new Error('请输入正确的身份证'))
             }
-            else {
-                cb()
-            }
+            else{
+                data_post_checkDriverCardid(val).then(res=>{
+                 cb()
+                }).catch(err=>{
+                    console.log(err)
+                        cb(new Error('该身份证已经注册~'))
+                })
+        }
         }
     //    选择所在地校验
         const belongCityNameValidator = (rule, val, cb) => {
@@ -490,7 +490,6 @@ export default {
             }
         }   
     return{
-        selectFlag:null,
         pickerOptions:{
         disabledDate(time) {
         return time.getTime() < Date.now();}},
@@ -567,7 +566,6 @@ export default {
         freezeDialogFlag:{
         handler: function(val, oldVal) {
             if(!val){
-                this.selectFlag=null
                 this.$refs.templateModel.resetFields();
                 this.templateModel.provinceCode=null
                 this.templateModel.cityCode=null
@@ -590,22 +588,24 @@ export default {
         }
         },
   methods:{
-     // 省市区选择
-     getStr(val){
-                this.templateModel.belongCity= val.area.code
-                this.templateModel.belongCityName = val.province.name+val.city.name+val.area.name
-                this.templateModel.provinceCode = val.province.name
-                this.templateModel.cityCode = val.city.name
-                this.templateModel.areaCode = val.area.name
-            },     
-        // 省市状态表
-     changeSelect(){
-                    if(this.editType=='add'){
-                        this.selectFlag = null
-                    } else{
-                        this.selectFlag = '1'
-                    }
-                    },  
+    regionChange(d) {
+        console.log('data:',d)
+        this.templateModel.belongCityName = (!d.province&&!d.city&&!d.area&&!d.town) ? '': `${this.getValue(d.province)}${this.getValue(d.city)}${this.getValue(d.area)}${this.getValue(d.town)}`.trim();
+        if(d.area){
+            this.templateModel.areaCode = d.area.name;
+            this.templateModel.belongCity = d.area.code;
+        }else if(d.city){
+            this.templateModel.belongCity = d.city.code;
+            this.templateModel.cityCode = d.city.name;
+        }
+        else{
+            this.templateModel.belongCity = d.province.code;
+            this.templateModel.provinceCode = d.province.name;
+        }
+    },
+    getValue(obj){
+        return obj ? obj.value:'';
+    },    
     change(){
       this.freezeDialogFlag!=this.freezeDialogFlag
     },

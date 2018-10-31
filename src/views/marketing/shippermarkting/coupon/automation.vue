@@ -242,7 +242,7 @@ export default {
             },
             getStr(val){
                 console.log('this.cityarr',val,name)
-                this.formAllData.areaCode = val.area.name
+                this.formAllData.areaCode = val.area.code
             }, 
             //每页显示数据量变更
             handlePageChange(obj) {
@@ -291,7 +291,6 @@ export default {
         },
             // 判断选中与否
             getSelection(val){
-            console.log('选中内容',val)
             this.selectRowData = val;
             },
             //点击选中当前行

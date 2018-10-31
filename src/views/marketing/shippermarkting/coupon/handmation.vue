@@ -239,7 +239,7 @@ export default {
             },
             getStr(val){
                 console.log('this.cityarr',val,name)
-                this.formAllData.areaCode = val.area.name
+                this.formAllData.areaCode = val.area.code
             }, 
             //每页显示数据量变更
             handlePageChange(obj) {

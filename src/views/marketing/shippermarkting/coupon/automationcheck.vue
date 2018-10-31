@@ -258,7 +258,7 @@
             </el-table> 
             </div>
          <!-- 页码 -->
-        <div class="info_tab_footer">共计:{{ dataTotal }} <div class="show_pager"> <Pager :total="dataTotal" @change="handlePageChange"  :sizes="sizes"></Pager></div> </div>
+        <div class="info_tab_footer">共计:{{ dataTotal }} <div class="show_pager"> <Pager :total="dataTotal" @change="handlePageChange"  :sizes="sizes" ref="pager"></Pager></div> </div>
              </div>
             </el-tab-pane>            
     </el-tabs>
@@ -455,7 +455,12 @@ export default {
         activityId:this.templateItem.id,
        }
        this.grantTimeAll = null;
-        this.firstblood();
+        if(this.page!= 1){
+            this.page = 1;
+            this.$refs.pager.inputval = this.page;
+            this.$refs.pager.pageNum = this.page;
+        }
+       this.firstblood();
    },
    openDialog(){
        this.dialogFormVisible_add = true;
@@ -739,7 +744,7 @@ export default {
             width: 100%;
             text-align: left;
             .el-input{width: 70px!important;}
-            .show_pager{float: right}
+            .show_pager{position:absolute;right: 0px;top:0px;}
             .page-select{top:5px;
             .el-input__inner{
             height: 30px;

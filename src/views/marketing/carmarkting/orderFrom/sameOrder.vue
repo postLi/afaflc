@@ -150,7 +150,7 @@ export default {
     methods:{
       getStr(val){
                 console.log('this.cityarr',val,name)
-                this.formAllData.areaCode = val.area.name
+                this.formAllData.areaCode = val.area.code
             },
             //获取  服务和车辆 类型列表
             getMoreInformation(){
