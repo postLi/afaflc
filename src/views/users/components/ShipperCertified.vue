@@ -62,7 +62,7 @@
 
        <!--认证审核部分 -->
     <div class="shippercertifed commoncss">
-        <el-dialog title="认证审核" :visible.sync="RZdialogFormVisible" top="5vh" v-if="Object.keys(shengheform).length != 0">
+        <el-dialog title="认证审核" :visible.sync="RZdialogFormVisible" :close-on-click-modal="false" top="5vh" v-if="Object.keys(shengheform).length != 0">
           <el-form :model="shengheform" ref="shengheform" :rules="shengheformRules"  label-position="right" :label-width="formLabelWidth">
             <el-row>
               <el-col :span="12">

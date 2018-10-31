@@ -32,7 +32,6 @@
                 ref="multipleTable"
                 stripe
                 height="100%"
-                :default-sort = "{prop: 'pointName', order: 'descending'}"
                 border
                 style="width: 100%">
                     <el-table-column

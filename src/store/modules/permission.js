@@ -62,9 +62,9 @@ const permission = {
         // 暂时给于全部权限，等后台权限体系建立好再对接设置
        // accessedRouters = asyncRouterMap
 
-        if (roles.length == 0) {
-            accessedRouters = asyncRouterMap
-        } else {
+        // if (roles.length == 0) {
+        //     accessedRouters = asyncRouterMap
+        // } else {
             accessedRouters = filterAsyncRouter(asyncRouterMap, roles);
             // console.log('accessedRoutersList', accessedRouters)
             accessedRouters.map(el => {
@@ -83,7 +83,7 @@ const permission = {
               }
             })
             // console.log('accessedRouters:',accessedRouters)
-        }
+        // }
         commit('SET_ROUTERS', accessedRouters)
         resolve()
       })

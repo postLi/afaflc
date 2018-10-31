@@ -170,6 +170,16 @@ export default {
                 })
             }
         }
+        var checkLocation = (rule,value,callback) => {
+            console.log('this.xinzengform.cityCode',this.xinzengform.provinceCode,this.xinzengform.cityCode)
+            if (value == '') {
+                callback(new Error('请输入出发地'));
+            }else if(this.xinzengform.cityCode == '' && this.xinzengform.provinceCode !=  '北京市' && this.xinzengform.provinceCode !=  '天津市' && this.xinzengform.provinceCode !=  '重庆市' && this.xinzengform.provinceCode !=  '上海市' ){
+                callback(new Error('至少选择到市级范围'));
+            }else{
+                callback();
+            }
+        };
         return{
         defaultImg:'/static/test.jpg',//默认第一张图片的url
         identifiy:'企业货主',
@@ -208,7 +218,7 @@ export default {
             ],
             contacts:{required: true, message:'请输入联系人', trigger:'change'},
             mobile:{required:true,validator: mobileValidator, trigger:'blur'},
-            belongCityName:{required:true, message:'请选择所属地区', trigger:'change'},
+            belongCityName:{required:true, validator:checkLocation, trigger:'change'},
             companyFacadeFile:{required:true, message:'请上传公司或者档口照片', trigger:'blur'},
             shipperCardFile:{required:true, message:'请上传发货人名片照片', trigger:'blur'}
         },
@@ -238,8 +248,8 @@ export default {
             this.xinzengform.cityCode = d.city.name;
         }
         else{
-            this.xinzengform.belongCity = d.province.code;
-            this.xinzengform.provinceCode = d.province.name;
+            this.xinzengform.belongCity = d.province ? d.province.code : '';
+            this.xinzengform.provinceCode = d.province ? d.province.name : '';
         }
     },
     getValue(obj){
@@ -288,7 +298,7 @@ export default {
         this.$emit('update:dialogFormVisible_add', false);
     },
     closeMe(done){
-        this.$refs.xinzengform.resetFields();
+        // this.$refs.xinzengform.resetFields();
         if (typeof done === 'function') {
             done()
         }

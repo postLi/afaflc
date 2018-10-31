@@ -153,10 +153,9 @@
                 </el-table>
                 <el-pagination
                     background
-                    @size-change="handleSizeChange"
                     @current-change="handleCurrentChange"
                     :page-sizes="size"
-                    layout="total, sizes, prev, pager, next, jumper"
+                    layout="total,prev, pager, next, jumper"
                     :total="complainTotalCount">
                 </el-pagination>
             </div>

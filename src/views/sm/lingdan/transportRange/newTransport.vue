@@ -453,7 +453,7 @@ export default {
             }else if(d.city){
                 this.ruleForm.startLocationCode = d.city.code;
             }else{
-                this.ruleForm.startLocationCode = d.province.code;
+                this.ruleForm.startLocationCode = d.province ? d.province.code :'';
             }
         },
         regionChangeEnd(d) {

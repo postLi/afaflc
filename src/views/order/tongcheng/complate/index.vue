@@ -151,7 +151,7 @@
                             :show-overflow-tooltip="true"
                             width="250">
                             <template  slot-scope="scope">
-                                {{ scope.row.aflcOrderAddresses[0].viaAddress }}
+                                {{ scope.row.aflcOrderAddresses[0].viaAddressName }}
                             </template>
                         </el-table-column>
                         <el-table-column
@@ -161,7 +161,7 @@
                             :show-overflow-tooltip="true"
                             width="250">
                             <template  slot-scope="scope">
-                                {{ scope.row.aflcOrderAddresses[scope.row.aflcOrderAddresses.length-1].viaAddress }}
+                                {{ scope.row.aflcOrderAddresses[scope.row.aflcOrderAddresses.length-1].viaAddressName }}
                             </template>
                         </el-table-column>
                         <!-- <el-table-column
@@ -173,7 +173,7 @@
                                     <span v-if="idx == 0">发货地：</span>
                                     <span v-else-if="idx == scope.row.aflcOrderAddresses.length-1">收货地：</span>
                                     <span v-else>途径地{{ scope.row.aflcOrderAddresses.length >3 ? idx : ''}}：</span>
-                                    {{obj.viaAddress}}
+                                    {{obj.viaAddressName}}
                                 </p>
                             </template>
                         </el-table-column> -->

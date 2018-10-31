@@ -90,24 +90,24 @@
                         </el-table-column>
                          <el-table-column
                             sortable
-                            prop="usedCarType"
+                            prop=""
                             label="取消时间"
                             width="160">
-                                <template  slot-scope="scope">
+                                <!-- <template  slot-scope="scope">
                                     <span>
                                         {{ scope.row.useCarTime | parseTime}}    
                                     </span>
-                                </template>
+                                </template> -->
                         </el-table-column>
                          <el-table-column
                             sortable
-                            prop="usedCarType"
+                            prop=""
                             label="取消原因"
                             width="150">
                         </el-table-column>
                          <el-table-column
                             sortable
-                            prop="usedCarType"
+                            prop=""
                             label="取消类型"
                             width="120">
                         </el-table-column>
@@ -159,7 +159,7 @@
                             :show-overflow-tooltip="true"
                             width="250">
                             <template  slot-scope="scope">
-                                {{ scope.row.aflcOrderAddresses[0].viaAddress }}
+                                {{ scope.row.aflcOrderAddresses[0].viaAddressName }}
                             </template>
                         </el-table-column>
                         <el-table-column
@@ -169,7 +169,7 @@
                             :show-overflow-tooltip="true"
                             width="250">
                             <template  slot-scope="scope">
-                                {{ scope.row.aflcOrderAddresses[scope.row.aflcOrderAddresses.length-1].viaAddress }}
+                                {{ scope.row.aflcOrderAddresses[scope.row.aflcOrderAddresses.length-1].viaAddressName }}
                             </template>
                         </el-table-column>
                         <!-- <el-table-column

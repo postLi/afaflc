@@ -36,36 +36,52 @@
             <h2>绑定车主</h2>
             <div class="essentialInformation_table">
                 <el-table
-                    :data="tableData"
+                    :data="driverShipperData"
                     border
                     style="width: 100%">
+                    <el-table-column label="序号"  width="80">
+                        <template slot-scope="scope">
+                            {{ (driverObj.currentPage - 1) * driverObj.pageSize + scope.$index + 1 }}
+                        </template>
+                    </el-table-column>  
                     <el-table-column
                     prop="date"
                     label="车主账号"
-                    width="180">
+                    >     
+                        <template slot-scope="scope">
+                            {{scope.row.driverPhone ? scope.row.driverPhone :''}}{{scope.row.driverName ? '/'+scope.row.driverName :''}}{{scope.row.carTypeName ? '/'+scope.row.carTypeName :''}}
+                        </template>
                     </el-table-column>
                     <el-table-column
-                    prop="name"
+                    prop="bindingStartDate"
                     label="绑定开始时间"
-                    width="180">
+                    >
+                        <!-- <template slot-scope="scope">
+                            {{ scope.row }}
+                        </template> -->
                     </el-table-column>
                     <el-table-column
-                    prop="address"
+                    prop="bindingEndDate"
                     label="绑定结束时间">
+                        <!-- <template slot-scope="scope">
+                            {{ scope.row }}
+                        </template> -->
                     </el-table-column>
                     <el-table-column
-                    prop="address"
+                    width="180"
+                    prop="usingStatus"
                     label="状态">
+                        <template slot-scope="scope">
+                            {{ scope.row.usingStatus == 1 ? '启用': '禁用' }}
+                        </template>
                     </el-table-column>
                 </el-table>
-                <!-- <div class="info_tab_footer">共计:{{ totalCount }} <div class="show_pager"> <Pager :total="totalCount" @change="handlePageChange" /></div> </div> -->
                 <el-pagination
                     background
-                    @size-change="handleSizeChange"
-                    @current-change="handleCurrentChange"
+                    @current-change="handleCurrentChangeDriver"
                     :page-sizes="size"
-                    layout="total, sizes, prev, pager, next, jumper"
-                    :total="totalCount">
+                    layout="total,prev, pager, next, jumper"
+                    :total="driverTotalCount">
                 </el-pagination>
             </div>
         </div>
@@ -116,6 +132,7 @@
 import { parseTime } from '@/utils/index.js'
 import Pager from '@/components/Pagination/index'
 import { closest } from '@/utils/index'
+import { aflcDriverShipperList } from '@/api/users/shipperDetails/index.js'
 
 export default {
   name: 'authority',
@@ -132,18 +149,20 @@ export default {
   data() {
     return {
         size:[20,30,50],
-        defaultImg:'/static/test.jpg',//默认第一张图片的url
-        defaultImg45:'/static/45du.png',
-        defaultImgCarCard:'/static/carcard.png',
-        defaultImgDriverCard:'/static/drivercard.png',
-        defaultImgIdCard:'/static/idcard.png',
-        defaultImgGeRen:'/static/geren.png',
-        listInformation: [],
         serviceType:[
             {name:'小货车',iscur:true},
             {name:'发物流',iscur:false},
             {name:'大货车',iscur:false},
         ],
+        driverObj:{//绑定车主列表条件
+            "currentPage": 1,
+            "pageSize": 10,
+            "vo": {
+                "shipperId": "",
+            }
+        },
+        driverShipperData:[],//绑定车主列表
+        driverTotalCount:0,//默认绑定车主列表数量
         page:1,
         pagesize:20,
         totalCount:100,
@@ -185,20 +204,21 @@ export default {
     },
     methods: {
         init() {
-        
+            let userId = this.$route.query.userId;
+            this.driverObj.vo.shipperId = userId;
+            this.DriverShipperList();
         },
-        shuaxin() {
-            this.init()
+        DriverShipperList(){
+            aflcDriverShipperList(this.driverObj).then(res => {
+                this.driverShipperData = res.data.list;
+                this.driverTotalCount = res.data.totalCount;
+            })
         },
-        handlerClick() {
-            this.currentOrderSerial = this.$route.query.orderSerial
-            this.dialogVisible = true
+        //绑定车主列表分页
+        handleCurrentChangeDriver(val){
+            this.driverObj.currentPage = val;
+            this.DriverShipperList();
         },
-        // handlePageChange(obj) {
-        //     this.page = obj.pageNum
-        //     this.pagesize = obj.pageSize
-        //     this.init();
-        // },
         handleSizeChange(val) {
             console.log(`每页 ${val} 条`);
         },

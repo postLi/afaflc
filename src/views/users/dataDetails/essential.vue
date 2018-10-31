@@ -78,32 +78,32 @@
                     <el-col :span="3">1</el-col>
                 </el-row>
             </div>
-            <div class="essentialInformation_img">
+            <div class="essentialInformation_img" v-viewer>
                 <el-row class="basicInfo_img" :span='24'>
                     <el-col :span="12">
                         <h6>公司或档口门头照：</h6>
-                        <el-tooltip class="item" effect="dark" content="点击图片查看原图" placement="top">
-                            <img :src='defaultImg45' alt="" v-showPicture :imgurl="defaultImg45">
+                        <el-tooltip class="item" effect="dark" content="双击图片查看原图" placement="top">
+                            <img :src='defaultImg45' alt="">
                         </el-tooltip>   
                     </el-col>
                     <el-col :span="12">
                         <h6>发货人名片：</h6>
-                        <el-tooltip class="item" effect="dark" content="点击图片查看原图" placement="top">
-                            <img :src='defaultImgCarCard' alt="" v-showPicture :imgurl="defaultImgCarCard">
+                        <el-tooltip class="item" effect="dark" content="双击图片查看原图" placement="top">
+                            <img :src='defaultImgCarCard' alt="">
                         </el-tooltip>   
                     </el-col>
                 </el-row>
                 <el-row class="basicInfo_img" :span='24'>
                     <el-col :span="12">
                         <h6>营业执照：</h6>
-                        <el-tooltip class="item" effect="dark" content="点击图片查看原图" placement="top">
-                            <img :src='defaultImgDriverCard' alt="" v-showPicture :imgurl="defaultImgDriverCard">
+                        <el-tooltip class="item" effect="dark" content="双击图片查看原图" placement="top">
+                            <img :src='defaultImgDriverCard' alt="">
                         </el-tooltip>   
                     </el-col>
                     <el-col :span="12">
                         <h6>其他照片：</h6>
-                        <el-tooltip class="item" effect="dark" content="点击图片查看原图" placement="top">
-                            <img :src='defaultImgIdCard' alt="" v-showPicture :imgurl="defaultImgIdCard">
+                        <el-tooltip class="item" effect="dark" content="双击图片查看原图" placement="top">
+                            <img :src='defaultImgIdCard' alt="">
                         </el-tooltip>   
                     </el-col>
                 </el-row>

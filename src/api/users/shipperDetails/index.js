@@ -1,6 +1,6 @@
 import fetch from '@/utils/fetch'
 
-const baseurl = 'aflc-order' //订单
+const baseurl = 'aflc-order-wtc' //订单
 const baseurl_tow = 'aflcsmservice' //服务
 const baseurl_three = 'aflcusercenterservice' //用户
 const baseurl_four = 'aflcorderservice' //订单
@@ -49,3 +49,22 @@ export function aflcOrderState(userId) {
       method: 'get',
     })
   }
+
+//订单信息-信息概要-根据时间获取订单信息列表
+export function aflcOrderList(data) {
+    return fetch({
+      url: '/' + baseurl_four + '/order/aflcOrder/v1/shipperOrderManageList',
+      method: 'post',
+      data: data
+    })
+  }
+
+//权限配置-绑定车主-根据条件获取车货主绑定列表
+export function aflcDriverShipperList(data) {
+    return fetch({
+      url: '/' + baseurl_four + '/dispatch/aflcDriverShipper/v1/list',
+      method: 'post',
+      data: data
+    })
+  }
+

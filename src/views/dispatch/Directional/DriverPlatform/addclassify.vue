@@ -76,14 +76,14 @@ export default {
     data() {
       return {
         forms:{
-            bindingStartDate:null,//拦截开始时间
-            bindingEndDate:null,//拦截结束时间
-            orgId:null,//平台人员
-            orgName:null,//
-            orgPhone:null,//
-            shipperId:null,//货主
-            shipperName:null,//
-            shipperPhone:null,//
+            bindingStartDate:'',//拦截开始时间
+            bindingEndDate:'',//拦截结束时间
+            orgId:'',//平台人员
+            orgName:'',//
+            orgPhone:'',//
+            shipperId:'',//货主
+            shipperName:'',//
+            shipperPhone:'',//
             
         },
         optionsShipper:[],//选择货主
@@ -94,7 +94,7 @@ export default {
         filterOptionsShipper:{
             search:''
         },//筛选货主
-        information:null,
+        information:'',
         filterOptionsSystemUsers:{
             search:''
         },//筛选平台人员
@@ -142,8 +142,8 @@ export default {
                         type: 'warning',
                         message: '拦截结束时间怎么能比拦截开始早呢！~'
                     })
-                    this.forms.bindingStartDate = null;
-                    this.forms.bindingEndDate = null;
+                    this.forms.bindingStartDate = '';
+                    this.forms.bindingEndDate = '';
                 }
             }
         },
@@ -267,14 +267,14 @@ export default {
 
         clearForms(){
             this.forms = {
-                bindingStartDate:null,//拦截开始时间
-                bindingEndDate:null,//拦截结束时间
-                orgId:null,//平台人员
-                orgName:null,//
-                orgPhone:null,//
-                shipperId:null,//货主
-                shipperName:null,//
-                shipperPhone:null,//
+                bindingStartDate:'',//拦截开始时间
+                bindingEndDate:'',//拦截结束时间
+                orgId:'',//平台人员
+                orgName:'',//
+                orgPhone:'',//
+                shipperId:'',//货主
+                shipperName:'',//
+                shipperPhone:'',//
             };
             this.filterOptionsShipper.search = '';
             this.checkListShpper = [];

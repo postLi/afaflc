@@ -1,15 +1,15 @@
 <template>
     <div class="TransportRange identicalStyle">
         <el-form :inline="true" :model="logisticsForm" ref="ruleForm" class="demo-ruleForm classify_searchinfo">
-            <el-form-item label="出发地：" >
+            <el-form-item label="出发地：" prop="startAddress">
                 <el-input v-model="logisticsForm.startAddress">
                 </el-input>
             </el-form-item>
-            <el-form-item label="到达地：">
+            <el-form-item label="到达地：" prop="endAddress">
                 <el-input v-model="logisticsForm.endAddress">
                 </el-input>
             </el-form-item>
-                <el-form-item label="商品名称：">
+                <el-form-item label="商品名称：" prop="goodsName">
                 <el-input v-model="logisticsForm.goodsName">
                 </el-input>
             </el-form-item>
@@ -23,7 +23,6 @@
                 <el-table
                 :data="tableData"
                 ref="multipleTable"
-                :default-sort = "{prop: 'startProvinceCityArea', order: 'ascending'}"
                 stripe
                 border
                 height="100%"

@@ -15,7 +15,6 @@
           @selection-change="getSelection"
           height="100%"
           tooltip-effect="dark"
-          :default-sort = "{prop: 'strartAddress', order: 'ascending'}"
           style="width: 100%">
           <el-table-column
             label="序号"

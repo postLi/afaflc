@@ -1,5 +1,4 @@
 <template>
-  <!--v-loading="loading"-->
   <div class="company clearfix" v-loading="loading">
     <div class="company-box">
       <div class="side_left">
@@ -16,15 +15,11 @@
             <span class="custom-tree-node" slot-scope="{ node, data }">
              <span v-bind:class="[data.status === 31 ? 'treeClass' : 'treeAct'] ">{{ node.label }}</span>
         </span>
-
-
         </el-tree>
       </div>
 
       <div class="side_right">
         <el-collapse accordion change="doLayout">
-
-
           <el-collapse-item title="公司信息:" v-if="form.parentId === 0">
             <div class="side_right_top" :class="{currActive:form.status ===31}">
               <el-form :model="form" class="demo-ruleForm" :inline="true" label-position="right" size="mini">
@@ -113,13 +108,10 @@
                 <el-form-item label="预警额度" :label-width="formLabelWidth">
                   <el-input v-model="form.warningQuota" auto-complete="off" disabled></el-input>
                 </el-form-item> -->
-
-
               </el-form>
             </div>
           </el-collapse-item>
         </el-collapse>
-
 
         <div class="side_right_bottom clearfix">
           <div class="btns_box_lrl clearfix">
@@ -135,7 +127,7 @@
             </el-button>
             <el-button type="primary" :size="btnsize" icon="el-icon-edit" @click="doAction('depMain')" plain v-has:SYSTEM_ORG_DEPT_MAINTAIN>部门维护
             </el-button>
-            <el-col class="org-name"><p>{{form.orgName}}</p></el-col>
+            <el-col class="org-name"><h4>{{form.orgName}}</h4></el-col>
           </div>
           <div class="info_news">
 
