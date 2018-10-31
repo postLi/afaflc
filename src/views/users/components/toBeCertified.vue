@@ -3,7 +3,9 @@
         <div class="shipper_searchinfo">
             <el-form inline  class="demo-ruleForm classify_searchinfo">
             <el-form-item label="所在地：">
-                 <GetCityList ref="area" v-model="formInline.belongCityName"  @returnStr="getStr"></GetCityList>
+                <vregion :ui="true"  @values="regionChange" class="form-control">
+                    <el-input v-model="belongCityName" placeholder="请选择"></el-input>
+                </vregion>
             </el-form-item>
             <el-form-item label="车牌号：">
                 <el-input placeholder="请输入内容" v-model.trim="formInline.carNumber" clearable></el-input>
@@ -87,7 +89,7 @@
     import { eventBus } from '@/eventBus'
     import { parseTime } from '@/utils/index.js'
     import Pager from '@/components/Pagination/index'
-    import GetCityList from '@/components/GetCityList/city'
+    import vregion from '@/components/vregion/Region'
     import DriverNewTemplate from '../carowner/driver-newTemplate.vue'
     import driverCertifyTemplate from '../carowner/driver_certifyTemplate.vue'
     export default {
@@ -99,7 +101,7 @@
         },
         components:{
             DriverNewTemplate,
-            GetCityList,
+            vregion,
             Pager,
             driverCertifyTemplate
         },
@@ -116,6 +118,7 @@
                 page:1,//当前页
                 pagesize:20,//每页显示数
                 totalCount:null,//总记录数
+                belongCityName:null,
                 formInline: {//查询条件
                     driverMobile:null,
                     driverStatus:'AF0010402',
@@ -173,8 +176,20 @@
           })
         }, 
         methods:{
-            getStr(val){
-                this.formInline.belongCity = val.area.code;
+            regionChange(d) {
+                console.log('data:',d)
+                this.belongCityName = (!d.province&&!d.city&&!d.area&&!d.town) ? '': `${this.getValue(d.province)}${this.getValue(d.city)}${this.getValue(d.area)}${this.getValue(d.town)}`.trim();
+                if(d.area){
+                    this.formInline.areaCode = d.area.name;
+                }else if(d.city){
+                    this.formInline.cityCode = d.city.name;
+                }
+                else{
+                    this.formInline.provinceCode = d.province.name;
+                }
+            },
+             getValue(obj){
+                return obj ? obj.value:'';
             },
             handlePageChange(obj) {
                 this.page = obj.pageNum
@@ -189,12 +204,10 @@
                     belongCity:null,
                     belongCityName:null,
                 }
+                this.belongCityName=null
                 if(this.page!= 1){
                     this.page = 1;
-                    this.$refs.pager.inputval = this.page;
-                    this.$refs.pager.pageNum = this.page;
                 }
-             this.$refs.area.clearData()   
              this.firstblood()    
             },
 
@@ -221,8 +234,6 @@
             //点击查询按纽，按条件查询列表
             getdata_search(event){
                 this.page = 1;
-                this.$refs.pager.inputval = this.page;
-                this.$refs.pager.pageNum = this.page;
                 this.firstblood()
             },
             //获取车主状态列表

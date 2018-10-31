@@ -23,8 +23,8 @@ export function data_get_driver_status() {
 }
 
 // 根据id获取车主
-export function data_get_driverName_id() {
-  return fetch.get('/' + baseurl + '/usercenter/aflcDriver/v1/{id}')
+export function data_get_driverName_id(id) {
+  return fetch.get('/' + baseurl + '/usercenter/aflcDriver/v1/' + id)
 }
 
 // 新增车主

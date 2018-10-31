@@ -2,7 +2,9 @@
     <div style="height:100%;" class="identicalStyle" v-loading="loading">
             <el-form :inline="true"  class="demo-ruleForm classify_searchinfo">
                 <el-form-item label="所在地：">
-                <GetCityList ref="area" v-model="formInline.belongCityName"  @returnStr="getStr"></GetCityList>
+                <vregion :ui="true"  @values="regionChange" class="form-control">
+                    <el-input v-model="belongCityName" placeholder="请选择"></el-input>
+                </vregion>
                 </el-form-item>
                 <el-form-item label="认证状态：">
                     <el-select v-model="formInline.driverStatus" placeholder="请选择" clearable>
@@ -212,7 +214,7 @@
     import {data_get_driver_list,data_get_driver_status,data_get_shipper_auid} from '../../../api/users/carowner/total_carowner.js'
     import DriverNewTemplate from '../carowner/driver-newTemplate'
     import { parseTime,formatTime } from '@/utils/index.js'
-    import GetCityList from '@/components/GetCityList/city'
+    import vregion from '@/components/vregion/Region'
     import { eventBus } from '@/eventBus'
     import Pager from '@/components/Pagination/index'
     import FreezeChangeTemplate from '../carowner/freeze-change-template'
@@ -236,6 +238,7 @@
                     belongCity:null,
                     belongCityName:null,
                 },
+                belongCityName:null,
                 tableDataTree:[],//定义列表记录
                 optionsService:[//状态
                     {
@@ -254,7 +257,7 @@
             }
         },
         components:{
-            GetCityList,
+            vregion,
             DriverNewTemplate,
             FreezeChangeTemplate,
             Pager,
@@ -287,9 +290,20 @@
         },
  
         methods:{
-            getStr(val){
-                console.log('this.cityarr',val,name)
-                this.formInline.belongCity = val.area.code
+            regionChange(d) {
+                console.log('data:',d)
+                this.belongCityName = (!d.province&&!d.city&&!d.area&&!d.town) ? '': `${this.getValue(d.province)}${this.getValue(d.city)}${this.getValue(d.area)}${this.getValue(d.town)}`.trim();
+                if(d.area){
+                    this.formInline.areaCode = d.area.name;
+                }else if(d.city){
+                    this.formInline.cityCode = d.city.name;
+                }
+                else{
+                    this.formInline.provinceCode = d.province.name;
+                }
+            },
+             getValue(obj){
+                return obj ? obj.value:'';
             },
             handlePageChange(obj) {
                 this.page = obj.pageNum
@@ -305,12 +319,10 @@
                     carNumber:null,
                     accountStatus:null
                 }
+                this.belongCityName=null
                 if(this.page!= 1){
                     this.page = 1;
-                    this.$refs.pager.inputval = this.page;
-                    this.$refs.pager.pageNum = this.page;
                 }
-                this.$refs.area.clearData()
                 this.firstblood()
             },
             // 判断选中与否
@@ -339,8 +351,6 @@
             //点击查询按纽，按条件查询列表
             getdata_search(event){
                 this.page = 1;
-                this.$refs.pager.inputval = this.page;
-                this.$refs.pager.pageNum = this.page;
                 this.firstblood()
             },
             

@@ -30,7 +30,7 @@
                  </el-select>
              </td>
              <td>
-                <el-select v-model="formAll.carType" clearable placeholder="请选择" disabled>
+                <el-select v-model="formAll.carType" clearable placeholder="请选择" >
                           <el-option
                              v-for="item in optionsCar"
                                :key="item.code"

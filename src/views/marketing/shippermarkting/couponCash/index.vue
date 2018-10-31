@@ -151,11 +151,7 @@ export default {
     },
     methods:{
             getStr(val){
-                this.formAllData.areaCode= val.area.code
-                this.formAllData.areaName = val.area.name
-                this.formAllData.province = val.province.name
-                this.formAllData.city = val.city.name
-                this.formAllData.area = val.area.name
+                this.formAllData.areaCode = val.area.code
             },  
             //获取  服务和车辆 类型列表
             getMoreInformation(){

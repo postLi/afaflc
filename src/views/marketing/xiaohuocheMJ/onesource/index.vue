@@ -513,12 +513,12 @@ export default {
         },
     },
     methods:{
-      // 省市
+       // 省市
        getStr(val){
                 this.formAll.areaCode = val.city.code
                 this.formAll.areaName = val.city.name
         },
-      // 省市
+       // 省市
        getStr1(val){
                 this.vestAll.areaCode = val.city.code
                 this.vestAll.areaName = val.city.name
@@ -528,8 +528,7 @@ export default {
                 this.selectRowData3.areaCode = val.city.code
                 this.selectRowData3.areaName = val.city.name
          },
-
-            // 省市状态表
+        // 省市状态表
             changeSelect(){
             if(this.editType=='0'){
                 this.selectFlag=false
@@ -563,10 +562,10 @@ export default {
                     console.log(res)
                 });
             },
-        showMap(name) {
-            this.popVisible = true ;
-            this.current = name;
-        },
+            showMap(name) {
+                this.popVisible = true ;
+                this.current = name;
+            },
             getInfo(pos, name, info) {
                 console.log('in',info)
                 console.log('pos',pos)

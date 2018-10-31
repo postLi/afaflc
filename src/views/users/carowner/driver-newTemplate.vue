@@ -29,14 +29,14 @@
               </el-row>
               <el-row>
                   <el-col :span="12">
-                      <span v-if="editType=='view'">
+                      <span v-if="editType=='view'||editType=='edit'">
                     <el-form-item label="身份证号码："  :label-width="formLabelWidth">
                         <el-input v-model.trim="templateModel.driverCardid" disabled ></el-input>
                     </el-form-item>
                     </span>
                     <span v-else>
                      <el-form-item label="身份证号码："  :label-width="formLabelWidth" prop="driverCardid" >
-                        <el-input v-model.trim="templateModel.driverCardid" :maxlength="18"></el-input>
+                        <el-input v-model.trim="templateModel.driverCardid" :maxlength="18" ></el-input>
                     </el-form-item>
                     </span>
                   </el-col>
@@ -112,17 +112,12 @@
                         </el-select>
                     </el-form-item>
                   </el-col>
-                <el-col :span="12">
-               <span v-if="!selectFlag">    
-              <el-form-item label="所在地 ："  :label-width="formLabelWidth"  prop="belongCityName">
-                        <el-input v-model="templateModel.belongCityName" placeholder="请选择" :disabled="editType=='view'" @focus="changeSelect"></el-input>
+                <el-col :span="12"> 
+              <el-form-item label="所在地 ："  :label-width="formLabelWidth" prop="belongCityName">
+                    <vregion :ui="true"  @values="regionChange" class="form-control" >
+                        <el-input v-model="templateModel.belongCityName" placeholder="请选择" ></el-input>
+                    </vregion>
               </el-form-item>
-              </span>   
-              <span v-else>   
-              <el-form-item label="所在地 ："  :label-width="formLabelWidth" prop="belongCity">
-                <GetCityList ref="area" v-model="templateModel.belongCity"  @returnStr="getStr"></GetCityList>
-              </el-form-item>
-               </span> 
                 </el-col>
               </el-row>
               
@@ -266,11 +261,11 @@
     </div>
 </template>
 <script>
-import  { data_post_createDriver,data_put_changeDriver,data_CarList,data_Get_carType,data_get_driver_obStatus,data_post_driverAudit,data_post_mobileGetDriver,data_post_checkDriverCardid,data_get_shipper_carmaid,data_get_shipper_carOwner} from '@/api/users/carowner/total_carowner.js'
+import  { data_post_createDriver,data_put_changeDriver,data_CarList,data_Get_carType,data_get_driver_obStatus,data_post_driverAudit,data_post_mobileGetDriver,data_post_checkDriverCardid,data_get_shipper_carmaid,data_get_shipper_carOwner,data_get_driverName_id} from '@/api/users/carowner/total_carowner.js'
 import Upload from '@/components/Upload/singleImage'
 import { eventBus } from '@/eventBus'
 import GetCityList from '@/components/GetCityList/city'
-
+import vregion from '@/components/vregion/Region'
 import { getDictionary } from '@/api/common.js'
 export default {
     name:'template-create-view-change',
@@ -321,7 +316,8 @@ export default {
     },
     components:{
         Upload,
-        GetCityList
+        GetCityList,
+        vregion
     },
     data() {
        // 手机号校验
@@ -345,7 +341,6 @@ export default {
              cb()
             }
             }
-
         }
     //    车主信息校验
         const driverNameValidator = (rule, val, cb) => {
@@ -365,17 +360,12 @@ export default {
                 cb(new Error('请输入正确的身份证'))
             }
             else{
-            if(this.editType=='add') {
                 data_post_checkDriverCardid(val).then(res=>{
                  cb()
                 }).catch(err=>{
                     console.log(err)
                         cb(new Error('该身份证已经注册~'))
                 })
-            }
-            else{
-                 cb()
-            }
         }
         }
     //    车牌号信息校验
@@ -559,7 +549,6 @@ export default {
         //     }
         // }   
         return{
-            selectFlag:null,
             defaultImg:'/static/test.jpg',//默认第一张图片的url
             type:'primary',
             title:null,
@@ -633,7 +622,6 @@ export default {
         driverTemplateDialogFlag:{
         handler: function(val, oldVal) {
             if(!val){
-                this.selectFlag = null
                 this.$refs.templateModel.resetFields()
                 this.templateModel.belongCity = null
                 this.templateModel.provinceCode=null
@@ -653,22 +641,24 @@ export default {
     mounted(){
     },
     methods:{
-        // 省市区选择
-    getStr(val){
-                this.templateModel.belongCity= val.area.code
-                this.templateModel.belongCityName = val.province.name+val.city.name+val.area.name
-                this.templateModel.provinceCode = val.province.name
-                this.templateModel.cityCode = val.city.name
-                this.templateModel.areaCode = val.area.name
-            },       
-        // 省市状态表
-     changeSelect(){
-                    if(this.editType=='add'){
-                        this.selectFlag=null
-                    } else{
-                        this.selectFlag='1'
-                    }
-                    },   
+    regionChange(d) {
+        console.log('data:',d)
+        this.templateModel.belongCityName = (!d.province&&!d.city&&!d.area&&!d.town) ? '': `${this.getValue(d.province)}${this.getValue(d.city)}${this.getValue(d.area)}${this.getValue(d.town)}`.trim();
+        if(d.area){
+            this.templateModel.areaCode = d.area.name;
+            this.templateModel.belongCity = d.area.code;
+        }else if(d.city){
+            this.templateModel.belongCity = d.city.code;
+            this.templateModel.cityCode = d.city.name;
+        }
+        else{
+            this.templateModel.belongCity = d.province.code;
+            this.templateModel.provinceCode = d.province.name;
+        }
+    },
+    getValue(obj){
+        return obj ? obj.value:'';
+    },     
         isVip(val){
             if(this.templateModel.isVipCar == '1'){
                 this.templateModel.isVipCar = '1'
@@ -686,7 +676,6 @@ export default {
             })
             //  获取车型列表
             data_Get_carType().then(res =>{
-                console.log('1',res)
                     this.optionsType=res.data
             }).catch(err =>{
                 console.log(err)
@@ -722,7 +711,6 @@ export default {
             if (this.editType === 'add') {
                 this.templateModel.carSpec = null;
                 this.templateModel.isVipCar = '0'
-                this.selectFlag='1'
                 this.driverTemplateDialogFlag = true ;
             }else if(this.editType=== 'valetAuth'||this.editType==='edit'||this.editType==='view'){
             if(!this.templateItem && this.editType !== 'add'){
@@ -739,8 +727,14 @@ export default {
                 })
                 this.$emit('getData') 
             }
-            else{
-                    this.templateModel = this.templateItem[0];
+            else{ 
+                console.log()
+                    data_get_driverName_id(this.templateItem[0].driverId).then(res=>{
+                    this.templateModel = res.data;
+                    }).catch(err=>{
+                        console.log('err',err)
+                    })
+                   
                     this.driverTemplateDialogFlag = true ;
                 }
             }
@@ -760,7 +754,6 @@ export default {
                 this.templateModel.carWidth=parseFloat(this.templateModel.carWidth).toFixed(2)
                 this.templateModel.carHeight= parseFloat(this.templateModel.carHeight).toFixed(2)
                     var forms= Object.assign({}, this.templateModel)
-                    console.log('this.templateModel',forms)
                      this.driverTemplateDialogFlag = false;
                     // 新增数据提交
                     if(this.editType === 'add'){
