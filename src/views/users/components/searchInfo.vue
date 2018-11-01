@@ -105,7 +105,7 @@ import { getDictionary } from '@/api/common.js'
             init() {
                 // 获取状态列表
                 Promise.all([getDictionary(this.auditingStatus),getDictionary(this.accountStatus)]).then(resArr => {
-                    console.log('resArr',resArr)
+                    // console.log('resArr',resArr)
                     resArr[0].data.map((item) => {
                         this.optionsStatus.push(item);
                     });

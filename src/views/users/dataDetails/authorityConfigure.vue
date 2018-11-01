@@ -90,10 +90,10 @@
             <h2>营销权益</h2>
             <div class="authority_legal">
                 <ul class="lengandInfo">
-                    <li>货主优惠等级：<span>皇冠</span></li>
-                    <li>剩余优惠金：<span>153</span></li>
-                    <li>优惠券：<span>允许使用</span></li>
-                    <li>优惠金：<span>允许使用</span></li>
+                    <li>货主优惠等级：<span>{{equityConfigDto.discountLevel}}</span></li>
+                    <li>剩余优惠金：<span>{{equityConfigDto.rewardBalance}}</span></li>
+                    <li>优惠券：<span>{{equityConfigDto.coupon}}</span></li>
+                    <li>优惠金：<span>{{equityConfigDto.reward}}</span></li>
                 </ul>
             </div>
             <div class="essentialInformation_table_title">
@@ -132,7 +132,7 @@
 import { parseTime } from '@/utils/index.js'
 import Pager from '@/components/Pagination/index'
 import { closest } from '@/utils/index'
-import { aflcDriverShipperList } from '@/api/users/shipperDetails/index.js'
+import { aflcDriverShipperList,aflcEquityConfigDto } from '@/api/users/shipperDetails/index.js'
 
 export default {
   name: 'authority',
@@ -163,6 +163,7 @@ export default {
         },
         driverShipperData:[],//绑定车主列表
         driverTotalCount:0,//默认绑定车主列表数量
+        equityConfigDto:{},//营销权益等级说明
         page:1,
         pagesize:20,
         totalCount:100,
@@ -207,7 +208,9 @@ export default {
             let userId = this.$route.query.userId;
             this.driverObj.vo.shipperId = userId;
             this.DriverShipperList();
+            this.EquityConfigDto(userId);
         },
+        //绑定车主列表
         DriverShipperList(){
             aflcDriverShipperList(this.driverObj).then(res => {
                 this.driverShipperData = res.data.list;
@@ -218,6 +221,11 @@ export default {
         handleCurrentChangeDriver(val){
             this.driverObj.currentPage = val;
             this.DriverShipperList();
+        },
+        EquityConfigDto(userId){
+            aflcEquityConfigDto(userId).then(res => {
+                this.equityConfigDto = res.data;
+            })
         },
         handleSizeChange(val) {
             console.log(`每页 ${val} 条`);

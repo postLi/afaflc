@@ -198,6 +198,11 @@ import Pager from '@/components/Pagination/index'
                             statusID = statusID.join(',');
                             data_ChangeStatus(statusID).then(res=>{
                                 this.firstblood();
+                            }).catch(err => {
+                                this.$message({
+                                    type: 'info',
+                                    message: '操作失败，原因：' + err.errorInfo ? err.errorInfo : err.text
+                                })
                             })
                             break;
                     }

@@ -115,7 +115,7 @@
                             :show-overflow-tooltip="true"
                             width="250">
                             <template  slot-scope="scope">
-                                {{ scope.row.aflcOrderAddresses[0].viaAddressName }}
+                                {{ scope.row.aflcOrderAddresses[0].viaAddressName}}{{scope.row.aflcOrderAddresses[0].viaAddress ? '('+scope.row.aflcOrderAddresses[0].viaAddress+')' : ''}}
                             </template>
                         </el-table-column>
                         <el-table-column
@@ -125,7 +125,7 @@
                             :show-overflow-tooltip="true"
                             width="250">
                             <template  slot-scope="scope">
-                                {{ scope.row.aflcOrderAddresses[scope.row.aflcOrderAddresses.length-1].viaAddressName }}
+                                {{ scope.row.aflcOrderAddresses[scope.row.aflcOrderAddresses.length-1].viaAddressName }}{{scope.row.aflcOrderAddresses[scope.row.aflcOrderAddresses.length-1].viaAddress ? '('+scope.row.aflcOrderAddresses[scope.row.aflcOrderAddresses.length-1].viaAddress+')' : ''}}
                             </template>
                         </el-table-column>
                         <!-- <el-table-column

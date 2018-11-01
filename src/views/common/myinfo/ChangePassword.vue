@@ -39,8 +39,11 @@ export default {
     ])
   },
   mounted() {
-    this.form.username = this.otherinfo.username
-    this.form.id = this.otherinfo.id
+      console.log('this.otherinfo',this.otherinfo)
+    this.form.username = this.otherinfo.username;
+    this.form.id = this.otherinfo.id;
+    this.form.userType = this.otherinfo.type;
+
   },
   data() {
     var validatePass2 = (rule, value, callback) => {
@@ -73,6 +76,7 @@ export default {
         id: 0,
         username: '',
         origin_pwd: '',
+        userType:'',
         pwd: '',
         re_pwd: '',
         errorTip: ''
@@ -104,11 +108,12 @@ export default {
         if (valid) {
           const form = this.form
           putChangeMyPassword({
-            'username': form.username,
+            'userName': form.username,
             'id': form.id,
-            'password': form.origin_pwd,
-            'newPassword': form.pwd,
-            'affirmNewPassword': form.re_pwd
+            'oldPassword': this.$md5(form.origin_pwd),
+            'newPassword': this.$md5(form.pwd),
+            'surePassword': this.$md5(form.re_pwd),
+            'userType':form.userType
           }).then(res => {
             this.$alert('修改成功', '提示', {
               confirmButtonText: '确定',
@@ -117,11 +122,13 @@ export default {
               }
             })
           }).catch(res => {
-            if (res.text.indexOf('原密码错误') !== -1) {
+              console.log('err',res)
+            if (res.errorInfo.indexOf('原密码错误') !== -1) {
               this.isCheck = 'false'
               this.$refs[formName].validate()
             }
-            this.$message.error(res.text)
+            this.$message.warning(res.errorInfo? res.errorInfo: res.text)
+
           })
         } else {
           return false

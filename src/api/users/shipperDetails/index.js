@@ -2,7 +2,7 @@ import fetch from '@/utils/fetch'
 
 const baseurl = 'aflc-order-wtc' //订单
 const baseurl_tow = 'aflcsmservice' //服务
-const baseurl_three = 'aflcusercenterservice' //用户
+const baseurl_three = 'aflcusercenterservice-wtc' //用户
 const baseurl_four = 'aflcorderservice' //订单
 
 
@@ -68,3 +68,10 @@ export function aflcDriverShipperList(data) {
     })
   }
 
+//权限配置-营销权益-根据id获取货主权益配置
+export function aflcEquityConfigDto(userId) {
+    return fetch({
+      url: '/' + baseurl_three + '/usercenter/aflcShipper/v1/findEquityConfigDto/' + userId,
+      method: 'get',
+    })
+  }

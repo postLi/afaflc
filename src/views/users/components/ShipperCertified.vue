@@ -403,7 +403,7 @@ export default {
         // 审核不通过
         handlerOut(){
             let ifQualified;
-            if(this.shengheform.shipperCardFileNoPass =="上传合格" && this.shengheform.companyFacadeFileNoPass == "上传合格" ){
+            if(this.shengheform.shipperCardFileNoPass =="上传合格" && this.shengheform.companyFacadeFileNoPass == "上传合格" &&this.shengheform.businessLicenceFileNoPass =="上传合格"){
                 ifQualified = true ;
             }else{
                 ifQualified = false ;

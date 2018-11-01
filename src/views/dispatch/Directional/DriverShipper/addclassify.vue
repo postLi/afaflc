@@ -9,7 +9,7 @@
                             <p><span>* </span>绑定开始时间 ：</p>
                             <el-date-picker
                             v-model="forms.bindingStartDate"
-                            type="datetime"
+                            type="date"
                             placeholder="选择日期"
                             value-format="timestamp">
                             </el-date-picker>
@@ -29,7 +29,7 @@
                             <p><span>* </span>绑定结束时间 ：</p>
                             <el-date-picker
                             v-model="forms.bindingEndDate"
-                            type="datetime"
+                            type="date"
                             placeholder="选择日期"
                             default-time="23:59:59"
                             value-format="timestamp">
@@ -39,9 +39,9 @@
                             <p><span>* </span>选择车主账号 ：</p>
                             <div class="chooseItem">
                                 <el-input v-model="filterOptionsCar.search"  size="mini" placeholder="请输入内容" ref="filterOptionsCar"></el-input>
-                                <el-checkbox-group v-model="checkListCar">
-                                    <el-checkbox v-for="obj in optionsCar" :label="obj" :key="obj.driverId" >{{obj.label}}</el-checkbox>
-                                </el-checkbox-group>
+                                <el-radio-group v-model="checkListCar">
+                                    <el-radio v-for="obj in optionsCar" :label="obj" :key="obj.driverId" >{{obj.label}}</el-radio>
+                                </el-radio-group>
                             </div>
                         </div>
                     </div>
@@ -58,8 +58,6 @@
 <script>
 
 import { data_findAflcDriverList,data_findAflcShipperList,data_NewData } from '@/api/dispatch/Directional.js'
-
-
 export default {
     name: 'addClassfy',
     props: {
@@ -91,7 +89,7 @@ export default {
         optionsCar:[],//选择车主
         optionsVisualCarType:[],
         checkListShpper:[],//货主选中内容
-        checkListCar:[],//车主选中内容
+        checkListCar:{},//车主选中内容
         filterOptionsShipper:{
             search:''
         },//筛选货主
@@ -199,7 +197,7 @@ export default {
             })
         },
         newInfoSave(){
-            // console.log(this.forms)
+            console.log(this.checkListCar)
             //货主
             let shipperId = [];
             let shipperName = [];
@@ -217,15 +215,17 @@ export default {
             let driverId = [];
             let driverName = [];
             let driverMobile = [];
-            this.checkListCar.forEach( el => {
-                driverId.push(el.driverId)
-                driverName.push(el.driverName ? el.driverName : el.driverMobile)
-                driverMobile.push(el.driverMobile)
-            })
+            // this.checkListCar.forEach( el => {
+                driverId.push(this.checkListCar.driverId)
+                driverName.push(this.checkListCar.driverName ? this.checkListCar.driverName : this.checkListCar.driverMobile)
+                driverMobile.push(this.checkListCar.driverMobile)
+            // })
             
             this.forms.driverId =  driverId.join(',');
             this.forms.driverName =  driverName.join(',');
             this.forms.driverPhone =  driverMobile.join(',');
+
+            console.log(this.forms)
 
             if(!this.forms.bindingStartDate){
                 return this.$message({
@@ -246,14 +246,15 @@ export default {
                     message: '请选择至少一个货主账号~'
                 })
             }
-            else if(this.checkListCar.length == 0){
+            else if(Object.keys(this.checkListCar).length == 0){
                 return this.$message({
                     type: 'warning',
-                    message: '请选择至少一个车主账号~'
+                    message: '请选择车主账号~'
                 })
-                
             }
             else{
+                this.forms.bindingEndDate +=  1* 24 * 60 * 60 * 1000 - 1000;
+
                 data_NewData(this.forms).then(res=>{
                      this.$alert('操作成功', '提示', {
                         confirmButtonText: '确定',
@@ -286,7 +287,7 @@ export default {
                 shipperPhone:'',//
             };
             this.checkListShpper  = [];
-            this.checkListCar = [];
+            this.checkListCar = {};
         },
     },
    
@@ -344,16 +345,25 @@ export default {
                         .el-checkbox{
                             display: block; 
                             margin-left: 0;
-                            .el-checkbox__input{
-                                .el-checkbox__inner{
-                                    width: 12px;
-                                    height: 12px;
-                                }
-                            }
+                            margin-bottom: 5px;
                             .el-checkbox__label{
                                 font-size: 12px;
                                 color: #666;
 
+                            }
+                        }
+                    }
+
+                    .el-radio-group{
+                        padding-top: 40px;
+                        margin-left: 0px;
+                        .el-radio{
+                            margin-left: 0;
+                            margin-bottom: 5px;
+                            .el-radio__label{
+                                font-size: 12px;
+                                color: #666;
+                                line-height: 19px;
                             }
                         }
                     }

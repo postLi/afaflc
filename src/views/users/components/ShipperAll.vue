@@ -10,7 +10,7 @@
                 <el-button type="primary" icon="fontFamily aflc-icon-yichuheimingdan" plain :size="btnsize" @click="handleClick('removeBlack')" v-has:SHIPPER_MANAGE_OUT_BLACK>移出黑名单</el-button>
                 <el-button type="primary" icon="fontFamily aflc-icon-jiedong1" plain :size="btnsize" @click="handleClick('removeFreeze')" v-has:SHIPPER_MANAGE_UNFREEZE>解冻</el-button>
 			</div>
-			<div class="info_news" >
+			<div class="info_news">
 				<el-table
 				ref="multipleTable"
 				:data="tableDataAll"

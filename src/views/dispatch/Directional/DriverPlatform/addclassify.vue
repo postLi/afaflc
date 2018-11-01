@@ -39,9 +39,9 @@
                             <p><span>* </span>选择运营或客服人员 ：</p>
                             <div class="chooseItem">
                                 <el-input v-model="filterOptionsSystemUsers.search"  size="mini" placeholder="请输入内容"></el-input>
-                                <el-checkbox-group v-model="checkListSystemUsers">
-                                    <el-checkbox v-for="obj in optionsSystem" :label="obj" :key="obj.userId" >{{obj.label}}</el-checkbox>
-                                </el-checkbox-group>
+                                <el-radio-group v-model="checkListSystemUsers">
+                                    <el-radio v-for="obj in optionsSystem" :label="obj" :key="obj.userId" >{{obj.label}}</el-radio>
+                                </el-radio-group>
                             </div>
                         </div>
                     </div>
@@ -90,7 +90,7 @@ export default {
         optionsSystem:[],//选择平台人员
         optionsVisualCarType:[],
         checkListShpper:[],//货主选中内容
-        checkListSystemUsers:[],//平台人员选中内容
+        checkListSystemUsers:{},//平台人员选中内容
         filterOptionsShipper:{
             search:''
         },//筛选货主
@@ -201,15 +201,15 @@ export default {
             this.forms.shipperName =  shipperName.join(',');
             this.forms.shipperPhone =  shipperPhone.join(',');
 
-            //车主
+            //客服
             let userId = [];
             let name = [];
             let mobilephone = [];
-            this.checkListSystemUsers.forEach( el => {
-                userId.push(el.userId)
-                name.push(el.name)
-                mobilephone.push(el.mobilephone)
-            })
+            // this.checkListSystemUsers.forEach( el => {
+                userId.push(this.checkListSystemUsers.userId)
+                name.push(this.checkListSystemUsers.name)
+                mobilephone.push(this.checkListSystemUsers.mobilephone)
+            // })
             
             this.forms.orgId =  userId.join(',');
             this.forms.orgName =  name.join(',');
@@ -234,10 +234,10 @@ export default {
                     message: '请选择至少一个货主账号~'
                 })
             }
-            else if(this.checkListSystemUsers.length == 0){
+            else if(Object.keys(this.checkListSystemUsers).length == 0){
                 return this.$message({
                         type: 'warning',
-                        message: '请选择至少一个车主账号~'
+                        message: '请选择客服账号~'
                     })
             }
             else{
@@ -280,7 +280,7 @@ export default {
             this.checkListShpper = [];
 
             this.filterOptionsSystemUsers.search = '';
-            this.checkListSystemUsers = [];
+            this.checkListSystemUsers = {};
         }
     },
    
@@ -337,16 +337,24 @@ export default {
                         padding-top: 40px;
                         .el-checkbox{
                             margin-left: 0;
+                            margin-bottom: 5px;
                             display: block;
-                            .el-checkbox__input{
-                                .el-checkbox__inner{
-                                    width: 12px;
-                                    height: 12px;
-                                }
-                            }
                             .el-checkbox__label{
                                 font-size: 12px;
                                 color: #666;
+                            }
+                        }
+                    }
+                    .el-radio-group{
+                        padding-top: 40px;
+                        margin-left: 0px;
+                        .el-radio{
+                            margin-left: 0;
+                            margin-bottom: 5px;
+                            .el-radio__label{
+                                font-size: 12px;
+                                color: #666;
+                                line-height: 19px;
                             }
                         }
                     }

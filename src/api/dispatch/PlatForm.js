@@ -1,6 +1,7 @@
 import fetch from '@/utils/fetch'
 
-const baseurl = "aflc-order"
+// const baseurl = "aflc-order"
+const baseurl = "aflcorderservice-lyc"
 
 
 
