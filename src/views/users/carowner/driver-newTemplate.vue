@@ -791,7 +791,8 @@ export default {
     font-weight: bold
     }
     .el-dialog{
-        overflow: unset;
+        overflow: unset!important;
+        width: 1200px;
         max-height: inherit;
     }
     .b10{

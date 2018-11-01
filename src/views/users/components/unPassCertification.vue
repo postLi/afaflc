@@ -258,6 +258,7 @@
 
             getDataList(){
                 this.firstblood()
+                this.$refs.multipleTable.clearSelection();
             } 
         }
         

@@ -86,7 +86,7 @@
              <th width="100">活跃</th>               
             </tr>
             <tr>
-             <th  rowspan="2">小面包</th>
+             <th  rowspan="2">小面包车</th>
              <td class="Online">在线</td>
              <td ><el-input  v-model="vestList.setting[keys].sett.AF01801.one.AF0010401" class="Pushinput"     maxlength="1" v-numberOnly></el-input> </td>
              <td ><el-input  v-model="vestList.setting[keys].sett.AF01801.one.AF0020405" class="Pushinput"     maxlength="1" v-numberOnly></el-input> </td>
@@ -105,7 +105,7 @@
              <td ><el-input  v-model="vestList.setting[keys].sett.AF01801.zero.AF0020401" class="Pushinput"    maxlength="1" v-numberOnly></el-input> </td>               
             </tr>
              <tr>
-             <th  rowspan="2">金杯</th>
+             <th  rowspan="2">金杯车</th>
              <td class="Online">在线</td>
              <td ><el-input  v-model="vestList.setting[keys].sett.AF01802.one.AF0010401" class="Pushinput"    maxlength="1" v-numberOnly></el-input> </td>
              <td ><el-input  v-model="vestList.setting[keys].sett.AF01802.one.AF0020405" class="Pushinput"    maxlength="1" v-numberOnly></el-input> </td>
@@ -124,7 +124,7 @@
              <td ><el-input  v-model="vestList.setting[keys].sett.AF01802.zero.AF0020401" class="Pushinput"    maxlength="1" v-numberOnly></el-input> </td>            
             </tr>
              <tr>
-             <th  rowspan="2">小货车</th>
+             <th  rowspan="2">小型货车</th>
              <td class="Online">在线</td>     
              <td ><el-input  v-model="vestList.setting[keys].sett.AF01803.one.AF0010401" class="Pushinput"    maxlength="1" v-numberOnly></el-input> </td>
              <td ><el-input  v-model="vestList.setting[keys].sett.AF01803.one.AF0020405" class="Pushinput"    maxlength="1" v-numberOnly></el-input> </td>
@@ -143,7 +143,7 @@
              <td ><el-input  v-model="vestList.setting[keys].sett.AF01803.zero.AF0020401" class="Pushinput"    maxlength="1" v-numberOnly></el-input> </td>   
             </tr>
             <tr>
-             <th  rowspan="2">大货车</th>
+             <th  rowspan="2">中型货车</th>
              <td class="Online">在线</td>        
              <td ><el-input  v-model="vestList.setting[keys].sett.AF01804.one.AF0010401" class="Pushinput"   maxlength="1" v-numberOnly></el-input> </td>
              <td ><el-input  v-model="vestList.setting[keys].sett.AF01804.one.AF0020405" class="Pushinput"   maxlength="1" v-numberOnly></el-input> </td>

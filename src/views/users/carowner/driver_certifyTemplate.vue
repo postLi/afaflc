@@ -282,11 +282,13 @@ import {parseTime} from '@/utils/'
 import { eventBus } from '@/eventBus'
 import Upload from '@/components/Upload/singleImage'
 import GetCityList from '@/components/GetCityList/city'
+import vregion from '@/components/vregion/Region'
 export default {
   name:'create-Change-ViewDialog',
   components:{
     Upload,
-    GetCityList
+    GetCityList,
+    vregion
   },
   props:{
     params:{
@@ -551,9 +553,6 @@ export default {
         },        
       }
   },
-  components:{
-   GetCityList
-  },
   computed: {
             pictureValue () {
             return {'车辆45°':this.radio1 ,'行驾证': this.radio2,'驾驶证':this.radio3 , '手持身份证':this.radio5,'身份证正面':this.radio4}
@@ -801,7 +800,7 @@ export default {
 <style lang="scss">
 .drivercertify{
     .el-dialog{
-       overflow: unset;
+       overflow: unset!important;
        width: 1200px;
        max-height: none;
        .certifyless{

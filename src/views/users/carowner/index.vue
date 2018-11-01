@@ -2,19 +2,19 @@
 	<div class="carOwner tabsWrap">
 		<el-tabs v-model="CarActiveName" type="card" @tab-click="handleClick">
 			<el-tab-pane label="全部" name="first" v-if="$_has_permission('DRIVER_MANAGE_LIST_ALL')">
-				<Total :isvisible="CarActiveName === 'first'"></Total>   
+				<Total :isvisible="CarActiveName === 'first'" ref="ref1"></Total>   
 			</el-tab-pane>
 			<el-tab-pane label="未认证"  name="second" v-if="$_has_permission('DRIVER_MANAGE_LIST_UNVALIDAT')">
-				<Unauthorized :isvisible="CarActiveName === 'second'"></Unauthorized>
+				<Unauthorized :isvisible="CarActiveName === 'second'" ref="ref2"></Unauthorized>
 			</el-tab-pane>
 			<el-tab-pane label="待认证" name="third" v-if="$_has_permission('DRIVER_MANAGE_LIST_VALIDATING')">
-                <toBeCertified :isvisible="CarActiveName === 'third'"></toBeCertified>
+                <toBeCertified :isvisible="CarActiveName === 'third'" ref="ref3"></toBeCertified>
 			</el-tab-pane>
 			<el-tab-pane label="已认证" name="fourth" v-if="$_has_permission('DRIVER_MANAGE_LIST_VALIDATED')">
-                <authenticatedcomponent  :isvisible="CarActiveName === 'fourth'"></authenticatedcomponent>
+                <authenticatedcomponent  :isvisible="CarActiveName === 'fourth'" ref="ref4"></authenticatedcomponent>
 			</el-tab-pane>
 			<el-tab-pane label="认证不通过" name="fifth" v-if="$_has_permission('DRIVER_MANAGE_LIST_VALIDATFAIL')">
-                <unPassCertification :isvisible="CarActiveName === 'fifth'"></unPassCertification>
+                <unPassCertification :isvisible="CarActiveName === 'fifth'" ref="ref5"></unPassCertification>
 			</el-tab-pane>
 		</el-tabs>
 	</div>
@@ -61,6 +61,11 @@
         },
         methods:{
 			handleClick(tab, event) {
+                this.$refs.ref1.getDataList()
+                this.$refs.ref2.getDataList()
+                this.$refs.ref3.getDataList()
+                this.$refs.ref4.getDataList()
+                this.$refs.ref5.getDataList()
                  this.CarActiveName = tab.name;
             },
 		}
