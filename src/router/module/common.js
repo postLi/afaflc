@@ -113,7 +113,7 @@ export default {
       },
       {
         path: '/common/businessCity',
-        icon: 'cheliangguanli',
+        icon: 'rwdd',
         hidden: false,
         name: '开放城市',
         component: _import('common/businessCity/index'),
