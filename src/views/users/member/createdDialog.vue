@@ -205,14 +205,14 @@
                 </el-col>
             </el-row>
 
-            <el-row :span="24">
+            <el-row :span="24" v-viewer>
                 <el-col :span="8">
                     <el-form-item label="上传营业执照照片：" label-width="180px" prop="businessLicenceFile">
                     </el-form-item>
                     <el-form-item  label-width="20px" prop="businessLicenceFile">
                         <div class="upload">
-                            <el-tooltip class="item" effect="dark" content="点击图片查看原图" placement="top" v-if="editType == 'view'">
-                                <img :src='xinzengform.businessLicenceFile ? xinzengform.businessLicenceFile : defaultImg' alt=""  v-showPicture :imgurl="xinzengform.businessLicenceFile">
+                            <el-tooltip class="item" effect="dark" content="双击图片查看原图" placement="top" v-if="editType == 'view'">
+                                <img :src='xinzengform.businessLicenceFile ? xinzengform.businessLicenceFile : defaultImg' alt="" >
                             </el-tooltip>
                             <upload class="licensePicture" tip="（必须为jpg/png并且小于5M）" v-else v-model="xinzengform.businessLicenceFile" />
                         </div>
@@ -223,8 +223,8 @@
                     </el-form-item>
                      <el-form-item  label-width="20px" prop="companyFacadeFile">
                         <div class="upload">
-                            <el-tooltip class="item" effect="dark" content="点击图片查看原图" placement="top" v-if="editType == 'view'">
-                                <img :src='xinzengform.companyFacadeFile ? xinzengform.companyFacadeFile : defaultImg' alt="" v-showPicture :imgurl="xinzengform.companyFacadeFile">
+                            <el-tooltip class="item" effect="dark" content="双击图片查看原图" placement="top" v-if="editType == 'view'">
+                                <img :src='xinzengform.companyFacadeFile ? xinzengform.companyFacadeFile : defaultImg' alt="">
                             </el-tooltip>
                             
                             <upload class="licensePicture" tip="（必须为jpg/png并且小于5M）" v-else v-model="xinzengform.companyFacadeFile" />
@@ -236,8 +236,8 @@
                     </el-form-item>
                     <el-form-item  label-width="20px" prop="takeIdCardFile" >
                         <div class="upload">
-                            <el-tooltip class="item" effect="dark" content="点击图片查看原图" placement="top" v-if="editType == 'view'">
-                                <img :src='xinzengform.takeIdCardFile ? xinzengform.takeIdCardFile : defaultImg' alt="" v-showPicture :imgurl="xinzengform.takeIdCardFile">
+                            <el-tooltip class="item" effect="dark" content="双击图片查看原图" placement="top" v-if="editType == 'view'">
+                                <img :src='xinzengform.takeIdCardFile ? xinzengform.takeIdCardFile : defaultImg' alt="">
                             </el-tooltip>
                             <upload class="licensePicture" tip="（必须为jpg/png并且小于5M）" v-else v-model="xinzengform.takeIdCardFile" />
                         </div>

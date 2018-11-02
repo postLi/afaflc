@@ -12,8 +12,8 @@
               <el-input v-model.trim="formAll.mobile"></el-input>
             </el-form-item>
             <el-form-item class="fr">
-              <el-button type="primary" icon="el-icon-search"  :size="btnsize" plain @click="getdata_search">查询</el-button>
-              <el-button type="info" icon="fontFamily aflc-icon-qingkong" :size="btnsize" plain @click="clearSearch">清空</el-button>
+              <el-button type="primary" icon="el-icon-search"  :size="btnsize" plain @click="handleSearch('search')">查询</el-button>
+              <el-button type="info" icon="fontFamily aflc-icon-qingkong" :size="btnsize" plain @click="handleSearch('clear')">清空</el-button>
             </el-form-item>
           </el-form>
       	<div class="classify_info">
@@ -31,11 +31,6 @@
             @selection-change="getSelection"    
 			tooltip-effect="dark"
 			style="width: 100%">
-            <!-- <el-table-column label="" width="60" fixed>
-                <template slot-scope="scope">
-                    <el-radio class="textRadio" @change.native="getCurrentRow(scope.$index,scope.row)" :label="scope.$index" v-model="templateRadio">&nbsp;</el-radio>
-                </template>
-            </el-table-column> -->
             <el-table-column
                     fixed
                     sortable
@@ -242,10 +237,10 @@
                 <!-- <div class="data_pic_default">
                     <img  :src= 'defaultImg'/>
                 </div> -->
-                <div class="data_pic_img clearfix">
+                <div class="data_pic_img clearfix" v-viewer>
                     <div class="data_pic_yyzz data_pic_c">  
-                        <el-tooltip class="item" effect="dark" content="点击图片查看原图" placement="top" >
-                            <img  class="picURL" :src="shengheform.businessLicenceFile ? shengheform.businessLicenceFile : defaultImg" v-showPicture :imgurl="shengheform.businessLicenceFile"/>
+                        <el-tooltip class="item" effect="dark" content="双击图片查看原图" placement="top" >
+                            <img  class="picURL" :src="shengheform.businessLicenceFile ? shengheform.businessLicenceFile : defaultImg"/>
                         </el-tooltip>
                         <h2>营业执照</h2>
                         <el-form-item  prop="radio1" label-width="0">
@@ -257,8 +252,8 @@
                         </el-form-item>
                     </div>
                     <div class="data_pic_company data_pic_c">   
-                        <el-tooltip class="item" effect="dark" content="点击图片查看原图" placement="top" >
-                            <img  class="picURL" :src="shengheform.companyFacadeFile ? shengheform.companyFacadeFile : defaultImg" v-showPicture :imgurl="shengheform.companyFacadeFile"/>
+                        <el-tooltip class="item" effect="dark" content="双击图片查看原图" placement="top" >
+                            <img  class="picURL" :src="shengheform.companyFacadeFile ? shengheform.companyFacadeFile : defaultImg"/>
                         </el-tooltip>
                         <h2>公司或档口照片</h2>
                         <el-form-item  prop="radio2" label-width="0">
@@ -270,8 +265,8 @@
                         </el-form-item>
                     </div>
                     <div class="data_pic_callingcode data_pic_c">
-                        <el-tooltip class="item" effect="dark" content="点击图片查看原图" placement="top" >
-                            <img  class="picURL" :src="shengheform.takeIdCardFile ? shengheform.takeIdCardFile : defaultImg" v-showPicture :imgurl="shengheform.takeIdCardFile"/>
+                        <el-tooltip class="item" effect="dark" content="双击图片查看原图" placement="top" >
+                            <img  class="picURL" :src="shengheform.takeIdCardFile ? shengheform.takeIdCardFile : defaultImg"/>
                         </el-tooltip>
                         <h2>手持身份证</h2>
                          <el-form-item  prop="radio3" label-width="0">
@@ -459,15 +454,6 @@ return {
             this.paramsView = row
             this.dialogFormVisible_add = true
         },
-        // getCurrentRow(index, row) {
-        //     this.shengheform = Object.assign({}, row)
-        //     this.otherServiceCode = JSON.parse(this.shengheform.otherServiceCode)
-        //     this.optionsServerArr = JSON.parse(this.shengheform.serviceType)
-        //     this.optionsProductArr = JSON.parse(this.shengheform.productServiceCode)
-        //     this.shengheform.isOpenTms = '0'
-        //     this.templateRadio = index
-        //     console.log('选中内容', row)
-        // },
         // 判断选中与否
         getSelection(val) {
           console.log('选中内容', val)
@@ -523,7 +509,25 @@ return {
             })
         },
         // 点击查询按纽，按条件查询列表
-         getdata_search(event) {
+        handleSearch(type){
+            switch(type){
+                case 'search':
+                    break;
+                case 'clear':
+                     this.formAll = {
+                        belongCity: null,
+                        belongCityName: '',
+                        companyName: '',
+                        mobile: '',
+                        authStatus: 'AF0010402', // 待认证的状态码
+                        isVest: '0'
+                    }
+                    break;
+            }
+            if(this.page!= 1){
+                this.page = 1;
+                this.$refs.pager.inputval = this.page;
+            }
             this.firstblood()
         },
          // 获取增值服务
@@ -538,20 +542,6 @@ return {
                 this.optionsProductService = resArr[1].data
                 this.optionsServer = resArr[2].data
             })
-        },
-        // 清空
-      clearSearch() {
-            // this.$refs.area.selectedOptions = [];
-          this.formAll = {
-              belongCity: null,
-              belongCityName: '',
-              companyName: '',
-              mobile: '',
-              authStatus: 'AF0010402', // 待认证的状态码
-              isVest: '0'
-
-            }
-          this.firstblood()
         },
       completeInfo() {
             if (this.shengheform.belongBrandCode) {

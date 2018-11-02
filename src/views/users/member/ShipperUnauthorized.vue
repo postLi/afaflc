@@ -24,8 +24,8 @@
               </el-input>
             </el-form-item>
             <el-form-item class="fr">
-              <el-button type="primary" plain icon="el-icon-search" :size="btnsize" @click="getdata_search">查询</el-button>
-              <el-button type="info" plain  icon="fontFamily aflc-icon-qingkong" :size="btnsize" @click="clearSearch">清空</el-button>
+              <el-button type="primary" plain icon="el-icon-search" :size="btnsize" @click="handleSearch('search')">查询</el-button>
+              <el-button type="info" plain  icon="fontFamily aflc-icon-qingkong" :size="btnsize" @click="handleSearch('clear')">清空</el-button>
             </el-form-item>
           </el-form>
 	  	<div class="classify_info">
@@ -202,27 +202,31 @@ export default {
         })
       }
     },
-        // 点击查询按纽，按条件查询列表
-    getdata_search(event) {
-            // this.formInline.belongCity = this.$refs.area.selectedOptions.pop();
-      this.firstblood()
+    // 点击查询按纽，按条件查询列表
+    handleSearch(type){
+        switch(type){
+            case 'search':
+                break;
+            case 'clear':
+                 this.formInline = {
+                    accountStatus: null,
+                    belongCity: '',
+                    mobile: '',
+                    authStatus: 'AF0010401', // 未认证的状态码
+                    isVest: '0'
+
+                }
+                break;
+        }
+        if(this.page!= 1){
+            this.page = 1;
+            this.$refs.pager.inputval = this.page;
+        }
+        this.firstblood()
     },
          // 点击选中当前行
     clickDetails(row, event, column) {
       this.$refs.multipleTable.toggleRowSelection(row)
-    },
-        // 清空
-    clearSearch() {
-            // this.$refs.area.selectedOptions = [];
-      this.formInline = {
-        accountStatus: null,
-        belongCity: '',
-        mobile: '',
-        authStatus: 'AF0010401', // 未认证的状态码
-        isVest: '0'
-
-      },
-            this.firstblood()
     },
         // 刷新页面
     firstblood() {

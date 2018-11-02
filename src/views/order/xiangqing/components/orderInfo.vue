@@ -175,12 +175,12 @@
             </div>
             <div class="essentialInformation">
                 <p>
-                    <span>在线交易奖励金：</span>
+                    <span>在线交易优惠金：</span>
                     <span v-if="listInformation.aflcOrderExpenses.reward">￥{{listInformation.aflcOrderExpenses.reward}}</span>
                     <span class="noneNun" v-else>无</span>
                 </p>
                 <p>
-                    <span>在线交易优惠金：</span>
+                    <span>在线交易奖励金：</span>
                     <!-- <span v-if="listInformation.aflcOrderExpenses.reward">￥{{listInformation.aflcOrderExpenses.reward}}</span> -->
                     <!-- <span class="noneNun" v-else>无</span> -->
                 </p>
@@ -216,10 +216,10 @@
                 </div>
             
                 <div class="essentialInformation">
-                    <!-- <p>
+                    <p>
                         <span>中单等级：</span>
-                        <span>{{listInformation.orderClass === '1' ? '实时订单' : '预约订单'}}</span>
-                    </p> -->
+                        <!-- <span>{{listInformation.orderClass === '1' ? '实时订单' : '预约订单'}}</span> -->
+                    </p>
                     <p>
                         <span>派单方式：</span>
                         <span>{{listInformation.aflcDriverStatus.dispatchWay? listInformation.aflcDriverStatus.dispatchWay : '未知'}}</span>

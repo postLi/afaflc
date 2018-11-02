@@ -157,10 +157,18 @@ export default {
         },
         clearSearch(){
             this.$refs.ruleForm.resetFields();
+            if(this.page!= 1){
+                this.page = 1;
+                this.$refs.pager.inputval = this.page;
+            }
             this.firstblood();
         },
         //搜索
         handleSearch(){
+            if(this.page!= 1){
+                this.page = 1;
+                this.$refs.pager.inputval = this.page;
+            }
             this.firstblood();
         },
         //新增网点

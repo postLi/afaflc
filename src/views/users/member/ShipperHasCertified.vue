@@ -11,8 +11,8 @@
                     <el-input placeholder="请输入内容" v-model.trim="formInline.contactsName" clearable></el-input>
                 </el-form-item>
                 <el-form-item class="fr">
-                    <el-button type="primary" icon="el-icon-search" :size="btnsize" plain @click="getdata_search">查询</el-button>
-                    <el-button type="info" icon="fontFamily aflc-icon-qingkong" :size="btnsize" plain @click="clearSearch">清空</el-button>
+                    <el-button type="primary" icon="el-icon-search" :size="btnsize" plain @click="handleSearch('search')">查询</el-button>
+                    <el-button type="info" icon="fontFamily aflc-icon-qingkong" :size="btnsize" plain @click="handleSearch('clear')">清空</el-button>
                 </el-form-item>
             </el-form>
         <div class="classify_info">
@@ -167,6 +167,28 @@ export default {
              // 清除选中状态，避免影响下个操作
       this.$refs.multipleTable.clearSelection()
     },
+     // 点击查询按纽，按条件查询列表
+    handleSearch(type){
+        switch(type){
+            case 'search':
+                break;
+            case 'clear':
+                this.formInline = {
+                    companyName: '',
+                    belongCity: '',
+                    mobile: '',
+                    authStatus: 'AF0010403', // 已认证的状态码
+                    isVest: '0',
+                    contactsName:'',
+                }
+                break;
+        }
+        if(this.page!= 1){
+            this.page = 1;
+            this.$refs.pager.inputval = this.page;
+        }
+        this.firstblood()
+    },
         // 判断选中与否
     getSelection(val) {
       console.log('选中内容', val)
@@ -188,22 +210,6 @@ export default {
       this.type = 'view'
       this.paramsView = row
       this.dialogFormVisible_add = true
-    },
-       // 点击查询按纽，按条件查询列表
-    getdata_search(event) {
-      this.firstblood()
-    },
-        // 清空
-    clearSearch() {
-      this.formInline = {
-            companyName: '',
-            belongCity: '',
-            mobile: '',
-            authStatus: 'AF0010403', // 已认证的状态码
-            isVest: '0',
-            contactsName:'',
-        }
-      this.firstblood()
     },
     getDataList() {
       this.firstblood()

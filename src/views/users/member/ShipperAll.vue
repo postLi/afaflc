@@ -2,7 +2,6 @@
     <div style="height:100%;"  class="identicalStyle">
           <el-form :inline="true" :model="shipperAll" ref="ruleForm" class="classify_searchinfo">
             <el-form-item label="所在地：">
-              <!-- <GetCityList v-model="shipperAll.belongCity" ref="area"></GetCityList> -->
                 <!-- <vregion :ui="true" @values="regionChange" class="form-control"> -->
                     <el-input v-model="shipperAll.belongCityName" placeholder="请输入"></el-input>
                 <!-- </vregion> -->
@@ -33,8 +32,8 @@
                 <el-input v-model.trim="shipperAll.mobile"></el-input>
             </el-form-item>
             <el-form-item class="fr"> 
-                <el-button type="primary" icon="el-icon-search" plain :size="btnsize"  @click="getdata_search">查询</el-button>
-                <el-button type="info" plain icon="fontFamily aflc-icon-qingkong" :size="btnsize" @click="clearSearch">清空</el-button>
+                <el-button type="primary" icon="el-icon-search" plain :size="btnsize"  @click="handleSearch('search')">查询</el-button>
+                <el-button type="info" plain icon="fontFamily aflc-icon-qingkong" :size="btnsize" @click="handleSearch('clear')">清空</el-button>
             </el-form-item>
           </el-form>
 		<div class="classify_info" >
@@ -259,27 +258,28 @@ export default {
           })
       },
         // 点击查询按纽，按条件查询列表
-    getdata_search(event) {
-            // this.shipperAll.belongCity = this.$refs.area.selectedOptions.pop();
-
-        console.log(this.shipperAll)
-        this.firstblood()
-      },
-        // 清空
-    clearSearch() {
-            // this.$refs.area.selectedOptions = [];
-        this.shipperAll = {
-            belongCity: '',
-            belongCityName: '',
-            authStatus: '',
-            accountStatus: '',
-            accountName: '',
-            mobile: '',
-            isVest: '0'
-          },
+        handleSearch(type){
+            switch(type){
+                case 'search':
+                    break;
+                case 'clear':
+                 this.shipperAll = {
+                    belongCity: '',
+                    belongCityName: '',
+                    authStatus: '',
+                    accountStatus: '',
+                    accountName: '',
+                    mobile: '',
+                    isVest: '0'
+                }
+                    break;
+            }
+            if(this.page!= 1){
+                this.page = 1;
+                this.$refs.pager.inputval = this.page;
+            }
             this.firstblood()
-      },
-
+        },
     handlePageChange(obj) {
         this.page = obj.pageNum
         this.pagesize = obj.pageSize

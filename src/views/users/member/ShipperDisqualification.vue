@@ -11,8 +11,8 @@
                     <el-input v-model.trim="formAll.mobile"></el-input>
                 </el-form-item>
                 <el-form-item class="fr">
-                    <el-button type="primary" icon="el-icon-search" :size="btnsize" plain @click="getdata_search">查询</el-button>
-                    <el-button type="info" icon="fontFamily aflc-icon-qingkong" :size="btnsize" plain @click="clearSearch">清空</el-button>
+                    <el-button type="primary" icon="el-icon-search" :size="btnsize" plain @click="handleSearch('search')">查询</el-button>
+                    <el-button type="info" icon="fontFamily aflc-icon-qingkong" :size="btnsize" plain @click="handleSearch('clear')">清空</el-button>
                 </el-form-item>
             </el-form>
         <div class="classify_info">
@@ -26,11 +26,6 @@
                     @row-click="clickDetails"
                     tooltip-effect="dark"
                     style="width: 100%">
-                    <!-- <el-table-column label="" width="60" fixed>
-                        <template slot-scope="scope">
-                            <el-radio class="textRadio" @change.native="getCurrentRow(scope.$index,scope.row)" :label="scope.$index" v-model="templateRadio">&nbsp;</el-radio>
-                        </template>
-                    </el-table-column> -->
                     <el-table-column
                         fixed
                         sortable
@@ -67,18 +62,6 @@
                     </el-table-column>
                     <el-table-column prop="qq" label="QQ号码" sortable width="120">
                     </el-table-column>
-                       <!-- <el-table-column prop="otherService" label="会员服务承诺" width="225"  align="left">
-                        <template slot-scope="scope" >
-                            <div class="otherServiceTD" v-if="scope.row.otherService != ''">
-                                <span class="otherService" v-for="(item,key) in JSON.parse(scope.row.otherService) " :key="key">
-                                    {{item}}
-                                </span>
-                            </div>
-                            <div v-else>
-                                未填写
-                            </div>
-                        </template>
-                    </el-table-column> -->
                     <el-table-column prop="isOpenTms" sortable label="是否开通TMS" >
                         <template slot-scope="scope">
                             <span :class="scope.row.isOpenTms == 1 ? 'isTMS' : 'noTMS'"> {{scope.row.isOpenTms == 1 ? '是' : '否'}}</span>
@@ -191,38 +174,29 @@ export default {
             // this.inited = true
         })
       },
-         // 点击查询按纽，按条件查询列表
-      getdata_search(event) {
-            // this.formAll.belongCity = this.$refs.area.selectedOptions.pop();
-        this.firstblood()
-      },
+    // 点击查询按纽，按条件查询列表
+    handleSearch(type){
+        switch(type){
+            case 'search':
+                break;
+            case 'clear':
+                this.formAll = {
+                    companyName: '',
+                    belongCity: '',
+                    mobile: '',
+                    authStatus: 'AF0010404', // 未认证的状态码
+                    isVest: '0',
+                    belongCityName: ''
 
-      // 清空
-      clearSearch() {
-        this.formAll = {
-          companyName: '',
-          belongCity: '',
-          mobile: '',
-          authStatus: 'AF0010404', // 未认证的状态码
-          isVest: '0',
-          belongCityName: ''
-
-        },
-        this.firstblood()
-      },
-      handleSizeChange(val) {
-        console.log(`每页 ${val} 条`)
-        this.pagesize = val
-        this.firstblood()
-      },
-      handleCurrentChange(val) {
-        console.log(`当前页: ${val}`)
-        this.page = val
-        this.firstblood()
-      },
-      handleChange(value) {
-          console.log(value)
+                }
+                break;
         }
+        if(this.page!= 1){
+            this.page = 1;
+            this.$refs.pager.inputval = this.page;
+        }
+        this.firstblood()
+    }
     }
 }
 </script>

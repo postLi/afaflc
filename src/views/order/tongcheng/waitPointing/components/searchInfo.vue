@@ -18,7 +18,7 @@
                 v-model="chooseTime"
                 type="daterange"
                 :picker-options="pickerOptions2"
-                range-separator="至"
+                range-separator="-"
                 start-placeholder="开始日期"
                 end-placeholder="结束日期"
                 unlink-panels

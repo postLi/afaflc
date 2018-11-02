@@ -1,7 +1,7 @@
 import fetch from '@/utils/fetch'
 
 // const baseurl = "aflc-order"
-const baseurl = "aflcorderservice-lyc"
+const baseurl = "aflcorderservice"
 
 //获取车主货主绑定列表
 export function data_dispatchList(page,pagesize,data) {
