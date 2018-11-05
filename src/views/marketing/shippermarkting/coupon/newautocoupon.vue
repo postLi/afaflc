@@ -60,7 +60,7 @@
               </el-col>
           </el-row>
           <el-row >
-            <el-col>
+            <el-col :span="8">
                <el-form-item  label="所属区域：" :label-width="formLabelWidth"  prop="areaName"> 
                 <GetCityList ref="area" v-model="formAllData.areaName"  @returnStr="getStr"></GetCityList>
                </el-form-item>  
@@ -83,7 +83,9 @@
              <div class="ht_table_th table_th9">过期时间</div>
              <div class="ht_table_th table_th10">适用服务类型</div>
              <div class="ht_table_th table_th11">适用车辆类型</div>
-             <div class="ht_table_th table_th12">所属区域</div>
+             <div class="ht_table_th table_th12">所属区域
+               <checkboxarea ref="areas" @returnStr="getStr1" :positiondata="positiondata"></checkboxarea>
+             </div>
              <div class="ht_table_th table_th13">能否与大户券叠加</div>
             </div>
              <div  class="ht_table_tr1">
@@ -153,7 +155,7 @@
                  </el-select>
             </div>
              <div class="ht_table_td table_th11">
-                    <el-select v-model="formAllData.aflcCouponList[keys].carType" clearable placeholder="请选择" >
+                    <el-select v-model="formAllData.aflcCouponList[keys].carType" clearable placeholder="请选择" multiple collapse-tags>
                           <el-option
                              v-for="item in optionsCar"
                              :key="item.code"
@@ -163,8 +165,11 @@
                          </el-option>
                  </el-select>
                  </div>  
-             <div class="ht_table_td table_th12" @click="changeInput(keys)">
-            <GetCityList  v-model="formAllData.aflcCouponList[keys].areaName"  @returnStr="getStr1"  ref="area1" ></GetCityList>
+             <div class="ht_table_td table_th12" @click="changeInput(keys,$event)">
+                <el-input placeholder="" v-model="formAllData.aflcCouponList[keys].areaName"  id="inputArea"></el-input>
+                <el-tooltip class="item" effect="dark" :content="formAllData.aflcCouponList[keys].areaName" placement="top-start" :disabled="!formAllData.aflcCouponList[keys].areaName">
+                <div class="moke" @click='open' id="moke"></div>
+                </el-tooltip>
               </div>
              <div class="ht_table_td table_th13">
                  <el-select v-model="formAllData.aflcCouponList[keys].ifvouchersuperposition" clearable placeholder="请选择" >
@@ -199,10 +204,12 @@ import Upload from '@/components/Upload/singleImage'
 import GetCityList from '@/components/GetCityList/city'
 import { eventBus } from '@/eventBus'
 import {parseTime,pickerOptions2} from '@/utils/'
+import checkboxarea from '@/components/GetCityList/checkboxarea'
 export default {
   components:{
     Upload,
-    GetCityList
+    GetCityList,
+    checkboxarea
   },
   props:{
     paramsView:{
@@ -286,6 +293,11 @@ export default {
             }   
         }        
     return{
+        positiondata:{
+            left:'',
+            top:'',
+        },
+        dialog_add:false,
         maxlengthNum:100,
         pickerOptions2: {
         shortcuts: pickerOptions2
@@ -334,7 +346,7 @@ export default {
             overTime:null,
             endTime:null,
             serivceCode:null,
-            carType:null,
+            carType:[],
             areaName:null,
             areaCode:null,            
             province:null,
@@ -373,16 +385,14 @@ export default {
             endTime:null,
             overTime:null,
             serivceCode:null,
-            carType:null,
+            carType:[],
             areaCode:null,
             areaName:null,
             ifvouchersuperposition:null,
             }]
             this.$refs.area.clearData();
-            for(var i=0;i<this.$refs.area1.length;i++)
-            {
-                this.$refs.area1[i].clearData();
-            }
+            this.$refs.areas[0].clearData();
+            this.$refs.areas[0].close()
             }
             else{
              this.getMoreInformation();
@@ -392,7 +402,6 @@ export default {
   },
   methods:{
     getStr(val){
-        console.log('fddf',val)
                 this.formAllData.areaCode= val.area.code
                 this.formAllData.areaName = val.area.name
                 this.formAllData.province = val.province.name
@@ -400,11 +409,11 @@ export default {
                 this.formAllData.area = val.area.name
             },  
     getStr1(val){
-                this.formAllData.aflcCouponList[this.inputKey].areaCode= val.area.code
-                this.formAllData.aflcCouponList[this.inputKey].areaName = val.area.name
-                this.formAllData.aflcCouponList[this.inputKey].province = val.province.name
-                this.formAllData.aflcCouponList[this.inputKey].city = val.city.name
-                this.formAllData.aflcCouponList[this.inputKey].area = val.area.name
+                this.formAllData.aflcCouponList[this.inputKey].areaCode= val.ItemDataCode
+                this.formAllData.aflcCouponList[this.inputKey].areaName = val.ItemDataName
+                this.formAllData.aflcCouponList[this.inputKey].province = val.ItemDataProvince
+                this.formAllData.aflcCouponList[this.inputKey].city = val.ItemDataCity
+                this.formAllData.aflcCouponList[this.inputKey].area = val.ItemDataName
             },               
     //获取  服务和车辆 类型列表
             getMoreInformation(){
@@ -428,12 +437,15 @@ export default {
                        this.couponTimeList = res.data
                 })
           },
-    changeInput:function(i){
+    changeInput:function(i,e){
        this.inputKey = i;
-       console.log(i)
+       this.positiondata.top =e.currentTarget.offsetTop+41
     },
     openDialog:function(){
         this.dialogFormVisible_add = true;
+   },
+   open(){
+       this.$refs.areas[0].open()
    },
     change:function(){
       this.dialogFormVisible_add = false;
@@ -457,7 +469,7 @@ export default {
            endTime:null,
            overTime:null,
            serivceCode:null,
-           carType:null,
+           carType:[],
            areaCode:null,
            areaName:null,
            ifvouchersuperposition:null,
@@ -482,14 +494,14 @@ export default {
     completeData(){
              let reg= /^[1-9]\d*$/  //输入正整数正则
              let reg2=/^(\d|9)(\.\d)?$/  //输入0到9
-             let reg3=/^(\d|10)(\.\d)?$/  //输入0到10
+             let reg3=/^([1-9]|1[0-9]|20)(\.\d)?$/  //输入0到10
                 for(var i=0;i<this.formAllData.aflcCouponList.length;i++){
                   if(!this.formAllData.aflcCouponList[i].couponNum){
                      this.$message.warning('派发数量都不能为空');
                      return false
                    }
                   if(!reg3.test(this.formAllData.aflcCouponList[i].couponNum)&&this.formAllData.aflcCouponList[i].couponNum!==null){
-                   this.$message.warning('派发数量仅能输入0-10之间正整数');
+                   this.$message.warning('派发数量仅能输入1-20之间正整数');
                      return false
                    }                   
                   if(!this.formAllData.aflcCouponList[i].couponName){
@@ -551,7 +563,7 @@ export default {
                      this.$message.warning('适用服务类型不能为空');  
                      return false  
                   }
-                  if(!this.formAllData.aflcCouponList[i].carType){
+                  if(!this.formAllData.aflcCouponList[i].carType.length>0){
                      this.$message.warning('适用车辆类型不能为空');  
                      return false  
                   }
@@ -595,7 +607,6 @@ export default {
                  }
     },
      add_data(){
-            console.log('this.formAllData.endTime',this.formAllData)     
             this.completeData(); 
             if(this.completeData()==false)
             {
@@ -624,7 +635,7 @@ export default {
                                 overTime:list.overTime,
                                 endTime:list.endTime,
                                 serivceCode:list.serivceCode,
-                                carType:list.carType,
+                                carType:list.carType.join(','),
                                 areaCode:list.areaCode,
                                 ifvouchersuperposition:list.ifvouchersuperposition,                              
                             }
@@ -643,6 +654,8 @@ export default {
                         aflcCouponList:aflcCouponList
                     }]
               this.dialogFormVisible_add = false;
+              console.log('aflcCouponList',aflcCouponList)
+              console.log(forms)
               data_get_couponActive_create(forms).then((res)=>{
               this.$emit('getData');
               this.$message.success('新增成功');
@@ -655,7 +668,22 @@ export default {
         }
      }       
   },
+  updated(){
+  },
   mounted(){
+    var _this = this
+    document.addEventListener('click',function(e){
+    e.stopPropagation();
+    if(_this.$refs.areas){
+    if(e.target.id=='checkboxCityList'||e.target.id=="moke")
+    {
+    _this.$refs.areas[0].open()
+    }
+    else{
+    _this.$refs.areas[0].close()
+    }   
+    }
+    })
   }
 }
 
@@ -668,11 +696,15 @@ export default {
         padding: 7px 15px 7px;
         font-size:12px;
         }
+        
     .el-dialog{
         width: 80%!important;
         overflow:unset;
         .el-input{
             width: 240px
+        }
+        .el-dialog__body{
+            padding:20px 0px;
         }
     }
     .el-row{
@@ -706,12 +738,11 @@ export default {
         color: #333;
         .ht_table_tr{
             width: 100%;
-            overflow: hidden;
             line-height: 42px;
             display: flex;
         }
          .ht_table_tr1{
-             overflow: hidden;
+             overflow: unset;
             width: 100%;
             line-height: 41px;
             height: 42px;
@@ -732,6 +763,7 @@ export default {
             display: inline-block;
             background: #EAF0FF;
             text-align: center;
+            position: relative;
             border-top:1px solid #d0d7e5;
             border-left:1px solid #d0d7e5;
             border-right:1px solid #d0d7e5;
@@ -747,8 +779,8 @@ export default {
         .table_th8{width: 10%;}
         .table_th9{width: 10%;}
         .table_th10{width: 7%;}
-        .table_th11{width: 7%;}
-        .table_th12{width: 7%;}
+        .table_th11{width: 12%;}
+        .table_th12{width: 12%;}
         .table_th13{width: 9%}
         .table_th14{width: 11%}
         .ht_table_td1{
@@ -808,5 +840,13 @@ export default {
              } 
         }
         }
+        .moke{
+            cursor: pointer;
+            position: absolute;
+            top:0px;
+            left:0px;
+            width:100%;
+            height:100%;
+        }    
 }
 </style>

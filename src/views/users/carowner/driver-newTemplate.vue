@@ -263,7 +263,6 @@
 <script>
 import  { data_post_createDriver,data_put_changeDriver,data_CarList,data_Get_carType,data_get_driver_obStatus,data_post_driverAudit,data_post_mobileGetDriver,data_post_checkDriverCardid,data_get_shipper_carmaid,data_get_shipper_carOwner,data_get_driverName_id} from '@/api/users/carowner/total_carowner.js'
 import Upload from '@/components/Upload/singleImage'
-import { eventBus } from '@/eventBus'
 import GetCityList from '@/components/GetCityList/city'
 import vregion from '@/components/vregion/Region'
 import { getDictionary } from '@/api/common.js'

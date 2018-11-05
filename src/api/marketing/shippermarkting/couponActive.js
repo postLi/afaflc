@@ -36,7 +36,6 @@ export function data_get_couponActive_create(data) {
 
 //删除优惠卷活动列表
 export function data_Del_couponActive(id) {
-    
   return fetch({
         url: '/'+baseurl+'/sm/aflcCouponActivity/v1/delete/'+id,
         method: 'delete',

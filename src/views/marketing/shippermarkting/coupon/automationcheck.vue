@@ -157,15 +157,9 @@
                  </el-select>
             </div>
              <div class="ht_table_td table_th11">
-                <el-select v-model="formAllData.aflcCouponList[keys].carType" clearable placeholder="" disabled>
-                          <el-option
-                             v-for="item in optionsCar"
-                              :key="item.code"
-                             :label="item.name"
-                             :value="item.code"
-                             :disabled="item.disabled">
-                         </el-option>
-                 </el-select>
+                 <el-tooltip :content="formAllData.aflcCouponList[keys].carTypeName" placement="top">
+                <el-input v-model="formAllData.aflcCouponList[keys].carTypeName" placeholder="" disabled></el-input>
+                 </el-tooltip>
                  </div>  
              <div class="ht_table_td table_th12">
                  <el-tooltip :content="formAllData.aflcCouponList[keys].areaName1" placement="top">

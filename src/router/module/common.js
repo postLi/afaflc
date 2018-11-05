@@ -119,6 +119,13 @@ export default {
         component: _import('common/businessCity/index'),
         meta: { title: '开放城市', stitle: '城市', noCache: true }
       },
-
+      {
+        path: '/common/appManage',
+        icon: 'rwdd',
+        hidden: false,
+        name: 'APP管理',
+        component: _import('common/appManage/index'),
+        meta: { title: 'APP管理', stitle: 'APP', noCache: true }
+      },
   ]
 }
