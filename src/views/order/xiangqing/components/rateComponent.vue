@@ -6,13 +6,13 @@
                 <p>
                     <span>装货照片：</span>
                     <el-tooltip class="item" effect="dark" content="双击图片查看原图" placement="top" v-viewer>
-                        <img class="showPicture" :src="listInformation.loadingUrl ? listInformation.loadingUrl: defaultImg" alt="" >
+                        <img class="showPicture" :src="listInformation.loadingUrl ? listInformation.loadingUrl: ''" alt="" >
                     </el-tooltip>
                 </p>
                 <p>
                     <span>回单照片：</span>
                     <el-tooltip class="item" v-for="(item,key) in listInformation.returnUrls" :key="key" effect="dark" content="双击图片查看原图" placement="top" v-viewer>
-                        <img  :src="item ? item: defaultImg" alt="">
+                        <img  :src="item ? item: ''" alt="">
                     </el-tooltip>
                 </p>
             </div>

@@ -72,7 +72,7 @@ export const constantRouterMap = [
       meta: { title: '财务控制台', noCache: true, 'code': '' }
     }, {
         path: '/html5',
-        icon: 'guijihf',
+        icon: 'guiji',
         hidden: false,
         name: '在途监控',
         component: _import('html5/index'),

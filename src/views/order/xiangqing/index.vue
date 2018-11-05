@@ -210,6 +210,9 @@ export default {
                     .fontRed{
                         color: red;
                     }
+                    .routerJump{
+                        cursor: pointer;
+                    }
                 }
                 .minwidth{
                     width: 200px;

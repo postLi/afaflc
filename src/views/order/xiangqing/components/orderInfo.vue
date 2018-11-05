@@ -36,7 +36,7 @@
                 </p>
                 <p>
                     <span>货主账号：</span>
-                    <span class="fontRed">{{listInformation.shipperMobile}}</span>
+                    <span class="fontRed routerJump" @click="pushOrderSerial(listInformation.shipperId,'shipper')">{{listInformation.shipperMobile}}</span>
                 </p>
             </div>
             <div class="essentialInformation">
@@ -199,7 +199,7 @@
                 <div class="essentialInformation">
                     <p>
                         <span>车主账号：</span>
-                        <span>{{listInformation.aflcDriverStatus.driverMobile}}</span>
+                        <span class="routerJump"  @click="pushOrderSerial(listInformation.aflcDriverStatus.driverId,'car')">{{listInformation.aflcDriverStatus.driverMobile}}</span>
                     </p>
                     <p>
                         <span>车主姓名：</span>
@@ -336,7 +336,17 @@ export default {
     handlerClick() {
         this.currentOrderSerial = this.$route.query.orderSerial
         this.dialogVisible = true
-      }
+      },
+    pushOrderSerial(userId,type){
+        switch(type){
+            case 'shipper':
+                this.$router.push({name: '货主详情',query:{ userId:userId}});
+                break;
+            case 'car':
+                this.$router.push({name: '车主详情',query:{ userId:userId}});
+                break;
+        }
+    },
   }
 }
 </script>

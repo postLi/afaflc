@@ -12,7 +12,6 @@
 				stripe
 				border
                 height="100%"
-                :default-sort = "{prop: 'mobile', order: 'descending'}"
                 @selection-change="getSelection" 
                 @row-click="clickDetails"
 				tooltip-effect="dark"
@@ -27,50 +26,61 @@
                             {{ (page - 1)*pagesize + scope.$index + 1 }}
                         </template>
                     </el-table-column>  
-                    <el-table-column label="货主姓名" prop="mobile" sortable>
+                    <el-table-column label="车主姓名" :show-overflow-tooltip="true" width="120" prop="driverName" sortable>
                         <template slot-scope="scope">
-                            <h4 class="needMoreInfo" @click="pushOrderSerial(scope.row)">{{ scope.row.nickname ? scope.row.nickname : scope.row.mobile}}</h4>
+                            <h4 class="needMoreInfo" @click="pushOrderSerial(scope.row)">{{ scope.row.driverName ? scope.row.driverName : scope.row.nickname}}</h4>
                         </template>
                     </el-table-column>
-                    <el-table-column prop="mobile"
+                    <el-table-column prop="driverMobile" width="120"
                         :show-overflow-tooltip="true" sortable
                         label="手机号码">
                     </el-table-column>
-                    <el-table-column prop="contacts" sortable label="短信验证码">
+                    <!-- <el-table-column prop="contacts" sortable label="短信验证码">
+                    </el-table-column> -->
+                    <el-table-column prop="registerOriginName" sortable label="注册渠道" width="120">
                     </el-table-column>
-                    <el-table-column prop="registerOriginName" sortable label="注册渠道">
-                    </el-table-column>
-                    <el-table-column prop="createTime" :show-overflow-tooltip="true" sortable  label="注册时间">
+                    <el-table-column prop="createTime" :show-overflow-tooltip="true" sortable width="160"  label="注册时间">
                         <template  slot-scope="scope">
                             <span v-if="scope.row.createTime">{{ scope.row.createTime | parseTime}}</span>
                         </template>
                     </el-table-column>
-                    <el-table-column prop="accountStatusName" :show-overflow-tooltip="true" sortable label="最后登录时间" width="120">
-                        <template slot-scope="scope">
-                            <span :class="{freezeName: scope.row.accountStatusName == '冻结中' ,blackName: scope.row.accountStatusName == '黑名单',normalName :scope.row.accountStatusName == '正常'}">{{scope.row.accountStatusName}}</span>
-                        </template>
+                    <el-table-column prop="" :show-overflow-tooltip="true" sortable label="最后登录时间" width="160">
                     </el-table-column>
-                    <el-table-column prop="belongCity" 
-                        :show-overflow-tooltip="true" sortable
+                    <el-table-column 
+                        prop=""   
+                        sortable
+                        width="120"
                         label="启用状态">
-                        <template slot-scope="scope">
+                        <!-- <template slot-scope="scope">
                             {{scope.row.belongCityName ? scope.row.belongCityName:scope.row.belongCity}}
-                        </template>
+                        </template> -->
                     </el-table-column>  
-                    <el-table-column prop="shipperTypeName" sortable label="活跃状态">
+                    <el-table-column prop="" sortable label="活跃状态" width="120">
                     </el-table-column>
-                    <el-table-column  label="身份状态" sortable prop="registerTime">
-                        <template  slot-scope="scope">
-                            <span v-if="scope.row.registerTime">{{ scope.row.registerTime | parseTime}}</span>
-                        </template>
+                    <el-table-column  label="身份状态" sortable prop="" width="120">
                     </el-table-column>
-                    <el-table-column prop="shipperTypeName" sortable label="审核状态">
+                    <el-table-column prop="driverStatusName" sortable label="审核状态" width="120">
                     </el-table-column>
-                    <el-table-column prop="shipperTypeName" sortable label="审核操作人">
+                    <el-table-column prop="" :show-overflow-tooltip="true" sortable label="审核操作人" width="120">
                     </el-table-column>
-                    <el-table-column prop="belongCity" sortable label="所属片区">
-                        <template slot-scope="scope">
+                    <el-table-column prop="belongArea" :show-overflow-tooltip="true" sortable label="所属片区" width="120">
+                        <!-- <template slot-scope="scope">
                             {{scope.row.belongCityName ? scope.row.belongCityName:scope.row.belongCity}}
+                        </template> -->
+                    </el-table-column>
+                    <el-table-column prop="" :show-overflow-tooltip="true" sortable label="所属商圈" width="120">
+                    </el-table-column>
+                    <el-table-column prop="" :show-overflow-tooltip="true" sortable label="所属业务员" width="120">
+                    </el-table-column>
+                    <el-table-column prop="" :show-overflow-tooltip="true" sortable label="所属客服" width="120">
+                    </el-table-column>
+                    <el-table-column 
+                        width="160"
+                        prop="updateTime" 
+                        :show-overflow-tooltip="true" sortable
+                         label="最后修改时间">
+                         <template  slot-scope="scope">
+                            <span v-if="scope.row.updateTime">{{ scope.row.updateTime | parseTime}}</span>
                         </template>
                     </el-table-column>
 				</el-table>
@@ -84,8 +94,8 @@
 <script type="text/javascript">
 import searchInfo from './searchInfo'
 import Pager from '@/components/Pagination/index'
-import { data_get_shipper_list} from '@/api/users/shipper/all_shipper.js'
-
+// import { data_get_shipper_list} from '@/api/users/shipper/all_shipper.js'
+import { data_get_driver_list} from '@/api/users/carowner/total_carowner.js'
     export default{
         components:{
             searchInfo,
@@ -116,7 +126,7 @@ import { data_get_shipper_list} from '@/api/users/shipper/all_shipper.js'
         methods: {
             firstblood(){
                 // this.loading = true;
-                data_get_shipper_list(this.page, this.pagesize, this.searchInfo).then(res => {
+                data_get_driver_list(this.page, this.pagesize, this.searchInfo).then(res => {
                     // console.log('shipperAll',res)
                     this.totalCount = res.data.totalCount
                     this.tableDataAll = res.data.list
@@ -139,9 +149,8 @@ import { data_get_shipper_list} from '@/api/users/shipper/all_shipper.js'
                 console.log('选中内容',val)
                 this.selected = val;
             },
-            pushOrderSerial(){
-                this.$router.push({name: '车主详情'});
-
+            pushOrderSerial(item){
+                this.$router.push({name: '车主详情',query:{ driverId:item.driverId }});
             },
             handlerJump(){
                 console.log('123')

@@ -40,12 +40,12 @@
             <h2>提现金额  </h2>
             <div class="authority_legal clearfix">
                 <ul class="lengandInfo fl">
-                    <li>提现金额：<span>135</span></li>
-                    <li>手续费：<span>150</span></li>
+                    <li>提现金额：<span>{{cashData.extractSumAll}}</span></li>
+                    <li>手续费：<span>0</span></li>
                 </ul>
                 <dir class="timeChoose fr">
                     <span>提现时间：</span>
-                    <el-date-picker
+                    <!-- <el-date-picker
                         v-model="value7"
                         type="daterange"
                         align="right"
@@ -56,56 +56,74 @@
                         value-format="timestamp"
                         :default-time="['00:00:00', '23:59:59']"
                         :picker-options="pickerOptions2">
+                    </el-date-picker> -->
+                    <el-date-picker
+                    v-model="cashObj.vo.extractTime"
+                    type="month"
+                    @change ="cashTimeChange"
+                    value-format="yyyy-MM"
+                    placeholder="选择月">
                     </el-date-picker>
+                    {{cashObj.vo.extractTime}}
                 </dir>
             </div>
             <div class="essentialInformation_table" >
                 <el-table
-                    :data="tableData"
+                    :data="cashData.aflcExtractCash"
                     border
                     style="width: 100%">
+                    <el-table-column label="序号"  width="80">
+                        <template slot-scope="scope">
+                            {{ (cashObj.currentPage - 1) * cashObj.pageSize + scope.$index + 1 }}
+                        </template>
+                    </el-table-column>  
                     <el-table-column
-                    prop="date"
-                    label="序号">
-                    </el-table-column>
-                    <el-table-column
-                    prop="date"
+                    prop="extractSerial"
                     label="流水号"
                     >
                     </el-table-column>
                     <el-table-column
-                    prop="name"
+                    prop="extractSum"
                     label="提现金额"
                     >
                     </el-table-column>
                     <el-table-column
-                    prop="address"
+                    prop=""
                     label="手续费">
                     </el-table-column>
                     <el-table-column
-                    prop="address"
+                    prop="extractWay"
                     label="提现方式">
                     </el-table-column>
                     <el-table-column
-                    prop="address"
+                    prop=""
                     label="钱包余额">
                     </el-table-column>
                     <el-table-column
-                    prop="address"
+                    prop="extractStatus"
                     label="提现状态">
                     </el-table-column>
+                     <el-table-column
+                    prop="extractTime"
+                    label="申请提现时间">
+                        <template slot-scope="scope">
+                            {{ scope.row.extractTime | parseTime }}
+                        </template>
+                    </el-table-column>
                     <el-table-column
-                    prop="address"
-                    label="完成时间">
+                    prop="auditTime"
+                    label="处理时间">
+                        <template slot-scope="scope">
+                            {{ scope.row.auditTime | parseTime }}
+                        </template>
                     </el-table-column>
                 </el-table>
                 <el-pagination
                     background
-                    @size-change="handleSizeChange"
-                    @current-change="handleCurrentChange"
+                    @current-change="handleCurrentChangeCash"
                     :page-sizes="size"
-                    layout="total, sizes, prev, pager, next, jumper"
-                    :total="totalCount">
+                    layout="total,prev, pager, next, jumper"
+                    :total="cashTotalCount">
                 </el-pagination>
             </div>
         </div>
@@ -182,7 +200,7 @@
 <script>
 
 import { parseTime } from '@/utils/index.js'
-
+import {  extractCashlist } from '@/api/users/carDetails/index.js'
 export default {
   name: 'ordersInfo',
   components: {
@@ -204,6 +222,18 @@ export default {
             {name:'近30天',iscur:false},
             {name:'近90天',iscur:false},
         ],
+        cashObj:{//提现金额列表查询条件
+            "currentPage": 1,
+            "pageSize": 10,
+            "vo":{
+                accountId:'',
+                extractTime:null,
+            }
+        },
+        value4:'',
+        cashTotalCount:0,//提现金额初始数量
+        cashTime:[],//提现时间选择
+        cashData:[],
         page:1,
         pagesize:20,
         totalCount:100,
@@ -272,7 +302,23 @@ export default {
     },
     methods: {
         init() {
-        
+            let driverId = this.$route.query.driverId;
+            this.cashObj.vo.accountId = driverId;
+            this.Cashlist();
+        },
+        Cashlist(){
+            extractCashlist(this.cashObj).then(res => {
+                this.cashData = res.data.list[0];
+                this.cashTotalCount = res.data.totalCount;
+            })
+        },
+        //提现金额当前页
+        handleCurrentChangeCash(val){
+            this.cashObj.currentPage = val;
+            this.Cashlist();
+        },
+        cashTimeChange(){
+            this.Cashlist();
         },
         handleSizeChange(val) {
             console.log(`每页 ${val} 条`);
@@ -286,7 +332,8 @@ export default {
                 console.log(idx)
                 idx == index ? el.iscur = true : el.iscur = false;
             })
-        }
+        },
+
     }
 }
 </script>

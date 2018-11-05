@@ -279,7 +279,7 @@
                     :page-sizes="size"
                     layout="total, sizes, prev, pager, next, jumper"
                     :total="totalCount">
-                </el-pagination>
+                </el-pagination> 
             </div>
         </div>
 
@@ -294,7 +294,7 @@ import searchInfo from './components/searchInfo'
 
 export default {
   name: 'ordersInfo',
-  components: {
+  components: { 
     //   Pager
     searchInfo,
   },

@@ -12,7 +12,6 @@
 				stripe
 				border
                 height="100%"
-                :default-sort = "{prop: 'mobile', order: 'descending'}"
                 @selection-change="getSelection" 
                 @row-click="clickDetails"
 				tooltip-effect="dark"
@@ -27,46 +26,54 @@
                             {{ (page - 1)*pagesize + scope.$index + 1 }}
                         </template>
                     </el-table-column>  
-                    <el-table-column label="货主姓名" prop="mobile" sortable>
+                    <el-table-column label="货主姓名" :show-overflow-tooltip="true" prop="mobile" width="120" sortable>
                         <template slot-scope="scope">
                             <h4 class="needMoreInfo" @click="pushOrderSerial(scope.row)">{{ scope.row.nickname ? scope.row.nickname : scope.row.mobile}}</h4>
                         </template>
                     </el-table-column>
                     <el-table-column prop="mobile"
+                        width="120"
                         :show-overflow-tooltip="true" sortable
                         label="手机号码">
                     </el-table-column>
-                    <el-table-column prop="registerOriginName" sortable label="注册渠道">
+                    <el-table-column prop="registerOriginName" sortable label="注册渠道" width="120">
                     </el-table-column>
-                    <el-table-column prop="createTime" :show-overflow-tooltip="true" sortable  label="注册时间">
+                    <el-table-column prop="createTime" :show-overflow-tooltip="true" sortable width="160"  label="注册时间">
                         <template  slot-scope="scope">
                             <span v-if="scope.row.createTime">{{ scope.row.createTime | parseTime}}</span>
                         </template>
                     </el-table-column>
-                    <el-table-column prop="" :show-overflow-tooltip="true" sortable label="最后登录时间" width="120">
-                        <!-- <template slot-scope="scope">
-                            <span :class="{freezeName: scope.row.accountStatusName == '冻结中' ,blackName: scope.row.accountStatusName == '黑名单',normalName :scope.row.accountStatusName == '正常'}">{{scope.row.accountStatusName}}</span>
-                        </template> -->
+                    <el-table-column prop="" :show-overflow-tooltip="true" sortable label="最后登录时间" width="160">
                     </el-table-column>
                     <el-table-column 
                         prop="" 
+                        width="120"
                         :show-overflow-tooltip="true" sortable
                         label="启用状态">
                         <!-- <template slot-scope="scope">
                             {{scope.row.belongCityName ? scope.row.belongCityName:scope.row.belongCity}}
                         </template> -->
                     </el-table-column>  
-                    <el-table-column prop="" sortable label="活跃状态">
+                    <el-table-column prop="" sortable :show-overflow-tooltip="true" label="活跃状态" width="120">
                     </el-table-column>
-                    <el-table-column  label="身份状态" sortable prop="">
+                    <el-table-column  label="身份状态" :show-overflow-tooltip="true" sortable prop="" width="120">
                     </el-table-column>
-                    <el-table-column prop="" sortable label="审核状态">
+                    <el-table-column prop="" sortable :show-overflow-tooltip="true" label="审核状态" width="120">
                     </el-table-column>
-                    <el-table-column prop="" sortable label="审核操作人">
+                    <el-table-column prop="" sortable :show-overflow-tooltip="true" label="审核操作人" width="120">
                     </el-table-column>
-                    <el-table-column prop="belongArea" sortable label="所属片区">
+                    <el-table-column prop="belongArea" width="120" sortable label="所属片区">
+                    </el-table-column>
+                    <el-table-column prop="" width="120" :show-overflow-tooltip="true" sortable label="所属街道">
+                    </el-table-column>
+                    <el-table-column prop="" width="120" :show-overflow-tooltip="true" sortable label="所属商圈">
+                    </el-table-column>
+                    <el-table-column prop="" width="120" :show-overflow-tooltip="true" sortable label="所属业务员">
+                    </el-table-column>
+                    <el-table-column prop="" width="120" :show-overflow-tooltip="true" sortable label="所属客服">
                     </el-table-column>
                     <el-table-column prop="updateTime" 
+                        width="160"
                         :show-overflow-tooltip="true" sortable
                          label="最后修改时间">
                          <template  slot-scope="scope">
