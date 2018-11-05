@@ -7,13 +7,12 @@
                  ref="treeForm"
                  show-checkbox
                 :data="cityTree"
-                check-strictly
                  node-key="code"
                 :props="defaultProps"
+                :check-strictly="treestatus"
                 :default-expand-all='treestatus'
                 :highlight-current = "true"
                 @check="nodeClick"
-                @check-change="handleClick" 
                 >
                 </el-tree>
                 </div>
@@ -93,7 +92,8 @@ export default{
               cityName:null,
               provinceCode:null,
               provinceName:null,
-              }
+              },
+              citystName:null,
             }
         },
       components: {
@@ -163,9 +163,7 @@ export default{
       methods: {
             // 刷新页面
             firstblood() {
-                console.log('11')
                 data_CityList(this.page,this.pagesize,{}).then(res=>{
-                    console.log('data1',res)
                     this.dataTotal = res.data.length
                     this.tableDataTree = res.data;
                     this.loading = false;
@@ -187,12 +185,20 @@ export default{
             })
 
             },
-            handleClick(data, checked, node){
-                 if(checked == true){
-                     this.$refs.treeForm.setCheckedNodes([data]);
-                 }
-            },
             nodeClick(data,checked,node,gg){
+                if(this.citystName==data.name){
+                this.citystName=null
+                this.fromData={
+                            cityCode:null,
+                            cityName:null,
+                            provinceCode:null,
+                            provinceName:null,
+                        }
+                this.$refs.treeForm.setCheckedNodes([])
+                    
+                }
+                else{
+                this.citystName=data.name
                 this.fromData={
                     cityCode:this.$refs.treeForm.getNode(data.code).data.code,
                     cityName:this.$refs.treeForm.getNode(data.code).data.name,
@@ -200,11 +206,14 @@ export default{
                     provinceName:this.$refs.treeForm.getNode(data.code).parent.data.name,
                 }
                 this.$refs.treeForm.setCheckedNodes([data])
-                
-                
+                }
             },
             // 新增
             Add_getData(){
+                if(!this.fromData.cityName){
+                    this.$message.info('请选中要添加的业务城市')
+                }
+                else{
                 data_AddCity(this.fromData).then(res=>{
                        this.$message.success('新增成功')
                             this.firstblood()
@@ -212,6 +221,8 @@ export default{
                             this.$message.error('新增失败')
                             this.firstblood()
                         })
+                }
+
             },
             // 每页显示数据量变更
             handlePageChange(obj) {
@@ -235,6 +246,7 @@ export default{
             .side_left_top{
              height:90%;
              overflow-x: auto;
+             overflow-y: hidden;
              }
             .side_left_bottom{
              position: absolute;

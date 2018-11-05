@@ -61,12 +61,22 @@
         },
         methods:{
 			handleClick(tab, event) {
+                if(tab.name=='first'){
                 this.$refs.ref1.getDataList()
+                }
+                if(tab.name=='second'){
                 this.$refs.ref2.getDataList()
+                }
+                if(tab.name=='third'){
                 this.$refs.ref3.getDataList()
+                }
+                if(tab.name=='fourth'){
                 this.$refs.ref4.getDataList()
+                }
+                if(tab.name=='fifth'){
                 this.$refs.ref5.getDataList()
-                 this.CarActiveName = tab.name;
+                }                                                                
+                this.CarActiveName = tab.name;
             },
 		}
     }
@@ -127,6 +137,7 @@
                                 }
                                 .lessWidth{
                                     width: 80px;
+                                    display: inline-block;
                                 }
                                 &>.el-checkbox{
                                     margin-left:0px;

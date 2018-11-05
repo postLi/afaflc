@@ -1,5 +1,8 @@
 <template>
     <div class="identicalStyle Marketing" style="height:100%" v-loading="loading">
+        <!-- <div style="width:200px;">
+         <checkboxarea ref="area" @returnStr="getStr1"></checkboxarea>
+        </div> -->
           <el-form :inline="true" class="demo-ruleForm classify_searchinfo">
             <el-form-item label="活动名称：">
                <el-input v-model="formAllData.activityName" class="activeCss"></el-input>
@@ -176,6 +179,9 @@ import newautocoupon from './newautocoupon'
 import automationcheck from './automationcheck'
 import modautocoupon from './modautocoupon'
 import couponGive from './couponGive'
+
+import checkboxarea from '@/components/GetCityList/checkboxarea'
+
 export default {
     props:{
       types:{
@@ -227,7 +233,8 @@ export default {
         automationcheck,
         modautocoupon,
         couponGive,
-        GetCityList
+        GetCityList,
+        checkboxarea
     },
     methods:{
              // 列表刷新页面  
@@ -244,6 +251,10 @@ export default {
                 console.log('this.cityarr',val,name)
                 this.formAllData.areaCode = val.area.code
             }, 
+            getStr1(val){
+                //  console.log('this.cityarr11111',val)
+            },
+            
             //每页显示数据量变更
             handlePageChange(obj) {
                 this.page = obj.pageNum
