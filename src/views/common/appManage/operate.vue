@@ -1,0 +1,335 @@
+<template>
+     <div class="appManagecread commoncss">
+      <el-button :type="btntype" :value="value" :plain="plain" :icon="icon" @click="openDialog()"><span :class="editType=='view'?'BtnInfo':''">{{btntext}}</span ></el-button>
+      <el-dialog  :visible="dialogFormVisible_add" :before-close="change" :title="btntitle">
+        <el-form ref="formData"  :rules="rulesForm" :model="formData">
+            <el-row>
+                <el-col :span="12">
+                    <el-form-item label="app名称 ：" :label-width="formLabelWidth" prop="appName">
+                        <el-input v-model="formData.appName" placeholder=""  :disabled="editType=='view'"></el-input>   
+                    </el-form-item>
+                </el-col>
+                <el-col :span="12">
+                    <el-form-item label="app下载地址 ：" :label-width="formLabelWidth" prop="appDownloadUrl">
+                        <el-input v-model="formData.appDownloadUrl" placeholder=""  :disabled="editType=='view'"></el-input>   
+                    </el-form-item>
+                </el-col>            
+            </el-row>
+            <el-row>
+                <el-col :span="12">
+                    <el-form-item label="app类型 ：" :label-width="formLabelWidth" prop="appType">
+               <el-select  v-model="formData.appType" clearable placeholder="请选择" :disabled="editType=='view'">
+                          <el-option
+                             v-for="item in appTypeList"
+                              :key="item.code"
+                              :label="item.name"
+                              :value="item.code"
+                               :disabled="item.disabled">
+                         </el-option>
+                 </el-select>
+                    </el-form-item>
+                </el-col>
+                <el-col :span="12">
+                    <el-form-item label="app版本号 ：" :label-width="formLabelWidth" prop="appVersion">
+                         <el-input v-model="formData.appVersion" placeholder=""  :disabled="editType=='view'"></el-input>   
+                    </el-form-item>
+                </el-col>    
+            </el-row>
+            <el-row>
+                <el-col :span="12">
+                    <el-form-item label="版本号名称 ：" :label-width="formLabelWidth" prop="appVersionName">
+                         <el-input v-model="formData.appVersionName" placeholder=""  :disabled="editType=='view'"></el-input>   
+                    </el-form-item>
+                </el-col> 
+                <el-col :span="12">
+                    <el-form-item label="版本发布时间 ：" :label-width="formLabelWidth" prop="versionDate">
+                         <el-date-picker v-model="formData.versionDate"
+                                :disabled="editType=='view'"
+                                type="datetime" 
+                                value-format="timestamp"
+                                default-time="00:00:00"
+                                placeholder="选择日期">
+                         </el-date-picker>
+
+                    </el-form-item>
+                </el-col> 
+            </el-row>
+            <el-row>
+                <el-col :span="24">
+                    <el-form-item label="更新内容 ：" :label-width="formLabelWidth" class="textArea" prop="remark">
+                        <el-input
+                                    type="textarea"
+                                    :rows="2"
+                                    placeholder="1-200间的字符" 
+                                    maxlength="200"
+                                    v-model="formData.remark"
+                                    :disabled="editType=='view'"
+                                    clearable>
+                                </el-input>
+                              <p class="countNum">
+                             <span class="">{{formData.remark.length}}</span> <span>/ {{maxlengthNum}}</span> 
+                        </p>
+                    </el-form-item>
+                </el-col> 
+            </el-row>
+        </el-form>
+        <div slot="footer" class="dialog-footer">
+          <el-button type="primary" @click="add_data" v-if="editType=='add'">确 定</el-button>
+          <el-button type="primary" @click="edit_data" v-if="editType=='edit'">确 定</el-button>
+          <el-button @click="close()" type="primary">关 闭</el-button>
+        </div>
+      </el-dialog> 
+      </div>
+</template>
+<script>
+import {data_get_aflcAppDownload_create,data_get_aflcAppDownload_update} from '@/api/company/appManage.js'
+import { eventBus } from '@/eventBus'
+import axios from 'axios'
+export default {
+  components:{
+  },
+  props:{
+    params:{
+      type:[Object,String,Array,Number],
+    },
+    value:{
+      type: String,
+      default:''
+    },
+    btntype: {
+      type: String,
+      default: ''
+    },
+    btntext: {
+      type: String,
+      default: ''
+    },
+    btntitle: {
+    type: String,
+    default: ''
+    },
+    icon:{
+      type: String,
+      default: ''
+    },
+    plain:{
+      type: Boolean,
+      default: false
+    },
+    /*add新增，edit编辑，view查看*/
+    editType: {
+      type: String,
+    },    
+    paramsView:{
+      type:Object
+    }
+  },
+  data(){
+        // app名称校验 
+        const appNameValidator = (rule,val,cb)=>{
+            if(!val){
+            cb(new Error('app名称不能为空'))
+            }
+            else{
+                cb()
+            }
+        }     
+        // app下载地址校验 
+        const appDownloadUrlValidator = (rule,val,cb)=>{
+            if(!val){
+            cb(new Error('app下载地址不能为空'))
+            }
+            else{
+                cb()
+            }
+        }   
+        // app类型校验 
+        const appTypeValidator = (rule,val,cb)=>{
+            if(!val){
+            cb(new Error('app类型不能为空'))
+            }
+            else{
+                cb()
+            }
+        } 
+        // app版本号校验 
+        const appVersionValidator = (rule,val,cb)=>{
+            if(!val){
+            cb(new Error('app版本号不能为空'))
+            }
+            else{
+                cb()
+            }
+        } 
+        // 版本号名称校验 
+        const appVersionNameValidator = (rule,val,cb)=>{
+            if(!val){
+            cb(new Error('版本号名称不能为空'))
+            }
+            else{
+                cb()
+            }
+        }   
+        // 版本发布时间校验 
+        const versionDateValidator = (rule,val,cb)=>{
+            if(!val){
+            cb(new Error('版本发布时间不能为空'))
+            }
+            else{
+                cb()
+            }
+        }   
+        // 更新内容校验 
+        const remarkValidator = (rule,val,cb)=>{
+            if(!val){
+            cb(new Error('更新内容不能为空'))
+            }
+            else{
+                cb()
+            }
+        }                   
+        
+
+        return{
+        maxlengthNum:200,
+        dialogFormVisible_add: false,
+        formLabelWidth:'120px',
+        formData:{
+        appName:'',
+        appDownloadUrl:'',
+        appType:'',
+        appVersion:'',
+        appVersionName:'',
+        versionDate:'',
+        remark:'',
+        },
+        appTypeList:[{code:'0',name:'安卓车主'},{code:'1',name:'安卓货主'},{code:'2',name:'IOS车主'},{code:'3',name:'IOS货主'}],
+        rulesForm:{
+            appName:{validator:appNameValidator, trigger:'change',required:true,},
+            appDownloadUrl:{validator:appDownloadUrlValidator, trigger:'change',required:true,},
+            appType:{validator:appTypeValidator, trigger:'change',required:true,},
+            appVersion:{validator:appVersionValidator, trigger:'change',required:true,},
+            appVersionName:{validator:appVersionNameValidator, trigger:'change',required:true,},
+            versionDate:{validator:versionDateValidator, trigger:'change',required:true,},
+            remark:{validator:remarkValidator, trigger:'change',required:true,},
+        }        
+        }
+  },
+  watch:{
+   dialogFormVisible_add:{
+        handler: function(val, oldVal) {
+            if(!val){
+                 this.$refs.formData.resetFields()
+            }
+        },
+    },
+  },
+  mounted(){
+  },
+  methods:{
+   openDialog:function(){
+       var _this = this
+       if(this.editType=='add'){
+        this.dialogFormVisible_add = true;
+       }
+       else if(this.editType=='view'){
+           console.log('fdf',_this.paramsView)
+            axios.get('/api/aflccommonservice/common/aflcAppDownload/v1/'+_this.paramsView.id).then(function (response) {
+                _this.formData = response.data.data
+                })
+                .catch(function (error) {
+                });           
+           this.dialogFormVisible_add = true;
+       }
+       else if(this.editType=='edit'){
+                 if(this.params.length == 0 && this.editType !== 'add'){
+               this.$message.warning('请选择您要操作的用户');
+               return false
+          }else if (this.params.length > 1 && this.editType !== 'add') {
+                this.$message({
+                    message: '每次只能操作单条数据~',
+                    type: 'warning'
+                })
+                this.$emit('getData') 
+                return false
+          }
+          else if(this.params.length == undefined && this.editType !== 'add')
+          {
+                this.$message.warning('请选择您要操作的用户');
+               return false
+          }
+           else{
+            if(this.params[0].usingStatus==0){
+            this.$message.info('选中内容被已禁用，不能进行修改操作');
+            this.$emit('getData') 
+            return
+           }
+           else{
+            axios.get('/api/aflccommonservice/common/aflcAppDownload/v1/'+_this.params[0].id).then(function (response) {
+                _this.formData = response.data.data
+                })
+                .catch(function (error) {
+                });
+          this.dialogFormVisible_add = true
+           }
+        }
+       }
+      
+    },
+   change:function(){
+      this.dialogFormVisible_add = false;
+   },
+// 新增
+   add_data:function(){
+   this.$refs['formData'].validate(valid=>{
+    if(valid){
+       this.dialogFormVisible_add = false;
+        data_get_aflcAppDownload_create(this.formData).then(res=>{
+              this.$emit('getData');
+              this.$message.success('新增成功');
+                }).catch(res=>{
+              this.$emit('getData');
+              this.$message.error('新增失败')
+            })
+    }})
+   },
+   edit_data:function(){
+   this.$refs['formData'].validate(valid=>{
+    if(valid){       
+       this.dialogFormVisible_add = false;
+        data_get_aflcAppDownload_update(this.formData).then(res=>{
+              this.$emit('getData');
+              this.$message.success('修改成功');
+                }).catch(res=>{
+              this.$emit('getData');
+              this.$message.error('修改失败')
+            })
+    }})
+    },
+
+// 关闭
+   close:function(){
+      this.dialogFormVisible_add = false;
+       }, 
+   },
+}
+</script>
+
+
+<style lang="scss">
+.appManagecread{
+     display: inline-block;
+    .el-button{
+        padding: 6px 15px 6px;
+        }
+    .el-form-item__content{
+        text-align: left;
+    }
+    .el-date-editor{
+        width: 100%;
+    }
+    .BtnInfo{
+    font-weight: bold
+    }
+}
+</style>

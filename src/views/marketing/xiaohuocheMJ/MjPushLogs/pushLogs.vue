@@ -59,7 +59,7 @@
                     </el-table-column>
                     <el-table-column
                     label="用户"
-                    width="180" prop="driverName">
+                    width="220" prop="driverName" show-overflow-tooltip>
                     <template slot-scope="scope">
                         <span v-if="!scope.row.driverName">{{scope.row.driverMobile}}</span>
                         <span v-else>{{scope.row.driverName}}-{{scope.row.driverMobile}}</span>

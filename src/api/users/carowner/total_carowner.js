@@ -105,11 +105,6 @@ export function data_get_shipper_carOwner() {
 }
 
 
-// 根据身份证获取车主
-export function data_post_checkDriverCardid(data) {
-  return fetch.get('/' + baseurl + '/usercenter/aflcDriver/v1/checkDriverCardid/' + data, data)
-}
-
 
 // 获取车主冻结原因字典
 export function data_get_car_freezeType() {
@@ -119,4 +114,19 @@ export function data_get_car_freezeType() {
 // 获取黑名单原因字典
 export function data_get_car_BlackType() {
   return fetch.get('/' + baseurl_two + '/sysDict/getSysDictByCodeGet/AF02002')
+}
+
+// 获取活跃值字典
+export function data_get_car_ActiveValue() {
+  return fetch.get('/' + baseurl_two + '/sysDict/getSysDictByCodeGet/AF00204')
+}
+
+// 根据身份证检验
+export function data_post_checkDriverCardid(data) {
+  return fetch.post('/' + baseurl + '/usercenter/aflcDriver/v1/checkDriverCardid/', data)
+}
+
+// 根据车牌检验
+export function data_post_checkDriverCarNumber(data) {
+  return fetch.post('/' + baseurl + '/usercenter/aflcDriver/v1/checkDriverCarNum/', data)
 }

@@ -54,7 +54,7 @@
                 <el-col :span="12">
                     <el-form-item label="车长(米)：" :label-width="formLabelWidth"  prop="carLength">
                       <el-input
-                            class="certifyless"
+                            class="lessWidth"
                             placeholder="长"
                             v-model="templateModel.carLength"
                             clearable
@@ -65,7 +65,7 @@
                     </el-form-item>
                     <el-form-item :label-width="formLabelWidth" prop="carWidth">
                         <el-input
-                            class="certifyless"
+                            class="lessWidth"
                             placeholder="宽"
                             v-model="templateModel.carWidth"
                             clearable
@@ -76,7 +76,7 @@
                     </el-form-item>
                     <el-form-item  :label-width="formLabelWidth" prop="carHeight">
                         <el-input
-                            class="certifyless"
+                            class="lessWidth"
                             placeholder="高"
                             v-model="templateModel.carHeight"
                             clearable
@@ -158,6 +158,21 @@
                         <el-checkbox v-model="templateModel.isVipCar" true-label="1" false-label='0' @change='isVip' label="是" border size="medium" ></el-checkbox>
                     </el-form-item>
                   </el-col>
+                  <el-col :span="12">
+                    <el-form-item label="活跃值：" :label-width="formLabelWidth">
+                        <el-select v-model="templateModel.activeValue" placeholder="请选择" :disabled="editType=='view'">
+                            <el-option
+                                v-for="item in activeValueList"
+                                :key="item.code"
+                                :label="item.name"
+                                :value="item.code">
+                            </el-option>
+                        </el-select>
+                    </el-form-item>
+                  </el-col>
+              </el-row>
+
+            <el-row>
                 <el-col :span="12">
                 <el-form-item label="提交认证时间：" :label-width="formLabelWidth">
                   <el-date-picker
@@ -168,20 +183,20 @@
                   </el-date-picker>
                 </el-form-item>
               </el-col>
-              </el-row>
-
-            <el-row>
-              <el-col :span="12">
-                <el-form-item label="等待时长：" :label-width="formLabelWidth">
-                  {{templateModel.authenticationTime|remainData}}
-                </el-form-item>
-              </el-col>
               <el-col :span="12">
                 <el-form-item label="注册来源：" :label-width="formLabelWidth">
                   <el-input v-model="templateModel.registerOriginName" disabled></el-input>
                 </el-form-item>
               </el-col>
             </el-row>
+            <el-row>
+              <el-col :span="12">
+                <el-form-item label="等待时长：" :label-width="formLabelWidth">
+                  {{templateModel.authenticationTime|remainData}}
+                </el-form-item>
+              </el-col>
+            </el-row>
+
             <div class="data_pic">
                 <div class="data_pic_callingcode data_pic_c" v-viewer>
                     <el-tooltip class="item" effect="dark" content="双击图片查看原图" placement="top">
@@ -277,7 +292,7 @@
   </div>
 </template>
 <script>
-import {data_post_checkDriverCardid,data_get_driver_obStatus,data_CarList,data_Get_carType,data_post_audit,data_get_shipper_carmaid,data_get_shipper_carOwner} from '../../../api/users/carowner/total_carowner.js'
+import {data_post_checkDriverCardid,data_get_driver_obStatus,data_CarList,data_Get_carType,data_post_audit,data_get_shipper_carmaid,data_get_shipper_carOwner,data_get_car_ActiveValue} from '../../../api/users/carowner/total_carowner.js'
 import {parseTime} from '@/utils/'
 import { eventBus } from '@/eventBus'
 import Upload from '@/components/Upload/singleImage'
@@ -522,6 +537,7 @@ export default {
         commisionLevel:null,
         },   // 认证审核表单
         formLabelWidth:'150px',
+        activeValueList:[],
         optionscarType:[],
         optionscarSpec:[],
         optionsLevel:[],
@@ -631,8 +647,11 @@ export default {
             }).catch(err =>{
                 console.log(err)
             })
-
-
+            data_get_car_ActiveValue().then(res=>{
+                this.activeValueList = res.data
+            }).catch(err =>{
+                console.log(err)
+            })
     },
     // 图片质量拼接传给后台
      pictureTypeChange(){
@@ -813,7 +832,7 @@ export default {
     }
 }
 .data_pic{
-    margin: 0 15px;
+   margin: 0 15px;
    overflow: hidden;
 .data_pic_c{
     float: left;
@@ -844,9 +863,6 @@ export default {
     }
     }
     }
-    }
-    .lessWidth{
-        width: 80px!important
     }
     .el-form-item__error 
     {

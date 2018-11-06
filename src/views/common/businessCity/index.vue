@@ -151,6 +151,7 @@ export default{
 
                 else{
                 data_GetCityList(item.code).then(res=>{
+                    console.log('res',res.data.list)
                     if(res.data.list.length>0)
                     {
                     item.children = res.data.list;

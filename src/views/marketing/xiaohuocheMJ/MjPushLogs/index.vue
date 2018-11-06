@@ -5,7 +5,7 @@
                    <el-input v-model="formAll.orderSerial"></el-input>
                  </el-form-item>
                   <el-form-item label="出发地" >
-                   <el-input v-model="formAll.startAddressName"></el-input>
+                   <el-input v-model="formAll.startAddressName" class="StartareaName"></el-input>
                  </el-form-item>
                   <el-form-item label="推送车主活跃度：">
                     <el-select v-model="formAll.liveness" placeholder="请选择" clearable>
@@ -212,6 +212,9 @@ export default {
     color: #3e9ff1;
     cursor: pointer;
     }   
+    .StartareaName{
+        width: 190px!important;
+    }
 }
 
 </style>

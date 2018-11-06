@@ -28,7 +28,7 @@
                     editType="edit"
                     :templateItem="selectionData"
                     btntitle="修改"
-                     @getData="getDataList"
+                    @getData="getDataList"
                     v-has:DRIVER_MANAGE_UPDATE
                     >
                     </driver-newTemplate>
