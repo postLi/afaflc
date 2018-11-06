@@ -34,7 +34,7 @@
                         is-range
                         type="daterange"
                         v-model="createTime"
-                        range-separator="至"
+                        range-separator="-"
                         start-placeholder="开始时间"
                         end-placeholder="结束时间"
                         placeholder="选择时间范围"
@@ -377,7 +377,6 @@ export default {
                     this.activeList.push(activeListType[0])
                 })
                 data_CarList().then(res=>{
-                    // console.log(res.data)
                     res.data.map((item)=>{
                         this.optionsCarList.push(item);
                     })

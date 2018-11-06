@@ -85,8 +85,6 @@ export function data_couponStatus() {
   })
 }
 
-
-
  //activity_id获取优惠卷活动列表
  export function data_get_couponActive2_Id(activity_id) {
   return fetch({

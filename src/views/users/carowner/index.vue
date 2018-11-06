@@ -116,7 +116,7 @@
                 text-align:right;
             }
         }
-        .carNewinfo,.freezeInfo,.blackInfo{
+        .carNewinfo,.freezeInfo,.blackInfo,.drivercertify{
             display: inline-block;
             .el-dialog{
                 width:1100px;
@@ -133,10 +133,10 @@
                         .el-form-item{
                             .el-form-item__content{
                                 .el-input{
-                                    width: 250px;
+                                    width: 320px;
                                 }
                                 .lessWidth{
-                                    width: 80px;
+                                    width: 103px;
                                     display: inline-block;
                                 }
                                 &>.el-checkbox{

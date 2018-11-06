@@ -391,8 +391,10 @@ export default {
             ifvouchersuperposition:null,
             }]
             this.$refs.area.clearData();
+            if(this.$refs.areas){
             this.$refs.areas[0].clearData();
             this.$refs.areas[0].close()
+            }
             }
             else{
              this.getMoreInformation();
@@ -675,13 +677,15 @@ export default {
     document.addEventListener('click',function(e){
     e.stopPropagation();
     if(_this.$refs.areas){
+    if(_this.$refs.areas.length>0){
     if(e.target.id=='checkboxCityList'||e.target.id=="moke")
     {
     _this.$refs.areas[0].open()
     }
     else{
     _this.$refs.areas[0].close()
-    }   
+    }    
+    }
     }
     })
   }

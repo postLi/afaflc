@@ -1,8 +1,5 @@
 <template>
     <div class="identicalStyle Marketing" style="height:100%" v-loading="loading">
-        <!-- <div style="width:200px;">
-         <checkboxarea ref="area" @returnStr="getStr1"></checkboxarea>
-        </div> -->
           <el-form :inline="true" class="demo-ruleForm classify_searchinfo">
             <el-form-item label="活动名称：">
                <el-input v-model="formAllData.activityName" class="activeCss"></el-input>
@@ -40,7 +37,7 @@
                         type="daterange"
                         align="right"
                         v-model="createTime"
-                        range-separator="至"
+                        range-separator="-"
                         start-placeholder="开始时间"
                         end-placeholder="结束时间"
                         placeholder="选择时间范围"
@@ -241,19 +238,14 @@ export default {
             firstblood(){
                 this.loading = true
                 data_get_couponActiveauto_list(this.page,this.pagesize,this.formAllData).then(res => {
-                  console.log(res)
                     this.dataTotal = res.data.totalCount
                     this.tableDataAll = res.data.list;
                     this.loading = false
                 })
             },
             getStr(val){
-                console.log('this.cityarr',val,name)
                 this.formAllData.areaCode = val.area.code
             }, 
-            getStr1(val){
-                //  console.log('this.cityarr11111',val)
-            },
             
             //每页显示数据量变更
             handlePageChange(obj) {
@@ -280,6 +272,7 @@ export default {
           },
         // 清空
         clearSearch(){
+        this.createTime = null;
         this.formAllData =  {
             activityName:null,
             activityType:null,

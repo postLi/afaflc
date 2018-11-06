@@ -2,21 +2,21 @@
      <div class="shoppingDialog commoncss">
       <el-button :type="btntype" :value="value" :plain="plain" :icon="icon" @click="openDialog()"><span :class="editType=='view'?'BtnInfo':''">{{btntext}}</span ></el-button>
       <el-dialog  :visible="dialogFormVisible_add" :before-close="change" :title="btntitle" top=5vh v-dialogDrag>
-        <el-form ref="formAll" :model="formAll" :rules="rulesForm">
+        <el-form ref="formAll" :model="formAll" :rules="rulesForm" :label-width="formLabelWidth">
             <el-row>
                 <el-col :span="12">
-                    <el-form-item label="商圈名称 ：" :label-width="formLabelWidth" prop="tradeName">
+                    <el-form-item label="商圈名称 ："  prop="tradeName">
                     <el-input v-model="formAll.tradeName" :disabled="editType=='view'"></el-input>
                     </el-form-item>
                 </el-col>
                  <el-col :span="12">
                      <span v-if="!selectFlag">
-                    <el-form-item label="所在区域 ：" :label-width="formLabelWidth">
+                    <el-form-item label="所在区域 ：" >
                     <el-input v-model="formAll.areaName" placeholder="请选择" :disabled="editType=='view'" @focus="changeSelect"></el-input>
                     </el-form-item>
                      </span>
                      <span v-else>
-                    <el-form-item label="所在区域 ：" :label-width="formLabelWidth" prop="areaName">
+                    <el-form-item label="所在区域 ："  prop="areaName">
                    <GetCityList ref="area" v-model="formAll.areaName"  @returnStr="getStr"></GetCityList>
                     </el-form-item>
                      </span>
@@ -24,19 +24,19 @@
             </el-row>
             <el-row>
                 <el-col :span="12">
-                    <el-form-item label="详细地址 ：" :label-width="formLabelWidth">
+                    <el-form-item label="详细地址 ：" >
                     <el-input v-model="formAll.address" :disabled="editType=='view'"></el-input>
                     </el-form-item>
                 </el-col>
                  <el-col :span="12">
-                    <el-form-item label="商圈场主 ：" :label-width="formLabelWidth" prop="tradeOwner">
+                    <el-form-item label="商圈场主 ："  prop="tradeOwner">
                     <el-input v-model="formAll.tradeOwner" :disabled="editType=='view'"></el-input>
                     </el-form-item>
                 </el-col>
             </el-row>
             <el-row>
                 <el-col :span="12">
-                    <el-form-item label="场主手机号 ：" :label-width="formLabelWidth" prop="ownerPhone">
+                    <el-form-item label="场主手机号 ："  prop="ownerPhone">
                     <el-input v-model="formAll.ownerPhone" :disabled="editType=='view'"></el-input>
                     </el-form-item>
                 </el-col>

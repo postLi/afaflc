@@ -3,10 +3,10 @@
       <el-button :type="btntype" :value="value" :plain="plain" :icon="icon" @click="openDialog()"><span :class="editType=='view'?'BtnInfo':''">{{btntext}}</span ></el-button>
       <div class="newmanageDistrict">
       <el-dialog  :visible="dialogFormVisible_add" :before-close="change" :title="btntitle" modal-append-to-body top=5vh v-dialogDrag>
-        <el-form ref="formAll" :model="formAll" :rules="rulesForm" :inline="true">
+        <el-form ref="formAll" :model="formAll" :rules="rulesForm" :label-width="formLabelWidth">
             <el-row>
                 <el-col :span="12">
-                    <el-form-item label="区代公司名称 ：" :label-width="formLabelWidth" prop="partnerCompany">
+                    <el-form-item label="区代公司名称 ："  prop="partnerCompany">
                         <el-autocomplete
                         class="inline-input"
                         v-model="formAll.partnerCompany"
@@ -20,29 +20,29 @@
                     </el-form-item>
                 </el-col>
                  <el-col :span="12">
-                    <el-form-item label="联系人 ：" :label-width="formLabelWidth" prop="partnerName">
+                    <el-form-item label="联系人 ："  prop="partnerName">
                     <el-input v-model="formAll.partnerName" :disabled="editType=='view'||inputdisabled"></el-input>
                     </el-form-item>
                 </el-col>
             </el-row>
             <el-row>
                 <el-col :span="12">
-                    <el-form-item label="手机号码 ：" :label-width="formLabelWidth" prop="mobile">
+                    <el-form-item label="手机号码 ："  prop="mobile">
                     <el-input v-model="formAll.mobile" :disabled="editType=='view'||inputdisabled"></el-input>
                     </el-form-item>
                 </el-col>
                  <el-col :span="12">
-                    <el-form-item  label="所在地 ：" :label-width="formLabelWidth" v-if="!selectFlag"> 
+                    <el-form-item  label="所在地 ："  v-if="!selectFlag"> 
                             <el-input v-model="areaName" @focus="changeSelect" :disabled="editType=='view'||inputdisabled"></el-input>
                     </el-form-item>  
-                    <el-form-item label="所在地 ：" :label-width="formLabelWidth" prop="areaName" v-else>
+                    <el-form-item label="所在地 ："  prop="areaName" v-else>
                     <GetCityList ref="area" v-model="formAll.areaName"  @returnStr="getStr"></GetCityList>
                     </el-form-item>
                 </el-col>
             </el-row>
             <el-row>
                 <el-col :span="12">
-                    <el-form-item label="签约时间 ：" :label-width="formLabelWidth" prop="signingDate">
+                    <el-form-item label="签约时间 ："  prop="signingDate">
                     <el-date-picker
                     v-model="formAll.signingDate"
                     type="datetime"
@@ -53,7 +53,7 @@
                     </el-form-item>
                 </el-col>
                 <el-col :span="12">
-                    <el-form-item label="是否开通28货运后台 ：" :label-width="formLabelWidth">
+                    <el-form-item label="是否开通28货运后台 ：" >
                         <el-radio-group v-model="isVip" >
                             <el-radio  v-for="(obj,key) in optionsStatus" :label="obj.value" :key='key'>{{obj.name}}</el-radio>
                         </el-radio-group>
@@ -62,7 +62,7 @@
             </el-row>
             <el-row>
                 <el-col :span="12">
-                    <el-form-item label="合同开始日期 ：" :label-width="formLabelWidth" prop="contractStartDate">
+                    <el-form-item label="合同开始日期 ："  prop="contractStartDate">
                     <el-date-picker
                     :disabled="editType=='view'"
                     v-model="formAll.contractStartDate"
@@ -74,7 +74,7 @@
                     </el-form-item>
                 </el-col>
                 <el-col :span="12">
-                    <el-form-item label="合同结束日期 ：" :label-width="formLabelWidth" prop="contractEndDate">
+                    <el-form-item label="合同结束日期 ："  prop="contractEndDate">
                     <el-date-picker
                     :disabled="editType=='view'"
                     v-model="formAll.contractEndDate"

@@ -121,7 +121,7 @@ export default {
       },
       {
         path: '/common/appManage',
-        icon: 'rwdd',
+        icon: 'sijiguanli',
         hidden: false,
         name: 'APP管理',
         component: _import('common/appManage/index'),

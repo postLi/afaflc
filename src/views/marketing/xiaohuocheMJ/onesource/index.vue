@@ -596,19 +596,14 @@ export default {
                   this.pickaddAera = info.aois[0].name
                 }
                 else{
-                  let startAddress = info.formattedAddresssplit('市')
+                  let startAddress = info.formattedAddress.split('市')
                   this.pickaddAera = startAddress[startAddress.length-1]
                 }
-                console.log('1')
-                console.log('data1',this.startAddressCoordinate,this.startAddressName,this.pickaddAera)
                 }
                 else{
                   this.startAddressName = info.pois[0].address
                   this.pickaddAera = info.pois[0].name    
                   this.startAddressCoordinate = info.pois[0].location.N+info.pois[0].location.O
-
-                console.log('21')
-                console.log('data2',this.startAddressCoordinate,this.startAddressName,this.pickaddAera)
                 }
                 break;
                 case 'destinationaddAera':
@@ -624,7 +619,7 @@ export default {
                   this.destinationaddAera = info.aois[0].name
                   }
                   else{
-                  let endAddress = info.formattedAddresssplit('市')
+                  let endAddress = info.formattedAddress.split('市')
                   this.destinationaddAera = endAddress[endAddress.length-1]                      
                   }
                 }

@@ -183,6 +183,18 @@
                         <el-checkbox v-model="templateModel.isVipCar" true-label="1" false-label='0' @change='isVip' label="是" border size="medium" :disabled="editType=='view'" ></el-checkbox>
                     </el-form-item>
                   </el-col>
+                  <el-col :span="12">
+                    <el-form-item label="活跃值：" :label-width="formLabelWidth">
+                        <el-select v-model="templateModel.activeValue" placeholder="请选择" :disabled="editType=='view'">
+                            <el-option
+                                v-for="item in activeValueList"
+                                :key="item.code"
+                                :label="item.name"
+                                :value="item.code">
+                            </el-option>
+                        </el-select>
+                    </el-form-item>
+                  </el-col>
               </el-row>
             
               <el-row>
@@ -261,7 +273,7 @@
     </div>
 </template>
 <script>
-import  { data_post_createDriver,data_put_changeDriver,data_CarList,data_Get_carType,data_get_driver_obStatus,data_post_driverAudit,data_post_mobileGetDriver,data_post_checkDriverCardid,data_get_shipper_carmaid,data_get_shipper_carOwner,data_get_driverName_id} from '@/api/users/carowner/total_carowner.js'
+import  { data_post_createDriver,data_put_changeDriver,data_CarList,data_Get_carType,data_get_driver_obStatus,data_post_driverAudit,data_post_mobileGetDriver,data_post_checkDriverCardid,data_get_shipper_carmaid,data_get_shipper_carOwner,data_get_driverName_id,data_get_car_ActiveValue,data_post_checkDriverCarNumber} from '@/api/users/carowner/total_carowner.js'
 import Upload from '@/components/Upload/singleImage'
 import GetCityList from '@/components/GetCityList/city'
 import vregion from '@/components/vregion/Region'
@@ -353,13 +365,15 @@ export default {
 
     //    身份证信息校验
         const driverCardidValidator = (rule, val, cb) => {
+            var _this = this
+            this.DriverCarCardid.driverCardid = val;
             !val && cb(new Error('身份证不能为空'))
              let IdTest = /^[1-9]\d{5}(18|19|([23]\d))\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\d{3}[0-9Xx]$/
             if(!(IdTest.test(val))){
                 cb(new Error('请输入正确的身份证'))
             }
             else{
-                data_post_checkDriverCardid(val).then(res=>{
+                data_post_checkDriverCardid(_this.DriverCarCardid).then(res=>{
                  cb()
                 }).catch(err=>{
                     console.log(err)
@@ -369,11 +383,18 @@ export default {
         }
     //    车牌号信息校验
         const carNumberValidator = (rule, val, cb) => {
+            var _this = this
+            this.DriverCarNumFrom.carNumber = val;
             if(!val){
             cb(new Error('车牌号不能为空'))
             }
             else{
-                cb()
+                data_post_checkDriverCarNumber(_this.DriverCarNumFrom).then(res=>{
+                 cb()
+                }).catch(err=>{
+                    console.log(err)
+                        cb(new Error('该车牌号已经注册~'))
+                })
             }
         }
 
@@ -552,6 +573,7 @@ export default {
             type:'primary',
             title:null,
             text:null,
+            activeValueList:[],//活跃值
             optionsLevel:[],
             options:[], // 车型列表
             optionsType:[], // 车辆规列表
@@ -584,7 +606,16 @@ export default {
                 areaCode:null,
                 rewardGrade:null,
                 commisionLevel:null,
+                activeValue:'AF0020405'
             },
+                DriverCarCardid:{
+                driverCardid:'',
+                driverId:'',
+                },
+                DriverCarNumFrom:{
+                carNumber:'',
+                driverId:'',
+                },
                 pickerOptions:{
                 disabledDate(time) {
                 return time.getTime() < Date.now();
@@ -626,6 +657,15 @@ export default {
                 this.templateModel.provinceCode=null
                 this.templateModel.cityCode=null
                 this.templateModel.areaCode=null
+                this.templateModel.activeValue='AF0020405'
+                this.DriverCarCardid = {
+                driverCardid:'',
+                driverId:'',
+                }
+                this.DriverCarNumFrom = {
+                carNumber:'',
+                driverId:'',
+                }
                 if(this.$refs.area)
                 {
                 this.$refs.area.clearData()
@@ -697,13 +737,16 @@ export default {
             }).catch(err =>{
                 console.log(err)
             })
-
+            data_get_car_ActiveValue().then(res=>{
+                this.activeValueList = res.data
+            }).catch(err =>{
+                console.log(err)
+            })
         },
 
         openDialog(){
             if(this.editType == 'view'){
-                console.log('this.templateItem',this.paramsView)
-                 this.templateModel = this.paramsView
+                this.templateModel = this.paramsView
                 this.driverTemplateDialogFlag = true ;
             }
              else{
@@ -711,7 +754,7 @@ export default {
                 this.templateModel.carSpec = null;
                 this.templateModel.isVipCar = '0'
                 this.driverTemplateDialogFlag = true ;
-            }else if(this.editType=== 'valetAuth'||this.editType==='edit'||this.editType==='view'){
+            }else if(this.editType=== 'valetAuth'||this.editType==='edit'){
             if(!this.templateItem && this.editType !== 'add'){
                this.$message.warning('请选择您要操作的用户');
                return
@@ -726,14 +769,17 @@ export default {
                 })
                 this.$emit('getData') 
             }
-            else{ 
-                console.log()
-                    data_get_driverName_id(this.templateItem[0].driverId).then(res=>{
+            else{
+                data_get_driverName_id(this.templateItem[0].driverId).then(res=>{
                     this.templateModel = res.data;
+                    this.DriverCarCardid.driverId = res.data.driverId;
+                    this.DriverCarNumFrom.driverId = res.data.driverId;
+                    this.DriverCarNumFrom.carNumber = res.data.carNumber;
+                    this.DriverCarCardid.driverCardid = res.data.driverCardid;
                     }).catch(err=>{
                         console.log('err',err)
                     })
-                   
+
                     this.driverTemplateDialogFlag = true ;
                 }
             }
