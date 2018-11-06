@@ -73,7 +73,7 @@
                 >
             </el-table-column>
         </el-table>
-        <!-- <div class="info_tab_footer">共计:{{ totalCount }} <div class="show_pager"> <Pager :total="totalCount" @change="handlePageChange" :sizes="sizes"/></div> </div>     -->
+        <div class="info_tab_footer">共计:{{ totalCount }} <div class="show_pager"> <Pager :total="totalCount" @change="handlePageChange" :sizes="sizes"/></div> </div>    
     </div>
 </template>
 
@@ -81,7 +81,7 @@
 
 import Pager from '@/components/Pagination/index'
 import { parseTime } from '@/utils/index.js'
-import { orderDetailsList } from '@/api/order/ordermange'
+import { orderDetailsList,getOrderPushList } from '@/api/order/ordermange'
 
 export default {
     name: 'pushOrderList',
@@ -100,8 +100,14 @@ export default {
             page:1,
             pagesize:20,
             sizes:[20,30,50],
-            tableData: null,
-
+            tableData: [],
+            orderPushObj:{
+                "currentPage": 1,
+                "pageSize": 30,
+                "vo": {
+                    orderSerial:'',
+                }
+            }
         };
     },
     watch:{
@@ -120,20 +126,26 @@ export default {
     },
     methods: {
         init(){
-
-            orderDetailsList(this.$route.query.orderSerial).then(res => {
-                console.log('details',res)
-                this.tableData = res.data.aflcOrderPushes;
+            this.orderPushObj.vo.orderSerial = this.$route.query.orderSerial;
+            getOrderPushList(this.orderPushObj).then(res => {
+                this.tableData = res.data.list;
+                this.totalCount = res.data.totalCount;
                 this.loading = false;
+                console.log(this.tableData)
             })
+            // orderDetailsList(this.$route.query.orderSerial).then(res => {
+            //     console.log('details',res)
+            //     this.tableData = res.data.aflcOrderPushes;
+            //     this.loading = false;
+            // })
             // this.totalCount = this.pushOrderData.length;
             // let pageStart =  (this.page - 1) * this.pagesize;
             // let pageEnd = this.page * this.pagesize;
             // this.tableData = this.pushOrderData.slice(pageStart,pageEnd)
         },
         handlePageChange(obj) {
-            this.page = obj.pageNum;
-            this.pagesize = obj.pageSize;
+            this.orderPushObj.currentPage = obj.pageNum;
+            this.orderPushObj.pageSize = obj.pageSize;
             this.init();
         },
     },
@@ -144,6 +156,7 @@ export default {
 <style rel="stylesheet/scss" lang="scss" scoped>
     .pushorder{
         height: 100%;
+        padding-bottom: 40px;
     }
     
 </style>

@@ -67,17 +67,20 @@
                 label="定位">
             </el-table-column>
         </el-table>
+         <div class="info_tab_footer">共计:{{ totalCount }} <div class="show_pager"> <Pager :total="totalCount" @change="handlePageChange" :sizes="sizes"/></div> </div>    
     </div>
 </template>
 
 <script>
 
-import { orderDetailsList } from '@/api/order/ordermange'
+import { orderDetailsList,getOrderFollowingFiles } from '@/api/order/ordermange'
 import { parseTime } from '@/utils/index.js'
+import Pager from '@/components/Pagination/index'
+
 export default {
     name: 'ordertrack',
     components:{
-
+        Pager
     },
     props: {
        isvisible: {
@@ -91,6 +94,13 @@ export default {
             page:1,
             pagesize:20,
             sizes:[20,30,50],
+            OrderFollowingObj:{
+                "currentPage": 1,
+                "pageSize": 30,
+                "vo": {
+                    orderSerial:'',
+                }
+            },
             listInformation: []
         };
     },
@@ -110,9 +120,11 @@ export default {
     },
     methods: {
         init(){
-            orderDetailsList(this.$route.query.orderSerial).then(res => {
-                console.log('details',res)
-                this.listInformation = res.data.aflcOrderFollowingFiles.reverse();
+            this.OrderFollowingObj.vo.orderSerial = this.$route.query.orderSerial;
+            
+            getOrderFollowingFiles(this.OrderFollowingObj).then(res => {
+                this.listInformation = res.data.list.reverse();
+                this.totalCount = res.data.totalCount;
                 this.loading = false;
                 this.listInformation.forEach(el => {
                     switch(el.userType){
@@ -131,6 +143,32 @@ export default {
                     }
                 })
             })
+            // orderDetailsList(this.$route.query.orderSerial).then(res => {
+            //     console.log('details',res)
+            //     this.listInformation = res.data.aflcOrderFollowingFiles.reverse();
+            //     this.loading = false;
+            //     this.listInformation.forEach(el => {
+            //         switch(el.userType){
+            //             case '0':
+            //                 el.userTypeName = '货主';
+            //                 break;
+            //             case '1':
+            //                 el.userTypeName = '车主';
+            //                 break;
+            //             case '2':
+            //                 el.userTypeName = '后台管理人员';
+            //                 break;
+            //             case '3':
+            //                 el.userTypeName = '车主（特权车主）';
+            //                 break;
+            //         }
+            //     })
+            // })
+        },
+        handlePageChange(obj) {
+            this.OrderFollowingObj.currentPage = obj.pageNum;
+            this.OrderFollowingObj.pageSize = obj.pageSize;
+            this.init();
         },
     },
    
@@ -140,6 +178,7 @@ export default {
 <style rel="stylesheet/scss" lang="scss" scoped>
     .ordertrack{
         height: 100%;
+        padding-bottom: 40px;
         // padding: 10px 20px;
         // .orderTrackStyle{
         //     p,h2{

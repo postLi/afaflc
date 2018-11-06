@@ -7,17 +7,17 @@
                 <el-row class="basicInfo" :span='24'>
                     <!-- 第一行 -->
                     <el-col :span="3">累计充值：</el-col>
-                    <el-col :span="3">{{financial.totalEchargeAmountSum}}</el-col>
+                    <el-col :span="3">{{financial.totalEchargeAmountSum ? financial.totalEchargeAmountSum :'0' }}</el-col>
                     <el-col :span="3">充值余额：</el-col>
-                    <el-col :span="3">{{financial.totalEchargeAmount}}</el-col>
+                    <el-col :span="3">{{financial.totalEchargeAmount ? financial.totalEchargeAmount : '0'}}</el-col>
                     <el-col :span="3">赠送余额：</el-col>
-                    <el-col :span="3">{{financial.availableBalance}}</el-col>
+                    <el-col :span="3">{{financial.availableBalance ? financial.availableBalance : '0'}}</el-col>
                     <el-col :span="3">优惠金余额：</el-col>
-                    <el-col :span="3">{{financial.rewardBalance}}</el-col>
+                    <el-col :span="3">{{financial.rewardBalance ? financial.rewardBalance : '0'}}</el-col>
 
                     <!-- 第二行 -->
                     <el-col :span="3">优惠券张数：</el-col>
-                    <el-col :span="3">{{financial.couponNum}}</el-col>
+                    <el-col :span="3">{{financial.couponNum ? financial.couponNum : '0'}}</el-col>
                     <el-col :span="3">优惠券抵扣金额：</el-col>
                     <el-col :span="3">{{financial.orderDiscountAmountSum ? financial.orderDiscountAmountSum : '0'}}</el-col>
                 </el-row>

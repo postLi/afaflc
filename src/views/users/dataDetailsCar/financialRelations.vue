@@ -45,26 +45,13 @@
                 </ul>
                 <dir class="timeChoose fr">
                     <span>提现时间：</span>
-                    <!-- <el-date-picker
-                        v-model="value7"
-                        type="daterange"
-                        align="right"
-                        unlink-panels
-                        range-separator="-"
-                        start-placeholder="开始日期"
-                        end-placeholder="结束日期"
-                        value-format="timestamp"
-                        :default-time="['00:00:00', '23:59:59']"
-                        :picker-options="pickerOptions2">
-                    </el-date-picker> -->
                     <el-date-picker
                     v-model="cashObj.vo.extractTime"
                     type="month"
-                    @change ="cashTimeChange"
+                    @change ="cashTimeChange('cash')"
                     value-format="yyyy-MM"
                     placeholder="选择月">
                     </el-date-picker>
-                    {{cashObj.vo.extractTime}}
                 </dir>
             </div>
             <div class="essentialInformation_table" >
@@ -121,7 +108,6 @@
                 <el-pagination
                     background
                     @current-change="handleCurrentChangeCash"
-                    :page-sizes="size"
                     layout="total,prev, pager, next, jumper"
                     :total="cashTotalCount">
                 </el-pagination>
@@ -133,8 +119,8 @@
             <h2>交易记录  </h2>
             <div class="authority_legal clearfix">
                 <ul class="lengandInfo fl">
-                    <li>钱包收入：<span>135</span></li>
-                    <li>支出：<span>150</span></li>
+                    <li>钱包收入：<span>{{paymentData.purseIncome}}</span></li>
+                    <li>支出：<span>{{paymentData.expenses}}</span></li>
                 </ul>
                 <dir class="timeChoose fr">
                     <span>交易时间：</span>
@@ -143,6 +129,7 @@
                         type="daterange"
                         align="right"
                         unlink-panels
+                        @change ="cashTimeChange('payment')"
                         range-separator="-"
                         start-placeholder="开始日期"
                         end-placeholder="结束日期"
@@ -154,43 +141,45 @@
             </div>
             <div class="essentialInformation_table" >
                 <el-table
-                    :data="tableData"
+                    :data="paymentData.aflcOrderPaymentList"
                     border
                     style="width: 100%">
+                    <el-table-column label="序号"  width="80">
+                        <template slot-scope="scope">
+                            {{ (paymentObj.currentPage - 1) * paymentObj.pageSize + scope.$index + 1 }}
+                        </template>
+                    </el-table-column>  
                     <el-table-column
-                    prop="date"
-                    label="序号">
-                    </el-table-column>
-                    <el-table-column
-                    prop="date"
+                    prop="tradeSerial"
                     label="流水号"
                     >
                     </el-table-column>
                     <el-table-column
-                    prop="name"
+                    prop="payTime"
                     label="交易时间"
                     >
+                        <template slot-scope="scope">
+                            {{ scope.row.payTime | parseTime}}
+                        </template>
                     </el-table-column>
                     <el-table-column
-                    prop="address"
+                    prop="incomeExpendType"
                     label="收支类型">
                     </el-table-column>
                     <el-table-column
-                    prop="address"
+                    prop="tradeType"
                     label="交易类型">
                     </el-table-column>
                     <el-table-column
-                    prop="address"
+                    prop="payTotal"
                     label="金额">
                     </el-table-column>
                 </el-table>
                 <el-pagination
                     background
-                    @size-change="handleSizeChange"
                     @current-change="handleCurrentChange"
-                    :page-sizes="size"
-                    layout="total, sizes, prev, pager, next, jumper"
-                    :total="totalCount">
+                    layout="total,prev, pager, next, jumper"
+                    :total="paymentTotalCount">
                 </el-pagination>
             </div>
         </div>
@@ -200,7 +189,7 @@
 <script>
 
 import { parseTime } from '@/utils/index.js'
-import {  extractCashlist } from '@/api/users/carDetails/index.js'
+import {  extractCashlist,driverOrderPaymentList } from '@/api/users/carDetails/index.js'
 export default {
   name: 'ordersInfo',
   components: {
@@ -213,15 +202,8 @@ export default {
   }, 
   data() {
     return {
-        size:[20,30,50],
         value7:[],
         listInformation: [],
-        dataType:[
-            {name:'全部',iscur:true},
-            {name:'近7天',iscur:false},
-            {name:'近30天',iscur:false},
-            {name:'近90天',iscur:false},
-        ],
         cashObj:{//提现金额列表查询条件
             "currentPage": 1,
             "pageSize": 10,
@@ -230,34 +212,22 @@ export default {
                 extractTime:null,
             }
         },
-        value4:'',
         cashTotalCount:0,//提现金额初始数量
-        cashTime:[],//提现时间选择
-        cashData:[],
-        page:1,
-        pagesize:20,
-        totalCount:100,
+        cashData:[],//体现金额列表
+        paymentObj:{//提现金额列表查询条件
+            "currentPage": 1,
+            "pageSize": 10,
+            "vo":{
+                userId:'',
+                timeDay:'',
+                tradeEndTime:'',
+                tradeStartTime:''
+            }
+        },
+        paymentData:[],//交易记录列表
+        paymentTotalCount:0,//交易记录列表初始数量
         loading: false,
-        dialogVisible: false,
-        currentOrderSerial: '',
-           tableData: [{
-          date: '2016-05-02',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1518 弄'
-        }, {
-          date: '2016-05-04',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1517 弄'
-        }, {
-          date: '2016-05-01',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1519 弄'
-        }, {
-          date: '2016-05-03',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1516 弄'
-        }],
-         pickerOptions2: {
+        pickerOptions2: {
           shortcuts: [{
             text: '最近一周',
             onClick(picker) {
@@ -304,12 +274,22 @@ export default {
         init() {
             let driverId = this.$route.query.driverId;
             this.cashObj.vo.accountId = driverId;
+            this.paymentObj.vo.userId = driverId;
             this.Cashlist();
+            this.PaymentList();
         },
+        //提现
         Cashlist(){
             extractCashlist(this.cashObj).then(res => {
                 this.cashData = res.data.list[0];
                 this.cashTotalCount = res.data.totalCount;
+            })
+        },
+        //交易明细列表
+        PaymentList(){
+            driverOrderPaymentList(this.paymentObj).then(res => {
+                this.paymentData = res.data.list[0];
+                this.paymentTotalCount = res.data.totalCount;
             })
         },
         //提现金额当前页
@@ -317,8 +297,24 @@ export default {
             this.cashObj.currentPage = val;
             this.Cashlist();
         },
-        cashTimeChange(){
-            this.Cashlist();
+        cashTimeChange(type){
+            switch(type){
+                case 'cash':
+                    this.Cashlist();
+                    break;
+                case 'payment':
+                    console.log(this.value7)
+                    if(this.value7){
+                        this.paymentObj.vo.tradeStartTime = this.value7[0] ?  this.value7[0] :'';
+                        this.paymentObj.vo.tradeEndTime = this.value7[1] ? this.value7[1] :'';
+                    }else{
+                        this.paymentObj.vo.tradeStartTime = '';
+                        this.paymentObj.vo.tradeEndTime = '';
+                    }
+                    this.PaymentList()
+                    break;
+
+            }
         },
         handleSizeChange(val) {
             console.log(`每页 ${val} 条`);
@@ -326,14 +322,6 @@ export default {
         handleCurrentChange(val) {
             console.log(`当前页: ${val}`);
         },
-        setCur(index){
-            console.log(index)
-            this.dataType.forEach((el,idx)=>{
-                console.log(idx)
-                idx == index ? el.iscur = true : el.iscur = false;
-            })
-        },
-
     }
 }
 </script>

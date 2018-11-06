@@ -86,7 +86,7 @@
             </div>
         </div>
         <!-- 营销权益 -->
-        <div class="legalInfo-collapse collapseInfo">
+        <!-- <div class="legalInfo-collapse collapseInfo">
             <h2>营销权益</h2>
             <div class="authority_legal">
                 <ul class="lengandInfo">
@@ -123,7 +123,7 @@
                     </el-table-column>
                 </el-table>
             </div>
-        </div>
+        </div> -->
     </div>
 </template>
 

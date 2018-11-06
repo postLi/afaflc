@@ -18,10 +18,53 @@ export function orderStatusList(page, pagesize, data) {
 // 根据流水号获取订单详细信息
 export function orderDetailsList(orderSerial) {
   return fetch({
-    url: '/' + baseurl + '/order/aflcOrder/v1/getOrderDetail/' + orderSerial,
+    url: '/' + baseurl + '/order/aflcOrder/v1/orderDetail/' + orderSerial,
     method: 'get'
   })
 }
+
+// 订单详情(新增)
+export function getOrderDetail(orderSerial) {
+    return fetch({
+      url: '/' + baseurl + '/order/aflcOrder/v1/getOrderDetail/' + orderSerial,
+      method: 'get'
+    })
+  }
+
+  // 获取推单记录(新增)
+export function getOrderPushList(data) {
+    return fetch({
+      url: '/' + baseurl + '/order/aflcOrder/v1/getOrderPushList',
+      method: 'post',
+      data: data
+    })
+  }
+
+// 获取抢单记录(新增)
+export function getOrderGrabList(data) {
+    return fetch({
+      url: '/' + baseurl + '/order/aflcOrder/v1/getOrderGrabList',
+      method: 'post',
+      data: data
+    })
+  }
+
+// 获取订单跟踪记录(新增)
+export function getOrderFollowingFiles(data) {
+    return fetch({
+      url: '/' + baseurl + '/order/aflcOrder/v1/getOrderFollowingFiles',
+      method: 'post',
+      data: data
+    })
+  }
+
+// 获取订单跟踪记录(新增)
+export function getReturnListAndEvaluation(orderSerial) {
+    return fetch({
+      url: '/' + baseurl + '/order/aflcOrder/v1/getReturnListAndEvaluation/'+ orderSerial,
+      method: 'post',
+    })
+  }
 
 // 取消订单
 export function cancelOrder(data) {

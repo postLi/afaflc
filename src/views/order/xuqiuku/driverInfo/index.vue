@@ -1,12 +1,12 @@
 <template>
     <div class="TransportRange identicalStyle">
         <el-form :inline="true" :model="logisticsForm" ref="ruleForm" class="demo-ruleForm classify_searchinfo">
-            <el-form-item label="出发地：" prop="startAddress">
-                <el-input v-model="logisticsForm.startAddress">
+            <el-form-item label="出发地：" prop="startProvinceCityArea">
+                <el-input v-model="logisticsForm.startProvinceCityArea">
                 </el-input>
             </el-form-item>
-            <el-form-item label="到达地：" prop="endAddress">
-                <el-input v-model="logisticsForm.endAddress">
+            <el-form-item label="到达地：" prop="endProvinceCityArea">
+                <el-input v-model="logisticsForm.endProvinceCityArea">
                 </el-input>
             </el-form-item>
                 <el-form-item label="商品名称：" prop="goodsName">
@@ -123,8 +123,8 @@ export default {
             pagesize:20,
             logisticsForm: {
                 queryType:'2',
-                startAddress: '',//出发地
-                endAddress: '',//到达地
+                startProvinceCityArea: '',//出发地
+                endProvinceCityArea: '',//到达地
                 goodsName:'',//商品名称
             },
             tableData: [],

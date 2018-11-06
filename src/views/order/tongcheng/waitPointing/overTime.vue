@@ -81,7 +81,7 @@
                             width="150">
                         </el-table-column> 
                         <el-table-column
-                            prop="totalAmount"
+                            prop="outTimeWaitTimes"
                             sortable
                             label="等待时长"
                             width="160">

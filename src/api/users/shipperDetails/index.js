@@ -1,15 +1,24 @@
 import fetch from '@/utils/fetch'
 
-const baseurl = 'aflc-order-wtc' //订单
+const baseurl = 'aflc-order' //订单
 const baseurl_tow = 'aflcsmservice' //服务
-const baseurl_three = 'aflcusercenterservice-wtc' //用户
+const baseurl_three = 'aflcusercenterservice' //用户
 const baseurl_four = 'aflcorderservice' //订单
 
 
-//其他信息--根据条件获取订单投诉建议表列表
+//其他信息-投诉记录-根据条件获取订单投诉建议表列表
 export function aflcOrderComplain(data) {
     return fetch({
       url: '/' + baseurl + '/order/aflcOrderComplain/v1/list',
+      method: 'post',
+      data: data
+    })
+  }
+
+  //其他信息-评价记录-根据货主数据管理
+export function aflcOrderEvaList(data) {
+    return fetch({
+      url: '/' + baseurl_four + '/order/aflcOrderEvaluation/v1/orderEvaList',
       method: 'post',
       data: data
     })
@@ -72,6 +81,15 @@ export function aflcDriverShipperList(data) {
 export function aflcEquityConfigDto(userId) {
     return fetch({
       url: '/' + baseurl_three + '/usercenter/aflcShipper/v1/findEquityConfigDto/' + userId,
+      method: 'get',
+    })
+  }
+
+  
+//基本信息-概要信息-根据id获取货主基本信息
+export function aflcShipperInfo(userId) {
+    return fetch({
+      url: '/aflc-uc/usercenter/aflcShipper/v1/' + userId,
       method: 'get',
     })
   }

@@ -270,7 +270,7 @@
 <script>
 
 import { parseTime } from '@/utils/index.js'
-import { orderDetailsList } from '@/api/order/ordermange'
+import { orderDetailsList,getOrderDetail } from '@/api/order/ordermange'
 import remarkerInfo from './remakInfo'
 
 export default {
@@ -315,7 +315,7 @@ export default {
     init() {
         const orderSerial = this.$route.query.orderSerial
         this.loading = true
-        orderDetailsList(orderSerial).then(res => {
+        getOrderDetail(orderSerial).then(res => {
               console.log('details', res)
               this.listInformation = res.data
               this.listInformation.aflcOrderAddresses.sort(function(a, b) {

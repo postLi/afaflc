@@ -103,7 +103,7 @@
                 >
             </el-table-column>
         </el-table>
-        <!-- <div class="info_tab_footer">共计:{{ totalCount }} <div class="show_pager"> <Pager :total="totalCount" @change="handlePageChange" :sizes="sizes"/></div> </div>     -->
+        <div class="info_tab_footer">共计:{{ totalCount }} <div class="show_pager"> <Pager :total="totalCount" @change="handlePageChange" :sizes="sizes"/></div> </div>    
     </div>
 </template>
 
@@ -111,7 +111,7 @@
 
 import Pager from '@/components/Pagination/index'
 import { parseTime } from '@/utils/index.js'
-import { orderDetailsList } from '@/api/order/ordermange'
+import { orderDetailsList,getOrderGrabList } from '@/api/order/ordermange'
 
 
 export default {
@@ -132,8 +132,15 @@ export default {
             page:1,
             pagesize:20,
             sizes:[20,30,50],
-            tableData: null,
+            tableData: [],
             loading:true,
+            orderGrabObj:{
+                "currentPage": 1,
+                "pageSize": 30,
+                "vo": {
+                    orderSerial:'',
+                }
+            }
         };
     },
     watch:{
@@ -152,11 +159,19 @@ export default {
     methods: {
         init(){
             this.loading = true;
-            orderDetailsList(this.$route.query.orderSerial).then(res => {
-                console.log('details',res)
-                this.tableData = res.data.aflcOrderGrabs;
+            this.orderGrabObj.vo.orderSerial = this.$route.query.orderSerial;
+
+            getOrderGrabList(this.orderGrabObj).then(res => {
+                this.tableData = res.data.list;
+                console.log(this.tableData)
+                this.totalCount = res.data.totalCount;
                 this.loading = false;
             })
+            // orderDetailsList(this.$route.query.orderSerial).then(res => {
+            //     console.log('details',res)
+            //     this.tableData = res.data.aflcOrderGrabs;
+            //     this.loading = false;
+            // })
             // this.totalCount = this.robbingData.length;
             // let pageStart =  (this.page - 1) * this.pagesize;
             // let pageEnd = this.page * this.pagesize;
@@ -164,8 +179,8 @@ export default {
             console.log(this.tableData)
         },
         handlePageChange(obj) {
-            this.page = obj.pageNum;
-            this.pagesize = obj.pageSize;
+            this.orderGrabObj.currentPage = obj.pageNum;
+            this.orderGrabObj.pageSize = obj.pageSize;
             this.init();
         },
     },
@@ -177,6 +192,7 @@ export default {
     .robbingList{
         position: relative;
         height: 100%;
+        padding-bottom: 40px;
         .el-table{
             .cell{
                 .ifGrap{

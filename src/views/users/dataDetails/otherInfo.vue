@@ -50,43 +50,46 @@
             <h2>评价记录</h2>
             <div class="essentialInformation_table" >
                 <el-table
-                    :data="tableData"
+                    :data="orderEvaData"
                     border
                     style="width: 100%">
+                    <el-table-column label="序号"  width="80">
+                        <template slot-scope="scope">
+                            {{ (orderEvaObj.currentPage - 1) * orderEvaObj.pageSize + scope.$index + 1 }}
+                        </template>
+                    </el-table-column>  
                     <el-table-column
-                    prop="date"
-                    label="序号">
-                    </el-table-column>
-                    <el-table-column
-                    prop="date"
+                    prop="updateTime"
                     label="评价时间"
                     >
+                        <template slot-scope="scope">
+                            {{ scope.row.updateTime | parseTime}}
+                        </template>
                     </el-table-column>
                     <el-table-column
-                    prop="name"
+                    prop="serviceName"
                     label="服务类型"
                     >
                     </el-table-column>
                     <el-table-column
-                    prop="address" 
+                    prop="starLevel" 
                     label="获评星级">
                     </el-table-column>
                     <el-table-column
-                    prop="address"
+                    prop="evaluationDes"
                     label="获评标签">
                     </el-table-column>
                     <el-table-column
-                    prop="address"
+                    prop="driverMobile"
                     label="货主账号">
                     </el-table-column>
                 </el-table>
                 <el-pagination
                     background
-                    @size-change="handleSizeChange"
-                    @current-change="handleCurrentChange"
+                    @current-change="handleCurrentChangeOrderEva"
                     :page-sizes="size"
-                    layout="total, sizes, prev, pager, next, jumper"
-                    :total="totalCount">
+                    layout="total, prev, pager, next, jumper"
+                    :total="orderEvaTotalCount">
                 </el-pagination>
             </div>
         </div>
@@ -153,7 +156,7 @@
                 </el-table>
                 <el-pagination
                     background
-                    @current-change="handleCurrentChange"
+                    @current-change="handleCurrentChangeComplain"
                     :page-sizes="size"
                     layout="total,prev, pager, next, jumper"
                     :total="complainTotalCount">
@@ -226,7 +229,7 @@
 <script>
 
 import { parseTime } from '@/utils/index.js'
-import { aflcOrderComplain } from '@/api/users/shipperDetails/index.js'
+import { aflcOrderComplain,aflcOrderEvaList } from '@/api/users/shipperDetails/index.js'
 
 export default {
   name: 'ordersInfo',
@@ -248,14 +251,23 @@ export default {
             {name:'近30天',iscur:false},
             {name:'近90天',iscur:false},
         ],
-        complainObj:{
+        complainObj:{//投诉列表
             "currentPage": 1,
             "pageSize": 10,
             "vo":{
                 complainId:'',
             }
         },
-        complainData:[],
+        complainData:[],//投诉
+        orderEvaObj:{//投诉列表
+            "currentPage": 1,
+            "pageSize": 10,
+            "vo":{
+                evaluationId:'',
+            }
+        },
+        orderEvaData:[],//评价
+        orderEvaTotalCount:0,//评价列表初始数量
         page:1,
         pagesize:20,
         totalCount:100,
@@ -299,13 +311,34 @@ export default {
     methods: {
         init() {
             this.complainObj.vo.complainId = this.$route.query.userId;
+            this.orderEvaObj.vo.evaluationId = this.$route.query.userId;
+
             this.Complain();
+            this.OrderEvaList();
         },
+        //投诉记录
         Complain(){
             aflcOrderComplain(this.complainObj).then(res => {
                 this.complainData = res.data.list;
                 this.complainTotalCount = res.data.totalCount;
             })
+        },
+        //评价记录
+        OrderEvaList(){
+            aflcOrderEvaList(this.orderEvaObj).then(res => {
+                this.orderEvaData = res.data.list;
+                this.orderEvaTotalCount = res.data.totalCount;
+            })
+        },
+        //评价分页
+        handleCurrentChangeOrderEva(val){
+            this.orderEvaObj.currentPage = val;
+            this.OrderEvaList();
+        },
+          //评价分页
+        handleCurrentChangeComplain(val){
+            this.complainObj.currentPage = val;
+            this.Complain();
         },
         handleSizeChange(val) {
             console.log(`每页 ${val} 条`);
