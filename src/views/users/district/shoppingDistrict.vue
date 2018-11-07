@@ -1,13 +1,13 @@
 <template>
     <div style="height:100%;"  class="identicalStyle District" v-loading="loading">
           <el-form :inline="true" class="classify_searchinfo">
-            <el-form-item label="所在地：">
+            <el-form-item label="所在地">
                 <GetCityList ref="area" v-model="formAllData.areaName"  @returnStr="getStr"></GetCityList>
             </el-form-item>
-            <el-form-item label="商圈名称：">
+            <el-form-item label="商圈名称">
                 <el-input v-model="formAllData.tradeName"></el-input>
             </el-form-item>
-            <el-form-item label="商圈场主：">
+            <el-form-item label="商圈场主">
                 <el-input v-model="formAllData.tradeOwner"></el-input>
             </el-form-item>
             <el-form-item class="fr"> 

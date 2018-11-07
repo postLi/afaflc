@@ -1,10 +1,10 @@
 <template>
     <div class="identicalStyle Marketing" style="height:100%" v-loading="loading">
           <el-form :inline="true" class="demo-ruleForm classify_searchinfo">
-            <el-form-item label="活动名称：">
+            <el-form-item label="活动名称">
                <el-input v-model="formAllData.activityName" class="activeCss"></el-input>
             </el-form-item>     
-            <el-form-item label="活动类型：">
+            <el-form-item label="活动类型">
                  <el-select v-model="formAllData.activityType" clearable placeholder="请选择" >
                           <el-option
                               v-for="item in activeList"
@@ -15,7 +15,7 @@
                          </el-option>
                  </el-select>
             </el-form-item>
-            <el-form-item label="活动状态：">
+            <el-form-item label="活动状态">
                  <el-select v-model="formAllData.usingStatus" clearable placeholder="请选择" >
                           <el-option
                              v-for="item in activeStatus"
@@ -26,10 +26,10 @@
                          </el-option>
                  </el-select>
             </el-form-item>  
-            <el-form-item label="所属区域：">
+            <el-form-item label="所属区域">
             <GetCityList ref="area" v-model="formAllData.areaName"  @returnStr="getStr"></GetCityList>
             </el-form-item> 
-            <el-form-item label="活动时间：">
+            <el-form-item label="活动时间">
                     <el-date-picker
                         is-range
                         type="daterange"
@@ -116,12 +116,8 @@
                             <template slot-scope="scope">
                              {{ (page - 1)*pagesize + scope.$index + 1 }}
                             </template>
-            </el-table-column> 
-            <el-table-column  label="创建" prop="createTime" sortable>
             </el-table-column>
-            <el-table-column  label="活动类型" prop="activityType" sortable>
-            </el-table-column>
-            <el-table-column  label="活动名称" prop="activityName" sortable>
+            <el-table-column  label="活动名称" prop="activityName" sortable width="250">
                 <template slot-scope="scope">
                     <automationcheck
                           btntype="text"           
@@ -138,6 +134,10 @@
                          :couponStatusLists="couponStatusList"
                     ></automationcheck>
                 </template>
+            </el-table-column>            
+            <el-table-column  label="创建" prop="createTime" sortable>
+            </el-table-column>
+            <el-table-column  label="活动类型" prop="activityType" sortable>
             </el-table-column>
             <el-table-column  label="所属区域" prop="areaName" show-overflow-tooltip sortable>
             </el-table-column>

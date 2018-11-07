@@ -61,6 +61,8 @@
             </el-table-column>
             <el-table-column  label="app版本号" prop="appVersion" sortable show-overflow-tooltip>
             </el-table-column>
+            <el-table-column  label="版本号名称" prop="appVersionName" sortable show-overflow-tooltip>
+            </el-table-column>
             <el-table-column  label="更新内容" prop="remark" sortable show-overflow-tooltip>
             </el-table-column>
             <el-table-column  label="版本发布时间" prop="versionDate" sortable show-overflow-tooltip>

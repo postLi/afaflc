@@ -22,20 +22,13 @@
                     </el-form-item>
                 </el-col>
                 <el-col :span="12">
-              <el-form-item label="所在地 ："  :label-width="formLabelWidth" prop="belongCityName">
-                    <vregion :ui="true"  @values="regionChange" class="form-control" >
-                        <el-input v-model="templateModel.belongCityName" placeholder="请选择" ></el-input>
-                    </vregion>
-              </el-form-item>
-                </el-col>
-            </el-row>
-
-            <el-row>
-                <el-col :span="12">
                     <el-form-item label="车牌号：" :label-width="formLabelWidth" prop="carNumber">
                         <el-input v-model="templateModel.carNumber" :maxlength="8"></el-input>
                     </el-form-item>
                 </el-col>
+            </el-row>
+
+            <el-row>
                 <el-col :span="12">
                     <el-form-item label="车型：" :label-width="formLabelWidth" prop="carType">
                         <el-select v-model="templateModel.carType" placeholder="请选择">
@@ -48,9 +41,6 @@
                         </el-select>
                     </el-form-item>
                 </el-col>
-            </el-row>
-
-            <el-row>
                 <el-col :span="12">
                     <el-form-item label="车长(米)：" :label-width="formLabelWidth"  prop="carLength">
                       <el-input
@@ -98,6 +88,14 @@
                         </el-select>
                     </el-form-item>
                   </el-col>
+                <el-col :span="12">
+              <el-form-item label="所在地 ："  :label-width="formLabelWidth" prop="belongCityName">
+                    <vregion :ui="true"  @values="regionChange" class="form-control" >
+                        <el-input v-model="templateModel.belongCityName" placeholder="请选择" ></el-input>
+                    </vregion>
+              </el-form-item>
+                </el-col>
+
             </el-row>
               <el-row>
                   <el-col :span="12">
@@ -292,7 +290,7 @@
   </div>
 </template>
 <script>
-import {data_post_checkDriverCardid,data_get_driver_obStatus,data_CarList,data_Get_carType,data_post_audit,data_get_shipper_carmaid,data_get_shipper_carOwner,data_get_car_ActiveValue} from '../../../api/users/carowner/total_carowner.js'
+import {data_post_checkDriverCardid,data_get_driver_obStatus,data_CarList,data_Get_carType,data_post_audit,data_get_shipper_carmaid,data_get_shipper_carOwner,data_get_car_ActiveValue,data_post_checkDriverCarNumber,data_get_driverName_id} from '../../../api/users/carowner/total_carowner.js'
 import {parseTime} from '@/utils/'
 import { eventBus } from '@/eventBus'
 import Upload from '@/components/Upload/singleImage'
@@ -363,13 +361,15 @@ export default {
 
     //    身份证信息校验
         const driverCardidValidator = (rule, val, cb) => {
+            var _this = this
+            this.DriverCarCardid.driverCardid = val;
             !val && cb(new Error('身份证不能为空'))
              let IdTest = /^[1-9]\d{5}(18|19|([23]\d))\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\d{3}[0-9Xx]$/
             if(!(IdTest.test(val))){
                 cb(new Error('请输入正确的身份证'))
             }
             else{
-                data_post_checkDriverCardid(val).then(res=>{
+                data_post_checkDriverCardid(_this.DriverCarCardid).then(res=>{
                  cb()
                 }).catch(err=>{
                     console.log(err)
@@ -386,13 +386,20 @@ export default {
                 cb()
             }                
         }
-   //    车牌号信息校验
+    //    车牌号信息校验
         const carNumberValidator = (rule, val, cb) => {
+            var _this = this
+            this.DriverCarNumFrom.carNumber = val;
             if(!val){
             cb(new Error('车牌号不能为空'))
             }
             else{
-                cb()
+                data_post_checkDriverCarNumber(_this.DriverCarNumFrom).then(res=>{
+                 cb()
+                }).catch(err=>{
+                    console.log(err)
+                        cb(new Error('该车牌号已经注册~'))
+                })
             }
         }
     //   抽佣等级校验
@@ -566,6 +573,14 @@ export default {
         rewardGrade:{validator: rewardGradeValidator, trigger:'change',required:true,},
         commisionLevel:{validator: commisionLevelValidator, trigger:'change',required:true,},        
         rewardgrade:{validator: rewardgradeValidator, trigger:'change',required:true,},
+        },      
+        DriverCarCardid:{
+        driverCardid:'',
+        driverId:'',
+        },
+        DriverCarNumFrom:{
+        carNumber:'',
+        driverId:'',
         },        
       }
   },
@@ -594,6 +609,14 @@ export default {
                 if(this.$refs.area)
                 {
                 this.$refs.area.clearData()
+                }
+                this.DriverCarCardid = {
+                driverCardid:'',
+                driverId:'',
+                }
+                this.DriverCarNumFrom = {
+                carNumber:'',
+                driverId:'',
                 }
             }
             else{
@@ -671,7 +694,6 @@ export default {
       eventBus.$emit('changeListtwo')
     },
     openDialog(){
-      //冻结
         if(!this.params && this.editType !== 'add')
           {
                this.$message.warning('请选择您要操作的用户');
@@ -689,9 +711,17 @@ export default {
                 return
             }
         else{
-        this.templateModel=this.params[0];
-        this.templateModel.obtainGradeTime = parseTime(this.templateModel.obtainGradeTime,"{y}-{m}-{d}");
-        this.freezeDialogFlag=true
+            data_get_driverName_id(this.params[0].driverId).then(res=>{
+                    this.templateModel = res.data;
+                    this.DriverCarCardid.driverId = res.data.driverId;
+                    this.DriverCarNumFrom.driverId = res.data.driverId;
+                    this.DriverCarNumFrom.carNumber = res.data.carNumber;
+                    this.DriverCarCardid.driverCardid = res.data.driverCardid;
+                    this.templateModel.obtainGradeTime = parseTime(this.templateModel.obtainGradeTime,"{y}-{m}-{d}");
+                    }).catch(err=>{
+                        console.log('err',err)
+                    })
+                    this.freezeDialogFlag=true
         }
       },
             completeData(){

@@ -24,7 +24,7 @@ export default {
             labelTab:'待处理'
         }
     },
-    components:{    
+    components:{
             cashAuditing,
             cashAuditingStatus,
     },
@@ -42,13 +42,13 @@ export default {
       this.shipperName = tab.name;
        },
      tabClik(i){
-        this.$refs.cashAuditing1.getDataList()
-        this.$refs.cashAuditing2.getDataList()
          
         if(i.name=='second'){
+        this.$refs.cashAuditing1.getDataList()
         this.labelTab = '审核中'
         }
         else{
+        this.$refs.cashAuditing2.getDataList()
         this.labelTab = '处理中'
         }            
      },

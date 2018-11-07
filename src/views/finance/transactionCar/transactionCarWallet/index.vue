@@ -1,10 +1,10 @@
 <template>
     <div class="identicalStyle transactionCar" style="height:100%" v-loading="loading">
           <el-form :inline="true"  class="demo-ruleForm classify_searchinfo">
-            <el-form-item label="所属区域：">
+            <el-form-item label="所属区域">
               <GetCityList v-model="formAllData.areaCode" ref="area" @returnStr="getStr"></GetCityList>
           </el-form-item>
-            <el-form-item label="车主账号:">
+            <el-form-item label="车主账号">
             <el-input placeholder="请输入内容" clearable v-model="formAllData.account"></el-input>
             </el-form-item>             
             <el-form-item class="fr">
@@ -24,7 +24,7 @@
                             <template slot-scope="scope">
                              {{ (page - 1)*pagesize + scope.$index + 1 }}
                             </template>
-            </el-table-column> 
+            </el-table-column>
             <el-table-column  label="所属区域" prop="areaCode" sortable>
             </el-table-column>
             <el-table-column  label="车主账号" prop="driverMobile" sortable >
@@ -38,11 +38,11 @@
             </el-table-column>
             <el-table-column  label="在线交易奖励金（已奖励 / 额度）" sortable>
             <template  slot-scope="scoped">
-             {{scoped.gainAwardReward}}/{{scoped.awardRewardMax}}
+             {{scoped.row.gainAwardReward}}/{{scoped.row.awardRewardMax}}
             </template>
             </el-table-column>       
             <el-table-column  label="保证金" prop="pledgeAmount" sortable>
-            </el-table-column>                                                  
+            </el-table-column>                                     
             </el-table> 
         	</div> 
          <!-- 页码 -->

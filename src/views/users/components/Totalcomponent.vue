@@ -1,12 +1,12 @@
 <template>
     <div style="height:100%;" class="identicalStyle" v-loading="loading">
             <el-form :inline="true"  class="demo-ruleForm classify_searchinfo">
-                <el-form-item label="所在地：">
+                <el-form-item label="所在地">
                 <vregion :ui="true"  @values="regionChange" class="form-control">
                     <el-input v-model="belongCityName" placeholder="请选择"></el-input>
                 </vregion>
                 </el-form-item>
-                <el-form-item label="认证状态：">
+                <el-form-item label="认证状态">
                     <el-select v-model="formInline.driverStatus" placeholder="请选择" clearable>
                         <el-option
                             v-for="item in optionsService"
@@ -18,7 +18,7 @@
                         </el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="账户状态：">
+                <el-form-item label="账户状态">
                     <el-select v-model="formInline.accountStatus" placeholder="请选择" clearable>
                         <el-option
                             v-for="item in optionsAuidSataus"
@@ -30,11 +30,11 @@
                         </el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="车牌号：">
+                <el-form-item label="车牌号">
                     <el-input v-model.trim="formInline.carNumber" clearable placeholder="请输入内容"></el-input>
                 </el-form-item>
-                <el-form-item label="手机号：">
-                    <el-input placeholder="请输入内容" v-model.trim="formInline.driverMobile" clearable v-numberOnly></el-input>
+                <el-form-item label="手机号">
+                    <el-input placeholder="请输入内容" v-model.trim="formInline.driverMobile" clearable v-numberOnly maxlength="11"></el-input>
                 </el-form-item>
                 <el-form-item class="fr">
                     <el-button type="primary" plain @click="getdata_search"  :size="btnsize" icon="el-icon-search">搜索</el-button>

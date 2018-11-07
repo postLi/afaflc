@@ -1,10 +1,10 @@
 <template>
     <div class="identicalStyle transactionCar" style="height:100%" v-loading="loading">
           <el-form :inline="true"  class="demo-ruleForm classify_searchinfo">
-            <el-form-item label="所属区域：">
+            <el-form-item label="所属区域">
               <GetCityList v-model="formAllData.areaCode" ref="area" @returnStr="getStr"></GetCityList>
           </el-form-item>
-            <el-form-item label="货主账号:">
+            <el-form-item label="货主账号">
             <el-input placeholder="请输入内容" clearable v-model="formAllData.account"></el-input>
             </el-form-item>             
             <el-form-item class="fr">       
@@ -38,7 +38,7 @@
             </el-table-column>
             <el-table-column  label="在线交易奖励金（已奖励 / 额度）" sortable>
             <template  slot-scope="scoped">
-             {{scoped.gainAwardReward}}/{{scoped.awardRewardMax}}
+             {{scoped.row.gainDiscountsReward}}/{{scoped.row.discountsRewardMax}}
             </template>
             </el-table-column> 
             <el-table-column  label="优惠券数" prop="couponCount" sortable>

@@ -1,13 +1,13 @@
 <template>
     <div class="identicalStyle " style="height:100%"  v-loading="loading">
           <el-form :inline="true" class="demo-ruleForm classify_searchinfo">
-             <el-form-item label="用户姓名：">
+             <el-form-item label="用户姓名">
                <el-input v-model="formAllData.name"></el-input>
             </el-form-item>     
-              <el-form-item label="用户账号：">
+              <el-form-item label="用户账号">
                <el-input v-model="formAllData.mobile"></el-input>
             </el-form-item>     
-                <el-form-item label="申请时间：">
+                <el-form-item label="申请时间">
                  <el-date-picker
                     value-format="timestamp"
                     type="daterange"
@@ -21,7 +21,7 @@
                     >
                     </el-date-picker>
             </el-form-item>   
-                <el-form-item label="处理时间：">
+                <el-form-item label="处理时间">
                  <el-date-picker
                     value-format="timestamp"
                     type="daterange"
@@ -35,7 +35,7 @@
                     >
                     </el-date-picker>
             </el-form-item>   
-               <el-form-item label="收款方式：">
+               <el-form-item label="收款方式">
                     <el-select v-model="formAllData.extractWay" placeholder="请选择" clearable>
                         <el-option
                             v-for="item in extractWayList"
@@ -47,7 +47,7 @@
                         </el-option>
                     </el-select>
             </el-form-item>     
-               <el-form-item label="处理结果：">
+               <el-form-item label="处理结果">
                     <el-select v-model="formAllData.auditOpinion" placeholder="请选择" clearable>
                         <el-option
                             v-for="item in auditOpinionList"
@@ -59,7 +59,7 @@
                         </el-option>
                     </el-select>
             </el-form-item>     
-               <el-form-item label="提现结果：">
+               <el-form-item label="提现结果">
                     <el-select v-model="formAllData.extractStatus" placeholder="请选择" clearable>
                         <el-option
                             v-for="item in extractStatusList"
