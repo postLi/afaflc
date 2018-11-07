@@ -2,16 +2,16 @@
     <div class="identicalStyle" v-loading="loading">
         <div class="shipper_searchinfo">
             <el-form inline  class="demo-ruleForm classify_searchinfo">
-            <el-form-item label="所在地：">
+            <el-form-item label="所在地">
                 <vregion :ui="true"  @values="regionChange" class="form-control">
                     <el-input v-model="belongCityName" placeholder="请选择"></el-input>
                 </vregion>
             </el-form-item>
-            <el-form-item label="车牌号：">
+            <el-form-item label="车牌号">
                 <el-input placeholder="请输入内容" v-model.trim="formInline.carNumber" clearable></el-input>
             </el-form-item>
-            <el-form-item label="手机号：">
-                <el-input placeholder="请输入内容" v-model.trim="formInline.driverMobile" clearable v-numberOnly></el-input>
+            <el-form-item label="手机号">
+                <el-input placeholder="请输入内容" v-model.trim="formInline.driverMobile" clearable v-numberOnly  maxlength="11"></el-input>
             </el-form-item>
             <el-form-item class="fr">
                 <el-button type="primary" plain @click="getdata_search"  :size="btnsize" icon="el-icon-search">搜索</el-button>

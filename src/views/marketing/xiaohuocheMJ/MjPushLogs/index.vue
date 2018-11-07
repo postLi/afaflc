@@ -7,7 +7,7 @@
                   <el-form-item label="出发地" >
                    <el-input v-model="formAll.startAddressName" class="StartareaName"></el-input>
                  </el-form-item>
-                  <el-form-item label="推送车主活跃度：">
+                  <el-form-item label="推送车主活跃度">
                     <el-select v-model="formAll.liveness" placeholder="请选择" clearable>
                         <el-option
                             v-for="item in activeTypeList"
@@ -19,7 +19,7 @@
                         </el-option>
                     </el-select>
                 </el-form-item>
-                  <el-form-item label="推送车型：">
+                  <el-form-item label="推送车型">
                     <el-select v-model="formAll.carType" placeholder="请选择" clearable>
                         <el-option
                             v-for="item in pushTypeList"
@@ -31,7 +31,7 @@
                         </el-option>
                     </el-select>
                 </el-form-item>
-                  <el-form-item label="车主在线状态：">
+                  <el-form-item label="车主在线状态">
                     <el-select v-model="formAll.isLine" placeholder="请选择" clearable>
                         <el-option
                             v-for="item in isLineList"

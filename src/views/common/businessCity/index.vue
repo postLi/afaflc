@@ -148,11 +148,9 @@ export default{
                         code:'820000',
                     }]
                 }                                
-
                 else{
                 data_GetCityList(item.code).then(res=>{
-                    console.log('res',res.data.list)
-                    if(res.data.list.length>0)
+                    if(res.data)
                     {
                     item.children = res.data.list;
                     }
@@ -184,7 +182,6 @@ export default{
                 this.cityTree = null;
             }
             })
-
             },
             nodeClick(data,checked,node,gg){
                 if(this.citystName==data.name){
@@ -196,7 +193,6 @@ export default{
                             provinceName:null,
                         }
                 this.$refs.treeForm.setCheckedNodes([])
-                    
                 }
                 else{
                 this.citystName=data.name

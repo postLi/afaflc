@@ -1,10 +1,10 @@
 <template>
     <div class="identicalStyle clearfix transactionRecharge" style="height:100%" v-loading="loading">
           <el-form :inline="true"  class="demo-ruleForm classify_searchinfo">
-            <el-form-item label="电话号码：">
+            <el-form-item label="电话号码">
                   <el-input v-model="formAllData.mobile" placeholder="请输入内容" clearable maxlength="11" class="Input"></el-input>
             </el-form-item>
-            <el-form-item label="充值渠道：">
+            <el-form-item label="充值渠道">
                   <el-select v-model="formAllData.rechargeChannel" clearable placeholder="请选择" >
                           <el-option
                               v-for="item in rechargeChannelList"
@@ -15,7 +15,7 @@
                          </el-option>
                  </el-select>               
             </el-form-item>
-            <el-form-item label="充值方式：">
+            <el-form-item label="充值方式">
                   <el-select v-model="formAllData.rechargeWay" clearable placeholder="请选择" >
                           <el-option
                               v-for="item in rechargeWayList"
@@ -26,7 +26,7 @@
                          </el-option>
                  </el-select>                  
             </el-form-item>
-            <el-form-item label="充值时间：">
+            <el-form-item label="充值时间">
                     <el-date-picker
                         is-range
                         unlink-panels
@@ -43,7 +43,7 @@
                         >
                     </el-date-picker>
             </el-form-item>    
-            <el-form-item label="流水号：">
+            <el-form-item label="流水号">
                   <el-input v-model="formAllData.rechargeSerial" placeholder="请输入内容" clearable class="Input"></el-input>
             </el-form-item>
 

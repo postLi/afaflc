@@ -1,10 +1,10 @@
 <template>
   <div  class="identicalStyle Marketing" style="height:100%;" v-loading="loading">
           <el-form :inline="true" class="demo-ruleForm classify_searchinfo">
-            <el-form-item label="所属区域：">
+            <el-form-item label="所属区域">
             <GetCityList ref="area" v-model="formAllData.areaName"  @returnStr="getStr"></GetCityList>
             </el-form-item>
-            <el-form-item label="服务类型：">
+            <el-form-item label="服务类型">
                  <el-select v-model="formAllData.serivceCode" clearable placeholder="请选择" >
                           <el-option
                               v-for="item in serviceCardList"
@@ -15,7 +15,7 @@
                          </el-option>
                  </el-select>
             </el-form-item>
-            <el-form-item label="车辆类型：">
+            <el-form-item label="车辆类型">
                  <el-select v-model="formAllData.carType" clearable placeholder="请选择" >
                           <el-option
                              v-for="item in optionsCar"

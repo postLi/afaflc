@@ -155,5 +155,8 @@ export default {
     .el-form-item__content{
         text-align: left;
     }
+    .BtnInfo{
+        font-weight: bold;
+    }
 }
 </style>

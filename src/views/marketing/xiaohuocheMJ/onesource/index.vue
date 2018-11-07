@@ -1,7 +1,7 @@
 <template>
     <div class="identicalStyle MjD_onesource" style="height:100%" v-loading="loading">
           <el-form :inline="true"  class="demo-ruleForm classify_searchinfo">
-            <el-form-item label="所在地：">
+            <el-form-item label="所在地">
               <GetCityList v-model="formAll.areaCode" ref="area"  @returnStr="getStr"></GetCityList>
           </el-form-item>
            <el-form-item label="服务类型">

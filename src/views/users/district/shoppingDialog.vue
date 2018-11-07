@@ -37,7 +37,7 @@
             <el-row>
                 <el-col :span="12">
                     <el-form-item label="场主手机号 ："  prop="ownerPhone">
-                    <el-input v-model="formAll.ownerPhone" :disabled="editType=='view'"></el-input>
+                    <el-input v-model="formAll.ownerPhone" :disabled="editType=='view'" maxlength="11"></el-input>
                     </el-form-item>
                 </el-col>
             </el-row>                        

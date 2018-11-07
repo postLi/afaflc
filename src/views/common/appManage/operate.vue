@@ -10,13 +10,6 @@
                     </el-form-item>
                 </el-col>
                 <el-col :span="12">
-                    <el-form-item label="app下载地址 ：" :label-width="formLabelWidth" prop="appDownloadUrl">
-                        <el-input v-model="formData.appDownloadUrl" placeholder=""  :disabled="editType=='view'"></el-input>   
-                    </el-form-item>
-                </el-col>            
-            </el-row>
-            <el-row>
-                <el-col :span="12">
                     <el-form-item label="app类型 ：" :label-width="formLabelWidth" prop="appType">
                <el-select  v-model="formData.appType" clearable placeholder="请选择" :disabled="editType=='view'">
                           <el-option
@@ -28,19 +21,21 @@
                          </el-option>
                  </el-select>
                     </el-form-item>
-                </el-col>
+                </el-col>         
+            </el-row>
+            <el-row>
                 <el-col :span="12">
                     <el-form-item label="app版本号 ：" :label-width="formLabelWidth" prop="appVersion">
                          <el-input v-model="formData.appVersion" placeholder=""  :disabled="editType=='view'"></el-input>   
                     </el-form-item>
                 </el-col>    
-            </el-row>
-            <el-row>
                 <el-col :span="12">
                     <el-form-item label="版本号名称 ：" :label-width="formLabelWidth" prop="appVersionName">
                          <el-input v-model="formData.appVersionName" placeholder=""  :disabled="editType=='view'"></el-input>   
                     </el-form-item>
                 </el-col> 
+            </el-row>
+            <el-row>
                 <el-col :span="12">
                     <el-form-item label="版本发布时间 ：" :label-width="formLabelWidth" prop="versionDate">
                          <el-date-picker v-model="formData.versionDate"
@@ -72,6 +67,14 @@
                     </el-form-item>
                 </el-col> 
             </el-row>
+            <el-row>
+                <el-col :span="24">
+                    <el-form-item label="app下载地址 ：" :label-width="formLabelWidth" prop="appDownloadUrl">
+                        <a :href="formData.appDownloadUrl" v-if="editType=='view'" class="urlapk" target="_blank">{{formData.appDownloadUrl}}</a>
+                         <upload class="licensePicture" tip="（上传速度较慢，请等一会儿）" v-model="formData.appDownloadUrl" :apkurl="formData.appDownloadUrl" v-else/>
+                    </el-form-item>
+                </el-col>   
+            </el-row>
         </el-form>
         <div slot="footer" class="dialog-footer">
           <el-button type="primary" @click="add_data" v-if="editType=='add'">确 定</el-button>
@@ -85,8 +88,10 @@
 import {data_get_aflcAppDownload_create,data_get_aflcAppDownload_update} from '@/api/company/appManage.js'
 import { eventBus } from '@/eventBus'
 import axios from 'axios'
+import Upload from '@/components/Upload/uploadApk'
 export default {
   components:{
+      Upload
   },
   props:{
     params:{
@@ -234,10 +239,16 @@ export default {
        }
        else if(this.editType=='view'){
            console.log('fdf',_this.paramsView)
-            axios.get('/api/aflccommonservice/common/aflcAppDownload/v1/'+_this.paramsView.id).then(function (response) {
-                _this.formData = response.data.data
+            axios.get('/api/aflccommonservice/common/aflcAppDownload/v1/'+_this.paramsView.id).then(res=> {
+                var NewData = res.data.data
+                    for (var u in NewData) {
+                    if(!NewData[u]){
+                        NewData[u]=''
+                    }
+                    }
+                _this.formData = NewData
                 })
-                .catch(function (error) {
+                .catch(err=>{
                 });           
            this.dialogFormVisible_add = true;
        }
@@ -265,10 +276,17 @@ export default {
             return
            }
            else{
-            axios.get('/api/aflccommonservice/common/aflcAppDownload/v1/'+_this.params[0].id).then(function (response) {
-                _this.formData = response.data.data
+            axios.get('/api/aflccommonservice/common/aflcAppDownload/v1/'+_this.params[0].id).then(res=>{
+                var NewData = res.data.data
+                    for (var u in NewData) {
+                    if(!NewData[u]){
+                        NewData[u]=''
+                    }
+                    }
+                _this.formData = NewData
                 })
-                .catch(function (error) {
+                .catch(err=> {
+                    console.log(err)
                 });
           this.dialogFormVisible_add = true
            }
@@ -330,6 +348,9 @@ export default {
     }
     .BtnInfo{
     font-weight: bold
+    }
+    .urlapk{
+        color: #66b1ff;
     }
 }
 </style>

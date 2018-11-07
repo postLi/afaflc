@@ -1,16 +1,16 @@
 <template>
 <!-- <<<<<<< HEAD -->
   <div class="same_shipper tabsWrap">
-    <el-tabs v-model="shipperName" type="card"  >
+    <el-tabs v-model="shipperName" type="card"  @tab-click='handleClick'>
 
         <!-- 自动化 -->
             <el-tab-pane label="自动化设置" name="first">
-                <automation types='one'></automation>
+                <automation types='one' ref="one"></automation>
             </el-tab-pane>
 
         <!-- 手动化 -->
             <el-tab-pane label="手动化设置"  name="second">
-                <handmation types='two'></handmation> 
+                <handmation types='two'  ref="two"></handmation> 
             </el-tab-pane>            
     </el-tabs>
   </div>
@@ -41,39 +41,17 @@ export default {
         },
      methods: {
      handleClick(tab, event) {
-      this.shipperName = tab.name;
+         if(tab.name == 'first'){
+           this.$refs.one.getDataList()
+         }
+         else{ 
+           this.$refs.two.getDataList()
+         }
        }
      },
 }
 </script>
 
 <style lang="scss" >
-    // @import "../../../../styles/tab.scss";
-    .completeinfo{
-      .detailinfo{
-        margin-left: 26px;
-        p{
-            width:160px;
-            height: 40px;
-            line-height: 40px;
-            text-align: left;
-            display: inline-block;
-            vertical-align: top;
-            span{
-                color:red;
-            }
-        }
-        .upload-demo{
-          display: inline-block ;
-        }
-      }
-    }
-    .same_shipper{
-        height:100%;    
-        position: relative;
-        .el-tabs__content{
-            padding:0px;
-        }
-    }
 </style>
 
