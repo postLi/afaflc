@@ -218,7 +218,7 @@
                 <div class="essentialInformation">
                     <p>
                         <span>中单等级：</span>
-                        <!-- <span>{{listInformation.orderClass === '1' ? '实时订单' : '预约订单'}}</span> -->
+                        <span>{{listInformation.aflcDriverStatus.obtainGrade}}</span>
                     </p>
                     <p>
                         <span>派单方式：</span>

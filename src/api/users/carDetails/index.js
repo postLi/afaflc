@@ -1,8 +1,16 @@
 import fetch from '@/utils/fetch'
 
-const baseurl = 'aflcsmservice-wtc'
-const baseurl_two = 'aflcorderservice-wtc'
-const baseurl_three = 'aflcusercenterservice' //用户
+const baseurl = 'aflcsmservice'
+const baseurl_two = 'aflcorderservice'
+const baseurl_three = 'aflcusercenterservice-wtc' //用户
+
+//财务信息-财务概况-根据id获取车主信息管理-财务概况
+export function findDrivrTrans(driverId) {
+    return fetch({
+      url: '/' + baseurl_three + '/usercenter/aflcDriver/v1/findDrivrTrans/'+driverId,
+      method: 'get',
+    })
+  }
 
 //财务信息-提现记录-根据条件获取车主信息管理
 export function extractCashlist(data) {

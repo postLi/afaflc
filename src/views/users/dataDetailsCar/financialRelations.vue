@@ -7,31 +7,31 @@
                 <el-row class="basicInfo" :span='24'>
                     <!-- 第一行 -->
                     <el-col :span="3">订单交易总额：</el-col>
-                    <el-col :span="3">1</el-col>
+                    <el-col :span="3">{{driverTransObj.orderTransTotal ? driverTransObj.orderTransTotal : '0'}}</el-col>
                     <el-col :span="3">线上交易总额：</el-col>
-                    <el-col :span="3">1</el-col>
+                    <el-col :span="3">{{driverTransObj.onLineTransTotal ? driverTransObj.onLineTransTotal : '0'}}</el-col>
                     <el-col :span="3">线下交易总额：</el-col>
-                    <el-col :span="3">1</el-col>
+                    <el-col :span="3">{{driverTransObj.offlineTransTotal ? driverTransObj.offlineTransTotal : '0'}}</el-col>
                     <el-col :span="3">平台补贴金额：</el-col>
-                    <el-col :span="3">1</el-col>
+                    <el-col :span="3">{{driverTransObj.rewardSubsiTotal ? driverTransObj.rewardSubsiTotal : '0'}}</el-col>
 
                     <!-- 第二行 -->
                     <el-col :span="3">已提现金额：</el-col>
-                    <el-col :span="3">1</el-col>
+                    <el-col :span="3">{{driverTransObj.cashWitndAmount ? driverTransObj.cashWitndAmount : '0'}}</el-col>
                     <el-col :span="3">钱包余额：</el-col>
-                    <el-col :span="3">1</el-col>
+                    <el-col :span="3">{{driverTransObj.walletBalance ? driverTransObj.walletBalance : '0'}}</el-col>
                     <el-col :span="3">可提现金额：</el-col>
-                    <el-col :span="3">1</el-col>
+                    <el-col :span="3">{{driverTransObj.acailBalance ? driverTransObj.acailBalance : '0'}}</el-col>
                     <el-col :span="3">冻结金额：</el-col>
-                    <el-col :span="3">1</el-col>
+                    <el-col :span="3">{{driverTransObj.freezAmount ? driverTransObj.freezAmount : '0'}}</el-col>
  
                     <!-- 第二行 -->
                     <el-col :span="3">保证金：</el-col>
-                    <el-col :span="3">1</el-col>
+                    <el-col :span="3">{{driverTransObj.securDeposit ? driverTransObj.securDeposit : '0'}}</el-col>
                     <el-col :span="3">待支付理赔：</el-col>
-                    <el-col :span="3">1</el-col>
+                    <el-col :span="3">{{driverTransObj.pendPayClaims ? driverTransObj.pendPayClaims : '0'}}</el-col>
                     <el-col :span="3">免费金额上限：</el-col>
-                    <el-col :span="9">1</el-col>
+                    <el-col :span="9">{{driverTransObj.maxHandsAmount ? driverTransObj.maxHandsAmount : '0'}}</el-col>
                 </el-row>
             </div>
         </div>
@@ -189,7 +189,7 @@
 <script>
 
 import { parseTime } from '@/utils/index.js'
-import {  extractCashlist,driverOrderPaymentList } from '@/api/users/carDetails/index.js'
+import {  extractCashlist,driverOrderPaymentList,findDrivrTrans } from '@/api/users/carDetails/index.js'
 export default {
   name: 'ordersInfo',
   components: {
@@ -203,7 +203,7 @@ export default {
   data() {
     return {
         value7:[],
-        listInformation: [],
+        driverTransObj:{},//财务概况
         cashObj:{//提现金额列表查询条件
             "currentPage": 1,
             "pageSize": 10,
@@ -277,6 +277,13 @@ export default {
             this.paymentObj.vo.userId = driverId;
             this.Cashlist();
             this.PaymentList();
+            this.DrivrTrans(driverId);
+        },
+        //财务概况
+        DrivrTrans(driverId){
+            findDrivrTrans(driverId).then(res => {
+                this.driverTransObj = res.data;
+            })
         },
         //提现
         Cashlist(){
