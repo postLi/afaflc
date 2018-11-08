@@ -18,7 +18,7 @@
               >
               </el-input>
               <!--<input type="text" v-focus v-model="dictName" placeholder="请输入"/>-->
-              <div class="addSvg">
+              <div class="addSvg fr">
                 <span @click="addDep" class="svgSpan">
                   <icon-svg class="lll-dot-true" icon-class="lll-dot-true"></icon-svg>
                 </span>
@@ -411,12 +411,13 @@
   /*depmain-edit 编辑*/
   .depmain-edit {
     .addSvg {
+        float: right;
       display: inline-block;
       span.svgSpan1 {
 
         .lll-dot-true {
           font-size: 20px;
-          margin: 4px 10px 2px 50px;
+          margin: 4px 10px 2px 0px;
           cursor: pointer;
         }
 

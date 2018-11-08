@@ -15,7 +15,7 @@
         text-align: center;
         padding-top: 50px;
     }
-    .orderTotal{
+    .UIorderTotal{
         padding-top:30px;
         text-align: center;
         h2{ 
@@ -131,7 +131,7 @@
         }
         #orderTypeHot{
             flex: 1;
-            margin:0 50px;
+            margin:0 20px;
         }
         .orderTypeXHC{
             width: 305px;
@@ -149,7 +149,7 @@
                     color: #ffffff;
                     margin-bottom: 40px;
                     p{
-                        margin-right: 35px;
+                        // margin-right: 35px;
                         span:first-child{
                             color: #00ccff;
                         }
@@ -207,7 +207,7 @@
                 }
             }
         }
-        .orderType_AreaLine{
+        #orderType_AreaLine{
             flex: 1;
             margin-left:20px;
             background: url('../../../assets/uiBG/lb.png') no-repeat center,url('../../../assets/uiBG/middle.png') no-repeat center;

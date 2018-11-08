@@ -140,11 +140,11 @@ export default {
       this.$refs.loginForm.validate(valid => {
         // console.log(valid)
         if (valid) {
-          this.loading = true
-          const data = Object.assign({}, this.loginForm);
-          data.username = data.username + '|' + 'aflc-7';
+            this.loading = true
+            const data = Object.assign({}, this.loginForm);
+            data.username = data.username + '|' + 'aflc-7';
             data.password = this.$md5(data.password);
-          this.$store.dispatch('Login', data).then(() => {
+            this.$store.dispatch('Login', data).then(() => {
             // if (!this.loginForm.accNum) {
             //   this.errInfo = true
             //   this.errInfo = '该公司Id不存在'
