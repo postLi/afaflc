@@ -179,6 +179,7 @@ export default {
           url = url ? url[1] : ''
         }
       this.emitInput(url)
+      this.$message.success('上传成功');
       // this.imageUrl = url
     },
     handleError(err) {

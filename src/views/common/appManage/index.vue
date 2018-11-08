@@ -127,7 +127,6 @@ export default {
                             item.appType='IOS货主'
                         }
                     })
-
                     this.loading = false
                 })
             },
@@ -146,8 +145,8 @@ export default {
         this.page = 1;
         this.$refs.pager.inputval = this.page;
         this.$refs.pager.pageNum = this.page;
-      }
-            this.firstblood()    
+        }
+        this.firstblood()    
         },
 
         // 判断选中与否
@@ -211,7 +210,7 @@ export default {
     }
    },
   mounted(){
-     eventBus.$on('pushListtwo', () => {
+    eventBus.$on('pushListtwo', () => {
                 this.firstblood()
     })
     this.firstblood();

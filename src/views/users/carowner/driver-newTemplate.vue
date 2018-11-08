@@ -409,13 +409,13 @@ export default {
         }
     //    车长信息校验
         const carLengthValidator = (rule, val, cb) => {
-            let reg=/^([0-9]|1[0-9]|2[0-9])(\.\d{1,3})?$/
+            let reg=/^([0-9]|1[0-9]|2[0-9])(\.\d{1,2})?$/
             let reg2 = /^[+-]?(0|([1-9]\d*))(\.\d+)?$/
             if(!reg2.test(val)){
             cb(new Error('输入车长须为数字'))
             }
             if(!reg.test(val)){
-            cb(new Error('输入30以内数字'))
+            cb(new Error('输入30以内数字,保留两位小数'))
             }
             else{
                 cb()
@@ -423,7 +423,7 @@ export default {
         }
     //    车宽信息校验
         const carWidthValidator = (rule, val, cb) => {
-            let reg=/^([0-9]|1[0-9]|2[0-9])(\.\d{1,3})?$/
+            let reg=/^([0-9]|1[0-9]|2[0-9])(\.\d{1,2})?$/
             let reg2 = /^[+-]?(0|([1-9]\d*))(\.\d+)?$/
             if(!reg2.test(val)){
             cb(new Error('输入车宽须为数字'))
@@ -437,7 +437,7 @@ export default {
         }
     //    车高信息校验
         const carHeightValidator = (rule, val, cb) => {
-            let reg=/^([0-9]|1[0-9]|2[0-9])(\.\d{1,3})?$/
+            let reg=/^([0-9]|1[0-9]|2[0-9])(\.\d{1,2})?$/
             let reg2 = /^[+-]?(0|([1-9]\d*))(\.\d+)?$/
             if(!reg2.test(val)){
             cb(new Error('输入车高须为数字'))

@@ -207,17 +207,29 @@ export default{
             },
             // 新增
             Add_getData(){
+                var _this = this
                 if(!this.fromData.cityName){
                     this.$message.info('请选中要添加的业务城市')
                 }
                 else{
-                data_AddCity(this.fromData).then(res=>{
+                   this.$confirm('确定新增业务城市"'+this.fromData.cityName+'"?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(()=>{
+                data_AddCity(_this.fromData).then(res=>{
                        this.$message.success('新增成功')
                             this.firstblood()
                         }).catch(res=>{
                             this.$message.error('新增失败')
                             this.firstblood()
                         })
+                }).catch(() => {
+                    this.$message({
+                        type: 'info',
+                        message: '已取消'
+                    })
+                })  
                 }
 
             },
@@ -242,8 +254,8 @@ export default{
         position: relative;
             .side_left_top{
              height:90%;
-             overflow-x: auto;
-             overflow-y: hidden;
+             overflow-y: auto;
+             overflow-x: hidden;
              }
             .side_left_bottom{
              position: absolute;
