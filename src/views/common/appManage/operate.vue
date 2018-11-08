@@ -6,12 +6,12 @@
             <el-row>
                 <el-col :span="12">
                     <el-form-item label="app名称 ：" :label-width="formLabelWidth" prop="appName">
-                        <el-input v-model="formData.appName" placeholder=""  :disabled="editType=='view'"></el-input>   
+                        <el-input v-model="formData.appName" placeholder="" :disabled="editType=='view'"></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col :span="12">
                     <el-form-item label="app类型 ：" :label-width="formLabelWidth" prop="appType">
-               <el-select  v-model="formData.appType" clearable placeholder="请选择" :disabled="editType=='view'">
+               <el-select  v-model="formData.appType" clearable placeholder="请选择" :disabled="editType=='view'||editType=='edit'">
                           <el-option
                              v-for="item in appTypeList"
                               :key="item.code"
@@ -21,17 +21,17 @@
                          </el-option>
                  </el-select>
                     </el-form-item>
-                </el-col>         
+                </el-col>
             </el-row>
             <el-row>
                 <el-col :span="12">
                     <el-form-item label="app版本号 ：" :label-width="formLabelWidth" prop="appVersion">
-                         <el-input v-model="formData.appVersion" placeholder=""  :disabled="editType=='view'"></el-input>   
+                         <el-input v-model="formData.appVersion" placeholder=""  :disabled="editType=='view'" maxlength="2"></el-input>   
                     </el-form-item>
                 </el-col>    
                 <el-col :span="12">
                     <el-form-item label="版本号名称 ：" :label-width="formLabelWidth" prop="appVersionName">
-                         <el-input v-model="formData.appVersionName" placeholder=""  :disabled="editType=='view'"></el-input>   
+                         <el-input v-model="formData.appVersionName" placeholder="例如:0.0.0.0"  :disabled="editType=='view'"></el-input>   
                     </el-form-item>
                 </el-col> 
             </el-row>
@@ -45,14 +45,13 @@
                                 default-time="00:00:00"
                                 placeholder="选择日期">
                          </el-date-picker>
-
                     </el-form-item>
                 </el-col> 
             </el-row>
             <el-row>
                 <el-col :span="24">
                     <el-form-item label="更新内容 ：" :label-width="formLabelWidth" class="textArea" prop="remark">
-                        <el-input
+                                <el-input
                                     type="textarea"
                                     :rows="2"
                                     placeholder="1-200间的字符" 
@@ -159,8 +158,12 @@ export default {
         } 
         // app版本号校验 
         const appVersionValidator = (rule,val,cb)=>{
+            let reg = /^([1-9]\d*|[0]{1,1})$/
             if(!val){
             cb(new Error('app版本号不能为空'))
+            }
+            else if(!(reg.test(val))){
+            cb(new Error('app版本号必须是正整数'))
             }
             else{
                 cb()
@@ -238,7 +241,6 @@ export default {
         this.dialogFormVisible_add = true;
        }
        else if(this.editType=='view'){
-           console.log('fdf',_this.paramsView)
             axios.get('/api/aflccommonservice/common/aflcAppDownload/v1/'+_this.paramsView.id).then(res=> {
                 var NewData = res.data.data
                     for (var u in NewData) {
@@ -292,7 +294,6 @@ export default {
            }
         }
        }
-      
     },
    change:function(){
       this.dialogFormVisible_add = false;
@@ -301,26 +302,26 @@ export default {
    add_data:function(){
    this.$refs['formData'].validate(valid=>{
     if(valid){
-       this.dialogFormVisible_add = false;
         data_get_aflcAppDownload_create(this.formData).then(res=>{
+              this.dialogFormVisible_add = false;
               this.$emit('getData');
               this.$message.success('新增成功');
                 }).catch(res=>{
               this.$emit('getData');
-              this.$message.error('新增失败')
+              this.$message.error('新增失败,'+res.text)
             })
     }})
    },
    edit_data:function(){
    this.$refs['formData'].validate(valid=>{
     if(valid){       
-       this.dialogFormVisible_add = false;
         data_get_aflcAppDownload_update(this.formData).then(res=>{
+            this.dialogFormVisible_add = false;
               this.$emit('getData');
               this.$message.success('修改成功');
                 }).catch(res=>{
               this.$emit('getData');
-              this.$message.error('修改失败')
+              this.$message.error('修改失败,'+res.text)
             })
     }})
     },
