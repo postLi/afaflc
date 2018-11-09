@@ -220,7 +220,7 @@ export default{
               handler(newVal, oldVal) {
                   if (newVal) {
                       this.firstblood()
-                        // this.timeOutAss = setInterval(this.firstblood,30000);
+                        this.timeOutAss = setInterval(this.firstblood,10*1000);
 
                     } else{
                       clearInterval(this.timeOutAss)

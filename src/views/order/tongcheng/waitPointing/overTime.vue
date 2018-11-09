@@ -229,7 +229,7 @@ export default{
                   console.log(this.isvisible)
                   if (newVal) {
                       this.firstblood()
-                        // this.timeOutOverTime = setInterval(this.firstblood,30000)
+                        this.timeOutOverTime = setInterval(this.firstblood,10*1000)
                     }else {
                       clearInterval(this.timeOutOverTime)
                     }

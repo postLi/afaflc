@@ -1,5 +1,5 @@
 <template>
-    <div class="rate clearfix" v-loading = "loading">
+    <div class="rate clearfix" v-loading = "loading" v-if="listInformation.returnList">
         <div class="ratePicture collapseInfo">
             <h2>照片信息</h2>   
             <div class="essentialInformation">
@@ -8,13 +8,17 @@
                     <el-tooltip class="item" effect="dark" content="双击图片查看原图" placement="top" v-viewer>
                         <img class="showPicture" :src="listInformation.loadingFile ? listInformation.loadingFile.filePath: ''" alt="" >
                     </el-tooltip><br>
-                    <!-- <span>{{listInformation.loadingFile ? listInformation.loadingFile.operation :''}}</span> -->
+                    <span class="shangchuan">上传时间：</span><span v-if="listInformation.loadingFile">{{listInformation.loadingFile.createTime | parseTime}}</span><br>
+                    <span class="shangchuan">上传位置：</span>
                 </p>
                 <p>
                     <span>回单照片：</span>
-                    <el-tooltip class="item" v-for="(item,key) in listInformation.returnList.filePathArr" :key="key" effect="dark" content="双击图片查看原图" placement="top" v-viewer>
+                    <el-tooltip class="item" v-for="(item,key) in listInformation.returnList.filePathArr" v-if="listInformation.returnList" :key="key" effect="dark" content="双击图片查看原图" placement="top" v-viewer>
                         <img  :src="item ? item: ''" alt="">
                     </el-tooltip>
+                    <br>
+                    <span class="shangchuan">上传时间：</span><span v-if="listInformation.returnList">{{listInformation.returnList.createTime | parseTime}}</span><br>
+                    <span class="shangchuan">上传位置：</span>
                 </p>
             </div>
         </div>
@@ -36,7 +40,7 @@
                     </p>
                     <p>
                         <span>评价内容：</span>
-                        <span>{{listInformation.shipperEvaluation.evaluationDes}}</span>
+                        <span>{{listInformation.shipperEvaluation ? listInformation.shipperEvaluation.evaluationDes :''}}</span>
                     </p>
                     <p>
                         <span>评价标签：</span>
@@ -151,7 +155,11 @@ export default {
             this.loading = true;
             getReturnListAndEvaluation(this.$route.query.orderSerial).then(res => {
                 this.listInformation = res.data;
-                this.listInformation.returnList.filePathArr = this.listInformation.returnList.filePath ?  this.listInformation.returnList.filePath.split(',') : [];
+                if(this.listInformation.returnList){
+                    this.listInformation.returnList.filePathArr = this.listInformation.returnList.filePath ?  this.listInformation.returnList.filePath.split(',') : [];
+                }else{
+                    this.listInformation.returnList.filePathArr = []
+                }
                 let item = this.listInformation.shipperEvaluation;
                 item.evaluationTypeName = item.evaluationType ? item.evaluationType.split(",") : [];
                 item.starLevel = Number(item.starLevel);
@@ -159,6 +167,12 @@ export default {
                 let el = this.listInformation.driverEvaluation;
                 el.evaluationTypeName = el.evaluationType ? el.evaluationType.split(",") : [];
                 el.starLevel = Number(el.starLevel);
+                this.loading = false;
+            }).catch(err => {
+                this.$message({
+                    type: 'info',
+                    message: '操作失败，原因：' + err.errorInfo ? err.errorInfo : err.text
+                })
                 this.loading = false;
             })
             // orderDetailsList(this.$route.query.orderSerial).then(res => {
@@ -197,6 +211,9 @@ export default {
                 }
                 p:nth-child(2){
                     width: 70%;
+                }
+                .shangchuan{
+                    margin-left: 70px;
                 }
             }
         }
