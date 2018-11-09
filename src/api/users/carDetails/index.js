@@ -1,7 +1,7 @@
 import fetch from '@/utils/fetch'
 
 const baseurl = 'aflcsmservice'
-const baseurl_two = 'aflcorderservice-wtc'
+const baseurl_two = 'aflcorderservice'
 const baseurl_three = 'aflcusercenterservice' //用户
 
 //财务信息-财务概况-根据id获取车主信息管理-财务概况
