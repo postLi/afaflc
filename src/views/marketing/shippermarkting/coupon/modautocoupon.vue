@@ -144,7 +144,7 @@
                                 default-time="23:59:59">
                                 </el-date-picker>
                      </span>
-                                </div>
+                      </div>
              <div class="ht_table_td table_th10">
                          <el-select v-model="formAllData.aflcCouponList[keys].serivceCode" clearable placeholder="请选择" >
                           <el-option
@@ -157,15 +157,17 @@
                  </el-select>
             </div>
              <div class="ht_table_td table_th11">
-                    <el-select v-model="formAllData.aflcCouponList[keys].carType" clearable placeholder="请选择" multiple collapse-tags>
+                  <el-tooltip class="item" effect="dark" :content="formAllData.aflcCouponList[keys].carTypeName" placement="top-start" :disabled="!formAllData.aflcCouponList[keys].carTypeName">
+                    <el-select v-model="formAllData.aflcCouponList[keys].carType" clearable placeholder="请选择" multiple @change='changcarType' @focus='focuscarType(keys)'>
                           <el-option
                              v-for="item in optionsCar"
-                              :key="item.code"
+                             :key="item.code"
                              :label="item.name"
                              :value="item.code"
                              :disabled="item.disabled">
                          </el-option>
                  </el-select>
+                 </el-tooltip>
                  </div>  
              <div class="ht_table_td table_th12" @click="changeInput(keys,$event)">
                 <span v-if="editType=='types'">
@@ -331,7 +333,7 @@ export default {
         selectFlag:false,
         areaStatus:null,
         couponList:[],
-        couponTimeList:[],          
+        couponTimeList:[],
         dialogFormVisible_add:false,
         formLabelWidth:'120px',
         formLabelWidth2:'80px',
@@ -361,6 +363,7 @@ export default {
             endTime:null,
             serivceCode:null,
             carType:[],
+            carTypeName:null,
             areaName:null,
             areaCode:null,
             selectFlag:null,
@@ -403,9 +406,10 @@ export default {
            overTime:null,
            serivceCode:null,
            carType:[],
+           carTypeName:null,
            selectFlag:null,
-           areaCode:[],
-           areaName:[],
+           areaCode:null,
+           areaName:null,
            areaName1:null,
            ifvouchersuperposition:null,
            }]
@@ -466,10 +470,14 @@ export default {
                        this.couponTimeList = res.data
                 })
           },
+    // 获取省市选择框index值      
     changeInput:function(i,e){
-        console.log('1',)
        this.inputKey = i;
        this.positiondata.top =e.currentTarget.offsetTop+41
+    },
+    // 获取车辆类型index值
+    focuscarType:function(i){
+       this.inputKey = i;
     },
     changeSelect1:function(i){
             if(this.editType==='add'){
@@ -535,7 +543,6 @@ export default {
           }
       })
       data_get_couponActive2_Id(this.params[0].id).then((res)=>{
-          console.log('122',res.data)
           this.formAllData.aflcCouponList = res.data
           for(var i= 0;i<this.formAllData.aflcCouponList.length;i++){
               let carString= []
@@ -577,6 +584,7 @@ export default {
            overTime:null,
            serivceCode:null,
            carType:[],
+           carTypeName:null,
            areaCode:null,
            areaName1:null,
            areaName:null,
@@ -713,6 +721,21 @@ export default {
                      return false
                     }
                  }
+    },
+    
+    // 车辆类型获取name
+    changcarType(e){
+     let objArray = [];
+       this.optionsCar.forEach((item)=>{
+          for(let i = 0;i<e.length;i++)
+          {
+              if(item.code == e[i])
+              {
+                objArray.push(item.name)
+              }
+          }
+      });
+      this.formAllData.aflcCouponList[this.inputKey].carTypeName = objArray.join(',')
     },
      add_data(){
             this.completeData(); 

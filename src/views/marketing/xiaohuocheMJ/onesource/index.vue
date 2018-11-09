@@ -22,7 +22,7 @@
          <el-button type="primary"  plain  @click="getdata_search()" :size="btnsize" icon="el-icon-search">查询</el-button> 
          <el-button type="primary"  plain  @click="clearSearch" :size="btnsize" icon="fontFamily aflc-icon-qingkong">清空</el-button>
          </el-form-item>
-           </el-form> 
+           </el-form>
   <div class="classify_info">
    <div class="btns_box">
   <!-- 马甲单新增 -->
@@ -95,7 +95,7 @@
                          <div class="vest_tree" v-else>
                              <span class="vest_tree_span">{{form.pickAeratree}}</span>
                              <el-button class="el-icon-minus"  @click="reduceItempick(keys)"></el-button>
-                       </div>     
+                       </div>
                        </div>                  
                    </div>
                </div>
@@ -222,8 +222,8 @@
             </el-col>
             <el-col :span="8">
         <el-form-item :label-width="formLabelWidth">       
-         <el-button type="primary"  plain  @click="getdata_search2()">查询</el-button> 
-         <el-button type="primary"  plain  @click="clearSearch2">清空</el-button>
+         <el-button type="primary"  plain  @click="getdata_search2()" icon="el-icon-search">查询</el-button> 
+         <el-button type="primary"  plain  @click="clearSearch2" icon="fontFamily aflc-icon-qingkong">清空</el-button>
          </el-form-item>
             </el-col>
              </el-row>
@@ -253,7 +253,6 @@
         </el-table> 
           <!-- 页码 -->
  <div class="info_tab_footer">共计:{{ dataTotal1 }} <div class="show_pager"> <Pager :total="dataTotal1" @change="handlePageChange1"  :sizes="sizes1" ref="pager1"/></div> </div> 
-
             </div>
            </div>
               <div slot="footer" class="dialog-footer" v-if="openFlag==1">
@@ -785,7 +784,7 @@ export default {
                                 endAddressName:this.endAddressName
                         });
                         this.destinationaddAera=''
-                        return         
+                        return
                         break
                         }
                     }

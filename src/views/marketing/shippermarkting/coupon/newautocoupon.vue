@@ -154,8 +154,9 @@
                          </el-option>
                  </el-select>
             </div>
-             <div class="ht_table_td table_th11">
-                    <el-select v-model="formAllData.aflcCouponList[keys].carType" clearable placeholder="请选择" multiple collapse-tags>
+             <div class="ht_table_td table_th11" >
+                  <el-tooltip class="item" effect="dark" :content="formAllData.aflcCouponList[keys].carTypeName" placement="top-start" :disabled="!formAllData.aflcCouponList[keys].carTypeName">
+                    <el-select v-model="formAllData.aflcCouponList[keys].carType" clearable placeholder="请选择" multiple @change='changcarType' @focus='focuscarType(keys)'>
                           <el-option
                              v-for="item in optionsCar"
                              :key="item.code"
@@ -164,6 +165,7 @@
                              :disabled="item.disabled">
                          </el-option>
                  </el-select>
+                 </el-tooltip>
                  </div>  
              <div class="ht_table_td table_th12" @click="changeInput(keys,$event)">
                 <el-input placeholder="" v-model="formAllData.aflcCouponList[keys].areaName"  id="inputArea"></el-input>
@@ -181,7 +183,7 @@
                              :disabled="item.disabled">
                          </el-option>
                  </el-select>
-             </div>               
+             </div>
             </div>
             </div>
 
@@ -347,6 +349,7 @@ export default {
             endTime:null,
             serivceCode:null,
             carType:[],
+            carTypeName:'',
             areaName:null,
             areaCode:null,            
             province:null,
@@ -389,6 +392,7 @@ export default {
             areaCode:null,
             areaName:null,
             ifvouchersuperposition:null,
+            carTypeName:null,
             }]
             this.$refs.area.clearData();
             if(this.$refs.areas){
@@ -439,12 +443,17 @@ export default {
                        this.couponTimeList = res.data
                 })
           },
+    // 获取省市选择框index值          
     changeInput:function(i,e){
        this.inputKey = i;
        this.positiondata.top =e.currentTarget.offsetTop+41
     },
+    // 获取车辆类型index值
+    focuscarType:function(i){
+       this.inputKey = i;
+    },
     openDialog:function(){
-        this.dialogFormVisible_add = true;
+       this.dialogFormVisible_add = true;
    },
    open(){
        this.$refs.areas[0].open()
@@ -472,6 +481,7 @@ export default {
            overTime:null,
            serivceCode:null,
            carType:[],
+           carTypeName:null,
            areaCode:null,
            areaName:null,
            ifvouchersuperposition:null,
@@ -608,6 +618,20 @@ export default {
                     }
                  }
     },
+    // 车辆类型获取name
+    changcarType(e){
+     let objArray = [];
+       this.optionsCar.forEach((item)=>{
+          for(let i = 0;i<e.length;i++)
+          {
+              if(item.code == e[i])
+              {
+                objArray.push(item.name)
+              }
+          }
+      });
+      this.formAllData.aflcCouponList[this.inputKey].carTypeName = objArray.join(',')
+    },
      add_data(){
             this.completeData(); 
             if(this.completeData()==false)
@@ -656,7 +680,6 @@ export default {
                         aflcCouponList:aflcCouponList
                     }]
               this.dialogFormVisible_add = false;
-              console.log('aflcCouponList',aflcCouponList)
               console.log(forms)
               data_get_couponActive_create(forms).then((res)=>{
               this.$emit('getData');
@@ -780,8 +803,8 @@ export default {
         .table_th5{width: 10%;}
         .table_th6{width: 6%;}
         .table_th7{width: 6%;}
-        .table_th8{width: 10%;}
-        .table_th9{width: 10%;}
+        .table_th8{width: 11%;}
+        .table_th9{width: 11%;}
         .table_th10{width: 7%;}
         .table_th11{width: 12%;}
         .table_th12{width: 12%;}
@@ -807,6 +830,7 @@ export default {
             border-bottom:1px solid #d0d7e5;
             border-right:1px solid #d0d7e5;
             position: relative;
+            z-index: 100;
             text-align: center;
             height: 42px;
             .reduceItem{
@@ -840,9 +864,24 @@ export default {
                  .el-input__inner{
                   padding: 0px 5px;
                  }
-                
              } 
         }
+        .el-select{
+            overflow: hidden;
+            .el-input__inner{height: 40px!important}
+            .el-select__tags{height: 40px;top:70%;overflow: hidden;max-width: none!important;
+             span{text-align: left;height: 100%;}
+            .el-tag--small{height: 100%;font-size: 14px;color: #606266;background-color:transparent;padding: 0px!important;margin:0px;
+            &::before{content: ','}
+            &:nth-of-type(1){
+            margin: 0px 0 0px 6px;
+            &::before{content: ''}   
+            }
+            }
+            .el-tag__close{display: none}
+            }
+        }
+
         }
         .moke{
             cursor: pointer;
