@@ -37,10 +37,9 @@
                 </el-table>
                 <el-pagination
                     background
-                    @size-change="handleSizeChange"
                     @current-change="handleCurrentChange"
                     :page-sizes="size"
-                    layout="total, sizes, prev, pager, next, jumper"
+                    layout="total, prev, pager, next, jumper"
                     :total="totalCount">
                 </el-pagination>
             </div>
@@ -50,48 +49,51 @@
             <h2>评价记录</h2>
             <div class="authority_legal">
                 <ul class="lengandInfo">
-                    <li>评价综合等级：<span>3.5</span></li>
+                    <li>评价综合等级：<span>{{DriverEvaListData.starLevelSum ? DriverEvaListData.starLevelSum : '0'}}</span></li>
                 </ul>
             </div>
             <div class="essentialInformation_table" style="padding-top:0;">
                 <el-table
-                    :data="tableData"
+                    :data="DriverEvaListData.aflcOrderDriverEvaluationDtoList"
                     border
                     style="width: 100%">
+                    <el-table-column label="序号"  width="80">
+                        <template slot-scope="scope">
+                            {{ (DriverEvaListObj.currentPage - 1) * DriverEvaListObj.pageSize + scope.$index + 1 }}
+                        </template>
+                    </el-table-column>  
                     <el-table-column
-                    prop="date"
-                    label="序号">
-                    </el-table-column>
-                    <el-table-column
-                    prop="date"
+                    prop="updateTime"
                     label="评价时间"
                     >
+                        <template slot-scope="scope">
+                            {{ scope.row.updateTime | parseTime }}
+                        </template>
                     </el-table-column>
                     <el-table-column
-                    prop="name"
+                    prop="serviceName"
                     label="服务类型"
                     >
                     </el-table-column>
                     <el-table-column
-                    prop="address" 
+                    prop="starLevel" 
                     label="获评星级">
                     </el-table-column>
                     <el-table-column
-                    prop="address"
+                    prop="evaluationDes"
                     label="获评标签">
                     </el-table-column>
                     <el-table-column
-                    prop="address"
+                    prop="shipperMobile"
                     label="货主账号">
                     </el-table-column>
                 </el-table>
                 <el-pagination
                     background
-                    @size-change="handleSizeChange"
-                    @current-change="handleCurrentChange"
+                    @current-change="handleCurrentChangeEva"
                     :page-sizes="size"
-                    layout="total, sizes, prev, pager, next, jumper"
-                    :total="totalCount">
+                    layout="total, prev, pager, next, jumper"
+                    :total="DriverEvaListTotalCount">
                 </el-pagination>
             </div>
         </div>
@@ -146,10 +148,9 @@
                 </el-table>
                 <el-pagination
                     background
-                    @size-change="handleSizeChange"
                     @current-change="handleCurrentChange"
                     :page-sizes="size"
-                    layout="total, sizes, prev, pager, next, jumper"
+                    layout="total,prev, pager, next, jumper"
                     :total="totalCount">
                 </el-pagination>
             </div>
@@ -160,6 +161,7 @@
 <script>
 
 import { parseTime } from '@/utils/index.js'
+import {  orderDriverEvaList } from '@/api/users/carDetails/index.js'
 
 export default {
   name: 'ordersInfo',
@@ -174,13 +176,15 @@ export default {
   data() {
     return {
         size:[20,30,50],
-        defaultImg:'/static/test.jpg',//默认第一张图片的url
-        defaultImg45:'/static/45du.png',
-        defaultImgCarCard:'/static/carcard.png',
-        defaultImgDriverCard:'/static/drivercard.png',
-        defaultImgIdCard:'/static/idcard.png',
-        defaultImgGeRen:'/static/geren.png',
-        listInformation: [],
+        DriverEvaListObj:{
+            "currentPage": 1,
+            "pageSize": 10,
+            "vo":{
+                evaluationId:'',
+            }
+        },
+        DriverEvaListData:{},//车主评价列表
+        DriverEvaListTotalCount:0,//车主评价列表初始数量
         dataType:[
             {name:'全部',iscur:true},
             {name:'近7天',iscur:false},
@@ -228,7 +232,20 @@ export default {
     },
     methods: {
         init() {
-        
+            let driverId =  this.$route.query.driverId;
+            this.DriverEvaListObj.vo.evaluationId = driverId;
+            this.DriverEvaList();
+        },
+        DriverEvaList(){
+            orderDriverEvaList(this.DriverEvaListObj).then(res => {
+                this.DriverEvaListData = res.data.list[0];
+                this.DriverEvaListTotalCount =res.data.totalCount;
+            })
+        },
+        //车主评价翻页
+        handleCurrentChangeEva(val){
+            this.DriverEvaListObj.currentPage = val;
+            this.DriverEvaList();
         },
         handleSizeChange(val) {
             console.log(`每页 ${val} 条`);
