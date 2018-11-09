@@ -319,11 +319,6 @@ export default {
         count:{//数组长度
             type:Number
         },
-        updataflag:{
-            type: Boolean,
-            default: false
-        }
-        
     },
     components:{
         Upload,

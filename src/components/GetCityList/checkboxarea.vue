@@ -170,10 +170,10 @@ updated(){
 #checkboxCityList{
   .dialog_div{position: absolute;left:0px;background:#fff;z-index: 1000000;width: 200px;overflow-x: auto;padding: 10px 0px;
       border: 1px solid #e4e7ed;
-    box-shadow: 0 2px 12px 0 rgba(0,0,0,.1);
+      box-shadow: 0 2px 12px 0 rgba(0,0,0,.1);
   }
   .add_box{
-    text-align: right
+      text-align: right
   }
         .el-tree-node__content{
         .el-checkbox{
