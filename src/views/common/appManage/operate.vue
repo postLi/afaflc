@@ -31,7 +31,7 @@
                 </el-col>    
                 <el-col :span="12">
                     <el-form-item label="版本号名称 ：" :label-width="formLabelWidth" prop="appVersionName">
-                         <el-input v-model="formData.appVersionName" placeholder="例如:0.0.0.0"  :disabled="editType=='view'"></el-input>   
+                         <el-input v-model="formData.appVersionName" placeholder="例如:1.0.0.0"  :disabled="editType=='view'"></el-input>   
                     </el-form-item>
                 </el-col> 
             </el-row>
@@ -45,6 +45,12 @@
                                 default-time="00:00:00"
                                 placeholder="选择日期">
                          </el-date-picker>
+                    </el-form-item>
+                </el-col> 
+                <el-col :span="12">
+                    <el-form-item label="是否强制更新 ：" :label-width="formLabelWidth" prop="versionDate">
+                        <el-radio v-model="formData.isForceUpdates" label="0" :disabled="editType=='view'">不强制更新</el-radio>
+                        <el-radio v-model="formData.isForceUpdates" label="1" :disabled="editType=='view'">强制更新</el-radio>
                     </el-form-item>
                 </el-col> 
             </el-row>
@@ -196,7 +202,15 @@ export default {
                 cb()
             }
         }                   
-        
+        // 是否强制更新检验
+        const isForceUpdatesValidator = (rule,val,cb)=>{
+            if(!val){
+            cb(new Error('是否强制更新不能为空'))
+            }
+            else{
+                cb()
+            }
+        }        
 
         return{
         maxlengthNum:200,
@@ -210,6 +224,7 @@ export default {
         appVersionName:'',
         versionDate:'',
         remark:'',
+        isForceUpdates:0,
         },
         appTypeList:[{code:'0',name:'安卓车主'},{code:'1',name:'安卓货主'},{code:'2',name:'IOS车主'},{code:'3',name:'IOS货主'}],
         rulesForm:{
@@ -220,6 +235,7 @@ export default {
             appVersionName:{validator:appVersionNameValidator, trigger:'change',required:true,},
             versionDate:{validator:versionDateValidator, trigger:'change',required:true,},
             remark:{validator:remarkValidator, trigger:'change',required:true,},
+            isForceUpdates:{validator:isForceUpdatesValidator, trigger:'change',required:true,}
         }        
         }
   },

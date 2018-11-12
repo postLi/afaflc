@@ -25,7 +25,6 @@
     import authEnticatedComponent from "../components/authEnticatedComponent.vue"
     import toBeCertified from "../components/toBeCertified.vue"
     import unPassCertification from "../components/unPassCertification.vue"
-
     export default {
         data(){
             return{

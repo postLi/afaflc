@@ -77,7 +77,7 @@
                     {{scope.row.province+scope.row.city+scope.row.area}}
                 </template>
             </el-table-column>
-            <el-table-column  label="奖励额度限制" prop="rewardMax" sortable>
+            <el-table-column  label="优惠额度限制" prop="rewardMax" sortable>
             </el-table-column>
             <el-table-column  label="服务分类" prop="serivceCode" sortable>
             </el-table-column>

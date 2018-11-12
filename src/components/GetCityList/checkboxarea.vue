@@ -104,7 +104,6 @@ export default {
       },
       check(i,j,k,z){
         var _this = this
-        console.log('0',i,j,k,z)
         if(i.pname==_this.cityStatus.name){
           _this.cityStatus.name = i.pname
         }
