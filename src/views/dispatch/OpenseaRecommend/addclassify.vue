@@ -56,7 +56,7 @@
                 </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
-            <el-button type="primary" @click="submitForm('ruleForm')">{{isModify? '保 存' : '确 定'}}</el-button>
+            <el-button type="primary" @click="submitForm('ruleForm')" :disabled="btnShow">{{isModify? '保 存' : '确 定'}}</el-button>
             <el-button @click="close">取 消</el-button>
             </div> 
         </el-dialog>
@@ -102,6 +102,7 @@ export default {
         };
     return {
         formLabelWidth:'180px',
+        btnShow:false,
         standForm: {
             areaCode: '', // 地区code
             areaCodeName: '',
@@ -179,13 +180,13 @@ export default {
         if(this.$refs.area){
             this.$refs.area.selectedOptions = [];
         }
-        this.$refs.area.clearData()
+        this.$refs.area.clearData();
+        this.btnShow = false;
     },
         // 初始化选择项数据
     init() {
         this.clearForms();
         if(!this.isModify){
-            console.log(this.isModify,'13121233')
             return Promise.all([data_CarList(), data_ServerClassList()]).then(resArr => {
                 console.log(resArr)
                 this.optionsCarType = resArr[0].data;
@@ -194,7 +195,7 @@ export default {
             }).catch(err => {
                 this.$message({
                     type: 'warning',
-                    message: '操作失败，原因：' + err.errorInfo ? err.errorInfo : err.text
+                    message: '操作失败，原因：' + (err.errorInfo ? err.errorInfo : err.text)
                 })
             })
         }else{
@@ -203,7 +204,7 @@ export default {
             }).catch(err => {
                 this.$message({
                     type: 'warning',
-                    message: '操作失败，原因：' + err.errorInfo ? err.errorInfo : err.text
+                    message: '操作失败，原因：' + (err.errorInfo ? err.errorInfo : err.text)
                 })
             });
             this.standForm = objectMerge2({},this.changeforms);
@@ -235,6 +236,7 @@ export default {
                 }else{
                     executeFunction = data_ChangeData(form);
                 }
+                this.btnShow = true;
                 executeFunction.then(res => {
                     this.$message({
                         type: 'success',
@@ -244,8 +246,9 @@ export default {
                 }).catch(err => {
                     this.$message({
                         type: 'warning',
-                        message: '操作失败，原因：' + err.errorInfo ? err.errorInfo : err.text
+                        message: '操作失败，原因：' + (err.errorInfo ? err.errorInfo : err.text)
                     })
+                    this.btnShow = false;
                 })
             } else {
                 this.$message({

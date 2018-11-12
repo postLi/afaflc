@@ -43,7 +43,7 @@
                     </div>
                     
                 <div slot="footer" class="dialog-footer">
-                    <el-button type="primary" @click="changeInfoSave">保 存</el-button>
+                    <el-button type="primary" @click="changeInfoSave" :disabled="btnShow">保 存</el-button>
                     <el-button @click="closeChangeInfo">取 消</el-button>
                 </div> 
             </el-dialog>
@@ -75,6 +75,7 @@ export default {
       return {
         startTime:null,
         endTime:null,
+        btnShow:false,
       };
     },
     components:{
@@ -125,6 +126,7 @@ export default {
             }
         },
         close(){
+            this.btnShow = false;
             this.$emit('update:dialogFormVisibleChange',false)
         },
         init(){
@@ -150,16 +152,18 @@ export default {
                 })
             }
             else{
+                this.btnShow = true;
                 this.changeforms.bindingEndDate +=  1* 24 * 60 * 60 * 1000 - 1000;
                 aflcShipperPlatformUpdata(this.changeforms).then(res=>{
-                    // console.log(res)
-                    this.$emit('renovate')
-                    this.close()
-                }).catch(res=>{
+                    this.$emit('renovate');
+                    this.close();
+                }).catch(err => {
                     this.$message({
                         type: 'warning',
-                        message: '操作失败，原因：' + err.errorInfo ? err.errorInfo : err.text
+                        message: '操作失败，原因：' + (err.errorInfo ? err.errorInfo : err.text)
                     })
+                    this.btnShow = false;
+                    
                 })  
             }
         },

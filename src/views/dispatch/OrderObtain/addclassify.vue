@@ -67,7 +67,7 @@
                  </div>
             </el-form>
             <div slot="footer" class="dialog-footer">
-                <el-button type="primary" @click="submitForm('ruleForm')">{{isModify? '保 存' : '确 定'}}</el-button>
+                <el-button type="primary" @click="submitForm('ruleForm')" :disabled="btnShow">{{isModify? '保 存' : '确 定'}}</el-button>
                 <el-button @click="close">取 消</el-button>
             </div> 
         </el-dialog>
@@ -105,6 +105,7 @@ export default {
     },
     data() {
       return {
+          btnShow:false,
         formLabelWidth:'180px',
         ifMoreForms:[
             {
@@ -163,6 +164,7 @@ export default {
         }
     },
     mounted(){
+
     },
     methods: {
         
@@ -174,6 +176,7 @@ export default {
             if(this.$refs.area){
                 this.$refs.area.selectedOptions = [];
             }
+            this.btnShow = false;
         },
         getStr(d){
             console.log('data:',d)
@@ -200,7 +203,7 @@ export default {
                 }).catch(err => {
                     this.$message({
                         type: 'warning',
-                        message: '操作失败，原因：' + err.errorInfo ? err.errorInfo : err.text
+                        message: '操作失败，原因：' + (err.errorInfo ? err.errorInfo : err.text)
                     })
                 })
             }else{
@@ -231,6 +234,7 @@ export default {
                             message: '中单时间或者中单距离不能为空！'
                         })
                     }else{
+                        this.btnShow = true;
                         executeFunction.then(res => {
                             this.$message({
                                 type: 'success',
@@ -240,8 +244,9 @@ export default {
                         }).catch(err => {
                             this.$message({
                                 type: 'warning',
-                                message: '操作失败，原因：' + err.errorInfo ? err.errorInfo : err.text
+                                message: '操作失败，原因：' + (err.errorInfo ? err.errorInfo : err.text)
                             })
+                            this.btnShow = false;
                         })
                     }
                 } else {

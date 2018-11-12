@@ -1,17 +1,13 @@
 <template>
     <el-form :inline="true" :model="searchInfo" ref="ruleForm" class="demo-ruleForm qdSearch fr" >
-        <el-form-item label="手机号码：" prop="orderSerial">
+        <el-form-item label="订单号：" maxlength="18"  prop="shipperName" v-if="this.searchType == 'transaction'">
             <el-input v-model="searchInfo.orderSerial" clearable>
             </el-input>
-        </el-form-item>
-        <!-- <el-form-item label="货主：" maxlength="18"  prop="shipperName">
-            <el-input v-model="searchInfo.shipperName" clearable placeholder="账户/姓名">
+        </el-form-item> 
+        <el-form-item label="货主名称：" prop="orderSerial">
+            <el-input v-model="searchInfo.shipperName" clearable>
             </el-input>
         </el-form-item>
-        <el-form-item label="车主：" maxlength="18"  prop="shipperName">
-            <el-input v-model="searchInfo.driverName" clearable placeholder="账户/姓名/车牌号">
-            </el-input>
-        </el-form-item> -->
         <el-form-item label="抢单时间：" prop="mobile">
             <el-date-picker
                 v-model="chooseTime"
@@ -40,6 +36,11 @@ import { parseTime,pickerOptions2 } from '@/utils/index.js'
     export default{
         components:{
         },
+        props:{
+            searchType:{
+                type:String,
+            }
+        },
         data(){
             return{
                 btnsize:'mini',
@@ -48,23 +49,27 @@ import { parseTime,pickerOptions2 } from '@/utils/index.js'
                     shortcuts:pickerOptions2
                 },
                 searchInfo:{
-                    belongCity:'',//区域
-                    belongCityName:'',
                     shipperName:'',//货主
-                    startOrderDate:'',//下单起始时间
-                    endOrderDate:'',//下单结束时间
+                    grabSingleTimeStart:'',//下单起始时间
+                    grabSingleTimeEnd:'',//下单结束时间
                     orderSerial:'',//订单号
-                    driverName:''
                 },
             }
         },
         methods: {
             //模糊查询 分类名称或者code
             handleSearch(type){
-                // console.log(this.chooseTime)
+                console.log(this.chooseTime)
                 let searchObj;
                 switch(type){
                     case 'search':
+                        if(this.chooseTime){
+                            this.searchInfo.grabSingleTimeStart = this.chooseTime[0];
+                            this.searchInfo.grabSingleTimeEnd = this.chooseTime[1];
+                        }else{
+                            this.searchInfo.grabSingleTimeStart = '';
+                            this.searchInfo.grabSingleTimeEnd = '';
+                        }
                         searchObj = Object.assign({}, this.searchInfo);
                         break;
                     case 'clear':
@@ -78,8 +83,7 @@ import { parseTime,pickerOptions2 } from '@/utils/index.js'
                         searchObj = Object.assign({}, this.searchInfo);
                         break;
                 }
-                this.$emit('change', searchObj)
-
+                this.$emit('change', searchObj,this.searchType)
             },
         }
     }

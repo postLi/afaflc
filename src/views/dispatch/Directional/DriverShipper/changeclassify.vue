@@ -14,7 +14,7 @@
                             <p><span>* </span>绑定开始时间 ：</p>
                             <el-date-picker
                             v-model="changeforms.bindingStartDate"
-                            type="datetime"
+                            type="date"
                             placeholder="选择日期"
                             :clearable = "false"
                             value-format="timestamp">
@@ -32,7 +32,7 @@
                             <p><span>* </span>绑定结束时间 ：</p>
                             <el-date-picker
                             v-model="changeforms.bindingEndDate"
-                            type="datetime"
+                            type="date"
                             placeholder="选择日期"
                             :clearable = "false"
                             default-time="23:59:59"
@@ -41,7 +41,7 @@
                         </div>
                     </div>
                 <div slot="footer" class="dialog-footer">
-                <el-button type="primary" @click="changeInfoSave">保 存</el-button>
+                <el-button type="primary" @click="changeInfoSave" :disabled="btnShow">保 存</el-button>
                 <el-button @click="closeChangeInfo">取 消</el-button>
                 </div> 
             </el-dialog>
@@ -75,6 +75,7 @@ export default {
         startTime:null,
         endTime:null,
         changeforms_now:null,
+        btnShow:false,
       };
     },
     components:{
@@ -127,7 +128,8 @@ export default {
             }
         },
         close(){
-            this.$emit('update:dialogFormVisibleChange',false)
+            this.$emit('update:dialogFormVisibleChange',false);
+            this.btnShow = false;
         },
         init(){
 
@@ -147,14 +149,19 @@ export default {
                 })
             }
             else{
+                this.btnShow = true;
+                this.changeforms.bindingEndDate +=  1* 24 * 60 * 60 * 1000 - 1000;
+
                 data_ChangeData(this.changeforms).then(res=>{
-                    this.close()
-                    this.$emit('renovate')
+                    this.close();
+                    this.$emit('renovate');
                 }).catch(err =>{
+                    console.log(err)
                     this.$message({
                         type: 'warning',
-                        message: '操作失败，原因：' + err.errorInfo ? err.errorInfo : err.text
+                        message: '操作失败，原因：' + (err.errorInfo ? err.errorInfo : err.text),
                     })
+                    this.btnShow = false;
                 })  
             }
         },

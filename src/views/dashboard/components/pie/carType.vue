@@ -52,7 +52,9 @@ export default {
                         normal: {
                             show: true,
                             position: 'inside',
-                            formatter: '{b}:{c} ({d}%)'
+                            formatter: '{b}:{c} ({d}%)',
+                            color:'#fff',
+                            fontWeight:'normal'
                         },
                         emphasis: {
                             show: true,

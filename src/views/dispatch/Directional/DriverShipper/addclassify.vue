@@ -46,7 +46,7 @@
                         </div>
                     </div>
                     <div slot="footer" class="dialog-footer">
-                    <el-button type="primary" @click="newInfoSave">保 存</el-button>
+                    <el-button type="primary" @click="newInfoSave" :disabled="btnShow">保 存</el-button>
                     <el-button @click="closeAddNewInfo">取 消</el-button>
                     </div> 
                 </el-dialog>
@@ -97,6 +97,7 @@ export default {
         filterOptionsCar:{
             search:''
         },//筛选车主
+        btnShow:false,
       };
     },
     computed: {
@@ -192,7 +193,7 @@ export default {
             }).catch(err => {
                  this.$message({
                         type: 'warning',
-                        message: '操作失败，原因：' + err.errorInfo ? err.errorInfo : err.text
+                        message: '操作失败，原因：' + (err.errorInfo ? err.errorInfo : err.text)
                     })
             })
         },
@@ -253,6 +254,8 @@ export default {
                 })
             }
             else{
+
+                this.btnShow = true;
                 this.forms.bindingEndDate +=  1* 24 * 60 * 60 * 1000 - 1000;
 
                 data_NewData(this.forms).then(res=>{
@@ -260,20 +263,22 @@ export default {
                         confirmButtonText: '确定',
                         callback: action => {
                             this.$emit('renovate');
-                            this.clearForms();
+                            this.closeAddNewInfo();
                         }
                     });
                 }).catch( err => {
                     this.$message({
                         type: 'warning',
-                        message: '操作失败，原因：' + err.errorInfo ? err.errorInfo : err.text
+                        message: '操作失败，原因：' + (err.errorInfo ? err.errorInfo : err.text)
                     })
+                    this.btnShow = false;
                 })
             }
         },
         closeAddNewInfo(){
             this.close();  
             this.clearForms();
+            this.btnShow = false;
         },
         clearForms(){
             this.forms = {

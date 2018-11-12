@@ -120,7 +120,6 @@ export default {
                                 borderWidth: 1
                             },
                             emphasis: {
-                                // areaColor: 'rgba(0,62,186,0.5)'
                                 areaColor: 'rgba(0,40,127,1)'
                             }
                         },

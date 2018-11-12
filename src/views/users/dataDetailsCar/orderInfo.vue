@@ -7,21 +7,21 @@
                 <el-row class="basicInfo" :span='24'>
                     <!-- 第一行 -->
                     <el-col :span="3">总抢单数：</el-col>
-                    <el-col :span="3">1</el-col>
+                    <el-col :span="3">{{orderPriceInfo.grabTotal ? orderPriceInfo.grabTotal : '0'}}</el-col>
                     <el-col :span="3">总中单数：</el-col>
-                    <el-col :span="3">1</el-col>
+                    <el-col :span="3">{{orderPriceInfo.singularTotal ? orderPriceInfo.singularTotal :'0'}}</el-col>
                     <el-col :span="3">订单交易总额：</el-col>
-                    <el-col :span="3">1</el-col>
+                    <el-col :span="3">{{orderPriceInfo.orderTransTotal ? orderPriceInfo.orderTransTotal : '0'}}</el-col>
                     <el-col :span="3">取消订单：</el-col>
-                    <el-col :span="3">1</el-col>
+                    <el-col :span="3">{{orderPriceInfo.cancelOrder ? orderPriceInfo.cancelOrder : '0'}}</el-col>
 
                     <!-- 第二行 -->
                     <el-col :span="3">同城订单数：</el-col>
-                    <el-col :span="3">1</el-col>
+                    <el-col :span="3">{{orderPriceInfo.sameCityOrderNum ? orderPriceInfo.sameCityOrderNum : '0'}}</el-col>
                     <el-col :span="3">城际订单数：</el-col>
-                    <el-col :span="3">1</el-col>
+                    <el-col :span="3">{{orderPriceInfo.interCityOrderNum ? orderPriceInfo.interCityOrderNum : '0'}}</el-col>
                     <el-col :span="3">零担订单数：</el-col>
-                    <el-col :span="9">1</el-col>
+                    <el-col :span="9">{{orderPriceInfo.ltlOrderNum ? orderPriceInfo.ltlOrderNum : '0'}}</el-col>
                 </el-row>
             </div>
         </div>
@@ -30,71 +30,108 @@
             <h2>抢单信息</h2>
             <div class="qd-collapse_title clearfix">
                 <ul class="classfyTitle fl">
-                   <li v-for="(item,index) in dataType" :key="item.name" :class="{currentClick:item.iscur}" @click="setCur(index)">{{item.name}}</li>
+                   <li v-for="(item,index) in grapListDataType" :key="item.name" :class="{currentClick:item.iscur}" @click="setCur(index,'grap',item.label)">{{item.name}}</li>
                 </ul>
-                <searchInfo />
+                <searchInfo  searchType = "grap" @change = "getSearchParam"/>
             </div>
             <div class="authority_legal">
                 <ul class="lengandInfo">
-                    <li>抢单数量：<span>135</span></li>
-                    <li>中单数量：<span>33</span></li>
-                    <li>同城：<span>150</span></li>
-                    <li>城际：<span>150</span></li>
-                    <li>零担：<span>150</span></li>
+                    <li>抢单数量：<span>{{grapListData.grabTotal ? grapListData.grabTotal : '0'}}</span></li>
+                    <li>中单数量：<span>{{grapListData.singularTotal ? grapListData.singularTotal : '0'}}</span></li>
+                    <li>小货车：<span>{{grapListData.grabsameCityOrderNum ? grapListData.grabsameCityOrderNum : '0'}}</span></li>
+                    <li>大货车：<span>{{grapListData.grabinterCityOrderNum ? grapListData.grabinterCityOrderNum : '0'}}</span></li>
+                    <li>发物流：<span>{{grapListData.grabltlOrderNum ? grapListData.grabltlOrderNum : '0'}}</span></li>
                 </ul>
             </div>
             <div class="essentialInformation_table" style="padding-top:0;">
                 <el-table
-                    :data="tableData"
+                    :data="grapListData.aflcOrderGrabListDtoList"
                     border
                     style="width: 100%">
+                    <el-table-column label="序号"  width="80">
+                        <template slot-scope="scope">
+                            {{ (grapListObj.currentPage - 1) * grapListObj.pageSize + scope.$index + 1 }}
+                        </template>
+                    </el-table-column>  
                     <el-table-column
-                    prop="date"
-                    label="序号"
-                    width="50">
-                    </el-table-column>
-                    <el-table-column
-                    prop="date"
+                    :show-overflow-tooltip="true"
+                    prop="shipperName"
                     label="货主姓名"
-                    width="180">
+                    width="120">
                     </el-table-column>
                     <el-table-column
-                    prop="name"
+                    prop="shipperMobile"
                     label="货主账号"
-                    width="180">
+                    width="120">
                     </el-table-column>
                     <el-table-column
-                    prop="address"
+                    prop="publishTime"
+                    width="160"
                     label="发布时间">
                     </el-table-column>
                     <el-table-column
-                    prop="address"
+                    width="160"
+                    prop="grabSingleTime"
                     label="抢单时间">
                     </el-table-column>
                     <el-table-column
-                    prop="address"
+                    width="120"
+                    prop="grabSpeed"
                     label="抢入速度">
                     </el-table-column>
                     <el-table-column
-                    prop="address"
-                    label="距离提货地">
+                    width="120"
+                    prop="driverDistance"
+                    label="距离提货地(米)">
                     </el-table-column>
                     <el-table-column
-                    prop="address"
+                    width="120"
+                    prop="isCollectDriver"
                     label="是否收藏司机">
                     </el-table-column>
                     <el-table-column
-                    prop="address"
+                    width="120"
+                    prop="isDirectDriver"
                     label="是否定向司机">
+                    </el-table-column>
+                    <el-table-column
+                    width="120"
+                    prop="serviceType"
+                    label="服务类型">
+                    </el-table-column>
+                    <el-table-column
+                    width="120"
+                    prop="isDriverSingle"
+                    label="是否已有司机中单">
+                    </el-table-column>
+                    <el-table-column
+                    width="120"
+                    prop="isGrab"
+                    label="是否中单">
+                    </el-table-column>
+                    <el-table-column
+                    width="160"
+                    prop="singleTime"
+                    label="中单时间">
+                    </el-table-column>
+                    <el-table-column
+                    width="200"
+                    :show-overflow-tooltip="true"
+                    prop="startAddress"
+                    label="始发地">
+                    </el-table-column>
+                    <el-table-column
+                    width="200"
+                    :show-overflow-tooltip="true"
+                    prop="endAddress"
+                    label="目的地">
                     </el-table-column>
                 </el-table>
                 <el-pagination
                     background
-                    @size-change="handleSizeChange"
-                    @current-change="handleCurrentChange"
-                    :page-sizes="size"
-                    layout="total, sizes, prev, pager, next, jumper"
-                    :total="totalCount">
+                    @current-change="handleCurrentChangeGrap"
+                    layout="total, prev, pager, next, jumper"
+                    :total="grapListTotalCount">
                 </el-pagination>
             </div>
         </div>
@@ -106,7 +143,7 @@
                 <ul class="classfyTitle fl">
                    <li v-for="(item,index) in dataType" :key="item.name" :class="{currentClick:item.iscur}" @click="setCur(index)">{{item.name}}</li>
                 </ul>
-                <searchInfo />
+                <searchInfo searchType = "transaction"/>
             </div>
             <div class="authority_legal">
                 <ul class="lengandInfo">
@@ -197,10 +234,8 @@
                 </el-table>
                 <el-pagination
                     background
-                    @size-change="handleSizeChange"
                     @current-change="handleCurrentChange"
-                    :page-sizes="size"
-                    layout="total, sizes, prev, pager, next, jumper"
+                    layout="total, prev, pager, next, jumper"
                     :total="totalCount">
                 </el-pagination>
             </div>
@@ -274,10 +309,8 @@
                 </el-table>
                 <el-pagination
                     background
-                    @size-change="handleSizeChange"
                     @current-change="handleCurrentChange"
-                    :page-sizes="size"
-                    layout="total, sizes, prev, pager, next, jumper"
+                    layout="total,prev, pager, next, jumper"
                     :total="totalCount">
                 </el-pagination> 
             </div>
@@ -291,6 +324,7 @@
 import { parseTime } from '@/utils/index.js'
 // import Pager from '@/components/Pagination/index'
 import searchInfo from './components/searchInfo'
+import { orderPriceInfo,grapList } from '@/api/users/carDetails/index.js'
 
 export default {
   name: 'ordersInfo',
@@ -308,12 +342,31 @@ export default {
     return {
         btnsize:'mini',
         size:[20,30,50],
-        listInformation: [],
+        orderPriceInfo:{},//订单信息概要
+        grapListObj:{//订单抢单记录表查询条件
+            "currentPage": 1,
+            "pageSize": 10,
+            "vo": {
+                "driverId": "",
+                "grabSingleTimeEnd": "",
+                "grabSingleTimeStart": "",
+                "shipperName": "",
+                "timeDay": "",
+            }
+        },
+        grapListData:{},//订单抢单记录表数据
+        grapListTotalCount:0,//订单抢单记录表初始数量
         dataType:[
-            {name:'全部',iscur:true},
-            {name:'近7天',iscur:false},
-            {name:'近30天',iscur:false},
-            {name:'近90天',iscur:false},
+            {name:'全部',label:'',iscur:true},
+            {name:'近7天',label:'-7',iscur:false},
+            {name:'近30天',label:'-30',iscur:false},
+            {name:'近90天',label:'-90',iscur:false},
+        ],
+        grapListDataType:[
+            {name:'全部',label:'',iscur:true},
+            {name:'近7天',label:'-7',iscur:false},
+            {name:'近30天',label:'-30',iscur:false},
+            {name:'近90天',label:'-90',iscur:false},
         ],
         page:1,
         pagesize:20,
@@ -355,34 +408,68 @@ export default {
     },
     methods: {
         init() {
-        
+            let driverId = this.$route.query.driverId;
+            this.grapListObj.vo.driverId = driverId;
+            this.PriceInfo(driverId);
+            this.GrapList();
         },
-        handleSizeChange(val) {
-            console.log(`每页 ${val} 条`);
+        //订单信息概要
+        PriceInfo(driverId){
+            orderPriceInfo(driverId).then(res => {
+                this.orderPriceInfo = res.data;
+            })
+        },
+        //订单抢单列表
+        GrapList(){
+            grapList(this.grapListObj).then(res => {
+                this.grapListData = res.data.list[0];
+                this.grapListTotalCount = res.data.totalCount;
+            })
+        },
+        handleCurrentChangeGrap(val){
+            this.grapListObj.currentPage = val;
+            this.GrapList();
         },
         handleCurrentChange(val) {
             console.log(`当前页: ${val}`);
         },
-        setCur(index){
-            console.log(index)
-            this.dataType.forEach((el,idx)=>{
-                console.log(idx)
-                idx == index ? el.iscur = true : el.iscur = false;
-            })
+        setCur(index,classfy,label){
+            switch(classfy){
+                case 'grap':
+                    this.grapListDataType.forEach((el,idx)=>{
+                        idx == index ? el.iscur = true : el.iscur = false;
+                    })
+                    this.grapListObj.vo.timeDay = label;
+                    this.GrapList();
+                    break;
+                case '':
+                    break;
+            }
+            // console.log(index)
+            // this.dataType.forEach((el,idx)=>{
+            //     console.log(idx)
+            //     idx == index ? el.iscur = true : el.iscur = false;
+            // })
         },
-        submitForm(formName) {
-            this.$refs[formName].validate((valid) => {
-                if (valid) {
-                    alert('submit!');
-                } else {
-                    console.log('error submit!!');
-                    return false;
-                }
-            });
+        getSearchParam(obj,searchType) {
+            console.log(obj,searchType)
+            switch(searchType){
+                case 'grap':
+                    this.grapListObj.vo = Object.assign({},this.grapListObj.vo, obj)
+                    console.log(this.grapListObj.vo)
+                    this.GrapList();
+                    break;
+                case '':
+                    break;
+            }
+            // this.searchInfo = Object.assign(this.searchInfo, obj)
+            // this.loading = false;
+            // if(this.page!= 1){
+            //     this.page = 1;
+            //     this.$refs.pager.inputval = this.page;
+            // }
+            // this.firstblood()
         },
-        resetForm(formName) {
-            this.$refs[formName].resetFields();
-        }
     }
 }
 </script>

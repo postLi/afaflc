@@ -23,7 +23,6 @@
             </div>
         </div>
         <div class="rateInfo collapseInfo">
-                        <!-- <span v-if="evaluationType" class="evaluationType" v-for="el in evaluationType.split(',')"  :key="el">{{el}}</span> -->
             <h2>评价信息</h2>   
             <div class="essentialInformation" >
                 <div  class="rateTabs">
@@ -31,6 +30,7 @@
                         <span>货主评价车主：</span>
                         <span>
                             <el-rate
+                                v-if="listInformation.shipperEvaluation"
                                 v-model="listInformation.shipperEvaluation.starLevel"
                                 disabled
                                 :colors="['#99A9BF', '#F7BA2A', '#FF9900']"
@@ -40,11 +40,11 @@
                     </p>
                     <p>
                         <span>评价内容：</span>
-                        <span>{{listInformation.shipperEvaluation ? listInformation.shipperEvaluation.evaluationDes :''}}</span>
+                        <span>{{listInformation.shipperEvaluation ? listInformation.shipperEvaluation.evaluationDes :'暂未评价'}}</span>
                     </p>
                     <p>
                         <span>评价标签：</span>
-                        <span v-if="listInformation.shipperEvaluation.evaluationType" class="evaluationType" v-for="(el,key) in listInformation.shipperEvaluation.evaluationTypeName"  :key="key">{{el}}</span>
+                        <span class="evaluationType" v-for="(el,key) in shipperEvaluationTypeName"  :key="key">{{el}}</span>
                     </p>
                 </div>
                 <div  class="rateTabs">
@@ -52,6 +52,7 @@
                         <span>车主评价货主：</span>
                         <span>
                             <el-rate
+                                v-if="listInformation.driverEvaluation"
                                 v-model="listInformation.driverEvaluation.starLevel"
                                 disabled
                                 :colors="['#99A9BF', '#F7BA2A', '#FF9900']"
@@ -62,13 +63,13 @@
                     <p>
                         <span>评价内容：</span>
                         <el-tooltip placement="top" effect="light">
-                            <div slot="content">{{listInformation.driverEvaluation.evaluationDes}}</div>
-                                <span>{{listInformation.driverEvaluation.evaluationDes}}</span>
+                            <div slot="content">{{listInformation.driverEvaluation ? listInformation.driverEvaluation.evaluationDes : ''}}</div>
+                            <span>{{listInformation.driverEvaluation ? listInformation.driverEvaluation.evaluationDes : '暂未评价'}}</span>
                         </el-tooltip>
                     </p>
                     <p>
                         <span>评价标签：</span>
-                        <span v-if="listInformation.driverEvaluation.evaluationType" class="evaluationType" v-for="el in listInformation.driverEvaluation.evaluationTypeName"  :key="el">{{el}}</span>
+                        <span class="evaluationType" v-for="el in driverEvaluationTypeName"  :key="el">{{el}}</span>
                     </p>
                 </div>
             </div>
@@ -133,6 +134,8 @@ export default {
             loading:true,
             listInformation:{},
             parseTimeF:null,
+            driverEvaluationTypeName:[],
+            shipperEvaluationTypeName:[],
         };
     },
     watch:{
@@ -161,12 +164,23 @@ export default {
                     this.listInformation.returnList.filePathArr = []
                 }
                 let item = this.listInformation.shipperEvaluation;
-                item.evaluationTypeName = item.evaluationType ? item.evaluationType.split(",") : [];
-                item.starLevel = Number(item.starLevel);
+
+                if(item){
+                    this.shipperEvaluationTypeName = item.evaluationType ? item.evaluationType.split(",") : [];
+                    item.starLevel = Number(item.starLevel);
+                }else{
+                    this.shipperEvaluationTypeName = [];
+                }
 
                 let el = this.listInformation.driverEvaluation;
-                el.evaluationTypeName = el.evaluationType ? el.evaluationType.split(",") : [];
-                el.starLevel = Number(el.starLevel);
+
+                if(el){
+                    this.driverEvaluationTypeName = el.evaluationType ? el.evaluationType.split(",") : [];
+                    el.starLevel = Number(el.starLevel);
+                }else{
+                    this.driverEvaluationTypeName = [];
+                }
+
                 this.loading = false;
             }).catch(err => {
                 this.$message({

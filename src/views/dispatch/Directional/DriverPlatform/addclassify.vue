@@ -46,7 +46,7 @@
                         </div>
                     </div>
                     <div slot="footer" class="dialog-footer">
-                    <el-button type="primary" @click="newInfoSave">保 存</el-button>
+                    <el-button type="primary" @click="newInfoSave" :disabled="btnShow">保 存</el-button>
                     <el-button @click="closeAddNewInfo">取 消</el-button>
                     </div> 
                 </el-dialog>
@@ -86,6 +86,7 @@ export default {
             shipperPhone:'',//
             
         },
+        btnShow : false,
         optionsShipper:[],//选择货主
         optionsSystem:[],//选择平台人员
         optionsVisualCarType:[],
@@ -166,7 +167,7 @@ export default {
             }).catch(err =>{
                  this.$message({
                         type: 'warning',
-                        message: '操作失败，原因：' + err.errorInfo ? err.errorInfo : err.text
+                        message: '操作失败，原因：' + (err.errorInfo ? err.errorInfo : err.text)
                     })
             })
         },
@@ -181,7 +182,7 @@ export default {
             }).catch(err =>{
                  this.$message({
                         type: 'warning',
-                        message: '操作失败，原因：' + err.errorInfo ? err.errorInfo : err.text
+                        message: '操作失败，原因：' + (err.errorInfo ? err.errorInfo : err.text)
                     })
             })
         },
@@ -241,6 +242,7 @@ export default {
                     })
             }
             else{
+                this.btnShow = true;
                 this.forms.bindingEndDate +=  1* 24 * 60 * 60 * 1000 - 1000;
                 data_NewData(this.forms).then(res=>{
                     console.log(res)
@@ -254,15 +256,17 @@ export default {
                 }).catch( err => {
                     this.$message({
                         type: 'warning',
-                        message: '操作失败，原因：' + err.errorInfo ? err.errorInfo : err.text
+                        message: '操作失败，原因：' + (err.errorInfo ? err.errorInfo : err.text)
                     })
+                    this.btnShow = false;
                 })
             }
             console.log(this.forms)
         },
         closeAddNewInfo(){
             this.close();  
-            this.clearForms()
+            this.clearForms();
+            this.btnShow = false;
         },
 
         clearForms(){

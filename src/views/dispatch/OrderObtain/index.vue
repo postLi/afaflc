@@ -196,7 +196,7 @@ import Pager from '@/components/Pagination/index'
                 }).catch(err => {
                     this.$message({
                         type: 'info',
-                        message: '操作失败，原因：' + err.errorInfo ? err.errorInfo : err.text
+                        message: '操作失败，原因：' + (err.errorInfo ? err.errorInfo : err.text)
                     })
                     this.loading = false;
                 })

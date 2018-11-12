@@ -39,9 +39,7 @@
                     <p><span>12000单</span><span class="fr">占比80.00%</span></p>
                 </div>
             </div>
-            <!-- <div id="orderTypeHot">
-                
-            </div> -->
+            <!-- 全国散点图 -->
             <Point/>
             <div class="orderTypeXHC orderTypeCommon">
                <h4>小货车待指派订单</h4>
@@ -109,15 +107,19 @@
                     </li>
                 </ul>
             </div>
+            <!-- 单量变化折现图 -->
             <TypeLine/>
         </div>
 
         <div class="orderType_carType">
+            <!-- 用车时间折线图 -->
             <useCarTime/>
+            <!-- 车型需求饼图 -->
             <carType/>
+            <!-- 订单状态饼图 -->
             <orderStatus/>
         </div>
-        
+        <!-- 用户数据柱状图 -->
         <userTypeCount/>
     </div>
 </template>

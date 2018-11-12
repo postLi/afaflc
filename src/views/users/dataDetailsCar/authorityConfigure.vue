@@ -57,42 +57,22 @@
             </div>
         </div>
         <!-- 奖励金权益 -->
-        <!-- <div class="legalInfo-collapse collapseInfo">
+        <div class="legalInfo-collapse collapseInfo">
             <h2>奖励金权益</h2>
-            <div class="authority_legal">
-                <ul class="lengandInfo">
-                    <li>奖励金：<span>允许使用</span></li>
-                    <li>启用状态：<span>启用</span></li>
-                </ul>
+            <div class="essentialInformation">
+                <el-row class="basicInfo" :span='24'>
+                    <!-- 第一行 -->
+                    <el-col :span="3">车主奖励等级：</el-col>
+                    <el-col :span="3">{{driverDto.discountLevel ? driverDto.discountLevel :'未分类'}}</el-col>
+                    <el-col :span="3">剩余奖励金：</el-col>
+                    <el-col :span="3">{{driverDto.availableReward ? driverDto.availableReward :'0'}}</el-col>
+                    <el-col :span="3">奖励金：</el-col>
+                    <el-col :span="3">{{driverDto.reward ? driverDto.reward : '暂无'}}</el-col>
+                    <el-col :span="3">启用状态：</el-col>
+                    <el-col :span="3">{{driverDto.userStatus ? driverDto.userStatus :'启动'}}</el-col>
+                </el-row>
             </div>
-            <div class="essentialInformation_table_title">
-                <ul>
-                   <li v-for="(item,index) in serviceType" :key="item.name" :class="{currentClick:item.iscur}" @click="setCur(index)">{{item.name}}</li>
-                </ul>
-            </div>
-            <div class="essentialInformation_table" style="padding-top:1px;">
-                <el-table
-                    :data="tableData"
-                    border
-                    style="width: 100%">
-                    <el-table-column
-                    prop="date"
-                    label="车辆类型"
-                    width="180">
-                    </el-table-column>
-                    <el-table-column
-                    prop="name"
-                    label="订单金额范围"
-                    >
-                    </el-table-column>
-                    <el-table-column
-                    prop="address"
-                    width="180"
-                    label="一天限量">
-                    </el-table-column>
-                </el-table>
-            </div>
-        </div> -->
+        </div> 
 
         <!-- 抽佣权益 -->
         <div class="legalInfo-collapse collapseInfo">
@@ -130,7 +110,7 @@
 import { parseTime } from '@/utils/index.js'
 import Pager from '@/components/Pagination/index'
 import { closest } from '@/utils/index'
-import {  queryCommission } from '@/api/users/carDetails/index.js'
+import {  queryCommission,findEquityConfigDriverDto,orderPriceInfo } from '@/api/users/carDetails/index.js'
 
 
 export default {
@@ -150,6 +130,7 @@ export default {
         listInformation: [],
         loading: false,
         commission:{},//抽佣权益
+        driverDto:{},//奖励金权益
       }
   },
     watch: {
@@ -169,10 +150,18 @@ export default {
         init() {
             let driverId = this.$route.query.driverId;
             this.Commission(driverId);
+            this.EquityConfigDriverDto(driverId);
         },
-        Commission(userId){
-            queryCommission(userId).then(res => {
+        //抽佣权益
+        Commission(driverId){
+            queryCommission(driverId).then(res => {
                 this.commission = res.data;
+            })
+        },
+        //奖励金权益
+        EquityConfigDriverDto(driverId){
+            findEquityConfigDriverDto(driverId).then(res => {
+                this.driverDto = res.data;
             })
         },
         handleSizeChange(val) {

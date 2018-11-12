@@ -19,6 +19,7 @@
                 <p>
                     <span>订单状态：</span>
                     <span>{{listInformation.orderStatus}}</span>
+                    <el-button class="ifzhipai fr" icon="el-icon-edit" v-if="listInformation.parentOrderStatus == 'AF00805'" @click="handlerClick('appoint')"  type="primary" size="mini" plain>指派司机</el-button>
                 </p>
             </div>
             <div class="essentialInformation">
@@ -117,7 +118,7 @@
                  </p>
                 <p>
                     <span>货主支付：</span>
-                    <span class="fontRed">￥{{listInformation.aflcOrderExpenses.factPay}}</span>
+                    <span class="fontRed">{{listInformation.aflcOrderExpenses.factPay ? '￥' + listInformation.aflcOrderExpenses.factPay :'暂未结算'}}</span>
                     <span v-if="listInformation.payWay">({{listInformation.payWay}})</span>
                 </p>
                 <p> 
@@ -237,7 +238,7 @@
         <div class="mark-collapse collapseInfo">
             <h2> 
                 客服备注
-                <el-button icon="el-icon-circle-plus" @click="handlerClick"  type="primary" size="mini" plain>添加备注</el-button>
+                <el-button icon="el-icon-circle-plus" @click="handlerClick('remark')"  type="primary" size="mini" plain>添加备注</el-button>
             </h2>
             <div v-if="listInformation.aflcOrderRemarks.length != 0">
                 <div class="essentialInformation"  v-for="item in listInformation.aflcOrderRemarks" :key="item.remarkId">
@@ -264,6 +265,8 @@
             </div>
         </div>
         <remarkerInfo :dialogVisible.sync="dialogVisible" :orderSerial = "currentOrderSerial"   @close = "shuaxin"/>
+        <appointDriver :dialogFormVisible.sync = "dialogFormVisible" :orderSerial = "appontOrderSerial" @close = "shuaxin" ></appointDriver>
+
     </div>
 </template>
 
@@ -272,11 +275,13 @@
 import { parseTime } from '@/utils/index.js'
 import { orderDetailsList,getOrderDetail } from '@/api/order/ordermange'
 import remarkerInfo from './remakInfo'
+import appointDriver from '../../tongcheng/components/appointDriver'
 
 export default {
   name: 'TCorderInfo',
   components: {
-    remarkerInfo
+    remarkerInfo,
+    appointDriver
   },
   props: {
     isvisible: {
@@ -290,7 +295,9 @@ export default {
         listInformation: [],
         loading: true,
         dialogVisible: false,
-        currentOrderSerial: ''
+        currentOrderSerial: '',
+        appontOrderSerial: '',
+        dialogFormVisible: false
       }
   },
   watch: {
@@ -333,9 +340,17 @@ export default {
     shuaxin() {
         this.init()
       },
-    handlerClick() {
-        this.currentOrderSerial = this.$route.query.orderSerial
-        this.dialogVisible = true
+    handlerClick(type) {
+        switch(type){
+            case 'appoint':
+                this.appontOrderSerial = this.$route.query.orderSerial;
+                this.dialogFormVisible = true
+                break;
+            case 'remark':
+                this.currentOrderSerial = this.$route.query.orderSerial;
+                this.dialogVisible = true;
+                break;
+        }
       },
     pushOrderSerial(userId,type){
         switch(type){
@@ -363,11 +378,28 @@ export default {
                 }
             }
         }
-
         .remakInfo{
             white-space:nowrap;
             text-overflow:ellipsis;
             overflow:hidden;
+        }
+    }
+</style>
+
+<style rel="stylesheet/scss" lang="scss">
+    .TCorderInfo{
+        .collapseInfo .essentialInformation .ifzhipai span{
+            overflow: inherit; 
+            height: auto; 
+            color: #0588c3;
+        }
+        .collapseInfo .essentialInformation .ifzhipai:hover {
+            background: #0588c3;
+            border-color: #0588c3;
+            color: #fff;
+            span{
+                color:#fff;
+            }
         }
     }
 </style>
