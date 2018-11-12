@@ -3,6 +3,7 @@
       <el-button :type="btntype" :value="value" :plain="plain" :icon="icon" @click="openDialog()">{{btntext}}</el-button>
       <el-dialog  :visible="dialogFormVisible_add" :before-close="change" :title="btntitle" top=5vh v-dialogDrag>
         <el-form ref="formAll" :model="formAll" :rules="rulesForm" :label-width="formLabelWidth">
+
             <el-row>
                 <el-col :span="12">
                     <el-form-item label="商圈名称 ："  prop="tradeName">
@@ -33,7 +34,15 @@
                     <el-input v-model="formAll.ownerPhone" maxlength="11"></el-input>
                     </el-form-item>
                 </el-col>
-            </el-row>                        
+            </el-row>    
+            <el-row>
+                <el-col :span="12">
+                    <el-form-item label="商圈地理围栏（多边形） ："  prop="ownerPhone">
+                     <ShoppingMap></ShoppingMap>
+                    </el-form-item>
+                </el-col>
+            </el-row>              
+
         </el-form>
         <div slot="footer" class="dialog-footer">
           <el-button type="primary"  @click="add_data">确 定</el-button>
@@ -45,6 +54,7 @@
 <script>
 import {data_get_aflcTradeArea_create,data_get_aflcTradeArea_Id} from '@/api/users/district/shoppingDistrict.js'
 import GetCityList from '@/components/GetCityList/city'
+import ShoppingMap from '@/components/map/shoppingMap'
 import { eventBus } from '@/eventBus'
 export default {
   props:{
@@ -129,7 +139,7 @@ export default {
         return{
         selectFlag:null,
         dialogFormVisible_add: false,
-        formLabelWidth:'120px',
+        formLabelWidth:'190px',
         formAll:{
             tradeName:null,
             areaName:null,
@@ -168,7 +178,8 @@ export default {
     
   },
   components:{
-    GetCityList
+    GetCityList,
+    ShoppingMap
   },
   methods:{
     getStr(val){
@@ -232,7 +243,7 @@ export default {
 .shoppingDialog{
      display: inline-block;
         .el-dialog{
-         width: 1000px;
+         width: 1200px!important;
      }
     .el-button{
         padding: 7px 15px 7px;

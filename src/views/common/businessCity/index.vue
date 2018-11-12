@@ -221,7 +221,7 @@ export default{
                        this.$message.success('新增成功')
                             this.firstblood()
                         }).catch(res=>{
-                            this.$message.error('新增失败')
+                            this.$message.error(res.data)
                             this.firstblood()
                         })
                 }).catch(() => {

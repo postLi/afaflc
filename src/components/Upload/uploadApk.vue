@@ -79,9 +79,6 @@ export default {
     imageUrl() {
       return this.value
     },
-    fileName(){
-      return this.apkurl
-    }
   },
   data() {
     return {
@@ -100,6 +97,7 @@ export default {
       uploadUrl: '',
       dir: '',
       filelist: [],
+      fileName:'',
     }
   },
   watch: {
@@ -120,6 +118,10 @@ export default {
   },
   mounted() {
     this.init()
+
+  },
+  updated(){
+    this.fileName = this.apkurl
   },
   methods: {
     init() {
@@ -133,8 +135,6 @@ export default {
             this.upload.key = data.dir + this.random_string() + type
         }).catch(err => {
         })
-
-        // console.log(' this.upload.key', this.upload)
     },
     rmImage() {
       this.emitInput('')

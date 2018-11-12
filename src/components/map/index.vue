@@ -72,7 +72,6 @@ export default {
     }
   },
   methods: {
-    
     exit() {
       if (this.map && this.map.destroy) {
         this.map.destroy()
