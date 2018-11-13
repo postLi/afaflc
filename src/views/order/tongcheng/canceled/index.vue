@@ -90,26 +90,30 @@
                         </el-table-column>
                          <el-table-column
                             sortable
-                            prop=""
+                            prop="cancelFile.createTime"
                             label="取消时间"
                             width="160">
-                                <!-- <template  slot-scope="scope">
+                                <template  slot-scope="scope">
                                     <span>
-                                        {{ scope.row.useCarTime | parseTime}}    
+                                        {{ scope.row.cancelFile.createTime | parseTime}}    
                                     </span>
-                                </template> -->
+                                </template>
                         </el-table-column>
                          <el-table-column
                             sortable
-                            prop=""
+                            :show-overflow-tooltip="true"
+                            prop="cancelReazon"
                             label="取消原因"
-                            width="150">
+                            width="250">
                         </el-table-column>
                          <el-table-column
                             sortable
-                            prop=""
+                            prop="cancelFile.userType"
                             label="取消类型"
                             width="120">
+                                <template  slot-scope="scope">
+                                        {{ scope.row.cancelFile.userType == 'AF0051301' ? '货主取消' : '平台取消'}}    
+                                </template>
                         </el-table-column>
                         <el-table-column
                             sortable
@@ -292,6 +296,7 @@ import vregion from '@/components/vregion/Region'
                         item.aflcOrderAddresses.sort(function(a,b){  
                             return a.viaOrder - b.viaOrder;  
                         })  
+                        item.cancelReazon = item.cancelFile.remark.slice(5,-1);
                     })
                     this.loading = false;
                 }).catch(err => {
