@@ -7,7 +7,7 @@
 
 import fetch from '@/utils/fetch'
 
-const baseurl = "aflccommonservice"
+const baseurl = "aflccommonservice-wtc"
 
 // 获取树节点的数据
 export function data_Trees(page,pagesize,pid) {

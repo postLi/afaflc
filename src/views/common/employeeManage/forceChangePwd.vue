@@ -1,12 +1,12 @@
 <template>
-<el-dialog class="passwordPop" title="修改密码" :visible.sync="isShow" :close-on-click-modal="false" :before-close="closeMe">
+<el-dialog class="RePasswordPop" title="重置密码" :visible.sync="isShow" :close-on-click-modal="false" :before-close="closeMe">
   <el-form :model="form" status-icon size="mini" :rules="rules" ref="ruleForm">
     <el-form-item label="账号" :label-width="formLabelWidth" prop="username">
       <el-input disabled v-model="form.username" auto-complete="off"></el-input>
     </el-form-item>
-    <el-form-item label="原始密码" :label-width="formLabelWidth" prop="origin_pwd">
+    <!-- <el-form-item label="原始密码" :label-width="formLabelWidth" prop="origin_pwd">
       <el-input type="password" v-model="form.origin_pwd" auto-complete="off"></el-input>
-    </el-form-item>
+    </el-form-item> -->
     <el-form-item label="新密码" :label-width="formLabelWidth" prop="pwd">
       <el-input type="password" v-model="form.pwd" auto-complete="off"></el-input>
     </el-form-item>
@@ -24,27 +24,41 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import { putChangeMyPassword } from '@/api/company/myinfo'
+// import { putChangeMyPassword } from '@/api/company/myinfo'
+import { resetPlatformAdminPassword } from '@/api/company/employeeManage.js'
 
 export default {
-  props: {
-    isShow: {
-      type: Boolean,
-      default: false
-    }
-  },
-  computed: {
-    ...mapGetters([
-      'otherinfo'
-    ])
-  },
-  mounted() {
-      console.log('this.otherinfo',this.otherinfo)
-    this.form.username = this.otherinfo.username;
-    this.form.id = this.otherinfo.id;
-    this.form.userType = this.otherinfo.type;
+    props: {
+        isShow: {
+            type: Boolean,
+            default: false
+        },
+        otherInfo:{
+            type:Object,
+        }
+    },
+//   computed: {
+//     ...mapGetters([
+//       'otherinfo'
+//     ])
+//   },
+    watch:{
+        isShow(newVal,oldVal){
+            console.log(newVal,oldVal,this.otherInfo)
+            if(newVal){
+                this.form.username = this.otherInfo.username;
+                this.form.id = this.otherInfo.id;
+                this.form.userType = this.otherInfo.type;
+            }
+        }
+    },
+    mounted() {
+            // console.log('this.otherinfo',this.otherinfo)
+            // this.form.username = this.otherinfo.username;
+            // this.form.id = this.otherinfo.id;
+            // this.form.userType = this.otherinfo.type;
 
-  },
+    },
   data() {
     var validatePass2 = (rule, value, callback) => {
       if (value === '') {
@@ -106,30 +120,41 @@ export default {
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          const form = this.form
-          putChangeMyPassword({
-            'userName': form.username,
-            'id': form.id,
-            'oldPassword': this.$md5(form.origin_pwd),
-            'newPassword': this.$md5(form.pwd),
-            'surePassword': this.$md5(form.re_pwd),
-            'userType':form.userType
-          }).then(res => {
-            this.$alert('修改成功', '提示', {
-              confirmButtonText: '确定',
-              callback: action => {
-                this.closeMe()
-              }
-            })
-          }).catch(res => {
-              console.log('err',res)
-            if (res.errorInfo.indexOf('原密码错误') !== -1) {
-              this.isCheck = 'false'
-              this.$refs[formName].validate()
-            }
-            this.$message.warning(res.errorInfo? res.errorInfo: res.text)
+            const form = this.form;
+            this.$confirm('确定要强制修改'+ form.username +' 该账号吗？', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+            }).then(() => {
+                resetPlatformAdminPassword({
+                    'userName': form.username,
+                    'id': form.id,
+                    // 'oldPassword': this.$md5(form.origin_pwd),
+                    'newPassword': this.$md5(form.pwd),
+                    'surePassword': this.$md5(form.re_pwd),
+                    'userType':form.userType
+                }).then(res => {
+                    this.$alert('修改成功', '提示', {
+                        confirmButtonText: '确定',
+                        callback: action => {
+                            this.closeMe()
+                        }
+                    })
+                }).catch(err => {
+                    this.$message({
+                        type: 'warning',
+                        message: '操作失败，原因：' + err.errorInfo ? err.errorInfo : err.text
+                    })
+                    this.ifDisable = false;
+                })
+            }).catch(() => {
+                this.$message({
+                    type: 'info',
+                    message: '已取消'
+                })
+                this.ifDisable = false;
 
-          })
+            })
         } else {
           return false
         }
@@ -150,7 +175,7 @@ export default {
 </script>
 
 <style lang="scss">
-  .passwordPop .el-dialog{
+  .RePasswordPop .el-dialog{
     min-width: 300px;
     max-width: 404px;
     box-shadow: 0px 0px 15px 0px 
@@ -169,7 +194,7 @@ export default {
       padding-bottom: 10px;
     }
     .el-dialog__headerbtn {
-        top: 17px;
+        top: 12px;
     }
   }
 </style>

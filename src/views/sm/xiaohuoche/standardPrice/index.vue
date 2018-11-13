@@ -15,7 +15,6 @@
                         stripe
                         border
                         height="100%"
-                        :default-sort = "{prop: 'carTypeName', order: 'null'}"
                         @selection-change = "getinfomation"
                         tooltip-effect="dark"
                         @row-click="clickDetails"

@@ -188,3 +188,11 @@ export function deleteEmployeer(id) {
 export function putEmployeerAuth(data) {
   return fetch.put('/'+baseUrl+'/system/user/v1/usersAuth', data)
 }
+
+/**
+ * 强制修改账号密码
+ * @param {*} data 密码和账号
+ */
+export function resetPlatformAdminPassword(data) {
+    return fetch.put('/aflc-common/common/aflcCommonUser/v1/resetPlatformAdminPassword', data)
+}

@@ -322,7 +322,7 @@ export default {
     init() {
         const orderSerial = this.$route.query.orderSerial
         this.loading = true
-        getOrderDetail(orderSerial).then(res => {
+        orderDetailsList(orderSerial).then(res => {
               console.log('details', res)
               this.listInformation = res.data
               this.listInformation.aflcOrderAddresses.sort(function(a, b) {

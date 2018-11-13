@@ -85,23 +85,23 @@
                                     </template>
                                 </el-table-column>
                                  <el-table-column
-                                prop="distance"
+                                prop=""
                                 label="是否货主收藏司机">
                                 </el-table-column>
                                 <el-table-column
-                                prop="endTime"
+                                prop=""
                                 label="本日与该货主交易次数">
                                 </el-table-column>
                                 <el-table-column
-                                prop="endTime"
+                                prop=""
                                 label="本月与该货主交易次数">
                                 </el-table-column>
                                 <el-table-column
-                                prop="bindingSource"
+                                prop=""
                                 label="本月累计交易次数">
                                 </el-table-column>
                                 <el-table-column
-                                prop="usingStatus"
+                                prop=""
                                 label="本月交易成功订单量">
                                 </el-table-column>
                             </el-table>
@@ -188,14 +188,26 @@ export default {
             if(!point){
                 getDictionary(this.carType).then(res => {
                     this.optionsCarType = res.data;
+                }).catch(err => {
+                    this.$message({
+                        type: 'info',
+                        message: '操作失败，原因：' + (err.errorInfo ? err.errorInfo : err.text)
+                    })
                 });
             }
 
             nearDriverList(this.searchInfo).then(res => {
                 this.dataTotal = res.data.length;
-                let pageStart =  (this.page - 1) * this.pagesize;
-                let pageEnd = this.page * this.pagesize;
-                this.tableData_point = res.data.slice(pageStart,pageEnd);
+                if(res.data != []){
+                    let pageStart =  (this.page - 1) * this.pagesize;
+                    let pageEnd = this.page * this.pagesize;
+                    this.tableData_point = res.data.slice(pageStart,pageEnd);
+                }else{
+                    this.$message({
+                        type: 'info',
+                        message: '无符合条件的司机'
+                    })
+                }
             }).catch(err => {
                 this.$message({
                     type: 'info',
@@ -247,7 +259,7 @@ export default {
                 }).catch(err => {
                     this.$message({
                         type: 'info',
-                        message: '操作失败，原因：' + err.text ? err.text : err.errinfo
+                        message: '操作失败，原因：' + (err.errorInfo ? err.errorInfo : err.text)
                     })
                 })
             }

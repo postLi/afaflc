@@ -2,8 +2,9 @@
     <div style="height:100%;"  class="identicalStyle">
           <el-form :inline="true" :model="formAll" ref="ruleForm" class="classify_searchinfo">
             <el-form-item label="所在地：">
-              <!-- <GetCityList v-model="formAll.belongCity" ref="area"></GetCityList> -->
-                <el-input v-model="formAll.belongCityName" placeholder="请输入"></el-input>
+                <vregion :ui="true" @values="regionChange" class="form-control">
+                    <el-input v-model="formAll.belongCityName" placeholder="请输入"></el-input> 
+                </vregion>
             </el-form-item>
             <el-form-item label="公司名称：">
               <el-input v-model.trim="formAll.companyName"></el-input>
@@ -300,8 +301,8 @@ import GetCityList from '@/components/GetCityList'
 import { data_LogisticsCompanyList, data_ChangeLogisticsCompany } from '@/api/users/logistics/LogisticsCompany.js'
 import { data_LogisticsCompany, getDictionary } from '@/api/common.js'
 import Pager from '@/components/Pagination/index'
+import vregion from '@/components/vregion/Region.vue'
 
-import defaultURL from '@/assets/404_images/404.png'
 export default {
   props: {
   isvisible: {
@@ -313,7 +314,8 @@ export default {
   createdDialog,
   GetCityList,
   Upload,
-  Pager
+  Pager,
+  vregion
 },
   computed: {
     pictureValue() {
@@ -449,6 +451,13 @@ return {
         })
     },
     methods: {
+        regionChange(d) {
+            console.log('data:', d)
+            this.formAll.belongCityName = (!d.province && !d.city && !d.area && !d.town) ? '' : `${this.getValue(d.province)}${this.getValue(d.city)}${this.getValue(d.area)}${this.getValue(d.town)}`.trim()
+        },
+        getValue(obj) {
+            return obj ? obj.value : ''
+        },
         pushOrderSerial(row) {
           this.type = 'view'
             this.paramsView = row

@@ -28,7 +28,6 @@
                         border
                         height="100%"
                         @selection-change = "getinfomation"
-                        :default-sort = "{prop: 'serviceName', order: 'null'}"
                         tooltip-effect="dark"
                         @row-click="clickDetails"
                         style="width: 100%"> 

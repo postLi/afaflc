@@ -141,102 +141,123 @@
             <h2>交易订单</h2>
             <div class="qd-collapse_title clearfix">
                 <ul class="classfyTitle fl">
-                   <li v-for="(item,index) in dataType" :key="item.name" :class="{currentClick:item.iscur}" @click="setCur(index)">{{item.name}}</li>
+                   <li v-for="(item,index) in tradeListDataType" :key="item.name" :class="{currentClick:item.iscur}" @click="setCur(index,'trade',item.label)">{{item.name}}</li>
                 </ul>
-                <searchInfo searchType = "transaction"/>
+                <searchInfo searchType = "transaction" @change = "getSearchParam"/>
             </div>
             <div class="authority_legal">
                 <ul class="lengandInfo">
-                    <li>交易订单数：<span>135</span></li>
-                    <li>订单金额：<span>33</span></li>
-                    <li>同城：<span>150</span></li>
-                    <li>同城交易：<span>150</span></li>
-                    <li>城际：<span>150</span></li>
-                    <li>城际交易：<span>150</span></li>
-                    <li>零担：<span>150</span></li>
-                    <li>零担交易：<span>150</span></li>
+                    <li>交易订单数：<span>{{tradOrdeListData.orderTransNum ? tradOrdeListData.orderTransNum : '0'}}</span></li>
+                    <li>订单金额：<span>{{tradOrdeListData.orderTransTotal ? tradOrdeListData.orderTransTotal : '0'}}</span></li>
+                    <li>小货车：<span>{{tradOrdeListData.sameCityOrderNum ? tradOrdeListData.sameCityOrderNum : '0'}}</span></li>
+                    <li>小货车交易：<span>{{tradOrdeListData.sameTransTotal ? tradOrdeListData.sameTransTotal : '0'}}</span></li>
+                    <li>大货车：<span>{{tradOrdeListData.interCityOrderNum ? tradOrdeListData.interCityOrderNum : '0'}}</span></li>
+                    <li>大货车交易：<span>{{tradOrdeListData.interTransTotal ? tradOrdeListData.interTransTotal : '0'}}</span></li>
+                    <li>发物流：<span>{{tradOrdeListData.ltlOrderNum ? tradOrdeListData.ltlOrderNum : '0'}}</span></li>
+                    <li>发物流交易：<span>{{tradOrdeListData.ltlTransTotal ? tradOrdeListData.ltlTransTotal : '0'}}</span></li>
                 </ul>
             </div>
             <div class="essentialInformation_table" style="padding-top:0;">
                 <el-table
-                    :data="tableData"
+                    :data="tradOrdeListData.aflcDriverrTradOrderDtoList"
                     border
                     style="width: 100%">
+                    <el-table-column label="序号"  width="80">
+                        <template slot-scope="scope">
+                            {{ (tradOrdeListObj.currentPage - 1) * tradOrdeListObj.pageSize + scope.$index + 1 }}
+                        </template>
+                    </el-table-column>  
                     <el-table-column
-                    prop="date"
-                    label="序号"
-                    width="50">
-                    </el-table-column>
-                    <el-table-column
-                    prop="date"
+                    width="230"
+                    prop="orderSerial"
                     label="订单号">
                     </el-table-column>
                     <el-table-column
-                    prop="name"
+                    width="120"
+                    :show-overflow-tooltip="true"
+                    prop="shipperName"
                     label="货主名称">
                     </el-table-column>
                     <el-table-column
-                    prop="address"
+                    width="120"
+                    prop="shipperMobile"
                     label="货主账号">
                     </el-table-column>
                     <el-table-column
-                    prop="address"
+                    width="160"
+                    prop="carrierTime"
                     label="承运时间">
                     </el-table-column>
                     <el-table-column
-                    prop="address"
+                    width="120"
+                    prop="serviceType"
                     label="服务类型">
                     </el-table-column>
                     <el-table-column
-                    prop="address"
+                    width="120"
+                    :show-overflow-tooltip="true"
+                    prop="goodsName"
                     label="货物名称">
                     </el-table-column>
                     <el-table-column
-                    prop="address"
+                    width="200"
+                    :show-overflow-tooltip="true"
+                    prop="startAddress"
                     label="始发地">
                     </el-table-column>
                     <el-table-column
-                    prop="address"
+                    width="200"
+                    :show-overflow-tooltip="true"
+                    prop="endAddress"
                     label="目的地">
                     </el-table-column>
                     <el-table-column
-                    prop="address"
+                    width="120"
+                    :show-overflow-tooltip="true"
+                    prop="contacts"
                     label="联系人">
                     </el-table-column>
                     <el-table-column
-                    prop="address"
+                    width="120"
+                    prop="contactsTel"
                     label="联系人电话">
                     </el-table-column>
                     <el-table-column
-                    prop="address"
+                    width="120"
+                    prop="payTimeType"
                     label="付款方式">
                     </el-table-column>
                     <el-table-column
-                    prop="address"
+                    width="120"
+                    prop="payStatus"
                     label="付款状态">
                     </el-table-column>
                     <el-table-column
-                    prop="address"
+                    width="160"
+                    prop="tradingHours"
                     label="交易时间">
                     </el-table-column>
                     <el-table-column
-                    prop="address"
+                    width="120"
+                    prop="totalAmount"
                     label="订单金额">
                     </el-table-column>
                     <el-table-column
-                    prop="address"
+                    width="120"
+                    prop="orderStatus"
                     label="订单状态">
                     </el-table-column>
                     <el-table-column
-                    prop="address"
+                    width="160"
+                    prop="orderFinishTime"
                     label="完成时间">
                     </el-table-column>
                 </el-table>
                 <el-pagination
                     background
-                    @current-change="handleCurrentChange"
+                    @current-change="handleCurrentChangeTrade"
                     layout="total, prev, pager, next, jumper"
-                    :total="totalCount">
+                    :total="tradOrdeListTotalCount">
                 </el-pagination>
             </div>
         </div>
@@ -324,7 +345,7 @@
 import { parseTime } from '@/utils/index.js'
 // import Pager from '@/components/Pagination/index'
 import searchInfo from './components/searchInfo'
-import { orderPriceInfo,grapList } from '@/api/users/carDetails/index.js'
+import { orderPriceInfo,grapList,driverTradOrdeList } from '@/api/users/carDetails/index.js'
 
 export default {
   name: 'ordersInfo',
@@ -356,6 +377,20 @@ export default {
         },
         grapListData:{},//订单抢单记录表数据
         grapListTotalCount:0,//订单抢单记录表初始数量
+        tradOrdeListObj:{
+            "currentPage": 1,
+            "pageSize": 10,
+            "vo": {
+                "driverId": "",
+                "grabSingleTimeEnd": "",
+                "grabSingleTimeStart": "",
+                "orderSerial": "",
+                "shipperName": "",
+                "timeDay": "",
+            }
+        },
+        tradOrdeListData:{},//订单抢单记录表数据
+        tradOrdeListTotalCount:0,//订单抢单记录表初始数量
         dataType:[
             {name:'全部',label:'',iscur:true},
             {name:'近7天',label:'-7',iscur:false},
@@ -363,6 +398,12 @@ export default {
             {name:'近90天',label:'-90',iscur:false},
         ],
         grapListDataType:[
+            {name:'全部',label:'',iscur:true},
+            {name:'近7天',label:'-7',iscur:false},
+            {name:'近30天',label:'-30',iscur:false},
+            {name:'近90天',label:'-90',iscur:false},
+        ],
+        tradeListDataType:[
             {name:'全部',label:'',iscur:true},
             {name:'近7天',label:'-7',iscur:false},
             {name:'近30天',label:'-30',iscur:false},
@@ -410,8 +451,11 @@ export default {
         init() {
             let driverId = this.$route.query.driverId;
             this.grapListObj.vo.driverId = driverId;
+            this.tradOrdeListObj.vo.driverId = driverId;
+
             this.PriceInfo(driverId);
             this.GrapList();
+            this.TradOrdeList()
         },
         //订单信息概要
         PriceInfo(driverId){
@@ -426,9 +470,22 @@ export default {
                 this.grapListTotalCount = res.data.totalCount;
             })
         },
+        //订单交易列表
+        TradOrdeList(){
+            driverTradOrdeList(this.tradOrdeListObj).then(res => {
+                this.tradOrdeListData = res.data.list[0];
+                this.tradOrdeListTotalCount = res.data.totalCount;
+            })
+        },
+        //订单抢单列表当前页
         handleCurrentChangeGrap(val){
             this.grapListObj.currentPage = val;
             this.GrapList();
+        },
+        //订单交易列表当前页
+        handleCurrentChangeTrade(val){
+            this.tradOrdeListObj.currentPage = val;
+            this.TradOrdeList();
         },
         handleCurrentChange(val) {
             console.log(`当前页: ${val}`);
@@ -442,24 +499,25 @@ export default {
                     this.grapListObj.vo.timeDay = label;
                     this.GrapList();
                     break;
-                case '':
+                case 'trade':
+                    this.tradeListDataType.forEach((el,idx)=>{
+                        idx == index ? el.iscur = true : el.iscur = false;
+                    })
+                    this.tradOrdeListObj.vo.timeDay = label;
+                    this.TradOrdeList();
                     break;
             }
-            // console.log(index)
-            // this.dataType.forEach((el,idx)=>{
-            //     console.log(idx)
-            //     idx == index ? el.iscur = true : el.iscur = false;
-            // })
         },
         getSearchParam(obj,searchType) {
             console.log(obj,searchType)
             switch(searchType){
                 case 'grap':
                     this.grapListObj.vo = Object.assign({},this.grapListObj.vo, obj)
-                    console.log(this.grapListObj.vo)
                     this.GrapList();
                     break;
-                case '':
+                case 'transaction':
+                    this.tradOrdeListObj.vo = Object.assign({},this.tradOrdeListObj.vo, obj)
+                    this.TradOrdeList();
                     break;
             }
             // this.searchInfo = Object.assign(this.searchInfo, obj)

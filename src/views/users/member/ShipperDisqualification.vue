@@ -2,7 +2,9 @@
     <div style="height:100%;"  class="identicalStyle">
           <el-form :inline="true" :model="formAll" ref="ruleForm" class="classify_searchinfo">
                 <el-form-item label="所在地">
-                    <el-input v-model="formAll.belongCityName" placeholder="请输入"></el-input>
+                    <vregion :ui="true" @values="regionChange" class="form-control">
+                        <el-input v-model="formAll.belongCityName" placeholder="请输入"></el-input>
+                    </vregion>
                 </el-form-item>
                 <el-form-item label="公司名称">
                     <el-input v-model.trim="formAll.companyName"></el-input>
@@ -134,11 +136,17 @@ export default {
     },
   mounted() {
       eventBus.$on('changeList', () => {
-            // console.log('6666666666666666')
           this.firstblood()
         })
     },
   methods: {
+        regionChange(d) {
+            console.log('data:', d)
+            this.formAll.belongCityName = (!d.province && !d.city && !d.area && !d.town) ? '' : `${this.getValue(d.province)}${this.getValue(d.city)}${this.getValue(d.area)}${this.getValue(d.town)}`.trim()
+        },
+        getValue(obj) {
+            return obj ? obj.value : ''
+        },
       pushOrderSerial(row) {
           this.type = 'view'
             this.paramsView = row

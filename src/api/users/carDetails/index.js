@@ -1,7 +1,7 @@
 import fetch from '@/utils/fetch'
 
 const baseurl = 'aflcsmservice'
-const baseurl_two = 'aflcorderservice-wtc'
+const baseurl_two = 'aflcorderservice'
 const baseurl_three = 'aflcusercenterservice' //用户
 
 //财务信息-财务概况-根据id获取车主信息管理-财务概况
@@ -69,6 +69,15 @@ export function orderPriceInfo(driverId) {
 export function grapList(data) {
     return fetch({
       url: '/' + baseurl_two + '/dispatch/aflcOrderGrab/v1/driver/grapList',
+      method: 'post',
+      data:data
+    })
+  }
+
+//订单信息-交易订单-根据条件获取车主信息管理订单信息列表
+export function driverTradOrdeList(data) {
+    return fetch({
+      url: '/' + baseurl_two + '/order/aflcOrder/v1/driverTradOrdeList',
       method: 'post',
       data:data
     })

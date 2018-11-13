@@ -2,8 +2,9 @@
     <div style="height:100%;"  class="identicalStyle">
           <el-form :inline="true" :model="formInline" ref="ruleForm" class="classify_searchinfo">
             <el-form-item label="所在地：">
-              <!-- <GetCityList v-model="formInline.belongCity" ref="area"></GetCityList> -->
-                <el-input v-model="formInline.belongCityName" placeholder="请输入"></el-input>
+                <vregion :ui="true" @values="regionChange" class="form-control">
+                    <el-input v-model="formInline.belongCityName" placeholder="请输入"></el-input>  
+                </vregion>
             </el-form-item>
             <el-form-item label="账户状态：">
               <el-select v-model="formInline.accountStatus" clearable placeholder="请选择">
@@ -95,6 +96,7 @@ import FreezeDialog from './FreezeDialog.vue'
 import { data_get_shipper_list, data_get_shipper_change, data_get_shipper_auid } from '@/api/users/shipper/all_shipper.js'
 import { data_LogisticsCompanyList } from '@/api/users/logistics/LogisticsCompany.js'
 import Pager from '@/components/Pagination/index'
+import vregion from '@/components/vregion/Region.vue'
 
 export default {
   props: {
@@ -107,7 +109,8 @@ export default {
     createdDialog,
     FreezeDialog,
     GetCityList,
-    Pager
+    Pager,
+    vregion
   },
   data() {
     return {
@@ -164,11 +167,17 @@ export default {
   },
   mounted() {
     eventBus.$on('changeList', () => {
-            // console.log('111111111111111111')
       this.firstblood()
     })
   },
   methods: {
+    regionChange(d) {
+        console.log('data:', d)
+        this.formInline.belongCityName = (!d.province && !d.city && !d.area && !d.town) ? '' : `${this.getValue(d.province)}${this.getValue(d.city)}${this.getValue(d.area)}${this.getValue(d.town)}`.trim()
+      },
+    getValue(obj) {
+        return obj ? obj.value : ''
+      },
     pushOrderSerial(row) {
       this.type = 'view'
       this.paramsView = row

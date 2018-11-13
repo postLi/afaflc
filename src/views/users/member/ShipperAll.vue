@@ -2,9 +2,9 @@
     <div style="height:100%;"  class="identicalStyle">
           <el-form :inline="true" :model="shipperAll" ref="ruleForm" class="classify_searchinfo">
             <el-form-item label="所在地：">
-                <!-- <vregion :ui="true" @values="regionChange" class="form-control"> -->
+                <vregion :ui="true" @values="regionChange" class="form-control">
                     <el-input v-model="shipperAll.belongCityName" placeholder="请输入"></el-input>
-                <!-- </vregion> -->
+                </vregion>
             </el-form-item>
             <el-form-item label="认证状态：">
               <el-select v-model="shipperAll.authStatus" clearable placeholder="请选择">

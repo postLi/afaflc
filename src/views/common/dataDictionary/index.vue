@@ -19,7 +19,7 @@
                     <el-form :inline="true" ref="ruleForm" class="demo-ruleForm classify_searchinfo" v-show="!showSearch">
                         <el-form-item label="关键词查询" prop="pointName">
                             <el-input
-                            placeholder="请输入内容"
+                            placeholder="只可搜索一级内容"
                             v-model="input_search"
                             clearable>
                             </el-input>

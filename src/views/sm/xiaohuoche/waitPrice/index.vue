@@ -27,7 +27,6 @@
                             stripe
                             border
                             height="100%"
-                            :default-sort = "{prop: 'areaName', order: 'null'}"
                             @row-click="clickDetails"
                             @selection-change = "getinfomation"
                             tooltip-effect="dark"

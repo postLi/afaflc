@@ -7,6 +7,8 @@
         <el-button type="primary" :size="btnsize" icon="el-icon-edit-outline" @click="doAction('auth')" plain v-has:SYSTEM_EMPLOYEE_MANAGE_EMP_AUTH>员工授权</el-button>
         <el-button type="primary" :size="btnsize" icon="el-icon-edit" @click="doAction('modify')" plain v-has:SYSTEM_EMPLOYEE_MANAGE_UPDATE>修改</el-button>
         <el-button type="primary" :size="btnsize" icon="el-icon-delete" @click="doAction('delete')" plain v-has:SYSTEM_EMPLOYEE_MANAGE_DELETE>删除</el-button>
+        <el-button type="primary" :size="btnsize" icon="el-icon-warning" @click="doAction('force')" plain>重置密码</el-button>
+
         <!-- <el-button type="primary" :size="btnsize" icon="el-icon-setting" plain @click="setTable" class="table_setup">表格设置</el-button> -->
       </div>
       <div class="info_news">
@@ -37,6 +39,9 @@
     <transition name="slideInRight">
       <SetAuth :orgid="otherinfo.companyId" :popVisible.sync="SetAuthVisible" @close="closeAuth" @success="fetchData" :users="authUser" v-if="showSetAuth" />
     </transition>
+
+    <ChangePwPop :isShow.sync="showPop" :otherInfo = "theUser" @close="closeForce" />
+
   </div>
 </template>
 <script type="text/javascript">
@@ -48,6 +53,7 @@ import AddEmployeer from './add'
 import SetAuth from './authorization'
 import Pager from '@/components/Pagination/index'
 import { objectMerge2, parseTime } from '@/utils/'
+import ChangePwPop from './forceChangePwd'
 
 export default {
   name: 'employeeManage',
@@ -56,7 +62,8 @@ export default {
     TableSetup,
     AddEmployeer,
     SetAuth,
-    Pager
+    Pager,
+    ChangePwPop
   },
   computed: {
     ...mapGetters([
@@ -67,6 +74,7 @@ export default {
     return {
       // 请求获得的数据
       rolesArr: [],
+      showPop:false,//强制修改密码
       departmentArr: [],
       usersArr: [],
       // 加载状态
@@ -177,6 +185,9 @@ export default {
     })
   },
   methods: {
+    closeForce(){
+        this.showPop = false;
+    },
     fetchAllUser(orgid, username, mobilephone) {
       return getAllUser(orgid, username || '', mobilephone || '')
     },
@@ -253,6 +264,18 @@ export default {
           this.authUser = this.selected
           this.openAuth()
           break
+        case 'force':
+            if (this.selected.length > 1) {
+                this.$message({
+                    message: '每次只能修改单条数据~',
+                    type: 'warning'
+                })
+            }else{
+                this.theUser = {};
+                this.theUser = objectMerge2({}, this.selected[0])
+                this.showPop = true;
+            }
+            break;
       }
       // 清除选中状态，避免影响下个操作
       this.$refs.multipleTable.clearSelection()
