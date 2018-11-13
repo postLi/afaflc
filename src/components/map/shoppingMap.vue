@@ -1,14 +1,18 @@
 <template>
 <div class="shoppingMapBox">
  <div id="shoppingMap"></div>
+ <div id="marker" @click="new1">新增</div>
 </div>
 </template>
 <script>
 import { loadJs } from '@/utils/'
+ var map={}
+ var polygon;
+ var marker;
+ var path = [];
 export default {
      data(){
          return{
-           
          }
      },
      methods:{
@@ -27,31 +31,52 @@ export default {
             }
         },
     	init:function(){
-        let lnglat = new AMap.LngLat(116.397, 39.918);
-        let contextMenuPositon = []
-
+        var _this = this
 		// 地图加载
-		var map = new AMap.Map('shoppingMap', {
+        var contextMenuPositon = []
+        var lnglat = new AMap.LngLat(116.397, 39.918);
+		map = new AMap.Map('shoppingMap', {
 			resizeEnable: true,
 			center: [116.400274, 39.905812],
 			zoom:11
         })
 
+
         //创建右键菜单
-        var contextMenu = new AMap.ContextMenu();
+            var contextMenu = new AMap.ContextMenu();
             contextMenu.addItem("添加标记", function (e) {
-                var marker = new AMap.Marker({
-                    map: map,
+                marker = new AMap.Marker({
+                    map:map,
                     position: contextMenuPositon //基点位置
                 });
+                path.push([contextMenuPositon.lng,contextMenuPositon.lat])
+                _this.ToolBar()
             }, 3);
-        //地图绑定鼠标右击事件——弹出右键菜单
-        map.on('rightclick', function (e) {
-            contextMenu.open(map, e.lnglat);
-            contextMenuPositon = e.lnglat;
-            console.log('e',e)
-        });
-    	}
+
+            map.on('rightclick', function (e) {
+                contextMenu.open(map, e.lnglat);
+                contextMenuPositon = e.lnglat;
+            });
+            contextMenu.open(map, lnglat);
+        },
+        ToolBar:function(){
+        var _this = this
+         polygon = new AMap.Polygon({
+                path: path,
+                strokeOpacity:0,
+                strokeWeight:1,
+                strokeStyle:"dashed",
+                strokeDasharray:[10,5],
+            })
+        polygon.setMap((map))          
+        },
+        new1:function(){
+            // var markers = []; 
+            // map.clearOerelay(marker)
+            //  path = [];
+            //  map.remove(markers);
+        }
+        
      },
      mounted(){
          this.loadMap();
