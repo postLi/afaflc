@@ -1,7 +1,7 @@
 <template>
 <div class="shoppingMapBox">
+     <div id="clear" @click="clear">清楚所有地理围栏</div>
  <div id="shoppingMap"></div>
- <div id="marker" @click="new1">新增</div>
 </div>
 </template>
 <script>
@@ -10,50 +10,56 @@ import { loadJs } from '@/utils/'
  var polygon;
  var marker;
  var path = [];
+ var contextMenuPositon = {}
 export default {
      data(){
          return{
+             dataAraay:[],
          }
      },
      methods:{
 		loadMap:function(){
 			if (window.AMap) {
                 this.init();
-                return Promise.resolve('')
             } else {
-                return new Promise((resolve, reject) => {
                 loadJs('https://webapi.amap.com/maps?v=1.4.10&key=f167f450303ea43b1c9ccc459156f867').then(() => {
                     this.init();
-                }).catch(() => {
-                    reject()
-                })
                 })
             }
         },
     	init:function(){
         var _this = this
 		// 地图加载
-        var contextMenuPositon = []
         var lnglat = new AMap.LngLat(116.397, 39.918);
 		map = new AMap.Map('shoppingMap', {
 			resizeEnable: true,
-			center: [116.400274, 39.905812],
+			center: [113.257416,23.149586],
 			zoom:11
         })
 
 
         //创建右键菜单
             var contextMenu = new AMap.ContextMenu();
+            var lng,lat;
             contextMenu.addItem("添加标记", function (e) {
+                console.log('111');
                 marker = new AMap.Marker({
                     map:map,
                     position: contextMenuPositon //基点位置
                 });
-                path.push([contextMenuPositon.lng,contextMenuPositon.lat])
+                lng = contextMenuPositon.lng
+                lat = contextMenuPositon.lat
+                path.push([lng,lat])
+                _this.dataAraay = path;
+                if(path.length>2){
+                 map.clearMap(polygon)
+                }
+                _this.$emit('returnStr', _this.dataAraay)
                 _this.ToolBar()
             }, 3);
 
             map.on('rightclick', function (e) {
+                
                 contextMenu.open(map, e.lnglat);
                 contextMenuPositon = e.lnglat;
             });
@@ -63,20 +69,25 @@ export default {
         var _this = this
          polygon = new AMap.Polygon({
                 path: path,
-                strokeOpacity:0,
-                strokeWeight:1,
-                strokeStyle:"dashed",
+                isOutline: true,
+                strokeOpacity:1,
+                lineJoin: 'round',
+                strokeWeight:3,
+                strokeStyle:"solid",
+                strokeColor: "#3366FF", 
                 strokeDasharray:[10,5],
+                fillOpacity: 0,
+                fillColor: '#FF0000',
             })
         polygon.setMap((map))          
         },
-        new1:function(){
-            // var markers = []; 
-            // map.clearOerelay(marker)
-            //  path = [];
-            //  map.remove(markers);
+        clear:function(){
+             map.clearMap();
+             path = [];
+        },
+        exit:function(){
+        map.destroy();
         }
-        
      },
      mounted(){
          this.loadMap();

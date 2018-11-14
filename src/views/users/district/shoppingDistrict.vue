@@ -17,7 +17,9 @@
     </el-form>
 		<div class="classify_info" >
 			<div class="btns_box">
-                   <shoppingCread
+                 <el-button  type="primary" value="value" plain icon="el-icon-circle-plus" @click="openDialogAdd()" :size="btnsize"  v-has:BUSINESS_AREA_MANAGE_BUSINESS_ADD>新增</el-button>
+                   <el-button  type="primary" value="value" plain icon="el-icon-edit" @click="openDialogEdit()" :size="btnsize"  v-has:BUSINESS_AREA_MANAGE_BUSINESS_UPDATE>修改</el-button>
+                   <!-- <shoppingCread
                     btntext="新增"
                     :plain="true"
                     btntype="primary" 
@@ -26,8 +28,8 @@
                     icon="el-icon-circle-plus"
                     v-has:BUSINESS_AREA_MANAGE_BUSINESS_ADD
                     > 
-                    </shoppingCread>
-                   <shoppingDialog
+                    </shoppingCread> -->
+                   <!-- <shoppingDialog
                     btntext="修改"
                     :plain="true"
                     btntype="primary"
@@ -38,7 +40,7 @@
                     :params="selectRowData"
                     v-has:BUSINESS_AREA_MANAGE_BUSINESS_UPDATE
                     >
-                    </shoppingDialog>
+                    </shoppingDialog> -->
                 <el-button type="primary" plain :size="btnsize" @click="handleUseStates" icon="el-icon-bell" v-has:BUSINESS_AREA_MANAGE_BUSINESS_USE>启用/停用</el-button>
                 <el-button type="primary" plain :size="btnsize" @click="delete_data" icon="el-icon-delete" v-has:BUSINESS_AREA_MANAGE_BUSINESS_DELETE>删除</el-button>
 			</div>
@@ -84,18 +86,124 @@
         </div>
 		</div>
          <div class="info_tab_footer">共计:{{ dataTotal }} <div class="show_pager"> <Pager :total="dataTotal" @change="handlePageChange" ref="pager"/></div> </div>
+    
+
+    <!-- 弹框 -->
+    <div class="shoppingDialog commoncss">
+      <el-dialog  :visible="dialogFormVisible_add" :before-close="change" top=5vh v-dialogDrag :title="btntitle">
+        <el-form ref="formAll" :model="formAll" :rules="rulesForm" :label-width="formLabelWidth">
+            <el-row>
+                <el-col :span="12">
+                    <el-form-item label="商圈名称 ："  prop="tradeName">
+                    <el-input v-model="formAll.tradeName" :disabled="editType=='view'"></el-input>
+                    </el-form-item>
+                </el-col>
+                 <el-col :span="12">
+                     <span v-if="!selectFlag">
+                    <el-form-item label="所在区域 ：" >
+                    <el-input v-model="formAll.areaName" placeholder="请选择" :disabled="editType=='view'" @focus="changeSelect"></el-input>
+                    </el-form-item>
+                     </span>
+                     <span v-else>
+                    <el-form-item label="所在区域 ："  prop="areaName">
+                   <GetCityList ref="area" v-model="formAll.areaName"  @returnStr="getStr1"></GetCityList>
+                    </el-form-item>
+                     </span>
+                </el-col>
+            </el-row>
+            <el-row>
+                <el-col :span="12">
+                    <el-form-item label="详细地址 ：" >
+                    <el-input v-model="formAll.address" :disabled="editType=='view'"></el-input>
+                    </el-form-item>
+                </el-col>
+                 <el-col :span="12">
+                    <el-form-item label="商圈场主 ："  prop="tradeOwner">
+                    <el-input v-model="formAll.tradeOwner" :disabled="editType=='view'"></el-input>
+                    </el-form-item>
+                </el-col>
+            </el-row>
+            <el-row>
+                <el-col :span="12">
+                    <el-form-item label="场主手机号 ："  prop="ownerPhone">
+                    <el-input v-model="formAll.ownerPhone" :disabled="editType=='view'" maxlength="11"></el-input>
+                    </el-form-item>
+                </el-col>
+            </el-row>         
+            <el-row>
+                <el-col :span="12">
+                    <el-form-item label="商圈地理围栏（多边形） ：">
+                     <ShoppingMap ref="mapblock" @returnStr = returnStr></ShoppingMap>
+                    </el-form-item>
+                </el-col>
+            </el-row>              
+        </el-form>
+        <div slot="footer" class="dialog-footer">
+          <el-button type="primary"  @click="add_data" v-if="editType=='add'">确 定1</el-button>
+          <el-button type="primary"  @click="edit_data" v-if="editType=='edit'">确 定2</el-button>
+          <el-button @click="close()" >取 消</el-button>
+        </div>
+      </el-dialog> 
+      </div>
+    
+    
     </div>
 </template>
 
 <script>
-import {data_get_aflcTradeArea_list,data_Del_aflcTradeArea,data_Able_aflcTradeArea} from '@/api/users/district/shoppingDistrict.js'
+import {data_get_aflcTradeArea_list,data_Del_aflcTradeArea,data_Able_aflcTradeArea,data_get_aflcTradeArea_Id,data_get_aflcTradeArea_create} from '@/api/users/district/shoppingDistrict.js'
 import GetCityList from '@/components/GetCityList/city'
+import ShoppingMap from '@/components/map/shoppingMap'
 import shoppingCread from './shoppingCread.vue'
 import shoppingDialog from './shoppingDialog.vue'
 import Pager from '@/components/Pagination/index'
 import { eventBus } from '@/eventBus'
 export default {
     data(){
+          //    选择省市校验
+        const areaNameValidator = (rule, val, cb) => {
+            if(val){
+            if(val.length<1){
+            cb(new Error('所属地区不能为空'))
+            }
+            else{
+                cb()
+            }                 
+            }else{
+            cb(new Error('所属地区不能为空'))
+            }
+        }
+
+    //    选择商圈地区校验
+        const tradeNameValidator = (rule, val, cb) => {
+            if(!val){
+            cb(new Error('商圈地区不能为空'))
+            }
+            else{
+                cb()
+            }        
+        }
+
+    //    选择商圈场主校验
+        const tradeOwnerValidator = (rule, val, cb) => {
+            if(!val){
+            cb(new Error('商圈场主不能为空'))
+            }
+            else{
+                cb()
+            }        
+        }
+    //    选择场主手机号校验
+        const ownerPhoneValidator = (rule, val, cb) => {
+            let phoneTest = /(^1[3|4|5|7|8|9]\d{9}$)|(^09\d{8}$)/
+            !val && cb(new Error('场主手机号码不能为空'))
+            if(!(phoneTest.test(val))){
+                cb(new Error('请输入正确的手机号码格式'))
+            } 
+            else{
+               cb()
+            }  
+        }
         return{
             loading:true,
             templateRadio: '',
@@ -112,14 +220,38 @@ export default {
                 tradeOwner:null,
                 areaCode:null,
                 areaName:null,
-            }
+            },
+            btntitle:'',
+            editType:'',
+            selectFlag:null,
+            dialogFormVisible_add: false,
+            formLabelWidth:'190px',
+            formAll:{
+                tradeName:null,
+                areaName:null,
+                areaCode: null,
+                province:null,
+                city:null,
+                area:null,
+                address:null,
+                tradeOwner:null,
+                ownerPhone:null,
+                points:[]        
+            },
+            rulesForm:{
+                tradeName:{trigger:'change',required:true,validator: tradeNameValidator},            
+                areaName:{trigger:'change',required:true,validator: areaNameValidator},         
+                tradeOwner:{trigger:'change',required:true,validator: tradeOwnerValidator},            
+                ownerPhone:{trigger:'change',required:true,validator: ownerPhoneValidator},                                      
+                },
         }
     },
     components:{
     shoppingCread,
     shoppingDialog,
     Pager,
-    GetCityList
+    GetCityList,
+    ShoppingMap
     },
     mounted(){
         this.firstblood();
@@ -127,10 +259,98 @@ export default {
                 this.firstblood()
           })
     },
+    watch:{
+    dialogFormVisible_add:{
+            handler: function(val, oldVal) {
+                if(!val){
+                    this.$refs['formAll'].resetFields();
+                    this.formAll.address = null;
+                    this.formAll.areaName =null;
+                    this.selectFlag = null;
+                    this.$refs.area.clearData();
+                    this.$refs.mapblock.clear();
+                     this.$refs.mapblock.exit()
+                }
+            },
+        },
+    },
     methods:{
     getStr(val){
                 this.formAllData.areaCode = val.area.code;
             },  
+
+    getStr1(val){
+                this.formAll.areaCode= val.area.code
+                this.formAll.areaName = val.area.name
+                this.formAll.province = val.province.name
+                this.formAll.city = val.city.name
+                this.formAll.area = val.area.name
+            },  
+   change:function(){
+      this.dialogFormVisible_add = false;
+   },
+   close:function(){
+      this.dialogFormVisible_add = false;
+       },
+   
+   //    新增打开
+    openDialogAdd(){
+        this.dialogFormVisible_add = true;
+        this.btntitle="创建";
+        this.editType="add";
+    },
+   //    修改打开
+    openDialogEdit(){
+          if(!this.selectRowData.length){
+               this.$message.warning('请选择您要操作的用户');
+               return
+          }
+          else if(this.selectRowData.length == 0 && this.editType !== 'add'){
+               this.$message.warning('请选择您要操作的用户');
+               return false
+          }else if (this.selectRowData.length > 1 && this.editType !== 'add') {
+                this.$message({
+                    message: '每次只能操作单条数据~',
+                    type: 'warning'
+                })
+                this.getDataList();
+                return false
+          }
+    else{
+        data_get_aflcTradeArea_Id(this.selectRowData[0].id).then(res=>{
+           this.formAll.tradeName = res.data.tradeName
+           this.formAll.address = res.data.address
+           this.formAll.province = res.data.province
+           this.formAll.city = res.data.city
+           this.formAll.area = res.data.area
+           this.formAll.tradeOwner = res.data.tradeOwner
+           this.formAll.ownerPhone = res.data.ownerPhone
+           this.formAll.areaName = res.data.areaName
+           this.formAll.areaCode = res.data.areaCode
+        })
+        this.dialogFormVisible_add = true;
+        this.btntitle="修改";
+        this.editType="edit";
+    }
+
+    },
+
+   // 省市状态表
+     changeSelect(){
+       this.selectFlag='1'
+      },    
+    returnStr(e){
+        this.formAll.points = []
+     var unshiftAraay = [e[0].lng,e[0].lat]
+     if(e.length>1){
+         for(let i = 1;i<e.length;i++)
+         {
+         this.formAll.points.push(e[i])
+         }
+        this.formAll.points.unshift(unshiftAraay)
+     }
+
+    },   
 
     // 列表刷新页面  
     firstblood(){
@@ -256,7 +476,42 @@ export default {
         getDataList(){
             this.firstblood()
             this.$refs.multipleTable.clearSelection();
-            }        
+            },
+    // 新增按钮
+    add_data(){
+       this.$refs['formAll'].validate(valid=>{
+        if(valid){
+        let forms={
+            areaCode:this.formAll.areaCode,
+            areaName:this.formAll.areaName,
+            province:this.formAll.province,
+            city:this.formAll.city,
+            area:this.formAll.area,
+            tradeName:this.formAll.tradeName,
+            address:this.formAll.address,
+            tradeOwner:this.formAll.tradeOwner,
+            ownerPhone:this.formAll.ownerPhone,    
+            points:JSON.stringify(this.formAll.points)
+        }
+        console.log(forms)
+        this.dialogFormVisible_add = false;
+        data_get_aflcTradeArea_create(forms).then(res=>{
+           this.$message.success('新增成功');
+           this.changeList();
+           console.log(res);
+
+        }).catch(res=>{
+            this.$message.error('新增失败')
+            this.changeList();
+           console.log(res);
+        })
+       }
+       })
+    },
+    // 修改按钮
+    edit_data(){
+
+    }     
     }
 }
 </script>
@@ -269,6 +524,19 @@ export default {
     .el-button{
         font-size:12px;
     }
+}
+.shoppingDialog{
+     display: inline-block;
+        .el-dialog{
+         width: 1200px!important;
+     }
+    .el-button{
+        padding: 7px 15px 7px;
+        }
+
+}
+.info_news .shoppingDialog .el-button{
+        padding: 0px 15px 0px;
 }
 }
 </style>

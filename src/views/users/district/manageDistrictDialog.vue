@@ -275,7 +275,7 @@ export default {
 
     //    手机号校验
         const ownerPhoneValidator = (rule, val, cb) => {
-            let phoneTest = /(^1[3|4|5|7|8|9]\d{9}$)|(^09\d{8}$)/
+            let phoneTest = /(^1[2|3|4|5|6|7|8|9]\d{9}$)|(^09\d{8}$)/
             !val && cb(new Error('手机号码不能为空'))
             if(!(phoneTest.test(val))){
                 cb(new Error('请输入正确的手机号码格式'))
@@ -412,6 +412,7 @@ export default {
           this.companyNameObject.companyName = item.value
           this.inputdisabled = true
         data_get_aflcPartner_findAuthCompany(1, 10, this.companyNameObject).then(res=>{
+            
             this.formAll.partnerName = res.data[0].contactsName
             this.formAll.mobile = res.data[0].mobile
             this.areaCode = res.data[0].belongCity
@@ -570,7 +571,8 @@ export default {
          let restaurantsData = res.data;
          restaurantsData.map(res=>{
              this.restaurants.push({
-                 value:res.companyName})
+                 value:res.companyName
+                 })
          })
          
         })
