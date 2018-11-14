@@ -268,7 +268,7 @@ export default {
 
     //    手机号校验
         const ownerPhoneValidator = (rule, val, cb) => {
-            let phoneTest = /(^1[3|4|5|7|8|9]\d{9}$)|(^09\d{8}$)/
+            let phoneTest = /(^1[2|3|4|5|6|7|8|9]\d{9}$)|(^09\d{8}$)/
             !val && cb(new Error('手机号码不能为空'))
             if(!(phoneTest.test(val))){
                 cb(new Error('请输入正确的手机号码格式'))

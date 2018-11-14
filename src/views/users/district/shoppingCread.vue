@@ -38,7 +38,7 @@
             <el-row>
                 <el-col :span="12">
                     <el-form-item label="商圈地理围栏（多边形） ："  prop="ownerPhone">
-                     <ShoppingMap></ShoppingMap>
+                     <ShoppingMap ref="mapblock" @returnStr = returnStr></ShoppingMap>
                     </el-form-item>
                 </el-col>
             </el-row>              
@@ -149,7 +149,8 @@ export default {
             area:null,
             address:null,
             tradeOwner:null,
-            ownerPhone:null,            
+            ownerPhone:null,
+            points:[]        
         },
          rulesForm:{
             tradeName:{trigger:'change',required:true,validator: tradeNameValidator},            
@@ -168,6 +169,7 @@ export default {
                  this.formAll.address = null;
                  this.selectFlag = null;
                  this.$refs.area.clearData();
+                 this.$refs.mapblock.clear();
             }
         },
     },
@@ -204,11 +206,22 @@ export default {
    // 省市状态表
      changeSelect(){
                 this.selectFlag='1'
-            },         
+            },    
+    returnStr(e){
+        this.formAll.points = []
+     var unshiftAraay = [e[0].lng,e[0].lat]
+     if(e.length>1){
+         for(let i = 1;i<e.length;i++)
+         {
+         this.formAll.points.push(e[i])
+         }
+        this.formAll.points.unshift(unshiftAraay)
+     }
+
+    },        
     add_data(){
        this.$refs['formAll'].validate(valid=>{
         if(valid){
-            
         let forms={
             areaCode:this.formAll.areaCode,
             areaName:this.formAll.areaName,
@@ -218,8 +231,10 @@ export default {
             tradeName:this.formAll.tradeName,
             address:this.formAll.address,
             tradeOwner:this.formAll.tradeOwner,
-            ownerPhone:this.formAll.ownerPhone,                  
+            ownerPhone:this.formAll.ownerPhone,    
+            points:JSON.stringify(this.formAll.points)
         }
+        console.log(forms)
         this.dialogFormVisible_add = false;
         data_get_aflcTradeArea_create(forms).then(res=>{
            this.$message.success('新增成功');
