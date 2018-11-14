@@ -103,9 +103,8 @@ export default {
     .chooseCityList{
         .el-cascader{   
             .el-cascader__label{
-                top: 5px;
-                height: 30px;
-                line-height: 30px;
+                // top: 5px;
+                height: 100%;
                 font-size: 14px;
                 color: #3e9ff1;
                 padding: 0 25px 0 6px;

@@ -68,7 +68,8 @@ export default {
   },
   data() {
     return {
-      orderTabName: 'orderInfo'
+      orderTabName: 'orderInfo',
+      orderType:'',
     }
   },
   computed: {
@@ -94,10 +95,11 @@ export default {
     if (this.$route.query.currentTab) {
       this.orderTabName = this.$route.query.currentTab
     }
+    // this.orderType = this.$route.query.orderType ?  this.$route.query.orderType : '';
   },
   methods: {
     init() {
-      this.routeQuery = this.$route.query.orderSerial || ''
+    //   this.routeQuery = this.$route.query.orderSerial || ''
     },
     handleClick(tab, event) {
       this.orderTabName = tab.name
@@ -148,15 +150,6 @@ export default {
             padding-left: 10px;
             padding-top: 12px;
         }
-
-        // .el-tab-pane{
-        //     .el-table th .cell {
-        //         white-space: initial;
-        //         overflow: hidden;
-        //         min-height: 30px;
-        //         line-height: 30px;
-        //     }
-        // }
 
         .collapseInfo{
             border: 1px solid #e2e2e2;

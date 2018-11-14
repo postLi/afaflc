@@ -318,48 +318,50 @@ export default {
     },
     getListSmall() {
       // const orderSerial = this.$route.query.orderSerial
-      console.log(this.rowid)
-      getGoodsfollowupAll(this.rowid).then(res => {
-        console.log(res.data)
-        this.tableData1 = res.data
-        this.tableData1.forEach((e, index) => {
-          let arr = []
-          let imgArr = []
-          let txtArr = []
-          arr = e.fileAddress.split(',')
-          arr.forEach((el, elindex) => {
-            const name = el.lastIndexOf('/')
-            let nameExtension = ''
-            if (name > -1) {
-              nameExtension = el.substring(name + 1)
-            }
-            console.log('nameExtension', nameExtension)
-            const i = nameExtension.lastIndexOf('.')
-            let extension = ''
-            if (i > -1) {
-              extension = nameExtension.substring(i + 1)
-            }
-            console.log('extension', extension)
-            if (extension === 'txt') {
-              txtArr.push({
-                url: el,
-                name: nameExtension
-              })
-            } else {
-              imgArr.push({
-                url: el,
-                name: nameExtension
-              })
-            }
+    //   console.log(this.rowid)
+    if(this.rowid){
+        getGoodsfollowupAll(this.rowid).then(res => {
+          console.log(res.data)
+          this.tableData1 = res.data
+          this.tableData1.forEach((e, index) => {
+            let arr = []
+            let imgArr = []
+            let txtArr = []
+            arr = e.fileAddress.split(',')
+            arr.forEach((el, elindex) => {
+              const name = el.lastIndexOf('/')
+              let nameExtension = ''
+              if (name > -1) {
+                nameExtension = el.substring(name + 1)
+              }
+              console.log('nameExtension', nameExtension)
+              const i = nameExtension.lastIndexOf('.')
+              let extension = ''
+              if (i > -1) {
+                extension = nameExtension.substring(i + 1)
+              }
+              console.log('extension', extension)
+              if (extension === 'txt') {
+                txtArr.push({
+                  url: el,
+                  name: nameExtension
+                })
+              } else {
+                imgArr.push({
+                  url: el,
+                  name: nameExtension
+                })
+              }
+            })
+            this.$set(e, 'txtArr', txtArr)
+            this.$set(e, 'imgArr', imgArr)
+            arr = []
+            imgArr = []
+            txtArr = []
           })
-          this.$set(e, 'txtArr', txtArr)
-          this.$set(e, 'imgArr', imgArr)
-          arr = []
-          imgArr = []
-          txtArr = []
+          console.log('tableData1----------', this.tableData1)
         })
-        console.log('tableData1----------', this.tableData1)
-      })
+    }
     },
     handlePageChange(obj) {
       this.page = obj.pageNum

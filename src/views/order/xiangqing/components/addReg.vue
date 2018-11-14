@@ -244,7 +244,7 @@ export default {
         if (this.isComreg) {
           this.popTitle = '投诉登记'
           this.formAllData = {}
-          console.log(this.isComreg)
+        //   console.log(this.isComreg)
         }
       },
       immediate: true
@@ -268,11 +268,11 @@ export default {
     },
     changeCode(obj) {
       this.formAllData.reporterType = obj
-      console.log('sdfsdfs', obj, this.formAllData)
+    //   console.log('sdfsdfs', obj, this.formAllData)
     },
     getclaimstatus() {
       DicClaimStatusType().then(res => {
-        console.log(res.data)
+        // console.log(res.data)
         res.data.map((item) => {
           this.optionsclaimType.push(item)
         })
@@ -287,7 +287,7 @@ export default {
     },
      // 判断选中与否
     getSelection(val) {
-      console.log('选中内容', val)
+    //   console.log('选中内容', val)
       this.selectRowData = val
     },
     // 点击选中当前行
@@ -295,7 +295,7 @@ export default {
       this.$refs.multipleTable.toggleRowSelection(row)
     },
     getFileInfo(obj) {
-      console.log('pageUpFile:', obj, obj.name)
+    //   console.log('pageUpFile:', obj, obj.name)
     },
     getFileList(list) {
       const address = []
@@ -306,12 +306,12 @@ export default {
       })
       this.formAllData.fileAddress = address.join(',')
       this.formAllData.fileName = name.join(',')
-      console.log('getFileList', this.formAllData)
+    //   console.log('getFileList', this.formAllData)
     },
     handleChange() {},
     uploadHandleFile(_this) {
       const file = _this.file
-      console.log('downfile :', file)
+    //   console.log('downfile :', file)
       let extension = ''
       const fileName = file.name.toLowerCase()
       const i = fileName.lastIndexOf('.')

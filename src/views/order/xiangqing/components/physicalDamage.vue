@@ -175,7 +175,6 @@ export default {
       page: 1,
       pagesize: 20,
       sizes: [20, 30, 50],
-      // tableData: null,
       expands: [],
       isMatreg: false,
       isClaim: false,
@@ -184,98 +183,6 @@ export default {
       rowid: '',
       belongCity: '',
       buttonText: ''
-      // formAllData: {
-      //   orderSerial: ''
-      // },
-      // tableData: [{
-      //   id: '1',
-      //   date: '2016-05-02',
-      //   name: '王小虎',
-      //   address: '上海市普陀区金沙江路 1518 弄',
-      //   tableData1: [{
-      //     date: '2016-05-02',
-      //     name: '王小虎',
-      //     address: '上海市普陀区金沙江路 1518 弄'
-      //   }, {
-      //     date: '2016-05-04',
-      //     name: '王小虎',
-      //     address: '上海市普陀区金沙江路 1517 弄'
-      //   }, {
-      //     date: '2016-05-01',
-      //     name: '王小虎',
-      //     address: '上海市普陀区金沙江路 1519 弄'
-      //   }, {
-      //     date: '2016-05-03',
-      //     name: '王小虎',
-      //     address: '上海市普陀区金沙江路 1516 弄'
-      //   }]
-      // }, {
-      //   id: '2',
-      //   date: '2016-05-04',
-      //   name: '王小虎',
-      //   address: '上海市普陀区金沙江路 1517 弄',
-      //   tableData1: [{
-      //     date: '2016-05-02',
-      //     name: '王小虎',
-      //     address: '上海市普陀区金沙江路 1518 弄'
-      //   }, {
-      //     date: '2016-05-04',
-      //     name: '王小虎',
-      //     address: '上海市普陀区金沙江路 1517 弄'
-      //   }, {
-      //     date: '2016-05-01',
-      //     name: '王小虎',
-      //     address: '上海市普陀区金沙江路 1519 弄'
-      //   }, {
-      //     date: '2016-05-03',
-      //     name: '王小虎',
-      //     address: '上海市普陀区金沙江路 1516 弄'
-      //   }]
-      // }, {
-      //   id: '3',
-      //   date: '2016-05-01',
-      //   name: '王小虎',
-      //   address: '上海市普陀区金沙江路 1519 弄',
-      //   tableData1: [{
-      //     date: '2016-05-02',
-      //     name: '王小虎',
-      //     address: '上海市普陀区金沙江路 1518 弄'
-      //   }, {
-      //     date: '2016-05-04',
-      //     name: '王小虎',
-      //     address: '上海市普陀区金沙江路 1517 弄'
-      //   }, {
-      //     date: '2016-05-01',
-      //     name: '王小虎',
-      //     address: '上海市普陀区金沙江路 1519 弄'
-      //   }, {
-      //     date: '2016-05-03',
-      //     name: '王小虎',
-      //     address: '上海市普陀区金沙江路 1516 弄'
-      //   }]
-      // }, {
-      //   id: '4',
-      //   date: '2016-05-03',
-      //   name: '王小虎',
-      //   address: '上海市普陀区金沙江路 1516 弄',
-      //   tableData1: [{
-      //     date: '2016-05-02',
-      //     name: '王小虎',
-      //     address: '上海市普陀区金沙江路 1518 弄'
-      //   }, {
-      //     date: '2016-05-04',
-      //     name: '王小虎',
-      //     address: '上海市普陀区金沙江路 1517 弄'
-      //   }, {
-      //     date: '2016-05-01',
-      //     name: '王小虎',
-      //     address: '上海市普陀区金沙江路 1519 弄'
-      //   }, {
-      //     date: '2016-05-03',
-      //     name: '王小虎',
-      //     address: '上海市普陀区金沙江路 1516 弄'
-      //   }]
-      // }]
     }
   },
   watch: {
@@ -356,47 +263,49 @@ export default {
     getListSmall() {
       // const orderSerial = this.$route.query.orderSerial
       console.log(this.rowid)
-      getGoodsfollowupAll(this.rowid).then(res => {
-        // console.log(res.data)
-        this.tableData1 = res.data
-        this.tableData1.forEach((e, index) => {
-          let arr = []
-          let imgArr = []
-          let txtArr = []
-          arr = e.fileAddress.split(',')
-          arr.forEach((el, elindex) => {
-            const name = el.lastIndexOf('/')
-            let nameExtension = ''
-            if (name > -1) {
-              nameExtension = el.substring(name + 1)
-            }
-            console.log('nameExtension', nameExtension)
-            const i = nameExtension.lastIndexOf('.')
-            let extension = ''
-            if (i > -1) {
-              extension = nameExtension.substring(i + 1)
-            }
-            console.log('extension', extension)
-            if (extension === 'txt') {
-              txtArr.push({
-                url: el,
-                name: nameExtension
+      if(this.rowid){
+          getGoodsfollowupAll(this.rowid).then(res => {
+            // console.log(res.data)
+            this.tableData1 = res.data
+            this.tableData1.forEach((e, index) => {
+              let arr = []
+              let imgArr = []
+              let txtArr = []
+              arr = e.fileAddress.split(',')
+              arr.forEach((el, elindex) => {
+                const name = el.lastIndexOf('/')
+                let nameExtension = ''
+                if (name > -1) {
+                  nameExtension = el.substring(name + 1)
+                }
+                console.log('nameExtension', nameExtension)
+                const i = nameExtension.lastIndexOf('.')
+                let extension = ''
+                if (i > -1) {
+                  extension = nameExtension.substring(i + 1)
+                }
+                console.log('extension', extension)
+                if (extension === 'txt') {
+                  txtArr.push({
+                    url: el,
+                    name: nameExtension
+                  })
+                } else {
+                  imgArr.push({
+                    url: el,
+                    name: nameExtension
+                  })
+                }
               })
-            } else {
-              imgArr.push({
-                url: el,
-                name: nameExtension
-              })
-            }
+              this.$set(e, 'txtArr', txtArr)
+              this.$set(e, 'imgArr', imgArr)
+              arr = []
+              imgArr = []
+              txtArr = []
+            })
+            console.log('tableData1----------', this.tableData1)
           })
-          this.$set(e, 'txtArr', txtArr)
-          this.$set(e, 'imgArr', imgArr)
-          arr = []
-          imgArr = []
-          txtArr = []
-        })
-        console.log('tableData1----------', this.tableData1)
-      })
+      }
     },
     handlePageChange(obj) {
       this.page = obj.pageNum

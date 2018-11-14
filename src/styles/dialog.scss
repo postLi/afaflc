@@ -11,8 +11,8 @@
         // .el-input__icon{
         //     line-height: 40px;
         // }
-        display: flex;
-        flex-direction: column;
+        // display: flex;
+        // flex-direction: column;
         .el-dialog__header{
             border-bottom:1px solid #ccc;
             text-align:center;
@@ -34,7 +34,7 @@
             }
         }
         .el-dialog__body{
-            flex: 1;
+            // flex: 1;
             padding: 20px 40px;
             // border:1px solid #ccc;
             .addItem{

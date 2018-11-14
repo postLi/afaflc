@@ -22,7 +22,7 @@
                 vertical-align: top;
                 line-height: 30px;
                 height: 30px;
-                .el-input{
+                .el-input,.chooseCityList .el-cascader{
                     width: 100%;
                     .el-input__inner{
                         color:#3e9ff1;
@@ -30,6 +30,12 @@
                         height: 30px;
                         line-height: 30px;
                         padding-right: 30px;
+                    }
+                }
+                .chooseCityList .el-cascader{
+                    line-height: 30px;
+                    .el-input__icon{
+                        line-height: 30px;
                     }
                 }
             }

@@ -40,7 +40,7 @@
                     :show-overflow-tooltip="true" sortable
                     label="公司名称">
 				</el-table-column>
-				<el-table-column prop="contacts" sortable label="联系人">
+				<el-table-column prop="contacts" :show-overflow-tooltip="true" sortable label="联系人">
 				</el-table-column>
 				<el-table-column prop="registerOriginName" sortable label="注册来源">
 				</el-table-column>

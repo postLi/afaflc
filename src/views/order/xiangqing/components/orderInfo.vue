@@ -10,7 +10,7 @@
                  </p>
                 <p>
                     <span>所属区域：</span>
-                    <span>{{listInformation.belongCity}}</span>
+                    <span>{{listInformation.belongCityName}}</span>
                 </p>
                 <p>
                     <span>服务分类：</span>
@@ -73,7 +73,7 @@
                 <p>
                     <span v-if="idx == 0">发货人：</span>
                     <span v-else>收货人：</span>
-                    <span>{{obj.contacts ? obj.contacts : obj.contactsPhone}}</span>
+                    <span>{{obj.contacts ? obj.contacts : ''}}</span>
                 </p>
                     <p>
                     <span>联系方式：</span>
@@ -147,7 +147,7 @@
                 </p>
                 <p>
                     <span>额外服务费：</span>
-                    <span>￥{{listInformation.aflcOrderExpenses.totalExtraCharge}}</span>
+                    <span>{{listInformation.ExtraPricesName == '暂无' ? '暂无' : '￥' + listInformation.ExtraPricesName}}</span>
                 </p>
             </div>
             <div class="essentialInformation">
@@ -182,14 +182,14 @@
                 </p>
                 <p>
                     <span>在线交易奖励金：</span>
-                    <!-- <span v-if="listInformation.aflcOrderExpenses.reward">￥{{listInformation.aflcOrderExpenses.reward}}</span> -->
-                    <!-- <span class="noneNun" v-else>无</span> -->
+                    <span v-if="listInformation.aflcOrderExpenses.driverReward">￥{{listInformation.aflcOrderExpenses.driverReward}}</span>
+                    <span class="noneNun" v-else>无</span>
                 </p>
                 <p>
                     <span>平台抽佣：</span>
-                    <!-- <span v-if="listInformation.aflcOrderExpenses.reward">￥{{listInformation.aflcOrderExpenses.reward}}</span> -->
-                    <!-- <span class="noneNun" v-else>无</span> -->
-                </p>
+                    <span v-if="listInformation.aflcOrderExpenses.platMaidFee">￥{{listInformation.aflcOrderExpenses.platMaidFee}}</span>
+                    <span class="noneNun" v-else>无</span>
+                </p> 
             </div>
         </div>
 
@@ -313,7 +313,6 @@ export default {
     $route(to, from) {
         console.log('to.path', to.path)
       }
-
   },
   mounted() {
         // console.log(this.$route)
@@ -323,18 +322,31 @@ export default {
         const orderSerial = this.$route.query.orderSerial
         this.loading = true
         orderDetailsList(orderSerial).then(res => {
-              console.log('details', res)
-              this.listInformation = res.data
-              this.listInformation.aflcOrderAddresses.sort(function(a, b) {
-                  return a.viaOrder - b.viaOrder
-                })
-              this.loading = false
+                console.log('details', res)
+                this.listInformation = res.data
+                this.listInformation.aflcOrderAddresses.sort(function(a, b) {
+                    return a.viaOrder - b.viaOrder
+                })  
+                
+                if(this.listInformation.aflcOrderExtraPrices){
+                    let item = 0 ;
+                    this.listInformation.aflcOrderExtraPrices.forEach(el => {
+                        item += el.extraPrice;
+                    })
+                    this.listInformation.ExtraPricesName = item;
+                }else{
+                    this.listInformation.ExtraPricesName = '暂无';
+                }
+
+                this.listInformation.belongCityName = this.listInformation.provinceCityArea.split(",")[2];
+
+                this.loading = false;
             }).catch(err => {
-              this.$message({
-                type: 'info',
-                message: '删除失败，原因：' + err.errorInfo ? err.errorInfo : err.text
-              })
-              this.loading = false
+                this.$message({
+                    type: 'info',
+                    message: '删除失败，原因：' + err.errorInfo ? err.errorInfo : err.text
+                })
+                this.loading = false
             })
       },
     shuaxin() {

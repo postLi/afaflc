@@ -36,7 +36,7 @@
                         <h4 class="needMoreInfo" @click="pushOrderSerial(scope.row)">{{ scope.row.mobile}}</h4>
                     </template>
 				</el-table-column>
-				<el-table-column prop="contacts" sortable label="联系人">
+				<el-table-column prop="contacts" :show-overflow-tooltip="true" sortable label="联系人">
 				</el-table-column>
 				<el-table-column
                     sortable

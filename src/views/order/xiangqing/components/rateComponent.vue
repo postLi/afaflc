@@ -1,24 +1,24 @@
 <template>
-    <div class="rate clearfix" v-loading = "loading" v-if="listInformation.returnList">
+    <div class="rate clearfix" v-loading = "loading">
         <div class="ratePicture collapseInfo">
             <h2>照片信息</h2>   
             <div class="essentialInformation">
                 <p>
                     <span>装货照片：</span>
-                    <el-tooltip class="item" effect="dark" content="双击图片查看原图" placement="top" v-viewer>
-                        <img class="showPicture" :src="listInformation.loadingFile ? listInformation.loadingFile.filePath: ''" alt="" >
+                    <el-tooltip class="item" effect="dark" content="双击图片查看原图" placement="top" v-viewer v-if="listInformation.loadingFile">
+                        <img class="showPicture" :src="loadingFile.filePath ? loadingFile.filePath: ''" alt="" >
                     </el-tooltip><br>
-                    <span class="shangchuan">上传时间：</span><span v-if="listInformation.loadingFile">{{listInformation.loadingFile.createTime | parseTime}}</span><br>
-                    <span class="shangchuan">上传位置：</span>
+                    <span class="shangchuan" v-if="loadingFile.createTime">上传时间：</span><span v-if="loadingFile.createTime">{{loadingFile.createTime | parseTime}}</span><br>
+                    <span class="shangchuan" v-if="loadingFile.createTime">上传位置：</span>
                 </p>
                 <p>
                     <span>回单照片：</span>
-                    <el-tooltip class="item" v-for="(item,key) in listInformation.returnList.filePathArr" v-if="listInformation.returnList" :key="key" effect="dark" content="双击图片查看原图" placement="top" v-viewer>
+                    <el-tooltip class="item" v-for="(item,key) in filePathArr" v-if="listInformation.returnList" :key="key" effect="dark" content="双击图片查看原图" placement="top" v-viewer>
                         <img  :src="item ? item: ''" alt="">
                     </el-tooltip>
                     <br>
-                    <span class="shangchuan">上传时间：</span><span v-if="listInformation.returnList">{{listInformation.returnList.createTime | parseTime}}</span><br>
-                    <span class="shangchuan">上传位置：</span>
+                    <span class="shangchuan" v-if="filePathArr[0]">上传时间：</span><span v-if="filePathArr[0]">{{listInformation.returnList.createTime | parseTime}}</span><br>
+                    <span class="shangchuan" v-if="filePathArr[0]">上传位置：</span>
                 </p>
             </div>
         </div>
@@ -40,7 +40,8 @@
                     </p>
                     <p>
                         <span>评价内容：</span>
-                        <span>{{listInformation.shipperEvaluation ? listInformation.shipperEvaluation.evaluationDes :'暂未评价'}}</span>
+                        <span v-if="listInformation.shipperEvaluation">{{listInformation.shipperEvaluation.evaluationDes ? listInformation.shipperEvaluation.evaluationDes :'暂未评价'}}</span>
+                        <span v-else>暂未评价</span>
                     </p>
                     <p>
                         <span>评价标签：</span>
@@ -64,7 +65,8 @@
                         <span>评价内容：</span>
                         <el-tooltip placement="top" effect="light">
                             <div slot="content">{{listInformation.driverEvaluation ? listInformation.driverEvaluation.evaluationDes : ''}}</div>
-                            <span>{{listInformation.driverEvaluation ? listInformation.driverEvaluation.evaluationDes : '暂未评价'}}</span>
+                            <span v-if="listInformation.driverEvaluation">{{listInformation.driverEvaluation.evaluationDes ? listInformation.driverEvaluation.evaluationDes : '暂未评价'}}</span>
+                            <span v-else>暂未评价</span>
                         </el-tooltip>
                     </p>
                     <p>
@@ -79,7 +81,7 @@
             <div class="essentialInformation">
                 <p>
                     <span>车主回单时间：</span>
-                    <span>{{listInformation.returnList ? parseTimeF(listInformation.returnList.createTime) :''}}</span>
+                    <span v-if="listInformation.returnList">{{listInformation.returnList.createTime | parseTime}}</span>
                 </p>
                 <!-- <p>
                     <span>快递公司：</span>
@@ -89,8 +91,7 @@
                 </p>  -->
                 <p>
                     <span>货主收到回单时间：</span>
-                    <span>{{listInformation.confirmReturnList ? parseTimeF(listInformation.confirmReturnList.createTime) :''}}</span>
-
+                    <span v-if="listInformation.confirmReturnList">{{listInformation.confirmReturnList.createTime | parseTime}}</span>
                 </p>
             </div>
         </div>
@@ -99,12 +100,11 @@
             <div class="essentialInformation">
                 <p>
                     <span>车主回款时间：</span>
-                    <span>{{listInformation.returnMoney ? parseTimeF(listInformation.returnMoney.createTime) :''}}</span>
-
+                    <span v-if="listInformation.returnMoney">{{listInformation.returnMoney.createTime | parseTime}}</span>
                 </p>
                 <p>
                     <span>货主收到回款时间：</span>
-                    <span>{{listInformation.confirmReturnMoney ? parseTimeF(listInformation.confirmReturnMoney.createTime) :''}}</span>
+                    <span v-if="listInformation.confirmReturnMoney">{{listInformation.confirmReturnMoney.createTime | parseTime}}</span>
 
                 </p>
             </div>
@@ -132,10 +132,21 @@ export default {
             evaluationType: "服务态度好,认路准确活地图,准时送达,收费合理",
             defaultImg:'/static/test.jpg',//默认加载失败图片
             loading:true,
-            listInformation:{},
+            listInformation:{
+                confirmReturnList: [],
+                confirmReturnMoney: [],
+                driverEvaluation: [],
+                loadingFile: [],
+                returnList: [],
+                returnMoney: [],
+                shipperEvaluation: [],
+            },
             parseTimeF:null,
             driverEvaluationTypeName:[],
             shipperEvaluationTypeName:[],
+            filePathArr:[],
+            driverEvaluation: [],
+            loadingFile: {},//装货照片
         };
     },
     watch:{
@@ -151,18 +162,22 @@ export default {
     },
     mounted(){
         // this.init();
-    },
+    }, 
     methods: {
         init(){
             this.parseTimeF = parseTime;
             this.loading = true;
             getReturnListAndEvaluation(this.$route.query.orderSerial).then(res => {
                 this.listInformation = res.data;
+
+                this.loadingFile = this.listInformation.loadingFile ?  this.listInformation.loadingFile : {};
+
                 if(this.listInformation.returnList){
-                    this.listInformation.returnList.filePathArr = this.listInformation.returnList.filePath ?  this.listInformation.returnList.filePath.split(',') : [];
+                    this.filePathArr = this.listInformation.returnList.filePath ?  this.listInformation.returnList.filePath.split(',') : [];
                 }else{
-                    this.listInformation.returnList.filePathArr = []
+                    this.filePathArr = []
                 }
+
                 let item = this.listInformation.shipperEvaluation;
 
                 if(item){
@@ -183,29 +198,13 @@ export default {
 
                 this.loading = false;
             }).catch(err => {
+                console.log('err',err)
                 this.$message({
                     type: 'info',
-                    message: '操作失败，原因：' + err.errorInfo ? err.errorInfo : err.text
+                    message: '操作失败，原因：' + (err.errorInfo ? err.errorInfo : err.text)
                 })
                 this.loading = false;
             })
-            // orderDetailsList(this.$route.query.orderSerial).then(res => {
-            //     console.log('details',res)
-            //     this.listInformation = res.data;
-            //     this.listInformation.aflcOrderEvaluations.forEach(item => {
-            //         console.log(item.evaluationType )
-            //         item.evaluationTypeName = item.evaluationType ? item.evaluationType.split(",") : [];
-            //         item.starLevel = Number(item.starLevel);
-            //         console.log(item.evaluationTypeName)
-            //     })
-            //     this.loading = false;
-            // }).catch(err => {
-            //     this.$message({
-            //         type: 'info',
-            //         message: '操作失败，原因：' + err.errorInfo ? err.errorInfo : err.text
-            //     })
-            //     this.loading = false;
-            // })
         },
     },
 }

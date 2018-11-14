@@ -37,7 +37,7 @@
 <script>
 
 import Pager from '@/components/Pagination/index'
-import { parseTime } from '@/utils/index.js'
+import { parseTime,objectMerge2 } from '@/utils/index.js'
 import { getOrderCarTrailList } from '@/api/order/ordermange'
 import DriverTrack from '@/components/gaodeTrack/index'
 export default {
@@ -86,13 +86,16 @@ export default {
             let trailform = Object.assign({},{orderSerial:this.$route.query.orderSerial});
             getOrderCarTrailList(this.page,this.pagesize,trailform).then(res => {
                 console.log('details',res)
+                let trackInfo = objectMerge2(res.data.list);
                 this.listInformation = res.data.list;
-                this.trackInfo = res.data.list.reverse();
+                this.trackInfo = trackInfo.reverse();
                 this.loading = false;
                 this.nowTable();
+                console.log(this.trackInfo)
             })
         },
         nowTable(){
+            this.listInformation = this.listInformation;
             this.totalCount = this.listInformation.length;
             let pageStart =  (this.Page - 1) * this.Pagesize;
             let pageEnd = this.Page * this.Pagesize;

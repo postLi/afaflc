@@ -1,11 +1,12 @@
 <template>
     <div class="identicalStyle clearfix waitpayment" v-loading="loading">
             <el-form :inline="true" :model="searchInfo" ref="ruleForm" class="demo-ruleForm classify_searchinfo">
-                {{searchInfo.belongCityName}}
                     <el-form-item label="区域" prop="pointName">
-                        <vregion :ui="true" @values="regionChange" class="form-control">
+                        <!-- <vregion :ui="true" @values="regionChange" class="form-control">
                             <el-input v-model="searchInfo.belongCityName" placeholder="请选择出发地" clearable></el-input>
-                        </vregion>
+                        </vregion> -->
+                        <getCityList class="chooseItem" @returnStr="getStr" v-model="searchInfo.belongCityName" ref="area"></getCityList>
+
                     </el-form-item>
                     <el-form-item label="订单号" prop="orderSerial">
                         <el-input v-model="searchInfo.orderSerial" clearable>
@@ -199,12 +200,14 @@ import '@/styles/dialog.scss'
 import { orderStatusList } from '@/api/order/ordermange'
 import { parseTime, pickerOptions2 } from '@/utils/index.js'
 import Pager from '@/components/Pagination/index'
-import vregion from '@/components/vregion/Region'
+// import vregion from '@/components/vregion/Region'
+import getCityList from '@/components/GetCityList/city'
 
 export default{
   components: {
     Pager,
-    vregion
+    // vregion,
+    getCityList
   },
   data() {
     return {
@@ -262,19 +265,28 @@ export default{
               } catch (e) { if (typeof console !== 'undefined') console.log(e, wbout) }
       return wbout
     },
-    regionChange(d) {
-      console.log('data:', d)
-      this.searchInfo.belongCityName = (!d.province && !d.city && !d.area && !d.town) ? '' : `${this.getValue(d.province)}${this.getValue(d.city)}${this.getValue(d.area)}${this.getValue(d.town)}`.trim()
-      if (d.area) {
-                  this.searchInfo.belongCity = d.area.code
-                } else if (d.city) {
-                  this.searchInfo.belongCity = d.city.code
-                } else {
-                  this.searchInfo.belongCity = d.province.code
-                }
-      console.log('this.searchInfo.belongCityName',this.searchInfo.belongCityName)
+    // regionChange(d) {
+    //   console.log('data:', d)
+    //   this.searchInfo.belongCityName = (!d.province && !d.city && !d.area && !d.town) ? '' : `${this.getValue(d.province)}${this.getValue(d.city)}${this.getValue(d.area)}${this.getValue(d.town)}`.trim()
+    //   if (d.area) {
+    //               this.searchInfo.belongCity = d.area.code
+    //             } else if (d.city) {
+    //               this.searchInfo.belongCity = d.city.code
+    //             } else {
+    //               this.searchInfo.belongCity = d.province.code
+    //             }
+    //   console.log('this.searchInfo.belongCityName',this.searchInfo.belongCityName)
 
-    },
+    // },
+    getStr(d){
+            console.log('data:',d)
+            this.searchInfo.belongCityName = (!d.province&&!d.city&&!d.area) ? '': `${this.getValue(d.province)}${this.getValue(d.city)}${this.getValue(d.area)}`.trim();
+            // if(d.city){
+                this.searchInfo.belongCity = d.area.code;
+            // }else{
+                // this.searchInfo.belongCity = d.province.code;
+            // }
+        },
     getValue(obj) {
       return obj ? obj.value : ''
     },
@@ -339,6 +351,8 @@ export default{
                         this.page = 1;
                         this.$refs.pager.inputval = this.page;
                     }
+                    this.$refs.area.clearData();
+
                   this.firstblood();
                   break;
                 case 'outExce':

@@ -277,7 +277,6 @@ import vregion from '@/components/vregion/Region'
                 this.page = obj.pageNum;
                 this.pagesize = obj.pageSize;
                 this.firstblood();
-
             },
             //单选中当前数据
             handleCurrentTask(val){
@@ -349,7 +348,7 @@ import vregion from '@/components/vregion/Region'
                 // console.log(item)
                 // this.dialogFormVisible_details = true;
                 // this.DetailsOrderSerial = item.orderSerial;
-                this.$router.push({name: '订单详情',query:{ orderSerial:item.orderSerial }});
+                this.$router.push({name: '订单详情',query:{ orderSerial:item.orderSerial}});
 
             }
         }

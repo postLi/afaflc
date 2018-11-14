@@ -41,6 +41,7 @@
                     </el-table-column>
                     <el-table-column
                         prop="contacts"
+                        :show-overflow-tooltip="true"
                         sortable
                         label="联系人">
                     </el-table-column>

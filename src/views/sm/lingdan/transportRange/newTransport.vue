@@ -415,12 +415,11 @@ export default {
        
     },
     mounted(){
-        // this.getInformations();
         this.getParams();
     },
     methods:{
         ifWrong(item,idx){
-            let flag = item[idx].endVolume < item[idx].startVolume ? true : false;
+            let flag = item[idx].endVolume <= item[idx].startVolume ? true : false;
             if(flag){
                 this.$message({
                     type: 'info',
@@ -431,7 +430,7 @@ export default {
             else if(item.length > (idx+1)){
                 item[idx+1].startVolume = item[idx].endVolume ;
                 if(item[idx+1].endVolume){
-                    if(item[idx+1].endVolume < item[idx+1].startVolume){
+                    if(item[idx+1].endVolume <= item[idx+1].startVolume){
                         this.$message({
                             type: 'info',
                             message: '终止运量应不小于起始运量' 

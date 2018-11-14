@@ -34,7 +34,7 @@
 			</el-table-column>
 			<el-table-column prop="mobile" sortable label="手机号">
 			</el-table-column>
-			<el-table-column prop="contacts" sortable label="联系人">
+			<el-table-column prop="contacts" :show-overflow-tooltip="true" sortable label="联系人">
 			</el-table-column>
 			<el-table-column prop="registerOriginName" sortable label="注册来源">
 			</el-table-column>
