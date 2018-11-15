@@ -4,7 +4,7 @@
         class="inline-input CustomerSearch"
         v-model="customerName"
         :fetch-suggestions="querySearch"
-        placeholder="请输入内容"
+        placeholder=""
         @select="handleSelect"
         :disabled="disabled"
         >

@@ -78,8 +78,6 @@ import getCityList from '@/components/GetCityList/city'
             // },
             getStr(d){
                 console.log('data:',d)
-                // this.standForm.areaCode = val;
-                // this.standForm.areaCodeName = name;
                 this.searchInfo.belongCityName = (!d.province&&!d.city&&!d.area) ? '': `${this.getValue(d.province)}${this.getValue(d.city)}${this.getValue(d.area)}`.trim();
                 // if(d.city){
                     this.searchInfo.belongCity = d.area.code;
