@@ -1,9 +1,10 @@
 <template>
     <el-form :inline="true" :model="searchInfo" ref="ruleForm" class="demo-ruleForm classify_searchinfo" >
         <el-form-item  label="区域：" prop="pointName">
-            <vregion :ui="true" @values="regionChange" class="form-control">
+            <!-- <vregion :ui="true" @values="regionChange" class="form-control">
                 <el-input v-model="searchInfo.belongCityName" placeholder="请选择出发地"></el-input>
-            </vregion>
+            </vregion> -->
+            <getCityList class="chooseItem" @returnStr="getStr" v-model="searchInfo.belongCityName" ref="area"></getCityList>
         </el-form-item>
         <el-form-item label="订单号：" prop="orderSerial">
             <el-input v-model="searchInfo.orderSerial" clearable>
@@ -41,11 +42,13 @@
 <script type="text/javascript">
 
 import { parseTime,pickerOptions2 } from '@/utils/index.js'
-import vregion from '@/components/vregion/Region'
+// import vregion from '@/components/vregion/Region'
+import getCityList from '@/components/GetCityList/city'
 
     export default{
         components:{
-            vregion
+            // vregion
+            getCityList
         },
         data(){
             return{
@@ -66,17 +69,22 @@ import vregion from '@/components/vregion/Region'
             }
         },
         methods: {
-            regionChange(d) {
+            // regionChange(d) {
+            //     console.log('data:',d)
+            //     this.searchInfo.belongCityName = (!d.province&&!d.city&&!d.area&&!d.town) ? '': `${this.getValue(d.province)}${this.getValue(d.city)}${this.getValue(d.area)}${this.getValue(d.town)}`.trim();
+            //     if(d.area){
+            //         this.searchInfo.belongCity = d.area.code;
+            //     }else if(d.city){
+            //         this.searchInfo.belongCity = d.city.code;
+            //     }
+            //     else{
+            //         this.searchInfo.belongCity = d.province.code;
+            //     }
+            // },
+            getStr(d){
                 console.log('data:',d)
-                this.searchInfo.belongCityName = (!d.province&&!d.city&&!d.area&&!d.town) ? '': `${this.getValue(d.province)}${this.getValue(d.city)}${this.getValue(d.area)}${this.getValue(d.town)}`.trim();
-                if(d.area){
-                    this.searchInfo.belongCity = d.area.code;
-                }else if(d.city){
-                    this.searchInfo.belongCity = d.city.code;
-                }
-                else{
-                    this.searchInfo.belongCity = d.province.code;
-                }
+                this.searchInfo.belongCityName = (!d.province&&!d.city&&!d.area) ? '': `${this.getValue(d.province)}${this.getValue(d.city)}${this.getValue(d.area)}`.trim();
+                this.searchInfo.belongCity = d.area.code;
             },
              getValue(obj){
                 return obj ? obj.value:'';
@@ -101,6 +109,7 @@ import vregion from '@/components/vregion/Region'
                             orderSerial:'',//订单号
                         }
                         this.chooseTime = [];
+                        this.$refs.area.clearData();
                         searchObj = Object.assign({}, this.searchInfo);
                         break;
                 }

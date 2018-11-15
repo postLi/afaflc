@@ -2,9 +2,11 @@
     <div class="identicalStyle clearfix waitpayment" v-loading="loading">
               <el-form :inline="true" :model="searchInfo" ref="ruleForm" class="demo-ruleForm classify_searchinfo">
                     <el-form-item label="区域" prop="pointName">
-                        <vregion :ui="true" @values="regionChange" class="form-control">
+                        <!-- <vregion :ui="true" @values="regionChange" class="form-control">
                             <el-input v-model="searchInfo.belongCityName" placeholder="请选择出发地" clearable></el-input>
-                        </vregion>
+                        </vregion> -->
+                        <getCityList class="chooseItem" @returnStr="getStr" v-model="searchInfo.belongCityName" ref="area"></getCityList>
+
                     </el-form-item>
                     <el-form-item label="订单号" prop="orderSerial">
                         <el-input v-model="searchInfo.orderSerial" clearable>
@@ -204,13 +206,15 @@ import '@/styles/dialog.scss'
 import { orderStatusList } from '@/api/order/ordermange'
 import { parseTime,pickerOptions2 } from '@/utils/index.js'
 import Pager from '@/components/Pagination/index'
-import vregion from '@/components/vregion/Region'
+// import vregion from '@/components/vregion/Region'
+import getCityList from '@/components/GetCityList/city'
 
 
     export default{
         components:{
             Pager,
-            vregion
+            // vregion
+            getCityList
         },
         data(){
             return{
@@ -252,19 +256,23 @@ import vregion from '@/components/vregion/Region'
             clearInterval(this.timeOutAll);
         },
         methods: {
-            regionChange(d) {
-                console.log('data:',d)
-                this.searchInfo.belongCityName = (!d.province&&!d.city&&!d.area&&!d.town) ? '': `${this.getValue(d.province)}${this.getValue(d.city)}${this.getValue(d.area)}${this.getValue(d.town)}`.trim();
-                if(d.area){
-                    this.searchInfo.belongCity = d.area.code;
-                }else if(d.city){
-                    this.searchInfo.belongCity = d.city.code;
-                }
-                else{
-                    this.searchInfo.belongCity = d.province.code;
-                }
+            // regionChange(d) {
+            //     console.log('data:',d)
+            //     this.searchInfo.belongCityName = (!d.province&&!d.city&&!d.area&&!d.town) ? '': `${this.getValue(d.province)}${this.getValue(d.city)}${this.getValue(d.area)}${this.getValue(d.town)}`.trim();
+            //     if(d.area){
+            //         this.searchInfo.belongCity = d.area.code;
+            //     }else if(d.city){
+            //         this.searchInfo.belongCity = d.city.code;
+            //     }
+            //     else{
+            //         this.searchInfo.belongCity = d.province.code;
+            //     }
+            // },
+            getStr(d){
+                this.searchInfo.belongCityName = (!d.province&&!d.city&&!d.area) ? '': `${this.getValue(d.province)}${this.getValue(d.city)}${this.getValue(d.area)}`.trim();
+                this.searchInfo.belongCity = d.area.code;
             },
-             getValue(obj){
+            getValue(obj){
                 return obj ? obj.value:'';
             },
             handlePageChange(obj) {
@@ -301,7 +309,6 @@ import vregion from '@/components/vregion/Region'
             },
             //模糊查询 分类名称或者code
             handleSearch(type){
-                // console.log(this.chooseTime)
                 switch(type){
                     case 'search':
                         if(this.chooseTime){
@@ -320,6 +327,7 @@ import vregion from '@/components/vregion/Region'
                             parentOrderStatus:'',//订单状态待支付
                         };
                         this.chooseTime = [];
+                        this.$refs.area.clearData();
                 }
                 if(this.page!= 1){
                     this.page = 1;
@@ -337,9 +345,7 @@ import vregion from '@/components/vregion/Region'
             },
             //详情弹窗
             pushOrderSerial(item){
-                // console.log(item)
                 this.$router.push({name: '订单详情',query:{ orderSerial:item.orderSerial }});
-
             }
         }
     }

@@ -26,14 +26,23 @@
                             {{ (page - 1)*pagesize + scope.$index + 1 }}
                         </template>
                     </el-table-column>  
-                    <el-table-column label="车主姓名" :show-overflow-tooltip="true" width="120" prop="driverName" sortable>
-                        <template slot-scope="scope">
-                            <h4 class="needMoreInfo" @click="pushOrderSerial(scope.row)">{{ scope.row.driverName ? scope.row.driverName : scope.row.nickname}}</h4>
-                        </template>
-                    </el-table-column>
-                    <el-table-column prop="driverMobile" width="120"
-                        :show-overflow-tooltip="true" sortable
+                    <el-table-column 
+                        prop="driverMobile"
+                        width="120"
+                        sortable
                         label="手机号码">
+                            <template slot-scope="scope">
+                                <h4 class="needMoreInfo" @click="pushOrderSerial(scope.row)">{{ scope.row.driverMobile}}</h4>
+                            </template>
+                    </el-table-column>
+                    <el-table-column label="车主姓名" 
+                        :show-overflow-tooltip="true" 
+                        width="120" 
+                        prop="driverName" 
+                        sortable>
+                        <template slot-scope="scope">
+                           {{ scope.row.driverName ? scope.row.driverName : scope.row.nickname}}
+                        </template>
                     </el-table-column>
                     <!-- <el-table-column prop="contacts" sortable label="短信验证码">
                     </el-table-column> -->

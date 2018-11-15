@@ -45,8 +45,6 @@ export function data_ChangeData(data) {
   })
 }
 
-
-
 //修改货主平台绑定
 export function aflcShipperPlatformUpdata(data) {
     return fetch({
@@ -55,8 +53,6 @@ export function aflcShipperPlatformUpdata(data) {
       data:data
     })
   }
-
-
   
 //获取车主列表，可根据模糊查询 search
 export function data_findAflcDriverList(data) {

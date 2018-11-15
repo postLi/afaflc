@@ -26,15 +26,24 @@
                             {{ (page - 1)*pagesize + scope.$index + 1 }}
                         </template>
                     </el-table-column>  
-                    <el-table-column label="货主姓名" :show-overflow-tooltip="true" prop="mobile" width="120" sortable>
+                    <el-table-column 
+                        prop="mobile"
+                        width="120"
+                        sortable
+                        label="手机号码">
                         <template slot-scope="scope">
-                            <h4 class="needMoreInfo" @click="pushOrderSerial(scope.row)">{{ scope.row.nickname ? scope.row.nickname : scope.row.mobile}}</h4>
+                            <h4 class="needMoreInfo" @click="pushOrderSerial(scope.row)">{{scope.row.mobile}}</h4>
                         </template>
                     </el-table-column>
-                    <el-table-column prop="mobile"
-                        width="120"
-                        :show-overflow-tooltip="true" sortable
-                        label="手机号码">
+                    <el-table-column 
+                        label="货主姓名" 
+                        :show-overflow-tooltip="true" 
+                        prop="nickname" 
+                        width="120" 
+                        sortable>
+                        <template slot-scope="scope">
+                            {{ scope.row.nickname ? scope.row.nickname : scope.row.mobile}}
+                        </template>
                     </el-table-column>
                     <el-table-column prop="registerOriginName" sortable label="注册渠道" width="120">
                     </el-table-column>
