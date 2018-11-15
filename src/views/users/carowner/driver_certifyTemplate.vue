@@ -156,11 +156,11 @@
                   </el-col>
             </el-row>
               <el-row>
-                  <el-col :span="12">
-                    <el-form-item :label-width="formLabelWidth" label="特权车：">
-                        <el-checkbox v-model="templateModel.isVipCar" true-label="1" false-label='0' @change='isVip' label="是" border size="medium" ></el-checkbox>
+              <el-col :span="12">
+                <el-form-item label="所属业务员：" :label-width="formLabelWidth">
+                        <CustomerSearch @returnCustomer = 'getCustomer' :customerName = "templateModel.belongSalesmanName" :disabled="editType == 'view'"/>
                     </el-form-item>
-                  </el-col>
+                </el-col>    
                   <el-col :span="12">
                     <el-form-item label="活跃值：" :label-width="formLabelWidth">
                         <el-select v-model="templateModel.activeValue" placeholder="请选择" :disabled="editType=='view'">
@@ -176,14 +176,11 @@
               </el-row>
             <el-row>
                 <el-col :span="12">
-                <el-form-item label="提交认证时间：" :label-width="formLabelWidth">
-                  <el-date-picker
-                    v-model="templateModel.authenticationTime"
-                    type="datetime"
-                    placeholder="选择日期"
-                    disabled>
-                  </el-date-picker>
-                </el-form-item>
+                  <el-col :span="12">
+                    <el-form-item :label-width="formLabelWidth" label="特权车：">
+                        <el-checkbox v-model="templateModel.isVipCar" true-label="1" false-label='0' @change='isVip' label="是" border size="medium" ></el-checkbox>
+                    </el-form-item>
+                  </el-col>
               </el-col>
               <el-col :span="12">
                 <el-form-item label="注册来源：" :label-width="formLabelWidth">
@@ -192,6 +189,14 @@
               </el-col>
             </el-row>
             <el-row>
+                <el-form-item label="提交认证时间：" :label-width="formLabelWidth">
+                  <el-date-picker
+                    v-model="templateModel.authenticationTime"
+                    type="datetime"
+                    placeholder="选择日期"
+                    disabled>
+                  </el-date-picker>
+                </el-form-item>
               <el-col :span="12">
                 <el-form-item label="等待时长：" :label-width="formLabelWidth">
                   {{templateModel.authenticationTime|remainData}}
@@ -299,12 +304,14 @@ import { eventBus } from '@/eventBus'
 import Upload from '@/components/Upload/singleImage'
 import GetCityList from '@/components/GetCityList/city'
 import vregion from '@/components/vregion/Region'
+import CustomerSearch from '@/components/CustomerSearch/index'
 export default {
   name:'create-Change-ViewDialog',
   components:{
     Upload,
     GetCityList,
-    vregion
+    vregion,
+    CustomerSearch
   },
   props:{
     params:{
@@ -546,6 +553,8 @@ export default {
         takeIdCardFile:null,
         rewardGrade:null,
         commisionLevel:null,
+        belongSalesmanName:null,
+        belongSalesman:null,
         },   // 认证审核表单
         formLabelWidth:'150px',
         activeValueList:[],
@@ -605,6 +614,8 @@ export default {
                 this.templateModel.provinceCode=null
                 this.templateModel.cityCode=null
                 this.templateModel.areaCode=null
+                this.templateModel.belongSalesman = null;
+                this.templateModel.belongSalesmanName = null;
                 this.radio1 = ''
                 this.radio2 = ''
                 this.radio3 = ''
@@ -667,7 +678,10 @@ export default {
                 this.templateModel.cityCode = val.city.name;
                 this.templateModel.belongCityName = val.province.name+val.city.name+val.area.name
             }, 
-
+      getCustomer(val){
+        this.templateModel.belongSalesman = val.userId;
+        this.templateModel.belongSalesmanName = val.name;
+    },  
 
     change(){
       this.freezeDialogFlag!=this.freezeDialogFlag

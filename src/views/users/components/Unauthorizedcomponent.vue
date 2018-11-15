@@ -98,8 +98,13 @@
                       </template>
                         </el-table-column>
                         <el-table-column
+                        width="160"
                         prop="belongCityName"
                         label="所在地" sortable>
+                        </el-table-column>
+                        <el-table-column
+                        prop="belongSalesmanName"
+                        label="所属业务员" sortable>
                         </el-table-column>
                         <el-table-column
                         prop="driverStatusName"
