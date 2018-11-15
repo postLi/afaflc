@@ -7,7 +7,7 @@
 
 import fetch from '@/utils/fetch'
 
-const baseurl = "aflccommonservice-wtc"
+const baseurl = "aflccommonservice"
 
 // 获取树节点的数据
 export function data_Trees(page,pagesize,pid) {
@@ -36,15 +36,12 @@ export function data_Search(page,pagesize,pid,info) {
     url: '/'+baseurl+'/sysDict/findSysDictByPid',
     method: 'post',
     data: {
-
           "currentPage": page,
           "pageSize": pagesize,
           "vo": {
             "pid":pid,
             "likeNameOrCode": info
-          
           }
-        
     }
   })
 }
@@ -66,7 +63,6 @@ export function data_Delet(delID) {
   })
 }
 
-
 // 更改状态
 export function data_changeStatus(ID) {
   return fetch({
@@ -75,11 +71,6 @@ export function data_changeStatus(ID) {
     data:ID
   })
 }
-
-
-
-
-
 
 //添加数据
 export function data_AddForms(infoforms) {
