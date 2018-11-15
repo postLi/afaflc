@@ -3,9 +3,10 @@
         <div class="shipper_searchinfo">
             <el-form inline  class="demo-ruleForm classify_searchinfo">
             <el-form-item label="所在地">
-                <vregion :ui="true"  @values="regionChange" class="form-control">
+                <GetCityList ref="area" v-model="belongCityName"  @returnStr="getStr"></GetCityList>
+                <!-- <vregion :ui="true"  @values="regionChange" class="form-control">
                     <el-input v-model="belongCityName" placeholder="请选择"></el-input>
-                </vregion>
+                </vregion> -->
             </el-form-item>
             <el-form-item label="车牌号">
                 <el-input placeholder="请输入内容" v-model.trim="formInline.carNumber" clearable></el-input>
@@ -56,11 +57,11 @@
                                 {{ (page - 1)*pagesize + scope.$index + 1 }}
                             </template>
                         </el-table-column> 
-                        <el-table-column label="车牌号" sortable>
+                        <el-table-column prop="driverMobile" label="手机号" sortable>
                         <template slot-scope="scoped" >
                             <driver-newTemplate
                             :paramsView="scoped.row"
-                                :btntext="scoped.row.carNumber"
+                                :btntext="scoped.row.driverMobile"
                                 type="primary" 
                                 btntype="text"
                                 editType="view"
@@ -68,7 +69,7 @@
                                 </driver-newTemplate>
                         </template>
                         </el-table-column>
-                        <el-table-column prop="driverMobile" label="手机号" sortable>
+                        <el-table-column label="车牌号" sortable prop="carNumber">
                         </el-table-column>
                         <el-table-column  prop="driverName" label="车主" width="200" sortable></el-table-column>
                         <el-table-column prop="belongCityName" label="所在地" sortable></el-table-column>
@@ -92,6 +93,7 @@
     import vregion from '@/components/vregion/Region'
     import DriverNewTemplate from '../carowner/driver-newTemplate.vue'
     import driverCertifyTemplate from '../carowner/driver_certifyTemplate.vue'
+    import GetCityList from '@/components/GetCityList/city'
     export default {
         props: {
             isvisible: {
@@ -103,7 +105,8 @@
             DriverNewTemplate,
             vregion,
             Pager,
-            driverCertifyTemplate
+            driverCertifyTemplate,
+            GetCityList
         },
         data(){
             return{
@@ -176,21 +179,28 @@
           })
         }, 
         methods:{
-            regionChange(d) {
-                console.log('data:',d)
-                this.belongCityName = (!d.province&&!d.city&&!d.area&&!d.town) ? '': `${this.getValue(d.province)}${this.getValue(d.city)}${this.getValue(d.area)}${this.getValue(d.town)}`.trim();
-                if(d.area){
-                    this.formInline.areaCode = d.area.name;
-                }else if(d.city){
-                    this.formInline.cityCode = d.city.name;
-                }
-                else{
-                    this.formInline.provinceCode = d.province.name;
-                }
-            },
-             getValue(obj){
-                return obj ? obj.value:'';
-            },
+            // regionChange(d) {
+            //     console.log('data:',d)
+            //     this.belongCityName = (!d.province&&!d.city&&!d.area&&!d.town) ? '': `${this.getValue(d.province)}${this.getValue(d.city)}${this.getValue(d.area)}${this.getValue(d.town)}`.trim();
+            //     if(d.area){
+            //         this.formInline.areaCode = d.area.name;
+            //     }else if(d.city){
+            //         this.formInline.cityCode = d.city.name;
+            //     }
+            //     else{
+            //         this.formInline.provinceCode = d.province.name;
+            //     }
+            // },
+            //  getValue(obj){
+            //     return obj ? obj.value:'';
+            // },
+
+        getStr(val){
+                    console.log('this.cityarr',val,name)
+                    this.belongCityName = val.province.name+val.city.name+val.area.name
+                    this.formInline.areaCode = val.area.name;
+                }, 
+
             handlePageChange(obj) {
                 this.page = obj.pageNum
                 this.pagesize = obj.pageSize
@@ -205,9 +215,12 @@
                     belongCityName:null,
                 }
                 this.belongCityName=null
-                if(this.page!= 1){
-                    this.page = 1;
-                }
+            if(this.page!= 1){
+                this.page = 1;
+                this.$refs.pager.inputval = this.page;
+                this.$refs.pager.pageNum = this.page;
+            }
+            this.$refs.area.clearData();
              this.firstblood()    
             },
 

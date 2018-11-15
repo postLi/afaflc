@@ -3,9 +3,10 @@
          <div class="shipper_searchinfo">
             <el-form inline  class="demo-ruleForm classify_searchinfo">
                 <el-form-item label="所在地">
-                <vregion :ui="true"  @values="regionChange" class="form-control">
+                <!-- <vregion :ui="true"  @values="regionChange" class="form-control">
                     <el-input v-model="belongCityName" placeholder="请选择"></el-input>
-                </vregion>
+                </vregion> -->
+                   <GetCityList ref="area" v-model="belongCityName"  @returnStr="getStr"></GetCityList>
                 </el-form-item>
                 <el-form-item label="手机号">
                     <el-input placeholder="请输入内容" v-model.trim="formInline.driverMobile" clearable v-numberOnly  maxlength="11"></el-input>
@@ -122,6 +123,7 @@
     import vregion from '@/components/vregion/Region'
     import { eventBus } from '@/eventBus'
     import { parseTime,formatTime } from '@/utils/index.js'
+    import GetCityList from '@/components/GetCityList/city'
     import Pager from '@/components/Pagination/index'
     import DriverNewTemplate from '../carowner/driver-newTemplate.vue'
     export default {
@@ -134,7 +136,8 @@
         components:{
             DriverNewTemplate,
             vregion,
-            Pager
+            Pager,
+            GetCityList
         },
         data(){
             return{
@@ -176,21 +179,28 @@
         },
          
         methods:{
-            regionChange(d) {
-                console.log('data:',d)
-                this.belongCityName = (!d.province&&!d.city&&!d.area&&!d.town) ? '': `${this.getValue(d.province)}${this.getValue(d.city)}${this.getValue(d.area)}${this.getValue(d.town)}`.trim();
-                if(d.area){
-                    this.formInline.areaCode = d.area.name;
-                }else if(d.city){
-                    this.formInline.cityCode = d.city.name;
-                }
-                else{
-                    this.formInline.provinceCode = d.province.name;
-                }
-            },
-             getValue(obj){
-                return obj ? obj.value:'';
-            },
+            // regionChange(d) {
+            //     console.log('data:',d)
+            //     this.belongCityName = (!d.province&&!d.city&&!d.area&&!d.town) ? '': `${this.getValue(d.province)}${this.getValue(d.city)}${this.getValue(d.area)}${this.getValue(d.town)}`.trim();
+            //     if(d.area){
+            //         this.formInline.areaCode = d.area.name;
+            //     }else if(d.city){
+            //         this.formInline.cityCode = d.city.name;
+            //     }
+            //     else{
+            //         this.formInline.provinceCode = d.province.name;
+            //     }
+            // },
+            //  getValue(obj){
+            //     return obj ? obj.value:'';
+            // },
+        getStr(val){
+                    console.log('this.cityarr',val,name)
+                    this.belongCityName = val.province.name+val.city.name+val.area.name
+                     this.formInline.areaCode = val.area.name;
+                }, 
+
+
             clearSearch(){
                 this.formInline={//查询条件
                     driverMobile:null,
@@ -202,7 +212,10 @@
                 this.belongCityName=null
                 if(this.page!= 1){
                     this.page = 1;
+                    this.$refs.pager.inputval = this.page;
+                    this.$refs.pager.pageNum = this.page;
                 }
+                this.$refs.area.clearData();
                 this.firstblood();
             },
             //点击选中当前行

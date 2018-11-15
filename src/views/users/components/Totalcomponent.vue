@@ -2,9 +2,10 @@
     <div style="height:100%;" class="identicalStyle" v-loading="loading">
             <el-form :inline="true"  class="demo-ruleForm classify_searchinfo">
                 <el-form-item label="所在地">
-                <vregion :ui="true"  @values="regionChange" class="form-control">
+                    <GetCityList ref="area" v-model="belongCityName"  @returnStr="getStr"></GetCityList>
+                <!-- <vregion :ui="true"  @values="regionChange" class="form-control">
                     <el-input v-model="belongCityName" placeholder="请选择"></el-input>
-                </vregion>
+                </vregion> -->
                 </el-form-item>
                 <el-form-item label="认证状态">
                     <el-select v-model="formInline.driverStatus" placeholder="请选择" clearable>
@@ -193,6 +194,14 @@
                         label="是否马甲车主" sortable>
                         </el-table-column>
                         <el-table-column
+                        prop="isOnLine"
+                        label="是否在线" sortable>
+                      <template slot-scope="scope">
+                         <span class="blackName" v-if="scope.row.isOnLine=='0'">不在线</span>
+                         <span class="normalName" v-else>在线</span>
+                      </template>
+                        </el-table-column>
+                        <el-table-column
                         prop="driverStatusName"
                         label="状态" sortable>
                         </el-table-column>
@@ -218,7 +227,7 @@
     import { eventBus } from '@/eventBus'
     import Pager from '@/components/Pagination/index'
     import FreezeChangeTemplate from '../carowner/freeze-change-template'
- 
+    import GetCityList from '@/components/GetCityList/city'
     import blacklist from '../carowner/blacklist'
 
     export default {
@@ -261,7 +270,8 @@
             DriverNewTemplate,
             FreezeChangeTemplate,
             Pager,
-            blacklist
+            blacklist,
+            GetCityList
         },
         created() {
            
@@ -290,21 +300,29 @@
         },
  
         methods:{
-            regionChange(d) {
-                console.log('data:',d)
-                this.belongCityName = (!d.province&&!d.city&&!d.area&&!d.town) ? '': `${this.getValue(d.province)}${this.getValue(d.city)}${this.getValue(d.area)}${this.getValue(d.town)}`.trim();
-                if(d.area){
-                    this.formInline.areaCode = d.area.name;
-                }else if(d.city){
-                    this.formInline.cityCode = d.city.name;
-                }
-                else{
-                    this.formInline.provinceCode = d.province.name;
-                }
-            },
-             getValue(obj){
-                return obj ? obj.value:'';
-            },
+            // regionChange(d) {
+            //     console.log('data:',d)
+            //     this.belongCityName = (!d.province&&!d.city&&!d.area&&!d.town) ? '': `${this.getValue(d.province)}${this.getValue(d.city)}${this.getValue(d.area)}${this.getValue(d.town)}`.trim();
+            //     if(d.area){
+            //         this.formInline.areaCode = d.area.name;
+            //     }else if(d.city){
+            //         this.formInline.cityCode = d.city.name;
+            //     }
+            //     else{
+            //         this.formInline.provinceCode = d.province.name;
+            //     }
+            // },
+            //  getValue(obj){
+            //     return obj ? obj.value:'';
+            // },
+        getStr(val){
+                    console.log('this.cityarr',val,name)
+                    this.belongCityName = val.province.name+val.city.name+val.area.name
+                    this.formInline.areaCode = val.area.name;
+                }, 
+
+
+
             handlePageChange(obj) {
                 this.page = obj.pageNum
                 this.pagesize = obj.pageSize
@@ -320,9 +338,12 @@
                     accountStatus:null
                 }
                 this.belongCityName=null
-                if(this.page!= 1){
-                    this.page = 1;
-                }
+            if(this.page!= 1){
+                this.page = 1;
+                this.$refs.pager.inputval = this.page;
+                this.$refs.pager.pageNum = this.page;
+            }
+            this.$refs.area.clearData();
                 this.firstblood()
             },
             // 判断选中与否
