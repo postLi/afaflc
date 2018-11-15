@@ -51,10 +51,16 @@
           </el-row>
 
           <el-row>
-            <el-col :span="24">
+            <el-col :span="12">
                 <el-form-item label="详细地址：" prop="address">
                     <!-- <span class="onlyShow" v-if="editType=='view'">{{xinzengform.address}}</span> -->
                     <el-input :maxlength="40" v-model="xinzengform.address" auto-complete="off"  :disabled="editType=='view'"></el-input>
+                </el-form-item>
+            </el-col>
+            <el-col :span="12">
+                <el-form-item label="所属业务员：" prop="address">
+                    <!-- <el-input :maxlength="40" v-model="xinzengform.address" auto-complete="off"  :disabled="editType=='view'"></el-input> -->
+                    <CustomerSearch/>
                 </el-form-item>
             </el-col>
           </el-row>
@@ -129,11 +135,13 @@ import { eventBus } from '@/eventBus'
 import {data_get_shipper_create,data_get_shipper_change,data_get_shipper_view} from '@/api/users/shipper/all_shipper.js'
 import { getDictionary } from '@/api/common.js'
 import vregion from '@/components/vregion/Region'
+import CustomerSearch from '@/components/CustomerSearch/index'
 
 export default {
   components:{
     Upload,
-    vregion
+    vregion,
+    CustomerSearch
   },
   props:{
     paramsView:{
@@ -214,11 +222,11 @@ export default {
         rulesForm:{
             shipperType:{required: true, message:'请选择货主类型', trigger:'blur'},
             companyName:[
-                {required: true, message:'请输入公司名称', trigger:'change'},
+                {required: true, message:'请输入公司名称', trigger:'blur'},
             ],
-            contacts:{required: true, message:'请输入联系人', trigger:'change'},
+            contacts:{required: true, message:'请输入联系人', trigger:'blur'},
             mobile:{required:true,validator: mobileValidator, trigger:'blur'},
-            belongCityName:{required:true, validator:checkLocation, trigger:'change'},
+            belongCityName:{required:true, validator:checkLocation, trigger:'blur'},
             companyFacadeFile:{required:true, message:'请上传公司或者档口照片', trigger:'blur'},
             shipperCardFile:{required:true, message:'请上传发货人名片照片', trigger:'blur'}
         },
