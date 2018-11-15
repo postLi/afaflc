@@ -72,7 +72,11 @@
                         <el-table-column label="车牌号" sortable prop="carNumber">
                         </el-table-column>
                         <el-table-column  prop="driverName" label="车主" width="200" sortable></el-table-column>
-                        <el-table-column prop="belongCityName" label="所在地" sortable></el-table-column>
+                        <el-table-column prop="belongCityName" label="所在地" sortable width="160"></el-table-column>
+                        <el-table-column
+                        prop="belongSalesmanName"
+                        label="所属业务员" sortable>
+                        </el-table-column>
                         <el-table-column  prop="authenticationTime" label="提交认证时间" sortable>
                         <template  slot-scope="scope">
                             <span v-if="scope.row.authenticationTime">{{ scope.row.authenticationTime | parseTime}}</span>

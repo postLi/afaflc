@@ -5,7 +5,7 @@
                 <GetCityList ref="area" v-model="formAllData.areaName"  @returnStr="getStr"></GetCityList>
             </el-form-item>
             <el-form-item label="商圈名称">
-                <el-input v-model="formAllData.tradeName"></el-input>
+                <el-input v-model="formAllData.tradeName" ></el-input>
             </el-form-item>
             <el-form-item label="商圈场主">
                 <el-input v-model="formAllData.tradeOwner"></el-input>
@@ -18,29 +18,7 @@
 		<div class="classify_info" >
 			<div class="btns_box">
                  <el-button  type="primary" value="value" plain icon="el-icon-circle-plus" @click="openDialogAdd()" :size="btnsize"  v-has:BUSINESS_AREA_MANAGE_BUSINESS_ADD>新增</el-button>
-                   <el-button  type="primary" value="value" plain icon="el-icon-edit" @click="openDialogEdit()" :size="btnsize"  v-has:BUSINESS_AREA_MANAGE_BUSINESS_UPDATE>修改</el-button>
-                   <!-- <shoppingCread
-                    btntext="新增"
-                    :plain="true"
-                    btntype="primary" 
-                    editType="add"
-                    btntitle="创建"
-                    icon="el-icon-circle-plus"
-                    v-has:BUSINESS_AREA_MANAGE_BUSINESS_ADD
-                    > 
-                    </shoppingCread> -->
-                   <!-- <shoppingDialog
-                    btntext="修改"
-                    :plain="true"
-                    btntype="primary"
-                    editType="edit"
-                    btntitle="修改"
-                    icon="el-icon-edit"
-                    @getData="getDataList"
-                    :params="selectRowData"
-                    v-has:BUSINESS_AREA_MANAGE_BUSINESS_UPDATE
-                    >
-                    </shoppingDialog> -->
+                 <el-button  type="primary" value="value" plain icon="el-icon-edit" @click="openDialogEdit()" :size="btnsize"  v-has:BUSINESS_AREA_MANAGE_BUSINESS_UPDATE>修改</el-button>
                 <el-button type="primary" plain :size="btnsize" @click="handleUseStates" icon="el-icon-bell" v-has:BUSINESS_AREA_MANAGE_BUSINESS_USE>启用/停用</el-button>
                 <el-button type="primary" plain :size="btnsize" @click="delete_data" icon="el-icon-delete" v-has:BUSINESS_AREA_MANAGE_BUSINESS_DELETE>删除</el-button>
 			</div>
@@ -58,15 +36,7 @@
             </el-table-column> 
             <el-table-column  label="商圈名称" sortable>
                         <template slot-scope="scoped">
-                        <shoppingDialog
-                            :btntext='scoped.row.tradeName'
-                            btntype="text"
-                            :plain="false"
-                            editType="view"
-                            btntitle="详情"
-                            :params="scoped.row"
-                            >
-                            </shoppingDialog>
+                        <span @click="openDialogView(scoped.row)" class="BtnInfo">{{scoped.row.tradeName}}</span>
                         </template>
             </el-table-column>
             <el-table-column  label="所在地" prop="areaName" sortable>
@@ -133,7 +103,7 @@
             <el-row>
                 <el-col :span="12">
                     <el-form-item label="商圈地理围栏（多边形） ：">
-                     <ShoppingMap ref="mapblock" @returnStr = returnStr :fromData = 'formAll' id="mapblock"></ShoppingMap>
+                     <ShoppingMap ref="mapblock" @returnStr = returnStr :fromData = 'formAll' id="mapblock" :editstatusMap = 'editstatus'></ShoppingMap>
                     </el-form-item>
                 </el-col>
             </el-row>              
@@ -205,6 +175,7 @@ export default {
             }  
         }
         return{
+            editstatus:'0',
             loading:true,
             templateRadio: '',
             btnsize:'mini',
@@ -251,7 +222,8 @@ export default {
     shoppingDialog,
     Pager,
     GetCityList,
-    ShoppingMap
+    ShoppingMap,
+    
     },
     mounted(){
         this.firstblood();
@@ -268,15 +240,13 @@ export default {
                     this.formAll.areaName =null;
                     this.selectFlag = null;
                     this.$refs.area.clearData();
-                    this.$refs.mapblock.clear();
-                     this.$refs.mapblock.exit()
+                    this.$refs.mapblock.exit()
                 }
                 else{
+                      console.log('111')
                    if(this.$refs.mapblock){
-                    this.$refs.mapblock.clear();
                     this.$refs.mapblock.loadMap()
                    }
-                    this.$refs.mapblock.add1()
                 }
             },
         },
@@ -305,6 +275,8 @@ export default {
         this.dialogFormVisible_add = true;
         this.btntitle="创建";
         this.editType="add";
+        this.editstatus = '0';
+        this.formAll.points =[]
     },
    //    修改打开
     openDialogEdit(){
@@ -339,16 +311,38 @@ export default {
         this.dialogFormVisible_add = true;
         this.btntitle="修改";
         this.editType="edit";
+        this.editstatus = '1';
     }
+    },
+    openDialogView(e){
+        
+        data_get_aflcTradeArea_Id(e.id).then(res=>{
+           this.formAll.tradeName = res.data.tradeName
+           this.formAll.address = res.data.address
+           this.formAll.province = res.data.province
+           this.formAll.city = res.data.city
+           this.formAll.area = res.data.area
+           this.formAll.tradeOwner = res.data.tradeOwner
+           this.formAll.ownerPhone = res.data.ownerPhone
+           this.formAll.areaName = res.data.areaName
+           this.formAll.areaCode = res.data.areaCode
+           this.formAll.points =JSON.parse(res.data.points)
+        })
+        this.dialogFormVisible_add = true;
+        this.btntitle="详情";
+        this.editType="view";
+        this.editstatus = '2';
 
     },
+
 
    // 省市状态表
      changeSelect(){
        this.selectFlag='1'
       },    
     returnStr(e){
-        this.formAll.points = []
+     this.formAll.points = []
+     console.log('e',e)
      var unshiftAraay = [e[0].lng,e[0].lat]
      if(e.length>1){
          for(let i = 1;i<e.length;i++)
@@ -518,7 +512,19 @@ export default {
     },
     // 修改按钮
     edit_data(){
-
+        let forms={
+            areaCode:this.formAll.areaCode,
+            areaName:this.formAll.areaName,
+            province:this.formAll.province,
+            city:this.formAll.city,
+            area:this.formAll.area,
+            tradeName:this.formAll.tradeName,
+            address:this.formAll.address,
+            tradeOwner:this.formAll.tradeOwner,
+            ownerPhone:this.formAll.ownerPhone,    
+            points:JSON.stringify(this.formAll.points)
+        }
+        console.log(forms)
     }     
     }
 }
@@ -546,6 +552,11 @@ export default {
 .info_news .shoppingDialog .el-button{
         padding: 0px 15px 0px;
 }
+.BtnInfo{
+    font-weight: bold;
+    color: #3e9ff1;
+    cursor: pointer;
+    }   
 }
 </style>
 

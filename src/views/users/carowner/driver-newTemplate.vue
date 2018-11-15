@@ -188,9 +188,9 @@
 
               <el-row>
                   <el-col :span="12">
-                    <el-form-item :label-width="formLabelWidth" label="特权车：">
-                        <el-checkbox v-model="templateModel.isVipCar" true-label="1" false-label='0' @change='isVip' label="是" border size="medium" :disabled="editType=='view'" ></el-checkbox>
-                    </el-form-item>
+                <el-form-item label="所属业务员：" :label-width="formLabelWidth">
+                    <CustomerSearch @returnCustomer = 'getCustomer' :customerName = "templateModel.belongSalesmanName" :disabled="editType == 'view'"/>
+                </el-form-item>
                   </el-col>
                   <el-col :span="12">
                     <el-form-item label="活跃值：" :label-width="formLabelWidth">
@@ -205,7 +205,13 @@
                     </el-form-item>
                   </el-col>
               </el-row>
-            
+              <el-row>
+              <el-col :span="12">
+                <el-form-item :label-width="formLabelWidth" label="特权车：">
+                        <el-checkbox v-model="templateModel.isVipCar" true-label="1" false-label='0' @change='isVip' label="是" border size="medium" :disabled="editType=='view'" ></el-checkbox>
+                </el-form-item>
+             </el-col>    
+              </el-row>
               <el-row>
                   <el-col :span="12">
                     <el-form-item label="上传车辆45°照片：" :label-width="formLabelWidth" prop="carFile" class="b10" required>
@@ -286,6 +292,7 @@ import  { data_post_createDriver,data_put_changeDriver,data_CarList,data_Get_car
 import Upload from '@/components/Upload/singleImage'
 import GetCityList from '@/components/GetCityList/city'
 import vregion from '@/components/vregion/Region'
+import CustomerSearch from '@/components/CustomerSearch/index'
 import { getDictionary } from '@/api/common.js'
 export default {
     name:'template-create-view-change',
@@ -332,7 +339,8 @@ export default {
     components:{
         Upload,
         GetCityList,
-        vregion
+        vregion,
+        CustomerSearch
     },
     data() {
        // 手机号校验
@@ -563,6 +571,7 @@ export default {
             }
         }   
 
+
         // 上传车主身份证反面照片校验 
         // const idCardFileOppositeValidator = (rule,val,cb)=>{
         //     if(!val){
@@ -572,6 +581,18 @@ export default {
         //         cb()
         //     }
         // }   
+
+        // 业务员校验 
+        const belongSalesmanNameValidator = (rule,val,cb)=>{
+            if(!val){
+            cb(new Error('所属业务员不能为空'))
+            }
+            else{
+                cb()
+            }
+        }   
+
+
         return{
             defaultImg:'/static/test.jpg',//默认第一张图片的url
             type:'primary',
@@ -611,7 +632,9 @@ export default {
                 areaCode:null,
                 rewardGrade:null,
                 commisionLevel:null,
-                activeValue:'AF0020405'
+                activeValue:'AF0020405',
+                belongSalesmanName:null,
+                belongSalesman:null,
             },
                 DriverCarCardid:{
                 driverCardid:'',
@@ -663,6 +686,8 @@ export default {
                 this.templateModel.provinceCode=null
                 this.templateModel.cityCode=null
                 this.templateModel.areaCode=null
+                this.templateModel.belongSalesman = null;
+                this.templateModel.belongSalesmanName = null;
                 this.templateModel.activeValue='AF0020405'
                 this.DriverCarCardid = {
                 driverCardid:'',
@@ -723,7 +748,11 @@ export default {
                 this.templateModel.belongCityName = val.province.name+val.city.name+val.area.name
             }, 
 
-
+    getCustomer(val){
+        console.log('belongSalesman',val)
+        this.templateModel.belongSalesman = val.userId;
+        this.templateModel.belongSalesmanName = val.name;
+    },  
         isVip(val){
             if(this.templateModel.isVipCar == '1'){
                 this.templateModel.isVipCar = '1'

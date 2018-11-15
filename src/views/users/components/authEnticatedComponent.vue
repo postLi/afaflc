@@ -87,9 +87,14 @@
                         label="注册来源">
                         </el-table-column>
                         <el-table-column
+                        width="160"
                         prop="belongCityName"
                         sortable
                         label="所在地">
+                        </el-table-column>
+                        <el-table-column
+                        prop="belongSalesmanName"
+                        label="所属业务员" sortable>
                         </el-table-column>
                         <el-table-column
                         prop="authPassTime"

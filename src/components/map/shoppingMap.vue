@@ -1,7 +1,6 @@
 <template>
 <div class="shoppingMapBox">
-     <div id="clear" @click="clear">清楚所有地理围栏</div>
-     <div class="add" @click="add1">add</div>
+     <div id="clear" @click="clear">清除所有地理围栏</div>
  <div id="shoppingMap"></div>
 </div>
 </template>
@@ -15,12 +14,23 @@ export default {
       props:{
       fromData:{
         type:[Object,String,Array,Number],
+      },
+      editstatusMap:{
+        type:[String],
+        default:''
       }
     },
      data(){
          return{
              dataAraay:[],
              path:[],
+             Mapstatus:this.editstatusMap
+         }
+     },
+     watch:{
+         editstatusMap(val){
+             console.log('2222',this.editstatusMap)
+            this.Mapstatus = val
          }
      },
      methods:{
@@ -43,12 +53,40 @@ export default {
 			center: [113.257416,23.149586],
 			zoom:11
         })
-
-
+        map.on("complete", function(){
+                _this.path = _this.fromData.points
+                polygon = new AMap.Polygon({
+                path: _this.path,
+                isOutline: true,
+                strokeOpacity:1,
+                lineJoin: 'round',
+                strokeWeight:3,
+                strokeStyle:"solid",
+                strokeColor: "#3366FF", 
+                strokeDasharray:[10,5],
+                fillOpacity: 0,
+                fillColor: '#FF0000',
+            })
+        polygon.setMap((map))    
+                });
         //创建右键菜单
             var contextMenu = new AMap.ContextMenu();
             var lng,lat;
             contextMenu.addItem("添加标记", function (e) {
+                console.log('111',_this.Mapstatus)
+               if(_this.Mapstatus=='1'){
+                _this.$message({
+                    message: '修改围栏需要清除之前的围栏~',
+                    type: 'warning'
+                })
+               }
+               else if(_this.Mapstatus=='2'){
+                _this.$message({
+                    message: '详情不能进行修改~',
+                    type: 'warning'
+                })
+               }
+                else{
                 marker = new AMap.Marker({
                     map:map,
                     position: contextMenuPositon //基点位置
@@ -62,13 +100,13 @@ export default {
                 }
                 _this.$emit('returnStr', _this.dataAraay)
                 _this.ToolBar()
+                }
             }, 3);
 
             map.on('rightclick', function (e) {
                 contextMenu.open(map, e.lnglat);
                 contextMenuPositon = e.lnglat;
             });
-            contextMenu.open(map, lnglat);
         },
         ToolBar:function(){
         var _this = this
@@ -87,36 +125,18 @@ export default {
         polygon.setMap((map))          
         },
         clear:function(){
-              var _this =this;
              map.clearMap();
-             _this.path = [];
+             this.path = [];
+             this.Mapstatus='0'
         },
         exit:function(){
+        this.path = [];
+        map.clearMap();
         map.destroy();
         },
-        add1:function(){
-          console.log('this.fromData.points')
-                   polygon = new AMap.Polygon({
-                path: this.fromData.points,
-                isOutline: true,
-                strokeOpacity:1,
-                lineJoin: 'round',
-                strokeWeight:3,
-                strokeStyle:"solid",
-                strokeColor: "#3366FF", 
-                strokeDasharray:[10,5],
-                fillOpacity: 0,
-                fillColor: '#FF0000',
-            })
-        polygon.setMap((map))          
-        }
      },
      mounted(){
          this.loadMap();
-        // if(this.fromData.points.length>0){
-        //  path = this.fromData.points
-        // }
-
      },
      beforeUpdate(){
               
@@ -124,8 +144,22 @@ export default {
 }
 </script>
 <style lang="scss">
+.shoppingMapBox{
+    position: relative;
 #shoppingMap{
     width: 915px;
     height: 500px;
+}
+#clear{
+   position: absolute;
+   left:20px;
+   top:20px;
+   z-index: 2;
+   border: 2px solid red;
+   color: red;
+   font-weight: bold;
+   padding: 0px 10px;
+   cursor: pointer;
+}
 }
 </style>
