@@ -56,6 +56,8 @@
 					prop="belongCityName"
 					label="所在地">
 				</el-table-column>
+                <el-table-column prop="belongSalesmanName" sortable label="所属业务员">
+				</el-table-column>
 				<el-table-column
                     sortable
 					prop="shipperTypeName"

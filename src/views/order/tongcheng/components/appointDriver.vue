@@ -20,7 +20,6 @@
                         </el-form-item>
                         <el-form-item prop="iftequan">
                             <el-checkbox v-model="iftequan" @change = "ifTequan">特权车</el-checkbox>
-                            {{searchInfo.if}}
                         </el-form-item>
                         <el-form-item class="btnChoose fr"  style="margin-left:0;">
                             <el-button type="primary" :size="btnsize" plain @click="pointSearch('search','point')">搜索</el-button>
@@ -106,7 +105,7 @@
                                 </el-table-column>
                             </el-table>
                         </div>
-                        <div class="info_tab_footer">共计:{{ dataTotal }} <div class="show_pager"> <Pager :total="dataTotal" @change="handlePageChange"  :sizes="sizes"/></div> </div>    
+                        <div class="info_tab_footer">共计:{{ dataTotal }} <div class="show_pager"> <Pager :total="dataTotal" @change="handlePageChange" /></div> </div>    
                     </div>
                 </el-dialog>
             </div>
@@ -131,7 +130,6 @@ export default {
             required:true,
         }
     },
-   
     components:{
         Pager
     },
@@ -141,13 +139,12 @@ export default {
             page:1,
             pagesize:20,
             dataTotal:0,
-            sizes:[10,20,30],
             carType:'AF018',//车型
             iftequan:false,
             searchInfo:{
                 orderSerial:'',
                 carType:'',//车辆类型
-                isVipCar:'0',//是否vip司机(1为是，0为否)(可选)
+                isVipCar:'',//是否vip司机(1为是，0为否)(可选)
                 search:'',//车主账号(可选)，姓名，车牌号
             },
             optionsCarType:[
@@ -235,6 +232,7 @@ export default {
                     break;
                 case 'clear':
                     this.iftequan = false;
+                    this.ifTequan(false)
                     this.$refs.ruleForm.resetFields();
                     this.init();
                     break;
@@ -274,7 +272,7 @@ export default {
             }
         },
         ifTequan(value){
-            this.searchInfo.isVipCar = value == true ? '1' : '0';
+            this.searchInfo.isVipCar = value == true ? '1' : '';
         }
         
     },

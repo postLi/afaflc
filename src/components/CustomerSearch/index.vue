@@ -6,10 +6,11 @@
         :fetch-suggestions="querySearch"
         placeholder="请输入内容"
         @select="handleSelect"
+        :disabled="disabled"
         >
         <template slot-scope="{ item }">
-            <!-- <div class="name">{{ item.value }}</div> -->
-            <span class="addr">{{ item.name }}/ {{ item.mobilephone}}</span>
+            <span class="addr">{{ item.name }}</span>
+            <!-- <span v-if="item.mobilephone">{{ '/ ' +  item.mobilephone}}</span> -->
         </template>
         </el-autocomplete>
 </template>
@@ -23,20 +24,22 @@ export default {
         disabled:{
             type: Boolean
         },
+        customerName:{
+            type:String
+        },
         value: [String, Array],
+        timeoutSearch:null
     },
     data() {
         return {
-            customerName:'',
             restaurants: [],
             filterOptionsSystemUsers:{
                 search:''
             },//筛选平台人员
         };
-    },
+    }, 
     methods: {
-        init(){
-            console.log('123123123')
+        init(queryString){
             data_findAflcSystemUserList(this.filterOptionsSystemUsers).then(res=>{
                 // console.log(res)
                 this.restaurants = res.data;
@@ -48,19 +51,29 @@ export default {
             })
         },
         querySearch(queryString, cb) {
-            console.log('queryString',queryString,this.restaurants)
-            var restaurants = this.restaurants;
-            var results = queryString ? restaurants.filter(this.createFilter(queryString)) : restaurants;
-            // 调用 callback 返回建议列表的数据
-            cb(results);
-        },
-        createFilter(queryString) {
-            return (restaurant) => {
-                return (restaurant.name.toLowerCase().indexOf(queryString.toLowerCase()) === 0);
-            };
+            // console.log('queryString',queryString,this.restaurants)
+            var results = [];
+            this.filterOptionsSystemUsers.search = queryString;
+            data_findAflcSystemUserList(this.filterOptionsSystemUsers).then(res=>{
+                results = res.data;
+                cb(results);
+            }).catch(err =>{
+                this.$message({
+                    type: 'warning',
+                    message: '操作失败，原因：' + (err.errorInfo ? err.errorInfo : err.text)
+                })
+            })
+            // clearTimeout(this.timeoutSearch);
+
+            // this.timeoutSearch = setTimeout(() => {
+            //     cb(results);
+            // }, 3000 * Math.random());
         },
         handleSelect(item) {
-            console.log(item);
+            // this.customerName = item.name + (item.mobilephone ? '/' + item.mobilephone :'');
+            this.customerName = item.name;
+            console.log(item,this.customerName);
+            this.$emit('returnCustomer',item)
         },
     },
     mounted(){

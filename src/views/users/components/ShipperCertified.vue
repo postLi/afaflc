@@ -49,6 +49,8 @@
                 :show-overflow-tooltip="true" sortable
                 label="所在地">
 			</el-table-column>
+             <el-table-column prop="belongSalesmanName" sortable label="所属业务员">
+			</el-table-column>
 			<el-table-column prop="authenticationTime" sortable label="提交认证时间">
                  <template slot-scope="scope">
                      {{scope.row.authenticationTime | parseTime}}
@@ -92,6 +94,7 @@
                 </el-form-item>
               </el-col>
             </el-row>
+            
             <el-row>
               <el-col :span="12">
                 <el-form-item label="详细地址：" prop="address">
@@ -140,7 +143,13 @@
                 </el-form-item>
               </el-col>
             </el-row>
- 
+            <el-row>
+              <el-col :span="12">
+                <el-form-item label="所属业务员：" prop="belongSalesmanName">
+                    <CustomerSearch @returnCustomer = 'getCustomer' :customerName = "shengheform.belongSalesmanName"/>
+                </el-form-item>
+              </el-col>
+            </el-row>
             <div class="data_pic clearfix" v-viewer>  
                 <!-- <div class="data_pic_default">
                     <img  :src= 'defaultImage ? defaultImage : defaultImg'/>
@@ -208,6 +217,7 @@ import Pager from '@/components/Pagination/index'
 import vregion from '@/components/vregion/Region'
 import { objectMerge2, parseTime } from '@/utils/'
 import { DicShippertype } from '@/api/common.js'
+import CustomerSearch from '@/components/CustomerSearch/index'
 
 export default {
 	props: {
@@ -221,7 +231,8 @@ export default {
 		searchInfo,
         Upload,
         Pager,
-        vregion
+        vregion,
+        CustomerSearch
 	},
 	computed: {
 		
@@ -309,6 +320,11 @@ export default {
         },
         getValue(obj){
             return obj ? obj.value:'';
+        },
+        getCustomer(val){
+            console.log('belongSalesman',val)
+            this.shengheform.belongSalesman = val.userId;
+            this.shengheform.belongSalesmanName = val.name;
         },
          //获取货主类型
         getMoreInformation(){

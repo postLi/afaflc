@@ -58,6 +58,8 @@
                         {{scope.row.belongCityName ? scope.row.belongCityName:scope.row.belongCity}}
                     </template>
 				</el-table-column>  
+                <el-table-column prop="belongSalesmanName" sortable label="所属业务员">
+				</el-table-column>
 				<el-table-column prop="shipperTypeName" sortable label="货主类型">
 				</el-table-column>
 				<el-table-column  label="注册日期" sortable prop="registerTime">

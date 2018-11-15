@@ -58,9 +58,9 @@
                 </el-form-item>
             </el-col>
             <el-col :span="12">
-                <el-form-item label="所属业务员：" prop="address">
-                    <!-- <el-input :maxlength="40" v-model="xinzengform.address" auto-complete="off"  :disabled="editType=='view'"></el-input> -->
-                    <CustomerSearch/>
+                <el-form-item label="所属业务员：" prop="belongSalesmanName">
+                    <!-- <el-input v-model="xinzengform.belongSalesmanName" auto-complete="off"  disabled v-if="editType=='view'"></el-input> -->
+                    <CustomerSearch @returnCustomer = 'getCustomer' :customerName = "xinzengform.belongSalesmanName" :disabled="editType == 'view'"/>
                 </el-form-item>
             </el-col>
           </el-row>
@@ -217,7 +217,9 @@ export default {
             isDirectional: '0',
             provinceCode:'',
             cityCode:'',
-            areaCode:''
+            areaCode:'',
+            belongSalesman:'',//所属业务员id
+            belongSalesmanName:'',// 所属业务员姓名
         },
         rulesForm:{
             shipperType:{required: true, message:'请选择货主类型', trigger:'blur'},
@@ -262,6 +264,11 @@ export default {
     },
     getValue(obj){
         return obj ? obj.value:'';
+    },
+    getCustomer(val){
+        console.log('belongSalesman',val)
+        this.xinzengform.belongSalesman = val.userId;
+        this.xinzengform.belongSalesmanName = val.name;
     },
     //事件分发
     changeList(){

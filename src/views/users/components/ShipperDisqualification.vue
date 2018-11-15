@@ -50,6 +50,8 @@
                     :show-overflow-tooltip="true"
                     label="所在地" sortable>
                     </el-table-column>
+                    <el-table-column prop="belongSalesmanName" sortable label="所属业务员">
+				    </el-table-column>
                     <el-table-column prop="authenticationTime" label="提交认证日期" sortable>
                         <template  slot-scope="scope">
                             <span v-if="scope.row.authenticationTime">{{ scope.row.authenticationTime | parseTime}}</span>
