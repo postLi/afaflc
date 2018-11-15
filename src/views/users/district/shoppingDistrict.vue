@@ -133,7 +133,7 @@
             <el-row>
                 <el-col :span="12">
                     <el-form-item label="商圈地理围栏（多边形） ：">
-                     <ShoppingMap ref="mapblock" @returnStr = returnStr></ShoppingMap>
+                     <ShoppingMap ref="mapblock" @returnStr = returnStr :fromData = 'formAll' id="mapblock"></ShoppingMap>
                     </el-form-item>
                 </el-col>
             </el-row>              
@@ -271,6 +271,13 @@ export default {
                     this.$refs.mapblock.clear();
                      this.$refs.mapblock.exit()
                 }
+                else{
+                   if(this.$refs.mapblock){
+                    this.$refs.mapblock.clear();
+                    this.$refs.mapblock.loadMap()
+                   }
+                    this.$refs.mapblock.add1()
+                }
             },
         },
     },
@@ -327,6 +334,7 @@ export default {
            this.formAll.ownerPhone = res.data.ownerPhone
            this.formAll.areaName = res.data.areaName
            this.formAll.areaCode = res.data.areaCode
+           this.formAll.points =JSON.parse(res.data.points)
         })
         this.dialogFormVisible_add = true;
         this.btntitle="修改";
@@ -497,12 +505,12 @@ export default {
         this.dialogFormVisible_add = false;
         data_get_aflcTradeArea_create(forms).then(res=>{
            this.$message.success('新增成功');
-           this.changeList();
+           this.getDataList();
            console.log(res);
 
         }).catch(res=>{
             this.$message.error('新增失败')
-            this.changeList();
+            this.getDataList();
            console.log(res);
         })
        }
