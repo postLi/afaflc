@@ -113,11 +113,20 @@
                     </el-form-item>
                   </el-col>
                 <el-col :span="12"> 
-              <el-form-item label="所在地 ："  :label-width="formLabelWidth" prop="belongCityName">
-                    <vregion :ui="true"  @values="regionChange" class="form-control" >
+                    <span v-if="editType !=='add'&&!selectFlag">
+                        <el-form-item label="所在地 ：" :label-width="formLabelWidth" prop="">
+                        <el-input v-model="templateModel.belongCityName" @focus="changeSelect" :disabled="editType=='view'"></el-input>
+                        </el-form-item>
+                    </span>
+                    <span v-else>
+                   <el-form-item label="所在地 ："  :label-width="formLabelWidth" prop="belongCityName">
+                    <GetCityList ref="area" v-model="templateModel.belongCityName"  @returnStr="getStr"></GetCityList>
+                    </el-form-item>
+                    </span>
+
+                    <!-- <vregion :ui="true"  @values="regionChange" class="form-control" >
                         <el-input v-model="templateModel.belongCityName" placeholder="请选择" ></el-input>
-                    </vregion>
-              </el-form-item>
+                    </vregion> -->
                 </el-col>
               </el-row>
               
@@ -567,6 +576,7 @@ export default {
             defaultImg:'/static/test.jpg',//默认第一张图片的url
             type:'primary',
             title:null,
+            selectFlag:false,
             text:null,
             activeValueList:[],//活跃值
             optionsLevel:[],
@@ -647,6 +657,7 @@ export default {
         driverTemplateDialogFlag:{
         handler: function(val, oldVal) {
             if(!val){
+                this.selectFlag=false;
                 this.$refs.templateModel.resetFields()
                 this.templateModel.belongCity = null
                 this.templateModel.provinceCode=null
@@ -675,24 +686,44 @@ export default {
     mounted(){
     },
     methods:{
-    regionChange(d) {
-        console.log('data:',d)
-        this.templateModel.belongCityName = (!d.province&&!d.city&&!d.area&&!d.town) ? '': `${this.getValue(d.province)}${this.getValue(d.city)}${this.getValue(d.area)}${this.getValue(d.town)}`.trim();
-        if(d.area){
-            this.templateModel.areaCode = d.area.name;
-            this.templateModel.belongCity = d.area.code;
-        }else if(d.city){
-            this.templateModel.belongCity = d.city.code;
-            this.templateModel.cityCode = d.city.name;
-        }
-        else{
-            this.templateModel.belongCity = d.province.code;
-            this.templateModel.provinceCode = d.province.name;
-        }
-    },
-    getValue(obj){
-        return obj ? obj.value:'';
-    },     
+    // regionChange(d) {
+    //     console.log('data:',d)
+    //     this.templateModel.belongCityName = (!d.province&&!d.city&&!d.area&&!d.town) ? '': `${this.getValue(d.province)}${this.getValue(d.city)}${this.getValue(d.area)}${this.getValue(d.town)}`.trim();
+    //     if(d.area){
+    //         this.templateModel.areaCode = d.area.name;
+    //         this.templateModel.belongCity = d.area.code;
+    //     }else if(d.city){
+    //         this.templateModel.belongCity = d.city.code;
+    //         this.templateModel.cityCode = d.city.name;
+    //     }
+    //     else{
+    //         this.templateModel.belongCity = d.province.code;
+    //         this.templateModel.provinceCode = d.province.name;
+    //     }
+    // },
+
+    // getValue(obj){
+    //     return obj ? obj.value:'';
+    // },     
+     // 省市状态表
+    changeSelect(){
+            if(this.editType==='add'){
+                this.selectFlag=false
+            } else{
+                this.selectFlag=true
+            }
+            },
+
+      getStr(val){
+                console.log('this.cityarr',val,name)
+                this.templateModel.areaCode = val.area.name;
+                this.templateModel.belongCity = val.area.code;
+                this.templateModel.provinceCode = val.province.name;
+                this.templateModel.cityCode = val.city.name;
+                this.templateModel.belongCityName = val.province.name+val.city.name+val.area.name
+            }, 
+
+
         isVip(val){
             if(this.templateModel.isVipCar == '1'){
                 this.templateModel.isVipCar = '1'
