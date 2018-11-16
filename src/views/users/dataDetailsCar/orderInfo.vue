@@ -267,72 +267,71 @@
             <h2>取消订单</h2>
             <div class="qd-collapse_title clearfix">
                 <ul class="classfyTitle fl">
-                   <li v-for="(item,index) in dataType" :key="item.name" :class="{currentClick:item.iscur}" @click="setCur(index)">{{item.name}}</li>
+                   <li v-for="(item,index) in CancelDataType" :key="item.name" :class="{currentClick:item.iscur}" @click="setCur(index,'cancel',item.label)">{{item.name}}</li>
                 </ul>
-                <searchInfo />
+                <searchInfo searchType = "cancel" @change = "getSearchParam"/>
             </div>
             <div class="authority_legal">
                 <ul class="lengandInfo">
-                    <li>取消订单：<span>135</span></li>
-                    <li>同城：<span>150</span></li>
-                    <li>城际：<span>150</span></li>
-                    <li>零担：<span>150</span></li>
+                    <li>取消订单：<span>{{CancelListData.cancelorderTransNum ? CancelListData.cancelorderTransNum : '0'}}</span></li>
+                    <li>小货车：<span>{{CancelListData.pickupTruckOrderNum ? CancelListData.pickupTruckOrderNum : '0'}}</span></li>
+                    <li>大货车：<span>{{CancelListData.bigTruckOrderNum ? CancelListData.bigTruckOrderNum : '0'}}</span></li>
+                    <li>发物流：<span>{{CancelListData.hairLogisticsOrderNum ? CancelListData.hairLogisticsOrderNum : '0'}}</span></li>
                 </ul>
             </div>
             <div class="essentialInformation_table" style="padding-top:0;">
                 <el-table
-                    :data="tableData"
+                    :data="CancelListData.aflcDriverCancelOrderList"
                     border
                     style="width: 100%">
+                    <el-table-column label="序号"  width="80">
+                        <template slot-scope="scope">
+                            {{ (CancelListObj.currentPage - 1) * CancelListObj.pageSize + scope.$index + 1 }}
+                        </template>
+                    </el-table-column>  
                     <el-table-column
-                    prop="date"
-                    label="序号"
-                    width="50">
-                    </el-table-column>
-                    <el-table-column
-                    prop="date"
+                    prop="orderSerial"
                     label="订单号"
                     width="180">
                     </el-table-column>
                     <el-table-column
-                    prop="name"
-                    label="货主名称"
-                    width="180">
+                    prop="shipperName"
+                    label="货主名称">
                     </el-table-column>
                     <el-table-column
-                    prop="address"
+                    prop="shipperMobile"
                     label="货主账号">
                     </el-table-column>
                     <el-table-column
-                    prop="address"
+                    prop="serviceType"
                     label="服务类型">
                     </el-table-column>
                     <el-table-column
-                    prop="address"
+                    prop="singleTime"
                     label="中单时间">
                     </el-table-column>
                     <el-table-column
-                    prop="address"
+                    prop="cancelTime"
                     label="取消时间">
                     </el-table-column>
                     <el-table-column
-                    prop="address"
+                    prop="startAddress"
                     label="始发地">
                     </el-table-column>
                     <el-table-column
-                    prop="address"
+                    prop="endAddress"
                     label="目的地">
                     </el-table-column>
                     <el-table-column
-                    prop="address"
+                    prop="cancelCause"
                     label="取消原因">
                     </el-table-column>
                 </el-table>
                 <el-pagination
                     background
-                    @current-change="handleCurrentChange"
+                    @current-change="handleCurrentChangeCancel"
                     layout="total,prev, pager, next, jumper"
-                    :total="totalCount">
+                    :total="CancelListtTotalCount">
                 </el-pagination> 
             </div>
         </div>
@@ -345,7 +344,7 @@
 import { parseTime } from '@/utils/index.js'
 // import Pager from '@/components/Pagination/index'
 import searchInfo from './components/searchInfo'
-import { orderPriceInfo,grapList,driverTradOrdeList } from '@/api/users/carDetails/index.js'
+import { orderPriceInfo,grapList,driverTradOrdeList,driverTradOrdeCancelList } from '@/api/users/carDetails/index.js'
 
 export default {
   name: 'ordersInfo',
@@ -362,7 +361,6 @@ export default {
   data() {
     return {
         btnsize:'mini',
-        size:[20,30,50],
         orderPriceInfo:{},//订单信息概要
         grapListObj:{//订单抢单记录表查询条件
             "currentPage": 1,
@@ -391,12 +389,19 @@ export default {
         },
         tradOrdeListData:{},//订单抢单记录表数据
         tradOrdeListTotalCount:0,//订单抢单记录表初始数量
-        dataType:[
-            {name:'全部',label:'',iscur:true},
-            {name:'近7天',label:'-7',iscur:false},
-            {name:'近30天',label:'-30',iscur:false},
-            {name:'近90天',label:'-90',iscur:false},
-        ],
+        CancelListObj:{//取消订单列表查询条件
+            "currentPage": 1,
+            "pageSize": 10,
+            "vo": {
+                "driverId": "",
+                "grabSingleTimeEnd": "",
+                "grabSingleTimeStart": "",
+                "shipperName": "",
+                "timeDay": "",
+            }
+        },
+        CancelListData:{},//取消订单列表数据
+        tradOrdeListTotalCount:0,//取消订单列表初始数量
         grapListDataType:[
             {name:'全部',label:'',iscur:true},
             {name:'近7天',label:'-7',iscur:false},
@@ -409,28 +414,13 @@ export default {
             {name:'近30天',label:'-30',iscur:false},
             {name:'近90天',label:'-90',iscur:false},
         ],
-        page:1,
-        pagesize:20,
-        totalCount:100,
+        CancelDataType:[
+            {name:'全部',label:'',iscur:true},
+            {name:'近7天',label:'-7',iscur:false},
+            {name:'近30天',label:'-30',iscur:false},
+            {name:'近90天',label:'-90',iscur:false},
+        ],
         loading: false,
-        dialogVisible: false,
-        tableData: [{
-          date: '2016-05-02',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1518 弄'
-        }, {
-          date: '2016-05-04',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1517 弄'
-        }, {
-          date: '2016-05-01',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1519 弄'
-        }, {
-          date: '2016-05-03',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1516 弄'
-        }],
       }
   },
     watch: {
@@ -452,10 +442,12 @@ export default {
             let driverId = this.$route.query.driverId;
             this.grapListObj.vo.driverId = driverId;
             this.tradOrdeListObj.vo.driverId = driverId;
+            this.CancelListObj.vo.driverId = driverId;
 
             this.PriceInfo(driverId);
             this.GrapList();
-            this.TradOrdeList()
+            this.TradOrdeList();
+            this.TradOrdeCancelList();
         },
         //订单信息概要
         PriceInfo(driverId){
@@ -477,6 +469,13 @@ export default {
                 this.tradOrdeListTotalCount = res.data.totalCount;
             })
         },
+        //取消订单列表
+        TradOrdeCancelList(){
+            driverTradOrdeCancelList(this.CancelListObj).then(res => {
+                this.CancelListData = res.data.list[0];
+                this.CancelListtTotalCount = res.data.totalCount;
+            })
+        },
         //订单抢单列表当前页
         handleCurrentChangeGrap(val){
             this.grapListObj.currentPage = val;
@@ -487,8 +486,10 @@ export default {
             this.tradOrdeListObj.currentPage = val;
             this.TradOrdeList();
         },
-        handleCurrentChange(val) {
-            console.log(`当前页: ${val}`);
+        //取消订单当前页
+        handleCurrentChangeCancel(val) {
+            this.CancelListObj.currentPage = val;
+            this.TradOrdeCancelList();
         },
         setCur(index,classfy,label){
             switch(classfy){
@@ -506,27 +507,39 @@ export default {
                     this.tradOrdeListObj.vo.timeDay = label;
                     this.TradOrdeList();
                     break;
+                case 'cancel':
+                    this.CancelDataType.forEach((el,idx)=>{
+                        idx == index ? el.iscur = true : el.iscur = false;
+                    })
+                    this.CancelListObj.vo.timeDay = label;
+                    this.TradOrdeCancelList();
             }
         },
         getSearchParam(obj,searchType) {
             console.log(obj,searchType)
             switch(searchType){
                 case 'grap':
+                    if(this.grapListObj.currentPage != 1){
+                        this.grapListObj.currentPage = 1;
+                    }
                     this.grapListObj.vo = Object.assign({},this.grapListObj.vo, obj)
                     this.GrapList();
                     break;
                 case 'transaction':
+                    if(this.tradOrdeListObj.currentPage != 1){
+                        this.tradOrdeListObj.currentPage = 1;
+                    }
                     this.tradOrdeListObj.vo = Object.assign({},this.tradOrdeListObj.vo, obj)
                     this.TradOrdeList();
                     break;
+                case 'cancel':
+                    if(this.CancelListObj.currentPage != 1){
+                        this.CancelListObj.currentPage = 1;
+                    }
+                    this.CancelListObj.vo = Object.assign({},this.CancelListObj.vo, obj)
+                    this.TradOrdeCancelList();
+                    break;
             }
-            // this.searchInfo = Object.assign(this.searchInfo, obj)
-            // this.loading = false;
-            // if(this.page!= 1){
-            //     this.page = 1;
-            //     this.$refs.pager.inputval = this.page;
-            // }
-            // this.firstblood()
         },
     }
 }

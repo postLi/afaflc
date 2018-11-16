@@ -55,7 +55,7 @@
             <el-col :span="12">
                 <el-form-item label="所属业务员：" prop="belongSalesmanName">
                     <!-- <el-input v-model="xinzengform.belongSalesmanName" auto-complete="off"  disabled v-if="editType=='view'"></el-input> -->
-                    <CustomerSearch @returnCustomer = 'getCustomer' :customerName = "xinzengform.belongSalesmanName" :disabled="editType == 'view'"/>
+                    <CustomerSearch @returnCustomer = 'getCustomer' v-model = "xinzengform.belongSalesmanName" :disabled="editType == 'view'"/>
                 </el-form-item>
             </el-col>
           </el-row>
@@ -358,9 +358,9 @@ export default {
                 var forms=Object.assign({},this.xinzengform)
                 switch  (this.editType){
                     case 'add':
-                        if(forms.shipperType == 'AF0010101'){
-                            forms.companyName = '个人业务' ;
-                        }
+                        // if(forms.shipperType == 'AF0010101'){
+                        //     forms.companyName = '个人业务' ;
+                        // }
                         this.ifDisable = true;
                         data_get_shipper_create(forms).then(res=>{
                             this.$alert('操作成功', '提示', {

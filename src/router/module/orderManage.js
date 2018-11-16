@@ -64,19 +64,19 @@ export default {
         ]
     },
     {
+        path: '/order/dahuoche', 
+        icon: 'dahuochedd', 
+        name: '大货车', 
+        component: _import('order/dahuoche/index'), 
+        meta: { role: ['admin'], title: '大货车',stitle: '大货车',  noCache: true , code: 'ORDER_BIG_CAR_ORDER'}
+    },
+    {
         path: '/order/lingdan', 
         icon: 'lddingdan', 
         name: '发物流', 
         component: _import('order/lingdan/index'), 
         meta: { role: ['admin'], title: '发物流',stitle: '发物流',  noCache: true , code: 'ORDER_LTL_ORDER'}
       },
-    {
-        path: '/order/dahuoche', 
-        icon: 'dahuochedd', 
-        name: '大货车订单', 
-        component: _import('order/dahuoche/index'), 
-        meta: { role: ['admin'], title: '大货车订单',stitle: '货车',  noCache: true , code: 'ORDER_BIG_CAR_ORDER'}
-    },
     {
         path: '/order/xuqiuku', 
         icon: 'xqk', 

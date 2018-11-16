@@ -170,8 +170,7 @@ export default {
     methods: {
         getCurrentRow(index,row){       
             this.selectRowData = Object.assign({},row);
-            this.templateRadio = index;
-            console.log('选中内容',row)
+            // console.log('选中内容',row)
         },
         handlePageChange(obj) {
             this.page = obj.pageNum;
@@ -206,10 +205,10 @@ export default {
                     })
                 }
             }).catch(err => {
-                this.$message({
-                    type: 'info',
-                    message: '操作失败，原因：' + (err.errorInfo ? err.errorInfo : err.text)
-                })
+                // this.$message({
+                //     type: 'info',
+                //     message: '操作失败，原因：' + (err.errorInfo ? err.errorInfo : err.text)
+                // })
             })
 
         },
@@ -250,9 +249,8 @@ export default {
                     message: '不可同时指派给多个司机~'
                 })
             }else{
-                let pointData = Object.assign({},{orderSerial:this.orderSerial,driverId:this.selectRowData.driverId,distance:this.selectRowData.distance})
+                let pointData = Object.assign({},{orderSerial:this.orderSerial,driverId:this.selectRowData.driverId,distance:this.selectRowData.distance});
                 appointDriverList(pointData).then(res => {
-                    console.log(res)
                     this.close()
                 }).catch(err => {
                     this.$message({

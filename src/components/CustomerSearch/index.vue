@@ -24,15 +24,16 @@ export default {
         disabled:{
             type: Boolean
         },
-        customerName:{
-            type:String
-        },
+        // customerName:{
+        //     type:String
+        // },
         value: [String, Array],
         timeoutSearch:null
     },
     data() {
         return {
             restaurants: [],
+            customerName:'',
             filterOptionsSystemUsers:{
                 search:''
             },//筛选平台人员

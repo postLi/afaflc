@@ -191,6 +191,8 @@ export default {
                 this.releaseDriver= newValue.releaseDriver == '0' ? false :true;//发布到车主分组
                 this.releaseShipper= newValue.releaseShipper == '0' ? false :true;//发布到货主分组
                 this.isTop= newValue.isTop == '0' ? false :true;//是否置顶
+            }else{
+                this.announce = {}
             }
         },
         releaseDriver:{

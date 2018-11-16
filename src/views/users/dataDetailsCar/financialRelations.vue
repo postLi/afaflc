@@ -307,6 +307,9 @@ export default {
         cashTimeChange(type){
             switch(type){
                 case 'cash':
+                    if(this.cashObj.currentPage != 1){
+                        this.cashObj.currentPage = 1;
+                    }
                     this.Cashlist();
                     break;
                 case 'payment':
@@ -317,6 +320,9 @@ export default {
                     }else{
                         this.paymentObj.vo.tradeStartTime = '';
                         this.paymentObj.vo.tradeEndTime = '';
+                    }
+                    if(this.paymentObj.currentPage != 1){
+                        this.paymentObj.currentPage = 1;
                     }
                     this.PaymentList()
                     break;

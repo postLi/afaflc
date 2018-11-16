@@ -29,7 +29,6 @@ export function data_Dic(){
     return fetch.get('/'+baseurl+'/sysDict/list') 
 }
 
-
 //模糊查询
 export function data_Search(page,pagesize,pid,info) {
   return fetch({

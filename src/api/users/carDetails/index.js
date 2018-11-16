@@ -82,3 +82,12 @@ export function driverTradOrdeList(data) {
       data:data
     })
   }
+
+//订单信息-取消订单-根据条件获取车主信息管理-订单信息-取消订单
+export function driverTradOrdeCancelList(data) {
+    return fetch({
+      url: '/' + baseurl_two + '/order/aflcOrder/v1/driverTradOrdeCancelList',
+      method: 'post',
+      data:data
+    })
+  }

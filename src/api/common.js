@@ -1,5 +1,5 @@
 import fetch from '@/utils/fetch'
-import axios from 'axios'
+
 const baseurl_two = 'aflc-common'
 const baseurl = 'aflcsmservice'
 
