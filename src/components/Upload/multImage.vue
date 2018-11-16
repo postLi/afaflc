@@ -37,7 +37,6 @@
       </el-dialog>
     </div>
 </template>
-
 <script>
 // 上传接口
 import { getUploadPolicy } from '@/api/common'
