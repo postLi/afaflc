@@ -69,14 +69,14 @@
                     </el-form-item>
                 </el-col>
                  <el-col :span="12">
-                     <span v-if="!selectFlag">
+                     <span v-if="editType !=='add'&&!selectFlag">
                     <el-form-item label="所在区域 ：" >
                     <el-input v-model="formAll.areaName" placeholder="请选择" :disabled="editType=='view'" @focus="changeSelect"></el-input>
                     </el-form-item>
                      </span>
                      <span v-else>
                     <el-form-item label="所在区域 ："  prop="areaName">
-                   <GetCityList ref="area" v-model="formAll.areaName"  @returnStr="getStr1"></GetCityList>
+                      <GetCityList ref="area" v-model="formAll.areaName"  @returnStr="getStr1"></GetCityList>
                     </el-form-item>
                      </span>
                 </el-col>
@@ -103,7 +103,7 @@
             <el-row>
                 <el-col :span="12">
                     <el-form-item label="商圈地理围栏（多边形） ：">
-                     <ShoppingMap ref="mapblock" @returnStr = returnStr :fromData = 'formAll' id="mapblock" :editstatusMap = 'editstatus'></ShoppingMap>
+                     <ShoppingMap ref="mapblock" @returnStr = returnStr  @EditStr = 'EditStrtype'  :fromData = 'formAll' id="mapblock" :editstatusMap = 'editstatus' ></ShoppingMap>
                     </el-form-item>
                 </el-col>
             </el-row>              
@@ -121,7 +121,7 @@
 </template>
 
 <script>
-import {data_get_aflcTradeArea_list,data_Del_aflcTradeArea,data_Able_aflcTradeArea,data_get_aflcTradeArea_Id,data_get_aflcTradeArea_create} from '@/api/users/district/shoppingDistrict.js'
+import {data_get_aflcTradeArea_list,data_Del_aflcTradeArea,data_Able_aflcTradeArea,data_get_aflcTradeArea_Id,data_get_aflcTradeArea_create,data_get_aflcTradeArea_update} from '@/api/users/district/shoppingDistrict.js'
 import GetCityList from '@/components/GetCityList/city'
 import ShoppingMap from '@/components/map/shoppingMap'
 import shoppingCread from './shoppingCread.vue'
@@ -146,12 +146,16 @@ export default {
 
     //    选择商圈地区校验
         const tradeNameValidator = (rule, val, cb) => {
+            var reg =/^[A-Za-z0-9\u4e00-\u9fa5]+$/
             if(!val){
             cb(new Error('商圈地区不能为空'))
             }
+            if(!reg.test(val)){
+            cb(new Error('请匹配字母&数字&汉字'))    
+            }
             else{
                 cb()
-            }        
+            }
         }
 
     //    选择商圈场主校验
@@ -175,6 +179,8 @@ export default {
             }  
         }
         return{
+            oldpoints:[],
+            editclear:'0',
             editstatus:'0',
             loading:true,
             templateRadio: '',
@@ -236,15 +242,25 @@ export default {
             handler: function(val, oldVal) {
                 if(!val){
                     this.$refs['formAll'].resetFields();
-                    this.formAll.address = null;
-                    this.formAll.areaName =null;
+                    this.formAll={
+                        tradeName:null,
+                        areaName:null,
+                        areaCode: null,
+                        province:null,
+                        city:null,
+                        area:null,
+                        address:null,
+                        tradeOwner:null,
+                        ownerPhone:null,
+                        points:[]        
+                    },
                     this.selectFlag = null;
                     this.$refs.area.clearData();
                     this.$refs.mapblock.exit()
                 }
                 else{
-                      console.log('111')
                    if(this.$refs.mapblock){
+                   this.$refs.mapblock.editclear='0'
                     this.$refs.mapblock.loadMap()
                    }
                 }
@@ -262,6 +278,7 @@ export default {
                 this.formAll.province = val.province.name
                 this.formAll.city = val.city.name
                 this.formAll.area = val.area.name
+                this.$refs.mapblock.setCity()
             },  
    change:function(){
       this.dialogFormVisible_add = false;
@@ -307,6 +324,7 @@ export default {
            this.formAll.areaName = res.data.areaName
            this.formAll.areaCode = res.data.areaCode
            this.formAll.points =JSON.parse(res.data.points)
+           this.oldpoints = JSON.parse(res.data.points)
         })
         this.dialogFormVisible_add = true;
         this.btntitle="修改";
@@ -334,7 +352,9 @@ export default {
         this.editstatus = '2';
 
     },
-
+    EditStrtype(e){
+     this.editclear = e
+    },
 
    // 省市状态表
      changeSelect(){
@@ -501,18 +521,24 @@ export default {
            this.$message.success('新增成功');
            this.getDataList();
            console.log(res);
-
-        }).catch(res=>{
-            this.$message.error('新增失败')
+            this.oldpoints=[];
+        }).catch(err=>{
+            this.$message.error(err.text)
             this.getDataList();
            console.log(res);
+           this.oldpoints=[]
         })
        }
        })
     },
     // 修改按钮
     edit_data(){
-        let forms={
+        var newpoints = [];
+         let forms;
+         console.log('data',this.formAll.points[0].O)       
+        if(this.formAll.points[0].O){
+          newpoints = this.oldpoints
+            forms={
             areaCode:this.formAll.areaCode,
             areaName:this.formAll.areaName,
             province:this.formAll.province,
@@ -522,9 +548,32 @@ export default {
             address:this.formAll.address,
             tradeOwner:this.formAll.tradeOwner,
             ownerPhone:this.formAll.ownerPhone,    
-            points:JSON.stringify(this.formAll.points)
+            id:this.selectRowData[0].id,
         }
-        console.log(forms)
+        }else{
+          newpoints = this.formAll.points
+            forms={
+            areaCode:this.formAll.areaCode,
+            areaName:this.formAll.areaName,
+            province:this.formAll.province,
+            city:this.formAll.city,
+            area:this.formAll.area,
+            tradeName:this.formAll.tradeName,
+            address:this.formAll.address,
+            tradeOwner:this.formAll.tradeOwner,
+            ownerPhone:this.formAll.ownerPhone,    
+            id:this.selectRowData[0].id,
+            points:JSON.stringify(newpoints)
+        }
+        }
+        this.dialogFormVisible_add = false;
+        data_get_aflcTradeArea_update(forms).then(res=>{
+           this.getDataList();
+            this.$message.success('修改成功');
+        }).catch(err=>{
+            this.getDataList();
+            this.$message.error(err.text)
+        })
     }     
     }
 }

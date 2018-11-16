@@ -29,20 +29,15 @@ export default {
      },
      watch:{
          editstatusMap(val){
-             console.log('2222',this.editstatusMap)
             this.Mapstatus = val
          }
      },
      methods:{
 		loadMap:function(){
             this.$nextTick(()=>{
-			if (window.AMap) {
-                this.init();
-            } else {
                 loadJs('https://webapi.amap.com/maps?v=1.4.10&key=f167f450303ea43b1c9ccc459156f867').then(() => {
                 this.init();
                 })
-            }
         })},
     	init:function(){
         var _this = this
@@ -73,14 +68,13 @@ export default {
             var contextMenu = new AMap.ContextMenu();
             var lng,lat;
             contextMenu.addItem("添加标记", function (e) {
-                console.log('111',_this.Mapstatus)
-               if(_this.Mapstatus=='1'){
+               if(_this.editstatusMap=='1'){
                 _this.$message({
                     message: '修改围栏需要清除之前的围栏~',
                     type: 'warning'
                 })
                }
-               else if(_this.Mapstatus=='2'){
+               else if(_this.editstatusMap=='2'){
                 _this.$message({
                     message: '详情不能进行修改~',
                     type: 'warning'
@@ -127,13 +121,27 @@ export default {
         clear:function(){
              map.clearMap();
              this.path = [];
-             this.Mapstatus='0'
+             this.editstatusMap='0'
         },
         exit:function(){
         this.path = [];
         map.clearMap();
         map.destroy();
         },
+        setCity:function(){
+        //     let getLocationMap = [];
+        //     var geocoder
+        //      geocoder = new AMap.Geocoder({
+        //         city: "010", //城市设为北京，默认：“全国”
+        //     });
+        // geocoder.getLocation('北京市', function(status, result) {
+        //     if (status === 'complete' && result.info === 'OK') {
+        //     // result中对应详细地理坐标信息
+        //         map.setCenter([result.geocodes[0].location.lng,result.geocodes[0].location.lng]); 
+        //     }
+        // })
+        }
+
      },
      mounted(){
          this.loadMap();

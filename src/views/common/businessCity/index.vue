@@ -41,6 +41,9 @@
                             sortable
                             prop="name"
                             label="城市">
+                            <template  slot-scope="scope">
+                            <span class="BtnInfo" @click="showMap(scope.row)">{{scope.row.name}}</span >
+                            </template>
                             </el-table-column>
                             <el-table-column
                             sortable
@@ -59,20 +62,24 @@
         </div>
         <!-- 页码 -->
          <div class="info_tab_footer">共计:{{ dataTotal }} <div class="show_pager"> <Pager :total="dataTotal" @change="handlePageChange"  :sizes="sizes" ref="pager"/></div> </div>     
+   <citymap :popVisible.sync="popVisible"  :fromData = 'MapAraay'/>
     </div>
 </template>
 
 <script type="text/javascript">
 import { data_getProvinceList,data_GetCityList } from '@/api/common.js'
-import { data_CityList,data_AddCity } from '@/api/company/businessCity.js'
+import { data_CityList,data_AddCity,data_CityCode } from '@/api/company/businessCity.js'
 import Pager from '@/components/Pagination/index'
 import { parseTime } from '@/utils/'
+import citymap from '@/components/map/businessCityMap'
 import '@/styles/dialog.scss'
 import '@/styles/side.scss'
 
 export default{
       data() {
           return {
+              MapAraay:[],
+              popVisible:false,
               treestatus:false,
               cityTree:[],
               btnsize: 'mini',
@@ -98,6 +105,7 @@ export default{
         },
       components: {
           Pager,
+          citymap
         },
 
       mounted() {
@@ -160,6 +168,16 @@ export default{
             })
        },
       methods: {
+            showMap(e) {
+              data_CityCode(e.code).then(res=>{
+                  this.MapAraay=[]
+                res.data.map(data=>{
+                    this.MapAraay.push(JSON.parse(data))
+                    
+                })
+              })
+                              this.popVisible = true;
+            },
             // 刷新页面
             firstblood() {
                 data_CityList(this.page,this.pagesize,{}).then(res=>{
@@ -275,5 +293,11 @@ export default{
                 display: block
             }
         }
-    }
+        .BtnInfo{
+        font-weight: bold;
+        font-size: 14px;
+        color: #3e9ff1;
+        cursor: pointer;
+        }   
+        }
 </style>

@@ -6,12 +6,12 @@
             <el-row>
                 <el-col :span="12">
                     <el-form-item label="app名称 ：" :label-width="formLabelWidth" prop="appName">
-                        <el-input v-model="formData.appName" placeholder="" :disabled="editType=='view'"></el-input>
+                        <el-input v-model="formData.appName" placeholder="" :disabled="editType=='view'||disabledFlag=='1'"></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col :span="12">
                     <el-form-item label="app类型 ：" :label-width="formLabelWidth" prop="appType">
-               <el-select  v-model="formData.appType" clearable placeholder="请选择" :disabled="editType=='view'||editType=='edit'">
+               <el-select  v-model="formData.appType" clearable placeholder="请选择" :disabled="editType=='view'||editType=='edit'||disabledFlag=='1'">
                           <el-option
                              v-for="item in appTypeList"
                               :key="item.code"
@@ -26,12 +26,12 @@
             <el-row>
                 <el-col :span="12">
                     <el-form-item label="app版本号 ：" :label-width="formLabelWidth" prop="appVersion">
-                         <el-input v-model="formData.appVersion" placeholder=""  :disabled="editType=='view'" maxlength="2"></el-input>   
+                         <el-input v-model="formData.appVersion" placeholder=""  :disabled="editType=='view'||disabledFlag=='1'" maxlength="2"></el-input>   
                     </el-form-item>
                 </el-col>    
                 <el-col :span="12">
                     <el-form-item label="版本号名称 ：" :label-width="formLabelWidth" prop="appVersionName">
-                         <el-input v-model="formData.appVersionName" placeholder="例如:1.0.0.0"  :disabled="editType=='view'"></el-input>   
+                         <el-input v-model="formData.appVersionName" placeholder="例如:1.0.0.0"  :disabled="editType=='view'||disabledFlag=='1'"></el-input>   
                     </el-form-item>
                 </el-col> 
             </el-row>
@@ -39,7 +39,7 @@
                 <el-col :span="12">
                     <el-form-item label="版本发布时间 ：" :label-width="formLabelWidth" prop="versionDate">
                          <el-date-picker v-model="formData.versionDate"
-                                :disabled="editType=='view'"
+                                :disabled="editType=='view'||disabledFlag=='1'"
                                 type="datetime" 
                                 value-format="timestamp"
                                 default-time="00:00:00"
@@ -49,8 +49,8 @@
                 </el-col> 
                 <el-col :span="12">
                     <el-form-item label="是否强制更新 ：" :label-width="formLabelWidth" prop="versionDate">
-                        <el-radio v-model="formData.isForceUpdates" label="0" :disabled="editType=='view'">不强制更新</el-radio>
-                        <el-radio v-model="formData.isForceUpdates" label="1" :disabled="editType=='view'">强制更新</el-radio>
+                        <el-radio v-model="formData.isForceUpdates" label="0" :disabled="editType=='view'" @change="changeRadio">不强制更新</el-radio>
+                        <el-radio v-model="formData.isForceUpdates" label="1" :disabled="editType=='view'"  @change="changeRadio">强制更新</el-radio>
                     </el-form-item>
                 </el-col> 
             </el-row>
@@ -63,7 +63,7 @@
                                     placeholder="1-200间的字符" 
                                     maxlength="200"
                                     v-model="formData.remark"
-                                    :disabled="editType=='view'"
+                                    :disabled="editType=='view'||disabledFlag=='1'"
                                     clearable>
                                 </el-input>
                               <p class="countNum">
@@ -76,7 +76,7 @@
                 <el-col :span="24">
                     <el-form-item label="app下载地址 ：" :label-width="formLabelWidth" prop="appDownloadUrl">
                         <a :href="formData.appDownloadUrl" v-if="editType=='view'" class="urlapk" target="_blank">{{formData.appDownloadUrl}}</a>
-                         <upload class="licensePicture" tip="（上传速度较慢，请等一会儿）" v-model="formData.appDownloadUrl" :apkurl="formData.appDownloadUrl" v-else/>
+                         <upload class="licensePicture" tip="（上传速度较慢，请等一会儿）" v-model="formData.appDownloadUrl" :apkurl="formData.appDownloadUrl" v-else :disabled="disabledFlag=='1'"/>
                     </el-form-item>
                 </el-col>   
             </el-row>
@@ -213,6 +213,8 @@ export default {
         }        
 
         return{
+        RadioFlag:'0',
+        disabledFlag:'0',
         maxlengthNum:200,
         dialogFormVisible_add: false,
         formLabelWidth:'120px',
@@ -224,7 +226,7 @@ export default {
         appVersionName:'',
         versionDate:'',
         remark:'',
-        isForceUpdates:0,
+        isForceUpdates:'',
         },
         appTypeList:[{code:'0',name:'安卓车主'},{code:'1',name:'安卓货主'},{code:'2',name:'IOS车主'},{code:'3',name:'IOS货主'}],
         rulesForm:{
@@ -244,6 +246,8 @@ export default {
         handler: function(val, oldVal) {
             if(!val){
                  this.$refs.formData.resetFields()
+                 this.isForceUpdates = ''
+                 this.disabledFlag = '0'
             }
         },
     },
@@ -251,6 +255,20 @@ export default {
   mounted(){
   },
   methods:{
+   changeRadio(e){
+    if(this.editType=='add'){
+     this.disabledFlag = '0'
+    }
+    else{
+        if(this.RadioFlag==e){
+        this.disabledFlag = '0'
+        }
+        else{
+        this.disabledFlag = '1'
+        }
+     
+    }
+   },
    openDialog:function(){
        var _this = this
        if(this.editType=='add'){
@@ -302,6 +320,7 @@ export default {
                     }
                     }
                 _this.formData = NewData
+                _this.RadioFlag = NewData.isForceUpdates
                 })
                 .catch(err=> {
                     console.log(err)

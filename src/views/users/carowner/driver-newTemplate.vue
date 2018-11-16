@@ -189,7 +189,7 @@
               <el-row>
                   <el-col :span="12">
                 <el-form-item label="所属业务员：" :label-width="formLabelWidth">
-                    <CustomerSearch @returnCustomer = 'getCustomer' :customerName = "templateModel.belongSalesmanName" :disabled="editType == 'view'"/>
+                    <CustomerSearch @returnCustomer = 'getCustomer' v-model = "templateModel.belongSalesmanName" :disabled="editType == 'view'"/>
                 </el-form-item>
                   </el-col>
                   <el-col :span="12">
