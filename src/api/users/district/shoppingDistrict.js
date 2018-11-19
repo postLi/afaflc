@@ -1,7 +1,7 @@
 import fetch from '@/utils/fetch'
 
-const baseurl = "aflc-uc"
-// const baseurl = "aflcusercenterservice-wtc"
+// const baseurl = "aflc-uc"
+const baseurl = "aflcusercenterservice-wtc"
 
 
 //获取商圈管理列表
@@ -11,7 +11,7 @@ export function data_get_aflcTradeArea_list(page,pagesize,data) {
       method: 'post',
       data:{
         "currentPage": page,
-        "pageSize": pagesize,
+        "pageSize": pagesize,   
         "vo": data
       }
     })
@@ -24,7 +24,6 @@ export function data_get_aflcTradeArea_create(data) {
 
 //删除商圈管理列表
 export function data_Del_aflcTradeArea(id) {
-
   return fetch({
         url: '/'+baseurl+'/usercenter/aflcTradeArea/v1/delete/'+id,
         method: 'delete',

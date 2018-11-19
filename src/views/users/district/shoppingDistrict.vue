@@ -56,7 +56,6 @@
         </div>
 		</div>
          <div class="info_tab_footer">共计:{{ dataTotal }} <div class="show_pager"> <Pager :total="dataTotal" @change="handlePageChange" ref="pager"/></div> </div>
-    
 
     <!-- 弹框 -->
     <div class="shoppingDialog commoncss">
@@ -76,7 +75,7 @@
                      </span>
                      <span v-else>
                     <el-form-item label="所在区域 ："  prop="areaName">
-                      <GetCityList ref="area" v-model="formAll.areaName"  @returnStr="getStr1"></GetCityList>
+                      <GetCityList ref="area1" v-model="formAll.areaName"  @returnStr="getStr1"></GetCityList>
                     </el-form-item>
                      </span>
                 </el-col>
@@ -101,7 +100,7 @@
                 </el-col>
             </el-row>         
             <el-row>
-                <el-col :span="12">
+                <el-col :span="24">
                     <el-form-item label="商圈地理围栏（多边形） ：">
                      <ShoppingMap ref="mapblock" @returnStr = returnStr  @EditStr = 'EditStrtype'  :fromData = 'formAll' id="mapblock" :editstatusMap = 'editstatus' ></ShoppingMap>
                     </el-form-item>
@@ -213,6 +212,7 @@ export default {
                 address:null,
                 tradeOwner:null,
                 ownerPhone:null,
+                fenceName:null,
                 points:[]        
             },
             rulesForm:{
@@ -252,15 +252,18 @@ export default {
                         address:null,
                         tradeOwner:null,
                         ownerPhone:null,
-                        points:[]        
+                        points:[],
+                        fenceName:null,  
                     },
                     this.selectFlag = null;
-                    this.$refs.area.clearData();
+                    if(this.$refs.area1){
+                    this.$refs.area1.clearData();
+                    }
                     this.$refs.mapblock.exit()
                 }
                 else{
                    if(this.$refs.mapblock){
-                   this.$refs.mapblock.editclear='0'
+                    this.$refs.mapblock.editclear='0'
                     this.$refs.mapblock.loadMap()
                    }
                 }
@@ -282,6 +285,7 @@ export default {
             },  
    change:function(){
       this.dialogFormVisible_add = false;
+      this.getDataList()
    },
    close:function(){
       this.dialogFormVisible_add = false;
@@ -324,6 +328,7 @@ export default {
            this.formAll.areaName = res.data.areaName
            this.formAll.areaCode = res.data.areaCode
            this.formAll.points =JSON.parse(res.data.points)
+           this.formAll.fenceName = res.data.fenceName
            this.oldpoints = JSON.parse(res.data.points)
         })
         this.dialogFormVisible_add = true;
@@ -357,7 +362,7 @@ export default {
     },
 
    // 省市状态表
-     changeSelect(){
+    changeSelect(){
        this.selectFlag='1'
       },    
     returnStr(e){
@@ -535,7 +540,6 @@ export default {
     edit_data(){
         var newpoints = [];
          let forms;
-         console.log('data',this.formAll.points[0].O)       
         if(this.formAll.points[0].O){
           newpoints = this.oldpoints
             forms={
@@ -549,6 +553,7 @@ export default {
             tradeOwner:this.formAll.tradeOwner,
             ownerPhone:this.formAll.ownerPhone,    
             id:this.selectRowData[0].id,
+            fenceName:this.formAll.fenceName
         }
         }else{
           newpoints = this.formAll.points
@@ -563,6 +568,7 @@ export default {
             tradeOwner:this.formAll.tradeOwner,
             ownerPhone:this.formAll.ownerPhone,    
             id:this.selectRowData[0].id,
+            fenceName:this.formAll.fenceName,
             points:JSON.stringify(newpoints)
         }
         }
