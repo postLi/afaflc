@@ -645,6 +645,9 @@ export default {
             text-align: center;
             border-right: 1px solid #d0d7e5;   
             box-sizing: border-box;
+            .el-cascader{
+                width: 100%;
+            }
             .el-input{
                 width:100%;
             }

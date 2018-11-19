@@ -33,7 +33,7 @@ export default {
     }
   },
   mounted() {
-
+    
   },
   created() {
 
@@ -65,13 +65,23 @@ export default {
     })},
     init:function(){
         var _this = this
-        var center = this.fromData[0][0]
-        console.log('fromData',center)
-		// 地图加载
-		map = new AMap.Map('CityMap', {
-			resizeEnable: true,
-			zoom:10
-        })
+        var center = []
+        console.log('fromData',this.fromData.length)
+        if(_this.fromData.length>0){
+           center = _this.fromData[0][0]
+            }
+        else{
+           center = [113.257416,23.149586]
+        }
+      // 地图加载
+        map = new AMap.Map('CityMap', {
+        resizeEnable: true,
+        zoom:10
+          })
+        map.plugin(["AMap.ToolBar"], function() {
+            map.addControl(new AMap.ToolBar());
+        });
+
         map.setCenter(center);
          polygon = new AMap.Polygon({
                 path: this.fromData,
@@ -82,8 +92,8 @@ export default {
                 strokeStyle:"solid",
                 strokeColor: "#3366FF", 
                 strokeDasharray:[10,5],
-                fillOpacity: 0,
-                fillColor: '#FF0000',
+                fillOpacity: 0.2,
+                fillColor: '#1791fc',
             })
         polygon.setMap((map))   
         }

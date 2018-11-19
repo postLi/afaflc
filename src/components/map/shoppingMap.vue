@@ -1,6 +1,7 @@
 <template>
 <div class="shoppingMapBox">
      <div id="clear" @click="clear">清除所有地理围栏</div>
+     <div id="backBtn" @click="back">返回上一步</div>
  <div id="shoppingMap"></div>
 </div>
 </template>
@@ -35,34 +36,44 @@ export default {
      methods:{
 		loadMap:function(){
             this.$nextTick(()=>{
-                loadJs('https://webapi.amap.com/maps?v=1.4.10&key=f167f450303ea43b1c9ccc459156f867').then(() => {
+                loadJs('https://webapi.amap.com/maps?v=1.4.10&key=73bdb8428fbfe511ed6c5f3328b5734b&plugin=AMap.Geocoder').then(() => {
                 this.init();
                 })
         })},
     	init:function(){
         var _this = this
 		// 地图加载
-        var lnglat = new AMap.LngLat(116.397, 39.918);
+
 		map = new AMap.Map('shoppingMap', {
 			resizeEnable: true,
-			center: [113.257416,23.149586],
-			zoom:11
+			zoom:12
         })
+        map.plugin(["AMap.ToolBar"], function() {
+            map.addControl(new AMap.ToolBar());
+        });
         map.on("complete", function(){
+                var center = []
+                if(_this.fromData.points.length>0){
+                    center = _this.fromData.points[0]
+                }
+                else{
+                    center = [113.257416,23.149586]
+                }
                 _this.path = _this.fromData.points
                 polygon = new AMap.Polygon({
                 path: _this.path,
                 isOutline: true,
                 strokeOpacity:1,
                 lineJoin: 'round',
-                strokeWeight:3,
+                strokeWeight:2,
                 strokeStyle:"solid",
                 strokeColor: "#3366FF", 
                 strokeDasharray:[10,5],
-                fillOpacity: 0,
-                fillColor: '#FF0000',
+                fillOpacity: 0.2,
+                fillColor: '#1791fc',
             })
-        polygon.setMap((map))    
+                map.setCenter(center);
+                polygon.setMap((map))    
                 });
         //创建右键菜单
             var contextMenu = new AMap.ContextMenu();
@@ -113,15 +124,48 @@ export default {
                 strokeStyle:"solid",
                 strokeColor: "#3366FF", 
                 strokeDasharray:[10,5],
-                fillOpacity: 0,
-                fillColor: '#FF0000',
+                fillOpacity: 0.2,
+                fillColor: '#1791fc',
             })
         polygon.setMap((map))          
         },
         clear:function(){
-             map.clearMap();
-             this.path = [];
-             this.editstatusMap='0'
+            var _this = this
+              if(_this.editstatusMap=='2'){
+                _this.$message({
+                    message: '详情不能进行修改~',
+                    type: 'warning'
+                })
+               }
+               else{
+                map.clearMap();
+                this.path = [];
+                this.editstatusMap='0'
+               }
+
+        },
+        back:function(){
+            var _this =this
+        if(_this.editstatusMap=='1'){
+                _this.$message({
+                    message: '修改围栏需要清除之前的围栏~',
+                    type: 'warning'
+                })
+               }
+        else if(_this.editstatusMap=='2'){
+                _this.$message({
+                    message: '详情不能进行修改~',
+                    type: 'warning'
+                })
+        }
+        else{
+        this.path.pop()
+        console.log(this.path)
+        _this.$emit('returnStr', _this.dataAraay)
+        map.clearMap(polygon)
+        this.ToolBar()      
+        }
+
         },
         exit:function(){
         this.path = [];
@@ -129,17 +173,17 @@ export default {
         map.destroy();
         },
         setCity:function(){
-        //     let getLocationMap = [];
-        //     var geocoder
-        //      geocoder = new AMap.Geocoder({
-        //         city: "010", //城市设为北京，默认：“全国”
-        //     });
-        // geocoder.getLocation('北京市', function(status, result) {
-        //     if (status === 'complete' && result.info === 'OK') {
-        //     // result中对应详细地理坐标信息
-        //         map.setCenter([result.geocodes[0].location.lng,result.geocodes[0].location.lng]); 
-        //     }
-        // })
+            var _this = this
+            let getLocationMap = [];
+            var geocoder
+             geocoder = new AMap.Geocoder({
+            });
+             geocoder.getLocation(_this.fromData.city+_this.fromData.area, function(status, result) {
+            if (status === 'complete' && result.info === 'OK') {
+            // result中对应详细地理坐标信息
+                map.setCenter([result.geocodes[0].location.lng,result.geocodes[0].location.lat]); 
+            }
+        })
         }
 
      },
@@ -147,7 +191,7 @@ export default {
          this.loadMap();
      },
      beforeUpdate(){
-              
+
      }
 }
 </script>
@@ -160,14 +204,27 @@ export default {
 }
 #clear{
    position: absolute;
-   left:20px;
-   top:20px;
+   right:10px;
+   top:10px;
+   z-index: 2;
+   border: 2px solid red;
+   color: red;
+   font-weight: bold;
+   padding: 0px 5px;
+   cursor: pointer;
+   line-height:30px;
+}
+#backBtn{
+   position: absolute;
+   right:10px;
+   top:50px;
    z-index: 2;
    border: 2px solid red;
    color: red;
    font-weight: bold;
    padding: 0px 10px;
-   cursor: pointer;
+   cursor: pointer;    
+   line-height:30px;
 }
 }
 </style>
