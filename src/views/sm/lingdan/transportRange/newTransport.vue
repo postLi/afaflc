@@ -8,7 +8,7 @@
                     <el-form-item label="出发地：" prop="startLocation" class="location_line">
                         <el-input v-model="ruleForm.startLocation" v-if="unable" :disabled="unable"></el-input>
                         <vregion :ui="true" @values="regionChangeStart"  class="form-control" v-else>
-                            <el-input v-model="ruleForm.startLocation" @blur="isProvice" placeholder="请选择出发地" ></el-input>
+                            <el-input v-model="ruleForm.startLocation" placeholder="请选择出发地" ></el-input>
                         </vregion>
                     </el-form-item>
                 </el-col>
@@ -177,10 +177,10 @@
   </div>
 </template>
 <script>
-import { getDictionary } from '@/api/common.js'
+// import { getDictionary } from '@/api/common.js'
 import { createWebTransport,getWebAflcTransportRange,updateWebAflcTransportRange } from '@/api/server/lingdan/TransportRange.js'
-import { getUserInfo } from '@/utils/auth.js'
-import { REGEX } from '@/utils/validate.js'
+// import { getUserInfo } from '@/utils/auth.js'
+// import { REGEX } from '@/utils/validate.js'
 // import upload from '@/components/Upload/singleImage2'
 import vregion from '@/components/vregion/Region.vue'
 export default {
@@ -190,27 +190,27 @@ export default {
         vregion
     },
     data() {
-        var checkStartLocationContactsMobile  = (rule, value, callback) => {
-            // console.log(value)
-            if (value === '') {
-                callback(new Error('请输入手机号码'));
-            } else {
-                if (!REGEX.MOBILE.test(value)) {
-                    callback(new Error('请输入正确的手机号码格式'));
-                }
-                callback();
-            }
-        };
-        var checkEndLocationContactsMobile  = (rule, value, callback) => {
-            if (value === '') {
-                callback(new Error('请输入手机号码'));
-            } else {
-                if (!REGEX.MOBILE.test(value)) {
-                    callback(new Error('请输入正确的手机号码格式'));
-                }
-                callback();
-            }
-        };
+        // var checkStartLocationContactsMobile  = (rule, value, callback) => {
+        //     // console.log(value)
+        //     if (value === '') {
+        //         callback(new Error('请输入手机号码'));
+        //     } else {
+        //         if (!REGEX.MOBILE.test(value)) {
+        //             callback(new Error('请输入正确的手机号码格式'));
+        //         }
+        //         callback();
+        //     }
+        // };
+        // var checkEndLocationContactsMobile  = (rule, value, callback) => {
+        //     if (value === '') {
+        //         callback(new Error('请输入手机号码'));
+        //     } else {
+        //         if (!REGEX.MOBILE.test(value)) {
+        //             callback(new Error('请输入正确的手机号码格式'));
+        //         }
+        //         callback();
+        //     }
+        // };
 
         var checkWeigthPriceForms = (rule,value,callback) => {
             if(this.weigthPriceForms[0].endVolume == ''){
@@ -273,7 +273,7 @@ export default {
         };
 
         var checkStartLocation = (rule,value,callback) => {
-            console.log('this.ruleForm.startCity',this.ruleForm.startProvince)
+            // console.log('this.ruleForm.startCity',this.ruleForm.startProvince)
             if (value == '') {
                 callback(new Error('请输入出发地'));
             } else if(this.ruleForm.startCity == '' && this.ruleForm.startProvince !=  '北京市' && this.ruleForm.startProvince !=  '天津市' && this.ruleForm.startProvince !=  '重庆市' && this.ruleForm.startProvince !=  '上海市' ){
@@ -284,7 +284,7 @@ export default {
         };
 
         var checkEndLocation = (rule,value,callback) => {
-            console.log('this.ruleForm.startCity',this.ruleForm.endCity)
+            // console.log('this.ruleForm.startCity',this.ruleForm.endCity)
             if (value == '') {
                 callback(new Error('请输入到达地'));
             } else if(this.ruleForm.endCity == '' && this.ruleForm.endProvince !=  '北京市' && this.ruleForm.endProvince !=  '天津市' && this.ruleForm.endProvince !=  '重庆市' && this.ruleForm.endProvince !=  '上海市' ){
@@ -443,7 +443,7 @@ export default {
         regionChangeStart(d) {
             // console.log('data:',d)
             this.ruleForm.startLocation = (!d.province&&!d.city&&!d.area&&!d.town) ? '': `${this.getValue(d.province)}${this.getValue(d.city)}${this.getValue(d.area)}${this.getValue(d.town)}`.trim();
-            console.log(this.ruleForm.startLocation)
+            // console.log(this.ruleForm.startLocation)
             this.ruleForm.startProvince = d.province ? d.province.name : '';
             this.ruleForm.startCity = d.city ? d.city.name : '';
             this.ruleForm.startArea = d.area ? d.area.name : '';
@@ -458,7 +458,7 @@ export default {
         regionChangeEnd(d) {
             // console.log('data:',d)
             this.ruleForm.endLocation = (!d.province&&!d.city&&!d.area&&!d.town) ? '': `${this.getValue(d.province)}${this.getValue(d.city)}${this.getValue(d.area)}${this.getValue(d.town)}`.trim();
-            if(this.ruleForm.endLocation == this.ruleForm.startLocation){
+            if(this.ruleForm.endLocation == this.ruleForm.startLocation && this.ruleForm.endLocation != ''){
                 this.$message({
                     type: 'info',
                     message: '出发地不可与到达地重复！' 
@@ -476,25 +476,6 @@ export default {
                 this.ruleForm.endLocationCode = d.province.code;
             }
         },
-        isProvice(){
-            // if(this.ruleForm.startCity){
-            //     return 
-            // }else{
-            //     this.ifProvice();
-            // }
-        },
-        ifProvice(type){
-            console.log('ifProvice',type)
-            this.$message({
-                type: 'info',
-                message: '至少选择到市级范围'
-            })
-            if(type == 'startLocation'){
-                return this.ruleForm.startLocation = '';
-            }else{
-                return this.ruleForm.endLocation = '';
-            }
-        },
         getValue(obj){
             return obj ? obj.value:'';
         },
@@ -502,7 +483,7 @@ export default {
             if(this.$route.params.rangeId){
                 this.ifShowRangeType = this.$route.params.ifrevise;//1是修改，2是详情
                 let rangeId = this.$route.params.rangeId;//接收数据
-                console.log('```',rangeId,this.ifShowRangeType)
+                // console.log('```',rangeId,this.ifShowRangeType)
                 getWebAflcTransportRange(rangeId).then(res=>{
                     this.ruleForm = res.data;
                     this.ligthPriceForms = [];
@@ -538,8 +519,6 @@ export default {
                     this.weigthPriceDottedForms.sort(function(a, b) {
                         return a.startVolume - b.startVolume
                     })
-
-                    console.log()
                 })
                 if(this.ifShowRangeType == 2){
                     this.unable = true;
@@ -573,7 +552,7 @@ export default {
         },
         //添加子节点新增
         addItem(type,idx,item){
-            console.log(type)
+            // console.log(type)
             switch(type){
                 case 'weight':
                 // console.log(item.primeryPrice)
@@ -665,7 +644,7 @@ export default {
         },
         //删除子节点新增
         reduceItem(idx,type){
-            console.log(idx,type)
+            // console.log(idx,type)
             switch(type){
                 case 'weight':
                     this.weigthPriceForms.splice(idx,1);
@@ -714,21 +693,35 @@ export default {
             let ifNull = true;
             let messageInfo;
 
-            // this.ligthPriceForms.forEach(item => {
-            //     if(item.primeryPrice == ''){
-            //         messageInfo= '请补充轻货推荐价格' 
-            //         ifNull = false;
-            //     }
-            // })
-            // this.weigthPriceForms.forEach(item => {
-            //     if(item.primeryPrice == ''){
-            //         messageInfo= '请补充重货推荐价格' 
-            //         ifNull = false;
-            //     }
-            // })
+            this.ligthPriceForms.forEach(item => {
+                if(item.primeryPrice == ''){
+                    messageInfo= '请补充轻货推荐价格' 
+                    ifNull = false;
+                }
+            })
+
+            this.ligthPriceDottedForms.forEach(item => {
+                if(item.primeryPrice == ''){
+                    messageInfo= '请补充重泡货（轻货）推荐价格' 
+                    ifNull = false;
+                }
+            })
+
+            this.weigthPriceForms.forEach(item => {
+                if(item.primeryPrice == ''){
+                    messageInfo= '请补充重货推荐价格' 
+                    ifNull = false;
+                }
+            })
+
+            this.weigthPriceDottedForms.forEach(item => {
+                if(item.primeryPrice == ''){
+                    messageInfo= '请补充重泡货（重货）推荐价格' 
+                    ifNull = false;
+                }
+            })
 
             if(ifNull){
-                
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
                         this.completeName();
@@ -862,7 +855,7 @@ export default {
             }
             .priceTime{
                 .el-input{
-                    width: 250px;
+                    width: 264px;
                 }
                 .el-form-item{
                     .el-form-item__content{

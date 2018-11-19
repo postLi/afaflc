@@ -121,8 +121,8 @@
                         }
                         .v-region{
                             .v-dropdown-container{
-                                height: 450px !important;
-                                overflow: auto;
+                                // height: 450px !important;
+                                // overflow: auto;
                             }
                         }
                     }

@@ -291,7 +291,7 @@
                             }
                             // 返回了数据才进行渲染
                             this.listArea = data
-                            console.log("333333333:",this.haveCity,this.nowProvince,this.nowCity,haveCity,res.code,data)
+                            // console.log("333333333:",this.haveCity,this.nowProvince,this.nowCity,haveCity,res.code,data)
                             if(data.length){
                                 this.list = this.getList(2);
                                 this.initSelected(3);
@@ -406,7 +406,7 @@
                 }
             },
             showDropdown(val){
-                console.log(val,'13123')
+                // console.log(val,'13123')
                 if(typeof(val) === 'boolean') {
                     let that = this;
                     this.$refs.dropdown.$emit('show', val, this.$refs.caller);
@@ -423,7 +423,6 @@
                     //         this.$emit('testCity');
                     //     }
                     // }
-
                     if(val) {
                         this.query = '';
                         this.$nextTick(()=>that.$refs.input.focus({preventScroll:true}));

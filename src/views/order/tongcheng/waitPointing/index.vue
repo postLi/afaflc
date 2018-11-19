@@ -10,7 +10,6 @@
             <el-tab-pane label="超时无人接单" name="overTime" v-if="$_has_permission('ORDER_CITY_WIDE_ORDER_WIAT_ASSIGN_TIMEOUT_NO_DRIVER')">
                 <overTime :isvisible=" pointName === 'overTime'"></overTime>
             </el-tab-pane>
-
         <!-- 公海无司机 -->
             <el-tab-pane label="公海无司机" name="noDriver" v-if="$_has_permission('ORDER_CITY_WIDE_ORDER_WIAT_ASSIGN_OPEN_NO_DRIVER')">
                 <noDriver :isvisible="pointName === 'noDriver'"></noDriver>

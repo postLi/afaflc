@@ -124,7 +124,6 @@ export default {
                             }
                         },
                     },
-
                     {
                         name: 'Top 5',
                         type: 'effectScatter',
@@ -162,13 +161,13 @@ export default {
                                         offset: 0, color: 'rgba(0,255,255,1)' // 0% 处的颜色
                                     },
                                     {
-                                        offset: 0.25, color: 'rgba(0,255,255,0)' // 100% 处的颜色
+                                        offset: 0.25, color: 'rgba(0,255,255,0)' // 25% 处的颜色
                                     },
                                     {
-                                        offset: 0.5, color: 'rgba(0,255,255,0)' // 100% 处的颜色
+                                        offset: 0.5, color: 'rgba(0,255,255,0)' // 50% 处的颜色
                                     },
                                     {
-                                        offset: 0.75, color: 'rgba(0,255,255,0)' // 100% 处的颜色
+                                        offset: 0.75, color: 'rgba(0,255,255,0)' // 75% 处的颜色
                                     },
                                      {
                                         offset: 1, color: 'rgba(0,255,255,1)' // 100% 处的颜色

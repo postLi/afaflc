@@ -159,11 +159,11 @@ export default {
         },
         // 判断选中与否
         getSelection(val){
-            console.log('选中内容',val)
+            // console.log('选中内容',val)
             this.selected = val;
         },
         getSearchParam(obj) {
-            console.log(obj)
+            // console.log(obj)
             this.searchInfo = objectMerge2(this.searchInfo, obj);
             if(this.page!= 1){
                 this.page = 1;

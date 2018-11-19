@@ -1,6 +1,6 @@
 <template>
      <div class="shippercreatDialog commoncss">
-      <el-dialog :title="typetitle" :visible="dialogFormVisible_add" :before-close="closeMe" v-dialogDrag :close-on-click-modal="false">
+      <el-dialog :title="typetitle" :visible="dialogFormVisible_add" :before-close="closeMe" v-dialogDrag :close-on-click-modal="false" ref="dialog">
         <el-form :model="xinzengform" ref="xinzengform" :rules="rulesForm" :label-width="formLabelWidth">
           <el-row>
             <el-col :span="12">
@@ -264,7 +264,6 @@ export default {
     },
   },
     mounted(){
-    
     },
   methods:{
     regionChange(d) {
@@ -295,8 +294,9 @@ export default {
         eventBus.$emit('changeList')
     },
     openDialog(){
-        // console.log(this.editType)
+        console.log(this.editType)
         // console.log('this.xinzengform',this.xinzengform)
+        let dialog = document.querySelector('.el-dialog');
         if(this.editType  == 'add'){
             this.xinzengform ={
                 shipperType:'AF0010101',//货主类型code
@@ -315,10 +315,18 @@ export default {
                 registerOriginName:'云平台',
                 isDirectional: '0',
             }
+            dialog.style.minHeight = 720 + "px";
         }else {
             this.xinzengform = Object.assign({},this.paramsView);
             if(this.xinzengform.shipperType == 'AF0010101' && this.editType  != 'view'){
                 this.xinzengform.shipperType = 'AF0010102';
+            }
+
+            if(this.editType  == 'view'){
+                // console.log('dialog',dialog.style)
+                dialog.style.minHeight = 369 + "px";
+            }else{
+                dialog.style.minHeight = 720 + "px";
             }
         }
     },
