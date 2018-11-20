@@ -10,7 +10,8 @@ export default {
   hidden: false,
   noDropdown: false,
   children: [{
-    path: '/28WEB/index', icon: 'baobiao', name: '28快运WEB端', component: _import('28WEB/index'), meta: { role: ['admin'], title: '28快运WEB端', noCache: true }
+    path: '/28WEB/webUser', icon: 'baobiao', name: '用户发布类', component: _import('28WEB/index'), meta:
+      { title: '用户发布类', noCache: true },
   }
   ]
 }
