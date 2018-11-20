@@ -1,3 +1,5 @@
 <template>
-  <h1>推荐</h1>
+  <div style="height:100%;">
+    <router-view></router-view>
+  </div>
 </template>
