@@ -33,12 +33,22 @@ export default {
     data() {
         return {
             restaurants: [],
-            customer:this.customerName ? this.customerName : '',
+            customer:'',
             filterOptionsSystemUsers:{
                 search:''
             },//筛选平台人员
         };
     }, 
+    watch:{
+        customerName(newVal,oldVal){
+            // console.log('customerName',newVal,oldVal)
+            if(newVal){
+                this.customer = newVal;
+            }else{
+                this.customer = '';
+            }
+        }
+    },
     methods: {
         init(queryString){
             data_findAflcSystemUserList(this.filterOptionsSystemUsers).then(res=>{

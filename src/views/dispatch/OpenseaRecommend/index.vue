@@ -29,21 +29,25 @@
                         </el-table-column>  
                         <el-table-column
                             sortable
+                            width="250"
                             prop="areaCodeName"
                             label="地区">
                         </el-table-column>
                         <el-table-column
                             sortable
-                          prop="serivceCodeName"
-                          label="服务类型">
+                            width="180"
+                            prop="serivceCodeName"
+                            label="服务类型">
                         </el-table-column>
                         <el-table-column
                             sortable
-                          prop="shipperCarTypeName"
-                          label="货主用车类型">
+                            width="250"
+                            prop="shipperCarTypeName"
+                            label="货主用车类型">
                         </el-table-column>
                         <el-table-column
                             sortable
+                            width="250"
                             prop="firstRecommendKm"
                             label="推送距离/推送时间">
                             <template slot-scope="scope">
@@ -56,13 +60,15 @@
                         </el-table-column> -->
                         <el-table-column
                             sortable
-                          prop="visualCarTypeName"
-                          label="可见车主类型">
+                            :show-overflow-tooltip="true"
+                            prop="visualCarTypeName"
+                            label="可见车主类型">
                         </el-table-column>
                         <el-table-column
                             sortable
-                          prop="usingStatus"
-                          label="状态">
+                            prop="usingStatus"
+                            width="120"
+                            label="状态">
                              <template  slot-scope="scope">
                                 {{ scope.row.usingStatus === '1' ? '启用' : '禁用' }}
                             </template>

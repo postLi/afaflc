@@ -54,8 +54,8 @@
             </el-col>
             <el-col :span="12">
                 <el-form-item label="所属业务员：" prop="belongSalesmanName">
-                    <!-- <el-input v-model="xinzengform.belongSalesmanName" auto-complete="off"  disabled v-if="editType=='view'"></el-input> -->
-                    <CustomerSearch @returnCustomer = 'getCustomer' :customerName = "xinzengform.belongSalesmanName" ref="SalesmanName" :disabled="editType == 'view'"/>
+                    <CustomerSearch @returnCustomer = 'getCustomer' :customerName = "xinzengform.belongSalesmanName ? xinzengform.belongSalesmanName :''" ref="SalesmanName" :disabled="editType == 'view'"/>
+                    <!-- {{xinzengform.belongSalesmanName}} -->
                 </el-form-item>
             </el-col>
           </el-row>
@@ -314,6 +314,8 @@ export default {
                 registerOrigin:'AF0030107',
                 registerOriginName:'云平台',
                 isDirectional: '0',
+                belongSalesman:'',//所属业务员id
+                belongSalesmanName:'',// 所属业务员姓名
             }
             dialog.style.minHeight = 720 + "px";
         }else {
@@ -333,7 +335,9 @@ export default {
             done()
         }
         this.$emit('update:dialogFormVisible_add', false);
-        this.$refs.SalesmanName.customer =  '';
+        // if(this.editType == 'add'){
+        //     this.$refs.SalesmanName.customer =  '';
+        // }
     },
     closeMe(done){
         this.$refs.xinzengform.resetFields();
@@ -341,7 +345,9 @@ export default {
             done()
         }
         this.$emit('update:dialogFormVisible_add', false);
-        this.$refs.SalesmanName.customer =  '';
+        // if(this.editType == 'add'){
+        //     this.$refs.SalesmanName.customer =  '';
+        // }
     },
     //获取货主类型
     getMoreInformation(){
