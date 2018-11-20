@@ -2,7 +2,7 @@
 <template>
       <el-autocomplete
         class="inline-input CustomerSearch"
-        v-model="customerName"
+        v-model="customer"
         :fetch-suggestions="querySearch"
         placeholder=""
         @select="handleSelect"
@@ -24,16 +24,16 @@ export default {
         disabled:{
             type: Boolean
         },
-        // customerName:{
-        //     type:String
-        // },
+        customerName:{
+            type:String
+        },
         value: [String, Array],
         timeoutSearch:null
     },
     data() {
         return {
             restaurants: [],
-            customerName:'',
+            customer:this.customerName ? this.customerName : '',
             filterOptionsSystemUsers:{
                 search:''
             },//筛选平台人员
@@ -71,9 +71,9 @@ export default {
             // }, 3000 * Math.random());
         },
         handleSelect(item) {
-            // this.customerName = item.name + (item.mobilephone ? '/' + item.mobilephone :'');
-            this.customerName = item.name;
-            console.log(item,this.customerName);
+            // this.customer = item.name + (item.mobilephone ? '/' + item.mobilephone :'');
+            this.customer = item.name;
+            console.log(item,this.customer);
             this.$emit('returnCustomer',item)
         },
     },

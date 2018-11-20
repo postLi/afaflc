@@ -130,7 +130,7 @@
                 font-weight: bold;
             }
         }
-        .wuliucreatDialog,.freezeDialog,.shipperBlackDialog,.shenghe{
+        .wuliucreatDialog,.freezeDialog,.shipperBlackDialog,.shenghedialog{
             display: inline-block;
             .el-dialog{
                 width: 1100px;

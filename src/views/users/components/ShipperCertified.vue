@@ -146,7 +146,7 @@
             <el-row>
               <el-col :span="12">
                 <el-form-item label="所属业务员：" prop="belongSalesmanName">
-                    <CustomerSearch @returnCustomer = 'getCustomer' :customerName = "shengheform.belongSalesmanName"/>
+                    <CustomerSearch @returnCustomer = 'getCustomer' :customerName = "shengheform.belongSalesmanName" ref="SalesmanName"/>
                 </el-form-item>
               </el-col>
             </el-row>
@@ -415,6 +415,7 @@ export default {
             this.changeList();
             this.firstblood();
             this.$refs.shengheform.resetFields();
+            this.$refs.SalesmanName.customer =  '';
         },
         // 审核不通过
         handlerOut(){

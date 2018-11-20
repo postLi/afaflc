@@ -82,6 +82,7 @@ import createdDialog from './createdDialog.vue'
 import GetCityList from '@/components/GetCityList'
 import { eventBus } from '@/eventBus'
 import Pager from '@/components/Pagination/index'
+import vregion from '@/components/vregion/Region.vue'
 
 import { data_LogisticsCompanyList } from '@/api/users/logistics/LogisticsCompany.js'
 
@@ -95,7 +96,8 @@ export default {
   components: {
       createdDialog,
       GetCityList,
-      Pager
+      Pager,
+      vregion
     },
   data() {
       return {

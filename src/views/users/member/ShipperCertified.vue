@@ -79,7 +79,7 @@
 
     <!--认证审核部分 -->
     <div class="shenghedialog commoncss">
-        <el-dialog title="认证审核" :visible.sync="dialogFormVisible" top="5vh" :close-on-click-modal = "false">
+        <el-dialog title="认证审核" :visible.sync="dialogFormVisible" top="5vh" v-el-drag-dialog :close-on-click-modal = "false">
           <el-form :model="shengheform" ref="shengheform" :rules="shengheformRules">
             <el-row>
               <el-col :span="12">
@@ -353,7 +353,7 @@ return {
   dialogFormVisible_add: false,
   type: '',
   paramsView: {},
-  defaultImg: '/static/test.jpg', // 默认第一张图片的url
+defaultImg:'/static/test.jpg',//默认第一张图片的url
   demoData: '企业货主', // 根据项目要求写死
   options: [], // 货主类型列表
   tableData1: [], // 列表数据
@@ -377,7 +377,7 @@ return {
   serviceType: 'AF028', // 服务类型
   belongBrand: 'AF029', // 品牌code
   productServiceCode: 'AF027', // 产品与服务code
-  otherServiceCode: 'AF025', // 增值服务code
+//   otherServiceCode: 'AF025', // 增值服务code
   otherService: [], // 会员承诺服务
   serviceTypeName: [],
   productService: [],
@@ -390,9 +390,9 @@ return {
   otherServiceCode: [], // 选择增值服务
   multipleSelection: {},
   shengheformRules: {
-        companyName: { required: true, message: '请输入公司名称', trigger: 'change' },
-        businessLife: { required: true, message: '请输入经营年限', trigger: 'change' },
-        corporation:{required: true, message: '请输入法人/负责人', trigger: 'change'},
+        companyName: { required: true, message: '请输入公司名称', trigger: 'blur' },
+        businessLife: { required: true, message: '请输入经营年限', trigger: 'blur' },
+        corporation:{required: true, message: '请输入法人/负责人', trigger: 'blur'},
         radio1: { required:true,validator: radioValidator, trigger: 'change' },
         radio2: { required: true,validator: radioValidator2, trigger: 'change' },
         radio3: { required: true,validator: radioValidator3, trigger: 'change' }
@@ -476,10 +476,10 @@ return {
         getValue(obj) {
             return obj ? obj.value:''
         },
-        changeIMG(event) {
-            // console.log(event)
-          this.defaultImg = event.target.src
-        },
+        // changeIMG(event) {
+        //     // console.log(event)
+        //   this.defaultImg = event.target.src
+        // },
         changeList() {
           eventBus.$emit('changeList')
         },
@@ -496,13 +496,13 @@ return {
                   type: 'info'
                 })
             }else {
-                this.shengheform = Object.assign({}, this.selected[0])
-                this.otherServiceCode = JSON.parse(this.shengheform.otherServiceCode)
-                this.optionsServerArr = JSON.parse(this.shengheform.serviceType)
-                this.optionsProductArr = JSON.parse(this.shengheform.productServiceCode)
+                this.shengheform = Object.assign({}, this.selected[0]);
+                this.otherServiceCode = this.shengheform.otherServiceCode?  JSON.parse(this.shengheform.otherServiceCode) : [];
+                this.optionsServerArr = this.shengheform.serviceType ? JSON.parse(this.shengheform.serviceType) :[];
+                this.optionsProductArr = this.shengheform.productServiceCode ? JSON.parse(this.shengheform.productServiceCode) : [];
                 this.shengheform.isOpenTms = '0'
                 this.dialogFormVisible = true
-                this.defaultImg = this.shengheform.businessLicenceFile ? this.shengheform.businessLicenceFile : this.defaultImg
+                // this.defaultImg = this.shengheform.businessLicenceFile ? this.shengheform.businessLicenceFile : this.defaultImg
             }
              // 清除选中状态，避免影响下个操作
           this.$refs.multipleTable.clearSelection()
@@ -676,7 +676,6 @@ return {
             this.radio2 = '';
             this.radio3 = '';
             this.$refs.shengheform.resetFields();
-
         }
     }
 }
@@ -705,8 +704,6 @@ return {
             }
             .data_pic_c{
                 flex: 1;
-                // float: left;
-                // width: 32%;
                 h2{
                     text-align: center;
                 }
@@ -723,6 +720,9 @@ return {
                     height: 160px;
                     margin-bottom: 10px;
                 }
+            }
+            .data_pic_company{
+                margin: 0 2%;
             }
         }
 

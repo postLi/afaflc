@@ -96,7 +96,7 @@
             display: inline-block;
             .el-dialog{
                 width: 1100px;
-                min-height: 720px;
+                min-height: 369px;
                 position: relative;
                 .el-dialog__body{
                     .el-form{

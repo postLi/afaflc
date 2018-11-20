@@ -55,7 +55,7 @@
             <el-col :span="12">
                 <el-form-item label="所属业务员：" prop="belongSalesmanName">
                     <!-- <el-input v-model="xinzengform.belongSalesmanName" auto-complete="off"  disabled v-if="editType=='view'"></el-input> -->
-                    <CustomerSearch @returnCustomer = 'getCustomer' v-model = "xinzengform.belongSalesmanName" :disabled="editType == 'view'"/>
+                    <CustomerSearch @returnCustomer = 'getCustomer' :customerName = "xinzengform.belongSalesmanName" ref="SalesmanName" :disabled="editType == 'view'"/>
                 </el-form-item>
             </el-col>
           </el-row>
@@ -294,7 +294,7 @@ export default {
         eventBus.$emit('changeList')
     },
     openDialog(){
-        console.log(this.editType)
+        // console.log(this.editType)
         // console.log('this.xinzengform',this.xinzengform)
         let dialog = document.querySelector('.el-dialog');
         if(this.editType  == 'add'){
@@ -321,13 +321,7 @@ export default {
             if(this.xinzengform.shipperType == 'AF0010101' && this.editType  != 'view'){
                 this.xinzengform.shipperType = 'AF0010102';
             }
-
-            if(this.editType  == 'view'){
-                // console.log('dialog',dialog.style)
-                dialog.style.minHeight = 369 + "px";
-            }else{
-                dialog.style.minHeight = 720 + "px";
-            }
+            dialog.style.minHeight = 369 + "px";
         }
     },
     close(done) {
@@ -339,6 +333,7 @@ export default {
             done()
         }
         this.$emit('update:dialogFormVisible_add', false);
+        this.$refs.SalesmanName.customer =  '';
     },
     closeMe(done){
         this.$refs.xinzengform.resetFields();
@@ -346,6 +341,7 @@ export default {
             done()
         }
         this.$emit('update:dialogFormVisible_add', false);
+        this.$refs.SalesmanName.customer =  '';
     },
     //获取货主类型
     getMoreInformation(){
