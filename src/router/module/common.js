@@ -127,5 +127,15 @@ export default {
         component: _import('common/appManage/index'),
         meta: { title: 'APP管理', stitle: 'APP', noCache: true }
       },
+
+      {
+        path: '/common/businessCity/City',
+        icon: 'sijiguanli',
+        hidden: true,
+        name: '业务城市围栏',
+        component: _import('common/businessCity/businessCityMap'),
+        meta: { title: '城市围栏', stitle: '围栏', noCache: true }
+      },
+
   ]
 }

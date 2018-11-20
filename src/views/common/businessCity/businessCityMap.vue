@@ -1,39 +1,16 @@
 <template>
 <div class="commoncss businessCityMap">
-<el-dialog custom-class="aflcmap-pop-wrapper" title="地图" @close="close" top=5vh :visible.sync="dialogTableVisible" v-dialogDrag>
-<div class="shoppingMapBox ">
  <div id="CityMap"></div>
-</div>
-</el-dialog>
 </div>
 </template>
 <script>
+import {data_CityCode } from '@/api/company/businessCity.js'
 import { loadJs } from '@/utils/'
  var map={}
  var polygon;
 export default {
-  props: {
-    fromData:{
-        type:[Object,String,Array,Number],
-      },
-    popVisible: {
-      type: Boolean,
-      default: false
-    }
-  },
+  props: {},
   watch: {
-    popVisible(newVal) {
-      this.open()
-    },
-    name() {
-      this.thename = this.name
-    },
-    pos() {
-      this.thepos = this.pos
-    }
-  },
-  mounted() {
-    
   },
   created() {
 
@@ -45,18 +22,18 @@ export default {
   data() {
     return {
       dialogTableVisible: false,
+      MapAraay:[]
     }
   },
+  mounted(){
+         data_CityCode(this.$route.query.code).then(res=>{
+          res.data.map(data=>{
+          this.MapAraay.push(JSON.parse(data))
+          })
+          })
+          this.loadMap();
+  },
   methods: {
-    close(done) {
-      map.clearMap();
-      map.destroy();
-      this.$emit('update:popVisible', false)
-    },
-    open() {
-      this.dialogTableVisible = this.popVisible
-       this.loadMap();
-    },
     loadMap:function(){
             this.$nextTick(()=>{
                 loadJs('https://webapi.amap.com/maps?v=1.4.10&key=f167f450303ea43b1c9ccc459156f867').then(() => {
@@ -66,49 +43,49 @@ export default {
     init:function(){
         var _this = this
         var center = []
-        if(_this.fromData.length>0){
-           center = _this.fromData[0][0]
-            }
-        else{
-           center = [113.257416,23.149586]
-        }
+        var NewMaparaay = this.MapAraay
       // 地图加载
         map = new AMap.Map('CityMap', {
         resizeEnable: true,
         zoom:10
-        })
+          })
         map.plugin(["AMap.ToolBar"], function() {
             map.addControl(new AMap.ToolBar());
         });
-
-        map.setCenter(center);
-         polygon = new AMap.Polygon({
-                path: this.fromData,
+        map.on("complete", function(){
+                var center = []
+                if(NewMaparaay.length>0){
+                    center = NewMaparaay[0][0]
+                }
+                else{
+                    center = [113.257416,23.149586]
+                }
+                polygon = new AMap.Polygon({
+                path: NewMaparaay,
                 isOutline: true,
                 strokeOpacity:1,
                 lineJoin: 'round',
-                strokeWeight:3,
+                strokeWeight:2,
                 strokeStyle:"solid",
                 strokeColor: "#3366FF", 
                 strokeDasharray:[10,5],
                 fillOpacity: 0.2,
                 fillColor: '#1791fc',
             })
-        polygon.setMap((map))   
+                map.setCenter(center);
+                polygon.setMap((map))    
+                });  
         }
   }
 }
 </script>
 <style lang="scss">
 .businessCityMap{
-  .el-dialog{
-    width: 80%;
-    height:850px;
-  }
-#CityMap{
+  height: 100%;
+  #CityMap{
     width: 100%;
-    height: 750px;
-}
+    height: 100%;
+  }
 
 }
 
