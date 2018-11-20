@@ -62,7 +62,7 @@
         </div>
         <!-- 页码 -->
          <div class="info_tab_footer">共计:{{ dataTotal }} <div class="show_pager"> <Pager :total="dataTotal" @change="handlePageChange"  :sizes="sizes" ref="pager"/></div> </div>     
-   <citymap :popVisible.sync="popVisible"  :fromData = 'MapAraay'/>
+   <!-- <citymap :popVisible.sync="popVisible"  :fromData = 'MapAraay'/> -->
     </div>
 </template>
 
@@ -169,14 +169,15 @@ export default{
        },
       methods: {
             showMap(e) {
-              data_CityCode(e.code).then(res=>{
-                  this.MapAraay=[]
-                res.data.map(data=>{
-                    this.MapAraay.push(JSON.parse(data))
-                    
-                })
-              })
-                              this.popVisible = true;
+            //   data_CityCode(e.code).then(res=>{
+            //       this.MapAraay=[]
+            //     res.data.map(data=>{
+            //         this.MapAraay.push(JSON.parse(data))
+            //     })
+            //   })
+            //   this.popVisible = true;
+            this.$router.push({name: '业务城市围栏',query:{code:e.code}});
+
             },
             // 刷新页面
             firstblood() {

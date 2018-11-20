@@ -338,7 +338,6 @@ export default {
     }
     },
     openDialogView(e){
-        
         data_get_aflcTradeArea_Id(e.id).then(res=>{
            this.formAll.tradeName = res.data.tradeName
            this.formAll.address = res.data.address
@@ -365,17 +364,22 @@ export default {
     changeSelect(){
        this.selectFlag='1'
       },    
-    returnStr(e){
-     this.formAll.points = []
-     console.log('e',e)
-     var unshiftAraay = [e[0].lng,e[0].lat]
-     if(e.length>1){
-         for(let i = 1;i<e.length;i++)
-         {
-         this.formAll.points.push(e[i])
-         }
-        this.formAll.points.unshift(unshiftAraay)
-     }
+    returnStr(e){ 
+             e.map((s1,o1)=>{
+                  console.log('length',e[o1].length)
+               e[o1].map((item,o2)=> {
+                   console.log('4434',Object.prototype.toString.call(item))
+                //   item = [item.lng,item.lat]
+                if(Object.prototype.toString.call(item)=="[object Object]")
+                {
+                       e[o1][o2] = [item.lng,item.lat]
+                }
+                else{
+                       e[o1][o2] = [item[0],item[1]]
+                }
+               })
+              })
+              this.formAll.points = e
 
     },   
 
@@ -520,9 +524,8 @@ export default {
             ownerPhone:this.formAll.ownerPhone,    
             points:JSON.stringify(this.formAll.points)
         }
-        console.log(forms)
-        this.dialogFormVisible_add = false;
         data_get_aflcTradeArea_create(forms).then(res=>{
+            this.dialogFormVisible_add = false;
            this.$message.success('新增成功');
            this.getDataList();
            console.log(res);
@@ -572,9 +575,9 @@ export default {
             points:JSON.stringify(newpoints)
         }
         }
-        this.dialogFormVisible_add = false;
         data_get_aflcTradeArea_update(forms).then(res=>{
-           this.getDataList();
+            this.dialogFormVisible_add = false;
+            this.getDataList();
             this.$message.success('修改成功');
         }).catch(err=>{
             this.getDataList();
@@ -597,12 +600,12 @@ export default {
 .shoppingDialog{
      display: inline-block;
         .el-dialog{
-         width: 1200px!important;
+         width: 80%!important;
+         max-height: 93%;
      }
     .el-button{
         padding: 7px 15px 7px;
         }
-
 }
 .info_news .shoppingDialog .el-button{
         padding: 0px 15px 0px;
