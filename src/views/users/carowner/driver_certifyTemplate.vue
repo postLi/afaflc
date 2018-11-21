@@ -158,7 +158,7 @@
               <el-row>
               <el-col :span="12">
                 <el-form-item label="所属业务员：" :label-width="formLabelWidth">
-                        <CustomerSearch @returnCustomer = 'getCustomer' v-model = "templateModel.belongSalesmanName" :disabled="editType == 'view'"/>
+                        <CustomerSearch @returnCustomer = 'getCustomer' :customerName = "templateModel.belongSalesmanName" ref="SalesmanName" :disabled="editType == 'view'"/>
                     </el-form-item>
                 </el-col>    
                   <el-col :span="12">
@@ -661,6 +661,12 @@ export default {
     //     return obj ? obj.value:'';
     // },    
 
+    // 所属业务员
+    getCustomer(val){
+
+        this.templateModel.belongSalesman = val.userId;
+        this.templateModel.belongSalesmanName = val.name;
+    },  
      // 省市状态表
     changeSelect(){
             if(this.editType==='add'){

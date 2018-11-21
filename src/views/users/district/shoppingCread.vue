@@ -204,7 +204,7 @@ export default {
         },  
    // 省市状态表
      changeSelect(){
-                this.selectFlag='1'
+            this.selectFlag='1'
             },    
     returnStr(e){
         this.formAll.points = []

@@ -322,7 +322,6 @@ import  { data_get_onesource_list,data_add_onesource_list,data_Del_onesource,dat
 import { parseTime,formatTime } from '@/utils/index.js'
 import Pager from '@/components/Pagination/index'
 import GetCityList from '@/components/GetCityList'
-import vestdetail from './vestdetail'
 import tmsmap from '@/components/map/index'
 export default {
     data(){
@@ -437,7 +436,6 @@ export default {
     },
     components:{
         GetCityList,
-        vestdetail,
         tmsmap,
         Pager
     },

@@ -1,7 +1,10 @@
 import fetch from '@/utils/fetch'
 const baseurl = "aflc-common"
-// const baseurl = "aflccommonservice-wtc"
 const baseurl_two = "aflcusercenterservice"
+
+// const baseurl = "aflccommonservice-wtc"
+// const baseurl_two = "aflcusercenterservice-wtc"
+
 //获取同城列表
 
 export function data_CityList() {

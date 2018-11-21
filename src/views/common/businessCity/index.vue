@@ -54,7 +54,20 @@
                             sortable
                             prop="createTime"
                             label="创建时间">
-                            </el-table-column>                            
+                            </el-table-column>          
+                            <!-- <el-table-column label="操作">
+                                <template slot-scope="scope">
+                                    <el-button
+                                    :size="btnsize"
+                                    :type="scope.row.isTop == 0 ? 'primary' : 'info'"
+                                    v-has:SYSTEM_NOTICE_TOP
+                                    @click="handleClick(scope.row,'ifTop')">{{scope.row.isTop == 0 ? '置顶' : '取消'}}</el-button>
+                                    <el-button
+                                    :size="btnsize"
+                                    v-has:SYSTEM_NOTICE_UPDATE
+                                    @click="handleClick(scope.row,'revise')">修改</el-button>
+                                </template>
+                            </el-table-column>         -->
                         </el-table>
                     </div>
                 </div>
@@ -71,7 +84,6 @@ import { data_getProvinceList,data_GetCityList } from '@/api/common.js'
 import { data_CityList,data_AddCity,data_CityCode } from '@/api/company/businessCity.js'
 import Pager from '@/components/Pagination/index'
 import { parseTime } from '@/utils/'
-import citymap from '@/components/map/businessCityMap'
 import '@/styles/dialog.scss'
 import '@/styles/side.scss'
 
@@ -105,7 +117,6 @@ export default{
         },
       components: {
           Pager,
-          citymap
         },
 
       mounted() {
@@ -157,12 +168,12 @@ export default{
                     }]
                 }                                
                 else{
-                data_GetCityList(item.code).then(res=>{
-                    if(res.data)
-                    {
-                    item.children = res.data.list;
-                    }
-                })
+                    data_GetCityList(item.code).then(res=>{
+                        if(res.data)
+                        {
+                            item.children = res.data.list;
+                        }
+                    })
                 }
      
             })
@@ -191,27 +202,27 @@ export default{
                 })                
             },
             getMoreInformation(){
-           data_getProvinceList().then(res=>{
-            if(res.text == '请求成功' && res.data.list.length >0 ){
-                this.cityTree = res.data.list.map(el => {
-                    el.children = []
-                    return el
-                });
-            }else{
-                this.cityTree = null;
-            }
-            })
+                data_getProvinceList().then(res=>{
+                    if(res.text == '请求成功' && res.data.list.length >0 ){
+                        this.cityTree = res.data.list.map(el => {
+                            el.children = []
+                            return el
+                        });
+                    }else{
+                        this.cityTree = null;
+                    }
+                })
             },
             nodeClick(data,checked,node,gg){
                 if(this.citystName==data.name){
-                this.citystName=null
-                this.fromData={
-                            cityCode:null,
-                            cityName:null,
-                            provinceCode:null,
-                            provinceName:null,
-                        }
-                this.$refs.treeForm.setCheckedNodes([])
+                    this.citystName=null
+                    this.fromData={
+                        cityCode:null,
+                        cityName:null,
+                        provinceCode:null,
+                        provinceName:null,
+                    }
+                    this.$refs.treeForm.setCheckedNodes([])
                 }
                 else{
                 this.citystName=data.name
@@ -250,13 +261,12 @@ export default{
                     })
                 })  
                 }
-
             },
             // 每页显示数据量变更
             handlePageChange(obj) {
-            this.page = obj.pageNum
-            this.pagesize = obj.pageSize
-            this.firstblood()
+                this.page = obj.pageNum
+                this.pagesize = obj.pageSize
+                this.firstblood()
             },
         }
     }

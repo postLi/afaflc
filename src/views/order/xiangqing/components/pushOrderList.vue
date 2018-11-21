@@ -29,12 +29,9 @@
                 </template>
             </el-table-column>
             <el-table-column
-                prop="address"
+                prop=""
                 label="车辆信息"
                 width="200">
-                <template slot-scope="scope">
-                    {{scope.row.driverName}} - {{scope.row.driverPhone}}
-                </template>
             </el-table-column>
             <el-table-column
                 prop="driverDistance"
