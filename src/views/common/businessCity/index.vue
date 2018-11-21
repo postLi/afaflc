@@ -84,7 +84,6 @@ import { data_getProvinceList,data_GetCityList } from '@/api/common.js'
 import { data_CityList,data_AddCity,data_CityCode } from '@/api/company/businessCity.js'
 import Pager from '@/components/Pagination/index'
 import { parseTime } from '@/utils/'
-import citymap from '@/components/map/businessCityMap'
 import '@/styles/dialog.scss'
 import '@/styles/side.scss'
 
@@ -118,7 +117,6 @@ export default{
         },
       components: {
           Pager,
-          citymap
         },
 
       mounted() {

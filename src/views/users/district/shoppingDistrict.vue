@@ -102,7 +102,7 @@
             <el-row>
                 <el-col :span="24">
                     <el-form-item label="商圈地理围栏（多边形） ：">
-                     <ShoppingMap ref="mapblock" @returnStr = returnStr  @EditStr = 'EditStrtype'  :fromData = 'formAll' id="mapblock" :editstatusMap = 'editstatus' ></ShoppingMap>
+                     <ShoppingMap ref="mapblock" @returnStr = returnStr  @EditStr = EditStrtype :fromData = 'formAll' id="mapblock" :editstatusMap = 'editstatus' ></ShoppingMap>
                     </el-form-item>
                 </el-col>
             </el-row>              
@@ -178,7 +178,6 @@ export default {
             }  
         }
         return{
-            oldpoints:[],
             editclear:'0',
             editstatus:'0',
             loading:true,
@@ -329,7 +328,6 @@ export default {
            this.formAll.areaCode = res.data.areaCode
            this.formAll.points =JSON.parse(res.data.points)
            this.formAll.fenceName = res.data.fenceName
-           this.oldpoints = JSON.parse(res.data.points)
         })
         this.dialogFormVisible_add = true;
         this.btntitle="修改";
@@ -357,6 +355,7 @@ export default {
 
     },
     EditStrtype(e){
+        console.log('EditStr11',e)
      this.editclear = e
     },
 
@@ -529,22 +528,34 @@ export default {
            this.$message.success('新增成功');
            this.getDataList();
            console.log(res);
-            this.oldpoints=[];
         }).catch(err=>{
             this.$message.error(err.text)
             this.getDataList();
            console.log(res);
-           this.oldpoints=[]
         })
        }
        })
     },
     // 修改按钮
     edit_data(){
-        var newpoints = [];
+        this.$refs.mapblock.editFlag()
          let forms;
-        if(this.formAll.points[0].O){
-          newpoints = this.oldpoints
+        if(this.editclear=="0"){
+            forms={
+            areaCode:this.formAll.areaCode,
+            areaName:this.formAll.areaName,
+            province:this.formAll.province,
+            city:this.formAll.city,
+            area:this.formAll.area,
+            tradeName:this.formAll.tradeName,
+            address:this.formAll.address,
+            tradeOwner:this.formAll.tradeOwner,
+            ownerPhone:this.formAll.ownerPhone,    
+            id:this.selectRowData[0].id,
+            fenceName:this.formAll.fenceName,
+            points:JSON.stringify(this.formAll.points)
+        }
+        }else{
             forms={
             areaCode:this.formAll.areaCode,
             areaName:this.formAll.areaName,
@@ -558,23 +569,8 @@ export default {
             id:this.selectRowData[0].id,
             fenceName:this.formAll.fenceName
         }
-        }else{
-          newpoints = this.formAll.points
-            forms={
-            areaCode:this.formAll.areaCode,
-            areaName:this.formAll.areaName,
-            province:this.formAll.province,
-            city:this.formAll.city,
-            area:this.formAll.area,
-            tradeName:this.formAll.tradeName,
-            address:this.formAll.address,
-            tradeOwner:this.formAll.tradeOwner,
-            ownerPhone:this.formAll.ownerPhone,    
-            id:this.selectRowData[0].id,
-            fenceName:this.formAll.fenceName,
-            points:JSON.stringify(newpoints)
         }
-        }
+        console.log(forms)
         data_get_aflcTradeArea_update(forms).then(res=>{
             this.dialogFormVisible_add = false;
             this.getDataList();

@@ -66,19 +66,21 @@ export default {
         var drawPolygon = mouseTool.polygon(); //用鼠标工具画多边形
         AMap.event.addListener( mouseTool,'draw',function(e){
         console.log(e.obj);//获取路径/范围
-               if(_this.editstatusMap=='1'){
+               if(_this.Mapstatus=='1'){
                 _this.$message({
                     message: '修改围栏需要清除之前的围栏~',
                     type: 'warning'
                 })
                 map.clearMap();
+                polygon.setMap((map)) 
                }
-               else if(_this.editstatusMap=='2'){
+               else if(_this.Mapstatus=='2'){
                 _this.$message({
                     message: '详情不能进行修改~',
                     type: 'warning'
                 })
                 map.clearMap();
+                polygon.setMap((map)) 
                }
                else{
              _this.dataAraay.push(e.obj.getPath())
@@ -87,7 +89,12 @@ export default {
         });
         map.on("complete", function(){
                 var center = []
+                if(_this.fromData.points.length>0){
+                    center = _this.fromData.points[0][0]
+                }
+                else{
                     center = [113.257416,23.149586]
+                }
                 _this.path = _this.fromData.points
                 polygon = new AMap.Polygon({
                 path: _this.path,
@@ -142,6 +149,7 @@ export default {
         //         contextMenu.open(map, e.lnglat);
         //         contextMenuPositon = e.lnglat;
         //     });
+
         },
         ToolBar:function(){
         var _this = this
@@ -161,7 +169,7 @@ export default {
         },
         clear:function(){
             var _this = this
-              if(_this.editstatusMap=='2'){
+              if(_this.Mapstatus=='2'){
                 _this.$message({
                     message: '详情不能进行修改~',
                     type: 'warning'
@@ -171,13 +179,15 @@ export default {
                 map.clearMap();
                 this.path = [];
                 this.dataAraay = [];
-                this.editstatusMap='0'
+                this.Mapstatus='0'
                }
+        },
+        editFlag(){
+        this.$emit('EditStr', this.Mapstatus)
         },
         exit:function(){
         this.path = [];
         this.dataAraay = [];
-        map.clearMap();
         map.destroy();
         },
         setCity:function(){
@@ -188,7 +198,6 @@ export default {
             });
              geocoder.getLocation(_this.fromData.city+_this.fromData.area, function(status, result) {
             if (status === 'complete' && result.info === 'OK') {
-            // result中对应详细地理坐标信息
              map.setCenter([result.geocodes[0].location.lng,result.geocodes[0].location.lat]); 
             }
         })

@@ -27,9 +27,7 @@ export default {
   },
   mounted(){
          data_CityCode(this.$route.query.code).then(res=>{
-          res.data.map(data=>{
-          this.MapAraay.push(JSON.parse(data))
-          })
+           this.MapAraay = JSON.parse(res.data);
           })
           this.loadMap();
   },
@@ -43,7 +41,6 @@ export default {
     init:function(){
         var _this = this
         var center = []
-        var NewMaparaay = this.MapAraay
       // 地图加载
         map = new AMap.Map('CityMap', {
         resizeEnable: true,
@@ -54,14 +51,14 @@ export default {
         });
         map.on("complete", function(){
                 var center = []
-                if(NewMaparaay.length>0){
-                    center = NewMaparaay[0][0]
+                if(_this.MapAraay.length>0){
+                    center = _this.MapAraay[0][0]
                 }
                 else{
                     center = [113.257416,23.149586]
                 }
                 polygon = new AMap.Polygon({
-                path: NewMaparaay,
+                path: _this.MapAraay,
                 isOutline: true,
                 strokeOpacity:1,
                 lineJoin: 'round',

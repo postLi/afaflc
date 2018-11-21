@@ -189,7 +189,7 @@
               <el-row>
                   <el-col :span="12">
                 <el-form-item label="所属业务员：" :label-width="formLabelWidth">
-                    <CustomerSearch @returnCustomer = 'getCustomer' v-model = "templateModel.belongSalesmanName" :disabled="editType == 'view'"/>
+                    <CustomerSearch @returnCustomer = 'getCustomer' :customerName = "templateModel.belongSalesmanName" ref="SalesmanName" :disabled="editType == 'view'"/>
                 </el-form-item>
                   </el-col>
                   <el-col :span="12">
@@ -731,7 +731,7 @@ export default {
     //     return obj ? obj.value:'';
     // },     
      // 省市状态表
-    changeSelect(){
+       changeSelect(){
             if(this.editType==='add'){
                 this.selectFlag=false
             } else{
@@ -739,7 +739,7 @@ export default {
             }
             },
 
-      getStr(val){
+       getStr(val){
                 console.log('this.cityarr',val,name)
                 this.templateModel.areaCode = val.area.name;
                 this.templateModel.belongCity = val.area.code;
@@ -747,12 +747,12 @@ export default {
                 this.templateModel.cityCode = val.city.name;
                 this.templateModel.belongCityName = val.province.name+val.city.name+val.area.name
             }, 
+        // 所属业务员
+        getCustomer(val){
 
-    getCustomer(val){
-        console.log('belongSalesman',val)
-        this.templateModel.belongSalesman = val.userId;
-        this.templateModel.belongSalesmanName = val.name;
-    },  
+            this.templateModel.belongSalesman = val.userId;
+            this.templateModel.belongSalesmanName = val.name;
+        },  
         isVip(val){
             if(this.templateModel.isVipCar == '1'){
                 this.templateModel.isVipCar = '1'
