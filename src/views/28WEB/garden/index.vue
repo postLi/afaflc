@@ -1,26 +1,26 @@
 <template>
-  <div class="identicalStyle Marketing" style="height:100%">
+  <div class="identicalStyle Marketing" style="height:100%" v-loading="loading">
     <el-form :inline="true" class="demo-ruleForm classify_searchinfo">
       <el-form-item label="所在地">
-        <GetCityList ref="area" v-model="searchQuery.belongCityName" @returnStr="getStr"></GetCityList>
+        <GetCityList ref="area" v-model="searchQuery.locationProvince" @returnStr="getStr"></GetCityList>
       </el-form-item>
       <el-form-item label="手机号">
-        <el-input clearable></el-input>
+        <el-input clearable v-model="searchQuery.parkMobile"></el-input>
       </el-form-item>
       <el-form-item label="园区名称">
-        <el-input clearable placeholder="请输入物流园区名称"></el-input>
+        <el-input v-model="searchQuery.parkName" clearable placeholder="请输入物流园区名称"></el-input>
       </el-form-item>
       <el-form-item label="客户管理应用">
 
-        <el-select v-model="searchQuery.verifyStatus" clearable>
-          <el-option label="已开放" :value="0"></el-option>
-          <el-option label="未开放" :value="1"></el-option>
+        <el-select v-model="searchQuery.openStatus" clearable>
+          <el-option label="已开放" :value="1"></el-option>
+          <el-option label="未开放" :value="0"></el-option>
           <el-option label="全部" value=""></el-option>
         </el-select>
 
       </el-form-item>
       <el-form-item label="状  态">
-        <el-select v-model="searchQuery.verifyStatus1" clearable>
+        <el-select v-model="searchQuery.disableStatus" clearable>
           <el-option label="启用" :value="0"></el-option>
           <el-option label="禁用" :value="1"></el-option>
           <el-option label="全部" value=""></el-option>
@@ -47,41 +47,49 @@
               {{ (page - 1)*pagesize + scope.$index + 1 }}
             </template>
           </el-table-column>
-          <el-table-column sortable prop="belongCity" label="物流园区" width="">
+          <el-table-column sortable prop="parkName" label="物流园区" width="">
           </el-table-column>
-          <el-table-column sortable prop="belongCity" label="联系人" width="">
+          <el-table-column sortable prop="parkContact" label="联系人" width="">
           </el-table-column>
-          <el-table-column sortable prop="belongCity" label="手机号" width="">
+          <el-table-column sortable prop="parkMobile" label="手机号" width="">
           </el-table-column>
-          <el-table-column sortable prop="belongCity" label="所在地" width="">
+          <el-table-column sortable prop="" label="所在地" width="">
+            <template slot-scope="scope">
+              <span>{{scope.row.locationProvince+scope.row.locationCity+scope.row.locationArea}}</span>
+            </template>
           </el-table-column>
-          <el-table-column sortable prop="belongCity" label="创建时间" width="">
+          <el-table-column sortable prop="createTime" label="创建时间" width="">
           </el-table-column>
           <el-table-column sortable prop="belongCity" label="状态" width="">
+            <template slot-scope="scope">
+              <span>{{scope.row.openStatus ===1?'已开放':'未开放'}}</span>
+            </template>
           </el-table-column>
           <el-table-column sortable prop="belongCity" label="客户管理应用" width="">
+            <template slot-scope="scope">
+              <span>{{scope.row.disableStatus ===1?'禁用':'启用'}}</span>
+            </template>
           </el-table-column>
           <el-table-column sortable prop="belongCity" label="操作" width="250">
             <template slot-scope="scope">
               <el-button
-                style="color: #f56c6c"
                 type="text" icon=""
                 size="small"
                 @click="handleDeatail(scope.row)">
-                <span style="border-bottom: 1px solid #f56c6c">详情</span>
+                <span>详情</span>
               </el-button>
               <el-button
-                style="color: #f56c6c"
                 type="text" icon=""
                 size="small"
                 @click="handleFn(scope.row)">
-                <span style="border-bottom: 1px solid #f56c6c">禁用</span>
+                <span>禁用</span>
               </el-button>
             </template>
           </el-table-column>
         </el-table>
       </div>
-      <AddGarden :isVisibleDialog.sync="isVisibleDialog" :isModify="isModify"></AddGarden>
+      <AddGarden :isVisibleDialog.sync="isVisibleDialog" :isModify="isModify" :info="selectedInfo" @success='fetchInfo'
+                 @close="closeVisibleDialog"></AddGarden>
       <div class="info_tab_footer">共计:{{ dataTotal }}
         <div class="show_pager">
           <Pager :total="dataTotal" @change="handlePageChange" :sizes="sizes"/>
@@ -91,6 +99,7 @@
   </div>
 </template>
 <script>
+  import {postList, putUpdateDisableStatus} from '@/api/web/garden'
   import GetCityList from '@/components/GetCityList/city'
   import Pager from '@/components/Pagination/index'
   import AddGarden from './addGarden'
@@ -103,6 +112,7 @@
     },
     data() {
       return {
+        loading: true,
         isVisibleDialog: false,
         isModify: false,
         sizes: [20, 50, 100],
@@ -112,39 +122,107 @@
         dataTotal: 0,
         dataset: [],
         selected: [],
+        selectedInfo: {},
         searchQuery: {
-          belongCityName: '',
-          belongCity: '',
-          verifyStatus: '',
-          verifyStatus1: '',
+          locationProvince: '',
+          locationCity: '',
+          locationArea: '',
+          parkName: '',
+          openStatus: '',
+          parkMobile: '',
+          disableStatus: '',
         }
       }
     },
     mounted() {
-
+      this.fetchList()
     },
     methods: {
+      fetchList() {
+        this.loading = true
+        postList(this.page, this.pagesize, this.searchQuery).then(res => {
+          this.dataset = res.data.list
+          this.dataTotal = res.data.total;
+          this.loading = false
+          // console.log(res)
+        }).catch(err => {
+          this.$message.warning(err.text || err.errorInfo || '无法获取服务端数据~')
+          this.loading = false;
+        })
+      },
+      fetchInfo() {
+        this.fetchList()
+      },
       getStr(val) {
-        this.searchQuery.belongCity = val.area.code
-        this.searchQuery.belongCityName = val.area.name
-        console.log('this.cityarr', val, val.area, val.area.code, val.area.name)
+        this.searchQuery.locationProvince = val.province.name
+        this.searchQuery.locationCity = val.city.name
+        this.searchQuery.locationArea = val.area.name
+        // console.log('this.cityarr', val, val.area, val.area.code, val.area.name)
       },
       handleSearch(type) {
         switch (type) {
           case 'searchForm':
+            this.fetchInfo()
             break
           case 'clearForm':
+            this.searchQuery = {
+              locationProvince: '',
+              locationCity: '',
+              locationArea: '',
+              parkName: '',
+              openStatus: '',
+              parkMobile: '',
+              disableStatus: '',
+            }
+            this.$refs.area.clearData()
+            this.fetchInfo()
             break
           case 'add':
             this.isVisibleDialog = true
+            this.isModify = false
+            this.selectedInfo = {}
             break
         }
 
       },
       handleDeatail(row) {
+        this.isVisibleDialog = true
+        this.isModify = true
+        this.selectedInfo = row
         console.log(row);
       },
       handleFn(row) {
+        this.loading = true
+        this.$confirm('是否操作此物流园?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning',
+          center: true
+        }).then(() => {
+          putUpdateDisableStatus(row.id).then(res => {
+            this.$message({
+              type: 'success',
+              message: '删除成功!'
+            });
+
+            this.fetchInfo()
+            this.loading = false
+          }).catch(err => {
+            this.$message.warning(err.text || err.errorInfo || '无法获取服务端数据~')
+            this.loading = false;
+          })
+
+          // this.$message({
+          //   type: 'success',
+          //   message: '删除成功!'
+          // });
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消删除'
+          });
+          this.loading = false
+        });
         console.log(row);
       },
       getSelection(selected) {
@@ -158,6 +236,9 @@
         this.pagesize = obj.pageSize
         // this.firstblood()
       },
+      closeVisibleDialog() {
+        this.isVisibleDialog = false
+      }
     }
   }
 </script>

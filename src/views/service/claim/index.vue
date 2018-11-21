@@ -12,7 +12,7 @@
           <!-- <el-form-item label="处理状态" prop="">
             <el-select clearable placeholder="请选择处理状态">
               <el-option
-              v-for="item in optionsPlantService"
+              v-for="item in optionsPlantService"fv
               :key="item.value"
               :label="item.label"
               :value="item.value">
@@ -29,7 +29,7 @@
                 :disabled="item.disabled">
               </el-option>
             </el-select>
-          </el-form-item> 
+          </el-form-item>
           <el-form-item label="货主">
             <el-input v-model="formAllData.shipper" :maxlength="20" placeholder="账户/姓名" auto-complete="off" clearable></el-input>
           </el-form-item>
@@ -42,7 +42,7 @@
           <el-form-item class="btnChoose fr">
             <el-button type="primary" :size="btnsize" plain @click="handleSearch('search')" icon="el-icon-search">搜索</el-button>
             <el-button type="info" :size="btnsize" plain @click="handleSearch('clear')" icon="fontFamily aflc-icon-qingkong">清空</el-button>
-          </el-form-item>            
+          </el-form-item>
         </el-form>
           <div class="classify_info">
             		<div class="btns_box">
@@ -50,7 +50,7 @@
                 <!-- <el-button type="primary" :size="btnsize" class="el-icon-tickets" @click="doAction('shouli')" plain>确认受理</el-button> -->
                 <!-- <el-button type="primary" :size="btnsize" icon="el-icon-news" @click="doAction('genjin')" plain>记录物流跟进</el-button> -->
             		</div>
-            <div class="info_news">    
+            <div class="info_news">
               <el-table ref="multipleTable" style="width: 100%" stripe border height="100%" @selection-change="getSelection" @row-click="clickDetails" highlight-current-row :data="dataset"  tooltip-effect="dark">
                 <!-- <el-table-column
                   label="选择"
@@ -61,7 +61,7 @@
                   <template slot-scope="scope">
                   {{ (page - 1)*pagesize + scope.$index + 1 }}
                   </template>
-                </el-table-column> 
+                </el-table-column>
                 <!-- <el-table-column fixed label="订单号" prop="orderSerial" sortable :show-overflow-tooltip="true" width="300">
                 </el-table-column> -->
                 <el-table-column
@@ -82,14 +82,14 @@
                 <el-table-column  label="车主" prop="driver" sortable :show-overflow-tooltip="true"  width="250">
                 </el-table-column>
                 <el-table-column  label="处理状态" prop="dealStatus" sortable :show-overflow-tooltip="true" width="120">
-                </el-table-column>       
+                </el-table-column>
                 <el-table-column  label="物损类型" prop="claimType" sortable :show-overflow-tooltip="true" width="120">
-                </el-table-column>                                                       
-                <el-table-column  
-                  label="上报人" 
-                  prop="reporter" 
-                  sortable 
-                  :show-overflow-tooltip="true"  
+                </el-table-column>
+                <el-table-column
+                  label="上报人"
+                  prop="reporter"
+                  sortable
+                  :show-overflow-tooltip="true"
                   width="300">
                   <template slot-scope="scope">
                     {{scope.row.reporterPhone? scope.row.reporterPhone + '-' : ''}}{{scope.row.reporter ? scope.row.reporter : ''}}
@@ -104,13 +104,13 @@
                 >
                 <template  slot-scope="scope">
                   <span class="orderSerial">
-                    {{ scope.row.createTime | parseTime('{y}-{m}-{d} {h}:{i}:{s}')}}    
+                    {{ scope.row.createTime | parseTime('{y}-{m}-{d} {h}:{i}:{s}')}}
                   </span>
                 </template>
                 <!-- <template slot-scope="scope">{{ scope.row.commissionTime | parseTime('{y}-{m}-{d} {h}:{i}:{s}')}}</template> -->
                 </el-table-column>
                 <el-table-column  label="订单状态" prop="orderStatus" sortable  width="120">
-                </el-table-column> 
+                </el-table-column>
                 <el-table-column
                 :show-overflow-tooltip="true"
                 prop="useCarTime"
@@ -120,7 +120,7 @@
                 >
                 <template  slot-scope="scope">
                   <span class="orderSerial">
-                    {{ scope.row.useCarTime | parseTime('{y}-{m}-{d} {h}:{i}:{s}')}}    
+                    {{ scope.row.useCarTime | parseTime('{y}-{m}-{d} {h}:{i}:{s}')}}
                   </span>
                 </template>
                 <!-- <template slot-scope="scope">{{ scope.row.commissionTime | parseTime('{y}-{m}-{d} {h}:{i}:{s}')}}</template> -->
@@ -128,13 +128,13 @@
                 <el-table-column  label="提货地" prop="startAddress" sortable :show-overflow-tooltip="true"  width="300">
                 </el-table-column>
                 <el-table-column  label="目的地" prop="endAddress" sortable :show-overflow-tooltip="true"  width="300">
-                </el-table-column>   
-              </el-table> 
-        	  </div> 
+                </el-table-column>
+              </el-table>
+        	  </div>
           <!-- addReg -->
           <addReg :centerDialogVisible="centerDialogVisible" @close="closeAddReg" @success="getsuccess"></addReg>
          <!-- 页码 -->
-          <div class="info_tab_footer">共计:{{ dataTotal }}<div class="show_pager"> <Pager :total="dataTotal" @change="handlePageChange"  :sizes="sizes"/></div> </div> 
+          <div class="info_tab_footer">共计:{{ dataTotal }}<div class="show_pager"> <Pager :total="dataTotal" @change="handlePageChange"  :sizes="sizes"/></div> </div>
         </div>
       </div>
 </template>
@@ -323,7 +323,7 @@ export default {
   }
 }
 </script>
-<style lang="scss">  
+<style lang="scss">
 .Marketing{
   .el-cascader{
     margin-top:-10px;
