@@ -44,6 +44,7 @@
                         border
                         highlight-current-row
                         current-row-key
+                        height="100%"
                         @selection-change="getSelection" 
                         @row-click="clickDetails"
                         tooltip-effect="dark"
