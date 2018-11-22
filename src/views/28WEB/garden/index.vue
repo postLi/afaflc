@@ -192,37 +192,17 @@
         console.log(row);
       },
       handleFn(row) {
-        this.loading = true
-        this.$confirm('是否操作此物流园?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          center: true
-        }).then(() => {
-          putUpdateDisableStatus(row.id).then(res => {
-            this.$message({
-              type: 'success',
-              message: '操作成功!'
-            });
-
-            this.fetchInfo()
-            this.loading = false
-          }).catch(err => {
-            this.$message.warning(err.text || err.errorInfo || '无法获取服务端数据~')
-            this.loading = false;
-          })
-
-          // this.$message({
-          //   type: 'success',
-          //   message: '删除成功!'
-          // });
-        }).catch(() => {
+        putUpdateDisableStatus(row.id).then(res => {
           this.$message({
-            type: 'info',
-            message: '已取消操作'
+            type: 'success',
+            message: '操作成功~'
           });
+          this.fetchInfo()
           this.loading = false
-        });
-        console.log(row);
+        }).catch(err => {
+          this.$message.warning(err.text || err.errorInfo || '无法获取服务端数据~')
+          this.loading = false;
+        })
       },
       getSelection(selected) {
         this.selected = selected

@@ -220,7 +220,11 @@
         this.form.locationArea = item.locationArea
         this.form.disableStatus = item.disableStatus
         this.form.locationFn = this.form.locationProvince + this.form.locationCity + this.form.locationArea
-
+        if (this.form.openStatus === 1) {
+          this.checked = true
+        } else {
+          this.checked = false
+        }
       },
       submitForm() {
         this.$refs.ruleForm.validate((valid) => {

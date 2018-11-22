@@ -16,7 +16,7 @@
             <!--推荐限制类型(0 - 不限制 1-限制)-->
             <el-checkbox v-model="checked">推荐条数限制</el-checkbox>
 
-            <p style="color: red;font-size: 12px" v-if="checked===true">
+            <p style="color: red;font-size: 12px;line-height: 20px" v-if="checked===true">
               超过{{form.recommendLimit===null||form.recommendLimit===''?'0':form.recommendLimit}}则不展示更多推荐（必填）</p>
             <!--<template slot="append">超过×则不展示更多推荐（必填）</template>-->
             <el-input placeholder="请输入推荐条数" v-model="form.recommendLimit" :maxlength="5" v-number-only>
@@ -118,24 +118,11 @@
           if (valid) {
             this.loading = true
             if (this.checked === true) {
-
-              if (this.form.recommendLimit === '' || this.form.recommendLimit === null) {
-                this.$message.info('请输入推荐限制数')
-                this.loading = false
-                return false
-              } else {
-                this.form.recommendLimitType = 1
-                this.senFetch()
-              }
+              this.form.recommendLimitType = 1
+              this.senFetch()
             } else {
-              if (this.form.recommendLimit === '' || this.form.recommendLimit === null) {
-                this.$message.info('请输入推荐限制数')
-                this.loading = false
-                return false
-              }else{
-                this.form.recommendLimitType = 0
-                this.senFetch()
-              }
+              this.form.recommendLimitType = 0
+              this.senFetch()
 
             }
           } else {
@@ -144,17 +131,24 @@
         })
       },
       senFetch() {
-        let data
-        data = objectMerge2(this.form)
-        putRecDetial(this.info.id, data).then(res => {
-          this.$emit('success')
-          this.$message.success('保存成功')
-          this.close()
-          // this.loading = false
-        }).catch(err => {
-          this.$message.warning(err.text || err.errorInfo || '无法获取服务端数据~')
-          this.loading = false;
-        })
+        if (this.form.recommendLimit === '' || this.form.recommendLimit === null) {
+          this.$message.info('请输入推荐限制数')
+          this.loading = false
+          return false
+        } else {
+          let data
+          data = objectMerge2(this.form)
+          putRecDetial(this.info.id, data).then(res => {
+            this.$emit('success')
+            this.$message.success('保存成功')
+            this.close()
+            // this.loading = false
+          }).catch(err => {
+            this.$message.warning(err.text || err.errorInfo || '无法获取服务端数据~')
+            this.loading = false;
+          })
+        }
+
       },
       reset() {
         this.$refs['ruleForm'].resetFields()
@@ -201,6 +195,7 @@
             }
             .el-textarea__inner {
               width: 83%;
+              color: #3e9ff1;
             }
           }
         }
