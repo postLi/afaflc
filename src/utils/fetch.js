@@ -22,11 +22,11 @@ service.interceptors.request.use(config => {
     }
 
     if (getUserInfo() && getUserInfo().id) {
-        config.headers.user_id = getUserInfo().id
+      config.headers.user_id = getUserInfo().id
     }
 
     if (getUserInfo() && getUserInfo().userToken) {
-        config.headers.user_token  = getUserInfo().userToken
+      config.headers.user_token = getUserInfo().userToken
     }
 
     config.params['access_token'] = getToken()
@@ -38,21 +38,22 @@ service.interceptors.request.use(config => {
     // 如果是生产环境，强制访问157
     if (process.env.NODE_ENV === 'production') {
       // 这个值也要转为设定的值
-    window.tms_testapiurl = 'api'
-    localStorage.tms_testapiurl = 'api'
-    config.url = '/api' + config.url
-  } else {
+      window.tms_testapiurl = 'api'
+      localStorage.tms_testapiurl = 'api'
+      config.url = '/api' + config.url
+    } else {
       /**
        * 测试环境修改这里，不要修改上面那句代码
        */
       // 统一加上/api 前缀，方便后台转发接口
         // console.log(' window.tms_testapiurl', window.tms_testapiurl)
-    window.tms_testapiurl = localStorage.tms_testapiurl || 'api'
+      window.tms_testapiurl = localStorage.tms_testapiurl || 'api'
 
-    if (window.tms_testapiurl) {
+      if (window.tms_testapiurl) {
         config.url = '/' + window.tms_testapiurl + config.url
       } else {
         config.url = '/api' + config.url // 78服务器
+        // config.url = '/79service' + config.url
         // config.url = '/localapi' + config.url
         // config.url = '/wukunzhi' + config.url
         // config.url = '/huangyuwen' + config.url
@@ -65,7 +66,7 @@ service.interceptors.request.use(config => {
         // config.url = '/lingzhiying' + config.url
         // config.url = '/79service' + config.url
       }
-  }
+    }
   }
 
   return config
