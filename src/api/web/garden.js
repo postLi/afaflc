@@ -29,10 +29,11 @@ export function postAddLogisticspark(data) {
 
 // /usercenter/aflclogisticspark/v1/{id}
 // 根据ID修改物流园区表信息
-export function putTextedLogisticspark(id) {
+export function putTextedLogisticspark(id,data) {
   return fetch({
     url: '/' + baseUrl + '/usercenter/aflclogisticspark/v1/' + id,
-    method: 'put'
+    method: 'put',
+    data: data
   })
 }
 //usercenter/aflclogisticspark/v1/updateDisableStatus/{id}

@@ -52,11 +52,11 @@
             end-placeholder="结束日期">
           </el-date-picker>
         </el-form-item>
-        <el-form-item label="自定义属性" prop="settopStatus" style="width:100%">
-          <el-checkbox v-model="formAllData.settopStatus">置顶</el-checkbox>
+        <el-form-item label="自定义属性" prop="code" style="width:100%">
+          <el-checkbox v-model="formAllData.code">置顶</el-checkbox>
         </el-form-item>
         <el-form-item label="推荐费" prop="recommendFee">
-          <el-input type="number" v-model="formAllData.recommendFee" :maxlength="20" placeholder="请输入推荐费" auto-complete="off" clearable></el-input>
+          <el-input v-model="formAllData.recommendFee" :maxlength="20" placeholder="请输入推荐费" auto-complete="off" clearable></el-input>
         </el-form-item>
         <!-- <el-form-item label="物损类型" prop="claimType">
           <el-select v-model="formAllData.claimType" clearable placeholder="请选择物损类型">
@@ -103,6 +103,7 @@ import Upload from '@/components/Upload/multImage'
 import { DicClaimStatusType, DicComplainatusType } from '@/api/common'
 import { postReportClaim } from '@/api/service/claim.js'
 import {postAddline} from '@/api/web/logistics.js'
+import {postAmend} from '@/api/web/recommend.js'
 import { postReportComplain } from '@/api/service/dispose.js'
 import { objectMerge2 } from '@/utils/index'
 export default {
@@ -193,9 +194,6 @@ export default {
         recommendColumn: [
           { required: true, message: '请选择推荐栏目' }
         ],
-        recommendPosition:[
-           { required: true, message: '请选择推荐位置' }
-        ],
         // claimDes: [
         //   { required: true, message: '请输入物损描述' }
         // ],
@@ -214,7 +212,6 @@ export default {
       },
 
       formAllData: {
-        associatedId:'',//专线id
         recommendColumn:'',//推荐栏目
         recommendPosition:'',//推荐位置
         recommendStarttime:'',//推荐开始时间
@@ -249,31 +246,28 @@ export default {
     isMatreg: {
       handler(newVal) {
         if (this.isMatreg) {
-         
-          this.formAllData = {
-            remarks:''
-          }
           this.searchCreatTime = this.defaultTime
           this.popTitle = '推荐设置'
-          console.log(this.isMatreg,this.selectInfo)
+          this.formAllData = {}
+          console.log(this.isMatreg)
         }
       },
       immediate: true
     },
-    // isComreg: {
-    //   handler(newVal) {
-    //     if (this.isComreg) {
-    //       this.popTitle = '投诉登记'
-    //       this.formAllData = {}
-    //     //   console.log(this.isComreg)
-    //     }
-    //   },
-    //   immediate: true
-    // }
+    isComreg: {
+      handler(newVal) {
+        if (this.isComreg) {
+          this.popTitle = '投诉登记'
+          this.formAllData = {}
+        //   console.log(this.isComreg)
+        }
+      },
+      immediate: true
+    }
   },
   mounted() {
-    // this.getclaimstatus()
-    // this.getComplainatus()
+    this.getclaimstatus()
+    this.getComplainatus()
     // console.log(this.isMatreg)
   },
   methods: {
@@ -295,65 +289,65 @@ export default {
       this.formAllData.recommendPosition = obj
     //   console.log('sdfsdfs', obj, this.formAllData)
     },
-    // getclaimstatus() {
-    //   DicClaimStatusType().then(res => {
-    //     // console.log(res.data)
-    //     res.data.map((item) => {
-    //       this.optionsclaimType.push(item)
-    //     })
-    //   })
-    // },
-    // getComplainatus() {
-    //   DicComplainatusType().then(res => {
-    //     res.data.map((item) => {
-    //       this.optionsComplainatusType.push(item)
-    //     })
-    //   })
-    // },
+    getclaimstatus() {
+      DicClaimStatusType().then(res => {
+        // console.log(res.data)
+        res.data.map((item) => {
+          this.optionsclaimType.push(item)
+        })
+      })
+    },
+    getComplainatus() {
+      DicComplainatusType().then(res => {
+        res.data.map((item) => {
+          this.optionsComplainatusType.push(item)
+        })
+      })
+    },
      // 判断选中与否
-    // getSelection(val) {
-    // //   console.log('选中内容', val)
-    //   this.selectRowData = val
-    // },
+    getSelection(val) {
+    //   console.log('选中内容', val)
+      this.selectRowData = val
+    },
     // 点击选中当前行
-    // clickDetails(row, event, column) {
-    //   this.$refs.multipleTable.toggleRowSelection(row)
-    // },
+    clickDetails(row, event, column) {
+      this.$refs.multipleTable.toggleRowSelection(row)
+    },
     getFileInfo(obj) {
     //   console.log('pageUpFile:', obj, obj.name)
     },
-    // getFileList(list) {
-    //   const address = []
-    //   const name = []
-    //   list.forEach((e, index) => {
-    //     address.push(e.url)
-    //     name.push(e.name)
-    //   })
-    //   this.formAllData.fileAddress = address.join(',')
-    //   this.formAllData.fileName = name.join(',')
-    // //   console.log('getFileList', this.formAllData)
-    // },
+    getFileList(list) {
+      const address = []
+      const name = []
+      list.forEach((e, index) => {
+        address.push(e.url)
+        name.push(e.name)
+      })
+      this.formAllData.fileAddress = address.join(',')
+      this.formAllData.fileName = name.join(',')
+    //   console.log('getFileList', this.formAllData)
+    },
     handleChange() {},
-    // uploadHandleFile(_this) {
-    //   const file = _this.file
-    // //   console.log('downfile :', file)
-    //   let extension = ''
-    //   const fileName = file.name.toLowerCase()
-    //   const i = fileName.lastIndexOf('.')
-    //   if (i > -1) {
-    //     extension = fileName.substring(i)
-    //   }
-    //   if (!extension || extension !== '.txt') {
-    //     this.$message({
-    //       type: 'info',
-    //       message: '只能上传 .txt 模板文件'
-    //     })
-    //     return
-    //   }
-    //   const data = new FormData()
-    //   data.append('uploadfile', file)
-    //   data.append('excelSign', this.info)
-    // },
+    uploadHandleFile(_this) {
+      const file = _this.file
+    //   console.log('downfile :', file)
+      let extension = ''
+      const fileName = file.name.toLowerCase()
+      const i = fileName.lastIndexOf('.')
+      if (i > -1) {
+        extension = fileName.substring(i)
+      }
+      if (!extension || extension !== '.txt') {
+        this.$message({
+          type: 'info',
+          message: '只能上传 .txt 模板文件'
+        })
+        return
+      }
+      const data = new FormData()
+      data.append('uploadfile', file)
+      data.append('excelSign', this.info)
+    },
     submitForm(ruleForm) {
       this.$refs[ruleForm].validate((valid) => {
           if (valid) {
@@ -372,7 +366,7 @@ export default {
             // console.log(data)
             let promiseObj
             if (this.isMatreg) {
-              promiseObj = postAddline(data1)
+              promiseObj = postAmend(this.selectInfo.id,data1)
             } else {
               promiseObj = postReportComplain(data2)
             }
