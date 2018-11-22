@@ -41,6 +41,7 @@
                         stripe
                         border
                         highlight-current-row
+                        height="100%"
                         @selection-change="getSelection" 
                         @row-click="clickDetails"
                         current-row-key
