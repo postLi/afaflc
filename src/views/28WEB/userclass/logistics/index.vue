@@ -6,9 +6,12 @@
               <el-input v-model="formAllData.belongCityName" placeholder="请选择所属区域" clearable></el-input>
             </vregion>
           </el-form-item> -->
-          <!-- <el-form-item label="所属区域">
-            <GetCityList ref="area" v-model="formAllData.belongCityName"  @returnStr="getStr"></GetCityList>
-          </el-form-item> -->
+          <el-form-item label="出发地">
+            <GetCityList ref="area" @returnStr="getStart"></GetCityList>
+          </el-form-item>
+          <el-form-item label="到达地">
+            <GetCityList ref="area" @returnStr="getEnd"></GetCityList>
+          </el-form-item>
           <!-- <el-form-item label="处理状态" prop="">
             <el-select clearable placeholder="请选择处理状态">
               <el-option
@@ -30,12 +33,12 @@
               </el-option>
             </el-select>
           </el-form-item>  -->
-          <el-form-item label="出发地">
+          <!-- <el-form-item label="出发地">
             <el-input v-model="formAllData.startLocation" :maxlength="20" placeholder="请输入出发地" auto-complete="off" clearable></el-input>
           </el-form-item>
           <el-form-item label="到达地">
             <el-input v-model="formAllData.endLocation" :maxlength="20" placeholder="请输入到达地" auto-complete="off" clearable></el-input>
-          </el-form-item>
+          </el-form-item> -->
           <el-form-item label="交易时间">
             <el-date-picker
               v-model="searchCreatTime"
@@ -50,7 +53,7 @@
             </el-date-picker>
           </el-form-item>
           <el-form-item label="发布者">
-            <el-input v-model="formAllData.orderSerial" :maxlength="20" placeholder="请输入发布者" auto-complete="off" clearable></el-input>
+            <el-input v-model="formAllData.publishName" :maxlength="20" placeholder="请输入发布者" auto-complete="off" clearable></el-input>
           </el-form-item>
           <el-form-item class="btnChoose fr">
             <el-button type="primary" :size="btnsize" plain @click="handleSearch('search')" icon="el-icon-search">搜索</el-button>
@@ -120,23 +123,23 @@
                   size="mini"
                   plain
                   type="primary"
-                  @click="handleEdit1(scope.$index, scope.row)">删除</el-button>
+                  @click="handleEdit1(scope.$index, scope.row,'delete')">删除</el-button>
                   <el-button
                   size="mini"
                   plain
                   type="warning"
-                  @click="handleEdit1(scope.$index, scope.row)">查看推荐</el-button>
+                  @click="handleEdit1(scope.$index, scope.row,'check')">查看推荐</el-button>
                   <el-button
                   size="mini"
                   plain
                   type="info"
-                  @click="handleEdit1(scope.$index, scope.row)">添加推荐</el-button>
+                  @click="handleEdit1(scope.$index, scope.row,'add')">添加推荐</el-button>
               </template>
           </el-table-column>                                                
               </el-table> 
         	  </div> 
           <!-- addReg -->
-          <!-- <addReg :centerDialogVisible="centerDialogVisible" @close="closeAddReg" @success="getsuccess"></addReg> -->
+          <add :selectInfo="selectInfo" :isMatreg="isMatreg" :centerDialogVisible="centerDialogVisible" @close="closeAddReg" @success="getsuccess"></add>
          <!-- 页码 -->
           <div class="info_tab_footer">共计:{{ dataTotal }}<div class="show_pager"> <Pager :total="dataTotal" @change="handlePageChange"  :sizes="sizes"/></div> </div> 
         </div>
@@ -144,12 +147,12 @@
 </template>
 <script>
 // import { postSelectAflcTransportRangeList } from '@/api/service/claim.js'
-import { postSelectAflcTransportRangeList } from '@/api/web/logistics.js'
+import { postSelectAflcTransportRangeList ,deleteBatch} from '@/api/web/logistics.js'
 import Pager from '@/components/Pagination/index'
 import { parseTime } from '@/utils/'
 // import vregion from '@/components/vregion/Region'
 import GetCityList from '@/components/GetCityList/city'
-// import addReg from './reg/index'
+import add from './components/add'
 import { pickerOptions2 } from '@/utils/index.js'
 export default {
   data() {
@@ -168,13 +171,22 @@ export default {
       centerDialogVisible: false,
       optionsdealStatus: [],
       searchCreatTime: [],
+      selectInfo:[],//专线id
+      centerDialogVisible: false,
+      isMatreg: false,
       defaultTime: [parseTime(+new Date() - 60 * 24 * 60 * 60 * 1000, '{y}-{m}-{d}'), parseTime(new Date(), '{y}-{m}-{d}')],
       formAllData: {
-        startLocation: '',
-        endLocation: '',
+        // startLocation: '',
+        // endLocation: '',
         startTime: '',
         endTime: '',
-        publishName: ''
+        publishName: '',
+        startProvince: '',
+        startCity: '',
+        startArea: '',
+        endProvince: '',
+        endCity: '',
+        endArea: ''
         // belongCity: '', // 区域
         // belongCityName: '', // 区域
         // // AF04801
@@ -192,6 +204,7 @@ export default {
     // newCity,
     // addReg,
     // vregion,
+    add,
     GetCityList,
     Pager
   },
@@ -209,18 +222,20 @@ export default {
         case 'search':
 
           this.firstblood()
-          var data = this.searchCreatTime[0]
-          const data4 = Date.parse(data)
-          console.log(data4)
+          this.formAllData.startTime = Date.parse(this.searchCreatTime[0] + ' 00:00:00')
+          this.formAllData.endTime = Date.parse(this.searchCreatTime[1] + ' 23:59:59')
+          console.log(this.formAllData.startTime, this.formAllData.endTime)
+          // const data4 = Date.parse(data)
+          // console.log(data4)
           break
         case 'clear':
           this.formAllData = {
-            belongCity: '',
-            belongCityName: '',
-            delStatus: '',
-            shipper: '',
-            driver: '',
-            orderSerial: ''
+            // belongCity: '',
+            // belongCityName: '',
+            // delStatus: '',
+            // shipper: '',
+            // driver: '',
+            // orderSerial: ''
           }
           this.$refs.area.clearData()
           this.firstblood()
@@ -240,8 +255,60 @@ export default {
         console.log(res)
       })
     },
-    handleEdit1() {
-
+    getStart(val) {
+      this.formAllData.startProvince = val.province.name
+      this.formAllData.startCity = val.city.name
+      this.formAllData.startArea = val.area.name
+      console.log('this.cityarr', val, val.province.name, val.city.name, val.area.name)
+    },
+    getEnd(val) {
+      this.formAllData.endProvince = val.province.name
+      this.formAllData.endCity = val.city.name
+      this.formAllData.endArea = val.area.name
+      console.log('this.cityarr', val, val.province.name, val.city.name, val.area.name)
+    },
+    handleEdit1(index,row,type) {
+      switch (type) {
+        case 'add':
+          this.selectInfo = row
+          this.centerDialogVisible = true
+          this.isMatreg = true
+          console.log(row)
+          break;
+          case 'check':
+            
+          break;
+        case 'delete':
+          console.log(index,row,row.id)
+          let arr = new Array()
+          arr.push(row.id)
+          console.log('arr', arr)
+          deleteBatch(arr).then(res => {
+             this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+              }).then(() => {
+                this.$message({
+                  type: 'success',
+                  message: '删除成功!'
+                });
+              }).catch(() => {
+                this.$message({
+                  type: 'info',
+                  message: '已取消删除'
+                });          
+              });
+            }).catch(err => {
+              this.$message({
+                type: 'error',
+                message: err.errorInfo || err.text || '未知错误，请重试~'
+              })
+            })
+          break;
+        default:
+          break;
+      }
     },
     closeAddReg() {
       this.centerDialogVisible = false
@@ -263,9 +330,9 @@ export default {
       this.pagesize = obj.pageSize
       this.firstblood()
     },
-    pushOrderSerial(item) {
-      this.$router.push({ name: '订单详情', query: { orderSerial: item.orderSerial }})
-    },
+    // pushOrderSerial(item) {
+    //   this.$router.push({ name: '订单详情', query: { orderSerial: item.orderSerial }})
+    // },
     getDataList() {
       this.firstblood()
       this.$refs.multipleTable.clearSelection()
