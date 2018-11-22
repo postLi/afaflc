@@ -96,6 +96,12 @@ export default {
             component: _import('finance/transactionShipper/transactionShipperWallet/shipperwallet'), 
             meta: { role: ['admin'], title: '货主账户详情',stitle: '详情',  noCache: false }
         },
-
+        {
+            path: '/finance/anfaCash', 
+            name: '安发账户概况',  
+            hidden: false,
+            component: _import('finance/anfaCash/index'), 
+            meta: { role: ['admin'], title: '安发账户概况',stitle: '账户',  noCache: false }
+        },
   ]
 }

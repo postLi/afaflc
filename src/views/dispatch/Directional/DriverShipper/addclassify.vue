@@ -107,7 +107,6 @@ export default {
         endTimeStatus() {
     　　　　return this.forms.bindingEndDate
     　　},
-
     },
     watch:{
         filterOptionsShipper:{
@@ -144,8 +143,6 @@ export default {
                         type: 'warning',
                         message: '绑定结束时间怎么能比绑定开始早呢！~'
                     })
-                    this.forms.bindingStartDate = '';
-                    this.forms.bindingEndDate = '';
                 }
             }
         },

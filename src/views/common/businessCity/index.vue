@@ -54,20 +54,16 @@
                             sortable
                             prop="createTime"
                             label="创建时间">
-                            </el-table-column>          
-                            <!-- <el-table-column label="操作">
+                            </el-table-column>           
+                            <el-table-column label="操作" width="150">
                                 <template slot-scope="scope">
                                     <el-button
                                     :size="btnsize"
-                                    :type="scope.row.isTop == 0 ? 'primary' : 'info'"
-                                    v-has:SYSTEM_NOTICE_TOP
-                                    @click="handleClick(scope.row,'ifTop')">{{scope.row.isTop == 0 ? '置顶' : '取消'}}</el-button>
-                                    <el-button
-                                    :size="btnsize"
-                                    v-has:SYSTEM_NOTICE_UPDATE
-                                    @click="handleClick(scope.row,'revise')">修改</el-button>
+                                    plain
+                                    type="primary"
+                                    @click="handleClick(scope.row)">初始化检查</el-button>
                                 </template>
-                            </el-table-column>         -->
+                            </el-table-column>        
                         </el-table>
                     </div>
                 </div>
@@ -268,6 +264,9 @@ export default{
                 this.pagesize = obj.pageSize
                 this.firstblood()
             },
+            handleClick(){
+
+            }
         }
     }
 </script>

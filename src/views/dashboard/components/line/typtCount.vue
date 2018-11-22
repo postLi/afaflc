@@ -55,6 +55,13 @@ export default {
             tooltip: {
                 trigger: 'axis',
             },
+            grid:{
+//                     x:50,
+//                     y:45,
+                    x2:25,
+//                     y2:20,
+//                     borderWidth:1
+              },
             legend: {
                 data: [
                     {

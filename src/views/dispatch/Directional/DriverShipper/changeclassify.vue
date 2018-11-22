@@ -94,7 +94,6 @@ export default {
                 this.startTime = oldValue
             }else{
                 this.startTime = newValue
-
             }
             this.ifWrong();
             
@@ -107,7 +106,6 @@ export default {
             }
             this.ifWrong();
     　　},
-        
     },
     mounted(){
     },
@@ -122,8 +120,9 @@ export default {
                         type: 'warning',
                         message: '绑定结束时间怎么能比绑定开始早呢！~'
                     })
-                    this.changeforms.bindingStartDate  = this.startTime ;
-                    this.changeforms.bindingEndDate = this.endTime ;
+                    this.btnShow = true;
+                }else{
+                    this.btnShow = false;
                 }
             }
         },

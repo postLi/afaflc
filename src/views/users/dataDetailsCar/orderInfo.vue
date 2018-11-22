@@ -401,7 +401,7 @@ export default {
             }
         },
         CancelListData:{},//取消订单列表数据
-        tradOrdeListTotalCount:0,//取消订单列表初始数量
+        CancelListtTotalCount:0,//取消订单列表初始数量
         grapListDataType:[
             {name:'全部',label:'',iscur:true},
             {name:'近7天',label:'-7',iscur:false},

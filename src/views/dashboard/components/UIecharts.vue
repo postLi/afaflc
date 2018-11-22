@@ -109,6 +109,30 @@
             </div>
             <!-- 单量变化折现图 -->
             <TypeLine/>
+            <!-- 待办事项 -->
+            <div class="orderType_AreaTop main_waitInfo">
+                <h4>待办事项</h4>
+                <ul>
+                   <li>
+                       <span>货主</span>
+                       <p class="fr">
+                            <span>18</span><span> >> </span>
+                       </p>
+                   </li>
+                    <li>
+                       <span>车主</span>
+                       <p class="fr">
+                            <span>18</span><span> >> </span> 
+                       </p>
+                   </li>
+                    <li>
+                       <span>物流公司</span>
+                       <p class="fr">
+                        <span>18</span><span> >> </span>
+                       </p>
+                   </li>
+                </ul> 
+            </div>
         </div>
 
         <div class="orderType_carType">
