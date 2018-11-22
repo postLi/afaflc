@@ -1,5 +1,5 @@
 <template>
-  <div class="identicalStyle Marketing" style="height:100%" v-loading="loading">
+  <div class="identicalStyle Marketing garden" style="height:100%" v-loading="loading">
     <el-form :inline="true" class="demo-ruleForm classify_searchinfo">
       <el-form-item label="所在地">
         <GetCityList ref="area" v-model="searchQuery.locationProvince" @returnStr="getStr"></GetCityList>
@@ -82,7 +82,7 @@
                 type="text" icon=""
                 size="small"
                 @click="handleFn(scope.row)">
-                <span>禁用</span>
+                <span >{{scope.row.disableStatus ===1?'启用':'禁用'}}</span>
               </el-button>
             </template>
           </el-table-column>
@@ -196,13 +196,12 @@
         this.$confirm('是否操作此物流园?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
-          type: 'warning',
           center: true
         }).then(() => {
           putUpdateDisableStatus(row.id).then(res => {
             this.$message({
               type: 'success',
-              message: '删除成功!'
+              message: '操作成功!'
             });
 
             this.fetchInfo()
@@ -219,7 +218,7 @@
         }).catch(() => {
           this.$message({
             type: 'info',
-            message: '已取消删除'
+            message: '已取消操作'
           });
           this.loading = false
         });
@@ -243,7 +242,7 @@
   }
 </script>
 <style lang="scss">
-  .Marketing {
+  .garden {
     .el-cascader {
       margin-top: -10px;
     }

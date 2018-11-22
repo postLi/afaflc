@@ -24,7 +24,7 @@
             <el-input v-model="form.parkContact" clearable :maxlength="15"></el-input>
           </el-form-item>
           <el-form-item label="固话" prop='parkNum'>
-            <el-input v-model="form.parkNum" clearable :maxlength="12"></el-input>
+            <el-input v-model="form.parkNum" clearable :maxlength="12" v-number-only></el-input>
           </el-form-item>
 
 
@@ -218,6 +218,7 @@
         this.form.locationProvince = item.locationProvince
         this.form.locationCity = item.locationCity
         this.form.locationArea = item.locationArea
+        this.form.disableStatus = item.disableStatus
         this.form.locationFn = this.form.locationProvince + this.form.locationCity + this.form.locationArea
 
       },
@@ -226,21 +227,23 @@
           if (valid) {
             let promiseObj
             let data
-            data = objectMerge2({}, this.form)
+            data = objectMerge2(this.form)
+
             delete data.locationFn
             delete data.addressFn
             if (this.checked === true) {
-              data.openStatus = 0
-            } else {
               data.openStatus = 1
+            } else {
+              data.openStatus = 0
             }
             // console.log(this.checked, data, 'checkde');
             if (this.isModify) {
-              console.log(data, 'data')
-              console.log(this.info.id, 'this.info.id')
+              // console.log(data, 'data')
+              // console.log(data.disableStatus, 'disableStatus')
               promiseObj = putTextedLogisticspark(this.info.id, data)
             } else {
-              // console.log(data, 'data')
+              this.form.disableStatus = 0
+              data.disableStatus = this.form.disableStatus
               promiseObj = postAddLogisticspark(data)
             }
             promiseObj.then(res => {
@@ -248,10 +251,7 @@
               this.$message.success('保存成功')
               this.close()
             }).catch(err => {
-              this.$message({
-                type: 'info',
-                message: '操作失败，原因：' + err.text ? err.text : err.errorInfo
-              })
+              this.$message.warning(err.text || err.errorInfo || '无法获取服务端数据~')
             })
           } else {
             return false
@@ -323,6 +323,9 @@
               margin-bottom: 0;
               .el-form-item__content {
                 width: 70%;
+                .el-textarea__inner {
+                  color: #3e9ff1;
+                }
               }
             }
           }
