@@ -114,7 +114,7 @@
                   </el-col>
                 <el-col :span="12"> 
                     <span v-if="editType !=='add'&&!selectFlag">
-                        <el-form-item label="所在地 ：" :label-width="formLabelWidth" prop="">
+                        <el-form-item label="所在地 ：" :label-width="formLabelWidth" prop="belongCityName">
                         <el-input v-model="templateModel.belongCityName" @focus="changeSelect" :disabled="editType=='view'"></el-input>
                         </el-form-item>
                     </span>
