@@ -1,5 +1,5 @@
 <template>
-    <div class="identicalStyle Marketing" style="height:100%">
+    <div class="identicalStyle Marketing" style="height:100%" v-loading="loading">
         <el-form :inline="true"  class="demo-ruleForm classify_searchinfo">
           <el-form-item label="出发地">
             <GetCityList ref="area" @returnStr="getStart"></GetCityList>
@@ -106,7 +106,7 @@
       </div>
 </template>
 <script>
-import { postSelectAflcTransportRangeList,deleteBatch } from '@/api/web/logistics.js'
+import { postSelectAflcTransportRangeList, deleteBatch } from '@/api/web/logistics.js'
 import Pager from '@/components/Pagination/index'
 import { parseTime } from '@/utils/'
 import GetCityList from '@/components/GetCityList/city'
@@ -130,7 +130,7 @@ export default {
       optionsdealStatus: [],
       searchCreatTime: [],
       selectInfo: [], // 专线id
-      centerDialogVisible: false,
+      loading: false,
       isMatreg: false,
       defaultTime: [parseTime(+new Date() - 60 * 24 * 60 * 60 * 1000, '{y}-{m}-{d}'), parseTime(new Date(), '{y}-{m}-{d}')],
       formAllData: {
@@ -194,11 +194,13 @@ export default {
     },
     // 请求接口刷新页面
     firstblood() {
-      // this.loading = false
       postSelectAflcTransportRangeList(this.page, this.pagesize, this.formAllData).then(res => {
         this.dataTotal = res.data.total
         this.dataset = res.data.list
         console.log(res)
+      }).catch(err => {
+        this.$message.warning(err.text || err.errorInfo || '无法获取服务端数据~')
+        this.loading = true
       })
     },
     getStart(val) {
@@ -221,7 +223,7 @@ export default {
           this.isMatreg = true
           console.log(row)
           break
-          case 'check':
+        case 'check':
           this.$router.push({ name: '专线推荐管理', query: { associatedId: row.id }})
           break
         case 'delete':
@@ -231,28 +233,27 @@ export default {
           console.log('arr', arr)
           deleteBatch(arr).then(res => {
             this.$confirm('确定要删除此物流专线吗?', '提示', {
-               confirmButtonText: '确定',
-               cancelButtonText: '取消',
-               type: 'warning'
-             }).then(() => {
-                this.$message({
-                  type: 'success',
-                  message: '删除成功!'
-                })
-                this.firstblood()
-              }).catch(() => {
-                this.$message({
-                  type: 'info',
-                  message: '已取消删除'
-                })          
-              })
-              
-            }).catch(err => {
+              confirmButtonText: '确定',
+              cancelButtonText: '取消',
+              type: 'warning'
+            }).then(() => {
               this.$message({
-                type: 'error',
-                message: err.errorInfo || err.text || '未知错误，请重试~'
+                type: 'success',
+                message: '删除成功!'
+              })
+              this.firstblood()
+            }).catch(() => {
+              this.$message({
+                type: 'info',
+                message: '已取消删除'
               })
             })
+          }).catch(err => {
+            this.$message({
+              type: 'error',
+              message: err.errorInfo || err.text || '未知错误，请重试~'
+            })
+          })
           break
         default:
           break
