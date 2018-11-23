@@ -1,44 +1,12 @@
 <template>
     <div class="identicalStyle Marketing" style="height:100%">
         <el-form :inline="true"  class="demo-ruleForm classify_searchinfo">
-          <!-- <el-form-item label="所属区域" prop="pointName">
-            <vregion :ui="true" @values="regionChange" class="form-control">
-              <el-input v-model="formAllData.belongCityName" placeholder="请选择所属区域" clearable></el-input>
-            </vregion>
-          </el-form-item> -->
           <el-form-item label="出发地">
             <GetCityList ref="area" @returnStr="getStart"></GetCityList>
           </el-form-item>
           <el-form-item label="到达地">
             <GetCityList ref="area" @returnStr="getEnd"></GetCityList>
           </el-form-item>
-          <!-- <el-form-item label="处理状态" prop="">
-            <el-select clearable placeholder="请选择处理状态">
-              <el-option
-              v-for="item in optionsPlantService"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value">
-              </el-option>
-            </el-select>
-          </el-form-item> -->
-          <!-- <el-form-item label="处理状态">
-            <el-select v-model="formAllData.dealStatus" clearable placeholder="请选择处理状态" >
-              <el-option
-                v-for="item in optionsdealStatus"
-                :key="item.code"
-                :label="item.name"
-                :value="item.code"
-                :disabled="item.disabled">
-              </el-option>
-            </el-select>
-          </el-form-item>  -->
-          <!-- <el-form-item label="出发地">
-            <el-input v-model="formAllData.startLocation" :maxlength="20" placeholder="请输入出发地" auto-complete="off" clearable></el-input>
-          </el-form-item>
-          <el-form-item label="到达地">
-            <el-input v-model="formAllData.endLocation" :maxlength="20" placeholder="请输入到达地" auto-complete="off" clearable></el-input>
-          </el-form-item> -->
           <el-form-item label="交易时间">
             <el-date-picker
               v-model="searchCreatTime"
@@ -61,11 +29,6 @@
           </el-form-item>            
         </el-form>
           <div class="classify_info">
-            		<!-- <div class="btns_box">
-                <el-button type="primary" :size="btnsize" class="el-icon-circle-plus"  plain @click="doAction('reg')">物损登记</el-button>
-                <el-button type="primary" :size="btnsize" class="el-icon-tickets" @click="doAction('shouli')" plain>确认受理</el-button>
-                <el-button type="primary" :size="btnsize" icon="el-icon-news" @click="doAction('genjin')" plain>记录物流跟进</el-button>
-            		</div> -->
             <div class="info_news">    
               <el-table ref="multipleTable" style="width: 100%" stripe border height="100%" @selection-change="getSelection" @row-click="clickDetails" highlight-current-row :data="dataset"  tooltip-effect="dark">
                 <!-- <el-table-column
@@ -102,9 +65,6 @@
                   sortable 
                   :show-overflow-tooltip="true"  
                   width="300">
-                  <!-- <template slot-scope="scope">
-                    {{scope.row.reporterPhone? scope.row.reporterPhone + '-' : ''}}{{scope.row.reporter ? scope.row.reporter : ''}}
-                  </template> -->
                 </el-table-column>
                 <el-table-column  label="浏览量" prop="browseNumber" sortable :show-overflow-tooltip="true">
                 </el-table-column>       
@@ -146,11 +106,9 @@
       </div>
 </template>
 <script>
-// import { postSelectAflcTransportRangeList } from '@/api/service/claim.js'
 import { postSelectAflcTransportRangeList ,deleteBatch} from '@/api/web/logistics.js'
 import Pager from '@/components/Pagination/index'
 import { parseTime } from '@/utils/'
-// import vregion from '@/components/vregion/Region'
 import GetCityList from '@/components/GetCityList/city'
 import add from './components/add'
 import { pickerOptions2 } from '@/utils/index.js'
@@ -176,8 +134,6 @@ export default {
       isMatreg: false,
       defaultTime: [parseTime(+new Date() - 60 * 24 * 60 * 60 * 1000, '{y}-{m}-{d}'), parseTime(new Date(), '{y}-{m}-{d}')],
       formAllData: {
-        // startLocation: '',
-        // endLocation: '',
         startTime: '',
         endTime: '',
         publishName: '',
@@ -187,13 +143,6 @@ export default {
         endProvince: '',
         endCity: '',
         endArea: ''
-        // belongCity: '', // 区域
-        // belongCityName: '', // 区域
-        // // AF04801
-        // dealStatus: '',
-        // shipper: '',
-        // driver: '',
-        // orderSerial: ''
       },
       pickerOptions2: {
         shortcuts: pickerOptions2
@@ -201,9 +150,6 @@ export default {
     }
   },
   components: {
-    // newCity,
-    // addReg,
-    // vregion,
     add,
     GetCityList,
     Pager
@@ -225,17 +171,17 @@ export default {
           this.formAllData.startTime = Date.parse(this.searchCreatTime[0] + ' 00:00:00')
           this.formAllData.endTime = Date.parse(this.searchCreatTime[1] + ' 23:59:59')
           console.log(this.formAllData.startTime, this.formAllData.endTime)
-          // const data4 = Date.parse(data)
-          // console.log(data4)
           break
         case 'clear':
+          this.searchCreatTime = [],
           this.formAllData = {
-            // belongCity: '',
-            // belongCityName: '',
-            // delStatus: '',
-            // shipper: '',
-            // driver: '',
-            // orderSerial: ''
+            publishName: '',
+            startProvince: '',
+            startCity: '',
+            startArea: '',
+            endProvince: '',
+            endCity: '',
+            endArea: ''
           }
           this.$refs.area.clearData()
           this.firstblood()
@@ -276,7 +222,7 @@ export default {
           console.log(row)
           break;
           case 'check':
-            
+            this.$router.push({ name: '专线推荐管理', query: { associatedId: row.id }})
           break;
         case 'delete':
           console.log(index,row,row.id)
@@ -284,7 +230,7 @@ export default {
           arr.push(row.id)
           console.log('arr', arr)
           deleteBatch(arr).then(res => {
-             this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+             this.$confirm('确定要删除此物流专线吗?', '提示', {
                 confirmButtonText: '确定',
                 cancelButtonText: '取消',
                 type: 'warning'
@@ -293,12 +239,14 @@ export default {
                   type: 'success',
                   message: '删除成功!'
                 });
+                this.firstblood()
               }).catch(() => {
                 this.$message({
                   type: 'info',
                   message: '已取消删除'
                 });          
               });
+              
             }).catch(err => {
               this.$message({
                 type: 'error',
@@ -312,6 +260,7 @@ export default {
     },
     closeAddReg() {
       this.centerDialogVisible = false
+      this.isMatreg = false
     },
          //  查询
     getData_query() {
@@ -329,13 +278,6 @@ export default {
       this.page = obj.pageNum
       this.pagesize = obj.pageSize
       this.firstblood()
-    },
-    // pushOrderSerial(item) {
-    //   this.$router.push({ name: '订单详情', query: { orderSerial: item.orderSerial }})
-    // },
-    getDataList() {
-      this.firstblood()
-      this.$refs.multipleTable.clearSelection()
     }
   }
 }

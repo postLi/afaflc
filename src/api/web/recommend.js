@@ -27,3 +27,24 @@ export function postAmend(id, data) {
     data: data
   })
 }
+/**
+ * /usercenter/aflcrecommend/v1/{id}
+ * 删除专线列表
+ */
+export function deleteLine(id) {
+  return fetch({
+    url: '/' + baseurl + '/usercenter/aflcrecommend/v1/' + id,
+    method: 'delete'
+  })
+}
+/**
+ *
+/usercenter/aflcrecommend/v1/putSettopStatusById/{id}
+根据ID置顶或取消置顶推荐专线表信息
+ */
+export function putCancel(id) {
+  return fetch({
+    url: '/' + baseurl + '/usercenter/aflcrecommend/v1/putSettopStatusById/' + id,
+    method: 'put'
+  })
+}

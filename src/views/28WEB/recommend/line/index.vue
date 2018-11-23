@@ -47,38 +47,11 @@
           </el-select>
         </el-form-item>
           <el-form-item label="出发地">
-            <GetCityList ref="area" @returnStr="getStart"></GetCityList>
+            <GetCityList ref="start" @returnStr="getStart"></GetCityList>
           </el-form-item>
           <el-form-item label="到达地">
-            <GetCityList ref="area" @returnStr="getEnd"></GetCityList>
+            <GetCityList ref="end" @returnStr="getEnd"></GetCityList>
           </el-form-item>
-          <!-- <el-form-item label="处理状态" prop="">
-            <el-select clearable placeholder="请选择处理状态">
-              <el-option
-              v-for="item in optionsPlantService"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value">
-              </el-option>
-            </el-select>
-          </el-form-item> -->
-          <!-- <el-form-item label="处理状态">
-            <el-select v-model="formAllData.dealStatus" clearable placeholder="请选择处理状态" >
-              <el-option
-                v-for="item in optionsdealStatus"
-                :key="item.code"
-                :label="item.name"
-                :value="item.code"
-                :disabled="item.disabled">
-              </el-option>
-            </el-select>
-          </el-form-item>  -->
-          <!-- <el-form-item label="出发地">
-            <el-input v-model="formAllData.startLocation" :maxlength="20" placeholder="请输入出发地" auto-complete="off" clearable></el-input>
-          </el-form-item>
-          <el-form-item label="到达地">
-            <el-input v-model="formAllData.endLocation" :maxlength="20" placeholder="请输入到达地" auto-complete="off" clearable></el-input>
-          </el-form-item> -->
           <el-form-item label="创建时间">
             <el-date-picker
               v-model="searchCreatTime"
@@ -93,7 +66,7 @@
             </el-date-picker>
           </el-form-item>
           <el-form-item label="账号">
-            <el-input v-model="formAllData.publishName" :maxlength="20" placeholder="请输入账号" auto-complete="off" clearable></el-input>
+            <el-input v-model="formAllData.account" :maxlength="20" placeholder="请输入账号" auto-complete="off" clearable></el-input>
           </el-form-item>
           <el-form-item class="btnChoose fr">
             <el-button type="primary" :size="btnsize" plain @click="handleSearch('search')" icon="el-icon-search">搜索</el-button>
@@ -157,16 +130,6 @@
                 </el-table-column> 
                 <el-table-column width="200" label="广告主账号" prop="account" sortable :show-overflow-tooltip="true">
                 </el-table-column>   
-                <!-- <el-table-column  
-                  label="发布者" 
-                  prop="publishName" 
-                  sortable 
-                  :show-overflow-tooltip="true"  
-                  width="300">
-                  <template slot-scope="scope">
-                    {{scope.row.reporterPhone? scope.row.reporterPhone + '-' : ''}}{{scope.row.reporter ? scope.row.reporter : ''}}
-                  </template>
-                </el-table-column> -->
                 <el-table-column
                   prop="settopStatus"
                   label="状态"
@@ -221,25 +184,22 @@
                   size="mini"
                   plain
                   type="info"
-                  @click="handleEdit(scope.$index, scope.row,'cancel')">取消置顶</el-button>
+                  @click="handleEdit1(scope.$index, scope.row,'cancel')">{{scope.row.settopStatus=== 1 ? '取消置顶': '置顶'}}</el-button>
               </template>
           </el-table-column>                                                
               </el-table> 
         	  </div> 
           <!-- addReg -->
-          <add :isMatreg="isMatreg" :centerDialogVisible="centerDialogVisible" @close="closeAddReg" @success="getsuccess"></add>
+          <add :selectInfo="selectInfo" :isMatreg="isMatreg" :centerDialogVisible="centerDialogVisible" @close="closeAddReg" @success="getsuccess"></add>
          <!-- 页码 -->
           <div class="info_tab_footer">共计:{{ dataTotal }}<div class="show_pager"> <Pager :total="dataTotal" @change="handlePageChange"  :sizes="sizes"/></div> </div> 
         </div>
       </div>
 </template>
 <script>
-// import { postSelectAflcTransportRangeList } from '@/api/service/claim.js'
-import { postSelectAflcTransportRangeList, deleteLine } from '@/api/web/logistics.js'
-import { postGetLists } from '@/api/web/recommend.js'
+import { postGetLists, deleteLine, putCancel } from '@/api/web/recommend.js'
 import Pager from '@/components/Pagination/index'
 import { parseTime } from '@/utils/'
-// import vregion from '@/components/vregion/Region'
 import GetCityList from '@/components/GetCityList/city'
 import add from './components/add'
 import { pickerOptions2 } from '@/utils/index.js'
@@ -260,32 +220,24 @@ export default {
       centerDialogVisible: false,
       optionsdealStatus: [],
       searchCreatTime: [],
-      centerDialogVisible: false,
       isMatreg: false,
+      selectInfo: [],
       defaultTime: [parseTime(+new Date() - 60 * 24 * 60 * 60 * 1000, '{y}-{m}-{d}'), parseTime(new Date(), '{y}-{m}-{d}')],
       formAllData: {
-        // startLocation: '',
-        // endLocation: '',
-        startTime: '',
-        endTime: '',
-        publishName: '',
-        startProvince: '',
+        associatedId: '', // 专线id
+        createStartTime: '', // 开始时间
+        createEndTime: '', // 结束时间
+        account: '', // 账号
+        startProvince: '', // 出发省
         startCity: '',
         startArea: '',
-        endProvince: '',
+        endProvince: '', // 到达省
         endCity: '',
         endArea: '',
         recommendColumn: '', // 推荐栏目
         recommendPosition: '', // 推荐位置
         settopStatus: '', // 置顶状态（0-不置顶 1-置顶）
         recommendPrescription: '' // 推荐时效（0-全部 1-未开始 2-进行中 3-已结束）
-        // belongCity: '', // 区域
-        // belongCityName: '', // 区域
-        // // AF04801
-        // dealStatus: '',
-        // shipper: '',
-        // driver: '',
-        // orderSerial: ''
       },
       options: [{
         value: '首页',
@@ -339,14 +291,12 @@ export default {
     }
   },
   components: {
-    // newCity,
-    // addReg,
-    // vregion,
     add,
     GetCityList,
     Pager
   },
   mounted() {
+    this.formAllData.associatedId = this.$route.query.associatedId
     this.firstblood()
     this.searchCreatTime = this.defaultTime
   },
@@ -360,22 +310,28 @@ export default {
         case 'search':
 
           this.firstblood()
-          this.formAllData.startTime = Date.parse(this.searchCreatTime[0] + ' 00:00:00')
-          this.formAllData.endTime = Date.parse(this.searchCreatTime[1] + ' 23:59:59')
+          this.formAllData.createStartTime = Date.parse(this.searchCreatTime[0] + ' 00:00:00')
+          this.formAllData.createEndTime = Date.parse(this.searchCreatTime[1] + ' 23:59:59')
           console.log(this.formAllData.startTime, this.formAllData.endTime)
-          // const data4 = Date.parse(data)
-          // console.log(data4)
           break
         case 'clear':
+          this.searchCreatTime = [],
           this.formAllData = {
-            // belongCity: '',
-            // belongCityName: '',
-            // delStatus: '',
-            // shipper: '',
-            // driver: '',
-            // orderSerial: ''
+            associatedId: '',
+            publishName: '',
+            startProvince: '',
+            startCity: '',
+            startArea: '',
+            endProvince: '',
+            endCity: '',
+            endArea: '',
+            recommendColumn: '', // 推荐栏目
+            recommendPosition: '', // 推荐位置
+            settopStatus: '', // 置顶状态（0-不置顶 1-置顶）
+            recommendPrescription: '' // 推荐时效（0-全部 1-未开始 2-进行中 3-已结束）
           }
-          this.$refs.area.clearData()
+          this.$refs.start.clearData()
+          this.$refs.end.clearData()
           this.firstblood()
           break
       }
@@ -387,6 +343,7 @@ export default {
     // 请求接口刷新页面
     firstblood() {
       // this.loading = false
+      // this.formAllData.recommendPrescription = this.options4[0].value
       postGetLists(this.page, this.pagesize, this.formAllData).then(res => {
         this.dataTotal = res.data.totalCount
         this.dataset = res.data.list
@@ -412,31 +369,52 @@ export default {
     },
     changePosition(obj) {
       this.formAllData.recommendPosition = obj
-    //   console.log('sdfsdfs', obj, this.formAllData)
     },
     changeStatus(obj) {
       this.formAllData.settopStatus = obj
-    //   console.log('sdfsdfs', obj, this.formAllData)
     },
-    changeStatus(obj) {
-      this.formAllData.Prescription = obj
-    //   console.log('sdfsdfs', obj, this.formAllData)
-    },
-    changePrescription(){
+    // changeStatus(obj) {
+    //   this.formAllData.Prescription = obj
+    // },
+    changePrescription(obj) {
       this.formAllData.recommendPrescription = obj
     },
     handleEdit1(index, row, type) {
       switch (type) {
         case 'amend':
+          this.selectInfo = row
           this.centerDialogVisible = true
           this.isMatreg = true
+          console.log('isMatreg', this.isMatreg)
+          break
+        case 'cancel':
+          putCancel(row.id).then(res => {
+            this.$message({
+              type: 'success',
+              message: '操作成功~'
+            })
+            this.firstblood()
+          })
+          console.log(row.settopStatus)
           break
         case 'delete':
           console.log(index, row, row.id)
-          postSelectAflcTransportRangeList(row.id).then(res => {
-            this.$message({
-              message: '删除成功~',
-              type: 'success'
+          deleteLine(row.id).then(res => {
+            this.$confirm('确定要删除此物流专线吗?', '提示', {
+              confirmButtonText: '确定',
+              cancelButtonText: '取消',
+              type: 'warning'
+            }).then(() => {
+              this.$message({
+                type: 'success',
+                message: '删除成功!'
+              })
+              this.firstblood()
+            }).catch(() => {
+              this.$message({
+                type: 'info',
+                message: '已取消删除'
+              })
             })
           }).catch(err => {
             this.$message({
@@ -451,11 +429,9 @@ export default {
     },
     closeAddReg() {
       this.centerDialogVisible = false
+      this.isMatreg = false
     },
-         //  查询
-    getData_query() {
-      this.firstblood()
-    },
+
     getSelection(selected) {
       this.selected = selected
     },
@@ -468,13 +444,6 @@ export default {
       this.page = obj.pageNum
       this.pagesize = obj.pageSize
       this.firstblood()
-    },
-    // pushOrderSerial(item) {
-    //   this.$router.push({ name: '订单详情', query: { orderSerial: item.orderSerial }})
-    // },
-    getDataList() {
-      this.firstblood()
-      this.$refs.multipleTable.clearSelection()
     }
   }
 }
