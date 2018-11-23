@@ -121,22 +121,31 @@
         init_instance_callback: function(editor) {
           // EDITOR = editor
           console.log('Editor: ' + editor.id + ' is now initialized.')
-          editor.on('input change undo redo', () => {
-            var content = editor.getContent()
-            _this.$emit('show', content)
-          })
+        //   editor.on('input change undo redo', () => {
+        //     var content = editor.getContent()
+        //     _this.$emit('show', content)
+        //   })
+
+        if (_this.value) {
+            editor.setContent(_this.value)
+          }
+          _this.hasInit = true;
+          editor.on('NodeChange Change KeyUp', () => {
+            this.hasChange = true;
+            this.$emit('input', editor.getContent({ format: 'raw' }));
+          });
         },
-        content_style: `
-            *                         { padding:0; margin:0; }
-            html, body                { height:100%; }
-            img                       { max-width:100%; display:block;height:auto; }
-            a                         { text-decoration: none; }
-            iframe                    { width: 100%; }
-            p                         { line-height:1.6; margin: 0px; }
-            table                     { word-wrap:break-word; word-break:break-all; max-width:100%; border:none; border-color:#999; }
-            .mce-object-iframe        { width:100%; box-sizing:border-box; margin:0; padding:0; }
-            ul,ol                     { list-style-position:inside; }
-        `,
+        // content_style: `
+        //     // *                         { padding:0; margin:0; }
+        //     html, body                { height:100%; }
+        //     img                       { max-width:100%; display:block;height:auto; }
+        //     a                         { text-decoration: none; }
+        //     iframe                    { width: 100%; }
+        //     p                         { line-height:1.6; margin: 0px; }
+        //     table                     { word-wrap:break-word; word-break:break-all; max-width:100%; border:none; border-color:#999; }
+        //     .mce-object-iframe        { width:100%; box-sizing:border-box; margin:0; padding:0; }
+        //     ul,ol                     { list-style-position:inside; }
+        // `,
         insert_button_items: 'image link | inserttable',
         paste_retain_style_properties: 'all',
         paste_word_valid_elements: '*[*]', // word需要它
@@ -240,7 +249,7 @@
             formData.append('success_action_status',  _this.uploadAli.success_action_status);
             formData.append('file', blobInfo.blob(),blobInfo.filename());
 
-            console.log('formData',formData)
+            // console.log('formData',formData)
             axios({
                 method: 'POST',
                 // 这里是你的上传地址

@@ -108,13 +108,17 @@ import { cancelOrder } from '@/api/order/ordermange.js'
                         // console.log(cancelForm)
                         // this.close();
                         cancelOrder(cancelForm).then(res => {
-                            console.log('是否取消成功',res)
-                            this.$alert('操作成功', '提示', {
-                                confirmButtonText: '确定',
-                                callback: action => {
+                            // console.log('是否取消成功',res)
+                            // this.$alert('操作成功', '提示', {
+                            //     confirmButtonText: '确定',
+                            //     callback: action => {
                                     this.close();
-                                }
-                            });
+                                      this.$message({
+                            type: 'success',
+                            message: '操作成功~'
+                        })
+                                // }
+                            // });
                         }).catch(err => {
                             this.$message({
                                 type: 'info',

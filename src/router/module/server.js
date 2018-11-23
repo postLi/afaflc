@@ -77,33 +77,33 @@ export default {
       ]
     },
     {
-        path: '/order/xuqiuku', 
+        path: '/sm/xuqiuku', 
         icon: 'xqk', 
         name: '需求库', 
-        component: _import('order/xuqiuku/index'), 
+        component: _import('sm/xuqiuku/index'), 
         meta: { role: ['admin'], title: '需求库',stitle: '需求库',  noCache: true , code: 'ORDER_REPOSITORY'},
         children:[
             { 
-                path: '/order/xuqiuku/carInfo', 
+                path: '/sm/xuqiuku/carInfo', 
                 hidden: false, 
                 name: '车源信息', 
-                component: _import('order/xuqiuku/carInfo/index'), 
+                component: _import('sm/xuqiuku/carInfo/index'), 
                 meta: { title: '车源信息',stitle: '车源',  noCache: true , code: 'ORDER_REPOSITORY_DRIVER_INFO'
             }},
 
             { 
-                path: '/order/xuqiuku/driverInfo', 
+                path: '/sm/xuqiuku/driverInfo', 
                 hidden: false,
                 name: '货源信息', 
-                component: _import('order/xuqiuku/driverInfo/index'), 
+                component: _import('sm/xuqiuku/driverInfo/index'), 
                 meta: { title: '货源信息',stitle: '货源',  noCache: true , code: 'ORDER_REPOSITORY_GOODS_INFO'
             }},
 
             { 
-                path: '/order/xuqiuku/manageGroup', 
+                path: '/sm/xuqiuku/manageGroup', 
                 hidden: false,
                 name: '网点信息', 
-                component: _import('order/xuqiuku/manageGroup/index'), 
+                component: _import('sm/xuqiuku/manageGroup/index'), 
                 meta: { title: '网点信息',stitle: '网点',  noCache: true , code: 'ORDER_REPOSITORY_NETWORK_INFO'
             }},
         ]

@@ -115,12 +115,16 @@ export default {
             'surePassword': this.$md5(form.re_pwd),
             'userType':form.userType
           }).then(res => {
-            this.$alert('修改成功', '提示', {
-              confirmButtonText: '确定',
-              callback: action => {
+            // this.$alert('修改成功', '提示', {
+            //   confirmButtonText: '确定',
+            //   callback: action => {
                 this.closeMe()
-              }
-            })
+                  this.$message({
+                            type: 'success',
+                            message: '操作成功~'
+                        })
+            //   }
+            // })
           }).catch(res => {
               console.log('err',res)
             if (res.errorInfo.indexOf('原密码错误') !== -1) {

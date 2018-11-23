@@ -322,12 +322,16 @@ export default {
                         var forms= Object.assign({}, this.formFroze)
                         data_get_shipper_change(forms).then(res=>{
                             // console.log(res)
-                            this.$alert('修改成功', '提示', {
-                                confirmButtonText: '确定',
-                                callback: action => {
+                            // this.$alert('修改成功', '提示', {
+                            //     confirmButtonText: '确定',
+                            //     callback: action => {
                                     this.close()
-                                }
-                            });
+                                      this.$message({
+                            type: 'success',
+                            message: '操作成功~'
+                        })
+                            //     }
+                            // });
                         }).catch(err => {
                              this.$message({
                                 type: 'info',

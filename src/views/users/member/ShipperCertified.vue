@@ -649,14 +649,18 @@ defaultImg:'/static/test.jpg',//默认第一张图片的url
                     var forms = Object.assign({}, this.shengheform, { authStatus: 'AF0010403', authStatusName: '已认证' }, { authNoPassCause: JSON.stringify(this.pictureValue) })
                     // console.log(forms)
                     data_ChangeLogisticsCompany(forms).then(res => {
-                        this.$alert('操作成功', '提示', {
-                            confirmButtonText: '确定',
-                            callback: action => {
+                        // this.$alert('操作成功', '提示', {
+                        //     confirmButtonText: '确定',
+                        //     callback: action => {
                                 this.handlerCancel();
                                 this.changeList();
                                 this.firstblood();
-                            }
+                                  this.$message({
+                            type: 'success',
+                            message: '操作成功~'
                         })
+                        //     }
+                        // })
                     }).catch(err => {
                         this.dialogFormVisible = true
                         this.$message({

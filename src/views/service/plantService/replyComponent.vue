@@ -98,13 +98,17 @@ import { getUserInfo } from '@/utils/auth.js'
                         let replyForm = Object.assign({},this.currentRow,{replyName:this.userInfo.username,replyId:this.userInfo.id})
                         console.log(replyForm)
                         replyPlantComplain(replyForm).then(res => {
-                            console.log('是否回复成功',res)
-                            this.$alert('操作成功', '提示', {
-                                confirmButtonText: '确定',
-                                callback: action => {
+                            // console.log('是否回复成功',res)
+                            // this.$alert('操作成功', '提示', {
+                            //     confirmButtonText: '确定',
+                            //     callback: action => {
                                     this.close();
-                                }
-                            });
+                                      this.$message({
+                                    type: 'success',
+                                    message: '操作成功~'
+                                })
+                                // }
+                            // });
                         }).catch(err => {
                             this.$message({
                                 type: 'info',

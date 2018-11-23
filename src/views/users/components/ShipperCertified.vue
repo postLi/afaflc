@@ -484,12 +484,16 @@ export default {
                     var forms=objectMerge2({},this.shengheform,{currentShipperStatus:"AF0010402"},{shipperStatus:"AF0010403",shipperStatusName:'已认证'});
                     console.log('this.forms',forms)
                     data_get_shipper_change(forms).then(res=>{
-                        this.$alert('操作成功', '提示', {
-                            confirmButtonText: '确定',
-                            callback: action => {
+                        // this.$alert('操作成功', '提示', {
+                        //     confirmButtonText: '确定',
+                        //     callback: action => {
                                this.closeMe();
-                            }
-                        });
+                                 this.$message({
+                            type: 'success',
+                            message: '操作成功~'
+                        })
+                        //     }
+                        // });
                     }).catch(err=>{
                         this.RZdialogFormVisible = true;
                         this.$message({

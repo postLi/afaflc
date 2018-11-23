@@ -87,9 +87,9 @@ export default {
                     }
                 ],
                 show:true,
-                left:'15%',
+                left:'20%',
                 top:'5%',
-                itemGap:50,
+                itemGap:20,
                 textStyle:{
                     fontSize:'16',
                     fontWeight:'bold'

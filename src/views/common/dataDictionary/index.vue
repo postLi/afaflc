@@ -247,16 +247,20 @@ import DicDialog from './component/addDictionary'
                                 type: 'warning'
                             }).then( ()=>{
                                 data_Delet(delID).then(res => {
-                                    this.$alert('操作成功', '提示', {
-                                        confirmButtonText: '确定',
-                                        callback: action => {
+                                    // this.$alert('操作成功', '提示', {
+                                    //     confirmButtonText: '确定',
+                                    //     callback: action => {
+                                            this.$message({
+                                                type: 'success',
+                                                message: '操作成功~'
+                                            })
                                             if(currentForm.pid){
                                                 this.getInformation();
                                             }else{
                                                 this.firstblood();
                                             }
-                                        }
-                                    });
+                                        // }
+                                    // });
                                 }).catch(res=>{
                                     this.$message.error('操作失败，失败原因：',err.errorInfo)
                                 })
