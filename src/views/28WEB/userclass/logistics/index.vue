@@ -106,7 +106,7 @@
       </div>
 </template>
 <script>
-import { postSelectAflcTransportRangeList ,deleteBatch} from '@/api/web/logistics.js'
+import { postSelectAflcTransportRangeList,deleteBatch } from '@/api/web/logistics.js'
 import Pager from '@/components/Pagination/index'
 import { parseTime } from '@/utils/'
 import GetCityList from '@/components/GetCityList/city'
@@ -129,7 +129,7 @@ export default {
       centerDialogVisible: false,
       optionsdealStatus: [],
       searchCreatTime: [],
-      selectInfo:[],//专线id
+      selectInfo: [], // 专线id
       centerDialogVisible: false,
       isMatreg: false,
       defaultTime: [parseTime(+new Date() - 60 * 24 * 60 * 60 * 1000, '{y}-{m}-{d}'), parseTime(new Date(), '{y}-{m}-{d}')],
@@ -196,7 +196,7 @@ export default {
     firstblood() {
       // this.loading = false
       postSelectAflcTransportRangeList(this.page, this.pagesize, this.formAllData).then(res => {
-        this.dataTotal = res.data.totalCount
+        this.dataTotal = res.data.total
         this.dataset = res.data.list
         console.log(res)
       })
@@ -213,39 +213,39 @@ export default {
       this.formAllData.endArea = val.area.name
       console.log('this.cityarr', val, val.province.name, val.city.name, val.area.name)
     },
-    handleEdit1(index,row,type) {
+    handleEdit1(index, row, type) {
       switch (type) {
         case 'add':
           this.selectInfo = row
           this.centerDialogVisible = true
           this.isMatreg = true
           console.log(row)
-          break;
+          break
           case 'check':
-            this.$router.push({ name: '专线推荐管理', query: { associatedId: row.id }})
-          break;
+          this.$router.push({ name: '专线推荐管理', query: { associatedId: row.id }})
+          break
         case 'delete':
-          console.log(index,row,row.id)
-          let arr = new Array()
+          console.log(index, row, row.id)
+          const arr = new Array()
           arr.push(row.id)
           console.log('arr', arr)
           deleteBatch(arr).then(res => {
-             this.$confirm('确定要删除此物流专线吗?', '提示', {
-                confirmButtonText: '确定',
-                cancelButtonText: '取消',
-                type: 'warning'
-              }).then(() => {
+            this.$confirm('确定要删除此物流专线吗?', '提示', {
+               confirmButtonText: '确定',
+               cancelButtonText: '取消',
+               type: 'warning'
+             }).then(() => {
                 this.$message({
                   type: 'success',
                   message: '删除成功!'
-                });
+                })
                 this.firstblood()
               }).catch(() => {
                 this.$message({
                   type: 'info',
                   message: '已取消删除'
-                });          
-              });
+                })          
+              })
               
             }).catch(err => {
               this.$message({
@@ -253,9 +253,9 @@ export default {
                 message: err.errorInfo || err.text || '未知错误，请重试~'
               })
             })
-          break;
+          break
         default:
-          break;
+          break
       }
     },
     closeAddReg() {

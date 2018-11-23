@@ -345,7 +345,7 @@ export default {
       // this.loading = false
       // this.formAllData.recommendPrescription = this.options4[0].value
       postGetLists(this.page, this.pagesize, this.formAllData).then(res => {
-        this.dataTotal = res.data.totalCount
+        this.dataTotal = res.data.total
         this.dataset = res.data.list
         console.log(res)
       })
