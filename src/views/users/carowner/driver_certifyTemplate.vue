@@ -87,14 +87,14 @@
                             </el-option>
                         </el-select>
                     </el-form-item>
-                  </el-col>
+                  </el-col> 
                 <el-col :span="12">
                     <span v-if="editType !=='add'&&!selectFlag">
-                        <el-form-item label="所在地 ：" :label-width="formLabelWidth" prop="">
+                        <el-form-item label="所在地 ：" :label-width="formLabelWidth" prop="belongCityName">
                         <el-input v-model="templateModel.belongCityName" @focus="changeSelect" :disabled="editType=='view'"></el-input>
                         </el-form-item>
                     </span>
-                    <span v-else>
+                    <span v-else>  
                    <el-form-item label="所在地 ："  :label-width="formLabelWidth" prop="belongCityName">
                     <GetCityList ref="area" v-model="templateModel.belongCityName"  @returnStr="getStr"></GetCityList>
                     </el-form-item>
