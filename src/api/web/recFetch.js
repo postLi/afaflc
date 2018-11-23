@@ -1,6 +1,6 @@
 import fetch from '@/utils/fetch'
-// const baseUrl = 'aflc-uc'
-const baseUrl = 'aflcusercenterservice-huang'
+const baseUrl = 'aflc-uc'
+// const baseUrl = 'aflcusercenterservice-huang'
 
 export function postList(page, pagesize, data) {
   return fetch({
