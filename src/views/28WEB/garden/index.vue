@@ -99,7 +99,7 @@
   </div>
 </template>
 <script>
-  import {postList, putUpdateDisableStatus} from '@/api/web/garden'
+  import { postList, putUpdateDisableStatus } from '@/api/web/garden'
   import GetCityList from '@/components/GetCityList/city'
   import Pager from '@/components/Pagination/index'
   import AddGarden from './addGarden'
@@ -130,7 +130,7 @@
           parkName: '',
           openStatus: '',
           parkMobile: '',
-          disableStatus: '',
+          disableStatus: ''
         }
       }
     },
@@ -142,12 +142,12 @@
         this.loading = true
         postList(this.page, this.pagesize, this.searchQuery).then(res => {
           this.dataset = res.data.list
-          this.dataTotal = res.data.total;
+          this.dataTotal = res.data.total
           this.loading = false
           // console.log(res)
         }).catch(err => {
           this.$message.warning(err.text || err.errorInfo || '无法获取服务端数据~')
-          this.loading = false;
+          this.loading = false
         })
       },
       fetchInfo() {
@@ -172,7 +172,7 @@
               parkName: '',
               openStatus: '',
               parkMobile: '',
-              disableStatus: '',
+              disableStatus: ''
             }
             this.$refs.area.clearData()
             this.fetchInfo()
@@ -183,25 +183,24 @@
             this.selectedInfo = {}
             break
         }
-
       },
       handleDeatail(row) {
         this.isVisibleDialog = true
         this.isModify = true
         this.selectedInfo = row
-        console.log(row);
+        console.log(row)
       },
       handleFn(row) {
         putUpdateDisableStatus(row.id).then(res => {
           this.$message({
             type: 'success',
             message: '操作成功~'
-          });
+          })
           this.fetchInfo()
           this.loading = false
         }).catch(err => {
           this.$message.warning(err.text || err.errorInfo || '无法获取服务端数据~')
-          this.loading = false;
+          this.loading = false
         })
       },
       getSelection(selected) {

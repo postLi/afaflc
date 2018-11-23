@@ -184,7 +184,7 @@
                   size="mini"
                   plain
                   type="info"
-                  @click="handleEdit1(scope.$index, scope.row,'cancel')">{{scope.row.settopStatus=== 1 ? '取消置顶': (scope.row.settopStatus === 0 ? '置顶': '')}}</el-button>
+                  @click="handleEdit1(scope.$index, scope.row,'cancel')">{{scope.row.settopStatus=== 1 ? '取消置顶': '置顶'}}</el-button>
               </template>
           </el-table-column>                                                
               </el-table> 
@@ -343,6 +343,7 @@ export default {
     // 请求接口刷新页面
     firstblood() {
       // this.loading = false
+      // this.formAllData.recommendPrescription = this.options4[0].value
       postGetLists(this.page, this.pagesize, this.formAllData).then(res => {
         this.dataTotal = res.data.totalCount
         this.dataset = res.data.list
@@ -388,6 +389,10 @@ export default {
           break
         case 'cancel':
           putCancel(row.id).then(res => {
+            this.$message({
+              type: 'success',
+              message: '操作成功~'
+            })
             this.firstblood()
           })
           console.log(row.settopStatus)
