@@ -2,8 +2,8 @@ import fetch from '@/utils/fetch'
 
 // /usercenter/aflclogisticspark/v1/list
 // 云平台-查询物流园区表分页信息
-const baseUrl = 'aflc-uc'
-// const baseUrl = 'aflcusercenterservice-huang'
+// const baseUrl = 'aflc-uc'
+const baseUrl = 'aflcusercenterservice'
 
 export function postList(page, pagesize, data) {
   return fetch({
