@@ -1,5 +1,5 @@
 <template>
-    <div class="identicalStyle Marketing" style="height:100%">
+    <div class="identicalStyle Marketing" style="height:100%" v-loading="loading">
         <el-form :inline="true"  class="demo-ruleForm classify_searchinfo">
           <!-- <el-form-item label="所属区域" prop="pointName">
             <vregion :ui="true" @values="regionChange" class="form-control">
@@ -217,6 +217,7 @@ export default {
       dataTotal: 0,
       dataset: [],
       radio: 1,
+      loading: false,
       centerDialogVisible: false,
       optionsdealStatus: [],
       searchCreatTime: [],
@@ -345,9 +346,12 @@ export default {
       // this.loading = false
       // this.formAllData.recommendPrescription = this.options4[0].value
       postGetLists(this.page, this.pagesize, this.formAllData).then(res => {
-        this.dataTotal = res.data.totalCount
+        this.dataTotal = res.data.total
         this.dataset = res.data.list
         console.log(res)
+      }).catch(err => {
+        this.$message.warning(err.text || err.errorInfo || '无法获取服务端数据~')
+        this.loading = true
       })
     },
     getStart(val) {

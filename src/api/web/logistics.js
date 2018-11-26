@@ -1,6 +1,6 @@
 import fetch from '@/utils/fetch'
-// const baseurl = 'aflcusercenterservice'
-const baseurl = 'aflcusercenterservice-huang'
+const baseurl = 'aflcusercenterservice'
+// const baseurl = 'aflcusercenterservice-huang'
 //
 /**
  * 专线列表
