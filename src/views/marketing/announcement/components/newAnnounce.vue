@@ -1,7 +1,7 @@
 <template>
     <div class="newAnnounce commoncss">
         <el-dialog :title='Atitle' :close-on-click-modal="false" top="5vh" @open='open'  :visible="dialogFormVisible" @close="close">
-            <el-form :model="announce" :rules="rules" :label-position="labelPosition" ref="ruleForm" label-width="80px" class="demo-ruleForm">
+            <el-form :model="announce" :rules="rules" :label-position="labelPosition" ref="ruleForm" label-width="100px" class="demo-ruleForm">
                 <el-form-item label="发布区域" prop="noticeLocation">
                     <vregion :ui="true" :area="false" @values="regionChange" class="form-control">
                         <el-input v-model="announce.noticeLocation" placeholder="请选择出发地" clearable></el-input>
@@ -32,10 +32,31 @@
                     <el-input v-model="announce.noticeUrl"></el-input>
                 </el-form-item>
                 <el-form-item prop="release">
-                    <el-checkbox v-model="releaseDriver" >发布到车主端</el-checkbox>
-                    <el-checkbox v-model="releaseShipper" >发布到货主端</el-checkbox>
+                    <el-checkbox v-model="releaseDriver" >28快运车主</el-checkbox>
+                    <el-checkbox v-model="releaseShipper" >28快运货主</el-checkbox>
+                    <el-checkbox v-model="releaseHome" v-if="releaseDriver || releaseShipper">发布到首页营销广告位</el-checkbox>
                 </el-form-item>
-                    <el-form-item label="公告分组" prop="noticeGroupCode" v-if="releaseDriver">
+                <el-form-item label="车主认证状态" prop="homeDriverStatus" v-if="releaseDriver && releaseHome">
+                    <el-select v-model="announce.homeDriverStatus" clearable placeholder="请选择">
+                        <el-option
+                        v-for="item in optionshomeDriverStatus"
+                        :key="item.id"
+                        :label="item.name"
+                        :value="item.label">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="货主认证状态" prop="homeShipperStatus" v-if="releaseShipper && releaseHome">
+                    <el-select v-model="announce.homeShipperStatus" clearable placeholder="请选择">
+                        <el-option
+                        v-for="item in optionshomeShipperStatus"
+                        :key="item.id"
+                        :label="item.name"
+                        :value="item.label">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="公告分组" prop="noticeGroupCode" v-if="releaseDriver">
                     <el-select v-model="announce.noticeGroupCode" clearable placeholder="请选择">
                         <el-option
                         v-for="item in optionsGroupCode"
@@ -123,6 +144,7 @@ export default {
             },
             releaseDriver:false,//发布到车主分组
             releaseShipper:false,//发布到货主分组
+            releaseHome:false,//发布到首页营销广告位
             isTop:false,//是否置顶
             noticeGroupCode:'AF045',
             labelPosition:'left',
@@ -136,12 +158,25 @@ export default {
                 noticeUrl:'',//公告链接
                 releaseDriver:'0',//发布到车主分组
                 releaseShipper:'0',//发布到货主分组
+                releaseHome:'0',
+                homeDriverStatus:'',
+                homeShipperStatus:'',
                 noticeGroupCode:'',//车主端公告分组
                 startTime:'',
                 endTime:null,
                 isTop:'0',//是否置顶
             },
             optionsGroupCode:[],
+            optionshomeDriverStatus:[
+                {name:'全部',label:"0",id:'01'},
+                {name:'未认证',label:"1",id:'02'},
+                {name:'已认证',label:"2",id:'03'},
+            ],
+            optionshomeShipperStatus:[
+                {name:'全部',label:"0",id:'04'},
+                {name:'未认证',label:"1",id:'05'},
+                {name:'已认证',label:"2",id:'06'},
+            ],
             announceTime:[],
             editorSetting: { // 配置富文本编辑器高
                 height: 300
@@ -171,7 +206,9 @@ export default {
                 ],
                 release:[
                     {required: true, validator: checkRelease, trigger: 'blur'}
-                ]
+                ],
+                homeShipperStatus:{required: true, message: '请选择首页广告车主认证状态', trigger: 'change'},
+                homeDriverStatus:{required: true, message: '请选择首页广告货主认证状态', trigger: 'change'}
             }
         };
     },
@@ -190,6 +227,7 @@ export default {
                 this.announce = newValue;
                 this.releaseDriver= newValue.releaseDriver == '0' ? false :true;//发布到车主分组
                 this.releaseShipper= newValue.releaseShipper == '0' ? false :true;//发布到货主分组
+                this.releaseHome= newValue.releaseHome == '0' ? false :true;//发布到货主分组
                 this.isTop= newValue.isTop == '0' ? false :true;//是否置顶
             }else{
                 this.announce = {}
@@ -214,6 +252,17 @@ export default {
                     this.announce.releaseShipper = '1'
                 }else{
                     this.announce.releaseShipper = '0'
+                }
+            },
+            deep: true, 
+        },
+        releaseHome:{
+            handler(curVal,oldVal){
+                // console.log(curVal);
+                if(curVal){
+                    this.announce.releaseHome = '1'
+                }else{
+                    this.announce.releaseHome = '0'
                 }
             },
             deep: true, 
@@ -326,6 +375,7 @@ export default {
             this.$refs.ruleForm.resetFields();
             this.releaseDriver = false;//发布到车主分组
             this.releaseShipper = false;//发布到货主分组
+            this.releaseHome = false,//发布到首页营销广告位
             this.isTop = false;//是否置顶
             this.announce.endTime = null;
             this.$emit('close');
@@ -334,9 +384,9 @@ export default {
             }
         },
         open(){
-            // this.nextTick(()=>{
+            this.$nextTick(()=>{
                 this.init();
-            // })
+            })
         }
     },
 }
@@ -368,7 +418,7 @@ export default {
     .newAnnounce{
          .el-dialog{
             .el-dialog__body{
-                padding:20px 10px 20px 50px;
+                padding:20px 10px 20px 40px;
                 border-bottom:0 none;
                 .el-form-item__content{
                     .licensePicture{

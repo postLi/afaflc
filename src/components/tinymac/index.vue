@@ -1,5 +1,7 @@
 <template>
-  <textarea :id='id' :value='value'></textarea>
+    <div>
+        <textarea :id='id' :value='value'></textarea>
+    </div>
 </template>
  
 <script>
@@ -54,14 +56,18 @@
     watch: {
       value: function(val) {
         console.log('init ' + val)
-        if (this.status === INIT || tinymce.activeEditor.getContent() !== val) {
-          tinymce.activeEditor.setContent(val)
+        if(this.flag){
+            if (this.status === INIT || tinymce.activeEditor.getContent() !== val) {
+              tinymce.activeEditor.setContent(val)
+            }
+            this.status = CHANGED
         }
-        this.status = CHANGED
+        this.flag=true;
       }
     },
     data() {
         return {
+            flag:true,
             status: INIT,
             id: 'editor-' + new Date().getMilliseconds(),
             uploadAli:{
@@ -121,19 +127,20 @@
         init_instance_callback: function(editor) {
           // EDITOR = editor
           console.log('Editor: ' + editor.id + ' is now initialized.')
-        //   editor.on('input change undo redo', () => {
-        //     var content = editor.getContent()
-        //     _this.$emit('show', content)
-        //   })
+          editor.on('input undo redo execCommand', () => {
+            _this.flag=false;
+            var content = editor.getContent()
+            _this.$emit('show', content)
+          })
 
-        if (_this.value) {
-            editor.setContent(_this.value)
-          }
-          _this.hasInit = true;
-          editor.on('NodeChange Change KeyUp', () => {
-            this.hasChange = true;
-            this.$emit('input', editor.getContent({ format: 'raw' }));
-          });
+        // if (_this.value) {
+        //     editor.setContent(_this.value)
+        //   }
+        //   _this.hasInit = true;
+        //   editor.on('NodeChange Change KeyUp', () => {
+        //     this.hasChange = true;
+        //     this.$emit('input', editor.getContent({ format: 'raw' }));
+        //   });
         },
         // content_style: `
         //     // *                         { padding:0; margin:0; }
@@ -238,7 +245,7 @@
           }
             let type = blobInfo.filename().match(/([^\.]+)$/)
             type = type ? '.' + type[1] : ''
-            console.log('_this.uploadAli',_this.uploadAli)
+            // console.log('_this.uploadAli',_this.uploadAli)
         function uploadPic() { // 发送请求
             let formData = new FormData();
             // 服务端接收文件的参数名，文件数据，文件名

@@ -9,11 +9,11 @@
             </el-input>
         </el-form-item>
         <el-form-item label="所属客服：" maxlength="18"  prop="shipperName">
-            <el-input v-model="searchInfo.driverName" clearable placeholder="账户/姓名/车牌号">
+            <el-input v-model="searchInfo.driverName" clearable>
             </el-input>
         </el-form-item>
         <el-form-item label="所属业务员：" maxlength="18"  prop="shipperName">
-            <el-input v-model="searchInfo.shipperName" clearable placeholder="账户/姓名">
+            <el-input v-model="searchInfo.shipperName" clearable>
             </el-input>
         </el-form-item>
                 <br>
@@ -23,11 +23,11 @@
             </vregion>
         </el-form-item>
         <el-form-item label="活跃状态：" maxlength="18"  prop="shipperName">
-            <el-input v-model="searchInfo.shipperName" clearable placeholder="账户/姓名">
+            <el-input v-model="searchInfo.shipperName" clearable>
             </el-input>
         </el-form-item>
         <el-form-item label="身份状态：" prop="mobile">
-           <el-input v-model="searchInfo.driverName" clearable placeholder="账户/姓名/车牌号">
+           <el-input v-model="searchInfo.driverName" clearable>
             </el-input>
         </el-form-item>
         <el-form-item class="btnChoose fr"  style="margin-left:0;">

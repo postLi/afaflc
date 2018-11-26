@@ -40,7 +40,7 @@
                             <el-table-column
                             sortable
                             prop="name"
-                            label="城市">
+                            label="开通城市">
                             <template  slot-scope="scope">
                             <span class="BtnInfo" @click="showMap(scope.row)">{{scope.row.name}}</span >
                             </template>
@@ -53,8 +53,18 @@
                             <el-table-column
                             sortable
                             prop="createTime"
-                            label="创建时间">
-                            </el-table-column>           
+                            label="开通时间">
+                            </el-table-column>    
+                            <el-table-column
+                            sortable
+                            prop="updater"
+                            label="上次检查结果">
+                            </el-table-column>    
+                            <el-table-column
+                            sortable
+                            prop="updateTime"
+                            label="上次检查时间">
+                            </el-table-column>              
                             <el-table-column label="操作" width="150">
                                 <template slot-scope="scope">
                                     <el-button
@@ -72,6 +82,8 @@
         <!-- 页码 -->
          <div class="info_tab_footer">共计:{{ dataTotal }} <div class="show_pager"> <Pager :total="dataTotal" @change="handlePageChange"  :sizes="sizes" ref="pager"/></div> </div>     
    <!-- <citymap :popVisible.sync="popVisible"  :fromData = 'MapAraay'/> -->
+
+        <CheckOut :dialogFormVisible = 'dialogFormVisibleCheck'/>
     </div>
 </template>
 
@@ -79,6 +91,7 @@
 import { data_getProvinceList,data_GetCityList } from '@/api/common.js'
 import { data_CityList,data_AddCity,data_CityCode } from '@/api/company/businessCity.js'
 import Pager from '@/components/Pagination/index'
+import CheckOut from './checkOut'
 import { parseTime } from '@/utils/'
 import '@/styles/dialog.scss'
 import '@/styles/side.scss'
@@ -86,6 +99,7 @@ import '@/styles/side.scss'
 export default{
       data() {
           return {
+              dialogFormVisibleCheck:false,//初始化检查
               MapAraay:[],
               popVisible:false,
               treestatus:false,
@@ -113,6 +127,7 @@ export default{
         },
       components: {
           Pager,
+          CheckOut
         },
 
       mounted() {
@@ -193,7 +208,8 @@ export default{
                     this.tableDataTree = res.data;
                     this.loading = false;
                     this.tableDataTree.forEach(item => {
-                        item.createTime = parseTime(item.createTime,"{y}-{m}-{d}");
+                        item.createTime = parseTime(item.createTime);
+                        item.updateTime = parseTime(item.updateTime);
                     })
                 })                
             },
@@ -265,7 +281,7 @@ export default{
                 this.firstblood()
             },
             handleClick(){
-
+                this.dialogFormVisibleCheck = true;
             }
         }
     }
