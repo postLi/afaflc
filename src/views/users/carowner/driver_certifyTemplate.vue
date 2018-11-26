@@ -885,7 +885,7 @@ export default {
             let timeData = new Date() - val
             let timeD = timeData/1000 / 60 / 60 / 24
             let timeH = (timeData/ 1000 / 60 / 60 % 24);
-           return  parseInt(timeD)+ '天'+ parseInt(timeH)+ '小时'
+            return  parseInt(timeD)+ '天'+ parseInt(timeH)+ '小时'
            }
         })
     }
