@@ -1,33 +1,33 @@
 <template>
     <el-form :inline="true" :model="searchInfo" ref="ruleForm" class="demo-ruleForm classify_searchinfo" >
-        <el-form-item  label="货主姓名：" prop="pointName">
-             <el-input v-model="searchInfo.orderSerial" clearable>
+        <el-form-item  label="车主姓名：" prop="driverName">
+             <el-input v-model="searchInfo.driverName" clearable>
             </el-input>
         </el-form-item>
-        <el-form-item label="注册账号：" prop="orderSerial">
-            <el-input v-model="searchInfo.orderSerial" clearable>
+        <el-form-item label="手机号码：" prop="driverMobile">
+            <el-input v-model="searchInfo.driverMobile" clearable>
             </el-input>
         </el-form-item>
         <el-form-item label="所属客服：" maxlength="18"  prop="shipperName">
-            <el-input v-model="searchInfo.driverName" clearable>
+            <el-input v-model="searchInfo.aa" clearable disabled>
             </el-input>
         </el-form-item>
         <el-form-item label="所属业务员：" maxlength="18"  prop="shipperName">
-            <el-input v-model="searchInfo.shipperName" clearable>
+            <el-input v-model="searchInfo.aa" clearable disabled>
             </el-input>
         </el-form-item>
                 <br>
          <el-form-item label="所属片区：" prop="orderSerial">
-            <vregion :ui="true" @values="regionChange" class="form-control">
-                <el-input v-model="searchInfo.belongCityName" placeholder="请选择出发地"></el-input>
-            </vregion>
+            <!-- <vregion :ui="true" @values="regionChange" class="form-control"> -->
+                <el-input v-model="searchInfo.aa" placeholder="请选择出发地" disabled></el-input>
+            <!-- </vregion> -->
         </el-form-item>
         <el-form-item label="活跃状态：" maxlength="18"  prop="shipperName">
-            <el-input v-model="searchInfo.shipperName" clearable>
+            <el-input v-model="searchInfo.aa" clearable disabled>
             </el-input>
         </el-form-item>
         <el-form-item label="身份状态：" prop="mobile">
-           <el-input v-model="searchInfo.driverName" clearable>
+           <el-input v-model="searchInfo.aa" clearable disabled>
             </el-input>
         </el-form-item>
         <el-form-item class="btnChoose fr"  style="margin-left:0;">
@@ -39,7 +39,7 @@
 
 <script type="text/javascript">
 
-import { parseTime,pickerOptions2 } from '@/utils/index.js'
+// import { parseTime,pickerOptions2 } from '@/utils/index.js'
 import vregion from '@/components/vregion/Region'
 
     export default{
@@ -50,17 +50,12 @@ import vregion from '@/components/vregion/Region'
             return{
                 btnsize:'mini',
                 chooseTime:[],
-                pickerOptions2:{
-                    shortcuts:pickerOptions2
-                },
+                // pickerOptions2:{
+                //     shortcuts:pickerOptions2
+                // },
                 searchInfo:{
-                    belongCity:'',//区域
-                    belongCityName:'',
-                    shipperName:'',//货主
-                    startOrderDate:'',//下单起始时间
-                    endOrderDate:'',//下单结束时间
-                    orderSerial:'',//订单号
-                    driverName:''
+                    driverName:'',
+                    driverMobile:''
                 },
             }
         },
@@ -90,11 +85,8 @@ import vregion from '@/components/vregion/Region'
                         break;
                     case 'clear':
                         this.searchInfo = {
-                            belongCity:'',//区域
-                            shipperName:'',//货主
-                            startOrderDate:'',//下单起始时间
-                            endOrderDate:'',//下单结束时间
-                            orderSerial:'',//订单号
+                            driverName:'',
+                            driverMobile:''
                         }
                         searchObj = Object.assign({}, this.searchInfo);
                         break;

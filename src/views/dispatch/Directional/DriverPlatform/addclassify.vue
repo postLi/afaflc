@@ -251,8 +251,8 @@ export default {
                     //     callback: action => {
                         this.$message({
                             type: 'success',
-                                message: '操作成功~'
-                            })
+                            message: '操作成功~'
+                        })
                             this.$emit('renovate');
                             this.closeAddNewInfo();
                         // }

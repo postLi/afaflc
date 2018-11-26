@@ -83,7 +83,7 @@
          <div class="info_tab_footer">共计:{{ dataTotal }} <div class="show_pager"> <Pager :total="dataTotal" @change="handlePageChange"  :sizes="sizes" ref="pager"/></div> </div>     
    <!-- <citymap :popVisible.sync="popVisible"  :fromData = 'MapAraay'/> -->
 
-        <CheckOut :dialogFormVisible = 'dialogFormVisibleCheck'/>
+        <CheckOut  :dialogFormVisible.sync = 'dialogFormVisible'  :cityId = 'checkCityId'/>
     </div>
 </template>
 
@@ -99,7 +99,8 @@ import '@/styles/side.scss'
 export default{
       data() {
           return {
-              dialogFormVisibleCheck:false,//初始化检查
+              dialogFormVisible:false,//初始化检查
+              checkCityId:'',
               MapAraay:[],
               popVisible:false,
               treestatus:false,
@@ -280,8 +281,10 @@ export default{
                 this.pagesize = obj.pageSize
                 this.firstblood()
             },
-            handleClick(){
-                this.dialogFormVisibleCheck = true;
+            handleClick(row){
+                console.log(row)
+                this.dialogFormVisible = true;
+                this.checkCityId = row.code;
             }
         }
     }

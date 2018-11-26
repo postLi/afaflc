@@ -40,12 +40,10 @@
                         width="120" 
                         prop="driverName" 
                         sortable>
-                        <template slot-scope="scope">
+                        <!-- <template slot-scope="scope">
                            {{ scope.row.driverName ? scope.row.driverName : scope.row.nickname}}
-                        </template>
+                        </template> -->
                     </el-table-column>
-                    <!-- <el-table-column prop="contacts" sortable label="短信验证码">
-                    </el-table-column> -->
                     <el-table-column prop="registerOriginName" sortable label="注册渠道" width="120">
                     </el-table-column>
                     <el-table-column prop="createTime" :show-overflow-tooltip="true" sortable width="160"  label="注册时间">

@@ -81,14 +81,14 @@
             <div class="essentialInformation_img" v-viewer>
                 <el-row class="basicInfo_img" :span='24'>
                     <el-col :span="12">
-                        <h6>公司或档口门头照：</h6>
+                        <h6>公司或档口门头照：<span class="">({{shipperInformation.companyFacadeFileNoPass ? shipperInformation.companyFacadeFileNoPass :'上传合格'}})</span></h6>
                         <el-tooltip class="item" effect="dark" content="双击图片查看原图" placement="top">
                             <img :src='shipperInformation.companyFacadeFile  ? shipperInformation.companyFacadeFile : defaultImg45' alt="">
                         </el-tooltip>   
 
                     </el-col>
                     <el-col :span="12">
-                        <h6>发货人名片：</h6>
+                        <h6>发货人名片：<span class="">({{shipperInformation.shipperCardFileNoPass ? shipperInformation.shipperCardFileNoPass :'上传合格'}})</span></h6>
                         <el-tooltip class="item" effect="dark" content="双击图片查看原图" placement="top">
                             <img :src='shipperInformation.shipperCardFile ? shipperInformation.shipperCardFile : defaultImgCarCard' alt="">
                         </el-tooltip>   
@@ -96,7 +96,7 @@
                 </el-row>
                 <el-row class="basicInfo_img" :span='24'>
                     <el-col :span="12">
-                        <h6>营业执照：</h6>
+                        <h6>营业执照：<span class="">({{shipperInformation.businessLicenceFileNoPass ? shipperInformation.businessLicenceFileNoPass :'上传合格'}})</span></h6>
                         <el-tooltip class="item" effect="dark" content="双击图片查看原图" placement="top">
                             <img :src='shipperInformation.businessLicenceFile ? shipperInformation.businessLicenceFile : defaultImgDriverCard' alt="">
                         </el-tooltip>   
@@ -214,7 +214,6 @@ export default {
         init() {
             let userId = this.$route.query.userId;
             this.ShipperInfo(userId);
-
         },
         ShipperInfo(userId){
             aflcShipperInfo(userId).then(res => {
