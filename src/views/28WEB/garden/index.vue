@@ -73,13 +73,13 @@
           <el-table-column sortable prop="belongCity" label="操作" width="250">
             <template slot-scope="scope">
               <el-button
-                type="text" icon=""
+                type="info" plain icon=""
                 size="small"
                 @click="handleDeatail(scope.row)">
                 <span>详情</span>
               </el-button>
               <el-button
-                type="text" icon=""
+                type="danger" plain icon=""
                 size="small"
                 @click="handleFn(scope.row)">
                 <span >{{scope.row.disableStatus ===1?'启用':'禁用'}}</span>
