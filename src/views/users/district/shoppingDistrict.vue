@@ -42,7 +42,7 @@
             <el-table-column  label="所在地" prop="areaName" sortable>
             </el-table-column>    
             <el-table-column  label="商圈场主" prop="tradeOwner" sortable>
-            </el-table-column> 
+            </el-table-column>
             <el-table-column  label="场主手机号" prop="ownerPhone" sortable>
             </el-table-column>
             <el-table-column  label="商圈货主数量" prop="" sortable>
@@ -69,7 +69,7 @@
                 </el-col>
                  <el-col :span="12">
                      <span v-if="editType !=='add'&&!selectFlag">
-                    <el-form-item label="所在区域 ：" >
+                    <el-form-item label="所在区域 ："  prop="areaName">
                     <el-input v-model="formAll.areaName" placeholder="请选择" :disabled="editType=='view'" @focus="changeSelect"></el-input>
                     </el-form-item>
                      </span>
@@ -108,8 +108,8 @@
             </el-row>              
         </el-form>
         <div slot="footer" class="dialog-footer">
-          <el-button type="primary"  @click="add_data" v-if="editType=='add'">确 定1</el-button>
-          <el-button type="primary"  @click="edit_data" v-if="editType=='edit'">确 定2</el-button>
+          <el-button type="primary"  @click="add_data" v-if="editType=='add'">确 定</el-button>
+          <el-button type="primary"  @click="edit_data" v-if="editType=='edit'">确 定</el-button>
           <el-button @click="close()" >取 消</el-button>
         </div>
       </el-dialog> 
@@ -355,7 +355,6 @@ export default {
 
     },
     EditStrtype(e){
-        console.log('EditStr11',e)
      this.editclear = e
     },
 
@@ -527,11 +526,9 @@ export default {
             this.dialogFormVisible_add = false;
            this.$message.success('新增成功');
            this.getDataList();
-           console.log(res);
         }).catch(err=>{
             this.$message.error(err.text)
             this.getDataList();
-           console.log(res);
         })
        }
        })
@@ -570,7 +567,6 @@ export default {
             fenceName:this.formAll.fenceName
         }
         }
-        console.log(forms)
         data_get_aflcTradeArea_update(forms).then(res=>{
             this.dialogFormVisible_add = false;
             this.getDataList();
