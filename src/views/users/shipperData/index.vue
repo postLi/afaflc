@@ -38,12 +38,12 @@
                     <el-table-column 
                         label="货主姓名" 
                         :show-overflow-tooltip="true" 
-                        prop="nickname" 
+                        prop="shipperName" 
                         width="120" 
                         sortable>
-                        <template slot-scope="scope">
+                        <!-- <template slot-scope="scope">
                             {{ scope.row.nickname ? scope.row.nickname : scope.row.mobile}}
-                        </template>
+                        </template> -->
                     </el-table-column>
                     <el-table-column prop="registerOriginName" sortable label="注册渠道" width="120">
                     </el-table-column>
@@ -52,8 +52,8 @@
                             <span v-if="scope.row.createTime">{{ scope.row.createTime | parseTime}}</span>
                         </template>
                     </el-table-column>
-                    <el-table-column prop="" :show-overflow-tooltip="true" sortable label="最后登录时间" width="160">
-                    </el-table-column>
+                    <!-- <el-table-column prop="" :show-overflow-tooltip="true" sortable label="最后登录时间" width="160">
+                    </el-table-column> -->
                     <el-table-column 
                         prop="" 
                         width="120"
@@ -67,8 +67,8 @@
                     </el-table-column>
                     <el-table-column  label="身份状态" :show-overflow-tooltip="true" sortable prop="" width="120">
                     </el-table-column>
-                    <el-table-column prop="" sortable :show-overflow-tooltip="true" label="审核状态" width="120">
-                    </el-table-column>
+                    <!-- <el-table-column prop="" sortable :show-overflow-tooltip="true" label="审核状态" width="120">
+                    </el-table-column> -->
                     <el-table-column prop="" sortable :show-overflow-tooltip="true" label="审核操作人" width="120">
                     </el-table-column>
                     <el-table-column prop="belongArea" width="120" sortable label="所属片区">
@@ -77,7 +77,7 @@
                     </el-table-column>
                     <el-table-column prop="" width="120" :show-overflow-tooltip="true" sortable label="所属商圈">
                     </el-table-column>
-                    <el-table-column prop="" width="120" :show-overflow-tooltip="true" sortable label="所属业务员">
+                    <el-table-column prop="belongSalesmanName" width="120" :show-overflow-tooltip="true" sortable label="所属业务员">
                     </el-table-column>
                     <el-table-column prop="" width="120" :show-overflow-tooltip="true" sortable label="所属客服">
                     </el-table-column>

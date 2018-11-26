@@ -91,3 +91,11 @@ export function driverTradOrdeCancelList(data) {
       data:data
     })
   }
+
+//基本信息-概要信息-根据id获取货主基本信息
+export function aflcDriverInfo(driverId) {
+    return fetch({
+      url: '/'+baseurl_three+'/usercenter/aflcDriver/v1/' + driverId,
+      method: 'get',
+    })
+  }

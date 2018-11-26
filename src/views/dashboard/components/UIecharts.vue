@@ -109,9 +109,9 @@
             </div>
             <!-- 单量变化折现图 -->
             <TypeLine/>
-            <!-- 待办事项 -->
+            <!-- 待审核 -->
             <div class="orderType_AreaTop main_waitInfo">
-                <h4>待办事项</h4>
+                <h4>待审核</h4>
                 <ul>
                    <li>
                        <span>货主</span>

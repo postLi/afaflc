@@ -7,36 +7,36 @@
                 <el-row class="basicInfo" :span='24'>
                     <!-- 第一行 -->
                     <el-col :span="3">注册日期：</el-col>
-                    <el-col :span="3">1</el-col>
+                    <el-col :span="3">{{shipperInformation.createTime | parseTime}}</el-col>
                     <el-col :span="3">注册渠道：</el-col>
-                    <el-col :span="3">1</el-col>
+                    <el-col :span="3">{{shipperInformation.registerOriginName}}</el-col>
                     <el-col :span="3">已加入天数：</el-col>
-                    <el-col :span="3">1</el-col>
+                    <el-col :span="3"></el-col>
                     <el-col :span="3">最近登录时间：</el-col>
-                    <el-col :span="3">1</el-col>
+                    <el-col :span="3"></el-col>
                     <!-- 第二行 -->
                     <el-col :span="3">用户姓名：</el-col>
-                    <el-col :span="3">1</el-col>
+                    <el-col :span="3">{{shipperInformation.shipperName}}</el-col>
                     <el-col :span="3">手机号码：</el-col>
-                    <el-col :span="3">1</el-col>
+                    <el-col :span="3">{{shipperInformation.mobile}}</el-col>
                     <el-col :span="3">年龄：</el-col>
-                    <el-col :span="3">1</el-col>
+                    <el-col :span="3">暂无</el-col>
                     <el-col :span="3">性别：</el-col>
-                    <el-col :span="3">1</el-col>
+                    <el-col :span="3">暂无</el-col>
                     <!-- 第三行 -->
                     <el-col :span="3">身份证号码：</el-col>
-                    <el-col :span="3">1</el-col>
+                    <el-col :span="3">暂无</el-col>
                     <el-col :span="3">生日：</el-col>
-                    <el-col :span="3">1</el-col>
+                    <el-col :span="3">暂无</el-col>
                     <el-col :span="3">居住地：</el-col>
-                    <el-col :span="9">1</el-col>
+                    <el-col :span="9">暂无</el-col>
                     <!-- 第四行 -->
                     <el-col :span="3">微信号：</el-col>
-                    <el-col :span="3">1</el-col>
+                    <el-col :span="3">暂无</el-col>
                     <el-col :span="3">支付宝：</el-col>
-                    <el-col :span="3">1</el-col>
+                    <el-col :span="3">暂无</el-col>
                     <el-col :span="3">账号启用状态：</el-col>
-                    <el-col :span="9">1</el-col>
+                    <el-col :span="9">暂无</el-col>
                 </el-row>
             </div>
         </div>
@@ -47,57 +47,58 @@
                 <el-row class="basicInfo" :span='24'>
                     <!-- 第一行 -->
                     <el-col :span="3">货主审核通过：</el-col>
-                    <el-col :span="3">1</el-col>  
+                    <el-col :span="3">{{shipperInformation.shipperStatusName}}</el-col>  
                     <el-col :span="3">身份状态：</el-col>
-                    <el-col :span="3">1</el-col>
+                    <el-col :span="3">{{shipperInformation.shipperTypeName}}</el-col>
                     <el-col :span="3">审核通过时间：</el-col>
-                    <el-col :span="9">1</el-col>
+                    <el-col :span="9">{{shipperInformation.registerTime | parseTime}}</el-col>
 
                     <!-- 第二行 -->
                     <el-col :span="3">企业名称：</el-col>
-                    <el-col :span="3">1</el-col>
+                    <el-col :span="3">{{shipperInformation.companyName}}</el-col>
                     <el-col :span="3">统一社会信用代码：</el-col>
-                    <el-col :span="3">1</el-col>
+                    <el-col :span="3">{{shipperInformation.creditCode}}</el-col>
                     <el-col :span="3">企业地址：</el-col>
-                    <el-col :span="9">1</el-col> 
+                    <el-col :span="9">{{shipperInformation.belongCityName}}</el-col> 
 
                     <!-- 第三行 -->
                     <el-col :span="3">所属商圈：</el-col>
-                    <el-col :span="3">1</el-col>
+                    <el-col :span="3">暂无</el-col>
                     <el-col :span="3">主营业务：</el-col>
-                    <el-col :span="3">1</el-col>
+                    <el-col :span="3">暂无</el-col>
                     <el-col :span="3">业务覆盖：</el-col>                                        
-                    <el-col :span="3">1</el-col>
+                    <el-col :span="3">暂无</el-col>
                     <el-col :span="3">常用车型：</el-col>
-                    <el-col :span="3">1</el-col>
+                    <el-col :span="3">暂无</el-col>
 
                     <!-- 第四行 -->
                     <el-col :span="3">业务联系人：</el-col>
-                    <el-col :span="3">1</el-col>
+                    <el-col :span="3">暂无</el-col>
                     <el-col :span="3">联系电话：</el-col>
-                    <el-col :span="3">1</el-col>
+                    <el-col :span="3">{{shipperInformation.mobile}}</el-col>
                 </el-row>
             </div>
             <div class="essentialInformation_img" v-viewer>
                 <el-row class="basicInfo_img" :span='24'>
                     <el-col :span="12">
-                        <h6>公司或档口门头照：</h6>
+                        <h6>公司或档口门头照：<span class="">({{shipperInformation.companyFacadeFileNoPass ? shipperInformation.companyFacadeFileNoPass :'上传合格'}})</span></h6>
                         <el-tooltip class="item" effect="dark" content="双击图片查看原图" placement="top">
-                            <img :src='defaultImg45' alt="">
+                            <img :src='shipperInformation.companyFacadeFile  ? shipperInformation.companyFacadeFile : defaultImg45' alt="">
                         </el-tooltip>   
+
                     </el-col>
                     <el-col :span="12">
-                        <h6>发货人名片：</h6>
+                        <h6>发货人名片：<span class="">({{shipperInformation.shipperCardFileNoPass ? shipperInformation.shipperCardFileNoPass :'上传合格'}})</span></h6>
                         <el-tooltip class="item" effect="dark" content="双击图片查看原图" placement="top">
-                            <img :src='defaultImgCarCard' alt="">
+                            <img :src='shipperInformation.shipperCardFile ? shipperInformation.shipperCardFile : defaultImgCarCard' alt="">
                         </el-tooltip>   
                     </el-col>
                 </el-row>
                 <el-row class="basicInfo_img" :span='24'>
                     <el-col :span="12">
-                        <h6>营业执照：</h6>
+                        <h6>营业执照：<span class="">({{shipperInformation.businessLicenceFileNoPass ? shipperInformation.businessLicenceFileNoPass :'上传合格'}})</span></h6>
                         <el-tooltip class="item" effect="dark" content="双击图片查看原图" placement="top">
-                            <img :src='defaultImgDriverCard' alt="">
+                            <img :src='shipperInformation.businessLicenceFile ? shipperInformation.businessLicenceFile : defaultImgDriverCard' alt="">
                         </el-tooltip>   
                     </el-col>
                     <el-col :span="12">
@@ -134,10 +135,9 @@
                 </el-table>
                 <el-pagination
                     background
-                    @size-change="handleSizeChange"
                     @current-change="handleCurrentChange"
                     :page-sizes="size"
-                    layout="total, sizes, prev, pager, next, jumper"
+                    layout="total, prev, pager, next, jumper"
                     :total="totalCount">
                 </el-pagination>
                 <!-- <div class="info_tab_footer">共计:{{ totalCount }} <div class="show_pager"> <Pager :total="totalCount" @change="handlePageChange" /></div> </div> -->
@@ -150,6 +150,9 @@
 
 import { parseTime } from '@/utils/index.js'
 // import Pager from '@/components/Pagination/index'
+import { aflcShipperInfo  } from "@/api/users/shipperDetails/index.js";
+
+
 
 export default {
   name: 'detailsInfo',
@@ -172,13 +175,8 @@ export default {
         defaultImgDriverCard:'/static/drivercard.png',
         defaultImgIdCard:'/static/idcard.png',
         defaultImgGeRen:'/static/geren.png',
-        listInformation: [],
-        page:1,
-        pagesize:20,
-        totalCount:100,
+        shipperInformation: {},
         loading: false,
-        dialogVisible: false,
-        currentOrderSerial: '',
            tableData: [{
           date: '2016-05-02',
           name: '王小虎',
@@ -214,14 +212,16 @@ export default {
     },
     methods: {
         init() {
-        
+            let userId = this.$route.query.userId;
+            this.ShipperInfo(userId);
         },
-        shuaxin() {
-            this.init()
+        ShipperInfo(userId){
+            aflcShipperInfo(userId).then(res => {
+                this.shipperInformation = res.data;
+            })
         },
         handlerClick() {
-            this.currentOrderSerial = this.$route.query.orderSerial
-            this.dialogVisible = true
+            
         },
         // handlePageChange(obj) {
         //     this.page = obj.pageNum

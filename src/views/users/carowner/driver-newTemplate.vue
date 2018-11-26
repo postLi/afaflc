@@ -82,7 +82,7 @@
                             ref="widths"
                             :maxlength="5"
                             :disabled="editType=='view'"
-                            >
+                        >
                         </el-input>
                          </el-form-item>
                          <el-form-item prop="carHeight" :label-width="formLabelWidth"  >
@@ -150,8 +150,8 @@
                             type="date"
                             format="yyyy-MM-dd"
                             placeholder="选择日期"
-                             :picker-options="pickerOptions"
-                             :disabled="editType=='view'"
+                            :picker-options="pickerOptions"
+                            :disabled="editType=='view'"
                             >
                         </el-date-picker>
                     </el-form-item>

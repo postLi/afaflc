@@ -491,13 +491,17 @@ export default {
                         case 'edit':
                             data_ChangeLogisticsCompany(forms).then(res=>{
                                 // console.log(res)
-                                this.$alert('操作成功', '提示', {
-                                    confirmButtonText: '确定',
-                                    callback: action => {
+                                // this.$alert('操作成功', '提示', {
+                                //     confirmButtonText: '确定',
+                                //     callback: action => {
                                         this.close();
                                         this.changeList();
-                                    }
-                                });
+                                          this.$message({
+                            type: 'success',
+                            message: '操作成功~'
+                        })
+                                //     }
+                                // });
                             }).catch(err=>{
                                 this.$message({
                                     type: 'info',

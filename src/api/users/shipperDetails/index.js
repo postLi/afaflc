@@ -89,7 +89,7 @@ export function aflcEquityConfigDto(userId) {
 //基本信息-概要信息-根据id获取货主基本信息
 export function aflcShipperInfo(userId) {
     return fetch({
-      url: '/aflc-uc/usercenter/aflcShipper/v1/' + userId,
+      url: '/'+baseurl_three+'/usercenter/aflcShipper/v1/' + userId,
       method: 'get',
     })
   }

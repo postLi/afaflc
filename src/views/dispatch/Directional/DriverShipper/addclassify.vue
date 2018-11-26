@@ -256,13 +256,17 @@ export default {
                 this.forms.bindingEndDate +=  1* 24 * 60 * 60 * 1000 - 1000;
 
                 data_NewData(this.forms).then(res=>{
-                     this.$alert('操作成功', '提示', {
-                        confirmButtonText: '确定',
-                        callback: action => {
+                    //  this.$alert('操作成功', '提示', {
+                    //     confirmButtonText: '确定',
+                    //     callback: action => {
                             this.$emit('renovate');
                             this.closeAddNewInfo();
-                        }
-                    });
+                              this.$message({
+                            type: 'success',
+                            message: '操作成功~'
+                        })
+                        // }
+                    // });
                 }).catch( err => {
                     this.$message({
                         type: 'warning',

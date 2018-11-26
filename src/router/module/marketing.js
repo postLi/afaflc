@@ -116,6 +116,14 @@ export default {
       children: [
 
       ]
-    }
+    },
+    {   
+        path: '/marketing/announcement',
+        icon: 'cheliangguanli',
+        hidden: false,
+        name: '发布公告',
+        component: _import('marketing/announcement/index'),
+        meta: { title: '发布公告', stitle: '公告', noCache: true , code: ''}
+      },
   ]
 }

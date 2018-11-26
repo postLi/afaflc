@@ -103,7 +103,7 @@ export default {
                         showLegendSymbol: false, // 存在legend时显示
                         label: {
                             normal: {
-                                show: false,
+                                show: false,   
                             },
                             emphasis: {
                                 show: false,

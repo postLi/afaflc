@@ -190,7 +190,7 @@ export default {
         // ],
         claimPic1: [
           { required: true, message: '至少上传一张图片' }
-        ],
+        ]
         // complainDes: [
         //   { required: true, message: '请输入投诉内容' }
         // ],
@@ -330,17 +330,17 @@ export default {
       data.append('excelSign', this.info)
     },
     submitForm(ruleForm) {
-      if(this.formAllData.claimType === '' && this.formAllData.claimDes === ''){
+      if (this.formAllData.claimType === '' && this.formAllData.claimDes === '' && this.isMatreg) {
         this.$message({
-          message:'物损类型及物损描述至少选填一项!',
-          type:'warning'
+          message: '物损类型及物损描述至少选填一项!',
+          type: 'warning'
         })
-      }else if(this.formAlldicData.complainType === '' && this.formAlldicData.complainDes === ''){
+      } else if (this.formAlldicData.complainType === '' && this.formAlldicData.complainDes === '' && this.isComreg) {
         this.$message({
-          message:'投诉分类及投诉内容至少选填一项',
-          type:'warning'
+          message: '投诉分类及投诉内容至少选填一项',
+          type: 'warning'
         })
-      }else {
+      } else {
         this.$refs[ruleForm].validate((valid) => {
           if (valid) {
             this.formAllData.createTime = parseTime(this.searchCreatTime, '{y}-{m}-{d} {h}:{i}:{s}')

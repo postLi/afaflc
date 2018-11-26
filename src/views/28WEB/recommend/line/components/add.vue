@@ -42,7 +42,7 @@
             end-placeholder="结束日期">
           </el-date-picker>
         </el-form-item>
-        <el-form-item label="自定义属性" prop="code" style="width:100%">
+        <el-form-item label="自定义属性" prop="settopStatus" style="width:100%">
           <el-checkbox v-model="formAllData.settopStatus">置顶</el-checkbox>
         </el-form-item>
         <el-form-item label="推荐费" prop="recommendFee">
@@ -93,7 +93,9 @@ export default {
       default: false
     },
     selectInfo: {
-      type: [Array, Object]
+      type: [Array, Object],
+      default: () => {
+      }
     },
     belongCity: {
       type: [Number, String]
@@ -171,28 +173,23 @@ export default {
   },
   watch: {
     isMatreg: {
-      handler(newVal, oldVal) {
-        console.log(newVal, oldVal)
-        if (newVal) {
-          this.searchCreatTime = this.defaultTime
-          this.popTitle = '推荐设置'
-          this.formAllData = this.$options.data().formAllData
-          console.log(this.selectInfo.id)
+      handler(n) {
+
+      }
+    },
+    selectInfo: {
+      handler(n) {
+        if (this.$refs['ruleForm']) {
+          this.$refs['ruleForm'].resetFields()
         }
-      },
-      immediate: true,
-      deep: true
+        if (this.isMatreg) {
+          this.popTitle = '推荐设置'
+          this.getSelectInfo(this.selectInfo)
+          console.log(this.info, 'info')
+          this.searchCreatTime = this.defaultTime
+        }
+      }
     }
-    // isComreg: {
-    //   handler(newVal) {
-    //     if (this.isComreg) {
-    //       this.popTitle = '投诉登记'
-    //       this.formAllData = {}
-    //     //   console.log(this.isComreg)
-    //     }
-    //   },
-    //   immediate: true
-    // }
   },
   mounted() {
   },
@@ -214,7 +211,19 @@ export default {
     changePosition(obj) {
       this.formAllData.recommendPosition = obj
     },
-
+    getSelectInfo(selectInfo) {
+      console.log(selectInfo)
+      this.formAllData.recommendColumn = selectInfo.recommendColumn
+      this.formAllData.recommendPosition = selectInfo.recommendPosition
+      this.formAllData.recommendStarttime = selectInfo.recommendStarttime
+      if (selectInfo.settopStatus === 1) {
+        this.formAllData.settopStatus = true
+      } else {
+        this.formAllData.settopStatus = false
+      }
+      this.formAllData.recommendFee = selectInfo.recommendFee
+      this.formAllData.remarks = selectInfo.remarks
+    },
     submitForm(ruleForm) {
       this.$refs[ruleForm].validate((valid) => {
         if (valid) {

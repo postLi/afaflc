@@ -1,5 +1,7 @@
 <template>
-  <textarea :id='id' :value='value'></textarea>
+    <div>
+        <textarea :id='id' :value='value'></textarea>
+    </div>
 </template>
  
 <script>
@@ -54,14 +56,18 @@
     watch: {
       value: function(val) {
         console.log('init ' + val)
-        if (this.status === INIT || tinymce.activeEditor.getContent() !== val) {
-          tinymce.activeEditor.setContent(val)
+        if(this.flag){
+            if (this.status === INIT || tinymce.activeEditor.getContent() !== val) {
+              tinymce.activeEditor.setContent(val)
+            }
+            this.status = CHANGED
         }
-        this.status = CHANGED
+        this.flag=true;
       }
     },
     data() {
         return {
+            flag:true,
             status: INIT,
             id: 'editor-' + new Date().getMilliseconds(),
             uploadAli:{
@@ -121,22 +127,32 @@
         init_instance_callback: function(editor) {
           // EDITOR = editor
           console.log('Editor: ' + editor.id + ' is now initialized.')
-          editor.on('input change undo redo', () => {
+          editor.on('input undo redo execCommand', () => {
+            _this.flag=false;
             var content = editor.getContent()
             _this.$emit('show', content)
           })
+
+        // if (_this.value) {
+        //     editor.setContent(_this.value)
+        //   }
+        //   _this.hasInit = true;
+        //   editor.on('NodeChange Change KeyUp', () => {
+        //     this.hasChange = true;
+        //     this.$emit('input', editor.getContent({ format: 'raw' }));
+        //   });
         },
-        content_style: `
-            *                         { padding:0; margin:0; }
-            html, body                { height:100%; }
-            img                       { max-width:100%; display:block;height:auto; }
-            a                         { text-decoration: none; }
-            iframe                    { width: 100%; }
-            p                         { line-height:1.6; margin: 0px; }
-            table                     { word-wrap:break-word; word-break:break-all; max-width:100%; border:none; border-color:#999; }
-            .mce-object-iframe        { width:100%; box-sizing:border-box; margin:0; padding:0; }
-            ul,ol                     { list-style-position:inside; }
-        `,
+        // content_style: `
+        //     // *                         { padding:0; margin:0; }
+        //     html, body                { height:100%; }
+        //     img                       { max-width:100%; display:block;height:auto; }
+        //     a                         { text-decoration: none; }
+        //     iframe                    { width: 100%; }
+        //     p                         { line-height:1.6; margin: 0px; }
+        //     table                     { word-wrap:break-word; word-break:break-all; max-width:100%; border:none; border-color:#999; }
+        //     .mce-object-iframe        { width:100%; box-sizing:border-box; margin:0; padding:0; }
+        //     ul,ol                     { list-style-position:inside; }
+        // `,
         insert_button_items: 'image link | inserttable',
         paste_retain_style_properties: 'all',
         paste_word_valid_elements: '*[*]', // word需要它
@@ -229,7 +245,7 @@
           }
             let type = blobInfo.filename().match(/([^\.]+)$/)
             type = type ? '.' + type[1] : ''
-            console.log('_this.uploadAli',_this.uploadAli)
+            // console.log('_this.uploadAli',_this.uploadAli)
         function uploadPic() { // 发送请求
             let formData = new FormData();
             // 服务端接收文件的参数名，文件数据，文件名
@@ -240,7 +256,7 @@
             formData.append('success_action_status',  _this.uploadAli.success_action_status);
             formData.append('file', blobInfo.blob(),blobInfo.filename());
 
-            console.log('formData',formData)
+            // console.log('formData',formData)
             axios({
                 method: 'POST',
                 // 这里是你的上传地址
