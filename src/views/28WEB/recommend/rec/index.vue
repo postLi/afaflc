@@ -42,7 +42,7 @@
         <el-table-column sortable prop="" label="操作" width="">
           <template slot-scope="scope">
             <el-button
-              type="text" icon=""
+              type="info" plain icon=""
               size="small"
               @click="handleDeatail(scope.row)">
               <span>设置</span>
