@@ -146,7 +146,8 @@
           this.loading = false
           // console.log(res)
         }).catch(err => {
-          this.$message.warning(err.text || err.errorInfo || '无法获取服务端数据~')
+          this.$message.warning(err.text ? err.text : err.errorInfo)
+          // this.$message.warning(err.text || err.errorInfo || '无法获取服务端数据~')
           this.loading = false
         })
       },
@@ -199,7 +200,8 @@
           this.fetchInfo()
           this.loading = false
         }).catch(err => {
-          this.$message.warning(err.text || err.errorInfo || '无法获取服务端数据~')
+          this.$message.warning(err.text ? err.text : err.errorInfo)
+          // this.$message.warning(err.text || err.errorInfo || '无法获取服务端数据~')
           this.loading = false
         })
       },

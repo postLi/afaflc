@@ -8,7 +8,7 @@
             <el-input v-model="form.parkName" clearable :maxlength="25"></el-input>
           </el-form-item>
           <el-form-item label="手机号" prop="parkMobile">
-            <el-input v-model="form.parkMobile" clearable :maxlength="11"></el-input>
+            <el-input v-model="form.parkMobile" clearable></el-input>
           </el-form-item>
 
           <el-form-item label="所在地" prop="locationFn">
@@ -123,6 +123,24 @@
 
     },
     data() {
+      //^1[3578][0-9]{9}(,1[3578][0-9]{9})*$
+      ///[^\r\n0-9\,]/g,''
+      // const validnum = (rule, value, callback) => {
+      //   if (/((((\d{3,4}-)?\d{7,8})|(1[73584]\d{9}))\,){0,}(((\d{3,4}-)?\d{7,8})|(1[73584]\d{9}))$/.test(value)) {
+      //     console.log(value,'value')
+      //     callback(new Error('错误的'))
+      //   } else {
+      //     callback()
+      //    // console.log(value,'valueddddd')
+      //   }
+      // }
+      const valuedaata = (value, callback) => {
+        if (!/^(\(\d{3,4}\)|\d{3,4}-|\s)?\d{7,14}$/.test(value)) {
+          callback()
+        } else {
+          callback(new Error('请输入正确号码~'))
+        }
+      }
       return {
         formLabelWidth: '120px',
         checked: true,
@@ -161,11 +179,14 @@
           ],
           //   { required: true, message: '请输入手机号码', trigger: 'blur', pattern: REGEX.MOBILE }
           parkMobile: [
+            // {required: true, message: '请输入手机号码'},
+            // {validator:validnum}
             {required: true, message: '请输入手机号码', pattern: REGEX.MOBILE}
           ],
           //
           parkNum: [
-            // {message: '请输入正确号码~', pattern: REGEX.TELEPHONE}
+
+            {validator: valuedaata}
           ],
           parkSignPicture: [
             {required: true, message: '请上传园区招牌图像~'}
@@ -193,14 +214,10 @@
         this.form.locationFn = info.addressComponent.province + info.addressComponent.city + info.addressComponent.district
 
         this.form.addressFn = info.addressComponent.township + info.addressComponent.street + info.addressComponent.streetNumber
-        // console.log(name, info, 'info')
-        // console.log(this.form.locationFn, info.addressComponent, this.form.addressFn, 'info')
         this.form.locationProvince = info.addressComponent.province
         this.form.locationCity = info.addressComponent.city
         this.form.locationArea = info.addressComponent.district
         this.form.parkAddress = this.form.addressFn
-        // console.log(this.form, 'form');
-        // <span>{{scope.row.locationProvince+scope.row.locationCity+scope.row.locationArea}}</span>
       },
       comWatch(item) {
         this.form.parkName = item.parkName

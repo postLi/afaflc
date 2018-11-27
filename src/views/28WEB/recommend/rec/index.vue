@@ -66,18 +66,19 @@
   import {postList} from '@/api/web/recFetch'
   import Pager from '@/components/Pagination/index'
   import RecSetting from './recSetting'
+
   export default {
-    components:{
+    components: {
       Pager,
       RecSetting
     },
     data() {
       return {
-        recommendColumnFn:[
+        recommendColumnFn: [
           {
-          value: '首页',
-          label: '首页'
-        },
+            value: '首页',
+            label: '首页'
+          },
           {
             value: '物流专线栏目',
             label: '物流专线栏目'
@@ -119,8 +120,8 @@
           this.loading = false
           // console.log(res)
         }).catch(err => {
-          this.$message.warning(err.text || err.errorInfo || '无法获取服务端数据~')
-          this.loading = false;
+          this.$message.warning(err.text ? err.text : err.errorInfo)
+          this.loading = true
         })
       },
       fetchInfo() {

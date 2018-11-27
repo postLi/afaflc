@@ -4,23 +4,38 @@ const _import = require('../_import_' + process.env.NODE_ENV)
 export default {
   path: '/28WEB',
   component: Layout,
-  redirect: '/28WEB/userclass/index',
+  redirect: '/28WEB/userclass/logistics/index',
   icon: 'baobiao',
   name: '28快运WEB端',
   hidden: false,
   noDropdown: false,
   children: [
     {
-      path: '/28WEB/userclass/index',
+      path: '/28WEB/userclass/logistics/index',
       icon: 'baobiao',
       name: '用户发布类',
-      component: _import('28WEB/userclass/index'),
+      component: _import('28WEB/userclass/logistics/index'),
       meta: { role: ['admin'], title: '用户发布类', noCache: true },
       children: [{
         path: '/28WEB/userclass/logistics/index',
         name: '物流专线',
         component: _import('28WEB/userclass/logistics/index'),
         meta: { role: ['admin'], title: '物流专线', noCache: true, code: 'CUSTOM_FEEDBACK_PLATFORM' }
+      }, {
+        path: '/order/xuqiuku/carInfo/index',
+        name: '车源信息',
+        component: _import('order/xuqiuku/carInfo/index'),
+        meta: { role: ['admin'], title: '车源信息', noCache: true, code: 'CUSTOM_FEEDBACK_PLATFORM' }
+      }, {
+        path: '/order/xuqiuku/driverInfo/index',
+        name: '货源信息',
+        component: _import('order/xuqiuku/driverInfo/index'),
+        meta: { role: ['admin'], title: '货源信息', noCache: true, code: 'CUSTOM_FEEDBACK_PLATFORM' }
+      }, {
+        path: '/order/xuqiuku/manageGroup/index',
+        name: '网点信息',
+        component: _import('order/xuqiuku/manageGroup/index'),
+        meta: { role: ['admin'], title: '网点信息', noCache: true, code: 'CUSTOM_FEEDBACK_PLATFORM' }
       }]
     }, {
       path: '/28WEB/garden/index',
