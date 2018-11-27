@@ -136,9 +136,10 @@
       // }
       const valuedaata = (value, callback) => {
         if (!/^(\(\d{3,4}\)|\d{3,4}-|\s)?\d{7,14}$/.test(value)) {
-          callback()
-        } else {
+          // callback()
           callback(new Error('请输入正确号码~'))
+        } else {
+          callback()
         }
       }
       return {
