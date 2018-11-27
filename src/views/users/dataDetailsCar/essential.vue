@@ -11,7 +11,7 @@
                     <el-col :span="3">注册渠道：</el-col>
                     <el-col :span="3">{{driverInformation.registerOriginName ? driverInformation.registerOriginName : '暂无'}}</el-col>
                     <el-col :span="3">已加入天数：</el-col>
-                    <el-col :span="3">暂无</el-col>
+                    <el-col :span="3">{{driverInformation.existTime ? driverInformation.existTime : 1}}</el-col>
                     <el-col :span="3">最近登录时间：</el-col>
                     <el-col :span="3">暂无</el-col>
                     <!-- 第二行 -->
@@ -20,14 +20,14 @@
                     <el-col :span="3">手机号码：</el-col>
                     <el-col :span="3">{{driverInformation.driverMobile}}</el-col>
                     <el-col :span="3">年龄：</el-col>
-                    <el-col :span="3">暂无</el-col>
+                    <el-col :span="3">{{driverInformation.age ? driverInformation.age : '暂无'}}</el-col>
                     <el-col :span="3">性别：</el-col>
-                    <el-col :span="3">暂无</el-col>
+                    <el-col :span="3">{{driverInformation.sex ? driverInformation.sex : '暂无'}}</el-col>
                     <!-- 第三行 -->
                     <el-col :span="3">身份证号码：</el-col>
-                    <el-col :span="3">暂无</el-col>
+                    <el-col :span="3">{{driverInformation.driverCardid ? driverInformation.driverCardid : '暂无'}}</el-col>
                     <el-col :span="3">生日：</el-col>
-                    <el-col :span="3">暂无</el-col>
+                    <el-col :span="3">{{driverInformation.birthday ? driverInformation.birthday : '暂无'}}</el-col>
                     <el-col :span="3">居住地：</el-col>
                     <el-col :span="9">暂无</el-col>
                     <!-- 第四行 -->
@@ -36,7 +36,7 @@
                     <el-col :span="3">支付宝：</el-col>
                     <el-col :span="3">暂无</el-col>
                     <el-col :span="3">账号启用状态：</el-col>
-                    <el-col :span="9">暂无</el-col>
+                    <el-col :span="9">{{driverInformation.accountStatusName}}</el-col>
                 </el-row>
             </div>
         </div>
@@ -53,15 +53,15 @@
                     <el-col :span="3">车主审核通过时间：</el-col>
                     <el-col :span="3">{{driverInformation.registerTime ? driverInformation.registerTime : '暂无'}}</el-col>
                     <el-col :span="3">驾驶证号码 ：</el-col>
-                    <el-col :span="3">暂无</el-col>
+                    <el-col :span="3">{{driverInformation.jscardid ? driverInformation.jscardid : '暂无'}}</el-col>
 
                     <!-- 第二行 -->
                     <el-col :span="3">驾驶证有效期：</el-col>
-                    <el-col :span="3">暂无</el-col>
+                    <el-col :span="3">{{driverInformation.vldEnd ? driverInformation.vldEnd : '暂无'}}</el-col>
                     <el-col :span="3">驾驶证是否过期：</el-col>
-                    <el-col :span="3">暂无</el-col>
+                    <el-col :span="3">{{driverInformation.isexpire ? driverInformation.isexpire : '暂无'}}</el-col>
                     <el-col :span="3">发证所在地：</el-col>
-                    <el-col :span="9">暂无</el-col> 
+                    <el-col :span="9">{{driverInformation.fzaddress ? driverInformation.fzaddress : '暂无'}}</el-col> 
 
                     <!-- 第三行 -->
                     <el-col :span="3">车牌号：</el-col>
@@ -75,7 +75,7 @@
 
                     <!-- 第四行 -->
                     <el-col :span="3">车辆规格：</el-col>
-                    <el-col :span="3">{{driverInformation.carSpecName ? driverInformation.carSpecName :'暂无'}}</el-col>
+                    <el-col :span="3">{{driverInformation.carSpec ? driverInformation.carSpec :'暂无'}}</el-col>
                     <el-col :span="3">车长：</el-col>
                     <el-col :span="3">{{driverInformation.carLength}}*{{driverInformation.carWidth}}*{{driverInformation.carHeight}}</el-col>
                     <el-col :span="3">商业险到期时间：</el-col>
@@ -193,7 +193,7 @@ export default {
         defaultImgIdCard:'/static/idcard.png',
         defaultImgGeRen:'/static/geren.png',
         driverInformation: {},
-        loading: false,
+        loading: true,
            tableData: [{
           date: '2016-05-02',
           name: '王小虎',
@@ -225,7 +225,6 @@ export default {
         },
     },
      mounted() {
-        // console.log(this.$route)
     },
     methods: {
         init() {
@@ -233,13 +232,23 @@ export default {
             this.DriverInfo(driverId);
         },
         DriverInfo(driverId){
+            this.loading = true;
             aflcDriverInfo(driverId).then(res => {
-                console.log(res)
                 this.driverInformation = res.data;
                 this.driverInformation.registerTime = parseTime(this.driverInformation.registerTime);
+                this.driverInformation.birthday = parseTime( this.driverInformation.birthday,'{y}-{m}-{d}');
+                this.driverInformation.vldEnd = parseTime(this.driverInformation.vldEnd,'{y}-{m}-{d}');
                 this.driverInformation.authNoPassCause = this.driverInformation.authNoPassCause ? this.driverInformation.authNoPassCause : {"车辆45°":"上传合格","行驾证":"上传合格","驾驶证":"上传合格","手持身份证":"上传合格","身份证正面":"上传合格"};
-                this.driverInformation.authNoPassCause = JSON.parse(this.driverInformation.authNoPassCause);
-                console.log('this.driverInformation.authNoPassCause',this.driverInformation.authNoPassCause)
+                // this.driverInformation.authNoPassCause = JSON.parse(this.driverInformation.authNoPassCause);
+                console.log(this.driverInformation.authNoPassCause)
+                this.loading = false;
+            }).catch(err => {
+                // console.log(err)
+                // this.$message({
+                //     type: 'info',
+                //     message: '操作失败，原因：' + (err.errorInfo ? err.errorInfo : err.text)
+                // })
+                this.loading = false;
             })
         },
         handleCurrentChange(val) {

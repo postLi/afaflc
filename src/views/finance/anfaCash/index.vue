@@ -8,19 +8,19 @@
                     <el-row class="basicInfo" :span='24'>
                         <!-- 第一行 -->
                         <el-col :span="4">货主充值余额：</el-col>
-                        <el-col :span="4">1</el-col>
+                        <el-col :span="4">{{anfaCashInfo.shipperRechargeAmountCount ? anfaCashInfo.shipperRechargeAmountCount : 0}}</el-col>
                         <el-col :span="4">货主赠送余额：</el-col>
-                        <el-col :span="4">1</el-col>
+                        <el-col :span="4">{{anfaCashInfo.shipperAvailableBalanceCount ? anfaCashInfo.shipperAvailableBalanceCount : 0}}</el-col>
                         <el-col :span="4">车主可提现金额余额：</el-col>
-                        <el-col :span="4">1</el-col>
+                        <el-col :span="4">{{anfaCashInfo.driverAvailableAmountCount ? anfaCashInfo.driverAvailableAmountCount : 0}}</el-col>
 
                         <!-- 第二行 -->
                         <el-col :span="4">车主提现审核中金额：</el-col>
-                        <el-col :span="4">1</el-col>
+                        <el-col :span="4">{{anfaCashInfo.driverExtractCashCount ? anfaCashInfo.driverExtractCashCount : 0}}</el-col>
                         <el-col :span="4">车主冻结金额：</el-col>
-                        <el-col :span="4">1</el-col>
+                        <el-col :span="4">0</el-col>
                         <el-col :span="4">车主保证金：</el-col>
-                        <el-col :span="4">1</el-col>
+                        <el-col :span="4">0</el-col>
                     </el-row>
                 </div>
             </div>
@@ -110,6 +110,7 @@
 import '@/styles/detailsStyle.scss'
 
 import { parseTime } from '@/utils/index.js'
+import { userMywalletSurvey } from '@/api/finance/anfaZhangHU.js'
 // import Pager from '@/components/Pagination/index'
 import searchInfo from './components/searchInfo'
 
@@ -120,11 +121,6 @@ export default {
     searchInfo
   },
   props: {
-    isvisible: {
-        type: Boolean,
-        default: false
-      }
-
   }, 
   data() {
     return {
@@ -133,7 +129,7 @@ export default {
         totalCount:100,
         loading: false,
         dialogVisible: false,
-        currentOrderSerial: '',
+        anfaCashInfo:{},
            tableData: [{
           date: '2016-05-02',
           name: '王小虎',
@@ -159,29 +155,20 @@ export default {
       }
   },
     watch: {
-        isvisible: {
-            handler(newVal, oldVal) {
-                if (newVal) {
-                    this.init()
-                }
-            },
-            // 代表在wacth里声明了firstName这个方法之后立即先去执行handler方法
-            immediate: true
-        },
+      
     },
      mounted() {
         // console.log(this.$route)
+        this.init();
     },
     methods: {
         init() {
-        
+            userMywalletSurvey().then(res => {
+                this.anfaCashInfo = res.data;
+            })
         },
         shuaxin() {
             this.init()
-        },
-        handlerClick() {
-            this.currentOrderSerial = this.$route.query.orderSerial
-            this.dialogVisible = true
         },
         handleSizeChange(val) {
             console.log(`每页 ${val} 条`);

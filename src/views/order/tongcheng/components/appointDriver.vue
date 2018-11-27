@@ -1,114 +1,112 @@
 <template>
-    <div>
-        <!-- 指派司机 -->
-            <div class="appoint commoncss">
-                <el-dialog title='指派司机' :close-on-click-modal="false"  :visible="dialogFormVisible" @close="close">
-                    <el-form :inline="true" :model="searchInfo" ref="ruleForm" class="demo-ruleForm classify_searchinfo">
-                        <el-form-item label="车主" prop="search">
-                            <el-input v-model="searchInfo.search" clearable placeholder="车主姓名/手机账号/车牌号码">
-                            </el-input>
-                        </el-form-item>
-                        <el-form-item label="车型" prop="carType">
-                            <el-select v-model="searchInfo.carType" clearable placeholder="请选择">
-                                <el-option
-                                v-for="item in optionsCarType"
-                                :key="item.id"
-                                :label="item.name"
-                                :value="item.code">
-                                </el-option>
-                            </el-select>
-                        </el-form-item>
-                        <el-form-item prop="iftequan">
-                            <el-checkbox v-model="iftequan" @change = "ifTequan">特权车</el-checkbox>
-                        </el-form-item>
-                        <el-form-item class="btnChoose fr"  style="margin-left:0;">
-                            <el-button type="primary" :size="btnsize" plain @click="pointSearch('search','point')">搜索</el-button>
-                            <el-button type="info" :size="btnsize" plain @click="pointSearch('clear','point')">清空</el-button>
-                        </el-form-item>
-                    </el-form>
-                    <div class="pointInfo">
-                        <div class="pointChoose">
-                            <el-button type="primary" :size="btnsize" class="el-icon-edit" plain  @click="pointXX">指派给选中车主</el-button>
-                            <el-table
-                            ref="multipleTable"
-                            :data="tableData_point"
-                            stripe
-                            border
-                            @selection-change = "getinfomation"
-                            tooltip-effect="dark"
-                            @row-click="clickDetails"
-                            style="width: 100%"> 
-                                <el-table-column
-                                    type="selection"
-                                    width="55">
-                                </el-table-column>
-                                <el-table-column label="序号"  width="80">
-                                    <template slot-scope="scope">
-                                        {{ (page - 1)*pagesize + scope.$index + 1 }}
-                                    </template>
-                                </el-table-column>  
-                                <el-table-column
-                                    :show-overflow-tooltip="true"
-                                    prop="driverMobile"
-                                    label="车主账号">
-                                </el-table-column>
-                                <el-table-column
-                                    :show-overflow-tooltip="true"
-                                    prop="driverName"
-                                    label="车主姓名">
-                                </el-table-column>
-                                <el-table-column
-                                prop="carNumber"
-                                label="车牌号码">
-                                </el-table-column>
-                                <el-table-column
-                                prop="carType"
-                                label="车型">
-                                </el-table-column>
-                                <el-table-column
-                                prop="distance"
-                                label="距离提货地(M)">
-                                    <template slot-scope="scope">
-                                        <span class="pointStance">{{scope.row.distance}}</span>
-                                    </template>
-                                </el-table-column>
-                                <el-table-column
-                                prop="obtainGrade"
-                                label="中单等级">
-                                </el-table-column>
-                                <el-table-column
-                                prop="isVipCar"
-                                label="是否特权车">
-                                    <template slot-scope="scope">
-                                        <span>{{scope.row.isVipCar == 1 ? '是' : '否'}}</span>
-                                    </template>
-                                </el-table-column>
-                                 <el-table-column
-                                prop=""
-                                label="是否货主收藏司机">
-                                </el-table-column>
-                                <el-table-column
-                                prop=""
-                                label="本日与该货主交易次数">
-                                </el-table-column>
-                                <el-table-column
-                                prop=""
-                                label="本月与该货主交易次数">
-                                </el-table-column>
-                                <el-table-column
-                                prop=""
-                                label="本月累计交易次数">
-                                </el-table-column>
-                                <el-table-column
-                                prop=""
-                                label="本月交易成功订单量">
-                                </el-table-column>
-                            </el-table>
-                        </div>
-                        <div class="info_tab_footer">共计:{{ dataTotal }} <div class="show_pager"> <Pager :total="dataTotal" @change="handlePageChange" /></div> </div>    
-                    </div>
-                </el-dialog>
+<!-- 指派司机 -->
+    <div class="appoint commoncss">
+        <el-dialog title='指派司机' :close-on-click-modal="false"  :visible="dialogFormVisible" @close="close" v-el-drag-dialog>
+            <el-form :inline="true" :model="searchInfo" ref="ruleForm" class="demo-ruleForm classify_searchinfo">
+                <el-form-item label="车主" prop="search">
+                    <el-input v-model="searchInfo.search" clearable placeholder="车主姓名/手机账号/车牌号码">
+                    </el-input>
+                </el-form-item>
+                <el-form-item label="车型" prop="carType">
+                    <el-select v-model="searchInfo.carType" clearable placeholder="请选择">
+                        <el-option
+                        v-for="item in optionsCarType"
+                        :key="item.id"
+                        :label="item.name"
+                        :value="item.code">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item prop="iftequan">
+                    <el-checkbox v-model="iftequan" @change = "ifTequan">特权车</el-checkbox>
+                </el-form-item>
+                <el-form-item class="btnChoose fr"  style="margin-left:0;">
+                    <el-button type="primary" :size="btnsize" plain @click="pointSearch('search','point')">搜索</el-button>
+                    <el-button type="info" :size="btnsize" plain @click="pointSearch('clear','point')">清空</el-button>
+                </el-form-item>
+            </el-form>
+            <div class="pointInfo">
+                <div class="pointChoose">
+                    <el-button type="primary" :size="btnsize" class="el-icon-edit" plain  @click="pointXX">指派给选中车主</el-button>
+                    <el-table
+                    ref="multipleTable"
+                    :data="tableData_point"
+                    stripe
+                    border
+                    @selection-change = "getinfomation"
+                    tooltip-effect="dark"
+                    @row-click="clickDetails"
+                    style="width: 100%"> 
+                        <el-table-column
+                            type="selection"
+                            width="55">
+                        </el-table-column>
+                        <el-table-column label="序号"  width="80">
+                            <template slot-scope="scope">
+                                {{ (page - 1)*pagesize + scope.$index + 1 }}
+                            </template>
+                        </el-table-column>  
+                        <el-table-column
+                            :show-overflow-tooltip="true"
+                            prop="driverMobile"
+                            label="车主账号">
+                        </el-table-column>
+                        <el-table-column
+                            :show-overflow-tooltip="true"
+                            prop="driverName"
+                            label="车主姓名">
+                        </el-table-column>
+                        <el-table-column
+                        prop="carNumber"
+                        label="车牌号码">
+                        </el-table-column>
+                        <el-table-column
+                        prop="carType"
+                        label="车型">
+                        </el-table-column>
+                        <el-table-column
+                        prop="distance"
+                        label="距离提货地(M)">
+                            <template slot-scope="scope">
+                                <span class="pointStance">{{scope.row.distance}}</span>
+                            </template>
+                        </el-table-column>
+                        <el-table-column
+                        prop="obtainGrade"
+                        label="中单等级">
+                        </el-table-column>
+                        <el-table-column
+                        prop="isVipCar"
+                        label="是否特权车">
+                            <template slot-scope="scope">
+                                <span>{{scope.row.isVipCar == 1 ? '是' : '否'}}</span>
+                            </template>
+                        </el-table-column>
+                            <el-table-column
+                        prop=""
+                        label="是否货主收藏司机">
+                        </el-table-column>
+                        <el-table-column
+                        prop=""
+                        label="本日与该货主交易次数">
+                        </el-table-column>
+                        <el-table-column
+                        prop=""
+                        label="本月与该货主交易次数">
+                        </el-table-column>
+                        <el-table-column
+                        prop=""
+                        label="本月累计交易次数">
+                        </el-table-column>
+                        <el-table-column
+                        prop=""
+                        label="本月交易成功订单量">
+                        </el-table-column>
+                    </el-table>
+                </div>
+                <div class="info_tab_footer">共计:{{ dataTotal }} <div class="show_pager"> <Pager :total="dataTotal" @change="handlePageChange" /></div> </div>    
             </div>
+        </el-dialog>
     </div>
 </template>
 
@@ -181,20 +179,21 @@ export default {
         init(point){
             this.searchInfo.orderSerial = this.orderSerial;
             
-            if(!point){
-                getDictionary(this.carType).then(res => {
-                    this.optionsCarType = res.data;
-                }).catch(err => {
-                    this.$message({
-                        type: 'info',
-                        message: '操作失败，原因：' + (err.errorInfo ? err.errorInfo : err.text)
-                    })
-                });
-            }
+            getDictionary(this.carType).then(res => {
+                this.optionsCarType = res.data;
+            }).catch(err => {
+                this.$message({
+                    type: 'info',
+                    message: '操作失败，原因：' + (err.errorInfo ? err.errorInfo : err.text)
+                })
+            });
 
+           this.DriverList();
+        },
+        DriverList(){
             nearDriverList(this.searchInfo).then(res => {
                 this.dataTotal = res.data.length;
-                if(res.data != []){
+                if(this.dataTotal != 0){
                     let pageStart =  (this.page - 1) * this.pagesize;
                     let pageEnd = this.page * this.pagesize;
                     this.tableData_point = res.data.slice(pageStart,pageEnd);
@@ -203,17 +202,17 @@ export default {
                         type: 'info',
                         message: '无符合条件的司机'
                     })
+                    this.dataTotal = 0 ;
+                    this.tableData_point = []
                 }
             }).catch(err => {
-                // this.$message({
-                //     type: 'info',
-                //     message: '操作失败，原因：' + (err.errorInfo ? err.errorInfo : err.text)
-                // })
+                this.$message({
+                    type: 'info',
+                    message: '无符合条件的司机'
+                })
+                this.dataTotal = 0 ;
+                this.tableData_point = []
             })
-
-        },
-        handleChange(val) {
-            console.log(val);
         },
         //判断是否选中
         getinfomation(selection){
@@ -227,13 +226,13 @@ export default {
         pointSearch(type,point){
             switch(type){
                 case 'search':
-                    this.init(point);
+                    this.DriverList();
                     break;
                 case 'clear':
                     this.iftequan = false;
                     this.ifTequan(false)
                     this.$refs.ruleForm.resetFields();
-                    this.init();
+                    this.DriverList();
                     break;
             }
         },

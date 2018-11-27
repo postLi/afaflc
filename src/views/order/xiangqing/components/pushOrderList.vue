@@ -22,6 +22,7 @@
             </el-table-column>
             <el-table-column
                 label="用户"
+                :show-overflow-tooltip="true"
                 width="200"
                 >
                 <template slot-scope="scope">
@@ -40,9 +41,26 @@
                 >
             </el-table-column>
             <el-table-column
+                prop="isReallyPush"
+                label="是否推单"
+                width="120"
+                >
+                <template slot-scope="scope">
+                    {{scope.row.isReallyPush == '0' ? '否' : '是'}}
+                </template>
+            </el-table-column>
+            <el-table-column
+                :show-overflow-tooltip="true"
+                prop="canotPushCause"
+                label="未推单原因"
+                width="200"
+                >
+            </el-table-column>
+            <el-table-column
+                :show-overflow-tooltip="true"
                 prop="driverAddress"
                 label="当前地址"
-                width="350">
+                width="300">
             </el-table-column>
              <el-table-column
                 prop="address"
