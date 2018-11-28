@@ -54,11 +54,29 @@
             </el-col>
             <el-col :span="12">
                 <el-form-item label="所属业务员：" prop="belongSalesmanName">
-                    <CustomerSearch @returnCustomer = 'getCustomer' :customerName = "xinzengform.belongSalesmanName ? xinzengform.belongSalesmanName :''" ref="SalesmanName" :disabled="editType == 'view'"/>
+                    <CustomerSearch @returnCustomer = 'getCustomer' :customerName = "xinzengform.belongSalesmanName" ref="SalesmanName" :disabled="editType == 'view'"/>
                     <!-- {{xinzengform.belongSalesmanName}} -->
                 </el-form-item>
             </el-col>
           </el-row>
+
+        <el-row>
+            <el-col :span="12">
+                <el-form-item label="货主优惠等级：" prop="address"> 
+                    <el-input v-model="xinzengform.discountLevelName" auto-complete="off" v-if="editType=='view'"  disabled></el-input>
+                    <el-select v-model="xinzengform.discountLevel" placeholder="请选择" v-else>
+                        <el-option
+                        v-for="item in optionsLevel"
+                        :key="item.id"
+                        :label="item.name"
+                        :value="item.code"
+                        :disabled="item.disabled">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
+            </el-col>
+          </el-row>
+
           <div v-if="xinzengform.shipperType != 'AF0010101'">
             <el-row>
                 <el-col :span="12">
@@ -128,7 +146,7 @@
 import Upload from '@/components/Upload/singleImage'
 import { eventBus } from '@/eventBus'
 import {data_get_shipper_create,data_get_shipper_change,data_get_shipper_view} from '@/api/users/shipper/all_shipper.js'
-import { getDictionary } from '@/api/common.js'
+import { getDictionary,DicShipperLevel } from '@/api/common.js'
 import vregion from '@/components/vregion/Region'
 import CustomerSearch from '@/components/CustomerSearch/index'
 import {REGEX} from '@/utils/validate'
@@ -158,22 +176,6 @@ export default {
   },
   data(){
     // 手机号校验
-        // const mobileValidator = (rule, val, cb) => {
-        //      if (val == '') {
-        //         cb(new Error('手机号码不能为空'));
-        //     }else if(!(this.phoneTest.test(val))){
-        //         cb(new Error('请输入正确的手机号码格式'))
-        //     } else {
-        //         data_get_shipper_view(val).then(res=>{
-        //             console.log(res)
-        //             if(res.data){
-        //                 cb(new Error('该手机号已经被注册~'))
-        //             } else {
-        //                 cb()
-        //             }
-        //         })
-        //     }
-        // }
         const validateMobile = (rule, value, callback) => {
             console.log('value',value)
             if(!value){
@@ -214,6 +216,7 @@ export default {
         text:'',
         ifDisable:false,
         options:[],
+        optionsLevel:[],
         formLabelWidth:'160px',
         xinzengform:{
             shipperType:'AF0010101',//货主类型code
@@ -236,6 +239,7 @@ export default {
             areaCode:'',
             belongSalesman:'',//所属业务员id
             belongSalesmanName:'',// 所属业务员姓名
+            discountLevel:'AF0020806',//货主优惠等级
         },
         rulesForm:{
             shipperType:{required: true, message:'请选择货主类型', trigger:'blur'},
@@ -248,7 +252,7 @@ export default {
             // {message: '请输入正确手机号码', trigger: 'blur', pattern: REGEX.MOBILE}
 
             ],
-            belongCityName:{required:true, validator:checkLocation, trigger:'blur'},
+            belongCityName:{required:true, validator:checkLocation, trigger:['blur','change']},
             companyFacadeFile:{required:true, message:'请上传公司或者档口照片', trigger:'blur'},
             shipperCardFile:{required:true, message:'请上传发货人名片照片', trigger:'blur'}
         },
@@ -335,9 +339,6 @@ export default {
             done()
         }
         this.$emit('update:dialogFormVisible_add', false);
-        // if(this.editType == 'add'){
-        //     this.$refs.SalesmanName.customer =  '';
-        // }
     },
     closeMe(done){
         this.$refs.xinzengform.resetFields();
@@ -345,9 +346,6 @@ export default {
             done()
         }
         this.$emit('update:dialogFormVisible_add', false);
-        // if(this.editType == 'add'){
-        //     this.$refs.SalesmanName.customer =  '';
-        // }
     },
     //获取货主类型
     getMoreInformation(){
@@ -359,6 +357,9 @@ export default {
                     return el.code != 'AF0010101';
                 })
             }
+        });
+        DicShipperLevel().then( res => {
+            this.optionsLevel = res.data;
         })
     },
     // 保存
@@ -373,16 +374,11 @@ export default {
                         // }
                         this.ifDisable = true;
                         data_get_shipper_create(forms).then(res=>{
-                            // this.$alert('操作成功', '提示', {
-                            //     confirmButtonText: '确定',
-                            //     callback: action => {
-                                    this.close()
-                                      this.$message({
-                            type: 'success',
-                            message: '操作成功~'
-                        })
-                                // }
-                            // });
+                            this.close()
+                            this.$message({
+                                type: 'success',
+                                message: '操作成功~'
+                            })
                         }).catch(err=>{
                             this.$message({
                                 type: 'warning',

@@ -77,6 +77,15 @@ export function DicCarType() {
       method: 'get'
     })
 }
+
+// 获取货主优惠等级
+export function DicShipperLevel() {
+    return fetch({
+        url: '/' + baseurl_two + '/sysDict/getSysDictByCodeGet/AF00208',
+        method: 'get'
+      })
+  }
+
 /**
  * 获取图片上传的policy
  * callback

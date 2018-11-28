@@ -146,7 +146,6 @@ export default {
     },
     mounted(){
         eventBus.$on('changeList', () => {
-            // console.log('111111111111111111')
             this.firstblood()
         })
     },
@@ -157,7 +156,7 @@ export default {
         },
         // 判断选中与否
         getSelection(val){
-            console.log('选中内容',val)
+            // console.log('选中内容',val)
             this.selected = val;
         },
         pushOrderSerial(row){

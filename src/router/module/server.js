@@ -108,6 +108,15 @@ export default {
             }},
         ]
     },
- 
+    {
+        path: '/sm/QRCode', 
+        icon: 'QQ', 
+        name: '二维码', 
+        component: _import('sm/QRCode/index'), 
+        meta: { role: ['admin'], title: '二维码', stitle: '二维码', noCache: true , code: ''},
+        children: [
+  
+        ]
+      },
   ]
 }

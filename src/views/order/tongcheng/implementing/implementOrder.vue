@@ -53,15 +53,21 @@
                             sortable
                             :show-overflow-tooltip="true"
                             prop="shipperMobile"
-                            label="货主账号"
-                            width="120">
+                            label="货主"
+                            width="250">
+                            <template slot-scope="scope">
+                                <p>{{scope.row.shipperMobile}}<span v-if="scope.row.shipperName">-</span>{{scope.row.shipperName}}</p>    
+                            </template>
                         </el-table-column>
                         <el-table-column
-                            sortable
+                            label="车主"  
                             :show-overflow-tooltip="true"
-                            prop="shipperName"
-                            label="货主姓名"
-                            width="120">
+                            sortable
+                            prop="driverMobile"
+                            width="250">
+                            <template slot-scope="scope">
+                                {{scope.row.aflcDriverStatus.driverMobile}}{{scope.row.aflcDriverStatus.driverName ? '-' + scope.row.aflcDriverStatus.driverName : ''}}{{scope.row.aflcDriverStatus.carNumber ? "-" + scope.row.aflcDriverStatus.carNumber : ''}}
+                            </template>
                         </el-table-column>
                         <el-table-column
                             sortable

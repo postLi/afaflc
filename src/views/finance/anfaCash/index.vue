@@ -29,27 +29,27 @@
                 <h2>营销收支</h2>
                 <div class="qd-collapse_title clearfix">
                     <ul class="classfyTitle fl">
-                        <li v-for="(item,index) in tradeListDataType" :key="item.name" :class="{currentClick:item.iscur}" @click="setCur(index,'transaction',item.label)">{{item.name}}</li>
+                        <li v-for="(item,index) in FinancialDataType" :key="item.name" :class="{currentClick:item.iscur}" @click="setCur(index,'financial',item.label)">{{item.name}}</li>
                     </ul>
-                    <searchInfo searchType = "transaction"/>
+                    <searchInfo :searchType = "searchType2" :searchFrom = 'searchFrom2' @change = "getSearchParam"/>
                 </div>
                 <div class="essentialInformation" style="padding-top:0;">
                     <el-row class="basicInfo" :span='24'>
                         <!-- 第一行 -->
                         <el-col :span="4">优惠券：</el-col>
-                        <el-col :span="4">1</el-col>  
+                        <el-col :span="4">{{FinancialWayObj.couponAllCount ? FinancialWayObj.couponAllCount : 0}}</el-col>  
                         <el-col :span="4">优惠金：</el-col>
-                        <el-col :span="4">1</el-col>
+                        <el-col :span="4">{{FinancialWayObj.discountAmount ? FinancialWayObj.discountAmount : 0}}</el-col>
                         <el-col :span="4">奖励金：</el-col>
-                        <el-col :span="4">1</el-col>
+                        <el-col :span="4">{{FinancialWayObj.bounty ? FinancialWayObj.bounty : 0}}</el-col>
 
                         <!-- 第二行 -->
                         <el-col :span="4">达量奖励：</el-col>
-                        <el-col :span="4">1</el-col>
+                        <el-col :span="4">{{FinancialWayObj.quantityReward ? FinancialWayObj.quantityReward : 0}}</el-col>
                         <el-col :span="4">充值赠送：</el-col>
-                        <el-col :span="4">1</el-col>
+                        <el-col :span="4">{{FinancialWayObj.repaidGift ? FinancialWayObj.repaidGift : 0}}</el-col>
                         <el-col :span="4">平台抽佣：</el-col>
-                        <el-col :span="4">1</el-col> 
+                        <el-col :span="4">{{FinancialWayObj.platformPumping ? FinancialWayObj.platformPumping : 0}}</el-col> 
                     </el-row>
                 </div>
             </div>
@@ -58,47 +58,52 @@
                 <h2>交易构成</h2>
                 <div class="qd-collapse_title clearfix">
                     <ul class="classfyTitle fl">
-                        <li v-for="(item,index) in tradeListDataType" :key="item.name" :class="{currentClick:item.iscur}" @click="setCur(index,'transaction',item.label)">{{item.name}}</li>
+                        <li v-for="(item,index) in tradeListDataType" :key="item.name" :class="{currentClick:item.iscur}" @click="setCur(index,'userTradeSurvey',item.label)">{{item.name}}</li>
                     </ul>
-                    <searchInfo searchType = "transaction" />
+                    <searchInfo :searchType = "searchType" :searchFrom = 'searchFrom' @change = "getSearchParam"/>
                 </div>
-                <div class="essentialInformation_table">
-                    <el-table
-                        :data="tableData"
-                        border
-                        style="width: 100%">
-                        <el-table-column
-                        prop="date"
-                        label=""
-                        width="180">
-                        </el-table-column>
-                        <el-table-column
-                        prop="date"
-                        label="运费收入"
-                        width="180">
-                        </el-table-column>
-                        <el-table-column
-                        prop="name"
-                        label="待结算运费"
-                        width="180">
-                        </el-table-column>
-                        <el-table-column
-                        prop="address"
-                        label="退运费">
-                        </el-table-column>
-                         <el-table-column
-                        prop="address"
-                        label="运费支出">
-                        </el-table-column>
-                         <el-table-column
-                        prop="address"
-                        label="理赔收入">
-                        </el-table-column>
-                         <el-table-column
-                        prop="address"
-                        label="理赔支出">
-                        </el-table-column>
-                    </el-table>
+                <div class="essentialInformation anfaCshDetails" style="padding-top:0;">
+                    <el-row class="basicInfo" :span='24'>
+                        <!-- 第一行 -->
+                        <el-col class="el-col-bg" :span="4"></el-col>
+                        <el-col class="el-col-bg" :span="4">运费收入</el-col>  
+                        <el-col class="el-col-bg" :span="4">退运费</el-col>
+                        <el-col class="el-col-bg" :span="4">运费支出</el-col>
+                        <el-col class="el-col-bg" :span="4">理赔收入</el-col>
+                        <el-col class="el-col-bg" :span="4">理赔支出</el-col>
+
+                        <!-- 第二行 微信-->
+                        <el-col :span="4">微信</el-col>
+                        <el-col :span="4">{{userTradeSurveyObj.wxIncome ? userTradeSurveyObj.wxIncome : '/'}}</el-col>
+                        <el-col :span="4">{{userTradeSurveyObj.wxRefund ? userTradeSurveyObj.wxRefund : '/'}}</el-col>
+                        <el-col :span="4">{{userTradeSurveyObj.wxExpend ? userTradeSurveyObj.wxExpend : '/'}}</el-col>
+                        <el-col :span="4">{{userTradeSurveyObj.wxClaimIncome ? userTradeSurveyObj.wxClaimIncome : '/'}}</el-col>
+                        <el-col :span="4">{{userTradeSurveyObj.wxClaimExpend ? userTradeSurveyObj.wxClaimExpend : '/'}}</el-col> 
+
+                        <!-- 第三行 支付宝-->
+                        <el-col :span="4">支付宝</el-col>
+                        <el-col :span="4">{{userTradeSurveyObj.aliIncome ? userTradeSurveyObj.aliIncome : '/'}}</el-col>
+                        <el-col :span="4">{{userTradeSurveyObj.aliRefund ? userTradeSurveyObj.aliRefund : '/'}}</el-col>
+                        <el-col :span="4">{{userTradeSurveyObj.aliExpend ? userTradeSurveyObj.aliExpend : '/'}}</el-col>
+                        <el-col :span="4">{{userTradeSurveyObj.aliClaimIncome ? userTradeSurveyObj.aliClaimIncome : '/'}}</el-col>
+                        <el-col :span="4">{{userTradeSurveyObj.aliClaimExpend ? userTradeSurveyObj.aliClaimExpend : '/'}}</el-col> 
+
+                         <!-- 第二行 钱包-->
+                        <el-col :span="4">钱包</el-col>
+                        <el-col :span="4">{{userTradeSurveyObj.walletIncome ? userTradeSurveyObj.walletIncome : '/'}}</el-col>
+                        <el-col :span="4">{{userTradeSurveyObj.walletRefund ? userTradeSurveyObj.walletRefund : '/'}}</el-col>
+                        <el-col :span="4">{{userTradeSurveyObj.walletExpend ? userTradeSurveyObj.walletExpend : '/'}}</el-col>
+                        <el-col :span="4">{{userTradeSurveyObj.walletClaimIncome ? userTradeSurveyObj.walletClaimIncome : '/'}}</el-col>
+                        <el-col :span="4">{{userTradeSurveyObj.walletClaimExpend ? userTradeSurveyObj.walletClaimExpend : '/'}}</el-col> 
+
+                         <!-- 第二行 总额-->
+                        <el-col :span="4">总额</el-col>
+                        <el-col :span="4">{{userTradeSurveyObj.incomeTotal}}</el-col>
+                        <el-col :span="4">{{userTradeSurveyObj.refundTotal}}</el-col>
+                        <el-col :span="4">{{userTradeSurveyObj.expendTotal}}</el-col>
+                        <el-col :span="4">{{userTradeSurveyObj.claimIncomeTotal}}</el-col>
+                        <el-col :span="4">{{userTradeSurveyObj.claimExpendTotal}}</el-col> 
+                    </el-row>
                 </div>
             </div>
         </div>
@@ -109,8 +114,8 @@
 
 import '@/styles/detailsStyle.scss'
 
-import { parseTime } from '@/utils/index.js'
-import { userMywalletSurvey } from '@/api/finance/anfaZhangHU.js'
+import { parseTime,objectMerge2 } from '@/utils/index.js'
+import { userMywalletSurvey,userTradeSurvey,financial } from '@/api/finance/anfaZhangHU.js'
 // import Pager from '@/components/Pagination/index'
 import searchInfo from './components/searchInfo'
 
@@ -118,7 +123,7 @@ export default {
   name: 'detailsInfo',
   components: {
     //   Pager
-    searchInfo
+    searchInfo,
   },
   props: {
   }, 
@@ -127,30 +132,35 @@ export default {
         page:1,
         pagesize:20,
         totalCount:100,
-        loading: false,
+        loading: true,
         dialogVisible: false,
         anfaCashInfo:{},
-           tableData: [{
-          date: '2016-05-02',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1518 弄'
-        }, {
-          date: '2016-05-04',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1517 弄'
-        }, {
-          date: '2016-05-01',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1519 弄'
-        }, {
-          date: '2016-05-03',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1516 弄'
-        }],
+        searchType2:'0',
+        searchType:'0',
+        searchFrom:'',
+        searchFrom2:'',
+        searchTime:'',
+        userTradeSurveyObj:{
+            claimExpendTotal: 0,
+            claimIncomeTotal: 0,
+            expendTotal: 0,
+            incomeTotal: 0,
+            refundTotal: 0,
+        },
+        FinancialWayObj:{},
+        userTradeData:{
+            "dateType": "0",
+            "startTime": ""
+        },
+        FinancialDataType:[
+            {name:'全部',label:'0',iscur:true},
+            {name:'自然天',label:'1',iscur:false},
+            {name:'自然月',label:'2',iscur:false},
+        ],
         tradeListDataType:[
-            {name:'全部',label:'',iscur:true},
-            {name:'自然天',label:'-7',iscur:false},
-            {name:'自然月',label:'-30',iscur:false},
+            {name:'全部',label:'0',iscur:true},
+            {name:'自然天',label:'1',iscur:false},
+            {name:'自然月',label:'2',iscur:false},
         ],
       }
   },
@@ -158,42 +168,80 @@ export default {
       
     },
      mounted() {
-        // console.log(this.$route)
         this.init();
     },
     methods: {
         init() {
+            this.loading = true;
             userMywalletSurvey().then(res => {
                 this.anfaCashInfo = res.data;
+            }).catch(err => {
+                this.loading = false;
+            })
+            this.TradeSurvey();
+            this.FinancialWay();
+            this.loading = false;
+        },
+        TradeSurvey(){
+            userTradeSurvey(this.userTradeData).then(res => {
+                this.userTradeSurveyObj = objectMerge2({},this.userTradeSurveyObj,res.data);
+                let el = this.userTradeSurveyObj;
+                el.incomeTotal = el.wxIncome + el.aliIncome + el.walletIncome ;
+                el.refundTotal = el.wxRefund + el.aliRefund + el.walletRefund ;
+                el.expendTotal = el.wxExpend + el.aliExpend + el.walletExpend ;
+                el.claimIncomeTotal = el.wxClaimIncome + el.aliClaimIncome + el.walletClaimIncome ;
+                el.claimExpendTotal = el.wxClaimExpend + el.aliClaimExpend + el.walletClaimExpend ;
+            }).catch(err => {
+                this.loading = false;
             })
         },
-        shuaxin() {
-            this.init()
-        },
-        handleSizeChange(val) {
-            console.log(`每页 ${val} 条`);
-        },
-        handleCurrentChange(val) {
-            console.log(`当前页: ${val}`);
+        FinancialWay(){
+            financial(this.searchTime).then(res => {
+                this.FinancialWayObj = res.data;
+            }).catch(err => {
+                this.loading = false;
+            })
         },
         setCur(index,classfy,label){
-        switch(classfy){
-            // case 'grap':
-            //     this.grapListDataType.forEach((el,idx)=>{
-            //         idx == index ? el.iscur = true : el.iscur = false;
-            //     })
-            //     this.grapListObj.vo.timeDay = label;
-            //     this.GrapList();
-            //     break;
-            case 'transaction':
-                this.tradeListDataType.forEach((el,idx)=>{
-                    idx == index ? el.iscur = true : el.iscur = false;
-                })
-                // this.tradOrdeListObj.vo.timeDay = label;
-                // this.TradOrdeList();
-                break;
-        }
-    },
+            switch(classfy){
+                case 'financial':
+                    this.FinancialDataType.forEach((el,idx)=>{
+                        idx == index ? el.iscur = true : el.iscur = false;
+                    })
+                    this.searchType2 = label;
+                    this.searchFrom2 = classfy;
+                    if(label == '0'){
+                        this.searchTime = '';
+                        this.FinancialWay();
+                    }
+                    break;
+                case 'userTradeSurvey':
+                    this.tradeListDataType.forEach((el,idx)=>{
+                        idx == index ? el.iscur = true : el.iscur = false;
+                    })
+                    this.searchType = label;
+                    this.userTradeData.dateType = label;
+                    this.searchFrom = classfy;
+                    if(label == '0'){
+                        this.userTradeData.startTime = '';
+                        this.TradeSurvey();
+                    }
+                    break;
+            }
+        },
+        getSearchParam(obj,searchFrom) {
+            console.log(obj,searchFrom)
+            switch(searchFrom){
+                case 'financial':
+                    this.searchTime = obj;
+                    this.FinancialWay();
+                    break;
+                case 'userTradeSurvey':
+                    this.userTradeData = Object.assign({},this.userTradeData, obj)
+                    this.TradeSurvey();
+                    break;
+            }
+        },
     }
 }
 </script>
@@ -209,6 +257,17 @@ export default {
                 }
                 .essentialInformation_table{
                     padding-top: 0;
+                }
+                .anfaCshDetails{
+                    .basicInfo{
+                        .el-col{
+                            background: #fff;
+                            text-align: center;
+                        }
+                        .el-col-bg{
+                            background: #fafafa;
+                        }
+                    }
                 }
             }
         }

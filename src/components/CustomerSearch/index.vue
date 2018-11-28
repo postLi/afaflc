@@ -41,7 +41,7 @@ export default {
     }, 
     watch:{
         customerName(newVal,oldVal){
-            // console.log('customerName',newVal,oldVal)
+            console.log('customerName',newVal,oldVal)
             if(newVal){
                 this.customer = newVal;
             }else{
@@ -88,6 +88,8 @@ export default {
         },
     },
     mounted(){
+        // console.log('customerNamecustomerNamecustomerName',this.customerName)
+        this.customer = this.customerName ? this.customerName : '';
         this.init();
         // this.restaurants = this.init();
     },
