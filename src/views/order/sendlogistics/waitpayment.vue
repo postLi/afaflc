@@ -53,7 +53,7 @@
             <el-table-column  label="订单号" prop="" sortable>
             </el-table-column>
             <el-table-column  label="订单状态" prop="" sortable>
-            </el-table-column>            
+            </el-table-column>
             <el-table-column  label="货主" prop="" sortable>
             </el-table-column>           
             <el-table-column  label="物流公司" prop="" sortable>
@@ -107,7 +107,7 @@ export default {
     methods:{
             // 列表
             firstblood(){
-
+            
             },
             // 页码改变
             handlePageChange(obj) {

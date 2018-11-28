@@ -20,7 +20,7 @@
                                >
                          </el-option>
                  </el-select>
-            </el-form-item>   
+            </el-form-item>
             <el-form-item label="下单时间">
             <el-date-picker
                 type="daterange"
@@ -68,7 +68,7 @@
             <el-table-column  label="货主" prop="" sortable>
             </el-table-column>           
             <el-table-column  label="物流公司" prop="" sortable>
-            </el-table-column>           
+            </el-table-column> 
             <el-table-column  label="货物名称" prop="" sortable>
             </el-table-column>           
             <el-table-column  label="运费总额" prop="" sortable>
@@ -78,7 +78,7 @@
             <el-table-column  label="提货地" prop="" sortable>
             </el-table-column>                                                           
             <el-table-column  label="目的地" prop="" sortable>
-            </el-table-column>   
+            </el-table-column>
             <el-table-column  label="下单时间" prop="" sortable>
             </el-table-column>   
             <el-table-column  label="订单来源" prop="" sortable>
