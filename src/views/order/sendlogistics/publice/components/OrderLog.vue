@@ -235,9 +235,9 @@
             </div>
         </div>
 
-        <!-- 物流公司信息 -->
+        <!-- 客服备注 -->
         <div class="orderInfo-collapse collapseInfo">
-            <h2>物流公司信息</h2>
+            <h2>客服备注</h2>
             <div class="essentialInformation">
                 <p>
                     <span>客服备注：</span>
@@ -250,7 +250,7 @@
                 <p>
                     <span>备注内容：</span>
                       <el-tooltip placement="top-start" effect="dark" content="ssssssssss">
-                          <span>sdsdsdsdsgfgfkdlfdkgdgdgdgdssssssssssssssssssssssssssssssssssssshgldhg</span>
+                          <span>客服备注内容与那个呗</span>
                       </el-tooltip>
                 </p>                 
             </div>
