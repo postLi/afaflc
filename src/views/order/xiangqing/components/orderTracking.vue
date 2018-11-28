@@ -171,7 +171,6 @@ export default {
             this.init();
         },
     },
-   
 }
 </script>
 

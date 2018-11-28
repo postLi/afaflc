@@ -130,12 +130,11 @@ export default{
           Pager,
           CheckOut
         },
-
-      mounted() {
+        mounted() {
             this.firstblood()
             this.getMoreInformation()
         },
-      updated(){
+        updated(){
             this.cityTree.forEach(item=>{
                 if(item.name=='北京市'){
                     item.children = [{

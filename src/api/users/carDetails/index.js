@@ -2,7 +2,7 @@ import fetch from '@/utils/fetch'
 
 const baseurl = 'aflcsmservice'
 const baseurl_two = 'aflcorderservice'
-const baseurl_three = 'aflcusercenterservice' //用户
+const baseurl_three = 'aflcusercenterservice-wtc' //用户
 
 //财务信息-财务概况-根据id获取车主信息管理-财务概况
 export function findDrivrTrans(driverId) {
@@ -95,7 +95,7 @@ export function driverTradOrdeCancelList(data) {
 //基本信息-概要信息-根据id获取货主基本信息
 export function aflcDriverInfo(driverId) {
     return fetch({
-      url: '/'+baseurl_three+'/usercenter/aflcDriver/v1/' + driverId,
+      url: '/'+baseurl_three+'/usercenter/aflcDriver/v1/driverBase/' + driverId,
       method: 'get',
     })
   }

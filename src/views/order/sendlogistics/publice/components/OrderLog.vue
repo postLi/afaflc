@@ -1,0 +1,274 @@
+<template>
+    <div class="TCorderInfo clearfix">
+        <!-- 基本信息 -->
+        <div class="orderInfo-collapse collapseInfo">
+            <h2>基础信息</h2>
+            <div class="essentialInformation">
+                <p>
+                    <span>订单编号：</span>
+                    <span>1</span>
+                 </p>
+                <p>
+                    <span>所属区域：</span>
+                    <span>1</span>
+                 </p>
+                <p>
+                    <span>订单类型：</span>
+                    <span>1</span>
+                </p>                 
+                <p>
+                    <span>订单状态：</span>
+                    <span>1</span>
+                </p>  
+            </div>
+            <div class="essentialInformation">
+                <p>
+                    <span>装货时间：</span>
+                    <span>1</span>
+                 </p>
+                <p>
+                    <span>下单时间：</span>
+                    <span>1</span>
+                 </p>
+                <p>
+                    <span>货主账号：</span>
+                    <span>1</span>
+                 </p>                 
+                <p>
+                    <span>货主姓名：</span>
+                    <span>1</span>
+                </p>  
+            </div>
+            <div class="essentialInformation">
+                <p>
+                    <span>订单来源：</span>
+                    <span>1</span>
+                </p>
+            </div>
+        </div>
+
+        <!-- 地址信息 -->
+        <div class="orderInfo-collapse collapseInfo">
+            <h2>地址信息</h2>
+            <div class="essentialInformation">
+                <p>
+                    <span>发货地：</span>
+                    <span>1</span>
+                 </p>
+                <p>
+                    <span>街道/门牌号：</span>
+                    <span>1</span>
+                 </p>
+                <p>
+                    <span>发货人：</span>
+                    <span>1</span>
+                 </p>                 
+                <p>
+                    <span>联系方式：</span>
+                    <span>1</span>
+                </p>  
+            </div>
+            <div class="essentialInformation">
+                <p>
+                    <span>目的地：</span>
+                    <span>1</span>
+                 </p>
+                <p>
+                    <span>街道/门牌号：</span>
+                    <span>1</span>
+                </p>
+                <p>
+                    <span>收货人：</span>
+                    <span>1</span>
+                </p>                 
+                <p>
+                    <span>联系方式：</span>
+                    <span>1</span>
+                </p>  
+            </div>
+        </div>
+
+        <!-- 货物及备注 -->
+        <div class="orderInfo-collapse collapseInfo">
+            <h2>货物及备注</h2>
+            <div class="essentialInformation">
+                <p>
+                    <span>重量 / 体积：</span>
+                    <span>1</span>
+                 </p>
+                <p>
+                    <span>货物名称 / 件数：</span>
+                    <span>1</span>
+                 </p>
+                <p>
+                    <span>货物保价：</span>
+                    <span>1</span>
+                </p>                 
+                <p>
+                    <span>时效：</span>
+                    <span>1</span>
+                </p>  
+            </div>
+            <div class="essentialInformation">
+                <p>
+                    <span>上门提货：</span>
+                    <span>1</span>
+                </p>
+                <p>
+                    <span>送货上门：</span>
+                    <span>1</span>
+                </p>
+                <p>
+                    <span>回单：</span>
+                    <span>1</span>
+                </p>                 
+                <p>
+                    <span>回款：</span>
+                    <span>1</span>
+                </p>  
+            </div>
+            <div class="essentialInformation">
+                <p>
+                    <span>开票：</span>
+                    <span>1</span>
+                </p>
+            </div>
+        </div>
+
+        <!-- 运费信息 -->
+        <div class="orderInfo-collapse collapseInfo">
+            <h2>运费信息</h2>
+            <div class="essentialInformation">
+                <p>
+                    <span>付款状态：</span>
+                    <span>1</span>
+                 </p>
+                <p>
+                    <span>付款时间：</span>
+                    <span>1</span>
+                 </p>
+                <p>
+                    <span>付款方式：</span>
+                    <span>1</span>
+                </p>                 
+                <p>
+                    <span>是否改价：</span>
+                    <span>1</span>
+                </p>  
+            </div>
+            <div class="essentialInformation">
+                <p>
+                    <span>订单总额：</span>
+                    <span>1</span>
+                </p>
+                <p>
+                    <span>干线费：</span>
+                    <span>1</span>
+                </p>
+                <p>
+                    <span>保价服务费：</span>
+                    <span>1</span>
+                </p>                 
+                <p>
+                    <span>协商差价：</span>
+                    <span>1</span>
+                </p>  
+            </div>
+            <div class="essentialInformation">
+                <p>
+                    <span>上门提货费：</span>
+                    <span>1</span>
+                </p>
+                <p>
+                    <span>送货上门费：</span>
+                    <span>1</span>
+                </p>
+                <p>
+                    <span>优惠券抵扣：</span>
+                    <span>1</span>
+                </p>
+                <p>
+                    <span>优惠金抵扣：</span>
+                    <span>1</span>
+                </p>                                
+            </div>
+            <div class="essentialInformation">
+                <p>
+                    <span>奖励金发放：</span>
+                    <span>1</span>
+                </p>
+                <p>
+                    <span>订单抽佣：</span>
+                    <span>1</span>
+                </p>
+                <p>
+                    <span>货主支付：</span>
+                    <span>1</span>
+                </p>
+                <p>
+                    <span>物流公司收入：</span>
+                    <span>1</span>
+                </p>                                
+            </div>
+        </div>
+
+        <!-- 物流公司信息 -->
+        <div class="orderInfo-collapse collapseInfo">
+            <h2>物流公司信息</h2>
+            <div class="essentialInformation">
+                <p>
+                    <span>物流公司账号：</span>
+                    <span>1</span>
+                 </p>
+                <p>
+                    <span>物流公司负责人：</span>
+                    <span>1</span>
+                 </p>
+                <p>
+                    <span>承运网点：</span>
+                    <span>1</span>
+                </p>                 
+                <p>
+                    <span>网点负责人：</span>
+                    <span>1</span>
+                </p>  
+            </div>
+        </div>
+
+        <!-- 物流公司信息 -->
+        <div class="orderInfo-collapse collapseInfo">
+            <h2>物流公司信息</h2>
+            <div class="essentialInformation">
+                <p>
+                    <span>客服备注：</span>
+                    <span>1</span>
+                 </p>
+                <p>
+                    <span>备注时间：</span>
+                    <span>1</span>
+                 </p>
+                <p>
+                    <span>备注内容：</span>
+                      <el-tooltip placement="top-start" effect="dark" content="ssssssssss">
+                          <span>sdsdsdsdsgfgfkdlfdkgdgdgdgdssssssssssssssssssssssssssssssssssssshgldhg</span>
+                      </el-tooltip>
+                </p>                 
+            </div>
+        </div>
+
+    </div>
+</template>
+
+<script>
+export default {
+    data(){
+        return{
+
+        }
+    }
+}
+</script>
+
+<style lang="scss">
+
+</style>
