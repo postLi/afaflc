@@ -11,9 +11,9 @@
                     <el-col :span="3">注册渠道：</el-col>
                     <el-col :span="3">{{shipperInformation.registerOriginName}}</el-col>
                     <el-col :span="3">已加入天数：</el-col>
-                    <el-col :span="3"></el-col>
+                    <el-col :span="3">{{shipperInformation.existTime ? shipperInformation.existTime : 1}}</el-col>
                     <el-col :span="3">最近登录时间：</el-col>
-                    <el-col :span="3"></el-col>
+                    <el-col :span="3">{{shipperInformation.lastLoginTime | parseTime}}</el-col>
                     <!-- 第二行 -->
                     <el-col :span="3">用户姓名：</el-col>
                     <el-col :span="3">{{shipperInformation.shipperName}}</el-col>

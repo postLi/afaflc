@@ -2,7 +2,7 @@ import fetch from '@/utils/fetch'
 
 const baseurl = 'aflc-order' //订单
 const baseurl_tow = 'aflcsmservice' //服务
-const baseurl_three = 'aflcusercenterservice' //用户
+const baseurl_three = 'aflcusercenterservice-wtc' //用户
 const baseurl_four = 'aflcorderservice' //订单
 
 
@@ -89,7 +89,7 @@ export function aflcEquityConfigDto(userId) {
 //基本信息-概要信息-根据id获取货主基本信息
 export function aflcShipperInfo(userId) {
     return fetch({
-      url: '/'+baseurl_three+'/usercenter/aflcShipper/v1/' + userId,
+      url: '/'+baseurl_three+'/usercenter/aflcShipper/v1/shipperBase/' + userId,
       method: 'get',
     })
   }

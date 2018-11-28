@@ -1,8 +1,8 @@
 <template>
     <!-- 初始化检查 -->
     <div class="checkout commoncss">
-        <el-dialog title='初始化检查' :close-on-click-modal="false" top="10vh"  :visible="dialogFormVisible" @close="close">
-            <div class="box_top"  v-if="type == 1">
+        <el-dialog title='初始化检查' :close-on-click-modal="false" top="5vh"  :visible="dialogFormVisible" @close="close">
+            <div class="box_top"  v-if="type == 1" :key="viewKey">
                 <div class="checkout_top">
                     <i class="wzlicon"></i>
                     <h6 v-if="!ischecked">初始化检查中<el-button type="primary"  plain @click="doAction('check')" class="btn_qx">{{ cancelAni ? '继续检查' : '取消'}}</el-button></h6>
@@ -10,13 +10,21 @@
                 </div>
                 <progressbar :cancelAni="cancelAni" :isani="showani" />
             </div>
-            <div class="top_content" v-else> 
-                <h6>初始化检查已完成，有{{dataset.totals}}项基础功能没维护</h6>
-            </div>
-            <div class="main_checker2">
-                <ul>
-                    
-                </ul>
+            <div class="main_checker2" v-if="type == 1">
+                <div class="company_content" :key="viewKey">
+                    <ul :class="{'showani': showani, 'cancelAni': cancelAni}" @animationend="ischecked = true">
+                        <li v-for="(obj,idx) in countList" :key="idx">
+                            <div>
+                                <i :class="obj.configNum > 0 ? 'el-icon-success ' : 'el-icon-warning'"></i>
+                                <p v-html="obj.configStatistics"></p> 
+                                <el-button type="primary" plain @click="doActions(obj.label,obj)" class="btn_qx1" v-if="obj.noConfigNum == 0" disabled>{{obj.button3}}</el-button>
+                                <el-button type="primary" plain @click="doActions(obj.label,obj)" class="btn_qx" v-else-if="obj.configNum == 0">{{obj.button1}}</el-button>
+                                <el-button type="primary" plain @click="doActions(obj.label,obj)" class="btn_qx1" v-else>{{obj.button2}}</el-button>
+                                <!-- <el-button type="primary" plain @click="doActions(obj.label,obj)" class="btn_qx1">{{obj.button2}}</el-button> -->
+                            </div>
+                        </li>
+                    </ul>
+                </div>
             </div>
         </el-dialog>
     </div>
@@ -49,10 +57,102 @@ export default {
             showAni: false,
             cancelAni: false,
             showani:false,
+            viewKey:0,
             dataset: {
                 totals:0,
             },
-            type:1
+            type:1,
+            countInfo:[],
+            countList: [{
+                label: 'areaService',
+                title: '区域服务定价',
+                configStatistics: '',
+                button1: '去配置',
+                button2: '继续添加',
+                button3: '已配置',
+            }, {
+                label: 'waitService',
+                title: '等候费定价',
+                configStatistics: '',
+                button1: '去配置',
+                button2: '继续添加',
+                button3: '已配置',
+
+            }, {
+                label: 'publicPush',
+                title: '公海推单规则',
+                configStatistics: '',
+                button1: '去配置',
+                button2: '继续添加',
+                button3: '已配置',
+
+            }, {
+                label: 'orderObtain',
+                title: '中单规则',
+                configStatistics: '',
+                button1: '去配置',
+                button2: '继续添加',
+                button3: '已配置',
+
+            }, {
+                label: 'favourablePrice',
+                title: '优惠金',
+                configStatistics: '',
+                button1: '去配置',
+                button2: '继续添加',
+                button3: '已配置',
+
+            }, {
+                label: 'favourableQuan',
+                title: '优惠券',
+                configStatistics: '',
+                button1: '去配置',
+                button2: '继续添加',
+                button3: '已配置',
+
+            }, {
+                label: 'brokerage',
+                title: '抽佣',
+                configStatistics: '',
+                button1: '去配置',
+                button2: '继续添加',
+                button3: '已配置',
+
+            }, {
+                label: 'bonus',
+                title: '奖励金',
+                configStatistics: '',
+                button1: '去配置',
+                button2: '继续添加',
+                button3: '已配置',
+
+            }, {
+                label: 'daliang',
+                title: '达量',
+                configStatistics: '',
+                button1: '去配置',
+                button2: '继续添加',
+                button3: '已配置',
+
+            }, {
+                label: 'sockpuppetSetting',
+                title: '马甲单',
+                configStatistics: '',
+                button1: '去配置',
+                button2: '继续添加'
+            }, {
+                label: 'shipperAnnouncement',
+                title: '货主公告',
+                configStatistics: '',
+                button1: '去配置',
+                button2: '继续添加'
+            }, {
+                label: 'driverAnnouncement',
+                title: '车主公告',
+                configStatistics: '',
+                button1: '去配置',
+                button2: '继续添加'
+            }],
         };
     },
     computed: {
@@ -70,9 +170,27 @@ export default {
     methods: {
         //初始化选择项数据
         init(){
-            console.log('1312313')
+            this.viewKey = new Date().getTime()
+            this.type = 1;
+            this.dataset.totals = 0;
             aflcCityCheckout(this.cityId).then(res => {
-                console.log('resresresres',res)
+                this.showani = true;
+                this.countList.forEach(el => {
+                    res.data.forEach(item => {
+                        if(el.label == item.label){
+                            el.configStatistics = item.configStatistics;
+                            el.configNum = item.configNum;
+                            el.determineConfig = item.determineConfig;
+                            el.noConfigNum = item.noConfigNum;
+                        }
+                    })
+                })
+
+                for(var i in this.countList){
+                    if(this.countList[i].configNum == 0){
+                        this.dataset.totals += 1 ;
+                    }
+                }
             }).catch(err => {
                 this.$message({
                     type: 'warning',
@@ -81,8 +199,76 @@ export default {
             })
         },
         doAction(type) {
+            console.log(type)
             switch (type) {
-                
+                case 'init':
+                    this.init()
+                    break;
+                case 'check':
+                    this.cancelAni = !this.cancelAni;
+                    break;
+                case 'agane':
+                    this.ischecked = false;
+                    this.type = 3
+                    this.init()
+                    break;
+            }
+        },
+        doActions(type,obj){
+            let routerHref = {} ;
+            switch(type){
+                case 'areaService':
+                    routerHref = this.$router.resolve({name:'区域服务及定价'})
+                    break;
+                case 'waitService':
+                    console.log(obj)
+                    if(obj.determineConfig == 0 && obj.configNum){
+                        routerHref = this.$router.resolve({name:'区域服务及定价'})
+                    }else{
+                        routerHref = this.$router.resolve({name:'等候费用定价'})
+                    }
+                    break;
+                case 'publicPush':
+                    if(obj.determineConfig == 0 && obj.configNum){
+                        routerHref = this.$router.resolve({name:'区域服务及定价'})
+                    }else{
+                        routerHref = this.$router.resolve({name:'公海推单'})
+                    }
+                    break;
+                case 'orderObtain':
+                    if(obj.determineConfig == 0 && obj.configNum){
+                        routerHref = this.$router.resolve({name:'区域服务及定价'})
+                    }else{
+                        routerHref = this.$router.resolve({name:'中单设置'})
+                    }
+                    break;
+                case 'favourablePrice':
+                    routerHref = this.$router.resolve({name:'优惠金'})                    
+                    break;
+                case 'favourableQuan':
+                    routerHref = this.$router.resolve({name:'优惠券'})
+                    break;
+                case 'brokerage':
+                    routerHref = this.$router.resolve({name:'抽佣管理'})
+                    break;
+                case 'bonus':
+                    routerHref = this.$router.resolve({name:'车主奖励'})
+                    break;
+                case 'daliang':
+                    routerHref = this.$router.resolve({name:'订单达量'})
+                    break;
+                case 'sockpuppetSetting':
+                    routerHref = this.$router.resolve({name:'推送设置'})
+                    break;
+                case 'shipperAnnouncement':
+                    routerHref = this.$router.resolve({name:'发布公告'})
+                    break;
+                case 'driverAnnouncement':
+                    routerHref = this.$router.resolve({name:'发布公告'})
+                    break;
+            }
+            if(routerHref.href){
+                window.open(routerHref.href, '_blank')
             }
         },
         close(){
@@ -125,6 +311,7 @@ export default {
         height: 100%;
     }
     }
+
     .checkout{
         .el-dialog__body{
             position: relative;
@@ -201,7 +388,6 @@ export default {
             .main_checker2{
                 border:1px solid rgba(188, 188, 188, 1);
                 // padding:10px 40px;
-                
                 h6{
                     height: 46px;
                     line-height: 46px;
@@ -211,18 +397,22 @@ export default {
                 }
                 p{
                     font-size:14px;
-                    .el-icon-success{
+                    display: inline-block;
+                }
+                .el-icon-success{
                     color: rgb(0,204,0);
                     margin-right: 10px;
-                    }
-                    .el-icon-warning{
+                }
+                .el-icon-warning{
                     color:rgb(255,0,0); 
                     margin-right: 10px;
-                    }
                 }
                 .company_content{
                     min-height: 320px;
                     margin-top:-11px;
+                    .countNum{
+                        color: red;
+                    }
                     ul{
                     height: 0;
                     margin-top:25px;
@@ -238,10 +428,39 @@ export default {
 
                     li{
                         // height: 50px;
-                        line-height: 50px;
-                        border-bottom:1px solid #ccc;
-                        padding:0 60px;
-                    }
+                            line-height: 50px;
+                            border-bottom:1px solid #ccc;
+                            padding:0 60px;
+                            .btn_qx{
+                                padding: 3px 10px;
+                                margin:14px 0;
+                                font-size:14px;
+                                width:75px;
+                                float:right;
+                            }
+                            .btn_qx1{
+                                width:75px;
+                                padding: 3px 10px;
+                                margin:14px 0;
+                                font-size:14px;
+                                float:right;
+                                border:1px solid rgba(188, 188, 188, 1);
+                                color:rgba(188, 188, 188, 1);
+                                display: block;
+                            }
+                            :hover.btn_qx1{
+                                border:1px solid #3e9ff1;
+                                background:#fff;
+                                color:#3e9ff1;
+                            }
+
+                            :hover .is-disabled{
+                                border:1px solid rgba(188, 188, 188, 1);
+                                color:rgba(188, 188, 188, 1);
+                                background-color: #ecf5ff;
+                            }
+
+                        }
                     }
                 }
                 .btn_content{
@@ -259,257 +478,20 @@ export default {
                     }
                 }
             }
-            
         }
-
     }
 </style>
+
 <style rel="stylesheet/scss" lang="scss">
-    .checkout{
-        .el-dialog{
-            width: 1300px;
-            .el-dialog__body{
-                padding:20px 10px;
-                border-bottom:0 none;
-                position: relative;
-                // .el-form-item__content{
-                //     width:200px;
-                //     .el-select{
-                //         width: 100%;
-                //     }
-                // }
-            }
-        }
-        // .el-dialog .el-dialog__body .el-form .el-form-item .el-form-item__content .el-input .el-input__inner{
-        //     height: 30px;
-        //     line-height:30px;
-        // }
 
+    .checkout .el-dialog__body .main_checker2 .company_content ul li p .countNum{
+        color:red;
     }
-</style>
+    .checkout .el-dialog{
+        min-width: 1300px;
+    }
 
-<style lang="scss">
-
-.check_box{
-  min-width: 1100px;
-  .el-header{
-     margin-top:20px;
-    .top_content{
-        border:1px solid rgba(188, 188, 188, 1);
-        height: 143px;
-        background-image: url('../../../assets/checkImg/bgo1.png');
-        background-repeat:no-repeat;
-        background-position: center;
-        background-size:cover;
-        // background-size: 100%;
-        padding: 45px 54px;
-        box-sizing: border-box;
-        h6{
-          font-size: 22px;
-          font-weight: normal;
-          color: #ffffff;
-        }
-        .top_ts{
-          margin-top:8px;
-          font-size: 16px;
-          font-weight: normal;
-          color: #ffffff;
-          .top_num{
-            color:#ff0000;
-            margin:0 5px;
-            font-weight: bold
-          }
-        }
+    .checkout .el-dialog .el-dialog__body {
+        padding: 5px;
     }
-    .box_top{
-      .top_content2{
-        height: 100px;
-        line-height: 24px;
-        padding: 40px 126px;
-        border: 1px solid #bcbcbc;
-        background-image: url('../../../assets/checkImg/bgo1.png');
-        background-repeat:no-repeat;
-        background-size:cover;
-        position: relative;
-        h6{
-          font-size: 30px;
-          color:#fff;
-          font-weight: normal;
-          .btn_qx{
-            padding: 4px 12px;
-            border:1px solid #fff;
-            background:#409EFF;
-            color:#fff;
-            margin-left:12px;
-          }
-          .btn_qx:hover{
-            background:#fff;
-            color:#409EFF;
-          }
-          .top_num{
-            color:#ff0000;
-            margin:0 5px;
-          }
-        }
-        .top_ts{
-          width: 144px;
-          height: 20px;
-          font-size: 16px;
-          font-weight: normal;
-          color: #fff;
-          overflow: hidden;
-          margin-top: 10px;
-          .center_title{
-            color:#fff;
-          }
-        }
-        .wzlicon{
-          width: 40px;
-          height:45px;
-          background-image: url(../../../assets/checkImg/anquan.png);
-          font-size: 45px;
-          color: #fff;
-          position: absolute;
-          left: 62px;
-          top: 28px;
-        }
-      }
-    }
-    
-  }
-  .el-main{
-    .btn_qx{
-      padding: 3px 10px;
-      margin:14px 0;
-      font-size:14px;
-      width:58px;
-      float:right;
-    }
-    .btn_qx1{
-      width:58px;
-      padding: 3px 10px;
-      margin:14px 0;
-      font-size:14px;
-      float:right;
-      border:1px solid rgba(188, 188, 188, 1);
-      color:rgba(188, 188, 188, 1);
-      display: block;
-    }
-    :hover.btn_qx1{
-      border:1px solid #3e9ff1;
-      background:#fff;
-      color:#3e9ff1;
-    }
-    padding:0 20px;
-    .main_checker{
-      text-align: center;
-      margin-top: 50px;
-      .el-button{
-        // width:300px;
-        // height:66px;
-        width: 260px;
-        height: 60px;
-        background-color: #07a6f9;
-        font-size:30px;
-        margin-top:20%;
-      }
-    }
-    .main_checker2{
-      border:1px solid rgba(188, 188, 188, 1);
-      // padding:10px 40px;
-     
-      h6{
-        height: 46px;
-        line-height: 46px;
-        font-size: 16px;
-        font-weight: normal;
-         border-bottom: 1px solid  rgba(188, 188, 188, 1);
-      }
-      p{
-        font-size:14px;
-        .el-icon-success{
-          color: rgb(0,204,0);
-          margin-right: 10px;
-        }
-        .el-icon-warning{
-          color:rgb(255,0,0); 
-          margin-right: 10px;
-        }
-      }
-      .company_content{
-        min-height: 320px;
-        // padding:10px 20px;
-        // display:none;
-        margin-top:-11px;
-        ul{
-          height: 0;
-          margin-top:25px;
-          overflow: hidden;
-          animation: showUlAni 1.2s linear  forwards;
-          animation-play-state: paused;
-          &.showani{
-            animation-play-state: running;
-          }
-          &.cancelAni{
-            animation-play-state: paused;
-          }
-
-          li{
-            // height: 50px;
-            line-height: 50px;
-            border-bottom:1px solid #ccc;
-            padding:0 60px;
-          }
-          // li{
-          //   width: 100%;
-          //   animation:myfirst 4s;
-          //   -moz-animation:myfirst 4s; /* Firefox */
-          //   -webkit-animation:myfirst 4s; /* Safari and Chrome */
-          //   -o-animation:myfirst 4s; /* Opera */
-          // }
-          // @keyframes myfirst
-          // {
-          // from {width: 0%;height: 0%;}
-          // to {width: 100%;}
-          // }
-          // @-moz-keyframes myfirst /* Firefox */
-          // {
-          // from {width: 0%;height: 0%;}
-          // to {width: 100%;}
-          // }
-          // @-webkit-keyframes myfirst /* Safari and Chrome */
-          // {
-          // from {width: 0%;height: 0%;}
-          // to {width: 100%;}
-          // }
-          // @-o-keyframes myfirst /* Opera */
-          // {
-          // from {width: 0%;height: 0%;}
-          // to {width: 100%;}
-          // }
-        }
-      }
-      .btn_content{
-        text-align: center;
-        margin: 20px 0;
-        .btn_kd{
-          width:110px;
-          font-size: 16px;
-        }
-        .btn_h{
-          width:110px;
-          font-size: 16px;
-          background-color:#ccc;
-          border:1px solid #ccc;
-        }
-      }
-      // .btn_content .btn_h:hover{
-      //   opacity: 0.8;
-      //   background:#fff;
-      //   color:#3e9ff1;
-      //   border:1px solid #3e9ff1;
-      // }
-    }
-  }
-}
 </style>

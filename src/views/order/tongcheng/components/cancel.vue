@@ -10,6 +10,7 @@
     :modal-append-to-body="false"
     v-loading="loading"
     width="25%"
+    v-el-drag-dialog
     :before-close="close">
         <div class="ifcancel">
             <p>
