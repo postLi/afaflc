@@ -222,7 +222,7 @@ export default {
       },
       rules: {
         reporterType: [
-          { required: true, message: '请输入上报人' }
+          { required: true, message: '请选择投诉人类型' }
         ],
         // complainDes: [
         //   { required: true, message: '请输入物损描述' }

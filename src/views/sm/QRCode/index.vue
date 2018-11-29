@@ -15,7 +15,6 @@
 </template>
 
 <script>
-import { orderDetailsList } from '@/api/order/ordermange'
 import newQRCode from './newQRCode.vue'
 import channelTotal from './channelTotal'
 export default {

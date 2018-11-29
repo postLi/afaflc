@@ -2,12 +2,46 @@
     <div class="FinancialConSole">
         <h1 class="financialtitle">财务数据中心</h1>
         <div class="financial_top">
-            <div class="TransactionFlow">
-                12312323
+            <div class="TransactionFlow financialCommon">
+                <h4>订单类型概览</h4>
+                <div class="TransactionFlow_classfy">
+                    <div class="transItem">
+                        <h6>现金流入</h6>
+                        <p>85,000,000元</p>
+                        <p>昨日全天：100,000,000</p>
+                    </div>
+                    <div class="transItem">
+                        <h6>现金流出</h6>
+                        <p>110,000,000元</p>
+                        <p>昨日全天：100,000,000</p>
+                    </div>
+                    <div class="transItem"> 
+                        <h6>流水差</h6>
+                        <p>25,000,000元</p>
+                        <p>昨日全天：100,000,000</p>
+                    </div>
+                </div>
             </div>
-            <div class="backlog">
-                123123
+            <div class="backlog financialCommon">
+                <h4>待办事项</h4>
+                <ul>
+                    <li>
+                       <span>待处理数</span>
+                       <p class="fr">
+                            <span>18</span><span> >> </span>
+                       </p>
+                   </li>
+                   <li>
+                       <span>待处理数</span>
+                       <p class="fr">
+                            <span>18</span><span> >> </span>
+                       </p>
+                   </li>
+                </ul>
             </div>
+        </div>
+        <div class="financial_middle financialCommon">
+            <h4>流水明细</h4>
         </div>
     </div>
 </template>

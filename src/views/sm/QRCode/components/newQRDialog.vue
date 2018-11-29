@@ -2,20 +2,32 @@
      <div class="commoncss">
         <el-dialog
         title="生成二维码"
-        :modal="false"
+        :modal="true"
         :visible="dialogVisible"
         custom-class="add-review"
         :close-on-click-modal="false"
         :modal-append-to-body="false"
         v-loading="loading"
+        width="40%"
         v-el-drag-dialog
         :before-close="close">
             <el-form   :model="standForm" :rules="newrules"  ref="ruleForm"  :label-width="formLabelWidth" label-position="right">
-
+                <el-form-item label="主题：" prop="topic" >
+					<el-input v-model.trim="standForm.topic" maxlength="20" ></el-input>
+                </el-form-item>
+                 <el-form-item label="业务员：" prop="name" >
+                    <CustomerSearch @returnCustomer = 'getCustomer' :customerName = "standForm.name"/>
+                </el-form-item>
+                 <el-form-item label="渠道名称：" prop="channal" >
+					<el-input v-model="standForm.channal" ></el-input>
+                </el-form-item>
+                 <el-form-item label="链接：" prop="url" >
+					<el-input v-model="standForm.url" ></el-input>
+                </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
-                <el-button type="primary" plain  icon="el-icon-success" @click="handleSearch('sure')">确认</el-button>
-                <el-button type="primary" plain icon="el-icon-error" @click="handleSearch('cancel')">取消</el-button>
+                <el-button type="primary" plain  icon="el-icon-success" @click="submitForm('ruleForm')">确认</el-button>
+                <el-button type="primary" plain icon="el-icon-error" @click="close">取消</el-button>
             </div>
         </el-dialog>
      </div>
@@ -23,10 +35,16 @@
 
 <script type="text/javascript">
 import { getDictionary } from '@/api/common.js'
-import { cancelOrder } from '@/api/order/ordermange.js'
-    export default{
-        components:{
+import CustomerSearch from '@/components/CustomerSearch/index'
+import { aflcQrcodeNew } from '@/api/server/QRCode.js'
 
+
+
+
+    export default{
+        name:'newQRcodeCompent',
+        components:{
+            CustomerSearch
         },
         props:{
             dialogVisible:{
@@ -44,20 +62,23 @@ import { cancelOrder } from '@/api/order/ordermange.js'
         data(){
             return{
                 cancelReason:'AF00512',//取消原因
-                formLabelWidth:'25%',
+                formLabelWidth:'15%',
                 loading:false,
                 standForm:{
-                    cancelRemark:'',//取消说明
-                    cancelCode:'',//取消原因code
-                    cancelCause:'',//取消原因
-                    cancelType:'AF0051302',
-                    orderSerial:'',//订单流水号
+                    topic:'',//主题
+                    belongSalesman:'',
+                    name:'',
+                    channal:'',//渠道
+                    url:'',
                 },
                 optionsCancel:[],
                 newrules:{
-                    cancel: [
-                        { required: true, message: '请选择取消原因', trigger: 'blur' },
+                    topic: [
+                        { required: true, message: '请输入主题名称', trigger: 'change' },
                     ],
+                    name:{required: true, message: '请选择业务员', trigger: 'change' },
+                    channal:{required: true, message: '请选择渠道', trigger: 'change' },
+                    url:{required: true, message: '请输入链接', trigger: 'change' },
                 },
             }
         },
@@ -70,15 +91,16 @@ import { cancelOrder } from '@/api/order/ordermange.js'
                 //     this.loading = false;
                 // })
             },
-            handleSearch(type){
-                switch(type){
-                    case 'cancel':
-                        this.close();
-                        break;
-                    case 'sure':
-                        this.form.cancelCause = this.optionsCancel.find(item => item.code == this.form.cancelCode)['name'];
-                        let cancelForm = Object.assign({},this.form,{orderSerial:this.orderSerial})
-                        cancelOrder(cancelForm).then(res => {
+            getCustomer(val){
+                console.log('belongSalesman',val)
+                this.standForm.belongSalesman = val.userId;
+                this.standForm.name = val.name;
+            },
+            submitForm(formName) {
+                this.$refs[formName].validate((valid) => {
+                    if (valid) {
+                        let form = Object.assign({},this.standForm);
+                        aflcQrcodeNew(form).then(res => {
                             this.close();
                             this.$message({
                                 type: 'success',
@@ -87,11 +109,14 @@ import { cancelOrder } from '@/api/order/ordermange.js'
                         }).catch(err => {
                             this.$message({
                                 type: 'info',
-                                message: '操作失败，原因：' + err.text ? err.text : err.errorInfo
+                                message: '操作失败，原因：' +( err.text ? err.text : err.errorInfo)
                             })
                         })
-                        break;
-                }
+                    } else {
+                        console.log('error submit!!');
+                        return false;
+                    }
+                });
             },
             close(done) {
                 this.$refs.ruleForm.resetFields();

@@ -1,16 +1,16 @@
 <template>
     <div class="identicalStyle creatQRCode" v-loading="loading">
             <el-form  :inline="true" :model="searchInfo" ref="ruleForm" class="demo-ruleForm classify_searchinfo">
-                <el-form-item label="姓名" prop="pointName">
-                    <el-input v-model="searchInfo.orderSerial" clearable>
+                <el-form-item label="姓名" prop="name">
+                    <el-input v-model="searchInfo.name" clearable>
                     </el-input>            
                 </el-form-item>
-                <el-form-item label="主题" prop="orderSerial">
-                    <el-input v-model="searchInfo.orderSerial" maxlength="20" clearable>
+                <el-form-item label="主题" prop="topic">
+                    <el-input v-model="searchInfo.topic" clearable>
                     </el-input>
                 </el-form-item>
-                <el-form-item label="渠道名称"   prop="shipperName">
-                    <el-input v-model="searchInfo.shipperName" clearable placeholder="账户/姓名">
+                <el-form-item label="渠道名称"   prop="channalName">
+                    <el-input v-model="searchInfo.channalName" clearable placeholder="账户/姓名">
                     </el-input>
                 </el-form-item>
                 <el-form-item class="btnChoose fr"  style="margin-left:0;">
@@ -21,7 +21,7 @@
             <div class="classify_info">
                 <div class="btns_box">
                     <el-button type="primary" icon="el-icon-circle-plus" plain @click="handleClick('new')" :size="btnsize">新增</el-button>
-                    <el-button type="primary" icon="el-icon-delete" plain @click="handleClick('cancel')" :size="btnsize">删除</el-button>
+                    <el-button type="primary" icon="el-icon-delete" plain @click="handleClick('delet')" :size="btnsize">删除</el-button>
                 </div>
                 <div class="info_news" style="height:89%">
                     <el-table
@@ -46,45 +46,52 @@
                         </el-table-column>  
                         <el-table-column
                             sortable
-                            prop="orderSerial"
+                            prop="name"
                             label="姓名"
                             width="250">
-                                <!-- <template  slot-scope="scope">
-                                        <h4 class="needMoreInfo" @click="pushOrderSerial(scope.row)">{{ scope.row.orderSerial}}</h4>
-                                </template> -->
                         </el-table-column>
                         <el-table-column
-                            prop="orderType"
+                            prop="topic"
                             :show-overflow-tooltip="true"
                             sortable
                             label="主题"
                             >
                         </el-table-column>
                         <el-table-column
-                            prop="belongCity"
+                            prop="channalName"
                             :show-overflow-tooltip="true"
                             sortable
                             label="渠道名称"
                             >
                         </el-table-column>
                         <el-table-column
-                            prop="shipperMobile"
+                            prop="url"
                             :show-overflow-tooltip="true"
                             sortable
                             label="链接"
                             >
                         </el-table-column>
                         <el-table-column
-                            prop="shipperName"
+                            prop="qrcode"
                             sortable
                             label="二维码"
                             width="120">
+                            <template slot-scope="scope">
+                                <el-button
+                                    :size="btnsize"
+                                    type="primary"
+                                    plain
+                                    @click="handleclick(scope.row)"  v-showPicture :imgurl="twocodeurl ? twocodeurl : ''">查看</el-button>
+                            </template>
                         </el-table-column>
                         <el-table-column
-                            prop="usedCarType"
+                            prop="createTime"
                             sortable
                             label="创建时间"
                             width="160">
+                            <template slot-scope="scope">
+                                {{scope.row.createTime | parseTime}}
+                            </template>
                         </el-table-column>
                     </el-table>
                 </div>
@@ -92,16 +99,18 @@
                 <!-- 页码 -->
             <div class="info_tab_footer">共计:{{ dataTotal }} <div class="show_pager"> <Pager :total="dataTotal" @change="handlePageChange"  :sizes="sizes"  ref="pager"/></div> </div>    
 
-            <newQRCode :dialogVisible.sync = "dialogVisible"/>
+            <newQRCode :dialogVisible.sync = "dialogVisible" @close="shuaxin"/>
     </div>
 </template>
 
 <script type="text/javascript">
 
-import { orderStatusList } from '@/api/order/ordermange'
+import { aflcQrcodeList,aflcQrcodeDelet } from '@/api/server/QRCode.js'
 import { parseTime, pickerOptions2 } from '@/utils/index.js'
 import Pager from '@/components/Pagination/index'
 import newQRCode from './components/newQRDialog'  
+import QRCode from 'qrcode'
+
 export default{
       props: {
           isvisible: {
@@ -124,26 +133,23 @@ export default{
               page: 1, // 初始化页码
               dataTotal: 0,
               searchInfo: {
-                  belongCity: '', // 区域
-                  shipperName: '', // 货主
-                  startOrderDate: '', // 下单起始时间
-                  endOrderDate: '', // 下单结束时间
-                  orderSerial: '', // 订单号
-                  orderStatus: 'AF0080502', // 公海无司机
-                  parentOrderStatus: 'AF00805' // 订单状态
+                  name:'',
+                  topic:'',
+                  channalName:'',
                 },
               tableData: [],
               checkedinformation: [],
-              dialogFormVisible: false
+              dialogFormVisible: false,
+                twocodeurl: ''
+
             }
         },
       watch: {
           isvisible: {
               handler(newVal, oldVal) {
                   if (newVal) {
-                        // this.firstblood()
-                    } else{
-                    }
+                        this.firstblood()
+                    } 
                 },
                 // 代表在wacth里声明了firstName这个方法之后立即先去执行handler方法
               immediate: true
@@ -166,45 +172,91 @@ export default{
             },
             // 刷新页面
           firstblood() {
-              this.loading = true
-
-                orderStatusList(this.page, this.pagesize, this.searchInfo).then(res => {
-                  console.log('车主改派', res)
-                  this.tableData = res.data.list
-                    this.dataTotal = res.data.totalCount
-
-                    this.tableData.forEach(item => {
-                      item.aflcOrderAddresses.sort(function(a, b) {
-                          return a.viaOrder - b.viaOrder  
-                        })
-                    })
-
-                  this.loading = false
-
+                this.loading = true
+                aflcQrcodeList(this.page, this.pagesize, this.searchInfo).then(res => {
+                    this.tableData = res.data.list;
+                    this.dataTotal = res.data.totalCount;
+                    this.loading = false;
+                }).catch(err => {
+                    this.loading = false;
                 })
             },
-
             // 模糊查询 分类名称或者code
           handleSearch(type) {
                 switch (type) {
                     case 'search':
-                        
+                        if(this.page!= 1){
+                            this.page = 1;
+                            this.$refs.pager.inputval = this.page;
+                        }
+                        this.firstblood()
                         break
                     case 'clear':
-
+                        if(this.page!= 1){
+                            this.page = 1;
+                            this.$refs.pager.inputval = this.page;
+                        }
+                        this. searchInfo ={
+                            name:'',
+                            topic:'',
+                            channalName:'',
+                        }
+                        this.firstblood()
                         break
                 }
-                    this.firstblood()
             },
             handleClick(type){
                 switch (type) {
                     case 'new':
                         this.dialogVisible = true;
                         break
-                    case 'clear':
-
+                    case 'delet':
+                        if(this.checkedinformation.length > 1 ){
+                            this.$message({
+                                type: 'warning',
+                                message: '只支持单条数据操作！' 
+                            })
+                        }else if(this.checkedinformation.length == 1){
+                            console.log(this.checkedinformation[0].id)
+                            let config = this.checkedinformation[0];
+                            this.$confirm('确定要删除'+config.name+'该条二维码吗？', '提示', {
+                                confirmButtonText: '确定',
+                                cancelButtonText: '取消',
+                                type: 'warning'
+                            }).then( ()=>{
+                                aflcQrcodeDelet(config.id).then(res => {
+                                     this.$message({
+                                        type: 'success',
+                                        message: '删除成功'
+                                    })
+                                    this.firstblood();
+                                }).catch(err=>{
+                                    this.$message({
+                                        type: 'info',
+                                        message: '删除失败，原因：' + err.errorInfo ? err.errorInfo : err.text
+                                    })
+                                })
+                            }).catch(() => {
+                                this.$message({
+                                    type: 'info',
+                                    message: '已取消'
+                                })
+                            })
+                            
+                        }
                         break
                 }
+            },
+            handleclick(row){
+                console.log(row.qrcode)
+                QRCode.toDataURL(row.qrcode, {
+                    rendererOpts: {
+                        margin: 0
+                    }
+                }).then(url => {
+                    this.twocodeurl = url
+                    console.log(url)
+                })
             },
              // 判断是否选中
             getinfomation(selection) {

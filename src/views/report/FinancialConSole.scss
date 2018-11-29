@@ -14,19 +14,91 @@
         padding-top: 50px;
         margin-bottom: 100px;
     }
+    h4,h6{
+        font-weight: normal;
+    }
+    h4{
+        font-size: 20px;
+        line-height: 20px;
+    }
+    .financialCommon{
+        padding: 0 34px;
+        padding-top:24px; 
+    }
     .financial_top{
         display: flex;
+        margin-bottom: 27px;
         .TransactionFlow{
             flex: 1;
             min-height: 355px;
             background: url('../../assets/uiBG/mb.png') no-repeat center,url('../../assets/uiBG/middle.png') no-repeat center;
             background-size:100% 100%;
             margin-right: 36px;
+            h4{
+                margin-bottom: 50px;
+            }
+            .TransactionFlow_classfy{
+                display: flex;
+                .transItem{
+                    flex: 1;
+                    min-height: 216px;
+                    background-color: rgba(0,164,255,.7);
+                    border-radius: 28px;
+                    padding: 33px 0 0 24px;
+                    h6,p{
+                        font-size: 30px;
+                        font-weight: normal;
+                        margin-bottom: 25px;
+                    }
+                    p:last-child{
+                        font-size: 18px;
+                        margin-bottom: 0;
+                    }
+                }
+                .transItem:nth-child(2){
+                    margin: 0 98px;
+                    background: rgba(115,100,255,.7);
+                }
+                .transItem:nth-child(3){
+                    background: rgba(0,213,255,.7);
+                }
+            }
         }
         .backlog{
             min-width: 307px;
             background: url('../../assets/uiBG/sb2.png') no-repeat center,url('../../assets/uiBG/small2.png') no-repeat center;
             background-size:100% 100%;
+            h4{
+                margin-bottom: 60px;
+            }
+            ul{
+                li{
+                    font-family: SourceHanSansCN-Regular;
+                    font-size: 16px;
+                    font-weight: normal;
+                    font-stretch: normal;
+                    line-height: 20px;
+                    letter-spacing: 0px;
+                    color: #ffffff;
+                    margin-bottom: 40px;
+                    p{
+                        cursor: pointer;
+                        // margin-right: 35px;
+                        span:first-child{
+                            color: #00ccff;
+                        }
+                    }
+                }
+                li:last-child{
+                    margin-bottom: 0px;
+                }
+            }
         }
+    }
+
+    .financial_middle{
+        min-height: 355px;
+        background: url('../../assets/uiBG/mb.png') no-repeat center,url('../../assets/uiBG/middle.png') no-repeat center;
+        background-size:100% 100%;
     }
 }
