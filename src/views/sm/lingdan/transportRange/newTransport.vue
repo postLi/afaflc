@@ -169,8 +169,8 @@
 
         </div>
         <el-form-item class="fromfooter" v-show="ifShowRangeType != '2'">
-            <el-button type="primary" @click="resetForm('ruleForm')">重置</el-button>
-            <el-button type="primary" @click="submitForm('ruleForm')">{{ifShowRangeType == '1' ? '修改' : '立即发布'}}</el-button>
+            <el-button type="primary" plain  icon="el-icon-success" @click="submitForm('ruleForm')">{{ifShowRangeType == '1' ? '修改' : '立即发布'}}</el-button>
+            <el-button type="primary" plain icon="el-icon-error" @click="resetForm('ruleForm')">重置</el-button>
         </el-form-item>
     </el-form>
 

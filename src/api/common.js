@@ -215,7 +215,7 @@ export function aflcProvinceCode() {
 
 // 根据cityId获取开放城市服务区域定价
   export function aflcCityCheckout(cityId) {
-    return fetch.get('/aflcsmservice-wtc/sm/aflcAreaPrice/v1/open/' + cityId)
+    return fetch.get('/aflcsmservice/sm/aflcAreaPrice/v1/open/' + cityId)
   }
   
 

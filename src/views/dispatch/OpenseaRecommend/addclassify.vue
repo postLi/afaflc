@@ -56,8 +56,8 @@
                 </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
-            <el-button type="primary" @click="submitForm('ruleForm')" :disabled="btnShow">{{isModify? '保 存' : '确 定'}}</el-button>
-            <el-button @click="close">取 消</el-button>
+                <el-button type="primary" plain  icon="el-icon-success" @click="submitForm('ruleForm')" :disabled="btnShow">{{isModify? '保 存' : '确 定'}}</el-button>
+                <el-button type="primary" plain icon="el-icon-error" @click="close">取 消</el-button>
             </div> 
         </el-dialog>
     </div>

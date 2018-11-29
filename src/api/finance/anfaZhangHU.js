@@ -1,7 +1,7 @@
 import fetch from '@/utils/fetch'
 
 const baseurl = 'aflcusercenterservice'
-const baseurl_two = 'aflcorderservice-lyc'
+const baseurl_two = 'aflcorderservice'
 
 // 获取服务分类列表
 export function userMywalletSurvey() {

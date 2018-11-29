@@ -1,16 +1,14 @@
 <template>
     <div class="QRCode tabsWrap">
        <el-tabs v-model="QRCodeName" type="card" @tab-click="handleClick" >
-            <!-- 订单详情 -->
-                <el-tab-pane label="订单详情" name="qrCode">
-                    <!-- <OrderInfo :isvisible="QRCodeName === 'qrCode'"></OrderInfo> -->
-                    12321
+            <!-- 二维码生成 -->
+                <el-tab-pane label="二维码生成" name="qrCode">
+                    <newQRCode :isvisible="QRCodeName === 'qrCode'"/>
                 </el-tab-pane>
 
-            <!-- 推单记录 -->
-                <el-tab-pane label="推单记录" name="pushOrderList">
-                    <!-- <pushList :isvisible="QRCodeName === 'pushOrderList'"></pushList> -->
-                    23112
+            <!-- 渠道数据统计 -->
+                <el-tab-pane label="渠道数据统计" name="channel">
+                    <channelTotal :isvisible="QRCodeName === 'channel'"/>
                 </el-tab-pane>
         </el-tabs>
     </div>
@@ -18,20 +16,22 @@
 
 <script>
 import { orderDetailsList } from '@/api/order/ordermange'
-
+import newQRCode from './newQRCode.vue'
+import channelTotal from './channelTotal'
 export default {
-  name: 'QRCode',
-  components: {
+    name: 'QRCode',
+    components: {
+        newQRCode,
+        channelTotal
+    },
+    data() {
+        return {
+        QRCodeName: 'qrCode',
+        }
+    },
+    computed: {
 
-  },
-  data() {
-    return {
-      QRCodeName: 'qrCode',
-    }
-  },
-  computed: {
-
-  },
+    },
 
     // created() {
     //     this.routeQuery = sessionStorage.getItem('orderSerial');
@@ -48,18 +48,18 @@ export default {
     //     console.log('beforeDestroy',this.routeQuery)
     // },
 
-  mounted() {
-    if (this.$route.query.currentTab) {
-      this.QRCodeName = this.$route.query.currentTab
-    }
-  },
-  methods: {
-    init() {
+    mounted() {
+        if (this.$route.query.currentTab) {
+        this.QRCodeName = this.$route.query.currentTab
+        }
     },
-    handleClick(tab, event) {
-      this.QRCodeName = tab.name
+    methods: {
+        init() {
+        },
+        handleClick(tab, event) {
+        this.QRCodeName = tab.name
+        }
     }
-  }
 
 }
 </script>

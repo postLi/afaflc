@@ -210,9 +210,9 @@
             </div>
           </el-form>
           <div slot="footer" class="dialog-footer">
-            <el-button type="primary" plain @click="handlerPass">确认审核通过</el-button>
-            <el-button @click="handlerOut">审核不通过</el-button>
-            <el-button @click="closeMe">取 消</el-button>
+            <el-button type="primary" plain  icon="el-icon-success" @click="handlerPass">确认审核通过</el-button>
+            <el-button type="primary" plain icon="el-icon-warning" @click="handlerOut">审核不通过</el-button>
+            <el-button type="primary" plain icon="el-icon-error" @click="closeMe">取 消</el-button>
           </div>
         </el-dialog>
      </div> 

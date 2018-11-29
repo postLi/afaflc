@@ -110,8 +110,8 @@
                             </span>
                         </div>
                       <div slot="footer" class="dialog-footer">
-                        <el-button type="primary" @click="newInfoSave">保 存</el-button>
-                        <el-button @click="closeAddNewInfo">取 消</el-button>
+                        <el-button type="primary" plain  icon="el-icon-success" @click="newInfoSave">保 存</el-button>
+                        <el-button type="primary" plain icon="el-icon-error" @click="closeAddNewInfo">取 消</el-button>
                       </div>
                     </el-dialog>
                 </div>
@@ -162,8 +162,8 @@
                             </div>
                         </div>
                         <div slot="footer" class="dialog-footer">
-                            <el-button type="primary" @click="changeInfoSave" :disabled="btnShow">保 存</el-button>
-                            <el-button @click="dialogFormVisible_change = false">取 消</el-button>
+                            <el-button type="primary" plain  icon="el-icon-success" @click="changeInfoSave" :disabled="btnShow">保 存</el-button>
+                            <el-button type="primary" plain icon="el-icon-error" @click="dialogFormVisible_change = false">取 消</el-button>
                         </div>
                     </el-dialog>
                 </div>
