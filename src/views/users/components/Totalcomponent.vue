@@ -149,6 +149,7 @@
                         prop="driverMobile"
                         label="手机号"
                         sortable
+                        width="140"
                         >
                         <template slot-scope="scoped">
                             <driver-newTemplate
@@ -212,6 +213,7 @@
                         </el-table-column>
                         <el-table-column
                         prop="createTime"
+                         width="150"
                         label="注册日期" sortable>
                      <template  slot-scope="scope">
                         <span v-if="scope.row.createTime">{{ scope.row.createTime | parseTime}}</span>

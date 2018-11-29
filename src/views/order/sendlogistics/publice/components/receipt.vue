@@ -7,14 +7,26 @@
                 <p>
                     <span>装货照片：</span>
                     <span>
-                        <img src="http://cdn.hao987.cn/shophtml/hanjulejia/images/item_02.jpg">
+                       <div class="upload" v-viewer>
+                        <el-tooltip class="item" effect="dark" content="双击图片查看原图" placement="top">
+                       <img src="http://cdn.hao987.cn/shophtml/hanjulejia/images/item_02.jpg">
+                        </el-tooltip>
+                      </div>
                     </span>
                  </p>
                 <p>
                     <span>回单照片：</span>
                     <span>                       
-                        <img src="http://cdn.hao987.cn/shophtml/hanjulejia/images/item_02.jpg">
-                        <img src="http://cdn.hao987.cn/shophtml/hanjulejia/images/item_02.jpg">
+                       <div class="upload" v-viewer>
+                        <el-tooltip class="item" effect="dark" content="双击图片查看原图" placement="top">
+                       <img src="http://cdn.hao987.cn/shophtml/hanjulejia/images/item_02.jpg">
+                        </el-tooltip>
+                      </div>
+                       <div class="upload" v-viewer>
+                        <el-tooltip class="item" effect="dark" content="双击图片查看原图" placement="top">
+                       <img src="http://cdn.hao987.cn/shophtml/hanjulejia/images/item_02.jpg">
+                        </el-tooltip>
+                      </div>
                     </span>
                  </p>
             </div>

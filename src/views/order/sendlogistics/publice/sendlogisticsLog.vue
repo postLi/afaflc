@@ -39,6 +39,7 @@ export default {
   },
   methods: {
     handleClick(tab, event) {
+      console.log('data',tab,event)
       this.orderTabName = tab.name
     }
   }
@@ -152,7 +153,6 @@ export default {
                 .lesswidth{
                     width: 521px;
                 }
-
                 .markInfo{
                     width: 50%;
                 }
