@@ -28,14 +28,14 @@ export default {
             tableData: [],
         }
     },
-    components:{
-        Pager
-    },
     methods:{
         handlePageChange(val){
             
         }
-    }
+    },
+    components:{
+        Pager
+    },
 }
 </script>
 

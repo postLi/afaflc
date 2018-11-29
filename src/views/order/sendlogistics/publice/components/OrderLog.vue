@@ -263,7 +263,9 @@
 export default {
     data(){
         return{
-
+         formData:{
+             
+         }
         }
     }
 }

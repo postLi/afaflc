@@ -98,14 +98,14 @@ export default {
         return{
             loading:true,
             btnsize: 'mini',
+            orderSerialList:[],
+            paymentList:[{name:'待付款',code:'AF0370901'},{name:'已付款',code:'AF0370902'},{name:'已退款',code:'AF0370903'}],
             pickerOptions2:{shortcuts:pickerOptions2},
             tableDataAll:[],
             dataTotal:null,
             sizes:[20,50,100],
             pagesize:20,//每页显示数
             page:1,//当前页
-            orderSerialList:[],
-            paymentList:[{name:'待付款',code:'AF0370901'},{name:'已付款',code:'AF0370902'},{name:'已退款',code:'AF0370903'}],
             formAllData:{
                 payment:null,
                 activityType:null,
