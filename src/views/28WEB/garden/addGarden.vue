@@ -112,7 +112,7 @@
           if (this.isModify) {
             this.formtitle = '查看物流园区信息'
             this.comWatch(this.info)
-            console.log(this.info, 'info')
+            // console.log(this.info, 'info')
           } else {
             this.formtitle = '新增物流园区信息'
             this.form = {}
