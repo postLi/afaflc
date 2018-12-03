@@ -19,7 +19,8 @@
                     <CustomerSearch @returnCustomer = 'getCustomer' :customerName = "standForm.name"/>
                 </el-form-item>
                  <el-form-item label="渠道名称：" prop="channal" >
-					<el-input v-model="standForm.channal" ></el-input>
+					<!-- <el-input v-model="standForm.channal" ></el-input> -->
+                    <selectChannel  @change = "getVal"  v-model="standForm.channal"/>
                 </el-form-item>
                  <el-form-item label="链接：" prop="url" >
 					<el-input v-model="standForm.url" ></el-input>
@@ -37,14 +38,13 @@
 import { getDictionary } from '@/api/common.js'
 import CustomerSearch from '@/components/CustomerSearch/index'
 import { aflcQrcodeNew } from '@/api/server/QRCode.js'
-
-
-
+import selectChannel from '@/components/selectTree/QRcode'
 
     export default{
         name:'newQRcodeCompent',
         components:{
-            CustomerSearch
+            CustomerSearch,
+            selectChannel
         },
         props:{
             dialogVisible:{
@@ -90,6 +90,9 @@ import { aflcQrcodeNew } from '@/api/server/QRCode.js'
                 //     this.form.cancelCode = res.data[0].code;
                 //     this.loading = false;
                 // })
+            },
+            getVal(val){
+                this.standForm.channal = val;
             },
             getCustomer(val){
                 console.log('belongSalesman',val)

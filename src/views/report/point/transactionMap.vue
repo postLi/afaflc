@@ -2,6 +2,9 @@
     <div class="transacitonMap">
         <div class="transacitonMap_left">
             <div id="finacialHot"></div>
+            <div class="typeLineTime_data">
+                <dataSearch/>
+            </div>
             <div class="transacitonMap_left_total">
                 <el-row>
                     <el-col :span="8">TOP5省份</el-col>
@@ -36,7 +39,18 @@
             </div>
         </div>
         <div class="transacitonMap_right financialCommon">
-            <h4>充值概况</h4>
+            <h4>
+                充值概况
+                <el-select v-model="currentkey" placeholder="请选择" >
+                    <el-option
+                    v-for="item in dataBtns"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value">
+                    </el-option>
+                </el-select>
+            </h4>
+            <dataSearch :isChoose = "chooseType" :keyVal = "currentkey"/>
             <ul>
                 <li>
                     <span>待处理数</span>
@@ -60,6 +74,8 @@
 import axios from 'axios'
 import echarts from 'echarts'
 import china from 'echarts/map/js/china'
+import dataSearch from '../components/dataSearch'
+
 export default {
     name:'transacitonMap',
     created() {
@@ -67,6 +83,9 @@ export default {
     },
     watch: {
         
+    },
+    components:{
+        dataSearch
     },
     data() {
         return {
@@ -80,6 +99,27 @@ export default {
                 {name: '招远', value: [120.38, 37.35, 142]},
                 {name: '舟山', value: [122.207216, 29.985295, 123]},
             ],
+            chooseType:false,
+            currentkey:0,
+            dataBtns: [{
+                label: '今天',
+                value: 0
+            }, {
+                label: '昨天',
+                value: 1
+            }, {
+                label: '本周',
+                value: 2
+            }, {
+                label: '本月',
+                value: 3
+            }, {
+                label: '本年',
+                value: 4
+            },{
+                label: '全部',
+                value: 5
+            }],
         }
     },
     methods: {

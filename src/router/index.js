@@ -46,7 +46,8 @@ export const constantRouterMap = [
     redirect: '/dashboard',
     noDropdown: true,
     icon: 'shouye',
-    name: '首页',
+    // name: '首页',
+    name: 'dashboard',
     meta: {
       'code': 'HOME'
     },
@@ -57,28 +58,42 @@ export const constantRouterMap = [
       icon: 'shouye', 
       hidden:false,
       component: _import('dashboard/index'),
-        meta: {  title: '运营控制台',noCache: false }
+            meta: {  title: '运营控制台',noCache: false ,'proute': 'dashboard'}
     }, {
       path: '/common/myinfo',
       icon: 'information',
       hidden: true,
       name: '个人中心',
       component: _import('common/myinfo/index'),
-      meta: { title: '个人中心', noCache: true }
+      meta: { 
+            title: '个人中心', 
+            noCache: true ,
+            'proute': 'dashboard'
+        }
     }, {
       path: '/report',
       icon: 'baobiao',
       hidden: false,
       name: '财务控制台',
       component: _import('report/newReport'),
-      meta: { title: '财务控制台', noCache: true, 'code': '' }
+      meta: { 
+          title: '财务控制台', 
+          noCache: true, 
+          'code': '' ,
+          'proute': 'dashboard'
+        }
     }, {
         path: '/html5',
         icon: 'guiji',
         hidden: false,
         name: '在途监控',
         component: _import('html5/index'),
-        meta: { title: '在途监控', noCache: true , 'code': ''}
+        meta: { 
+            title: '在途监控', 
+            noCache: true , 
+            'code': '',
+            'proute': 'dashboard'
+        }
       }]
   }
 ]

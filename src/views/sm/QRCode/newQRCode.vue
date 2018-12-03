@@ -105,7 +105,7 @@
 
 <script type="text/javascript">
 
-import { aflcQrcodeList,aflcQrcodeDelet } from '@/api/server/QRCode.js'
+import { aflcQrcodeList,aflcQrcodeDelet,getChannel } from '@/api/server/QRCode.js'
 import { parseTime, pickerOptions2 } from '@/utils/index.js'
 import Pager from '@/components/Pagination/index'
 import newQRCode from './components/newQRDialog'  
@@ -180,6 +180,10 @@ export default{
                 }).catch(err => {
                     this.loading = false;
                 })
+
+                getChannel().then(res => {
+                    console.log('getChannel',res)
+                })
             },
             // 模糊查询 分类名称或者code
           handleSearch(type) {
@@ -244,11 +248,11 @@ export default{
                             })
                             
                         }
-                        break
+                        break;
                 }
             },
             handleclick(row){
-                console.log(row.qrcode)
+                // console.log(row.qrcode)
                 QRCode.toDataURL(row.qrcode, {
                     rendererOpts: {
                         margin: 0
