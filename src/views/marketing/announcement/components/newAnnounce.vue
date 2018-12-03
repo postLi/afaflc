@@ -3,8 +3,8 @@
         <el-dialog :title='Atitle' :close-on-click-modal="false" top="5vh" @open='open'  :visible="dialogFormVisible" @close="close">
             <el-form :model="announce" :rules="rules" :label-position="labelPosition" ref="ruleForm" label-width="100px" class="demo-ruleForm">
                 <el-form-item label="发布区域" prop="noticeLocation">
-                    <vregion :ui="true" :area="false" @values="regionChange" class="form-control">
-                        <el-input v-model="announce.noticeLocation" placeholder="请选择出发地" clearable></el-input>
+                    <vregion :ui="true" :area="false" @values="regionChange" class="form-control"  ref="vregion">
+                        <el-input v-model="announce.noticeLocation" placeholder="请选择发布区域" clearable></el-input>
                     </vregion>
                 </el-form-item>
                 <el-form-item label="标题" prop="title">
@@ -288,6 +288,8 @@ export default {
           this.announce.noticeLocation = (!d.province&&!d.city&&!d.area&&!d.town) ? '': `${this.getValue(d.province)}${this.getValue(d.city)}${this.getValue(d.area)}${this.getValue(d.town)}`.trim();
           this.announce.province = d.province ? d.province.code : '';
           this.announce.city = d.city ? d.city.code : '';
+
+          console.log(this.$refs.vregion)
         },
         getValue(obj){
             return obj ? obj.value:'';
@@ -373,6 +375,7 @@ export default {
         close(){
             this.$emit('update:dialogFormVisible',false)
             this.$refs.ruleForm.resetFields();
+            this.$refs.vregion.clear();
             this.releaseDriver = false;//发布到车主分组
             this.releaseShipper = false;//发布到货主分组
             this.releaseHome = false,//发布到首页营销广告位

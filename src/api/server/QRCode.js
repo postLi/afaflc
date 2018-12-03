@@ -23,7 +23,6 @@ export function aflcQrcodeDelet(delID) {
     })
   }
 
-
 //根据id删除二维码生成表
 export function aflcQrcodeNew(data) {
     return fetch({
@@ -33,3 +32,10 @@ export function aflcQrcodeNew(data) {
     })
   } 
 
+//获取渠道编码
+export function getChannel() {
+    return fetch({
+      url: '/'+baseurl+'/sysDict/getChannel/?code=AF0030103',
+      method: 'get',
+    })
+  } 

@@ -2,16 +2,21 @@
     <div class="financial_bottom1">
         <div id="transaction_AreaLine"></div>
         <div class="typeLineTime_data">
-            <!-- <li v-for="(item,index) in dataType" :key="item.name" :class="{currentClick:item.iscur}" @click="setCur(index,item.label)">{{item.name}}</li> -->
+            <dataSearch/>
         </div>
     </div>
 </template>
 
 <script>
 import echarts from 'echarts'
+import dataSearch from '../components/dataSearch'
+
 export default {
     watch: {
         
+    },
+    components:{
+        dataSearch
     },
     data() {
         return {

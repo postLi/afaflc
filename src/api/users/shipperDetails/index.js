@@ -2,7 +2,7 @@ import fetch from '@/utils/fetch'
 
 const baseurl = 'aflc-order' //订单
 const baseurl_tow = 'aflcsmservice' //服务
-const baseurl_three = 'aflcusercenterservice-wtc' //用户
+const baseurl_three = 'aflcusercenterservice' //用户
 const baseurl_four = 'aflcorderservice' //订单
 
 

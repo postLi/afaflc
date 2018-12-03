@@ -19,7 +19,7 @@
     }
     h4{
         font-size: 20px;
-        line-height: 20px;
+        line-height: 30px;
     }
     .financialCommon{
         padding: 0 34px;
@@ -35,7 +35,10 @@
             background-size:100% 100%;
             margin-right: 36px;
             h4{
-                margin-bottom: 50px;
+                margin-bottom: 30px;
+                .dataChoose{
+                    float: right;
+                }
             }
             .TransactionFlow_classfy{
                 display: flex;
@@ -50,10 +53,16 @@
                         font-weight: normal;
                         margin-bottom: 25px;
                     }
-                    p:last-child{
-                        font-size: 18px;
-                        margin-bottom: 0;
+                    p{
+                        font-size: 42px;
                     }
+                    h6{
+                        // color:hsla(0,0%,100%,.6);
+                    }
+                    // p:last-child{
+                    //     font-size: 18px;
+                    //     margin-bottom: 0;
+                    // }
                 }
                 .transItem:nth-child(2){
                     margin: 0 98px;
@@ -100,6 +109,11 @@
         min-height: 381px;
         background: url('../../assets/uiBG/mb.png') no-repeat center,url('../../assets/uiBG/middle.png') no-repeat center;
         background-size:100% 100%;
+        h4{
+            .dataChoose{
+                float: right;
+            }
+        }
         .financial_stream{
             .el-row{
                 border-bottom: 1px solid rgba(0, 204, 255, .5);
@@ -126,14 +140,11 @@
         #transaction_AreaLine{
             height: 100%;
         }
-        // &>.typeLineTime_data{
-        //     position: absolute;
-        //     right: 0;
-        //     top: 23px;
-        //     li{
-        //         margin-right: 29px;
-        //     }
-        // }
+        &>.typeLineTime_data{
+            position: absolute;
+            right: 34px;
+            top: 23px;
+        }
     }
 
     .transacitonMap{
@@ -147,6 +158,12 @@
             background-size:100% 100%;
             display: flex;
             padding-right: 38px;
+            position: relative;
+            &>.typeLineTime_data{
+                position: absolute;
+                right: 40px;
+                top: 12px;
+            }
             #finacialHot{
                 flex: 1;
                 height: 100%;
@@ -177,7 +194,19 @@
             background: url('../../assets/uiBG/brb.png') no-repeat center,url('../../assets/uiBG/brbr.png') no-repeat center;
             background-size:100% 100%;
             h4{
-                margin-bottom: 80px;
+                margin-bottom: 20px;
+                .el-select{
+                    width: 100px;
+                    float: right;
+                     .el-input__inner{
+                        height: 30px;
+                        line-height: 30px;
+                    }
+                }
+            }
+            .dataChoose{
+                margin-bottom: 20px;
+                text-align: right;
             }
             ul{
                 li{

@@ -1,6 +1,6 @@
 <template>
 <div style="height:100%">
-<el-table :data="tableData" border height="100%" style="width: 100%">
+<el-table :data="tableDataTree" border height="100%" style="width: 100%">
             <el-table-column type="index" label="序号" width="80">
             </el-table-column>
              <el-table-column prop="" label="时间"></el-table-column>
@@ -27,13 +27,17 @@ export default {
             pagesize:20,
             sizes:[20,30,50],
             tableData: [],
+            tableDataTree:[],
+            dataTotal:null,
         }
     },
     methods:{
         firstblood(){
-        // orderStatusFollow(this.$route.query.orderSerial).then(res=>{
-        //     console.log('12121212',res)
-        // })
+        orderStatusFollow(this.$route.query.orderSerial).then(res=>{
+            console.log('data:',res)
+                    this.dataTotal = res.data.totalCount
+                    this.tableDataTree = res.data.list;
+        })
         },
         // 页码改变
         handlePageChange(obj) {
