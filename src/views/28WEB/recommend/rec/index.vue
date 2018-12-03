@@ -130,7 +130,7 @@
       handleDeatail(row) {
         this.isVisibleDialog = true
         this.selectedInfo = row
-        console.log(row,'rowrowrow')
+        // console.log(row,'rowrowrow')
       },
 
       handleSearch(type) {
