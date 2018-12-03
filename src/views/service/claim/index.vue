@@ -137,6 +137,7 @@
           <div class="info_tab_footer">共计:{{ dataTotal }}<div class="show_pager"> <Pager :total="dataTotal" @change="handlePageChange"  :sizes="sizes"/></div> </div>
         </div>
       </div>
+      
 </template>
 <script>
 import { postOrderGoodsclaimlist } from '@/api/service/claim.js'
