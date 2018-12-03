@@ -41,7 +41,6 @@ export default {
   },
   methods: {
     handleClick(tab, event) {
-      console.log('data',tab,event)
       this.orderTabName = tab.name
     }
   }

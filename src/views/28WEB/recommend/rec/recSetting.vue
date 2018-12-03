@@ -59,13 +59,16 @@
     watch: {
       isVisibleDialog: {
         handler(n) {
-
+          if (this.$refs['ruleForm']) {
+            this.$refs['ruleForm'].resetFields()
+          }
+          this.fetchInfo(this.info.id)
         }
       },
       info: {
         handler(n) {
-          this.fetchInfo(this.info.id)
-        }
+        },
+        immediate: true
       },
     },
     data() {
@@ -85,7 +88,6 @@
       }
     },
     mounted() {
-
     },
     methods: {
       fetchInfo(id) {

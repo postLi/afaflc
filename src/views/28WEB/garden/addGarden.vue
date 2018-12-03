@@ -112,7 +112,7 @@
           if (this.isModify) {
             this.formtitle = '查看物流园区信息'
             this.comWatch(this.info)
-            console.log(this.info, 'info')
+            // console.log(this.info, 'info')
           } else {
             this.formtitle = '新增物流园区信息'
             this.form = {}
@@ -136,9 +136,10 @@
       // }
       const valuedaata = (value, callback) => {
         if (!/^(\(\d{3,4}\)|\d{3,4}-|\s)?\d{7,14}$/.test(value)) {
-          callback()
-        } else {
+          // callback()
           callback(new Error('请输入正确号码~'))
+        } else {
+          callback()
         }
       }
       return {

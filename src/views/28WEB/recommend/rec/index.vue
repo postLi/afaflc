@@ -18,7 +18,7 @@
       <el-form-item class="btnChoose fr">
         <el-button type="primary" size="mini" plain @click="handleSearch('searchForm')" icon="el-icon-search">搜索
         </el-button>
-        <el-button type="info" size="mini" plain @click="handleSearch('clearForm')"
+        <el-button type="info" size="mini" plain @click="handleSearch('clearForm1')"
                    icon="fontFamily aflc-icon-qingkong">清空
         </el-button>
       </el-form-item>
@@ -130,7 +130,7 @@
       handleDeatail(row) {
         this.isVisibleDialog = true
         this.selectedInfo = row
-        console.log(row)
+        console.log(row,'rowrowrow')
       },
 
       handleSearch(type) {
@@ -138,10 +138,9 @@
           case 'searchForm':
             this.fetchInfo()
             break
-          case 'clearForm':
-            this.searchQuery = {
-              recommendColumn: ''
-            }
+          case 'clearForm1':
+            this.searchQuery.recommendColumn = ''
+            this.fetchList()
             break
         }
       },

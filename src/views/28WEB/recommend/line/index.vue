@@ -264,26 +264,26 @@ export default {
         label: '此路线其他专线'
       }],
       options3: [{
-        value: '全部',
+        value: null,
         label: '全部'
       }, {
-        value: '已置顶',
+        value: 1,
         label: '已置顶'
       }, {
-        value: '未置顶',
+        value: 0,
         label: '未置顶'
       }],
       options4: [{
-        value: '全部',
+        value: null,
         label: '全部'
       }, {
-        value: '未开始',
+        value: 1,
         label: '未开始'
       }, {
-        value: '进行中',
+        value: 2,
         label: '进行中'
       }, {
-        value: '已结束',
+        value: 3,
         label: '已结束'
       }],
       pickerOptions2: {

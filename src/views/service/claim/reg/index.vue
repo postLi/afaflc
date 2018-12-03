@@ -37,6 +37,7 @@
         </el-form-item>
       </el-form>
       <div class="classify_info">
+        
         <div class="info_news">    
           <el-table ref="multipleTable" style="width: 100%" stripe border height="100%" @row-click="clickDetails" @selection-change="getSelection" highlight-current-row :data="dataset"  tooltip-effect="dark">
             <el-table-column
@@ -365,13 +366,13 @@ export default {
           type: 'warning'
         })
         // return false
-      } else if(this.searchForm.claimType === '' && this.searchForm.claimDes === ''){
+      } else if (this.searchForm.claimType === '' && this.searchForm.claimDes === '') {
         this.$message({
           message: '物损类型及物损描述至少选填一项！',
           type: 'warning'
         })
         return false
-      }else {
+      } else {
         this.$refs[ruleForm].validate((valid) => {
           if (valid) {
             this.searchForm.createTime = parseTime(this.searchCreatTime1, '{y}-{m}-{d} {h}:{i}:{s}')
