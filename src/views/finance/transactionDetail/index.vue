@@ -196,7 +196,6 @@
                           sortable
                           >
                         </el-table-column>
-                        
                         <el-table-column
                         align = "center"
                           prop="totalAmount"
@@ -253,9 +252,9 @@ import { parseTime,formatTime,pickerOptions2 } from '@/utils/index.js'
                 dataTotal:null,
                 tableDataTree:[],
                 optionsAccountType: [
-                    {code:'AF01701',name:'同城'},
-                    {code:'AF01702',name:'零担'},
-                    {code:'AF01703',name:'城际'},                    
+                    {code:'AF01701',name:'小货车'},
+                    {code:'AF01702',name:'发物流'},
+                    {code:'AF01703',name:'大货车'},                    
                 ],
                 optionsAccountType2: [
                     {code:'AF01403',name:'货主订单多退'},
@@ -267,16 +266,14 @@ import { parseTime,formatTime,pickerOptions2 } from '@/utils/index.js'
                     {code:'AF01501',name:'货主支付运费'},
                     {code:'AF01509',name:'平台支付理赔'},
                     {code:'AF01505',name:'优惠券'},
-                    {code:'AF01411',name:'平台支付运费'},
-                    {code:'AF01508',name:'平台运费收入'},
+                    {code:'AF01411',name:'平台运费收入'},
+                    {code:'AF01508',name:'平台支付运费'},
                     {code:'AF01412',name:'平台理赔收入'},
                     {code:'AF01510',name:'平台订单多退'},
                     {code:'AF01511',name:'平台退运费'},
-                    {code:'AF01515',name:'优惠金'},
-                    {code:'AF01516',name:'奖励金'},                    
+                    {code:'AF01516',name:'优惠金'},
+                    {code:'AF01517',name:'奖励金'},
                     ],
-                alloption1:{},
-                alloption2:{},
             }
         },
         components:{

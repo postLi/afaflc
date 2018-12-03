@@ -105,7 +105,6 @@ export default {
       this.orderTabName = tab.name
     }
   }
-
 }
 </script>
 
@@ -189,7 +188,7 @@ export default {
                         white-space: nowrap;
                         text-overflow:ellipsis;
                         height: 30px;
-                        .el-rate__icon{
+                        .el-rate__icon,.el-rate__decimal,.el-icon-star-on{
                             line-height: 30px;
                         }
                     }

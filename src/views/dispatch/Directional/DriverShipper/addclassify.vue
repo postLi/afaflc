@@ -46,8 +46,8 @@
                         </div>
                     </div>
                     <div slot="footer" class="dialog-footer">
-                    <el-button type="primary" @click="newInfoSave" :disabled="btnShow">保 存</el-button>
-                    <el-button @click="closeAddNewInfo">取 消</el-button>
+                        <el-button type="primary" plain  icon="el-icon-success" @click="newInfoSave" :disabled="btnShow">保 存</el-button>
+                        <el-button type="primary" plain icon="el-icon-error" @click="closeAddNewInfo">取 消</el-button>
                     </div> 
                 </el-dialog>
             </div>

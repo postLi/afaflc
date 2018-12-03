@@ -45,9 +45,9 @@
                 <!-- <el-table-column
                   label="选择"
                   type="selection"
-                  width="50"> -->
-                </el-table-column>
-                <el-table-column fixed label="序号" sortable  width="80">
+                  width="50"> 
+                </el-table-column>-->
+                <el-table-column label="序号" sortable  width="80">
                   <template slot-scope="scope">
                   {{ (page - 1)*pagesize + scope.$index + 1 }}
                   </template>
@@ -86,9 +86,9 @@
                   {{scope.row.driverName ? scope.row.driverName + '-': ''}}{{ scope.row.driverMobile ? scope.row.driverMobile + '-': ''}}{{scope.row.carNumber ? scope.row.carNumber : ''}}
                   </template>
                 </el-table-column>
-                <el-table-column  label="处理状态" prop="carTypeName" sortable :show-overflow-tooltip="true" width="120">
+                <el-table-column  label="处理状态" prop="complainStatusName" sortable :show-overflow-tooltip="true" width="120">
                 </el-table-column>       
-                <el-table-column  label="投诉分类" prop="complainStatusName" sortable :show-overflow-tooltip="true" width="120">
+                <el-table-column  label="投诉分类" prop="complainTypeName" sortable :show-overflow-tooltip="true" width="120">
                 </el-table-column>                                                       
                 <el-table-column  label="投诉人" prop="complainName" sortable :show-overflow-tooltip="true"  width="300">
                 </el-table-column>

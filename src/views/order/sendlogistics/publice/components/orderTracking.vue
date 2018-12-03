@@ -18,6 +18,7 @@
 
 <script>
 import Pager from '@/components/Pagination/index'
+import {orderStatusFollow} from '@/api/order/logistics/logistics.js'
 export default {
     data(){
         return{
@@ -28,14 +29,23 @@ export default {
             tableData: [],
         }
     },
+    methods:{
+        firstblood(){
+        // orderStatusFollow(this.$route.query.orderSerial).then(res=>{
+        //     console.log('12121212',res)
+        // })
+        },
+        // 页码改变
+        handlePageChange(obj) {
+                this.page = obj.pageNum
+                this.pagesize = obj.pageSize
+                this.firstblood()
+            },
+
+    },
     components:{
         Pager
     },
-    methods:{
-        handlePageChange(val){
-            
-        }
-    }
 }
 </script>
 

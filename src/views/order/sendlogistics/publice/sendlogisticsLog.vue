@@ -3,13 +3,13 @@
        <el-tabs v-model="orderTabName" type="card" @tab-click="handleClick" >
             <!-- 订单详情 -->
                 <el-tab-pane label="订单详情" name="OrderLog">
-                    <OrderLog></OrderLog>
+                    <OrderLog  ref="OrderLog"></OrderLog>
                 </el-tab-pane>
-                 <el-tab-pane label="订单跟踪" name="orderTracking">
-                    <orderTracking></orderTracking>
+                 <el-tab-pane label="订单跟踪" name="orderTracking" >
+                    <orderTracking ref="orderTracking"></orderTracking>
                 </el-tab-pane>
-                 <el-tab-pane label="回单回款评价" name="receipt">
-                    <receipt></receipt>
+                 <el-tab-pane label="回单回款评价" name="receipt" >
+                    <receipt ref="receipt"></receipt>
                 </el-tab-pane>
         </el-tabs>
     </div>
@@ -36,9 +36,12 @@ export default {
    
   },
   mounted() {
+      this.$refs.OrderLog.firstblood();
+      this.$refs.orderTracking.firstblood();
   },
   methods: {
     handleClick(tab, event) {
+      console.log('data',tab,event)
       this.orderTabName = tab.name
     }
   }
@@ -152,7 +155,6 @@ export default {
                 .lesswidth{
                     width: 521px;
                 }
-
                 .markInfo{
                     width: 50%;
                 }

@@ -93,6 +93,7 @@ import { parseTime,pickerOptions2 } from '@/utils/index.js'
     .qdSearch{
         .el-form-item {
             margin-bottom: 0;
+            margin-right: 10px;
         }
     }
 </style>

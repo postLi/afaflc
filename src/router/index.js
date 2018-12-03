@@ -70,7 +70,7 @@ export const constantRouterMap = [
       icon: 'baobiao',
       hidden: false,
       name: '财务控制台',
-      component: _import('report/index'),
+      component: _import('report/newReport'),
       meta: { title: '财务控制台', noCache: true, 'code': '' }
     }, {
         path: '/html5',

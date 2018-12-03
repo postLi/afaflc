@@ -1,48 +1,48 @@
 <template>
-    <div class="TCorderInfo clearfix">
+    <div class="TCorderInfo clearfix" v-if="formData.length != 0">
         <!-- 基本信息 -->
-        <div class="orderInfo-collapse collapseInfo">
+        <div class="orderInfo-collapse collapseInfo" >
             <h2>基础信息</h2>
             <div class="essentialInformation">
                 <p>
                     <span>订单编号：</span>
-                    <span>1</span>
+                    <span>{{formData.orderExpenses.orderSerial}}</span>
                  </p>
                 <p>
                     <span>所属区域：</span>
-                    <span>1</span>
+                    <span>{{formData.startProvince}}-{{formData.startCity}}-{{formData.startArea}}</span>
                  </p>
                 <p>
                     <span>订单类型：</span>
-                    <span>1</span>
+                    <span>{{formData.orderDataType}}</span>
                 </p>                 
                 <p>
                     <span>订单状态：</span>
-                    <span>1</span>
+                    <span>{{formData.orderExpenses.orderStatusName}}</span>
                 </p>  
             </div>
             <div class="essentialInformation">
                 <p>
                     <span>装货时间：</span>
-                    <span>1</span>
+                    <span>{{formData.loadingTime}}</span>
                  </p>
                 <p>
                     <span>下单时间：</span>
-                    <span>1</span>
+                    <span>{{formData.createTime}}</span>
                  </p>
                 <p>
                     <span>货主账号：</span>
-                    <span>1</span>
+                    <span></span>
                  </p>                 
                 <p>
                     <span>货主姓名：</span>
-                    <span>1</span>
+                    <span>{{formData.shipperName}}</span>
                 </p>  
             </div>
             <div class="essentialInformation">
                 <p>
                     <span>订单来源：</span>
-                    <span>1</span>
+                    <span>{{formData.orderFrom}}</span>
                 </p>
             </div>
         </div>
@@ -53,37 +53,37 @@
             <div class="essentialInformation">
                 <p>
                     <span>发货地：</span>
-                    <span>1</span>
+                    <span>{{formData.aflcOrderAddressWebDtoList[0].viaAddressName}}</span>
                  </p>
                 <p>
                     <span>街道/门牌号：</span>
-                    <span>1</span>
+                    <span>{{formData.aflcOrderAddressWebDtoList[0].viaAddress}}</span>
                  </p>
                 <p>
                     <span>发货人：</span>
-                    <span>1</span>
+                    <span>{{formData.aflcOrderAddressWebDtoList[0].contacts}}</span>
                  </p>                 
                 <p>
                     <span>联系方式：</span>
-                    <span>1</span>
+                    <span>{{formData.aflcOrderAddressWebDtoList[0].contactsPhone}}</span>
                 </p>  
             </div>
             <div class="essentialInformation">
                 <p>
                     <span>目的地：</span>
-                    <span>1</span>
+                    <span>{{formData.aflcOrderAddressWebDtoList[1].viaAddressName}}</span>
                  </p>
                 <p>
                     <span>街道/门牌号：</span>
-                    <span>1</span>
+                    <span>{{formData.aflcOrderAddressWebDtoList[1].viaAddress}}</span>
                 </p>
                 <p>
                     <span>收货人：</span>
-                    <span>1</span>
+                    <span>{{formData.aflcOrderAddressWebDtoList[1].contacts}}</span>
                 </p>                 
                 <p>
                     <span>联系方式：</span>
-                    <span>1</span>
+                    <span>{{formData.aflcOrderAddressWebDtoList[1].contactsPhone}}</span>
                 </p>  
             </div>
         </div>
@@ -91,18 +91,18 @@
         <!-- 货物及备注 -->
         <div class="orderInfo-collapse collapseInfo">
             <h2>货物及备注</h2>
-            <div class="essentialInformation">
+            <div class="essentialInformation" >
                 <p>
                     <span>重量 / 体积：</span>
-                    <span>1</span>
+                    <span>{{formData.aflcFCLOrderGoodsDtoList[0].goodsWeight}}  /  {{formData.aflcFCLOrderGoodsDtoList[0].goodsVolume}}</span>
                  </p>
                 <p>
                     <span>货物名称 / 件数：</span>
-                    <span>1</span>
+                    <span>{{formData.aflcFCLOrderGoodsDtoList[0].goodsName}}  /  {{formData.aflcFCLOrderGoodsDtoList[0].goodsNum}}</span>
                  </p>
                 <p>
                     <span>货物保价：</span>
-                    <span>1</span>
+                    <span>{{formData.aflcFCLOrderGoodsDtoList[0].valuationCost}}</span>
                 </p>                 
                 <p>
                     <span>时效：</span>
@@ -112,11 +112,11 @@
             <div class="essentialInformation">
                 <p>
                     <span>上门提货：</span>
-                    <span>1</span>
+                    <span>{{formData.isDoorPickUp}}</span>
                 </p>
                 <p>
                     <span>送货上门：</span>
-                    <span>1</span>
+                    <span>{{formData.isDoorDelivery}}</span>
                 </p>
                 <p>
                     <span>回单：</span>
@@ -130,7 +130,7 @@
             <div class="essentialInformation">
                 <p>
                     <span>开票：</span>
-                    <span>1</span>
+                    <span>{{formData.invoiceTitle}}</span>
                 </p>
             </div>
         </div>
@@ -141,7 +141,7 @@
             <div class="essentialInformation">
                 <p>
                     <span>付款状态：</span>
-                    <span>1</span>
+                    <span>{{formData.payStatusName}}</span>
                  </p>
                 <p>
                     <span>付款时间：</span>
@@ -159,7 +159,7 @@
             <div class="essentialInformation">
                 <p>
                     <span>订单总额：</span>
-                    <span>1</span>
+                    <span>{{formData.totalAmount}}</span>
                 </p>
                 <p>
                     <span>干线费：</span>
@@ -235,9 +235,9 @@
             </div>
         </div>
 
-        <!-- 物流公司信息 -->
+        <!-- 客服备注 -->
         <div class="orderInfo-collapse collapseInfo">
-            <h2>物流公司信息</h2>
+            <h2>客服备注</h2>
             <div class="essentialInformation">
                 <p>
                     <span>客服备注：</span>
@@ -250,7 +250,7 @@
                 <p>
                     <span>备注内容：</span>
                       <el-tooltip placement="top-start" effect="dark" content="ssssssssss">
-                          <span>sdsdsdsdsgfgfkdlfdkgdgdgdgdssssssssssssssssssssssssssssssssssssshgldhg</span>
+                          <span>客服备注内容与那个呗</span>
                       </el-tooltip>
                 </p>                 
             </div>
@@ -260,12 +260,25 @@
 </template>
 
 <script>
+import {getFCLOrderByOrderSerial} from '@/api/order/logistics/logistics.js'
 export default {
     data(){
         return{
-
+         formData:[]
         }
-    }
+    },
+    methods:{
+        firstblood(){
+        getFCLOrderByOrderSerial(this.$route.query.orderSerial).then(res=>{
+            console.log('orderSerial',res)
+            this.formData = res.data
+            console.log(this.formData.length)
+        })
+        }
+    },
+    mounted() {
+
+    },
 }
 </script>
 

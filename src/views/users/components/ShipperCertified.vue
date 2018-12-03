@@ -25,14 +25,14 @@
                     {{ (page - 1)*pagesize + scope.$index + 1 }}
                 </template>
 			</el-table-column>  
+			<el-table-column prop="mobile" sortable label="手机号">
+                 <template slot-scope="scope">
+                    <h4 class="needMoreInfo" @click="pushOrderSerial(scope.row)">{{ scope.row.mobile}}</h4>
+                </template>
+			</el-table-column>
 			<el-table-column label="公司名称" 
                 :show-overflow-tooltip="true" sortable
                  prop="companyName">
-                <template slot-scope="scope">
-                    <h4 class="needMoreInfo" @click="pushOrderSerial(scope.row)">{{ scope.row.companyName}}</h4>
-                </template>
-			</el-table-column>
-			<el-table-column prop="mobile" sortable label="手机号">
 			</el-table-column>
 			<el-table-column prop="contacts" :show-overflow-tooltip="true" sortable label="联系人">
 			</el-table-column>
@@ -149,7 +149,21 @@
                     <CustomerSearch @returnCustomer = 'getCustomer' :customerName = "shengheform.belongSalesmanName" ref="SalesmanName"/>
                 </el-form-item>
               </el-col>
+                <el-col :span="12">
+                    <el-form-item label="货主优惠等级：" prop="address"> 
+                        <el-select v-model="shengheform.discountLevel" placeholder="请选择">
+                            <el-option
+                            v-for="item in optionsLevel"
+                            :key="item.id"
+                            :label="item.name"
+                            :value="item.code"
+                            :disabled="item.disabled">
+                            </el-option>
+                        </el-select>
+                    </el-form-item>
+                </el-col>
             </el-row>
+
             <div class="data_pic clearfix" v-viewer>  
                 <!-- <div class="data_pic_default">
                     <img  :src= 'defaultImage ? defaultImage : defaultImg'/>
@@ -196,9 +210,9 @@
             </div>
           </el-form>
           <div slot="footer" class="dialog-footer">
-            <el-button type="primary" plain @click="handlerPass">确认审核通过</el-button>
-            <el-button @click="handlerOut">审核不通过</el-button>
-            <el-button @click="closeMe">取 消</el-button>
+            <el-button type="primary" plain  icon="el-icon-success" @click="handlerPass">确认审核通过</el-button>
+            <el-button type="primary" plain icon="el-icon-warning" @click="handlerOut">审核不通过</el-button>
+            <el-button type="primary" plain icon="el-icon-error" @click="closeMe">取 消</el-button>
           </div>
         </el-dialog>
      </div> 
@@ -216,7 +230,7 @@ import {data_get_shipper_list,data_get_shipper_change} from '@/api/users/shipper
 import Pager from '@/components/Pagination/index'
 import vregion from '@/components/vregion/Region'
 import { objectMerge2, parseTime } from '@/utils/'
-import { DicShippertype } from '@/api/common.js'
+import { DicShippertype,DicShipperLevel } from '@/api/common.js'
 import CustomerSearch from '@/components/CustomerSearch/index'
 
 export default {
@@ -244,6 +258,7 @@ export default {
             type: '',
             paramsView: {},
             optionsShipperType:[],
+            optionsLevel:[],
             typetitle:'',
             btnsize:'mini',
             tabType:'certified',
@@ -334,6 +349,9 @@ export default {
                 this.optionsShipperType = this.optionsShipperType.filter(el => {
                     return el.code != 'AF0010101';
                 })
+            });
+            DicShipperLevel().then( res => {
+                this.optionsLevel = res.data;
             })
         },
         pushOrderSerial(row){
@@ -385,7 +403,8 @@ export default {
                 this.getMoreInformation();
                 this.RZdialogFormVisible = true;
                 this.shengheform = objectMerge2({},this.selected[0]) ;
-                this.shengheform.shipperType = 'AF0010102';
+                this.shengheform.shipperType = this.shengheform.shipperType =='AF0010101' ? 'AF0010102' : this.shengheform.shipperType;
+                this.shengheform.discountLevel =  this.shengheform.discountLevel ? this.shengheform.discountLevel : 'AF0020806';
                 this.defaultImage =  this.shengheform.businessLicenceFile ?  this.shengheform.businessLicenceFile : this.defaultImg;
                 this.clearTableSelection();
             }

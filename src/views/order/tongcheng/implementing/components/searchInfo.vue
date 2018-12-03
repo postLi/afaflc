@@ -107,6 +107,7 @@ import getCityList from '@/components/GetCityList/city'
                             startOrderDate:'',//下单起始时间
                             endOrderDate:'',//下单结束时间
                             orderSerial:'',//订单号
+                            driverName:''
                         }
                         this.chooseTime = [];
                         this.$refs.area.clearData();

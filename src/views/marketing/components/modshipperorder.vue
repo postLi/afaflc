@@ -24,13 +24,13 @@
                              v-for="item in serviceCardList"
                               :key="item.code"
                              :label="item.name"
-                              :value="item.code"
-                               :disabled="item.disabled">
+                             :value="item.code"
+                             :disabled="item.disabled">
                          </el-option>
                  </el-select>
              </td>
              <td>
-                <el-select v-model="formAll.carType" clearable placeholder="请选择" >
+                <el-select v-model="formAll.carType" clearable placeholder="请选择" disabled>
                           <el-option
                              v-for="item in optionsCar"
                                :key="item.code"

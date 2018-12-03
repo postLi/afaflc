@@ -449,7 +449,7 @@ export default {
                                 display: block;
                             }
                             :hover.btn_qx1{
-                                border:1px solid #3e9ff1;
+                                border:1px solid #3e9ff1;   
                                 background:#fff;
                                 color:#3e9ff1;
                             }

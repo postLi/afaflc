@@ -77,6 +77,16 @@ export function DicCarType() {
       method: 'get'
     })
 }
+
+// 获取货主优惠等级
+export function DicShipperLevel() {
+    return fetch({
+        url: '/' + baseurl_two + '/sysDict/getSysDictByCodeGet/AF00208',
+        method: 'get'
+      })
+  }
+  
+
 /**
  * 获取图片上传的policy
  * callback
@@ -206,7 +216,7 @@ export function aflcProvinceCode() {
 
 // 根据cityId获取开放城市服务区域定价
   export function aflcCityCheckout(cityId) {
-    return fetch.get('/aflcsmservice-wtc/sm/aflcAreaPrice/v1/open/' + cityId)
+    return fetch.get('/aflcsmservice/sm/aflcAreaPrice/v1/open/' + cityId)
   }
   
 

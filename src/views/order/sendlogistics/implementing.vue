@@ -6,7 +6,7 @@
             :key="item.name"
             :label="item.label"
             :name="item.name">
-            <publiceComponent></publiceComponent> 
+            <publiceComponent :status = "item.type"></publiceComponent> 
             </el-tab-pane>
         </el-tabs>
             </div>
@@ -19,10 +19,10 @@ export default {
         return{
             orderTabName:'tihuo',
             visibleTabs:[
-                {label:"待提货",name:"tihuo"},
-                {label:"待发车",name:"fache"},
-                {label:"待签收",name:"qianshou"},
-                {label:"待确认收货",name:"shouhuo"},
+                {label:"待提货",name:"tihuo",type:'AF0510201'},
+                {label:"待发车",name:"fache",type:'AF0510202'},
+                {label:"待签收",name:"qianshou",type:'AF0510203'},
+                {label:"待确认收货",name:"shouhuo",type:'AF0510204'},
             ]
         }
     },

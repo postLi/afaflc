@@ -43,7 +43,7 @@
           </el-row>
           <el-row>
               <el-col :span="20">
-               <el-form-item  label="活动说明：" :label-width="formLabelWidth" prop="activityDes" class="textArea" > 
+               <el-form-item  label="活动说明：" :label-width="formLabelWidth" prop="activityDes" class="textArea" >
                                 <el-input
                                     type="textarea"
                                     :rows="2"
@@ -718,14 +718,13 @@ export default {
 <style lang="scss">
 .newcouponBox{
         display: inline-block;
-        .el-button {
+    .el-button {
         margin-right:0px;
         padding: 7px 15px 7px;
         font-size:12px;
         }
-        
     .el-dialog{
-        width: 80%!important;
+        width: 85%!important;
         overflow:unset;
         .el-input{
             width: 240px

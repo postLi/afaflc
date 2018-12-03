@@ -1,21 +1,48 @@
 <template>
-    <el-form :inline="true" :model="searchInfo" ref="ruleForm" class="demo-ruleForm qdSearch fr" >
-        <el-form-item label="" prop="mobile">
-            <el-date-picker
-                v-model="searchInfo.grabSingleTimeStart"
-                type="month"
-                value-format="yyyy-MM"
-                placeholder="选择月">
-            </el-date-picker>
-            <el-date-picker
-                v-model="searchInfo.grabSingleTimeStart"
-                type="date"
-                value-format="timestamp"
-                format="yyyy 年 MM 月 dd 日"
-                placeholder="选择日期">
-            </el-date-picker>
-        </el-form-item>
-    </el-form>
+    <div>
+        <el-form :inline="true" :model="searchInfo" ref="ruleForm" class="demo-ruleForm qdSearch fr" v-if="searchFrom == 'userTradeSurvey'">
+            <el-form-item label="" prop="startTime" v-if="searchType != '0'">
+                <el-date-picker
+                    v-if="searchType == '2'"
+                    v-model="searchInfo.startTime"
+                    type="month"
+                    value-format="timestamp"
+                    @change ="cashTimeChange"
+                    placeholder="选择月">
+                </el-date-picker>
+                <el-date-picker
+                    v-if="searchType == '1'"
+                    v-model="searchInfo.startTime"
+                    type="date"
+                    value-format="timestamp"
+                    @change ="cashTimeChange"
+                    format="yyyy 年 MM 月 dd 日"
+                    placeholder="选择日期">
+                </el-date-picker>
+            </el-form-item>
+        </el-form>
+        <el-form :inline="true" :model="searchInfo" ref="ruleForm" class="demo-ruleForm qdSearch fr" v-if="searchFrom == 'financial'">
+            <el-form-item label="" prop="searchTime" v-if="searchType != '0'">
+                <el-date-picker
+                    v-if="searchType == '2'"
+                    v-model="searchTime"
+                    value-format="yyyy-MM"
+                    type="month"
+                    @change ="cashTimeChange2"
+                    placeholder="选择月">
+                </el-date-picker>
+                <el-date-picker
+                    v-if="searchType == '1'"
+                    v-model="searchTime"
+                    type="date"
+                    value-format="yyyy-MM-dd"
+                    @change ="cashTimeChange2"
+                    format="yyyy 年 MM 月 dd 日"
+                    placeholder="选择日期">
+                </el-date-picker>
+            </el-form-item>
+        </el-form>
+    </div>
 </template>
 
 <script type="text/javascript">
@@ -24,9 +51,13 @@
 
     export default{
         components:{
+
         },
         props:{
             searchType:{
+                type:String,
+            },
+            searchFrom:{
                 type:String,
             }
         },
@@ -34,15 +65,34 @@
             return{
                 btnsize:'mini',
                 searchInfo:{
-                    shipperName:'',//货主
-                    grabSingleTimeStart:'',//下单起始时间
-                    grabSingleTimeEnd:'',//下单结束时间
-                    orderSerial:'',//订单号
+                   startTime:''
                 },
+                searchTime:'',
             }
         },
+        watch: {
+            searchType: {
+                handler(newVal, oldVal) {
+                    console.log(newVal,oldVal)
+                    if(newVal == '0' && this.searchFrom == 'userTradeSurvey'){
+                        this.searchInfo.startTime = '';
+                    }else if(newVal == '0' && this.searchFrom == 'financial'){
+                        this.searchTime = '';
+                    }
+                },
+            },
+        },
         methods: {
-            
+            cashTimeChange(){
+                console.log(this.searchInfo.startTime)
+                this.searchInfo.startTime = this.searchInfo.startTime == null ? '' : this.searchInfo.startTime ;
+                let searchObj = Object.assign({}, this.searchInfo);
+                this.$emit('change', searchObj,this.searchFrom)
+            },
+            cashTimeChange2(){
+                this.searchTime = this.searchTime == null ? '' : this.searchTime ;
+                this.$emit('change', this.searchTime,this.searchFrom)
+            }
         }
     }
 </script>
