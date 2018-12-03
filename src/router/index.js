@@ -27,7 +27,8 @@ import Users from './module/users'
 import Order from './module/orderManage'
 //28WEB
 import KYWEB from './module/28web'
-
+//考核管理
+import EvaLuation from './module/evaluation'
 Vue.use(Router)
 
  /**
@@ -98,7 +99,9 @@ export const asyncRouterMap = [
   Service,
 //   Report,
 //   Dispatch,
-    KYWEB,
+  KYWEB,
+  EvaLuation,
   Common,
+
   { path: '*', redirect: '/404', hidden: true }
 ]
