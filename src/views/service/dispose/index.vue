@@ -83,14 +83,17 @@
                   :show-overflow-tooltip="true"  
                   width="250">
                   <template slot-scope="scope">
-                  {{scope.row.driverName ? scope.row.driverName + '-': ''}}{{ scope.row.driverMobile ? scope.row.driverMobile + '-': ''}}{{scope.row.carNumber ? scope.row.carNumber : ''}}
+                  {{scope.row.driverName ? scope.row.driverName + '-': ''}}{{ scope.row.driverMobile ? scope.row.driverMobile + '-': ''}}{{scope.row.carNumber ? scope.row.carNumber+ '-' : ''}}{{scope.row.carTypeName ? scope.row.carTypeName : ''}}
                   </template>
                 </el-table-column>
                 <el-table-column  label="处理状态" prop="complainStatusName" sortable :show-overflow-tooltip="true" width="120">
                 </el-table-column>       
-                <el-table-column  label="投诉分类" prop="complainTypeName" sortable :show-overflow-tooltip="true" width="120">
+                <el-table-column  label="投诉分类" prop="complainTypeName" sortable :show-overflow-tooltip="true" width="160">
                 </el-table-column>                                                       
                 <el-table-column  label="投诉人" prop="complainName" sortable :show-overflow-tooltip="true"  width="300">
+                    <template slot-scope="scope">
+                    {{scope.row.complainName ? scope.row.complainName + '-': ''}}{{ scope.row.driverMobile ? scope.row.driverMobile: ''}}
+                  </template>
                 </el-table-column>
                 <el-table-column
                 :show-overflow-tooltip="true"

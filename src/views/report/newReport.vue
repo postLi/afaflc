@@ -5,7 +5,7 @@
             <div class="TransactionFlow financialCommon">
                 <h4>
                     交易流水
-                    <dataSearch @getValue = "valueChange" timeType = "jyls"/>
+                    <dataSearch @getValue = "valueChange" countType = "jyls"/>
                 </h4>
                 <div class="TransactionFlow_classfy">
                     <div class="transItem">
@@ -46,7 +46,7 @@
         <div class="financial_middle financialCommon">
             <h4>
                 流水明细
-                <dataSearch @getValue = "valueChange" timeType = "lsmx"/>
+                <dataSearch @getValue = "valueChange" countType = "lsmx"/>
             </h4>
             <div class="financial_stream">
                 <el-row>
@@ -152,7 +152,7 @@ export default {
             })
         },
         valueChange(val,type){
-            console.log('val,type',val,type)
+            // console.log('val,type',val,type)
             switch(type){
                 case 'jyls':
                     this.tradeOrderPaymentCountTime.startTime = val[0];

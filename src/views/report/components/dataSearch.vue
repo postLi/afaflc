@@ -1,8 +1,17 @@
 <template>
     <div class="dataChoose">
-        <el-select v-model="currentkey" placeholder="请选择" v-show="isChoose">
+        <!-- {{countType}} {{currentkey2}} -->
+        <el-select v-model="currentkey" placeholder="请选择" v-show="isChoose" v-if="countType != 'jybhline'">
             <el-option
             v-for="item in dataBtns"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value">
+            </el-option>
+        </el-select>
+        <el-select v-model="currentkey2" placeholder="请选择" v-show="isChoose" v-else>
+            <el-option
+            v-for="item in dataBtns2"
             :key="item.value"
             :label="item.label"
             :value="item.value">
@@ -36,7 +45,7 @@ export default {
             type:Number,
             default:0
         },
-        timeType:{
+        countType:{
             type:String
         }
     },
@@ -44,6 +53,11 @@ export default {
         currentkey(newVal) {
             if (newVal !== '') {
                 this.doAction(newVal)
+            }
+        },
+        currentkey2(newVal) {
+            if (newVal !== '') {
+                this.doAction2(newVal)
             }
         },
         keyVal(newVal){
@@ -56,9 +70,10 @@ export default {
     data() {
         return {
             newTime:'',
-            timeOutComplate:null,
+            timeType:'',
             value:'',
             currentkey:'',
+            currentkey2:'',
             pickerDate:[],
             dataBtns: [{
                 label: '今天',
@@ -79,6 +94,19 @@ export default {
                 label: '全部',
                 value: 5
             }],
+            dataBtns2:[{
+                label: '近7天',
+                value: 0
+            }, {
+                label: '近30天',
+                value: 1
+            }, {
+                label: '近半年',
+                value: 2
+            }, {
+                label: '近一年',
+                value: 3
+            }]
         }
     },
     methods: {
@@ -132,17 +160,75 @@ export default {
                 this.currentkey = 4
                 // this.title = '本年'
                 break
+                case 5:
+                this.pickerDate = [null,null];
+                this.currentkey = 5
+                // this.title = '全部'
+                break
+            }
+            this.getData()
+        },
+        doAction2(type){
+            switch (type) {
+                case 0:
+                const last7Dat = pickerOptions4.last7Day()
+                // console.log(this.dataset)
+                // picker.$emit('pick', Today)
+                this.pickerDate = last7Dat
+                // this.searchQuery.vo.buttonKey = 0
+                this.currentkey2 = 0
+                this.timeType = 'day'
+                // this.title = '近7天'
+                console.log('近7天')
+                break
+                case 1:
+                const last30Day = pickerOptions4.last30Day()
+                this.pickerDate = last30Day
+                // this.title = '近30天'
+                console.log('近30天')
+                this.timeType = 'day'
+                // this.searchQuery.vo.buttonKey = 1
+                this.currentkey2 = 1
+                break
+                case 2:
+                // 最近的星期天的日期，到今天的日期
+                const last6Month = pickerOptions4.last6Month()
+                // 上上周星期天的日前，到上周六的日期
+                const lastWeek = pickerOptions4.lastWeek()
+                this.pickerDate = last6Month
+                this.timeType = 'month'
+                // this.searchQuery.vo.buttonKey = 2
+                this.currentkey2 = 2
+                // this.title = '近半年'
+                console.log('近半年')
+                break
+                case 3:
+                // 本月1日到今天的日前
+                const CurrentMonth = pickerOptions4.last12Month()
+                // 上月1日到上月的结束时间
+                const LastMonth = pickerOptions4.lastMonth()
+                this.pickerDate = CurrentMonth
+                this.timeType = 'month'
+                // this.searchQuery.vo.buttonKey = 3
+                this.currentkey2 = 3
+                // this.title = '本月'
+                console.log('近一年')
+                break
             }
             this.getData()
         },
         getData(){
-            this.$emit('getValue',this.pickerDate,this.timeType)
+            this.$emit('getValue',this.pickerDate,this.countType,this.timeType)
         }
     },
     beforeDestroy(){
     },
     mounted() {
-        this.currentkey = 0
+        if(this.countType != 'jybhline'){
+            this.currentkey = 0
+        }else{
+            this.currentkey2 = 0
+        }
     }
 
 }
