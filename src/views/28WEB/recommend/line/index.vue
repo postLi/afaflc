@@ -19,10 +19,12 @@
         <el-form-item label="推荐位置" prop="recommendPosition">
           <el-select v-model="formAllData.recommendPosition" placeholder="请选择" @change="changePosition">
             <el-option
-              v-for="item in options1"
+              v-for="(item,index) in options1"
               :key="item.value"
               :label="item.label"
-              :value="item.value">
+              :value="item.value"
+              :disabled="options1list.indexOf(index) == '-1'"
+              >
             </el-option>
           </el-select>
         </el-form-item>
@@ -286,6 +288,7 @@ export default {
         value: 3,
         label: '已结束'
       }],
+      options1list: [],
       pickerOptions2: {
         shortcuts: pickerOptions2
       }
@@ -368,8 +371,20 @@ export default {
     },
     // 选择搜索列表的值
     changeColumn(obj) {
+      this.formAllData.recommendPosition = ''
+      this.options1list = []
       this.formAllData.recommendColumn = obj
-      console.log('sdfsdfs', obj)
+      switch (obj) {
+        case '首页'
+            :this.options1list.push(0)
+          break
+        case '物流专线栏目'
+            :this.options1list.push(1, 2)
+          break
+        case '专线详情页'
+            :this.options1list.push(3)
+          break
+      }
     },
     changePosition(obj) {
       this.formAllData.recommendPosition = obj
