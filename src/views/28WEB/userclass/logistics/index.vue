@@ -173,7 +173,7 @@ export default {
           console.log(this.formAllData.startTime, this.formAllData.endTime)
           break
         case 'clear':
-          this.searchCreatTime = [],
+          this.searchCreatTime = []
           this.formAllData = {
             publishName: '',
             startProvince: '',

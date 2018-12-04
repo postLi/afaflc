@@ -22,10 +22,12 @@
         <el-form-item label="推荐位置" prop="recommendPosition">
           <el-select v-model="formAllData.recommendPosition" placeholder="请选择" @change="changePosition">
             <el-option
-              v-for="item in options1"
+              v-for="(item,index) in options1"
               :key="item.value"
               :label="item.label"
-              :value="item.value">
+              :value="item.value"
+              :disabled="options1list.indexOf(index) == '-1'"
+              >
             </el-option>
           </el-select>
         </el-form-item>
@@ -65,7 +67,7 @@ import { parseTime, pickerOptions2 } from '@/utils/index.js'
 import Pager from '@/components/Pagination/index'
 import Upload from '@/components/Upload/multImage'
 import { postAddline } from '@/api/web/logistics.js'
-import { postReportComplain } from '@/api/service/dispose.js'
+// import { postReportComplain } from '@/api/service/dispose.js'
 import { objectMerge2 } from '@/utils/index'
 export default {
   computed: {
@@ -145,6 +147,7 @@ export default {
         value: '此路线其他专线',
         label: '此路线其他专线'
       }],
+      options1list: [],
       form: {
 
       },
@@ -179,7 +182,6 @@ export default {
         if (this.isMatreg) {
           this.searchCreatTime = this.defaultTime
           this.popTitle = '推荐设置'
-          console.log(this.isMatreg, this.selectInfo)
         }
       },
       immediate: true
@@ -209,8 +211,20 @@ export default {
       }
     },
     changeColumn(obj) {
+      this.formAllData.recommendPosition = ''
+      this.options1list = []
       this.formAllData.recommendColumn = obj
-      console.log('sdfsdfs', obj)
+      switch (obj) {
+        case '首页'
+            :this.options1list.push(0)
+          break
+        case '物流专线栏目'
+            :this.options1list.push(1, 2)
+          break
+        case '专线详情页'
+            :this.options1list.push(3)
+          break
+      }
     },
     changePosition(obj) {
       this.formAllData.recommendPosition = obj
