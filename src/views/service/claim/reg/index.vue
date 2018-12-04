@@ -289,8 +289,8 @@ export default {
       switch (type) {
         case 'search':
           if (this.searchCreatTime) {
-            this.formAllData.startTime = this.searchCreatTime ? parseTime(this.searchCreatTime[0], '{y}-{m}-{d}') + '00:00:00' : null
-            this.formAllData.endTime = this.searchCreatTime ? parseTime(this.searchCreatTime[1], '{y}-{m}-{d}') + '23:59:59' : null
+            this.formAllData.startTime = this.searchCreatTime ? parseTime(this.searchCreatTime[0], '{y}-{m}-{d}') + ' 00:00:00' : null
+            this.formAllData.endTime = this.searchCreatTime ? parseTime(this.searchCreatTime[1], '{y}-{m}-{d}') + ' 23:59:59' : null
           } else {
             this.formAllData.startTime = null
             this.formAllData.endTime = null

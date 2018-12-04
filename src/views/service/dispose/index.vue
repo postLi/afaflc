@@ -10,7 +10,7 @@
             <GetCityList ref="area" v-model="formAllData.belongCityName"  @returnStr="getStr"></GetCityList>
           </el-form-item>
           <el-form-item label="处理状态">
-            <el-select v-model="formAllData.dealStatus" clearable placeholder="请选择处理状态" >
+            <el-select v-model="formAllData.complainStatus" clearable placeholder="请选择处理状态" >
               <el-option
                 v-for="item in optionsdealStatus"
                 :key="item.code"
@@ -184,7 +184,7 @@ export default {
         belongCity: '', // 区域
         belongCityName: '', // 区域
         // AF04801
-        dealStatus: '',
+        complainStatus: '',
         shipperName: '',
         driverName: '',
         orderSerial: ''
