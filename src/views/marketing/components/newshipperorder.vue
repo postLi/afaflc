@@ -579,11 +579,10 @@ export default {
         }).catch(res=>{
             this.$emit('getData');
             this.$message.error('新增失败');
-       });
-
-       }
-       }
-       )
+        });
+        }
+        }
+        )
    },
   }
 }
