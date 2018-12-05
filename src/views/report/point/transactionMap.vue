@@ -3,38 +3,18 @@
         <div class="transacitonMap_left">
             <div id="finacialHot"></div>
             <div class="typeLineTime_data">
-                <dataSearch/>
+                <dataSearch @getValue = "valueChange" countType = "jyfbPoint"/>
             </div>
             <div class="transacitonMap_left_total">
                 <el-row>
                     <el-col :span="8">TOP5省份</el-col>
                     <el-col :span="8" class="financial_stream_title">下单数量</el-col>
                     <el-col :span="8" class="financial_stream_title">付款金额</el-col>
-                </el-row>
-                <el-row> 
-                    <el-col :span="8" class="financial_stream_title">小货车</el-col>
-                    <el-col :span="8">52000</el-col>
-                    <el-col :span="8">52000</el-col>
-                </el-row>
-                <el-row> 
-                    <el-col :span="8" class="financial_stream_title">小货车</el-col>
-                    <el-col :span="8">52000</el-col>
-                    <el-col :span="8">52000</el-col>
-                </el-row>
-                <el-row> 
-                    <el-col :span="8" class="financial_stream_title">小货车</el-col>
-                    <el-col :span="8">52000</el-col>
-                    <el-col :span="8">52000</el-col>
-                </el-row>
-                <el-row> 
-                    <el-col :span="8" class="financial_stream_title">小货车</el-col>
-                    <el-col :span="8">52000</el-col>
-                    <el-col :span="8">52000</el-col>
-                </el-row>
-                <el-row> 
-                    <el-col :span="8" class="financial_stream_title">小货车</el-col>
-                    <el-col :span="8">52000</el-col>
-                    <el-col :span="8">52000</el-col>
+                </el-row> 
+                <el-row v-for="(item,idx) in  tradePaymentPlaceObj" :key="idx"> 
+                    <el-col :span="8" class="financial_stream_title">{{item.area ? item.area : ''}}</el-col>
+                    <el-col :span="8">{{item.orderCount}}</el-col>
+                    <el-col :span="8">{{item.payTotal}}</el-col>
                 </el-row>
             </div>
         </div>
@@ -50,18 +30,36 @@
                     </el-option>
                 </el-select>
             </h4>
-            <dataSearch :isChoose = "chooseType" :keyVal = "currentkey"/>
+            <dataSearch :isChoose = "chooseType" :keyVal = "currentkey"  @getValue = "valueChange" countType = "czgk"/>
             <ul>
                 <li>
-                    <span>待处理数</span>
+                    <span>充值人数</span>
                     <p class="fr">
-                        <span>18</span><span> >> </span>
+                        <span>{{rechargeCountObj.personCount ? rechargeCountObj.personCount : 0}}</span>
                     </p>
                 </li>
                 <li>
-                    <span>待处理数</span>
+                    <span>充值金额</span>
                     <p class="fr">
-                        <span>18</span><span> >> </span>
+                        <span>{{rechargeCountObj.rechargeSum ? rechargeCountObj.rechargeSum : 0}}</span>
+                    </p>
+                </li>
+                <li>
+                    <span>赠送金额</span>
+                    <p class="fr">
+                        <span>{{rechargeCountObj.giveSum ? rechargeCountObj.giveSum : 0}}</span>
+                    </p>
+                </li>
+                <li>
+                    <span>微信收款</span>
+                    <p class="fr">
+                        <span>{{rechargeCountObj.wxRechargeSum ? rechargeCountObj.wxRechargeSum : 0}}</span>
+                    </p>
+                </li>
+                 <li>
+                    <span>支付宝收款</span>
+                    <p class="fr">
+                        <span>{{rechargeCountObj.aliRechargeSum ? rechargeCountObj.aliRechargeSum : 0}}</span>
                     </p>
                 </li>
             </ul>
@@ -75,6 +73,7 @@ import axios from 'axios'
 import echarts from 'echarts'
 import china from 'echarts/map/js/china'
 import dataSearch from '../components/dataSearch'
+import { tradePaymentPlace,rechargeCount } from '@/api/transaction.js'
 
 export default {
     name:'transacitonMap',
@@ -93,6 +92,16 @@ export default {
             myChart: {},
             geoCoordMap: {},
             name: '热力图',
+            tradePaymentPlaceTime:{
+                "endTime": "",
+                "startTime": "",
+            },//交易分布时间
+            tradePaymentPlaceObj:[],//交易分布
+            rechargeCountTime:{
+                "endTime": "",
+                "startTime": "",
+            },//充值概况时间
+            rechargeCountObj:{},//充值概况
             myData:[
                 {name: '海门', value: [121.15, 31.89, 90]},
                 {name: '鄂尔多斯', value: [109.781327, 39.608266, 120]},
@@ -123,8 +132,24 @@ export default {
         }
     },
     methods: {
+        init(){
+            this.PaymentPlace()
+            this.aflcRechargeCount();
+        },
+        //交易分步
+        PaymentPlace(){
+            tradePaymentPlace(this.tradePaymentPlaceTime).then(res => {
+                this.tradePaymentPlaceObj = res.data;
+                this.mapCount();
+            })
+        },
+        aflcRechargeCount(){
+            rechargeCount(this.rechargeCountTime).then(res => {
+                this.rechargeCountObj = res.data;
+            })
+        },
         mapInit(options) {
-            this.myChart = echarts.init(document.querySelector('#finacialHot'));
+            this.myChart.hideLoading();
             this.myChart.setOption(options)
         },
         _getCityData() {
@@ -135,19 +160,19 @@ export default {
         convertData(data) {
             let res = [];
             for (let i = 0; i < data.length; i++) {
-                let geoCoord = this.geoCoordMap[data[i].name];
+                let geoCoord = this.geoCoordMap[data[i].area];
+                // console.log('geoCoord',geoCoord)
                 if (geoCoord) {
-                res.push(geoCoord.concat(data[i].value));
+                res.push(geoCoord.concat(data[i].payTotal));
                 }
             }
+            // console.log('resres',res)
             return res;
-        }
-    },
-    beforeDestroy(){
-        
-    },
-    mounted() {
-        // axios.get('static/data/heat/testData.json').then((res) => {
+        },
+        mapCount(){
+            this.myChart = echarts.init(document.querySelector('#finacialHot'));
+            this.myChart.showLoading();
+
             let options = {
                 title: {
                     text: '交易分布',
@@ -178,15 +203,6 @@ export default {
                             shadowBlur: 150
                         }
                     }
-                    //  itemStyle: {
-                    //     normal: {
-                    //         areaColor: '#01215c',
-                    //         borderWidth: 5,//设置外层边框
-                    //         borderColor:'#9ffcff',
-                    //         shadowColor: 'rgba(0,54,255, 1)',
-                    //         shadowBlur: 150
-                    //     }
-                    // }
                 },
                 series: [
                    {
@@ -224,11 +240,12 @@ export default {
                         type: 'effectScatter',
                         // coordinateSystem: 'bmap',
                         coordinateSystem: 'geo',
-                        data: this.myData,
+                        data:this.convertData(this.tradePaymentPlaceObj),
                         symbol:'circle',//标记的图形
                         symbolSize: function (val) {
-                            return val[2] / 10;
-                            // return 30;
+                            // return val[2] / 10;
+                            // return val[2];
+                            return 30;
                         },
                         showEffectOn: 'render',
                         rippleEffect: {
@@ -277,16 +294,43 @@ export default {
                     }
                 ]
             };
-            // window.onresize = this.myChart.resize;
             //散点全国地图
             this.mapInit(options);
-        // });
-        window.onresize = () => {
-            this.myChart.resize({
-                width: 'auto',
-                height: 'auto'
-            })
+            window.onresize = () => {
+                this.myChart.resize({
+                    width: 'auto',
+                    height: 'auto'
+                })
+            }
+        },
+        valueChange(val,type){
+            console.log('val,type',val,type)
+            switch(type){
+                case 'jyfbPoint' :
+                    this.tradePaymentPlaceTime.startTime = val[0];
+                    this.tradePaymentPlaceTime.endTime = val[1];
+                    this.PaymentPlace();
+                    break;
+                case 'czgk' :
+                    this.rechargeCountTime.startTime = val[0];
+                    this.rechargeCountTime.endTime = val[1];
+                    this.aflcRechargeCount();
+                    break;
+            }
+        },
+        valueChange1(val,type){
+            this.rechargeCountTime.startTime = val[0];
+            this.rechargeCountTime.endTime = val[1];
+            // this.aflcRechargeCount();
         }
+        
+    },
+    beforeDestroy(){
+        
+    },
+    mounted() {
+        // this.init()
+     
     }
 
 }

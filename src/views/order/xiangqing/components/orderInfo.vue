@@ -95,15 +95,30 @@
                     <span v-if="listInformation.goodsWeight || listInformation.goodsVolume">{{listInformation.goodsWeight ? listInformation.goodsWeight+'吨' : ''}} {{listInformation.goodsVolume ? listInformation.goodsVolume + '方':''}}</span>
                     <span v-else>未填写</span>
                 </p>
-                <p>
+                <p style="width:48%;">
                     <span>额外服务：</span>
                     <span v-if="listInformation.extraName" class="fontRed">{{listInformation.extraName}}</span>
                     <span v-else>未填写</span>
                 </p>
-                <p>
+                <!-- <p>
                     <span>备注：</span>
-                    <span v-if="listInformation.remark">{{listInformation.remark}}</span>
-                    <span v-else>未填写</span>
+                    <span v-if="!listInformation.remark">未填写</span>
+                    <el-tooltip placement="top-start" effect="light" v-else-if="listInformation.remark.length > 24">
+                        <div slot="content">{{listInformation.remark}}</div>
+                        <span>{{listInformation.remark}}</span>    
+                    </el-tooltip>
+                    <span v-else>{{listInformation.remark}}</span>
+                </p> -->
+            </div>
+            <div class="essentialInformation">
+                 <p style="width:100%;">
+                    <span>备注：</span>
+                    <span v-if="!listInformation.remark">未填写</span>
+                    <!-- <el-tooltip placement="top-start" effect="light" v-else-if="listInformation.remark.length > 24">
+                        <div slot="content">{{listInformation.remark}}</div>
+                        <span>{{listInformation.remark}}</span>    
+                    </el-tooltip> -->
+                    <span v-else>{{listInformation.remark}}</span>
                 </p>
             </div>
         </div>

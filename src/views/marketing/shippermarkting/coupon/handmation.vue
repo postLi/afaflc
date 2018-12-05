@@ -15,17 +15,6 @@
                          </el-option>
                  </el-select>
             </el-form-item>
-            <el-form-item label="活动状态">
-                 <el-select v-model="formAllData.usingStatus" clearable placeholder="请选择" >
-                          <el-option
-                             v-for="item in activeStatus"
-                               :key="item.code"
-                               :label="item.name"
-                               :value="item.code"
-                               :disabled="item.disabled">
-                         </el-option>
-                 </el-select>
-            </el-form-item>  
             <el-form-item label="所属区域">
             <GetCityList ref="area" v-model="formAllData.areaName"  @returnStr="getStr"></GetCityList>
             </el-form-item> 

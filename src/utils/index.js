@@ -456,6 +456,34 @@ export function toggleClass(element, className) {
 }
 
 export const pickerOptions4 = {
+    //近七天
+    last7Day(dateobj) {
+        const _end = dateobj || new Date()
+        const end = new Date(_end.getFullYear(), _end.getMonth(), _end.getDate() - 1)
+        const start = new Date(end.getFullYear(), _end.getMonth(), _end.getDate() - 7)
+        return [start, end]
+      }, 
+    // 近30天
+    last30Day(dateobj) {
+        const _end = dateobj || new Date()
+        const end = new Date(_end.getFullYear(), _end.getMonth(), _end.getDate() - 1)
+        const start = new Date(end.getFullYear(), _end.getMonth(), _end.getDate() - 30)
+        return [start, end]
+      },  
+    // 近半年
+    last6Month(dateobj) {
+        const _end = dateobj || new Date()
+        const end = new Date(_end.getFullYear(), _end.getMonth(), _end.getDate() - 1)
+        const start = new Date(end.getFullYear(), _end.getMonth() - 6, 1)
+        return [start, end]
+      },
+    // 近一年
+    last12Month(dateobj) {
+        const _end = dateobj || new Date()
+        const end = new Date(_end.getFullYear(), _end.getMonth(), _end.getDate() - 1)
+        const start = new Date(end.getFullYear(), _end.getMonth() - 12, 1)
+        return [start, end]
+      },
   currentMonth(dateobj) {
     const end = dateobj || new Date()
     const start = new Date(end.getFullYear(), end.getMonth(), 1)
@@ -1049,3 +1077,54 @@ export function NumFormat(value){
     }
 }
 
+export function getBetweenDateStr(start,end,type){
+    var result = [];
+    if(type == 'day'){
+        var beginDay = start.split("-");
+        var endDay = end.split("-");
+        var diffDay = new Date();
+        var dateList = new Array;
+        var i = 0;
+        diffDay.setDate(beginDay[2]);
+        diffDay.setMonth(beginDay[1]-1);
+        diffDay.setFullYear(beginDay[0]);
+        result.push(start);
+        while(i == 0){
+            var countDay = diffDay.getTime() + 24 * 60 * 60 * 1000;
+            diffDay.setTime(countDay);
+            dateList[2] = diffDay.getDate();
+            dateList[1] = diffDay.getMonth() + 1;
+            dateList[0] = diffDay.getFullYear();
+            if(String(dateList[1]).length == 1){dateList[1] = "0"+dateList[1]};
+            if(String(dateList[2]).length == 1){dateList[2] = "0"+dateList[2]};
+            result.push(dateList[0]+"-"+dateList[1]+"-"+dateList[2]);
+            if(dateList[0] == endDay[0] && dateList[1] == endDay[1] && dateList[2] == endDay[2]){ i = 1;
+            }
+        };
+    }else{
+        var start = start.split('-');
+        var end = end.split('-');
+        var staYear = parseInt(start[0]);
+        var staMon = parseInt(start[1]);
+        var endYear = parseInt(end[0]);
+        var endMon = parseInt(end[1]);
+        while (staYear <= endYear) {
+            if (staYear === endYear) {
+                while (staMon < endMon) {
+                    staMon++;
+                    result.push(staYear+'-'+staMon);
+                }
+                staYear++;
+            } else {
+                staMon++;
+                if (staMon > 12) {
+                    staMon = 1;
+                    staYear++;
+                }
+                result.push(staYear+'-'+staMon);
+            }
+        }
+    }
+    // console.log('所有时间',result);
+    return result;
+}

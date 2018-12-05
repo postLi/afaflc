@@ -25,7 +25,7 @@ export function userTradeSurvey(data) {
 export function financial(time) {
     return fetch({
     //   url: '/' + baseurl + '/sm/aflcCouponUse/v1/financial' + time,
-      url: '/aflcsmservice-wtc/sm/aflcCouponUse/v1/financial?time=' + time,
+      url: '/aflcsmservice/sm/aflcCouponUse/v1/financial?time=' + time,
       method: 'get'
     })
   }
