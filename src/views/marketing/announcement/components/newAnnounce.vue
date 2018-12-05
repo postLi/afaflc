@@ -36,20 +36,23 @@
                     <el-checkbox v-model="releaseShipper" >28快运货主</el-checkbox>
                     <el-checkbox v-model="releaseHome" v-if="releaseDriver || releaseShipper">发布到首页营销广告位</el-checkbox>
                 </el-form-item>
-                <el-form-item label="车主认证状态" prop="homeDriverStatus" v-if="releaseDriver && releaseHome">
-                    <el-select v-model="announce.homeDriverStatus" clearable placeholder="请选择">
+                <el-form-item prop="releaseHomeUrl" label="营销广告图" v-if="releaseHome">
+                    <upload class="licensePicture" tip="（必须为jpg/png并且小于5M）" v-model="announce.releaseHomeUrl"  />
+                </el-form-item>
+                <el-form-item label="货主认证状态" prop="homeShipperStatus" v-if="releaseShipper && releaseHome">
+                    <el-select v-model="announce.homeShipperStatus" clearable placeholder="请选择">
                         <el-option
-                        v-for="item in optionshomeDriverStatus"
+                        v-for="item in optionshomeShipperStatus"
                         :key="item.id"
                         :label="item.name"
                         :value="item.label">
                         </el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="货主认证状态" prop="homeShipperStatus" v-if="releaseShipper && releaseHome">
-                    <el-select v-model="announce.homeShipperStatus" clearable placeholder="请选择">
+                <el-form-item label="车主认证状态" prop="homeDriverStatus" v-if="releaseDriver && releaseHome">
+                    <el-select v-model="announce.homeDriverStatus" clearable placeholder="请选择">
                         <el-option
-                        v-for="item in optionshomeShipperStatus"
+                        v-for="item in optionshomeDriverStatus"
                         :key="item.id"
                         :label="item.name"
                         :value="item.label">
@@ -195,9 +198,9 @@ export default {
                 titleLogo: [
                     { required: true, message: '请上传标题图片', trigger: 'change' }
                 ],
-                // noticeContent: [
-                //     { required: true, message: '请填写公告内容', trigger: 'change' }
-                // ],
+                releaseHomeUrl: [
+                    { required: true, message: '请上传营销广告图', trigger: 'change' }
+                ],
                 noticeGroupCode: [
                     { required: true, message: '请选择车主端公告分组', trigger: 'change' }
                 ],

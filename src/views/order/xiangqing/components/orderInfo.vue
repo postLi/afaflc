@@ -143,7 +143,7 @@
                 </p>
                 <p>
                     <span>付款状态：</span>
-                    <span class="fontRed">{{listInformation.payStatus}}</span>
+                    <span class="fontRed">{{listInformation.payStatus ? listInformation.payStatus : '未付款'}}</span>
                 </p>
             </div>
             <div class="essentialInformation">

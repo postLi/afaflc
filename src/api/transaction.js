@@ -1,7 +1,7 @@
 import fetch from '../utils/fetch'
 
 const baseurl = 'aflc-uc'
-const baseurl_two = 'aflcorderservice-lyc'
+const baseurl_two = 'aflcorderservice'
 
 
 export function pendingExtractCashCount(obj) {
