@@ -95,7 +95,19 @@ export const constantRouterMap = [
             'code': '',
             'proute': 'dashboard'
         }
-      }]
+    }, {
+        path: '/onlineService',
+        icon: 'zxkf',
+        hidden: false,
+        name: '在线客服',
+        component: _import('onlineService/index'),
+        meta: { 
+            title: '在线客服', 
+            noCache: true , 
+            'code': '',
+            'proute': 'dashboard'
+        }
+    }]
   }
 ]
 export default new Router({

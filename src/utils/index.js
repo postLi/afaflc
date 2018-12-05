@@ -1128,3 +1128,23 @@ export function getBetweenDateStr(start,end,type){
     // console.log('所有时间',result);
     return result;
 }
+
+export function checkData(day,dayList){ 
+    console.log('tetststststs',day,dayList)
+    let result = Array(day.length).fill(0) ;
+    day.forEach((item1,i)=>{
+        dayList.forEach((item2)=>{
+            if(item1 === item2.createTime){
+                item2.index = i
+            }
+        })
+    })
+
+    // console.log(dayList);
+    // console.log('result',result)
+    dayList.forEach((item,i)=>{
+        result.fill(dayList[i].payTotal,dayList[i].index,dayList[i].index + 1)
+    })
+    console.log('result',result)
+    return result
+}

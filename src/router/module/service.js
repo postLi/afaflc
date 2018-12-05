@@ -47,6 +47,15 @@ export default {
       children: [
 
       ]
-    }
+    }, {
+        path: '/service/400Manage/index',
+        icon: '400',
+        name: '400管理',
+        component: _import('service/400Manage/index'),
+        meta: { role: ['admin'], title: '400管理', stitle: '400', noCache: true, code: '' },
+        children: [
+  
+        ]
+      }
   ]
 }

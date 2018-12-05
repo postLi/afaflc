@@ -1,11 +1,10 @@
 <template>
-    <div class="identicalStyle clearfix plantService" v-loading="loading">
-            <searchInfo @change="getSearchParam" :serviceType = 'serviceType'></searchInfo>
+    <div class="identicalStyle clearfix Manage_400" v-loading="loading">
+            <searchInfo @change="getSearchParam"></searchInfo>
             <div class="classify_info">
-                <!-- <div class="btns_box">
-                    <el-button type="primary" plain @click="handleSearch('cancel')" size="mini">取消订单</el-button>
+                <div class="btns_box">
                     <el-button type="primary" plain @click="handleSearch('export')" size="mini">导出Exce</el-button>
-                </div> -->
+                </div>
                 <div class="info_news">
                     <el-table
                         ref="multipleTable"
@@ -18,117 +17,104 @@
                         tooltip-effect="dark"
                         @row-click="clickDetails"
                         style="width: 100%"> 
-                        <el-table-column
-                            label="选择"
-                            type="selection"
-                            width="50">
-                        </el-table-column>
                         <el-table-column label="序号" sortable  width="80">
                             <template slot-scope="scope">
                             {{ (page - 1)*pagesize + scope.$index + 1 }}
                             </template>
-                        </el-table-column> 
+                        </el-table-column>  
                         <el-table-column
-                            label="工单编号"
-                            width="250" sortable>
+                            prop="orderSerial"
+                            label="主叫号码"
+                            width="150"
+                            sortable
+                            >
                                 <template  slot-scope="scope">
                                     {{ scope.row.workSerial}}
                                 </template>
                         </el-table-column>
                         <el-table-column
                             prop="complainTypeName"
-                            label="提交类型"
+                            label="用户类型"
                             width="120"
                             sortable
                             >
                         </el-table-column>
                         <el-table-column
                             prop="orderSerial"
-                            label="运单号"
-                            width="250"
-                            sortable
-                            >
-                        </el-table-column>
-                        <el-table-column
-                            prop="title"
-                            :show-overflow-tooltip="true"
-                            label="提交主题"
-                            width="150"
+                            label="联系人"
+                            width="160"
                             sortable
                             >
                         </el-table-column>
                         <el-table-column
                             :show-overflow-tooltip="true"
                             prop="complainDes"
-                            label="提交内容"
-                            width="300"
+                            label="被叫号码"
+                            width="160"
                             sortable
                             >
                         </el-table-column>
                         <el-table-column
                             prop="complainTime"
-                            label="提交时间"
+                            label="开始时间"
                             width="160"
                             sortable
                             >
                         </el-table-column>
                          <el-table-column
                             prop="complainName"
-                            label="提交人"
-                            width="120"
+                            label="结束时间"
+                            width="160"
                             sortable
                             >
                         </el-table-column> 
                         <el-table-column
-                            prop="phone"
-                            label="联系电话"
-                            width="150"
-                            sortable
-                            >
-                        </el-table-column>
-                         <el-table-column
-                         prop="email"
-                            label="电子邮箱"
-                            width="200"
-                            sortable
-                            >
-                        </el-table-column>
-                        <el-table-column
                             prop="complainStatusName"
-                            label="处理状态"
-                            width="100"
-                            sortable
-                            >
-                                <!-- <template  slot-scope="scope">
-                                    <span :class="{reMark:scope.row.complainStatusName == '待处理',sussces:scope.row.complainStatusName == '已处理'}">{{ scope.row.complainStatusName}}</span>
-                                </template> -->
-                        </el-table-column>
-                        <el-table-column
-                            prop="platformTime"
-                            label="处理时间"
-                            width="160"
-                            sortable
-                            >
-                        </el-table-column>
-                        <el-table-column
-                        prop="replyName"
-                            label="处理人"
+                            label="类型"
                             width="120"
                             sortable
                             >
                         </el-table-column>
                         <el-table-column
-                            :show-overflow-tooltip="true"
-                            label="回复内容"
-                            width="300"
+                            label="客户号码归属地"
+                            width="200"
                             sortable
                             >
                             <template  slot-scope="scope">
-                                {{scope.row.reply}}
+                               {{scope.row.platformTime ? scope.row.platformTime : '无'}}
                             </template>
-                        </el-table-column><el-table-column
+                        </el-table-column>
+                        <el-table-column
+                            label="满意度"
+                            width="120"
+                            sortable
+                            >
+                            <template  slot-scope="scope">
+                               {{scope.row.replyName ? scope.row.replyName : '无'}}
+                            </template>
+                        </el-table-column>
+                        <el-table-column
+                            label="通话时长"
+                            width="120"
+                            sortable
+                            >
+                            <template  slot-scope="scope">
+                                {{scope.row.reply ? scope.row.reply : '无'}}
+                            </template>
+                        </el-table-column>
+                        <el-table-column
+                            :show-overflow-tooltip="true"
+                            label="跟进内容"
+                            width="160"
+                            sortable
+                            >
+                            <template  slot-scope="scope">
+                                {{scope.row.reply ? scope.row.reply : '无'}}
+                            </template>
+                        </el-table-column>
+                        <el-table-column
                             label="操作"
-                            width="200"
+                            width="120"
                             sortable
                             >
                             <template  slot-scope="scope">
@@ -142,34 +128,26 @@
                 </div>
             </div>
                 <!-- 页码 -->
-            <div class="info_tab_footer">共计:{{ dataTotal }} <div class="show_pager"> <Pager :total="dataTotal" @change="handlePageChange"  :sizes="sizes"/></div> </div> 
-
-            <Reply :dialogVisible.sync="dialogVisible" :currentRow = "currentRow"   @close = "shuaxin"/>
+            <div class="info_tab_footer">共计:{{ dataTotal }} <div class="show_pager"> <Pager :total="dataTotal" @change="handlePageChange"/></div> </div>    
     </div>
 </template>
 
 <script type="text/javascript">
 
-import { getListPlatformComplain,deletReply } from '@/api/service/index.js'
+import { getListCouseComplain } from '@/api/service/index.js'
 import { parseTime } from '@/utils/index.js'
 import Pager from '@/components/Pagination/index'
-import searchInfo from '../components/searchInfo'
-import Reply from './replyComponent'
+import searchInfo from './searchInfo'
+
     export default{
         components:{
             Pager,
-            // Details,
             searchInfo,
-            Reply
-            // cancelCompnent,
         },
         data(){
             return{
-                btnsize:'mini',
-                currentRow:{},
-                serviceType:'plant',
-                loading: true,//加载
-                sizes:[20,50,100],
+                serviceType:'couse',
+                loading: false,//加载
                 pagesize:20,//初始化加载数量
                 page:1,//初始化页码
                 dataTotal:0,
@@ -178,10 +156,9 @@ import Reply from './replyComponent'
                     workSerial:'',//工单号                    
                 },
                 tableData:[],
-                parseTimeFunction:null,
                 dialogFormVisible_details:false,//详情弹窗
                 DetailsOrderSerial:'',
-                dialogVisible:false,//回复弹窗
+                dialogVisible:false,//取消订单弹框
                 checkedinformation:[],//选中数据
             }
         },
@@ -192,7 +169,7 @@ import Reply from './replyComponent'
 
         },
         mounted(){
-            this.firstblood();
+            // this.firstblood();
         },  
         beforeDestroy(){
             // clearInterval(this.timeOut);
@@ -206,7 +183,7 @@ import Reply from './replyComponent'
             //刷新页面  
             firstblood(){
                 this.loading = true;
-                getListPlatformComplain(this.page,this.pagesize,this.searchInfo).then(res => {
+                getListCouseComplain(this.page,this.pagesize,this.searchInfo).then(res => {
                     console.log('是否刷新',res.data)
                     this.tableData = res.data.list;
                     this.dataTotal = res.data.totalCount;
@@ -214,39 +191,14 @@ import Reply from './replyComponent'
                 })
             },
             //模糊查询 分类名称或者code
-            handleSearch(row,type){
-               
+            handleSearch(type){
+                // console.log(this.chooseTime)
                 switch(type){
                     case 'cancel':
 
                         break;
                     case 'export':
                         
-                }
-            },
-            handleClick(row,type){
-                console.log(row)
-                switch(type){
-                    case 'reply':
-                        this.currentRow = Object.assign({},row)
-                        this.dialogVisible = true;
-                        break;
-                    case 'delet':
-                        this.$confirm('确定要删除工单号为'+ row.workSerial +'改条记录吗？', '提示', {
-                            confirmButtonText: '确定',
-                            cancelButtonText: '取消',
-                            type: 'warning'
-                        }).then(()=>{
-                            deletReply(row.id).then(res => {
-                                this.firstblood();
-                            })
-                        }).catch(() => {
-                            this.$message({
-                                type: 'info',
-                                message: '已取消'
-                            })
-                        })
-                        break;
                 }
             },
              //判断是否选中
@@ -271,25 +223,35 @@ import Reply from './replyComponent'
             },
             shuaxin(){
                 this.firstblood();
+            },
+            handleClick(){
+
             }
         }
     }
 </script>
 
 <style type="text/css" lang="scss" scoped>
-    .plantService{
+    .Manage_400{
         height: 100%;
-        .reMark{
-            padding: 5px 15px;
-            border-radius: 20%  / 50%;
-            background: #eca438;
-            color: #fff;
-        }
-        .sussces{
-            padding: 5px 15px;
-            border-radius: 20%  / 50%;
-            background: skyblue;
-            color: #fff;
-        }
+        // .info_news{
+        //     .el-table .cell {
+        //         white-space: inherit;
+        //         overflow: hidden;
+        //         text-overflow: ellipsis;
+        //     }
+        //     .reMark{
+        //         padding: 5px 15px;
+        //         border-radius: 20%  / 50%;
+        //         background: #eca438;
+        //         color: #fff;
+        //     }
+        //     .sussces{
+        //         padding: 5px 15px;
+        //         border-radius: 20%  / 50%;
+        //         background: skyblue;
+        //         color: #fff;
+        //     }
+        // }
     }
 </style>

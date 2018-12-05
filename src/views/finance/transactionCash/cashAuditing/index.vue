@@ -1,14 +1,14 @@
 <template>
   <div class="tabsWrap clearfix">
-    <el-tabs v-model="shipperName" type="card"  @tab-click='tabClik'>
+    <el-tabs v-model="cashAuditingName" type="card"  @tab-click='handleClick'>
         <!-- 全部提现 -->
             <el-tab-pane label="全部提现" name="first">
-                <cashAuditing ref="cashAuditing1"></cashAuditing>
+                <cashAuditing ></cashAuditing>
             </el-tab-pane>
 
         <!-- 待处理/审核中 -->
-            <el-tab-pane :label='labelTab' name="second" ref="second">
-                <cashAuditingStatus ref="cashAuditing2"></cashAuditingStatus>
+            <el-tab-pane label='待处理' name="second">
+                <cashAuditingStatus ></cashAuditingStatus>
             </el-tab-pane>
     </el-tabs>
   </div>
@@ -20,39 +20,40 @@ import cashAuditingStatus from './cashAuditingStatus.vue'
 export default {
     data(){
         return{
-            shipperName:'first',
-            labelTab:'待处理'
+            cashAuditingName:'first',
         }
     },
     components:{
             cashAuditing,
             cashAuditingStatus,
     },
-    watch:{
-     shipperName(newVal,oldVal){
-        if(newVal){
-            this.shipperName = newVal;
-          }else{
-        this.shipperName = oldVal;
+    watch: {
+        cashAuditingName(newVal, oldVal) {
+          if (newVal) {
+            this.cashAuditingName = newVal
+          } else {
+            this.cashAuditingName = oldVal
           }
         }
-        },
+      },
+      created() {
+        this.cashAuditingName = sessionStorage.getItem('cashAuditingName') || 'first'
+
+      },
+
+      beforeUpdate() {
+        sessionStorage.setItem('cashAuditingName', this.cashAuditingName)
+      },
+
+      beforeDestroy() {
+        sessionStorage.setItem('cashAuditingName', 'first')
+      },
      methods: {
      handleClick(tab, event) {
-      this.shipperName = tab.name;
+      this.cashAuditingName = tab.name;
        },
-     tabClik(i){
-         
-        if(i.name=='second'){
-        this.$refs.cashAuditing1.getDataList()
-        this.labelTab = '审核中'
-        }
-        else{
-        this.$refs.cashAuditing2.getDataList()
-        this.labelTab = '处理中'
-        }            
-     },
      }
+     
 }
 </script>
 <style lang="scss" >

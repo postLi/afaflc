@@ -91,11 +91,15 @@
                     color: #ffffff;
                     margin-bottom: 40px;
                     p{
-                        cursor: pointer;
                         // margin-right: 35px;
                         span:first-child{
                             color: #00ccff;
                         }
+                    }
+                }
+                li + li{
+                    p{
+                        cursor: pointer;
                     }
                 }
                 li:last-child{
@@ -219,7 +223,7 @@
                     color: #ffffff;
                     margin-bottom: 40px;
                     p{
-                        cursor: pointer;
+                        // cursor: pointer;
                         // margin-right: 35px;
                         span:first-child{
                             color: #00ccff;

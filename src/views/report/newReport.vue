@@ -36,8 +36,8 @@
                    </li>
                    <li>
                        <span>待处理数</span>
-                       <p class="fr">
-                            <span>{{pendingExtractCashCount.count ? pendingExtractCashCount.count : 0}}</span><span> >> </span>
+                       <p class="fr" @click="junpRoute">
+                            <span >{{pendingExtractCashCount.count ? pendingExtractCashCount.count : 0}}</span><span> >> </span>
                        </p>
                    </li>
                 </ul>
@@ -150,6 +150,10 @@ export default {
             tradeOrderPaymentDetail(this.tradeOrderPaymentDetailTime).then(res => {
                 this.tradeOrderPaymentDetailObj = res.data;
             })
+        },
+        junpRoute(){
+            this.$router.push({ name: '提现审核' });
+            sessionStorage.setItem('cashAuditingName', 'second')
         },
         valueChange(val,type){
             // console.log('val,type',val,type)
