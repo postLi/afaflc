@@ -36,7 +36,7 @@ export function DicClaimStatusType() {
 }
 // 处理状态
 export function DicDelStatusType() {
-  return fetch.get('/' + baseurl_two + '/sysDict/getSysDictByCodeGet/AF048')
+  return fetch.get('/' + baseurl_two + '/sysDict/getSysDictByCodeGet/AF040')
 }
   //  数据字典获取移入黑名单原因列表
 export function DicBlackType() {
@@ -73,19 +73,19 @@ export function DicShippertype() {
 // 获取车辆规格 加宽  加长等
 export function DicCarType() {
   return fetch({
-      url: '/' + baseurl_two + '/sysDict/getSysDictByCodeGet/AF009',
-      method: 'get'
-    })
+    url: '/' + baseurl_two + '/sysDict/getSysDictByCodeGet/AF009',
+    method: 'get'
+  })
 }
 
 // 获取货主优惠等级
 export function DicShipperLevel() {
-    return fetch({
-        url: '/' + baseurl_two + '/sysDict/getSysDictByCodeGet/AF00208',
-        method: 'get'
-      })
-  }
-  
+  return fetch({
+      url: '/' + baseurl_two + '/sysDict/getSysDictByCodeGet/AF00208',
+      method: 'get'
+    })
+}
+
 
 /**
  * 获取图片上传的policy
@@ -99,7 +99,7 @@ export function DicShipperLevel() {
         "expire": "1527005100"
     }
  */
-//let UPLOADPOLICYDATA // 用来缓存上传policy
+// let UPLOADPOLICYDATA // 用来缓存上传policy
 // export function getUploadPolicy() {
 //   // 后期可添加是否过期的验证
 //   if (UPLOADPOLICYDATA) {
@@ -215,8 +215,8 @@ export function aflcProvinceCode() {
 }
 
 // 根据cityId获取开放城市服务区域定价
-  export function aflcCityCheckout(cityId) {
+export function aflcCityCheckout(cityId) {
     return fetch.get('/aflcsmservice/sm/aflcAreaPrice/v1/open/' + cityId)
   }
-  
+
 
