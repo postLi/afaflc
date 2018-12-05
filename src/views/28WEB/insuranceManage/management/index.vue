@@ -1,30 +1,48 @@
 <template>
-  <div class="tabsWrap clearfix">
-    <el-tabs v-model="shipperName" type="card" @tab-click='tabClik' lazy=true>
-      <el-tab-pane label='全部投保单(8)' name="first" ref="first" >
-          <all ref="all" :tabsNameFn="tabsNameFn" :isvisible="shipperName === 'all'"></all>
-      </el-tab-pane>
-      <el-tab-pane label='待支付投保单(8)' name="second" ref="second">
-          <payFor ref="payFor" :tabsNameFn="tabsNameFn" :isvisible="shipperName === 'payFor'"></payFor>
-      </el-tab-pane>
-      <el-tab-pane label='已支付投保单(8)' name="three" ref="three">
-          <isPayfor ref="isPayfor" :tabsNameFn="tabsNameFn" :isvisible="shipperName === 'isPayfor'"></isPayfor>
-      </el-tab-pane>
-    </el-tabs>
+  <div class="insurance-lll">
+    <div class="inul">
+      <ul>
+        <li v-for="(tab,index) in tabs" @click="toggle(index,tab.view)" :class="{active:active==index}">
+          {{tab.label+'('+tab.num+')'}}
+        </li>
+      </ul>
+    </div>
+    <!--:is实现多个组件实现同一个挂载点-->
+    <component :is="currentView" :listtype="currentView"></component>
   </div>
 </template>
 
 <script>
-  // import cashAuditing from './cashAuditing.vue'
   import all from './administration'
   import payFor from './administration'
   import isPayfor from './administration'
+  import * as apiInst from '@/api/web/insurance'
   // import cashAuditingStatus from './cashAuditingStatus.vue'
   export default {
     data() {
       return {
-        tabsNameFn: 'first',
-        shipperName: 'first',
+        active: 0,
+        currentView: 'all',
+        tabs: [
+          {
+            label: '全部投保单',
+            num: '0',
+            type: 'all',
+            view: 'all'
+          },
+          {
+            label: '待支付投保单',
+            num: '0',
+            type: 'payFor',
+            view: 'payFor'
+          },
+          {
+            label: '已支付投保单',
+            num: '0',
+            type: 'isPayfor',
+            view: 'isPayfor'
+          }
+        ]
       }
     },
     components: {
@@ -32,43 +50,73 @@
       payFor,
       isPayfor,
     },
-    watch: {
-      shipperName(newVal, oldVal) {
-        if (newVal) {
-          this.shipperName = newVal;
-        } else {
-          this.shipperName = oldVal;
-        }
-      }
-    },
+    watch: {},
     mounted() {
-      console.log(this.$refs.first);
-      if(this.$refs.first.$children[0].tabsNameFn === 'first'){
-        this.tabsNameFn = 'first'
-        console.log(this.$refs.first.$children[0].tabsNameFn === 'first','this.$refs.first.$children[0].tabsNameFn===\'first\'');
-      }
+      this.eventBus.$on('updateListCount', () => {
+        // this.getCount()
+      })
     },
+    created() {
+      this.getCount()
+    },
+
     methods: {
-      handleClick(tab, event) {
-        this.shipperName = tab.name;
+      toggle(i, v) {
+        this.active = i;
+        this.currentView = v;
       },
-      tabClik(i,e) {
+      getCount() {
+        apiInst.postInsuranceNum().then(data => {
+          this.tabs[0].num = data.data.totalCount > 99 ? '99+' : data.data.totalCount
+          this.tabs[1].num = data.data.notPaymentCount > 99 ? '99+' : data.data.notPaymentCount
+          this.tabs[2].num = data.data.paymentCount > 99 ? '99+' : data.data.paymentCount
 
-        // console.log(i,'iiiiiiiii')
-        // if (i.name === 'first') {
-        //   this.tabsNameFn = 'first'
-        // }
-        // if (i.name === 'second') {
-        //   this.tabsNameFn = 'second'
-        // }
-        // if (i.name === 'three') {
-        //   this.tabsNameFn = 'three'
-        // }
-
-      },
+        })
+      }
     }
   }
 </script>
 <style lang="scss">
+  .insurance-lll {
+    padding-top: 12px;
+    .inul {
+      display: flex;
+      border-bottom: 1px solid #03a9f4;
+      padding-left: 10px;
+      ul {
+        overflow: hidden;
+        margin-bottom: -1px;
+        position: relative;
+
+      }
+      ul li {
+        padding: 0 20px;
+        height: 40px;
+        -webkit-box-sizing: border-box;
+        box-sizing: border-box;
+        line-height: 40px;
+        display: inline-block;
+        list-style: none;
+        font-size: 14px;
+        font-weight: 500;
+        color: #303133;
+        position: relative;
+        border: 1px solid #d2d2d2;
+        border-top-width: 2px;
+        border-radius: 4px 4px 0px 0px;
+        border-bottom: 0 none;
+        height: 30px;
+        line-height: 30px;
+      }
+      ul li.active {
+        font-weight: bold;
+        border-color: #03a9f4;
+        background: #ffffff;
+        border-bottom-color: #ffffff;
+        color: #409EFF;
+      }
+    }
+
+  }
 </style>
 
