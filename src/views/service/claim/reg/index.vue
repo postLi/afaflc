@@ -28,6 +28,7 @@
         <el-form-item label="车主">
           <el-input v-model="formAllData.driverName" :maxlength="20" placeholder="账户/姓名/车号牌" auto-complete="off" clearable></el-input>
         </el-form-item>
+       
         <el-form-item label="订单号">
           <el-input v-model="formAllData.orderSerial" :maxlength="20" auto-complete="off" clearable></el-input>
         </el-form-item>
@@ -243,8 +244,8 @@ export default {
       defaultTime: [parseTime(+new Date() - 60 * 24 * 60 * 60 * 1000, '{y}-{m}-{d}'), parseTime(new Date(), '{y}-{m}-{d}')],
       formAllData: {
         orderSerial: '',
-        startTime: '',
-        endTime: '',
+        startOrderDate: '',
+        endOrderDate: '',
         shipperName: '',
         driverName: ''
       },
@@ -289,11 +290,11 @@ export default {
       switch (type) {
         case 'search':
           if (this.searchCreatTime) {
-            this.formAllData.startTime = this.searchCreatTime ? parseTime(this.searchCreatTime[0], '{y}-{m}-{d}') + ' 00:00:00' : null
-            this.formAllData.endTime = this.searchCreatTime ? parseTime(this.searchCreatTime[1], '{y}-{m}-{d}') + ' 23:59:59' : null
+            this.formAllData.startOrderDate = this.searchCreatTime ? parseTime(this.searchCreatTime[0], '{y}-{m}-{d}') + ' 00:00:00' : null
+            this.formAllData.endOrderDate = this.searchCreatTime ? parseTime(this.searchCreatTime[1], '{y}-{m}-{d}') + ' 23:59:59' : null
           } else {
-            this.formAllData.startTime = null
-            this.formAllData.endTime = null
+            this.formAllData.startOrderDate = null
+            this.formAllData.endOrderDate = null
           }
           this.firstblood()
           break

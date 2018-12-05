@@ -259,8 +259,8 @@ export default {
         value: '物流专线列表',
         label: '物流专线列表'
       }, {
-        value: '右侧专线列表',
-        label: '右侧专线列表'
+        value: '右侧专线推荐',
+        label: '右侧专线推荐'
       }, {
         value: '此路线其他专线',
         label: '此路线其他专线'

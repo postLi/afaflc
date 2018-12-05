@@ -378,13 +378,57 @@ export default {
         }
     },
     mounted() {
-            this.firstblood()
             this.getMoreInformation()
         },
     methods:{
         firstblood(){
-        aflcAssessmentSettings_list(1, 10, this.cityCode).then(res => {
-        console.log('1',res);
+        aflcAssessmentSettings_list(1, 100, {citycode:this.cityCode}).then(res => {
+        this.formdata.assessWeightPoint1 = res.data.list[0].assessWeightPoint;this.formdata.assessWeightPoint2 = res.data.list[4].assessWeightPoint;this.formdata.assessWeightPoint3 = res.data.list[7].assessWeightPoint
+        this.formdata.assessWeightPoint4 = res.data.list[10].assessWeightPoint;this.formdata.assessWeightPoint5 = res.data.list[13].assessWeightPoint;this.formdata.assessWeightPoint6 = res.data.list[16].assessWeightPoint
+        this.formdata.assessWeightPoint7 = res.data.list[19].assessWeightPoint;this.formdata.assessWeightPoint8 = res.data.list[22].assessWeightPoint;this.formdata.assessWeightPoint9 = res.data.list[25].assessWeightPoint
+        console.log('212',res)
+        // for(let lists = 0;lists<res.data.list.length;lists++)
+        // {
+        // let Listmath = Math.round(lists / 3)
+        // let reminder = lists % 3
+        
+        // if(reminder==0){
+        // this.formdata['evaluaInterval'+(Listmath*4+1)] =  res.data.list[lists].evaluaIntervalEnd; this.formdata['score'+(lists+1)] = res.data.list[lists].score
+        // }
+        // else if(reminder==1){
+        // this.formdata['evaluaInterval'+(Listmath*4+2)] =  res.data.list[lists].evaluaIntervalStart;this.formdata['evaluaInterval'+(Listmath*4+2)] =  res.data.list[lists].evaluaIntervalEnd; this.formdata['score'+(lists+1)] = res.data.list[lists].score
+        // }
+        // else if(reminder==2){
+        // this.formdata['evaluaInterval'+((Listmath+1)*4)] =  res.data.list[lists].evaluaIntervalStart; this.formdata['score'+(lists+1)] = res.data.list[lists].score
+        // }
+        this.formdata.evaluaInterval1 = res.data.list[0].evaluaIntervalEnd;this.formdata.score1 = res.data.list[0].score;
+        this.formdata.evaluaInterval2 = res.data.list[1].evaluaIntervalStart;this.formdata.evaluaInterval3 = res.data.list[1].evaluaIntervalEnd;this.formdata.score2 = res.data.list[1].score;
+        this.formdata.evaluaInterval4 = res.data.list[2].evaluaIntervalStart;this.formdata.score3 = res.data.list[2].score;
+        this.formdata.evaluaInterval5 = res.data.list[3].evaluaIntervalEnd;this.formdata.score4 = res.data.list[3].score;
+        this.formdata.evaluaInterval6 = res.data.list[4].evaluaIntervalStart;this.formdata.evaluaInterval7 = res.data.list[4].evaluaIntervalEnd;this.formdata.score5 = res.data.list[4].score;
+        this.formdata.evaluaInterval8 = res.data.list[5].evaluaIntervalStart;this.formdata.score6 = res.data.list[5].score;
+        this.formdata.evaluaInterval9 = res.data.list[6].evaluaIntervalEnd;this.formdata.score7 = res.data.list[6].score;
+        this.formdata.evaluaInterval10 = res.data.list[7].evaluaIntervalStart;this.formdata.evaluaInterval11 = res.data.list[7].evaluaIntervalEnd;this.formdata.score8 = res.data.list[7].score;
+        this.formdata.evaluaInterval12 = res.data.list[8].evaluaIntervalStart;this.formdata.score9 = res.data.list[8].score;
+        this.formdata.evaluaInterval13 = res.data.list[9].evaluaIntervalEnd;this.formdata.score10 = res.data.list[9].score;
+        this.formdata.evaluaInterval14 = res.data.list[10].evaluaIntervalStart;this.formdata.evaluaInterval15 = res.data.list[10].evaluaIntervalEnd;this.formdata.score11 = res.data.list[10].score;
+        this.formdata.evaluaInterval16 = res.data.list[11].evaluaIntervalStart;this.formdata.score12 = res.data.list[11].score;
+        this.formdata.evaluaInterval17 = res.data.list[12].evaluaIntervalEnd;this.formdata.score13 = res.data.list[12].score;
+        this.formdata.evaluaInterval18 = res.data.list[13].evaluaIntervalStart;this.formdata.evaluaInterval19 = res.data.list[13].evaluaIntervalEnd;this.formdata.score14 = res.data.list[13].score;
+        this.formdata.evaluaInterval20 = res.data.list[14].evaluaIntervalStart;this.formdata.score15 = res.data.list[14].score;
+        this.formdata.evaluaInterval21 = res.data.list[15].evaluaIntervalEnd;this.formdata.score16 = res.data.list[15].score;
+        this.formdata.evaluaInterval22 = res.data.list[16].evaluaIntervalStart;this.formdata.evaluaInterval23 = res.data.list[16].evaluaIntervalEnd;this.formdata.score17 = res.data.list[16].score;
+        this.formdata.evaluaInterval24 = res.data.list[17].evaluaIntervalStart;this.formdata.score18 = res.data.list[17].score;
+        this.formdata.evaluaInterval25 = res.data.list[18].evaluaIntervalEnd;this.formdata.score19 = res.data.list[18].score;
+        this.formdata.evaluaInterval26 = res.data.list[19].evaluaIntervalStart;this.formdata.evaluaInterval27 = res.data.list[19].evaluaIntervalEnd;this.formdata.score20 = res.data.list[19].score;
+        this.formdata.evaluaInterval28 = res.data.list[20].evaluaIntervalStart;this.formdata.score21 = res.data.list[20].score;
+        this.formdata.evaluaInterval29 = res.data.list[21].evaluaIntervalEnd;this.formdata.score22 = res.data.list[21].score;
+        this.formdata.evaluaInterval30 = res.data.list[22].evaluaIntervalStart;this.formdata.evaluaInterval31 = res.data.list[22].evaluaIntervalEnd;this.formdata.score23 = res.data.list[22].score;
+        this.formdata.evaluaInterval32 = res.data.list[23].evaluaIntervalStart;this.formdata.score24 = res.data.list[23].score;     
+        this.formdata.evaluaInterval33 = res.data.list[24].evaluaIntervalEnd;this.formdata.score25 = res.data.list[24].score;
+        this.formdata.evaluaInterval34 = res.data.list[25].evaluaIntervalStart;this.formdata.evaluaInterval35 = res.data.list[25].evaluaIntervalEnd;this.formdata.score26 = res.data.list[25].score;
+        this.formdata.evaluaInterval36 = res.data.list[26].evaluaIntervalStart;this.formdata.score27 = res.data.list[26].score;              
+        // }
         })
         },
         getMoreInformation(){
@@ -394,6 +438,7 @@ export default {
         },
         nodeClick(data){
         this.cityCode = data.code
+        this.firstblood();
         },
         inputChange(i){
         let ii = i%4;

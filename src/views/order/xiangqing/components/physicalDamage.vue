@@ -263,16 +263,16 @@ export default {
     getListSmall() {
       // const orderSerial = this.$route.query.orderSerial
       console.log(this.rowid)
-      if(this.rowid){
-          getGoodsfollowupAll(this.rowid).then(res => {
+      if (this.rowid) {
+        getGoodsfollowupAll(this.rowid).then(res => {
             // console.log(res.data)
-            this.tableData1 = res.data
-            this.tableData1.forEach((e, index) => {
-              let arr = []
-              let imgArr = []
-              let txtArr = []
-              arr = e.fileAddress.split(',')
-              arr.forEach((el, elindex) => {
+          this.tableData1 = res.data
+          this.tableData1.forEach((e, index) => {
+            let arr = []
+            let imgArr = []
+            let txtArr = []
+            arr = e.fileAddress.split(',')
+            arr.forEach((el, elindex) => {
                 const name = el.lastIndexOf('/')
                 let nameExtension = ''
                 if (name > -1) {
@@ -297,14 +297,14 @@ export default {
                   })
                 }
               })
-              this.$set(e, 'txtArr', txtArr)
-              this.$set(e, 'imgArr', imgArr)
-              arr = []
-              imgArr = []
-              txtArr = []
-            })
-            console.log('tableData1----------', this.tableData1)
+            this.$set(e, 'txtArr', txtArr)
+            this.$set(e, 'imgArr', imgArr)
+            arr = []
+            imgArr = []
+            txtArr = []
           })
+          console.log('tableData1----------', this.tableData1)
+        })
       }
     },
     handlePageChange(obj) {
