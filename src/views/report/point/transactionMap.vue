@@ -163,7 +163,7 @@ export default {
                 let geoCoord = this.geoCoordMap[data[i].area];
                 // console.log('geoCoord',geoCoord)
                 if (geoCoord) {
-                res.push(geoCoord.concat(data[i].payTotal));
+                    res.push(geoCoord.concat(data[i].payTotal));
                 }
             }
             // console.log('resres',res)

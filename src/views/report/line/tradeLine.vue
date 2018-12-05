@@ -38,12 +38,25 @@ export default {
         init(){
             this.OrderPayment();
         },
+        checkData(arr){ 
+            let result = [];
+            for(var i = 0;i< this.xAxisArr.length;i++){
+                
+            };
+            this.xAxisArr.forEach(el => {
+                arr.some(item=> {
+                    result.push( el == item.createTime ? item.payTotal : 0)
+                })
+            })
+            console.log('result',result)
+            return result
+        },
         //交易变化曲线图
         OrderPayment(){
             dateOrderPayment(this.dateOrderPaymentTime).then(res => {
                 // console.log('dateOrderPayment',res.data)
                 this.dateOrderPaymentObj = res.data;
-                
+                this.checkData(this.dateOrderPaymentObj.smallCar)
                 this.lineCharts(this.xAxisArr)
             })
         },

@@ -92,7 +92,7 @@
                   :show-overflow-tooltip="true"
                   width="300">
                   <template slot-scope="scope">
-                    {{scope.row.reporterPhone? scope.row.reporterPhone + '-' : ''}}{{scope.row.reporter ? scope.row.reporter : ''}}
+                    {{scope.row.reporter? scope.row.reporter + '-' : ''}}{{scope.row.reporterPhone ? scope.row.reporterPhone : ''}}
                   </template>
                 </el-table-column>
                 <el-table-column
