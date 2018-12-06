@@ -48,10 +48,10 @@
           <el-checkbox v-model="formAllData.settopStatus">置顶</el-checkbox>
         </el-form-item>
         <el-form-item label="推荐费" prop="recommendFee">
-          <el-input v-model.trim="formAllData.recommendFee" v-number-only:point :maxlength="20" placeholder="请输入推荐费" auto-complete="off" clearable></el-input>
+          <el-input v-number-only:point v-model.trim="formAllData.recommendFee" :maxlength="6" placeholder="请输入推荐费" auto-complete="off" clearable></el-input>
         </el-form-item>
         <el-form-item class="goodsclaimDes" label="备注" prop="claimDes">
-          <el-input v-model.trim="formAllData.remarks" type="textarea" :maxlength="200" style="width:100%" placeholder="请输入备注信息"></el-input>
+          <el-input v-model.trim="formAllData.remarks" type="textarea" :maxlength="100" style="width:100%" placeholder="请输入备注信息"></el-input>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -68,6 +68,7 @@ import Pager from '@/components/Pagination/index'
 import Upload from '@/components/Upload/multImage'
 import { postAmend } from '@/api/web/recommend.js'
 import { objectMerge2 } from '@/utils/index'
+import { REGEX } from '@/utils/validate'
 export default {
   computed: {
     isShow: {
@@ -159,8 +160,8 @@ export default {
         recommendPosition: [
            { required: true, message: '请选择推荐位置' }
         ],
-        claimPic1: [
-          { required: true, message: '至少上传一张图片' }
+        recommendFee: [
+          {pattern: REGEX.ONLY_NUMBER_POINT, required: true, message: '请输入推荐费,限制1位小数' }
         ]
       },
       formAllData: {
