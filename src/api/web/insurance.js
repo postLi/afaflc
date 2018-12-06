@@ -16,15 +16,12 @@ export function postInsuranceList(page, pagesize, data) {
     }
   })
 }
-// /usercenter/aflcinsurancepolicy/v1/{id}
-// 根据ID查询保险单信息
 export function getInsuranceDetail(id) {
   return fetch({
     url: '/' + baseUrl + '/usercenter/aflcinsurancepolicy/v1/' + id,
     method: 'get'
   })
 }
-//http://{{ip}}:7010/aflc-uc/usercenter/aflcinsurancepolicy/v1/getCountByPaymentState?access_token={{access_token
 export function postInsuranceNum() {
   return fetch({
     url: '/' + baseUrl + '/usercenter/aflcinsurancepolicy/v1/getCountByPaymentState/',

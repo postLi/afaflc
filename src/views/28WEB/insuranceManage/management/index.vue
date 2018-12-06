@@ -7,7 +7,6 @@
         </li>
       </ul>
     </div>
-    <!--:is实现多个组件实现同一个挂载点-->
     <component :is="currentView" :listtype="currentView"></component>
   </div>
 </template>
@@ -17,7 +16,6 @@
   import payFor from './administration'
   import isPayfor from './administration'
   import * as apiInst from '@/api/web/insurance'
-  // import cashAuditingStatus from './cashAuditingStatus.vue'
   export default {
     data() {
       return {
@@ -66,7 +64,7 @@
         this.currentView = v;
       },
       getCount() {
-        apiInst.postInsuranceNum().then(data => {
+        apiInst.postInsuranceNum().then((data,index) => {
           this.tabs[0].num = data.data.totalCount > 99 ? '99+' : data.data.totalCount
           this.tabs[1].num = data.data.notPaymentCount > 99 ? '99+' : data.data.notPaymentCount
           this.tabs[2].num = data.data.paymentCount > 99 ? '99+' : data.data.paymentCount

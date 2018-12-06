@@ -1,7 +1,6 @@
 <template>
   <div class="identicalStyle " style="height:100%" v-loading="loading">
     <el-form :inline="true" class="demo-ruleForm classify_searchinfo">
-      <!--<template v-if='/(all)/.test(listtype)===true'>-->
       <el-form-item label="投保">
         <el-input v-model="formAllData.insuranceName" placeholder="保险公司/产品名称/被保险人" class="lll-pl" clearable></el-input>
       </el-form-item>
@@ -111,7 +110,7 @@
         timeOutNoDriver: null,
         searchCreatTime: [],
         defaultTime: [parseTime(+new Date() - 60 * 24 * 60 * 60 * 1000, '{y}-{m}-{d}'), parseTime(new Date(), '{y}-{m}-{d}')],
-        tableDataAll: [{}, {}],
+        tableDataAll: [],
         btnsize: 'mini',
         ExtractTime: null,
         loading: false,
@@ -134,15 +133,11 @@
     },
     methods: {
       fetchList() {
+        this.loading = true
         postInsuranceList(this.page, this.pagesize, this.formAllData).then(data => {
           this.tableDataAll = data.data.list
-
           this.dataTotal = data.data.total
-          console.log(data, 'ddaada');
-          // this.loading = false
-        }).catch(err => {
-          this.$message.warning(err.text || err.errorInfo || '无法获取服务端数据~')
-          this.loading = true
+          this.loading = false
         })
       },
       fetchData() {
@@ -152,7 +147,7 @@
       viewDetail(row, type) {
         this.$router.push({
           path: '/28WEB/insuranceManage/management/detail', query: {
-            id:row.id
+            id: row.id
           }
         })
       },

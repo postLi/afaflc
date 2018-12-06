@@ -1,19 +1,19 @@
 <template>
-  <div class="detail-lll">
+  <div class="detail-lll" v-loading="loading">
     <div class="detail">
       <div class="classul">
         <ul>
           <li>
-            <span>平安国内货运险</span>
+            <span>{{form.insuranceName}}</span>
             <span>保险单</span>
-            <span>投保日期：2018-11-14 15:23:45</span>
+            <span>投保日期：{{form.createTime}}</span>
           </li>
           <br>
           <li>
-            <span>投保单号：AFBX2018111516175896</span>
-            <span>保险金额：<i style="color:red;font-style: normal">10.00</i> 元</span>
-            <span>已支付</span>
-            <span>支付时间：2018-11-16 15:26:59</span>
+            <span>投保单号：{{form.insuranceNum}}</span>
+            <span>保险金额：<i style="color:red;font-style: normal">{{form.insuranceFee}}</i> 元</span>
+            <span>{{form.paymentState===0?'待支付':'已支付'}}</span>
+            <span v-if="form.paymentState===1">支付时间：{{form.paymentTime}}</span>
           </li>
         </ul>
       </div>
@@ -27,9 +27,9 @@
           <th>证件号</th>
         </tr>
         <tr>
-          <td>个人</td>
-          <td>张远</td>
-          <td>430902199589522666</td>
+          <td>{{form.policyHolderType}}</td>
+          <td>{{form.policyHolderName}}</td>
+          <td>{{form.policyHolderNum}}</td>
         </tr>
       </table>
       <div class="title-class" style="margin-top: 15px;">
@@ -42,9 +42,9 @@
           <th>证件号</th>
         </tr>
         <tr>
-          <td>个人</td>
-          <td>张远</td>
-          <td>430902199589522666</td>
+          <td>{{form.theInsuredType}}</td>
+          <td>{{form.theInsuredName}}</td>
+          <td>{{form.theInsuredNum}}</td>
         </tr>
       </table>
       <div class="title-class" style="margin-top: 15px;">
@@ -53,24 +53,24 @@
       <table class="detail-botton">
         <tr>
           <th width="16%" style="background-color: rgb(249,249,249);text-align: right;font-weight: normal">货物类型</th>
-          <th style="font-weight: normal;text-align: left">工业类、纺织服装类</th>
+          <th style="font-weight: normal;text-align: left">{{form.goodsType}}</th>
           <!--<th>证件号</th>-->
         </tr>
         <tr>
           <td style="background-color: rgb(249,249,249);text-align: right">货物名称</td>
-          <td style="text-align: left">衣服</td>
+          <td style="text-align: left">{{form.goodsName}}</td>
         </tr>
         <tr>
           <td style="background-color: rgb(249,249,249);text-align: right">货物包装</td>
-          <td style="text-align: left">货物包装</td>
+          <td style="text-align: left">{{form.goodsPack}}</td>
         </tr>
         <tr>
-          <td style="background-color: rgb(249,249,249);text-align: right">货物包装</td>
-          <td style="text-align: left">1112</td>
+          <td style="background-color: rgb(249,249,249);text-align: right">货物数量</td>
+          <td style="text-align: left">{{form.goodsNumber}}</td>
         </tr>
         <tr>
           <td style="background-color: rgb(249,249,249);text-align: right">货物价值</td>
-          <td style="text-align: left">20000.00元</td>
+          <td style="text-align: left">{{form.goodsValue}}元</td>
         </tr>
       </table>
 
@@ -80,34 +80,29 @@
       <table class="detail-top">
         <tr>
           <th width="16%" style="background-color: rgb(249,249,249);text-align: right;font-weight: normal">起运地</th>
-          <th width="34%" style="background-color: white;text-align: left;font-weight: normal">工业类、纺织服装类</th>
+          <th width="34%" style="background-color: white;text-align: left;font-weight: normal">
+            {{form.startProvince+form.startCity}}
+          </th>
           <th width="16%" style="background-color: rgb(249,249,249);text-align: right;font-weight: normal">起运日期</th>
-          <th width="34%" style="background-color: white;text-align: left;font-weight: normal">2018-11-15</th>
+          <th width="34%" style="background-color: white;text-align: left;font-weight: normal">{{form.startTime}}</th>
         </tr>
         <tr>
           <td style="background-color: rgb(249,249,249);text-align: right">目的地</td>
-          <td style="background-color: white;text-align: left;font-weight: normal">衣服</td>
+          <td style="background-color: white;text-align: left;font-weight: normal">{{form.endProvince+form.endCity}}
+          </td>
           <td style="background-color: rgb(249,249,249);text-align: right">车牌号</td>
-          <td style="background-color: white;text-align: left;font-weight: normal">湘H15952</td>
+          <td style="background-color: white;text-align: left;font-weight: normal">{{form.carNum}}</td>
         </tr>
         <tr>
           <td style="background-color: rgb(249,249,249);text-align: right">中转地</td>
-          <td style="background-color: white;text-align: left;font-weight: normal"> 袋装</td>
+          <td style="background-color: white;text-align: left;font-weight: normal"> {{form.transferCitys}}</td>
           <td style="background-color: rgb(249,249,249);text-align: right">运单号</td>
-          <td style="background-color: white;text-align: left;font-weight: normal">AFBX2018111516175896</td>
+          <td style="background-color: white;text-align: left;font-weight: normal">{{form.orderNum}}</td>
         </tr>
       </table>
     </div>
   </div>
-  <!--<el-container>-->
-  <!--<el-main>-->
-  <!---->
-  <!--</el-main>-->
-  <!--</el-container>-->
-
-
 </template>
-
 <script>
   import * as apiInsu from '@/api/web/insurance'
 
@@ -115,23 +110,8 @@
     name: "detail",
     data() {
       return {
-        tableData: [{
-          date: '2016-05-02',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1518 弄'
-        }, {
-          date: '2016-05-04',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1517 弄'
-        }, {
-          date: '2016-05-01',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1519 弄'
-        }, {
-          date: '2016-05-03',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1516 弄'
-        }]
+        loading:false,
+        form: {}
       }
     },
     mounted() {
@@ -139,9 +119,38 @@
     },
     methods: {
       fetchDetail() {
+        this.loading = true
         apiInsu.getInsuranceDetail(this.$route.query.id).then(data => {
-          console.log(data, data)
+          this.comData(data.data)
+          this.loading = false
         })
+      },
+      comData(data) {
+        this.$set(this.form, 'insuranceName', data.insuranceName)
+        this.$set(this.form, 'createTime', data.createTime)
+        this.$set(this.form, 'insuranceNum', data.insuranceNum)
+        this.$set(this.form, 'insuranceFee', data.insuranceFee ? data.insuranceFee : '0.00')
+        this.$set(this.form, 'paymentState', data.paymentState)
+        this.$set(this.form, 'paymentTime', data.paymentTime)
+        this.$set(this.form, 'policyHolderType', data.policyHolderType === 0 ? '个人' : '团队')
+        this.$set(this.form, 'policyHolderName', data.policyHolderName)
+        this.$set(this.form, 'policyHolderNum', data.policyHolderNum)
+        this.$set(this.form, 'theInsuredType', data.theInsuredType === 0 ? '个人' : '团队')
+        this.$set(this.form, 'theInsuredName', data.theInsuredName)
+        this.$set(this.form, 'theInsuredNum', data.theInsuredNum)
+        this.$set(this.form, 'goodsType', data.goodsType)
+        this.$set(this.form, 'goodsName', data.goodsName)
+        this.$set(this.form, 'goodsPack', data.goodsPack)
+        this.$set(this.form, 'goodsNumber', data.goodsNumber)
+        this.$set(this.form, 'goodsValue', data.goodsValue ? data.goodsValue : '0.00')
+        this.$set(this.form, 'startProvince', data.startProvince)
+        this.$set(this.form, 'startCity', data.startCity)
+        this.$set(this.form, 'startTime', data.startTime)
+        this.$set(this.form, 'endProvince', data.endProvince)
+        this.$set(this.form, 'endCity', data.endCity)
+        this.$set(this.form, 'carNum', data.carNum)
+        this.$set(this.form, 'orderNum', data.orderNum)
+        this.$set(this.form, 'transferCitys', data.transferCitys ? data.transferCitys : '无')
       }
     }
   }
@@ -149,12 +158,10 @@
 
 <style lang="scss">
   .detail-lll {
-    /*background-color: green;*/
     height: 100%;
     padding: 10px;
     .detail {
       padding: 20px 50px 0px 50px;
-      /*background-color: red;*/
       padding-bottom: 0;
       display: -ms-flexbox;
       display: flex;
