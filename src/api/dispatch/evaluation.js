@@ -23,3 +23,16 @@ export function aflcAssessmentSettings_list(page,pagesize,data) {
       }
     })
   }
+
+// 考核汇总表
+export function aflcAssessmentSum_list(page,pagesize,data) {
+  return fetch({
+    url: '/' + baseurl + '/common/aflcAssessmentSum/v1/list',
+    method: 'post',
+    data:{
+      "currentPage": page,
+      "pageSize": pagesize,
+      "vo": data
+    }
+  })
+}
