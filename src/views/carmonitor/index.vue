@@ -46,7 +46,7 @@
                 <div style="display: flex;padding: 5px 5px 0;border-bottom: 1px solid #eee;margin-top: 4px">
                   <div
                     :class="{onlineTab:true,onlineTabActive:(onlineTabFocus===index),tabCanClick:(onlineTabFocus!==index)}"
-                    v-for="(item, index) in onlineTabs" @click="clickOnlineTab(index)">
+                    v-for="(item, index) in onlineTabs" @click="clickOnlineTab(index)" :key="index">
                     <el-badge :value="item.count" :max="9999999">
                       {{item.label}}
                     </el-badge>
@@ -56,7 +56,7 @@
                 <div style="height: 340px;margin-top: 2px">
                   <div
                     :class="{searchList:true,tabCanClick:(searchResultFocus!==index),isActive:(searchResultFocus===index)}"
-                    v-for="(item,index) in searchList" @click="clickSearchResult(index)" v-show="searchList.length>0">
+                    v-for="(item,index) in searchList" @click="clickSearchResult(index)" v-show="searchList.length>0" :key="index">
                     <div class="carIcon"><img :src="('./static/cartype/'+item.icon)"
                                               style="height: 23px;position: absolute"></div>
                     <div class="carNum" :title="item.carNumber">{{item.carNumber}}</div>
@@ -104,7 +104,7 @@
                 <div style="height: 340px">
                   <div
                     :class="{searchList:true,tabCanClick:(searchResultFocus!==index),isActive:(searchResultFocus===index)}"
-                    v-for="(item,index) in searchList" @click="clickSearchResult(index)" v-show="searchList.length>0">
+                    v-for="(item,index) in searchList" @click="clickSearchResult(index)" v-show="searchList.length>0"  :key="index">
                     <div class="carIcon"><img :src="('./static/cartype/'+item.icon)"
                                               style="height: 23px;position: absolute;left: 0;top:0"></div>
                     <div class="carNum" :title="item.carNumber">{{item.carNumber}}</div>

@@ -83,25 +83,27 @@ export const constantRouterMap = [
         'code': '',
         'proute': 'dashboard'
       }
-    }, {
-      path: '/html5',
-      icon: 'guiji',
-      hidden: false,
-      name: '订单在途监控',
-      component: _import('html5/index'),
-      meta: {
-        title: '订单在途监控',
-        noCache: true,
-        'code': '',
-        'proute': 'dashboard'
-      }
-    }, {
+    },
+    //  {
+    //   path: '/html5',
+    //   icon: 'guiji',
+    //   hidden: false,
+    //   name: '订单在途监控',
+    //   component: _import('html5/index'),
+    //   meta: {
+    //     title: '订单在途监控',
+    //     noCache: true,
+    //     'code': '',
+    //     'proute': 'dashboard'
+    //   }
+    // }, 
+    {
       path: '/carmonitor',
       icon: 'car',
       hidden: false,
       name: '车辆跟踪',
       component: _import('carmonitor/index'),
-      meta: { title: '车辆跟踪', noCache: true, 'code': '' }
+      meta: { title: '车辆跟踪', noCache: true, 'code': '','proute': 'dashboard' }
     }, {
       path: '/onlineService',
       icon: 'zxkf',
