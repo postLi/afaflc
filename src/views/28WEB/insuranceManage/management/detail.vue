@@ -156,6 +156,8 @@
   }
 </script>
 
+
+
 <style lang="scss">
   .detail-lll {
     height: 100%;
@@ -213,7 +215,7 @@
           }
         }
       }
-      
+
       .title-class {
         border-bottom: 1px solid rgb(22, 155, 213);
         padding-bottom: 10px;
