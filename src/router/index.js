@@ -84,18 +84,6 @@ export const constantRouterMap = [
         'proute': 'dashboard'
       }
     }, {
-      path: '/html5',
-      icon: 'guiji',
-      hidden: false,
-      name: '订单在途监控',
-      component: _import('html5/index'),
-      meta: {
-        title: '订单在途监控',
-        noCache: true,
-        'code': '',
-        'proute': 'dashboard'
-      }
-    }, {
       path: '/carmonitor',
       icon: 'car',
       hidden: false,
