@@ -214,7 +214,7 @@
       handlePageChange(obj) {
         this.page = obj.pageNum
         this.pagesize = obj.pageSize
-        // this.firstblood()
+        this.fetchInfo()
       },
       closeVisibleDialog() {
         this.isVisibleDialog = false

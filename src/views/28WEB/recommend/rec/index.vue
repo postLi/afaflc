@@ -36,6 +36,9 @@
         <el-table-column sortable prop="recommendPosition" label="推荐位置" width="">
         </el-table-column>
         <el-table-column sortable prop="recommendLimit" label="推荐条数限制" width="">
+          <template slot-scope="scope">
+            {{scope.row.recommendLimitType===1?scope.row.recommendLimit:'无限制'}}
+          </template>
         </el-table-column>
         <el-table-column sortable prop="updateTime" label="更新时间" width="">
         </el-table-column>
@@ -130,7 +133,7 @@
       handleDeatail(row) {
         this.isVisibleDialog = true
         this.selectedInfo = row
-        console.log(row,'rowrowrow')
+        // console.log(row,'rowrowrow')
       },
 
       handleSearch(type) {
