@@ -61,7 +61,6 @@ export default {
             }
         },
         keyVal(newVal){
-            // console.log('newVal',newVal)
             if(newVal){
                 this.currentkey = newVal;
             }
@@ -114,7 +113,6 @@ export default {
             switch (type) {
                 case 0:
                 const Today = pickerOptions4.today()
-                // console.log(this.dataset)
                 // picker.$emit('pick', Today)
                 this.pickerDate = Today
                 // this.searchQuery.vo.buttonKey = 0

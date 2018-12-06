@@ -50,7 +50,18 @@ export default {
     component: _import('dispatch/OrderObtain/index'), 
     meta: { role: ['admin'], title: '中单设置',stitle: '中单',  noCache: true , code: 'DISPATCH_OBTAIN'}
   },
-  
+  {
+    path: '/dispatch/evaluation', 
+    icon: 'zonghe', name: '考核管理', 
+    component: _import('dispatch/evaluation/truck/index'), 
+    meta: { role: ['admin'], title: '考核管理',stitle: '考核管理',  noCache: true },
+    children: [{
+      path: '/dispatch/evaluation/truck',
+      name: '小货车', 
+      component: _import('dispatch/evaluation/truck/index'), 
+      meta: { role: ['admin'], title: '小货车',stitle: '货车',  noCache: true }
+    }]
+  },  
 
 ]
 }

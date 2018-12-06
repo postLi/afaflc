@@ -11,7 +11,7 @@
 import echarts from 'echarts'
 import dataSearch from '../components/dataSearch'
 import { dateOrderPayment } from '@/api/transaction.js'
-import { getBetweenDateStr, parseTime } from '@/utils/'
+import { getBetweenDateStr, parseTime,checkData } from '@/utils/'
 
 export default {
     watch: {
@@ -38,26 +38,17 @@ export default {
         init(){
             this.OrderPayment();
         },
-        checkData(arr){ 
-            let result = [];
-            for(var i = 0;i< this.xAxisArr.length;i++){
-                
-            };
-            this.xAxisArr.forEach(el => {
-                arr.some(item=> {
-                    result.push( el == item.createTime ? item.payTotal : 0)
-                })
-            })
-            console.log('result',result)
-            return result
-        },
         //交易变化曲线图
         OrderPayment(){
             dateOrderPayment(this.dateOrderPaymentTime).then(res => {
                 // console.log('dateOrderPayment',res.data)
                 this.dateOrderPaymentObj = res.data;
-                this.checkData(this.dateOrderPaymentObj.smallCar)
-                this.lineCharts(this.xAxisArr)
+                let smallData = checkData(this.xAxisArr,this.dateOrderPaymentObj.smallCar);
+                let companyData = checkData(this.xAxisArr,this.dateOrderPaymentObj.company);
+                let bigData = checkData(this.xAxisArr,this.dateOrderPaymentObj.bigCar);
+
+                // console.log('smallDatasmallData',smallData,companyData,bigData)
+                this.lineCharts(this.xAxisArr,smallData,companyData,bigData)
             })
         },
         LineInit(options) {
@@ -203,7 +194,7 @@ export default {
                         name: '小货车',
                         type: 'line',
                         symbolSize:[8,8],
-                        data: [30054, 46666, 13333, 45656, 32314, 46665, 48998],
+                        data: smallData,
                         itemStyle: {
                             normal: {
                                 color:'#00ccff'
@@ -236,7 +227,7 @@ export default {
                         type: 'line',
                         // smooth: true,
                         symbolSize:[8,8],
-                        data: [20323, 35465, 22345, 28945, 24545, 31456, 35456],
+                        data: bigData,
                         itemStyle: {
                             normal: {
                                 color:'#e9d000'
@@ -269,7 +260,7 @@ export default {
                         type: 'line',
                         // smooth: true,
                         symbolSize:[8,8],
-                        data: [14012, 16666, 31999, 14444, 11555, 21165, 17884],
+                        data: companyData,
                         // markPoint: {
                         //     data: [
                         //         { type: 'max', name: '最大值' },
@@ -315,7 +306,7 @@ export default {
             }
         },
         valueChange(val,type,timeType){
-            console.log('val,type',val,type)
+            // console.log('val,type',val,type)
             if(type == 'jybhline'){
                 this.dateOrderPaymentTime.startTime = val[0];
                 this.dateOrderPaymentTime.endTime = val[1];

@@ -304,7 +304,7 @@ export default {
             }
         },
         valueChange(val,type){
-            console.log('val,type',val,type)
+            // console.log('val,type',val,type)
             switch(type){
                 case 'jyfbPoint' :
                     this.tradePaymentPlaceTime.startTime = val[0];

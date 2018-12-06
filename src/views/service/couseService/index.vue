@@ -31,7 +31,7 @@
                         <el-table-column
                             prop="orderSerial"
                             label="工单编号"
-                            width="300"
+                            width="250"
                             sortable
                             >
                                 <template  slot-scope="scope">
@@ -63,7 +63,7 @@
                         <el-table-column
                             prop="complainTime"
                             label="提交时间"
-                            width="250"
+                            width="160"
                             sortable
                             >
                         </el-table-column>
@@ -86,7 +86,7 @@
                         </el-table-column>
                         <el-table-column
                             label="处理时间"
-                            width="250"
+                            width="160"
                             sortable
                             >
                             <template  slot-scope="scope">

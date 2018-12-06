@@ -99,6 +99,7 @@ export default {
         {
             path: '/finance/anfaCash', 
             name: '安发账户概况',  
+            icon: 'afzhgk', 
             hidden: false,
             component: _import('finance/anfaCash/index'), 
             meta: { role: ['admin'], title: '安发账户概况',stitle: '账户',  noCache: false }
