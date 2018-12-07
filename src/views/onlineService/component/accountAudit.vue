@@ -6,7 +6,7 @@
         <div class="onlineService_content">
             <div class="onlineService_content_right workOrder_right">
                 <div class="workOrder_right_typeBottom workOrder_right_type" v-for="(item,index) in workOrderType" :key="index" :class="{currentClick:item.iscur}"   @click="setCur(index,'workOrder',item.label)">
-                    <span>{{item.count}}</span>
+                    <span>{{item.count}}</span>   
                     <span>{{item.name}}</span>
                 </div>
             </div>
