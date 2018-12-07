@@ -40,6 +40,11 @@
                 <el-tab-pane label="回单回款评价" name="rate">
                     <rate :isvisible="orderTabName === 'rate'"></rate>
                 </el-tab-pane>
+
+            <!-- 回单回款评价 -->
+                <el-tab-pane label="订单KPI" name="KPI">
+                    <orderKPI :isvisible="orderTabName === 'KPI'"></orderKPI>
+                </el-tab-pane>
         </el-tabs>
     </div>
 </template>
@@ -53,6 +58,8 @@ import robbingList from './components/robbingList'
 import driverTrail from './components/driveTrail'
 import complaint from './components/complaint'
 import rate from './components/rateComponent'
+import orderKPI from './components/orderKPI'
+
 import physicalDamage from './components/physicalDamage'
 export default {
   name: 'dingdanxiangqing',
