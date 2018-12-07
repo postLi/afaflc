@@ -83,7 +83,6 @@ export const constantRouterMap = [
         'code': '',
         'proute': 'dashboard'
       }
-<<<<<<< HEAD
     },
     //  {
     //   path: '/html5',
@@ -99,9 +98,6 @@ export const constantRouterMap = [
     //   }
     // }, 
     {
-=======
-    }, {
->>>>>>> 83bdbde062052937799bc4627d2b0359884651f6
       path: '/carmonitor',
       icon: 'car',
       hidden: false,
