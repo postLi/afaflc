@@ -8,7 +8,7 @@
             <el-input v-model="form.parkName" clearable :maxlength="25"></el-input>
           </el-form-item>
           <el-form-item label="手机号" prop="parkMobile">
-            <el-input v-model="form.parkMobile" clearable></el-input>
+            <el-input v-model="form.parkMobile" clearable :maxlength='11' ></el-input>
           </el-form-item>
 
           <el-form-item label="所在地" prop="locationFn">
@@ -23,7 +23,7 @@
           <el-form-item label="联系人" prop="parkContact">
             <el-input v-model="form.parkContact" clearable :maxlength="15"></el-input>
           </el-form-item>
-          <el-form-item label="固话" prop='parkNum'>
+          <el-form-item label="固话" prop=''>
             <el-input v-model="form.parkNum" clearable :maxlength="12" v-number-only></el-input>
           </el-form-item>
 
@@ -35,7 +35,20 @@
         </div>
         <div class="message-text clearfix">
           <el-form-item label="园区介绍">
-            <el-input type="textarea" v-model="form.parkIntroduce" clearable></el-input>
+            <!--<el-input type="textarea" v-model="form.parkIntroduce" clearable></el-input>-->
+            <div>
+              <editor
+                class="editor"
+                :value="form.parkIntroduce"
+                :setting="editorSetting"
+                @show="editors"
+                :url              = "Url"
+                :max-size         = "MaxSize"
+                :accept           = "Accept"
+                :with-credentials = "withCredentials"
+                @on-upload-fail         = "onEditorReady"
+                @on-upload-success= "onEditorUploadComplete"></editor>
+            </div>
           </el-form-item>
         </div>
         <div class="message-center">
@@ -66,6 +79,7 @@
 </template>
 
 <script>
+  import editor from '@/components/tinymac/index'
   import Upload from '@/components/Upload/singleImage'
   import {REGEX} from '@/utils/validate.js'
   import tmsmap from '@/components/map/index'
@@ -77,6 +91,7 @@
     components: {
       Upload,
       tmsmap,
+      editor,
     },
     props: {
       isVisibleDialog: {
@@ -143,6 +158,14 @@
         }
       }
       return {
+        Url: '', // 图片对应的上传地址,不传!
+        MaxSize: 2097152, // 文件大小
+        Accept: 'image/jpeg, image/png', // 文件格式
+        editorSetting: { // 配置富文本编辑器高
+
+          height: 300
+        },
+        withCredentials: true,
         formLabelWidth: '120px',
         checked: true,
         loading: false,
@@ -206,9 +229,20 @@
       }
     },
     methods: {
+      onEditorReady(ins, ina){
+        // console.log(ins, ina)
+      },
+      onEditorUploadComplete(json){
+        // console.log(json,'jsonjson')
+        this.form.parkIntroduce = this.form.parkIntroduce + '<img src=' + json[0].data.filePath + '>';
+      },
+      editors(content) { // editor组件传过来的值赋给content
+        // console.log(content,'parkIntroduceparkIntroduce')
+        this.form.parkIntroduce = content;
+      },
       showMap(name) {
         this.popVisible = true;
-        console.log(name, 'name')
+        // console.log(name, 'name')
         // this.current = name;
       },
       getInfo(pos, name, info) {

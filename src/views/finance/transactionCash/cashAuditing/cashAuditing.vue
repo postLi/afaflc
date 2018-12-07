@@ -91,8 +91,8 @@
                     :params="selectRowData"
                     > 
                     </cashAuditingEdit>
-            </div>
-            <el-table style="width: 100%" stripe border height="100%" ref="multipleTable" highlight-current-row  tooltip-effect="dark" :data="tableDataAll" @selection-change="getSelection" @row-click="clickDetails">
+            </div> 
+            <el-table style="width: 100%" stripe border height="94%" ref="multipleTable" tooltip-effect="dark" :data="tableDataAll" @selection-change="getSelection" @row-click="clickDetails">
               <el-table-column
                             label="选择"
                             type="selection"
@@ -148,10 +148,11 @@
             <el-table-column  label="处理时间" prop="auditTime">
             </el-table-column>
             </el-table> 
-        	</div> 
+
          <!-- 页码 -->
        <div class="info_tab_footer">共计:{{ dataTotal }} <div class="show_pager"> <Pager :total="dataTotal" @change="handlePageChange"  :sizes="sizes" ref="pager"/></div> </div>  
           </div>
+    	</div> 
       </div>
 </template>
 <script>

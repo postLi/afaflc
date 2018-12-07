@@ -201,7 +201,6 @@ export default {
   },
   mounted() {
   },
-  
   methods: {
     reset() {
       this.$refs['ruleForm'].resetFields()

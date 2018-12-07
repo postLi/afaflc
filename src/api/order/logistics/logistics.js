@@ -40,7 +40,12 @@ export function getFCLSupplyGoodsByOrderSerial(orderSerial) {
     })
   }
 
-  // 获取订单字典
+  // 获取来源订单字典
   export function orderSerialFun() {
     return fetch.get('/' + baseurl_two + '/sysDict/getSysDictByCodeGet/AF00400')
   }
+
+    // 获取付款状态订单字典
+    export function paymentFun() {
+      return fetch.get('/' + baseurl_two + '/sysDict/getSysDictByCodeGet/AF05105')
+    }

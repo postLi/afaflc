@@ -42,11 +42,11 @@ module.exports = {
         pathRewrite: {'^/api': ''},
         changeOrigin: true
       },
-      // '/79service' : {
-      //   target: "http://192.168.1.79:7010",
-      //   pathRewrite: {'^/79service': ''},
-      //   changeOrigin: true
-      // },
+      '/79service' : {
+        target: "http://192.168.1.79:7010",
+        pathRewrite: {'^/79service': ''},
+        changeOrigin: true
+      },
       '/ceshi': {
         target: "http://192.168.1.157:7010",
         pathRewrite: {'^/ceshi': ''},

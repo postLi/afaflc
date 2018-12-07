@@ -19,7 +19,7 @@
             <p style="color: red;font-size: 12px;line-height: 20px" v-if="checked===true">
               超过{{form.recommendLimit===null||form.recommendLimit===''?'0':form.recommendLimit}}则不展示更多推荐（必填）</p>
             <!--<template slot="append">超过×则不展示更多推荐（必填）</template>-->
-            <el-input placeholder="请输入推荐条数" v-model="form.recommendLimit" :maxlength="5" v-number-only>
+            <el-input placeholder="请输入推荐条数" v-model="form.recommendLimit" :maxlength="5" v-number-only v-if="checked===true">
               <template slot="prepend">超出</template>
               <template slot="append">条，超出的推荐则不生效</template>
             </el-input>
@@ -114,7 +114,6 @@
           recommendLimit: item.recommendLimit,
           recommendRemarks: item.recommendRemarks,
         }
-
       },
       submitForm() {
         this.$refs.ruleForm.validate((valid) => {
@@ -125,7 +124,17 @@
               this.senFetch()
             } else {
               this.form.recommendLimitType = 0
-              this.senFetch()
+              // this.form.recommendLimit === ''
+              let data
+              data = objectMerge2(this.form)
+              data.recommendLimit=''
+              console.log(data,'data');
+              putRecDetial(this.info.id, data).then(res => {
+                this.$emit('success')
+                this.$message.success('保存成功')
+                this.close()
+                // this.loading = false
+              })
 
             }
           } else {
