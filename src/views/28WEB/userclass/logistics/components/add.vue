@@ -60,7 +60,6 @@
       </div>
     </el-dialog>
   </div>
-  
 </template>
 <script>
 import { parseTime, pickerOptions2 } from '@/utils/index.js'
@@ -160,7 +159,7 @@ export default {
            { required: true, message: '请选择推荐位置' }
         ],
         recommendFee: [
-          {pattern: REGEX.ONLY_NUMBER_POINT, required: true, message: '请输入推荐费,限制1位小数' }
+          { pattern: REGEX.ONLY_NUMBER_POINT, required: true, message: '请输入推荐费,限制1位小数' }
         ]
       },
 
