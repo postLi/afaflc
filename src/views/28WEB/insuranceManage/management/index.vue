@@ -2,7 +2,7 @@
   <div class="insurance-lll">
     <div class="inul">
       <ul>
-        <li v-for="(tab,index) in tabs" @click="toggle(index,tab.view)" :class="{active:active==index}">
+        <li v-for="(tab,index) in tabs" @click="toggle(index,tab.view)" :class="{active:active==index}" :key="index">
           {{tab.label+'('+tab.num+')'}}
         </li>
       </ul>
