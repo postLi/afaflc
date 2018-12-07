@@ -33,7 +33,7 @@
             </el-input>
           </el-form-item>
           <el-form-item prop="password" class="previewPwd">
-            <el-input name="password" :maxlength="20" :type="!isview? 'password' : 'text'" @keyup.enter.native="handleLogin" v-model="loginForm.password" autoComplete="off" :placeholder="holder.password" @focus='password()' clearable>
+            <el-input name="password" :maxlength="20" :type="!isview? 'password' : 'text'" @keyup.enter.native="handleLogin" v-model="loginForm.password" autoComplete="off" :placeholder="holder.password" @focus='password()' clearable onpaste="return false" oncontextmenu="return false" oncopy="return false" oncut="return false">
               <template slot="prepend">
                 <i class="icon_login" :class="[loginError? 'icon_login_password_error':'icon_login_password']"></i>
                 <!-- 两种写法都可以 -->

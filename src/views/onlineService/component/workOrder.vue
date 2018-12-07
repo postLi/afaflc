@@ -5,7 +5,14 @@
         </div>
         <div class="onlineService_content">
             <div class="onlineService_content_left">
-                    
+                <div class="onlineService_content_left_top onlineService_icon">
+                    <img src="../../../assets/onlineService/xiehuo_kefu.png" alt="">
+                    <span>咨询投诉</span>
+                </div>
+                <div class="onlineService_content_left_bottom onlineService_icon">
+                    <img src="../../../assets/onlineService/sijijd_wusunlp.png" alt="">
+                    <span>物损理赔</span>
+                </div>
             </div>
             <div class="onlineService_content_right workOrder_right">
                 <div class="workOrder_right_type" v-for="(item,index) in workOrderType" :key="index" :class="{currentClick:item.iscur}"   @click="setCur(index,'workOrder',item.label)">

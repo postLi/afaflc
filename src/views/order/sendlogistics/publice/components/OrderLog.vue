@@ -1,5 +1,5 @@
 <template>
-    <div class="TCorderInfo clearfix" v-if="formData.length != 0">
+    <div class="TCorderInfo clearfix OrderLog" v-if="formData.length != 0">
         <!-- 基本信息 -->
         <div class="orderInfo-collapse collapseInfo" >
             <h2>基础信息</h2>
@@ -14,11 +14,11 @@
                  </p>
                 <p>
                     <span>订单类型：</span>
-                    <span>{{formData.orderDataType}}</span>
+                    <span>{{formData.orderTypeName}}</span>
                 </p>                 
                 <p>
                     <span>订单状态：</span>
-                    <span>{{formData.orderExpenses.orderStatusName}}</span>
+                    <span>{{formData.orderStatusName}}</span>
                 </p>  
             </div>
             <div class="essentialInformation">
@@ -28,11 +28,11 @@
                  </p>
                 <p>
                     <span>下单时间：</span>
-                    <span>{{formData.createTime}}</span>
+                    <span>{{formData.useTime}}</span>
                  </p>
                 <p>
                     <span>货主账号：</span>
-                    <span></span>
+                    <span>{{formData.shipperMobile}}</span>
                  </p>                 
                 <p>
                     <span>货主姓名：</span>
@@ -42,7 +42,7 @@
             <div class="essentialInformation">
                 <p>
                     <span>订单来源：</span>
-                    <span>{{formData.orderFrom}}</span>
+                    <span>{{formData.orderFromName}}</span>
                 </p>
             </div>
         </div>
@@ -94,15 +94,15 @@
             <div class="essentialInformation" >
                 <p>
                     <span>重量 / 体积：</span>
-                    <span>{{formData.aflcFCLOrderGoodsDtoList[0].goodsWeight}}  /  {{formData.aflcFCLOrderGoodsDtoList[0].goodsVolume}}</span>
+                    <span>{{formData.aflcFCLOrderGoodsDtoList[0].goodsWeight}}  <i class="red">/</i>  {{formData.aflcFCLOrderGoodsDtoList[0].goodsVolume}}</span>
                  </p>
                 <p>
                     <span>货物名称 / 件数：</span>
-                    <span>{{formData.aflcFCLOrderGoodsDtoList[0].goodsName}}  /  {{formData.aflcFCLOrderGoodsDtoList[0].goodsNum}}</span>
+                    <span>{{formData.aflcFCLOrderGoodsDtoList[0].goodsName}}  <i  class="red">/</i>  {{formData.aflcFCLOrderGoodsDtoList[0].goodsNum}}</span>
                  </p>
                 <p>
                     <span>货物保价：</span>
-                    <span>{{formData.aflcFCLOrderGoodsDtoList[0].valuationCost}}</span>
+                    <span>{{formData.valuationCost}}</span>
                 </p>                 
                 <p>
                     <span>时效：</span>
@@ -112,19 +112,19 @@
             <div class="essentialInformation">
                 <p>
                     <span>上门提货：</span>
-                    <span>{{formData.isDoorPickUp}}</span>
+                    <span>{{formData.isDoorPickUp=='1'?'是':'否'}}</span>
                 </p>
                 <p>
                     <span>送货上门：</span>
-                    <span>{{formData.isDoorDelivery}}</span>
+                    <span>{{formData.isDoorDelivery=='1'?'是':'否'}}</span>
                 </p>
                 <p>
                     <span>回单：</span>
-                    <span>1</span>
+                    <span>{{formData.orderExtraCodesName}}</span>
                 </p>                 
                 <p>
                     <span>回款：</span>
-                    <span>1</span>
+                    <span>{{formData.extraRrice}}</span>
                 </p>  
             </div>
             <div class="essentialInformation">
@@ -218,7 +218,7 @@
             <div class="essentialInformation">
                 <p>
                     <span>物流公司账号：</span>
-                    <span>1</span>
+                    <span>{{formData.logisticsCompanyPhone}}</span>
                  </p>
                 <p>
                     <span>物流公司负责人：</span>
@@ -261,6 +261,7 @@
 
 <script>
 import {getFCLOrderByOrderSerial} from '@/api/order/logistics/logistics.js'
+import { parseTime,pickerOptions2 } from '@/utils/index.js'
 export default {
     data(){
         return{
@@ -270,18 +271,22 @@ export default {
     methods:{
         firstblood(){
         getFCLOrderByOrderSerial(this.$route.query.orderSerial).then(res=>{
-            console.log('orderSerial',res)
             this.formData = res.data
-            console.log(this.formData.length)
+            this.formData.useTime = parseTime(this.formData.useTime,"{y}-{m}-{d} {h}:{i}:{s}");
         })
         }
     },
     mounted() {
-
+     this. firstblood()
     },
 }
 </script>
 
 <style lang="scss">
-
+.OrderLog{
+    .red{
+        color: red;
+        padding: 0px 10px;
+    }
+}
 </style>
