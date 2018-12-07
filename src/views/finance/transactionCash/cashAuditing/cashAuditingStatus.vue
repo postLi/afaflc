@@ -52,10 +52,10 @@
                     @getData="getDataList"
                     :params="selectRowData"
                     > 
-                    </cashAuditingEdit>
+                   </cashAuditingEdit>
             </div>
 
-            <el-table style="width: 100%" stripe border height="100%" ref="multipleTable" highlight-current-row  tooltip-effect="dark" :data="tableDataAll" @selection-change="getSelection" @row-click="clickDetails">
+            <el-table style="width: 100%" stripe border height="94%" ref="multipleTable" highlight-current-row  tooltip-effect="dark" :data="tableDataAll" @selection-change="getSelection" @row-click="clickDetails">
               <el-table-column
                             label="选择"
                             type="selection"

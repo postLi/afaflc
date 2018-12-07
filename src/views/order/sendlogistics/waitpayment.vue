@@ -42,8 +42,11 @@
           </el-form-item>   
           </el-form>
             <div class="classify_info">
+            <div class="btns_box">
+             <el-button  type="primary" plain icon="el-icon-bell" @click="importExcel" :size="btnsize" >导出Excel</el-button>
+            </div>                
             <div class="info_news">
-            <el-table ref="multipleTable" style="width: 100%" stripe border height="100%" highlight-current-row :data="tableDataTree">
+            <el-table ref="multipleTable" style="width: 100%" stripe border height="100%" highlight-current-row :data="tableDataTree" id="out-table">
               <el-table-column
                             label="选择"
                             type="selection"
@@ -59,7 +62,7 @@
             <span class="BtnInfo" @click="pushOrderSerial(scope.row)">{{scope.row.orderSerial}}</span >
             </template>
             </el-table-column>
-            <el-table-column  label="订单状态" prop="orderStatusName" sortable width="100">
+            <el-table-column  label="订单状态" prop="orderStatusName" sortable width="160">
             </el-table-column>
             <el-table-column  label="货主" prop="shipperName" sortable show-overflow-tooltip width="120">
             </el-table-column>           
@@ -97,6 +100,8 @@
 import { parseTime,pickerOptions2 } from '@/utils/index.js'
 import Pager from '@/components/Pagination/index'
 import {orderSerialFun,findFCLOrderInfoList,paymentFun} from '@/api/order/logistics/logistics.js'
+import FileSaver from 'file-saver'
+import XLSX from 'xlsx'
 export default {
     data(){
         return{
@@ -180,6 +185,14 @@ export default {
                 }
                 this.firstblood();
             },
+            importExcel(){
+            var wb = XLSX.utils.table_to_book(document.querySelector('#out-table'))
+            var wbout = XLSX.write(wb, { bookType: 'xlsx', bookSST: true, type: 'array' })
+            try {
+                FileSaver.saveAs(new Blob([wbout], { type: 'application/octet-stream' }), 'sheetjs'+Math.floor(Math.random()*100000)+'.xlsx')
+            } catch (e) { if (typeof console !== 'undefined') {} }
+            return wbout
+            },    
             pushOrderSerial(val){
                  this.$router.push({name: '发物流订单详情',query:{ orderSerial:val.orderSerial}});
             }

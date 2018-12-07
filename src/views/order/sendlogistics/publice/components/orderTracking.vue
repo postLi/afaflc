@@ -33,7 +33,6 @@ export default {
             sizes:[20,30,50],
             tableData: [],
             tableDataTree:[],
-            dataTotal:null,
         }
     },
     methods:{
