@@ -272,6 +272,8 @@
                     url = url ? url[1] : ''
                 }
                 console.log('上传成功的链接',url)
+                    // 抛出 'on-upload-success' 钩子
+                _this.$emit('on-upload-success', url)
                 success(url);
             })
             .catch((err) => {

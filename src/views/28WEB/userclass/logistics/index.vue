@@ -224,7 +224,7 @@ export default {
           console.log(row)
           break
         case 'check':
-          this.$router.push({ name: '专线推荐管理', query: { associatedId: row.id }})
+          this.$router.push({ name: '28WEB专线推荐管理', query: { associatedId: row.id }})
           break
         case 'delete':
           console.log(index, row, row.id)

@@ -15,7 +15,7 @@ export default {
     {
       path: '/sm/xiaohuoche', 
       icon: 'xiaohuoche', 
-      name: '小货车', 
+      name: '小货车服务', 
       component: _import('sm/xiaohuoche/index'), 
       meta: { role: ['admin'], title: '小货车', stitle: '小货车', noCache: true , code: 'SERVICE_SMALL_CAR'},
       children: [

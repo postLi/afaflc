@@ -19,45 +19,45 @@ export default {
       meta: {role: ['admin'], title: '用户发布类', noCache: true},
       children: [{
         path: '/28WEB/userclass/logistics/index',
-        name: '物流专线',
+        name: '28WEB物流专线',
         component: _import('28WEB/userclass/logistics/index'),
         meta: {role: ['admin'], title: '物流专线', noCache: true, code: 'CUSTOM_FEEDBACK_PLATFORM'}
       }, {
         path: '/order/xuqiuku/carInfo/index',
-        name: '车源信息',
+        name: '28WEB车源信息',
         component: _import('order/xuqiuku/carInfo/index'),
         meta: {role: ['admin'], title: '车源信息', noCache: true, code: 'CUSTOM_FEEDBACK_PLATFORM'}
       }, {
         path: '/order/xuqiuku/driverInfo/index',
-        name: '货源信息',
+        name: '28WEB货源信息',
         component: _import('order/xuqiuku/driverInfo/index'),
         meta: {role: ['admin'], title: '货源信息', noCache: true, code: 'CUSTOM_FEEDBACK_PLATFORM'}
       }, {
         path: '/order/xuqiuku/manageGroup/index',
-        name: '网点信息',
+        name: '28WEB网点信息',
         component: _import('order/xuqiuku/manageGroup/index'),
         meta: {role: ['admin'], title: '网点信息', noCache: true, code: 'CUSTOM_FEEDBACK_PLATFORM'}
       }]
     }, {
       path: '/28WEB/garden/index',
       icon: 'baobiao',
-      name: '园区管理',
+      name: '28WEB园区管理',
       component: _import('28WEB/garden/index'),
       meta: {role: ['admin'], title: '园区管理', noCache: true}
     }, {
       path: '/28WEB/recommend/index',
       icon: 'baobiao',
-      name: '推荐管理',
+      name: '28WEB推荐管理',
       component: _import('28WEB/recommend/index'),
       meta: {role: ['admin'], title: '推荐管理', noCache: true},
       children: [{
         path: '/28WEB/recommend/rec/index',
-        name: '推荐位管理',
+        name: '28WEB推荐位管理',
         component: _import('28WEB/recommend/rec/index'),
         meta: {role: ['admin'], title: '推荐位管理', noCache: true, code: 'CUSTOM_FEEDBACK_PLATFORM'}
       }, {
         path: '/28WEB/recommend/line/index',
-        name: '专线推荐管理',
+        name: '28WEB专线推荐管理',
         component: _import('28WEB/recommend/line/index'),
         meta: {role: ['admin'], title: '专线推荐管理', noCache: true, code: 'CUSTOM_FEEDBACK_PLATFORM'}
       }]
@@ -66,7 +66,7 @@ export default {
       path: '/28WEB/insuranceManage',
       icon: 'txgl',
       hidden: false,
-      name: '保险管理',
+      name: '28WEB保险管理',
       component: _import('28WEB/insuranceManage/index'),
       meta: {title: '保险管理', noCache: true, code: 'FINANCE_WITHDRAW_MANAGE'},
       children: [
@@ -85,7 +85,7 @@ export default {
       path: '/28WEB/insuranceManage/management/detail',
       icon: 'baobiao',
       hidden: true,
-      name: '保单详情',
+      name: '28WEB保单详情',
       component: _import('28WEB/insuranceManage/management/detail'),
       meta: {role: ['admin'], title: '保单详情', noCache: true}
     },

@@ -71,7 +71,8 @@ export default {
     driverTrail,
     complaint,
     physicalDamage,
-    rate
+    rate,
+    orderKPI
   },
   data() {
     return {

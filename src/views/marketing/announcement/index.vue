@@ -208,7 +208,7 @@ import editor from '@/components/tinymac/index'
             firstblood(){
                 this.loading = true;
                 CommonNoticeList(this.page,this.pagesize,this.searchInfo).then(res => {
-                    console.log('公告',res)
+                    // console.log('公告',res)
                     this.dataTotal = res.data.totalCount;
                     this.tableData = res.data.list;
                     this.loading = false;
@@ -228,18 +228,6 @@ import editor from '@/components/tinymac/index'
                 console.log(row,type);
                 switch(type){
                     case 'ifTop':
-                        // this.$confirm('确定要将'+ itemMove +' 货主解冻吗？', '提示', {
-                        //     confirmButtonText: '确定',
-                        //     cancelButtonText: '取消',
-                        //     type: 'warning'
-                        // }).then( ()=>{
-                            
-                        // }).catch(() => {
-                        //     this.$message({
-                        //         type: 'info',
-                        //         message: '已取消'
-                        //     })
-                        // })
                         let ifTop = row.isTop == '0' ? '1' : '0';
                         let rowData = Object.assign({},row,{isTop:ifTop})
                         updateNotice(rowData).then(res => {
@@ -263,7 +251,6 @@ import editor from '@/components/tinymac/index'
                 this.$refs.multipleTable.clearSelection()
             },
             getSearchParam(obj) {
-                console.log(obj)
                 this.searchInfo = Object.assign(this.searchInfo, obj);
                 this.firstblood();
             },

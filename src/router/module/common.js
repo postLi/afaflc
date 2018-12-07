@@ -18,13 +18,13 @@ export default {
         name: '公司管理', 
         component: _import('common/index'), 
         meta: { title: '公司管理', stitle: '公司', noCache: true , code: ''}},
-    { 
-        path: '/common/systemSetup', 
-        icon: 'xitongshezhi',
-        hidden: true, 
-        name: '公司管理', 
-        component: _import('common/systemSetup/index'), 
-        meta: { title: '公司管理', stitle: '公司', noCache: true , code: ''}},
+    // { 
+    //     path: '/common/systemSetup', 
+    //     icon: 'xitongshezhi',
+    //     hidden: true, 
+    //     name: '公司管理', 
+    //     component: _import('common/systemSetup/index'), 
+    //     meta: { title: '公司管理', stitle: '公司', noCache: true , code: ''}},
     { 
         path: '/common/groupManage', 
         icon: 'zuzhijiagou', 

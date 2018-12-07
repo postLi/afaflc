@@ -34,9 +34,9 @@
                 <el-form-item prop="release">
                     <el-checkbox v-model="releaseDriver" >28快运车主</el-checkbox>
                     <el-checkbox v-model="releaseShipper" >28快运货主</el-checkbox>
-                    <el-checkbox v-model="releaseHome" v-if="releaseDriver || releaseShipper">发布到首页营销广告位</el-checkbox>
+                    <el-checkbox v-model="releaseHome" v-if="releaseDriver || releaseShipper">发布到首页营销广告位{{releaseHome}}</el-checkbox>
                 </el-form-item>
-                <el-form-item prop="releaseHomeUrl" label="营销广告图" v-if="releaseHome">
+                <el-form-item prop="releaseHomeUrl" label="营销广告图" v-if="releaseHome && (releaseDriver || releaseShipper)">
                     <upload class="licensePicture" tip="（必须为jpg/png并且小于5M）" v-model="announce.releaseHomeUrl"  />
                 </el-form-item>
                 <el-form-item label="货主认证状态" prop="homeShipperStatus" v-if="releaseShipper && releaseHome">
@@ -59,7 +59,7 @@
                         </el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="公告分组" prop="noticeGroupCode" v-if="releaseDriver">
+                <el-form-item label="车主端公告分组" prop="noticeGroupCode" v-if="releaseDriver">
                     <el-select v-model="announce.noticeGroupCode" clearable placeholder="请选择">
                         <el-option
                         v-for="item in optionsGroupCode"
@@ -283,16 +283,15 @@ export default {
         },
     },
     mounted(){
-        console.log('Date.now()',Date.now())
+        // console.log('Date.now()',Date.now())
     },
     methods: {
         regionChange(d) {
-          console.log('data:',d)
+        //   console.log('data:',d)
           this.announce.noticeLocation = (!d.province&&!d.city&&!d.area&&!d.town) ? '': `${this.getValue(d.province)}${this.getValue(d.city)}${this.getValue(d.area)}${this.getValue(d.town)}`.trim();
           this.announce.province = d.province ? d.province.code : '';
           this.announce.city = d.city ? d.city.code : '';
-
-          console.log(this.$refs.vregion)
+        //   console.log(this.$refs.vregion)
         },
         getValue(obj){
             return obj ? obj.value:'';
@@ -318,11 +317,11 @@ export default {
             console.log(ins)
             console.log(ina)
         },
-        onEditorUploadComplete(json) { // 处理上传图片后返回数据，添加img标签到编辑框内
-            console.log('json')
-            console.log(json)
+        onEditorUploadComplete(url) { // 处理上传图片后返回数据，添加img标签到编辑框内
+            console.log('url')
+            console.log(url)
             // console.log(json[0].data.filePath)
-            this.announce.noticeContent = this.announce.noticeContent + '<img src=' + json[0].data.filePath + '>';
+            this.announce.noticeContent = this.announce.noticeContent + '<img src=' + url + '>';
         },
         submitForm(formName) {
             if(this.announce.noticeContent || this.announce.noticeUrl){
@@ -343,7 +342,7 @@ export default {
                                 noticeFuncton = updateNotice(announceform);
                             }
                             noticeFuncton.then(res => {
-                                console.log('发布',res)
+                                // console.log('发布',res)
                                 this.close()
                             }).catch(err=>{
                                 this.$message({
@@ -372,12 +371,26 @@ export default {
                 })
             }
         },
-        resetForm(formName) {
-            this.$refs[formName].resetFields();
-        },
         close(){
             this.$emit('update:dialogFormVisible',false)
-            this.$refs.ruleForm.resetFields();
+            this.announce = {
+                province:'',//省
+                city:'',//市
+                title:'',//标题
+                titleLogo:'',//标题图片
+                noticeLocation:'',//发布区域
+                noticeContent:'',//公告内容// 富文本编辑器双向绑定的内容
+                noticeUrl:'',//公告链接
+                releaseDriver:'0',//发布到车主分组
+                releaseShipper:'0',//发布到货主分组
+                releaseHome:'0',
+                homeDriverStatus:'',
+                homeShipperStatus:'',
+                noticeGroupCode:'',//车主端公告分组
+                startTime:'',
+                endTime:null,
+                isTop:'0',//是否置顶
+            },
             this.$refs.vregion.clear();
             this.releaseDriver = false;//发布到车主分组
             this.releaseShipper = false;//发布到货主分组
@@ -385,6 +398,7 @@ export default {
             this.isTop = false;//是否置顶
             this.announce.endTime = null;
             this.$emit('close');
+            this.$refs.ruleForm.resetFields();
             if (typeof done === 'function') {
                 done()
             }

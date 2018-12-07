@@ -57,9 +57,9 @@ export default {
     meta: { role: ['admin'], title: '考核管理',stitle: '考核管理',  noCache: true },
     children: [{
       path: '/dispatch/evaluation/truck',
-      name: '小货车', 
+      name: '小货车考核', 
       component: _import('dispatch/evaluation/truck/index'), 
-      meta: { role: ['admin'], title: '小货车',stitle: '货车',  noCache: true }
+      meta: { role: ['admin'], title: '小货车',stitle: '小货车',  noCache: true }
     }]
   },  
 

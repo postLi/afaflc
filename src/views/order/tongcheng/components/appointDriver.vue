@@ -248,7 +248,9 @@ export default {
                     message: '不可同时指派给多个司机~'
                 })
             }else{
-                let pointData = Object.assign({},{orderSerial:this.orderSerial,driverId:this.selectRowData.driverId,distance:this.selectRowData.distance});
+                let coordinate = [];
+                coordinate.push(this.selectRowData.latitude,this.selectRowData.longitude)
+                let pointData = Object.assign({},{orderSerial:this.orderSerial,driverId:this.selectRowData.driverId,distance:this.selectRowData.distance,coordinate:coordinate.join(',')});
                 appointDriverList(pointData).then(res => {
                     this.close()
                 }).catch(err => {
