@@ -3,12 +3,12 @@
     <el-tabs v-model="cashAuditingName" type="card"  @tab-click='handleClick'>
         <!-- 全部提现 -->
             <el-tab-pane label="全部提现" name="first">
-                <cashAuditing ></cashAuditing>
+                <cashAuditing ref="one"></cashAuditing>
             </el-tab-pane>
 
         <!-- 待处理/审核中 -->
             <el-tab-pane label='待处理' name="second">
-                <cashAuditingStatus ></cashAuditingStatus>
+                <cashAuditingStatus ref="two"></cashAuditingStatus>
             </el-tab-pane>
     </el-tabs>
   </div>
@@ -38,7 +38,6 @@ export default {
       },
       created() {
         this.cashAuditingName = sessionStorage.getItem('cashAuditingName') || 'first'
-
       },
 
       beforeUpdate() {
@@ -51,9 +50,14 @@ export default {
      methods: {
      handleClick(tab, event) {
       this.cashAuditingName = tab.name;
-       },
+         if(tab.name == 'first'){
+           this.$refs.one.firstblood()
+         }
+         else{ 
+           this.$refs.two.firstblood()
+         }
      }
-     
+     }
 }
 </script>
 <style lang="scss" >

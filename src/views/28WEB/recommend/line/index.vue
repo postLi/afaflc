@@ -227,20 +227,20 @@ export default {
       selectInfo: [],
       defaultTime: [parseTime(+new Date() - 60 * 24 * 60 * 60 * 1000, '{y}-{m}-{d}'), parseTime(new Date(), '{y}-{m}-{d}')],
       formAllData: {
-        associatedId: '', // 专线id
-        createStartTime: '', // 开始时间
-        createEndTime: '', // 结束时间
-        account: '', // 账号
-        startProvince: '', // 出发省
-        startCity: '',
-        startArea: '',
-        endProvince: '', // 到达省
-        endCity: '',
-        endArea: '',
-        recommendColumn: '', // 推荐栏目
-        recommendPosition: '', // 推荐位置
-        settopStatus: '', // 置顶状态（0-不置顶 1-置顶）
-        recommendPrescription: '' // 推荐时效（0-全部 1-未开始 2-进行中 3-已结束）
+        associatedId: '' // 专线id
+        // createStartTime: '', // 开始时间
+        // createEndTime: '', // 结束时间
+        // account: '', // 账号
+        // startProvince: '', // 出发省
+        // startCity: '',
+        // startArea: '',
+        // endProvince: '', // 到达省
+        // endCity: '',
+        // endArea: '',
+        // recommendColumn: '', // 推荐栏目
+        // recommendPosition: '', // 推荐位置
+        // settopStatus: '', // 置顶状态（0-不置顶 1-置顶）
+        // recommendPrescription: '' // 推荐时效（0-全部 1-未开始 2-进行中 3-已结束）
       },
       options: [{
         value: '首页',
@@ -300,7 +300,8 @@ export default {
     Pager
   },
   mounted() {
-    this.formAllData.associatedId = this.$route.query.associatedId
+    // this.formAllData.associatedId = this.$route.query.associatedId
+    this.$set(this.formAllData, 'associatedId', this.$route.query.associatedId ? this.$route.query.associatedId : '')
     this.firstblood()
     this.searchCreatTime = this.defaultTime
   },
@@ -312,16 +313,17 @@ export default {
     handleSearch(type) {
       switch (type) {
         case 'search':
-
+          // this.formAllData.createStartTime = Date.parse(this.searchCreatTime[0] + ' 00:00:00')
+          // this.formAllData.createEndTime = Date.parse(this.searchCreatTime[1] + ' 23:59:59')
+          this.formAllData.createStartTime = this.searchCreatTime ? parseTime(this.searchCreatTime[0], '{y}-{m}-{d}') + ' 00:00:00' : null
+          this.formAllData.createEndTime = this.searchCreatTime ? parseTime(this.searchCreatTime[1], '{y}-{m}-{d}') + ' 23:59:59' : null
           this.firstblood()
-          this.formAllData.createStartTime = Date.parse(this.searchCreatTime[0] + ' 00:00:00')
-          this.formAllData.createEndTime = Date.parse(this.searchCreatTime[1] + ' 23:59:59')
-          console.log(this.formAllData.startTime, this.formAllData.endTime)
+          // console.log(this.formAllData.startTime, this.formAllData.endTime)
           break
         case 'clear':
           this.searchCreatTime = []
           this.formAllData = {
-            associatedId: '',
+            // associatedId: '',
             publishName: '',
             startProvince: '',
             startCity: '',

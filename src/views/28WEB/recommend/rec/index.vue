@@ -35,7 +35,7 @@
         </el-table-column>
         <el-table-column sortable prop="recommendPosition" label="推荐位置" width="">
         </el-table-column>
-        <el-table-column sortable prop="recommendLimit" label="推荐条数限制" width="">
+        <el-table-column sortable prop="" label="推荐条数限制" width="">
           <template slot-scope="scope">
             {{scope.row.recommendLimitType===1?scope.row.recommendLimit:'无限制'}}
           </template>
@@ -116,12 +116,10 @@
     methods: {
       fetchList() {
         this.loading = true
-        // this.searchQuery.recommendColumn = this.recommendColumnFn[3].value
         postList(this.page, this.pagesize, this.searchQuery).then(res => {
           this.dataset = res.data.list
           this.dataTotal = res.data.total;
           this.loading = false
-          // console.log(res)
         }).catch(err => {
           this.$message.warning(err.text ? err.text : err.errorInfo)
           this.loading = true
@@ -133,7 +131,6 @@
       handleDeatail(row) {
         this.isVisibleDialog = true
         this.selectedInfo = row
-        // console.log(row,'rowrowrow')
       },
 
       handleSearch(type) {
