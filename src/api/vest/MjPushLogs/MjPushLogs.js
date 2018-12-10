@@ -29,7 +29,7 @@ export function data_get_RecordList_list(page,pagesize,data) {
 }
 
 // 获取车主活跃度字典
-export function data_get_car_activeType() {
+export function data_get_car_activeType() { 
   return fetch.get('/' + baseurl_two + '/sysDict/getSysDictByCodeGet/AF00204')
 }
 

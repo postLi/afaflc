@@ -270,7 +270,7 @@ export default {
             if(reg.test(val)){
             cb(new Error('请输入正整数'))
             }
-            else if(val<1){
+            else if(val<0){
             cb(new Error('必须大于评估区间开始值'))
             }
             else{
@@ -306,7 +306,58 @@ export default {
             else{
                 cb()
             }            
-        }           
+        }
+        const score1Validator = (rule, val, cb) =>{
+            let stringValidator = (Math.floor(Number(rule.field.split('score')[1])/3)+1)
+            var reg= /[^-?\d]/g
+            if(reg.test(val)){
+            cb(new Error('请输入正整数'))
+            }
+            else if(parseInt(this.formdata['assessWeightPoint'+stringValidator])<parseInt(val)){
+            cb(new Error('不能大于'+this.formdata['appraItems'+stringValidator]+'权重配分'))
+            }
+            else if(val<-100){
+            cb(new Error('输入大于-100的数'))
+            }
+            else{
+                cb()
+            }            
+        }
+        const score2Validator = (rule, val, cb) =>{
+            let string2Validator = (Math.floor(Number(rule.field.split('score')[1])/3)+1)
+            var reg= /[^-?\d]/g
+            if(reg.test(val)){
+            cb(new Error('请输入正整数'))
+            }
+            else if(val<-100){
+            cb(new Error('输入大于-100的数'))
+            }
+            else if(parseInt(val)>=parseInt(this.formdata['score'+ (Number(rule.field.split('score')[1])-1)])){
+            cb(new Error('不能大于'+this.formdata['appraItems'+string2Validator]+'达标的得分值'))
+            }
+            else{
+                cb()
+            }            
+        }
+        const score3Validator = (rule, val, cb) =>{
+            let string3Validator = (Math.floor(Number(rule.field.split('score')[1])/3))
+            var reg= /[^-?\d]/g
+            if(reg.test(val)){
+                console.log()
+            cb(new Error('请输入正整数'))
+            }
+            else if(val<-100){
+            cb(new Error('输入大于-100的数'))
+            }
+            else if(parseInt(val)>=parseInt(this.formdata['score'+ (Number(rule.field.split('score')[1])-1)])){
+            cb(new Error('不能大于'+this.formdata['appraItems'+string3Validator]+'不达标的得分值'))
+            }            
+            else{
+                cb()
+            }            
+        }        
+
+        
         return{
         cityTree:[],
         treestatus:false,
@@ -316,6 +367,8 @@ export default {
         },
         formdata:{
             cityCode:null,
+            appraItems1:'撮合时效',appraItems2:'中单后联系货主时效',appraItems3:'到车时效',appraItems4:'到货时效',appraItems5:'回单时效',appraItems6:'回款时效',
+            appraItems7:'货损货差',appraItems8:'投诉',appraItems9:'到车距离异常',
             assessDescrip1:'从客户下单时间开始计算，到首次确认中单司机所用时间；',
             assessDescrip2:'从确认中单司机开始计算，到车主联系货主或前往提货地所用时间；',
             assessDescrip3:'实际到达提货地时间与预计到达提货地时间（即时订单：车主中单时间加上地图预估用时；预约订单：预约用车时间）差异值；',
@@ -365,15 +418,15 @@ export default {
             evaluaInterval20:{trigger:'change',required:true,validator: evaluaInterval_four},evaluaInterval24:{trigger:'change',required:true,validator: evaluaInterval_four},
             evaluaInterval28:{trigger:'change',required:true,validator: evaluaInterval_four},evaluaInterval32:{trigger:'change',required:true,validator: evaluaInterval_four},
             evaluaInterval36:{trigger:'change',required:true,validator: evaluaInterval_four},
-            score1:{trigger:'change',required:true,validator: rewardValidator},score2:{trigger:'change',required:true,validator: rewardValidator},score3:{trigger:'change',required:true,validator: rewardValidator},
-            score4:{trigger:'change',required:true,validator: rewardValidator},score5:{trigger:'change',required:true,validator: rewardValidator},score6:{trigger:'change',required:true,validator: rewardValidator},
-            score7:{trigger:'change',required:true,validator: rewardValidator},score8:{trigger:'change',required:true,validator: rewardValidator},score9:{trigger:'change',required:true,validator: rewardValidator},
-            score10:{trigger:'change',required:true,validator: rewardValidator},score11:{trigger:'change',required:true,validator: rewardValidator},score12:{trigger:'change',required:true,validator: rewardValidator},
-            score13:{trigger:'change',required:true,validator: rewardValidator},score14:{trigger:'change',required:true,validator: rewardValidator},score15:{trigger:'change',required:true,validator: rewardValidator},
-            score16:{trigger:'change',required:true,validator: rewardValidator},score17:{trigger:'change',required:true,validator: rewardValidator},score18:{trigger:'change',required:true,validator: rewardValidator},
-            score19:{trigger:'change',required:true,validator: rewardValidator},score20:{trigger:'change',required:true,validator: rewardValidator},score21:{trigger:'change',required:true,validator: rewardValidator},
-            score22:{trigger:'change',required:true,validator: rewardValidator},score23:{trigger:'change',required:true,validator: rewardValidator},score24:{trigger:'change',required:true,validator: rewardValidator},
-            score25:{trigger:'change',required:true,validator: rewardValidator},score26:{trigger:'change',required:true,validator: rewardValidator},score27:{trigger:'change',required:true,validator: rewardValidator},
+            score1:{trigger:'change',required:true,validator: score1Validator},score2:{trigger:'change',required:true,validator: score2Validator},score3:{trigger:'change',required:true,validator: score3Validator},
+            score4:{trigger:'change',required:true,validator: score1Validator},score5:{trigger:'change',required:true,validator: score2Validator},score6:{trigger:'change',required:true,validator: score3Validator},
+            score7:{trigger:'change',required:true,validator: score1Validator},score8:{trigger:'change',required:true,validator: score2Validator},score9:{trigger:'change',required:true,validator: score3Validator},
+            score10:{trigger:'change',required:true,validator: score1Validator},score11:{trigger:'change',required:true,validator: score2Validator},score12:{trigger:'change',required:true,validator: score3Validator},
+            score13:{trigger:'change',required:true,validator: score1Validator},score14:{trigger:'change',required:true,validator: score2Validator},score15:{trigger:'change',required:true,validator: score3Validator},
+            score16:{trigger:'change',required:true,validator: score1Validator},score17:{trigger:'change',required:true,validator: score2Validator},score18:{trigger:'change',required:true,validator: score3Validator},
+            score19:{trigger:'change',required:true,validator: score1Validator},score20:{trigger:'change',required:true,validator: score2Validator},score21:{trigger:'change',required:true,validator: score3Validator},
+            score22:{trigger:'change',required:true,validator: score1Validator},score23:{trigger:'change',required:true,validator: score2Validator},score24:{trigger:'change',required:true,validator: score3Validator},
+            score25:{trigger:'change',required:true,validator: score1Validator},score26:{trigger:'change',required:true,validator: score2Validator},score27:{trigger:'change',required:true,validator: score3Validator},
         },
         }
     },
@@ -449,6 +502,20 @@ export default {
         break;                 
         }
         },
+
+        calibrate(){
+            let suntotle = 0;
+            for(let assI = 1;assI<=9;assI++){
+            suntotle += Number(this.formdata['assessWeightPoint'+assI])
+            }
+            if(suntotle==100){
+            return
+            }
+            else{
+            this.$message.error('所有考核项配分总数为100分,否则不能保存成功~');
+            return false
+            }
+        },
         Addsave(){
         let form = [
         {classAssessItem:'AF0051801',appraItems:'AF005180101',assessWeightPoint:this.formdata.assessWeightPoint1,evakuaValue:'达标',evaluaIntervalStart:'0',evaluaIntervalEnd:this.formdata.evaluaInterval1,score:this.formdata.score1,assessDescrip:this.formdata.assessDescrip1,citycode:this.cityCode},
@@ -481,6 +548,13 @@ export default {
         {classAssessItem:'AF0051803',appraItems:'AF005180302',assessWeightPoint:this.formdata.assessWeightPoint9,evakuaValue:'不达标',evaluaIntervalStart:this.formdata.evaluaInterval34,evaluaIntervalEnd:this.formdata.evaluaInterval35,score:this.formdata.score26,assessDescrip:this.formdata.assessDescrip9,citycode:this.cityCode},
         {classAssessItem:'AF0051803',appraItems:'AF005180302',assessWeightPoint:this.formdata.assessWeightPoint9,evakuaValue:'严重不达标',evaluaIntervalStart:this.formdata.evaluaInterval36,evaluaIntervalEnd:'9999',score:this.formdata.score27,assessDescrip:this.formdata.assessDescrip9,citycode:this.cityCode},
         ]
+
+      this.calibrate();
+      if(this.calibrate()==false)
+        {
+        return
+        }
+        else{
        this.$refs['formdata'].validate(valid=>{
         if(valid){
         if(this.cityCode){
@@ -498,6 +572,7 @@ export default {
         }
         }
        })
+    }
        }
     }    
 }
