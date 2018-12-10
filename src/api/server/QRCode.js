@@ -1,6 +1,6 @@
 import fetch from '@/utils/fetch'
 
-const baseurl = "aflccommonservice"
+const baseurl = "aflccommonservice-wtc"
 
 //根据条件获取二维码生成表列表
 export function aflcQrcodeList(page,pagesize,data) {
@@ -39,3 +39,17 @@ export function getChannel() {
       method: 'get',
     })
   } 
+
+
+//根据条件获取渠道数据统计列表
+export function aflcChannelStatistics(page,pagesize,data) {
+    return fetch({
+      url: '/'+baseurl+'/common/aflcChannelStatistics/v1/list',
+      method: 'post',
+      data:{
+        "currentPage":page ,
+        "pageSize": pagesize,
+        "vo": data
+      }
+    })
+  }

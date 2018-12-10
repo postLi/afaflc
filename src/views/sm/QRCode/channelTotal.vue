@@ -1,12 +1,12 @@
 <template>
     <div class="identicalStyle creatQRCode" v-loading="loading">
             <el-form  :inline="true" :model="searchInfo" ref="ruleForm" class="demo-ruleForm classify_searchinfo">
-                <el-form-item label="业务员" prop="pointName">
-                    <el-input v-model="searchInfo.orderSerial" clearable>
+                <el-form-item label="业务员" prop="salesman">
+                    <el-input v-model="searchInfo.salesman" clearable>
                     </el-input>            
                 </el-form-item>
-                <el-form-item label="渠道名称" prop="orderSerial">
-                    <el-input v-model="searchInfo.orderSerial" maxlength="20" clearable>
+                <el-form-item label="渠道名称" prop="channelName">
+                    <el-input v-model="searchInfo.channelName" maxlength="20" clearable>
                     </el-input>
                 </el-form-item>
                 <el-form-item class="btnChoose fr"  style="margin-left:0;">
@@ -31,10 +31,10 @@
                         tooltip-effect="dark"
                         @row-click="clickDetails"
                         style="width: 100%"> 
-                        <el-table-column
+                        <!-- <el-table-column
                             type="selection"
                             width="55">
-                        </el-table-column>
+                        </el-table-column> -->
                         <el-table-column label="序号" sortable width="80">
                             <template slot-scope="scope">
                                 {{ (page - 1)*pagesize + scope.$index + 1 }}
@@ -42,57 +42,78 @@
                         </el-table-column>  
                         <el-table-column
                             sortable
-                            prop="orderSerial"
-                            label="姓名"
-                            width="250">
-                                <!-- <template  slot-scope="scope">
-                                        <h4 class="needMoreInfo" @click="pushOrderSerial(scope.row)">{{ scope.row.orderSerial}}</h4>
-                                </template> -->
+                            prop="salesman"
+                            label="业务员"
+                            width="160">
                         </el-table-column>
                         <el-table-column
-                            prop="orderType"
-                            :show-overflow-tooltip="true"
-                            sortable
-                            label="主题"
-                            >
-                        </el-table-column>
-                        <el-table-column
-                            prop="belongCity"
+                            prop="channelName"
                             :show-overflow-tooltip="true"
                             sortable
                             label="渠道名称"
                             >
                         </el-table-column>
                         <el-table-column
-                            prop="shipperMobile"
+                            prop="regisShipper"
                             :show-overflow-tooltip="true"
                             sortable
-                            label="链接"
+                            label="注册货主"
                             >
                         </el-table-column>
                         <el-table-column
-                            prop="shipperName"
+                            prop="cartificationeShipper"
+                            :show-overflow-tooltip="true"
                             sortable
-                            label="二维码"
+                            label="认证货主"
+                            >
+                        </el-table-column>
+                        <el-table-column
+                            prop="shipperOrdernum"
+                            sortable
+                            label="货主下单数量"
                             width="120">
                         </el-table-column>
                         <el-table-column
-                            prop="usedCarType"
+                            prop="regisDriver"
                             sortable
-                            label="创建时间"
+                            label="注册车主"
+                            width="160">
+                        </el-table-column>
+                        <el-table-column
+                            prop="cartificationeDriver"
+                            sortable
+                            label="认证车主"
+                            width="160">
+                        </el-table-column>
+                        <el-table-column
+                            prop="regisLogisticsCompany"
+                            sortable
+                            label="注册物流公司"
+                            width="160">
+                        </el-table-column>
+                        <el-table-column
+                            prop="cartificationeLogisticsCompany"
+                            sortable
+                            label="认证物流公司"
+                            width="160">
+                        </el-table-column>
+                        <el-table-column
+                            prop="logisticsCompanyOrdernum"
+                            sortable
+                            label="物流公司下单数量"
                             width="160">
                         </el-table-column>
                     </el-table>
                 </div>
             </div>   
                 <!-- 页码 -->
-            <div class="info_tab_footer">共计:{{ dataTotal }} <div class="show_pager"> <Pager :total="dataTotal" @change="handlePageChange"  :sizes="sizes"  ref="pager"/></div> </div>    
+            <div class="info_tab_footer">共计:{{ dataTotal }} <div class="show_pager"> <Pager :total="dataTotal" @change="handlePageChange"  ref="pager"/></div> </div>    
     </div>
 </template>
 
 <script type="text/javascript">
 
-import { orderStatusList } from '@/api/order/ordermange'
+import { aflcChannelStatistics } from '@/api/server/QRCode.js'
 import { parseTime, pickerOptions2 } from '@/utils/index.js'
 import Pager from '@/components/Pagination/index'
 
@@ -109,32 +130,24 @@ export default{
       data() {
           return {
               btnsize: 'mini',
-              dialogVisible: false,
-              timeOutAss: null,
-              loading: false, // 加载
+              loading: true, // 加载
               sizes: [20, 50, 100],
               pagesize: 20, // 初始化加载数量
               page: 1, // 初始化页码
               dataTotal: 0,
               searchInfo: {
-                  belongCity: '', // 区域
-                  shipperName: '', // 货主
-                  startOrderDate: '', // 下单起始时间
-                  endOrderDate: '', // 下单结束时间
-                  orderSerial: '', // 订单号
-                  orderStatus: 'AF0080502', // 公海无司机
-                  parentOrderStatus: 'AF00805' // 订单状态
+                  channelName:'',//渠道名称
+                    salesman:'',//业务员
                 },
               tableData: [],
               checkedinformation: [],
-              dialogFormVisible: false
             }
         },
       watch: {
           isvisible: {
               handler(newVal, oldVal) {
                   if (newVal) {
-                        // this.firstblood()
+                        this.firstblood()
                     } else{
                     }
                 },
@@ -147,7 +160,6 @@ export default{
         },
       mounted() {
             // this.firstblood();
-
         },
       beforeDestroy() {
         },
@@ -159,38 +171,26 @@ export default{
             },
             // 刷新页面
           firstblood() {
-              this.loading = true
-
-                orderStatusList(this.page, this.pagesize, this.searchInfo).then(res => {
-                  console.log('车主改派', res)
-                  this.tableData = res.data.list
-                    this.dataTotal = res.data.totalCount
-
-                    this.tableData.forEach(item => {
-                      item.aflcOrderAddresses.sort(function(a, b) {
-                          return a.viaOrder - b.viaOrder  
-                        })
-                    })
-
-                  this.loading = false
-
+                this.loading = true;
+                aflcChannelStatistics(this.page, this.pagesize, this.searchInfo).then(res => {
+                    this.tableData = res.data.list;
+                    this.dataTotal = res.data.totalCount;
+                    this.loading = false;
                 })
             },
-
             // 模糊查询 分类名称或者code
           handleSearch(type) {
               switch (type) {
-                  case 'appoint':
-
-                    break
                 case 'search':
                     
                     break
                 case 'clear':
-
+                    this.$refs.ruleForm.resetFields();
                     break
-                case 'cancel':
-                    break
+                }
+                if(this.page!= 1){
+                    this.page = 1;
+                    this.$refs.pager.inputval = this.page;
                 }
                 this.firstblood()
             },
@@ -201,13 +201,6 @@ export default{
              // 点击选中当前行
             clickDetails(row, event, column) {
               this.$refs.multipleTable.toggleRowSelection(row)
-            },
-            // 详情弹窗
-            pushOrderSerial(item) {
-              this.$router.push({ name: '订单详情', query: { orderSerial: item.orderSerial }})
-            },
-            shuaxin() {
-              this.firstblood()
             },
         }
     }

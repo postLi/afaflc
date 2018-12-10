@@ -23,14 +23,14 @@
                             </template>
                         </el-table-column>  
                         <el-table-column
-                            prop="orderSerial"
+                            prop="callerNo"
                             label="主叫号码"
                             width="150"
                             sortable
                             >
-                                <template  slot-scope="scope">
+                                <!-- <template  slot-scope="scope">
                                     {{ scope.row.workSerial}}
-                                </template>
+                                </template> -->
                         </el-table-column>
                         <el-table-column
                             prop="complainTypeName"
@@ -40,7 +40,7 @@
                             >
                         </el-table-column>
                         <el-table-column
-                            prop="orderSerial"
+                            prop="linkman"
                             label="联系人"
                             width="160"
                             sortable
@@ -48,25 +48,31 @@
                         </el-table-column>
                         <el-table-column
                             :show-overflow-tooltip="true"
-                            prop="complainDes"
+                            prop="calleeNo"
                             label="被叫号码"
                             width="160"
                             sortable
                             >
                         </el-table-column>
                         <el-table-column
-                            prop="complainTime"
+                            prop="startTime"
                             label="开始时间"
                             width="160"
                             sortable
                             >
+                            <template  slot-scope="scope">
+                               {{scope.row.startTime | parseTime}}
+                            </template>
                         </el-table-column>
                          <el-table-column
-                            prop="complainName"
+                            prop="onhookTime"
                             label="结束时间"
                             width="160"
                             sortable
                             >
+                            <template  slot-scope="scope">
+                               {{scope.row.onhookTime | parseTime}}
+                            </template>
                         </el-table-column> 
                         <el-table-column
                             prop="complainStatusName"
@@ -77,11 +83,12 @@
                         </el-table-column>
                         <el-table-column
                             label="客户号码归属地"
+                            prop="district"
                             width="200"
                             sortable
                             >
                             <template  slot-scope="scope">
-                               {{scope.row.platformTime ? scope.row.platformTime : '无'}}
+                               {{scope.row.district ? scope.row.district : '无'}}
                             </template>
                         </el-table-column>
                         <el-table-column
@@ -95,11 +102,12 @@
                         </el-table-column>
                         <el-table-column
                             label="通话时长"
+                            prop="minutes"
                             width="120"
                             sortable
                             >
                             <template  slot-scope="scope">
-                                {{scope.row.reply ? scope.row.reply : '无'}}
+                                {{scope.row.minutes ? scope.row.minutes : '无'}}
                             </template>
                         </el-table-column>
                         <el-table-column
@@ -114,13 +122,13 @@
                         </el-table-column>
                         <el-table-column
                             label="操作"
-                            width="120"
+                            width="160"
                             sortable
                             >
                             <template  slot-scope="scope">
                                 <!-- <el-button-group> -->
-                                    <el-button type="primary" plain icon="el-icon-document" :size="btnsize" @click="handleClick(scope.row,'reply')">回复</el-button>
-                                    <el-button type="primary" plain icon="el-icon-delete" :size="btnsize" @click="handleClick(scope.row,'delet')">删除</el-button>
+                                    <el-button type="primary" plain  :size="btnsize" @click="handleClick(scope.row,'reply')">播放</el-button>
+                                    <el-button type="primary" plain  :size="btnsize" @click="handleClick(scope.row,'delet')">下载</el-button>
                                 <!-- </el-button-group> -->
                             </template>
                         </el-table-column>
@@ -134,7 +142,7 @@
 
 <script type="text/javascript">
 
-import { getListCouseComplain } from '@/api/service/index.js'
+import { aflcCallLog } from '@/api/service/400.js'
 import { parseTime } from '@/utils/index.js'
 import Pager from '@/components/Pagination/index'
 import searchInfo from './searchInfo'
@@ -146,14 +154,15 @@ import searchInfo from './searchInfo'
         },
         data(){
             return{
+                btnsize:'mini',
                 serviceType:'couse',
                 loading: false,//加载
                 pagesize:20,//初始化加载数量
                 page:1,//初始化页码
                 dataTotal:0,
                 searchInfo:{
-                    complainType:'',//类型
-                    workSerial:'',//工单号                    
+                    // complainType:'',//类型
+                    // workSerial:'',//工单号                    
                 },
                 tableData:[],
                 dialogFormVisible_details:false,//详情弹窗
@@ -169,10 +178,9 @@ import searchInfo from './searchInfo'
 
         },
         mounted(){
-            // this.firstblood();
+            this.firstblood();
         },  
         beforeDestroy(){
-            // clearInterval(this.timeOut);
         },
         methods: {
             handlePageChange(obj) {
@@ -183,8 +191,7 @@ import searchInfo from './searchInfo'
             //刷新页面  
             firstblood(){
                 this.loading = true;
-                getListCouseComplain(this.page,this.pagesize,this.searchInfo).then(res => {
-                    console.log('是否刷新',res.data)
+                aflcCallLog(this.page,this.pagesize,this.searchInfo).then(res => {
                     this.tableData = res.data.list;
                     this.dataTotal = res.data.totalCount;
                     this.loading = false;

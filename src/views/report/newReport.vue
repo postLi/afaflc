@@ -10,17 +10,17 @@
                 <div class="TransactionFlow_classfy">
                     <div class="transItem">
                         <h6>现金流入</h6>
-                        <p>{{this.tradeOrderPaymentCountObj.incomeAmount | NumFormat}} 元</p>
+                        <p>{{(this.tradeOrderPaymentCountObj.incomeAmount+'') | NumFormat}} 元</p>
                         <!-- <p>昨日全天：100,000,000</p> -->
                     </div>
                     <div class="transItem">
                         <h6>现金流出</h6>
-                        <p>{{this.tradeOrderPaymentCountObj.expendAmount | NumFormat}} 元</p>
+                        <p>{{(this.tradeOrderPaymentCountObj.expendAmount+'') | NumFormat}} 元</p>
                         <!-- <p>昨日全天：100,000,000</p>    -->
                     </div>
                     <div class="transItem"> 
                         <h6>流水差</h6>
-                        <p>{{(this.tradeOrderPaymentCountObj.incomeAmount - this.tradeOrderPaymentCountObj.expendAmount ) | NumFormat}}元</p>
+                        <p><span v-if="this.tradeOrderPaymentCountObj.incomeAmount - this.tradeOrderPaymentCountObj.expendAmount < 0">-</span>{{(this.tradeOrderPaymentCountObj.incomeAmount - this.tradeOrderPaymentCountObj.expendAmount + '') | NumFormat}}元</p>
                         <!-- <p>昨日全天：100,000,000</p> -->
                     </div>
                 </div>
