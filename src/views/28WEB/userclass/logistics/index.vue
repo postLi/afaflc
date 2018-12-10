@@ -2,15 +2,14 @@
     <div class="identicalStyle Marketing" style="height:100%" v-loading="loading">
         <el-form :inline="true"  class="demo-ruleForm classify_searchinfo">
           <el-form-item label="出发地">
-            <GetCityList ref="area" @returnStr="getStart"></GetCityList>
+            <GetCityList ref="start" @returnStr="getStart"></GetCityList>
           </el-form-item>
           <el-form-item label="到达地">
-            <GetCityList ref="area" @returnStr="getEnd"></GetCityList>
+            <GetCityList ref="end" @returnStr="getEnd"></GetCityList>
           </el-form-item>
-          <el-form-item label="交易时间">
+          <el-form-item label="发布时间">
             <el-date-picker
               v-model="searchCreatTime"
-              :default-value="defaultTime"
               type="daterange"
               align="right"
               popper-class='searchCreatTime'
@@ -132,7 +131,7 @@ export default {
       selectInfo: [], // 专线id
       loading: false,
       isMatreg: false,
-      defaultTime: [parseTime(+new Date() - 60 * 24 * 60 * 60 * 1000, '{y}-{m}-{d}'), parseTime(new Date(), '{y}-{m}-{d}')],
+      // defaultTime: [parseTime(+new Date() - 60 * 24 * 60 * 60 * 1000, '{y}-{m}-{d}'), parseTime(new Date(), '{y}-{m}-{d}')],
       formAllData: {
         startTime: '',
         endTime: '',
@@ -156,7 +155,7 @@ export default {
   },
   mounted() {
     this.firstblood()
-    this.searchCreatTime = this.defaultTime
+    // this.searchCreatTime = this.defaultTime
   },
   methods: {
     getValue(obj) {
@@ -170,7 +169,7 @@ export default {
           this.firstblood()
           this.formAllData.startTime = Date.parse(this.searchCreatTime[0] + ' 00:00:00')
           this.formAllData.endTime = Date.parse(this.searchCreatTime[1] + ' 23:59:59')
-          console.log(this.formAllData.startTime, this.formAllData.endTime)
+          // console.log(this.formAllData.startTime, this.formAllData.endTime)
           break
         case 'clear':
           this.searchCreatTime = []
@@ -183,7 +182,8 @@ export default {
             endCity: '',
             endArea: ''
           }
-          this.$refs.area.clearData()
+          this.$refs.start.clearData()
+          this.$refs.end.clearData()
           this.firstblood()
           break
       }

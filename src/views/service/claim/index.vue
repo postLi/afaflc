@@ -137,17 +137,16 @@
           <div class="info_tab_footer">共计:{{ dataTotal }}<div class="show_pager"> <Pager :total="dataTotal" @change="handlePageChange"  :sizes="sizes"/></div> </div>
         </div>
       </div>
-      
 </template>
 <script>
 import { postOrderGoodsclaimlist } from '@/api/service/claim.js'
 import Pager from '@/components/Pagination/index'
-import { parseTime } from '@/utils/'
+// import { parseTime } from '@/utils/'
 // import vregion from '@/components/vregion/Region'
 import GetCityList from '@/components/GetCityList/city'
 import { DicDelStatusType } from '@/api/common'
 import addReg from './reg/index'
-import { orderDetailsList } from '@/api/order/ordermange'
+// import { orderDetailsList } from '@/api/order/ordermange'
 export default {
   data() {
     return {

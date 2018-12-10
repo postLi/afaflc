@@ -170,7 +170,7 @@ export default {
             cTime(i){
             this.formAllData.startUseTime = i[0]/1000
             this.formAllData.endUseTime = i[1]/1000
-            },
+            },   
             // 查询
             getdata_search(){
             this.page = 1;
