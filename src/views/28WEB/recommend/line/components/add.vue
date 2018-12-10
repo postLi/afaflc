@@ -10,26 +10,10 @@
       :before-close="closeMe">
       <el-form :model="formAllData" :rules="rules"  ref="ruleForm" :inline="true"  label-position="right" label-width="100px">
         <el-form-item label="推荐栏目" prop="recommendColumn">
-          <el-select v-model="formAllData.recommendColumn" placeholder="请选择" @change="changeColumn">
-            <el-option
-              v-for="item in options"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value">
-            </el-option>
-          </el-select>
+          <el-input v-number-only:point v-model.trim="formAllData.recommendColumn" :maxlength="6" disabled="disabled" auto-complete="off" clearable></el-input>
         </el-form-item>
-        <el-form-item label="推荐位置" prop="recommendPosition">
-          <el-select v-model="formAllData.recommendPosition" placeholder="请选择" @change="changePosition">
-            <el-option
-              v-for="(item,index) in options1"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
-              :disabled="options1list.indexOf(index) == '-1'"
-              >
-            </el-option>
-          </el-select>
+         <el-form-item label="推荐位置" prop="recommendPosition">
+          <el-input v-number-only:point v-model.trim="formAllData.recommendPosition" :maxlength="6" disabled="disabled" auto-complete="off" clearable></el-input>
         </el-form-item>
         <el-form-item label="推荐有效期" prop="searchCreatTime">
           <el-date-picker
@@ -126,30 +110,6 @@ export default {
       defaultTime: [parseTime(+new Date() - 60 * 24 * 60 * 60 * 1000, '{y}-{m}-{d}'), parseTime(new Date(), '{y}-{m}-{d}')],
       value3: true,
       value4: true,
-      options: [{
-        value: '首页',
-        label: '首页'
-      }, {
-        value: '物流专线栏目',
-        label: '物流专线栏目'
-      }, {
-        value: '专线详情页',
-        label: '专线详情页'
-      }],
-      options1: [{
-        value: '找物流专线',
-        label: '找物流专线'
-      }, {
-        value: '物流专线列表',
-        label: '物流专线列表'
-      }, {
-        value: '右侧专线列表',
-        label: '右侧专线列表'
-      }, {
-        value: '此路线其他专线',
-        label: '此路线其他专线'
-      }],
-      options1list: [],
       form: {
 
       },
@@ -207,25 +167,6 @@ export default {
       if (typeof done === 'function') {
         done()
       }
-    },
-    changeColumn(obj) {
-      this.formAllData.recommendPosition = ''
-      this.options1list = []
-      this.formAllData.recommendColumn = obj
-      switch (obj) {
-        case '首页'
-            :this.options1list.push(0)
-          break
-        case '物流专线栏目'
-            :this.options1list.push(1, 2)
-          break
-        case '专线详情页'
-            :this.options1list.push(3)
-          break
-      }
-    },
-    changePosition(obj) {
-      this.formAllData.recommendPosition = obj
     },
     getSelectInfo(selectInfo) {
       console.log(selectInfo)
@@ -327,6 +268,7 @@ export default {
     .el-input__inner{
       height:35px;
       line-height: 35px;
+      color: #3e9ff1;
     }
     .picklist{
       width: 217px;
@@ -340,6 +282,7 @@ export default {
     }
     .el-textarea__inner{
       height:100px;
+      color: #3e9ff1;
     }
     .el-range-editor.el-input__inner{
       width: 217px;

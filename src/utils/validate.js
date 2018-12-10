@@ -26,6 +26,7 @@ export function validateNumber(str) {
   const reg = /^\d*\.{0,1}\d{0,1}$/
   return reg.test(str)
 }
+
 /* 小写字母*/
 export function validateLowerCase(str) {
   const reg = /^[a-z]+$/
@@ -104,6 +105,8 @@ export const REGEX = {
   ONLY_NUMBER_GT: /^[1-9]\d*$/,
   // 只能数字或小数 只能有一个小数点并且第一位不能为小数点
   ONLY_NUMBER_POINT: /^\d*\.{0,1}\d{0,1}$/,
+  // 匹配整数，且只能有一位小数
+  ONLY_ONE_NUMBER: /^[1-9]\d{0,2}\.\d$|^0\.\d$/,
   // 只含有英文字母、数字和下划线
   ONLY_ENGLISH_NUMBER: /^[A-Za-z0-9_]+$/,
   // 国内电话(区号-号码)
