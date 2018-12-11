@@ -10,7 +10,7 @@
                     </el-input>
                 </el-form-item>
                 <el-form-item label="渠道名称"   prop="channalName">
-                    <el-input v-model="searchInfo.channalName" clearable placeholder="账户/姓名">
+                    <el-input v-model="searchInfo.channalName" clearable>
                     </el-input>
                 </el-form-item>
                 <el-form-item class="btnChoose fr"  style="margin-left:0;">
