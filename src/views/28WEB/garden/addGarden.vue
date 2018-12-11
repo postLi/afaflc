@@ -8,7 +8,7 @@
             <el-input v-model="form.parkName" clearable :maxlength="25"></el-input>
           </el-form-item>
           <el-form-item label="手机号" prop="parkMobile">
-            <el-input v-model="form.parkMobile" clearable :maxlength='11' ></el-input>
+            <el-input v-model="form.parkMobile" clearable :maxlength='11'></el-input>
           </el-form-item>
 
           <el-form-item label="所在地" prop="locationFn">
@@ -42,12 +42,12 @@
                 :value="form.parkIntroduce"
                 :setting="editorSetting"
                 @show="editors"
-                :url              = "Url"
-                :max-size         = "MaxSize"
-                :accept           = "Accept"
-                :with-credentials = "withCredentials"
-                @on-upload-fail         = "onEditorReady"
-                @on-upload-success= "onEditorUploadComplete"></editor>
+                :url="Url"
+                :max-size="MaxSize"
+                :accept="Accept"
+                :with-credentials="withCredentials"
+                @on-upload-fail="onEditorReady"
+                @on-upload-success="onEditorUploadComplete"></editor>
             </div>
           </el-form-item>
         </div>
@@ -74,7 +74,7 @@
       </div>
 
     </el-dialog>
-    <tmsmap @success="getInfo" pos="" name="" :popVisible.sync="popVisible"/>
+    <tmsmap @success="getInfo" pos="" name="" :popVisible.sync="popVisible" />
   </div>
 </template>
 
@@ -229,10 +229,10 @@
       }
     },
     methods: {
-      onEditorReady(ins, ina){
+      onEditorReady(ins, ina) {
         // console.log(ins, ina)
       },
-      onEditorUploadComplete(json){
+      onEditorUploadComplete(json) {
         // console.log(json,'jsonjson')
         this.form.parkIntroduce = this.form.parkIntroduce + '<img src=' + json[0].data.filePath + '>';
       },
