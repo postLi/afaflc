@@ -57,7 +57,6 @@
           <el-form-item label="创建时间">
             <el-date-picker
               v-model="searchCreatTime"
-              :default-value="defaultTime"
               type="daterange"
               align="right"
               popper-class='searchCreatTime'
@@ -201,7 +200,7 @@
 <script>
 import { postGetLists, deleteLine, putCancel } from '@/api/web/recommend.js'
 import Pager from '@/components/Pagination/index'
-import { parseTime } from '@/utils/'
+// import { parseTime } from '@/utils/'
 import GetCityList from '@/components/GetCityList/city'
 import add from './components/add'
 import { pickerOptions2 } from '@/utils/index.js'
@@ -225,22 +224,22 @@ export default {
       searchCreatTime: [],
       isMatreg: false,
       selectInfo: [],
-      defaultTime: [parseTime(+new Date() - 60 * 24 * 60 * 60 * 1000, '{y}-{m}-{d}'), parseTime(new Date(), '{y}-{m}-{d}')],
+      // defaultTime: [parseTime(+new Date() - 60 * 24 * 60 * 60 * 1000, '{y}-{m}-{d}'), parseTime(new Date(), '{y}-{m}-{d}')],
       formAllData: {
-        associatedId: '' // 专线id
-        // createStartTime: '', // 开始时间
-        // createEndTime: '', // 结束时间
-        // account: '', // 账号
-        // startProvince: '', // 出发省
-        // startCity: '',
-        // startArea: '',
-        // endProvince: '', // 到达省
-        // endCity: '',
-        // endArea: '',
-        // recommendColumn: '', // 推荐栏目
-        // recommendPosition: '', // 推荐位置
-        // settopStatus: '', // 置顶状态（0-不置顶 1-置顶）
-        // recommendPrescription: '' // 推荐时效（0-全部 1-未开始 2-进行中 3-已结束）
+        associatedId: '', // 专线id
+        createStartTime: '', // 开始时间
+        createEndTime: '', // 结束时间
+        account: '', // 账号
+        startProvince: '', // 出发省
+        startCity: '',
+        startArea: '',
+        endProvince: '', // 到达省
+        endCity: '',
+        endArea: '',
+        recommendColumn: '', // 推荐栏目
+        recommendPosition: '', // 推荐位置
+        settopStatus: '', // 置顶状态（0-不置顶 1-置顶）
+        recommendPrescription: '' // 推荐时效（0-全部 1-未开始 2-进行中 3-已结束）
       },
       options: [{
         value: '首页',
@@ -262,8 +261,8 @@ export default {
         value: '右侧专线推荐',
         label: '右侧专线推荐'
       }, {
-        value: '此路线其他专线',
-        label: '此路线其他专线'
+        value: '此线路其他专线',
+        label: '此线路其他专线'
       }],
       options3: [{
         value: null,
@@ -303,7 +302,7 @@ export default {
     // this.formAllData.associatedId = this.$route.query.associatedId
     this.$set(this.formAllData, 'associatedId', this.$route.query.associatedId ? this.$route.query.associatedId : '')
     this.firstblood()
-    this.searchCreatTime = this.defaultTime
+    // this.searchCreatTime = this.defaultTime
   },
   methods: {
     getValue(obj) {
@@ -315,10 +314,9 @@ export default {
         case 'search':
           // this.formAllData.createStartTime = Date.parse(this.searchCreatTime[0] + ' 00:00:00')
           // this.formAllData.createEndTime = Date.parse(this.searchCreatTime[1] + ' 23:59:59')
-          this.formAllData.createStartTime = this.searchCreatTime ? parseTime(this.searchCreatTime[0], '{y}-{m}-{d}') + ' 00:00:00' : null
-          this.formAllData.createEndTime = this.searchCreatTime ? parseTime(this.searchCreatTime[1], '{y}-{m}-{d}') + ' 23:59:59' : null
+          this.formAllData.createStartTime = this.searchCreatTime[0] ? this.searchCreatTime[0] + ' 00:00:00' : ''
+          this.formAllData.createEndTime = this.searchCreatTime[1] ? this.searchCreatTime[1] + ' 23:59:59' : ''
           this.firstblood()
-          // console.log(this.formAllData.startTime, this.formAllData.endTime)
           break
         case 'clear':
           this.searchCreatTime = []
@@ -373,7 +371,7 @@ export default {
     },
     // 选择搜索列表的值
     changeColumn(obj) {
-      this.formAllData.recommendPosition = ''
+      // this.formAllData.recommendPosition = ''
       this.options1list = []
       this.formAllData.recommendColumn = obj
       switch (obj) {

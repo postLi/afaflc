@@ -144,8 +144,8 @@ export default {
         value: '右侧专线推荐',
         label: '右侧专线推荐'
       }, {
-        value: '此路线其他专线',
-        label: '此路线其他专线'
+        value: '此线路其他专线',
+        label: '此线路其他专线'
       }],
       options1list: [],
       form: {
@@ -212,7 +212,7 @@ export default {
       }
     },
     changeColumn(obj) {
-      this.formAllData.recommendPosition = ''
+      // this.formAllData.recommendPosition = ''
       this.options1list = []
       this.formAllData.recommendColumn = obj
       switch (obj) {

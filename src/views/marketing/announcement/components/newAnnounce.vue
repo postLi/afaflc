@@ -1,7 +1,7 @@
 <template>
     <div class="newAnnounce commoncss">
         <el-dialog :title='Atitle' :close-on-click-modal="false" top="5vh" @open='open'  :visible="dialogFormVisible" @close="close">
-            <el-form :model="announce" :rules="rules" :label-position="labelPosition" ref="ruleForm" label-width="100px" class="demo-ruleForm">
+            <el-form :model="announce" :rules="rules" :label-position="labelPosition" ref="ruleForm" label-width="120px" class="demo-ruleForm">
                 <el-form-item label="发布区域" prop="noticeLocation">
                     <vregion :ui="true" :area="false" @values="regionChange" class="form-control"  ref="vregion">
                         <el-input v-model="announce.noticeLocation" placeholder="请选择发布区域" clearable></el-input>
@@ -418,7 +418,7 @@ export default {
             .el-dialog__body{
                 position:relative;
                 .el-form-item{
-                    margin-right: 30%;
+                    margin-right: 28%;
                 }
                 .el-button{
                    padding:12px 20px;
