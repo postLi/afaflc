@@ -112,43 +112,6 @@ export default {
                 polygon.setMap((map))    
                 });
 
-        // //创建右键菜单
-        //     var contextMenu = new AMap.ContextMenu();
-        //     var lng,lat;
-        //     contextMenu.addItem("添加标记", function (e) {
-        //        if(_this.editstatusMap=='1'){
-        //         _this.$message({
-        //             message: '修改围栏需要清除之前的围栏~',
-        //             type: 'warning'
-        //         })
-        //        }
-        //        else if(_this.editstatusMap=='2'){
-        //         _this.$message({
-        //             message: '详情不能进行修改~',
-        //             type: 'warning'
-        //         })
-        //        }
-        //         else{
-        //         marker = new AMap.Marker({
-        //             map:map,
-        //             position: contextMenuPositon //基点位置
-        //         });
-        //         lng = contextMenuPositon.lng
-        //         lat = contextMenuPositon.lat
-        //         _this.path.push([lng,lat])
-        //         if(_this.path.length>2){
-        //          map.clearMap(polygon)
-        //         }
-        //         _this.dataAraay = _this.path;
-        //         _this.$emit('returnStr', _this.dataAraay)
-        //         _this.ToolBar()
-        //         }
-        //     }, 3);
-
-        //     map.on('rightclick', function (e) {
-        //         contextMenu.open(map, e.lnglat);
-        //         contextMenuPositon = e.lnglat;
-        //     });
 
         },
         ToolBar:function(){

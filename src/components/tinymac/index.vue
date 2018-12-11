@@ -3,7 +3,7 @@
         <textarea :id='id' :value='value'></textarea>
     </div>
 </template>
- 
+
 <script>
     // Import TinyMCE
     import tinymce from 'tinymce/tinymce'
@@ -126,7 +126,7 @@
         skin_url: '../../../static/tinymce/skins/lightgray',
         init_instance_callback: function(editor) {
           // EDITOR = editor
-          console.log('Editor: ' + editor.id + ' is now initialized.')
+          console.log('Editor: ' + editor.id + ' is now initialized.',editor)
           editor.on('input undo redo execCommand', () => {
             _this.flag=false;
             var content = editor.getContent()
@@ -306,7 +306,7 @@
         }
       }
         Object.assign(setting, _this.setting)
- 
+
         tinymce.init(setting);
     },
     beforeDestroy: function() {

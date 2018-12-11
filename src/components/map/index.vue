@@ -9,13 +9,30 @@
                 <!-- <label>请输入关键字：</label> -->
             </td>
         </tr>
+      <!--this.isSearch-->
         <!-- <tr>
             <td>
                 <input id="tipinput"/>
             </td>
         </tr> -->
     </table>
+
 </div>
+  <div class="tableSearch" v-if="isSearch">
+    <table >
+      <tr>
+        <td>
+          <label>请输入关键字：</label>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <input ref="tipinput" id="tipinput"/>
+        </td>
+      </tr>
+    </table>
+  </div>
+
 <div class="aflcmap-pop-footer" slot="footer">
   <div class="addrname">当前选中的地址：{{this.thename}}<br>当前经纬度信息：{{this.thepos}}</div>
   <el-button type="primary" :disabled="noinfo" @click="submitForm">确 定</el-button>
@@ -38,6 +55,10 @@ export default {
     popVisible: {
       type: Boolean,
       default: false
+    },
+    isSearch:{
+      type: [Boolean,String],
+      default: true
     }
   },
   watch: {
@@ -49,11 +70,14 @@ export default {
     },
     pos() {
       this.thepos = this.pos
+    },
+    isSearch(){
+
     }
   },
   mounted() {
     // this.dialogTableVisible = this.popVisible
-    
+
   },
   created() {
 
@@ -84,6 +108,7 @@ export default {
     init() {
       this.dialogTableVisible = this.popVisible
       console.log('this.popVisible:', this.popVisible)
+      console.log(this.isSearch,typeof this.isSearch,'isSearchisSearchisSearchisSearch')
       // 当为展现时，初始化
       if (this.popVisible) {
         this.thepos = this.pos
@@ -143,6 +168,11 @@ export default {
         extensions: 'base' // all base
         // type: '商务住宅|生活服务|公司企业|地名地址信息'
       })
+      const name = this.name
+      if(name){
+        this.$refs['tipinput'].value = name.replace('市辖区', '')
+        placeSearch.search(name)
+      }
       /* AMapUI.loadUI(['misc/PositionPicker'], function(PositionPicker) {
         var map = new AMap.Map('container', {
           zoom: 16
@@ -214,7 +244,7 @@ export default {
       })
 
       function geocoder_CallBack(data, pos) {
-       
+
 
         var haspx = !!pos.lat
 
@@ -280,7 +310,7 @@ export default {
   .el-dialog__body{
     position: relative;
     height: 500px;
-    
+
   }
 }
 #mapcontainer {
@@ -328,7 +358,27 @@ export default {
 .amap-info-content {
 	font-size: 12px;
 }
-
+.tableSearch{
+position: absolute;
+top: 60px;
+right: 10px;
+background: #fff none repeat scroll 0 0;
+border: 1px solid #ccc;
+margin: 10px auto;
+padding: 6px;
+font-family: "Microsoft Yahei", "\5FAE\8F6F\96C5\9ED1", "Pinghei";
+font-size: 14px;}
+.tableSearch label {
+  margin: 0 20px 10px 0;
+  display: inline-block;
+  color: #666666;
+  font-weight: normal;
+}
+.tableSearch input {
+  width: 250px;
+  height: 30px;
+  line-height: 30px;
+}
 #myPageTop {
 	position: absolute;
 	top: 5px;

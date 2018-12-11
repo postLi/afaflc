@@ -20,9 +20,9 @@
          <table class="tree-table">
             <tbody>
                 <tr>
-                    <th  width="10%">考核项目</th>
-                    <th  width="8%">达标时效</th>
-                    <th  width="8%">实际时效</th>
+                    <th  width="12%">考核项目</th>
+                    <th  width="7%">达标时效</th>
+                    <th  width="7%">实际时效</th>
                     <th  width="8%">差异值</th>
                     <th  width="8%">考核项权限配分</th>
                     <th  width="10%">评估值</th>
@@ -35,10 +35,60 @@
                     <td>45</td>
                     <td>32</td>
                     <td>22</td>
-                    <td><span class="td_red">不达标</span></td>
-                    <td><span class="td_red">12</span></td>
-                    <td>从客户下单时间开始计算，到首次确认中单司机所用时间<br>单位：<span class="td_red">秒</span></td>
+                    <td><span class="Colorred">不达标</span></td>
+                    <td><span class="Colorred">12</span></td>
+                    <td>从客户下单时间开始计算，到首次确认中单司机所用时间<br>单位：<span class="Colorred">秒</span></td>
                 </tr>
+                <tr>
+                    <td>中单后联系货主时效（秒）</td>
+                    <td>30</td>
+                    <td>45</td>
+                    <td>32</td>
+                    <td>22</td>
+                    <td><span class="Colorred">不达标</span></td>
+                    <td><span class="Colorred">12</span></td>
+                    <td>从确认中单司机开始计算，到车主联系货主或前往提货地所用时间<br>单位：<span class="Colorred">秒</span></td>
+                </tr>        
+                <tr>
+                    <td>到车时效（分钟）</td>
+                    <td>30</td>
+                    <td>45</td>
+                    <td>32</td>
+                    <td>22</td>
+                    <td><span class="Colorred">不达标</span></td>
+                    <td><span class="Colorred">12</span></td>
+                    <td>实际到达提货地时间与预计到达提货地时间（即时订单：车主中单时间加上地图预估用时；预约订单：预约用车时间）差异值<br>单位：<span class="Colorred">分钟</span></td>
+                </tr>  
+                <tr>
+                    <td>到货时效（分钟）</td>
+                    <td>30</td>
+                    <td>45</td>
+                    <td>32</td>
+                    <td>22</td>
+                    <td><span class="Colorred">不达标</span></td>
+                    <td><span class="Colorred">12</span></td>
+                    <td>实际到达目的地时间与预计到达目的地时间差异值<br>单位：<span class="Colorred">分钟</span></td>
+                </tr>    
+                <tr>
+                    <td>回单时效（小时）</td>
+                    <td>30</td>
+                    <td>45</td>
+                    <td>32</td>
+                    <td>22</td>
+                    <td><span class="Colorred">不达标</span></td>
+                    <td><span class="Colorred">12</span></td>
+                    <td>从完成卸货时间开始计算，到车主回单所用时间<br>单位：<span class="Colorred">小时</span></td>
+                </tr>   
+                <tr>
+                    <td>回款时效（小时）</td>
+                    <td>30</td>
+                    <td>45</td>
+                    <td>32</td>
+                    <td>22</td>
+                    <td><span class="Colorred">不达标</span></td>
+                    <td><span class="Colorred">12</span></td>
+                    <td>从完成卸货时间开始计算，到车主回款所用时间<br>单位：<span class="Colorred">小时</span></td>
+                </tr>                                                                  
             </tbody>
          </table>
         </div>
@@ -50,9 +100,9 @@
          <table class="tree-table">
             <tbody>
                 <tr>
-                    <th  width="10%">考核项目</th>
-                    <th  width="8%">达标时效</th>
-                    <th  width="8%">实际时效</th>
+                    <th  width="12%">考核项目</th>
+                    <th  width="7%">达标时效</th>
+                    <th  width="7%">实际时效</th>
                     <th  width="8%">差异值</th>
                     <th  width="8%">考核项权限配分</th>
                     <th  width="10%">评估值</th>
@@ -80,9 +130,9 @@
          <table class="tree-table">
             <tbody>
                 <tr>
-                    <th  width="10%">考核项目</th>
-                    <th  width="8%">达标时效</th>
-                    <th  width="8%">实际时效</th>
+                    <th  width="12%">考核项目</th>
+                    <th  width="7%">达标时效</th>
+                    <th  width="7%">实际时效</th>
                     <th  width="8%">差异值</th>
                     <th  width="8%">考核项权限配分</th>
                     <th  width="10%">评估值</th>
@@ -99,6 +149,16 @@
                     <td><span class="Colorred">12</span></td>
                     <td>订单货主投诉次数<br>单位：<span class="Colorred">次</span></td>
                 </tr>
+                <tr>
+                    <td>到车距离异常（次）</td>
+                    <td>30</td>
+                    <td>45</td>
+                    <td>32</td>
+                    <td>22</td>
+                    <td><span class="Colorred">不达标</span></td>
+                    <td><span class="Colorred">12</span></td>
+                    <td>车主点击到达提货地或目的地时，距离客户下单地址异常次数<br>单位：<span class="Colorred">次</span></td>
+                </tr>                
             </tbody>
          </table>
         </div>
@@ -130,17 +190,29 @@ export default {
             ],
           tooltip:{
           show:true,
-          position:function(p){   //其中p为当前鼠标的位置
+          position:function(p){
             return [p[0] + 10, p[1] - 10];
-        }
+          }
           },
            series : [
                 {
+                itemStyle: {
+                    normal: {
+                        areaStyle: {
+                            type: 'default'
+                        }
+                    }
+                },
                 type: 'radar',
                     data : [
                         {
-                            value : [10, -20, 30, 40, 50, 60,70,80,90],
-                        },
+                            value : [10, 20, 30, 40, 50, 60,70,80,90],
+                            name: '评分',
+                                            itemStyle: {
+                    normal: {
+                           color: '#a9d3ff',
+                            lineStyle: {
+                            color: '#a9d3ff',}}}}
                     ]
                 }
             ]
