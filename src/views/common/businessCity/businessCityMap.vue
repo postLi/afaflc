@@ -27,20 +27,26 @@ export default {
   },
   mounted(){
          data_CityCode(this.$route.query.code).then(res=>{
+           if(res.data){
            this.MapAraay = JSON.parse(res.data);
+           }
+           else{
+           this.MapAraay = []
+           }
           })
           this.loadMap();
   },
   methods: {
     loadMap:function(){
             this.$nextTick(()=>{
-                loadJs('https://webapi.amap.com/maps?v=1.4.10&key=f167f450303ea43b1c9ccc459156f867').then(() => {
+                loadJs('https://webapi.amap.com/maps?v=1.4.10&key=73bdb8428fbfe511ed6c5f3328b5734b&plugin=AMap.Geocoder,AMap.MouseTool').then(() => {
                 this.init();
                 })
     })},
     init:function(){
         var _this = this
         var center = []
+        var City = null
       // 地图加载
         map = new AMap.Map('CityMap', {
         resizeEnable: true,
@@ -50,12 +56,49 @@ export default {
             map.addControl(new AMap.ToolBar());
         });
         map.on("complete", function(){
+            var geocoder = new AMap.Geocoder({
+            });
+
                 var center = []
                 if(_this.MapAraay.length>0){
                     center = _this.MapAraay[0][0]
                 }
                 else{
-                    center = [113.257416,23.149586]
+                  if(_this.$route.query.city=='北京城区')
+                  {
+                  City = '北京'
+                  }
+                  else if(_this.$route.query.city=='天津城区'){
+                  City = '天津'
+                  }
+                  else if(_this.$route.query.city=='天津城区'){
+                  City = '天津'
+                  }
+                  else if(_this.$route.query.city=='上海城区'){
+                  City = '上海'
+                  }
+                  else if(_this.$route.query.city=='重庆城区'){
+                  City = '天津'
+                  }
+                  else if(_this.$route.query.city=='台湾省'){
+                  City = '台湾'
+                  }
+                  else if(_this.$route.query.city=='香港特别行政区'){
+                  City = '香港'
+                  }
+                  else if(_this.$route.query.city=='澳门特别行政区'){
+                  City = '澳门'
+                  }
+                  else{
+                  City = _this.$route.query.city
+                  }
+                  geocoder.getLocation(City, function(status, result) {
+                  if (status === 'complete' && result.info === 'OK') {
+                  center=[result.geocodes[0].location.lng,result.geocodes[0].location.lat]
+                  console.log('center',center)
+                  map.setCenter(center);
+                  }
+                  })
                 }
                 polygon = new AMap.Polygon({
                 path: _this.MapAraay,
@@ -69,6 +112,7 @@ export default {
                 fillOpacity: 0.2,
                 fillColor: '#1791fc',
             })
+            
                 map.setCenter(center);
                 polygon.setMap((map))    
                 });  

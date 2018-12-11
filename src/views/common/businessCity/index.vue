@@ -198,7 +198,7 @@ export default{
             //     })
             //   })
             //   this.popVisible = true;
-            this.$router.push({name: '业务城市围栏',query:{code:e.code}});
+            this.$router.push({name: '业务城市围栏',query:{code:e.code,city:e.name}});
 
             },
             // 刷新页面

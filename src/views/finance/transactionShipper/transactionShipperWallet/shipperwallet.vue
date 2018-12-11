@@ -45,8 +45,9 @@
                 </el-form-item>
        </el-form>
          <div class="classify_info">
+            <div class="totle_info">收入金额：<span></span>支出金额：<span></span></div>
             <div class="info_news">
-            <el-table style="width: 100%"  border height="100%"  ref="multipleTable" :data="tableDataAll">
+            <el-table style="width: 100%"  border height="93%"  ref="multipleTable" :data="tableDataAll">
               <el-table-column
                             label="选择"
                             type="selection"
@@ -57,9 +58,9 @@
                              {{ (page - 1)*pagesize + scope.$index + 1 }}
                             </template>
             </el-table-column>
-            <el-table-column  label="订单流水号" prop="orderSerial" sortable>
+            <el-table-column  label="订单流水号" prop="orderSerial" sortable width="250">
             </el-table-column>
-            <el-table-column  label="交易流水号" prop="tradeSerial" sortable>
+            <el-table-column  label="交易流水号" prop="tradeSerial" sortable width="250">
             </el-table-column> 
             <el-table-column  label="货主账号" prop="accountName" sortable>
             </el-table-column>        
@@ -75,12 +76,12 @@
             </el-table-column>                                                                                               
             </el-table> 
              </div>
-             <div class="info_tab_footer">共计:{{ dataTotal}} <div class="show_pager"> <Pager :total="dataTotal" @change="handlePageChange"  :sizes="sizes"/></div> </div> 
+             <div class="info_tab_footer">共计:{{ dataTotal}} <div class="show_pager"> <Pager :total="dataTotal" @change="handlePageChange"  :sizes="sizes" ref="pager1"/></div> </div> 
             </div>
             </div>
             </el-tab-pane>
 
-        <!-- 提现记录 -->
+        <!-- 充值记录 -->
             <el-tab-pane label="充值记录"  name="second">
         <div style="height:100%;" class="identicalStyle">
        <el-form :inline="true"  class="demo-ruleForm classify_searchinfo">
@@ -129,8 +130,9 @@
                 </el-form-item>
        </el-form>
          <div class="classify_info">
+            <div class="totle_info">充值金额：<span></span>赠送金额：<span></span></div>
             <div class="info_news">
-            <el-table style="width: 100%"  border height="100%" stripe ref="multipleTable2" :data="tableDataAll2">
+            <el-table style="width: 100%"  border height="93%" stripe ref="multipleTable2" :data="tableDataAll2">
               <el-table-column
                             label="选择"
                             type="selection"
@@ -141,9 +143,9 @@
                              {{ (page2 - 1)*pagesize2 + scope.$index + 1 }}
                             </template>
             </el-table-column>
-            <el-table-column  label="流水号" prop="rechargeSerial" sortable>
+            <el-table-column  label="流水号" prop="rechargeSerial" sortable width="250">
             </el-table-column>
-            <el-table-column  label="充值时间" prop="rechargeTime" sortable>
+            <el-table-column  label="充值时间" prop="rechargeTime" sortable width="250">
             </el-table-column>             
             <el-table-column  label="充值金额" prop="enterSum" sortable>
             </el-table-column>        
@@ -155,7 +157,7 @@
             </el-table-column>                                                                                               
             </el-table> 
             </div>
-             <div class="info_tab_footer">共计:{{ dataTotal2 }} <div class="show_pager"> <Pager :total="dataTotal2" @change="handlePageChange2"  :sizes="sizes"/></div> </div> 
+             <div class="info_tab_footer">共计:{{ dataTotal2 }} <div class="show_pager"> <Pager :total="dataTotal2" @change="handlePageChange2"  :sizes="sizes" ref="pager2"/></div> </div> 
              </div>
              </div>
             </el-tab-pane>     
@@ -184,7 +186,7 @@
        </el-form>
          <div class="classify_info">
             <div class="info_news">
-            <el-table style="width: 100%"  border height="100%" stripe ref="multipleTable2" :data="tableDataAll3">
+            <el-table style="width: 100%"  border height="93%" stripe ref="multipleTable2" :data="tableDataAll3">
               <el-table-column
                             label="选择"
                             type="selection"
@@ -217,7 +219,7 @@
             </el-table-column>         
             </el-table>
             </div>
-              <div class="info_tab_footer">共计:{{ dataTotal3 }} <div class="show_pager"> <Pager :total="dataTotal3" @change="handlePageChange3"  :sizes="sizes"/></div> </div> 
+              <div class="info_tab_footer">共计:{{ dataTotal3 }} <div class="show_pager"> <Pager :total="dataTotal3" @change="handlePageChange3"  :sizes="sizes" ref="pager3"/></div> </div> 
              </div>
              </div>
             </el-tab-pane>            
@@ -405,7 +407,12 @@ export default {
             incomeExpendType:null,
             tradeStartTime:null,
             tradeEndTime:null,
-            },
+            }
+            if(this.page!= 1){
+                this.page = 1;
+                this.$refs.pager1.inputval = this.page;
+                this.$refs.pager1.pageNum = this.page;
+            }
             this.firstblood()
             },  
     //充值记录表查询按纽，按条件查询列表
@@ -420,7 +427,12 @@ export default {
             rechargeWay:null,
             rechargeTime:null,
             accountId:this.$route.query.accountId
-            },
+            }
+            if(this.page2!= 1){
+                this.page2 = 1;
+                this.$refs.pager2.inputval = this.page2;
+                this.$refs.pager2.pageNum = this.page2;
+            }
             this.firstblood2()
             },  
 
@@ -433,7 +445,12 @@ export default {
             couponName:null,
             couponStatus:null,
             userId:this.$route.query.accountId
-            },
+            }
+            if(this.page3!= 1){
+                this.page3 = 1;
+                this.$refs.pager3.inputval = this.page3;
+                this.$refs.pager3.pageNum = this.page3;
+            }            
             this.firstblood3()
             },  
     cTime(i){
@@ -469,5 +486,12 @@ export default {
     .classify_info{
     padding-bottom: 0px;
     }
+    .totle_info{
+        font-size: 14px;
+        padding: 10px 10px;
+        span{
+            padding-right: 50px;
+        }
+    }    
 }
 </style>

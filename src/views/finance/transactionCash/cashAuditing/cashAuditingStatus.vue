@@ -85,6 +85,9 @@
             <el-table-column  label="用户姓名" prop="name">
             </el-table-column>
             <el-table-column  label="用户账号" prop="mobile">
+            <template  slot-scope="scope">
+                          <h4 class="needMoreInfo" @click="pushOrderSerial(scope.row)">{{ scope.row.mobile}}</h4>
+            </template>
             </el-table-column>
             <el-table-column  label="提现金额" prop="extractSum" width="100">
             </el-table-column>       
@@ -257,8 +260,11 @@ export default {
     getDataList(){
             this.firstblood()
             this.$refs.multipleTable.clearSelection();
-            }           
-    
+            },           
+    // 进入账户概况
+    pushOrderSerial(item) {
+      this.$router.push({ name: '车主账户详情', query: { accountId: item.accountId }})
+    }     
    },
   mounted(){
     this.firstblood()

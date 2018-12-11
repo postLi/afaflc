@@ -45,8 +45,9 @@
                 </el-form-item> 
        </el-form>
          <div class="classify_info">
+            <div class="totle_info">收入金额：<span></span>支出金额：<span></span></div>
             <div class="info_news">
-            <el-table style="width: 100%"  border height="100%"  ref="multipleTable" :data="tableDataAll">
+            <el-table style="width: 100%"  border height="93%"  ref="multipleTable" :data="tableDataAll">
               <el-table-column
                             label="选择"
                             type="selection"
@@ -57,9 +58,9 @@
                              {{ (page - 1)*pagesize + scope.$index + 1 }}
                             </template>
             </el-table-column>
-            <el-table-column  label="订单流水号" prop="orderSerial" sortable show-overflow-tooltip >
+            <el-table-column  label="订单流水号" prop="orderSerial" sortable show-overflow-tooltip width="250">
             </el-table-column>
-            <el-table-column  label="交易流水号" prop="tradeSerial" sortable show-overflow-tooltip >
+            <el-table-column  label="交易流水号" prop="tradeSerial" sortable show-overflow-tooltip width="250">
             </el-table-column> 
             <el-table-column  label="货主账号" prop="accountName" sortable show-overflow-tooltip >
             </el-table-column>        
@@ -75,7 +76,7 @@
             </el-table-column>                                                                                               
             </el-table> 
             </div>
-              <div class="info_tab_footer">共计:{{ dataTotal}} <div class="show_pager"> <Pager :total="dataTotal" @change="handlePageChange"  :sizes="sizes"/></div> </div> 
+              <div class="info_tab_footer">共计:{{ dataTotal}} <div class="show_pager"> <Pager :total="dataTotal" @change="handlePageChange"  :sizes="sizes" ref="pager1"/></div> </div> 
         </div>
                  </div>
             </el-tab-pane>
@@ -119,8 +120,9 @@
                 </el-form-item> 
        </el-form>
             <div class="classify_info">
+            <div class="totle_info">提现金额：<span></span>手续费：<span></span></div>
             <div class="info_news">
-            <el-table style="width: 100%" border height="100%"  ref="multipleTable2" :data="tableDataAll2">
+            <el-table style="width: 100%" border height="93%"  ref="multipleTable2" :data="tableDataAll2">
               <el-table-column
                             label="选择"
                             type="selection"
@@ -131,9 +133,9 @@
                              {{ (page2 - 1)*pagesize2 + scope.$index + 1 }}
                             </template>
             </el-table-column>
-            <el-table-column  label="流水号" prop="extractSerial" show-overflow-tooltip sortable>
+            <el-table-column  label="流水号" prop="extractSerial" show-overflow-tooltip sortable width="250">
             </el-table-column>
-            <el-table-column  label="处理时间" prop="auditTime" sortable>
+            <el-table-column  label="处理时间" prop="auditTime" sortable width="250">
             </el-table-column> 
             <el-table-column  label="用户账号" prop="mobile" sortable>
             </el-table-column>        
@@ -150,7 +152,7 @@
             </el-table-column>                                                                                                 
             </el-table> 
             </div>
-             <div class="info_tab_footer">共计:{{ dataTotal2}} <div class="show_pager"> <Pager :total="dataTotal2" @change="handlePageChange2"  :sizes="sizes"/></div> </div> 
+             <div class="info_tab_footer">共计:{{ dataTotal2}} <div class="show_pager"> <Pager :total="dataTotal2" @change="handlePageChange2"  :sizes="sizes" ref="pager2"/></div> </div> 
              </div>
              </div>
             </el-tab-pane>            
@@ -302,7 +304,7 @@ export default {
       this.firstblood2()
     },  
     getdata_search(event){
-            this.firstblood()
+      this.firstblood()
     },    
     clearSearch(){
             this.payTime = null
@@ -314,7 +316,12 @@ export default {
             incomeExpendType:null,
             tradeStartTime:null,
             tradeEndTime:null,
-            },
+            }
+            if(this.page!= 1){
+                this.page = 1;
+                this.$refs.pager1.inputval = this.page;
+                this.$refs.pager1.pageNum = this.page;
+            }
             this.firstblood()
             },  
     getdata_search2(event){
@@ -327,7 +334,12 @@ export default {
                 endExtractTime:null,
                 extractWay:null,
                 accountId:this.$route.query.accountId
-            },
+            }
+            if(this.page2!= 1){
+                this.page2 = 1;
+                this.$refs.pager2.inputval = this.page2;
+                this.$refs.pager2.pageNum = this.page2;
+            }
             this.firstblood2()
             },  
     // 钱包明细
@@ -366,5 +378,12 @@ export default {
 .Carwallet{
     .classify_info{
     padding-bottom: 0px;
+    .totle_info{
+        font-size: 14px;
+        padding: 10px 10px;
+        span{
+            padding-right: 50px;
+        }
+    }
 }}
 </style>
