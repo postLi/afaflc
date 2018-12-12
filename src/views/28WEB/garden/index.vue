@@ -45,10 +45,17 @@
           <span>详情</span>
         </el-button>
         <el-button
+          type="success" plain icon=""
+          size="small"
+          @click="handleSearch('use')">
+          启用
+          <!--<span >{{scope.row.disableStatus ===1?'启用':'禁用'}}</span>-->
+        </el-button>
+        <el-button
           type="danger" plain icon=""
           size="small"
           @click="handleSearch('del')">
-          启用
+          禁用
           <!--<span >{{scope.row.disableStatus ===1?'启用':'禁用'}}</span>-->
         </el-button>
       </div>
@@ -85,22 +92,7 @@
 
             </template>
           </el-table-column>
-          <!--<el-table-column sortable prop="belongCity" label="操作" width="250">-->
-          <!--<template slot-scope="scope">-->
-          <!--<el-button-->
-          <!--type="info" plain icon=""-->
-          <!--size="small"-->
-          <!--@click="handleDeatail(scope.row)">-->
-          <!--<span>详情</span>-->
-          <!--</el-button>-->
-          <!--<el-button-->
-          <!--type="danger" plain icon=""-->
-          <!--size="small"-->
-          <!--@click="handleFn(scope.row)">-->
-          <!--<span >{{scope.row.disableStatus ===1?'启用':'禁用'}}</span>-->
-          <!--</el-button>-->
-          <!--</template>-->
-          <!--</el-table-column>-->
+
         </el-table>
       </div>
       <AddGarden :isVisibleDialog.sync="isVisibleDialog" :isModify="isModify" :info="selectedInfo" @success='fetchInfo'
@@ -212,14 +204,12 @@
             this.isModify = true
             this.selectedInfo = this.selected[0]
             break
-          case 'del':
-            if (this.selected.length > 1) {
-              this.$message.info('每次只能操作单条数据~')
-              this.$refs.multipleTable.clearSelection()
-              return false
-            }
+          case 'use':
+            let ids = this.selected.map(el => {
+              return el.id
+            })
 
-            putUpdateDisableStatus(this.selected[0].id).then(res => {
+            putUpdateDisableStatus(0, ids).then(res => {
               this.$message({
                 type: 'success',
                 message: '操作成功~'
@@ -228,9 +218,26 @@
               this.loading = false
             }).catch(err => {
               this.$message.warning(err.text ? err.text : err.errorInfo)
-              // this.$message.warning(err.text || err.errorInfo || '无法获取服务端数据~')
               this.loading = false
             })
+            break
+          case 'del':
+            let id = this.selected.map(el => {
+              return el.id
+            })
+
+            putUpdateDisableStatus(1, id).then(res => {
+              this.$message({
+                type: 'success',
+                message: '操作成功~'
+              })
+              this.fetchInfo()
+              this.loading = false
+            }).catch(err => {
+              this.$message.warning(err.text ? err.text : err.errorInfo)
+              this.loading = false
+            })
+            break
         }
         this.$refs.multipleTable.clearSelection()
       },
@@ -245,7 +252,6 @@
           this.loading = false
         }).catch(err => {
           this.$message.warning(err.text ? err.text : err.errorInfo)
-          // this.$message.warning(err.text || err.errorInfo || '无法获取服务端数据~')
           this.loading = false
         })
       },
