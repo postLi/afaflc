@@ -21,6 +21,7 @@
                 </template>
             </el-table-column>
             <el-table-column
+                prop="driverName"
                 label="用户"
                 :show-overflow-tooltip="true"
                 width="200"
@@ -30,9 +31,12 @@
                 </template>
             </el-table-column>
             <el-table-column
-                prop=""
+                prop="carType"
                 label="车辆信息"
                 width="200">
+                <template slot-scope="scope">
+                    {{scope.row.carNumber}}{{scope.row.carType ? '-'+scope.row.carType : ''}}
+                </template>
             </el-table-column>
             <el-table-column
                 prop="driverDistance"
