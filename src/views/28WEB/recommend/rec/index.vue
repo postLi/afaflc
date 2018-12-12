@@ -24,8 +24,17 @@
       </el-form-item>
     </el-form>
     <div class="classify_info">
+      <div class="btns_box">
+        <el-button
+          type="info" plain icon=""
+          size="small"
+          @click="handleSearch('set')">
+          <span>设置</span>
+        </el-button>
+      </div>
       <el-table ref="multipleTable" style="width: 100%" stripe border height="100%" @selection-change="getSelection"
                 @row-click="clickDetails" highlight-current-row :data="dataset" tooltip-effect="dark">
+        <el-table-column fixed sortable type="selection" width="50"></el-table-column>
         <el-table-column fixed label="序号" sortable width="80">
           <template slot-scope="scope">
             {{ (page - 1)*pagesize + scope.$index + 1 }}
@@ -42,16 +51,16 @@
         </el-table-column>
         <el-table-column sortable prop="updateTime" label="更新时间" width="">
         </el-table-column>
-        <el-table-column sortable prop="" label="操作" width="">
-          <template slot-scope="scope">
-            <el-button
-              type="info" plain icon=""
-              size="small"
-              @click="handleDeatail(scope.row)">
-              <span>设置</span>
-            </el-button>
-          </template>
-        </el-table-column>
+        <!--<el-table-column sortable prop="" label="操作" width="">-->
+        <!--<template slot-scope="scope">-->
+        <!--<el-button-->
+        <!--type="info" plain icon=""-->
+        <!--size="small"-->
+        <!--@click="handleDeatail(scope.row)">-->
+        <!--<span>设置</span>-->
+        <!--</el-button>-->
+        <!--</template>-->
+        <!--</el-table-column>-->
 
       </el-table>
     </div>
@@ -128,12 +137,15 @@
       fetchInfo() {
         this.fetchList()
       },
-      handleDeatail(row) {
-        this.isVisibleDialog = true
-        this.selectedInfo = row
+      handleDeatail() {
+
       },
 
       handleSearch(type) {
+        if (!this.selected.length && type !== 'searchForm' && type !== 'clearForm1') {
+          this.$message.info('请选择要操作的项~')
+          return false
+        }
         switch (type) {
           case 'searchForm':
             this.fetchInfo()
@@ -142,7 +154,17 @@
             this.searchQuery.recommendColumn = ''
             this.fetchList()
             break
+          case 'set':
+            if (this.selected.length > 1) {
+              this.$message.info('每次只能操作单条数据~')
+              this.$refs.multipleTable.clearSelection()
+              return false
+            }
+            this.isVisibleDialog = true
+            this.selectedInfo = this.selected[0]
+            break
         }
+        this.$refs.multipleTable.clearSelection()
       },
       getSelection(selected) {
         this.selected = selected

@@ -38,10 +38,24 @@
       <div class="btns_box">
         <el-button type="primary" size="mini" class="el-icon-circle-plus" plain @click="handleSearch('add')">新增
         </el-button>
+        <el-button
+          type="info" plain icon=""
+          size="small"
+          @click="handleSearch('detail')">
+          <span>详情</span>
+        </el-button>
+        <el-button
+          type="danger" plain icon=""
+          size="small"
+          @click="handleSearch('del')">
+          启用
+          <!--<span >{{scope.row.disableStatus ===1?'启用':'禁用'}}</span>-->
+        </el-button>
       </div>
       <div class="info_news">
         <el-table ref="multipleTable" style="width: 100%" stripe border height="100%" @selection-change="getSelection"
                   @row-click="clickDetails" highlight-current-row :data="dataset" tooltip-effect="dark">
+          <el-table-column fixed sortable type="selection" width="50"></el-table-column>
           <el-table-column fixed label="序号" sortable width="80">
             <template slot-scope="scope">
               {{ (page - 1)*pagesize + scope.$index + 1 }}
@@ -62,30 +76,31 @@
           </el-table-column>
           <el-table-column sortable prop="belongCity" label="状态" width="">
             <template slot-scope="scope">
-              <span>{{scope.row.openStatus ===1?'已开放':'未开放'}}</span>
+              <span>{{scope.row.disableStatus ===1?'禁用':'启用'}}</span>
             </template>
           </el-table-column>
           <el-table-column sortable prop="belongCity" label="客户管理应用" width="">
             <template slot-scope="scope">
-              <span>{{scope.row.disableStatus ===1?'禁用':'启用'}}</span>
+              <span>{{scope.row.openStatus ===1?'已开放':'未开放'}}</span>
+
             </template>
           </el-table-column>
-          <el-table-column sortable prop="belongCity" label="操作" width="250">
-            <template slot-scope="scope">
-              <el-button
-                type="info" plain icon=""
-                size="small"
-                @click="handleDeatail(scope.row)">
-                <span>详情</span>
-              </el-button>
-              <el-button
-                type="danger" plain icon=""
-                size="small"
-                @click="handleFn(scope.row)">
-                <span >{{scope.row.disableStatus ===1?'启用':'禁用'}}</span>
-              </el-button>
-            </template>
-          </el-table-column>
+          <!--<el-table-column sortable prop="belongCity" label="操作" width="250">-->
+          <!--<template slot-scope="scope">-->
+          <!--<el-button-->
+          <!--type="info" plain icon=""-->
+          <!--size="small"-->
+          <!--@click="handleDeatail(scope.row)">-->
+          <!--<span>详情</span>-->
+          <!--</el-button>-->
+          <!--<el-button-->
+          <!--type="danger" plain icon=""-->
+          <!--size="small"-->
+          <!--@click="handleFn(scope.row)">-->
+          <!--<span >{{scope.row.disableStatus ===1?'启用':'禁用'}}</span>-->
+          <!--</el-button>-->
+          <!--</template>-->
+          <!--</el-table-column>-->
         </el-table>
       </div>
       <AddGarden :isVisibleDialog.sync="isVisibleDialog" :isModify="isModify" :info="selectedInfo" @success='fetchInfo'
@@ -99,7 +114,7 @@
   </div>
 </template>
 <script>
-  import { postList, putUpdateDisableStatus } from '@/api/web/garden'
+  import {postList, putUpdateDisableStatus} from '@/api/web/garden'
   import GetCityList from '@/components/GetCityList/city'
   import Pager from '@/components/Pagination/index'
   import AddGarden from './addGarden'
@@ -161,6 +176,10 @@
         // console.log('this.cityarr', val, val.area, val.area.code, val.area.name)
       },
       handleSearch(type) {
+        if (!this.selected.length && type !== 'searchForm' && type !== 'clearForm' && type !== 'add') {
+          this.$message.info('请选择要操作的项~')
+          return false
+        }
         switch (type) {
           case 'searchForm':
             this.fetchInfo()
@@ -183,14 +202,39 @@
             this.isModify = false
             this.selectedInfo = {}
             break
+          case 'detail':
+            if (this.selected.length > 1) {
+              this.$message.info('每次只能操作单条数据~')
+              this.$refs.multipleTable.clearSelection()
+              return false
+            }
+            this.isVisibleDialog = true
+            this.isModify = true
+            this.selectedInfo = this.selected[0]
+            break
+          case 'del':
+            if (this.selected.length > 1) {
+              this.$message.info('每次只能操作单条数据~')
+              this.$refs.multipleTable.clearSelection()
+              return false
+            }
+
+            putUpdateDisableStatus(this.selected[0].id).then(res => {
+              this.$message({
+                type: 'success',
+                message: '操作成功~'
+              })
+              this.fetchInfo()
+              this.loading = false
+            }).catch(err => {
+              this.$message.warning(err.text ? err.text : err.errorInfo)
+              // this.$message.warning(err.text || err.errorInfo || '无法获取服务端数据~')
+              this.loading = false
+            })
         }
+        this.$refs.multipleTable.clearSelection()
       },
-      handleDeatail(row) {
-        this.isVisibleDialog = true
-        this.isModify = true
-        this.selectedInfo = row
-        console.log(row)
-      },
+
       handleFn(row) {
         putUpdateDisableStatus(row.id).then(res => {
           this.$message({
