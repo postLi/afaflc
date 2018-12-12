@@ -75,11 +75,12 @@
           </el-form-item>            
         </el-form>
           <div class="classify_info">
-              <!-- <div class="btns_box">
-              <el-button type="primary" :size="btnsize" class="el-icon-circle-plus"  plain @click="doAction('sold')">上架</el-button>
-              <el-button type="primary" :size="btnsize" class="el-icon-tickets" @click="doAction('soldout')" plain>下架</el-button>
-              <el-button type="primary" :size="btnsize" icon="el-icon-delete"  @click="doAction('genjin')" plain>删除</el-button>
-              </div> -->
+              <div class="btns_box">
+                <el-button type="primary" :size="btnsize" class="el-icon-circle-plus"  plain @click="doAction('Stick')">置顶</el-button>
+                <el-button type="primary" :size="btnsize" class="el-icon-circle-plus"  plain @click="doAction('UpStick')">取消置顶</el-button>
+                <el-button type="primary" :size="btnsize" class="el-icon-tickets" @click="doAction('amend')" plain>修改</el-button>
+                <el-button type="primary" :size="btnsize" icon="el-icon-delete"  @click="doAction('genjin')" plain>删除</el-button>
+              </div>
             <div class="info_news">    
               <el-table ref="multipleTable" style="width: 100%" stripe border height="100%" @selection-change="getSelection" @row-click="clickDetails" highlight-current-row :data="dataset"  tooltip-effect="dark">
                 <el-table-column
@@ -92,7 +93,7 @@
                   {{ (page - 1)*pagesize + scope.$index + 1 }}
                   </template>
                 </el-table-column> 
-                <el-table-column  label="出发地-到达地" width="300" sortable :show-overflow-tooltip="true">
+                <el-table-column  fixed label="出发地-到达地" width="300" sortable :show-overflow-tooltip="true">
                   <template slot-scope="scope">
                     {{scope.row.startLocation ? scope.row.startLocation + '-' : ''}}{{ scope.row.endLocation ? scope.row.endLocation : ''}}
                   </template>
@@ -397,6 +398,42 @@ export default {
     // },
     changePrescription(obj) {
       this.formAllData.recommendPrescription = obj
+    },
+    doAction(type) {
+      switch (type) {
+        case 'amend':
+          if (!this.selected.length) {
+            this.$message({
+              message: '请选择要操作的项~',
+              type: 'warning'
+            })
+            return false
+          } else if (this.selected.length > 1) {
+            this.$message({
+              message: '每次只能修改一条数据',
+              type: 'warning'
+            })
+            return false
+          } else {
+            console.log(this.selected[0].id)
+            this.selectInfo = this.selected[0]
+            this.centerDialogVisible = true
+            this.isMatreg = true
+          }
+          break
+        case 'Stick':
+          // putCancel(this.selected[0].id).then(res => {
+          //   this.$message({
+          //     type: 'success',
+          //     message: '操作成功~'
+          //   })
+          //   this.firstblood()
+          // })
+          console.log(this.selected[0].id.settopStatus)
+          break
+        case 'UpStick':
+          break
+      }
     },
     handleEdit1(index, row, type) {
       switch (type) {

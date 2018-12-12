@@ -3,6 +3,7 @@ import fetch from '@/utils/fetch'
 const baseurl = 'aflcorderservice'
 const baseurl_two = 'aflc-common'
 const baseurl_three = 'aflc-uc'
+// const baseurl_three = 'aflcusercenterservice-lyc'
 
   // 根据发物流订单管理列表
   export function findFCLOrderInfoList(page, pagesize, data) {
@@ -25,13 +26,6 @@ export function getFCLOrderByOrderSerial(orderSerial) {
   })
 }
 
-// 根据流水号获取货源详细信息
-export function getFCLSupplyGoodsByOrderSerial(orderSerial) {
-  return fetch({
-    url: '/' + baseurl + '/order/aflcFCLOrderWeb/ /' + orderSerial,
-    method: 'get'
-  })
-}
 
   // 根据流水号获订单跟踪信息
   export function orderStatusFollow(orderSerial) {
@@ -52,6 +46,11 @@ export function getFCLSupplyGoodsByOrderSerial(orderSerial) {
     }
 
     // 获取货主获取物流公司
-    export function findByOrderSerial(data) {
+    export function aflcTransportEvaluation(data) {
       return fetch.get('/' + baseurl_three + '/usercenter/aflcTransportEvaluation/v1/findByOrderSerial/' + data)
     }    
+
+    // 获取物流公司获取货主
+    export function aflcShipperEvaluation(data) {
+          return fetch.get('/' + baseurl_three + '/usercenter/aflcShipperEvaluation/v1/findByOrderSerial/' + data)
+    }   

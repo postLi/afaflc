@@ -25,9 +25,13 @@
       </el-form-item>
     </el-form>
     <div class="classify_info">
+      <div class="btns_box">
+        <el-button type="info" size="small" plain @click="viewDetail">查看详情</el-button>
+      </div>
       <div class="info_news">
-        <el-table style="width: 100%" stripe border height="100%" ref="multipleTable" highlight-current-row
-                  tooltip-effect="dark" :data="tableDataAll">
+        <el-table ref="multipleTable" style="width: 100%" stripe border height="100%" @selection-change="getSelection"
+                   highlight-current-row :data="tableDataAll" tooltip-effect="dark" @row-click="clickDetails">
+          <el-table-column fixed sortable type="selection" width="50"></el-table-column>
           <el-table-column label="序号" sortable width="80">
             <template slot-scope="scope">
               {{ (page - 1)*pagesize + scope.$index + 1 }}
@@ -39,11 +43,11 @@
           <el-table-column label="投保日期" prop="createTime"></el-table-column>
           <el-table-column label="运单号" prop="orderNum"></el-table-column>
           <el-table-column label="状态" prop="paymentStateName"></el-table-column>
-          <el-table-column label="操作" prop="extractTime">
-            <template slot-scope='scope'>
-              <el-button type="info" size="small" plain @click="viewDetail(scope.row,'spacialLine')">查看详情</el-button>
-            </template>
-          </el-table-column>
+          <!--<el-table-column label="操作" prop="extractTime">-->
+            <!--<template slot-scope='scope'>-->
+              <!--<el-button type="info" size="small" plain @click="viewDetail(scope.row,'spacialLine')">查看详情</el-button>-->
+            <!--</template>-->
+          <!--</el-table-column>-->
         </el-table>
       </div>
       <div class="info_tab_footer">共计:{{ dataTotal }}
@@ -111,6 +115,7 @@
         searchCreatTime: [],
         defaultTime: [parseTime(+new Date() - 60 * 24 * 60 * 60 * 1000, '{y}-{m}-{d}'), parseTime(new Date(), '{y}-{m}-{d}')],
         tableDataAll: [],
+        selected: [],
         btnsize: 'mini',
         ExtractTime: null,
         loading: false,
@@ -144,10 +149,20 @@
         this.eventBus.$emit('updateListCount')
         this.fetchList()
       },
-      viewDetail(row, type) {
+      viewDetail() {
+        if(!this.selected.length){
+          this.$message.info('请选择要操作的项~')
+          return false
+        }
+        if (this.selected.length > 1) {
+
+          this.$message.info('每次只能操作单条数据~')
+          this.$refs.multipleTable.clearSelection()
+          return false
+        }
         this.$router.push({
           path: '/28WEB/insuranceManage/management/detail', query: {
-            id: row.id
+            id: this.selected[0].id
           }
         })
       },
@@ -167,6 +182,12 @@
         this.page = obj.pageNum
         this.pagesize = obj.pageSize
         this.fetchData()
+      },
+      getSelection(selected) {
+        this.selected = selected
+      },
+      clickDetails(row, event, column) {
+        this.$refs.multipleTable.toggleRowSelection(row)
       },
     }
   }

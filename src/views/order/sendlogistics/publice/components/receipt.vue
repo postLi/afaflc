@@ -7,49 +7,59 @@
                 <p>
                     <span>回单照片：</span>
                     <span v-if="formData.receiptUrls">          
-                        <span v-for="(form,keys) in formAllData.receiptUrls" :key='keys'>        
+                        <i v-for="(form,keys) in formData.receiptUrls" :key='keys'>        
                        <div class="upload" v-viewer >
                         <el-tooltip class="item" effect="dark" content="双击图片查看原图" placement="top">
                         <img :src="formData.receiptUrls[keys]">
                         </el-tooltip> 
                       </div>
-                      </span>     
+                      </i>     
                     </span>
                     <span v-else></span>
                  </p>
             </div>
         </div>
- 
+
          <!-- 评价信息 -->
         <div class="orderInfo-collapse collapseInfo">
             <h2>评价信息</h2>
-            <div class="essentialInformation">
+            <div class="essentialInformation rateformation">
                 <p>
                     <span>货主评价物流公司：</span>
-                    <span>1</span>
+                    <span>
+                        <el-rate
+                                v-if="TransportEvaluation.serverStarLevel"
+                                v-model="TransportEvaluation.serverStarLevel"
+                                disabled
+                                score-template="{value}"
+                                :colors="['#99A9BF', '#F7BA2A', '#FF9900']"
+                                >
+                         </el-rate>
+                    </span>
                  </p>
                 <p>
                     <span>评价内容：</span>
-                    <span>1</span>
-                 </p>
-                <p>
-                    <span>评价标签：</span>
-                    <span>1</span>
-                </p>                  
+                    <span>{{TransportEvaluation.evaluationDes}}</span>
+                 </p>         
             </div>
-            <div class="essentialInformation">
+            <div class="essentialInformation rateformation">
                 <p>
                     <span>物流公司评价货主：</span>
-                    <span>1</span>
+                    <span>
+                        <el-rate
+                                v-if="ShipperEvaluation.serverStarLevel"
+                                v-model="ShipperEvaluation.serverStarLevel"
+                                disabled
+                                score-template="{value}"
+                                :colors="['#99A9BF', '#F7BA2A', '#FF9900']"
+                                >
+                         </el-rate>                        
+                    </span>
                  </p>
                 <p>
                     <span>评价内容：</span>
-                    <span>1</span>
-                 </p>
-                <p>
-                    <span>评价标签：</span>
-                    <span>1</span>
-                </p>                  
+                    <span>{{ShipperEvaluation.evaluationDes}}</span>
+                 </p>                
             </div>
         </div>
  
@@ -80,7 +90,7 @@
                 <p>
                     <span>是否需要回款：</span>
                     <span>{{formData.orderExtraCodes=='1'?'是':'否'}}
-                     <i class="orderExtraStyle">{{formData.orderExtraCodesName}}</i>
+                     <i class="orderExtraStyle">{{formData.extraRrice}}</i>
                     </span>
                  </p>
                 <p>
@@ -93,23 +103,56 @@
                 </p>                 
             </div>
         </div>
-
  </div>
 </template>
 
 <script>
-import {findByOrderSerial,getFCLOrderByOrderSerial} from '@/api/order/logistics/logistics.js'
+import {aflcTransportEvaluation,getFCLOrderByOrderSerial,aflcShipperEvaluation} from '@/api/order/logistics/logistics.js'
 export default {
     data(){
         return{
-        formData:[]
+        formData:[],
+        TransportEvaluation:{
+         serverStarLevel:0,
+         evaluationDes:null,
+        },
+        ShipperEvaluation:{
+         serverStarLevel:0,
+         evaluationDes:null,
+        }
         }
     },
     methods:{
     firstblood(){   
-        // findByOrderSerial(this.$route.query.orderSerial).then(res=>{
-        //  console.log('data111111111111:',res)
-        // })
+        aflcTransportEvaluation(this.$route.query.orderSerial).then(res=>{
+         console.log('data1:',res)
+        if(res.data){
+        this.TransportEvaluation = {
+        serverStarLevel:Math.floor((parseInt(res.data.dockStarLevelScore)+parseInt(res.data.goodsStarLevelScore)+parseInt(res.data.payStarLevelScore))/3),
+        evaluationDes:res.data.evaluationDes
+        }   
+         }else{
+        this.TransportEvaluation = {
+        serverStarLevel:4.9,
+        evaluationDes:null,
+        }
+         }
+        })
+        aflcShipperEvaluation(this.$route.query.orderSerial).then(res=>{
+         console.log('data2:',res)
+         if(res.data){
+            this.TransportEvaluation = {
+            serverStarLevel:Math.floor((parseInt(res.data.dockStarLevelScore)+parseInt(res.data.goodsStarLevelScore)+parseInt(res.data.payStarLevelScore))/3),
+            evaluationDes:res.data.evaluationDes,
+            }
+         }else{
+        this.TransportEvaluation = {
+        serverStarLevel:0,
+        evaluationDes:null,
+        }
+         }
+
+        })
         getFCLOrderByOrderSerial(this.$route.query.orderSerial).then(res=>{
         this.formData = res.data
         })
@@ -142,9 +185,15 @@ export default {
         width: 70%
         }        
         img{
-            width: 50%
+            width: 208px;
         }
     }
     }
-}
+    }
+    .rateformation{
+        .el-rate__decimal{
+            line-height: 30px;
+        }
+    }
+
 </style>
