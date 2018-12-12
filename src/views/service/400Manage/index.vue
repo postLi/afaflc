@@ -1,8 +1,18 @@
 <template>
     <div class="identicalStyle clearfix Manage_400" v-loading="loading">
             <searchInfo @change="getSearchParam"></searchInfo>
+            <el-dialog
+            :visible.sync="dialogVisible"
+            :close-on-click-modal="false"
+            width="30%"
+            :before-close="handleClose">
+                <div id="autoTest">
+                    <audio :src="audioUrl" controls="controls" id="music" preload="auto" autoplay="autoplay"></audio>
+                    <!-- <el-button type="primary" plain @click="playPause()" size="mini">{{playFlay?'暂停':'播放'}}</el-button> -->
+                </div>
+            </el-dialog>
             <div class="classify_info">
-                <div class="btns_box">
+                <div class="btns_box" id="urlLoad">
                     <el-button type="primary" plain @click="handleSearch('export')" size="mini">导出Exce</el-button>
                 </div>
                 <div class="info_news">
@@ -75,7 +85,7 @@
                             </template>
                         </el-table-column> 
                         <el-table-column
-                            prop="complainStatusName"
+                            prop="statusName"
                             label="类型"
                             width="120"
                             sortable
@@ -84,14 +94,13 @@
                         <el-table-column
                             label="客户号码归属地"
                             prop="district"
-                            width="200"
                             sortable
                             >
                             <template  slot-scope="scope">
                                {{scope.row.district ? scope.row.district : '无'}}
                             </template>
                         </el-table-column>
-                        <el-table-column
+                        <!-- <el-table-column
                             label="满意度"
                             width="120"
                             sortable
@@ -99,7 +108,7 @@
                             <template  slot-scope="scope">
                                {{scope.row.replyName ? scope.row.replyName : '无'}}
                             </template>
-                        </el-table-column>
+                        </el-table-column> -->
                         <el-table-column
                             label="通话时长"
                             prop="minutes"
@@ -110,7 +119,7 @@
                                 {{scope.row.minutes ? scope.row.minutes : '无'}}
                             </template>
                         </el-table-column>
-                        <el-table-column
+                        <!-- <el-table-column
                             :show-overflow-tooltip="true"
                             label="跟进内容"
                             width="160"
@@ -119,7 +128,7 @@
                             <template  slot-scope="scope">
                                 {{scope.row.reply ? scope.row.reply : '无'}}
                             </template>
-                        </el-table-column>
+                        </el-table-column> -->
                         <el-table-column
                             label="操作"
                             width="160"
@@ -127,8 +136,8 @@
                             >
                             <template  slot-scope="scope">
                                 <!-- <el-button-group> -->
-                                    <el-button type="primary" plain  :size="btnsize" @click="handleClick(scope.row,'reply')">播放</el-button>
-                                    <el-button type="primary" plain  :size="btnsize" @click="handleClick(scope.row,'delet')">下载</el-button>
+                                    <el-button type="primary" plain  :size="btnsize" @click="handleClick(scope.row,'play')">播放</el-button>
+                                    <el-button type="primary" plain  :size="btnsize" @click="handleClick(scope.row,'download')">下载</el-button>
                                 <!-- </el-button-group> -->
                             </template>
                         </el-table-column>
@@ -142,7 +151,7 @@
 
 <script type="text/javascript">
 
-import { aflcCallLog } from '@/api/service/400.js'
+import { aflcCallLog,getVoiceUrl } from '@/api/service/400.js'
 import { parseTime } from '@/utils/index.js'
 import Pager from '@/components/Pagination/index'
 import searchInfo from './searchInfo'
@@ -161,14 +170,16 @@ import searchInfo from './searchInfo'
                 page:1,//初始化页码
                 dataTotal:0,
                 searchInfo:{
-                    // complainType:'',//类型
-                    // workSerial:'',//工单号                    
+                    status:null,
+                    callerNo:'',//主叫号码    
                 },
                 tableData:[],
                 dialogFormVisible_details:false,//详情弹窗
                 DetailsOrderSerial:'',
                 dialogVisible:false,//取消订单弹框
                 checkedinformation:[],//选中数据
+                playFlay:false,
+                audioUrl:null,
             }
         },
         watch:{
@@ -183,6 +194,19 @@ import searchInfo from './searchInfo'
         beforeDestroy(){
         },
         methods: {
+            playPause(){
+                var autoTest = document.getElementById('music');
+                if(autoTest !==null){
+                    if(this.playFlay){
+                        autoTest.pause();
+                        this.playFlay = false;
+                    }else{
+                        autoTest.currentTime = 0;
+                        autoTest.play();
+                        this.playFlay = true;
+                    }
+                }
+            },
             handlePageChange(obj) {
                 this.page = obj.pageNum;
                 this.pagesize = obj.pageSize;
@@ -194,6 +218,19 @@ import searchInfo from './searchInfo'
                 aflcCallLog(this.page,this.pagesize,this.searchInfo).then(res => {
                     this.tableData = res.data.list;
                     this.dataTotal = res.data.totalCount;
+                    this.tableData.forEach(el => {
+                        switch(el.status){
+                            case 0:
+                                el.statusName = '未接';
+                                break;
+                            case 1:
+                                el.statusName = "已接";
+                                break;
+                            case 2:
+                                el.statusName = "留言";
+                                break;
+                        }
+                    })
                     this.loading = false;
                 })
             },
@@ -231,34 +268,60 @@ import searchInfo from './searchInfo'
             shuaxin(){
                 this.firstblood();
             },
-            handleClick(){
-
+            handleClick(row,type){
+                getVoiceUrl(row.lsh,parseTime(row.startTime,'{y}-{m}-{d}')).then(res => {
+                    this.audioUrl = res.data;
+                    if(this.audioUrl && this.audioUrl != '0'){
+                        // console.log('audioUrlaudioUrl',this.audioUrl)
+                        switch(type){
+                            case 'play':
+                                this.dialogVisible = true;
+                                break;
+                            case 'download':
+                                let aClick = document.createElement('a');
+                                aClick.href = this.audioUrl;
+                                aClick.click();
+                                let urlLoad = document.getElementById('urlLoad')
+                                urlLoad.appendChild(aClick);
+                                urlLoad.removeChild(aClick);
+                                break;
+                        }
+                    }else{
+                        this.$message({
+                            type: 'warning',
+                            message: '文件不存在！'
+                        })
+                    }
+                })
+            },
+            handleClose(){
+                this.dialogVisible = false;
+                var autoTest = document.getElementById('music');
+                autoTest.pause();
             }
         }
     }
 </script>
 
-<style type="text/css" lang="scss" scoped>
+<style type="text/css" lang="scss">
     .Manage_400{
         height: 100%;
-        // .info_news{
-        //     .el-table .cell {
-        //         white-space: inherit;
-        //         overflow: hidden;
-        //         text-overflow: ellipsis;
-        //     }
-        //     .reMark{
-        //         padding: 5px 15px;
-        //         border-radius: 20%  / 50%;
-        //         background: #eca438;
-        //         color: #fff;
-        //     }
-        //     .sussces{
-        //         padding: 5px 15px;
-        //         border-radius: 20%  / 50%;
-        //         background: skyblue;
-        //         color: #fff;
-        //     }
-        // }
+        .el-dialog{
+            background: none;
+            box-shadow: none;
+            .el-dialog__header{
+                padding: 0;
+                .el-dialog__headerbtn .el-dialog__close {
+                    color: #ffffff;
+                }
+                .el-dialog__headerbtn:focus .el-dialog__close, .el-dialog__headerbtn:hover .el-dialog__close {
+                    color: #409EFF;
+                }
+            }
+            .el-dialog__body{
+                padding: 0;
+                text-align: center;
+            }
+        }
     }
 </style>

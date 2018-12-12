@@ -11,7 +11,7 @@
                 </el-col>
                 <el-col :span="12">
                     <el-form-item label="电话号码 ：" :label-width="formLabelWidth" >
-                    <span>{{formData.mobile}}</span>
+                    <span class="mobileInfo" @click="pushOrderSerial">{{formData.mobile}}</span>
                     </el-form-item>
                 </el-col>
             </el-row>
@@ -181,7 +181,11 @@ export default {
        },
     changeList(){
             eventBus.$emit('pushListtwo')
-        },      
+        },
+    // 进入账户概况
+    pushOrderSerial(item) {
+      this.$router.push({ name: '车主账户详情', query: { accountId: this.formData.accountId }})
+    },           
     edit_data(){
        this.$refs['formAll'].validate(valid=>{
         if(valid){
@@ -198,7 +202,6 @@ export default {
             this.$emit('getData') 
         })      
         }
-
        }
        })
     }
@@ -215,6 +218,10 @@ export default {
         }
     .el-form-item__content{
         text-align: left;
-    }        
+    }
+    .mobileInfo{
+        color: #0da0e4;
+        cursor: pointer;
+    }         
 }
 </style>

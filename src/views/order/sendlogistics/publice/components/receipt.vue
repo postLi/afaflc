@@ -1,33 +1,21 @@
 <template>
- <div class="TCorderInfo clearfix">
+ <div class="TCorderInfo clearfix" v-if="formData.length != 0">
         <!-- 照片信息 -->
         <div class="orderInfo-collapse collapseInfo">
             <h2>照片信息</h2>
             <div class="essentialInformationPhoto">
                 <p>
-                    <span>装货照片：</span>
-                    <span>
-                       <div class="upload" v-viewer>
-                        <el-tooltip class="item" effect="dark" content="双击图片查看原图" placement="top">
-                       <img src="http://cdn.hao987.cn/shophtml/hanjulejia/images/item_02.jpg">
-                        </el-tooltip>
-                      </div>
-                    </span>
-                 </p>
-                <p>
                     <span>回单照片：</span>
-                    <span>                       
-                       <div class="upload" v-viewer>
+                    <span v-if="formData.receiptUrls">          
+                        <span v-for="(form,keys) in formAllData.receiptUrls" :key='keys'>        
+                       <div class="upload" v-viewer >
                         <el-tooltip class="item" effect="dark" content="双击图片查看原图" placement="top">
-                       <img src="http://cdn.hao987.cn/shophtml/hanjulejia/images/item_02.jpg">
-                        </el-tooltip>
+                        <img :src="formData.receiptUrls[keys]">
+                        </el-tooltip> 
                       </div>
-                       <div class="upload" v-viewer>
-                        <el-tooltip class="item" effect="dark" content="双击图片查看原图" placement="top">
-                       <img src="http://cdn.hao987.cn/shophtml/hanjulejia/images/item_02.jpg">
-                        </el-tooltip>
-                      </div>
+                      </span>     
                     </span>
+                    <span v-else></span>
                  </p>
             </div>
         </div>
@@ -37,7 +25,7 @@
             <h2>评价信息</h2>
             <div class="essentialInformation">
                 <p>
-                    <span>货主评价车主：</span>
+                    <span>货主评价物流公司：</span>
                     <span>1</span>
                  </p>
                 <p>
@@ -51,7 +39,7 @@
             </div>
             <div class="essentialInformation">
                 <p>
-                    <span>车主评价货主：</span>
+                    <span>物流公司评价货主：</span>
                     <span>1</span>
                  </p>
                 <p>
@@ -71,15 +59,16 @@
             <div class="essentialInformation">
                 <p>
                     <span>是否需要回单：</span>
-                    <span>1</span>
+                    <span>{{formData.isDoorPickUp=='1'?'是':'否'}}</span>
+                    <i class="orderExtraStyle">{{formData.orderExtraCodesName}}</i>
                  </p>
                 <p>
                     <span>物流公司回单时间：</span>
-                    <span>1</span>
+                    <span>{{formData.companyConfirmReceiptTime}}</span>
                  </p>
                 <p>
                     <span>货主收到回单时间：</span>
-                    <span>1</span>
+                    <span>{{formData.shipperConfirmReceiptTime}}</span>
                 </p>                 
             </div>
         </div>
@@ -90,15 +79,17 @@
             <div class="essentialInformation">
                 <p>
                     <span>是否需要回款：</span>
-                    <span>1</span>
+                    <span>{{formData.orderExtraCodes=='1'?'是':'否'}}
+                     <i class="orderExtraStyle">{{formData.orderExtraCodesName}}</i>
+                    </span>
                  </p>
                 <p>
                     <span>物流公司回款时间：</span>
-                    <span>1</span>
+                    <span>{{formData.companyConfirmReceivableTime}}</span>
                  </p>
                 <p>
                     <span>货主收到回款时间：</span>
-                    <span>1</span>
+                    <span>{{formData.shipperConfirmReceivableTime}}</span>
                 </p>                 
             </div>
         </div>
@@ -107,12 +98,34 @@
 </template>
 
 <script>
+import {findByOrderSerial,getFCLOrderByOrderSerial} from '@/api/order/logistics/logistics.js'
 export default {
-    
+    data(){
+        return{
+        formData:[]
+        }
+    },
+    methods:{
+    firstblood(){   
+        // findByOrderSerial(this.$route.query.orderSerial).then(res=>{
+        //  console.log('data111111111111:',res)
+        // })
+        getFCLOrderByOrderSerial(this.$route.query.orderSerial).then(res=>{
+        this.formData = res.data
+        })
+    }
+    },
+    mounted(){
+     this.firstblood()
+    }    
 }
 </script>
 
 <style lang="scss">
+.orderExtraStyle{
+        font-style: normal;
+        color: red
+    }
 .essentialInformationPhoto{
     p{
     display: inline-block;

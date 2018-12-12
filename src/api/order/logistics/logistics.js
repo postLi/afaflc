@@ -2,6 +2,7 @@
 import fetch from '@/utils/fetch'
 const baseurl = 'aflcorderservice'
 const baseurl_two = 'aflc-common'
+const baseurl_three = 'aflc-uc'
 
   // 根据发物流订单管理列表
   export function findFCLOrderInfoList(page, pagesize, data) {
@@ -49,3 +50,8 @@ export function getFCLSupplyGoodsByOrderSerial(orderSerial) {
     export function paymentFun() {
       return fetch.get('/' + baseurl_two + '/sysDict/getSysDictByCodeGet/AF05105')
     }
+
+    // 获取货主获取物流公司
+    export function findByOrderSerial(data) {
+      return fetch.get('/' + baseurl_three + '/usercenter/aflcTransportEvaluation/v1/findByOrderSerial/' + data)
+    }    

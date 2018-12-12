@@ -1,6 +1,6 @@
 <template>
     <el-form :inline="true" :model="searchInfo" ref="ruleForm" class="demo-ruleForm classify_searchinfo" >
-        <el-form-item label="通话分类" prop="pointName">
+        <!-- <el-form-item label="通话分类" prop="pointName">
             <el-select v-model="searchInfo.complainType" clearable placeholder="请选择">
                 <el-option
                 v-for="item in optionsPlantService"
@@ -9,9 +9,9 @@
                 :value="item.code">
                 </el-option>
             </el-select>
-        </el-form-item>
-        <el-form-item label="通话类型" prop="pointName">
-            <el-select v-model="searchInfo.complainType" clearable placeholder="请选择">
+        </el-form-item> -->
+        <el-form-item label="通话类型" prop="status">
+            <el-select v-model="searchInfo.status" clearable placeholder="请选择">
                 <el-option
                 v-for="item in optionsPlantService"
                 :key="item.id"
@@ -20,8 +20,8 @@
                 </el-option>
             </el-select>
         </el-form-item>
-        <el-form-item label="手机号码" prop="workSerial">
-            <el-input v-model="searchInfo.workSerial" clearable>
+        <el-form-item label="手机号码" prop="callerNo">
+            <el-input v-model="searchInfo.callerNo" clearable>
             </el-input>
         </el-form-item>
         <el-form-item class="btnChoose fr"  style="margin-left:0;">
@@ -53,8 +53,9 @@ export default{
         shortcuts: pickerOptions2
       },
       searchInfo: {
-        complainType: '', // 类型
-        workSerial: '' // 工单号
+        // complainType: '', // 类型
+        status:null,
+        callerNo:'',//主叫号码
       },
       optionsCouseService: [
         {
@@ -65,19 +66,24 @@ export default{
       ],
       optionsPlantService: [
         {
-          id: '0',
+          id:'-1',
           name: '全部',
-          code: ''
+          code: null
+        },
+        {
+          id: '0',
+          name: '未接来电',
+          code: 0
         },
         {
           id: '1',
-          name: '投诉',
-          code: '投诉'
+          name: '已接来电',
+          code: 1
         },
         {
           id: '2',
-          name: '建议',
-          code: '建议'
+          name: '留言电话',
+          code: 2
         }
       ]
 

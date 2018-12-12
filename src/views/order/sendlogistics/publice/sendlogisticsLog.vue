@@ -38,6 +38,7 @@ export default {
   mounted() {
       this.$refs.OrderLog.firstblood();
       this.$refs.orderTracking.firstblood();
+      this.$refs.receipt.firstblood();
   },
   methods: {
     handleClick(tab, event) {
