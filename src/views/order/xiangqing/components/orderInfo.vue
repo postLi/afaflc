@@ -19,7 +19,7 @@
                 <p>
                     <span>订单状态：</span>
                     <span>{{listInformation.orderStatus}}</span>
-                    <el-button class="ifzhipai fr" icon="el-icon-edit" v-if="listInformation.orderStatusCode == 'AF00805'" @click="handlerClick('appoint')"  type="primary" size="mini" plain>指派司机</el-button>
+                    <el-button class="ifzhipai fr" icon="el-icon-edit" v-if="listInformation.orderStatusCode.indexOf('AF00805') != -1" @click="handlerClick('appoint')"  type="primary" size="mini" plain>指派司机</el-button>
                 </p>
             </div>
             <div class="essentialInformation">

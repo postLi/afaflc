@@ -9,7 +9,7 @@
                         <img class="showPicture" :src="loadingFile.filePath ? loadingFile.filePath: ''" alt="" >
                     </el-tooltip><br>
                     <span class="shangchuan" v-if="loadingFile.createTime">上传时间：</span><span v-if="loadingFile.createTime">{{loadingFile.createTime | parseTime}}</span><br>
-                    <span class="shangchuan" v-if="loadingFile.address">上传位置：{{loadingFile.address ? loadingFile.address :''}}</span>
+                    <span class="shangchuan" v-if="loadingFile.address" :title="loadingFile.address ? loadingFile.address :''">上传位置：{{loadingFile.address ? loadingFile.address :''}}</span>
                 </p>
                 <p>
                     <span>回单照片：</span>
@@ -18,7 +18,7 @@
                     </el-tooltip>
                     <br>
                     <span class="shangchuan" v-if="filePathArr[0]">上传时间：</span><span v-if="filePathArr[0]">{{listInformation.returnList.createTime | parseTime}}</span><br>
-                    <span class="shangchuan" v-if="filePathArr[0]">上传位置：{{listInformation.returnList.address}}</span>
+                    <span class="shangchuan" v-if="listInformation.returnList.address">上传位置：{{listInformation.returnList.address}}</span>
                 </p>
             </div>
         </div>
@@ -226,7 +226,8 @@ export default {
                     width: 70%;
                 }
                 .shangchuan{
-                    margin-left: 70px;
+                    // margin-left: 70px;
+                    margin-right: 5px;
                 }
             }
         }

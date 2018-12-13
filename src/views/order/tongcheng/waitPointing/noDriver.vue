@@ -164,6 +164,7 @@
 
 <script type="text/javascript">
 
+import { eventBus } from '@/eventBus'
 import { orderStatusList } from '@/api/order/ordermange'
 import { parseTime, pickerOptions2 } from '@/utils/index.js'
 import Pager from '@/components/Pagination/index'
@@ -245,6 +246,9 @@ export default{
                 this.pagesize = obj.pageSize
                 this.firstblood()
             },
+             getParentCount(){
+        eventBus.$emit('getOrderCount');
+    },
             // 刷新页面
           firstblood() {
               this.loading = true
@@ -261,6 +265,7 @@ export default{
                     })
                   this.loading = false
                 })
+                this.getParentCount();
             },
 
             // 模糊查询 分类名称或者code

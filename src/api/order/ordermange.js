@@ -116,3 +116,10 @@ export function RemarkDriverInfo(data) {
     })
   }
 
+//获取平台定向,超时无人接单,公海无司机,车主改派,中单后联系货主超时的总数量
+export function getCountByStatus() {
+    return fetch({
+      url: '/' + baseurl + '/order/aflcOrder/v1/getCountByStatus',
+      method: 'post',
+    })
+  }
