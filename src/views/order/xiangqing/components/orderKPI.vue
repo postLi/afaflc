@@ -5,7 +5,7 @@
             <div class="essentialInformation">   
          <div class="orderEchart">
           <div class="orderKPI_fl">
-              综合评分：<span class="Colorred">62</span>分
+              综合评分：<span class="orderColor">62</span>分
           </div>
           <div class="orderKPI_fr">
               <div id="KPI_echarts"></div>
@@ -35,9 +35,9 @@
                     <td>45</td>
                     <td>32</td>
                     <td>22</td>
-                    <td><span class="Colorred">不达标</span></td>
-                    <td><span class="Colorred">12</span></td>
-                    <td>从客户下单时间开始计算，到首次确认中单司机所用时间<br>单位：<span class="Colorred">秒</span></td>
+                    <td><span class="orderColor">不达标</span></td>
+                    <td><span class="orderColor">8</span></td>
+                    <td>从客户下单时间开始计算，到首次确认中单司机所用时间<br>单位：<span class="orderColor">秒</span></td>
                 </tr>
                 <tr>
                     <td>中单后联系货主时效（秒）</td>
@@ -45,9 +45,9 @@
                     <td>45</td>
                     <td>32</td>
                     <td>22</td>
-                    <td><span class="Colorred">不达标</span></td>
-                    <td><span class="Colorred">12</span></td>
-                    <td>从确认中单司机开始计算，到车主联系货主或前往提货地所用时间<br>单位：<span class="Colorred">秒</span></td>
+                    <td><span class="orderColor">不达标</span></td>
+                    <td><span class="orderColor">8</span></td>
+                    <td>从确认中单司机开始计算，到车主联系货主或前往提货地所用时间<br>单位：<span class="orderColor">秒</span></td>
                 </tr>        
                 <tr>
                     <td>到车时效（分钟）</td>
@@ -55,9 +55,9 @@
                     <td>45</td>
                     <td>32</td>
                     <td>22</td>
-                    <td><span class="Colorred">不达标</span></td>
-                    <td><span class="Colorred">12</span></td>
-                    <td>实际到达提货地时间与预计到达提货地时间（即时订单：车主中单时间加上地图预估用时；预约订单：预约用车时间）差异值<br>单位：<span class="Colorred">分钟</span></td>
+                    <td><span class="orderColor">不达标</span></td>
+                    <td><span class="orderColor">8</span></td>
+                    <td>实际到达提货地时间与预计到达提货地时间（即时订单：车主中单时间加上地图预估用时；预约订单：预约用车时间）差异值<br>单位：<span class="orderColor">分钟</span></td>
                 </tr>  
                 <tr>
                     <td>到货时效（分钟）</td>
@@ -65,9 +65,9 @@
                     <td>45</td>
                     <td>32</td>
                     <td>22</td>
-                    <td><span class="Colorred">不达标</span></td>
-                    <td><span class="Colorred">12</span></td>
-                    <td>实际到达目的地时间与预计到达目的地时间差异值<br>单位：<span class="Colorred">分钟</span></td>
+                    <td><span class="orderColor">不达标</span></td>
+                    <td><span class="orderColor">8</span></td>
+                    <td>实际到达目的地时间与预计到达目的地时间差异值<br>单位：<span class="orderColor">分钟</span></td>
                 </tr>    
                 <tr>
                     <td>回单时效（小时）</td>
@@ -75,9 +75,9 @@
                     <td>45</td>
                     <td>32</td>
                     <td>22</td>
-                    <td><span class="Colorred">不达标</span></td>
-                    <td><span class="Colorred">12</span></td>
-                    <td>从完成卸货时间开始计算，到车主回单所用时间<br>单位：<span class="Colorred">小时</span></td>
+                    <td><span class="orderColor">不达标</span></td>
+                    <td><span class="orderColor">1</span></td>
+                    <td>从完成卸货时间开始计算，到车主回单所用时间<br>单位：<span class="orderColor">小时</span></td>
                 </tr>   
                 <tr>
                     <td>回款时效（小时）</td>
@@ -85,9 +85,9 @@
                     <td>45</td>
                     <td>32</td>
                     <td>22</td>
-                    <td><span class="Colorred">不达标</span></td>
-                    <td><span class="Colorred">12</span></td>
-                    <td>从完成卸货时间开始计算，到车主回款所用时间<br>单位：<span class="Colorred">小时</span></td>
+                    <td><span class="orderColor">不达标</span></td>
+                    <td><span class="orderColor">12</span></td>
+                    <td>从完成卸货时间开始计算，到车主回款所用时间<br>单位：<span class="orderColor">小时</span></td>
                 </tr>                                                                  
             </tbody>
          </table>
@@ -115,9 +115,9 @@
                     <td>45</td>
                     <td>32</td>
                     <td>22</td>
-                    <td><span class="Colorred">不达标</span></td>
-                    <td><span class="Colorred">12</span></td>
-                    <td>订单货损货差次数<br>单位：<span class="Colorred">次</span></td>
+                    <td><span class="orderColor">不达标</span></td>
+                    <td><span class="orderColor">12</span></td>
+                    <td>订单货损货差次数<br>单位：<span class="orderColor">次</span></td>
                 </tr>
             </tbody>
          </table>
@@ -145,9 +145,9 @@
                     <td>45</td>
                     <td>32</td>
                     <td>22</td>
-                    <td><span class="Colorred">不达标</span></td>
-                    <td><span class="Colorred">12</span></td>
-                    <td>订单货主投诉次数<br>单位：<span class="Colorred">次</span></td>
+                    <td><span class="orderColor">不达标</span></td>
+                    <td><span class="orderColor">12</span></td>
+                    <td>订单货主投诉次数<br>单位：<span class="orderColor">次</span></td>
                 </tr>
                 <tr>
                     <td>到车距离异常（次）</td>
@@ -155,9 +155,9 @@
                     <td>45</td>
                     <td>32</td>
                     <td>22</td>
-                    <td><span class="Colorred">不达标</span></td>
-                    <td><span class="Colorred">12</span></td>
-                    <td>车主点击到达提货地或目的地时，距离客户下单地址异常次数<br>单位：<span class="Colorred">次</span></td>
+                    <td><span class="orderColor">不达标</span></td>
+                    <td><span class="orderColor">12</span></td>
+                    <td>车主点击到达提货地或目的地时，距离客户下单地址异常次数<br>单位：<span class="orderColor">次</span></td>
                 </tr>                
             </tbody>
          </table>
@@ -208,12 +208,21 @@ export default {
                         {
                             value : [10, 20, 30, 40, 50, 60,70,80,90],
                             name: '评分',
-                                            itemStyle: {
+                    itemStyle: {
                     normal: {
-                           color: '#a9d3ff',
+                            color: '#a9d3ff',
                             lineStyle: {
-                            color: '#a9d3ff',}}}}
-                    ]
+                            color: '#a9d3ff',}}},
+                    label: {
+                    normal: {
+                        show: true,
+                        color: '#328ff5',
+                        formatter: (params) => {
+                            return params.value
+                        },
+                    },
+                },
+                }]
                 }
             ]
 
@@ -251,7 +260,7 @@ export default {
         width: 500px;
         height: 300px;
     }
-    .Colorred{
+    .orderColor{
         color: red;
     }
     .tree-table{
