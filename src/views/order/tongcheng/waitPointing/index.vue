@@ -2,26 +2,31 @@
   <div class="pointing tabsWrap">
     <el-tabs v-model="pointName" type="card" @tab-click="handleClick" >
         <!-- 平台定向 -->
-            <el-tab-pane label="平台定向" name="plantOrigin" v-if="$_has_permission('ORDER_CITY_WIDE_ORDER_WIAT_ASSIGN_PLATFORM')">
+            <el-tab-pane  name="plantOrigin" v-if="$_has_permission('ORDER_CITY_WIDE_ORDER_WIAT_ASSIGN_PLATFORM')">
+                <span slot="label">平台定向 ( {{tabsNum.platFormCounts > 99 ? '99+' : tabsNum.platFormCounts}} ) </span>
                 <plantOrigin :isvisible="pointName === 'plantOrigin'"></plantOrigin>
             </el-tab-pane>
 
         <!-- 超时无人人接单 -->
             <el-tab-pane label="超时无人接单" name="overTime" v-if="$_has_permission('ORDER_CITY_WIDE_ORDER_WIAT_ASSIGN_TIMEOUT_NO_DRIVER')">
+                <span slot="label">超时无人接单 ( {{tabsNum.outTimeNoDriverCounts > 99 ? '99+' : tabsNum.outTimeNoDriverCounts}} ) </span>
                 <overTime :isvisible=" pointName === 'overTime'"></overTime>
             </el-tab-pane>
         <!-- 公海无司机 -->
             <el-tab-pane label="公海无司机" name="noDriver" v-if="$_has_permission('ORDER_CITY_WIDE_ORDER_WIAT_ASSIGN_OPEN_NO_DRIVER')">
+                <span slot="label">公海无司机 ( {{tabsNum.publicSeaNoDriverCounts > 99 ? '99+' : tabsNum.publicSeaNoDriverCounts}} ) </span>
                 <noDriver :isvisible="pointName === 'noDriver'"></noDriver>
             </el-tab-pane>
             
         <!-- 车主改派 -->
             <el-tab-pane label="车主改派" name="assignCar" v-if="$_has_permission('ORDER_CITY_WIDE_ORDER_WIAT_ASSIGN_DRIVER_CHANGE')">
+                <span slot="label">车主改派 ( {{tabsNum.driverReassignmentCounts > 99 ? '99+' : tabsNum.driverReassignmentCounts}} ) </span>
                 <assignCar :isvisible="pointName === 'assignCar'"></assignCar>
             </el-tab-pane>
 
         <!-- 中单后联系货主超时 -->
             <el-tab-pane label="中单后联系货主超时" name="passOverTime" v-if="$_has_permission('ORDER_CITY_WIDE_ORDER_WIAT_ASSIGN_SHIPPER_TIMEOUT')">
+                <span slot="label">中单后联系货主超时 ( {{tabsNum.winOrderContactsOutTimeCounts > 99 ? '99+' : tabsNum.winOrderContactsOutTimeCounts}} ) </span>
                 <passOverTime :isvisible="pointName === 'passOverTime'"></passOverTime>
             </el-tab-pane>
     </el-tabs>
@@ -31,6 +36,8 @@
 
 <script type="text/javascript">
 
+import { eventBus } from '@/eventBus'
+import { getCountByStatus } from '@/api/order/ordermange'
 import plantOrigin from './PlantOrientation'
 import overTime from './overTime'
 import noDriver from './noDriver'
@@ -49,6 +56,7 @@ import passOverTime from './passOverTime'
         data() {
           return {
             pointName:'plantOrigin',
+            tabsNum:{},
           };
         },
         watch:{
@@ -63,6 +71,7 @@ import passOverTime from './passOverTime'
         },
         created() {
             this.pointName = localStorage.getItem('pointName') || 'plantOrigin';
+            this.getCount();
         },
 
         beforeUpdate () {
@@ -76,7 +85,18 @@ import passOverTime from './passOverTime'
             handleClick(tab, event) {
                 // console.log(tab, event);
                 this.pointName = tab.name;
+            },
+            getCount(){
+                getCountByStatus().then(res => {
+                    console.log('getCount',res.data)
+                    this.tabsNum = res.data;
+                })
             }
+        },
+        mounted(){
+            eventBus.$on('getOrderCount', () => {
+                this.getCount();
+            })
         }
     }
 </script>

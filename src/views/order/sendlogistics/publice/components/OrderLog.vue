@@ -94,11 +94,11 @@
             <div class="essentialInformation" >
                 <p>
                     <span>重量 / 体积：</span>
-                    <span>{{formData.aflcFCLOrderGoodsDtoList[0].goodsWeight}}  <i class="red">/</i>  {{formData.aflcFCLOrderGoodsDtoList[0].goodsVolume}}</span>
+                    <span v-if="formData.aflcFCLOrderGoodsDtoList.length>0">{{formData.aflcFCLOrderGoodsDtoList[0].goodsWeight}}  <i class="red">/</i>  {{formData.aflcFCLOrderGoodsDtoList[0].goodsVolume}}</span>
                  </p>
                 <p>
                     <span>货物名称 / 件数：</span>
-                    <span>{{formData.aflcFCLOrderGoodsDtoList[0].goodsName}}  <i  class="red">/</i>  {{formData.aflcFCLOrderGoodsDtoList[0].goodsNum}}</span>
+                    <span v-if="formData.aflcFCLOrderGoodsDtoList.length>1">{{formData.aflcFCLOrderGoodsDtoList[0].goodsName}}  <i  class="red">/</i>  {{formData.aflcFCLOrderGoodsDtoList[0].goodsNum}}</span>
                  </p>
                 <p>
                     <span>货物保价：</span>
@@ -271,6 +271,7 @@ export default {
     methods:{
         firstblood(){
         getFCLOrderByOrderSerial(this.$route.query.orderSerial).then(res=>{
+            console.log('dfdfdfdfdfdfdfdffdfdf',res)
             this.formData = res.data
             this.formData.useTime = parseTime(this.formData.useTime,"{y}-{m}-{d} {h}:{i}:{s}");
         })

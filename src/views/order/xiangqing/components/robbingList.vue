@@ -31,12 +31,12 @@
                 </template>
             </el-table-column>
             <el-table-column
-                prop="address"
+                prop="carType"
                 label="车辆信息"
                 :show-overflow-tooltip="true"
                 width="200">
                 <template slot-scope="scope">
-                    {{scope.row.driverName}} - {{scope.row.driverPhone}}
+                    {{scope.row.carNumber}}{{scope.row.carType ? '-'+scope.row.carType : ''}}
                 </template>
             </el-table-column>
             <el-table-column
