@@ -337,20 +337,20 @@
             })
 
             //
-            // if (this.isModify) {
-            //   promiseObj = putTextedLogisticspark(this.info.id, data)
-            // } else {
-            //   this.form.disableStatus = 0
-            //   data.disableStatus = this.form.disableStatus
-            //   promiseObj = postAddLogisticspark(data)
-            // }
-            // promiseObj.then(res => {
-            //   this.$emit('success')
-            //   this.$message.success('保存成功')
-            //   this.close()
-            // }).catch(err => {
-            //   this.$message.warning(err.text || err.errorInfo || '无法获取服务端数据~')
-            // })
+            if (this.isModify) {
+              promiseObj = putTextedLogisticspark(this.info.id, data)
+            } else {
+              this.form.disableStatus = 0
+              data.disableStatus = this.form.disableStatus
+              promiseObj = postAddLogisticspark(data)
+            }
+            promiseObj.then(res => {
+              this.$emit('success')
+              this.$message.success('保存成功')
+              this.close()
+            }).catch(err => {
+              this.$message.warning(err.text || err.errorInfo || '无法获取服务端数据~')
+            })
           } else {
             return false
           }
