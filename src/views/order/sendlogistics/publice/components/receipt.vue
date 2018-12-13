@@ -69,8 +69,9 @@
             <div class="essentialInformation">
                 <p>
                     <span>是否需要回单：</span>
-                    <span>{{formData.isDoorPickUp=='1'?'是':'否'}}</span>
+                    <span>{{formData.isDoorPickUp=='1'?'是':'否'}}
                     <i class="orderExtraStyle">{{formData.orderExtraCodesName}}</i>
+                    </span>
                  </p>
                 <p>
                     <span>物流公司回单时间：</span>
@@ -133,7 +134,7 @@ export default {
         }   
          }else{
         this.TransportEvaluation = {
-        serverStarLevel:4.9,
+        serverStarLevel:0,
         evaluationDes:null,
         }
          }
