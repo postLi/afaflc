@@ -1,11 +1,6 @@
 <template>
     <div class="identicalStyle Marketing" style="height:100%" v-loading="loading">
         <el-form :inline="true"  class="demo-ruleForm classify_searchinfo">
-          <!-- <el-form-item label="所属区域" prop="pointName">
-            <vregion :ui="true" @values="regionChange" class="form-control">
-              <el-input v-model="formAllData.belongCityName" placeholder="请选择所属区域" clearable></el-input>
-            </vregion>
-          </el-form-item> -->
           <el-form-item label="推荐栏目" prop="recommendColumn">
           <el-select v-model="formAllData.recommendColumn" placeholder="请选择" @change="changeColumn">
             <el-option
@@ -76,10 +71,10 @@
         </el-form>
           <div class="classify_info">
               <div class="btns_box">
-                <el-button type="primary" :size="btnsize" class="el-icon-circle-plus"  plain @click="doAction('Stick')">置顶</el-button>
-                <el-button type="primary" :size="btnsize" class="el-icon-circle-plus"  plain @click="doAction('UpStick')">取消置顶</el-button>
-                <el-button type="primary" :size="btnsize" class="el-icon-tickets" @click="doAction('amend')" plain>修改</el-button>
-                <el-button type="primary" :size="btnsize" icon="el-icon-delete"  @click="doAction('genjin')" plain>删除</el-button>
+                <el-button type="primary" :size="btnsize" class="el-icon-arrow-up"  plain @click="doAction('Stick')">置顶</el-button>
+                <el-button type="primary" :size="btnsize" class="el-icon-arrow-down"  plain @click="doAction('UpStick')">取消置顶</el-button>
+                <el-button type="primary" :size="btnsize" class="el-icon-edit" @click="doAction('amend')" plain>修改</el-button>
+                <el-button type="primary" :size="btnsize" icon="el-icon-delete"  @click="doAction('delete')" plain>删除</el-button>
               </div>
             <div class="info_news">    
               <el-table ref="multipleTable" style="width: 100%" stripe border height="100%" @selection-change="getSelection" @row-click="clickDetails" highlight-current-row :data="dataset"  tooltip-effect="dark">
@@ -101,7 +96,17 @@
                 <el-table-column width="200" label="推荐栏目" prop="recommendColumn" sortable :show-overflow-tooltip="true">
                 </el-table-column>   
                 <el-table-column  width="200" label="推荐位置" prop="recommendPosition" sortable :show-overflow-tooltip="true">
-                </el-table-column>   
+                </el-table-column>  
+                <el-table-column
+                  prop="settopStatus"
+                  label="状态"
+                  width="120"
+                  sortable
+                  >
+                  <template slot-scope="scope">
+                    {{ scope.row.settopStatus === 0 ? "不置顶" : "置顶" }}
+                  </template>
+                </el-table-column> 
                 <el-table-column
                   :show-overflow-tooltip="true"
                   prop="recommendStarttime"
@@ -133,21 +138,6 @@
                 <el-table-column width="200" label="广告主账号" prop="account" sortable :show-overflow-tooltip="true">
                 </el-table-column>   
                 <el-table-column
-                  prop="settopStatus"
-                  label="状态"
-                  width="120"
-                  sortable
-                  >
-                  <template slot-scope="scope">
-                    {{ scope.row.settopStatus === 0 ? "不置顶" : "置顶" }}
-                  </template>
-                </el-table-column>
-               
-                <!-- <el-table-column  label="曝光量" prop="browseNumber" sortable :show-overflow-tooltip="true">
-                </el-table-column>        -->
-                <!-- <el-table-column  label="点击量" prop="rangeTypeName" sortable :show-overflow-tooltip="true">
-                </el-table-column>   -->
-                <el-table-column
                   :show-overflow-tooltip="true"
                   prop="createTime"
                   label="创建时间"
@@ -160,35 +150,6 @@
                   </span>
                 </template>
                 </el-table-column> 
-                <el-table-column
-                  label="操作"
-                  width="300"
-                  plain
-                  >
-              <!-- 待处理的时候显示确认受理，处理中显示记录投诉跟进，已处理两个按钮都不显示 -->
-                <template slot-scope="scope">
-                  <el-button
-                  size="mini"
-                  plain
-                  type="primary"
-                  @click="handleEdit1(scope.$index, scope.row,'delete')">删除</el-button>
-                  <el-button
-                  size="mini"
-                  plain
-                  type="warning"
-                  @click="handleEdit1(scope.$index, scope.row,'amend')">修改</el-button>
-                  <!-- <el-button
-                  size="mini"
-                  plain
-                  type="info"
-                  @click="handleEdit(scope.$index, scope.row,'soldout')">下架</el-button> -->
-                  <el-button
-                  size="mini"
-                  plain
-                  type="info"
-                  @click="handleEdit1(scope.$index, scope.row,'cancel')">{{scope.row.settopStatus=== 1 ? '取消置顶': '置顶'}}</el-button>
-              </template>
-          </el-table-column>                                                
               </el-table> 
         	  </div> 
           <!-- addReg -->
@@ -199,9 +160,8 @@
       </div>
 </template>
 <script>
-import { postGetLists, deleteLine, putCancel } from '@/api/web/recommend.js'
+import { postGetLists ,putStick,putUpStick,deleteBatch} from '@/api/web/recommend.js'
 import Pager from '@/components/Pagination/index'
-// import { parseTime } from '@/utils/'
 import GetCityList from '@/components/GetCityList/city'
 import add from './components/add'
 import { pickerOptions2 } from '@/utils/index.js'
@@ -313,8 +273,6 @@ export default {
     handleSearch(type) {
       switch (type) {
         case 'search':
-          // this.formAllData.createStartTime = Date.parse(this.searchCreatTime[0] + ' 00:00:00')
-          // this.formAllData.createEndTime = Date.parse(this.searchCreatTime[1] + ' 23:59:59')
           this.formAllData.createStartTime = this.searchCreatTime[0] ? this.searchCreatTime[0] + ' 00:00:00' : ''
           this.formAllData.createEndTime = this.searchCreatTime[1] ? this.searchCreatTime[1] + ' 23:59:59' : ''
           this.firstblood()
@@ -322,7 +280,6 @@ export default {
         case 'clear':
           this.searchCreatTime = []
           this.formAllData = {
-            // associatedId: '',
             publishName: '',
             startProvince: '',
             startCity: '',
@@ -347,12 +304,10 @@ export default {
     },
     // 请求接口刷新页面
     firstblood() {
-      // this.loading = false
-      // this.formAllData.recommendPrescription = this.options4[0].value
       postGetLists(this.page, this.pagesize, this.formAllData).then(res => {
         this.dataTotal = res.data.total
         this.dataset = res.data.list
-        console.log(res)
+        // console.log(this.dataset)
       }).catch(err => {
         this.$message.warning(err.text || err.errorInfo || '无法获取服务端数据~')
         this.loading = true
@@ -393,22 +348,20 @@ export default {
     changeStatus(obj) {
       this.formAllData.settopStatus = obj
     },
-    // changeStatus(obj) {
-    //   this.formAllData.Prescription = obj
-    // },
     changePrescription(obj) {
       this.formAllData.recommendPrescription = obj
     },
     doAction(type) {
+      if (!this.selected.length) {
+        this.$message({
+          message: '请选择要操作的项~',
+          type: 'warning'
+        })
+        return false
+      }
       switch (type) {
         case 'amend':
-          if (!this.selected.length) {
-            this.$message({
-              message: '请选择要操作的项~',
-              type: 'warning'
-            })
-            return false
-          } else if (this.selected.length > 1) {
+          if (this.selected.length > 1) {
             this.$message({
               message: '每次只能修改一条数据',
               type: 'warning'
@@ -416,46 +369,75 @@ export default {
             return false
           } else {
             console.log(this.selected[0].id)
+            console.log(this.selected[0].settopStatus)
             this.selectInfo = this.selected[0]
             this.centerDialogVisible = true
             this.isMatreg = true
           }
           break
         case 'Stick':
-          // putCancel(this.selected[0].id).then(res => {
-          //   this.$message({
-          //     type: 'success',
-          //     message: '操作成功~'
-          //   })
-          //   this.firstblood()
-          // })
-          console.log(this.selected[0].id.settopStatus)
+          const datas1 = this.selected.filter(el => {
+            return el.settopStatus !== 1
+          })
+          const ids1 = datas1.map(el => {
+            return el.id
+          })
+          if(datas1.length <= 0){
+            this.$message({
+              message: '已是置顶状态~',
+              type: 'warning'
+            })
+            return false
+          } else {
+            putStick(ids1).then(res => {
+              this.$message({
+                type: 'success',
+                message: '置顶成功~'
+              })
+              this.firstblood()
+            }).catch(err => {
+              this.$message({
+                type: 'error',
+                message: err.errorInfo || err.text || '未知错误，请重试~'
+              })
+            })
+          }
           break
         case 'UpStick':
-          break
-      }
-    },
-    handleEdit1(index, row, type) {
-      switch (type) {
-        case 'amend':
-          this.selectInfo = row
-          this.centerDialogVisible = true
-          this.isMatreg = true
-          console.log('isMatreg', this.isMatreg)
-          break
-        case 'cancel':
-          putCancel(row.id).then(res => {
-            this.$message({
-              type: 'success',
-              message: '操作成功~'
-            })
-            this.firstblood()
+        const datas2 = this.selected.filter(el => {
+            return el.settopStatus !== 0
           })
-          console.log(row.settopStatus)
+          const ids2 = datas2.map(el => {
+            return el.id
+          })
+          console.log(datas2,ids2)
+          if(datas2.length <= 0){
+            this.$message({
+              message: '未置顶不能取消~',
+              type: 'warning'
+            })
+            return false
+          } else {
+            putUpStick(ids2).then(res => {
+              this.$message({
+                type: 'success',
+                message: '取消成功~'
+              })
+              this.firstblood()
+            }).catch(err => {
+              this.$message({
+                type: 'error',
+                message: err.errorInfo || err.text || '未知错误，请重试~'
+              })
+            })
+          }
           break
-        case 'delete':
-          console.log(index, row, row.id)
-          deleteLine(row.id).then(res => {
+          case 'delete':
+          const ids3 = this.selected.map(el => {
+            return el.id
+          })
+          console.log(ids3)
+          deleteBatch(ids3).then(res => {
             this.$confirm('确定要删除此物流专线吗?', '提示', {
               confirmButtonText: '确定',
               cancelButtonText: '取消',
@@ -487,7 +469,6 @@ export default {
       this.centerDialogVisible = false
       this.isMatreg = false
     },
-
     getSelection(selected) {
       this.selected = selected
     },
