@@ -56,8 +56,6 @@ export function getOrderMonitorList(data) {
     })
   }
 
-  querySysDictUrl
-
 // 通过code获取那么
 export function querySysDictUrl(code) {
     return fetch({

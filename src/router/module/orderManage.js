@@ -117,10 +117,10 @@ export default {
      },
 
     {
-        path: '/order/xiangqing', 
+        path: '/order/orderDetails', 
         name: '订单详情',  
         hidden: true,
-        component: _import('order/xiangqing/index'), 
+        component: _import('order/orderDetails/index'), 
         meta: { role: ['admin'], title: '订单详情',stitle: '详情',  noCache: false }
     },
 
