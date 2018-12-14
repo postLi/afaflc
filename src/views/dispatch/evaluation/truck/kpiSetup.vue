@@ -560,9 +560,9 @@ export default {
         if(this.cityCode){
             aflcAssessmentSettings(form).then(res=>{
                 this.$message.success('保存成功')
-                this.$refs['formdata'].resetFields();
-                this.$refs.treeForm.setCheckedNodes([])
-                this.cityCode = null
+                // this.$refs['formdata'].resetFields();
+                // this.$refs.treeForm.setCheckedNodes([])
+                // this.cityCode = null
             }).catch(res=>{
                 this.$message.error('保存失败')
             })
