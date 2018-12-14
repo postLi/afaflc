@@ -203,6 +203,15 @@ export default {
                         }
                     }
                 },
+                    label: {
+                    normal: {
+                        show: true,
+                        color: '#328ff5',
+                        formatter: (params) => {
+                            return params.value
+                        },
+                    },
+                },
                 type: 'radar',
                     data : [
                         {
@@ -213,15 +222,6 @@ export default {
                             color: '#a9d3ff',
                             lineStyle: {
                             color: '#a9d3ff',}}},
-                    label: {
-                    normal: {
-                        show: true,
-                        color: '#328ff5',
-                        formatter: (params) => {
-                            return params.value
-                        },
-                    },
-                },
                 }]
                 }
             ]
@@ -231,8 +231,10 @@ export default {
     },
     methods:{
         firstBlood(){
+            this.$nextTick(()=>{
             var myChart = echarts.init(document.getElementById('KPI_echarts')); 
              myChart.setOption(this.option); 
+            })
         }
     },
     mounted(){

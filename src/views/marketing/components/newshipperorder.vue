@@ -54,14 +54,14 @@
              <th width="80"   rowspan="2">一天限量</th>
             </tr>
             <tr>
-              <td><el-form-item prop="reward1" size = '50'><el-input class="Order_input" v-model="formAll.reward1" ref='reward1' maxlength='5'></el-input></el-form-item>-<el-form-item prop="reward2"><el-input class="Order_input" v-model="formAll.reward2" ref='reward2'  maxlength='5' @change='inputChange(1)'></el-input></el-form-item></td> 
-              <td><el-form-item prop="reward3"><el-input class="Order_input" v-model="formAll.reward3" ref='reward3' maxlength='5' @change='inputChange(2)'></el-input></el-form-item>-<el-form-item prop="reward4"><el-input class="Order_input" v-model="formAll.reward4" ref='reward4'  maxlength='5' @change='inputChange(3)'></el-input></el-form-item></td> 
-              <td><el-form-item prop="reward5"><el-input class="Order_input" v-model="formAll.reward5" ref='reward5' maxlength='5' @change='inputChange(4)'></el-input></el-form-item>-<el-form-item prop="reward6"><el-input class="Order_input" v-model="formAll.reward6" ref='reward6'  maxlength='5' @change='inputChange(5)'></el-input></el-form-item></td> 
-              <td><el-form-item prop="reward7"><el-input class="Order_input" v-model="formAll.reward7" ref='reward7' maxlength='5' @change='inputChange(6)'></el-input></el-form-item>-<el-form-item prop="reward8"><el-input class="Order_input" v-model="formAll.reward8" ref='reward8'  maxlength='5' @change='inputChange(7)'></el-input></el-form-item></td> 
-              <td><el-form-item prop="reward9"><el-input class="Order_input" v-model="formAll.reward9" ref='reward9' maxlength='5' @change='inputChange(8)'></el-input></el-form-item>-<el-form-item prop="reward10"><el-input class="Order_input" v-model="formAll.reward10" ref='reward10'  maxlength='5' @change='inputChange(9)'></el-input></el-form-item></td> 
-              <td><el-form-item prop="reward11"><el-input class="Order_input" v-model="formAll.reward11" ref='reward11' maxlength='5' @change='inputChange(10)'></el-input></el-form-item>-<el-form-item prop="reward12"><el-input class="Order_input" v-model="formAll.reward12" ref='reward12'  maxlength='5' @change='inputChange(11)'></el-input></el-form-item></td> 
-              <td><el-form-item prop="reward13"><el-input class="Order_input" v-model="formAll.reward13" ref='reward13' maxlength='5' @change='inputChange(12)'></el-input></el-form-item>-<el-form-item prop="reward14"><el-input class="Order_input" v-model="formAll.reward14" ref='reward14'  maxlength='5' @change='inputChange(13)'></el-input></el-form-item></td> 
-              <td><el-form-item prop="reward15"><el-input class="Order_input" v-model="formAll.reward15" ref='reward15' maxlength='5' @change='inputChange(14)'></el-input></el-form-item>-<el-form-item prop="reward16"><el-input class="Order_input" v-model="formAll.reward16" ref='reward16'  maxlength='5'></el-input></el-form-item></td> 
+              <td><el-form-item prop="reward1" size = '50'><el-input class="Order_input" v-model="formAll.reward1" ref='reward1' maxlength='5'></el-input></el-form-item>-<el-form-item prop="reward2"><el-input class="Order_input" v-model="formAll.reward2" ref='reward2'  maxlength='5' @keyup.native='inputChange(1)'></el-input></el-form-item></td> 
+              <td><el-form-item prop="reward3"><el-input class="Order_input" v-model="formAll.reward3" ref='reward3' maxlength='5' @keyup.native='inputChange(2)'></el-input></el-form-item>-<el-form-item prop="reward4"><el-input class="Order_input" v-model="formAll.reward4" ref='reward4'  maxlength='5' @keyup.native='inputChange(3)'></el-input></el-form-item></td> 
+              <td><el-form-item prop="reward5"><el-input class="Order_input" v-model="formAll.reward5" ref='reward5' maxlength='5' @keyup.native='inputChange(4)'></el-input></el-form-item>-<el-form-item prop="reward6"><el-input class="Order_input" v-model="formAll.reward6" ref='reward6'  maxlength='5' @keyup.native='inputChange(5)'></el-input></el-form-item></td> 
+              <td><el-form-item prop="reward7"><el-input class="Order_input" v-model="formAll.reward7" ref='reward7' maxlength='5' @keyup.native='inputChange(6)'></el-input></el-form-item>-<el-form-item prop="reward8"><el-input class="Order_input" v-model="formAll.reward8" ref='reward8'  maxlength='5' @keyup.native='inputChange(7)'></el-input></el-form-item></td> 
+              <td><el-form-item prop="reward9"><el-input class="Order_input" v-model="formAll.reward9" ref='reward9' maxlength='5' @keyup.native='inputChange(8)'></el-input></el-form-item>-<el-form-item prop="reward10"><el-input class="Order_input" v-model="formAll.reward10" ref='reward10'  maxlength='5' @keyup.native='inputChange(9)'></el-input></el-form-item></td> 
+              <td><el-form-item prop="reward11"><el-input class="Order_input" v-model="formAll.reward11" ref='reward11' maxlength='5' @keyup.native='inputChange(10)'></el-input></el-form-item>-<el-form-item prop="reward12"><el-input class="Order_input" v-model="formAll.reward12" ref='reward12'  maxlength='5' @keyup.native='inputChange(11)'></el-input></el-form-item></td> 
+              <td><el-form-item prop="reward13"><el-input class="Order_input" v-model="formAll.reward13" ref='reward13' maxlength='5' @keyup.native='inputChange(12)'></el-input></el-form-item>-<el-form-item prop="reward14"><el-input class="Order_input" v-model="formAll.reward14" ref='reward14'  maxlength='5' @keyup.native='inputChange(13)'></el-input></el-form-item></td> 
+              <td><el-form-item prop="reward15"><el-input class="Order_input" v-model="formAll.reward15" ref='reward15' maxlength='5' @keyup.native='inputChange(14)'></el-input></el-form-item>-<el-form-item prop="reward16"><el-input class="Order_input" v-model="formAll.reward16" ref='reward16'  maxlength='5'></el-input></el-form-item></td> 
                  </tr>
             <tr>
               <td>未分类</td>
@@ -342,7 +342,8 @@ export default {
         dialogFormVisible_add: false,
         optionsCar:[],
         serviceCardList:[],
-        FormData:null,
+        FormData:[],
+        rewardGradeList:['AF0020806','AF0020801','AF0020802','AF0020803','AF0020804','AF0020805'],
         formAll:{
             areaCode: [],
             areaName:[],
@@ -355,7 +356,6 @@ export default {
             data21:'0',data22:'0',data23:'0',data24:'0',data25:'0',data26:'0',data27:'0',data28:'0',data29:'0',data30:'0',data31:'0',data32:'0',data33:'0',data34:'0',data35:'0',data36:'0',data37:'0',data38:'0',data39:'0',data40:'0',
             data41:'0',data42:'0',data43:'0',data44:'0',data45:'0',data46:'0',data47:'0',data48:'0'
             },
-            
             rulesForm:{
             areaName:{trigger:'change',required:true,validator: belongCityNameValidator},
             carType:{trigger:'change',required:true,validator:carTypeValidator},
@@ -439,53 +439,16 @@ export default {
         this.dialogFormVisible_add = true;
    },
         inputChange(i){
-        switch (i) {
+        let ii = i%2;
+        switch (ii) {
+        case 0:
+           this.formAll['reward'+i] = (parseInt(this.formAll['reward'+(i+1)])-1).toString() 
+           break;
         case 1:
-        this.formAll.reward3 = (parseInt(this.formAll.reward2)+1).toString() 
-        break;
-        case 2:
-        this.formAll.reward2 = (parseInt(this.formAll.reward3)-1).toString() 
-        break;
-        case 3:
-        this.formAll.reward5 = (parseInt(this.formAll.reward4)+1).toString() 
-        break;
-        case 4:
-        this.formAll.reward4 = (parseInt(this.formAll.reward5)-1).toString() 
-        break;
-        case 5:
-        this.formAll.reward7 = (parseInt(this.formAll.reward6)+1).toString() 
-        break;
-        case 6:
-        this.formAll.reward6= (parseInt(this.formAll.reward7)-1).toString() 
-        break; 
-        case 7:
-        this.formAll.reward9= (parseInt(this.formAll.reward8)+1).toString() 
-        break;
-        case 8:
-        this.formAll.reward8 = (parseInt(this.formAll.reward9)-1).toString() 
-        break;
-        case 9:
-        this.formAll.reward11= (parseInt(this.formAll.reward10)+1).toString() 
-        break; 
-        case 10:
-        this.formAll.reward10= (parseInt(this.formAll.reward11)-1).toString() 
-        break;        
-        case 11:
-        this.formAll.reward13= (parseInt(this.formAll.reward12)+1).toString() 
-        break;  
-        case 12:
-        this.formAll.reward12= (parseInt(this.formAll.reward13)-1).toString() 
-        break;  
-        case 13:
-        this.formAll.reward15= (parseInt(this.formAll.reward14)+1).toString() 
-        break;  
-        case 14:
-        this.formAll.reward14= (parseInt(this.formAll.reward15)-1).toString() 
-        break;                                                                                        
+           this.formAll['reward'+(i+2)] = (parseInt(this.formAll['reward'+(i+1)])+1).toString() 
+           break;
         }
          },   
-
-
    change:function(){
       this.dialogFormVisible_add = false;
       this.$refs['formAll'].resetFields(); 
@@ -510,56 +473,21 @@ export default {
         },  
     // 同城新增    
    add_data(){
-       this.FormData = [
-           {aflcShipperPreferential:{},startPrice:this.formAll.reward1,endPrice:this.formAll.reward2,rewardGrade:'AF0020806',reward:this.formAll.data1,orderNum:this.formAll.maxnum1},
-           {aflcShipperPreferential:{},startPrice:this.formAll.reward3,endPrice:this.formAll.reward4,rewardGrade:'AF0020806',reward:this.formAll.data2,orderNum:this.formAll.maxnum1},
-           {aflcShipperPreferential:{},startPrice:this.formAll.reward5,endPrice:this.formAll.reward6,rewardGrade:'AF0020806',reward:this.formAll.data3,orderNum:this.formAll.maxnum1},
-           {aflcShipperPreferential:{},startPrice:this.formAll.reward7,endPrice:this.formAll.reward8,rewardGrade:'AF0020806',reward:this.formAll.data4,orderNum:this.formAll.maxnum1},
-           {aflcShipperPreferential:{},startPrice:this.formAll.reward9,endPrice:this.formAll.reward10,rewardGrade:'AF0020806',reward:this.formAll.data5,orderNum:this.formAll.maxnum1},
-           {aflcShipperPreferential:{},startPrice:this.formAll.reward11,endPrice:this.formAll.reward12,rewardGrade:'AF0020806',reward:this.formAll.data6,orderNum:this.formAll.maxnum1},
-           {aflcShipperPreferential:{},startPrice:this.formAll.reward13,endPrice:this.formAll.reward14,rewardGrade:'AF0020806',reward:this.formAll.data7,orderNum:this.formAll.maxnum1},
-           {aflcShipperPreferential:{},startPrice:this.formAll.reward15,endPrice:this.formAll.reward16,rewardGrade:'AF0020806',reward:this.formAll.data8,orderNum:this.formAll.maxnum1},
-                      {aflcShipperPreferential:{},startPrice:this.formAll.reward1,endPrice:this.formAll.reward2,rewardGrade:'AF0020801',reward:this.formAll.data9,orderNum:this.formAll.maxnum2},
-           {aflcShipperPreferential:{},startPrice:this.formAll.reward3,endPrice:this.formAll.reward4,rewardGrade:'AF0020801',reward:this.formAll.data10,orderNum:this.formAll.maxnum2},
-           {aflcShipperPreferential:{},startPrice:this.formAll.reward5,endPrice:this.formAll.reward6,rewardGrade:'AF0020801',reward:this.formAll.data11,orderNum:this.formAll.maxnum2},
-           {aflcShipperPreferential:{},startPrice:this.formAll.reward7,endPrice:this.formAll.reward8,rewardGrade:'AF0020801',reward:this.formAll.data12,orderNum:this.formAll.maxnum2},
-           {aflcShipperPreferential:{},startPrice:this.formAll.reward9,endPrice:this.formAll.reward10,rewardGrade:'AF0020801',reward:this.formAll.data13,orderNum:this.formAll.maxnum2},
-           {aflcShipperPreferential:{},startPrice:this.formAll.reward11,endPrice:this.formAll.reward12,rewardGrade:'AF0020801',reward:this.formAll.data14,orderNum:this.formAll.maxnum2},
-           {aflcShipperPreferential:{},startPrice:this.formAll.reward13,endPrice:this.formAll.reward14,rewardGrade:'AF0020801',reward:this.formAll.data15,orderNum:this.formAll.maxnum2},
-           {aflcShipperPreferential:{},startPrice:this.formAll.reward15,endPrice:this.formAll.reward16,rewardGrade:'AF0020801',reward:this.formAll.data16,orderNum:this.formAll.maxnum2},
-                      {aflcShipperPreferential:{},startPrice:this.formAll.reward1,endPrice:this.formAll.reward2,rewardGrade:'AF0020802',reward:this.formAll.data17,orderNum:this.formAll.maxnum3},
-           {aflcShipperPreferential:{},startPrice:this.formAll.reward3,endPrice:this.formAll.reward4,rewardGrade:'AF0020802',reward:this.formAll.data18,orderNum:this.formAll.maxnum3},
-           {aflcShipperPreferential:{},startPrice:this.formAll.reward5,endPrice:this.formAll.reward6,rewardGrade:'AF0020802',reward:this.formAll.data19,orderNum:this.formAll.maxnum3},
-           {aflcShipperPreferential:{},startPrice:this.formAll.reward7,endPrice:this.formAll.reward8,rewardGrade:'AF0020802',reward:this.formAll.data20,orderNum:this.formAll.maxnum3},
-           {aflcShipperPreferential:{},startPrice:this.formAll.reward9,endPrice:this.formAll.reward10,rewardGrade:'AF0020802',reward:this.formAll.data21,orderNum:this.formAll.maxnum3},
-           {aflcShipperPreferential:{},startPrice:this.formAll.reward11,endPrice:this.formAll.reward12,rewardGrade:'AF0020802',reward:this.formAll.data22,orderNum:this.formAll.maxnum3},
-           {aflcShipperPreferential:{},startPrice:this.formAll.reward13,endPrice:this.formAll.reward14,rewardGrade:'AF0020802',reward:this.formAll.data23,orderNum:this.formAll.maxnum3},
-           {aflcShipperPreferential:{},startPrice:this.formAll.reward15,endPrice:this.formAll.reward16,rewardGrade:'AF0020802',reward:this.formAll.data24,orderNum:this.formAll.maxnum3},
-                      {aflcShipperPreferential:{},startPrice:this.formAll.reward1,endPrice:this.formAll.reward2,rewardGrade:'AF0020803',reward:this.formAll.data25,orderNum:this.formAll.maxnum4},
-           {aflcShipperPreferential:{},startPrice:this.formAll.reward3,endPrice:this.formAll.reward4,rewardGrade:'AF0020803',reward:this.formAll.data26,orderNum:this.formAll.maxnum4},
-           {aflcShipperPreferential:{},startPrice:this.formAll.reward5,endPrice:this.formAll.reward6,rewardGrade:'AF0020803',reward:this.formAll.data27,orderNum:this.formAll.maxnum4},
-           {aflcShipperPreferential:{},startPrice:this.formAll.reward7,endPrice:this.formAll.reward8,rewardGrade:'AF0020803',reward:this.formAll.data28,orderNum:this.formAll.maxnum4},
-           {aflcShipperPreferential:{},startPrice:this.formAll.reward9,endPrice:this.formAll.reward10,rewardGrade:'AF0020803',reward:this.formAll.data29,orderNum:this.formAll.maxnum4},
-           {aflcShipperPreferential:{},startPrice:this.formAll.reward11,endPrice:this.formAll.reward12,rewardGrade:'AF0020803',reward:this.formAll.data30,orderNum:this.formAll.maxnum4},
-           {aflcShipperPreferential:{},startPrice:this.formAll.reward13,endPrice:this.formAll.reward14,rewardGrade:'AF0020803',reward:this.formAll.data31,orderNum:this.formAll.maxnum4},
-           {aflcShipperPreferential:{},startPrice:this.formAll.reward15,endPrice:this.formAll.reward16,rewardGrade:'AF0020803',reward:this.formAll.data32,orderNum:this.formAll.maxnum4},
-                      {aflcShipperPreferential:{},startPrice:this.formAll.reward1,endPrice:this.formAll.reward2,rewardGrade:'AF0020804',reward:this.formAll.data33,orderNum:this.formAll.maxnum5},
-           {aflcShipperPreferential:{},startPrice:this.formAll.reward3,endPrice:this.formAll.reward4,rewardGrade:'AF0020804',reward:this.formAll.data34,orderNum:this.formAll.maxnum5},
-           {aflcShipperPreferential:{},startPrice:this.formAll.reward5,endPrice:this.formAll.reward6,rewardGrade:'AF0020804',reward:this.formAll.data35,orderNum:this.formAll.maxnum5},
-           {aflcShipperPreferential:{},startPrice:this.formAll.reward7,endPrice:this.formAll.reward8,rewardGrade:'AF0020804',reward:this.formAll.data36,orderNum:this.formAll.maxnum5},
-           {aflcShipperPreferential:{},startPrice:this.formAll.reward9,endPrice:this.formAll.reward10,rewardGrade:'AF0020804',reward:this.formAll.data37,orderNum:this.formAll.maxnum5},
-           {aflcShipperPreferential:{},startPrice:this.formAll.reward11,endPrice:this.formAll.reward12,rewardGrade:'AF0020804',reward:this.formAll.data38,orderNum:this.formAll.maxnum5},
-           {aflcShipperPreferential:{},startPrice:this.formAll.reward13,endPrice:this.formAll.reward14,rewardGrade:'AF0020804',reward:this.formAll.data39,orderNum:this.formAll.maxnum5},
-           {aflcShipperPreferential:{},startPrice:this.formAll.reward15,endPrice:this.formAll.reward16,rewardGrade:'AF0020804',reward:this.formAll.data40,orderNum:this.formAll.maxnum5},
-                      {aflcShipperPreferential:{},startPrice:this.formAll.reward1,endPrice:this.formAll.reward2,rewardGrade:'AF0020805',reward:this.formAll.data41,orderNum:this.formAll.maxnum6},
-           {aflcShipperPreferential:{},startPrice:this.formAll.reward3,endPrice:this.formAll.reward4,rewardGrade:'AF0020805',reward:this.formAll.data42,orderNum:this.formAll.maxnum6},
-           {aflcShipperPreferential:{},startPrice:this.formAll.reward5,endPrice:this.formAll.reward6,rewardGrade:'AF0020805',reward:this.formAll.data43,orderNum:this.formAll.maxnum6},
-           {aflcShipperPreferential:{},startPrice:this.formAll.reward7,endPrice:this.formAll.reward8,rewardGrade:'AF0020805',reward:this.formAll.data44,orderNum:this.formAll.maxnum6},
-           {aflcShipperPreferential:{},startPrice:this.formAll.reward9,endPrice:this.formAll.reward10,rewardGrade:'AF0020805',reward:this.formAll.data45,orderNum:this.formAll.maxnum6},
-           {aflcShipperPreferential:{},startPrice:this.formAll.reward11,endPrice:this.formAll.reward12,rewardGrade:'AF0020805',reward:this.formAll.data46,orderNum:this.formAll.maxnum6},
-           {aflcShipperPreferential:{},startPrice:this.formAll.reward13,endPrice:this.formAll.reward14,rewardGrade:'AF0020805',reward:this.formAll.data47,orderNum:this.formAll.maxnum6},
-           {aflcShipperPreferential:{},startPrice:this.formAll.reward15,endPrice:this.formAll.reward16,rewardGrade:'AF0020805',reward:this.formAll.data48,orderNum:this.formAll.maxnum6},           
-           ]
+       this.FormData = []
+       let forItemZ = 0;
+       for(let forItemI = 1;forItemI<7;forItemI++){
+           for(let forItemJ = 1;forItemJ<9;forItemJ++){
+            forItemZ++
+            this.FormData.push({
+                aflcShipperPreferential:{},
+                startPrice:this.formAll['reward'+(2*forItemJ-1)],
+                endPrice:this.formAll['reward'+(2*forItemJ)],
+                rewardGrade:this.rewardGradeList[forItemI-1],
+                reward:this.formAll['data'+forItemZ],
+                orderNum:this.formAll['maxnum'+forItemI]
+            })
+           }
+       }
        this.$refs['formAll'].validate(valid=>{
         if(valid){
         let forms=[{
