@@ -31,9 +31,9 @@
           </el-form-item>
           <el-form-item label="固话" prop=''>
             <el-tooltip class="item" effect="dark" placement="top" :enterable="false" :manual="true" :value="istooltip"
-                        tabindex="-1">
+                        tabindex="-1" clearable>
               <div slot="content">多个固话用"；"隔开</div>
-              <el-input v-model="form.parkNum" clearable auto-complete="off" @focus="istooltip = true"
+              <el-input v-model="form.parkNum" auto-complete="off" @focus="istooltip = true"
                         @blur="istooltip = false" class=""></el-input>
 
             </el-tooltip>
@@ -224,7 +224,7 @@
 
 
             // {required: true, message: '请输入手机号码', pattern: REGEX.MOBILE}
-            {required: true, message: '请输入手机号码'}
+            {required: true, message: '请输入手机号码~'}
           ],
           //
           parkNum: [
@@ -315,7 +315,7 @@
             const str = data.parkMobile.replace(/；/g, ';').split(';')
             str.map((el, index) => {
               if (!/^(\(\d{3,4}\)|\d{3,4}-|\s)?\d{7,14}$/.test(el)) {
-                this.$message.info('请输入' + el + '正确手机号~')
+                this.$message.info('请输入正确手机号~')
                 return false
               } else {
                 data.parkMobile = str.join(',')
@@ -324,18 +324,17 @@
 
             const arr = data.parkNum.replace(/；/g, ';').split(';')
             arr.forEach((el, index) => {
-              const call = /(^\d{3}-\d{8}$)|(^\d{4}-\d{7,8}$)/
-              const nums = /^[0-9]+$/
+              // const call = /(^\d{3}-\d{8}$)|(^\d{4}-\d{7,8}$)/
+              // const nums = /^[0-9]+$/
               if (!/(^\d{3}-\d{8}$)|(^\d{4}-\d{7,8}$)/.test(el)) {
-                console.log(el,'llll');
-                this.$message.info('请输入' + el + '正确固话~')
+                // console.log(el,'llll');
+                this.$message.info('请输入正确固话~')
                 return false
               } else {
                 data.parkNum = arr.join(',')
               }
 
             })
-
             //
             if (this.isModify) {
               promiseObj = putTextedLogisticspark(this.info.id, data)
@@ -373,14 +372,8 @@
         if (typeof done === 'function') {
           done()
         }
-      },
-      inputfn(item) {
-        console.log(item, 'itemmmmm')
       }
     },
-    mounted() {
-      // console.log(this.parkMobile,'data.parkMobile');
-    }
   }
 </script>
 
@@ -398,32 +391,6 @@
         .el-form {
           .message-left {
             float: left;
-            .tooltip {
-              .el-form-item__content {
-                position: relative;
-                font-size: 14px;
-                display: inline-block;
-                .nativeinput.item {
-                  -webkit-appearance: none;
-                  background-color: #fff;
-                  background-image: none;
-                  border-radius: 4px;
-                  border: 1px solid #dcdfe6;
-                  -webkit-box-sizing: border-box;
-                  box-sizing: border-box;
-                  color: #606266;
-                  display: inline-block;
-                  font-size: inherit;
-                  height: 40px;
-                  line-height: 40px;
-                  outline: 0;
-                  padding: 0 15px;
-                  -webkit-transition: border-color .2s cubic-bezier(.645, .045, .355, 1);
-                  transition: border-color .2s cubic-bezier(.645, .045, .355, 1);
-                  width: 100%;
-                }
-              }
-            }
           }
           .message-right {
             float: left;
