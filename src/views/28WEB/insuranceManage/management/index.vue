@@ -77,6 +77,9 @@
 <style lang="scss">
   .insurance-lll {
     padding-top: 12px;
+    /*height: 100%;*/
+    /*position: relative;*/
+    /*padding-right: 10px;*/
     .inul {
       display: flex;
       border-bottom: 1px solid #03a9f4;

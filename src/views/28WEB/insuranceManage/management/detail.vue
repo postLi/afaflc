@@ -22,9 +22,9 @@
       </div>
       <table class="detail-top">
         <tr>
-          <th>类型</th>
-          <th>投保人</th>
-          <th>证件号</th>
+          <th style="width: 33%">类型</th>
+          <th style="width: 33%">投保人</th>
+          <th style="width: 33%">证件号</th>
         </tr>
         <tr>
           <td>{{form.policyHolderType}}</td>
@@ -37,9 +37,9 @@
       </div>
       <table class="detail-top">
         <tr>
-          <th>类型</th>
-          <th>投保人</th>
-          <th>证件号</th>
+          <th style="width: 33%">类型</th>
+          <th style="width: 33%">投保人</th>
+          <th style="width: 33%">证件号</th>
         </tr>
         <tr>
           <td>{{form.theInsuredType}}</td>
@@ -160,8 +160,8 @@
 
 <style lang="scss">
   .detail-lll {
-    height: 100%;
-    padding: 10px;
+    /*height: 100%;*/
+    /*padding: 10px;*/
     .detail {
       padding: 20px 50px 0px 50px;
       padding-bottom: 0;
@@ -169,7 +169,7 @@
       display: flex;
       -ms-flex-direction: column;
       flex-direction: column;
-      border: 2px solid #ccc;
+      /*border: 2px solid #ccc;*/
       height: 100%;
       width: 100%;
       .classul {
