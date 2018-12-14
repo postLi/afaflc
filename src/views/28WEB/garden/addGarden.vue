@@ -7,8 +7,14 @@
           <el-form-item label="园区名称" prop='parkName'>
             <el-input v-model="form.parkName" clearable :maxlength="25"></el-input>
           </el-form-item>
-          <el-form-item label="手机号" prop="parkMobile">
-            <el-input v-model="form.parkMobile" clearable :maxlength='11'></el-input>
+          <el-form-item label="手机号" prop="parkMobile" class="tooltip">
+            <el-tooltip class="item" effect="dark" placement="top" :enterable="false" :manual="true" :value="tooltip"
+                        tabindex="-1">
+              <div slot="content">多个手机号用"；"隔开</div>
+              <el-input v-model="form.parkMobile" clearable auto-complete="off" @focus="tooltip = true"
+                        @blur="tooltip = false" class=""></el-input>
+              <!--<input :value="form.parkMobile" auto-complete="off" @focus="tooltip = true" @blur="tooltip = false"  class="nativeinput" >-->
+            </el-tooltip>
           </el-form-item>
 
           <el-form-item label="所在地" prop="locationFn">
@@ -24,7 +30,15 @@
             <el-input v-model="form.parkContact" clearable :maxlength="15"></el-input>
           </el-form-item>
           <el-form-item label="固话" prop=''>
-            <el-input v-model="form.parkNum" clearable :maxlength="12" v-number-only></el-input>
+            <el-tooltip class="item" effect="dark" placement="top" :enterable="false" :manual="true" :value="istooltip"
+                        tabindex="-1" clearable>
+              <div slot="content">多个固话用"；"隔开</div>
+              <el-input v-model="form.parkNum" auto-complete="off" @focus="istooltip = true"
+                        @blur="istooltip = false" class=""></el-input>
+
+            </el-tooltip>
+
+            <!--<el-input v-model="form.parkNum" clearable :maxlength="12" v-number-only></el-input>-->
           </el-form-item>
 
 
@@ -74,7 +88,7 @@
       </div>
 
     </el-dialog>
-    <tmsmap @success="getInfo" pos="" name="" :popVisible.sync="popVisible" />
+    <tmsmap @success="getInfo" pos="" name="" :popVisible.sync="popVisible"/>
   </div>
 </template>
 
@@ -103,9 +117,9 @@
         default: false
       },
       info: {
-        type: [Array, Object],
-        default: () => {
-        }
+        type: [Object, Array],
+        // default: () => {
+        // }
       },
     },
     watch: {
@@ -158,6 +172,8 @@
         }
       }
       return {
+        tooltip: false,
+        istooltip: false,
         Url: '', // 图片对应的上传地址,不传!
         MaxSize: 2097152, // 文件大小
         Accept: 'image/jpeg, image/png', // 文件格式
@@ -205,7 +221,10 @@
           parkMobile: [
             // {required: true, message: '请输入手机号码'},
             // {validator:validnum}
-            {required: true, message: '请输入手机号码', pattern: REGEX.MOBILE}
+
+
+            // {required: true, message: '请输入手机号码', pattern: REGEX.MOBILE}
+            {required: true, message: '请输入手机号码~'}
           ],
           //
           parkNum: [
@@ -292,10 +311,32 @@
             } else {
               data.openStatus = 0
             }
-            // console.log(this.checked, data, 'checkde');
+
+            const str = data.parkMobile.replace(/；/g, ';').split(';')
+            str.map((el, index) => {
+              if (!/^(\(\d{3,4}\)|\d{3,4}-|\s)?\d{7,14}$/.test(el)) {
+                this.$message.info('请输入正确手机号~')
+                return false
+              } else {
+                data.parkMobile = str.join(',')
+              }
+            })
+
+            const arr = data.parkNum.replace(/；/g, ';').split(';')
+            arr.forEach((el, index) => {
+              // const call = /(^\d{3}-\d{8}$)|(^\d{4}-\d{7,8}$)/
+              // const nums = /^[0-9]+$/
+              if (!/(^\d{3}-\d{8}$)|(^\d{4}-\d{7,8}$)/.test(el)) {
+                // console.log(el,'llll');
+                this.$message.info('请输入正确固话~')
+                return false
+              } else {
+                data.parkNum = arr.join(',')
+              }
+
+            })
+            //
             if (this.isModify) {
-              // console.log(data, 'data')
-              // console.log(data.disableStatus, 'disableStatus')
               promiseObj = putTextedLogisticspark(this.info.id, data)
             } else {
               this.form.disableStatus = 0
@@ -332,7 +373,7 @@
           done()
         }
       }
-    }
+    },
   }
 </script>
 
@@ -384,6 +425,7 @@
                 }
               }
             }
+
           }
           .message-bottom {
             .el-form-item {

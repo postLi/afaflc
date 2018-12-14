@@ -51,17 +51,6 @@
         </el-table-column>
         <el-table-column sortable prop="updateTime" label="更新时间" width="">
         </el-table-column>
-        <!--<el-table-column sortable prop="" label="操作" width="">-->
-        <!--<template slot-scope="scope">-->
-        <!--<el-button-->
-        <!--type="info" plain icon=""-->
-        <!--size="small"-->
-        <!--@click="handleDeatail(scope.row)">-->
-        <!--<span>设置</span>-->
-        <!--</el-button>-->
-        <!--</template>-->
-        <!--</el-table-column>-->
-
       </el-table>
     </div>
     <RecSetting :isVisibleDialog.sync="isVisibleDialog" :info="selectedInfo" @success='fetchInfo'

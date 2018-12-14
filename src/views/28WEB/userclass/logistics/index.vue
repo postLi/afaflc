@@ -28,13 +28,18 @@
           </el-form-item>            
         </el-form>
           <div class="classify_info">
+            <div class="btns_box">
+              <el-button type="primary" :size="btnsize" class="el-icon-circle-plus" @click="doAction('add')" plain>添加</el-button>
+              <el-button type="primary" :size="btnsize" class="el-icon-tickets" plain @click="doAction('check')">查看</el-button>
+              <el-button type="primary" :size="btnsize" icon="el-icon-delete"  @click="doAction('delete')" plain>删除</el-button>
+            </div>
             <div class="info_news">    
               <el-table ref="multipleTable" style="width: 100%" stripe border height="100%" @selection-change="getSelection" @row-click="clickDetails" highlight-current-row :data="dataset"  tooltip-effect="dark">
-                <!-- <el-table-column
+                <el-table-column
                   label="选择"
                   type="selection"
                   width="50">
-                </el-table-column> -->
+                </el-table-column>
                 <el-table-column fixed label="序号" sortable width="80">
                   <template slot-scope="scope">
                   {{ (page - 1)*pagesize + scope.$index + 1 }}
@@ -71,30 +76,6 @@
                 </el-table-column>  
                 <el-table-column  label="有效推荐数" prop="recommendCount" sortable :show-overflow-tooltip="true">
                 </el-table-column>    
-                <el-table-column
-                  label="操作"
-                  width="300"
-                  plain
-                  >
-              <!-- 待处理的时候显示确认受理，处理中显示记录投诉跟进，已处理两个按钮都不显示 -->
-                <template slot-scope="scope">
-                  <el-button
-                  size="mini"
-                  plain
-                  type="primary"
-                  @click="handleEdit1(scope.$index, scope.row,'delete')">删除</el-button>
-                  <el-button
-                  size="mini"
-                  plain
-                  type="warning"
-                  @click="handleEdit1(scope.$index, scope.row,'check')">查看推荐</el-button>
-                  <el-button
-                  size="mini"
-                  plain
-                  type="info"
-                  @click="handleEdit1(scope.$index, scope.row,'add')">添加推荐</el-button>
-              </template>
-          </el-table-column>                                                
               </el-table> 
         	  </div> 
           <!-- addReg -->
@@ -165,7 +146,6 @@ export default {
     handleSearch(type) {
       switch (type) {
         case 'search':
-
           this.firstblood()
           this.formAllData.startTime = Date.parse(this.searchCreatTime[0] + ' 00:00:00')
           this.formAllData.endTime = Date.parse(this.searchCreatTime[1] + ' 23:59:59')
@@ -215,23 +195,36 @@ export default {
       this.formAllData.endArea = val.area.name
       console.log('this.cityarr', val, val.province.name, val.city.name, val.area.name)
     },
-    handleEdit1(index, row, type) {
+    doAction(type) {
+      if (!this.selected.length && type != 'add') {
+        this.$message({
+          message: '请选择要操作的项~',
+          type: 'warning'
+        })
+        return false
+      }
       switch (type) {
         case 'add':
-          this.selectInfo = row
+          this.selectInfo = this.selected[0]
           this.centerDialogVisible = true
           this.isMatreg = true
-          console.log(row)
           break
         case 'check':
-          this.$router.push({ name: '28WEB专线推荐管理', query: { associatedId: row.id }})
+          if (this.selected.length > 1) {
+            this.$message({
+              message: '每次只能查看一条数据',
+              type: 'warning'
+            })
+            return false
+          } else {
+            this.$router.push({ name: '28WEB专线推荐管理', query: { associatedId: this.selected[0].id }})
+          }
           break
         case 'delete':
-          console.log(index, row, row.id)
-          const arr = new Array()
-          arr.push(row.id)
-          console.log('arr', arr)
-          deleteBatch(arr).then(res => {
+          const ids3 = this.selected.map(el => {
+            return el.id
+          })
+          deleteBatch(ids3).then(res => {
             this.$confirm('确定要删除此物流专线吗?', '提示', {
               confirmButtonText: '确定',
               cancelButtonText: '取消',
@@ -273,6 +266,7 @@ export default {
     // 点击选中当前行
     clickDetails(row, event, column) {
       this.$refs.multipleTable.toggleRowSelection(row)
+      this.$router.push({ name: '28WEB专线推荐管理', query: { associatedId: row.id }})
     },
     // 每页显示数据量变更
     handlePageChange(obj) {

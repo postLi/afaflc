@@ -42,9 +42,39 @@ export function deleteLine(id) {
 /usercenter/aflcrecommend/v1/putSettopStatusById/{id}
 根据ID置顶或取消置顶推荐专线表信息
  */
-export function putCancel(id) {
+// export function putCancel(id) {
+//   return fetch({
+//     url: '/' + baseurl + '/usercenter/aflcrecommend/v1/putSettopStatusById/' + id,
+//     method: 'put'
+//   })
+// }
+/**
+ * 批量置顶/aflc-uc/usercenter/aflcrecommend/v1/deleteBatch
+ */
+export function putStick(data) {
   return fetch({
-    url: '/' + baseurl + '/usercenter/aflcrecommend/v1/putSettopStatusById/' + id,
-    method: 'put'
+    url: '/' + baseurl + '/usercenter/aflcrecommend/v1/putSettopStatusByIds?settopStatus=1',
+    method: 'put',
+    data: data
+  })
+}
+/**
+ * 批量取消置顶/aflc-uc/usercenter/aflcrecommend/v1/deleteBatch
+ */
+export function putUpStick(data) {
+  return fetch({
+    url: '/' + baseurl + '/usercenter/aflcrecommend/v1/putSettopStatusByIds?settopStatus=0',
+    method: 'put',
+    data: data
+  })
+}
+/**
+ * 批量删除/usercenter/aflcrecommend/v1/deleteBatch
+ */
+export function deleteBatch(data) {
+  return fetch({
+    url: '/' + baseurl + '/usercenter/aflcrecommend/v1/deleteBatch?',
+    method: 'delete',
+    data: data
   })
 }

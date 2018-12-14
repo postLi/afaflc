@@ -1,5 +1,5 @@
 <template>
-  <div class="identicalStyle " style="height:100%" v-loading="loading">
+  <div class="identicalStyle" style="height:100%" v-loading="loading">
     <el-form :inline="true" class="demo-ruleForm classify_searchinfo">
       <el-form-item label="投保">
         <el-input v-model="formAllData.insuranceName" placeholder="保险公司/产品名称/被保险人" class="lll-pl" clearable></el-input>
@@ -17,20 +17,20 @@
           end-placeholder="结束日期">
         </el-date-picker>
       </el-form-item>
-      <!--</template>-->
-      <el-form-item class='fr'>
+      <el-form-item class="btnChoose fr">
         <el-button type="primary" plain :size="btnsize" icon="el-icon-search" @click="getdata_search">搜索</el-button>
         <el-button type="info" plain :size="btnsize" icon="fontFamily aflc-icon-qingkong" @click="clearSearch">清空
         </el-button>
       </el-form-item>
     </el-form>
     <div class="classify_info">
-      <div class="btns_box">
-        <el-button type="info" size="small" plain @click="viewDetail">查看详情</el-button>
-      </div>
       <div class="info_news">
+        <div class="btns_box">
+          <el-button type="info" size="small" plain @click="viewDetail">查看详情</el-button>
+        </div>
         <el-table ref="multipleTable" style="width: 100%" stripe border height="100%" @selection-change="getSelection"
-                   highlight-current-row :data="tableDataAll" tooltip-effect="dark" @row-click="clickDetails">
+                  @row-click="clickDetails" highlight-current-row :data="tableDataAll" tooltip-effect="dark"
+                  class="table-lll">
           <el-table-column fixed sortable type="selection" width="50"></el-table-column>
           <el-table-column label="序号" sortable width="80">
             <template slot-scope="scope">
@@ -43,16 +43,11 @@
           <el-table-column label="投保日期" prop="createTime"></el-table-column>
           <el-table-column label="运单号" prop="orderNum"></el-table-column>
           <el-table-column label="状态" prop="paymentStateName"></el-table-column>
-          <!--<el-table-column label="操作" prop="extractTime">-->
-            <!--<template slot-scope='scope'>-->
-              <!--<el-button type="info" size="small" plain @click="viewDetail(scope.row,'spacialLine')">查看详情</el-button>-->
-            <!--</template>-->
-          <!--</el-table-column>-->
         </el-table>
-      </div>
-      <div class="info_tab_footer">共计:{{ dataTotal }}
-        <div class="show_pager">
-          <Pager :total="dataTotal" @change="handlePageChange" :sizes="sizes" ref="pager"/>
+        <div class="info_tab_footer">共计:{{ dataTotal }}
+          <div class="show_pager">
+            <Pager :total="dataTotal" @change="handlePageChange" :sizes="sizes" ref="pager"/>
+          </div>
         </div>
       </div>
     </div>
@@ -83,9 +78,7 @@
       listtype: {
         handler(newVal, oldVal) {
           if (newVal === 'all') {
-            if (this.formAllData.paymentState) {
-              delete this.formAllData.paymentState
-            }
+            this.$set(this.formAllData, 'paymentState', '')
             this.fetchData()
           }
           else if (newVal === 'payFor') {
@@ -150,7 +143,7 @@
         this.fetchList()
       },
       viewDetail() {
-        if(!this.selected.length){
+        if (!this.selected.length) {
           this.$message.info('请选择要操作的项~')
           return false
         }
@@ -198,5 +191,15 @@
     .el-input__inner {
       width: 104% !important;
     }
+  }
+
+  .table-lll {
+
+    .el-table__body-wrapper.is-scrolling-none {
+      max-height: 640px;
+      min-height: 640px;
+      overflow-y: auto;
+    }
+
   }
 </style>

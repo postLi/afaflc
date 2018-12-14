@@ -1,6 +1,7 @@
 import fetch from '@/utils/fetch'
 
 const baseurl = 'aflccommonservice'
+const baseurl_one = 'aflcorderservice'
 
 // 新增KPI考核
 export function aflcAssessmentSettings(data) {
@@ -27,7 +28,7 @@ export function aflcAssessmentSettings_list(page,pagesize,data) {
 // 考核汇总表
 export function aflcAssessmentSum_list(page,pagesize,data) {
   return fetch({
-    url: '/' + baseurl + '/common/aflcAssessmentSum/v1/list',
+    url: '/' + baseurl_one + '/order/aflcOrderAssessmentSum/v1/list',
     method: 'post',
     data:{
       "currentPage": page,

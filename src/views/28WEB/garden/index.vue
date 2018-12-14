@@ -212,7 +212,7 @@
             putUpdateDisableStatus(0, ids).then(res => {
               this.$message({
                 type: 'success',
-                message: '操作成功~'
+                message: '启用成功~'
               })
               this.fetchInfo()
               this.loading = false
@@ -229,7 +229,7 @@
             putUpdateDisableStatus(1, id).then(res => {
               this.$message({
                 type: 'success',
-                message: '操作成功~'
+                message: '禁用成功~'
               })
               this.fetchInfo()
               this.loading = false
@@ -240,20 +240,6 @@
             break
         }
         this.$refs.multipleTable.clearSelection()
-      },
-
-      handleFn(row) {
-        putUpdateDisableStatus(row.id).then(res => {
-          this.$message({
-            type: 'success',
-            message: '操作成功~'
-          })
-          this.fetchInfo()
-          this.loading = false
-        }).catch(err => {
-          this.$message.warning(err.text ? err.text : err.errorInfo)
-          this.loading = false
-        })
       },
       getSelection(selected) {
         this.selected = selected

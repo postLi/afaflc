@@ -52,13 +52,13 @@ service.interceptors.request.use(config => {
       if (window.tms_testapiurl) {
         config.url = '/' + window.tms_testapiurl + config.url
       } else {
-        // config.url = '/api' + config.url // 78服务器
-        config.url = '/79service' + config.url
+        config.url = '/api' + config.url // 78服务器
+        // config.url = '/79service' + config.url
         // config.url = '/localapi' + config.url
         // config.url = '/wukunzhi' + config.url
         // config.url = '/huangyuwen' + config.url
         // config.url = '/dingfei' + config.url
-        // config.url = '/ceshi' + config.url //157测试
+        // config.url = '/ceshi' + config.url // 157测试
         // config.url = '/chenrongtao' + config.url
         // config.url = '/home' + config.url
         // config.url = '/fangjian' + config.url
