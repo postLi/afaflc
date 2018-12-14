@@ -52,7 +52,7 @@ export default {
     },
     tip: {
       type: String,
-      default: '（jpg/png。小于5M）'
+      default: '（必须为jpg/png并且小于5M）'
     },
     size: {
       type: String,
