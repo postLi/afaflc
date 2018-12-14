@@ -15,7 +15,11 @@
                 </div>
             </div>
             <div class="onlineService_content_right workOrder_right">
-                <div class="workOrder_right_type" v-for="(item,index) in workOrderType" :key="index" :class="{currentClick:item.iscur}"   @click="setCur(index,'workOrder',item.label)">
+                <div class="workOrder_right_type" v-for="(item,index) in complain" :key="index + item.parentName" :class="{currentClick:item.iscur}"   @click="setCur(index,'complain',item.label)">
+                    <span>{{item.count}}</span>
+                    <span>{{item.name}}</span>
+                </div>
+                <div class="workOrder_right_type" v-for="(item,index) in goodsClaim" :key="index + item.parentName" :class="{currentClick:item.iscur}"   @click="setCur(index,'goodsClaim',item.label)">
                     <span>{{item.count}}</span>
                     <span>{{item.name}}</span>
                 </div>
@@ -25,35 +29,51 @@
 </template>
 
 <script>
+import { aflcWorkOrderDealController } from '@/api/onlineService.js'
+
 export default {
     name:'workOrder',
     data(){
         return {
-            workOrderType:[{
+            complain:[{
                 name:'待处理',
+                label:"pendingCount",
                 count:0,
+                parentName:'complain',
                 iscur:false
             },{
                 name:'当天已处理',
-                count:10,
+                label:"dealDayCount",
+                count:0,
+                parentName:'complain',
                 iscur:false
             },{
                 name:'当月已处理',
-                count:250,
-                iscur:false
-            },{
-                name:'待处理',
+                label:"dealMonthCount",
                 count:0,
+                parentName:'complain',
+                iscur:false
+            }],
+            goodsClaim:[{
+                name:'待处理',
+                label:"pendingCount",
+                count:0,
+                parentName:'goodsclaim',
                 iscur:false
             },{
                 name:'当天已处理',
-                count:10,
+                label:"dealDayCount",
+                count:0,
+                parentName:'goodsclaim',
                 iscur:false
             },{
                 name:'当月已处理',
-                count:620,
+                label:"dealMonthCount",
+                count:0,
+                parentName:'goodsclaim',
                 iscur:false
-            }]
+            }],
+            workOrderList:{},
         }
     },
     methods:{
@@ -67,6 +87,22 @@ export default {
                     // break;
             // }
         },
+        WorkOrderDealController(){
+            aflcWorkOrderDealController().then(res => {
+                for (const item in this.complain) {
+                    // console.log(item,this.complain[item],res.data.complain[this.complain[item].label])
+                    this.complain[item].count = res.data.complain[this.complain[item].label] ? res.data.complain[this.complain[item].label] : 0;
+                }
+
+                for (const item in this.goodsClaim) {
+                    console.log(item,this.goodsClaim[item],res.data.goodsclaim[this.goodsClaim[item].label])
+                    this.goodsClaim[item].count = res.data.goodsclaim[this.goodsClaim[item].label] ? res.data.goodsclaim[this.goodsClaim[item].label] : 0;
+                }
+            })
+        }
     },
+    mounted(){
+        this.WorkOrderDealController();
+    }
 }
 </script>
