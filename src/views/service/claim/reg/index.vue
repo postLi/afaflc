@@ -73,20 +73,16 @@
             <el-table-column  
               label="货主"
               sortable 
+              prop="shipperName"
               :show-overflow-tooltip="true" 
               width="200">
-              <template slot-scope="scope">
-                {{scope.row.shipperName ? scope.row.shipperName  + '-' : ''}}{{ scope.row.shipperMobile ? scope.row.shipperMobile : ''}}
-              </template>
             </el-table-column>
             <el-table-column  
               label="车主" 
               sortable 
+              prop="driverName"
               :show-overflow-tooltip="true"  
               width="200">
-              <template slot-scope="scope">
-                {{scope.row.driverName ? scope.row.driverName + '-' : ''}}{{ scope.row.driverMobile ? scope.row.driverMobile + '-' : ''}}{{scope.row.carNumber ? scope.row.carNumber : ''}}
-              </template>
             </el-table-column>
             <el-table-column  
               label="提货地" 
