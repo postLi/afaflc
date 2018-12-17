@@ -40,10 +40,9 @@ export default {
                 this.init();
                 })
         })},
+        // 地图加载
     	init:function(){
         var _this = this
-		// 地图加载
-
 		map = new AMap.Map('shoppingMap', {
 			resizeEnable: true,
 			zoom:12
@@ -114,6 +113,7 @@ export default {
 
 
         },
+        // 画围栏折线
         ToolBar:function(){
         var _this = this
          polygon = new AMap.Polygon({
@@ -130,6 +130,7 @@ export default {
             })
         polygon.setMap((map))          
         },
+        // 清除所有的围栏
         clear:function(){
             var _this = this
               if(_this.Mapstatus=='2'){
@@ -148,11 +149,13 @@ export default {
         editFlag(){
         this.$emit('EditStr', this.Mapstatus)
         },
+        // 关闭地图
         exit:function(){
         this.path = [];
         this.dataAraay = [];
         map.destroy();
         },
+        // 定位城市
         setCity:function(){
             var _this = this
             let getLocationMap = [];
@@ -170,9 +173,6 @@ export default {
      mounted(){
          this.loadMap();
      },
-     beforeUpdate(){
-
-     }
 }
 </script>
 <style lang="scss">

@@ -144,7 +144,7 @@ import {data_financeList,data_GetServerType,data_GetServerType2,data_GetServerTy
                    rechargeWay:null,
                    rechargeTime:null,
                    rechargeSerial:null,
-               },
+               }, 
             }
         },
         components:{
@@ -160,6 +160,10 @@ import {data_financeList,data_GetServerType,data_GetServerType2,data_GetServerTy
                 data_aflcRechargeList(this.page,this.pagesize,this.formAllData).then(res => {
                     this.dataTotal = res.data.totalCount;
                     this.tableDataAll = res.data.list;
+                    this.tableDataAll.forEach(item=>{
+                        item.rechargeTime = parseTime(item.rechargeTime,"{y}-{m}-{d} {h}:{i}:{s}");
+                    })
+                   
                     this.loading = false
                 })
             }, 

@@ -5,10 +5,10 @@
                 <el-tab-pane label="订单详情" name="OrderLog">
                     <OrderLog  ref="OrderLog"></OrderLog>
                 </el-tab-pane>
-                 <el-tab-pane label="订单跟踪" name="orderTracking" >
+                 <el-tab-pane label="订单跟踪" name="orderTracking">
                     <orderTracking ref="orderTracking"></orderTracking>
                 </el-tab-pane>
-                 <el-tab-pane label="回单回款评价" name="receipt" >
+                 <el-tab-pane label="回单回款评价" name="receipt">
                     <receipt ref="receipt"></receipt>
                 </el-tab-pane>
         </el-tabs>
