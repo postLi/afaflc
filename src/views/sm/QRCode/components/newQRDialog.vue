@@ -23,7 +23,17 @@
                     <selectChannel  @change = "getVal"  v-model="standForm.channal"/>
                 </el-form-item>
                  <el-form-item label="链接：" prop="url" >
-					<el-input v-model="standForm.url" ></el-input>
+                    <el-select v-model="standForm.url" clearable placeholder="请选择" @change="choseStyle">
+                        <el-option
+                            v-for="item in optionsQRcode"
+                            :key="item.id"
+                            :label="item.name"
+                            :value="item.value"
+                            :disabled="item.disabled">
+                        </el-option>
+                    </el-select>
+                    {{standForm.url}}
+					<!-- <el-input v-model="standForm.url" ></el-input> -->
                 </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
@@ -35,7 +45,7 @@
 </template>
 
 <script type="text/javascript">
-import { getDictionary } from '@/api/common.js'
+import { getDictionary,DicQRcodeLink } from '@/api/common.js'
 import CustomerSearch from '@/components/CustomerSearch/index'
 import { aflcQrcodeNew } from '@/api/server/QRCode.js'
 import selectChannel from '@/components/selectTree/QRcode'
@@ -55,7 +65,7 @@ import selectChannel from '@/components/selectTree/QRcode'
         watch:{
             dialogVisible(newVal,oldVal){
                 if(newVal){
-                    // this.init();
+                    this.init();
                 }
             }
         },
@@ -64,6 +74,7 @@ import selectChannel from '@/components/selectTree/QRcode'
                 cancelReason:'AF00512',//取消原因
                 formLabelWidth:'15%',
                 loading:false,
+                optionsQRcode:[],
                 standForm:{
                     topic:'',//主题
                     belongSalesman:'',
@@ -84,12 +95,15 @@ import selectChannel from '@/components/selectTree/QRcode'
         },
         methods: {
             init(){
-                // getDictionary(this.cancelReason).then(res => {
+                // ,DicQRcodeLink(this.cancelReason).then(res => {
                 //     // console.log('cancel',res)
                 //     this.optionsCancel = res.data;
                 //     this.form.cancelCode = res.data[0].code;
                 //     this.loading = false;
                 // })
+                DicQRcodeLink().then(res => {
+                    this.optionsQRcode = res.data;
+                })
             },
             getVal(val){
                 this.standForm.channal = val;

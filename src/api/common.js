@@ -86,6 +86,13 @@ export function DicShipperLevel() {
     })
 }
 
+// 获取货主优惠等级
+export function DicQRcodeLink() {
+    return fetch({
+        url: '/' + baseurl_two + '/sysDict/getSysDictByCodeGet/AF054',
+        method: 'get'
+      })
+  }
 
 /**
  * 获取图片上传的policy

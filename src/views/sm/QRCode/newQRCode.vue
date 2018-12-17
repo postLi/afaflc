@@ -4,7 +4,7 @@
                 <el-form-item label="姓名" prop="name">
                     <el-input v-model="searchInfo.name" clearable>
                     </el-input>            
-                </el-form-item>
+                </el-form-item>a
                 <el-form-item label="主题" prop="topic">
                     <el-input v-model="searchInfo.topic" clearable>
                     </el-input>

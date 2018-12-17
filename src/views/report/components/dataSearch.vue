@@ -17,7 +17,7 @@
             :value="item.value">
             </el-option>
         </el-select>
-        <p>{{pickerDate[0] | parseTime('{y}-{m}-{d}')}} <span>至</span> {{pickerDate[1] | parseTime('{y}-{m}-{d}')}}</p>
+        <p v-if="pickerDate[0] && pickerDate[1]">{{pickerDate[0] | parseTime('{y}-{m}-{d}')}} <span>至</span> {{pickerDate[1] | parseTime('{y}-{m}-{d}')}}</p>
         <el-date-picker
             v-model="pickerDate"
             type="daterange"
@@ -76,18 +76,23 @@ export default {
             pickerDate:[],
             dataBtns: [{
                 label: '今天',
+                type:'day',
                 value: 0
             }, {
                 label: '昨天',
+                type:'day',
                 value: 1
             }, {
                 label: '本周',
+                type:'day',
                 value: 2
             }, {
                 label: '本月',
+                type:'day',
                 value: 3
             }, {
                 label: '本年',
+                type:'month',
                 value: 4
             },{
                 label: '全部',
@@ -95,15 +100,19 @@ export default {
             }],
             dataBtns2:[{
                 label: '近7天',
+                type:'day',
                 value: 0
             }, {
                 label: '近30天',
+                type:'day',
                 value: 1
             }, {
                 label: '近半年',
+                type:'month',
                 value: 2
             }, {
                 label: '近一年',
+                type:'month',
                 value: 3
             }]
         }

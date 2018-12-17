@@ -306,10 +306,11 @@ export default {
             }
         },
         valueChange(val,type,timeType){
-            // console.log('val,type',val,type)
+            // console.log('val,type',val,type,timeType)
             if(type == 'jybhline'){
                 this.dateOrderPaymentTime.startTime = val[0];
                 this.dateOrderPaymentTime.endTime = val[1];
+                this.dateOrderPaymentTime.type = timeType;
                 this.xAxisStartTime = parseTime(val[0],'{y}-{m}-{d}')
                 this.xAxisEndTime = parseTime(val[1],'{y}-{m}-{d}')
                 this.xAxisArr = getBetweenDateStr(this.xAxisStartTime,this.xAxisEndTime,timeType) ? getBetweenDateStr(this.xAxisStartTime,this.xAxisEndTime,timeType) : [];
