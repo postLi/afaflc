@@ -683,11 +683,12 @@ export default {
                 this.selectFlag=false;
                 this.$refs.templateModel.resetFields()
                 this.templateModel.belongCity = null
-                this.templateModel.provinceCode=null
-                this.templateModel.cityCode=null
-                this.templateModel.areaCode=null
-                this.templateModel.belongSalesman = null;
-                this.templateModel.belongSalesmanName = null;
+                this.templateModel.provinceCode = null
+                this.templateModel.cityCode = null
+                this.templateModel.areaCode = null
+                this.templateModel.belongSalesmanMobile = null
+                this.templateModel.belongSalesman = null
+                this.templateModel.belongSalesmanName = null
                 this.templateModel.activeValue='AF0020405'
                 this.DriverCarCardid = {
                 driverCardid:'',
@@ -749,9 +750,10 @@ export default {
             }, 
         // 所属业务员
         getCustomer(val){
-
+            this.templateModel.belongSalesmanMobile = val.mobilephone;
             this.templateModel.belongSalesman = val.userId;
             this.templateModel.belongSalesmanName = val.name;
+            console.log('this.templateModel.belongSalesmanMobile',this.templateModel.belongSalesmanMobile)
         },  
         isVip(val){
             if(this.templateModel.isVipCar == '1'){

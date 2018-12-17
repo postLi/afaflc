@@ -38,7 +38,11 @@ export function DicClaimStatusType() {
 export function DicDelStatusType() {
   return fetch.get('/' + baseurl_two + '/sysDict/getSysDictByCodeGet/AF040')
 }
-  //  数据字典获取移入黑名单原因列表
+// 物损处理状态
+export function ClaimStatusType() {
+  return fetch.get('/' + baseurl_two + '/sysDict/getSysDictByCodeGet/AF048')
+}
+//  数据字典获取移入黑名单原因列表
 export function DicBlackType() {
   return fetch.get('/' + baseurl_two + '/sysDict/getSysDictByCodeGet/AF02004')
 }
@@ -81,9 +85,9 @@ export function DicCarType() {
 // 获取货主优惠等级
 export function DicShipperLevel() {
   return fetch({
-      url: '/' + baseurl_two + '/sysDict/getSysDictByCodeGet/AF00208',
-      method: 'get'
-    })
+    url: '/' + baseurl_two + '/sysDict/getSysDictByCodeGet/AF00208',
+    method: 'get'
+  })
 }
 
 // 获取货主优惠等级
@@ -223,7 +227,6 @@ export function aflcProvinceCode() {
 
 // 根据cityId获取开放城市服务区域定价
 export function aflcCityCheckout(cityId) {
-    return fetch.get('/aflcsmservice/sm/aflcAreaPrice/v1/open/' + cityId)
-  }
-
+  return fetch.get('/aflcsmservice/sm/aflcAreaPrice/v1/open/' + cityId)
+}
 

@@ -249,6 +249,7 @@
     },
     methods: {
       onEditorReady(ins, ina) {
+
         // console.log(ins, ina)
       },
       onEditorUploadComplete(json) {
@@ -265,6 +266,10 @@
         // this.current = name;
       },
       getInfo(pos, name, info) {
+        let posfn = pos.split(',')
+        this.$set(this.form, 'longitude', posfn[0])
+        this.$set(this.form, 'latitude', posfn[1])
+        // console.log(this.form,'info.addressComponent')
         this.form.locationFn = info.addressComponent.province + info.addressComponent.city + info.addressComponent.district
 
         this.form.addressFn = info.addressComponent.township + info.addressComponent.street + info.addressComponent.streetNumber
@@ -321,20 +326,23 @@
                 data.parkMobile = str.join(',')
               }
             })
+            console.log(data.parkNum,'data.parkNum');
+            if (data.parkNum !== undefined ) {
+              const arr = data.parkNum.replace(/；/g, ';').split(';')
+              arr.forEach((el, index) => {
+                // const call = /(^\d{3}-\d{8}$)|(^\d{4}-\d{7,8}$)/
+                // const nums = /^[0-9]+$/
+                if (!/(^\d{3}-\d{8}$)|(^\d{4}-\d{7,8}$)/.test(el)) {
+                  // console.log(el,'llll');
+                  this.$message.info('请输入正确固话~')
+                  return false
+                } else {
+                  data.parkNum = arr.join(',')
+                }
 
-            const arr = data.parkNum.replace(/；/g, ';').split(';')
-            arr.forEach((el, index) => {
-              // const call = /(^\d{3}-\d{8}$)|(^\d{4}-\d{7,8}$)/
-              // const nums = /^[0-9]+$/
-              if (!/(^\d{3}-\d{8}$)|(^\d{4}-\d{7,8}$)/.test(el)) {
-                // console.log(el,'llll');
-                this.$message.info('请输入正确固话~')
-                return false
-              } else {
-                data.parkNum = arr.join(',')
-              }
+              })
+            }
 
-            })
             //
             if (this.isModify) {
               promiseObj = putTextedLogisticspark(this.info.id, data)

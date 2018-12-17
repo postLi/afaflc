@@ -144,7 +144,7 @@ import Pager from '@/components/Pagination/index'
 // import { parseTime } from '@/utils/'
 // import vregion from '@/components/vregion/Region'
 import GetCityList from '@/components/GetCityList/city'
-import { DicDelStatusType } from '@/api/common'
+import { ClaimStatusType } from '@/api/common'
 import addReg from './reg/index'
 // import { orderDetailsList } from '@/api/order/ordermange'
 export default {
@@ -284,7 +284,7 @@ export default {
       this.centerDialogVisible = false
     },
     getdelstatus() {
-      DicDelStatusType().then(res => {
+      ClaimStatusType().then(res => {
         console.log(res.data)
         res.data.map((item) => {
           this.optionsdealStatus.push(item)

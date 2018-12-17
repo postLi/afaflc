@@ -32,7 +32,6 @@
                             :disabled="item.disabled">
                         </el-option>
                     </el-select>
-                    {{standForm.url}}
 					<!-- <el-input v-model="standForm.url" ></el-input> -->
                 </el-form-item>
             </el-form>

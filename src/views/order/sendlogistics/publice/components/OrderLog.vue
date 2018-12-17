@@ -269,9 +269,9 @@ export default {
         }
     },
     methods:{
-        firstblood(){
+    firstblood(){
         getFCLOrderByOrderSerial(this.$route.query.orderSerial).then(res=>{
-            console.log('dfdfdfdfdfdfdfdffdfdf',res)
+            console.log('data：',res)
             this.formData = res.data
             this.formData.useTime = parseTime(this.formData.useTime,"{y}-{m}-{d} {h}:{i}:{s}");
         })

@@ -27,7 +27,6 @@
                     </el-form-item>
                 </el-col>
             </el-row>
-
             <el-row>
                 <el-col :span="12">
                     <el-form-item label="车型：" :label-width="formLabelWidth" prop="carType">
@@ -614,8 +613,9 @@ export default {
                 this.templateModel.provinceCode=null
                 this.templateModel.cityCode=null
                 this.templateModel.areaCode=null
-                this.templateModel.belongSalesman = null;
-                this.templateModel.belongSalesmanName = null;
+                this.templateModel.belongSalesmanMobile = null
+                this.templateModel.belongSalesman = null
+                this.templateModel.belongSalesmanName = null
                 this.radio1 = ''
                 this.radio2 = ''
                 this.radio3 = ''
@@ -663,7 +663,7 @@ export default {
 
     // 所属业务员
     getCustomer(val){
-
+        this.templateModel.belongSalesmanMobile = val.mobilephone;
         this.templateModel.belongSalesman = val.userId;
         this.templateModel.belongSalesmanName = val.name;
     },  
