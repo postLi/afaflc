@@ -69,7 +69,7 @@
             <div class="essentialInformation">
                 <p>
                     <span>是否需要回单：</span>
-                    <span>{{formData.isDoorPickUp=='1'?'是':'否'}}
+                    <span>{{formData.isReceipt?'是':'否'}}
                     <i class="orderExtraStyle">{{formData.orderExtraCodesName}}</i>
                     </span>
                  </p>
@@ -90,7 +90,7 @@
             <div class="essentialInformation">
                 <p>
                     <span>是否需要回款：</span>
-                    <span>{{formData.orderExtraCodes=='1'?'是':'否'}}
+                    <span>{{formData.isReceivable?'是':'否'}}
                      <i class="orderExtraStyle">{{formData.extraRrice}}</i>
                     </span>
                  </p>
@@ -126,7 +126,6 @@ export default {
     methods:{
     firstblood(){   
         aflcTransportEvaluation(this.$route.query.orderSerial).then(res=>{
-         console.log('data1:',res)
         if(res.data){
         this.TransportEvaluation = {
         serverStarLevel:Math.floor((parseInt(res.data.dockStarLevelScore)+parseInt(res.data.goodsStarLevelScore)+parseInt(res.data.payStarLevelScore))/3),
@@ -140,7 +139,6 @@ export default {
          }
         })
         aflcShipperEvaluation(this.$route.query.orderSerial).then(res=>{
-         console.log('data2:',res)
          if(res.data){
             this.TransportEvaluation = {
             serverStarLevel:Math.floor((parseInt(res.data.dockStarLevelScore)+parseInt(res.data.goodsStarLevelScore)+parseInt(res.data.payStarLevelScore))/3),

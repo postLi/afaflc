@@ -106,7 +106,7 @@
                 </p>                 
                 <p>
                     <span>时效：</span>
-                    <span>1</span>
+                    <span>{{formData.transportAging}}</span>
                 </p>  
             </div>
             <div class="essentialInformation">
@@ -120,11 +120,11 @@
                 </p>
                 <p>
                     <span>回单：</span>
-                    <span>{{formData.orderExtraCodesName}}</span>
+                    <span>{{formData.isReceipt?'是':'否'}}</span>
                 </p>                 
                 <p>
                     <span>回款：</span>
-                    <span>{{formData.extraRrice}}</span>
+                    <span>{{formData.isReceivable?'是':'否'}}</span>
                 </p>  
             </div>
             <div class="essentialInformation">

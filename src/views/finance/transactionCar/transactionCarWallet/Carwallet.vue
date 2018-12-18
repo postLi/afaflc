@@ -59,6 +59,9 @@
                             </template>
             </el-table-column>
             <el-table-column  label="订单流水号" prop="orderSerial" sortable show-overflow-tooltip width="250">
+                <template slot-scope="scope">
+                <h4 class="needMoreInfo" @click="pushOrderSerial(scope.row)">{{ scope.row.orderSerial}}</h4>
+                </template>
             </el-table-column>
             <el-table-column  label="交易流水号" prop="tradeSerial" sortable show-overflow-tooltip width="250">
             </el-table-column> 
@@ -134,6 +137,9 @@
                             </template>
             </el-table-column>
             <el-table-column  label="流水号" prop="extractSerial" show-overflow-tooltip sortable width="250">
+                <template slot-scope="scope">
+                <h4 class="needMoreInfo" @click="pushOrderSerial(scope.row)">{{ scope.row.orderSerial}}</h4>
+                </template>
             </el-table-column>
             <el-table-column  label="处理时间" prop="auditTime" sortable width="250">
             </el-table-column> 
@@ -360,7 +366,10 @@ export default {
                     })
        })
        },   
-
+    //  流水号进入订单详情
+     pushOrderSerial(item){
+    this.$router.push({ name: '订单详情', query: { orderSerial: item.orderSerial }})
+     },
      // 获取对应的字典列表
     getMoreInformation(){
 
