@@ -59,6 +59,9 @@
                             </template>
             </el-table-column>
             <el-table-column  label="订单流水号" prop="orderSerial" sortable width="250">
+                <template slot-scope="scope">
+                <h4 class="needMoreInfo" @click="pushOrderSerial(scope.row)">{{ scope.row.orderSerial}}</h4>
+                </template>
             </el-table-column>
             <el-table-column  label="交易流水号" prop="tradeSerial" sortable width="250">
             </el-table-column> 
@@ -144,6 +147,9 @@
                             </template>
             </el-table-column>
             <el-table-column  label="流水号" prop="rechargeSerial" sortable width="250">
+                <template slot-scope="scope">
+                <h4 class="needMoreInfo" @click="pushOrderSerial(scope.row)">{{ scope.row.orderSerial}}</h4>
+                </template>
             </el-table-column>
             <el-table-column  label="充值时间" prop="rechargeTime" sortable width="250">
             </el-table-column>             
@@ -469,6 +475,10 @@ export default {
                 console.log(err)
             })
         },
+    //  流水号进入订单详情
+     pushOrderSerial(item){
+    this.$router.push({ name: '订单详情', query: { orderSerial: item.orderSerial }})
+     },
    },
    mounted(){
      this.getMoreInformation();

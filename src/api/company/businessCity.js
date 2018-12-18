@@ -12,12 +12,12 @@ export function data_CityList() {
 }
 
 //增加城市
-export function data_AddCity(data){
-    return fetch.post('/'+baseurl+'/common/aflcCityTree/v1/add',data) 
-}
 
+export function data_AddCity(data) {
+  return fetch.post('/' + baseurl + '/common/aflcCityTree/v1/add', data)
+}
 // 根据地区获取所有商圈
 
 export function data_CityCode(code) {
-  return fetch.get('/'+baseurl_two+'/usercenter/aflcTradeArea/v1/tradeAll/'+ code)
+  return fetch.get('/'+ baseurl_two+'/usercenter/aflcTradeArea/v1/tradeAll/'+ code)
 }
