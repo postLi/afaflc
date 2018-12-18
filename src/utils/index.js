@@ -1130,7 +1130,7 @@ export function getBetweenDateStr(start,end,type){
 }
 
 export function checkData(day,dayList){ 
-    console.log('tetststststs',day,dayList)
+    // console.log('tetststststs',day,dayList)
     let result = Array(day.length).fill(0) ;
     day.forEach((item1,i)=>{
         dayList.forEach((item2)=>{

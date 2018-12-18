@@ -889,7 +889,7 @@ export default {
                 }
                 .jieti{
                     .el-form-item__content{
-                        width: 1165px;
+                        width: 70%;
                         .el-input{
                             width: 50px;
                         }
@@ -912,10 +912,10 @@ export default {
                                     }
                                 }
                                 span:first-child{
-                                    margin:0 222px;
+                                    margin:0 21%;
                                 }
                                 span:nth-child(2){
-                                    margin:0 140px;
+                                    margin:0 13%;
                                 }
                                  span:nth-child(3){
                                     margin:0 122px;
@@ -928,7 +928,7 @@ export default {
                                 overflow: hidden;
                                 li{
                                     .el-input{
-                                        width: 174px;
+                                        width: 41%;
                                     }
                                     float: left;
                                 }
@@ -936,7 +936,10 @@ export default {
                                     margin-left: 9%;
                                 }
                                 li:nth-child(2){
-                                    margin-left: 20%;
+                                    margin-left: 15%;
+                                    .el-input{
+                                        width: 86%;
+                                    }
                                 }
                                 li:nth-child(3){
                                     margin-left: 21%; 
