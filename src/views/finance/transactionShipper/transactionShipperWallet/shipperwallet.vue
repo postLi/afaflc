@@ -114,10 +114,10 @@
                                :value="item.code"
                                :disabled="item.disabled">
                          </el-option>
-                 </el-select>               
+                 </el-select>   
             </el-form-item>
             <el-form-item label="充值方式：">
-                  <el-select v-model="formAllData2.rechargeWay" clearable placeholder="请选择" >
+                  <el-select v-model="formAllData2.rechargeWay" clearable placeholder="请选择">
                           <el-option
                               v-for="item in rechargeWayList"
                                :key="item.code"

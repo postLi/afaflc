@@ -5,7 +5,7 @@
             <div class="essentialInformation">   
          <div class="orderEchart">
           <div class="orderKPI_fl">
-              综合评分：<span class="orderColor">62</span>分
+              综合评分：<span class="orderColor" v-if="params.length>0">{{params[0].comprehensiveRating}}</span>分
           </div>
           <div class="orderKPI_fr">
               <div id="KPI_echarts"></div>
@@ -13,7 +13,6 @@
          </div>
         </div>
         </div>
-
         <div class="address-collapse collapseInfo">
             <h2>时效考核</h2>
         <div class="essentialInformation">            
@@ -31,62 +30,62 @@
                 </tr>
                 <tr>
                     <td>撮合时效（秒）</td>
-                    <td>30</td>
-                    <td>45</td>
-                    <td>32</td>
-                    <td>22</td>
-                    <td><span class="orderColor">不达标</span></td>
-                    <td><span class="orderColor">8</span></td>
+                    <td>{{params.length>0?params[0].standards:''}}</td>
+                    <td>{{params.length>0?params[0].actual:''}}</td>
+                    <td>{{params.length>0?params[0].differenceValue:''}}</td>
+                    <td>{{params.length>0?params[0].assessItemPoints:''}}</td>
+                    <td><span class="orderColor">{{params.length>0?params[0].evaluateValues:''}}</span></td>
+                    <td><span class="orderColor">{{params.length>0?params[0].indiviReting:''}}</span></td>
                     <td>从客户下单时间开始计算，到首次确认中单司机所用时间<br>单位：<span class="orderColor">秒</span></td>
                 </tr>
                 <tr>
                     <td>中单后联系货主时效（秒）</td>
-                    <td>30</td>
-                    <td>45</td>
-                    <td>32</td>
-                    <td>22</td>
-                    <td><span class="orderColor">不达标</span></td>
-                    <td><span class="orderColor">8</span></td>
+                    <td>{{params.length>0?params[1].standards:''}}</td>
+                    <td>{{params.length>0?params[1].actual:''}}</td>
+                    <td>{{params.length>0?params[1].differenceValue:''}}</td>
+                    <td>{{params.length>0?params[1].assessItemPoints:''}}</td>
+                    <td><span class="orderColor">{{params.length>0?params[1].evaluateValues:''}}</span></td>
+                    <td><span class="orderColor">{{params.length>0?params[1].indiviReting:''}}</span></td>
                     <td>从确认中单司机开始计算，到车主联系货主或前往提货地所用时间<br>单位：<span class="orderColor">秒</span></td>
                 </tr>        
                 <tr>
                     <td>到车时效（分钟）</td>
-                    <td>30</td>
-                    <td>45</td>
-                    <td>32</td>
-                    <td>22</td>
-                    <td><span class="orderColor">不达标</span></td>
-                    <td><span class="orderColor">8</span></td>
+                    <td>{{params.length>0?params[2].standards:''}}</td>
+                    <td>{{params.length>0?params[2].actual:''}}</td>
+                    <td>{{params.length>0?params[2].differenceValue:''}}</td>
+                    <td>{{params.length>0?params[2].assessItemPoints:''}}</td>
+                    <td><span class="orderColor">{{params.length>0?params[2].evaluateValues:''}}</span></td>
+                    <td><span class="orderColor">{{params.length>0?params[2].indiviReting:''}}</span></td>
                     <td>实际到达提货地时间与预计到达提货地时间（即时订单：车主中单时间加上地图预估用时；预约订单：预约用车时间）差异值<br>单位：<span class="orderColor">分钟</span></td>
                 </tr>  
                 <tr>
                     <td>到货时效（分钟）</td>
-                    <td>30</td>
-                    <td>45</td>
-                    <td>32</td>
-                    <td>22</td>
-                    <td><span class="orderColor">不达标</span></td>
-                    <td><span class="orderColor">8</span></td>
+                    <td>{{params.length>0?params[3].standards:''}}</td>
+                    <td>{{params.length>0?params[3].actual:''}}</td>
+                    <td>{{params.length>0?params[3].differenceValue:''}}</td>
+                    <td>{{params.length>0?params[3].assessItemPoints:''}}</td>
+                    <td><span class="orderColor">{{params.length>0?params[3].evaluateValues:''}}</span></td>
+                    <td><span class="orderColor">{{params.length>0?params[3].indiviReting:''}}</span></td>
                     <td>实际到达目的地时间与预计到达目的地时间差异值<br>单位：<span class="orderColor">分钟</span></td>
                 </tr>    
                 <tr>
                     <td>回单时效（小时）</td>
-                    <td>30</td>
-                    <td>45</td>
-                    <td>32</td>
-                    <td>22</td>
-                    <td><span class="orderColor">不达标</span></td>
-                    <td><span class="orderColor">1</span></td>
+                    <td>{{params.length>0?params[4].standards:''}}</td>
+                    <td>{{params.length>0?params[4].actual:''}}</td>
+                    <td>{{params.length>0?params[4].differenceValue:''}}</td>
+                    <td>{{params.length>0?params[4].assessItemPoints:''}}</td>
+                    <td><span class="orderColor">{{params.length>0?params[4].evaluateValues:''}}</span></td>
+                    <td><span class="orderColor">{{params.length>0?params[4].indiviReting:''}}</span></td>
                     <td>从完成卸货时间开始计算，到车主回单所用时间<br>单位：<span class="orderColor">小时</span></td>
                 </tr>   
                 <tr>
                     <td>回款时效（小时）</td>
-                    <td>30</td>
-                    <td>45</td>
-                    <td>32</td>
-                    <td>22</td>
-                    <td><span class="orderColor">不达标</span></td>
-                    <td><span class="orderColor">12</span></td>
+                    <td>{{params.length>0?params[5].standards:''}}</td>
+                    <td>{{params.length>0?params[5].actual:''}}</td>
+                    <td>{{params.length>0?params[5].differenceValue:''}}</td>
+                    <td>{{params.length>0?params[5].assessItemPoints:''}}</td>
+                    <td><span class="orderColor">{{params.length>0?params[5].evaluateValues:''}}</span></td>
+                    <td><span class="orderColor">{{params.length>0?params[5].indiviReting:''}}</span></td>
                     <td>从完成卸货时间开始计算，到车主回款所用时间<br>单位：<span class="orderColor">小时</span></td>
                 </tr>                                                                  
             </tbody>
@@ -111,12 +110,12 @@
                 </tr>
                 <tr>
                     <td>货损货差（次）</td>
-                    <td>30</td>
-                    <td>45</td>
-                    <td>32</td>
-                    <td>22</td>
-                    <td><span class="orderColor">不达标</span></td>
-                    <td><span class="orderColor">12</span></td>
+                    <td>{{params.length>0?params[6].standards:''}}</td>
+                    <td>{{params.length>0?params[6].actual:''}}</td>
+                    <td>{{params.length>0?params[6].differenceValue:''}}</td>
+                    <td>{{params.length>0?params[6].assessItemPoints:''}}</td>
+                    <td><span class="orderColor">{{params.length>0?params[6].evaluateValues:''}}</span></td>
+                    <td><span class="orderColor">{{params.length>0?params[6].indiviReting:''}}</span></td>
                     <td>订单货损货差次数<br>单位：<span class="orderColor">次</span></td>
                 </tr>
             </tbody>
@@ -141,22 +140,22 @@
                 </tr>
                 <tr>
                     <td>投诉（次）</td>
-                    <td>30</td>
-                    <td>45</td>
-                    <td>32</td>
-                    <td>22</td>
-                    <td><span class="orderColor">不达标</span></td>
-                    <td><span class="orderColor">12</span></td>
+                    <td>{{params.length>0?params[7].standards:''}}</td>
+                    <td>{{params.length>0?params[7].actual:''}}</td>
+                    <td>{{params.length>0?params[7].differenceValue:''}}</td>
+                    <td>{{params.length>0?params[7].assessItemPoints:''}}</td>
+                    <td><span class="orderColor">{{params.length>0?params[7].evaluateValues:''}}</span></td>
+                    <td><span class="orderColor">{{params.length>0?params[7].indiviReting:''}}</span></td>
                     <td>订单货主投诉次数<br>单位：<span class="orderColor">次</span></td>
                 </tr>
                 <tr>
                     <td>到车距离异常（次）</td>
-                    <td>30</td>
-                    <td>45</td>
-                    <td>32</td>
-                    <td>22</td>
-                    <td><span class="orderColor">不达标</span></td>
-                    <td><span class="orderColor">12</span></td>
+                    <td>{{params.length>0?params[8].standards:''}}</td>
+                    <td>{{params.length>0?params[8].actual:''}}</td>
+                    <td>{{params.length>0?params[8].differenceValue:''}}</td>
+                    <td>{{params.length>0?params[8].assessItemPoints:''}}</td>
+                    <td><span class="orderColor">{{params.length>0?params[8].evaluateValues:''}}</span></td>
+                    <td><span class="orderColor">{{params.length>0?params[8].indiviReting:''}}</span></td>
                     <td>车主点击到达提货地或目的地时，距离客户下单地址异常次数<br>单位：<span class="orderColor">次</span></td>
                 </tr>                
             </tbody>
@@ -168,23 +167,28 @@
 </template>
 
 <script>
+import { findAssessmentByOrderSerial } from '@/api/dispatch/evaluation.js'
 import echarts from 'echarts'
 export default {
     data(){
         return{
+        formData:{
+            orderSerial:null,
+        },
+        params:[],         
         option:{
             polar : [
             {
                 indicator : [
-                    { text: '撮合时效', max: 100},
-                    { text: '中单后联系货主时效', max: 100},
-                    { text: '到车时效', max: 100},
-                    { text: '到货时效', max: 100},
-                    { text: '回单时效', max: 100},
-                    { text: '回款时效', max: 100},
-                    { text: '货损货差', max: 100},
-                    { text: '投诉', max: 100},
-                    { text: '到车距离异常', max: 100},               
+                    { text: '撮合时效', max: 20},
+                    { text: '中单后联系货主时效', max: 20},
+                    { text: '到车时效', max: 20},
+                    { text: '到货时效', max: 20},
+                    { text: '回单时效', max: 20},
+                    { text: '回款时效', max: 20},
+                    { text: '货损货差', max: 20},
+                    { text: '投诉', max: 20},
+                    { text: '到车距离异常', max: 20},               
                     ]
                 },  
             ],
@@ -215,7 +219,7 @@ export default {
                 type: 'radar',
                     data : [
                         {
-                            value : [10, 20, 30, 40, 50, 60,70,80,90],
+                            value : [10, 20, 30, 40, 50, 60,70,80,10],
                             name: '评分',
                     itemStyle: {
                     normal: {
@@ -231,14 +235,24 @@ export default {
     },
     methods:{
         firstBlood(){
-            this.$nextTick(()=>{
+        findAssessmentByOrderSerial(1,100,this.formData).then(res => {
+            if(res.data.length>0){
+            this.option.series[0].data[0].value = [res.data[0].standards,res.data[1].standards,res.data[2].standards,res.data[3].standards,res.data[4].standards,res.data[5].standards,res.data[6].standards,res.data[7].standards,res.data[8].standards]
+            this.params = res.data
+            }
+            else{
+            this.option.series[0].data[0].value = []
+            this.params = []
+            }
             var myChart = echarts.init(document.getElementById('KPI_echarts')); 
-             myChart.setOption(this.option); 
-            })
+            myChart.setOption(this.option);             
+        })
         }
     },
     mounted(){
+        this.formData.orderSerial = this.$route.query.orderSerial
         this.firstBlood()
+
     }
 }
 </script>

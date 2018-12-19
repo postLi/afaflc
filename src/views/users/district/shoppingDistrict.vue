@@ -21,7 +21,18 @@
                  <el-button  type="primary" value="value" plain icon="el-icon-edit" @click="openDialogEdit()" :size="btnsize"  v-has:BUSINESS_AREA_MANAGE_BUSINESS_UPDATE>修改</el-button>
                 <el-button type="primary" plain :size="btnsize" @click="handleUseStates" icon="el-icon-bell" v-has:BUSINESS_AREA_MANAGE_BUSINESS_USE>启用/停用</el-button>
                 <el-button type="primary" plain :size="btnsize" @click="delete_data" icon="el-icon-delete" v-has:BUSINESS_AREA_MANAGE_BUSINESS_DELETE>删除</el-button>
-			</div>
+			    <shoppingCread
+                            btntext='设置货物分类'
+                            :plain="true"
+                            btntype="primary"
+                            editType="view"
+                            btntitle="设置商圈货物分类"
+                            :params="selectRowData"
+                            icon="el-icon-circle-plus"
+                            >
+                </shoppingCread>
+            
+            </div>
             <div class="info_news">
             <el-table style="width: 100%" stripe border height="100%" :data="tableDataAll" ref="multipleTable"  @selection-change="getSelection" @row-click="clickDetails" highlight-current-row tooltip-effect="dark">
               <el-table-column
@@ -124,7 +135,6 @@ import {data_get_aflcTradeArea_list,data_Del_aflcTradeArea,data_Able_aflcTradeAr
 import GetCityList from '@/components/GetCityList/city'
 import ShoppingMap from '@/components/map/shoppingMap'
 import shoppingCread from './shoppingCread.vue'
-import shoppingDialog from './shoppingDialog.vue'
 import Pager from '@/components/Pagination/index'
 import { eventBus } from '@/eventBus'
 export default {
@@ -224,7 +234,6 @@ export default {
     },
     components:{
     shoppingCread,
-    shoppingDialog,
     Pager,
     GetCityList,
     ShoppingMap,
@@ -364,7 +373,6 @@ export default {
       },    
     returnStr(e){ 
              e.map((s1,o1)=>{
-                  console.log('length',e[o1].length)
                e[o1].map((item,o2)=> {
                    console.log('4434',Object.prototype.toString.call(item))
                 //   item = [item.lng,item.lat]
