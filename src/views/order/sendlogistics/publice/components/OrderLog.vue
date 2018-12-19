@@ -53,37 +53,37 @@
             <div class="essentialInformation">
                 <p>
                     <span>发货地：</span>
-                    <span>{{formData.aflcOrderAddressWebDtoList[0].viaAddressName}}</span>
+                    <span v-if="formData.aflcOrderAddressWebDtoList.length>0">{{formData.aflcOrderAddressWebDtoList[0].viaAddressName}}</span>
                  </p>
                 <p>
                     <span>街道/门牌号：</span>
-                    <span>{{formData.aflcOrderAddressWebDtoList[0].viaAddress}}</span>
+                    <span v-if="formData.aflcOrderAddressWebDtoList.length>0">{{formData.aflcOrderAddressWebDtoList[0].viaAddress}}</span>
                  </p>
                 <p>
                     <span>发货人：</span>
-                    <span>{{formData.aflcOrderAddressWebDtoList[0].contacts}}</span>
+                    <span v-if="formData.aflcOrderAddressWebDtoList.length>0">{{formData.aflcOrderAddressWebDtoList[0].contacts}}</span>
                  </p>                 
                 <p>
                     <span>联系方式：</span>
-                    <span>{{formData.aflcOrderAddressWebDtoList[0].contactsPhone}}</span>
+                    <span v-if="formData.aflcOrderAddressWebDtoList.length>0">{{formData.aflcOrderAddressWebDtoList[0].contactsPhone}}</span>
                 </p>  
             </div>
             <div class="essentialInformation">
                 <p>
                     <span>目的地：</span>
-                    <span>{{formData.aflcOrderAddressWebDtoList[1].viaAddressName}}</span>
+                    <span v-if="formData.aflcOrderAddressWebDtoList.length>0">{{formData.aflcOrderAddressWebDtoList[1].viaAddressName}}</span>
                  </p>
                 <p>
                     <span>街道/门牌号：</span>
-                    <span>{{formData.aflcOrderAddressWebDtoList[1].viaAddress}}</span>
+                    <span v-if="formData.aflcOrderAddressWebDtoList.length>0">{{formData.aflcOrderAddressWebDtoList[1].viaAddress}}</span>
                 </p>
                 <p>
                     <span>收货人：</span>
-                    <span>{{formData.aflcOrderAddressWebDtoList[1].contacts}}</span>
+                    <span v-if="formData.aflcOrderAddressWebDtoList.length>0">{{formData.aflcOrderAddressWebDtoList[1].contacts}}</span>
                 </p>                 
                 <p>
                     <span>联系方式：</span>
-                    <span>{{formData.aflcOrderAddressWebDtoList[1].contactsPhone}}</span>
+                    <span v-if="formData.aflcOrderAddressWebDtoList.length>0">{{formData.aflcOrderAddressWebDtoList[1].contactsPhone}}</span>
                 </p>  
             </div>
         </div>

@@ -37,3 +37,16 @@ export function aflcAssessmentSum_list(page,pagesize,data) {
     }
   })
 }
+
+// 考核汇总流水号
+export function findAssessmentByOrderSerial(page,pagesize,data) {
+  return fetch({
+    url: '/' + baseurl_one + '/order/aflcOrderAssessmentSum/v1/findAssessmentByOrderSerial',
+    method: 'post',
+    data:{
+      "currentPage": page,
+      "pageSize": pagesize,
+      "vo": data
+    }
+  })
+}

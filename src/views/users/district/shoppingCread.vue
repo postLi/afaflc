@@ -2,46 +2,57 @@
      <div class="shoppingDialog commoncss">
       <el-button :type="btntype" :value="value" :plain="plain" :icon="icon" @click="openDialog()">{{btntext}}</el-button>
       <el-dialog  :visible="dialogFormVisible_add" :before-close="change" :title="btntitle" top=5vh v-dialogDrag>
-        <el-form ref="formAll" :model="formAll" :rules="rulesForm" :label-width="formLabelWidth">
-            <el-row>
-                <el-col :span="12">
-                    <el-form-item label="商圈名称 ："  prop="tradeName">
-                    <el-input v-model="formAll.tradeName"></el-input>
-                    </el-form-item>
-                </el-col>
-                 <el-col :span="12">
-                    <el-form-item label="所在区域 ："  prop="areaName">
-                    <GetCityList ref="area" v-model="formAll.areaName"  @returnStr="getStr"></GetCityList>
-                    </el-form-item>
-                </el-col>
+        <el-form ref="formAll" :label-width="formLabelWidth">          
+          <el-row>
+            <el-col :span="24">
+                <div class="manageShopping_table" v-for="(form,keys) in formAll.aflcPartnerAreaList" :key='keys'>
+                 <div v-if="keys == 0" class="manageShopping_tr">
+                     <div class="manageShopping_th table_w1">序号</div>
+                     <div class="manageShopping_th table_w2">分类名称</div>
+                     <div class="manageShopping_th table_w3">分类简要说明</div>
+                     <div class="manageShopping_th table_w4">货物名称</div>
+                     <div class="manageShopping_th table_w5">分类单位</div>
+                     <div class="manageShopping_th table_w6">体积（方）</div>
+                     <div class="manageShopping_th table_w7">重量(KG)</div>
+                     <div class="manageShopping_th table_w8">上传分类简图</div>
+                     <div class="manageShopping_th table_w9">与标准分类比例</div>
+                     <div class="manageShopping_th table_w10">操作</div>
+                 </div>
+                 <div class="manageShopping_tr">
+                     <div class="manageShopping_td table_w1" @click="changeInput(keys)">
+                         {{keys+1}}
+                      </div>
+                     <div class="manageShopping_td table_w2">
+                         <el-input> </el-input>
+                     </div>
+                     <div class="manageShopping_td table_w3">
+                         <el-input> </el-input>
+                     </div>
+                     <div class="manageShopping_td table_w4">
+                         <el-input> </el-input>
+                     </div>
+                     <div class="manageShopping_td table_w5">
+                         <el-input> </el-input>
+                     </div>
+                     <div class="manageShopping_td table_w6">
+                         <el-input> </el-input>
+                     </div>
+                     <div class="manageShopping_td table_w7">
+                         <el-input> </el-input>
+                     </div>
+                     <div class="manageShopping_td table_w8">
+                         <el-input> </el-input>
+                     </div>
+                     <div class="manageShopping_td table_w9">
+                         <el-input> </el-input>
+                     </div>
+                     <div class="manageShopping_td Item_position table_w10">
+                         <span  class="addItem" @click="addItem()" v-if="keys==0"> </span><span  class="reduceItem" @click="reduceItem(keys)" v-else> </span>
+                     </div>
+                 </div>
+                </div>
+            </el-col>   
             </el-row>
-            <el-row>
-                <el-col :span="12">
-                    <el-form-item label="详细地址 ："  >
-                    <el-input v-model="formAll.address"></el-input>
-                    </el-form-item>
-                </el-col>
-                 <el-col :span="12">
-                    <el-form-item label="商圈场主 ："  prop="tradeOwner">
-                    <el-input v-model="formAll.tradeOwner"></el-input>
-                    </el-form-item>
-                </el-col>
-            </el-row>
-            <el-row>
-                <el-col :span="12">
-                    <el-form-item label="场主手机号 ："  prop="ownerPhone">
-                    <el-input v-model="formAll.ownerPhone" maxlength="11"></el-input>
-                    </el-form-item>
-                </el-col>
-            </el-row>    
-            <el-row>
-                <el-col :span="12">
-                    <el-form-item label="商圈地理围栏（多边形） ："  prop="ownerPhone">
-                     <ShoppingMap ref="mapblock" @returnStr = returnStr></ShoppingMap>
-                    </el-form-item>
-                </el-col>
-            </el-row>              
-
         </el-form>
         <div slot="footer" class="dialog-footer">
           <el-button type="primary"  @click="add_data">确 定</el-button>
@@ -84,91 +95,31 @@ export default {
       type: Boolean,
       default: false
     },
-    /*add新增，edit编辑，view查看*/
-    editType: {
-      type: String,
-    }    
   },
   data(){
-          //    选择省市校验
-        const areaNameValidator = (rule, val, cb) => {
-            if(val){
-            if(val.length<1){
-            cb(new Error('所属地区不能为空'))
-            }
-            else{
-                cb()
-            }                 
-            }else{
-            cb(new Error('所属地区不能为空'))
-            }
-        }
-
-    //    选择商圈地区校验
-        const tradeNameValidator = (rule, val, cb) => {
-            if(!val){
-            cb(new Error('商圈地区不能为空'))
-            }
-            else{
-                cb()
-            }        
-        }
-
-    //    选择商圈场主校验
-        const tradeOwnerValidator = (rule, val, cb) => {
-            if(!val){
-            cb(new Error('商圈场主不能为空'))
-            }
-            else{
-                cb()
-            }        
-        }
-    //    选择场主手机号校验
-        const ownerPhoneValidator = (rule, val, cb) => {
-            let phoneTest = /(^1[3|4|5|7|8|9]\d{9}$)|(^09\d{8}$)/
-            !val && cb(new Error('场主手机号码不能为空'))
-            if(!(phoneTest.test(val))){
-                cb(new Error('请输入正确的手机号码格式'))
-            } 
-            else{
-               cb()
-            }  
-        }
 
         return{
         selectFlag:null,
         dialogFormVisible_add: false,
         formLabelWidth:'190px',
         formAll:{
-            tradeName:null,
-            areaName:null,
+            aflcPartnerAreaList:[{
+            areaName: null,
             areaCode: null,
             province:null,
             city:null,
             area:null,
-            address:null,
-            tradeOwner:null,
-            ownerPhone:null,
-            points:[]        
+            contractStartDate:null,
+            contractEndDate:null,
+            selectFlag:null,
+            }],
         },
-         rulesForm:{
-            tradeName:{trigger:'change',required:true,validator: tradeNameValidator},            
-            areaName:{trigger:'change',required:true,validator: areaNameValidator},         
-            tradeOwner:{trigger:'change',required:true,validator: tradeOwnerValidator},            
-            ownerPhone:{trigger:'change',required:true,validator: ownerPhoneValidator},                                      
-            },
         }
   },
   watch:{
    dialogFormVisible_add:{
         handler: function(val, oldVal) {
             if(!val){
-                console.log('val',val)
-                 this.$refs['formAll'].resetFields();
-                 this.formAll.address = null;
-                 this.selectFlag = null;
-                 this.$refs.area.clearData();
-                 this.$refs.mapblock.clear();
             }
         },
     },
@@ -179,17 +130,9 @@ export default {
     
   },
   components:{
-    GetCityList,
-    ShoppingMap
+
   },
   methods:{
-    getStr(val){
-                this.formAll.areaCode= val.area.code
-                this.formAll.areaName = val.area.name
-                this.formAll.province = val.province.name
-                this.formAll.city = val.city.name
-                this.formAll.area = val.area.name
-            },  
    openDialog:function(){
          this.dialogFormVisible_add = true;
    },
@@ -199,55 +142,39 @@ export default {
    close:function(){
       this.dialogFormVisible_add = false;
        },
-    changeList(){
+   changeList(){
             eventBus.$emit('pushListtwo')
-        },  
-   // 省市状态表
-     changeSelect(){
-            this.selectFlag='1'
-            },    
-    returnStr(e){
-        this.formAll.points = []
-     var unshiftAraay = [e[0].lng,e[0].lat]
-     if(e.length>1){
-         for(let i = 1;i<e.length;i++)
-         {
-         this.formAll.points.push(e[i])
-         }
-        this.formAll.points.unshift(unshiftAraay)
-     }
-
-    },        
-    add_data(){
-       this.$refs['formAll'].validate(valid=>{
-        if(valid){
-        let forms={
-            areaCode:this.formAll.areaCode,
-            areaName:this.formAll.areaName,
-            province:this.formAll.province,
-            city:this.formAll.city,
-            area:this.formAll.area,
-            tradeName:this.formAll.tradeName,
-            address:this.formAll.address,
-            tradeOwner:this.formAll.tradeOwner,
-            ownerPhone:this.formAll.ownerPhone,    
-            points:JSON.stringify(this.formAll.points)
+    },
+    // 增加分类
+    addItem(){
+            if(this.editType=='view'){
+            return false
+            }else{        
+           this.formAll.aflcPartnerAreaList.push({
+            areaName: [],
+            areaCode: [],
+            province:null,
+            city:null,
+            area:null,
+            contractStartDate:null,
+            contractEndDate:null,
+            }) 
+            }
+        },    
+    // 减少分类
+    reduceItem(i){
+            if(this.formAll.aflcPartnerAreaList.length>1){
+            this.formAll.aflcPartnerAreaList.splice(i,1);
+            }
+            else{
+                return
         }
-        console.log(forms)
-        this.dialogFormVisible_add = false;
-        data_get_aflcTradeArea_create(forms).then(res=>{
-           this.$message.success('新增成功');
-           this.changeList();
-           console.log(res);
+    },  
 
-        }).catch(res=>{
-            this.$message.error('新增失败')
-            this.changeList();
-           console.log(res);
-        })
-       }
-       })
-    }
+   add_data(){
+
+    },
+
   }
 }
 </script>
@@ -262,7 +189,63 @@ export default {
     .el-button{
         padding: 7px 15px 7px;
         }
-
+        .manageShopping_table{
+            width: 100%;
+            border-top: 1px solid #d0d7e5;
+            border-left: 1px solid #d0d7e5;
+            .Item_position{
+                position: relative;
+                .addItem{
+                    top: 7px;
+                    left:40%;
+                }                
+                .reduceItem{
+                    top: 7px;
+                    left:40%;
+                }
+            }
+            .manageShopping_tr{
+             height: 40px;
+             line-height: 40px;
+             overflow: hidden;
+             border-bottom: 1px solid #d0d7e5;
+            }
+            .manageShopping_th{
+            float: left;
+            display: inline-block;
+            background: #EAF0FF;
+            text-align: center;
+            border-right: 1px solid #d0d7e5;
+           }
+            .manageShopping_td{
+            float: left;
+            display: inline-block;
+            text-align: center;
+            border-right: 1px solid #d0d7e5;   
+            box-sizing: border-box;
+            .el-cascader{
+                width: 100%;
+            }
+            .el-input{
+                width:100%;
+            }
+           }
+            .viewWidth{width: 100%;display: inline-block;
+                    a{
+                        color: #409EFF
+                    }
+           }
+           .table_w1{width: 5%}
+           .table_w2{width: 12%}
+           .table_w3{width: 10%}
+           .table_w4{width: 12%}
+           .table_w5{width: 10%}
+           .table_w6{width: 10%}
+           .table_w7{width: 10%}
+           .table_w8{width: 11%}
+           .table_w9{width: 10%}
+           .table_w10{width: 10%;height: 40px;}
+        }
 }
 .info_news .shoppingDialog .el-button{
         padding: 0px 15px 0px;

@@ -87,12 +87,12 @@
             </el-table-column>                            
             <el-table-column  label="提货地" prop="" sortable show-overflow-tooltip>
              <template  slot-scope="scope">
-            <span>{{scope.row.orderAddressList[0].viaAddressName}}</span >
+            <span v-if="scope.row.orderAddressList.length>0">{{scope.row.orderAddressList[0].viaAddressName}}</span >
             </template>
             </el-table-column>                                                           
             <el-table-column  label="目的地" prop="" sortable show-overflow-tooltip>
              <template  slot-scope="scope">
-            <span>{{scope.row.orderAddressList[1].viaAddressName}}</span >
+            <span v-if="scope.row.orderAddressList.length>0">{{scope.row.orderAddressList[1].viaAddressName}}</span >
             </template>
             </el-table-column>  
             <el-table-column  label="下单时间" prop="useTime" sortable width="180">
@@ -146,8 +146,10 @@ export default {
             // 列表
             firstblood(){
               findFCLOrderInfoList(this.page,this.pagesize,this.formAllData).then(res=>{
+                 
                     this.dataTotal = res.data.totalCount
                     this.tableDataTree = res.data.list;
+                     console.log('tableDataTree',this.tableDataTree)
                      this.tableDataTree.forEach(item => {
                         item.useTime = parseTime(item.useTime,"{y}-{m}-{d} {h}:{i}:{s}");
                     })
