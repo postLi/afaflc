@@ -7,6 +7,7 @@
             <div class="onlineService_content_right workOrder_right">
                 <div class="workOrder_right_type workOrder_right_typeBottom" v-for="(item,index) in workOrderType" :key="index" :class="{currentClick:item.iscur}"   @click="setCur(index,'workOrder',item.label)">
                     <span>{{item.count}}</span>
+                    <span>{{item.class}}</span>
                     <span>{{item.name}}</span>
                 </div>
             </div>
@@ -20,27 +21,33 @@ export default {
     data(){
         return {
             workOrderType:[{
-                name:'待处理',
+                name:'公海无司机抢单',
+                class:'小货车',
                 count:0,
                 iscur:false
             },{
-                name:'当天已处理',
+                name:'公海无司机抢单',
+                class:'发物流',
                 count:10,
                 iscur:false
             },{
-                name:'当月已处理',
+                name:'公海无司机抢单',
+                class:'大货车',
                 count:250,
                 iscur:false
             },{
-                name:'待处理',
+                name:'已抢单未联系货主',
+                class:'小货车',
                 count:0,
                 iscur:false
             },{
-                name:'当天已处理',
+                name:'已抢单未联系货主',
+                class:'发物流',
                 count:10,
                 iscur:false
             },{
-                name:'当月已处理',
+                name:'已抢单未联系货主',
+                class:'大货车',
                 count:620,
                 iscur:false
             }]

@@ -36,14 +36,14 @@
                         </div>
                     </li>
                     <li>
-                        呼入接通率 | 90%
+                        APP响应率 | 90%
                         <div>
                             <span>接听（9）</span>
                             <span>未接（9）</span>
                         </div>
                     </li>
                     <li>
-                        呼入接通率 | 90%
+                        公众号响应率 | 90%
                         <div>
                             <span>接听（9）</span>
                             <span>未接（9）</span>

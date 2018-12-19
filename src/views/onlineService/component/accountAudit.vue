@@ -20,27 +20,27 @@ export default {
     data(){
         return {
             workOrderType:[{
-                name:'待处理',
+                name:'货主待认证',
                 count:0,
                 iscur:false
             },{
-                name:'当天已处理',
+                name:'车主待认证',
                 count:10,
                 iscur:false
             },{
-                name:'当月已处理',
+                name:'物流公司待认证',
                 count:250,
                 iscur:false
             },{
-                name:'待处理',
+                name:'货主认证不通过',
                 count:0,
                 iscur:false
             },{
-                name:'当天已处理',
+                name:'车主认证不通过',
                 count:10,
                 iscur:false
             },{
-                name:'当月已处理',
+                name:'物流公司认证不通过',
                 count:620,
                 iscur:false
             }]

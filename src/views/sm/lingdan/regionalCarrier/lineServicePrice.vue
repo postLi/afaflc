@@ -1,18 +1,22 @@
 <template>
     <div class="identicalStyle creatQRCode" v-loading="loading">
             <el-form  :inline="true" :model="searchInfo" ref="ruleForm" class="demo-ruleForm classify_searchinfo">
-                <el-form-item label="姓名" prop="name">
+                <el-form-item label="区域" prop="name">
                     <el-input v-model="searchInfo.name" clearable>
                     </el-input>            
                 </el-form-item>
-                <el-form-item label="主题" prop="topic">
+                <!-- <el-form-item label="商圈线路承运商" prop="topic">
                     <el-input v-model="searchInfo.topic" clearable>
                     </el-input>
                 </el-form-item>
-                <el-form-item label="渠道名称"   prop="channalName">
+                <el-form-item label="商圈"   prop="channalName">
                     <el-input v-model="searchInfo.channalName" clearable>
                     </el-input>
                 </el-form-item>
+                <el-form-item label="到达地"   prop="channalName">
+                    <el-input v-model="searchInfo.channalName" clearable>
+                    </el-input>
+                </el-form-item> -->
                 <el-form-item class="btnChoose fr"  style="margin-left:0;">
                     <el-button type="primary" icon="el-icon-search" plain :size="btnsize" @click="handleSearch('search')">搜索</el-button>
                     <el-button type="info" icon="fontFamily aflc-icon-qingkong" :size="btnsize" plain @click="handleSearch('clear')">清空</el-button>
@@ -47,51 +51,30 @@
                         <el-table-column
                             sortable
                             prop="name"
-                            label="姓名"
-                            width="250">
+                            label="区域"
+                            >
                         </el-table-column>
                         <el-table-column
                             prop="topic"
                             :show-overflow-tooltip="true"
                             sortable
-                            label="主题"
+                            label="操作人"
                             >
                         </el-table-column>
                         <el-table-column
+                            prop="topic"
+                            :show-overflow-tooltip="true"
+                            sortable
+                            label="操作时间"
+                            >
+                        </el-table-column>
+                        <el-table-column
+                            width="160"
                             prop="channalName"
                             :show-overflow-tooltip="true"
                             sortable
-                            label="渠道名称"
+                            label="状态"
                             >
-                        </el-table-column>
-                        <el-table-column
-                            prop="url"
-                            :show-overflow-tooltip="true"
-                            sortable
-                            label="链接"
-                            >
-                        </el-table-column>
-                        <el-table-column
-                            prop="qrcode"
-                            sortable
-                            label="二维码"
-                            width="120">
-                            <template slot-scope="scope">
-                                <el-button
-                                    :size="btnsize"
-                                    type="primary"
-                                    plain
-                                    @click="handleclick(scope.row)"  v-showPicture :imgurl="twocodeurl ? twocodeurl : ''">查看</el-button>
-                            </template>
-                        </el-table-column>
-                        <el-table-column
-                            prop="createTime"
-                            sortable
-                            label="创建时间"
-                            width="160">
-                            <template slot-scope="scope">
-                                {{scope.row.createTime | parseTime}}
-                            </template>
                         </el-table-column>
                     </el-table>
                 </div>
@@ -108,7 +91,7 @@
 import { aflcQrcodeList,aflcQrcodeDelet,getChannel } from '@/api/server/QRCode.js'
 import { parseTime, pickerOptions2 } from '@/utils/index.js'
 import Pager from '@/components/Pagination/index'
-import newQRCode from './components/newQRDialog'  
+// import newQRCode from './components/newQRDialog'  
 import QRCode from 'qrcode'
 
 export default{
@@ -120,7 +103,7 @@ export default{
         },
       components: {
             Pager,
-            newQRCode
+            // newQRCode
         },
       data() {
           return {
@@ -148,7 +131,7 @@ export default{
           isvisible: {
               handler(newVal, oldVal) {
                   if (newVal) {
-                        this.firstblood()
+                        // this.firstblood()
                     } 
                 },
                 // 代表在wacth里声明了firstName这个方法之后立即先去执行handler方法

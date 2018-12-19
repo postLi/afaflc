@@ -10,17 +10,17 @@
                 <div class="TransactionFlow_classfy">
                     <div class="transItem">
                         <h6>现金流入</h6>
-                        <p>{{(this.tradeOrderPaymentCountObj.incomeAmount+'') | NumFormat}} 元</p>
+                        <p>{{(this.tradeOrderPaymentCountObj.incomeAmount ? this.tradeOrderPaymentCountObj.incomeAmount+'' : '0') | NumFormat}} 元</p>
                         <!-- <p>昨日全天：100,000,000</p> -->
                     </div>
                     <div class="transItem">
                         <h6>现金流出</h6>
-                        <p>{{(this.tradeOrderPaymentCountObj.expendAmount+'') | NumFormat}} 元</p>
+                        <p>{{(this.tradeOrderPaymentCountObj.expendAmount ? this.tradeOrderPaymentCountObj.expendAmount+'' : '0') | NumFormat}} 元</p>
                         <!-- <p>昨日全天：100,000,000</p>    -->
                     </div>
                     <div class="transItem"> 
                         <h6>流水差</h6>
-                        <p><span v-if="this.tradeOrderPaymentCountObj.incomeAmount - this.tradeOrderPaymentCountObj.expendAmount < 0">-</span>{{(this.tradeOrderPaymentCountObj.incomeAmount - this.tradeOrderPaymentCountObj.expendAmount + '') | NumFormat}}元</p>
+                        <p>{{(this.tradeOrderPaymentCountObj.incomeAmount - this.tradeOrderPaymentCountObj.expendAmount ?this.tradeOrderPaymentCountObj.incomeAmount - this.tradeOrderPaymentCountObj.expendAmount + '' : '0') | NumFormat}}元</p>
                         <!-- <p>昨日全天：100,000,000</p> -->
                     </div>
                 </div>
@@ -117,7 +117,10 @@ export default {
                 "endTime": "",
                 "startTime": "",
             },//交易流水时间
-            tradeOrderPaymentCountObj:{},//交易流水
+            tradeOrderPaymentCountObj:{
+                expendAmount: 0,
+                incomeAmount: 0
+            },//交易流水
             pendingExtractCashCount:{},//待办事项
             tradeOrderPaymentDetailTime:{
                 "endTime": "",

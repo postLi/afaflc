@@ -23,7 +23,7 @@
                     <selectChannel  @change = "getVal"  v-model="standForm.channal"/>
                 </el-form-item>
                  <el-form-item label="链接：" prop="url" >
-                    <el-select v-model="standForm.url" clearable placeholder="请选择" @change="choseStyle">
+                    <el-select v-model="standForm.url" clearable placeholder="请选择">
                         <el-option
                             v-for="item in optionsQRcode"
                             :key="item.id"

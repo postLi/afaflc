@@ -1,15 +1,19 @@
 <template>
     <div class="identicalStyle creatQRCode" v-loading="loading">
             <el-form  :inline="true" :model="searchInfo" ref="ruleForm" class="demo-ruleForm classify_searchinfo">
-                <el-form-item label="姓名" prop="name">
+                <el-form-item label="承运商类型" prop="name">
                     <el-input v-model="searchInfo.name" clearable>
                     </el-input>            
                 </el-form-item>
-                <el-form-item label="主题" prop="topic">
+                <el-form-item label="商圈线路承运商" prop="topic">
                     <el-input v-model="searchInfo.topic" clearable>
                     </el-input>
                 </el-form-item>
-                <el-form-item label="渠道名称"   prop="channalName">
+                <el-form-item label="商圈"   prop="channalName">
+                    <el-input v-model="searchInfo.channalName" clearable>
+                    </el-input>
+                </el-form-item>
+                <el-form-item label="到达地"   prop="channalName">
                     <el-input v-model="searchInfo.channalName" clearable>
                     </el-input>
                 </el-form-item>
@@ -108,7 +112,7 @@
 import { aflcQrcodeList,aflcQrcodeDelet,getChannel } from '@/api/server/QRCode.js'
 import { parseTime, pickerOptions2 } from '@/utils/index.js'
 import Pager from '@/components/Pagination/index'
-import newQRCode from './components/newQRDialog'  
+// import newQRCode from './components/newQRDialog'  
 import QRCode from 'qrcode'
 
 export default{
@@ -120,7 +124,7 @@ export default{
         },
       components: {
             Pager,
-            newQRCode
+            // newQRCode
         },
       data() {
           return {
@@ -148,7 +152,7 @@ export default{
           isvisible: {
               handler(newVal, oldVal) {
                   if (newVal) {
-                        this.firstblood()
+                        // this.firstblood()
                     } 
                 },
                 // 代表在wacth里声明了firstName这个方法之后立即先去执行handler方法
