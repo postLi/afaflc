@@ -179,17 +179,7 @@ export default {
         option:{
             polar : [
             {
-                indicator : [
-                    { text: '撮合时效', max: 20},
-                    { text: '中单后联系货主时效', max: 20},
-                    { text: '到车时效', max: 20},
-                    { text: '到货时效', max: 20},
-                    { text: '回单时效', max: 20},
-                    { text: '回款时效', max: 20},
-                    { text: '货损货差', max: 20},
-                    { text: '投诉', max: 20},
-                    { text: '到车距离异常', max: 20},               
-                    ]
+                indicator : []
                 },  
             ],
           tooltip:{
@@ -236,8 +226,27 @@ export default {
     methods:{
         firstBlood(){
         findAssessmentByOrderSerial(1,100,this.formData).then(res => {
+            console.log('option',this.option.polar[0].indicator);
+            let MaxArray = []
+            for(let maxI = 0;maxI<9;maxI++)
+            {
+                MaxArray.push(res.data[maxI].assessItemPoints)
+            }
             if(res.data.length>0){
-            this.option.series[0].data[0].value = [res.data[0].standards,res.data[1].standards,res.data[2].standards,res.data[3].standards,res.data[4].standards,res.data[5].standards,res.data[6].standards,res.data[7].standards,res.data[8].standards]
+            var maxNum = MaxArray.reduce(function(a , b){ 
+            return b > a ? b : a; 
+            });
+            this.option.polar[0].indicator = [
+                    { text: '撮合时效', max: maxNum},
+                    { text: '中单后联系货主时效', max: maxNum},
+                    { text: '到车时效', max: maxNum},
+                    { text: '到货时效', max: maxNum},
+                    { text: '回单时效', max: maxNum},
+                    { text: '回款时效', max: maxNum},
+                    { text: '货损货差', max: maxNum},
+                    { text: '投诉', max: maxNum},
+                    { text: '到车距离异常', max: maxNum},]
+            this.option.series[0].data[0].value = [res.data[0].indiviReting,res.data[1].indiviReting,res.data[2].indiviReting,res.data[3].indiviReting,res.data[4].indiviReting,res.data[5].indiviReting,res.data[6].indiviReting,res.data[7].indiviReting,res.data[8].indiviReting]
             this.params = res.data
             }
             else{

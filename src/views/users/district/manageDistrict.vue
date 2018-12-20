@@ -74,8 +74,6 @@
             </el-table-column>    
             <el-table-column  label="手机号码" prop="mobile" sortable>
             </el-table-column> 
-            <el-table-column  label="代理区域" prop="belongCity" sortable>
-            </el-table-column>
             <el-table-column  label="合同开始日期" prop="contractStartDate" sortable> 
             </el-table-column>       
             <el-table-column  label="合同结束日期" prop="contractEndDate" sortable>

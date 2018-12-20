@@ -45,7 +45,7 @@
                 </el-form-item> 
        </el-form>
          <div class="classify_info">
-            <div class="totle_info">收入金额：<span></span>支出金额：<span></span></div>
+            <div class="totle_info">收入金额：<span>{{orderData.incomeSum}}</span>支出金额：<span>{{orderData.expendSum}}</span></div>
             <div class="info_news">
             <el-table style="width: 100%"  border height="93%"  ref="multipleTable" :data="tableDataAll">
               <el-table-column
@@ -123,7 +123,7 @@
                 </el-form-item> 
        </el-form>
             <div class="classify_info">
-            <div class="totle_info">提现金额：<span></span>手续费：<span></span></div>
+            <div class="totle_info">成功提现金额：<span>{{orderData2.successExtract}}</span>可提现金额：<span>{{orderData2.availableAmount}}</span>审核中提现金额：<span>{{orderData2.pendingExtract}}</span></div>
             <div class="info_news">
             <el-table style="width: 100%" border height="93%"  ref="multipleTable2" :data="tableDataAll2">
               <el-table-column
@@ -133,30 +133,45 @@
               </el-table-column>
            <el-table-column label="序号" sortable  width="80">
                             <template slot-scope="scope">
-                             {{ (page2 - 1)*pagesize2 + scope.$index + 1 }}
+                             {{ (page - 1)*pagesize + scope.$index + 1 }}
                             </template>
             </el-table-column>
-            <el-table-column  label="流水号" prop="extractSerial" show-overflow-tooltip sortable width="250">
-                <template slot-scope="scope">
-                <h4 class="needMoreInfo" @click="pushOrderSerial(scope.row)">{{ scope.row.orderSerial}}</h4>
-                </template>
+            <el-table-column  label="流水号" prop="extractSerial" width="280">
+            <template  slot-scope="scope">
+                          <h4 class="needMoreInfo" @click="pushOrderSerial(scope.row)">{{ scope.row.extractSerial}}</h4>
+            </template>
             </el-table-column>
-            <el-table-column  label="处理时间" prop="auditTime" sortable width="250">
-            </el-table-column> 
-            <el-table-column  label="用户账号" prop="mobile" sortable>
-            </el-table-column>        
-            <el-table-column  label="提现金额" prop="extractSum" sortable>
+            <el-table-column  label="申请时间" prop="extractTime">
+            </el-table-column>
+            <el-table-column  label="用户姓名" prop="name">
+            </el-table-column>
+            <el-table-column  label="用户账号" prop="mobile">
+            </el-table-column>
+            <el-table-column  label="提现金额" prop="extractSum" width="100">
             </el-table-column>       
-            <el-table-column  label="手续费" prop="" sortable>
-             <template  slot-scope="scope">
+            <el-table-column  label="手续费" prop="" width="100">
+            <template  slot-scope="scope">
              <span>0</span>
             </template>
-            </el-table-column>     
-            <el-table-column  label="收款方式" prop="extractWay" sortable>
+            </el-table-column>                                                       
+            <el-table-column  label="收款方式" prop="extractWay" width="100">
             </el-table-column>
-            <el-table-column  label="收款账号" prop="extractAccount" sortable show-overflow-tooltip >
-            </el-table-column>                                                                                                 
-            </el-table> 
+            <el-table-column  label="收款账号" prop="extractAccount" show-overflow-tooltip>
+            </el-table-column>
+            <el-table-column  label="处理结果" prop="auditOpinion" width="120">
+               <template slot-scope="scope">
+              <span :class="{freezeName: scope.row.auditOpinion == '待处理' ,blackName: scope.row.auditOpinion == '审核不通过',normalName :scope.row.auditOpinion == '审核通过'}">{{scope.row.auditOpinion}}</span>
+               </template>
+            </el-table-column>
+            <el-table-column  label="提现结果" prop="extractStatus" width="120">
+               <template slot-scope="scope">
+              <span :class="{freezeName: scope.row.extractStatus == '提现中' ,blackName: scope.row.extractStatus == '提现失败',normalName :scope.row.extractStatus == '提现成功'}">{{scope.row.extractStatus}}</span>
+               </template>
+            </el-table-column>    
+            <el-table-column  label="处理时间" prop="auditTime">
+            </el-table-column>
+            </el-table>
+
             </div>
              <div class="info_tab_footer">共计:{{ dataTotal2}} <div class="show_pager"> <Pager :total="dataTotal2" @change="handlePageChange2"  :sizes="sizes" ref="pager2"/></div> </div> 
              </div>
@@ -167,7 +182,7 @@
 </template>
 <script>
 import { data_Commission ,data_CarList,data_MaidLevel,data_ServerClassList} from '@/api/server/areaPrice.js'
-import { data_aflcOrderPaymentList} from '@/api/finance/transactionShipper'
+import { data_aflcOrderPaymentList,userPaymentCount,userExtractCashCount} from '@/api/finance/transactionShipper'
 import { eventBus } from '@/eventBus'
 import {data_aflcExtractCashList} from '@/api/finance/transactionCash.js'
 import {parseTime,pickerOptions2} from '@/utils/'
@@ -255,6 +270,15 @@ export default {
                 endExtractTime:null,
                 extractWay:null,
                 accountId:null,
+            },
+            orderData:{
+            expendSum:null,
+            incomeSum:null,
+            },
+            orderData2:{
+            availableAmount:null,
+            pendingExtract:null,
+            successExtract:null,
             },
             optionsAccountType2: [
                     {code:'AF01403',name:'订单多退'},
@@ -354,6 +378,10 @@ export default {
                     this.dataTotal = res.data.totalCount
                     this.tableDataAll = res.data.list;
        })
+
+       userPaymentCount(this.$route.query.accountId).then(res=>{
+                    this.orderData = res.data
+       })
        },
     // 提现记录  
     firstblood2(){
@@ -364,6 +392,9 @@ export default {
                         item.auditTime = parseTime(item.auditTime,"{y}-{m}-{d} {h}:{i}:{s}");
                         item.extractTime = parseTime(item.extractTime,"{y}-{m}-{d} {h}:{i}:{s}");
                     })
+       })
+       userExtractCashCount(this.$route.query.accountId).then(res=>{
+           this.orderData2 = res.data
        })
        },   
     //  流水号进入订单详情

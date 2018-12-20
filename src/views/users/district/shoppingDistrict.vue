@@ -29,6 +29,7 @@
                             btntitle="设置商圈货物分类"
                             :params="selectRowData"
                             icon="el-icon-circle-plus"
+                            @getData="getDataList"
                             >
                 </shoppingCread>
             
@@ -69,8 +70,13 @@
          <div class="info_tab_footer">共计:{{ dataTotal }} <div class="show_pager"> <Pager :total="dataTotal" @change="handlePageChange" ref="pager"/></div> </div>
 
     <!-- 弹框 -->
-    <div class="shoppingDialog commoncss">
-      <el-dialog  :visible="dialogFormVisible_add" :before-close="change" top=5vh v-dialogDrag :title="btntitle">
+    <div class="shoppingDialog commoncss tabsWrap">
+
+      <el-dialog  :visible="dialogFormVisible_add" :before-close="change" top=5vh v-dialogDrag :title="btntitle" :class="editType=='view'?'':'cardDisplay'">
+        <el-tabs v-model="autocheck" type="card">
+        <!-- 基本信息 -->
+        <el-tab-pane label="基本信息" name="first" >
+            <div>
         <el-form ref="formAll" :model="formAll" :rules="rulesForm" :label-width="formLabelWidth">
             <el-row>
                 <el-col :span="12">
@@ -116,13 +122,76 @@
                      <ShoppingMap ref="mapblock" @returnStr = returnStr  @EditStr = EditStrtype :fromData = 'formAll' id="mapblock" :editstatusMap = 'editstatus' ></ShoppingMap>
                     </el-form-item>
                 </el-col>
-            </el-row>              
-        </el-form>
-        <div slot="footer" class="dialog-footer">
-          <el-button type="primary"  @click="add_data" v-if="editType=='add'">确 定</el-button>
-          <el-button type="primary"  @click="edit_data" v-if="editType=='edit'">确 定</el-button>
-          <el-button @click="close()" >取 消</el-button>
-        </div>
+            </el-row>          
+           </el-form>
+                 <div  class="dialog-footer">
+                <el-button type="primary"  @click="add_data" v-if="editType=='add'">确 定</el-button>
+                <el-button type="primary"  @click="edit_data" v-if="editType=='edit'">确 定</el-button>
+                <el-button @click="close()" >取 消</el-button>
+                </div>    
+
+            </div>
+            </el-tab-pane>
+            <el-tab-pane label="货物分类" name="two" >
+                <el-form inline>
+            <el-row>
+            <el-col :span="24">
+                <div class="manageShopping_table" v-for="(form,keys) in formAllUnit" :key='keys'>
+                 <div v-if="keys == 0" class="manageShopping_tr">
+                     <div class="manageShopping_th table_w1">序号</div>
+                     <div class="manageShopping_th table_w2">分类名称</div>
+                     <div class="manageShopping_th table_w11">分类简要说明</div>
+                     <div class="manageShopping_th table_w4">货物名称</div>
+                     <div class="manageShopping_th table_w5">分类单位</div>
+                     <div class="manageShopping_th table_w6">体积（方）</div>
+                     <div class="manageShopping_th table_w7">重量(KG)</div>
+                     <div class="manageShopping_th table_w8">上传分类简图</div>
+                     <div class="manageShopping_th table_w9">与标准分类比例</div>
+                 </div>
+                 <div class="manageShopping_tr">
+                     <div class="manageShopping_td table_w1">
+                         {{keys+1}}
+                      </div>
+                     <div class="manageShopping_td table_w2">
+                         <el-input v-model="formAllUnit[keys].categoryName"> </el-input>
+                     </div>
+                     <div class="manageShopping_td table_w11">
+                         <el-input v-model="formAllUnit[keys].categoryDesc"> </el-input>
+                     </div>
+                     <div class="manageShopping_td table_w4">
+                         <el-input v-model="formAllUnit[keys].goodsName"> </el-input>
+                     </div>
+                     <div class="manageShopping_td table_w5">
+                    <el-select v-model="formAllUnit[keys].categoryUnit" placeholder="请选择" clearable>
+                        <el-option
+                            v-for="item in unitList"
+                            :key="item.code"
+                            :label="item.name"
+                            :value="item.code"
+                            :disabled="item.disabled"
+                            >
+                        </el-option>
+                    </el-select>
+                     </div>
+                     <div class="manageShopping_td table_w6">
+                         <el-input v-model="formAllUnit[keys].volume"> </el-input>
+                     </div>
+                     <div class="manageShopping_td table_w7">
+                         <el-input v-model="formAllUnit[keys].weight"> </el-input>
+                     </div>
+                     <div class="manageShopping_td table_w8">
+                          <el-input v-model="formAllUnit[keys].uploadCategoryDiagrams"> </el-input>
+                     </div>
+                     <div class="manageShopping_td table_w9">
+                         <span><el-input v-model="formAllUnit[keys].standardProportion"></el-input></span>
+                     </div>
+                 </div>
+                </div>
+                </el-col>   
+                </el-row>
+                </el-form>
+            </el-tab-pane>
+          </el-tabs>
       </el-dialog> 
       </div>
     
@@ -131,7 +200,7 @@
 </template>
 
 <script>
-import {data_get_aflcTradeArea_list,data_Del_aflcTradeArea,data_Able_aflcTradeArea,data_get_aflcTradeArea_Id,data_get_aflcTradeArea_create,data_get_aflcTradeArea_update} from '@/api/users/district/shoppingDistrict.js'
+import {data_get_aflcTradeArea_list,data_Del_aflcTradeArea,data_Able_aflcTradeArea,data_get_aflcTradeArea_Id,data_get_aflcTradeArea_create,data_get_aflcTradeArea_update,data_get_unitList,aflcGoodscategorySettingTrade} from '@/api/users/district/shoppingDistrict.js'
 import GetCityList from '@/components/GetCityList/city'
 import ShoppingMap from '@/components/map/shoppingMap'
 import shoppingCread from './shoppingCread.vue'
@@ -188,6 +257,7 @@ export default {
             }  
         }
         return{
+            autocheck:'first',
             editclear:'0',
             editstatus:'0',
             loading:true,
@@ -206,6 +276,18 @@ export default {
                 areaCode:null,
                 areaName:null,
             },
+            formAllUnit:[{
+            categoryName:null,
+            categoryDesc:null,
+            goodsName:null,
+            categoryUnit:null,
+            volume:null,
+            weight:null,
+            uploadCategoryDiagrams:null,
+            standardProportion:'标准分类',
+            tradeId:null,
+            tradeName:null,
+            }],
             btntitle:'',
             editType:'',
             selectFlag:null,
@@ -224,6 +306,7 @@ export default {
                 fenceName:null,
                 points:[]        
             },
+            unitList:[],
             rulesForm:{
                 tradeName:{trigger:'change',required:true,validator: tradeNameValidator},            
                 areaName:{trigger:'change',required:true,validator: areaNameValidator},         
@@ -240,6 +323,7 @@ export default {
     
     },
     mounted(){
+        this.getInformation();
         this.firstblood();
         eventBus.$on('pushListtwo', () => {
                 this.firstblood()
@@ -277,6 +361,13 @@ export default {
                 }
             },
         },
+   autocheck(newVal,oldVal){
+        if(newVal){
+            this.autocheck = newVal;
+          }else{
+        this.autocheck = oldVal;
+          }
+        },  
     },
     methods:{
     getStr(val){
@@ -298,7 +389,12 @@ export default {
    close:function(){
       this.dialogFormVisible_add = false;
        },
-   
+     // 获取分类列表
+    getInformation(){
+        data_get_unitList().then(res=>{
+            this.unitList = res.data
+        }) 
+    },
    //    新增打开
     openDialogAdd(){
         this.dialogFormVisible_add = true;
@@ -356,6 +452,10 @@ export default {
            this.formAll.areaName = res.data.areaName
            this.formAll.areaCode = res.data.areaCode
            this.formAll.points =JSON.parse(res.data.points)
+        })
+
+        aflcGoodscategorySettingTrade(e.id).then(res=>{
+            console.log('res',res)
         })
         this.dialogFormVisible_add = true;
         this.btntitle="详情";
@@ -589,8 +689,14 @@ export default {
 </script>
 <style lang="scss">
 .District{
+.el-dialog__body{
+    min-height: 800px;
+}
 .el-cascader{
         margin-top:-10px;
+}
+.tabsWrap{
+    position: static;
 }
 .btns_box{
     .el-button{
@@ -614,7 +720,15 @@ export default {
     font-weight: bold;
     color: #3e9ff1;
     cursor: pointer;
-    }   
+    } 
+ .el-tabs__content{
+     margin-top: 20px;
+ }
+ .cardDisplay{
+     .el-tabs__header{
+       display: none;
+     }
+ } 
 }
 </style>
 
