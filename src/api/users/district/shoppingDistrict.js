@@ -1,6 +1,7 @@
 import fetch from '@/utils/fetch'
 
 const baseurl = "aflc-uc"
+const baseurl_two = 'aflccommonservice'
 // const baseurl = "aflcusercenterservice-wtc"
 
 
@@ -52,3 +53,25 @@ export function data_get_aflcTradeArea_update(data) {
     method: 'get',
   })
 }
+
+// 获取分类单位列表
+export function data_get_unitList() {
+  return fetch.get('/' + baseurl_two + '/sysDict/getSysDictByCodeGet/AF04903')
+}
+
+// 设置货物分类
+export function aflcGoodscategorySetting(data) {
+  return fetch({
+           url: '/'+baseurl+'/usercenter/aflcGoodscategorySetting/v1/add',
+           method: 'post',
+           data:data
+         })
+       }    
+
+// 获取货物分类
+export function aflcGoodscategorySettingTrade(data) {
+  return fetch({
+           url: '/'+baseurl+'/usercenter/aflcGoodscategorySetting/v1/trade/' + data,
+           method: 'get',
+         })
+       }    

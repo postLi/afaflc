@@ -1,5 +1,5 @@
 <template>
-     <div class="shoppingDialog commoncss">
+     <div class="manageDistrict commoncss">
       <el-button :type="btntype" :value="value" :plain="plain" :icon="icon" @click="openDialog()"><span :class="editType=='view'?'BtnInfo':''">{{btntext}}</span ></el-button>
       <div class="newmanageDistrict">
       <el-dialog  :visible="dialogFormVisible_add" :before-close="change" :title="btntitle" modal-append-to-body top=5vh v-dialogDrag>
@@ -21,22 +21,21 @@
                 </el-col>
                  <el-col :span="12">
                     <el-form-item label="联系人 ："  prop="partnerName">
-                    <el-input v-model="formAll.partnerName" :disabled="editType=='view'||inputdisabled"></el-input>
+                    <el-input v-model="formAll.partnerName" :disabled="editType=='view'"></el-input>
                     </el-form-item>
                 </el-col>
             </el-row>
             <el-row>
                 <el-col :span="12">
                     <el-form-item label="手机号码 ："  prop="mobile">
-                    <el-input v-model="formAll.mobile" :disabled="editType=='view'||inputdisabled"></el-input>
+                    <el-input v-model="formAll.mobile" :disabled="editType=='view'"></el-input>
                     </el-form-item>
                 </el-col>
                  <el-col :span="12">
-                    <el-form-item  label="所在地 ："  v-if="!selectFlag"> 
-                            <el-input v-model="areaName" @focus="changeSelect" :disabled="editType=='view'||inputdisabled"></el-input>
-                    </el-form-item>  
-                    <el-form-item label="所在地 ："  prop="areaName" v-else>
-                    <GetCityList ref="area" v-model="formAll.areaName"  @returnStr="getStr"></GetCityList>
+                    <el-form-item label="所在地 ："  prop="areaName">
+                    <vregion :ui="true"  @values="regionChange" class="form-control">
+                        <el-input v-model="formAll.areaName" placeholder="请选择" :disabled="editType=='view'"></el-input>
+                    </vregion>
                     </el-form-item>
                 </el-col>
             </el-row>
@@ -45,6 +44,7 @@
                     <el-form-item label="签约时间 ："  prop="signingDate">
                     <el-date-picker
                     v-model="formAll.signingDate"
+                    :disabled="editType=='view'"
                     type="datetime"
                     value-format="timestamp"
                     default-time="00:00:00"
@@ -175,9 +175,8 @@ import {data_get_aflcPartner_update,data_get_aflcPartner_Id,data_get_aflcPartner
 import GetCityList from '@/components/GetCityList/city'
 import { eventBus } from '@/eventBus'
 import Upload from '@/components/Upload/singlei'
+import vregion from '@/components/vregion/Region'
 export default {
-  components:{
-  },
   props:{
     params:{
       type:[Object,String,Array,Number],
@@ -288,12 +287,10 @@ export default {
         return{
         isVip:'0',
         companyId:null,    
-        areaName:null,
         areaCode:null,
         companyNameObject:{
         companyName:null,
         },
-        inputdisabled:false,
         restaurants: [],
         areaStatus:null,
         selectFlag:null,
@@ -351,7 +348,8 @@ export default {
   },
   components:{
       Upload,
-      GetCityList
+      GetCityList,
+      vregion
   },
   watch:{
    dialogFormVisible_add:{
@@ -360,7 +358,6 @@ export default {
                  this.$refs['formAll'].resetFields();
                  this.formAll.address = null;
                  this.selectFlag = null;
-                 this.AreaName = null;
                 this.formAll.aflcPartnerAreaList=[{
                 areaName: null,
                 areaCode: null,
@@ -377,8 +374,6 @@ export default {
                 selectFlag:'',
                 }]   
                 this.areaStatus = null 
-                this.inputdisabled = false
-                this.areaName =null,
                 this.areaCode =null,
                 this.companyId = null,
                 this.companyNameObject.companyName = null;
@@ -396,6 +391,25 @@ export default {
   mounted(){
   },
   methods:{
+        regionChange(d) {
+                this.formAll.areaName = (!d.province&&!d.city&&!d.area&&!d.town) ? '': `${this.getValue(d.province)}${this.getValue(d.city)}${this.getValue(d.area)}${this.getValue(d.town)}`.trim();
+                this.formAll.province =  !d.province?'': d.province.name
+                this.formAll.city = !d.city?'': d.city.name
+                this.formAll.area = !d.area?'': d.area.name
+                if(d.province&&d.city&&d.area){
+                    this.formAll.areaCode = d.area.code
+                }
+                else if(d.province&&d.city&&!d.area){
+                    this.formAll.areaCode = d.city.code
+                }
+                else{
+                    this.formAll.areaCode = d.province.code
+                }
+            },
+        getValue(obj){
+                return obj ? obj.value:'';
+            },
+
     //   区代公司名称
       querySearch(queryString, cb) {
         var restaurants = this.restaurants;
@@ -410,7 +424,6 @@ export default {
       },
       handleSelect(item) {
           this.companyNameObject.companyName = item.value
-          this.inputdisabled = true
         data_get_aflcPartner_findAuthCompany(1, 10, this.companyNameObject).then(res=>{
             
             this.formAll.partnerName = res.data[0].contactsName
@@ -419,7 +432,7 @@ export default {
             this.formAll.province = res.data[0].provinceCode
             this.formAll.city = res.data[0].cityCode
             this.formAll.area = res.data[0].areaCode
-            this.areaName = res.data[0].belongCityName
+            this.formAll.areaName =  res.data[0].address
             this.companyId = res.data[0].id
         })
       },
@@ -427,8 +440,6 @@ export default {
      this.formAll.partnerName = null
      this.formAll.mobile = null
      this.formAll.areaName = null
-     this.areaName = null
-     this.inputdisabled = false
      this.companyId = null
      this.selectFlag=null
       },
@@ -494,7 +505,7 @@ export default {
              this.formAll.contractEndDate=res.data.contractEndDate
              this.formAll.aflcPartnerAreaList = res.data.aflcPartnerAreaList
              this.formAll.aflcPartnerFileList = res.data.aflcPartnerFileList
-             this.areaName = res.data.belongCity;
+             this.formAll.areaName = res.data.belongCity;
              if(!this.formAll.aflcPartnerFileList.length){
                 this.formAll.aflcPartnerFileList=[{
                 saveAddress:'',    
@@ -537,13 +548,10 @@ export default {
              this.formAll.contractEndDate=res.data.contractEndDate
              this.formAll.aflcPartnerAreaList = res.data.aflcPartnerAreaList
              this.formAll.aflcPartnerFileList = res.data.aflcPartnerFileList
-             this.areaName = res.data.belongCity
+             this.formAll.areaName = res.data.belongCity
              this.companyId = res.data.companyId
              this.isVip = res.data.openAdminManage
              this.areaCode = res.data.areaCode
-             if(res.data.companyId){
-                this.inputdisabled = true
-             }
              if(!this.formAll.aflcPartnerFileList.length){
                 this.formAll.aflcPartnerFileList=[{
                 saveAddress:'',    

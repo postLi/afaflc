@@ -1,5 +1,5 @@
 <template>
-     <div class="shoppingDialog commoncss">
+     <div class="manageDistrict commoncss">
       <el-button :type="btntype" :value="value" :plain="plain" :icon="icon" @click="openDialog()">{{btntext}}</el-button>
       <el-dialog  :visible="dialogFormVisible_add" :before-close="change" :title="btntitle" top=5vh v-dialogDrag>
         <el-form ref="formAll" :model="formAll" :rules="rulesForm" :label-width="formLabelWidth">
@@ -18,27 +18,22 @@
                 </el-col>
                  <el-col :span="12">
                     <el-form-item label="联系人 ："  prop="partnerName">
-                    <el-input v-model="formAll.partnerName" :disabled="inputdisabled"></el-input>
+                    <el-input v-model="formAll.partnerName"></el-input>
                     </el-form-item>
                 </el-col>
             </el-row>
             <el-row>
                 <el-col :span="12">
                     <el-form-item label="手机号码 ："  prop="mobile">
-                    <el-input v-model="formAll.mobile" :disabled="inputdisabled"></el-input>
+                    <el-input v-model="formAll.mobile"></el-input>
                     </el-form-item>
                 </el-col>
                  <el-col :span="12">
-                    <span v-if='inputdisabled'>
-                        <el-form-item label="所在地 ："  prop="">
-                        <el-input v-model="areaName" :disabled="inputdisabled"></el-input>
-                        </el-form-item>
-                    </span>
-                    <span v-else>
                     <el-form-item label="所在地 ："  prop="areaName">
-                    <GetCityList ref="area" v-model="formAll.areaName"  @returnStr="getStr"></GetCityList>
+                    <vregion :ui="true"  @values="regionChange" class="form-control">
+                        <el-input v-model="formAll.areaName" placeholder="请选择"></el-input>
+                    </vregion>
                     </el-form-item>
-                    </span>
                 </el-col>
             </el-row>
             <el-row>
@@ -164,6 +159,7 @@ import {data_get_aflcPartner_create,data_get_aflcTradeArea_Id,data_get_aflcPartn
 import GetCityList from '@/components/GetCityList/city'
 import { eventBus } from '@/eventBus'
 import Upload from '@/components/Upload/singlei'
+import vregion from '@/components/vregion/Region'
 export default {
   components:{
   },
@@ -280,12 +276,10 @@ export default {
 
         return{
         companyId:null,    
-        areaName:null,
         areaCode:null,
         companyNameObject:{
             companyName:null,
         },
-        inputdisabled:false,
         restaurants:[],
         isVip:'0',
         areaStatus:null,    
@@ -342,7 +336,8 @@ export default {
   },
   components:{
       Upload,
-      GetCityList
+      GetCityList,
+      vregion
   },
   watch:{
    dialogFormVisible_add:{
@@ -366,11 +361,9 @@ export default {
                 fileName:'',    
                 }]   
                 this.areaStatus = null
-                this.areaName =null,
                 this.areaCode =null,
                 this.companyId = null,
                 this.companyNameObject.companyName = null;
-                this.inputdisabled = false
                  if(this.$refs.area){
                      this.$refs.area.clearData();
                  }
@@ -390,6 +383,25 @@ export default {
   mounted(){
   },
   methods:{
+            regionChange(d) {
+                console.log('data:',d)
+                this.formAll.areaName = (!d.province&&!d.city&&!d.area&&!d.town) ? '': `${this.getValue(d.province)}${this.getValue(d.city)}${this.getValue(d.area)}${this.getValue(d.town)}`.trim();
+                this.formAll.province =  !d.province?'': d.province.name
+                this.formAll.city = !d.city?'': d.city.name
+                this.formAll.area = !d.area?'': d.area.name
+                if(d.province&&d.city&&d.area){
+                    this.formAll.areaCode = d.area.code
+                }
+                else if(d.province&&d.city&&!d.area){
+                    this.formAll.areaCode = d.city.code
+                }
+                else{
+                    this.formAll.areaCode = d.province.code
+                }
+            },
+             getValue(obj){
+                return obj ? obj.value:'';
+            },
     //   区代公司名称
       querySearch(queryString, cb) {
         var restaurants = this.restaurants;
@@ -404,23 +416,22 @@ export default {
       },
       handleSelect(item) {
           this.companyNameObject.companyName = item.value
-          this.inputdisabled = true
         data_get_aflcPartner_findAuthCompany(1, 10, this.companyNameObject).then(res=>{
+            console.log('res',res)
             this.formAll.partnerName = res.data[0].contactsName
             this.formAll.mobile = res.data[0].mobile
             this.areaCode = res.data[0].belongCity
             this.formAll.province = res.data[0].provinceCode
             this.formAll.city = res.data[0].cityCode
             this.formAll.area = res.data[0].areaCode
-            this.areaName = res.data[0].belongCityName
             this.companyId = res.data[0].id
+            this.formAll.areaName =  res.data[0].address
         })
       },
       handblur(i){
      this.formAll.partnerName = null
      this.formAll.mobile = null
      this.formAll.areaName = null
-     this.inputdisabled = false
      this.companyId = null
       },
       changeInput:function(i){
@@ -451,7 +462,24 @@ export default {
             }, 
 
    openDialog:function(){
+          if(!this.params.length){
+               this.$message.warning('请选择您要操作的用户');
+               return
+          }
+          else if(this.params.length == 0 && this.editType !== 'add'){
+               this.$message.warning('请选择您要操作的用户');
+               return false
+          }else if (this.params.length > 1 && this.editType !== 'add') {
+                this.$message({
+                    message: '每次只能操作单条数据~',
+                    type: 'warning'
+                })
+                this.$emit('getData') 
+                return false
+          }
+          else{
          this.dialogFormVisible_add = true;
+          }
    },
    change:function(){
       this.dialogFormVisible_add = false;
@@ -598,8 +626,11 @@ export default {
 
 
 <style lang="scss">
-.shoppingDialog{
+.manageDistrict{
      display: inline-block;
+     .el-dialog{
+         overflow: unset!important;
+     }
     .el-button{
         padding: 7px 15px 7px;
         }

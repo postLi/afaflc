@@ -2,7 +2,7 @@
 	<div class="Shipperwallet tabsWrap">
           <el-tabs v-model="autocheck" type="card">
         <!-- 钱包明细 -->
-            <el-tab-pane label="交易明细" name="first">
+            <el-tab-pane label="钱包明细" name="first">
         <div style="height:100%;" class="identicalStyle">
        <el-form :inline="true"  class="demo-ruleForm classify_searchinfo">
                <el-form-item  label="交易类型："> 
@@ -45,7 +45,7 @@
                 </el-form-item>
        </el-form>
          <div class="classify_info">
-            <div class="totle_info">收入金额：<span></span>支出金额：<span></span></div>
+            <div class="totle_info">收入金额：<span>{{orderData.incomeSum}}</span>支出金额：<span>{{orderData.expendSum}}</span></div>
             <div class="info_news">
             <el-table style="width: 100%"  border height="93%"  ref="multipleTable" :data="tableDataAll">
               <el-table-column
@@ -133,7 +133,7 @@
                 </el-form-item>
        </el-form>
          <div class="classify_info">
-            <div class="totle_info">充值金额：<span></span>赠送金额：<span></span></div>
+            <div class="totle_info">充值金额：<span>{{orderData2.rechargeSum}}</span>赠送金额：<span>{{orderData2.giveSum}}</span></div>
             <div class="info_news">
             <el-table style="width: 100%"  border height="93%" stripe ref="multipleTable2" :data="tableDataAll2">
               <el-table-column
@@ -235,7 +235,7 @@
 <script>
 import { data_Commission ,data_CarList,data_MaidLevel,data_ServerClassList} from '@/api/server/areaPrice.js'
 import { eventBus } from '@/eventBus'
-import { data_aflcCouponUseList,data_couponActive,data_aflcOrderPaymentList} from '@/api/finance/transactionShipper'
+import { data_aflcCouponUseList,data_couponActive,data_aflcOrderPaymentList,userPaymentCount,userRechargeCount} from '@/api/finance/transactionShipper'
 import {data_aflcRechargeList} from '@/api/finance/transactionRecharge.js'
 import Pager from '@/components/Pagination/index'
 import {parseTime,pickerOptions2} from '@/utils/'
@@ -337,6 +337,14 @@ export default {
             couponName:null,
             couponStatus:null,
             },
+            orderData:{
+            expendSum:null,
+            incomeSum:null,
+            },
+            orderData2:{
+            giveSum:null,
+            rechargeSum:null,
+            },
             couponStatusList:[],
             optionsAccountType2: [
                     {code:'AF01403',name:'订单多退'},
@@ -366,6 +374,10 @@ export default {
                     this.dataTotal = res.data.totalCount
                     this.tableDataAll = res.data.list;
        })
+       userPaymentCount(this.$route.query.accountId).then(res=>{
+                    this.orderData = res.data
+       })
+
        },
 
     // 充值记录
@@ -374,6 +386,10 @@ export default {
                     this.dataTotal2 = res.data.totalCount
                     this.tableDataAll2 = res.data.list;
        })
+       userRechargeCount(this.$route.query.accountId).then(res=>{
+                    this.orderData2 = res.data
+       })
+
        },
     // 优惠卷领用
     firstblood3(){

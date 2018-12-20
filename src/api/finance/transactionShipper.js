@@ -3,6 +3,9 @@ const baseurl = 'aflc-uc'
 const baseurl_two = 'aflcsmservice'
 const baseurl_three = "aflccommonservice"
 const baseurl_four = 'aflc-order'
+const baseurl_five = 'aflcorderservice' 
+const baseurl_six = 'aflcusercenterservice' 
+
 // 获取交易明细列表
 export function data_findShipperMywalletList(page, pagesize, data) {
   return fetch({
@@ -46,6 +49,30 @@ export function data_aflcCouponUseList(page, pagesize, data) {
 export function data_couponActive() {
   return fetch({
     url: '/'+baseurl_three+'/sysDict/getSysDictByCodeGet/AF0464',
+    method: 'get'
+  })
+}
+
+//获取钱包明细
+export function userPaymentCount(id) {
+  return fetch({
+    url: '/'+baseurl_five+'/order/aflcOrderPayment/v1/userPaymentCount/'+id,
+    method: 'get'
+  })
+}
+
+//获取提现明细
+export function userExtractCashCount(id) {
+  return fetch({
+    url: '/'+baseurl_six+'/usercenter/aflcExtractCash/v1/userExtractCashCount/'+id,
+    method: 'get'
+  })
+}
+
+//获取充值明细
+export function userRechargeCount(id) {
+  return fetch({
+    url: '/'+baseurl_six+'/usercenter/aflcRecharge/v1/userRechargeCount/'+id,
     method: 'get'
   })
 }

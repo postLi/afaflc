@@ -2,10 +2,17 @@
      <div class="shoppingDialog commoncss">
       <el-button :type="btntype" :value="value" :plain="plain" :icon="icon" @click="openDialog()">{{btntext}}</el-button>
       <el-dialog  :visible="dialogFormVisible_add" :before-close="change" :title="btntitle" top=5vh v-dialogDrag>
-        <el-form ref="formAll" :label-width="formLabelWidth">          
+        <el-form ref="formAll" inline>
+          <el-row>
+          <el-col>
+         <el-form-item label="商圈名称 ：">
+                    <el-input disabled v-model="formAll[0].tradeName"></el-input>
+          </el-form-item>     
+          </el-col>      
+          </el-row>          
           <el-row>
             <el-col :span="24">
-                <div class="manageShopping_table" v-for="(form,keys) in formAll.aflcPartnerAreaList" :key='keys'>
+                <div class="manageShopping_table" v-for="(form,keys) in formAll" :key='keys'>
                  <div v-if="keys == 0" class="manageShopping_tr">
                      <div class="manageShopping_th table_w1">序号</div>
                      <div class="manageShopping_th table_w2">分类名称</div>
@@ -23,28 +30,40 @@
                          {{keys+1}}
                       </div>
                      <div class="manageShopping_td table_w2">
-                         <el-input> </el-input>
+                         <el-input v-model="formAll[keys].categoryName"> </el-input>
                      </div>
                      <div class="manageShopping_td table_w3">
-                         <el-input> </el-input>
+                         <el-input v-model="formAll[keys].categoryDesc"> </el-input>
                      </div>
                      <div class="manageShopping_td table_w4">
-                         <el-input> </el-input>
+                         <el-input v-model="formAll[keys].goodsName"> </el-input>
                      </div>
                      <div class="manageShopping_td table_w5">
-                         <el-input> </el-input>
+                    <el-select v-model="formAll[keys].categoryUnit" placeholder="请选择" clearable>
+                        <el-option
+                            v-for="item in unitList"
+                            :key="item.code"
+                            :label="item.name"
+                            :value="item.code"
+                            :disabled="item.disabled"
+                            >
+                        </el-option>
+                    </el-select>
                      </div>
                      <div class="manageShopping_td table_w6">
-                         <el-input> </el-input>
+                         <el-input v-model="formAll[keys].volume"> </el-input>
                      </div>
                      <div class="manageShopping_td table_w7">
-                         <el-input> </el-input>
+                         <el-input v-model="formAll[keys].weight"> </el-input>
                      </div>
                      <div class="manageShopping_td table_w8">
-                         <el-input> </el-input>
+                   <span  @click="selectUpload(keys)">
+                    <upload class="licensePicture" tip="（必须为jpg/png并且小于5M）" v-model="formAll[keys].uploadCategoryDiagrams"  @fileNmeChange = 'fileNmeChange' />
+                   </span>
                      </div>
                      <div class="manageShopping_td table_w9">
-                         <el-input> </el-input>
+                         <span v-if="keys == 0">标准分类</span>
+                         <span v-else><el-input v-model="formAll[keys].standardProportion"></el-input></span>
                      </div>
                      <div class="manageShopping_td Item_position table_w10">
                          <span  class="addItem" @click="addItem()" v-if="keys==0"> </span><span  class="reduceItem" @click="reduceItem(keys)" v-else> </span>
@@ -62,10 +81,11 @@
       </div>
 </template>
 <script>
-import {data_get_aflcTradeArea_create,data_get_aflcTradeArea_Id} from '@/api/users/district/shoppingDistrict.js'
+import {data_get_aflcTradeArea_Id,data_get_unitList,aflcGoodscategorySetting} from '@/api/users/district/shoppingDistrict.js'
 import GetCityList from '@/components/GetCityList/city'
 import ShoppingMap from '@/components/map/shoppingMap'
 import { eventBus } from '@/eventBus'
+import Upload from '@/components/Upload/singlei'
 export default {
   props:{
     params:{
@@ -97,23 +117,24 @@ export default {
     },
   },
   data(){
-
         return{
         selectFlag:null,
         dialogFormVisible_add: false,
-        formLabelWidth:'190px',
-        formAll:{
-            aflcPartnerAreaList:[{
-            areaName: null,
-            areaCode: null,
-            province:null,
-            city:null,
-            area:null,
-            contractStartDate:null,
-            contractEndDate:null,
-            selectFlag:null,
+        formLabelWidth:'200px',
+        selectIndex:null,
+        formAll:[{
+            categoryName:null,
+            categoryDesc:null,
+            goodsName:null,
+            categoryUnit:null,
+            volume:null,
+            weight:null,
+            uploadCategoryDiagrams:null,
+            standardProportion:'标准分类',
+            tradeId:null,
+            tradeName:null,
             }],
-        },
+       unitList:[],
         }
   },
   watch:{
@@ -125,16 +146,33 @@ export default {
     },
   },
   mounted(){
-  },
-  computed:{
-    
+   this.getInformation()
   },
   components:{
-
+    Upload
   },
   methods:{
    openDialog:function(){
-         this.dialogFormVisible_add = true;
+          if(!this.params.length){
+               this.$message.warning('请选择您要操作的用户');
+               return
+          }
+          else if(this.params.length == 0 && this.editType !== 'add'){
+               this.$message.warning('请选择您要操作的用户');
+               return false
+          }else if (this.params.length > 1 && this.editType !== 'add') {
+                this.$message({
+                    message: '每次只能操作单条数据~',
+                    type: 'warning'
+                })
+                this.$emit('getData') 
+                return false
+          }
+          else{
+          this.formAll[0].tradeId = this.params[0].id
+          this.formAll[0].tradeName = this.params[0].tradeName
+          this.dialogFormVisible_add = true;
+          }
    },
    change:function(){
       this.dialogFormVisible_add = false;
@@ -150,29 +188,50 @@ export default {
             if(this.editType=='view'){
             return false
             }else{        
-           this.formAll.aflcPartnerAreaList.push({
-            areaName: [],
-            areaCode: [],
-            province:null,
-            city:null,
-            area:null,
-            contractStartDate:null,
-            contractEndDate:null,
+           this.formAll.push({
+            categoryName:null,
+            categoryDesc:null,
+            goodsName:null,
+            categoryUnit:null,
+            volume:null,
+            weight:null,
+            uploadCategoryDiagrams:null,
+            standardProportion:null,
+            tradeId:this.params[0].id,
+            tradeName:this.params[0].tradeName,
             }) 
             }
         },    
     // 减少分类
     reduceItem(i){
-            if(this.formAll.aflcPartnerAreaList.length>1){
-            this.formAll.aflcPartnerAreaList.splice(i,1);
+            if(this.formAll.length>1){
+            this.formAll.splice(i,1);
             }
             else{
                 return
         }
     },  
-
+    fileNmeChange(i){
+        this.formAll[this.selectIndex].uploadCategoryDiagrams = i
+       
+    },
+    selectUpload(i){
+        this.selectIndex = i;
+    },
+    // 获取分类列表
+    getInformation(){
+        data_get_unitList().then(res=>{
+            this.unitList = res.data
+        }) 
+    },
    add_data(){
-
+    aflcGoodscategorySetting(this.formAll).then(res=>{
+           this.$message.success('新增成功');
+           this.changeList();
+           this.dialogFormVisible_add = false;     
+    }).catch(err=>{
+        this.$message.error('新增失败')
+    })
     },
 
   }
@@ -229,6 +288,11 @@ export default {
             .el-input{
                 width:100%;
             }
+            .el-input__inner{
+                text-align: center;
+                height: 37px;
+                line-height: 37px;
+            }
            }
             .viewWidth{width: 100%;display: inline-block;
                     a{
@@ -245,6 +309,7 @@ export default {
            .table_w8{width: 11%}
            .table_w9{width: 10%}
            .table_w10{width: 10%;height: 40px;}
+           .table_w11{width: 20%;}
         }
 }
 .info_news .shoppingDialog .el-button{
