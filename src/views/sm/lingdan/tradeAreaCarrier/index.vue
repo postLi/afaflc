@@ -1,8 +1,8 @@
 <template>
     <div class="tradeAreaCarrier tabsWrap">
        <el-tabs v-model="tradeAreaCarrierName" type="card" @tab-click="handleClick" >
-            <!-- 商圈线路承运商 -->
-                <el-tab-pane label="商圈线路承运商" name="tradeAreaLineCarrier">
+            <!-- 商圈承运商 -->
+                <el-tab-pane label="商圈承运商" name="tradeAreaLineCarrier">
                     <tradeAreaLineCarrier :isvisible="tradeAreaCarrierName === 'tradeAreaLineCarrier'"/>
                 </el-tab-pane>
 
@@ -15,8 +15,8 @@
 </template>
 
 <script>
-import tradeAreaLineCarrier from './tradeAreaLineCarrier'
-import tradeAreaServicePrice from './tradeAreaServicePrice'
+import tradeAreaLineCarrier from './tradeAreaLineCarrier/tradeAreaLineCarrier'
+import tradeAreaServicePrice from './tradeAreaServicePrice/tradeAreaServicePrice'
 export default {
     name: 'tradeAreaCarrier',
     components: {

@@ -8,11 +8,11 @@
         </div>
         <div class="onlineService_content">
             <div class="onlineService_content_left">
-                <div class="onlineService_content_left_top onlineService_icon">
+                <!-- <div class="onlineService_content_left_top onlineService_icon">
                     <img src="../../../assets/onlineService/dianhua_out.png" alt="">
                     <span>外呼总时长</span>
                     <span>00:00:00</span>
-                </div>
+                </div> -->
                 <div class="onlineService_content_left_bottom onlineService_icon">
                     <img src="../../../assets/onlineService/dianhua_in.png" alt="">
                     <span>呼入总时长</span>

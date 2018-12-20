@@ -17,6 +17,7 @@
                 </div>
                 <div class="info_news">
                     <el-table
+                        id="out-table-manage"
                         ref="multipleTable"
                         :data="tableData"
                         stripe
@@ -38,16 +39,17 @@
                             width="150"
                             sortable
                             >
-                                <!-- <template  slot-scope="scope">
-                                    {{ scope.row.workSerial}}
-                                </template> -->
                         </el-table-column>
                         <el-table-column
-                            prop="complainTypeName"
                             label="用户类型"
-                            width="120"
+                            width="160"
                             sortable
                             >
+                            <template  slot-scope="scope">
+                                <router-link :to="{ name: '货主详情',query:{ userId:scope.row.shipperId }}" v-if="scope.row.shipperId" target="_blank">货主</router-link>
+                                <router-link :to="{ name: '车主详情',query:{ driverId:scope.row.driverId }}" v-if="scope.row.driverId" target="_blank">车主</router-link>
+                                <!-- <router-link to='/users/shipperData'>物流公司</router-link> -->
+                            </template>
                         </el-table-column>
                         <el-table-column
                             prop="linkman"
@@ -151,6 +153,8 @@
 
 <script type="text/javascript">
 
+import FileSaver from 'file-saver'
+import XLSX from 'xlsx'
 import { aflcCallLog,getVoiceUrl } from '@/api/service/400.js'
 import { parseTime } from '@/utils/index.js'
 import Pager from '@/components/Pagination/index'
@@ -194,6 +198,18 @@ import searchInfo from './searchInfo'
         beforeDestroy(){
         },
         methods: {
+            exportExcel() {
+                /* generate workbook object from table */
+                var wb = XLSX.utils.table_to_book(document.querySelector('#out-table-manage'))
+                /* get binary string as output */
+                var wbout = XLSX.write(wb, { bookType: 'xlsx', bookSST: true, type: 'array' })
+                console.log(wb)
+                console.log(wbout)
+                try {
+                    FileSaver.saveAs(new Blob([wbout], { type: 'application/octet-stream' }), '400管理'+ parseTime(new Date(), '{y}{m}{d}{h}{i}{s}')+'.xlsx')
+                } catch (e) { if (typeof console !== 'undefined') console.log(e, wbout) }
+                return wbout
+            },
             playPause(){
                 var autoTest = document.getElementById('music');
                 if(autoTest !==null){
@@ -236,13 +252,13 @@ import searchInfo from './searchInfo'
             },
             //模糊查询 分类名称或者code
             handleSearch(type){
-                // console.log(this.chooseTime)
                 switch(type){
                     case 'cancel':
 
                         break;
                     case 'export':
-                        
+                        this.exportExcel();
+                        break;
                 }
             },
              //判断是否选中

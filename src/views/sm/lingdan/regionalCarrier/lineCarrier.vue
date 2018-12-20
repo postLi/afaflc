@@ -25,7 +25,7 @@
             <div class="classify_info">
                 <div class="btns_box">
                     <el-button type="primary" icon="el-icon-circle-plus" plain @click="handleClick('new')" :size="btnsize">新增</el-button>
-                    <el-button type="primary" icon="el-icon-delete" plain @click="handleClick('delet')" :size="btnsize">删除</el-button>
+                    <el-button type="primary" icon="el-icon-bell" plain @click="handleClick('delet')" :size="btnsize">启用/禁用</el-button>
                 </div>
                 <div class="info_news" style="height:89%">
                     <el-table
@@ -117,7 +117,6 @@
                 <!-- 页码 -->
             <div class="info_tab_footer">共计:{{ dataTotal }} <div class="show_pager"> <Pager :total="dataTotal" @change="handlePageChange"  :sizes="sizes"  ref="pager"/></div> </div>    
 
-            <newQRCode :dialogVisible.sync = "dialogVisible" @close="shuaxin"/>
     </div>
 </template>
 
@@ -126,7 +125,6 @@
 import { aflcQrcodeList,aflcQrcodeDelet,getChannel } from '@/api/server/QRCode.js'
 import { parseTime, pickerOptions2 } from '@/utils/index.js'
 import Pager from '@/components/Pagination/index'
-// import newQRCode from './components/newQRDialog'  
 import QRCode from 'qrcode'
 
 export default{
@@ -138,7 +136,6 @@ export default{
         },
       components: {
             Pager,
-            // newQRCode
         },
       data() {
           return {

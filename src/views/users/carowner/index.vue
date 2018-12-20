@@ -48,15 +48,15 @@
             }
         },
         created() {
-            this.CarActiveName = localStorage.getItem('CarActiveName') || 'first';
+            this.CarActiveName = sessionStorage.getItem('CarActiveName') || 'first';
         },
 
         beforeUpdate () {
-            localStorage.setItem('CarActiveName', this.CarActiveName);
+            sessionStorage.setItem('CarActiveName', this.CarActiveName);
         },
 
         beforeDestroy () {
-            localStorage.setItem('CarActiveName', 'first');
+            sessionStorage.setItem('CarActiveName', 'first');
         },
         methods:{
 			handleClick(tab, event) {

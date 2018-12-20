@@ -2,11 +2,11 @@
     <div class="onlineService">
         <div class="onlineService_top onlineCommon">
             <workInfo/>
-            <workOrder/>
+            <workOrder ref="workOrder"/>
         </div>
         <div class="onlineService_bottom onlineCommon">
-            <accountAudit/>
-            <orderManage/>
+            <accountAudit ref="accountAudit"/>
+            <orderManage ref="orderManage"/>
         </div>
     </div>
 </template>
@@ -28,16 +28,22 @@
         },
         data(){
             return {
-              
+                timeOutAss:null,
             }
         },
         methods:{
-
+            setIntervalFunction(){
+                this.$refs.workOrder.WorkOrderDealController();
+                this.$refs.accountAudit.AccountAuditController();
+                this.$refs.orderManage.OrderDealController();
+            }
         },
         mounted(){
-
+            this.timeOutAss = setInterval(this.setIntervalFunction,10*1000);
         },
-
+        beforeDestroy() {
+          clearInterval(this.timeOutAss)
+        },
     }
 </script>
 

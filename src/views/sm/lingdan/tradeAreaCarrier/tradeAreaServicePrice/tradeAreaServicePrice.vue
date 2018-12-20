@@ -1,19 +1,11 @@
 <template>
     <div class="identicalStyle creatQRCode" v-loading="loading">
             <el-form  :inline="true" :model="searchInfo" ref="ruleForm" class="demo-ruleForm classify_searchinfo">
-                <el-form-item label="承运商类型" prop="name">
-                    <el-input v-model="searchInfo.name" clearable>
-                    </el-input>            
-                </el-form-item>
-                <el-form-item label="商圈线路承运商" prop="topic">
-                    <el-input v-model="searchInfo.topic" clearable>
-                    </el-input>
-                </el-form-item>
                 <el-form-item label="商圈"   prop="channalName">
                     <el-input v-model="searchInfo.channalName" clearable>
                     </el-input>
                 </el-form-item>
-                <el-form-item label="到达地"   prop="channalName">
+                <el-form-item label="商圈所在地"   prop="channalName">
                     <el-input v-model="searchInfo.channalName" clearable>
                     </el-input>
                 </el-form-item>
@@ -25,7 +17,7 @@
             <div class="classify_info">
                 <div class="btns_box">
                     <el-button type="primary" icon="el-icon-circle-plus" plain @click="handleClick('new')" :size="btnsize">新增</el-button>
-                    <el-button type="primary" icon="el-icon-delete" plain @click="handleClick('delet')" :size="btnsize">删除</el-button>
+                    <el-button type="primary" icon="el-icon-bell" plain @click="handleClick('delet')" :size="btnsize">启用/禁用</el-button>
                 </div>
                 <div class="info_news" style="height:89%">
                     <el-table
@@ -51,58 +43,34 @@
                         <el-table-column
                             sortable
                             prop="name"
-                            label="商圈线路承运商"
-                            width="250">
+                            label="商圈"
+                            >
                         </el-table-column>
                         <el-table-column
                             prop="topic"
                             :show-overflow-tooltip="true"
                             sortable
-                            label="承运商类型"
+                            label="商圈所在地"
                             >
                         </el-table-column>
                         <el-table-column
                             prop="channalName"
                             :show-overflow-tooltip="true"
                             sortable
-                            label="商圈"
+                            label="操作人"
                             >
                         </el-table-column>
                         <el-table-column
                             prop="url"
                             :show-overflow-tooltip="true"
                             sortable
-                            label="到达地"
+                            label="操作时间"
                             >
                         </el-table-column>
                         <el-table-column
                             prop="qrcode"
                             sortable
-                            label="标准货物分类价格"
-                            width="120">
-                        </el-table-column>
-                        <el-table-column
-                            prop="qrcode"
-                            sortable
-                            label="最低一票收费"
-                            width="120">
-                        </el-table-column>
-                        <el-table-column
-                            prop="qrcode"
-                            sortable
-                            label="运输时效"
-                            width="120">
-                        </el-table-column>
-                        <el-table-column
-                            prop="qrcode"
-                            sortable
-                            label="有效开始日期"
-                            width="160">
-                        </el-table-column>
-                        <el-table-column
-                            prop="qrcode"
-                            sortable
-                            label="有效结束日期"
+                            label="状态"
                             width="160">
                         </el-table-column>
                     </el-table>
@@ -111,7 +79,6 @@
                 <!-- 页码 -->
             <div class="info_tab_footer">共计:{{ dataTotal }} <div class="show_pager"> <Pager :total="dataTotal" @change="handlePageChange"  :sizes="sizes"  ref="pager"/></div> </div>    
 
-            <newQRCode :dialogVisible.sync = "dialogVisible" @close="shuaxin"/>
     </div>
 </template>
 
@@ -120,7 +87,6 @@
 import { aflcQrcodeList,aflcQrcodeDelet,getChannel } from '@/api/server/QRCode.js'
 import { parseTime, pickerOptions2 } from '@/utils/index.js'
 import Pager from '@/components/Pagination/index'
-// import newQRCode from './components/newQRDialog'  
 import QRCode from 'qrcode'
 
 export default{
@@ -132,7 +98,6 @@ export default{
         },
       components: {
             Pager,
-            // newQRCode
         },
       data() {
           return {

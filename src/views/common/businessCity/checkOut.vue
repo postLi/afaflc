@@ -199,7 +199,7 @@ export default {
             })
         },
         doAction(type) {
-            console.log(type)
+            // console.log(type)
             switch (type) {
                 case 'init':
                     this.init()
@@ -221,7 +221,7 @@ export default {
                     routerHref = this.$router.resolve({name:'区域服务及定价'})
                     break;
                 case 'waitService':
-                    console.log(obj)
+                    // console.log(obj)
                     if(obj.determineConfig == 0 && obj.configNum){
                         routerHref = this.$router.resolve({name:'区域服务及定价'})
                     }else{

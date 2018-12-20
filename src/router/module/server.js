@@ -70,11 +70,18 @@ export default {
             component: _import('sm/lingdan/tradeAreaCarrier/index'),
             meta: { title: '商圈承运商', stitle: '商圈', noCache: true , code: ''}
         },
+        {   path: '/sm/lingdan/tradeAreaCarrier/tradeAreaLineCarrier/newTradeAreaLineCarrier',
+            hidden: false,
+            name: '发物流新增商圈承运商',
+            component: _import('sm/lingdan/tradeAreaCarrier/tradeAreaLineCarrier/newTradeAreaLineCarrier'),
+            meta: { title: '新增商圈承运商', stitle: '商圈', noCache: true , code: ''}
+        },
+        
         {   path: '/sm/lingdan/regionalCarrier',
             hidden: false,
-            name: '发物流区域承运商',
+            name: '发物流线路承运商',
             component: _import('sm/lingdan/regionalCarrier/index'),
-            meta: { title: '区域承运商', stitle: '区域', noCache: true , code: ''}
+            meta: { title: '线路承运商', stitle: '区域', noCache: true , code: ''}
         },
       ]
     },

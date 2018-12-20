@@ -87,8 +87,8 @@ export default {
             getOrderCarTrailList(this.page,this.pagesize,trailform).then(res => {
                 console.log('details',res)
                 let trackInfo = objectMerge2(res.data.list);
-                this.listInformation = res.data.list;
-                this.trackInfo = trackInfo.reverse();
+                this.listInformation = res.data.list.reverse();
+                this.trackInfo = trackInfo;
                 this.loading = false;
                 this.nowTable();
                 console.log(this.trackInfo)
