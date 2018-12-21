@@ -37,6 +37,10 @@
                         <el-col :span="8" class="fixPrice blackBook">
                             <el-input v-model="form.primeryPrice" :disabled="unable" v-number-only:point maxlength="7"></el-input>
                             <div class="iconItem">
+                                 <!-- <span  @click="addItem('light',keys,form)" class="addItem" v-if="keys == ligthPriceForms.length-1 && keys != 4">
+                            </span>
+                            <span  @click="reduceItem(keys,'light')" class="reduceItem" v-if="keys == ligthPriceForms.length-1 && ligthPriceForms.length !=1">
+                            </span> -->
                                 <span class="addItem"></span>
                                 <span class="reduceItem"></span>
                             </div>
@@ -343,6 +347,22 @@ export default {
             },
             //rangeTypeClassfy:[],//专线类型选项
             //departClassfy:[],//发车时间选项
+            //送货费定价
+            deliverGoods:[
+                {
+                    startVolume:'0',
+                    endVolume:'',
+                    startVolume:'0',
+                    endVolume:'',
+                }
+            ],
+            fw:[
+                        {
+                            startVolume:'0',
+                            endVolume:'',
+                            price:'',
+                        },
+                    ],
             ligthPriceForms:[
                 {
                     startVolume:'0',

@@ -11,7 +11,7 @@
             :file-list="filelist"
             :limit="limit"
             :before-upload="beforeUpload" 
-            :list-type="listtype"
+            :list-type="listtype"  
             :on-exceed="onexceed"
             :disabled="disabled"
             :on-remove="handleRemove"
