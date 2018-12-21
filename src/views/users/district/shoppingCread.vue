@@ -30,13 +30,13 @@
                          {{keys+1}}
                       </div>
                      <div class="manageShopping_td table_w2">
-                         <el-input v-model="formAll[keys].categoryName"> </el-input>
+                         <el-input v-model="formAll[keys].categoryName" maxlength="20"> </el-input>
                      </div>
                      <div class="manageShopping_td table_w3">
-                         <el-input v-model="formAll[keys].categoryDesc"> </el-input>
+                         <el-input v-model="formAll[keys].categoryDesc" maxlength="50"> </el-input>
                      </div>
                      <div class="manageShopping_td table_w4">
-                         <el-input v-model="formAll[keys].goodsName"> </el-input>
+                         <el-input v-model="formAll[keys].goodsName" maxlength="20"> </el-input>
                      </div>
                      <div class="manageShopping_td table_w5">
                     <el-select v-model="formAll[keys].categoryUnit" placeholder="请选择" clearable>
@@ -57,8 +57,9 @@
                          <el-input v-model="formAll[keys].weight"> </el-input>
                      </div>
                      <div class="manageShopping_td table_w8">
-                   <span  @click="selectUpload(keys)">
-                    <upload class="licensePicture" tip="（必须为jpg/png并且小于5M）" v-model="formAll[keys].uploadCategoryDiagrams"  @fileNmeChange = 'fileNmeChange' />
+                   <span >
+                    <upload class="licensePicture" tip="（必须为jpg/png并且小于5M）" v-model="formAll[keys].uploadCategoryDiagrams"/>
+                    <!-- <upload class="licensePicture" tip="（必须为jpg/png并且小于5M）" v-model="formAll[keys].uploadCategoryDiagrams"  @fileNmeChange = 'fileNmeChange' /> -->
                    </span>
                      </div>
                      <div class="manageShopping_td table_w9">
@@ -81,11 +82,11 @@
       </div>
 </template>
 <script>
-import {data_get_aflcTradeArea_Id,data_get_unitList,aflcGoodscategorySetting} from '@/api/users/district/shoppingDistrict.js'
+import {data_get_aflcTradeArea_Id,data_get_unitList,aflcGoodscategorySetting,aflcGoodscategorySettingTrade} from '@/api/users/district/shoppingDistrict.js'
 import GetCityList from '@/components/GetCityList/city'
 import ShoppingMap from '@/components/map/shoppingMap'
 import { eventBus } from '@/eventBus'
-import Upload from '@/components/Upload/singlei'
+import Upload from '@/components/Upload/singleImage4'
 export default {
   props:{
     params:{
@@ -171,6 +172,25 @@ export default {
           else{
           this.formAll[0].tradeId = this.params[0].id
           this.formAll[0].tradeName = this.params[0].tradeName
+          aflcGoodscategorySettingTrade(this.params[0].id).then(res=>{
+            if(res.data.length>0){
+                this.formAll = res.data
+            }
+            else{
+            this.formAll = [{
+            categoryName:null,
+            categoryDesc:null,
+            goodsName:null,
+            categoryUnit:null,
+            volume:null,
+            weight:null,
+            uploadCategoryDiagrams:null,
+            standardProportion:'标准分类',
+            tradeId:this.params[0].id,
+            tradeName:this.params[0].tradeName,
+            }]
+            }
+        })
           this.dialogFormVisible_add = true;
           }
    },
@@ -199,7 +219,7 @@ export default {
             standardProportion:null,
             tradeId:this.params[0].id,
             tradeName:this.params[0].tradeName,
-            }) 
+            })
             }
         },    
     // 减少分类
@@ -211,29 +231,85 @@ export default {
                 return
         }
     },  
-    fileNmeChange(i){
-        this.formAll[this.selectIndex].uploadCategoryDiagrams = i
-       
-    },
-    selectUpload(i){
-        this.selectIndex = i;
-    },
     // 获取分类列表
     getInformation(){
         data_get_unitList().then(res=>{
             this.unitList = res.data
         }) 
     },
+   completeData(){
+    for(var i=0;i<this.formAll.length;i++){
+        let reg= /^[+]?(0|([1-9]\d*))(\.\d+)?$/  //输入正则
+    if(!this.formAll[i].categoryName){
+     this.$message.warning('第'+(i+1)+'条分类名称都不能为空');
+     return false
+    }
+    if(!this.formAll[i].goodsName){
+     this.$message.warning('第'+(i+1)+'条货物名称都不能为空');
+     return false
+    }
+    if(!this.formAll[i].categoryUnit){
+     this.$message.warning('第'+(i+1)+'条分类单位都不能为空');
+     return false
+    }
+    if(!this.formAll[i].volume){
+     this.$message.warning('第'+(i+1)+'条体积都不能为空');
+     return false
+    }
+    if(!this.formAll[i].weight){
+     this.$message.warning('第'+(i+1)+'条重量都不能为空');
+     return false
+    }    
+    if(!reg.test(this.formAll[i].volume)){
+     this.$message.warning('第'+(i+1)+'条体积必须数字');
+     return false
+    }
+    if(!reg.test(this.formAll[i].weight)){
+     this.$message.warning('第'+(i+1)+'条重量必须数字');
+     return false
+    }
+    if(parseInt(this.formAll[i].volume)<=0){
+     this.$message.warning('第'+(i+1)+'条体积必须大于0');
+     return false
+    }
+    if(parseInt(this.formAll[i].weight)<=0){
+     this.$message.warning('第'+(i+1)+'条重量必须大于0');
+     return false
+    }
+    if(!this.formAll[i].uploadCategoryDiagrams){
+     this.$message.warning('第'+(i+1)+'条上传分类简图都不能为空');
+     return false
+    }
+    if(!this.formAll[i].standardProportion){
+     this.$message.warning('第'+(i+1)+'条与标准分类比例都不能为空');
+     return false
+    }
+    if(parseInt(this.formAll[i].standardProportion)<=0&&i>0){
+     this.$message.warning('第'+(i+1)+'条与标准分类比例必须大于0');
+     return false
+    }
+    if(!reg.test(this.formAll[i].standardProportion)&&i>0){
+     this.$message.warning('第'+(i+1)+'条与标准分类比例必须数字');
+     return false
+    }
+
+    }
+   },
    add_data(){
+            if(this.completeData()==false)
+            {
+               return
+            }  
+            else{
     aflcGoodscategorySetting(this.formAll).then(res=>{
            this.$message.success('新增成功');
            this.changeList();
            this.dialogFormVisible_add = false;     
     }).catch(err=>{
-        this.$message.error('新增失败')
+           this.$message.error('新增失败')
     })
-    },
-
+    }        
+   }
   }
 }
 </script>
@@ -250,8 +326,10 @@ export default {
         }
         .manageShopping_table{
             width: 100%;
-            border-top: 1px solid #d0d7e5;
             border-left: 1px solid #d0d7e5;
+            &:nth-of-type(1){
+            border-top: 1px solid #d0d7e5;
+            }
             .Item_position{
                 position: relative;
                 .addItem{
@@ -290,8 +368,8 @@ export default {
             }
             .el-input__inner{
                 text-align: center;
-                height: 37px;
-                line-height: 37px;
+                height: 35px;
+                line-height: 35px;
             }
            }
             .viewWidth{width: 100%;display: inline-block;
@@ -306,7 +384,9 @@ export default {
            .table_w5{width: 10%}
            .table_w6{width: 10%}
            .table_w7{width: 10%}
-           .table_w8{width: 11%}
+           .table_w8{width: 11%;height: 40px;
+           img{width: 60%;height: 100%}
+           }
            .table_w9{width: 10%}
            .table_w10{width: 10%;height: 40px;}
            .table_w11{width: 20%;}

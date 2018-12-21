@@ -26,7 +26,7 @@
             <el-row>
                 <el-col :span="12">
                     <el-form-item label="app版本号 ：" :label-width="formLabelWidth" prop="appVersion">
-                         <el-input v-model="formData.appVersion" placeholder=""  :disabled="editType=='view'||disabledFlag=='1'" maxlength="2"></el-input>   
+                         <el-input v-model="formData.appVersion" placeholder=""  :disabled="editType=='view'||disabledFlag=='1'" maxlength="4"></el-input>   
                     </el-form-item>
                 </el-col>    
                 <el-col :span="12">

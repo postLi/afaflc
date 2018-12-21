@@ -25,6 +25,8 @@
                              {{ (page - 1)*pagesize + scope.$index + 1 }}
                             </template>
             </el-table-column>
+            <el-table-column  label="货主姓名" prop="shipperName" sortable>
+            </el-table-column>
             <el-table-column  label="所属区域" prop="areaCode" sortable>
             </el-table-column>
             <el-table-column  label="货主账号" prop="mobile" sortable>

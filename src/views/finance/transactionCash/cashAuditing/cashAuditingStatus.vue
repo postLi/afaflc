@@ -66,7 +66,7 @@
                              {{ (page - 1)*pagesize + scope.$index + 1 }}
                             </template>
             </el-table-column>
-            <el-table-column  label="流水号" prop="extractSerial" width="280">
+            <el-table-column  label="流水号" prop="extractSerial" width="280" sortable>
             <template  slot-scope="scope">
                    <cashAuditingDetail
                     :btntext="scope.row.extractSerial"
@@ -80,37 +80,37 @@
                     </cashAuditingDetail>
             </template>
             </el-table-column>
-            <el-table-column  label="申请时间" prop="extractTime">
+            <el-table-column  label="申请时间" prop="extractTime" sortable>
             </el-table-column>
-            <el-table-column  label="用户姓名" prop="name">
+            <el-table-column  label="用户姓名" prop="name" sortable>
             </el-table-column>
-            <el-table-column  label="用户账号" prop="mobile">
+            <el-table-column  label="用户账号" prop="mobile" sortable>
             <template  slot-scope="scope">
                           <h4 class="needMoreInfo" @click="pushOrderSerial(scope.row)">{{ scope.row.mobile}}</h4>
             </template>
             </el-table-column>
-            <el-table-column  label="提现金额" prop="extractSum" width="100">
+            <el-table-column  label="提现金额" prop="extractSum" width="100" sortable>
             </el-table-column>       
-            <el-table-column  label="手续费" prop="" width="100">
+            <el-table-column  label="手续费" prop="" width="100" sortable>
             <template  slot-scope="scope">
              <span>0</span>
             </template>
             </el-table-column>                                                       
-            <el-table-column  label="收款方式" prop="extractWay" width="100">
+            <el-table-column  label="收款方式" prop="extractWay" width="100" sortable>
             </el-table-column>
-            <el-table-column  label="收款账号" prop="extractAccount" show-overflow-tooltip>
+            <el-table-column  label="收款账号" prop="extractAccount" show-overflow-tooltip sortable>
             </el-table-column>
-            <el-table-column  label="处理结果" prop="auditOpinion" width="120">
+            <el-table-column  label="处理结果" prop="auditOpinion" width="120" sortable>
                <template slot-scope="scope">
               <span :class="{freezeName: scope.row.auditOpinion == '待处理' ,blackName: scope.row.auditOpinion == '审核不通过',normalName :scope.row.auditOpinion == '审核通过'}">{{scope.row.auditOpinion}}</span>
                </template>
             </el-table-column>
-            <el-table-column  label="提现结果" prop="extractStatus" width="120">
+            <el-table-column  label="提现结果" prop="extractStatus" width="120" sortable>
                <template slot-scope="scope">
               <span :class="{freezeName: scope.row.extractStatus == '提现中' ,blackName: scope.row.extractStatus == '提现失败',normalName :scope.row.extractStatus == '提现成功'}">{{scope.row.extractStatus}}</span>
                </template>
             </el-table-column>    
-            <el-table-column  label="处理时间" prop="auditTime">
+            <el-table-column  label="处理时间" prop="auditTime" sortable>
             </el-table-column>                                                 
             </el-table> 
         	</div> 
