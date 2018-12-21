@@ -1,11 +1,10 @@
 import fetch from '@/utils/fetch'
 
-const baseurl = "aflc-uc"
+const baseurl = 'aflc-uc'
 const baseurl_two = 'aflccommonservice'
 // const baseurl = "aflcusercenterservice-wtc"
 
-
-//获取商圈管理列表
+// 获取商圈管理列表
 export function data_get_aflcTradeArea_list(page,pagesize,data) {
     return fetch({
       url: '/'+baseurl+'/usercenter/aflcTradeArea/v1/list',

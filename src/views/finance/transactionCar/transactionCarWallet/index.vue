@@ -25,6 +25,8 @@
                              {{ (page - 1)*pagesize + scope.$index + 1 }}
                             </template>
             </el-table-column>
+            <el-table-column  label="车主姓名" prop="driverName" sortable>
+            </el-table-column>
             <el-table-column  label="所属区域" prop="areaCode" sortable>
             </el-table-column>
             <el-table-column  label="车主账号" prop="driverMobile" sortable >

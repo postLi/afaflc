@@ -71,7 +71,6 @@
 
     <!-- 弹框 -->
     <div class="shoppingDialog commoncss tabsWrap">
-
       <el-dialog  :visible="dialogFormVisible_add" :before-close="change" top=5vh v-dialogDrag :title="btntitle" :class="editType=='view'?'':'cardDisplay'">
         <el-tabs v-model="autocheck" type="card">
         <!-- 基本信息 -->
@@ -153,16 +152,16 @@
                          {{keys+1}}
                       </div>
                      <div class="manageShopping_td table_w2">
-                         <el-input v-model="formAllUnit[keys].categoryName"> </el-input>
+                          <el-input v-model="formAllUnit[keys].categoryName" disabled> </el-input>
                      </div>
                      <div class="manageShopping_td table_w11">
-                         <el-input v-model="formAllUnit[keys].categoryDesc"> </el-input>
+                         <el-input v-model="formAllUnit[keys].categoryDesc" disabled> </el-input>
                      </div>
                      <div class="manageShopping_td table_w4">
-                         <el-input v-model="formAllUnit[keys].goodsName"> </el-input>
+                         <el-input v-model="formAllUnit[keys].goodsName" disabled> </el-input>
                      </div>
                      <div class="manageShopping_td table_w5">
-                    <el-select v-model="formAllUnit[keys].categoryUnit" placeholder="请选择" clearable>
+                    <el-select v-model="formAllUnit[keys].categoryUnit" placeholder="请选择" clearable disabled>
                         <el-option
                             v-for="item in unitList"
                             :key="item.code"
@@ -174,16 +173,18 @@
                     </el-select>
                      </div>
                      <div class="manageShopping_td table_w6">
-                         <el-input v-model="formAllUnit[keys].volume"> </el-input>
+                         <el-input v-model="formAllUnit[keys].volume" disabled> </el-input>
                      </div>
                      <div class="manageShopping_td table_w7">
-                         <el-input v-model="formAllUnit[keys].weight"> </el-input>
+                         <el-input v-model="formAllUnit[keys].weight"  disabled> </el-input>
                      </div>
                      <div class="manageShopping_td table_w8">
-                          <el-input v-model="formAllUnit[keys].uploadCategoryDiagrams"> </el-input>
+                         <el-tooltip class="item" effect="dark" content="双击图片查看原图" placement="top">
+                        <img :src="formAllUnit[keys].uploadCategoryDiagrams" v-if="formAllUnit[keys].uploadCategoryDiagrams" v-viewer>
+                         </el-tooltip>
                      </div>
                      <div class="manageShopping_td table_w9">
-                         <span><el-input v-model="formAllUnit[keys].standardProportion"></el-input></span>
+                         <el-input v-model="formAllUnit[keys].standardProportion" disabled> </el-input>
                      </div>
                  </div>
                 </div>
@@ -247,7 +248,7 @@ export default {
         }
     //    选择场主手机号校验
         const ownerPhoneValidator = (rule, val, cb) => {
-            let phoneTest = /(^1[3|4|5|7|8|9]\d{9}$)|(^09\d{8}$)/
+            let phoneTest = /(^1[2|3|4|5|6|7|8|9]\d{9}$)|(^09\d{8}$)/
             !val && cb(new Error('场主手机号码不能为空'))
             if(!(phoneTest.test(val))){
                 cb(new Error('请输入正确的手机号码格式'))
@@ -333,6 +334,7 @@ export default {
     dialogFormVisible_add:{
             handler: function(val, oldVal) {
                 if(!val){
+                    this.autocheck='first',
                     this.$refs['formAll'].resetFields();
                     this.formAll={
                         tradeName:null,
@@ -373,7 +375,6 @@ export default {
     getStr(val){
                 this.formAllData.areaCode = val.area.code;
             },  
-
     getStr1(val){
                 this.formAll.areaCode= val.area.code
                 this.formAll.areaName = val.area.name
@@ -453,9 +454,24 @@ export default {
            this.formAll.areaCode = res.data.areaCode
            this.formAll.points =JSON.parse(res.data.points)
         })
-
         aflcGoodscategorySettingTrade(e.id).then(res=>{
-            console.log('res',res)
+            if(res.data.length>0){
+                this.formAllUnit = res.data
+            }
+            else{
+            this.formAllUnit = [{
+            categoryName:null,
+            categoryDesc:null,
+            goodsName:null,
+            categoryUnit:null,
+            volume:null,
+            weight:null,
+            uploadCategoryDiagrams:null,
+            standardProportion:'标准分类',
+            tradeId:null,
+            tradeName:null,
+            }]
+            }
         })
         this.dialogFormVisible_add = true;
         this.btntitle="详情";
@@ -469,13 +485,11 @@ export default {
 
    // 省市状态表
     changeSelect(){
-       this.selectFlag='1'
-      },    
+    this.selectFlag='1'
+    },    
     returnStr(e){ 
              e.map((s1,o1)=>{
                e[o1].map((item,o2)=> {
-                   console.log('4434',Object.prototype.toString.call(item))
-                //   item = [item.lng,item.lat]
                 if(Object.prototype.toString.call(item)=="[object Object]")
                 {
                        e[o1][o2] = [item.lng,item.lat]
@@ -690,13 +704,14 @@ export default {
 <style lang="scss">
 .District{
 .el-dialog__body{
-    min-height: 800px;
+    min-height: 300px;
 }
 .el-cascader{
         margin-top:-10px;
 }
 .tabsWrap{
     position: static;
+    height: auto;
 }
 .btns_box{
     .el-button{
@@ -728,7 +743,10 @@ export default {
      .el-tabs__header{
        display: none;
      }
- } 
+ }
+ .Ahref{
+     color: #3e9ff1
+ }
 }
 </style>
 
