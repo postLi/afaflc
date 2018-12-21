@@ -189,7 +189,7 @@ export default{
             handleClick(type){
                 switch (type) {
                     case 'new':
-                        this.dialogVisible = true;
+                        this.$router.push({name:'发物流新增商圈增值服务定价'})
                         break
                     case 'delet':
                         if(this.checkedinformation.length > 1 ){

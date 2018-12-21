@@ -2,6 +2,7 @@ import fetch from '../utils/fetch'
 
 const baseurl = 'aflcorderservice'
 const baseurl_two = 'aflc-uc'
+const baseurl_three = 'aflccommonservice'
 
 //工单处理
 export function aflcWorkOrderDealController() {
@@ -24,5 +25,27 @@ export function aflcOrderDealController() {
     return fetch({
       url: '/'+baseurl+'/order/aflcWorkOrderDealController/v1/dealOrderCount',
       method: 'get',
+    }) 
+  }
+
+//首页-在线客服-工作概况
+export function aflcCallLog(timeType) {
+    return fetch({
+      url: '/'+baseurl_three+'/common/aflcCallLog/v1/callLogCount',
+      method: 'post',
+      data:{
+          type:timeType
+      }
+    }) 
+  }
+
+//首页-在线客服-工作概况-响应率
+export function aflcAppRes(timeType) {
+    return fetch({
+      url: '/'+baseurl+'/order/aflcWorkOrderDealController/v1/dealWorkCount',
+      method: 'post',
+      data:{
+          type:timeType
+      }
     }) 
   }

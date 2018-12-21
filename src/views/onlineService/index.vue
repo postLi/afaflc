@@ -1,7 +1,7 @@
 <template>
     <div class="onlineService">
         <div class="onlineService_top onlineCommon">
-            <workInfo/>
+            <workInfo ref="workInfo"/>
             <workOrder ref="workOrder"/>
         </div>
         <div class="onlineService_bottom onlineCommon">
@@ -36,6 +36,7 @@
                 this.$refs.workOrder.WorkOrderDealController();
                 this.$refs.accountAudit.AccountAuditController();
                 this.$refs.orderManage.OrderDealController();
+                this.$refs.workInfo.init();
             }
         },
         mounted(){

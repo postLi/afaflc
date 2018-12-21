@@ -31,21 +31,15 @@ export default {
     computed: {
 
     },
-    // created() {
-    //     this.routeQuery = sessionStorage.getItem('orderSerial');
-    //     console.log('created',this.routeQuery)
-    // },
-
-    // beforeUpdate () {
-    //     sessionStorage.setItem('orderSerial', this.routeQuery);
-    //     console.log('beforeUpdate',this.routeQuery)
-    // },
-
-    // beforeDestroy () {
-    //     sessionStorage.setItem('orderSerial', this.routeQuery);
-    //     console.log('beforeDestroy',this.routeQuery)
-    // },
-
+    created() {
+        this.tradeAreaCarrierName = sessionStorage.getItem('tradeAreaCarrierName') || 'tradeAreaLineCarrier';
+    },
+    beforeUpdate () {
+        sessionStorage.setItem('tradeAreaCarrierName', this.tradeAreaCarrierName);
+    },
+    beforeDestroy () {
+        sessionStorage.setItem('tradeAreaCarrierName', this.tradeAreaCarrierName);
+    },
     mounted() {
         // if (this.$route.query.currentTab) {
         // this.tradeAreaCarrierName = this.$route.query.currentTab

@@ -5,18 +5,10 @@
             <h2>基本信息</h2>
             <el-row :gutter="20">
                 <el-col :span="10">
-                    <el-form-item label="出发地：" prop="startLocation" class="location_line">
+                    <el-form-item label="区域：" prop="startLocation" class="location_line">
                         <el-input v-model="ruleForm.startLocation" v-if="unable" :disabled="unable"></el-input>
                         <vregion :ui="true" @values="regionChangeStart"  class="form-control" v-else>
-                            <el-input v-model="ruleForm.startLocation" placeholder="请选择出发地" ></el-input>
-                        </vregion>
-                    </el-form-item>
-                </el-col>
-                <el-col :span="10">
-                    <el-form-item label="到达地：" prop="endLocation" class="location_line">
-                        <el-input v-model="ruleForm.endLocation" v-if="unable" :disabled="unable"></el-input>
-                        <vregion :ui="true" @values="regionChangeEnd" class="form-control"  v-else>
-                            <el-input v-model="ruleForm.endLocation"  placeholder="请选择到达地"></el-input>
+                            <el-input v-model="ruleForm.startLocation" ></el-input>
                         </vregion>
                     </el-form-item>
                 </el-col>
@@ -24,149 +16,190 @@
         </div>
         <div class=" priceTime rangeCommon">
             <h2>价格时效</h2>
-            <el-form-item label="运输时效：" prop="transportAging">
-                <el-input v-model="ruleForm.transportAging" :disabled="unable" maxlength="3" @keyup.native='handlerChoose' >
-                     <template slot="append">小时</template>
-                </el-input>
-                <!-- <el-radio-group v-model="ruleForm.transportAgingUnit" :disabled="unable">
-                    <el-radio label="天"></el-radio>
-                    <el-radio label="小时"></el-radio>
-                    <el-radio label="多天"></el-radio>
-                </el-radio-group>
-                <span class="supplement">(多天填写如：2-5，其它只能填写阿拉伯数字)</span> -->
-            </el-form-item>
-            
-            <el-form-item label="发车频率：" prop="departureHzData">
-                <el-input placeholder="请输入" v-numberOnly v-model="ruleForm.departureHzData" maxlength="3" :disabled="unable">
-                    <template slot="append">天</template>
-                </el-input>
-                <el-input placeholder="请输入" v-numberOnly v-model="ruleForm.departureHzTime" maxlength="3" :disabled="unable">
-                    <template slot="append">次</template>
-                </el-input>
-            </el-form-item>
-
-            <el-form-item label="轻货价格：" class="jieti" prop="ligthPriceForms">
-                <p>(阶梯价格最大值不填，代表无穷大，例如：10-，代表10立方以上)</p>
+            <el-form-item label="提货费定价：" class="jieti" prop="">
                 <div class="goodsPriceChoose">
-                    <p>
-                        <span>运量（m3）</span>
-                        <span>推荐价格（元 / m3）<strong>(必填)</strong></span>
-                    </p>
-                    <ul v-for="(form,keys) in ligthPriceForms" :key="keys">
-                        <li>
+                    <el-row class="goodsPriceChoose_title">
+                        <el-col :span="8">重量区间（公斤）</el-col>
+                        <el-col :span="8">体积区间（立方）</el-col>
+                        <el-col :span="8">提货费（元）</el-col>
+                    </el-row>
+                    <el-row v-for="(form,keys) in ligthPriceForms" :key="keys">
+                        <el-col :span="8" class="intervalNum blackBook">
                             <el-input v-model.number="form.startVolume" v-numberOnly placeholder="包含" maxlength="7" disabled></el-input>
                             <span>----</span>
                             <el-input v-model.number="form.endVolume" :disabled="unable" v-numberOnly placeholder="包含，整数"  maxlength="7" @change="ifWrong(ligthPriceForms,keys)"></el-input>
-                        </li>
-                        <li>
-                            <el-input v-model="form.primeryPrice" :disabled="unable" v-number-only:point maxlength="7"></el-input>
-                        </li>
-                        <li class="buttons" v-show="ifShowRangeType != '2'">
-                            <span  @click="addItem('light',keys,form)" class="addItem" v-if="keys == ligthPriceForms.length-1 && keys != 4">
-                            </span>
-                            <span  @click="reduceItem(keys,'light')" class="reduceItem" v-if="keys == ligthPriceForms.length-1 && ligthPriceForms.length !=1">
-                            </span>
-                        </li>
-                    </ul>
-                </div>
-            </el-form-item>
-
-            <el-form-item label="重泡货（轻货）：" prop="ligthPriceDottedForms" class="jieti">
-                <p>(阶梯价格最大值不填，代表无穷大，例如：10-，代表10立方以上)</p>
-                <div class="goodsPriceChoose">
-                    <p>
-                        <span>运量（m3）</span>
-                        <span>推荐价格（元 / m3） <strong>(必填)</strong></span>
-                    </p>
-                    <ul v-for="(form,keys) in ligthPriceDottedForms" :key="keys">
-                        <li>
+                        </el-col>
+                        <el-col :span="8" class="intervalNum blackBook">
                             <el-input v-model.number="form.startVolume" v-numberOnly placeholder="包含" maxlength="7" disabled></el-input>
                             <span>----</span>
-                            <el-input v-model.number="form.endVolume" :disabled="unable" v-numberOnly placeholder="包含，整数" maxlength="7" @change="ifWrong(ligthPriceDottedForms,keys)"></el-input>
-                        </li>
-                        <li>
+                            <el-input v-model.number="form.endVolume" :disabled="unable" v-numberOnly placeholder="包含，整数"  maxlength="7" @change="ifWrong(ligthPriceForms,keys)"></el-input>
+                        </el-col>
+                        <el-col :span="8" class="fixPrice blackBook">
                             <el-input v-model="form.primeryPrice" :disabled="unable" v-number-only:point maxlength="7"></el-input>
-                        </li>
-                        <li class="buttons" v-show="ifShowRangeType != '2'">
-                            <span  @click="addItem('lightDotted',keys,form)" class="addItem" v-if="keys == ligthPriceDottedForms.length-1 && keys != 4">
-                            </span>
-                            <span  @click="reduceItem(keys,'lightDotted')" class="reduceItem" v-if="keys == ligthPriceDottedForms.length-1 && ligthPriceDottedForms.length !=1 " >
-                            </span>
-                        </li>
-                    </ul>
+                            <div class="iconItem">
+                                <span class="addItem"></span>
+                                <span class="reduceItem"></span>
+                            </div>
+                        </el-col>
+                    </el-row>
                 </div>
             </el-form-item>
 
-            <el-form-item label="重泡货（重货）：" prop="weigthPriceDottedForms" class="jieti">
-                <p>(阶梯价格最大值不填，代表无穷大，例如：500-，代表500公斤以上)</p>
+            <el-form-item label="送货费定价：" class="jieti" prop="">
                 <div class="goodsPriceChoose">
-                    <p>
-                        <span>运量（kg）</span>
-                        <span>推荐价格（元 / kg） <strong>(必填)</strong></span>
-                    </p>
-                    <ul v-for="(form,keys) in weigthPriceDottedForms" :key="keys">
-                        <li>
+                    <el-row class="goodsPriceChoose_title">
+                        <el-col :span="6">重量区间（公斤）</el-col>
+                        <el-col :span="6">体积区间（立方）</el-col>
+                        <el-col :span="6">送货范围（公里）</el-col>
+                        <el-col :span="6">提货费（元）</el-col>
+                    </el-row>
+                    <el-row v-for="(form,keys) in ligthPriceForms" :key="keys">
+                        <el-col :span="6" class="intervalNum blackBook">
                             <el-input v-model.number="form.startVolume" v-numberOnly placeholder="包含" maxlength="7" disabled></el-input>
                             <span>----</span>
-                            <el-input v-model.number="form.endVolume" :disabled="unable" v-numberOnly placeholder="包含，整数" maxlength="7" @change="ifWrong(weigthPriceDottedForms,keys)"></el-input>
-                        </li>
-                        <li>
-                            <el-input v-model="form.primeryPrice" :disabled="unable" v-number-only:point maxlength="7"></el-input>
-                        </li>
-                        <li class="buttons" v-show="ifShowRangeType != '2'">
-                            <span  @click="addItem('weightDotted',keys,form)" class="addItem" v-if="keys == weigthPriceDottedForms.length-1 && keys != 4">
-                            </span>
-                            <span  @click="reduceItem(keys,'weightDotted')" class="reduceItem" v-if="keys == weigthPriceDottedForms.length-1 && weigthPriceDottedForms.length !=1 " >
-                            </span>
-                        </li>
-                    </ul>
-                </div>
-            </el-form-item>
-
-            <el-form-item label="重货价格：" prop="weigthPriceForms" class="jieti">
-                <p>(阶梯价格最大值不填，代表无穷大，例如：500-，代表500公斤以上)</p>
-                <div class="goodsPriceChoose">
-                    <p>
-                        <span>运量（kg）</span>
-                        <span>推荐价格（元 / kg） <strong>(必填)</strong></span>
-                    </p>
-                    <ul v-for="(form,keys) in weigthPriceForms" :key="keys">
-                        <li>
+                            <el-input v-model.number="form.endVolume" :disabled="unable" v-numberOnly placeholder="包含，整数"  maxlength="7" @change="ifWrong(ligthPriceForms,keys)"></el-input>
+                        </el-col>
+                        <el-col :span="6" class="intervalNum blackBook">
                             <el-input v-model.number="form.startVolume" v-numberOnly placeholder="包含" maxlength="7" disabled></el-input>
                             <span>----</span>
-                            <el-input v-model.number="form.endVolume" :disabled="unable" v-numberOnly placeholder="包含，整数" maxlength="7" @change="ifWrong(weigthPriceForms,keys)"></el-input>
-                        </li>
-                        <li>
+                            <el-input v-model.number="form.endVolume" :disabled="unable" v-numberOnly placeholder="包含，整数"  maxlength="7" @change="ifWrong(ligthPriceForms,keys)"></el-input>
+                            <div class="iconItem">
+                                <span class="addItem"></span>
+                                <span class="reduceItem"></span>
+                            </div>
+                        </el-col>
+                        <el-col :span="6" class="intervalNum blackBook">
+                            <el-input v-model.number="form.startVolume" v-numberOnly placeholder="包含" maxlength="7" disabled></el-input>
+                            <span>----</span>
+                            <el-input v-model.number="form.endVolume" :disabled="unable" v-numberOnly placeholder="包含，整数"  maxlength="7" @change="ifWrong(ligthPriceForms,keys)"></el-input>
+                            <div class="iconItem">
+                                <span class="addItem"></span>
+                                <span class="reduceItem"></span>
+                            </div>
+                        </el-col>
+                        <el-col :span="6" class="fixPrice blackBook">
                             <el-input v-model="form.primeryPrice" :disabled="unable" v-number-only:point maxlength="7"></el-input>
-                        </li>
-                        <li class="buttons" v-show="ifShowRangeType != '2'">
-                            <span  @click="addItem('weight',keys,form)" class="addItem" v-if="keys == weigthPriceForms.length-1 && keys != 4">
-                            </span>
-                            <span  @click="reduceItem(keys,'weight')" class="reduceItem" v-if="keys == weigthPriceForms.length-1 && weigthPriceForms.length !=1 " >
-                            </span>
-                        </li>
-                    </ul>
+                           
+                        </el-col>
+                    </el-row>
                 </div>
             </el-form-item>
 
-            <el-form-item label="最低一票价格：" prop="lowerPrice">
+            <el-form-item label="保价费定价：" class="jieti" prop="">
+                <div class="goodsPriceChoose">
+                    <el-row class="goodsPriceChoose_title">
+                        <el-col :span="8">干线费区间（元）</el-col>
+                        <el-col :span="8">赠送保额（元）</el-col>
+                        <el-col :span="8">超出赠送保额保费费率（千分之）</el-col>
+                    </el-row>
+                    <el-row v-for="(form,keys) in ligthPriceForms" :key="keys">
+                        <el-col :span="8" class="intervalNum blackBook">
+                            <el-input v-model.number="form.startVolume" v-numberOnly placeholder="包含" maxlength="7" disabled></el-input>
+                            <span>----</span>
+                            <el-input v-model.number="form.endVolume" :disabled="unable" v-numberOnly placeholder="包含，整数"  maxlength="7" @change="ifWrong(ligthPriceForms,keys)"></el-input>
+                        </el-col>
+                        <el-col :span="8" class="intervalNum blackBook">
+                            <el-input v-model.number="form.startVolume" v-numberOnly placeholder="包含" maxlength="7" disabled></el-input>
+                            <span>----</span>
+                            <el-input v-model.number="form.endVolume" :disabled="unable" v-numberOnly placeholder="包含，整数"  maxlength="7" @change="ifWrong(ligthPriceForms,keys)"></el-input>
+                        </el-col>
+                        <el-col :span="8" class="fixPrice blackBook">
+                            <el-input v-model="form.primeryPrice" :disabled="unable" v-number-only:point maxlength="7"></el-input>
+                            <div class="iconItem">
+                                <span class="addItem"></span>
+                                <span class="reduceItem"></span>
+                            </div>
+                        </el-col>
+                    </el-row>
+                </div>
+            </el-form-item>
+
+            <el-form-item label="最低一票收费：" prop="lowerPrice" class="inlineForm inlineForm_odd">
                 <el-input v-model="ruleForm.lowerPrice" placeholder="报价" :disabled="unable" v-number-only:point>
                      <template slot="append">元</template>
                 </el-input> 
             </el-form-item>
 
-            <el-form-item label="线路说明：" class="textarea" prop="transportRemark" >
-                <el-input type="textarea" 
-                    :disabled="unable"
-                    v-model="ruleForm.transportRemark" 
-                    :autosize="{ minRows: 3, maxRows: 10}"
-                    :maxlength="maxlength" 
-                    placeholder="请填写备注30-2000个字。提供原创说明有助于提升线路效果。">
-                </el-input>
-                <span v-show="ifShowRangeType != '2'"><i>{{ruleForm.transportRemark.length}}</i>/{{maxlength}}</span>
-                <p class="supplement">请对您的线路进行补充说明，尽量使用市场上或物流行业内的常用词。</p>
+            <el-form-item label="最高一票收费：" prop="lowerPrice" class="inlineForm">
+                <el-input v-model="ruleForm.lowerPrice" placeholder="报价" :disabled="unable" v-number-only:point>
+                     <template slot="append">元</template>
+                </el-input> 
             </el-form-item>
 
+            <el-form-item label="代收货款手续费定价：" class="jieti" prop="">
+                <div class="goodsPriceChoose">
+                    <el-row class="goodsPriceChoose_title">
+                        <el-col :span="12">干线费区间（元）</el-col>
+                        <el-col :span="12">代收货款手续费计算</el-col>
+                    </el-row>
+                    <el-row v-for="(form,keys) in ligthPriceForms" :key="keys">
+                        <el-col :span="12" class="intervalNum blackBook">
+                            <el-input v-model.number="form.startVolume" v-numberOnly placeholder="包含" maxlength="7" disabled></el-input>
+                            <span>----</span>
+                            <el-input v-model.number="form.endVolume" :disabled="unable" v-numberOnly placeholder="包含，整数"  maxlength="7" @change="ifWrong(ligthPriceForms,keys)"></el-input>
+                        </el-col>
+                        <!-- <el-col :span="12" class="intervalNum blackBook">
+                            <el-input v-model.number="form.startVolume" v-numberOnly placeholder="包含" maxlength="7" disabled></el-input>
+                            <span>----</span>
+                            <el-input v-model.number="form.endVolume" :disabled="unable" v-numberOnly placeholder="包含，整数"  maxlength="7" @change="ifWrong(ligthPriceForms,keys)"></el-input>
+                        </el-col> -->
+                        <el-col :span="12" class="fixPrice blackBook">
+                            <el-input v-model="form.primeryPrice" :disabled="unable" v-number-only:point maxlength="7"></el-input>
+                            <div class="iconItem">
+                                <span class="addItem"></span>
+                                <span class="reduceItem"></span>
+                            </div>
+                        </el-col>
+                    </el-row>
+                </div>
+            </el-form-item>
+
+            <el-form-item label="最低一票收费：" prop="lowerPrice" class="inlineForm inlineForm_odd">
+                <el-input v-model="ruleForm.lowerPrice" placeholder="报价" :disabled="unable" v-number-only:point>
+                     <template slot="append">元</template>
+                </el-input> 
+            </el-form-item>
+
+            <el-form-item label="最高一票收费：" prop="lowerPrice" class="inlineForm">
+                <el-input v-model="ruleForm.lowerPrice" placeholder="报价" :disabled="unable" v-number-only:point>
+                     <template slot="append">元</template>
+                </el-input> 
+            </el-form-item>
+
+            <el-form-item label="时效保障费定价：" class="jieti" prop="">
+                <div class="goodsPriceChoose">
+                    <el-row class="goodsPriceChoose_title">
+                        <el-col :span="12">干线费区间（元）</el-col>
+                        <el-col :span="12">时效保障费计算</el-col>
+                    </el-row>
+                    <el-row v-for="(form,keys) in ligthPriceForms" :key="keys">
+                        <el-col :span="12" class="intervalNum blackBook">
+                            <el-input v-model.number="form.startVolume" v-numberOnly placeholder="包含" maxlength="7" disabled></el-input>
+                            <span>----</span>
+                            <el-input v-model.number="form.endVolume" :disabled="unable" v-numberOnly placeholder="包含，整数"  maxlength="7" @change="ifWrong(ligthPriceForms,keys)"></el-input>
+                        </el-col>
+                        <el-col :span="12" class="fixPrice blackBook">
+                            <el-input v-model="form.primeryPrice" :disabled="unable" v-number-only:point maxlength="7"></el-input>
+                            <div class="iconItem">
+                                <span class="addItem"></span>
+                                <span class="reduceItem"></span>
+                            </div>
+                        </el-col>
+                    </el-row>
+                </div>
+            </el-form-item>
+
+            <el-form-item label="最低一票收费：" prop="lowerPrice" class="inlineForm inlineForm_odd">
+                <el-input v-model="ruleForm.lowerPrice" placeholder="报价" :disabled="unable" v-number-only:point>
+                     <template slot="append">元</template>
+                </el-input> 
+            </el-form-item>
+
+            <el-form-item label="最高一票收费：" prop="lowerPrice" class="inlineForm">
+                <el-input v-model="ruleForm.lowerPrice" placeholder="报价" :disabled="unable" v-number-only:point>
+                     <template slot="append">元</template>
+                </el-input> 
+            </el-form-item>
         </div>
         <el-form-item class="fromfooter" v-show="ifShowRangeType != '2'">
             <el-button type="primary" plain  icon="el-icon-success" @click="submitForm('ruleForm')">{{ifShowRangeType == '1' ? '修改' : '立即发布'}}</el-button>
@@ -185,33 +218,9 @@ import { createWebTransport,getWebAflcTransportRange,updateWebAflcTransportRange
 import vregion from '@/components/vregion/Region.vue'
 export default {
     components:{
-        // upload,
-        // tmsmap,
         vregion
     },
     data() {
-        // var checkStartLocationContactsMobile  = (rule, value, callback) => {
-        //     // console.log(value)
-        //     if (value === '') {
-        //         callback(new Error('请输入手机号码'));
-        //     } else {
-        //         if (!REGEX.MOBILE.test(value)) {
-        //             callback(new Error('请输入正确的手机号码格式'));
-        //         }
-        //         callback();
-        //     }
-        // };
-        // var checkEndLocationContactsMobile  = (rule, value, callback) => {
-        //     if (value === '') {
-        //         callback(new Error('请输入手机号码'));
-        //     } else {
-        //         if (!REGEX.MOBILE.test(value)) {
-        //             callback(new Error('请输入正确的手机号码格式'));
-        //         }
-        //         callback();
-        //     }
-        // };
-
         var checkWeigthPriceForms = (rule,value,callback) => {
             if(this.weigthPriceForms[0].endVolume == ''){
                 callback(new Error('请补充重货运量范围'));
@@ -854,6 +863,7 @@ export default {
                 }
             }
             .priceTime{
+                margin-bottom: 18px;
                 .el-input{
                     width: 264px;
                 }
@@ -867,29 +877,17 @@ export default {
                         }
                     }
                 }
-                .el-form-item:nth-child(3){
-                    .el-form-item__content{
-                        .el-input{
-                            width:130px;
-                            .el-input-group__append{
-                                background-color: #f5f7fa;
-                                color: #909399;
-                                vertical-align: middle;
-                                display: table-cell;
-                                position: relative;
-                                border: 1px solid #dcdfe6;
-                                border-left: 0 none;
-                                padding: 0 20px;
-                                white-space: nowrap;
-                                top: 0;
-                                right: 0;
-                            }
-                        }
-                    }
+                .inlineForm{
+                    display: inline-block;
+                    margin-bottom: 40px;
+                }
+
+                .inlineForm_odd{
+                    margin-left: 8%;
                 }
                 .jieti{
                     .el-form-item__content{
-                        width: 70%;
+                        width: 80%;
                         .el-input{
                             width: 50px;
                         }
@@ -899,6 +897,70 @@ export default {
                         }
                         .goodsPriceChoose{  
                             border: 1px solid #ccc;
+                            .el-row{
+                                text-align: center;
+                                .el-col{
+                                    border-right: 1px solid #ccc;
+                                    position: relative;
+                                    .iconItem{
+                                        float: right;
+                                        padding-top:6px; 
+                                        margin-right: 10px;
+                                        height: 40px;
+                                        .addItem{
+                                            display:inline-block;
+                                            height: 26px;
+                                            width:26px;
+                                            line-height: 26px;
+                                            cursor: pointer;
+                                            background:url('../../../../../assets/icom/23zengjia.png') no-repeat center;
+                                            // position: absolute;
+                                            // top:15px;
+                                            // right: 80px;
+                                            &:hover{
+                                                background:url('../../../../../assets/icom/24zengjia-b.png') no-repeat center;
+                                            }
+                                        }
+                                        .reduceItem{
+                                            display:inline-block;
+                                            height: 26px;
+                                            width:26px;
+                                            line-height: 26px;
+                                            cursor: pointer;
+                                            background:url('../../../../../assets/icom/21shanchu.png') no-repeat center;
+                                            // position: absolute;
+                                            // top:15px;
+                                            // right:40px;
+                                            &:hover{
+                                                background:url('../../../../../assets/icom/22shanchu-b.png') no-repeat center;
+                                            }
+                                        }
+                                    }
+                                }
+                                .el-col:last-child{
+                                    border: 0 none;
+                                }
+                                .intervalNum{
+                                    .el-input{
+                                        width: 24%;
+                                        min-width: 105px;
+                                    }
+                                }
+                                .fixPrice{
+                                    .el-input{
+                                        width:40%;
+                                    }
+                                }
+
+                                .blackBook{
+                                    padding: 10px 0;
+                                }
+                            }
+                            .goodsPriceChoose_title{
+                                background: #eaefff;
+                                font-size: 14px;
+                                color: #333333;
+                            }
                             p{
                                 padding: 6px 50px;                     
                                 background: #eaefff;
@@ -956,9 +1018,9 @@ export default {
                                     line-height: 26px;
                                     cursor: pointer;
                                     background:url('../../../../../assets/icom/23zengjia.png') no-repeat center;
-                                    position: absolute;
-                                    top:15px;
-                                    right: 80px;
+                                    // position: absolute;
+                                    // top:15px;
+                                    // right: 80px;
                                     &:hover{
                                         background:url('../../../../../assets/icom/24zengjia-b.png') no-repeat center;
                                     }
@@ -970,41 +1032,13 @@ export default {
                                     line-height: 26px;
                                     cursor: pointer;
                                     background:url('../../../../../assets/icom/21shanchu.png') no-repeat center;
-                                    position: absolute;
-                                    top:15px;
-                                    right:40px;
+                                    // position: absolute;
+                                    // top:15px;
+                                    // right:40px;
                                     &:hover{
                                         background:url('../../../../../assets/icom/22shanchu-b.png') no-repeat center;
                                     }
                                 }
-                            }
-                        }
-                    }
-                }
-                .el-form-item:nth-child(6),{
-                    .el-form-item__content{
-                        .el-input{
-                            width: 100px;
-                        }
-                    }
-                }
-                .el-form-item:last-child,{
-                    .el-form-item__content{
-                        width: 600px;
-                        .el-textarea__inner{
-                            padding-bottom: 20px;
-                        }
-                        span{
-                            font-size: 12px;
-                            color: #999;
-                            position: absolute;
-                            right: 10px;
-                            bottom: 40px;
-                            line-height: 20px;
-                            i{
-                                color: red;
-                                font-style: normal;
-                                margin-right: 5px;
                             }
                         }
                     }

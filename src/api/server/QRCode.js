@@ -1,6 +1,6 @@
 import fetch from '@/utils/fetch'
 
-const baseurl = "aflccommonservice"
+const baseurl = "aflccommonservice-wtc"
 
 //根据条件获取二维码生成表列表
 export function aflcQrcodeList(page,pagesize,data) {

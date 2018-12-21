@@ -9,9 +9,10 @@
                     <el-input v-model="searchInfo.topic" clearable>
                     </el-input>
                 </el-form-item>
-                <el-form-item label="渠道名称"   prop="channalName">
-                    <el-input v-model="searchInfo.channalName" clearable>
-                    </el-input>
+                <el-form-item label="渠道名称"   prop="channal">
+                    <!-- <el-input v-model="searchInfo.channalName" clearable>
+                    </el-input> -->
+                    <selectChannel  @change = "getVal"  v-model="searchInfo.channal"/>
                 </el-form-item>
                 <el-form-item class="btnChoose fr"  style="margin-left:0;">
                     <el-button type="primary" icon="el-icon-search" plain :size="btnsize" @click="handleSearch('search')">搜索</el-button>
@@ -110,6 +111,7 @@ import { parseTime, pickerOptions2 } from '@/utils/index.js'
 import Pager from '@/components/Pagination/index'
 import newQRCode from './components/newQRDialog'  
 import QRCode from 'qrcode'
+import selectChannel from '@/components/selectTree/QRcode'
 
 export default{
       props: {
@@ -120,7 +122,8 @@ export default{
         },
       components: {
             Pager,
-            newQRCode
+            newQRCode,
+            selectChannel
         },
       data() {
           return {
@@ -135,7 +138,7 @@ export default{
               searchInfo: {
                   name:'',
                   topic:'',
-                  channalName:'',
+                  channal:'',
                 },
               tableData: [],
               checkedinformation: [],
@@ -165,6 +168,9 @@ export default{
       beforeDestroy() {
         },
       methods: {
+             getVal(val){
+                this.searchInfo.channal = val;
+            },
           handlePageChange(obj) {
               this.page = obj.pageNum
                 this.pagesize = obj.pageSize
@@ -203,7 +209,7 @@ export default{
                         this. searchInfo ={
                             name:'',
                             topic:'',
-                            channalName:'',
+                            channal:'',
                         }
                         this.firstblood()
                         break

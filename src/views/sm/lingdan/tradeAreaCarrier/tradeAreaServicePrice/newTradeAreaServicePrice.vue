@@ -5,18 +5,18 @@
             <h2>基本信息</h2>
             <el-row :gutter="20">
                 <el-col :span="10">
-                    <el-form-item label="出发地：" prop="startLocation" class="location_line">
+                    <el-form-item label="商圈所在地：" prop="startLocation" class="location_line">
                         <el-input v-model="ruleForm.startLocation" v-if="unable" :disabled="unable"></el-input>
                         <vregion :ui="true" @values="regionChangeStart"  class="form-control" v-else>
-                            <el-input v-model="ruleForm.startLocation" placeholder="请选择出发地" ></el-input>
+                            <el-input v-model="ruleForm.startLocation" ></el-input>
                         </vregion>
                     </el-form-item>
                 </el-col>
                 <el-col :span="10">
-                    <el-form-item label="到达地：" prop="endLocation" class="location_line">
+                    <el-form-item label="商圈：" prop="endLocation" class="location_line">
                         <el-input v-model="ruleForm.endLocation" v-if="unable" :disabled="unable"></el-input>
                         <vregion :ui="true" @values="regionChangeEnd" class="form-control"  v-else>
-                            <el-input v-model="ruleForm.endLocation"  placeholder="请选择到达地"></el-input>
+                            <el-input v-model="ruleForm.endLocation" ></el-input>
                         </vregion>
                     </el-form-item>
                 </el-col>
@@ -24,33 +24,27 @@
         </div>
         <div class=" priceTime rangeCommon">
             <h2>价格时效</h2>
-            <el-form-item label="运输时效：" prop="transportAging">
-                <el-input v-model="ruleForm.transportAging" :disabled="unable" maxlength="3" @keyup.native='handlerChoose' >
-                     <template slot="append">小时</template>
-                </el-input>
-                <!-- <el-radio-group v-model="ruleForm.transportAgingUnit" :disabled="unable">
-                    <el-radio label="天"></el-radio>
-                    <el-radio label="小时"></el-radio>
-                    <el-radio label="多天"></el-radio>
-                </el-radio-group>
-                <span class="supplement">(多天填写如：2-5，其它只能填写阿拉伯数字)</span> -->
-            </el-form-item>
-            
-            <el-form-item label="发车频率：" prop="departureHzData">
-                <el-input placeholder="请输入" v-numberOnly v-model="ruleForm.departureHzData" maxlength="3" :disabled="unable">
-                    <template slot="append">天</template>
-                </el-input>
-                <el-input placeholder="请输入" v-numberOnly v-model="ruleForm.departureHzTime" maxlength="3" :disabled="unable">
-                    <template slot="append">次</template>
-                </el-input>
-            </el-form-item>
-
-            <el-form-item label="轻货价格：" class="jieti" prop="ligthPriceForms">
-                <p>(阶梯价格最大值不填，代表无穷大，例如：10-，代表10立方以上)</p>
+            <el-form-item label="提货费定价：" class="jieti" prop="">
+                <div class="goodsPriceChoose">
+                    <el-row class="goodsPriceChoose_title">
+                        <el-col :span="12">标准货物分类数量区间</el-col>
+                        <el-col :span="12">提货费 (元) </el-col>
+                    </el-row>
+                    <el-row v-for="(form,keys) in ligthPriceForms" :key="keys">
+                        <el-col :span="12">
+                            <el-input v-model.number="form.startVolume" v-numberOnly placeholder="包含" maxlength="7" disabled></el-input>
+                            <span>----</span>
+                            <el-input v-model.number="form.endVolume" :disabled="unable" v-numberOnly placeholder="包含，整数"  maxlength="7" @change="ifWrong(ligthPriceForms,keys)"></el-input>
+                        </el-col>
+                        <el-col :span="12">
+                            <el-input v-model="form.primeryPrice" :disabled="unable" v-number-only:point maxlength="7"></el-input>
+                        </el-col>
+                    </el-row>
+                </div>
                 <div class="goodsPriceChoose">
                     <p>
-                        <span>运量（m3）</span>
-                        <span>推荐价格（元 / m3）<strong>(必填)</strong></span>
+                        <span>标准货物分类数量区间</span>
+                        <span>提货费 (元) </span>
                     </p>
                     <ul v-for="(form,keys) in ligthPriceForms" :key="keys">
                         <li>
@@ -71,12 +65,13 @@
                 </div>
             </el-form-item>
 
-            <el-form-item label="重泡货（轻货）：" prop="ligthPriceDottedForms" class="jieti">
+            <el-form-item label="送货费定价：" prop="ligthPriceDottedForms" class="jieti">
                 <p>(阶梯价格最大值不填，代表无穷大，例如：10-，代表10立方以上)</p>
                 <div class="goodsPriceChoose">
                     <p>
-                        <span>运量（m3）</span>
-                        <span>推荐价格（元 / m3） <strong>(必填)</strong></span>
+                        <span>标准货物分类数量区间</span>
+                        <!-- <span>送货范围（公里）</span> -->
+                        <span>送货费 (元)</span>
                     </p>
                     <ul v-for="(form,keys) in ligthPriceDottedForms" :key="keys">
                         <li>
@@ -185,33 +180,9 @@ import { createWebTransport,getWebAflcTransportRange,updateWebAflcTransportRange
 import vregion from '@/components/vregion/Region.vue'
 export default {
     components:{
-        // upload,
-        // tmsmap,
         vregion
     },
     data() {
-        // var checkStartLocationContactsMobile  = (rule, value, callback) => {
-        //     // console.log(value)
-        //     if (value === '') {
-        //         callback(new Error('请输入手机号码'));
-        //     } else {
-        //         if (!REGEX.MOBILE.test(value)) {
-        //             callback(new Error('请输入正确的手机号码格式'));
-        //         }
-        //         callback();
-        //     }
-        // };
-        // var checkEndLocationContactsMobile  = (rule, value, callback) => {
-        //     if (value === '') {
-        //         callback(new Error('请输入手机号码'));
-        //     } else {
-        //         if (!REGEX.MOBILE.test(value)) {
-        //             callback(new Error('请输入正确的手机号码格式'));
-        //         }
-        //         callback();
-        //     }
-        // };
-
         var checkWeigthPriceForms = (rule,value,callback) => {
             if(this.weigthPriceForms[0].endVolume == ''){
                 callback(new Error('请补充重货运量范围'));
@@ -899,6 +870,21 @@ export default {
                         }
                         .goodsPriceChoose{  
                             border: 1px solid #ccc;
+                            .el-row{
+                                text-align: center;
+                                .el-col{
+                                    border-right: 1px solid #ccc;
+                                }
+
+                                .el-col:last-child{
+                                    border: 0 none;
+                                }
+                            }
+                            .goodsPriceChoose_title{
+                                background: #eaefff;
+                                font-size: 14px;
+                                color: #333333;
+                            }
                             p{
                                 padding: 6px 50px;                     
                                 background: #eaefff;
