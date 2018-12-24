@@ -25,22 +25,25 @@
                              {{ (page - 1)*pagesize + scope.$index + 1 }}
                             </template>
             </el-table-column>
+            <el-table-column  label="货主账号" prop="mobile" sortable >
+                <template  slot-scope="scoped">
+                    <h4 class="needMoreInfo" @click="pushOrderSerial(scoped.row)">{{ scoped.row.mobile}}</h4>
+                </template>
+            </el-table-column>
             <el-table-column  label="货主姓名" prop="shipperName" sortable>
             </el-table-column>
             <el-table-column  label="所属区域" prop="areaCode" sortable>
-            </el-table-column>
-            <el-table-column  label="货主账号" prop="mobile" sortable>
-                <template  slot-scope="scoped">
-                    <h4 class="needMoreInfo" @click="pushOrderSerial(scoped.row)">{{ scoped.row.mobile}}</h4>
+                <template slot-scope="scoped">
+               {{scoped.cityCode}}{{scoped.areaCode}}
                 </template>
             </el-table-column>
             <el-table-column  label="可用余额" prop="balance" sortable>
             </el-table-column>
             <el-table-column  label="充值赠送余额" prop="availableBalance" sortable>
             </el-table-column>
-            <el-table-column  label="在线交易奖励金（已奖励 / 额度）" sortable>
+            <el-table-column  label="在线交易奖励金（已奖励 / 额度）" sortable width="280">
             <template  slot-scope="scoped">
-             {{scoped.row.gainDiscountsReward}}/{{scoped.row.discountsRewardMax}}
+             {{scoped.row.gainDiscountsReward}}  /  {{scoped.row.discountsRewardMax}}
             </template>
             </el-table-column> 
             <el-table-column  label="优惠券数" prop="couponCount" sortable>

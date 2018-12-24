@@ -33,7 +33,6 @@
                     >
                     </el-date-picker>
             </el-form-item>   
-
                 <el-form-item class='fr'> 
                   <el-button type="primary" plain :size="btnsize" icon="el-icon-search" @click="getdata_search">搜索</el-button>
                   <el-button type="info"  plain :size="btnsize" icon="fontFamily aflc-icon-qingkong" @click="clearSearch">清空</el-button>

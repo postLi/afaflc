@@ -25,24 +25,27 @@
                              {{ (page - 1)*pagesize + scope.$index + 1 }}
                             </template>
             </el-table-column>
-            <el-table-column  label="车主姓名" prop="driverName" sortable>
-            </el-table-column>
-            <el-table-column  label="所属区域" prop="areaCode" sortable>
-            </el-table-column>
             <el-table-column  label="车主账号" prop="driverMobile" sortable >
                 <template  slot-scope="scoped">
                     <h4 class="needMoreInfo" @click="pushOrderSerial(scoped.row)">{{ scoped.row.driverMobile}}</h4>
                 </template>
             </el-table-column>
+            <el-table-column  label="车主姓名" prop="driverName" sortable>
+            </el-table-column>
+            <el-table-column  label="所属区域" prop="areaCode" sortable>
+                <template slot-scope="scoped">
+               {{scoped.row.cityCode}}{{scoped.row.areaCode}}
+                </template>                
+            </el-table-column>
             <el-table-column  label="可提现余额" prop="availableAmount" sortable>
             </el-table-column>
             <el-table-column  label="待处理提现金额" prop="waitAvailableAmount" sortable>
             </el-table-column>
-            <el-table-column  label="在线交易奖励金（已奖励 / 额度）" sortable>
+            <el-table-column  label="在线交易奖励金（已奖励 / 额度）" sortable width="280">
             <template  slot-scope="scoped">
-             {{scoped.row.gainAwardReward}}/{{scoped.row.awardRewardMax}}
+             {{scoped.row.gainAwardReward}}  /  {{scoped.row.awardRewardMax}}
             </template>
-            </el-table-column>       
+            </el-table-column>
             <el-table-column  label="保证金" prop="pledgeAmount" sortable>
             </el-table-column>                                     
             </el-table> 

@@ -693,18 +693,18 @@ export default {
                   }                                 
                     if(this.formAllData.aflcCouponList[i].remissionDiscount){
                    if(this.formAllData.aflcCouponList[i].couponType==null){
-                       this.$message.warning('请选择优惠卷类型');
+                       this.$message.warning('请选择优惠券类型');
                         return false
                     }  
                     }
                   if(this.formAllData.aflcCouponList[i].couponType=='AF046201'){
                    if(!reg.test(this.formAllData.aflcCouponList[i].remissionDiscount))
                    {
-                       this.$message.warning('满减卷输入0以上的正整数');
+                       this.$message.warning('满减券输入0以上的正整数');
                         return false
                    }
                    else if(this.formAllData.aflcCouponList[i].remissionDiscount>this.formAllData.aflcCouponList[i].conditionDeduction){
-                       this.$message.warning('满减卷不能大于最高满减条件');
+                       this.$message.warning('满减券不能大于最高满减条件');
                         return false
                    }
                     }
@@ -712,7 +712,7 @@ export default {
                    {
                    if(!reg2.test(this.formAllData.aflcCouponList[i].remissionDiscount))
                    {
-                       this.$message.warning('折扣卷输入数字，输入的范围值为 0<x<10，精确到小数点后一位');
+                       this.$message.warning('折扣券输入数字，输入的范围值为 0<x<10，精确到小数点后一位');
                         return false
                    }
                    }
@@ -790,9 +790,9 @@ export default {
            }).catch(res=>{
               this.$emit('getData');
                     console.log('res',res.text)
-                    if(res.text='已发放过优惠卷不能进行修改')
+                    if(res.text='已发放过优惠券不能进行修改')
                     {
-                    this.$message.error('已发放过优惠卷不能进行修改')
+                    this.$message.error('已发放过优惠券不能进行修改')
                     }
                     else{
                     this.$message.error('修改失败')

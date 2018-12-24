@@ -73,7 +73,7 @@
                     btntype="primary"
                     icon="el-icon-news"
                     editType="Give"
-                    btntitle="优惠卷发放"
+                    btntitle="优惠券发放"
                     :params = 'selectRowData'
                     @getData="getDataList"
                     >
@@ -85,7 +85,7 @@
                     btntype="primary"
                     icon="el-icon-news"
                     editType="Build"
-                    btntitle="优惠卷生成"
+                    btntitle="优惠券生成"
                     :params = 'selectRowData'
                     @getData="getDataList"
                     >

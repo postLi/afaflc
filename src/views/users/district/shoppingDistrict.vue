@@ -584,7 +584,7 @@ export default {
                         message: '已取消'
                     })
                     this.$refs.multipleTable.clearSelection();
-                })   
+                })
             },
             
         // 启用禁用
@@ -617,7 +617,7 @@ export default {
                         this.firstblood();       
                         this.$refs.multipleTable.clearSelection(); 
                     })
-                }
+                 }
         },  
         handlePageChange(obj) {
             this.page = obj.pageNum
@@ -673,8 +673,8 @@ export default {
             id:this.selectRowData[0].id,
             fenceName:this.formAll.fenceName,
             points:JSON.stringify(this.formAll.points)
-        }
-        }else{
+        }}
+        else{
             forms={
             areaCode:this.formAll.areaCode,
             areaName:this.formAll.areaName,

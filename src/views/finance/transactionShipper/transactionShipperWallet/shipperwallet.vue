@@ -391,7 +391,7 @@ export default {
        })
 
        },
-    // 优惠卷领用
+    // 优惠券领用
     firstblood3(){
      data_aflcCouponUseList(this.page3,this.pagesize3,this.formAllData3).then(res => {
                     this.dataTotal3 = res.data.totalCount
