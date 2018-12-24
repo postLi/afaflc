@@ -8,6 +8,7 @@
         v-if="!route.hidden"
         :class="{'is-active': detectPActive(route)}" 
         ref="sidebaritem"
+        @click.stop="toggle($event)" 
         >
         <!-- 有子菜单但不展示 && 没有子菜单 -->
         <router-link  v-if="isFolder(route) ? route.noDropdown : (!route.tab && true)" :to="route.path" :key="route.name" >
@@ -115,6 +116,7 @@ export default {
       return true
     },
     toggle(event) {
+        console.log('1123123')
       const el = closest(event.target, 'li')
       const ul = closest(el, 'ul')
       const lis = Array.from(ul.querySelectorAll('.isOpen') || []).filter(l => {

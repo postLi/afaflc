@@ -116,7 +116,7 @@
 
 <script type="text/javascript">
 
-import { aflcQrcodeList,aflcQrcodeDelet,getChannel } from '@/api/server/QRCode.js'
+import { TradeAreaLineCarrierList } from '@/api/server/lingdan/TradeAreaLineCarrier.js'
 import { parseTime, pickerOptions2 } from '@/utils/index.js'
 import Pager from '@/components/Pagination/index'
 import QRCode from 'qrcode'
@@ -142,22 +142,18 @@ export default{
               page: 1, // 初始化页码
               dataTotal: 0,
               searchInfo: {
-                  name:'',
-                  topic:'',
-                  channalName:'',
+                  areaName:'',
                 },
               tableData: [],
               checkedinformation: [],
               dialogFormVisible: false,
-                twocodeurl: ''
-
             }
         },
       watch: {
           isvisible: {
               handler(newVal, oldVal) {
                   if (newVal) {
-                        // this.firstblood()
+                        this.firstblood()
                     } 
                 },
                 // 代表在wacth里声明了firstName这个方法之后立即先去执行handler方法
@@ -174,24 +170,20 @@ export default{
       beforeDestroy() {
         },
       methods: {
-          handlePageChange(obj) {
-              this.page = obj.pageNum
+            handlePageChange(obj) {
+                this.page = obj.pageNum
                 this.pagesize = obj.pageSize
                 this.firstblood()
             },
             // 刷新页面
           firstblood() {
                 this.loading = true
-                aflcQrcodeList(this.page, this.pagesize, this.searchInfo).then(res => {
+                TradeAreaLineCarrierList(this.page, this.pagesize, this.searchInfo).then(res => {
                     this.tableData = res.data.list;
                     this.dataTotal = res.data.totalCount;
                     this.loading = false;
                 }).catch(err => {
                     this.loading = false;
-                })
-
-                getChannel().then(res => {
-                    console.log('getChannel',res)
                 })
             },
             // 模糊查询 分类名称或者code

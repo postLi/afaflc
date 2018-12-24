@@ -534,7 +534,7 @@ export const pickerOptions4 = {
   },
   currentWeek(dateobj) {
     const _end = dateobj || new Date()
-    const start = new Date(_end.getFullYear(), _end.getMonth(), _end.getDate() - _end.getDay())
+    const start = new Date(_end.getFullYear(), _end.getMonth(), _end.getDate() - _end.getDay()+ 1)
     // const end = new Date(_end.getTime() - 3600 * 1000 * 24)
     return [start, _end]
   },

@@ -82,10 +82,10 @@ export default {
             component: _import('sm/lingdan/regionalCarrier/index'),
             meta: { title: '线路承运商', stitle: '线路', noCache: true , code: ''}
         },
-        {   path: '/sm/lingdan/tradeAreaCarrier/tradeAreaLineCarrier/newTradeAreaLineCarrier',
+        {   path: '/sm/lingdan/regionalCarrier/lineServicePrice/newLineServicePrice',
             hidden: false,
             name: '发物流新增线路增值服务定价',
-            component: _import('sm/lingdan/tradeAreaCarrier/tradeAreaLineCarrier/newTradeAreaLineCarrier'),
+            component: _import('sm/lingdan/regionalCarrier/lineServicePrice/newLineServicePrice'),
             meta: { title: '线路增值服务定价', stitle: '线路', noCache: true , code: ''}
         },
         

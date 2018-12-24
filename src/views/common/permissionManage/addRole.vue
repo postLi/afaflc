@@ -30,12 +30,14 @@
                   default-expand-all
                   node-key="id"
                   ref="tree"
+                  @node-click="handleNodeClick"
+                    @check-change="handleCheckChange"
+                    @check="aa"
                   highlight-current
                   :props="defaultProps"
                 >
                   <span class="custom-tree-node" slot-scope="{ node, data }">
                     <span v-if="data.status===0">
-
                       <img src="../../../assets/icom/link.png" alt="">
                       {{ node.label }}
                       <!-- {{ node.label }} -->
@@ -203,6 +205,19 @@
         if (typeof done === 'function') {
           done()
         }
+      },
+      handleNodeClick(data){
+        //   console.log(data);
+      },
+       handleCheckChange(data, checked, indeterminate) {
+        // console.log(data, checked, indeterminate);
+        // console.log(data.children)
+      },
+      aa(node,data,data2,data3){
+          console.log('node',node,data,data2)
+
+        //   console.log(this.$refs.tree.getCheckedNodes())
+        //   this.$refs.tree.getCheckedNodes().push(data.children[0])
       },
       getCheckedNodes(formName, bool) {
         this.$refs[formName].validate((valid) => {

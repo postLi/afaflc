@@ -15,12 +15,12 @@
 </template>
 
 <script>
-import lineCarrier from './lineCarrier'
-import lineServicePrice from './lineServicePrice'
+import lineCarrier from './lineCarrier/lineCarrier'
+import lineServicePrice from './lineServicePrice/lineServicePrice'
 export default {
     name: 'regionalCarrier',
     components: {
-        lineCarrier,
+        lineCarrier,  
         lineServicePrice
     },
     data() {
