@@ -3,7 +3,7 @@ import fetch from '@/utils/fetch'
 const baseurl = "aflcsmservice"
 const baseurl_two = "aflccommonservice"
 
-//获取优惠卷手动活动列表
+//获取优惠券手动活动列表
 export function data_get_couponActivehand_list(page,pagesize,data) {
     return fetch({
       url: '/'+baseurl+'/sm/aflcCouponActivity/v1/list',
@@ -16,7 +16,7 @@ export function data_get_couponActivehand_list(page,pagesize,data) {
     })
   }
 
-//获取优惠卷自动活动列表
+//获取优惠券自动活动列表
   export function data_get_couponActiveauto_list(page,pagesize,data) {
     return fetch({
       url: '/'+baseurl+'/sm/aflcCouponActivity/v1/listAuto',
@@ -29,12 +29,12 @@ export function data_get_couponActivehand_list(page,pagesize,data) {
     })
   }
   
-//优惠卷活动列表新增
+//优惠券活动列表新增
 export function data_get_couponActive_create(data) {
   return fetch.post('/' + baseurl + '/sm/aflcCouponActivity/v1/add', data)
 }
 
-//删除优惠卷活动列表
+//删除优惠券活动列表
 export function data_Del_couponActive(id) {
   return fetch({
         url: '/'+baseurl+'/sm/aflcCouponActivity/v1/delete/'+id,
@@ -42,7 +42,7 @@ export function data_Del_couponActive(id) {
       })
     }
 
-//启用优惠卷活动列表
+//启用优惠券活动列表
 export function data_Able_couponActive(ids) {
         
   return fetch({
@@ -77,7 +77,7 @@ export function data_couponActiveTime() {
   })
 }
 
-//获取卷码状态类型
+//获取券码状态类型
 export function data_couponStatus() {
   return fetch({
     url: '/'+baseurl_two+'/sysDict/getSysDictByCodeGet/AF0464',
@@ -85,7 +85,7 @@ export function data_couponStatus() {
   })
 }
 
- //activity_id获取优惠卷活动列表
+ //activity_id获取优惠券活动列表
  export function data_get_couponActive2_Id(activity_id) {
   return fetch({
     url: '/'+baseurl+'/sm/aflcCoupon/v1/query/' + activity_id,
@@ -93,7 +93,7 @@ export function data_couponStatus() {
   })
 }
 
- //activity_id获取优惠卷活动列表2
+ //activity_id获取优惠券活动列表2
  export function data_get_couponActive3_Id(activity_id) {
   return fetch({
     url: '/'+baseurl+'/sm/aflcCoupon/v1/queryTrans/' + activity_id,
@@ -101,7 +101,7 @@ export function data_couponStatus() {
   })
 }
 
- //id优惠卷活动列表
+ //id优惠券活动列表
  export function data_get_couponActive_Id(id) {
   return fetch({
     url: '/'+baseurl+'/sm/aflcCouponActivity/v1/'+ id,
@@ -110,7 +110,7 @@ export function data_couponStatus() {
 }
 
 
-//获取优惠卷领用明细列表
+//获取优惠券领用明细列表
 export function data_get_aflcCouponUse_list(page,pagesize,data) {
   return fetch({
     url: '/'+baseurl+'/sm/aflcCouponUse/v1/listDetail',
@@ -123,12 +123,12 @@ export function data_get_aflcCouponUse_list(page,pagesize,data) {
   })
 }
 
-//  修改优惠卷领用明细列表
+//  修改优惠券领用明细列表
 export function data_get_couponActive_update(data) {
   return fetch.put('/' + baseurl + '/sm/aflcCouponActivity/v1/update', data)
 }      
 
-//  新增优惠卷
+//  新增优惠券
 export function data_get_aflcCoupon_add(data) {
   return fetch({
     url: '/'+baseurl+'/sm/aflcCoupon/v1/add',
@@ -139,7 +139,7 @@ export function data_get_aflcCoupon_add(data) {
   })
 }      
 
-//  删除优惠卷
+//  删除优惠券
 export function data_get_aflcCoupon_delete(id) {
     
   return fetch({
@@ -149,7 +149,7 @@ export function data_get_aflcCoupon_delete(id) {
     }
 
     
-//获取优惠卷列表
+//获取优惠券列表
 export function data_get_aflcCoupon_list(page,pagesize,data) {
   return fetch({
     url: '/'+baseurl+'/sm/aflcCoupon/v1/list',
@@ -163,7 +163,7 @@ export function data_get_aflcCoupon_list(page,pagesize,data) {
 }
 
 
-// 生成优惠卷
+// 生成优惠券
  export function data_get_produceCoupon(activity_id,num) {
   return fetch({
     url: '/'+baseurl+'/sm/aflcCouponUse/v1/produceCoupon/?id=' + activity_id+'&num='+num,
@@ -171,7 +171,7 @@ export function data_get_aflcCoupon_list(page,pagesize,data) {
   })
 }
 
-// 发放优惠卷
+// 发放优惠券
 export function data_get_grantCoupon(id,data) {
 return fetch.post('/'+baseurl+'/sm/aflcCouponUse/v1/grantCouponCondition/'+id, data)
 }

@@ -207,7 +207,7 @@
                         >
                         </el-date-picker>
                   </el-form-item> 
-                    <el-form-item  label="卷码状态：" :label-width="formLabelWidth">
+                    <el-form-item  label="券码状态：" :label-width="formLabelWidth">
                         <el-select v-model="searchData.couponStatus" clearable placeholder="">
                           <el-option
                              v-for="item in couponStatusLists"
@@ -516,7 +516,7 @@ export default {
                 this.pagesize = obj.pageSize
                 this.firstblood();
         },          
-    // 卷码状态    
+    // 券码状态    
     getMoreInformation(){
                          this.optionsCar=this.optionsCarList
                          this.MaidLevel=this.MaidLevelList

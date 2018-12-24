@@ -74,7 +74,7 @@ export function postUserRewardShipperTransaction(page, pagesize, data) {
   })
 }
 /**
- * 优惠卷
+ * 优惠
  */
 export function postCouponTransaction(page, pagesize, data) {
   return fetch({

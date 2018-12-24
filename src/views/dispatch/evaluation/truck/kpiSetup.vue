@@ -107,7 +107,7 @@
                     <td>0</td>
                     <td><el-form-item prop="evaluaInterval13"><el-input type="text" placeholder="时效区间" v-model="formdata.evaluaInterval13" @keyup.native='inputChange(13)' ref="evaluaInterval13"></el-input></el-form-item></td>
                     <td><el-form-item prop="score10"><el-input type="text" placeholder="计分" v-model="formdata.score10"></el-input></el-form-item></td>
-                    <td rowspan="3">{{formdata.assessDescrip4}}<br>单位：<span class="td_red">秒</span></td>
+                    <td rowspan="3">{{formdata.assessDescrip4}}<br>单位：<span class="td_red">分钟</span></td>
                 </tr>
                 <tr>
                     <td>不达标</td>

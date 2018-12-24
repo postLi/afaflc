@@ -31,7 +31,7 @@ export function data_aflcOrderPaymentList(page, pagesize, data) {
   })
 }
 
-// 获取优惠卷领用明细表
+// 获取优惠券领用明细表
 export function data_aflcCouponUseList(page, pagesize, data) {
   return fetch({
     url: '/' + baseurl_two + '/sm/aflcCouponUse/v1/listDetail',
@@ -45,7 +45,7 @@ export function data_aflcCouponUseList(page, pagesize, data) {
 }
 
 
-//获取卷码状态
+//获取券码状态
 export function data_couponActive() {
   return fetch({
     url: '/'+baseurl_three+'/sysDict/getSysDictByCodeGet/AF0464',

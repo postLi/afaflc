@@ -274,7 +274,7 @@ export default {
                 this.financial = res.data;
             })
         },
-        //账户优惠卷当前页
+        //账户优惠券当前页
         handleCurrentChangeCoupon(val){
             this.couponObj.currentPage = val;
             this.CouponList();
