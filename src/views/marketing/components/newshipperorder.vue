@@ -438,7 +438,7 @@ export default {
    openDialog:function(){
         this.dialogFormVisible_add = true;
    },
-        inputChange(i){
+   inputChange(i){
         let ii = i%2;
         switch (ii) {
         case 0:

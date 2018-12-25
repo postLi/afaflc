@@ -407,11 +407,11 @@ export default {
    //    修改打开
     openDialogEdit(){
           if(!this.selectRowData.length){
-               this.$message.warning('请选择您要操作的用户');
+               this.$message.warning('请选择您要操作的商圈');
                return
           }
           else if(this.selectRowData.length == 0 && this.editType !== 'add'){
-               this.$message.warning('请选择您要操作的用户');
+               this.$message.warning('请选择您要操作的商圈');
                return false
           }else if (this.selectRowData.length > 1 && this.editType !== 'add') {
                 this.$message({
@@ -543,11 +543,11 @@ export default {
     // 选择删除
         delete_data(){
                     if(!this.selectRowData.length){
-                        this.$message.warning('请选择您要操作的用户');
+                        this.$message.warning('请选择您要操作的商圈');
                         return
                     }
                     if(this.selectRowData.length == 0){
-                        this.$message.warning('请选择您要操作的用户');
+                        this.$message.warning('请选择您要操作的商圈');
                         return
                     }else if (this.selectRowData.length > 1) {
                             this.$message({
@@ -590,11 +590,11 @@ export default {
         // 启用禁用
         handleUseStates(){
                     if(!this.selectRowData.length){
-                        this.$message.warning('请选择您要操作的用户');
+                        this.$message.warning('请选择您要操作的商圈');
                         return
                     }
                     if(this.selectRowData.length == 0){
-                        this.$message.warning('请选择您要操作的用户');
+                        this.$message.warning('请选择您要操作的商圈');
                         return
                     }else if (this.selectRowData.length > 1) {
                             this.$message({

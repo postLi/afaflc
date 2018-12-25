@@ -8,6 +8,7 @@
 import fetch from '@/utils/fetch'
 
 const baseurl = "aflccommonservice"
+const baseurl_two = 'aflc-common'
 
 // 获取树节点的数据
 export function data_Trees(page,pagesize,pid) {
@@ -96,5 +97,12 @@ export function data_ChangeForms(infoforms) {
   })
 }
 
+//清除缓存
+export function data_clearCache() {
+  return fetch({
+    url:'/'+baseurl_two+ '/sysDict/clearCache',
+    method: 'get'
+  })
+}
 
 

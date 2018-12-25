@@ -36,6 +36,7 @@
                         <el-button type="primary" :size="btnsize" plain icon="el-icon-edit" @click="handleClick('revise')" v-has:SYSTEM_DICT_UPDATE>修改</el-button>
                         <el-button type="primary" :size="btnsize" plain icon="el-icon-delete" @click="handleClick('delet')" v-has:SYSTEM_DICT_DELETE>删除</el-button>
                         <el-button type="primary" :size="btnsize" plain icon="el-icon-bell" @click="handleClick('status')" v-has:SYSTEM_DICT_USE>启用/禁用</el-button>
+                        <el-button type="danger" :size="btnsize" plain icon="el-icon-refresh" @click="handleClick('clearCache')">清除缓存</el-button>
                     </div>
                     <div class="info_news">
                         <el-table
@@ -117,7 +118,7 @@
 
 <script type="text/javascript">
 
-import { data_Dic,data_Trees,data_Search,data_CreatCode,data_AddForms,data_Delet,data_ChangeForms,data_CreatCode_top,data_changeStatus } from '@/api/company/data_dic.js'
+import { data_Dic,data_Trees,data_Search,data_CreatCode,data_AddForms,data_Delet,data_ChangeForms,data_CreatCode_top,data_changeStatus,data_clearCache} from '@/api/company/data_dic.js'
 import '@/styles/dialog.scss'
 import Pager from '@/components/Pagination/index'
 import DicDialog from './component/addDictionary'
@@ -195,7 +196,7 @@ import DicDialog from './component/addDictionary'
                 this.$refs.multipleTable.toggleRowSelection(row);
             },
             handleClick(type){
-                if(this.checkedinformation.length === 0 && type != 'add'){
+                if(this.checkedinformation.length === 0 && type != 'add'&& type!='clearCache'){
                     //未选择任何修改内容的提示
                     this.$message({
                         message: '请选择要操作的数据~',
@@ -292,6 +293,20 @@ import DicDialog from './component/addDictionary'
                             })
                         }
                         break;
+                    case 'clearCache':
+                    data_clearCache().then(res=>{
+                     this.$message({
+                        type: 'success',
+                        message: '清除缓存成功~'
+                        })
+                    }).catch(err=>{
+                     this.$message({
+                        type: 'error',
+                        message: '清除缓存失败~'
+                        })
+                    })
+                    break;
+                    
                 }
                 // 清除选中状态，避免影响下个操作
                 this.$refs.multipleTable.clearSelection();

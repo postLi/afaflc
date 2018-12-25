@@ -447,7 +447,7 @@ export default {
             }
         else{
           if(this.params.length == 0 && this.editType !== 'add'){
-               this.$message.warning('请选择您要操作的用户');
+               this.$message.warning('请选择您要操作的数据');
                return
           }else if (this.params.length > 1 && this.editType !== 'add') {
                 this.$message({
@@ -458,7 +458,7 @@ export default {
           }
           else if(this.params.length == undefined && this.editType !== 'add')
           {
-                this.$message.warning('请选择您要操作的用户');
+                this.$message.warning('请选择您要操作的数据');
                return false
           }          
            else{
