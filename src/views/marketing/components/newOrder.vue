@@ -251,7 +251,7 @@ export default {
             areaCode:{trigger:'change',required:true,validator: belongCityNameValidator},
             carType:{trigger:'change',required:true,validator:carTypeValidator},
             commissionGrade:{trigger:'change',required:true,validator:commissionGradeValidator},
-            reward1:{trigger:'change',required:true,validator:rewardValidator}, 
+            reward1:{trigger:'change',required:true,validator:rewardValidator},
             reward2:{trigger:'change',required:true,validator:rewardValidator},
             reward3:{trigger:'change',required:true,validator:rewardValidator},
             reward4:{trigger:'change',required:true,validator:rewardValidator},
@@ -291,7 +291,7 @@ export default {
    openDialog:function(){
        if(this.editType=='edit'){
           if(this.params.length == 0 && this.editType !== 'add'){
-               this.$message.warning('请选择您要操作的用户');
+               this.$message.warning('请选择您要操作的数据');
                return
           }else if (this.params.length > 1 && this.editType !== 'add') {
                 this.$message({
@@ -303,7 +303,7 @@ export default {
           }
           else if(this.params.length == undefined && this.editType !== 'add')
           {
-                this.$message.warning('请选择您要操作的用户');
+                this.$message.warning('请选择您要操作的数据');
                return false
           }
            else{

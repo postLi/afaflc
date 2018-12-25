@@ -677,11 +677,11 @@ export default {
         openDialogView0(){
             console.log(this.selectRowData)
            if(this.selectRowData.length==undefined){
-              this.$message.warning('请选择您要操作的用户');
+              this.$message.warning('请选择您要操作的数据');
                return
            }
           else if(this.selectRowData.length == 0){
-               this.$message.warning('请选择您要操作的用户');
+               this.$message.warning('请选择您要操作的数据');
                return
           }else if (this.selectRowData.length > 1) {
                 this.$message({
@@ -875,11 +875,11 @@ export default {
         //  大表删除行
             handleDelete(){
            if(this.selectRowData.length==undefined){
-              this.$message.warning('请选择您要操作的用户');
+              this.$message.warning('请选择您要操作的数据');
                return
            }
           else if(this.selectRowData.length == 0){
-               this.$message.warning('请选择您要操作的用户');
+               this.$message.warning('请选择您要操作的数据');
                return
           }else if (this.selectRowData.length > 1) {
                 this.$message({
@@ -978,11 +978,11 @@ export default {
         // 启用禁用
             handleUseStates(){
            if(this.selectRowData.length==undefined){
-              this.$message.warning('请选择您要操作的用户');
+              this.$message.warning('请选择您要操作的数据');
                return
            }
           else if(this.selectRowData.length == 0){
-               this.$message.warning('请选择您要操作的用户');
+               this.$message.warning('请选择您要操作的数据');
                return
           }else if (this.selectRowData.length > 1) {
                 this.$message({

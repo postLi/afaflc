@@ -168,8 +168,8 @@
              </div>
             </el-tab-pane>     
 
-        <!-- 账户优惠卷 -->
-        <el-tab-pane label="账户优惠卷"  name="three">
+        <!-- 账户优惠券 -->
+        <el-tab-pane label="账户优惠券"  name="three">
         <div style="height:100%;" class="identicalStyle">
        <el-form :inline="true"  class="demo-ruleForm classify_searchinfo">
                <el-form-item  label="优惠券名称："> 
@@ -410,7 +410,7 @@ export default {
       this.pagesize2 = obj.pageSize
       this.firstblood2()
     },  
-    // 优惠卷领用细表每页显示数据量变更
+    // 优惠券领用细表每页显示数据量变更
     handlePageChange3(obj) {
       this.page3 = obj.pageNum
       this.pagesize3 = obj.pageSize
@@ -458,7 +458,7 @@ export default {
             this.firstblood2()
             },  
 
-    //点击优惠卷领用细表查询按纽，按条件查询列表
+    //点击优惠券领用细表查询按纽，按条件查询列表
     getdata_search3(event){
                 this.firstblood3()
     },    

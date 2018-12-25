@@ -25,7 +25,7 @@
             </slot>
         </el-upload>
         <div class="image-preview" v-if="imageUrl && !showFileList">
-            <div class="image-preview-wrapper">
+            <div class="image-preview-wrapper">    
                 <span class="fileName">{{fileName}}</span>
                     <i @click="rmImage" class="el-icon-delete"></i>
             </div>

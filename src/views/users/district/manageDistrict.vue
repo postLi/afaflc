@@ -196,11 +196,11 @@ export default {
     // 选择删除
         delete_data(){
                     if(!this.selectRowData.length){
-                        this.$message.warning('请选择您要操作的用户');
+                        this.$message.warning('请选择您要操作的区代公司');
                         return
                     }
                     if(this.selectRowData.length == 0){
-                        this.$message.warning('请选择您要操作的用户');
+                        this.$message.warning('请选择您要操作的区代公司');
                         return
                     }else if (this.selectRowData.length > 1) {
                             this.$message({

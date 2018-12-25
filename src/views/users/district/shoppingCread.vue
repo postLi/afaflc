@@ -155,11 +155,11 @@ export default {
   methods:{
    openDialog:function(){
           if(!this.params.length){
-               this.$message.warning('请选择您要操作的用户');
+               this.$message.warning('请选择您要操作的商圈');
                return
           }
           else if(this.params.length == 0 && this.editType !== 'add'){
-               this.$message.warning('请选择您要操作的用户');
+               this.$message.warning('请选择您要操作的商圈');
                return false
           }else if (this.params.length > 1 && this.editType !== 'add') {
                 this.$message({

@@ -6,7 +6,7 @@
             </el-form-item>     
               <el-form-item label="用户账号">
                <el-input v-model="formAllData.mobile"></el-input>
-            </el-form-item>       
+            </el-form-item>
                <el-form-item label="收款方式">
                     <el-select v-model="formAllData.extractWay" placeholder="请选择" clearable>
                         <el-option
@@ -32,8 +32,8 @@
                     @change='cTime'
                     >
                     </el-date-picker>
-            </el-form-item>   
-                <el-form-item class='fr'> 
+            </el-form-item>
+                <el-form-item class='fr'>
                   <el-button type="primary" plain :size="btnsize" icon="el-icon-search" @click="getdata_search">搜索</el-button>
                   <el-button type="info"  plain :size="btnsize" icon="fontFamily aflc-icon-qingkong" @click="clearSearch">清空</el-button>
                </el-form-item>     
@@ -75,7 +75,7 @@
                     btntitle="查看"
                     @getData="getDataList"
                     :params="scope.row"
-                    > 
+                    >
                     </cashAuditingDetail>
             </template>
             </el-table-column>
@@ -94,7 +94,7 @@
             <template  slot-scope="scope">
              <span>0</span>
             </template>
-            </el-table-column>                                                       
+            </el-table-column>
             <el-table-column  label="收款方式" prop="extractWay" width="100" sortable>
             </el-table-column>
             <el-table-column  label="收款账号" prop="extractAccount" show-overflow-tooltip sortable>
@@ -171,7 +171,6 @@ export default {
       page:1,//当前页      
       sizes:[20,50,100],
      }
-     
   },
     components:{
     Pager,
