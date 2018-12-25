@@ -1,22 +1,14 @@
 <template>
   <div class="create-range">
-    <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="250px" class="demo-ruleForm">
+    <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="200px" class="demo-ruleForm">
         <div class="searchInformation rangeCommon">
             <h2>基本信息</h2>
             <el-row :gutter="20">
                 <el-col :span="10">
-                    <el-form-item label="商圈所在地：" prop="startLocation" class="location_line">
-                        <el-input v-model="ruleForm.startLocation" v-if="unable" :disabled="unable"></el-input>
+                    <el-form-item label="区域：" prop="areaName" class="location_line">
+                        <el-input v-model="ruleForm.areaName" v-if="unable" :disabled="unable"></el-input>
                         <vregion :ui="true" @values="regionChangeStart"  class="form-control" v-else>
-                            <el-input v-model="ruleForm.startLocation" ></el-input>
-                        </vregion>
-                    </el-form-item>
-                </el-col>
-                <el-col :span="10">
-                    <el-form-item label="商圈：" prop="endLocation" class="location_line">
-                        <el-input v-model="ruleForm.endLocation" v-if="unable" :disabled="unable"></el-input>
-                        <vregion :ui="true" @values="regionChangeEnd" class="form-control"  v-else>
-                            <el-input v-model="ruleForm.endLocation" ></el-input>
+                            <el-input v-model="ruleForm.areaName" ></el-input>
                         </vregion>
                     </el-form-item>
                 </el-col>
@@ -27,141 +19,206 @@
             <el-form-item label="提货费定价：" class="jieti" prop="">
                 <div class="goodsPriceChoose">
                     <el-row class="goodsPriceChoose_title">
-                        <el-col :span="12">标准货物分类数量区间</el-col>
-                        <el-col :span="12">提货费 (元) </el-col>
+                        <el-col :span="8">重量区间（公斤）</el-col>
+                        <el-col :span="8">体积区间（立方）</el-col>
+                        <el-col :span="8">提货费（元）</el-col>
                     </el-row>
-                    <el-row v-for="(form,keys) in ligthPriceForms" :key="keys">
-                        <el-col :span="12">
-                            <el-input v-model.number="form.startVolume" v-numberOnly placeholder="包含" maxlength="7" disabled></el-input>
+                    <el-row v-for="(form,keys) in takeGoods" :key="keys">
+                        <el-col :span="8" class="intervalNum blackBook">
+                            <el-input v-model.number="form.weightInterval1" v-numberOnly placeholder="包含" maxlength="7" disabled></el-input>
                             <span>----</span>
-                            <el-input v-model.number="form.endVolume" :disabled="unable" v-numberOnly placeholder="包含，整数"  maxlength="7" @change="ifWrong(ligthPriceForms,keys)"></el-input>
+                            <el-input v-model.number="form.weightInterval2" :disabled="unable" v-numberOnly placeholder="包含，整数"  maxlength="7" @change="ifWrong(takeGoods,keys)"></el-input>
                         </el-col>
-                        <el-col :span="12">
-                            <el-input v-model="form.primeryPrice" :disabled="unable" v-number-only:point maxlength="7"></el-input>
+                        <el-col :span="8" class="intervalNum blackBook">
+                            <el-input v-model.number="form.volumeInterval1" v-numberOnly placeholder="包含" maxlength="7" disabled></el-input>
+                            <span>----</span>
+                            <el-input v-model.number="form.volumeInterval2" :disabled="unable" v-numberOnly placeholder="包含，整数"  maxlength="7" @change="ifWrong(takeGoods,keys)"></el-input>
+                        </el-col>
+                        <el-col :span="8" class="fixPrice blackBook">
+                            <el-input v-model="form.cost" :disabled="unable" v-number-only:point maxlength="7"></el-input>
+                            <div class="iconItem">
+                                <span  @click="addItem('takeGoods',keys,form)" class="addItem" v-if="keys == takeGoods.length-1 && keys != 4">
+                                </span>
+                                <span  @click="reduceItem(keys,'takeGoods')" class="reduceItem" v-if="keys == takeGoods.length-1 && takeGoods.length !=1">
+                                </span>
+                            </div>
                         </el-col>
                     </el-row>
                 </div>
+            </el-form-item>
+
+            <el-form-item label="送货费定价：" class="jieti" prop="">
                 <div class="goodsPriceChoose">
-                    <p>
-                        <span>标准货物分类数量区间</span>
-                        <span>提货费 (元) </span>
-                    </p>
-                    <ul v-for="(form,keys) in ligthPriceForms" :key="keys">
-                        <li>
-                            <el-input v-model.number="form.startVolume" v-numberOnly placeholder="包含" maxlength="7" disabled></el-input>
+                    <el-row class="goodsPriceChoose_title">
+                        <el-col :span="6">重量区间（公斤）</el-col>
+                        <el-col :span="6">体积区间（立方）</el-col>
+                        <el-col :span="6">送货范围（公里）</el-col>
+                        <el-col :span="6">提货费（元）</el-col>
+                    </el-row>
+                     <div v-for="(form,keys) in deliverGoods" :key="keys"  class="deliverGoods">
+                        <div :span="6" class="intervalNum blackBook">
+                            <el-input v-model.number="form.weightInterval1" v-numberOnly placeholder="包含" maxlength="7" disabled></el-input>
                             <span>----</span>
-                            <el-input v-model.number="form.endVolume" :disabled="unable" v-numberOnly placeholder="包含，整数"  maxlength="7" @change="ifWrong(ligthPriceForms,keys)"></el-input>
-                        </li>
-                        <li>
-                            <el-input v-model="form.primeryPrice" :disabled="unable" v-number-only:point maxlength="7"></el-input>
-                        </li>
-                        <li class="buttons" v-show="ifShowRangeType != '2'">
-                            <span  @click="addItem('light',keys,form)" class="addItem" v-if="keys == ligthPriceForms.length-1 && keys != 4">
-                            </span>
-                            <span  @click="reduceItem(keys,'light')" class="reduceItem" v-if="keys == ligthPriceForms.length-1 && ligthPriceForms.length !=1">
-                            </span>
-                        </li>
-                    </ul>
+                            <el-input v-model.number="form.weightInterval2" :disabled="unable" v-numberOnly placeholder="包含，整数"  maxlength="7" @change="ifWrong(deliverGoods,keys)"></el-input>
+                        </div>
+                        <div :span="6" class="intervalNum blackBook">
+                            <el-input v-model.number="form.volumeInterval1" v-numberOnly placeholder="包含" maxlength="7" disabled></el-input>
+                            <span>----</span>
+                            <el-input v-model.number="form.volumeInterval2" :disabled="unable" v-numberOnly placeholder="包含，整数"  maxlength="7" @change="ifWrong(deliverGoods,keys)"></el-input>
+                            <div class="iconItem">
+                                <span  @click="addItem('deliverGoods',keys,form)" class="addItem" v-if="keys == deliverGoods.length-1 && keys != 4">
+                                </span>
+                                <span  @click="reduceItem(keys,'deliverGoods')" class="reduceItem" v-if="keys == deliverGoods.length-1 && deliverGoods.length !=1">
+                                </span>
+                            </div>
+                        </div>
+                        <div :span="12" class="intervalNum otherStyle">
+                            <div v-for="(item,keys) in form.deliverIntervalList" :key="keys" class="otherStyleBox">
+                                <div :span="12" class="intervalNum">
+                                    <el-input v-model.number="item.deliverInterval1" v-numberOnly placeholder="包含" maxlength="7" disabled></el-input>
+                                    <span>----</span>
+                                    <el-input v-model.number="item.deliverInterval2" :disabled="unable" v-numberOnly placeholder="包含，整数"  maxlength="7" @change="ifWrong(deliverGoods,keys)"></el-input>
+                                    <div class="iconItem">
+                                        <span  @click="addItem('deliverGoodsRange',keys,form.deliverIntervalList)" class="addItem" v-if="keys == form.deliverIntervalList.length-1 && keys != 4">
+                                        </span>
+                                        <span  @click="reduceItem(keys,'deliverGoodsRange',form.deliverIntervalList)" class="reduceItem" v-if="keys == form.deliverIntervalList.length-1 && form.deliverIntervalList.length !=1">
+                                        </span>
+                                    </div>
+                                </div>
+                                <div :span="12" class="fixPrice">
+                                    <el-input v-model="item.cost" :disabled="unable" v-number-only:point maxlength="7"></el-input>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
             </el-form-item>
 
-            <el-form-item label="送货费定价：" prop="ligthPriceDottedForms" class="jieti">
-                <p>(阶梯价格最大值不填，代表无穷大，例如：10-，代表10立方以上)</p>
+            <el-form-item label="保价费定价：" class="jieti" prop="">
                 <div class="goodsPriceChoose">
-                    <p>
-                        <span>标准货物分类数量区间</span>
-                        <!-- <span>送货范围（公里）</span> -->
-                        <span>送货费 (元)</span>
-                    </p>
-                    <ul v-for="(form,keys) in ligthPriceDottedForms" :key="keys">
-                        <li>
-                            <el-input v-model.number="form.startVolume" v-numberOnly placeholder="包含" maxlength="7" disabled></el-input>
+                    <el-row class="goodsPriceChoose_title">
+                        <el-col :span="8">干线费区间（元）</el-col>
+                        <el-col :span="8">赠送保额（元）</el-col>
+                        <el-col :span="8">超出赠送保额保费费率（千分之）</el-col>
+                    </el-row>
+                    <el-row v-for="(form,keys) in supportGoods" :key="keys">
+                        <el-col :span="8" class="intervalNum blackBook">
+                            <el-input v-model.number="form.costInterval1" v-numberOnly placeholder="包含" maxlength="7" disabled></el-input>
                             <span>----</span>
-                            <el-input v-model.number="form.endVolume" :disabled="unable" v-numberOnly placeholder="包含，整数" maxlength="7" @change="ifWrong(ligthPriceDottedForms,keys)"></el-input>
-                        </li>
-                        <li>
-                            <el-input v-model="form.primeryPrice" :disabled="unable" v-number-only:point maxlength="7"></el-input>
-                        </li>
-                        <li class="buttons" v-show="ifShowRangeType != '2'">
-                            <span  @click="addItem('lightDotted',keys,form)" class="addItem" v-if="keys == ligthPriceDottedForms.length-1 && keys != 4">
-                            </span>
-                            <span  @click="reduceItem(keys,'lightDotted')" class="reduceItem" v-if="keys == ligthPriceDottedForms.length-1 && ligthPriceDottedForms.length !=1 " >
-                            </span>
-                        </li>
-                    </ul>
+                            <el-input v-model.number="form.costInterval2" :disabled="unable" v-numberOnly placeholder="包含，整数"  maxlength="7" @change="ifWrong(supportGoods,keys)"></el-input>
+                        </el-col>
+                        <el-col :span="8" class="blackBook fixPrice">
+                            <el-input v-model="form.cost" :disabled="unable" v-number-only:point maxlength="7"></el-input>
+                        </el-col>
+                        <el-col :span="8" class="fixPrice blackBook">
+                            <el-input v-model="form.rate" :disabled="unable" v-number-only:point maxlength="7"></el-input>
+                            <div class="iconItem">
+                                <span  @click="addItem('supportGoods',keys,form)" class="addItem" v-if="keys == supportGoods.length-1 && keys != 4">
+                                </span>
+                                <span  @click="reduceItem(keys,'supportGoods')" class="reduceItem" v-if="keys == supportGoods.length-1 && supportGoods.length !=1">
+                                </span>
+                            </div>
+                        </el-col>
+                    </el-row>
                 </div>
             </el-form-item>
 
-            <el-form-item label="重泡货（重货）：" prop="weigthPriceDottedForms" class="jieti">
-                <p>(阶梯价格最大值不填，代表无穷大，例如：500-，代表500公斤以上)</p>
-                <div class="goodsPriceChoose">
-                    <p>
-                        <span>运量（kg）</span>
-                        <span>推荐价格（元 / kg） <strong>(必填)</strong></span>
-                    </p>
-                    <ul v-for="(form,keys) in weigthPriceDottedForms" :key="keys">
-                        <li>
-                            <el-input v-model.number="form.startVolume" v-numberOnly placeholder="包含" maxlength="7" disabled></el-input>
-                            <span>----</span>
-                            <el-input v-model.number="form.endVolume" :disabled="unable" v-numberOnly placeholder="包含，整数" maxlength="7" @change="ifWrong(weigthPriceDottedForms,keys)"></el-input>
-                        </li>
-                        <li>
-                            <el-input v-model="form.primeryPrice" :disabled="unable" v-number-only:point maxlength="7"></el-input>
-                        </li>
-                        <li class="buttons" v-show="ifShowRangeType != '2'">
-                            <span  @click="addItem('weightDotted',keys,form)" class="addItem" v-if="keys == weigthPriceDottedForms.length-1 && keys != 4">
-                            </span>
-                            <span  @click="reduceItem(keys,'weightDotted')" class="reduceItem" v-if="keys == weigthPriceDottedForms.length-1 && weigthPriceDottedForms.length !=1 " >
-                            </span>
-                        </li>
-                    </ul>
-                </div>
-            </el-form-item>
-
-            <el-form-item label="重货价格：" prop="weigthPriceForms" class="jieti">
-                <p>(阶梯价格最大值不填，代表无穷大，例如：500-，代表500公斤以上)</p>
-                <div class="goodsPriceChoose">
-                    <p>
-                        <span>运量（kg）</span>
-                        <span>推荐价格（元 / kg） <strong>(必填)</strong></span>
-                    </p>
-                    <ul v-for="(form,keys) in weigthPriceForms" :key="keys">
-                        <li>
-                            <el-input v-model.number="form.startVolume" v-numberOnly placeholder="包含" maxlength="7" disabled></el-input>
-                            <span>----</span>
-                            <el-input v-model.number="form.endVolume" :disabled="unable" v-numberOnly placeholder="包含，整数" maxlength="7" @change="ifWrong(weigthPriceForms,keys)"></el-input>
-                        </li>
-                        <li>
-                            <el-input v-model="form.primeryPrice" :disabled="unable" v-number-only:point maxlength="7"></el-input>
-                        </li>
-                        <li class="buttons" v-show="ifShowRangeType != '2'">
-                            <span  @click="addItem('weight',keys,form)" class="addItem" v-if="keys == weigthPriceForms.length-1 && keys != 4">
-                            </span>
-                            <span  @click="reduceItem(keys,'weight')" class="reduceItem" v-if="keys == weigthPriceForms.length-1 && weigthPriceForms.length !=1 " >
-                            </span>
-                        </li>
-                    </ul>
-                </div>
-            </el-form-item>
-
-            <el-form-item label="最低一票价格：" prop="lowerPrice">
-                <el-input v-model="ruleForm.lowerPrice" placeholder="报价" :disabled="unable" v-number-only:point>
+            <el-form-item label="最低一票收费：" prop="lowestCost" class="inlineForm inlineForm_odd">
+                <el-input v-model="supportGoods[0].lowestCost" placeholder="报价" :disabled="unable" v-number-only:point>
                      <template slot="append">元</template>
                 </el-input> 
             </el-form-item>
 
-            <el-form-item label="线路说明：" class="textarea" prop="transportRemark" >
-                <el-input type="textarea" 
-                    :disabled="unable"
-                    v-model="ruleForm.transportRemark" 
-                    :autosize="{ minRows: 3, maxRows: 10}"
-                    :maxlength="maxlength" 
-                    placeholder="请填写备注30-2000个字。提供原创说明有助于提升线路效果。">
-                </el-input>
-                <span v-show="ifShowRangeType != '2'"><i>{{ruleForm.transportRemark.length}}</i>/{{maxlength}}</span>
-                <p class="supplement">请对您的线路进行补充说明，尽量使用市场上或物流行业内的常用词。</p>
+            <el-form-item label="最高一票收费：" prop="highestCost" class="inlineForm">
+                <el-input v-model="supportGoods[0].highestCost" placeholder="报价" :disabled="unable" v-number-only:point>
+                     <template slot="append">元</template>
+                </el-input> 
             </el-form-item>
 
+            <el-form-item label="代收货款手续费定价：" class="jieti" prop="">
+                <div class="goodsPriceChoose">
+                    <el-row class="goodsPriceChoose_title">
+                        <el-col :span="12">干线费区间（元）</el-col>
+                        <el-col :span="12">代收货款手续费计算</el-col>
+                    </el-row>
+                    <el-row v-for="(form,keys) in FeePricing" :key="keys">
+                        <el-col :span="12" class="intervalNum blackBook">
+                            <el-input v-model.number="form.costInterval1" v-numberOnly placeholder="包含" maxlength="7" disabled></el-input>
+                            <span>----</span>
+                            <el-input v-model.number="form.costInterval2" :disabled="unable" v-numberOnly placeholder="包含，整数"  maxlength="7" @change="ifWrong(FeePricing,keys)"></el-input>
+                        </el-col>
+                        <el-col :span="12" class="fixPrice blackBook">
+                            <el-radio v-model="form.radio" label="1">固定收费
+                                <el-input v-model="form.cost" :disabled="unable || form.radio != '1'" v-numberOnly maxlength="7"></el-input>
+                            </el-radio>
+                            <el-radio v-model="form.radio" label="2">按代收货款百分比
+                                <el-input v-model="form.rate" :disabled="unable || form.radio != '2'" v-numberOnly maxlength="7"></el-input>
+                            </el-radio>
+                            <div class="iconItem">
+                                <span  @click="addItem('FeePricing',keys,form)" class="addItem" v-if="keys == FeePricing.length-1 && keys != 4">
+                                </span>
+                                <span  @click="reduceItem(keys,'FeePricing')" class="reduceItem" v-if="keys == FeePricing.length-1 && FeePricing.length !=1">
+                                </span>
+                            </div>
+                        </el-col>
+                    </el-row>
+                </div>
+            </el-form-item>
+
+            <el-form-item label="最低一票收费：" prop="lowerPrice" class="inlineForm inlineForm_odd">
+                <el-input v-model="FeePricing[0].lowestCost" placeholder="报价" :disabled="unable" v-number-only:point>
+                     <template slot="append">元</template>
+                </el-input> 
+            </el-form-item>
+
+            <el-form-item label="最高一票收费：" prop="lowerPrice" class="inlineForm">
+                <el-input v-model="FeePricing[0].highestCost" placeholder="报价" :disabled="unable" v-number-only:point>
+                     <template slot="append">元</template>
+                </el-input> 
+            </el-form-item>
+
+            <el-form-item label="时效保障费定价：" class="jieti" prop="">
+                <div class="goodsPriceChoose">
+                    <el-row class="goodsPriceChoose_title">
+                        <el-col :span="12">干线费区间（元）</el-col>
+                        <el-col :span="12">时效保障费计算</el-col>
+                    </el-row>
+                    <el-row v-for="(form,keys) in timeValue" :key="keys">
+                        <el-col :span="12" class="intervalNum blackBook">
+                            <el-input v-model.number="form.costInterval1" v-numberOnly placeholder="包含" maxlength="7" disabled></el-input>
+                            <span>----</span>
+                            <el-input v-model.number="form.costInterval2" :disabled="unable" v-numberOnly placeholder="包含，整数"  maxlength="7" @change="ifWrong(timeValue,keys)"></el-input>
+                        </el-col>
+                        <el-col :span="12" class="fixPrice blackBook">
+                            <el-radio v-model="form.radio" label="1">固定收费
+                                <el-input v-model="form.cost" :disabled="unable || form.radio != '1'" v-numberOnly maxlength="7"></el-input>
+                            </el-radio>
+                            <el-radio v-model="form.radio" label="2">按代收货款百分比
+                                <el-input v-model="form.rate" :disabled="unable || form.radio != '2'" v-numberOnly maxlength="7"></el-input>
+                            </el-radio>
+                            <div class="iconItem">
+                                <span  @click="addItem('timeValue',keys,form)" class="addItem" v-if="keys == timeValue.length-1 && keys != 4">
+                                </span>
+                                <span  @click="reduceItem(keys,'timeValue')" class="reduceItem" v-if="keys == timeValue.length-1 && timeValue.length !=1">
+                                </span>
+                            </div>
+                        </el-col>
+                    </el-row>
+                </div>
+            </el-form-item>
+
+            <el-form-item label="最低一票收费：" prop="lowerPrice" class="inlineForm inlineForm_odd">
+                <el-input v-model="timeValue[0].lowestCost" placeholder="报价" :disabled="unable" v-number-only:point>
+                     <template slot="append">元</template>
+                </el-input> 
+            </el-form-item>
+
+            <el-form-item label="最高一票收费：" prop="lowerPrice" class="inlineForm">
+                <el-input v-model="timeValue[0].highestCost" placeholder="报价" :disabled="unable" v-number-only:point>
+                     <template slot="append">元</template>
+                </el-input> 
+            </el-form-item>
         </div>
         <el-form-item class="fromfooter" v-show="ifShowRangeType != '2'">
             <el-button type="primary" plain  icon="el-icon-success" @click="submitForm('ruleForm')">{{ifShowRangeType == '1' ? '修改' : '立即发布'}}</el-button>
@@ -174,6 +231,8 @@
 <script>
 // import { getDictionary } from '@/api/common.js'
 import { createWebTransport,getWebAflcTransportRange,updateWebAflcTransportRange } from '@/api/server/lingdan/TransportRange.js'
+import { newTradeAreaLineCarrier } from '@/api/server/lingdan/TradeAreaLineCarrier.js'
+
 // import { getUserInfo } from '@/utils/auth.js'
 // import { REGEX } from '@/utils/validate.js'
 // import upload from '@/components/Upload/singleImage2'
@@ -246,126 +305,27 @@ export default {
         var checkStartLocation = (rule,value,callback) => {
             // console.log('this.ruleForm.startCity',this.ruleForm.startProvince)
             if (value == '') {
-                callback(new Error('请输入出发地'));
+                callback(new Error('请选择区域'));
             } else if(this.ruleForm.startCity == '' && this.ruleForm.startProvince !=  '北京市' && this.ruleForm.startProvince !=  '天津市' && this.ruleForm.startProvince !=  '重庆市' && this.ruleForm.startProvince !=  '上海市' ){
                 callback(new Error('至少选择到市级范围'));
             }else{
                 callback();
             }
         };
-
-        var checkEndLocation = (rule,value,callback) => {
-            // console.log('this.ruleForm.startCity',this.ruleForm.endCity)
-            if (value == '') {
-                callback(new Error('请输入到达地'));
-            } else if(this.ruleForm.endCity == '' && this.ruleForm.endProvince !=  '北京市' && this.ruleForm.endProvince !=  '天津市' && this.ruleForm.endProvince !=  '重庆市' && this.ruleForm.endProvince !=  '上海市' ){
-                callback(new Error('至少选择到市级范围'));
-            }else{
-                callback();
-            }
-        };
         return {
-            // rangeLogo:[],
             unable:false,
-            popVisible:false,
             ifShowRangeType:'0',
-            // dedicated:'AF033',
-            // depart:'AF026',
-            totalNumber:0,//當前字數
-            maxlength:120,
             ruleForm: {
-                startLocation:'',//出发地
-                startLocationCode:'',
-                startProvince:'',
-                startCity:'',
-                startArea:'',
-                //startLocationContacts:'',//出发地联系人
-                //startLocationContactsMobile:'',//出发地联系人电话
-                endLocation:'',//到达地
-                endLocationCode:'',
-                endProvince:'',
-                endCity:'',
-                endArea:'',
-                //endLocationContacts:'',//到达地联系人
-                //endLocationContactsMobile:'',//到达地联系人电话
-                transportAging:'',//运输时效
-                // transportAgingUnit:'小时',//运输时效单位
-                departureHzData:'',//发车频率天数
-                departureHzTime:'',//发车频率车次
-                rangePrices:[],
-                lowerPrice:'',//最低一票价
-                //rangeType:'AF03301',
-                //rangeTypeName:'普通线路',
-                //departureTimeCode:'',//发车时间code
-                //departureTime:'',//发车时间
-                transportRemark:'',//线路说明
-                // publishName:'',
-                // publishId:'',
-                //rangeLogo:'',//专线图片
+                areaName:'',//出发地
+                province:'',//省
+                city:'',//市
+                area:'',//区
+                areaCode:'',//区域code
+                //增值服务定价实体表
+                aflcIncrementPriceExtendList:[],
+                //增值服务定价实体表
+                aflcIncrementPriceList:[]
             },
-            // ruleForm: {
-            //     areaLocation:'',//出发地
-            //     province:'',//省
-            //     city:'',//市
-            //     area:'',//区
-            //     areaCode:'',//区域code
-            //     //增值服务定价实体表
-            //     aflcIncrementPriceExtendList:[{
-            //         costType:'0',//费用类型(提货费:0 ; 送货费:1)
-            //         cost:'',//费用
-            //         deliverInterval1:'',//送货范围1
-            //         deliverInterval2:'',//送货范围2
-            //         volumeInterval1:'',//体积区间1
-            //         volumeInterval2:'',//体积区间2
-            //         weightInterval1:'',//重量区间1
-            //         weightInterval2:'',//重量区间2
-            //     },{
-            //         costType:'1',//费用类型(提货费:0 ; 送货费:1)
-            //         cost:'',//费用
-            //         deliverInterval1:'',//送货范围1
-            //         deliverInterval2:'',//送货范围2
-            //         deliverIntervalList:[{
-            //             cost:'',
-            //             costType:'1',
-            //             deliverInterval1:'',//送货范围1
-            //             deliverInterval2:'',//送货范围2
-            //         }],
-            //         volumeInterval1:'',//体积区间1
-            //         volumeInterval2:'',//体积区间2
-            //         weightInterval1:'',//重量区间1
-            //         weightInterval2:'',//重量区间2
-            //     }],
-            //     //增值服务定价实体表
-            //     aflcIncrementPriceList:[{
-            //         costType:'0',//费用类型(保价费定价:0 ;代收货款手续费定价:1 ; 时效保障费定价:2)
-            //         costInterval1:'',//干线费区间1
-            //         costInterval2:'',//干线费区间2
-            //         lowestCost:'',//最低一票收费
-            //         highestCost:'',//最高一票收费
-            //         // cost:'',//费用
-            //         rate:'',//费率
-            //     },{
-            //         costType:'1',//费用类型(保价费定价:0 ;代收货款手续费定价:1 ; 时效保障费定价:2)
-            //         costInterval1:'',//干线费区间1
-            //         costInterval2:'',//干线费区间2
-            //         lowestCost:'',//最低一票收费
-            //         highestCost:'',//最高一票收费
-            //         radio:'',//单选判断点
-            //         cost:'',//费用
-            //         rate:'',//费率
-            //     },{
-            //         costType:'2',//费用类型(保价费定价:0 ;代收货款手续费定价:1 ; 时效保障费定价:2)
-            //         costInterval1:'',//干线费区间1
-            //         costInterval2:'',//干线费区间2
-            //         lowestCost:'',//最低一票收费
-            //         highestCost:'',//最高一票收费
-            //         radio:'',//单选判断点
-            //         cost:'',//费用
-            //         rate:'',//费率
-            //     }]
-            // },
-            //rangeTypeClassfy:[],//专线类型选项
-            //departClassfy:[],//发车时间选项
             ligthPriceForms:[
                 {
                     startVolume:'0',
@@ -374,57 +334,67 @@ export default {
                     type:'0'
                 } 
             ],
-            ligthPriceDottedForms:[
+            //提货费定价
+            takeGoods:[
                 {
-                    startVolume:'0',
-                    endVolume:'',
-                    primeryPrice:'',//标准价
-                    type:'2'
-                } 
-            ],
-            weigthPriceForms:[
-                {
-                    startVolume:'0',
-                    endVolume:'',
-                    primeryPrice:'',//标准价
-                    discountPrice:'',//折后价
-                    type:'1'
+                    costType:'0',//费用类型(提货费:0 ; 送货费:1)
+                    cost:'',//费用
+                    volumeInterval1:0,//体积区间1
+                    volumeInterval2:'',//体积区间2
+                    weightInterval1:0,//重量区间1
+                    weightInterval2:'',//重量区间2
                 }
             ],
-            weigthPriceDottedForms:[
-                {
-                    startVolume:'0',
-                    endVolume:'',
-                    primeryPrice:'',//标准价
-                    discountPrice:'',//折后价
-                    type:'3'
-                }
-            ],
+            //送货费定价
+            deliverGoods:[{
+                costType:'1',//费用类型(提货费:0 ; 送货费:1)
+                deliverIntervalList:[{
+                    cost:'',
+                    costType:'1',
+                    deliverInterval1:0,//送货范围1
+                    deliverInterval2:'',//送货范围2
+                }],
+                volumeInterval1:0,//体积区间1
+                volumeInterval2:'',//体积区间2
+                weightInterval1:0,//重量区间1
+                weightInterval2:'',//重量区间2
+            }],
+            //保价费定价
+            supportGoods:[{
+                costType:'0',//费用类型(保价费定价:0 ;代收货款手续费定价:1 ; 时效保障费定价:2)
+                costInterval1:0,//干线费区间1
+                costInterval2:'',//干线费区间2
+                lowestCost:'',//最低一票收费
+                highestCost:'',//最高一票收费
+                cost:'',//费用
+                rate:'',//费率
+            }],
+            //代收货款手续费定价
+            FeePricing:[{
+                costType:'1',//费用类型(保价费定价:0 ;代收货款手续费定价:1 ; 时效保障费定价:2)
+                costInterval1:0,//干线费区间1
+                costInterval2:'',//干线费区间2
+                lowestCost:'',//最低一票收费
+                highestCost:'',//最高一票收费
+                cost:'',//费用
+                rate:'',//费率
+                radio:'1',//单选判断点
+            }],
+            //时效保障费定价
+            timeValue:[{
+                costType:'2',//费用类型(保价费定价:0 ;代收货款手续费定价:1 ; 时效保障费定价:2)
+                costInterval1:0,//干线费区间1
+                costInterval2:'',//干线费区间2
+                lowestCost:'',//最低一票收费
+                highestCost:'',//最高一票收费
+                cost:'',//费用
+                rate:'',//费率
+                radio:'1',//单选判断点
+            }],
             rules: {
-                startLocation:[
+                areaName:[
                     { required: true, validator: checkStartLocation, trigger: 'change' },
                 ],
-                endLocation: [
-                    { required: true, validator: checkEndLocation, trigger: 'change' },
-                ],
-                // startLocationContacts: [
-                //     { required: true, message: '请输入出发地联系人信息', trigger: 'blur' }
-                // ],
-                // endLocationContacts: [
-                //     { required: true, message: '请输入到达地联系人信息', trigger: 'blur' }
-                // ],
-                // startLocationContactsMobile: [
-                //     { required: true, validator: checkStartLocationContactsMobile, trigger: 'change' }
-                // ],
-                // endLocationContactsMobile: [
-                //     { required: true, validator: checkEndLocationContactsMobile, trigger: 'change' }
-                // ],
-                // rangeType: [
-                //     { required: true, message: '请选择专线类型', trigger: 'change' }
-                // ],
-                // transportRemark:[
-                //     { min: 30, max: 2000, message: '专线说明请在30-2000字', trigger: 'blur' }
-                // ],
                 weigthPriceForms:[
                     { required:true,validator: checkWeigthPriceForms, trigger: 'blur'},
                 ],
@@ -474,38 +444,17 @@ export default {
         },
         regionChangeStart(d) {
             // console.log('data:',d)
-            this.ruleForm.startLocation = (!d.province&&!d.city&&!d.area&&!d.town) ? '': `${this.getValue(d.province)}${this.getValue(d.city)}${this.getValue(d.area)}${this.getValue(d.town)}`.trim();
-            // console.log(this.ruleForm.startLocation)
-            this.ruleForm.startProvince = d.province ? d.province.name : '';
-            this.ruleForm.startCity = d.city ? d.city.name : '';
-            this.ruleForm.startArea = d.area ? d.area.name : '';
+            this.ruleForm.areaName = (!d.province&&!d.city&&!d.area&&!d.town) ? '': `${this.getValue(d.province)}${this.getValue(d.city)}${this.getValue(d.area)}${this.getValue(d.town)}`.trim();
+            // console.log(this.ruleForm.areaName)
+            this.ruleForm.province = d.province ? d.province.name : '';
+            this.ruleForm.city = d.city ? d.city.name : '';
+            this.ruleForm.area = d.area ? d.area.name : '';
             if(d.area){
-                this.ruleForm.startLocationCode = d.area.code;
+                this.ruleForm.areaCode = d.area.code;
             }else if(d.city){
-                this.ruleForm.startLocationCode = d.city.code;
+                this.ruleForm.areaCode = d.city.code;
             }else{
-                this.ruleForm.startLocationCode = d.province ? d.province.code :'';
-            }
-        },
-        regionChangeEnd(d) {
-            // console.log('data:',d)
-            this.ruleForm.endLocation = (!d.province&&!d.city&&!d.area&&!d.town) ? '': `${this.getValue(d.province)}${this.getValue(d.city)}${this.getValue(d.area)}${this.getValue(d.town)}`.trim();
-            if(this.ruleForm.endLocation == this.ruleForm.startLocation && this.ruleForm.endLocation != ''){
-                this.$message({
-                    type: 'info',
-                    message: '出发地不可与到达地重复！' 
-                })
-                return this.ruleForm.endLocation = ''
-            }
-            this.ruleForm.endProvince = d.province ? d.province.name : '';
-            this.ruleForm.endCity = d.city ? d.city.name : '';
-            this.ruleForm.endArea = d.area ? d.area.name : '';
-            if(d.area){
-                this.ruleForm.endLocationCode = d.area.code;
-            }else if(d.city){
-                this.ruleForm.endLocationCode = d.city.code;
-            }else{
-                this.ruleForm.endLocationCode = d.province.code;
+                this.ruleForm.areaCode = d.province ? d.province.code :'';
             }
         },
         getValue(obj){
@@ -557,220 +506,220 @@ export default {
                 }
             }
         },
-        //判断和限制
-        handlerChoose(){
-            // let type = this.ruleForm.transportAgingUnit;
-            let transportAging = this.ruleForm.transportAging;
-            // if(type != '多天'){
-            //     transportAging = transportAging.replace(/[^\d.]/g,""); //清除"数字"和"."以外的字符
-            //     transportAging = transportAging.replace(/^\./g,""); //验证第一个字符是数字
-            //     transportAging = transportAging.replace(/\.{2,}/g,"."); //只保留第一个, 清除多余的
-            //     transportAging = transportAging.replace(".","$#$").replace(/\./g,"").replace("$#$",".");
-            //     transportAging = transportAging.replace(/^(\-)*(\d+)\.(\d).*$/,'$1$2.$3'); //只能输入一位小数
-            //     this.ruleForm.transportAging = transportAging ; 
-            // }else{
-                transportAging = transportAging.replace(/[^0-9\-]+/g,"");
-                this.ruleForm.transportAging = transportAging ; 
-            // }
-        },
-        getInformations(){
-            // Promise.all([ getDictionary(this.dedicated), getDictionary(this.depart)]).then(resArr => {
-            //     this.rangeTypeClassfy = resArr[0].data;
-            //     this.departClassfy = resArr[1].data;
-            // })
-            // let userInfo = getUserInfo();
-            // this.ruleForm.publishName = userInfo.companyName;
-            // this.ruleForm.publishId = userInfo.id;
-        },
         //添加子节点新增
         addItem(type,idx,item){
             // console.log(type)
             switch(type){
-                case 'weight':
+                case 'takeGoods':
                 // console.log(item.primeryPrice)
-                    if(idx == 0 && item.endVolume == ''){
-                        return this.$message({
-                            type: 'info',
-                            message: '请补充重货运量' 
-                        })
-                    }
-                    else if(item.primeryPrice == ''){
-                        return this.$message({
-                            type: 'info',
-                            message: '请补充重货推荐价格（元 / m3）' 
-                        })
-                    }else{
-                        this.weigthPriceForms.push({
-                            startVolume:this.weigthPriceForms[idx].endVolume,
-                            endVolume:'',
-                            primeryPrice:'',//标准价
-                            type:'1'
+                    // if(idx == 0 && item.endVolume == ''){
+                    //     return this.$message({
+                    //         type: 'info',
+                    //         message: '请补充重货运量' 
+                    //     })
+                    // }
+                    // else if(item.primeryPrice == ''){
+                    //     return this.$message({
+                    //         type: 'info',
+                    //         message: '请补充重货推荐价格（元 / m3）' 
+                    //     })
+                    // }else{
+                        this.takeGoods.push({
+                            weightInterval1:this.takeGoods[idx].weightInterval2,//重量区间1
+                            weightInterval2:'',//重量区间2
+                            costType:'0',//费用类型(提货费:0 ; 送货费:1)
+                            cost:'',//费用
+                            volumeInterval1:this.takeGoods[idx].volumeInterval2,//体积区间1
+                            volumeInterval2:'',//体积区间2
                         }); 
-                    }
+                    // }
                     break;
-                case 'weightDotted':
-                    if(idx == 0 && item.endVolume == ''){
-                        return this.$message({
-                            type: 'info',
-                            message: '请补充重泡货（重货）运量' 
-                        })
-                    }
-                    else if(item.primeryPrice == ''){
-                        return this.$message({
-                            type: 'info',
-                            message: '请补充重泡货（重货）推荐价格（元 / m3）' 
-                        })
-                    }else{
-                        this.weigthPriceDottedForms.push({
-                            startVolume:this.weigthPriceDottedForms[idx].endVolume,
-                            endVolume:'',
-                            primeryPrice:'',//标准价
-                            type:'3'
+                case 'deliverGoods':
+                    // if(idx == 0 && item.endVolume == ''){
+                    //     return this.$message({
+                    //         type: 'info',
+                    //         message: '请补充重泡货（重货）运量' 
+                    //     })
+                    // }
+                    // else if(item.primeryPrice == ''){
+                    //     return this.$message({
+                    //         type: 'info',
+                    //         message: '请补充重泡货（重货）推荐价格（元 / m3）' 
+                    //     })
+                    // }else{
+                        this.deliverGoods.push({
+                            weightInterval1:this.deliverGoods[idx].weightInterval2,//重量区间1
+                            weightInterval2:'',//重量区间2
+                            costType:'1',//费用类型(提货费:0 ; 送货费:1)
+                            deliverIntervalList:[{
+                                cost:'',
+                                costType:'1',
+                                deliverInterval1:0,//送货范围1
+                                deliverInterval2:'',//送货范围2
+                            }],
+                            volumeInterval1:this.deliverGoods[idx].volumeInterval2,//体积区间1
+                            volumeInterval2:'',//体积区间2
                         }); 
-                    }
+                    // }
                     break;
-                case 'lightDotted':
-                    if(idx == 0 && item.endVolume == ''){
-                        return this.$message({
-                            type: 'info',
-                            message: '请补充重泡货（轻货）运量' 
-                        })
-                    }
-                    else if(item.primeryPrice == ''){
-                        return this.$message({
-                            type: 'info',
-                            message: '请补充重泡货（轻货）推荐价格（元 / m3）' 
-                        })
-                    }else{
-                        this.ligthPriceDottedForms.push({
-                            startVolume:this.ligthPriceDottedForms[idx].endVolume,
-                            endVolume:'',
-                            primeryPrice:'',//标准价
-                            type:'2'
-                        }); 
-                    }
+                case 'deliverGoodsRange':
+                    // console.log(type,idx,item)
+                    item.push({
+                        cost:'',
+                        costType:'1',
+                        deliverInterval1:item[idx].deliverInterval2,//送货范围1
+                        deliverInterval2:'',//送货范围2
+                    })
                     break;
-                case 'light':
-                    if(idx == 0 && item.endVolume == ''){
-                        return this.$message({
-                            type: 'info',
-                            message: '请补充轻货运量' 
-                        })
-                    }
-                    else if(item.primeryPrice == ''){
-                        return this.$message({
-                            type: 'info',
-                            message: '请补充轻货推荐价格' 
-                        })
-                    }else{
-                        this.ligthPriceForms.push({
-                            startVolume:this.ligthPriceForms[idx].endVolume,
-                            endVolume:'',
-                            primeryPrice:'',//标准价
-                            discountPrice:'',//折后价
-                            type:'0'
+                case 'supportGoods':
+                    // if(idx == 0 && item.endVolume == ''){
+                    //     return this.$message({
+                    //         type: 'info',
+                    //         message: '请补充轻货运量' 
+                    //     })
+                    // }
+                    // else if(item.primeryPrice == ''){
+                    //     return this.$message({
+                    //         type: 'info',
+                    //         message: '请补充轻货推荐价格' 
+                    //     })
+                    // }else{
+                        this.supportGoods.push({
+                            costType:'0',//费用类型(保价费定价:0 ;代收货款手续费定价:1 ; 时效保障费定价:2)
+                            costInterval1:this.supportGoods[idx].costInterval2,//干线费区间1
+                            costInterval2:'',//干线费区间2
+                            lowestCost:'',//最低一票收费
+                            highestCost:'',//最高一票收费
+                            cost:'',//费用
+                            rate:'',//费率
                         }); 
-                    }
+                    // }
+                    break;
+
+                case 'FeePricing':
+                        this.FeePricing.push({
+                            costType:'1',//费用类型(保价费定价:0 ;代收货款手续费定价:1 ; 时效保障费定价:2)
+                            costInterval1:this.FeePricing[idx].costInterval2,//干线费区间1
+                            costInterval2:'',//干线费区间2
+                            lowestCost:'',//最低一票收费
+                            highestCost:'',//最高一票收费
+                            cost:'',//费用
+                            rate:'',//费率
+                            radio:'1',//单选判断点
+                        })
+                    break;
+                case 'timeValue':
+                         this.timeValue.push({
+                            costType:'2',//费用类型(保价费定价:0 ;代收货款手续费定价:1 ; 时效保障费定价:2)
+                            costInterval1:this.timeValue[idx].costInterval2,//干线费区间1
+                            costInterval2:'',//干线费区间2
+                            lowestCost:'',//最低一票收费
+                            highestCost:'',//最高一票收费
+                            cost:'',//费用
+                            rate:'',//费率
+                            radio:'1',//单选判断点
+                        })
                     break;
             }
         },
         //删除子节点新增
-        reduceItem(idx,type){
+        reduceItem(idx,type,item){
             // console.log(idx,type)
             switch(type){
-                case 'weight':
-                    this.weigthPriceForms.splice(idx,1);
+                case 'takeGoods':
+                    this.takeGoods.splice(idx,1);
                     break;
-                case 'light':
-                    this.ligthPriceForms.splice(idx,1);
+                case 'deliverGoods':
+                    this.deliverGoods.splice(idx,1);
                     break;
-                case 'lightDotted':
-                    this.ligthPriceDottedForms.splice(idx,1);
+                case 'deliverGoodsRange':
+                    item.splice(idx,1);
                     break;
-                case 'weightDotted':
-                    this.weigthPriceDottedForms.splice(idx,1);
+                case 'supportGoods':
+                    this.supportGoods.splice(idx,1);
+                    break;
+                case 'FeePricing':
+                    this.FeePricing.splice(idx,1);
+                    break;
+                case 'timeValue':
+                    this.timeValue.splice(idx,1);
                     break;
             }
         },  
         completeName(){
-            this.ruleForm.rangePrices = [];
+            let aflcIncrementPriceExtendList = [];
+            let aflcIncrementPriceList = [];
 
-            this.ligthPriceForms.forEach(item => {
-                this.ruleForm.rangePrices.push(item) 
+            //增值服务定价扩展表
+            this.takeGoods.forEach(el => {
+                aflcIncrementPriceExtendList.push(el)
             })
 
-            this.weigthPriceForms.forEach(item => {
-                this.ruleForm.rangePrices.push(item) 
+            this.deliverGoods.forEach(el => {
+                aflcIncrementPriceExtendList.push(el)
             })
 
-            this.ligthPriceDottedForms.forEach(item => {
-                this.ruleForm.rangePrices.push(item) 
+            this.supportGoods.forEach((el,idx,item) => {
+                el.lowestCost = item[0].lowestCost;
+                el.highestCost = item[0].highestCost;
             })
 
-            this.weigthPriceDottedForms.forEach(item => {
-                this.ruleForm.rangePrices.push(item) 
+            this.FeePricing.forEach((el,idx,item) => {
+                el.lowestCost = item[0].lowestCost;
+                el.highestCost = item[0].highestCost;
             })
-            
-            // if(this.ruleForm.rangeType){
-            //     this.ruleForm.rangeTypeName = this.rangeTypeClassfy.find(item => item.code == this.ruleForm.rangeType)['name'];
-            // }
 
-            // if(this.ruleForm.departureTimeCode){
-            //     this.ruleForm.departureTime = this.departClassfy.find(item => item.code == this.ruleForm.departureTimeCode)['name'];
-            // }
+            this.timeValue.forEach((el,idx,item) => {
+                el.lowestCost = item[0].lowestCost;
+                el.highestCost = item[0].highestCost;
+            })
+
+            //增值服务定价实体表
+            this.supportGoods.forEach(el => {
+                aflcIncrementPriceList.push(el)
+            })
+
+            this.FeePricing.forEach(el => {
+                aflcIncrementPriceList.push(el)
+            })
+
+            this.timeValue.forEach(el => {
+                aflcIncrementPriceList.push(el)
+            })
+
+            this.ruleForm.aflcIncrementPriceExtendList = aflcIncrementPriceExtendList;
+            this.ruleForm.aflcIncrementPriceList = aflcIncrementPriceList;
         },
         //提交按钮
         submitForm(formName) {
-            // console.log(this.ruleForm)
             let ifNull = true;
             let messageInfo;
-
-            this.ligthPriceForms.forEach(item => {
-                if(item.primeryPrice == ''){
-                    messageInfo= '请补充轻货推荐价格' 
-                    ifNull = false;
-                }
-            })
-
-            this.ligthPriceDottedForms.forEach(item => {
-                if(item.primeryPrice == ''){
-                    messageInfo= '请补充重泡货（轻货）推荐价格' 
-                    ifNull = false;
-                }
-            })
-
-            this.weigthPriceForms.forEach(item => {
-                if(item.primeryPrice == ''){
-                    messageInfo= '请补充重货推荐价格' 
-                    ifNull = false;
-                }
-            })
-
-            this.weigthPriceDottedForms.forEach(item => {
-                if(item.primeryPrice == ''){
-                    messageInfo= '请补充重泡货（重货）推荐价格' 
-                    ifNull = false;
-                }
-            })
-
+            // this.ligthPriceForms.forEach(item => {
+            //     if(item.primeryPrice == ''){
+            //         messageInfo= '请补充轻货推荐价格' 
+            //         ifNull = false;
+            //     }
+            // })
+            
             if(ifNull){
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
                         this.completeName();
+                       
                         console.log(this.ruleForm)
-                        let commitFunction;
-                        if(this.ifShowRangeType == '1'){
-                            commitFunction = updateWebAflcTransportRange(this.ruleForm);
-                        }else{
-                            commitFunction = createWebTransport(this.ruleForm)
-                        }
+                        let commitFunction = newTradeAreaLineCarrier(this.ruleForm);
+                        // if(this.ifShowRangeType == '1'){
+                        //     commitFunction = updateWebAflcTransportRange(this.ruleForm);
+                        // }else{
+                        //     commitFunction = createWebTransport(this.ruleForm)
+                        // }
                         commitFunction.then(res => {
                             console.log('res',res) 
                             if(res.status == 200){
                                 this.$alert('操作成功', '提示', {
                                     confirmButtonText: '确定',
                                     callback: action => {
-                                        this.$router.push({name:'物流专线'})
+                                        // this.$router.push({name:'物流专线'})
                                     }
                                 });
                             }else{
@@ -803,40 +752,6 @@ export default {
 
         resetForm(formName) {
             this.$refs[formName].resetFields();
-            this.ruleForm.departureHzTime = '';
-            this.ligthPriceForms = [
-                {
-                    startVolume:'0',
-                    endVolume:'',
-                    primeryPrice:'',//标准价
-                    type:'0'
-                } 
-            ];
-            this.weigthPriceForms=[
-                {
-                    startVolume:'0',
-                    endVolume:'',
-                    primeryPrice:'',//标准价
-                    type:'1'
-                }
-            ];
-            this.ligthPriceDottedForms=[
-                {
-                    startVolume:'0',
-                    endVolume:'',
-                    primeryPrice:'',//标准价
-                    type:'2'
-                }
-            ];
-            this.weigthPriceDottedForms=[
-                {
-                    startVolume:'0',
-                    endVolume:'',
-                    primeryPrice:'',//标准价
-                    type:'3'
-                }
-            ];
-
         }
     }
 }
@@ -886,6 +801,7 @@ export default {
                 }
             }
             .priceTime{
+                margin-bottom: 18px;
                 .el-input{
                     width: 264px;
                 }
@@ -899,29 +815,17 @@ export default {
                         }
                     }
                 }
-                .el-form-item:nth-child(3){
-                    .el-form-item__content{
-                        .el-input{
-                            width:130px;
-                            .el-input-group__append{
-                                background-color: #f5f7fa;
-                                color: #909399;
-                                vertical-align: middle;
-                                display: table-cell;
-                                position: relative;
-                                border: 1px solid #dcdfe6;
-                                border-left: 0 none;
-                                padding: 0 20px;
-                                white-space: nowrap;
-                                top: 0;
-                                right: 0;
-                            }
-                        }
-                    }
+                .inlineForm{
+                    display: inline-block;
+                    margin-bottom: 40px;
+                }
+
+                .inlineForm_odd{
+                    margin-left: 8%;
                 }
                 .jieti{
                     .el-form-item__content{
-                        width: 70%;
+                        width: 86%;
                         .el-input{
                             width: 50px;
                         }
@@ -931,14 +835,136 @@ export default {
                         }
                         .goodsPriceChoose{  
                             border: 1px solid #ccc;
+                            border-bottom: 0 none;
+
+                            .fixPrice{
+                                    .el-input{
+                                        width:40%;
+                                    }
+                                    .el-radio{
+                                        width: 35%;
+                                    }
+                                }
+
                             .el-row{
                                 text-align: center;
                                 .el-col{
                                     border-right: 1px solid #ccc;
+                                    position: relative;
+                                   
                                 }
-
                                 .el-col:last-child{
                                     border: 0 none;
+                                }
+                                .intervalNum{
+                                    .el-input{
+                                        width: 24%;
+                                        min-width: 105px;
+                                    }
+                                }
+                                
+                                .blackBook{
+                                    padding: 10px 0;
+                                }
+                                .otherStyle{
+                                    .el-row{
+                                        .el-col{
+                                            padding: 10px 0;
+                                        }
+                                    }
+                                }
+                            }
+                            
+                            .deliverGoods{
+                                font-size: 0;
+                                display: flex;
+                                border-bottom: 1px solid #ccc;
+                                .intervalNum{
+                                    display: inline-block;
+                                    box-sizing: border-box;
+                                    padding: 10px 0;
+                                    text-align: center;
+                                    vertical-align: middle;
+                                    span{
+                                        font-size: 14px;
+                                    }
+                                    .el-input{
+                                        width: 24%;
+                                        min-width: 105px;
+                                    }
+                                }
+                                .blackBook{
+                                    width: 25%;
+                                    display: flex;
+                                    justify-content: center;
+                                    align-items: center;
+                                    border-right: 1px solid #ccc;
+                                    .iconItem{
+                                        margin-left: 10px;
+                                        margin-right: 0;
+                                    }
+                                }
+                                .otherStyle{
+                                    width: 50%;
+                                    vertical-align: middle;
+                                    .otherStyleBox{
+                                        font-size: 0;
+                                        div{
+                                            display: inline-block;
+                                            box-sizing: border-box;
+                                        }
+                                        .intervalNum{
+                                            border-right: 1px solid #ccc;
+                                        }
+                                    }
+                                    .intervalNum,.fixPrice{
+                                        width: 50%;
+                                    }
+                                    .fixPrice{
+                                        .el-input{
+                                            width:40%;
+                                        }
+                                    }
+                                }
+                            }
+                            .el-row + .el-row{
+                                border-bottom: 1px solid #ccc;
+                            }
+
+                            .iconItem{
+                                min-width: 56px;
+                                float: right;
+                                padding-top:6px; 
+                                margin-right: 10px;
+                                height: 40px;
+                                text-align: left;
+                                .addItem{
+                                    display:inline-block;
+                                    height: 26px;
+                                    width:26px;
+                                    line-height: 26px;
+                                    cursor: pointer;
+                                    background:url('../../../../../assets/icom/23zengjia.png') no-repeat center;
+                                    // position: absolute;
+                                    // top:15px;
+                                    // right: 80px;
+                                    &:hover{
+                                        background:url('../../../../../assets/icom/24zengjia-b.png') no-repeat center;
+                                    }
+                                }
+                                .reduceItem{
+                                    display:inline-block;
+                                    height: 26px;
+                                    width:26px;
+                                    line-height: 26px;
+                                    cursor: pointer;
+                                    background:url('../../../../../assets/icom/21shanchu.png') no-repeat center;
+                                    // position: absolute;
+                                    // top:15px;
+                                    // right:40px;
+                                    &:hover{
+                                        background:url('../../../../../assets/icom/22shanchu-b.png') no-repeat center;
+                                    }
                                 }
                             }
                             .goodsPriceChoose_title{
@@ -1003,9 +1029,9 @@ export default {
                                     line-height: 26px;
                                     cursor: pointer;
                                     background:url('../../../../../assets/icom/23zengjia.png') no-repeat center;
-                                    position: absolute;
-                                    top:15px;
-                                    right: 80px;
+                                    // position: absolute;
+                                    // top:15px;
+                                    // right: 80px;
                                     &:hover{
                                         background:url('../../../../../assets/icom/24zengjia-b.png') no-repeat center;
                                     }
@@ -1017,41 +1043,13 @@ export default {
                                     line-height: 26px;
                                     cursor: pointer;
                                     background:url('../../../../../assets/icom/21shanchu.png') no-repeat center;
-                                    position: absolute;
-                                    top:15px;
-                                    right:40px;
+                                    // position: absolute;
+                                    // top:15px;
+                                    // right:40px;
                                     &:hover{
                                         background:url('../../../../../assets/icom/22shanchu-b.png') no-repeat center;
                                     }
                                 }
-                            }
-                        }
-                    }
-                }
-                .el-form-item:nth-child(6),{
-                    .el-form-item__content{
-                        .el-input{
-                            width: 100px;
-                        }
-                    }
-                }
-                .el-form-item:last-child,{
-                    .el-form-item__content{
-                        width: 600px;
-                        .el-textarea__inner{
-                            padding-bottom: 20px;
-                        }
-                        span{
-                            font-size: 12px;
-                            color: #999;
-                            position: absolute;
-                            right: 10px;
-                            bottom: 40px;
-                            line-height: 20px;
-                            i{
-                                color: red;
-                                font-style: normal;
-                                margin-right: 5px;
                             }
                         }
                     }

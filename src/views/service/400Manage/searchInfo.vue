@@ -113,8 +113,8 @@ export default{
           break
         case 'clear':
           this.searchInfo = {
-            complainType: '', // 类型
-            workSerial: '' // 工单号
+            status:null,
+            callerNo:'',//主叫号码
           }
 
           this.$emit('change', this.searchInfo)

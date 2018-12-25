@@ -13,7 +13,7 @@
             </el-dialog>
             <div class="classify_info">
                 <div class="btns_box" id="urlLoad">
-                    <el-button type="primary" plain @click="handleSearch('export')" size="mini">导出Exce</el-button>
+                    <el-button type="primary" plain @click="handleSearch('export')" size="mini">导出Excel</el-button>
                 </div>
                 <div class="info_news">
                     <el-table
@@ -102,15 +102,6 @@
                                {{scope.row.district ? scope.row.district : '无'}}
                             </template>
                         </el-table-column>
-                        <!-- <el-table-column
-                            label="满意度"
-                            width="120"
-                            sortable
-                            >
-                            <template  slot-scope="scope">
-                               {{scope.row.replyName ? scope.row.replyName : '无'}}
-                            </template>
-                        </el-table-column> -->
                         <el-table-column
                             label="通话时长"
                             prop="minutes"
@@ -121,16 +112,6 @@
                                 {{scope.row.minutes ? scope.row.minutes : '无'}}
                             </template>
                         </el-table-column>
-                        <!-- <el-table-column
-                            :show-overflow-tooltip="true"
-                            label="跟进内容"
-                            width="160"
-                            sortable
-                            >
-                            <template  slot-scope="scope">
-                                {{scope.row.reply ? scope.row.reply : '无'}}
-                            </template>
-                        </el-table-column> -->
                         <el-table-column
                             label="操作"
                             width="160"
@@ -155,10 +136,11 @@
 
 import FileSaver from 'file-saver'
 import XLSX from 'xlsx'
-import { aflcCallLog,getVoiceUrl } from '@/api/service/400.js'
+import { aflcCallLog,getVoiceUrl,aflcExcelList } from '@/api/service/400.js'
 import { parseTime } from '@/utils/index.js'
 import Pager from '@/components/Pagination/index'
 import searchInfo from './searchInfo'
+import { SaveAsFile } from '@/utils/lodopFuncs'
 
     export default{
         components:{
@@ -184,6 +166,37 @@ import searchInfo from './searchInfo'
                 checkedinformation:[],//选中数据
                 playFlay:false,
                 audioUrl:null,
+                tableColumn:[{
+                    'label': '序号',
+                    'prop': '',
+                },{
+                    'label': '主叫号码',
+                    'prop': 'callerNo',
+                },{
+                    'label': '用户类型',
+                    'prop': 'typeName',
+                },{
+                    'label': '联系人',
+                    'prop': 'linkman',
+                },{
+                    'label': '被叫号码',
+                    'prop': 'calleeNo',
+                },{
+                    'label': '开始时间',
+                    'prop': 'startTime',
+                },{
+                    'label': '结束时间',
+                    'prop': 'onhookTime',
+                },{
+                    'label': '类型',
+                    'prop': 'statusName',
+                },{
+                    'label': '客服号码归属地',
+                    'prop': 'district',
+                },{
+                    'label': '通话时长',
+                    'prop': 'minutes',
+                }]
             }
         },
         watch:{
@@ -257,7 +270,32 @@ import searchInfo from './searchInfo'
 
                         break;
                     case 'export':
-                        this.exportExcel();
+                        aflcExcelList(this.searchInfo).then(res => {
+                            res.data.forEach(el => {
+                                el.typeName = el.shipperId ? '货主' :'' + el.driverId ? ' 车主 ' :'' + el.companyId ? '物流公司' :'';
+                                el.startTime = parseTime(el.startTime, '{y}-{m}-{d} {h}:{i}:{s}');
+                                el.onhookTime = parseTime(el.onhookTime, '{y}-{m}-{d} {h}:{i}:{s}');
+                                switch(el.status){
+                                    case 0:
+                                        el.statusName = '未接';
+                                        break;
+                                    case 1:
+                                        el.statusName = "已接";
+                                        break;
+                                    case 2:
+                                        el.statusName = "留言";
+                                        break;
+                                }
+                            })
+                            SaveAsFile({
+                                data: res.data,
+                                columns: this.tableColumn,
+                                name: '400管理-' + parseTime(new Date(), '{y}{m}{d}{h}{i}{s}')
+                            })
+                        })
+                        // this.exportExcel();
+                        
+                       
                         break;
                 }
             },
@@ -277,8 +315,11 @@ import searchInfo from './searchInfo'
             },
             getSearchParam(obj) {
                 console.log(obj)
-                this.searchInfo = Object.assign(this.searchInfo, obj)
-                this.loading = true ;
+                this.searchInfo = Object.assign(this.searchInfo, obj);
+                if(this.page!= 1){
+                    this.page = 1;
+                    this.$refs.pager.inputval = this.page;
+                }
                 this.firstblood();
             },
             shuaxin(){

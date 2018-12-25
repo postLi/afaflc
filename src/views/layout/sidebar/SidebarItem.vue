@@ -116,7 +116,6 @@ export default {
       return true
     },
     toggle(event) {
-        console.log('1123123')
       const el = closest(event.target, 'li')
       const ul = closest(el, 'ul')
       const lis = Array.from(ul.querySelectorAll('.isOpen') || []).filter(l => {
