@@ -31,25 +31,19 @@ export default {
     computed: {
 
     },
-    // created() {
-    //     this.routeQuery = sessionStorage.getItem('orderSerial');
-    //     console.log('created',this.routeQuery)
-    // },
+    created() {
+        this.regionalCarrierName = sessionStorage.getItem('regionalCarrierName');
+    },
 
-    // beforeUpdate () {
-    //     sessionStorage.setItem('orderSerial', this.routeQuery);
-    //     console.log('beforeUpdate',this.routeQuery)
-    // },
+    beforeUpdate () {
+        sessionStorage.setItem('regionalCarrierName', this.regionalCarrierName);
+    },
 
-    // beforeDestroy () {
-    //     sessionStorage.setItem('orderSerial', this.routeQuery);
-    //     console.log('beforeDestroy',this.routeQuery)
-    // },
+    beforeDestroy () {
+        sessionStorage.setItem('regionalCarrierName', this.regionalCarrierName);
+    },
 
     mounted() {
-        // if (this.$route.query.currentTab) {
-        // this.regionalCarrierName = this.$route.query.currentTab
-        // }
     },
     methods: {
         init() {

@@ -48,7 +48,7 @@ export default {
     {
       path: '/sm/lingdan', 
       icon: 'lingdan', 
-      name: '发物流', 
+      name: '发物流服务', 
       component: _import('sm/lingdan/index'), 
       meta: { role: ['admin'], title: '发物流', stitle: '发物流', noCache: true , code: 'SERVICE_LTL'},
       children: [
@@ -94,7 +94,7 @@ export default {
     {
       path: '/sm/dahuoche', 
       icon: 'dahuoche', 
-      name: '大货车', 
+      name: '大货车服务', 
       component: _import('sm/dahuoche/index'), 
       meta: { role: ['admin'], title: '大货车', stitle: '大货车', noCache: true , code: 'SERVICE_BIG_CAR'},
       children: [
@@ -106,30 +106,28 @@ export default {
         icon: 'xqk', 
         name: '需求库', 
         component: _import('sm/xuqiuku/index'), 
-        meta: { role: ['admin'], title: '需求库',stitle: '需求库',  noCache: true , code: 'ORDER_REPOSITORY'},
+        meta: { role: ['admin'], title: '需求库',stitle: '需求库',  noCache: true , code: 'SERVICE_DEMAND'},
         children:[
             { 
                 path: '/sm/xuqiuku/carInfo', 
                 hidden: false, 
                 name: '车源信息', 
                 component: _import('sm/xuqiuku/carInfo/index'), 
-                meta: { title: '车源信息',stitle: '车源',  noCache: true , code: 'ORDER_REPOSITORY_DRIVER_INFO'
+                meta: { title: '车源信息',stitle: '车源',  noCache: true , code: 'SERVICE_DEMAND_DRIVER_INFO'
             }},
-
             { 
                 path: '/sm/xuqiuku/driverInfo', 
                 hidden: false,
                 name: '货源信息', 
                 component: _import('sm/xuqiuku/driverInfo/index'), 
-                meta: { title: '货源信息',stitle: '货源',  noCache: true , code: 'ORDER_REPOSITORY_GOODS_INFO'
+                meta: { title: '货源信息',stitle: '货源',  noCache: true , code: 'SERVICE_DEMAND_SHIPPER_GOODS_INFO'
             }},
-
             { 
                 path: '/sm/xuqiuku/manageGroup', 
                 hidden: false,
                 name: '网点信息', 
                 component: _import('sm/xuqiuku/manageGroup/index'), 
-                meta: { title: '网点信息',stitle: '网点',  noCache: true , code: 'ORDER_REPOSITORY_NETWORK_INFO'
+                meta: { title: '网点信息',stitle: '网点',  noCache: true , code: 'SERVICE_DEMAND_NETWORK_INFO'
             }},
         ]
     },
@@ -138,7 +136,7 @@ export default {
         icon: 'QRcode', 
         name: '二维码', 
         component: _import('sm/QRCode/index'), 
-        meta: { role: ['admin'], title: '二维码', stitle: '二维码', noCache: true , code: ''},
+        meta: { role: ['admin'], title: '二维码', stitle: '二维码', noCache: true , code: 'SERVICE_QRCODE'},
         children: [
   
         ]

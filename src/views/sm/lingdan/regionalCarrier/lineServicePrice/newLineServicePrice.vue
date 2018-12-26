@@ -6,8 +6,8 @@
             <el-row :gutter="20">
                 <el-col :span="10">
                     <el-form-item label="区域：" prop="areaName" class="location_line">
-                        <el-input v-model="ruleForm.areaName" v-if="unable" :disabled="unable"></el-input>
-                        <vregion :ui="true" @values="regionChangeStart"  class="form-control" v-else>
+                        <!-- <el-input v-model="ruleForm.areaName" v-if="unable" :disabled="unable"></el-input> -->
+                        <vregion :ui="true" @values="regionChangeStart"  class="form-control" ref="vregion" >
                             <el-input v-model="ruleForm.areaName" ></el-input>
                         </vregion>
                     </el-form-item>
@@ -106,7 +106,7 @@
                         <el-col :span="8" class="intervalNum blackBook">
                             <el-input v-model.number="form.costInterval1" v-numberOnly placeholder="包含" maxlength="7" disabled></el-input>
                             <span>----</span>
-                            <el-input v-model.number="form.costInterval2" :disabled="unable" v-numberOnly placeholder="包含，整数"  maxlength="7" @change="ifWrong(supportGoods,keys)"></el-input>
+                            <el-input v-model.number="form.costInterval2" :disabled="unable" v-numberOnly placeholder="包含，整数"  maxlength="7" @change="ifWrong(supportGoods,keys,form,'costInterval','supportGoods')"></el-input>
                         </el-col>
                         <el-col :span="8" class="blackBook fixPrice">
                             <el-input v-model="form.cost" :disabled="unable" v-numberOnly maxlength="7"></el-input>
@@ -146,13 +146,13 @@
                         <el-col :span="12" class="intervalNum blackBook">
                             <el-input v-model.number="form.costInterval1" v-numberOnly placeholder="包含" maxlength="7" disabled></el-input>
                             <span>----</span>
-                            <el-input v-model.number="form.costInterval2" :disabled="unable" v-numberOnly placeholder="包含，整数"  maxlength="7" @change="ifWrong(FeePricing,keys)"></el-input>
+                            <el-input v-model.number="form.costInterval2" :disabled="unable" v-numberOnly placeholder="包含，整数"  maxlength="7" @change="ifWrong(FeePricing,keys,form,'costInterval','FeePricing')"></el-input>
                         </el-col>
                         <el-col :span="12" class="fixPrice blackBook">
-                            <el-radio v-model="form.radio" label="1">固定收费
+                            <el-radio v-model="form.radio" label="1" @change="radioChange(keys,'FeePricing')">固定收费
                                 <el-input v-model="form.cost" :disabled="unable || form.radio != '1'" v-numberOnly maxlength="7"></el-input>
                             </el-radio>
-                            <el-radio v-model="form.radio" label="2">按代收货款百分比
+                            <el-radio v-model="form.radio" label="2" @change="radioChange(keys,'FeePricing')">按代收货款百分比
                                 <el-input v-model="form.rate" :disabled="unable || form.radio != '2'" v-numberOnly maxlength="7"></el-input>
                             </el-radio>
                             <div class="iconItem">
@@ -192,13 +192,15 @@
                         <el-col :span="12" class="intervalNum blackBook">
                             <el-input v-model.number="form.costInterval1" v-numberOnly placeholder="包含" maxlength="7" disabled></el-input>
                             <span>----</span>
-                            <el-input v-model.number="form.costInterval2" :disabled="unable" v-numberOnly placeholder="包含，整数"  maxlength="7" @change="ifWrong(timeValue,keys)"></el-input>
+                            <el-input v-model.number="form.costInterval2" :disabled="unable" v-numberOnly placeholder="包含，整数"  maxlength="7" @change="ifWrong(timeValue,keys,form,'costInterval','timeValue')"></el-input>
                         </el-col>
                         <el-col :span="12" class="fixPrice blackBook">
-                            <el-radio v-model="form.radio" label="1">固定收费
+                            {{form.radio}}
+                            <el-radio v-model="form.radio" label="1" @change="radioChange(keys,'timeValue')">固定收费
                                 <el-input v-model="form.cost" :disabled="unable || form.radio != '1'" v-numberOnly maxlength="7"></el-input>
                             </el-radio>
-                            <el-radio v-model="form.radio" label="2">按代收货款百分比
+                            {{form.radio}}
+                            <el-radio v-model="form.radio" label="2" @change="radioChange(keys,'timeValue')">按代收货款百分比
                                 <el-input v-model="form.rate" :disabled="unable || form.radio != '2'" v-numberOnly maxlength="7"></el-input>
                             </el-radio>
                             <div class="iconItem">
@@ -224,8 +226,8 @@
                 </el-input> 
             </el-form-item>
         </div>
-        <el-form-item class="fromfooter" v-show="ifShowRangeType != '2'">
-            <el-button type="primary" plain  icon="el-icon-success" @click="submitForm('ruleForm')">{{ifShowRangeType == '1' ? '修改' : '立即发布'}}</el-button>
+        <el-form-item class="fromfooter">
+            <el-button type="primary" plain  icon="el-icon-success" @click="submitForm('ruleForm')">保存</el-button>
             <el-button type="primary" plain icon="el-icon-error" @click="resetForm('ruleForm')">重置</el-button>
         </el-form-item>
     </el-form>
@@ -233,13 +235,7 @@
   </div>
 </template>
 <script>
-// import { getDictionary } from '@/api/common.js'
-import { createWebTransport,getWebAflcTransportRange,updateWebAflcTransportRange } from '@/api/server/lingdan/TransportRange.js'
-import { newTradeAreaLineCarrier } from '@/api/server/lingdan/TradeAreaLineCarrier.js'
-
-// import { getUserInfo } from '@/utils/auth.js'
-// import { REGEX } from '@/utils/validate.js'
-// import upload from '@/components/Upload/singleImage2'
+import { newTradeAreaLineCarrier,TradeAreaLineCarrierDetails } from '@/api/server/lingdan/TradeAreaLineCarrier.js'
 import vregion from '@/components/vregion/Region.vue'
 export default {
     components:{
@@ -251,7 +247,7 @@ export default {
          var checksupportGoodslowestCost = (rule,value,callback) => {
             if(this.supportGoods[0].lowestCost == ''){
                 callback(new Error('请补充保价费最低一票收费'));
-            }else if(Number(this.supportGoods[0].highestCost) < Number(this.supportGoods[0].lowestCost)){
+            }else if(Number(this.supportGoods[0].highestCost) < Number(this.supportGoods[0].lowestCost && this.supportGoods[0].highestCost != '')){
                 callback(new Error('最高一票收费应大于最低一票收费'));
             }else{
                 callback();
@@ -272,7 +268,7 @@ export default {
         var checkFeePricinglowestCost = (rule,value,callback) => {
             if(this.FeePricing[0].lowestCost == ''){
                 callback(new Error('请补充代收货款手续费最低一票收费'));
-            }else if(Number(this.FeePricing[0].highestCost) < Number(this.FeePricing[0].lowestCost)){
+            }else if(Number(this.FeePricing[0].highestCost) < Number(this.FeePricing[0].lowestCost) && this.FeePricing[0].highestCost != ''){
                 callback(new Error('最高一票收费应大于最低一票收费'));
             }else{
                 callback();
@@ -293,7 +289,7 @@ export default {
         var checktimeValuelowestCost = (rule,value,callback) => {
             if(this.timeValue[0].lowestCost == ''){
                 callback(new Error('请补充时效保障费最低一票收费'));
-            }else if(Number(this.timeValue[0].highestCost) < Number(this.timeValue[0].lowestCost)){
+            }else if(Number(this.timeValue[0].highestCost) < Number(this.timeValue[0].lowestCost) && this.timeValue[0].highestCost != ''){
                 callback(new Error('最高一票收费应大于最低一票收费'));
             }else{
                 callback();
@@ -310,51 +306,6 @@ export default {
             }
         };
 
-        var checkWeigthPriceDottedForms = (rule,value,callback) => {
-            if(this.weigthPriceDottedForms[0].endVolume == ''){
-                callback(new Error('请补充重泡货（重货）运量范围'));
-            }else{
-                this.weigthPriceDottedForms.forEach(el => {
-                    if(el.primeryPrice === ''){
-                        callback(new Error('请补充重泡货（重货）推荐价格'));
-                    }
-                    else{
-                        callback();
-                    }
-                })
-            }
-        };
-
-        var checkLigthPriceDottedForms = (rule,value,callback) => {
-            if(this.ligthPriceDottedForms[0].endVolume == ''){
-                callback(new Error('请补充重泡货（轻货）运量范围'));
-            }else{
-                this.ligthPriceDottedForms.forEach(el => {
-                    if(el.primeryPrice === ''){
-                        callback(new Error('请补充重泡货（轻货）推荐价格'));
-                    }
-                    else{
-                        callback();
-                    }
-                })
-            }
-        };
-
-        var checkLightPriceForms = (rule,value,callback) => {
-            if(this.ligthPriceForms[0].endVolume == ''){
-                callback(new Error('请补充轻货运量范围'));
-            }else{
-                this.ligthPriceForms.forEach(el => {
-                    if(el.primeryPrice === ''){
-                        callback(new Error('请补充轻货推荐价格'));
-                    }
-                    else{
-                        callback();
-                    }
-                })
-            }
-        };
-
         var checkStartLocation = (rule,value,callback) => {
             // console.log('this.ruleForm.startCity',this.ruleForm.startProvince)
             if (value == '') {
@@ -367,7 +318,7 @@ export default {
         };
         return {
             unable:false,
-            ifShowRangeType:'0',
+            // ifShowRangeType:'0',
             ruleForm: {
                 areaName:'',//出发地
                 province:'',//省
@@ -379,22 +330,14 @@ export default {
                 //增值服务定价实体表
                 aflcIncrementPriceList:[]
             },
-            ligthPriceForms:[
-                {
-                    startVolume:'0',
-                    endVolume:'',
-                    primeryPrice:'',//标准价
-                    type:'0'
-                } 
-            ],
             //提货费定价
             takeGoods:[
                 {
                     costType:'0',//费用类型(提货费:0 ; 送货费:1)
                     cost:'',//费用
-                    volumeInterval1:0,//体积区间1
+                    volumeInterval1:'0',//体积区间1
                     volumeInterval2:'',//体积区间2
-                    weightInterval1:0,//重量区间1
+                    weightInterval1:'0',//重量区间1
                     weightInterval2:'',//重量区间2
                 }
             ],
@@ -404,18 +347,18 @@ export default {
                 deliverIntervalList:[{
                     cost:'',
                     costType:'1',
-                    deliverInterval1:0,//送货范围1
+                    deliverInterval1:'0',//送货范围1
                     deliverInterval2:'',//送货范围2
                 }],
-                volumeInterval1:0,//体积区间1
+                volumeInterval1:'0',//体积区间1
                 volumeInterval2:'',//体积区间2
-                weightInterval1:0,//重量区间1
+                weightInterval1:'0',//重量区间1
                 weightInterval2:'',//重量区间2
             }],
             //保价费定价
             supportGoods:[{
                 costType:'0',//费用类型(保价费定价:0 ;代收货款手续费定价:1 ; 时效保障费定价:2)
-                costInterval1:0,//干线费区间1
+                costInterval1:'0',//干线费区间1
                 costInterval2:'',//干线费区间2
                 lowestCost:'',//最低一票收费
                 highestCost:'',//最高一票收费
@@ -425,7 +368,7 @@ export default {
             //代收货款手续费定价
             FeePricing:[{
                 costType:'1',//费用类型(保价费定价:0 ;代收货款手续费定价:1 ; 时效保障费定价:2)
-                costInterval1:0,//干线费区间1
+                costInterval1:'0',//干线费区间1
                 costInterval2:'',//干线费区间2
                 lowestCost:'',//最低一票收费
                 highestCost:'',//最高一票收费
@@ -436,7 +379,7 @@ export default {
             //时效保障费定价
             timeValue:[{
                 costType:'2',//费用类型(保价费定价:0 ;代收货款手续费定价:1 ; 时效保障费定价:2)
-                costInterval1:0,//干线费区间1
+                costInterval1:'0',//干线费区间1
                 costInterval2:'',//干线费区间2
                 lowestCost:'',//最低一票收费
                 highestCost:'',//最高一票收费
@@ -466,18 +409,6 @@ export default {
                 timeValuehighestCost:[
                     { required:true,validator: checktimeValuehighestCost, trigger: 'change'},
                 ],
-                weigthPriceDottedForms:[
-                    { required:true,validator: checkWeigthPriceDottedForms, trigger: 'blur'},
-                ],
-                ligthPriceDottedForms:[
-                    { required:true,validator: checkLigthPriceDottedForms, trigger: 'blur'},
-                ],
-                ligthPriceForms:[
-                    { required:true,validator: checkLightPriceForms, trigger: 'blur'},
-                ],
-                primeryPrice:[
-                    {required:true,message: '请填写价格', trigger: 'blur' },
-                ],
             }
         }
     },
@@ -485,35 +416,42 @@ export default {
        
     },
     mounted(){
-        // this.getParams();
+        this.getParams();
     },
     methods:{
         ifWrong(item,idx,obj,label,classfy){
             console.log(item,idx,obj,label,classfy)
-            let flag = item[idx][label+'2'] <= item[idx][[label+'1']] ? true : false;
+            if(item[idx][label+'2'] != ''){
+                let flag = item[idx][label+'2'] <= item[idx][[label+'1']] ? true : false;
 
-            if(item[idx][label+'2'] && (item.length == (idx+1)) && !flag){
-                this.addItem(classfy,idx,item)
-            }
-
-            if(flag){
-                this.$message({
-                    type: 'info',
-                    message: '终止运量应不小于起始运量' 
-                })
-                return item[idx][label+'2'] = ''
-            }
-            else if(item.length > (idx+1)){
-                item[idx+1][[label+'1']] = item[idx][label+'2'] ;
-                if(item[idx+1][label+'2']){
-                    if(item[idx+1][label+'2'] <= item[idx+1][[label+'1']]){
-                        this.$message({
-                            type: 'info',
-                            message: '终止运量应不小于起始运量' 
-                        })
-                        item.splice(idx+1);
-                        return this.addItem(classfy,idx,item)
+                if(item[idx][label+'2'] && (item.length == (idx+1)) && !flag){
+                    this.addItem(classfy,idx,item)
+                }
+                if(flag){
+                    this.$message({
+                        type: 'info',
+                        message: '终止运量应不小于起始运量' 
+                    })
+                    return item[idx][label+'2'] = ''
+                }
+                else if(item.length > (idx+1)){
+                    item[idx+1][[label+'1']] = item[idx][label+'2'] ;
+                    if(item[idx+1][label+'2']){
+                        if(item[idx+1][label+'2'] <= item[idx+1][[label+'1']]){
+                            this.$message({
+                                type: 'info',
+                                message: '终止运量应不小于起始运量' 
+                            })
+                            item.splice(idx+1);
+                            return this.addItem(classfy,idx,item)
+                        }
                     }
+                }
+            }else{
+                if(item.length == (idx+1)){
+
+                }else{
+                    item.splice(idx+1);
                 }
             }
         },
@@ -535,50 +473,95 @@ export default {
         getValue(obj){
             return obj ? obj.value:'';
         },
+        radioChange(value,type){
+            if(this[type][value].radio == '1'){
+                this[type][value].rate = '';
+            }else{
+                this[type][value].cost = '';
+            }
+            this.$forceUpdate()
+        },
         getParams(){
-            if(this.$route.params.rangeId){
-                this.ifShowRangeType = this.$route.params.ifrevise;//1是修改，2是详情
-                let rangeId = this.$route.params.rangeId;//接收数据
-                // console.log('```',rangeId,this.ifShowRangeType)
-                getWebAflcTransportRange(rangeId).then(res=>{
+            if(this.$route.query.areaCode){
+                // this.ifShowRangeType = this.$route.params.ifrevise;//1是修改，2是详情
+                let areaCode = this.$route.query.areaCode;//接收数据
+                // console.log('```',areaCode,this.ifShowRangeType)
+                TradeAreaLineCarrierDetails(areaCode).then(res=>{
                     this.ruleForm = res.data;
-                    this.ligthPriceForms = [];
-                    this.weigthPriceForms = [];
-                    this.ligthPriceDottedForms = [];
-                    this.weigthPriceDottedForms = [];
 
-                    this.ruleForm.rangePrices.forEach(item => {
-                        switch (item.type) {
+                    this.takeGoods = [];
+                    this.deliverGoods = [];
+                    this.supportGoods = [];
+                    this.FeePricing = [];
+                    this.timeValue = [];
+
+                    this.ruleForm.aflcIncrementPriceExtendList.forEach(el => {
+                        switch(el.costType){
                             case '0':
-                                this.ligthPriceForms.push(item)
-                                break
+                                this.takeGoods.push(el);
+                                break;
                             case '1':
-                                this.weigthPriceForms.push(item)
-                                break
-                            case '2':
-                                this.ligthPriceDottedForms.push(item)
-                                break
-                            case '3':
-                                this.weigthPriceDottedForms.push(item)
-                                break
+                                this.deliverGoods.push(el);
+                                break;
                         }
                     })
-                    this.ligthPriceForms.sort(function(a, b) {
-                        return a.startVolume - b.startVolume
+
+                    this.ruleForm.aflcIncrementPriceList.forEach(el => {
+                        switch(el.costType){
+                            case '0':
+                                this.supportGoods.push(el);
+                                break;
+                            case '1':
+                                this.FeePricing.push(el);
+                                break;
+                            case '2':
+                                this.timeValue.push(el);
+                                break;
+                        }
                     })
-                    this.weigthPriceForms.sort(function(a, b) {
-                        return a.startVolume - b.startVolume
+
+                    this.takeGoods.sort(function(a, b) {
+                        return a.weightInterval1 - b.weightInterval1
                     })
-                    this.ligthPriceDottedForms.sort(function(a, b) {
-                        return a.startVolume - b.startVolume
+
+                    this.deliverGoods.sort(function(a, b) {
+                        return a.weightInterval1 - b.weightInterval1
                     })
-                    this.weigthPriceDottedForms.sort(function(a, b) {
-                        return a.startVolume - b.startVolume
+
+                    this.deliverGoods.forEach(el => {
+                        el.deliverIntervalList.sort(function(a, b) {
+                            return a.deliverInterval1 - b.deliverInterval1
+                        })             
+                    })
+
+                    this.supportGoods.sort(function(a, b) {
+                        return a.costInterval1 - b.costInterval1
+                    })             
+
+                    this.FeePricing.sort(function(a, b) {
+                        return a.costInterval1 - b.costInterval1
+                    })         
+
+                    this.timeValue.sort(function(a, b) {
+                        return a.costInterval1 - b.costInterval1
+                    })
+
+                    this.FeePricing.forEach(el => {
+                        if(el.cost == null ){
+                            el.radio = '2';
+                        }else{
+                            el.radio = '1';
+                        }
+                    })
+
+                    this.timeValue.forEach(el => {
+                        if(el.cost == null ){
+                            el.radio = '2';
+                        }else{
+                            el.radio = '1';
+                        }
                     })
                 })
-                if(this.ifShowRangeType == 2){
-                    this.unable = true;
-                }
             }
         },
         //添加子节点新增
@@ -586,19 +569,6 @@ export default {
             // console.log(type)
             switch(type){
                 case 'takeGoods':
-                // console.log(item.primeryPrice)
-                    // if(idx == 0 && item.endVolume == ''){
-                    //     return this.$message({
-                    //         type: 'info',
-                    //         message: '请补充重货运量' 
-                    //     })
-                    // }
-                    // else if(item.primeryPrice == ''){
-                    //     return this.$message({
-                    //         type: 'info',
-                    //         message: '请补充重货推荐价格（元 / m3）' 
-                    //     })
-                    // }else{
                         this.takeGoods.push({
                             weightInterval1:this.takeGoods[idx].weightInterval2,//重量区间1
                             weightInterval2:'',//重量区间2
@@ -607,21 +577,8 @@ export default {
                             volumeInterval1:this.takeGoods[idx].volumeInterval2,//体积区间1
                             volumeInterval2:'',//体积区间2
                         }); 
-                    // }
                     break;
                 case 'deliverGoods':
-                    // if(idx == 0 && item.endVolume == ''){
-                    //     return this.$message({
-                    //         type: 'info',
-                    //         message: '请补充重泡货（重货）运量' 
-                    //     })
-                    // }
-                    // else if(item.primeryPrice == ''){
-                    //     return this.$message({
-                    //         type: 'info',
-                    //         message: '请补充重泡货（重货）推荐价格（元 / m3）' 
-                    //     })
-                    // }else{
                         this.deliverGoods.push({
                             weightInterval1:this.deliverGoods[idx].weightInterval2,//重量区间1
                             weightInterval2:'',//重量区间2
@@ -629,13 +586,12 @@ export default {
                             deliverIntervalList:[{
                                 cost:'',
                                 costType:'1',
-                                deliverInterval1:0,//送货范围1
+                                deliverInterval1:'0',//送货范围1
                                 deliverInterval2:'',//送货范围2
                             }],
                             volumeInterval1:this.deliverGoods[idx].volumeInterval2,//体积区间1
                             volumeInterval2:'',//体积区间2
                         }); 
-                    // }
                     break;
                 case 'deliverGoodsRange':
                     // console.log(type,idx,item)
@@ -647,18 +603,6 @@ export default {
                     })
                     break;
                 case 'supportGoods':
-                    // if(idx == 0 && item.endVolume == ''){
-                    //     return this.$message({
-                    //         type: 'info',
-                    //         message: '请补充轻货运量' 
-                    //     })
-                    // }
-                    // else if(item.primeryPrice == ''){
-                    //     return this.$message({
-                    //         type: 'info',
-                    //         message: '请补充轻货推荐价格' 
-                    //     })
-                    // }else{
                         this.supportGoods.push({
                             costType:'0',//费用类型(保价费定价:0 ;代收货款手续费定价:1 ; 时效保障费定价:2)
                             costInterval1:this.supportGoods[idx].costInterval2,//干线费区间1
@@ -668,7 +612,6 @@ export default {
                             cost:'',//费用
                             rate:'',//费率
                         }); 
-                    // }
                     break;
 
                 case 'FeePricing':
@@ -703,21 +646,29 @@ export default {
             switch(type){
                 case 'takeGoods':
                     this.takeGoods.splice(idx,1);
+                    this.takeGoods[idx-1].weightInterval2 = '';
+                    this.takeGoods[idx-1].volumeInterval2 = '';
                     break;
                 case 'deliverGoods':
                     this.deliverGoods.splice(idx,1);
+                    this.deliverGoods[idx-1].weightInterval2 = '';
+                    this.deliverGoods[idx-1].volumeInterval2 = '';
                     break;
                 case 'deliverGoodsRange':
                     item.splice(idx,1);
+                    item[idx-1].deliverInterval2 = '';
                     break;
                 case 'supportGoods':
                     this.supportGoods.splice(idx,1);
+                    this.supportGoods[idx-1].costInterval2 = '';
                     break;
                 case 'FeePricing':
                     this.FeePricing.splice(idx,1);
+                    this.FeePricing[idx-1].costInterval2 = '';
                     break;
                 case 'timeValue':
                     this.timeValue.splice(idx,1);
+                    this.timeValue[idx-1].costInterval2 = '';
                     break;
             }
         },  
@@ -769,44 +720,74 @@ export default {
         submitForm(formName) {
             let ifNull = true;
             let messageInfo;
-            // this.ligthPriceForms.forEach(item => {
-            //     if(item.primeryPrice == ''){
-            //         messageInfo= '请补充轻货推荐价格' 
-            //         ifNull = false;
-            //     }
-            // })
+            this.takeGoods.forEach(item => {
+                if(item.volumeInterval1 == '' || item.weightInterval1 == ''){
+                    messageInfo= '提货费区间最小值不可为空' 
+                    ifNull = false;
+                }
+                // console.log('volumeInterval1',item.weightInterval1,item.volumeInterval1)
+            })
+
+            this.deliverGoods.forEach(item => {
+                if(item.volumeInterval1 == '' || item.weightInterval1 == ''){
+                    messageInfo= '送货费区间最小值不可为空' 
+                    ifNull = false;
+                }else{
+                    item.deliverIntervalList.forEach(el => {
+                        if(el.deliverInterval1 == ''){
+                            messageInfo= '送货费送货范围区间最小值不可为空' 
+                            ifNull = false;
+                        }
+                    })
+                }
+            })
             
+            this.supportGoods.forEach(item => {
+                if(item.costInterval1 == ''){
+                    messageInfo= '保价费区间最小值不可为空' 
+                    ifNull = false;
+                }
+            })
+
+            this.FeePricing.forEach(item => {
+                if(item.costInterval1 == ''){
+                    messageInfo= '代收货款手续费区间最小值不可为空' 
+                    ifNull = false;
+                }
+            })
+
+            this.timeValue.forEach(item => {
+                console.log('item.costInterval1',item.costInterval1)
+                if(item.costInterval1 == ''){
+                    messageInfo= '时效保障费区间最小值不可为空' 
+                    ifNull = false;
+                }
+            })
+
             if(ifNull){
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
                         this.completeName();
-                       
-                        console.log(this.ruleForm)
                         let commitFunction = newTradeAreaLineCarrier(this.ruleForm);
-                        // if(this.ifShowRangeType == '1'){
-                        //     commitFunction = updateWebAflcTransportRange(this.ruleForm);
-                        // }else{
-                        //     commitFunction = createWebTransport(this.ruleForm)
-                        // }
                         commitFunction.then(res => {
-                            console.log('res',res) 
                             if(res.status == 200){
                                 this.$alert('操作成功', '提示', {
                                     confirmButtonText: '确定',
                                     callback: action => {
-                                        // this.$router.push({name:'物流专线'})
+                                        sessionStorage.setItem('regionalCarrierName','lineServicePrice');
+                                        this.$router.push({name:'发物流线路承运商'});
                                     }
                                 });
                             }else{
                                 this.$message({
                                     type: 'info',
-                                    message: '操作失败，原因：' + res.errorInfo ? res.errorInfo : res.text
+                                    message: '操作失败，原因：' + (res.errorInfo ? res.errorInfo : res.text)
                                 })
                             }
                         }).catch(err=>{
                             this.$message({
                                 type: 'info',
-                                message: '操作失败，原因：' + err.errorInfo ? err.errorInfo : err.text
+                                message: '操作失败，原因：' + (err.errorInfo ? err.errorInfo : err.text)
                             })
                         })
                     } else {
@@ -827,6 +808,63 @@ export default {
 
         resetForm(formName) {
             this.$refs[formName].resetFields();
+            this.$refs.vregion.clear();
+            this.takeGoods=[
+                {
+                    costType:'0',//费用类型(提货费:0 ; 送货费:1)
+                    cost:'',//费用
+                    volumeInterval1:'0',//体积区间1
+                    volumeInterval2:'',//体积区间2
+                    weightInterval1:'0',//重量区间1
+                    weightInterval2:'',//重量区间2
+                }
+            ]
+            //送货费定价
+            this.deliverGoods=[{
+                costType:'1',//费用类型(提货费:0 ; 送货费:1)
+                deliverIntervalList:[{
+                    cost:'',
+                    costType:'1',
+                    deliverInterval1:'0',//送货范围1
+                    deliverInterval2:'',//送货范围2
+                }],
+                volumeInterval1:'0',//体积区间1
+                volumeInterval2:'',//体积区间2
+                weightInterval1:'0',//重量区间1
+                weightInterval2:'',//重量区间2
+            }]
+            //保价费定价
+            this.supportGoods=[{
+                costType:'0',//费用类型(保价费定价:0 ;代收货款手续费定价:1 ; 时效保障费定价:2)
+                costInterval1:'0',//干线费区间1
+                costInterval2:'',//干线费区间2
+                lowestCost:'',//最低一票收费
+                highestCost:'',//最高一票收费
+                cost:'',//费用
+                rate:'',//费率
+            }]
+            //代收货款手续费定价
+            this.FeePricing=[{
+                costType:'1',//费用类型(保价费定价:0 ;代收货款手续费定价:1 ; 时效保障费定价:2)
+                costInterval1:'0',//干线费区间1
+                costInterval2:'',//干线费区间2
+                lowestCost:'',//最低一票收费
+                highestCost:'',//最高一票收费
+                cost:'',//费用
+                rate:'',//费率
+                radio:'1',//单选判断点
+            }]
+            //时效保障费定价
+            this.timeValue=[{
+                costType:'2',//费用类型(保价费定价:0 ;代收货款手续费定价:1 ; 时效保障费定价:2)
+                costInterval1:'0',//干线费区间1
+                costInterval2:'',//干线费区间2
+                lowestCost:'',//最低一票收费
+                highestCost:'',//最高一票收费
+                cost:'',//费用
+                rate:'',//费率
+                radio:'1',//单选判断点
+            }]
         }
     }
 }

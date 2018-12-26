@@ -69,7 +69,7 @@
         sessionStorage.setItem('UseshipperName', this.UseshipperName)
       },
       beforeDestroy() {
-        sessionStorage.setItem('UseshipperName', 'first')
+        sessionStorage.setItem('UseshipperName', this.UseshipperName)
       },
       mounted(){
 

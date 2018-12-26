@@ -46,7 +46,7 @@
         </el-form>
           <div class="classify_info">
             		<div class="btns_box">
-                <el-button type="primary" :size="btnsize" class="el-icon-circle-plus"  plain @click="doAction('reg')">物损登记</el-button>
+                <el-button type="primary" :size="btnsize" class="el-icon-circle-plus"  plain @click="doAction('reg')"  v-has:CUSTOM_CLAIM_REGISTER>物损登记</el-button>
                 <!-- <el-button type="primary" :size="btnsize" class="el-icon-tickets" @click="doAction('shouli')" plain>确认受理</el-button> -->
                 <!-- <el-button type="primary" :size="btnsize" icon="el-icon-news" @click="doAction('genjin')" plain>记录物流跟进</el-button> -->
             		</div>

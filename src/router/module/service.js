@@ -34,7 +34,7 @@ export default {
       icon: 'dahuoche',
       name: '物损理赔',
       component: _import('service/claim/index'),
-      meta: { role: ['admin'], title: '物损理赔', stitle: '物损理赔', noCache: true, code: '' },
+      meta: { role: ['admin'], title: '物损理赔', stitle: '物损理赔', noCache: true, code: 'CUSTOM_CLAIM' },
       children: [
 
       ]
@@ -43,7 +43,7 @@ export default {
       icon: 'dahuoche',
       name: '投诉处理',
       component: _import('service/dispose/index'),
-      meta: { role: ['admin'], title: '投诉处理', stitle: '投诉处理', noCache: true, code: '' },
+      meta: { role: ['admin'], title: '投诉处理', stitle: '投诉处理', noCache: true, code: 'CUSTOM_COMPLAIN' },
       children: [
 
       ]
@@ -52,7 +52,7 @@ export default {
         icon: '400',
         name: '400管理',
         component: _import('service/400Manage/index'),
-        meta: { role: ['admin'], title: '400管理', stitle: '400', noCache: true, code: '' },
+        meta: { role: ['admin'], title: '400管理', stitle: '400', noCache: true, code: 'CUSTOM_400_MANAGE' },
         children: [
   
         ]

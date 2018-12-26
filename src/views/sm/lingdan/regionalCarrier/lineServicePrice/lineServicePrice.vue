@@ -1,5 +1,5 @@
 <template>
-    <div class="identicalStyle creatQRCode" v-loading="loading">
+    <div class="identicalStyle lineServicePrice" v-loading="loading">
             <el-form  :inline="true" :model="searchInfo" ref="ruleForm" class="demo-ruleForm classify_searchinfo">
                 <el-form-item label="区域" prop="areaName">
                     <el-input v-model="searchInfo.areaName" clearable>
@@ -13,7 +13,7 @@
             <div class="classify_info">
                 <div class="btns_box">
                     <el-button type="primary" icon="el-icon-circle-plus" plain @click="handleClick('new')" :size="btnsize">新增</el-button>
-                    <el-button type="primary" icon="el-icon-bell" plain @click="handleClick('delet')" :size="btnsize">启用/禁用</el-button>
+                    <el-button type="primary" icon="el-icon-bell" plain @click="handleClick('status')" :size="btnsize">启用/禁用</el-button>
                 </div>
                 <div class="info_news" style="height:89%">
                     <el-table
@@ -41,6 +41,9 @@
                             prop="areaName"
                             label="区域"
                             >
+                            <template slot-scope="scope">
+                               <h4 class="moreInfo" @click="handleInfo(scope.row)">{{scope.row.areaName}}</h4>
+                            </template>
                         </el-table-column>
                         <el-table-column
                             prop="updater"
@@ -74,15 +77,14 @@
                 </div>
             </div>   
                 <!-- 页码 -->
-            <div class="info_tab_footer">共计:{{ dataTotal }} <div class="show_pager"> <Pager :total="dataTotal" @change="handlePageChange"  :sizes="sizes"  ref="pager"/></div> </div>    
+            <div class="info_tab_footer">共计:{{ dataTotal }} <div class="show_pager"> <Pager :total="dataTotal" @change="handlePageChange"    ref="pager"/></div> </div>    
 
     </div>
 </template>
 
 <script type="text/javascript">
 
-import { TradeAreaLineCarrierList } from '@/api/server/lingdan/TradeAreaLineCarrier.js'
-import { aflcQrcodeList,aflcQrcodeDelet,getChannel } from '@/api/server/QRCode.js'
+import { TradeAreaLineCarrierList,TradeAreaLineCarrierStatus } from '@/api/server/lingdan/TradeAreaLineCarrier.js'
 import { parseTime, pickerOptions2 } from '@/utils/index.js'
 import Pager from '@/components/Pagination/index'
 
@@ -99,8 +101,6 @@ export default{
       data() {
           return {
               btnsize: 'mini',
-              dialogVisible: false,
-              timeOutAss: null,
               loading: false, // 加载
               sizes: [20, 50, 100],
               pagesize: 20, // 初始化加载数量
@@ -112,8 +112,6 @@ export default{
               tableData: [],
               checkedinformation: [],
               dialogFormVisible: false,
-                twocodeurl: ''
-
             }
         },
       watch: {
@@ -153,6 +151,9 @@ export default{
                     this.loading = false;
                 })
             },
+            handleInfo(row){
+                this.$router.push({ name: '发物流新增线路增值服务定价', query: { areaCode: row.areaCode }})
+            },
             // 模糊查询 分类名称或者code
           handleSearch(type) {
                 switch (type) {
@@ -180,55 +181,30 @@ export default{
             handleClick(type){
                 switch (type) {
                     case 'new':
-                        this.dialogVisible = true;
+                        this.$router.push({ name: '发物流新增线路增值服务定价'})
                         break
-                    case 'delet':
-                        if(this.checkedinformation.length > 1 ){
+                    case 'status':
+                        console.log(this.checkedinformation)
+                        if(this.checkedinformation.length == 0 ){
                             this.$message({
                                 type: 'warning',
-                                message: '只支持单条数据操作！' 
+                                message: '请选择要操作的数据！' 
                             })
-                        }else if(this.checkedinformation.length == 1){
-                            console.log(this.checkedinformation[0].id)
-                            let config = this.checkedinformation[0];
-                            this.$confirm('确定要删除'+config.name+'该条二维码吗？', '提示', {
-                                confirmButtonText: '确定',
-                                cancelButtonText: '取消',
-                                type: 'warning'
-                            }).then( ()=>{
-                                aflcQrcodeDelet(config.id).then(res => {
-                                     this.$message({
-                                        type: 'success',
-                                        message: '删除成功'
-                                    })
-                                    this.firstblood();
-                                }).catch(err=>{
-                                    this.$message({
-                                        type: 'info',
-                                        message: '删除失败，原因：' + err.errorInfo ? err.errorInfo : err.text
-                                    })
-                                })
-                            }).catch(() => {
+                        }else {
+                            let ids = [];
+                            this.checkedinformation.forEach(el =>{
+                                ids.push(el.areaCode)
+                            })
+                            TradeAreaLineCarrierStatus(ids).then(res => {
                                 this.$message({
-                                    type: 'info',
-                                    message: '已取消'
+                                    type: 'success',
+                                    message: '操作成功！' 
                                 })
+                                this.firstblood()
                             })
-                            
                         }
                         break;
                 }
-            },
-            handleclick(row){
-                // console.log(row.qrcode)
-                QRCode.toDataURL(row.qrcode, {
-                    rendererOpts: {
-                        margin: 0
-                    }
-                }).then(url => {
-                    this.twocodeurl = url
-                    console.log(url)
-                })
             },
              // 判断是否选中
             getinfomation(selection) {
@@ -243,14 +219,25 @@ export default{
               this.$router.push({ name: '订单详情', query: { orderSerial: item.orderSerial }})
             },
             shuaxin() {
-              this.firstblood()
+              this.firstblood();
             },
         }
     }
 </script>
 
 <style type="text/css" lang="scss" scoped>
-    .creatQRCode{
-        height: 100%;
+    .lineServicePrice{
+        .info_news{
+            .el-table{
+                td{
+                    .cell{
+                        .moreInfo{
+                            cursor: pointer;
+                            color: #3e9ff1;
+                        }
+                    }
+                }
+            }
+        }
     }
 </style>

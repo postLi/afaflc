@@ -13,7 +13,7 @@
             </el-dialog>
             <div class="classify_info">
                 <div class="btns_box" id="urlLoad">
-                    <el-button type="primary" plain @click="handleSearch('export')" size="mini">导出Excel</el-button>
+                    <el-button type="primary" plain @click="handleSearch('export')" size="mini" v-has:CUSTOM_400_MANAGE_EXCEL>导出Excel</el-button>  
                 </div>
                 <div class="info_news">
                     <el-table

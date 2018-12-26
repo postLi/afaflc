@@ -129,7 +129,7 @@
             <div class="essentialInformation">
                 <p>
                     <span>运费总额：</span>
-                    <span class="fontRed">￥{{listInformation.aflcOrderExpenses.orderPrice ? listInformation.aflcOrderExpenses.orderPrice : 0}}</span>
+                    <span class="fontRed">￥{{listInformation.orderPrice ? listInformation.orderPrice : 0}}</span>
                  </p>
                 <p>
                     <span>货主支付：</span>

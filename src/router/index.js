@@ -50,7 +50,7 @@ export const constantRouterMap = [
     // name: '首页',
     name: 'dashboard',
     meta: {
-      'code': 'HOME'
+      'code': 'HOME',
     },
     hidden: true,
     children: [{
@@ -59,7 +59,7 @@ export const constantRouterMap = [
       icon: 'shouye',
       hidden: false,
       component: _import('dashboard/index'),
-      meta: { title: '运营控制台', noCache: false, 'proute': 'dashboard' }
+      meta: { title: '运营控制台', noCache: false,'code': 'HOME_OPERATION_CONSOLE', 'proute': 'dashboard' }
     }, {
       path: '/common/myinfo',
       icon: 'information',
@@ -80,7 +80,7 @@ export const constantRouterMap = [
       meta: {
         title: '财务控制台',
         noCache: true,
-        'code': '',
+        'code': 'HOME_FINANCE_EXECUTE',
         'proute': 'dashboard'
       }
     },
@@ -103,7 +103,7 @@ export const constantRouterMap = [
       hidden: false,
       name: '车辆跟踪',
       component: _import('carmonitor/index'),
-      meta: { title: '车辆跟踪', noCache: true, 'code': '','proute': 'dashboard' }
+      meta: { title: '车辆跟踪', noCache: true, 'code': 'HOME_DRIVER_TRACE','proute': 'dashboard' }
     }, {
       path: '/onlineService',
       icon: 'zxkf',
@@ -113,7 +113,7 @@ export const constantRouterMap = [
       meta: {
         title: '在线客服',
         noCache: true,
-        'code': '',
+        'code': 'HOME_ONLINE_SERVICE',
         'proute': 'dashboard'
       }
     }]
