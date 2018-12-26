@@ -10,7 +10,7 @@
    tmsMath,
    parseTime
  } from '@/utils/'
- import {
+ import {  
    getUserInfo
  } from '@/utils/auth'
 
@@ -18,7 +18,7 @@
  //  const ExportJsonExcel = require('js-export-excel')
  //  const ExportJsonExcel = require('./excel')
  const ExportJsonExcel2 = require('./exceljs.min')
-//  const FileSaver = require('./fileSaver')
+ const FileSaver = require('./fileSaver')
 
  //  console.log('ExportJsonExcel:', ExportJsonExcel)
 
@@ -449,7 +449,7 @@
   * tmsDbLoadsList 短驳信息
   * }
   */
- export function formatOrderData(info, type) {
+ export function formatOrderData(info, type) {   
    // 获取用户信息
    const user = getUserInfo()
    console.log('formatOrderData:', info, type, user)
@@ -1003,8 +1003,8 @@
  function SaveExcelByTwo(option) {
    // https://github.com/guyonroche/exceljs
    var workbook = new ExcelJS.Workbook()
-   workbook.creator = '28TMS'
-   workbook.lastModifiedBy = '28TMS'
+   workbook.creator = '28Web'
+   workbook.lastModifiedBy = '28Web'
    workbook.created = new Date()
    workbook.modified = new Date()
    workbook.lastPrinted = new Date()
@@ -1198,6 +1198,7 @@
      uselodop = false
    }
    if (!uselodop) {
+       console.log('1232321312323')
      const summaries = getSummaries(obj)
      const sumObj = {}
      var option = {}
@@ -1224,6 +1225,8 @@
      //  SaveExcelByOne(option)
      SaveExcelByTwo(option)
    } else {
+    console.log('123')
+
      try {
        // by lyy
        // let tableId = createTable(data, columns) // 重新创建打印视图table

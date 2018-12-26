@@ -216,8 +216,8 @@ import { SaveAsFile } from '@/utils/lodopFuncs'
                 var wb = XLSX.utils.table_to_book(document.querySelector('#out-table-manage'))
                 /* get binary string as output */
                 var wbout = XLSX.write(wb, { bookType: 'xlsx', bookSST: true, type: 'array' })
-                console.log(wb)
-                console.log(wbout)
+                // console.log(wb)
+                // console.log(wbout)
                 try {
                     FileSaver.saveAs(new Blob([wbout], { type: 'application/octet-stream' }), '400管理'+ parseTime(new Date(), '{y}{m}{d}{h}{i}{s}')+'.xlsx')
                 } catch (e) { if (typeof console !== 'undefined') console.log(e, wbout) }
@@ -288,14 +288,11 @@ import { SaveAsFile } from '@/utils/lodopFuncs'
                                 }
                             })
                             SaveAsFile({
-                                data: res.data,
+                                data: res.data ? res.data : [],
                                 columns: this.tableColumn,
                                 name: '400管理-' + parseTime(new Date(), '{y}{m}{d}{h}{i}{s}')
                             })
                         })
-                        // this.exportExcel();
-                        
-                       
                         break;
                 }
             },
@@ -314,7 +311,7 @@ import { SaveAsFile } from '@/utils/lodopFuncs'
                 this.DetailsOrderSerial = item.orderSerial;
             },
             getSearchParam(obj) {
-                console.log(obj)
+                // console.log(obj)
                 this.searchInfo = Object.assign(this.searchInfo, obj);
                 if(this.page!= 1){
                     this.page = 1;

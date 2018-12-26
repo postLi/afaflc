@@ -1,7 +1,7 @@
 import fetch from '@/utils/fetch'
 
-// const baseurl = "aflc-common"
-const baseurl = "aflccommonservice-lyc"
+const baseurl = "aflc-common"
+// const baseurl = "aflccommonservice-lyc"
 
 
 //根据条件获取400通话记录表列表
