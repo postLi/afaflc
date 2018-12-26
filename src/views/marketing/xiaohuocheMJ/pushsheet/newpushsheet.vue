@@ -728,8 +728,6 @@ methods:{
             this.selectFlag=false;
         },
     
-        
-
             //完善数据
             completeData(){
                 let Carst = ['AF01801','AF01802','AF01803','AF01804'];
@@ -761,7 +759,7 @@ methods:{
                    this.$message.warning('推送时间段必须都填写');
                    this.vestList.setting[i].startTime = null;
                    this.vestList.setting[i].endTime = null;
-                  return false
+                   return false
                     }
                     else{
                 this.vestList.setting[i].startTime = this.vestList.setting[i].createTime[0];

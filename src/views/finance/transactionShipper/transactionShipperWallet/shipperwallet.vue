@@ -147,13 +147,13 @@
                             </template>
             </el-table-column>
             <el-table-column  label="流水号" prop="rechargeSerial" sortable width="250">
-                <template slot-scope="scope">
-                <h4 class="needMoreInfo" @click="pushOrderSerial(scope.row)">{{ scope.row.orderSerial}}</h4>
-                </template>
+                <!-- <template slot-scope="scope">
+                <h4 class="needMoreInfo" @click="pushOrderSerial(scope.row)">{{ scope.row.rechargeSerial}}</h4>
+                </template> -->
             </el-table-column>
             <el-table-column  label="充值时间" prop="rechargeTime" sortable width="250">
             </el-table-column>             
-            <el-table-column  label="充值金额" prop="enterSum" sortable>
+            <el-table-column  label="充值金额" prop="rechargeSum" sortable>
             </el-table-column>        
             <el-table-column  label="充值赠送" prop="giveSum" sortable>
             </el-table-column>       
@@ -382,9 +382,12 @@ export default {
 
     // 充值记录
     firstblood2(){
-     data_aflcRechargeList(this.page2,this.pagesize2,this.formAllData2).then(res => {
+       data_aflcRechargeList(this.page2,this.pagesize2,this.formAllData2).then(res => {
                     this.dataTotal2 = res.data.totalCount
                     this.tableDataAll2 = res.data.list;
+                    res.data.list.forEach(item => {
+                    item.rechargeTime = parseTime(item.rechargeTime,"{y}-{m}-{d} {h}:{i}:{s}");
+                    })
        })
        userRechargeCount(this.$route.query.accountId).then(res=>{
                     this.orderData2 = res.data
@@ -493,7 +496,7 @@ export default {
         },
     //  流水号进入订单详情
      pushOrderSerial(item){
-    this.$router.push({ name: '订单详情', query: { orderSerial: item.orderSerial }})
+    this.$router.push({ name: '订单详情', query: { orderSerial: item.rechargeTime }})
      },
    },
    mounted(){

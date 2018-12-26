@@ -2,12 +2,12 @@
   <div class="member tabsWrap">
     <el-tabs v-model="shipperName" type="card" @tab-click="handleClick" >
         <!-- KPI考核设置 -->
-            <el-tab-pane label="KPI考核设置" name="kpiSetup">
+            <el-tab-pane label="KPI考核设置" name="kpiSetup" v-if="$_has_permission('DISPATCH_CHECK_MANEGE_SMALL_CAR_KPI_SETTING')">
                 <kpiSetup :isvisible="shipperName === 'kpiSetup'"></kpiSetup>
             </el-tab-pane>
 
         <!-- 考核汇总表 -->
-            <el-tab-pane label="考核汇总表" name="evaluationTotal">
+            <el-tab-pane label="考核汇总表" name="evaluationTotal" v-if="$_has_permission('DISPATCH_CHECK_MANEGE_SMALL_CAR_CHECK_ALL')">
                 <evaluationTotal :isvisible="shipperName === 'evaluationTotal'"></evaluationTotal>
             </el-tab-pane>
     </el-tabs>

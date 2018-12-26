@@ -10,6 +10,7 @@
                     icon="el-icon-circle-plus"
                     editType="add"
                     @getData="getDataList"
+                    v-has:SYSTEM_APP_MANAGE_ADD_APK
                     btntitle="创建">
                     </operate>
                    <operate
@@ -20,6 +21,7 @@
                     icon="el-icon-edit"
                     editType="edit"
                     @getData="getDataList"
+                    v-has:SYSTEM_APP_MANAGE_UPDATE_APK
                     :params="selectRowData"
                     btntitle="修改">
                     </operate>

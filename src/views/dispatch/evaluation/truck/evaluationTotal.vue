@@ -27,7 +27,7 @@
             </el-form-item>     
             <el-form-item label="车主">
                 <el-input v-model.trim="formData.driver" clearable placeholder="请输入车主"></el-input>
-            </el-form-item>   
+            </el-form-item>
             <el-form-item label="订单号">
                <el-input v-model.trim="formData.orderSerial" clearable placeholder="请输入订单号"></el-input>
             </el-form-item>               
@@ -50,7 +50,7 @@
             </template>
             </el-table-column>
             <el-table-column  label="所属区域" prop="areaCodeName" show-overflow-tooltip sortable width="150">
-            </el-table-column>                                                      -->
+            </el-table-column>                                                 
             <el-table-column  label="下单时间" prop="orderTime" sortable width="180">
             </el-table-column>
             <el-table-column  label="所需车型" prop="carTypeName" sortable width="120">

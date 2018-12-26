@@ -56,7 +56,7 @@
              <el-button  type="primary" plain icon="el-icon-bell" @click="importExcel" :size="btnsize" >导出Excel</el-button>
             </div> 
             <div class="info_news">
-            <el-table ref="multipleTable" style="width: 100%" stripe border height="100%" highlight-current-row :data="tableDataTree" id="out-table">
+            <el-table ref="multipleTable" style="width: 100%" stripe border height="100%" highlight-current-row :data="tableDataTree" id="out-table" @selection-change="getSelection" @row-click="clickDetails">
               <el-table-column
                             label="选择"
                             type="selection"
@@ -84,18 +84,18 @@
             </el-table-column>   
             <el-table-column  label="付款状态" prop="payStatusName" sortable width="100">
             </el-table-column>                            
-            <el-table-column  label="提货地" prop="" sortable show-overflow-tooltip>
+            <el-table-column  label="提货地" prop="viaAddressName1" sortable show-overflow-tooltip>
              <template  slot-scope="scope">
             <span v-if="scope.row.orderAddressList.length>0">{{scope.row.orderAddressList[0].viaAddressName}}</span >
             </template>
             </el-table-column>                                                           
-            <el-table-column  label="目的地" prop="" sortable show-overflow-tooltip>
+            <el-table-column  label="目的地" prop="viaAddressName2" sortable show-overflow-tooltip>
              <template  slot-scope="scope">
             <span v-if="scope.row.orderAddressList.length>0">{{scope.row.orderAddressList[1].viaAddressName}}</span >
             </template>
             </el-table-column>  
             <el-table-column  label="下单时间" prop="useTime" sortable width="180">
-            </el-table-column>   
+            </el-table-column>
             <el-table-column  label="订单来源" prop="orderFromName" sortable width="100" show-overflow-tooltip>
             </el-table-column>                           
             </el-table>
@@ -112,6 +112,7 @@ import Pager from '@/components/Pagination/index'
 import {orderSerialFun,findFCLOrderInfoList,paymentFun} from '@/api/order/logistics/logistics.js'
 import FileSaver from 'file-saver'
 import XLSX from 'xlsx'
+import { SaveAsFile } from '@/utils/lodopFuncs'
 export default {
         props: {
             isvisible: {
@@ -136,6 +137,7 @@ export default {
             orderSerialList:[],
             ctime:[],
             paymentList:[],
+            selectRowData: {},
             formAllData:{
                 payStatus:null,
                 orderStatus:'AF05101',
@@ -146,7 +148,46 @@ export default {
                 startUseTime:null,
                 endUseTime:null,
                 orderFrom:null,
-            }
+            },
+            tableColumn:[{
+                    'label': '序号',
+                    'prop': '',
+                },{
+                    'label': '订单号',
+                    'prop': 'orderSerial',
+                },{
+                    'label': '订单状态',
+                    'prop': 'orderStatusName',
+                },{
+                    'label': '货主',
+                    'prop': 'shipperName',
+                },{
+                    'label': '物流公司',
+                    'prop': 'companyName',
+                },{
+                    'label': '货物名称',
+                    'prop': 'goodsName',
+                },{
+                    'label': '运费总额',
+                    'prop': 'totalAmount',
+                },{
+                    'label': '付款状态',
+                    'prop': 'payStatusName',
+                },{
+                    'label': '提货地',
+                    'prop': 'viaAddressName1',
+                },{
+                    'label': '目的地',
+                    'prop': 'viaAddressName2',
+                },
+                {
+                    'label': '下单时间',
+                    'prop': 'useTime',
+                },
+                {
+                    'label': '订单来源',
+                    'prop': 'orderFromName',
+                }]             
         }
     },
     components:{
@@ -161,6 +202,8 @@ export default {
                     this.tableDataTree = res.data.list;
                      this.tableDataTree.forEach(item => {
                         item.useTime = parseTime(item.useTime,"{y}-{m}-{d} {h}:{i}:{s}");
+                        item.viaAddressName1= item.orderAddressList[0].viaAddressName
+                        item.viaAddressName2= item.orderAddressList[1].viaAddressName     
                     })
               })
             },
@@ -210,13 +253,30 @@ export default {
                 }
                 this.firstblood();
             },
+            // 判断选中与否
+            getSelection(val) {
+            console.log('选中内容', val)
+            this.selectRowData = val
+            },
+            // 点击选中当前行
+            clickDetails(row, event, column) {
+            this.$refs.multipleTable.toggleRowSelection(row)
+            },
             importExcel(){
-            var wb = XLSX.utils.table_to_book(document.querySelector('#out-table'))
-            var wbout = XLSX.write(wb, { bookType: 'xlsx', bookSST: true, type: 'array' })
-            try {
-                FileSaver.saveAs(new Blob([wbout], { type: 'application/octet-stream' }), 'sheetjs'+Math.floor(Math.random()*100000)+'.xlsx')
-            } catch (e) { if (typeof console !== 'undefined') {} }
-            return wbout
+                if(this.selectRowData.length>0){
+                    SaveAsFile({
+                        data: this.selectRowData ? this.selectRowData : [],
+                        columns: this.tableColumn,
+                        name: '订单管理-' + parseTime(new Date(), '{y}{m}{d}{h}{i}{s}')
+                    })
+                    this.$refs.multipleTable.clearSelection()
+                }else{
+                    SaveAsFile({
+                        data: this.tableDataTree ? this.tableDataTree : [],
+                        columns: this.tableColumn,
+                        name: '订单管理-' + parseTime(new Date(), '{y}{m}{d}{h}{i}{s}')
+                    })
+                }
             },             
             pushOrderSerial(val){
                  this.$router.push({name: '发物流订单详情',query:{ orderSerial:val.orderSerial}});

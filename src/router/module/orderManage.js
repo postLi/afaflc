@@ -74,37 +74,37 @@ export default {
                 path: '/order/sendlogistics/waitCarriy',
                 name: '发物流待承运', 
                 component: _import('order/sendlogistics/waitCarriy'), 
-                meta: { role: ['admin'], title: '待承运',stitle: '承运',  noCache: true,}
+                meta: { role: ['admin'], title: '待承运',stitle: '承运',  noCache: true,code: 'ORDER_LTL_ORDER_WAIT' }
             },
             {
                 path: '/order/sendlogistics/waitpayment',
                 name: '发物流待付款', 
                 component: _import('order/sendlogistics/waitpayment'), 
-                meta: { role: ['admin'], title: '待付款',stitle: '付款',  noCache: true,}
+                meta: { role: ['admin'], title: '待付款',stitle: '付款',  noCache: true,code: 'ORDER_LTL_ORDER_UNPAY'}
             },
             {
                 path: '/order/sendlogistics/implementing',
                 name: '发物流进行中', 
                 component: _import('order/sendlogistics/implementing'), 
-                meta: { role: ['admin'], title: '进行中',stitle: '进行',  noCache: true,}
+                meta: { role: ['admin'], title: '进行中',stitle: '进行',  noCache: true,code: 'ORDER_LTL_ORDER_ING' }
             },            
             {
                 path: '/order/sendlogistics/complate',
                 name: '发物流已完成', 
                 component: _import('order/sendlogistics/complate'), 
-                meta: { role: ['admin'], title: '已完成',stitle: '完成',  noCache: true,}
+                meta: { role: ['admin'], title: '已完成',stitle: '完成',  noCache: true,code: 'ORDER_LTL_ORDER_FINISH' }
             },
             {
                 path: '/order/sendlogistics/cancel',
                 name: '发物流已取消', 
                 component: _import('order/sendlogistics/cancel'), 
-                meta: { role: ['admin'], title: '已取消',stitle: '取消',  noCache: true,}
+                meta: { role: ['admin'], title: '已取消',stitle: '取消',  noCache: true,code: 'ORDER_LTL_ORDER_CANCLE' }
             },
             {
                 path: '/order/sendlogistics/allsendlogistics',
                 name: '发物流全部', 
                 component: _import('order/sendlogistics/allsendlogistics'), 
-                meta: { role: ['admin'], title: '全部',stitle: '全部',  noCache: true,}
+                meta: { role: ['admin'], title: '全部',stitle: '全部',  noCache: true,code: 'ORDER_LTL_ORDER_ALL' }
             },                        
         ]
       },
