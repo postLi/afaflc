@@ -2,12 +2,12 @@
     <div class="QRCode tabsWrap">
        <el-tabs v-model="QRCodeName" type="card" @tab-click="handleClick" >
             <!-- 二维码生成 -->
-                <el-tab-pane label="二维码生成" name="qrCode">
+                <el-tab-pane label="二维码生成" name="qrCode" v-if="$_has_permission('SERVICE_QRCODE_QRCODE_CREATE')">
                     <newQRCode :isvisible="QRCodeName === 'qrCode'"/>
                 </el-tab-pane>
 
             <!-- 渠道数据统计 -->
-                <el-tab-pane label="渠道数据统计" name="channel">
+                <el-tab-pane label="渠道数据统计" name="channel" v-if="$_has_permission('SERVICE_QRCODE_CHANNEL_DATA_COUNT')">
                     <channelTotal :isvisible="QRCodeName === 'channel'"/>
                 </el-tab-pane>
         </el-tabs>

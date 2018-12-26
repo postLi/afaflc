@@ -21,10 +21,10 @@
             </el-form>
             <div class="classify_info">
                 <div class="btns_box">
-                    <el-button type="primary" icon="el-icon-circle-plus" plain @click="handleClick('new')" :size="btnsize">新增</el-button>
-                    <el-button type="primary" icon="el-icon-delete" plain @click="handleClick('delet')" :size="btnsize">删除</el-button>
+                    <el-button type="primary" icon="el-icon-circle-plus" plain @click="handleClick('new')" :size="btnsize" v-has:SERVICE_QRCODE_ADD>新增</el-button>
+                    <el-button type="primary" icon="el-icon-delete" plain @click="handleClick('delet')" :size="btnsize" v-has:SERVICE_QRCODE_DELETE>删除</el-button>
                 </div>
-                <div class="info_news" style="height:89%">
+                <div class="info_news">
                     <el-table
                         ref="multipleTable"
                         :data="tableData"
