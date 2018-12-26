@@ -86,7 +86,7 @@ export default {
                 path: '/marketing/xiaohuocheMJ/MjPushLogs',
                 hidden: false, name:'推送记录',
                 component: _import('marketing/xiaohuocheMJ/MjPushLogs/index'),
-                meta: { title: '推送记录', stitle: '记录', noCache: true }
+                meta: { title: '推送记录', stitle: '记录', noCache: true, code: 'MARKETING_SMALL_CAR_MJ_PUSH_RECORD' }
             },
             {
                 path: '/marketing/xiaohuocheMJ/Logs',

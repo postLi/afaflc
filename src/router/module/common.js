@@ -102,7 +102,7 @@ export default {
         hidden: false,
         name: '开放城市',
         component: _import('common/businessCity/index'),
-        meta: { title: '开放城市', stitle: '城市', noCache: true ,code:'SYSTEM_CITY' }
+        meta: { title: '开放城市', stitle: '城市', noCache: true, code: 'SYSTEM_CITY' }
       },
       {
         path: '/common/appManage',
@@ -110,7 +110,7 @@ export default {
         hidden: false,
         name: 'APP管理',
         component: _import('common/appManage/index'),
-        meta: { title: 'APP管理', stitle: 'APP', noCache: true }
+        meta: { title: 'APP管理', stitle: 'APP', noCache: true, code: 'SYSTEM_APP_MANAGE' }
       },
 
       {

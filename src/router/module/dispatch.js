@@ -54,12 +54,12 @@ export default {
     path: '/dispatch/evaluation', 
     icon: 'zonghe', name: '考核管理', 
     component: _import('dispatch/evaluation/truck/index'), 
-    meta: { role: ['admin'], title: '考核管理',stitle: '考核管理',  noCache: true },
+    meta: { role: ['admin'], title: '考核管理',stitle: '考核管理', noCache: true, code: 'DISPATCH_CHECK_MANEGE' },
     children: [{
       path: '/dispatch/evaluation/truck',
       name: '小货车考核', 
       component: _import('dispatch/evaluation/truck/index'), 
-      meta: { role: ['admin'], title: '小货车',stitle: '小货车',  noCache: true }
+      meta: { role: ['admin'], title: '小货车',stitle: '小货车', noCache: true , code: 'DISPATCH_CHECK_MANEGE_SMALL_CAR' }
     }]
   },  
 
