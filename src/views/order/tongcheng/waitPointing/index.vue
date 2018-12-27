@@ -12,6 +12,7 @@
                 <span slot="label">超时无人接单 ( <span style="color:red;">{{tabsNum.outTimeNoDriverCounts > 99 ? '99+' : tabsNum.outTimeNoDriverCounts}}</span> ) </span>
                 <overTime :isvisible=" waitPointName === 'overTime'"></overTime>
             </el-tab-pane>
+            
         <!-- 公海无司机 -->
             <el-tab-pane label="公海无司机" name="noDriver" v-if="$_has_permission('ORDER_CITY_WIDE_ORDER_WIAT_ASSIGN_OPEN_NO_DRIVER')">
                 <span slot="label">公海无司机 ( <span style="color:red;">{{tabsNum.publicSeaNoDriverCounts > 99 ? '99+' : tabsNum.publicSeaNoDriverCounts}}</span> ) </span>

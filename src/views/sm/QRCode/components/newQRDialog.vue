@@ -16,6 +16,7 @@
 					<el-input v-model.trim="standForm.topic" maxlength="20" ></el-input>
                 </el-form-item>
                  <el-form-item label="业务员：" prop="name" >
+                    <!-- <CustomerSearch @returnCustomer = 'getCustomer' :customerName = "standForm.name"  v-model="standForm.name"/> -->
                     <CustomerSearch @returnCustomer = 'getCustomer' :customerName = "standForm.name"/>
                 </el-form-item>
                  <el-form-item label="渠道名称：" prop="channal" >
@@ -45,7 +46,7 @@
 
 <script type="text/javascript">
 import { getDictionary,DicQRcodeLink } from '@/api/common.js'
-import CustomerSearch from '@/components/CustomerSearch/index'
+import CustomerSearch from '@/components/CustomerSearch/select'
 import { aflcQrcodeNew } from '@/api/server/QRCode.js'
 import selectChannel from '@/components/selectTree/QRcode'
 
@@ -94,12 +95,6 @@ import selectChannel from '@/components/selectTree/QRcode'
         },
         methods: {
             init(){
-                // ,DicQRcodeLink(this.cancelReason).then(res => {
-                //     // console.log('cancel',res)
-                //     this.optionsCancel = res.data;
-                //     this.form.cancelCode = res.data[0].code;
-                //     this.loading = false;
-                // })
                 DicQRcodeLink().then(res => {
                     this.optionsQRcode = res.data;
                 })

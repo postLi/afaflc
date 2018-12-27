@@ -220,7 +220,7 @@ export default{
           isvisible: {
               handler(newVal, oldVal) {
                   if (newVal) {
-                      this.firstblood()
+                        this.firstblood()
                         this.timeOutAss = setInterval(this.firstblood,10*1000);
 
                     } else{
@@ -253,7 +253,6 @@ export default{
             // 刷新页面
           firstblood() {
               this.loading = true
-
                 orderStatusList(this.page, this.pagesize, this.searchInfo).then(res => {
                   console.log('车主改派', res)
                   this.tableData = res.data.list

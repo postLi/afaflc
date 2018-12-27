@@ -23,19 +23,19 @@ export default {
         component: _import('28WEB/userclass/logistics/index'),
         meta: {role: ['admin'], title: '物流专线', noCache: true, code: 'CUSTOM_FEEDBACK_PLATFORM'}
       }, {
-        path: '/order/xuqiuku/carInfo/index',
+        path: '/sm/xuqiuku/carInfo/index',
         name: '28WEB车源信息',
-        component: _import('order/xuqiuku/carInfo/index'),
+        component: _import('sm/xuqiuku/carInfo/index'),
         meta: {role: ['admin'], title: '车源信息', noCache: true, code: 'CUSTOM_FEEDBACK_PLATFORM'}
       }, {
-        path: '/order/xuqiuku/driverInfo/index',
+        path: '/sm/xuqiuku/driverInfo/index',
         name: '28WEB货源信息',
-        component: _import('order/xuqiuku/driverInfo/index'),
+        component: _import('sm/xuqiuku/driverInfo/index'),
         meta: {role: ['admin'], title: '货源信息', noCache: true, code: 'CUSTOM_FEEDBACK_PLATFORM'}
       }, {
-        path: '/order/xuqiuku/manageGroup/index',
+        path: '/sm/xuqiuku/manageGroup/index',
         name: '28WEB网点信息',
-        component: _import('order/xuqiuku/manageGroup/index'),
+        component: _import('sm/xuqiuku/manageGroup/index'),
         meta: {role: ['admin'], title: '网点信息', noCache: true, code: 'CUSTOM_FEEDBACK_PLATFORM'}
       }]
     }, {

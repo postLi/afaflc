@@ -50,22 +50,6 @@ export default {
       meta: { title: '数据字典', stitle: '数据', noCache: true, code: 'SYSTEM_DICT' }
     },
     {
-      path: '/common/driverManage',
-      icon: 'sijiguanli',
-      hidden: true,
-      name: '模板管理',
-      component: _import('common/driverManage/index'),
-      meta: { title: '模板管理', stitle: '模板', noCache: true, code: '' }
-    },
-    {
-      path: '/common/trunkManage',
-      icon: 'cheliangguanli',
-      hidden: true,
-      name: '片区管理',
-      component: _import('common/trunkManage/index'),
-      meta: { title: '片区管理', stitle: '片区', noCache: true, code: '' }
-    },
-    {
         path: '/common/task',
         icon: 'rwdd',
         hidden: true,

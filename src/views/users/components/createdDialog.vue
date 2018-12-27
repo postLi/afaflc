@@ -54,8 +54,8 @@
             </el-col>
             <el-col :span="12">
                 <el-form-item label="所属业务员：" prop="belongSalesmanName">
-                    <CustomerSearch @returnCustomer = 'getCustomer' :customerName = "xinzengform.belongSalesmanName" ref="SalesmanName" :disabled="editType == 'view'"/>
-                    <!-- {{xinzengform.belongSalesmanName}} -->
+                    <el-input :maxlength="40" v-model="xinzengform.belongSalesmanName" auto-complete="off"  disabled v-if="editType=='view'"></el-input>
+                    <CustomerSearch @returnCustomer = 'getCustomer' :customerName = "xinzengform.belongSalesmanName" ref="SalesmanName" v-else/>
                 </el-form-item>
             </el-col>
           </el-row>
@@ -148,7 +148,7 @@ import { eventBus } from '@/eventBus'
 import {data_get_shipper_create,data_get_shipper_change,data_get_shipper_view} from '@/api/users/shipper/all_shipper.js'
 import { getDictionary,DicShipperLevel } from '@/api/common.js'
 import vregion from '@/components/vregion/Region'
-import CustomerSearch from '@/components/CustomerSearch/index'
+import CustomerSearch from '@/components/CustomerSearch/select'
 import {REGEX} from '@/utils/validate'
 
 export default {
