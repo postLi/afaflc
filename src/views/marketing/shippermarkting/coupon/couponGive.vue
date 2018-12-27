@@ -228,6 +228,7 @@ export default {
        BatchDistribution(){
         let inputFile = this.$refs.inputer;
         var formdata = new FormData()
+        console.log(inputFile.files)
         formdata.append('id',this.params[0].id);
         formdata.append('multipartFile',inputFile.files[0]);
         this.dialogFormVisible_add = false;

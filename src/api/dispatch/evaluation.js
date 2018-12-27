@@ -1,6 +1,6 @@
 import fetch from '@/utils/fetch'
 
-const baseurl = 'aflccommonservice-wtc'
+const baseurl = 'aflccommonservice'
 const baseurl_one = 'aflcorderservice'
 
 // 新增KPI考核

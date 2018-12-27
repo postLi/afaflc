@@ -23,7 +23,7 @@ export default {
     component: _import('dispatch/OpenseaRecommend/index'), 
     meta: { role: ['admin'], title: '公海推单',stitle: '公海',  noCache: true , code: 'DISPATCH_OPENSEA_RECOMMEND'}
   },
-  {          
+  {
     path: '/dispatch/Directional', 
     icon: 'dxtdsz', 
     name: '定向推单设置',

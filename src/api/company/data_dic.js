@@ -106,3 +106,13 @@ export function data_clearCache() {
 }
 
 
+//导入excel的数据字典
+export function data_importDictExcel(data) {
+  return fetch({
+    url: '/'+baseurl_two+'/sysDict/importDictExcel',
+    method: 'post',
+    data:data
+  })
+}
+
+
