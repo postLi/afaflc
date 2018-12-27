@@ -7,7 +7,7 @@
         <el-button type="primary" :size="btnsize" icon="el-icon-edit-outline" @click="doAction('auth')" plain v-has:SYSTEM_EMPLOYEE_MANAGE_EMP_AUTH>员工授权</el-button>
         <el-button type="primary" :size="btnsize" icon="el-icon-edit" @click="doAction('modify')" plain v-has:SYSTEM_EMPLOYEE_MANAGE_UPDATE>修改</el-button>
         <el-button type="primary" :size="btnsize" icon="el-icon-delete" @click="doAction('delete')" plain v-has:SYSTEM_EMPLOYEE_MANAGE_DELETE>删除</el-button>
-        <el-button type="primary" :size="btnsize" icon="el-icon-warning" @click="doAction('force')" plain>重置密码</el-button>
+        <el-button type="primary" :size="btnsize" icon="el-icon-warning" @click="doAction('force')" plain v-has:SYSTEM_EMPLOYEE_MANAGE_RESET_PASSWORD>重置密码</el-button>
 
         <!-- <el-button type="primary" :size="btnsize" icon="el-icon-setting" plain @click="setTable" class="table_setup">表格设置</el-button> -->
       </div>

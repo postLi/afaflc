@@ -7,6 +7,7 @@ import { Message, MessageBox } from 'element-ui'
 
 const whiteList = ['/login']
 router.beforeEach((to, from, next) => {
+    
   /* must call `next` */
   NProgress.start()
   // 如果链接带有token信息，则将其保存
@@ -31,13 +32,17 @@ router.beforeEach((to, from, next) => {
     if (to.path === '/login') {
       next({ path: '/' })
     } else {
+        
       // 如果没有当前角色权限信息，则请求获取
       if (store.getters.roles.length === 0) {
         store.dispatch('GetInfo').then(res => {
           const roles = res.data.permissionTrees
           store.dispatch('GenerateRoutes', { roles }).then(() => {
             router.addRoutes(store.getters.addRouters)
-            next({ ...to, replace: true })
+            
+            // next({ ...to, replace: true })
+            next({ path:to.fullPath || '/', replace: true })
+            
           })
         }).catch((err) => {
           Message.error('错误：' + (err.text || err.errInfo || err.data || JSON.stringify(err)))
@@ -49,8 +54,9 @@ router.beforeEach((to, from, next) => {
           }})
         })
       } else {
+          
         const title = to.meta.title || to.name || ''
-        window.document.title = (title ? title + ' - ' : '') + '安发AFLC管理系统'
+        window.document.title = (title ? title + ' - ' : '') + '28快运云平台'
         // window.document.title = '安发AFLC管理系统'
         next()
       }

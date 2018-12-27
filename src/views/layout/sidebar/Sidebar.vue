@@ -119,7 +119,7 @@ export default {
 // }
 .sidebar-container{
     min-height: 100%;
-    padding-top: 70px;
+    padding-top: 75px;
     background: #42485B;
     border-radius: 0;
 
@@ -154,7 +154,7 @@ export default {
 
   .hamburger-container{
     position: absolute;
-    top: 40px;
+    top: 45px;
     right: 10px;
   }
 

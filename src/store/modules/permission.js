@@ -28,7 +28,7 @@ function filterAsyncRouter(asyncRouterMap, roles) {
         }
         return false
     })
-    // console.log('accessedRouters',accessedRouters)
+    console.log('accessedRouters',accessedRouters)
     return accessedRouters
 }
 
@@ -66,7 +66,7 @@ const permission = {
         //     accessedRouters = asyncRouterMap
         // } else {
             accessedRouters = filterAsyncRouter(asyncRouterMap, roles);
-            // console.log('accessedRoutersList', accessedRouters)
+            console.log('accessedRoutersList', accessedRouters)
             accessedRouters.map(el => {
               if (el.meta) {
                 let flag = true

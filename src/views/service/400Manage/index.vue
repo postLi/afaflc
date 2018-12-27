@@ -128,7 +128,7 @@
                 </div>
             </div>
                 <!-- 页码 -->
-            <div class="info_tab_footer">共计:{{ dataTotal }} <div class="show_pager"> <Pager :total="dataTotal" @change="handlePageChange"/></div> </div>    
+            <div class="info_tab_footer">共计:{{ dataTotal }} <div class="show_pager"> <Pager :total="dataTotal" @change="handlePageChange" ref="pager"/></div> </div>    
     </div>
 </template>
 
@@ -375,6 +375,17 @@ import { SaveAsFile } from '@/utils/lodopFuncs'
             .el-dialog__body{
                 padding: 0;
                 text-align: center;
+            }
+        }
+        .info_news{
+            .el-table{
+                td{
+                    .cell{
+                        a{
+                            color: #3e9ff1;
+                        }
+                    }
+                }
             }
         }
     }

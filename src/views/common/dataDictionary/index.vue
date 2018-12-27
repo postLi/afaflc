@@ -36,7 +36,7 @@
                         <el-button type="primary" :size="btnsize" plain icon="el-icon-edit" @click="handleClick('revise')" v-has:SYSTEM_DICT_UPDATE>修改</el-button>
                         <el-button type="primary" :size="btnsize" plain icon="el-icon-delete" @click="handleClick('delet')" v-has:SYSTEM_DICT_DELETE>删除</el-button>
                         <el-button type="primary" :size="btnsize" plain icon="el-icon-bell" @click="handleClick('status')" v-has:SYSTEM_DICT_USE>启用/禁用</el-button>
-                        <el-button type="danger" :size="btnsize" plain icon="el-icon-refresh" @click="handleClick('clearCache')">清除缓存</el-button>
+                        <el-button type="danger" :size="btnsize" plain icon="el-icon-refresh" @click="handleClick('clearCache')" v-has:SYSTEM_DICT_CLEAR_CACHE>清除缓存</el-button>
                     </div>
                     <div class="info_news">
                         <el-table
