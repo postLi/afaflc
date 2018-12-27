@@ -32,7 +32,7 @@ export default {
 
     },
     created() {
-        this.regionalCarrierName = sessionStorage.getItem('regionalCarrierName');
+        this.regionalCarrierName = sessionStorage.getItem('regionalCarrierName') ? sessionStorage.getItem('regionalCarrierName') :'lineCarrier';
     },
 
     beforeUpdate () {

@@ -1,7 +1,7 @@
 
 import fetch from '@/utils/fetch'
 
-const baseUrl = 'aflcusercenterservice-wtc'
+const baseUrl = 'aflcusercenterservice'
 
 //新增增值服务定价-线路增值服务定价
 export function newTradeAreaLineCarrier(data){
