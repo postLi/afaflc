@@ -152,6 +152,7 @@
                             placeholder="选择日期"
                             :picker-options="pickerOptions"
                             :disabled="editType=='view'"
+                             :default-value="timeDefaultShow"
                             >
                         </el-date-picker>
                     </el-form-item>
@@ -189,7 +190,10 @@
               <el-row>
                   <el-col :span="12">
                 <el-form-item label="所属业务员：" :label-width="formLabelWidth">
-                    <CustomerSearch @returnCustomer = 'getCustomer' :customerName = "templateModel.belongSalesmanName" ref="SalesmanName" :disabled="editType == 'view'"/>
+                    <el-input :maxlength="40" v-model="templateModel.belongSalesmanName" auto-complete="off"  disabled v-if="editType=='view'"></el-input>
+                    <CustomerSearch @returnCustomer = 'getCustomer' :customerName = "templateModel.belongSalesmanName" ref="SalesmanName" v-else/>
+
+                    <!-- <CustomerSearch @returnCustomer = 'getCustomer' :customerName = "templateModel.belongSalesmanName" ref="SalesmanName" :disabled="editType == 'view'"/> -->
                 </el-form-item>
                   </el-col>
                   <el-col :span="12">
@@ -292,7 +296,7 @@ import  { data_post_createDriver,data_put_changeDriver,data_CarList,data_Get_car
 import Upload from '@/components/Upload/singleImage'
 import GetCityList from '@/components/GetCityList/city'
 import vregion from '@/components/vregion/Region'
-import CustomerSearch from '@/components/CustomerSearch/index'
+import CustomerSearch from '@/components/CustomerSearch/select'
 import { getDictionary } from '@/api/common.js'
 export default {
     name:'template-create-view-change',
@@ -649,6 +653,7 @@ export default {
                 return time.getTime() < Date.now();
                 }
             },
+            timeDefaultShow:new Date().setFullYear(new Date().getFullYear()+1),
             formLabelWidth:'190px',
             driverTemplateDialogFlag: false,// 弹框控制的控制
             rulesForm:{
@@ -842,7 +847,6 @@ export default {
             }
             }
         },
-
         //弹框控制
         change() {
          this.driverTemplateDialogFlag = false;

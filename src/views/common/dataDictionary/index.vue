@@ -37,6 +37,7 @@
                         <el-button type="primary" :size="btnsize" plain icon="el-icon-delete" @click="handleClick('delet')" v-has:SYSTEM_DICT_DELETE>删除</el-button>
                         <el-button type="primary" :size="btnsize" plain icon="el-icon-bell" @click="handleClick('status')" v-has:SYSTEM_DICT_USE>启用/禁用</el-button>
                         <el-button type="danger" :size="btnsize" plain icon="el-icon-refresh" @click="handleClick('clearCache')">清除缓存</el-button>
+                        <el-button type="primary" :size="btnsize" plain icon="el-icon-circle-plus" @click="handleClick('addexcel')" v-has:SYSTEM_DICT_ADD>导入数据字典Excel</el-button>
                     </div>
                     <div class="info_news">
                         <el-table
@@ -108,6 +109,8 @@
                     </div>
 
                     <DicDialog :dialogAddDic.sync="dialogVisible" :reviseForm = 'reviseForm' :pid="pid" :pidName="pidname" :formtitle = 'formtitle' :isModify = "isModify"   @close = "shuaxin"/>
+                     <addExcel :dialogVisibleExcel.sync="dialogVisibleExcel"  :formtitle = 'formtitleExcel'  @close = "shuaxin"/>
+                
                 </div>
             </div>
         </div>
@@ -122,7 +125,7 @@ import { data_Dic,data_Trees,data_Search,data_CreatCode,data_AddForms,data_Delet
 import '@/styles/dialog.scss'
 import Pager from '@/components/Pagination/index'
 import DicDialog from './component/addDictionary'
-
+import addExcel from './component/addExcel'
     export default{
         data(){
             return{
@@ -132,6 +135,7 @@ import DicDialog from './component/addDictionary'
                 btnsize:'mini',
                 isModify:false,
                 dialogVisible:false,
+                dialogVisibleExcel:false,
                 showSearch:true,
                 reviseForm:{},
                 pid:null,
@@ -139,6 +143,7 @@ import DicDialog from './component/addDictionary'
                 page:1,
                 pagesize:20,
                 formtitle:'新增分类信息',
+                formtitleExcel:'导入数据字典信息',
                 dataTotal:0,
                 checkedinformation:[],
                 input_search: '',
@@ -159,7 +164,8 @@ import DicDialog from './component/addDictionary'
         },
         components:{
             Pager,
-            DicDialog
+            DicDialog,
+            addExcel
         },
         watch:{
             pid:{
@@ -196,7 +202,7 @@ import DicDialog from './component/addDictionary'
                 this.$refs.multipleTable.toggleRowSelection(row);
             },
             handleClick(type){
-                if(this.checkedinformation.length === 0 && type != 'add'&& type!='clearCache'){
+                if(this.checkedinformation.length === 0 && type != 'add'&& type!='clearCache'&&type!='addexcel'){
                     //未选择任何修改内容的提示
                     this.$message({
                         message: '请选择要操作的数据~',
@@ -305,6 +311,9 @@ import DicDialog from './component/addDictionary'
                         message: '清除缓存失败~'
                         })
                     })
+                    break;
+                    case 'addexcel':
+                    this.dialogVisibleExcel = true
                     break;
                     
                 }

@@ -198,6 +198,12 @@
                         <el-table-column
                         prop="dataSourcesType"
                         label="是否马甲车主" sortable>
+                        <template slot-scope='scope'>
+                        <span v-if="scope.row.dataSourcesType == '1'">马甲</span>
+                        <span v-if="scope.row.dataSourcesType == '2'">爬虫</span>
+                        <span v-if="scope.row.dataSourcesType == '3'">手工</span>
+                        <span v-if="scope.row.dataSourcesType == '4'">真实</span>
+                        </template>
                         </el-table-column>
                         <el-table-column
                         prop="isOnLine"

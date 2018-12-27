@@ -122,6 +122,7 @@
                             format="yyyy-MM-dd"
                             placeholder="选择日期"
                             :picker-options="pickerOptions"
+                            :default-value="timeDefaultShow"
                             >
                         </el-date-picker>
                     </el-form-item>
@@ -157,7 +158,10 @@
               <el-row>
               <el-col :span="12">
                 <el-form-item label="所属业务员：" :label-width="formLabelWidth">
-                        <CustomerSearch @returnCustomer = 'getCustomer' :customerName = "templateModel.belongSalesmanName" ref="SalesmanName" :disabled="editType == 'view'"/>
+                    <el-input :maxlength="40" v-model="templateModel.belongSalesmanName" auto-complete="off"  disabled v-if="editType=='view'"></el-input>
+                    <CustomerSearch @returnCustomer = 'getCustomer' :customerName = "templateModel.belongSalesmanName" ref="SalesmanName" v-else/>
+
+                        <!-- <CustomerSearch @returnCustomer = 'getCustomer' :customerName = "templateModel.belongSalesmanName" ref="SalesmanName" :disabled="editType == 'view'"/> -->
                     </el-form-item>
                 </el-col>    
                   <el-col :span="12">
@@ -303,7 +307,7 @@ import { eventBus } from '@/eventBus'
 import Upload from '@/components/Upload/singleImage'
 import GetCityList from '@/components/GetCityList/city'
 import vregion from '@/components/vregion/Region'
-import CustomerSearch from '@/components/CustomerSearch/index'
+import CustomerSearch from '@/components/CustomerSearch/select'
 export default {
   name:'create-Change-ViewDialog',
   components:{
@@ -555,6 +559,7 @@ export default {
         belongSalesmanName:null,
         belongSalesman:null,
         },   // 认证审核表单
+        timeDefaultShow:new Date().setFullYear(new Date().getFullYear()+1),
         formLabelWidth:'150px',
         activeValueList:[],
         optionscarType:[],

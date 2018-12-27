@@ -231,6 +231,10 @@ export default {
             for(let maxI = 0;maxI<9;maxI++)
             {
                 MaxArray.push(res.data[maxI].assessItemPoints)
+                if(res.data[maxI].indiviReting<0){
+                  res.data[maxI].indiviReting = 0
+                }
+                
             }
             if(res.data.length>0){
             var maxNum = MaxArray.reduce(function(a , b){ 
@@ -261,7 +265,6 @@ export default {
     mounted(){
         this.formData.orderSerial = this.$route.query.orderSerial
         this.firstBlood()
-
     }
 }
 </script>
