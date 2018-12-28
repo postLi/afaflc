@@ -18,7 +18,6 @@
         <el-form-item label="推荐有效期" prop="searchCreatTime">
           <el-date-picker
             v-model="searchCreatTime"
-            :default-value="defaultTime"
             type="daterange"
             align="right"
             popper-class='searchCreatTime'
@@ -107,7 +106,7 @@ export default {
       optionsclaimType: [],
       optionsComplainatusType: [],
       searchCreatTime: [],
-      defaultTime: [parseTime(+new Date() - 60 * 24 * 60 * 60 * 1000, '{y}-{m}-{d}'), parseTime(new Date(), '{y}-{m}-{d}')],
+      // defaultTime: [parseTime(+new Date() - 60 * 24 * 60 * 60 * 1000, '{y}-{m}-{d}'), parseTime(new Date(), '{y}-{m}-{d}')],
       value3: true,
       value4: true,
       form: {
@@ -150,7 +149,7 @@ export default {
           this.popTitle = '推荐设置'
           this.getSelectInfo(this.selectInfo)
           console.log(this.info, 'info')
-          this.searchCreatTime = this.defaultTime
+          // this.searchCreatTime = this.defaultTime
         }
       }
     }
@@ -169,7 +168,7 @@ export default {
       }
     },
     getSelectInfo(selectInfo) {
-      console.log(selectInfo)
+      console.log('selectInfo',selectInfo)
       this.formAllData.recommendColumn = selectInfo.recommendColumn
       this.formAllData.recommendPosition = selectInfo.recommendPosition
       this.formAllData.recommendStarttime = selectInfo.recommendStarttime
@@ -180,6 +179,8 @@ export default {
       }
       this.formAllData.recommendFee = selectInfo.recommendFee
       this.formAllData.remarks = selectInfo.remarks
+      this.searchCreatTime[0] = selectInfo.recommendStarttime
+      this.searchCreatTime[1] = selectInfo.recommendEndtime
     },
     submitForm(ruleForm) {
       this.$refs[ruleForm].validate((valid) => {

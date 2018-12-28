@@ -56,7 +56,7 @@ export default {
   props: {
     sizes: {
       type: Array,
-      default: () => [20, 50, 100, 400,]
+      default: () => [20, 50, 100, 400 ]
     },
     total: {
       type: Number,
@@ -135,6 +135,7 @@ export default {
         // this.$refs.input.$el.querySelector('input').value = 1
       }
     },
+
     handleBlur({ target }) {
       this.handleChange(target.value)
       this.jumpTo(this.inputval)

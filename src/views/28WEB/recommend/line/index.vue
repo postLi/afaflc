@@ -90,6 +90,7 @@
                 </el-table-column> 
                 <el-table-column  fixed label="出发地-到达地" width="300" sortable :show-overflow-tooltip="true">
                   <template slot-scope="scope">
+                    <img v-if="scope.row.settopStatus !== 0" src="../../../../assets/icom/ding.png" style="width:30px;height:30px;vertical-align: middle;"/>
                     {{scope.row.startLocation ? scope.row.startLocation + '-' : ''}}{{ scope.row.endLocation ? scope.row.endLocation : ''}}
                   </template>
                 </el-table-column>
@@ -156,11 +157,12 @@
           <add :selectInfo="selectInfo" :isMatreg="isMatreg" :centerDialogVisible="centerDialogVisible" @close="closeAddReg" @success="getsuccess"></add>
          <!-- 页码 -->
           <div class="info_tab_footer">共计:{{ dataTotal }}<div class="show_pager"> <Pager :total="dataTotal" @change="handlePageChange"  :sizes="sizes"/></div> </div> 
+          
         </div>
       </div>
 </template>
 <script>
-import { postGetLists ,putStick,putUpStick,deleteBatch} from '@/api/web/recommend.js'
+import { postGetLists, putStick, putUpStick, deleteBatch } from '@/api/web/recommend.js'
 import Pager from '@/components/Pagination/index'
 import GetCityList from '@/components/GetCityList/city'
 import add from './components/add'
@@ -382,7 +384,7 @@ export default {
           const ids1 = datas1.map(el => {
             return el.id
           })
-          if(datas1.length <= 0){
+          if (datas1.length <= 0) {
             this.$message({
               message: '已是置顶状态~',
               type: 'warning'
@@ -404,14 +406,14 @@ export default {
           }
           break
         case 'UpStick':
-        const datas2 = this.selected.filter(el => {
+          const datas2 = this.selected.filter(el => {
             return el.settopStatus !== 0
           })
           const ids2 = datas2.map(el => {
             return el.id
           })
-          console.log(datas2,ids2)
-          if(datas2.length <= 0){
+          console.log(datas2, ids2)
+          if (datas2.length <= 0) {
             this.$message({
               message: '未置顶不能取消~',
               type: 'warning'
@@ -432,7 +434,7 @@ export default {
             })
           }
           break
-          case 'delete':
+        case 'delete':
           const ids3 = this.selected.map(el => {
             return el.id
           })

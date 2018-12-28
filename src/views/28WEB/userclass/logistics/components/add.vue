@@ -240,7 +240,7 @@ export default {
           }
           this.formAllData.recommendStarttime = Date.parse(this.searchCreatTime[0] + ' 00:00:00')
           this.formAllData.recommendEndtime = Date.parse(this.searchCreatTime[1] + ' 23:59:59')
-          this.formAllData.associatedId = this.selectInfo.id
+          // this.formAllData.associatedId = this.selectInfo.id
           const data1 = objectMerge2({}, this.formAllData)
           let promiseObj
           if (this.isMatreg) {
