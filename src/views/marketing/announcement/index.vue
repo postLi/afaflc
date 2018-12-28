@@ -65,11 +65,9 @@
                                 <el-button
                                 :size="btnsize"
                                 :type="scope.row.isTop == 0 ? 'primary' : 'info'"
-                                v-has:SYSTEM_NOTICE_TOP
                                 @click="handleClick(scope.row,'ifTop')">{{scope.row.isTop == 0 ? '置顶' : '取消'}}</el-button>
                                 <el-button
                                 :size="btnsize"
-                                v-has:SYSTEM_NOTICE_UPDATE
                                 @click="handleClick(scope.row,'revise')">修改</el-button>
                             </template>
                         </el-table-column>
