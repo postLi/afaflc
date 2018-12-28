@@ -3,7 +3,7 @@
             <searchInfo @change="getSearchParam"></searchInfo>
             <div class="classify_info">
                 <div class="btns_box">
-                    <el-button type="primary" icon="el-icon-tickets" :size="btnsize" plain @click="handleSearch('publish')" v-has:SYSTEM_NOTICE_ADD>发布公告</el-button>
+                    <el-button type="primary" icon="el-icon-tickets" :size="btnsize" plain @click="handleSearch('publish')" v-has:MARKETING_PUBLISH_NOTICE_PUBLISH>发布公告</el-button>
                 </div>
                 <div class="info_news">
                     <el-table

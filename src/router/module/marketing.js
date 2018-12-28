@@ -123,7 +123,7 @@ export default {
         hidden: false,
         name: '发布公告',
         component: _import('marketing/announcement/index'),
-        meta: { title: '发布公告', stitle: '公告', noCache: true , code: ''}
+        meta: { title: '发布公告', stitle: '公告', noCache: true , code: 'MARKETING_PUBLISH_NOTICE'}
       },
   ]
 }
