@@ -177,7 +177,6 @@ export default {
       postSelectAflcTransportRangeList(this.page, this.pagesize, this.formAllData).then(res => {
         this.dataTotal = res.data.total
         this.dataset = res.data.list
-        console.log(res)
       }).catch(err => {
         this.$message.warning(err.text || err.errorInfo || '无法获取服务端数据~')
         this.loading = true
