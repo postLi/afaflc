@@ -88,7 +88,7 @@
 <script>
 import { postSelectAflcTransportRangeList, deleteBatch } from '@/api/web/logistics.js'
 import Pager from '@/components/Pagination/index'
-import { parseTime } from '@/utils/'
+// import { parseTime } from '@/utils/'
 import GetCityList from '@/components/GetCityList/city'
 import add from './components/add'
 import { pickerOptions2 } from '@/utils/index.js'
